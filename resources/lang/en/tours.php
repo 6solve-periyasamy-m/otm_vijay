@@ -11,6 +11,8 @@ return [
                         'dates' => 'Dates',
                         'details' => 'Description',
                         'component_type' => 'Tour Component Type',
+                        'sold' => 'Sold',
+                        'available' => 'Available',
                         'price' => [
                             'purchase' => 'Purchase Price',
                             'sales' => 'Sales Price',

@@ -1,4 +1,4 @@
-@php 
+@php
 /** 
  * @var \App\Models\Tour\Tour $tour 
  */
@@ -152,6 +152,8 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.sold') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.available') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -184,6 +186,12 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                             <td>
                                 {{ $componentRepository->getMargin() !== null ? $componentRepository->getMargin() . '%' : 'No Cost to Company' }}
                             </td>
+                            <td>
+                                {{ $componentRepository->getUsedOnOrderCount() }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getAvailableStock() }}
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -199,6 +207,8 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.sold') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.available') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -224,6 +234,12 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                             <td>
                                 {{ $component->repository->getMargin() !== null ? $component->repository->getMargin() . '%' : 'Not Set' }}
                             </td>
+                            <td>
+                                {{ $component->repository->getUsedOnOrderCount() }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getAvailableStock() }}
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -239,6 +255,8 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.sold') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.available') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -264,6 +282,12 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                             <td>
                                 {{ $component->repository->getMargin() !== null ? $component->repository->getMargin() . '%' : 'Not Set' }}
                             </td>
+                            <td>
+                                {{ $component->repository->getUsedOnOrderCount() }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getAvailableStock() }}
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -279,6 +303,8 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.sold') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.available') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -304,6 +330,12 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                             <td>
                                 {{ $component->repository->getMargin() !== null ? $component->repository->getMargin() . '%' : 'Not Set' }}
                             </td>
+                            <td>
+                                {{ $component->repository->getUsedOnOrderCount() }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getAvailableStock() }}
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -319,6 +351,8 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.sold') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.available') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -344,6 +378,12 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                             <td>
                                 {{ $component->repository->getMargin() !== null ? $component->repository->getMargin() . '%' : 'Not Set' }}
                             </td>
+                            <td>
+                                {{ $component->repository->getUsedOnOrderCount() }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getAvailableStock() }}
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -358,6 +398,7 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.sold') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -377,6 +418,9 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                             </td>
                             <td>
                                 {{ $component->repository->getMargin() !== null ? $component->repository->getMargin() . '%' : 'Not Set' }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getUsedOnOrderCount() }}
                             </td>
                         </tr>
                     @endforeach
