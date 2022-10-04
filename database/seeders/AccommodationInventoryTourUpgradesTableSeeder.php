@@ -289,6 +289,296 @@ class AccommodationInventoryTourUpgradesTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:24:00',
                 'deleted_at' => NULL,
             ),
+            27 => 
+            array (
+                'id' => 28,
+                'base_id' => 46,
+                'upgrade_id' => 47,
+                'description' => 'Breakfast Included',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:49',
+                'deleted_at' => '2022-09-14 09:53:49',
+            ),
+            28 => 
+            array (
+                'id' => 29,
+                'base_id' => 46,
+                'upgrade_id' => 48,
+                'description' => 'Upgrade to a Single Room',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:49',
+                'deleted_at' => '2022-09-14 09:53:49',
+            ),
+            29 => 
+            array (
+                'id' => 30,
+                'base_id' => 46,
+                'upgrade_id' => 49,
+            'description' => 'Upgrade to a Single Room (Included Breakfast)',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:49',
+                'deleted_at' => '2022-09-14 09:53:49',
+            ),
+            30 => 
+            array (
+                'id' => 31,
+                'base_id' => 50,
+                'upgrade_id' => 51,
+                'description' => 'Breakfast Included',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:54:00',
+                'deleted_at' => '2022-09-14 09:54:00',
+            ),
+            31 => 
+            array (
+                'id' => 32,
+                'base_id' => 50,
+                'upgrade_id' => 52,
+                'description' => 'Upgrade to a Single Room',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:54:00',
+                'deleted_at' => '2022-09-14 09:54:00',
+            ),
+            32 => 
+            array (
+                'id' => 33,
+                'base_id' => 50,
+                'upgrade_id' => 53,
+            'description' => 'Upgrade to a Single Room (Included Breakfast)',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:54:00',
+                'deleted_at' => '2022-09-14 09:54:00',
+            ),
+            33 => 
+            array (
+                'id' => 34,
+                'base_id' => 54,
+                'upgrade_id' => 55,
+                'description' => 'Breakfast Included',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:51:21',
+                'deleted_at' => '2022-09-14 09:51:21',
+            ),
+            34 => 
+            array (
+                'id' => 35,
+                'base_id' => 54,
+                'upgrade_id' => 56,
+                'description' => 'Upgrade to a Single Room',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:51:21',
+                'deleted_at' => '2022-09-14 09:51:21',
+            ),
+            35 => 
+            array (
+                'id' => 36,
+                'base_id' => 54,
+                'upgrade_id' => 57,
+            'description' => 'Upgrade to a Single Room (Included Breakfast)',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:51:21',
+                'deleted_at' => '2022-09-14 09:51:21',
+            ),
+            36 => 
+            array (
+                'id' => 37,
+                'base_id' => 58,
+                'upgrade_id' => 59,
+                'description' => 'Breakfast Included',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:31',
+                'deleted_at' => '2022-09-14 09:52:31',
+            ),
+            37 => 
+            array (
+                'id' => 38,
+                'base_id' => 58,
+                'upgrade_id' => 60,
+                'description' => 'Upgrade to a Single Room',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:31',
+                'deleted_at' => '2022-09-14 09:52:31',
+            ),
+            38 => 
+            array (
+                'id' => 39,
+                'base_id' => 58,
+                'upgrade_id' => 61,
+            'description' => 'Upgrade to a Single Room (Included Breakfast)',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:31',
+                'deleted_at' => '2022-09-14 09:52:31',
+            ),
+            39 => 
+            array (
+                'id' => 40,
+                'base_id' => 62,
+                'upgrade_id' => 63,
+                'description' => 'Breakfast Included',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:52',
+                'deleted_at' => '2022-09-14 09:52:52',
+            ),
+            40 => 
+            array (
+                'id' => 41,
+                'base_id' => 62,
+                'upgrade_id' => 64,
+                'description' => 'Upgrade to a Single Room',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:52',
+                'deleted_at' => '2022-09-14 09:52:52',
+            ),
+            41 => 
+            array (
+                'id' => 42,
+                'base_id' => 62,
+                'upgrade_id' => 65,
+            'description' => 'Upgrade to a Single Room (Included Breakfast)',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:52',
+                'deleted_at' => '2022-09-14 09:52:52',
+            ),
+            42 => 
+            array (
+                'id' => 43,
+                'base_id' => 66,
+                'upgrade_id' => 67,
+                'description' => 'Breakfast Included',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:04',
+                'deleted_at' => '2022-09-14 09:53:04',
+            ),
+            43 => 
+            array (
+                'id' => 44,
+                'base_id' => 66,
+                'upgrade_id' => 68,
+                'description' => 'Upgrade to a Single Room',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:04',
+                'deleted_at' => '2022-09-14 09:53:04',
+            ),
+            44 => 
+            array (
+                'id' => 45,
+                'base_id' => 66,
+                'upgrade_id' => 69,
+            'description' => 'Upgrade to a Single Room (Included Breakfast)',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:04',
+                'deleted_at' => '2022-09-14 09:53:04',
+            ),
+            45 => 
+            array (
+                'id' => 46,
+                'base_id' => 70,
+                'upgrade_id' => 71,
+                'description' => 'Breakfast Included',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:18',
+                'deleted_at' => '2022-09-14 09:53:18',
+            ),
+            46 => 
+            array (
+                'id' => 47,
+                'base_id' => 70,
+                'upgrade_id' => 72,
+                'description' => 'Upgrade to a Single Room',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:18',
+                'deleted_at' => '2022-09-14 09:53:18',
+            ),
+            47 => 
+            array (
+                'id' => 48,
+                'base_id' => 70,
+                'upgrade_id' => 73,
+            'description' => 'Upgrade to a Single Room (Included Breakfast)',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:18',
+                'deleted_at' => '2022-09-14 09:53:18',
+            ),
+            48 => 
+            array (
+                'id' => 49,
+                'base_id' => 74,
+                'upgrade_id' => 75,
+                'description' => 'Breakfast Included',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:29',
+                'deleted_at' => '2022-09-14 09:53:29',
+            ),
+            49 => 
+            array (
+                'id' => 50,
+                'base_id' => 74,
+                'upgrade_id' => 76,
+                'description' => 'Upgrade to a Single Room',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:29',
+                'deleted_at' => '2022-09-14 09:53:29',
+            ),
+            50 => 
+            array (
+                'id' => 51,
+                'base_id' => 74,
+                'upgrade_id' => 77,
+            'description' => 'Upgrade to a Single Room (Included Breakfast)',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:29',
+                'deleted_at' => '2022-09-14 09:53:29',
+            ),
+            51 => 
+            array (
+                'id' => 52,
+                'base_id' => 78,
+                'upgrade_id' => 79,
+                'description' => 'Breakfast Included',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:39',
+                'deleted_at' => '2022-09-14 09:53:39',
+            ),
+            52 => 
+            array (
+                'id' => 53,
+                'base_id' => 78,
+                'upgrade_id' => 80,
+                'description' => 'Upgrade to a Single Room',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:39',
+                'deleted_at' => '2022-09-14 09:53:39',
+            ),
+            53 => 
+            array (
+                'id' => 54,
+                'base_id' => 78,
+                'upgrade_id' => 81,
+            'description' => 'Upgrade to a Single Room (Included Breakfast)',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:39',
+                'deleted_at' => '2022-09-14 09:53:39',
+            ),
+            54 => 
+            array (
+                'id' => 55,
+                'base_id' => 100,
+                'upgrade_id' => 104,
+                'description' => 'High quality breakfast of local produce included, served in the restaurant',
+                'created_at' => '2022-09-14 10:10:08',
+                'updated_at' => '2022-09-14 10:10:08',
+                'deleted_at' => NULL,
+            ),
+            55 => 
+            array (
+                'id' => 56,
+                'base_id' => 101,
+                'upgrade_id' => 105,
+                'description' => 'High quality breakfast of local produce included, served in the restaurant',
+                'created_at' => '2022-09-14 10:10:41',
+                'updated_at' => '2022-09-14 10:10:41',
+                'deleted_at' => NULL,
+            ),
         ));
         
         

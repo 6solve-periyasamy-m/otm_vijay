@@ -36,8 +36,12 @@ class DatabaseSeeder extends Seeder
             $this->call(ActivityTypesTableSeeder::class);
             $this->call(EventsTableSeeder::class);
             $this->call(OperatorsTableSeeder::class);
+            $this->call(VariantsTableSeeder::class);
+            $this->call(MerchandiseSizesTableSeeder::class);
+            $this->call(MerchandiseTypesTableSeeder::class);
             $this->call(CustomersTableSeeder::class);
 
+            $this->call(TourCategoriesTableSeeder::class);
             $this->call(ToursTableSeeder::class);
             $this->call(TransportTypesTableSeeder::class);
             $this->call(TravelClassesTableSeeder::class);
@@ -59,16 +63,21 @@ class DatabaseSeeder extends Seeder
             $this->call(FlightInventoryToursTableSeeder::class);
             $this->call(FlightInventoryTourUpgradesTableSeeder::class);
 
-
             $this->call(TransportsTableSeeder::class);
             $this->call(TransportInventoriesTableSeeder::class);
             $this->call(TransportInventoryToursTableSeeder::class);
             $this->call(TransportInventoryTourUpgradesTableSeeder::class);
 
+            $this->call(MerchandisesTableSeeder::class);
+            $this->call(MerchandiseInventoriesTableSeeder::class);
+            $this->call(MerchandiseInventoryToursTableSeeder::class);
+
             $this->call(OrdersTableSeeder::class);
             $this->call(ManualAdjustmentsTableSeeder::class);
             $this->call(OrderCustomerAdjustmentsTableSeeder::class);
-            //$this->call(OrderAccommodationsTableSeeder::class);
+            $this->call(GroupsTableSeeder::class);
+            $this->call(OrderCustomerGroupTableSeeder::class);
+            $this->call(OrderAccommodationsTableSeeder::class);
             $this->call(OrderActivitiesTableSeeder::class);
             $this->call(OrderFlightsTableSeeder::class);
             $this->call(OrderTransportsTableSeeder::class);
@@ -76,6 +85,14 @@ class DatabaseSeeder extends Seeder
             $this->call(PaymentInstallmentsTableSeeder::class);
             $this->call(PaymentsTableSeeder::class);
             $this->call(OrderInstallmentsTableSeeder::class);
+
+            $this->call(QuotesTableSeeder::class);
+            $this->call(QuoteActivitiesTableSeeder::class);
+            $this->call(QuoteFlightsTableSeeder::class);
+            $this->call(QuoteInstallmentsTableSeeder::class);
+            $this->call(QuoteMerchandisesTableSeeder::class);
+            $this->call(QuotePricePointsTableSeeder::class);
+            $this->call(QuoteTransportsTableSeeder::class);
         } else {
             Artisan::call('countries:update');
         }

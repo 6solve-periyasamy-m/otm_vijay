@@ -31,6 +31,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:51:19',
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             1 => 
             array (
@@ -44,6 +45,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:51:19',
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             2 => 
             array (
@@ -57,6 +59,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:51:19',
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             3 => 
             array (
@@ -70,6 +73,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:51:19',
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             4 => 
             array (
@@ -83,6 +87,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:51:19',
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             5 => 
             array (
@@ -96,6 +101,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:51:19',
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             6 => 
             array (
@@ -109,6 +115,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:51:19',
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             7 => 
             array (
@@ -122,6 +129,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:51:19',
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             8 => 
             array (
@@ -135,6 +143,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:51:19',
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             9 => 
             array (
@@ -148,6 +157,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:56:34',
                 'updated_at' => '2022-01-20 12:56:34',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             10 => 
             array (
@@ -161,6 +171,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:08:43',
                 'updated_at' => '2022-01-20 13:08:43',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             11 => 
             array (
@@ -174,6 +185,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:09:17',
                 'updated_at' => '2022-01-20 13:09:17',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             12 => 
             array (
@@ -187,6 +199,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:12:50',
                 'updated_at' => '2022-01-20 13:12:50',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             13 => 
             array (
@@ -200,6 +213,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:13:03',
                 'updated_at' => '2022-01-20 13:13:03',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             14 => 
             array (
@@ -213,6 +227,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:13:16',
                 'updated_at' => '2022-01-20 13:13:16',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             15 => 
             array (
@@ -226,6 +241,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:13:55',
                 'updated_at' => '2022-01-20 13:13:55',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             16 => 
             array (
@@ -239,6 +255,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:14:07',
                 'updated_at' => '2022-01-20 13:14:07',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             17 => 
             array (
@@ -252,6 +269,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:14:21',
                 'updated_at' => '2022-01-20 13:14:21',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             18 => 
             array (
@@ -265,6 +283,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:14:57',
                 'updated_at' => '2022-01-20 13:14:57',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             19 => 
             array (
@@ -278,6 +297,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:15:19',
                 'updated_at' => '2022-01-20 13:15:19',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             20 => 
             array (
@@ -291,6 +311,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:15:28',
                 'updated_at' => '2022-01-20 13:15:28',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             21 => 
             array (
@@ -304,6 +325,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:16:30',
                 'updated_at' => '2022-01-20 13:16:30',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             22 => 
             array (
@@ -317,6 +339,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:16:44',
                 'updated_at' => '2022-01-20 13:16:44',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             23 => 
             array (
@@ -330,6 +353,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:17:51',
                 'updated_at' => '2022-01-20 13:17:51',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             24 => 
             array (
@@ -343,6 +367,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:18:20',
                 'updated_at' => '2022-01-20 13:18:20',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             25 => 
             array (
@@ -356,6 +381,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:18:34',
                 'updated_at' => '2022-01-20 13:18:34',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             26 => 
             array (
@@ -369,6 +395,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:18:47',
                 'updated_at' => '2022-01-20 13:18:47',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             27 => 
             array (
@@ -382,6 +409,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:19:12',
                 'updated_at' => '2022-01-20 13:19:12',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             28 => 
             array (
@@ -395,6 +423,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:19:23',
                 'updated_at' => '2022-01-20 13:19:23',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             29 => 
             array (
@@ -408,6 +437,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:19:33',
                 'updated_at' => '2022-01-20 13:19:33',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             30 => 
             array (
@@ -421,6 +451,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:22:35',
                 'updated_at' => '2022-01-20 13:22:35',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             31 => 
             array (
@@ -434,6 +465,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:22:46',
                 'updated_at' => '2022-01-20 13:22:46',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             32 => 
             array (
@@ -447,6 +479,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:22:57',
                 'updated_at' => '2022-01-20 13:22:57',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             33 => 
             array (
@@ -460,6 +493,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:23:35',
                 'updated_at' => '2022-01-20 13:23:35',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             34 => 
             array (
@@ -473,6 +507,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:23:47',
                 'updated_at' => '2022-01-20 13:23:47',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             35 => 
             array (
@@ -486,6 +521,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:24:00',
                 'updated_at' => '2022-01-20 13:24:00',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             36 => 
             array (
@@ -499,6 +535,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:34:21',
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             37 => 
             array (
@@ -512,6 +549,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:34:21',
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             38 => 
             array (
@@ -525,6 +563,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:34:21',
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             39 => 
             array (
@@ -538,6 +577,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:34:21',
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             40 => 
             array (
@@ -551,6 +591,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:34:21',
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             41 => 
             array (
@@ -564,6 +605,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:34:21',
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             42 => 
             array (
@@ -577,6 +619,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:34:21',
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             43 => 
             array (
@@ -590,6 +633,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:34:21',
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
             44 => 
             array (
@@ -603,6 +647,945 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:34:21',
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
+                'is_bookable' => 1,
+            ),
+            45 => 
+            array (
+                'id' => 46,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 3,
+                'tour_sales_price' => '45.00',
+                'is_template' => 1,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:49',
+                'deleted_at' => '2022-09-14 09:53:49',
+                'is_bookable' => 1,
+            ),
+            46 => 
+            array (
+                'id' => 47,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 4,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:51',
+                'deleted_at' => '2022-09-14 09:53:51',
+                'is_bookable' => 1,
+            ),
+            47 => 
+            array (
+                'id' => 48,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 1,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:54',
+                'deleted_at' => '2022-09-14 09:53:54',
+                'is_bookable' => 1,
+            ),
+            48 => 
+            array (
+                'id' => 49,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 2,
+                'tour_sales_price' => '75.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:56',
+                'deleted_at' => '2022-09-14 09:53:56',
+                'is_bookable' => 1,
+            ),
+            49 => 
+            array (
+                'id' => 50,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 7,
+                'tour_sales_price' => '45.00',
+                'is_template' => 1,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:54:00',
+                'deleted_at' => '2022-09-14 09:54:00',
+                'is_bookable' => 1,
+            ),
+            50 => 
+            array (
+                'id' => 51,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 8,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:54:02',
+                'deleted_at' => '2022-09-14 09:54:02',
+                'is_bookable' => 1,
+            ),
+            51 => 
+            array (
+                'id' => 52,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 5,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:54:04',
+                'deleted_at' => '2022-09-14 09:54:04',
+                'is_bookable' => 1,
+            ),
+            52 => 
+            array (
+                'id' => 53,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 6,
+                'tour_sales_price' => '75.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:54:06',
+                'deleted_at' => '2022-09-14 09:54:06',
+                'is_bookable' => 1,
+            ),
+            53 => 
+            array (
+                'id' => 54,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 11,
+                'tour_sales_price' => '45.00',
+                'is_template' => 1,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:51:21',
+                'deleted_at' => '2022-09-14 09:51:21',
+                'is_bookable' => 1,
+            ),
+            54 => 
+            array (
+                'id' => 55,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 12,
+                'tour_sales_price' => '20.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:21',
+                'deleted_at' => '2022-09-14 09:52:21',
+                'is_bookable' => 1,
+            ),
+            55 => 
+            array (
+                'id' => 56,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 9,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:24',
+                'deleted_at' => '2022-09-14 09:52:24',
+                'is_bookable' => 1,
+            ),
+            56 => 
+            array (
+                'id' => 57,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 10,
+                'tour_sales_price' => '100.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:26',
+                'deleted_at' => '2022-09-14 09:52:26',
+                'is_bookable' => 1,
+            ),
+            57 => 
+            array (
+                'id' => 58,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 15,
+                'tour_sales_price' => '45.00',
+                'is_template' => 1,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:31',
+                'deleted_at' => '2022-09-14 09:52:31',
+                'is_bookable' => 1,
+            ),
+            58 => 
+            array (
+                'id' => 59,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 16,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:34',
+                'deleted_at' => '2022-09-14 09:52:34',
+                'is_bookable' => 1,
+            ),
+            59 => 
+            array (
+                'id' => 60,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 13,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:36',
+                'deleted_at' => '2022-09-14 09:52:36',
+                'is_bookable' => 1,
+            ),
+            60 => 
+            array (
+                'id' => 61,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 14,
+                'tour_sales_price' => '75.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:38',
+                'deleted_at' => '2022-09-14 09:52:38',
+                'is_bookable' => 1,
+            ),
+            61 => 
+            array (
+                'id' => 62,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 19,
+                'tour_sales_price' => '45.00',
+                'is_template' => 1,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:52',
+                'deleted_at' => '2022-09-14 09:52:52',
+                'is_bookable' => 1,
+            ),
+            62 => 
+            array (
+                'id' => 63,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 20,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:54',
+                'deleted_at' => '2022-09-14 09:52:54',
+                'is_bookable' => 1,
+            ),
+            63 => 
+            array (
+                'id' => 64,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 17,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:57',
+                'deleted_at' => '2022-09-14 09:52:57',
+                'is_bookable' => 1,
+            ),
+            64 => 
+            array (
+                'id' => 65,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 18,
+                'tour_sales_price' => '75.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:59',
+                'deleted_at' => '2022-09-14 09:52:59',
+                'is_bookable' => 1,
+            ),
+            65 => 
+            array (
+                'id' => 66,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 23,
+                'tour_sales_price' => '45.00',
+                'is_template' => 1,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:04',
+                'deleted_at' => '2022-09-14 09:53:04',
+                'is_bookable' => 1,
+            ),
+            66 => 
+            array (
+                'id' => 67,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 24,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:06',
+                'deleted_at' => '2022-09-14 09:53:06',
+                'is_bookable' => 1,
+            ),
+            67 => 
+            array (
+                'id' => 68,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 21,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:09',
+                'deleted_at' => '2022-09-14 09:53:09',
+                'is_bookable' => 1,
+            ),
+            68 => 
+            array (
+                'id' => 69,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 22,
+                'tour_sales_price' => '75.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:12',
+                'deleted_at' => '2022-09-14 09:53:12',
+                'is_bookable' => 1,
+            ),
+            69 => 
+            array (
+                'id' => 70,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 27,
+                'tour_sales_price' => '45.00',
+                'is_template' => 1,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:18',
+                'deleted_at' => '2022-09-14 09:53:18',
+                'is_bookable' => 1,
+            ),
+            70 => 
+            array (
+                'id' => 71,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 28,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:21',
+                'deleted_at' => '2022-09-14 09:53:21',
+                'is_bookable' => 1,
+            ),
+            71 => 
+            array (
+                'id' => 72,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 25,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:23',
+                'deleted_at' => '2022-09-14 09:53:23',
+                'is_bookable' => 1,
+            ),
+            72 => 
+            array (
+                'id' => 73,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 26,
+                'tour_sales_price' => '75.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:25',
+                'deleted_at' => '2022-09-14 09:53:25',
+                'is_bookable' => 1,
+            ),
+            73 => 
+            array (
+                'id' => 74,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 31,
+                'tour_sales_price' => '45.00',
+                'is_template' => 1,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:29',
+                'deleted_at' => '2022-09-14 09:53:29',
+                'is_bookable' => 1,
+            ),
+            74 => 
+            array (
+                'id' => 75,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 32,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:31',
+                'deleted_at' => '2022-09-14 09:53:31',
+                'is_bookable' => 1,
+            ),
+            75 => 
+            array (
+                'id' => 76,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 29,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:33',
+                'deleted_at' => '2022-09-14 09:53:33',
+                'is_bookable' => 1,
+            ),
+            76 => 
+            array (
+                'id' => 77,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 30,
+                'tour_sales_price' => '75.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:35',
+                'deleted_at' => '2022-09-14 09:53:35',
+                'is_bookable' => 1,
+            ),
+            77 => 
+            array (
+                'id' => 78,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 35,
+                'tour_sales_price' => '45.00',
+                'is_template' => 1,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:40',
+                'deleted_at' => '2022-09-14 09:53:40',
+                'is_bookable' => 1,
+            ),
+            78 => 
+            array (
+                'id' => 79,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 36,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:41',
+                'deleted_at' => '2022-09-14 09:53:41',
+                'is_bookable' => 1,
+            ),
+            79 => 
+            array (
+                'id' => 80,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 33,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:43',
+                'deleted_at' => '2022-09-14 09:53:43',
+                'is_bookable' => 1,
+            ),
+            80 => 
+            array (
+                'id' => 81,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 34,
+                'tour_sales_price' => '75.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:45',
+                'deleted_at' => '2022-09-14 09:53:45',
+                'is_bookable' => 1,
+            ),
+            81 => 
+            array (
+                'id' => 82,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 9,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:52:28',
+                'deleted_at' => '2022-09-14 09:52:28',
+                'is_bookable' => 1,
+            ),
+            82 => 
+            array (
+                'id' => 83,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 5,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:54:08',
+                'deleted_at' => '2022-09-14 09:54:08',
+                'is_bookable' => 1,
+            ),
+            83 => 
+            array (
+                'id' => 84,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 1,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:58',
+                'deleted_at' => '2022-09-14 09:53:58',
+                'is_bookable' => 1,
+            ),
+            84 => 
+            array (
+                'id' => 85,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 33,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:47',
+                'deleted_at' => '2022-09-14 09:53:47',
+                'is_bookable' => 1,
+            ),
+            85 => 
+            array (
+                'id' => 86,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 29,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:12',
+                'updated_at' => '2022-09-14 09:53:37',
+                'deleted_at' => '2022-09-14 09:53:37',
+                'is_bookable' => 1,
+            ),
+            86 => 
+            array (
+                'id' => 87,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 25,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:13',
+                'updated_at' => '2022-09-14 09:53:27',
+                'deleted_at' => '2022-09-14 09:53:27',
+                'is_bookable' => 1,
+            ),
+            87 => 
+            array (
+                'id' => 88,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 21,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:13',
+                'updated_at' => '2022-09-14 09:53:14',
+                'deleted_at' => '2022-09-14 09:53:14',
+                'is_bookable' => 1,
+            ),
+            88 => 
+            array (
+                'id' => 89,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 17,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:13',
+                'updated_at' => '2022-09-14 09:53:02',
+                'deleted_at' => '2022-09-14 09:53:02',
+                'is_bookable' => 1,
+            ),
+            89 => 
+            array (
+                'id' => 90,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 13,
+                'tour_sales_price' => '50.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:13',
+                'updated_at' => '2022-09-14 09:52:41',
+                'deleted_at' => '2022-09-14 09:52:41',
+                'is_bookable' => 1,
+            ),
+            90 => 
+            array (
+                'id' => 91,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 37,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:13',
+                'updated_at' => '2022-09-14 09:50:02',
+                'deleted_at' => '2022-09-14 09:50:02',
+                'is_bookable' => 1,
+            ),
+            91 => 
+            array (
+                'id' => 92,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 38,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:13',
+                'updated_at' => '2022-09-14 09:50:13',
+                'deleted_at' => '2022-09-14 09:50:13',
+                'is_bookable' => 1,
+            ),
+            92 => 
+            array (
+                'id' => 93,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 39,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:13',
+                'updated_at' => '2022-09-14 09:52:44',
+                'deleted_at' => '2022-09-14 09:52:44',
+                'is_bookable' => 1,
+            ),
+            93 => 
+            array (
+                'id' => 94,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 40,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:13',
+                'updated_at' => '2022-09-14 09:50:06',
+                'deleted_at' => '2022-09-14 09:50:06',
+                'is_bookable' => 1,
+            ),
+            94 => 
+            array (
+                'id' => 95,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 41,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:13',
+                'updated_at' => '2022-09-14 09:50:16',
+                'deleted_at' => '2022-09-14 09:50:16',
+                'is_bookable' => 1,
+            ),
+            95 => 
+            array (
+                'id' => 96,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 42,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:13',
+                'updated_at' => '2022-09-14 09:52:46',
+                'deleted_at' => '2022-09-14 09:52:46',
+                'is_bookable' => 1,
+            ),
+            96 => 
+            array (
+                'id' => 97,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 43,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:13',
+                'updated_at' => '2022-09-14 09:50:09',
+                'deleted_at' => '2022-09-14 09:50:09',
+                'is_bookable' => 1,
+            ),
+            97 => 
+            array (
+                'id' => 98,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 44,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:13',
+                'updated_at' => '2022-09-14 09:50:20',
+                'deleted_at' => '2022-09-14 09:50:20',
+                'is_bookable' => 1,
+            ),
+            98 => 
+            array (
+                'id' => 99,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 45,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 09:49:13',
+                'updated_at' => '2022-09-14 09:52:49',
+                'deleted_at' => '2022-09-14 09:52:49',
+                'is_bookable' => 1,
+            ),
+            99 => 
+            array (
+                'id' => 100,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 47,
+                'tour_sales_price' => '45.00',
+                'is_template' => 1,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 10:07:11',
+                'updated_at' => '2022-09-14 10:07:11',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+            ),
+            100 => 
+            array (
+                'id' => 101,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 48,
+                'tour_sales_price' => '40.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 10:07:11',
+                'updated_at' => '2022-09-14 10:07:11',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+            ),
+            101 => 
+            array (
+                'id' => 102,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 52,
+                'tour_sales_price' => '80.00',
+                'is_template' => 1,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 10:09:16',
+                'updated_at' => '2022-09-14 10:09:16',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+            ),
+            102 => 
+            array (
+                'id' => 103,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 54,
+                'tour_sales_price' => '80.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 10:09:16',
+                'updated_at' => '2022-09-14 10:09:16',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+            ),
+            103 => 
+            array (
+                'id' => 104,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 50,
+                'tour_sales_price' => '30.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 10:10:08',
+                'updated_at' => '2022-09-14 10:10:08',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+            ),
+            104 => 
+            array (
+                'id' => 105,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 51,
+                'tour_sales_price' => '25.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 10:10:41',
+                'updated_at' => '2022-09-14 10:10:41',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+            ),
+            105 => 
+            array (
+                'id' => 106,
+                'tour_id' => 2,
+                'accommodation_inventory_id' => 53,
+                'tour_sales_price' => '90.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-14 12:16:33',
+                'updated_at' => '2022-09-14 12:31:06',
+                'deleted_at' => NULL,
+                'is_bookable' => 0,
+            ),
+            106 => 
+            array (
+                'id' => 107,
+                'tour_id' => 4,
+                'accommodation_inventory_id' => 47,
+                'tour_sales_price' => '45.00',
+                'is_template' => 1,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-20 10:39:17',
+                'updated_at' => '2022-09-20 10:39:17',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+            ),
+            107 => 
+            array (
+                'id' => 108,
+                'tour_id' => 4,
+                'accommodation_inventory_id' => 48,
+                'tour_sales_price' => '40.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-20 10:39:17',
+                'updated_at' => '2022-09-20 10:39:17',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+            ),
+            108 => 
+            array (
+                'id' => 109,
+                'tour_id' => 4,
+                'accommodation_inventory_id' => 52,
+                'tour_sales_price' => '80.00',
+                'is_template' => 1,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-20 10:39:17',
+                'updated_at' => '2022-09-20 10:39:17',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+            ),
+            109 => 
+            array (
+                'id' => 110,
+                'tour_id' => 4,
+                'accommodation_inventory_id' => 54,
+                'tour_sales_price' => '80.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-20 10:39:17',
+                'updated_at' => '2022-09-20 10:39:17',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+            ),
+            110 => 
+            array (
+                'id' => 111,
+                'tour_id' => 4,
+                'accommodation_inventory_id' => 53,
+                'tour_sales_price' => '90.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-20 10:39:17',
+                'updated_at' => '2022-09-20 10:39:17',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+            ),
+            111 => 
+            array (
+                'id' => 112,
+                'tour_id' => 5,
+                'accommodation_inventory_id' => 56,
+                'tour_sales_price' => '150.00',
+                'is_template' => 1,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2022-09-20 19:00:58',
+                'updated_at' => '2022-09-20 19:00:58',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
             ),
         ));
         

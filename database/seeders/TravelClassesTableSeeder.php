@@ -43,6 +43,14 @@ class TravelClassesTableSeeder extends Seeder
                 'updated_at' => '2022-01-21 11:21:41',
                 'deleted_at' => NULL,
             ),
+            3 => 
+            array (
+                'id' => 4,
+                'name' => 'Standard',
+                'created_at' => '2022-09-20 19:05:48',
+                'updated_at' => '2022-09-20 19:05:48',
+                'deleted_at' => NULL,
+            ),
         ));
         
         

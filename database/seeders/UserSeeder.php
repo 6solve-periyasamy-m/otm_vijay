@@ -46,7 +46,15 @@ class UserSeeder extends Seeder
             'password' => '$2a$10$1TEFiRVsIG3R9Aa9JiJ1cuDSVqLffb9J11HSmHO5oIDliHaunqd8C',
         ]);
 
+        $jon = User::create([
+            'name' => 'Jon Redding',
+            'email' => 'jsr@octopustravelmatrix.com',
+            'email_verified_at' => now(),
+            'password' => '$2y$10$9sAbr6xuyq.blFnbTk/iBeA1UURkdLbLy3las/sf18RUGRKgG8XcO',
+        ]);
+
         $charlotte->assign($otmStaff);
+        $jon->assign($otmStaff);
 
         if (config('app.debug')) {
             $celeste = User::create([
