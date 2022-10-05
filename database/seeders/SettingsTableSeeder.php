@@ -36,65 +36,70 @@ class SettingsTableSeeder extends Seeder
             ),
             3 => 
             array (
+                'key' => 'authorization.reminders',
+                'value' => '1660819442',
+            ),
+            4 => 
+            array (
                 'key' => 'booking.prefix',
                 'value' => 'OTM',
             ),
-            4 => 
+            5 => 
             array (
                 'key' => 'company.address.city',
                 'value' => 'Walton',
             ),
-            5 => 
+            6 => 
             array (
                 'key' => 'company.address.line_1',
                 'value' => '89 Ivy Lane',
             ),
-            6 => 
+            7 => 
             array (
                 'key' => 'company.address.line_2',
                 'value' => 'Colderson',
             ),
-            7 => 
+            8 => 
             array (
                 'key' => 'company.address.postcode',
                 'value' => 'ST15 5WN',
             ),
-            8 => 
+            9 => 
             array (
                 'key' => 'company.address.region',
                 'value' => 'Stockport',
             ),
-            9 => 
+            10 => 
             array (
                 'key' => 'company.contact.email',
                 'value' => 'info@octopustravelmatrix.com',
             ),
-            10 => 
+            11 => 
             array (
                 'key' => 'company.contact.phone',
                 'value' => '01632960966',
             ),
-            11 => 
+            12 => 
             array (
                 'key' => 'company.logo',
                 'value' => 'images/octlogo.png',
             ),
-            12 => 
+            13 => 
             array (
                 'key' => 'company.name',
                 'value' => 'Octopus Travel Matrix Ltd.',
             ),
-            13 => 
+            14 => 
             array (
                 'key' => 'company.vat',
                 'value' => '6210102',
             ),
-            14 => 
+            15 => 
             array (
                 'key' => 'email.additional-traveller-added.subject',
                 'value' => 'You have been added as an additional traveller on [TOUR_NAME]',
             ),
-            15 => 
+            16 => 
             array (
                 'key' => 'email.additional-traveller-added.template',
                 'value' => '<p>Greetings [CUSTOMER_TITLE] [CUSTOMER_FIRST_NAME] [CUSTOMER_LAST_NAME],</p>
@@ -107,12 +112,12 @@ class SettingsTableSeeder extends Seeder
 
 <p>[SETTING_COMPANY_NAME]</p>',
             ),
-            16 => 
+            17 => 
             array (
                 'key' => 'email.additional-traveller-removed.subject',
                 'value' => 'You have been removed as an additional traveller on [TOUR_NAME]',
             ),
-            17 => 
+            18 => 
             array (
                 'key' => 'email.additional-traveller-removed.template',
                 'value' => '<p>Greetings [CUSTOMER_TITLE] [CUSTOMER_FIRST_NAME] [CUSTOMER_LAST_NAME],</p>
@@ -125,12 +130,12 @@ class SettingsTableSeeder extends Seeder
 
 <p>[SETTING_COMPANY_NAME]</p>',
             ),
-            18 => 
+            19 => 
             array (
                 'key' => 'email.booking-confirmation.subject',
                 'value' => 'Booking confirmed for Order [BOOKING_REFERENCE] on Tour [TOUR_NAME]',
             ),
-            19 => 
+            20 => 
             array (
                 'key' => 'email.booking-confirmation.template',
                 'value' => '<p>Greetings [LEAD_TITLE] [LEAD_FIRST_NAME] [LEAD_LAST_NAME],</p>
@@ -141,12 +146,12 @@ class SettingsTableSeeder extends Seeder
 
 <p>[SETTING_COMPANY_NAME]</p>',
             ),
-            20 => 
+            21 => 
             array (
                 'key' => 'email.order-cancelled.subject',
                 'value' => 'Order [BOOKING_REFERENCE]: Your order has been cancelled',
             ),
-            21 => 
+            22 => 
             array (
                 'key' => 'email.order-cancelled.template',
                 'value' => '<p>Greetings [LEAD_TITLE] [LEAD_FIRST_NAME] [LEAD_LAST_NAME],</p>
@@ -157,12 +162,12 @@ class SettingsTableSeeder extends Seeder
 
 <p>[SETTING_COMPANY_NAME]</p>',
             ),
-            22 => 
+            23 => 
             array (
                 'key' => 'email.order-changed.subject',
                 'value' => 'Order [BOOKING_REFERENCE]: A change has been made to your order',
             ),
-            23 => 
+            24 => 
             array (
                 'key' => 'email.order-changed.template',
                 'value' => '<p>Greetings [LEAD_TITLE] [LEAD_FIRST_NAME] [LEAD_LAST_NAME],</p>
@@ -173,12 +178,12 @@ class SettingsTableSeeder extends Seeder
 
 <p>[SETTING_COMPANY_NAME]</p>',
             ),
-            24 => 
+            25 => 
             array (
                 'key' => 'email.payment-due.subject',
                 'value' => 'Order [BOOKING_REFERENCE]: Payment due on [DUE_PAYMENT_DATE]',
             ),
-            25 => 
+            26 => 
             array (
                 'key' => 'email.payment-due.template',
                 'value' => '<p>Dear [LEAD_TITLE] [LEAD_FIRST_NAME] [LEAD_LAST_NAME],</p>
@@ -191,12 +196,12 @@ class SettingsTableSeeder extends Seeder
 
 <p>[SETTING_COMPANY_NAME]</p>',
             ),
-            26 => 
+            27 => 
             array (
                 'key' => 'email.payment-made.subject',
                 'value' => 'Order [BOOKING_REFERENCE]: Payment accepted',
             ),
-            27 => 
+            28 => 
             array (
                 'key' => 'email.payment-made.template',
                 'value' => '<p>Dear [LEAD_TITLE] [LEAD_FIRST_NAME] [LEAD_LAST_NAME],</p>
@@ -209,12 +214,12 @@ class SettingsTableSeeder extends Seeder
 
 <p>[SETTING_COMPANY_NAME]</p>',
             ),
-            28 => 
+            29 => 
             array (
                 'key' => 'email.payment-overdue.subject',
                 'value' => 'Order [BOOKING_REFERENCE]: Payment overdue since [DUE_PAYMENT_DATE]',
             ),
-            29 => 
+            30 => 
             array (
                 'key' => 'email.payment-overdue.template',
                 'value' => '<p>Dear [LEAD_TITLE] [LEAD_FIRST_NAME] [LEAD_LAST_NAME],</p>
@@ -227,12 +232,12 @@ class SettingsTableSeeder extends Seeder
 
 <p>[SETTING_COMPANY_NAME]</p>',
             ),
-            30 => 
+            31 => 
             array (
                 'key' => 'email.refund-given.subject',
                 'value' => 'Order [BOOKING_REFERENCE]: Refund given',
             ),
-            31 => 
+            32 => 
             array (
                 'key' => 'email.refund-given.template',
                 'value' => '<p>Dear [LEAD_TITLE] [LEAD_FIRST_NAME] [LEAD_LAST_NAME],</p>
@@ -245,12 +250,12 @@ class SettingsTableSeeder extends Seeder
 
 <p>[SETTING_COMPANY_NAME]</p>',
             ),
-            32 => 
+            33 => 
             array (
                 'key' => 'system.format.date',
                 'value' => 'd/m/Y',
             ),
-            33 => 
+            34 => 
             array (
                 'key' => 'system.format.time',
                 'value' => 'H:i',

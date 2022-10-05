@@ -64,6 +64,15 @@ class RoomTypesTableSeeder extends Seeder
                 'updated_at' => '2022-02-09 09:33:29',
                 'deleted_at' => NULL,
             ),
+            5 => 
+            array (
+                'id' => 6,
+                'name' => 'Sea View Double',
+                'maximum_occupancy' => 2,
+                'created_at' => '2022-06-29 10:09:05',
+                'updated_at' => '2022-09-23 09:49:02',
+                'deleted_at' => '2022-09-23 09:49:02',
+            ),
         ));
         
         

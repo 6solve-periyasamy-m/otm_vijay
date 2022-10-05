@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class PaymentRemindersTableSeeder extends Seeder
+class HatSizesTableSeeder extends Seeder
 {
 
     /**
@@ -16,7 +16,7 @@ class PaymentRemindersTableSeeder extends Seeder
     {
         
 
-        \DB::table('payment_reminders')->delete();
+        \DB::table('hat_sizes')->delete();
         
         
         

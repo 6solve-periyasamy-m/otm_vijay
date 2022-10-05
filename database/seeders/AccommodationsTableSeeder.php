@@ -23,13 +23,13 @@ class AccommodationsTableSeeder extends Seeder
             array (
                 'id' => 1,
                 'name' => 'Signature Lux Hotel by ONOMO Foreshore',
-                'description' => 'A 7-minute walk from the Cape Town International Convention Centre, this hip hotel is 3 km from the upmarket V&A Waterfront, offering dining, shopping and scenic views. It\'s 18 km from Cape Town International Airport.',
+                'description' => 'Signature Lux Hotel by ONOMO Foreshore',
                 'audit_date' => '2022-01-20',
                 'image_url' => NULL,
-                'currency_id' => 7,
+                'currency_id' => 30,
                 'address_id' => 1,
                 'created_at' => '2022-01-20 11:47:54',
-                'updated_at' => '2022-01-20 11:47:54',
+                'updated_at' => '2022-09-14 09:57:09',
                 'deleted_at' => NULL,
             ),
             1 => 
@@ -56,6 +56,19 @@ class AccommodationsTableSeeder extends Seeder
                 'address_id' => 76,
                 'created_at' => '2022-02-09 09:30:21',
                 'updated_at' => '2022-02-09 09:30:21',
+                'deleted_at' => NULL,
+            ),
+            3 => 
+            array (
+                'id' => 4,
+                'name' => 'Senegambia Hotel',
+                'description' => 'Client Advice: Senegambia Hotel: We recommend booking on bed and breakfast as it is likely half board and other dining packages may be cheaper locally; Please note the hotel only accepts payment by cash',
+                'audit_date' => '2022-09-20',
+                'image_url' => 'images/hotel_1.jpg',
+                'currency_id' => 154,
+                'address_id' => 103,
+                'created_at' => '2022-09-20 18:51:56',
+                'updated_at' => '2022-09-20 18:51:56',
                 'deleted_at' => NULL,
             ),
         ));
