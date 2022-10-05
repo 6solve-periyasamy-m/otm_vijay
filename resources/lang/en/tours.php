@@ -15,8 +15,7 @@ return [
                         'available' => 'Available',
                         'price' => [
                             'purchase' => 'Purchase Price',
-                            'sales' => 'Sales Price',
-                            'tour' => 'Tour Cost',
+                            'tour' => 'Sales Price',
                             'margin' => 'Margin',
                         ],
                         'na' => 'Not Applicable',
