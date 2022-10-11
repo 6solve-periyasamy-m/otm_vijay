@@ -8,6 +8,7 @@
 use App\Http\Controllers\Api\Admin\QuoteController;
 use App\Http\Controllers\Api\Admin\MerchandiseController;
 use App\Http\Controllers\Api\CustomerBookingController;
+use App\Http\Gateways\FellohGateway;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
@@ -175,6 +176,7 @@ Route::prefix('/orders')->group(function () {
 });
 
 Route::stripeWebhooks('/stripe/webhooks');
+Route::post('/felloh/webhook', [FellohGateway::class, 'webhook'])->name('api.felloh.webhook');
 
 Route::middleware('auth:api')->group(function() {
     Route::get('/booking/info', [BookingController::class, 'getInfo']);

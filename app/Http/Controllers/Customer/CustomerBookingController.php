@@ -5,17 +5,20 @@ namespace App\Http\Controllers\Customer;
 use App\Exceptions\NotOnTourException;
 use App\Exceptions\RoomingFailedException;
 use App\Http\Controllers\Controller;
+use App\Http\Gateways\Storage\LineItem;
 use App\Http\Gateways\StripeGateway;
 use App\Http\Requests\Booking\BookingCustomerRequest;
 use App\Models\Accommodation\RoomType;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingGroup;
+use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\Model\Booking\BookingRepository;
 use App\Repository\Model\Booking\BookingTravellerRepository;
 use App\Repository\RoomingRepository;
+use Gateway;
 use Illuminate\Http\Request;
 use Session;
 use URL;
@@ -189,7 +192,11 @@ class CustomerBookingController extends Controller
         if ($amount >= 1_000_000) return back()->withErrors('We cannot process payments that large');
         if ($amount <= 0.3) return back()->withErrors('We cannot process payments that small');
 
+        $gateway = Gateway::getDefaultGateway();
+        $item = new LineItem("Deposit for Booking from {$booking->leadTraveller->full_name}", $amount);
+        $intention = PaymentIntention::build($booking->leadTraveller->customer, $booking->token, 'Deposit');
+
         $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
-        return StripeGateway::checkout([['name' => "Deposit for Booking from {$booking->leadTraveller->full_name}", 'quantity' => 1, 'cost' => $amount]], $booking->token, 'Deposit', 0, $redirect);
+        return redirect($gateway->checkout([$item,], $intention, $booking->leadTraveller, $redirect));
     }
 }

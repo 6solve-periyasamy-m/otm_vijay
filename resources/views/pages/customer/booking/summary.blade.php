@@ -9,6 +9,8 @@ $leadAddons = $booking->leadTraveller->repository->getAvailableAddons();
 $shouldRooming = $tour->templates->count();
 @endphp
 
+@section('title', 'Confirm Booking')
+
 @push('header-stack')
     <style>
         .hidden {
@@ -87,6 +89,7 @@ $shouldRooming = $tour->templates->count();
             <h2 class="col-md-12 mb-0">Make Payment</h2>
         </div>
     </div>
+    @if(\Gateway::getDefaultGateway() !== null)
     <div class="card hidden">
         <div class="card-body">
             <form class="form-material" action="{{ route('customer-booking.deposit', ['bookingUrl' => $booking->tour->booking_form_url, 'token' => $booking->token]) }}" method="post">
@@ -103,4 +106,11 @@ $shouldRooming = $tour->templates->count();
             </form>
         </div>
     </div>
+    @else
+        <div class="card hidden">
+            <div class="card-body">
+                <h2 class="col-md-12 mb-0">The operator has not enabled online payments</h2>
+            </div>
+        </div>
+    @endif
 @endsection
