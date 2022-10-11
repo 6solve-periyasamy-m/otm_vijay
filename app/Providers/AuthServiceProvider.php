@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -23,6 +25,15 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-        //
+
+        Gate::define('viewLogViewer', function (?User $user) {
+           if (!isset($user) && (!$user instanceof User)) return false;
+
+           if ($user->getHighestRoleLevel() < 999) {
+               return false;
+           }
+
+           return true;
+        });
     }
 }
