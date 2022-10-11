@@ -107,6 +107,7 @@ class BespokeReportRepository
                         if ($format) {
                             $field = self::format($field, $info->format);
                         }
+                        if ($field instanceof OrderStatus) $field = $field->description();
                         $data[] = $field;
                     }
                 }
@@ -163,6 +164,7 @@ class BespokeReportRepository
                 if ($format) {
                     $field = self::format($field, $info->format);
                 }
+                if ($field instanceof OrderStatus) $field = $field->description();
                 $data[] = $field;
             }
         }
@@ -178,6 +180,7 @@ class BespokeReportRepository
                 if ($format) {
                     $field = self::format($field, $info->format);
                 }
+                if ($field instanceof OrderStatus) $field = $field->description();
                 $data[] = $field;
             }
         }
@@ -200,6 +203,7 @@ class BespokeReportRepository
                 if ($format) {
                     $field = self::format($field, $info->format);
                 }
+                if ($field instanceof OrderStatus) $field = $field->description();
                 $data[] = $field;
             }
         }
