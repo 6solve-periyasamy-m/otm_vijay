@@ -121,7 +121,7 @@ class Quote extends Model
         'quote_status' => QuoteStatus::class
     ];
     private QuoteRepository $internal_repository;
-    protected array $cascadeDeletes = ['sentQuotes', 'leadTraveller', 'pricePoints', 'installments', 'accommodation', 'activities', 'flights', 'transport', 'merchadise'];
+    protected array $cascadeDeletes = ['sentQuotes', 'leadTraveller', 'pricePoints', 'installments', 'accommodation', 'activities', 'flights', 'transport', 'merchandise'];
 
     public function sentQuotes(): HasMany
     {

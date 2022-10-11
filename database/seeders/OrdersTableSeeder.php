@@ -26,16 +26,16 @@ class OrdersTableSeeder extends Seeder
                 'tour_id' => 1,
                 'lead_booker_id' => null,
                 'booking_reference' => 'OTM000100010001XGON',
-                'deposit' => 300.0,
+                'deposit' => '300.00',
                 'ordered_on' => '2022-01-23 00:00:00',
-                'cancelled' => 0,
+                'cancelled' => 1,
                 'internal_notes' => NULL,
                 'external_notes' => NULL,
+                'invoice_footer' => 'This is a demo tour, and will not be fulfilled',
                 'created_at' => '2022-01-23 13:02:34',
-                'updated_at' => '2022-01-23 13:02:34',
+                'updated_at' => '2022-07-19 12:06:49',
                 'deleted_at' => NULL,
                 'token' => NULL,
-                'invoice_footer' => 'This is a demo tour, and will not be fulfilled',
             ),
             1 => 
             array (
@@ -43,16 +43,16 @@ class OrdersTableSeeder extends Seeder
                 'tour_id' => 1,
                 'lead_booker_id' => null,
                 'booking_reference' => 'OTM000100020002KQRV',
-                'deposit' => 300.0,
+                'deposit' => '300.00',
                 'ordered_on' => '2022-01-04 10:00:00',
                 'cancelled' => 0,
                 'internal_notes' => NULL,
                 'external_notes' => NULL,
+                'invoice_footer' => 'This is a demo tour, and will not be fulfilled',
                 'created_at' => '2022-01-23 13:21:17',
-                'updated_at' => '2022-01-23 13:21:17',
+                'updated_at' => '2022-06-27 17:24:15',
                 'deleted_at' => NULL,
                 'token' => NULL,
-                'invoice_footer' => 'This is a demo tour, and will not be fulfilled',
             ),
             2 => 
             array (
@@ -60,16 +60,16 @@ class OrdersTableSeeder extends Seeder
                 'tour_id' => 1,
                 'lead_booker_id' => null,
                 'booking_reference' => 'OTM000100030003PRSE',
-                'deposit' => 300.0,
+                'deposit' => '300.00',
                 'ordered_on' => '2022-01-23 00:00:00',
-                'cancelled' => 0,
+                'cancelled' => 1,
                 'internal_notes' => NULL,
                 'external_notes' => NULL,
+                'invoice_footer' => 'This is a demo tour, and will not be fulfilled',
                 'created_at' => '2022-01-23 13:25:11',
-                'updated_at' => '2022-01-23 13:25:11',
+                'updated_at' => '2022-07-19 12:45:03',
                 'deleted_at' => NULL,
                 'token' => NULL,
-                'invoice_footer' => 'This is a demo tour, and will not be fulfilled',
             ),
             3 => 
             array (
@@ -77,101 +77,228 @@ class OrdersTableSeeder extends Seeder
                 'tour_id' => 1,
                 'lead_booker_id' => null,
                 'booking_reference' => 'OTM000100040005XTJD',
-                'deposit' => 300.0,
+                'deposit' => '300.00',
                 'ordered_on' => '2022-01-21 00:00:00',
                 'cancelled' => 1,
                 'internal_notes' => NULL,
                 'external_notes' => NULL,
+                'invoice_footer' => 'This is a demo tour, and will not be fulfilled',
                 'created_at' => '2022-01-23 13:47:50',
-                'updated_at' => '2022-01-23 13:48:42',
+                'updated_at' => '2022-06-27 17:24:15',
                 'deleted_at' => NULL,
                 'token' => NULL,
+            ),
+            4 => 
+            array (
+                'id' => 5,
+                'tour_id' => 1,
+                'lead_booker_id' => null,
+                'booking_reference' => 'OTM000100050006PIRW',
+                'deposit' => '300.00',
+                'ordered_on' => '2022-05-31 14:00:00',
+                'cancelled' => 0,
+                'internal_notes' => NULL,
+                'external_notes' => NULL,
                 'invoice_footer' => 'This is a demo tour, and will not be fulfilled',
+                'created_at' => '2022-06-29 07:59:19',
+                'updated_at' => '2022-06-29 07:59:19',
+                'deleted_at' => NULL,
+                'token' => NULL,
+            ),
+            5 => 
+            array (
+                'id' => 6,
+                'tour_id' => 1,
+                'lead_booker_id' => null,
+                'booking_reference' => 'OTM000100060009HBRY',
+                'deposit' => '300.00',
+                'ordered_on' => '2022-02-14 10:00:00',
+                'cancelled' => 0,
+                'internal_notes' => NULL,
+                'external_notes' => NULL,
+                'invoice_footer' => 'This is a demo tour, and will not be fulfilled',
+                'created_at' => '2022-06-29 08:21:03',
+                'updated_at' => '2022-06-29 08:21:03',
+                'deleted_at' => NULL,
+                'token' => NULL,
+            ),
+            6 => 
+            array (
+                'id' => 7,
+                'tour_id' => 2,
+                'lead_booker_id' => null,
+                'booking_reference' => 'OTM000200070014IUMT',
+                'deposit' => '300.00',
+                'ordered_on' => '2022-09-14 11:22:23',
+                'cancelled' => 0,
+                'internal_notes' => NULL,
+                'external_notes' => NULL,
+                'invoice_footer' => '<p>This is a demo tour, and will not be fulfilled</p>',
+                'created_at' => '2022-09-14 11:22:23',
+                'updated_at' => '2022-09-14 11:22:24',
+                'deleted_at' => NULL,
+                'token' => 'XOiHwpgVMqahAFnBK2HD9fxJ4o5P8bQImwD6ekzyBG9vfIEZ30jsnW3CSlk0eguL',
+            ),
+            7 => 
+            array (
+                'id' => 8,
+                'tour_id' => 4,
+                'lead_booker_id' => null,
+                'booking_reference' => 'OTM000400080016UAHR',
+                'deposit' => '300.00',
+                'ordered_on' => '2022-09-20 10:39:17',
+                'cancelled' => 0,
+                'internal_notes' => NULL,
+                'external_notes' => NULL,
+                'invoice_footer' => '<p>The Tour Company will not be held responsible for any cancellation of this tour deemed to be resulting from an act of god</p>',
+                'created_at' => '2022-09-20 10:39:17',
+                'updated_at' => '2022-09-20 10:39:17',
+                'deleted_at' => NULL,
+                'token' => NULL,
+            ),
+            8 => 
+            array (
+                'id' => 9,
+                'tour_id' => 5,
+                'lead_booker_id' => null,
+                'booking_reference' => 'OTM000500090019EBJK',
+                'deposit' => '350.00',
+                'ordered_on' => '2022-09-20 19:33:03',
+                'cancelled' => 0,
+                'internal_notes' => NULL,
+                'external_notes' => NULL,
+                'invoice_footer' => '<p>The Gambia is commonly known as the &quot;smiling coast&quot; of Africa. It is recognised for its beautiful white sandy beaches and for being home to Jufureh. The reputed ancestral village of Kunte Kinte, the main legend in Alex Haley well known novel &quot;Roots&quot;. This small West African country, surrounded by Senegal and the narrow Atlantic coastline. &nbsp;The diverse ecosystems is around the central Gambia River. The abundance of wildlife in its Kiang West National Park and Bao Bolong Wetland Reserve includes monkeys, leopards, hippos, hyenas and rare birds. The capital, Banjul, and nearby Serrekunda offer access to beaches.</p>',
+                'created_at' => '2022-09-20 19:33:03',
+                'updated_at' => '2022-09-20 19:33:03',
+                'deleted_at' => NULL,
+                'token' => '0d8ONlQWIprehRXImuljW2jp1X6xAEYfVotQBSmtowrRD1EcM0CYqwc68g7A5FMy',
+            ),
+            9 => 
+            array (
+                'id' => 10,
+                'tour_id' => 6,
+                'lead_booker_id' => null,
+                'booking_reference' => 'OTM000600100021YKXQ',
+                'deposit' => '50.00',
+                'ordered_on' => '2022-09-01 03:15:00',
+                'cancelled' => 0,
+                'internal_notes' => NULL,
+                'external_notes' => NULL,
+                'invoice_footer' => NULL,
+                'created_at' => '2022-09-21 09:24:11',
+                'updated_at' => '2022-09-21 09:24:11',
+                'deleted_at' => NULL,
+                'token' => NULL,
+            ),
+            10 => 
+            array (
+                'id' => 11,
+                'tour_id' => 6,
+                'lead_booker_id' => null,
+                'booking_reference' => 'OTM000600110022HMFS',
+                'deposit' => '50.00',
+                'ordered_on' => '2022-08-13 13:30:00',
+                'cancelled' => 0,
+                'internal_notes' => NULL,
+                'external_notes' => NULL,
+                'invoice_footer' => NULL,
+                'created_at' => '2022-09-21 09:27:53',
+                'updated_at' => '2022-09-21 09:27:53',
+                'deleted_at' => NULL,
+                'token' => NULL,
+            ),
+            11 => 
+            array (
+                'id' => 12,
+                'tour_id' => 6,
+                'lead_booker_id' => null,
+                'booking_reference' => 'OTM000600120023TQHV',
+                'deposit' => '50.00',
+                'ordered_on' => '2022-09-21 10:00:00',
+                'cancelled' => 0,
+                'internal_notes' => NULL,
+                'external_notes' => NULL,
+                'invoice_footer' => NULL,
+                'created_at' => '2022-09-21 09:30:33',
+                'updated_at' => '2022-09-21 09:30:33',
+                'deleted_at' => NULL,
+                'token' => NULL,
+            ),
+            12 => 
+            array (
+                'id' => 13,
+                'tour_id' => 6,
+                'lead_booker_id' => null,
+                'booking_reference' => 'OTM000600130024VFQL',
+                'deposit' => '50.00',
+                'ordered_on' => '2022-09-21 10:26:00',
+                'cancelled' => 0,
+                'internal_notes' => NULL,
+                'external_notes' => NULL,
+                'invoice_footer' => NULL,
+                'created_at' => '2022-09-21 09:31:56',
+                'updated_at' => '2022-09-21 09:31:56',
+                'deleted_at' => NULL,
+                'token' => NULL,
+            ),
+            13 => 
+            array (
+                'id' => 14,
+                'tour_id' => 5,
+                'lead_booker_id' => null,
+                'booking_reference' => 'OTM000500140026XNHU',
+                'deposit' => '350.00',
+                'ordered_on' => '2022-09-21 11:45:17',
+                'cancelled' => 0,
+                'internal_notes' => NULL,
+                'external_notes' => NULL,
+                'invoice_footer' => '<p>The Gambia is commonly known as the &quot;smiling coast&quot; of Africa. It is recognised for its beautiful white sandy beaches and for being home to Jufureh. The reputed ancestral village of Kunte Kinte, the main legend in Alex Haley well known novel &quot;Roots&quot;. This small West African country, surrounded by Senegal and the narrow Atlantic coastline. &nbsp;The diverse ecosystems is around the central Gambia River. The abundance of wildlife in its Kiang West National Park and Bao Bolong Wetland Reserve includes monkeys, leopards, hippos, hyenas and rare birds. The capital, Banjul, and nearby Serrekunda offer access to beaches.</p>',
+                'created_at' => '2022-09-21 11:45:17',
+                'updated_at' => '2022-09-21 11:45:18',
+                'deleted_at' => NULL,
+                'token' => 'zjgZyBQvhlcM74W9m6P2Jwb2RtKxuRWbErkiXfVxPBGJ5zvS8tAG1pYD5KLcFOQ4',
+            ),
+            14 => 
+            array (
+                'id' => 15,
+                'tour_id' => 5,
+                'lead_booker_id' => null,
+                'booking_reference' => 'OTM000500150027NBRV',
+                'deposit' => '350.00',
+                'ordered_on' => '2022-09-21 13:30:00',
+                'cancelled' => 0,
+                'internal_notes' => NULL,
+                'external_notes' => NULL,
+                'invoice_footer' => '<p>The Gambia is commonly known as the &quot;smiling coast&quot; of Africa. It is recognised for its beautiful white sandy beaches and for being home to Jufureh. The reputed ancestral village of Kunte Kinte, the main legend in Alex Haley well known novel &quot;Roots&quot;. This small West African country, surrounded by Senegal and the narrow Atlantic coastline. &nbsp;The diverse ecosystems is around the central Gambia River. The abundance of wildlife in its Kiang West National Park and Bao Bolong Wetland Reserve includes monkeys, leopards, hippos, hyenas and rare birds. The capital, Banjul, and nearby Serrekunda offer access to beaches.</p>',
+                'created_at' => '2022-09-21 12:44:00',
+                'updated_at' => '2022-09-21 12:44:00',
+                'deleted_at' => NULL,
+                'token' => NULL,
             ),
         ));
-
-        \DB::table('order_customers')->delete();
-
-        \DB::table('order_customers')->insert(array (
-            0 =>
-                array (
-                    'id' => 1,
-                    'order_id' => 1,
-                    'customer_id' => 1,
-                    'tour_cost' => 3498.0,
-                    'single_occupancy_surcharge' => 419.67,
-                    'travel_insurer' => NULL,
-                    'policy_number' => NULL,
-                    'created_at' => '2022-01-23 13:02:34',
-                    'updated_at' => '2022-01-23 13:02:34',
-                    'deleted_at' => NULL,
-                ),
-            1 =>
-                array (
-                    'id' => 2,
-                    'order_id' => 2,
-                    'customer_id' => 4,
-                    'tour_cost' => 3498.0,
-                    'single_occupancy_surcharge' => 419.67,
-                    'travel_insurer' => NULL,
-                    'policy_number' => NULL,
-                    'created_at' => '2022-01-23 13:21:17',
-                    'updated_at' => '2022-01-23 13:21:17',
-                    'deleted_at' => NULL,
-                ),
-            2 =>
-                array (
-                    'id' => 3,
-                    'order_id' => 3,
-                    'customer_id' => 3,
-                    'tour_cost' => 3498.0,
-                    'single_occupancy_surcharge' => 419.67,
-                    'travel_insurer' => NULL,
-                    'policy_number' => NULL,
-                    'created_at' => '2022-01-23 13:25:11',
-                    'updated_at' => '2022-01-23 13:25:11',
-                    'deleted_at' => NULL,
-                ),
-            3 =>
-                array (
-                    'id' => 4,
-                    'order_id' => 3,
-                    'customer_id' => 18,
-                    'tour_cost' => 3498.0,
-                    'single_occupancy_surcharge' => 1250.0,
-                    'travel_insurer' => 'ASCI',
-                    'policy_number' => 'ABDF',
-                    'created_at' => '2022-01-23 13:38:49',
-                    'updated_at' => '2022-01-23 13:38:49',
-                    'deleted_at' => NULL,
-                ),
-            4 =>
-                array (
-                    'id' => 5,
-                    'order_id' => 4,
-                    'customer_id' => 5,
-                    'tour_cost' => 3498.0,
-                    'single_occupancy_surcharge' => 419.67,
-                    'travel_insurer' => NULL,
-                    'policy_number' => NULL,
-                    'created_at' => '2022-01-23 13:47:50',
-                    'updated_at' => '2022-01-23 13:47:50',
-                    'deleted_at' => NULL,
-                ),
-        ));
-
-        $order1 =  Order::find(1);
-        $order1->lead_booker_id = 1;
-        $order1->save();
-        $order2 =  Order::find(2);
-        $order2->lead_booker_id = 2;
-        $order2->save();
-        $order3 =  Order::find(3);
-        $order3->lead_booker_id = 3;
-        $order3->save();
-        $order4 =  Order::find(4);
-        $order4->lead_booker_id = 5;
-        $order4->save();
         
+        $this->call(OrderCustomersTableSeeder::class);
+        $this->updateLeadBooker(1, 1);
+        $this->updateLeadBooker(2, 2);
+        $this->updateLeadBooker(3, 3);
+        $this->updateLeadBooker(4, 5);
+        $this->updateLeadBooker(5, 6);
+        $this->updateLeadBooker(6, 9);
+        $this->updateLeadBooker(7, 14);
+        $this->updateLeadBooker(8, 16);
+        $this->updateLeadBooker(9, 19);
+        $this->updateLeadBooker(10, 21);
+        $this->updateLeadBooker(11, 22);
+        $this->updateLeadBooker(12, 23);
+        $this->updateLeadBooker(13, 24);
+        $this->updateLeadBooker(14, 26);
+        $this->updateLeadBooker(15, 27);
+    }
+
+    private function updateLeadBooker(int $orderId, int $leadBookerId)
+    {
+        $order = Order::find($orderId);
+        $order->lead_booker_id = $leadBookerId;
+        $order->save();
     }
 }

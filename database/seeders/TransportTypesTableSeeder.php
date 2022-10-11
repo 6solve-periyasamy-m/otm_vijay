@@ -27,6 +27,22 @@ class TransportTypesTableSeeder extends Seeder
                 'updated_at' => '2022-01-21 12:41:11',
                 'deleted_at' => NULL,
             ),
+            1 => 
+            array (
+                'id' => 2,
+                'name' => 'Standard',
+                'created_at' => '2022-09-20 19:02:05',
+                'updated_at' => '2022-09-20 19:02:05',
+                'deleted_at' => NULL,
+            ),
+            2 => 
+            array (
+                'id' => 3,
+                'name' => 'Luxury Coach',
+                'created_at' => '2022-09-21 08:59:47',
+                'updated_at' => '2022-09-21 08:59:47',
+                'deleted_at' => NULL,
+            ),
         ));
         
         
