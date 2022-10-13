@@ -26,7 +26,7 @@ class AccommodationInventoryTourController extends Controller
         $accommodationInventoryTour = AccommodationInventoryTour::make([
             'accommodation_inventory_id' => $request->input('accommodation_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),
-            'tour_sales_price' => $request->input('tour_sales_price'),
+            'tour_sales_price' => $request->input('tour_sales_price') ?? 0,
             'is_template' => $request->input('is_template')  == 'on' ? 1 : 0,
         ]);
         $tour->accommodationInventoryTours()->save($accommodationInventoryTour);
@@ -49,7 +49,7 @@ class AccommodationInventoryTourController extends Controller
         $accommodationInventoryTour->update([
             'accommodation_inventory_id' => $request->input('accommodation_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),
-            'tour_sales_price' => $request->input('tour_sales_price'),
+            'tour_sales_price' => $request->input('tour_sales_price') ?? 0,
             'is_template' => $request->input('is_template')  == 'on' ? 1 : 0,
         ]);
         return redirect()->route('tours.view', ['tour' => $tour,]);

@@ -33,8 +33,8 @@ class AccommodationInventoryController extends Controller
             'check_out_time_confirmed' => $request->input('check_out_time_confirmed') == 'on' ? 1 : 0,
             'fit_selectable' => $request->input('fit_selectable') == 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
-            'purchase_price' => $request->input('purchase_price'),
-            'sales_price' => $request->input('sales_price'),
+            'purchase_price' => $request->input('purchase_price') ?? 0,
+            'sales_price' => $request->input('sales_price') ?? 0,
             'notes' => $request->input('notes'),
         ]);
         $accommodation->inventory()->save($accommodationInventory);
@@ -73,8 +73,8 @@ class AccommodationInventoryController extends Controller
             'check_out_time_confirmed' => $request->input('check_out_time_confirmed') == 'on' ? 1 : 0,
             'fit_selectable' => $request->input('fit_selectable') == 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
-            'purchase_price' => $request->input('purchase_price'),
-            'sales_price' => $request->input('sales_price'),
+            'purchase_price' => $request->input('purchase_price') ?? 0,
+            'sales_price' => $request->input('sales_price') ?? 0,
             'notes' => $request->input('notes'),
         ]);
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
