@@ -54,6 +54,11 @@ abstract class AttributeRepository extends ModelRepository
         return $this->getRelatedCount() === 0;
     }
 
+    public static function getSafeName(): string
+    {
+        return preg_replace('/[^A-Za-z0-9-_]/', '', static::getName());
+    }
+
     public static abstract function getCreateUrl(): string|null;
     public static abstract function getAll(bool $trashed = false): array|Collection;
     public static abstract function getName(): string;
