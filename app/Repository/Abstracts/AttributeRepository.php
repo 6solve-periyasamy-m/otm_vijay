@@ -3,6 +3,7 @@
 namespace App\Repository\Abstracts;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 
 abstract class AttributeRepository extends ModelRepository
@@ -57,6 +58,11 @@ abstract class AttributeRepository extends ModelRepository
     public static function getSafeName(): string
     {
         return preg_replace('/[^A-Za-z0-9-_]/', '', static::getName());
+    }
+
+    public function getReturnURL(): RedirectResponse
+    {
+        return redirect()->route('attributes.edit');
     }
 
     public static abstract function getCreateUrl(): string|null;

@@ -49,7 +49,8 @@ class TravelClassController extends Controller
 
     public function destroy(TravelClass $travelClass)
     {
-        $travelClass->delete();
-        return redirect()->route('travel-classes.all');
+        $repo = $travelClass->repository;
+        $repo->delete();
+        return $repo->getReturnURL();
     }
 }
