@@ -147,6 +147,10 @@ a {
 .otm-sidebar {    
     background-color: $sideBarColor;
 
+    .nav-item {
+        width: 100%;
+    }
+
     .nav-link {
         padding: 0.8rem 1rem;
         color: #151515;
@@ -225,7 +229,6 @@ a {
     .otm-sidebar:not(.shown) {
         transition-duration: 0.5s;
         width: 2.5%;
-        overflow: hidden;
 
         .sidebar-hide {
             display: none;
