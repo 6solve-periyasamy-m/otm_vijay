@@ -129,7 +129,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'single_occupancy_surcharge' => $this->quote->single_occupancy_surcharge,
         ]);
         foreach ($this->getComponents() as $repository) {
-            $repository->getInventory()->addToTour($tour, $repository->getTourComponentType(), $repository->getCost());
+            $repository->convertToTourComponent($tour);
         }
         foreach ($this->quote->installments as $installment) {
             $tour->repository->addInstallment($installment->due_on, $installment->amount, $installment->percentage);
