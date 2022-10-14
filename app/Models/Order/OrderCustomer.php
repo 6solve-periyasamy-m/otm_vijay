@@ -63,6 +63,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read bool $has_surcharge Whether the customer should be charged for single occupancy
  * @property-read bool $is_lead_booker Whether the customer is the lead booker
  * @property-read bool $cancelled Whether the customer is cancelled
+ * @property-read bool $registered Is the traveller a registered user
  * @property-read string $lead_booker_name The full name of the lead booker
  * @property-read Carbon $ordered_on When the order was placed
  * @property-read float $adjustment_total The sum of all adjustments for the OrderCustomer
@@ -258,5 +259,10 @@ class OrderCustomer extends Model
     public function getAdditionalCosts(): array
     {
         return $this->repository->getAdditionalCosts();
+    }
+
+    public function getRegisteredAttribute(): bool
+    {
+        return $this->customer?->registered ?? false;
     }
 }

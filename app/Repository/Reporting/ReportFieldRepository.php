@@ -464,6 +464,11 @@ class ReportFieldRepository
                         'name' => 'Hat Size',
                         'method' => 'hatSize',
                     ],
+                    'registered' => [
+                        'name' => 'Has Account',
+                        'method' => 'registered',
+                        'format' => 'boolean',
+                    ],
                     'internal_notes' => [
                         'name' => 'Internal Notes',
                         'method' => 'internal_notes',
