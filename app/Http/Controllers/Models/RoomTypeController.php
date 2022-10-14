@@ -51,7 +51,8 @@ class RoomTypeController extends Controller
 
     public function destroy(RoomType $roomType)
     {
-        $roomType->delete();
-        return redirect()->route('room-types.all');
+        $repo = $roomType->repository;
+        $repo->delete();
+        return $repo->getReturnURL();
     }
 }

@@ -49,7 +49,8 @@ class BoardTypeController extends Controller
 
     public function destroy(BoardType $boardType)
     {
-        $boardType->delete();
-        return redirect()->route('board-types.all');
+        $repo = $boardType->repository;
+        $repo->delete();
+        return $repo->getReturnURL();
     }
 }

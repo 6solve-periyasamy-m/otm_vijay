@@ -3,6 +3,7 @@
 namespace App\Models\Customer;
 
 use App\Models\Helper\SimpleModel;
+use App\Models\Traits\HasRepository;
 use App\Repository\Model\Customer\TShirtSizeRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -40,6 +41,7 @@ class TShirtSize extends SimpleModel
 {
     use HasFactory;
     use SoftDeletes;
+    use HasRepository;
 
     protected $fillable = ['name',];
 

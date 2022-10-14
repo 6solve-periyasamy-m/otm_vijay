@@ -3,9 +3,11 @@
 namespace App\Repository\Model\Quote\Component;
 
 use App\Models\Quote\Component\QuoteTransport;
+use App\Models\Tour\Tour;
+use App\Models\Transport\TransportInventoryTour;
+use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Transport\TransportInventoryRepository;
-use App\Repository\Model\Transport\TransportInventoryTourRepository;
 use App\Repository\Traits\Component\IsTransport;
 
 class QuoteTransportRepository extends QuoteComponentRepository
@@ -88,5 +90,16 @@ class QuoteTransportRepository extends QuoteComponentRepository
     public function getItineraryAsset(): string
     {
         return asset($this->getInventory()->get()->component->image_url);
+    }
+
+    public function convertToTourComponent(Tour $tour): InventoryTourRepository
+    {
+        $tourComponent = TransportInventoryTour::create([
+            'tour_id' => $tour->id,
+            'tour_component_type' => $this->quoteComponent->tour_component_type,
+            'tour_sales_price' => $this->quoteComponent->tour_sales_price,
+            'transport_inventory_id' => $this->quoteComponent->transport_inventory_id,
+        ]);
+        return $tourComponent->repository;
     }
 }

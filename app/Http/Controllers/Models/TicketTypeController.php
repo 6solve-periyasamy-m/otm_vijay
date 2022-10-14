@@ -49,7 +49,8 @@ class TicketTypeController extends Controller
 
     public function destroy(TicketType $ticketType)
     {
-        $ticketType->delete();
-        return redirect()->route('ticket-types.all');
+        $repo = $ticketType->repository;
+        $repo->delete();
+        return $repo->getReturnURL();
     }
 }
