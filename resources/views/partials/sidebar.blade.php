@@ -234,5 +234,13 @@
                 </a>
             </li>
         @endcan
+        @if(Auth::user() !== null && Auth::user()->getHighestRoleLevel() === 999)
+            <li>
+                <a href="{{ url('/system/logs') }}" class="nav-link">
+                    <i class="icon-layers"></i>
+                    <span>Log Viewer</span>
+                </a>
+            </li>
+        @endif
     </ul>
 </div>
