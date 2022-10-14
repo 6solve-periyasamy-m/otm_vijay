@@ -148,7 +148,7 @@ a {
     background-color: $sideBarColor;
 
     .nav-link {
-        padding: 1rem 1.3rem;
+        padding: 0.8rem 1rem;
         color: #151515;
         font-size: 1rem;
         position: relative;
@@ -185,7 +185,7 @@ a {
             float: right;
             position: absolute;
             right: 0;
-            top: 12px;
+            top: 8px;
             background: 0 0;
             width: 0;
             height: 0;
@@ -213,7 +213,7 @@ a {
         position: sticky;
         top: 4rem;
         z-index: 1000;        
-        height: calc(100vh - 4rem);                       
+        height: calc(100vh - 4rem);
     }
 
     .collapse.otm-sidebar:not(.show) {
