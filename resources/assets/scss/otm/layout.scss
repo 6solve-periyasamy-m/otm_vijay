@@ -155,7 +155,7 @@ a {
         line-height: 1rem;
         font-weight: 500;
         display: flex;
-        
+        white-space: nowrap;
 
         &:hover {            
             background-color: $secondColor;
@@ -222,11 +222,42 @@ a {
 }
 
 @media only screen and (min-width: 1500px) {
+    .otm-sidebar:not(.shown) {
+        transition-duration: 0.5s;
+        width: 2.5%;
+        overflow: hidden;
+
+        .sidebar-hide {
+            display: none;
+        }
+
+        &:hover{
+            width: 13%;
+
+            .sidebar-hide {
+                display: inherit;
+            }
+        }
+    }
+
     .otm-sidebar {
-        width: 13%;
+        &.shown {
+            width: 13%;
+        }
     }
 
     .otm-content {
-        width: 87%;
+        display: flex;
+        flex: 1 1 auto;
+        width: calc(100% - 2.5%);
     }
+
+    .page-wrapper {
+        width: 100%;
+    }
+}
+
+.sidebar-toggle {
+    justify-content: end;
+    padding-left: 2.5rem !important;
 }

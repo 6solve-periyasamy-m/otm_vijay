@@ -1,12 +1,12 @@
 @if($permitted)
     @php $active = isset($search) && str_contains(Request::path(), $search) @endphp
-    <li>
+    <div class="nav-item">
         <a href="{{ $url }}" class="nav-link @if($active) active @endif">
             <i class="icon-{{ $icon }}"></i>
-            <span>{{ $name }}</span>
+            <span class="sidebar-hide">{{ $name }}</span>
             @if($active)
-                <span class="selected"></span>
+                <span class="sidebar-hide selected"></span>
             @endif
         </a>
-    </li>
+    </div>
 @endif
