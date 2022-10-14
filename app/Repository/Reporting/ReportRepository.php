@@ -88,6 +88,7 @@ class ReportRepository
             $row->booking_reference = $order->booking_reference;
             $row->lb_first_name = $order->leadBooker->customer->first_name;
             $row->lb_last_name = $order->leadBooker->customer->last_name;
+            $row->lb_email = $order->leadBooker->customer->email_address;
             $row->customer_count = $order->customer_count;
             $row->tour_name = $order->tour->name;
             $row->total_order_value = $order->total;
