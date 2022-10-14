@@ -22,7 +22,7 @@ class QuoteController extends ApiController
         }
         $customers = $request->paying + $request->travelling;
         $cost = $quote->repository->getPricePerPerson($request->paying);
-        if ($cost === null && $request->paying > 0) {
+        if ($cost === null) {
             return response()->json(['success' => false, 'message' => 'No price point exists for that few travellers']);
         }
         $cost = $request->paying == 0 ? 0 : $cost->price_per_person;

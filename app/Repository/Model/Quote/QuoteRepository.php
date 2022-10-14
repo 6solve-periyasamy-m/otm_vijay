@@ -307,7 +307,13 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function getPricePerPerson(int $count): ?QuotePricePoint
     {
         $price = QuotePricePoint::where('quote_id', $this->quote->id)->where('quantity', '<=', $count)->orderBy('quantity', 'desc')->first();
-        if (!isset($price)) {
+        if (!isset($price) && $count === 0) {
+            return QuotePricePoint::make([
+                'quantity' => 0,
+                'quote_id' => $this->quote->id,
+                'price_per_person' => 0,
+            ]);
+        } elseif (!isset($price)) {
             $highest = null;
             foreach ($this->quote->pricePoints as $pricePoint) {
                 if ($pricePoint->quantity == $count) return $pricePoint;
