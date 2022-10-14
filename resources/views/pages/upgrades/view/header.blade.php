@@ -9,7 +9,13 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Booking URL</p>
-            <h6 class="fw-bold"><a href="{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,]) }}">{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,]) }}</a></h6>
+            <h6 class="fw-bold">
+                @if(!empty($tour->booking_form_url))
+                    <a href="{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,]) }}">{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,]) }}</a>
+                @else
+                    No Booking URL Set
+                @endif
+            </h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Price per Person</p>

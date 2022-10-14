@@ -20,7 +20,7 @@ class QuoteGetPricePointTest extends DatabaseTestCase
         $this->assertEquals(100, $quote->repository->getPricePerPerson(1)->price_per_person);
         $this->assertEquals(100, $quote->repository->getPricePerPerson(10)->price_per_person);
         $this->assertEquals(100, $quote->repository->getPricePerPerson(100)->price_per_person);
-        $this->assertNull($quote->repository->getPricePerPerson(0));
+        $this->assertEquals(0, $quote->repository->getPricePerPerson(0)->price_per_person);
     }
 
     public function testGetWithTwo()
@@ -32,7 +32,7 @@ class QuoteGetPricePointTest extends DatabaseTestCase
         $this->assertEquals(100, $quote->repository->getPricePerPerson(9)->price_per_person);
         $this->assertEquals(80, $quote->repository->getPricePerPerson(10)->price_per_person);
         $this->assertEquals(80, $quote->repository->getPricePerPerson(100)->price_per_person);
-        $this->assertNull($quote->repository->getPricePerPerson(0));
+        $this->assertEquals(0, $quote->repository->getPricePerPerson(0)->price_per_person);
     }
 
     public function testGetWithThree()
@@ -47,6 +47,6 @@ class QuoteGetPricePointTest extends DatabaseTestCase
         $this->assertEquals(80, $quote->repository->getPricePerPerson(99)->price_per_person);
         $this->assertEquals(50, $quote->repository->getPricePerPerson(100)->price_per_person);
         $this->assertEquals(50, $quote->repository->getPricePerPerson(1000)->price_per_person);
-        $this->assertNull($quote->repository->getPricePerPerson(0));
+        $this->assertEquals(0, $quote->repository->getPricePerPerson(0)->price_per_person);
     }
 }

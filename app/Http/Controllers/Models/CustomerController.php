@@ -6,9 +6,11 @@ use App\Events\Customer\CustomerCreatedEvent;
 use App\Events\Customer\CustomerEditedEvent;
 use App\Events\Customer\CustomerRemovedEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginAsCustomerRequest;
 use App\Models\Customer\Customer;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Log;
@@ -97,6 +99,12 @@ class CustomerController extends Controller
         $customer->save();
         event(new CustomerCreatedEvent($customer));
         return redirect()->route('customers.view', ['customer' => $customer,]);
+    }
+
+    public function login(LoginAsCustomerRequest $request)
+    {
+        Auth::guard('customer')->loginUsingId($request->customer_id);
+        return redirect()->route('customer.portal');
     }
 
     public function view(Customer $customer)

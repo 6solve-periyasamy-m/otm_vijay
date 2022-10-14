@@ -51,7 +51,8 @@ class OperatorController extends Controller
 
     public function destroy(Operator $operator)
     {
-        $operator->delete();
-        return redirect()->route('operators.all');
+        $repo = $operator->repository;
+        $repo->delete();
+        return $repo->getReturnURL();
     }
 }

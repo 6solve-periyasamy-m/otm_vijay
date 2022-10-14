@@ -69,7 +69,8 @@ class AirportController extends Controller
 
     public function destroy(Airport $airport)
     {
-        $airport->delete();
-        return redirect()->route('airports.all');
+        $repo = $airport->repository;
+        $repo->delete();
+        return $repo->getReturnURL();
     }
 }

@@ -2,12 +2,13 @@
 
 namespace App\Repository\Model\Quote\Component;
 
+use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Quote\Component\QuoteAccommodation;
+use App\Models\Tour\Tour;
+use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
-use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
 use App\Repository\Traits\Component\IsAccommodation;
-use Carbon\Carbon;
 
 class QuoteAccommodationRepository extends QuoteComponentRepository
 {
@@ -89,5 +90,16 @@ class QuoteAccommodationRepository extends QuoteComponentRepository
     public function getItineraryAsset(): string
     {
         return asset($this->getInventory()->get()->component->image_url);
+    }
+
+    public function convertToTourComponent(Tour $tour): InventoryTourRepository
+    {
+        $tourComponent = AccommodationInventoryTour::create([
+            'tour_id' => $tour->id,
+            'tour_component_type' => $this->quoteComponent->tour_component_type,
+            'tour_sales_price' => $this->quoteComponent->tour_sales_price,
+            'accommodation_inventory_id' => $this->quoteComponent->accommodation_inventory_id,
+        ]);
+        return $tourComponent->repository;
     }
 }

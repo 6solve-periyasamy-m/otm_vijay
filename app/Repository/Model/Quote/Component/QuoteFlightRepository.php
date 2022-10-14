@@ -2,10 +2,12 @@
 
 namespace App\Repository\Model\Quote\Component;
 
+use App\Models\Flight\FlightInventoryTour;
 use App\Models\Quote\Component\QuoteFlight;
+use App\Models\Tour\Tour;
+use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Flight\FlightInventoryRepository;
-use App\Repository\Model\Flight\FlightInventoryTourRepository;
 use App\Repository\Traits\Component\IsFlight;
 
 class QuoteFlightRepository extends QuoteComponentRepository
@@ -90,5 +92,17 @@ class QuoteFlightRepository extends QuoteComponentRepository
     public function getItineraryAsset(): string
     {
         return asset($this->getInventory()->get()->component->image_url);
+    }
+
+    public function convertToTourComponent(Tour $tour): InventoryTourRepository
+    {
+        $tourComponent = FlightInventoryTour::create([
+            'tour_id' => $tour->id,
+            'tour_component_type' => $this->quoteComponent->tour_component_type,
+            'tour_sales_price' => $this->quoteComponent->tour_sales_price,
+            'flight_inventory_id' => $this->quoteComponent->flight_inventory_id,
+            'flight_type' => $this->quoteComponent->flight_type,
+        ]);
+        return $tourComponent->repository;
     }
 }

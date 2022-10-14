@@ -3,10 +3,12 @@
 namespace App\Repository\Model\Quote\Component;
 
 
+use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Quote\Component\QuoteMerchandise;
+use App\Models\Tour\Tour;
+use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Merchandise\MerchandiseInventoryRepository;
-use App\Repository\Model\Merchandise\MerchandiseInventoryTourRepository;
 use App\Repository\Traits\Component\IsMerchandise;
 
 class QuoteMerchandiseRepository extends QuoteComponentRepository
@@ -94,5 +96,16 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
     public function getItineraryAsset(): string
     {
         return $this->getInventory()->get()->asset;
+    }
+
+    public function convertToTourComponent(Tour $tour): InventoryTourRepository
+    {
+        $tourComponent = MerchandiseInventoryTour::create([
+            'tour_id' => $tour->id,
+            'tour_component_type' => $this->quoteComponent->tour_component_type,
+            'tour_sales_price' => $this->quoteComponent->tour_sales_price,
+            'merchandise_inventory_id' => $this->quoteComponent->merchandise_inventory_id,
+        ]);
+        return $tourComponent->repository;
     }
 }

@@ -5,6 +5,7 @@
             <th scope="col">Booking Reference</th>
             <th scope="col">Lead Booker First Name</th>
             <th scope="col">Lead Booker Last Name</th>
+            <th scope="col">Lead Booker Email</th>
             <th scope="col">Passenger Count</th>
             <th scope="col">Tour Name</th>
             <th scope="col">Total Order Value</th>
@@ -22,6 +23,7 @@
                 <th scope="row">{{ $row->booking_reference }}</th>
                 <td>{{ $row->lb_first_name }}</td>
                 <td>{{ $row->lb_last_name }}</td>
+                <td>{{ $row->lb_email }}</td>
                 <td>{{ $row->customer_count }}</td>
                 <td>{{ $row->tour_name }}</td>
                 <td>{{ $row->total_order_value }}</td>
