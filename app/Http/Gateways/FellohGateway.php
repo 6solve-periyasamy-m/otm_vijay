@@ -68,7 +68,7 @@ class FellohGateway extends Gateway
         ])->post($this->url . '/felloh-checkout-service/v1/checkout-payment', $body);
         if ($response->status() !== 201) {
             Log::error("Failed fetching felloh gateway: \n" . $response->body());
-            return route('payment.gateway.fellow.failed');
+            return route('payment.gateway.felloh.failed');
         }
         GatewayPaymentLink::create([
             'gateway' => self::$GATEWAY,

@@ -901,7 +901,7 @@ Route::prefix('payment')->name('payment.')->group(function () {
             Route::get('success', [StripeController::class, 'success'])->name('success');
             Route::get('cancelled', [StripeController::class, 'cancelled'])->name('cancelled');
         });
-        Route::prefix('felloh')->name('fellow.')->group(function () {
+        Route::prefix('felloh')->name('felloh.')->group(function () {
             Route::get('failed', [FellohGateway::class, 'failed'])->name('failed');
         });
     });
