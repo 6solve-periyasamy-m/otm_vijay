@@ -10,6 +10,7 @@ use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\System\GatewayPaymentLink;
 use Carbon\Carbon;
+use Exception;
 use Http;
 use Illuminate\Http\JsonResponse;
 use Log;
@@ -87,6 +88,11 @@ class FellohGateway extends Gateway
 
     public function webhook(WebhookRequest $request): JsonResponse
     {
+        try {
+            Log::channel('webhook')->info(self::$GATEWAY . " Gateway Webhook: ($request->eventType) $request->transactionId");
+        } catch(Exception $e) {
+            Log::error($e);
+        }
         if ($request->eventType === " PaymentAuthorised"
             || $request->eventType === "PaymentReceived"
             || $request->eventType === "PaymentCompleted") {
