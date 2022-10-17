@@ -235,7 +235,7 @@ class Order extends Model
      */
     public function getTotalAttribute(): float
     {
-        return $this->cancelled ? $this->paid : $this->cost;
+        return $this->cancelled ? $this->paid : ($this->cost + $this->total_adjustments);
     }
 
     /**
@@ -259,7 +259,7 @@ class Order extends Model
      */
     public function getRemainingInstallmentAttribute(): float
     {
-        $cost = $this->cost - $this->calculated_deposit;
+        $cost = $this->cost - $this->calculated_deposit - $this->total_adjustments;
         foreach ($this->installments as $installment) {
             $cost -= $installment->calculated_amount;
         }

@@ -56,6 +56,6 @@ class HatSizeRepository extends AttributeRepository
 
     public function getRelatedCount(): int
     {
-        return $this->model->transports()->count();
+        return $this->model->customers()->count();
     }
 }

@@ -40,11 +40,10 @@
                                 </span>
                         @endif
                         @if($model->repository->getDeleteUrl() !== null)
-                            <a href="#" class="btn btn-sm btn-outline-danger mb-1"
-                               onclick="event.preventDefault();document.getElementById('{{$repository}}-{{ $model->id }}-delete').submit();">
+                            <a href="javascript:$('#{{$repository::getSafeName()}}-{{ $model->id }}-delete').submit();" class="btn btn-sm btn-outline-danger mb-1">
                                 <i class="icon-trash"></i>
                             </a>
-                            <form id="{{$repository}}-{{ $model->id }}-delete" action="{{$model->repository->getDeleteUrl()}}" method="POST" style="display: none;">{{ csrf_field() }}</form>
+                            <form id="{{$repository::getSafeName()}}-{{ $model->id }}-delete" action="{{$model->repository->getDeleteUrl()}}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
                                     <i class="icon-trash"></i>

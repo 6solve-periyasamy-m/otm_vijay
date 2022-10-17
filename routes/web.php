@@ -72,6 +72,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\UpgradeController;
+use App\Http\Gateways\FellohGateway;
 use App\Models\Tour\Tour;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -749,6 +750,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::get('/', [CustomerController::class, 'index'])->name('customers.all')->middleware('bouncer:Customer\Customer,read');
         Route::get('/create', [CustomerController::class, 'create'])->name('customers.create')->middleware('bouncer:Customer\Customer,create');
         Route::post('/create', [CustomerController::class, 'store'])->name('customers.store')->middleware('bouncer:Customer\Customer,create');
+        Route::post('/login', [CustomerController::class, 'login'])->name('customers.login-as')->middleware('bouncer:Customer\Customer,read');
         Route::prefix('{customer}')->group(function () {
             Route::get('/', [CustomerController::class, 'view'])->name('customers.view')->middleware('bouncer:Customer\Customer,read');
             Route::get('/update', [CustomerController::class, 'edit'])->name('customers.edit')->middleware('bouncer:Customer\Customer,update');
@@ -899,6 +901,9 @@ Route::prefix('payment')->name('payment.')->group(function () {
         Route::prefix('stripe')->name('stripe.')->group(function () {
             Route::get('success', [StripeController::class, 'success'])->name('success');
             Route::get('cancelled', [StripeController::class, 'cancelled'])->name('cancelled');
+        });
+        Route::prefix('felloh')->name('felloh.')->group(function () {
+            Route::get('failed', [FellohGateway::class, 'failed'])->name('failed');
         });
     });
 });

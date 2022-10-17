@@ -22,7 +22,7 @@ $next = $order->next_installment;
                         <label class="payment-label">Balance Outstanding</label>
                     </div>
                     <div class="col-md-3 text-center">
-                        <p class="payment-value" id="order_status">{{ $order->status->description() }}</p>
+                        <p class="payment-value" id="order_status">{{ $order->repository->getOrderStatus(true)->description() }}</p>
                         <label class="payment-label">Order Status</label>
                     </div>
                 </div>

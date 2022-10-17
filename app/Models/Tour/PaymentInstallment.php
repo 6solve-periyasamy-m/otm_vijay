@@ -72,7 +72,11 @@ class PaymentInstallment extends Model
         if ($this->is_percentage) {
             return $this->amount;
         } else {
-            return round(($this->amount / $this->tour->base_price_per_person) * 100, 2);
+            if ($this->tour->base_price_per_person <= 0) {
+                return 100;
+            } else {
+                return round(($this->amount / $this->tour->base_price_per_person) * 100, 2);
+            }
         }
     }
 }

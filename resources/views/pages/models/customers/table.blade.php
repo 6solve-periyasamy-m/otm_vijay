@@ -25,6 +25,8 @@
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">Name</th>
+                    <th scope="col">Email Address</th>
+                    <th scope="col">Registered</th>
                     <th scope="col">Date of Birth</th>
                     <th scope="col">Home Address</th>
                     <th scope="col">Mobile Number</th>
@@ -35,6 +37,8 @@
                 @foreach($customers as $customer)
                     <tr>
                         <td><a href="{{ route('customers.view', ['customer' => $customer,]) }}">{{ $customer->full_name }}</a></td>
+                        <td>{{ $customer->email_address ?? 'No Email Address' }}</td>
+                        <td>{{ f_bool($customer->registered) }}</td>
                         <td>{{ f_date($customer->date_of_birth) }}</td>
                         <td>{{ $customer->homeAddress }}</td>
                         <td>{{ $customer->mobile_number }}</td>

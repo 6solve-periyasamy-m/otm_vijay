@@ -147,15 +147,20 @@ a {
 .otm-sidebar {    
     background-color: $sideBarColor;
 
+    .nav-item {
+        width: 100%;
+    }
+
     .nav-link {
-        padding: 1rem 1.3rem;
+        padding: 0.8rem 1rem;
         color: #151515;
         font-size: 1rem;
         position: relative;
         line-height: 1rem;
         font-weight: 500;
         display: flex;
-        
+        white-space: nowrap;
+        transition-duration: 0.5s;
 
         &:hover {            
             background-color: $secondColor;
@@ -185,7 +190,7 @@ a {
             float: right;
             position: absolute;
             right: 0;
-            top: 12px;
+            top: 0.5rem;
             background: 0 0;
             width: 0;
             height: 0;
@@ -213,7 +218,7 @@ a {
         position: sticky;
         top: 4rem;
         z-index: 1000;        
-        height: calc(100vh - 4rem);                       
+        height: calc(100vh - 4rem);
     }
 
     .collapse.otm-sidebar:not(.show) {
@@ -222,11 +227,41 @@ a {
 }
 
 @media only screen and (min-width: 1500px) {
+    .otm-sidebar:not(.shown) {
+        transition-duration: 0.5s;
+        width: 2.5%;
+
+        .sidebar-hide {
+            display: none;
+        }
+
+        &:hover{
+            width: 13%;
+
+            .sidebar-hide {
+                display: inherit;
+            }
+        }
+    }
+
     .otm-sidebar {
-        width: 13%;
+        &.shown {
+            width: 13%;
+        }
     }
 
     .otm-content {
-        width: 87%;
+        display: flex;
+        flex: 1 1 auto;
+        width: calc(100% - 2.5%);
     }
+
+    .page-wrapper {
+        width: 100%;
+    }
+}
+
+.sidebar-toggle {
+    justify-content: end;
+    padding-left: 2.5rem !important;
 }

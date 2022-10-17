@@ -7,11 +7,16 @@ use Illuminate\Http\Request;
 
 class StripeController extends Controller
 {
+    public function __construct()
+    {
+        $this->gateway = new StripeGateway();
+    }
+
     public function success(Request $request) {
-        return StripeGateway::success($request);
+        return $this->gateway->success($request);
     }
 
     public function cancelled(Request $request) {
-        return StripeGateway::cancelled($request);
+        return $this->gateway->cancelled($request);
     }
 }

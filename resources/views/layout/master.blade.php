@@ -32,7 +32,7 @@
 <body>
 @include('partials.navbar')
 <div class="container-fluid">
-    <div class='row flex-xl-nowrap'>
+    <div class='row flex-xl-nowrap page-wrapper'>
         @include('partials.sidebar')
         <div id="container" class='col-12 col-md-9 col-xl-10 py-md-3 px-md-4 otm-content'>
             @if ($errors->any())
@@ -45,7 +45,7 @@
                     </div>
                 @endforeach
             @endif
-            <div id="content" class="">
+            <div id="content" class="w-100">
                 <div class="heading pt-md-4 pb-md-3 pt-3">
                     <h2 class="fw-bold">@yield('title')</h2>
                 </div>

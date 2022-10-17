@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Gateways\StripeGateway;
+use Gateway;
+use App\Http\Gateways\Storage\LineItem;
 use App\Models\Order\Order;
+use App\Models\Order\Payment\PaymentIntention;
 use App\Models\System\Setting;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
@@ -158,7 +160,10 @@ class BookingController extends Controller
 
         $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
 
-        return StripeGateway::checkout([['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token, 'Deposit', $customer->id, $redirect);
+        $item = new LineItem("Deposit for Booking from $customer->full_name", $amount);
+        $intention = PaymentIntention::build($customer, $booking->token, 'Deposit');
+
+        return redirect(Gateway::getDefaultGateway()->checkout([$item,], $intention, $customer, $redirect));
     }
 
     /**

@@ -88,6 +88,7 @@ class ReportRepository
             $row->booking_reference = $order->booking_reference;
             $row->lb_first_name = $order->leadBooker->customer->first_name;
             $row->lb_last_name = $order->leadBooker->customer->last_name;
+            $row->lb_email = $order->leadBooker->customer->email_address;
             $row->customer_count = $order->customer_count;
             $row->tour_name = $order->tour->name;
             $row->total_order_value = $order->total;
@@ -232,7 +233,7 @@ class ReportRepository
             $row = collect();
             $cDetailsSource = $booking->leadTraveller->customer ?? $booking->leadTraveller;
             $row->name = $cDetailsSource->title . ' ' . $cDetailsSource->first_name . ' ' . $cDetailsSource->last_name;
-            $row->tour = $booking->tour->name;
+            $row->tour = $booking->tour?->name ?? 'Deleted Tour';
             $row->date = $booking->created_at;
             $row->travellers = $booking->travellers()->count();
             $row->expected = $booking->repository->getTotalCost();

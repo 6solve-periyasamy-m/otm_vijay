@@ -49,7 +49,8 @@ class TShirtSizeController extends Controller
 
     public function destroy(TShirtSize $tShirtSize)
     {
-        $tShirtSize->delete();
-        return redirect()->route('t-shirt-sizes.all');
+        $repo = $tShirtSize->repository;
+        $repo->delete();
+        return $repo->getReturnURL();
     }
 }

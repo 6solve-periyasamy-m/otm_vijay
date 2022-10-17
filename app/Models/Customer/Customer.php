@@ -81,6 +81,7 @@ use Laravel\Cashier\Subscription;
  * @property-read string $customer_full_name (Deprecated) Full name of the customer
  * @property-read string $full_name Full name of customer
  * @property-read HatSize|null $hatSize Customer hat size
+ * @property-read bool $registered Is the customer a registered user
  * @property-read Address $homeAddress Home address. Should be a unique entry in the database
  * @property-read Collection|Order[] $leadingOrders Orders where they are the lead booker
  * @property-read int|null $leading_orders_count Amount of orders where they are the lead booker
@@ -291,5 +292,10 @@ class Customer extends Authenticatable
     {
         if (isset($this->profile_picture)) return asset($this->profile_picture);
         return isset($this->email_address) ? Gravatar::get($this->email_address) : ('https://secure.gravatar.com/avatar/?d=mp&s=300');
+    }
+
+    public function getRegisteredAttribute(): bool
+    {
+        return isset($this->email_address) && isset($this->password);
     }
 }

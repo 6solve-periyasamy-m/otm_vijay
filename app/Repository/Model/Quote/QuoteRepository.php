@@ -113,6 +113,13 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         return $order;
     }
 
+    public function getRemainingInstallment(int $paying = 1)
+    {
+        $price = $this->getPricePerPerson($paying)->price_per_person;
+        $total = $this->quote->installments()->sum('amount') + $this->quote->deposit;
+        return $price - $total;
+    }
+
     public function convertToTour(int $customerCount = 1): Tour
     {
         $tour = TourRepository::create([
@@ -129,7 +136,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'single_occupancy_surcharge' => $this->quote->single_occupancy_surcharge,
         ]);
         foreach ($this->getComponents() as $repository) {
-            $repository->getInventory()->addToTour($tour, $repository->getTourComponentType(), $repository->getCost());
+            $repository->convertToTourComponent($tour);
         }
         foreach ($this->quote->installments as $installment) {
             $tour->repository->addInstallment($installment->due_on, $installment->amount, $installment->percentage);
@@ -307,7 +314,13 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function getPricePerPerson(int $count): ?QuotePricePoint
     {
         $price = QuotePricePoint::where('quote_id', $this->quote->id)->where('quantity', '<=', $count)->orderBy('quantity', 'desc')->first();
-        if (!isset($price)) {
+        if (!isset($price) && $count === 0) {
+            return QuotePricePoint::make([
+                'quantity' => 0,
+                'quote_id' => $this->quote->id,
+                'price_per_person' => 0,
+            ]);
+        } elseif (!isset($price)) {
             $highest = null;
             foreach ($this->quote->pricePoints as $pricePoint) {
                 if ($pricePoint->quantity == $count) return $pricePoint;

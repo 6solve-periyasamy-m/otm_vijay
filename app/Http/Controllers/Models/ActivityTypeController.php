@@ -49,7 +49,8 @@ class ActivityTypeController extends Controller
 
     public function destroy(ActivityType $activityType)
     {
-        $activityType->delete();
-        return redirect()->route('activity-types.all');
+        $repo = $activityType->repository;
+        $repo->delete();
+        return $repo->getReturnURL();
     }
 }

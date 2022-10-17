@@ -29,8 +29,8 @@ class ActivityInventoryController extends Controller
             'ends_at' => $request->input('ends_at'),
             'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
-            'purchase_price' => $request->input('purchase_price'),
-            'sales_price' => $request->input('sales_price'),
+            'purchase_price' => $request->input('purchase_price') ?? 0,
+            'sales_price' => $request->input('sales_price') ?? 0,
             'notes' => $request->input('notes'),
         ]);
         $activity->activityInventory()->save($activityInventory);
@@ -56,8 +56,8 @@ class ActivityInventoryController extends Controller
             'ends_at' => $request->input('ends_at'),
             'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
-            'purchase_price' => $request->input('purchase_price'),
-            'sales_price' => $request->input('sales_price'),
+            'purchase_price' => $request->input('purchase_price') ?? 0,
+            'sales_price' => $request->input('sales_price') ?? 0,
             'notes' => $request->input('notes'),
         ]);
         return redirect()->route('activities.view', ['activity' => $activity,]);

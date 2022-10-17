@@ -49,7 +49,8 @@ class HatSizeController extends Controller
 
     public function destroy(HatSize $hatSize)
     {
-        $hatSize->delete();
-        return redirect()->route('hat-sizes.all');
+        $repo = $hatSize->repository;
+        $repo->delete();
+        return $repo->getReturnURL();
     }
 }

@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Gateways\StripeGateway;
+use App\Http\Gateways\Storage\LineItem;
 use App\Http\Requests\Api\Customer\CustomerUpgradeRequest;
-use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
-use App\Models\Flight\FlightInventoryTour;
 use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderTransport;
+use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use Gateway;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 
@@ -101,8 +101,9 @@ class CustomerComponentController extends Controller
         ];
         $redirect = setting('purchase.upgrade.success.redirect', route('customer.extras', ['reference' => $orderCustomer->order->booking_reference, 'customer' => $orderCustomer->customer,]));
 
-        $gateway = StripeGateway::checkout([['name' => $upgrade->description, 'cost' => $upgrade->upgrade->tour_sales_price, 'quantity' => 1],],
-            $orderCustomer->order->booking_reference, 'Installment', $orderCustomer->customer->id, $redirect, $data);
-        return response()->json(['success' => true, 'location' => $gateway->headers->get('Location')]);
+        $item = new LineItem($upgrade->description, $upgrade->upgrade->tour_sales_price);
+        $intention = PaymentIntention::build($orderCustomer->customer, $orderCustomer->order->booking_reference, 'Installment', $data);
+
+        return response()->json(['success' => true, 'location' => Gateway::getDefaultGateway()->checkout([$item,], $intention, $orderCustomer->customer, $redirect)]);
     }
 }
