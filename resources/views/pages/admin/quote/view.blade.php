@@ -623,6 +623,17 @@
                                   action="{{ route('quotes.installments.delete', ['quote' => $quote, 'installment' => $installment,]) }}">@csrf</form>
                         </tr>
                     @endforeach
+                    <tr>
+                        <td>{{ __('quotes.view.cards.installments.types.remaining') }}</td>
+                        <td data-order="{{$quote->final_payment->format('Y-m-d')}}">{{ f_date($quote->final_payment) }}</td>
+                        <td>{{ f_currency($quote->remaining) }}</td>
+                        <td>
+                            <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}"
+                               class="btn btn-outline-success btn-sm mb-1">
+                                <i class="icon-note"></i>
+                            </a>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </x-admin.section.card>
