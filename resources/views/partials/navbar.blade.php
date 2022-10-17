@@ -37,7 +37,7 @@
 @push('footer-stack')
     <script type="text/javascript">
         function logout() {
-            $.post('{{ route('logout') }}', {'_token': '{{ csrf_token() }}',}).then(function () { window.location = '{{ route('homepage') }}'; });
+            $.post('{{ route('logout') }}', {'_token': '{{ csrf_token() }}',}).always(function () { window.location = '{{ route('homepage') }}'; });
         }
     </script>
 @endpush
