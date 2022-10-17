@@ -12,6 +12,7 @@ use App\Models\Order\Order;
 use App\Models\Quote\Quote;
 use App\Models\System\Report;
 use App\Models\System\Setting;
+use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Models\Transport\Transport;
 use App\Models\User;
@@ -60,6 +61,7 @@ class SidebarLink extends Component
     {
         return [
             new SidebarLink('Dashboard', route('dash'), 'list'),
+            new SidebarLink('Events', route('events.all'), 'calendar', 'events', Event::class, 'read'),
             new SidebarLink('Tours', route('tours.all'), 'globe', 'tours', Tour::class, 'read'),
             new SidebarLink('Accommodation', route('accommodations.all'), 'home', 'accommodation', Accommodation::class, 'read'),
             new SidebarLink('Activities', route('activities.all'), 'game-controller', 'activities', Activity::class, 'read'),
