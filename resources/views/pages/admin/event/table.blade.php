@@ -43,7 +43,7 @@
             <tbody>
             @foreach($events as $event)
                 <tr>
-                    <td>{{ $event->name }}</td>
+                    <td><a href="{{route('events.view', ['event' => $event,])}}" class="link link-primary">{{ $event->name }}</a></td>
                     <td>{{ $event->description }}</td>
                     <td>{{ f_date($event->starts_at) }}</td>
                     <td>{{ f_date($event->ends_at) }}</td>

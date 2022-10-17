@@ -35,7 +35,7 @@ class EventController extends Controller
 
     public function view(Event $event)
     {
-        return view('pages.models.events.view', ['event' => $event,]);
+        return view('pages.admin.event.view', ['event' => $event,]);
     }
 
     public function edit(Event $event)
