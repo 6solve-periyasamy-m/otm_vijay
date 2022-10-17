@@ -5,12 +5,7 @@
                 {{ $sidebarLink->render() }}
             @endforeach
             @if(Auth::user() !== null && Auth::user()->getHighestRoleLevel() === 999)
-                <li>
-                    <a href="{{ url('/system/logs') }}" class="nav-link">
-                        <i class="icon-layers"></i>
-                        <span>Log Viewer</span>
-                    </a>
-                </li>
+                {{ \App\View\Components\Admin\SidebarLink::getLogsURL()->render() }}
             @endif
         </div>
         <div class="nav-item">

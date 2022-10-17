@@ -79,4 +79,9 @@ class SidebarLink extends Component
             new SidebarLink('Reports', route('reports.bespoke.all'), 'list', 'reports', Report::class, 'read'),
         ];
     }
+
+    public static function getLogsURL(): SidebarLink
+    {
+        return new SidebarLink('Log Viewer', url('/system/logs'), 'layers');
+    }
 }
