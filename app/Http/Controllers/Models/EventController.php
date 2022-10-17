@@ -11,7 +11,7 @@ class EventController extends Controller
 
     public function index()
     {
-        return view('pages.models.events.table', ['events' => Event::all(),]);
+        return view('pages.admin.event.table', ['events' => Event::all(),]);
     }
 
     public function create()
