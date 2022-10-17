@@ -113,6 +113,13 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         return $order;
     }
 
+    public function getRemainingInstallment(int $paying = 1)
+    {
+        $price = $this->getPricePerPerson($paying)->price_per_person;
+        $total = $this->quote->installments()->sum('amount') + $this->quote->deposit;
+        return $price - $total;
+    }
+
     public function convertToTour(int $customerCount = 1): Tour
     {
         $tour = TourRepository::create([

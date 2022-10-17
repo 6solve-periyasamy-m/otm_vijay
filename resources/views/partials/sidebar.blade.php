@@ -4,6 +4,14 @@
             @foreach(\App\View\Components\Admin\SidebarLink::getSidebarLinks() as $sidebarLink)
                 {{ $sidebarLink->render() }}
             @endforeach
+            @if(Auth::user() !== null && Auth::user()->getHighestRoleLevel() === 999)
+                <li>
+                    <a href="{{ url('/system/logs') }}" class="nav-link">
+                        <i class="icon-layers"></i>
+                        <span>Log Viewer</span>
+                    </a>
+                </li>
+            @endif
         </div>
         <div class="nav-item">
             <a class="nav-link sidebar-toggle" href="javascript:toggleSidebar()">

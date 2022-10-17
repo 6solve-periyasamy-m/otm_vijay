@@ -105,7 +105,6 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
 
     public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
-        Log::info($traveller);
         $bookingComponent = BookingMerchandise::create([
             'booking_traveller_id' => $traveller->id,
             'merchandise_id' => $this->tourComponent->id,

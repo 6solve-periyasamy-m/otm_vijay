@@ -61,7 +61,6 @@ class RoomingRepository
     {
         $inflated = [];
         foreach ($data as $object) {
-            Log::error($data);
             $collection = new Collection();
             $roomType = RoomType::find($object['roomType']);
             if (!isset($roomType)) throw new RoomingFailedException('An invalid room type was provided');

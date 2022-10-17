@@ -10,7 +10,11 @@ use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\System\GatewayPaymentLink;
 use Carbon\Carbon;
+use Exception;
 use Http;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Log;
 
@@ -64,7 +68,7 @@ class FellohGateway extends Gateway
         ])->post($this->url . '/felloh-checkout-service/v1/checkout-payment', $body);
         if ($response->status() !== 201) {
             Log::error("Failed fetching felloh gateway: \n" . $response->body());
-            return back()->getTargetUrl();
+            return route('payment.gateway.felloh.failed');
         }
         GatewayPaymentLink::create([
             'gateway' => self::$GATEWAY,
@@ -87,6 +91,11 @@ class FellohGateway extends Gateway
 
     public function webhook(WebhookRequest $request): JsonResponse
     {
+        try {
+            Log::channel('webhook')->info(self::$GATEWAY . " Gateway Webhook: ($request->eventType) $request->transactionId");
+        } catch(Exception $e) {
+            Log::error($e);
+        }
         if ($request->eventType === " PaymentAuthorised"
             || $request->eventType === "PaymentReceived"
             || $request->eventType === "PaymentCompleted") {
@@ -95,6 +104,11 @@ class FellohGateway extends Gateway
             $this->process($request->transactionId, $amount, Carbon::createFromTimestamp($request->eventTimestamp/1000));
         }
         return response()->json(['success' => true,]);
+    }
+
+    public function failed(): Factory|View|Application
+    {
+        return view('pages.payments.felloh.failed');
     }
 
     private function renewToken(): void

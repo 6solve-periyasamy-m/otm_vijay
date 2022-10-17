@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Customer;
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Gateways\Storage\LineItem;
-use App\Http\Gateways\StripeGateway;
 use App\Http\Requests\Customer\TourDetailsRequest;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Customer\Customer;
@@ -19,6 +18,7 @@ use App\Models\Order\Payment\PaymentIntention;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\Model\Order\OrderRepository;
+use Gateway;
 use Illuminate\Http\Request;
 
 class CustomerTourController extends Controller
@@ -133,7 +133,7 @@ class CustomerTourController extends Controller
         $item = new LineItem("{$tourComponent}", $tourComponent->tour_sales_price);
         $intention = PaymentIntention::build(CustomerAuthenticationRepository::getCustomer(), $order->booking_reference, 'Installment', $data);
 
-        return redirect((new StripeGateway($redirect))->checkout([$item,], $intention, $redirect));
+        return redirect(Gateway::getDefaultGateway()->checkout([$item,], $intention, CustomerAuthenticationRepository::getCustomer(), $redirect));
     }
 
     public function addExtra(string $reference, string $componentType, int $componentId, ?Customer $customer = null)

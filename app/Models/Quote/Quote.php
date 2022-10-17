@@ -74,6 +74,7 @@ use Illuminate\Support\Carbon;
  * @property-read Tour|null $tour
  * @property-read Collection|QuoteTransport[] $transport
  * @property-read int|null $transport_count
+ * @property-read float $remaining
  * @method static QuoteFactory factory(...$parameters)
  * @method static Builder|Quote newModelQuery()
  * @method static Builder|Quote newQuery()
@@ -202,5 +203,10 @@ class Quote extends Model
     public function getRefAttribute(): string
     {
         return $this->reference . '-' . $this->revision;
+    }
+
+    public function getRemainingAttribute(): float
+    {
+        return $this->repository->getRemainingInstallment();
     }
 }

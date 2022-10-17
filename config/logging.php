@@ -105,6 +105,12 @@ return [
             'path' => storage_path('logs/mail.log'),
             'level' => env('LOG_LEVEL', 'debug'),
         ],
+
+        'webhook' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/webhook.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
     ],
 
 ];
