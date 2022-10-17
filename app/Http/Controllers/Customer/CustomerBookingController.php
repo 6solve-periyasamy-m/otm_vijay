@@ -6,7 +6,6 @@ use App\Exceptions\NotOnTourException;
 use App\Exceptions\RoomingFailedException;
 use App\Http\Controllers\Controller;
 use App\Http\Gateways\Storage\LineItem;
-use App\Http\Gateways\StripeGateway;
 use App\Http\Requests\Booking\BookingCustomerRequest;
 use App\Models\Accommodation\RoomType;
 use App\Models\Booking\Booking;

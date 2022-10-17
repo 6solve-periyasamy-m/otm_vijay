@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Gateways\Storage\LineItem;
-use App\Http\Gateways\StripeGateway;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\Model\Order\OrderRepository;
