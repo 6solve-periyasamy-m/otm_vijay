@@ -106,6 +106,7 @@ return [
                     'dates' => 'Dates',
                     'details' => 'Description',
                     'price' => 'Purchase Price',
+                    'sales_price' => 'Sales Price',
                     'na' => 'Not Applicable',
                 ],
                 'tabs' => [

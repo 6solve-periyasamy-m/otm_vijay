@@ -20,6 +20,16 @@ abstract class QuoteComponentRepository extends InventoryContainerRepository
     public abstract function priceShown(): bool;
     public abstract function getSalesPrice(): float;
 
+    public function getEditUrl(): string
+    {
+        return route('quotes.components.edit', ['type' => $this->getComponentType(), 'id' => (int)$this->get()->id, 'quote' => $this->get()->quote]);
+    }
+
+    public function getUpdateUrl(): string
+    {
+        return route('quotes.components.update', ['type' => $this->getComponentType(), 'id' => (int)$this->get()->id, 'quote' => $this->get()->quote]);
+    }
+
     public static function getComponent(string $type, int $id): ?QuoteComponentRepository
     {
         return match ($type) {

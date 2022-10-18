@@ -54,6 +54,8 @@ class QuoteMerchandise extends Model
     protected $guarded = [];
     protected $casts = ['purchase_price' => 'double', 'tour_sales_price' => 'double',];
 
+    private QuoteMerchandiseRepository $internal_repository;
+
     public function quote(): BelongsTo
     {
         return $this->belongsTo(Quote::class, 'quote_id');

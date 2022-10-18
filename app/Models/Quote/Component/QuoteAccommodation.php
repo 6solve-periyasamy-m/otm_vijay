@@ -57,6 +57,8 @@ class QuoteAccommodation extends Model
     protected $guarded = [];
     protected $casts = ['tour_sales_price' => 'double', 'is_template' => 'boolean'];
 
+    private QuoteAccommodationRepository $internal_repository;
+
     public function quote(): BelongsTo
     {
         return $this->belongsTo(Quote::class, 'quote_id');
