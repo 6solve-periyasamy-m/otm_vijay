@@ -112,7 +112,7 @@ $paying = $sent->paid;
                         @foreach($quote->repository->getAccommodationForInvoice() as $component)
                             <tr>
                                 <td class="date-double"><div class="order-table-description">{{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}</div></td>
-                                <td class="short-description"><div class="order-table-description">{{ $component->getShortDescription() }}</div></td>
+                                <td class="short-description"><div class="order-table-description">{{ $component->getShortDescription() }} ({{ $component->priceShown() ? f_currency($component->getSalesPrice()) : 'Included'}})</div></td>
                                 <td class="quantity">{{ $paying + $travelling }}</td>
                             </tr>
                         @endforeach
@@ -122,7 +122,7 @@ $paying = $sent->paid;
                         @foreach($quote->repository->getActivitiesForInvoice() as $component)
                             <tr>
                                 <td class="date-double"><div class="order-table-description">{{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}</div></td>
-                                <td class="short-description"><div class="order-table-description">{{ $component->getShortDescription() }}</div></td>
+                                <td class="short-description"><div class="order-table-description">{{ $component->getShortDescription() }} ({{ $component->priceShown() ? f_currency($component->getSalesPrice()) : 'Included'}})</div></td>
                                 <td class="quantity">{{ $paying + $travelling }}</td>
                             </tr>
                         @endforeach
@@ -132,7 +132,7 @@ $paying = $sent->paid;
                         @foreach($quote->repository->getFlightsForInvoice() as $component)
                             <tr>
                                 <td class="date-double"><div class="order-table-description">{{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}</div></td>
-                                <td class="short-description"><div class="order-table-description">{{ $component->getShortDescription() }}</div></td>
+                                <td class="short-description"><div class="order-table-description">{{ $component->getShortDescription() }} ({{ $component->priceShown() ? f_currency($component->getSalesPrice()) : 'Included'}})</div></td>
                                 <td class="quantity">{{ $paying + $travelling }}</td>
                             </tr>
                         @endforeach
@@ -142,7 +142,7 @@ $paying = $sent->paid;
                         @foreach($quote->repository->getTransportForInvoice() as $component)
                             <tr>
                                 <td class="date-double"><div class="order-table-description">{{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}</div></td>
-                                <td class="short-description"><div class="order-table-description">{{ $component->getShortDescription() }}</div></td>
+                                <td class="short-description"><div class="order-table-description">{{ $component->getShortDescription() }} ({{ $component->priceShown() ? f_currency($component->getSalesPrice()) : 'Included'}})</div></td>
                                 <td class="quantity">{{ $paying + $travelling }}</td>
                             </tr>
                         @endforeach
