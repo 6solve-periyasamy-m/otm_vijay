@@ -17,6 +17,8 @@ abstract class QuoteComponentRepository extends InventoryContainerRepository
     public abstract function getItineraryDescription(): string;
     public abstract function getItineraryAsset(): string;
     public abstract function convertToTourComponent(Tour $tour): InventoryTourRepository;
+    public abstract function priceShown(): bool;
+    public abstract function getSalesPrice(): float;
 
     public static function getComponent(string $type, int $id): ?QuoteComponentRepository
     {
