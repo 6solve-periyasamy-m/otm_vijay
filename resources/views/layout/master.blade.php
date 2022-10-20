@@ -34,17 +34,17 @@
     <div class='row flex-xl-nowrap page-wrapper'>
         @include('partials.sidebar')
         <div id="container" class='col-12 col-md-9 col-xl-10 py-md-3 px-md-4 otm-content'>
-            @if ($errors->any())
-                @foreach ($errors->all() as $error)
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {{ $error }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <ion-icon name="close"></ion-icon>
-                        </button>
-                    </div>
-                @endforeach
-            @endif
             <div id="content" class="w-100">
+                @if ($errors->any())
+                    @foreach ($errors->all() as $error)
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ $error }}
+                            <button onclick="$(this).parent().remove()" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <ion-icon name="close"></ion-icon>
+                            </button>
+                        </div>
+                    @endforeach
+                @endif
                 <div class="heading pt-md-4 pb-md-3 pt-3">
                     <h2 class="fw-bold">@yield('title')</h2>
                 </div>
