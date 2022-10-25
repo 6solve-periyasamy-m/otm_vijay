@@ -232,13 +232,13 @@ class ReportRepository
         foreach (Booking::whereNull('order_id')->with('tour', 'leadTraveller', 'leadTraveller.customer')->get() as $booking) {
             $row = collect();
             $cDetailsSource = $booking->leadTraveller->customer ?? $booking->leadTraveller;
-            $row->name = $cDetailsSource->title . ' ' . $cDetailsSource->first_name . ' ' . $cDetailsSource->last_name;
+            $row->name = $cDetailsSource?->title . ' ' . $cDetailsSource?->first_name . ' ' . $cDetailsSource?->last_name;
             $row->tour = $booking->tour?->name ?? 'Deleted Tour';
             $row->date = $booking->created_at;
             $row->travellers = $booking->travellers()->count();
             $row->expected = $booking->repository->getTotalCost();
-            $row->contact_email = $cDetailsSource->email_address;
-            $row->contact_number = $cDetailsSource->mobile_number;
+            $row->contact_email = $cDetailsSource?->email_address ?? "Unknown";
+            $row->contact_number = $cDetailsSource?->mobile_number ?? "Unknown";
             $row->continue = route('customer-booking.summary', ['bookingUrl' => $booking->tour->booking_form_url, 'token' => $booking->token,]);
             $data[] = $row;
         }
