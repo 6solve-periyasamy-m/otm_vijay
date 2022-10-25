@@ -9,7 +9,6 @@ use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\OrderCustomer;
 use App\Models\Quote\Component\QuoteMerchandise;
 use App\Models\Quote\Quote;
-use App\Models\Tour\Merchandise;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
@@ -157,7 +156,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
     public function getUsedOnOrderCount(): int
     {
         $used = 0;
-        foreach ($this->tourComponent->orderMerchandise as $orderComponent) {
+        foreach ($this->tourComponent->orderComponents as $orderComponent) {
             if (!$orderComponent->cancelled) $used++;
         }
         return $used;
