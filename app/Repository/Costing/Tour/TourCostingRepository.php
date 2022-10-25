@@ -127,7 +127,7 @@ class TourCostingRepository extends CostingRepository
         return (new Donut($this->tour->name . ' Revenue', $labels, $values, $colors))->render();
     }
 
-    public function getOrdersOverTime(): Closure|View|string
+    public function getOrdersOverTime(): Closure|View|string|null
     {
         $query = DB::table('orders');
         $query->where('tour_id', '=', $this->tour->id);
@@ -138,6 +138,7 @@ class TourCostingRepository extends CostingRepository
         $results = $res->mapWithKeys(fn($item, $key) => [$item->ordered => $item->orders])->toArray();
         $headers = [];
         $data = [];
+        if ($res->first() === null) return null;
         foreach (CarbonPeriod::create($res->first()->ordered, $res->last()->ordered) as $date) {
             $headers[] = f_date($date);
             if (array_key_exists($date->format('Y-m-d'), $results)) {

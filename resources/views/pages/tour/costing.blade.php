@@ -509,7 +509,7 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                     <div class="card-title">
                         <h4 class="fw-bold">Orders Over Time</h4>
                     </div>
-                    {{ $tour->repository->getCosting()->getOrdersOverTime() }}
+                    {{ $tour->repository->getCosting()->getOrdersOverTime() ?? "No orders have been placed" }}
                 </div>
             </div>
         </div>
