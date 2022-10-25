@@ -68,7 +68,7 @@ class SidebarLink extends Component
             new SidebarLink('Flights', route('flights.all'), 'plane', 'flights', Flight::class, 'read'),
             new SidebarLink('Transport', route('transports.all'), 'directions', 'transport', Transport::class, 'read'),
             new SidebarLink('Merchandise', route('merchandise.all'), 'badge', 'merchandise', Merchandise::class, 'read'),
-            new SidebarLink('Address', route('addresses.all'), 'envelope-letter', 'addresses', Address::class, 'read'),
+            new SidebarLink('Addresses', route('addresses.all'), 'envelope-letter', 'addresses', Address::class, 'read'),
             new SidebarLink('Orders', route('orders.all'), 'credit-card', 'orders', Order::class, 'read'),
             new SidebarLink('Quotes', route('quotes.all'), 'wallet', 'quotes', Quote::class, 'read'),
             new SidebarLink('Customers', route('customers.all'), 'user', 'customers', Customer::class, 'read'),

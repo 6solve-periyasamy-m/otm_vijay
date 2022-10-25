@@ -115,7 +115,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getRemainingInstallment(int $paying = 1)
     {
-        $price = $this->getPricePerPerson($paying)->price_per_person;
+        $price = $this->getPricePerPerson($paying)?->price_per_person ?? 0;
         $total = $this->quote->installments()->sum('amount') + $this->quote->deposit;
         return $price - $total;
     }
