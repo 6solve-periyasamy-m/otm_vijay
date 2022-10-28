@@ -87,6 +87,7 @@ $paying = $sent->paid;
                     </div>
                 </div>
             </div>
+            @if(isset($quote->description))
             <!-- Description Section -->
             <div class="section pagebreak-inside">
                 <h2 class="section-title header-title">Description</h2>
@@ -94,9 +95,35 @@ $paying = $sent->paid;
                     <div style="margin-top: 0">{!! $quote->description !!}</div>
                 </div>
             </div>
+            @endif
+            @if($quote->repository->hasSections())
+                <div class="section">
+                    <h2 class="section-title header-title">What's Included</h2>
+                    <div class="cards">
+                        @foreach($quote->sections as $section)
+                            @if($section->hidden) @continue @endif
+                            <div class="card">
+                                @if(isset($section->image_url))
+                                <div class="item">
+                                    <img src="{{ $section->asset }}" alt="{{$section->title}}"/>
+                                </div>
+                                @endif
+                                <div class="item">
+                                    <div>
+                                        <h4>{{ $section->title }}</h4>
+                                        {!! $section->body !!}
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="pagebreak"></div>
+                <div class="pageborder"></div>
+            @endif
             <!-- Order Section -->
             <div class="section">
-                <h2 class="section-title header-title">What's Included</h2>
+                <h2 class="section-title header-title">Breakdown</h2>
                 <table class="order-table center">
                     <thead>
                         <tr>

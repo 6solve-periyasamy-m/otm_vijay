@@ -125,6 +125,14 @@ return [
                 'travelling' => 'Non-Paying Travellers',
                 'reference' => 'Reference'
             ],
+            'sections' => [
+                'header' => 'Quote Sections',
+                'title' => 'Title',
+                'body' => 'Body',
+                'image' => 'Has Image?',
+                'hidden' => 'Hidden?',
+                'order' => 'Order'
+            ],
         ]
     ],
     'status' => [

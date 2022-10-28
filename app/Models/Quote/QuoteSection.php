@@ -21,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Quote $quote
+ * @property-read string|null $asset
  * @method static Builder|QuoteSection newModelQuery()
  * @method static Builder|QuoteSection newQuery()
  * @method static Builder|QuoteSection query()
@@ -36,8 +37,28 @@ use Illuminate\Support\Carbon;
  */
 class QuoteSection extends Model
 {
+    protected $guarded = [];
+
+    protected $casts = ['hidden' => 'boolean'];
+
     public function quote(): BelongsTo
     {
         return $this->belongsTo(Quote::class, 'quote_id');
+    }
+
+    public function getAssetAttribute(): ?string
+    {
+        return isset($this->image_url) ? asset($this->image_url) : null;
+    }
+
+    public function serialize(): array
+    {
+        return [
+            'title' => $this->title,
+            'body' => $this->body,
+            'order' => $this->order,
+            'hidden' => $this->getAttribute('hidden'),
+            'image_url' => $this->image_url
+        ];
     }
 }

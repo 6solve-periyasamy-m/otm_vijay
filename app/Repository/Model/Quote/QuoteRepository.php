@@ -17,6 +17,7 @@ use App\Models\Quote\Quote;
 use App\Models\Quote\QuoteInstallment;
 use App\Models\Quote\QuotePricePoint;
 use App\Models\Quote\QuoteProspect;
+use App\Models\Quote\QuoteSection;
 use App\Models\Quote\SentQuote;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ComponentPackageRepository;
@@ -163,6 +164,16 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $prospect = QuoteProspect::create($data);
         }
         return $prospect;
+    }
+
+    public function hasComponents(): bool
+    {
+        $components =
+            sizeof($this->quote->accommodation) +
+            sizeof($this->quote->activities) +
+            sizeof($this->quote->flights) +
+            sizeof($this->quote->transport);
+        return $components > 0;
     }
 
     public function addPricePoint(int $customerCount, float $pricePerPerson): QuotePricePoint
@@ -563,10 +574,13 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $quote = array_merge($quote, $components);
         $installments = [];
         $pricepoints = [];
+        $sections = [];
         foreach ($this->quote->installments as $installment) { $installments[] = ['due_on' => $installment->due_on->format('Y-m-d'), 'amount' => $installment->amount,]; }
         foreach ($this->quote->pricePoints as $pricePoint) { $pricepoints[$pricePoint->quantity] = $pricePoint->price_per_person; }
+        foreach ($this->quote->sections as $section) { $sections[] =  $section->serialize(); }
         $quote['installments'] = $installments;
         $quote['pricepoints'] = $pricepoints;
+        $quote['sections'] = $sections;
         return json_encode($quote);
     }
 
@@ -631,6 +645,11 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $pricepoints[] = QuotePricePoint::make(['quantity' => $quantity, 'price_per_person' => $price]);
         }
         unset($data['pricepoints']);
+        $sections = [];
+        foreach ($data['sections'] as $datum) {
+            $sections[] = QuoteSection::make($datum);
+        }
+        unset($data['sections']);
         unset($data['lead_traveller']);
         $quote = Quote::make($data);
         $quote->setRelations([
@@ -641,6 +660,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'flights' => $flight,
             'transport' => $transport,
             'merchandise' => $merchandise,
+            'sections' => $sections,
             'leadTraveller' => $lead,
         ]);
         return $quote;
@@ -689,6 +709,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $installments = $quote->installments;
         $pricepoints = $quote->pricePoints;
         $lead = $quote->leadTraveller;
+        $sections = $quote->sections;
         $lead->save();
         $quote->internal_notes .= "\nRebuilt from Quote sent at " . f_datetime($sent->sent);
         $quote->lead_traveller_id = $lead->id;
@@ -701,6 +722,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $quote->installments()->saveMany($installments);
         $quote->pricePoints()->saveMany($pricepoints);
         $quote->sentQuotes()->saveMany($sent->quote->sentQuotes);
+        $quote->sections()->saveMany($sections);
         return $quote;
     }
 
@@ -718,5 +740,14 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'billing_address_id' => $billingAddress->id,
             'date_of_birth' => now(),
         ]);
+    }
+
+    public function hasSections(): bool
+    {
+        foreach ($this->quote->sections as $section) {
+            \Log::info($section);
+            if (!$section->hidden) return true;
+        }
+        return false;
     }
 }
