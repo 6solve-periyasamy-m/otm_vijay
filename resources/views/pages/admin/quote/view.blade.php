@@ -244,12 +244,11 @@
                 </x-admin.section.otm-text>
                 <x-admin.section.otm-text>
                     <x-slot:header>{{ __('quotes.view.cards.quick.calculator.convert') }}</x-slot:header>
-                    <form class="d-none preview-form" action="{{ route('quotes.preview', ['quote' => $quote,]) }}" method="post">
-                        @csrf
+                    <form class="d-none preview-form" target="_blank" action="{{ route('quotes.preview', ['quote' => $quote,]) }}" method="get">
                         <input type="hidden" name="paying" class="paying-input" value="0">
                         <input type="hidden" name="travelling" class="travelling-input" value="0">
                     </form>
-                    <a href="javascript:$('.preview-form').submit();" class="btn btn-info">
+                    <a class="btn btn-info" onclick="event.preventDefault();$('.preview-form').submit();">
                         <i class="icon-magnifier"></i>
                         {{ __('quotes.view.cards.quick.calculator.preview') }}
                     </a>
