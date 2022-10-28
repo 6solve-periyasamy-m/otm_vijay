@@ -4,6 +4,7 @@ namespace App\Repository\Model\Quote\Component;
 
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Quote\Component\QuoteActivity;
+use App\Models\Quote\QuoteSection;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
@@ -101,5 +102,15 @@ class QuoteActivityRepository extends QuoteComponentRepository
             'activity_inventory_id' => $this->quoteComponent->activity_inventory_id,
         ]);
         return $tourComponent->repository;
+    }
+
+    public function convertToQuoteSection(): QuoteSection
+    {
+        return QuoteSection::create([
+            'title' => $this->quoteComponent->inventory->component->name,
+            'body' => $this->quoteComponent->inventory->component->description,
+            'image_url' => $this->quoteComponent->inventory->component->image_url,
+            'quote_id' => $this->quoteComponent->quote_id,
+        ]);
     }
 }

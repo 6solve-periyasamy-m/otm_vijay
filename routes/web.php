@@ -302,6 +302,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             });
             Route::prefix('component')->name('components.')->group(function () {
                 Route::get('/add', [QuoteComponentController::class, 'add'])->name('add')->middleware('bouncer:Quote\Quote,update');
+                Route::get('/{type}/{id}/convert', [QuoteComponentController::class, 'convert'])->name('convert')->middleware('bouncer:Quote\Quote,update');
                 Route::post('/{type}/{id}/delete', [QuoteComponentController::class, 'delete'])->name('delete')->middleware('bouncer:Quote\Quote,update');
             });
         });

@@ -4,6 +4,7 @@ namespace App\Repository\Model\Quote\Component;
 
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Quote\Component\QuoteFlight;
+use App\Models\Quote\QuoteSection;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
@@ -104,5 +105,15 @@ class QuoteFlightRepository extends QuoteComponentRepository
             'flight_type' => $this->quoteComponent->flight_type,
         ]);
         return $tourComponent->repository;
+    }
+
+    public function convertToQuoteSection(): QuoteSection
+    {
+        return QuoteSection::create([
+            'title' => $this->quoteComponent->inventory->component->departureAirport . ' to ' . $this->quoteComponent->inventory->component->arrivalAirport,
+            'body' => $this->quoteComponent->inventory->travelClass,
+            'image_url' => $this->quoteComponent->inventory->component->image_url,
+            'quote_id' => $this->quoteComponent->quote_id,
+        ]);
     }
 }

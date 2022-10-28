@@ -26,4 +26,12 @@ class QuoteComponentController extends Controller
         $component->delete();
         return redirect()->route('quotes.view', ['quote' => $quote,]);
     }
+
+    public function convert(Quote $quote, string $type, int $id)
+    {
+        $component = QuoteComponentRepository::getComponent($type, $id);
+        if (!isset($component)) abort(404);
+        $component->convertToQuoteSection();
+        return redirect()->route('quotes.view', ['quote' => $quote,]);
+    }
 }
