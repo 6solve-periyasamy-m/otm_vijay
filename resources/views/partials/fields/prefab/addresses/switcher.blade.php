@@ -24,7 +24,7 @@
 <div class="{{ $prefix ?? "" }}switcher-existing">
     @include('partials.fields.prefab.addresses.selector', ['value' => isset($address) ? $address->id : 0, ])
 </div>
-<div class="switcher-new">
+<div class="switcher-new row">
     @can('create', \App\Models\Location\LocationType::class)
     @include('partials.fields.selector.adder',
                 ['name' => 'Location Type', 'field' => ($prefix ?? '') . 'location_type_id', 'value' => $location_type_id ?? null,
@@ -35,13 +35,14 @@
                  'route' => 'location-types', ])
     @endcan
     <hr class="splitter"/>
-    @include('partials.fields.text', ['name' => 'Address Line 1', 'field' => ($prefix ?? "") . 'address_line_1', 'value' => $address_line_1 ?? null,])
-    @include('partials.fields.text', ['name' => 'Address Line 2', 'field' => ($prefix ?? "") . 'address_line_2', 'value' => $address_line_2 ?? null,])
-    @include('partials.fields.text', ['name' => 'Town', 'field' => ($prefix ?? "") . 'town', 'value' => $town ?? null,])
-    @include('partials.fields.text', ['name' => 'Region', 'field' => ($prefix ?? "") . 'region', 'value' => $region ?? null,])
+    @include('partials.fields.text', ['name' => 'Address Name', 'field' => ($prefix ?? "") . 'address_name', 'value' => $name ?? null,])
+    @include('partials.fields.text', ['name' => 'Address Line 1', 'field' => ($prefix ?? "") . 'address_line_1', 'value' => $address_line_1 ?? null, 'width' => 6])
+    @include('partials.fields.text', ['name' => 'Address Line 2', 'field' => ($prefix ?? "") . 'address_line_2', 'value' => $address_line_2 ?? null, 'width' => 6])
+    @include('partials.fields.text', ['name' => 'Town', 'field' => ($prefix ?? "") . 'town', 'value' => $town ?? null, 'width' => 6])
+    @include('partials.fields.text', ['name' => 'Region', 'field' => ($prefix ?? "") . 'region', 'value' => $region ?? null, 'width' => 6])
     @include('partials.fields.selector.default',
                 ['name' => 'Country', 'field' => ($prefix ?? '') . 'country_id', 'value' => $country_id ?? null,
-                 'route' => 'countries', ])
-    @include('partials.fields.text', ['name' => 'Postcode', 'field' => ($prefix ?? "") . 'postcode', 'value' => $postcode ?? null,])
+                 'route' => 'countries', 'width' => 6])
+    @include('partials.fields.text', ['name' => 'Postcode', 'field' => ($prefix ?? "") . 'postcode', 'value' => $postcode ?? null, 'width' => 6])
 </div>
 <hr class="splitter"/>

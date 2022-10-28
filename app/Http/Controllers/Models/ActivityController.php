@@ -37,7 +37,7 @@ class ActivityController extends Controller
             $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('activity'));
         } else {
             $request->validate(Address::getValidationRules());
-            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('name'), AddressParent::getParentId('activity')));
+            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::getParentId('activity')));
             $address->repository->save();
         }
         if ($request->has('image') && $request->file('image') != null) {
@@ -72,7 +72,7 @@ class ActivityController extends Controller
             Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('activity'), $activity->address);
         } else {
             $request->validate(Address::getValidationRules());
-            $activity->address->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('name'), AddressParent::getParentId('activity')));
+            $activity->address->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::getParentId('activity')));
         }
         if ($request->has('image') && $request->file('image') != null) {
             if (isset($activity->image_url)) {
