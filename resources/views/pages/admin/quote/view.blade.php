@@ -700,6 +700,14 @@
             <x-admin.section.card>
                 <x-slot:header>{{ __('quotes.view.cards.sections.header') }}</x-slot:header>
                 <div class="pb-3 text-end">
+                    <a href="{{ route('quotes.section.show', ['quote' => $quote, ]) }}" class="btn btn-primary text-white mb-1">
+                        <i class="icon-key"></i>
+                        Show All
+                    </a>
+                    <a href="{{ route('quotes.section.hide', ['quote' => $quote, ]) }}" class="btn btn-info text-white mb-1">
+                        <i class="icon-lock"></i>
+                        Hide All
+                    </a>
                     <a href="{{ route('quotes.section.create', ['quote' => $quote, ]) }}" class="btn btn-success text-white mb-1">
                         <i class="icon-plus"></i>
                         New Section

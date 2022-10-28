@@ -272,6 +272,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::prefix('section')->name('section.')->group(function () {
                 Route::get('/create', [QuoteSectionController::class, 'create'])->name('create')->middleware('bouncer:Quote\Quote,update');
                 Route::post('/create', [QuoteSectionController::class, 'store'])->name('store')->middleware('bouncer:Quote\Quote,update');
+                Route::get('/hide-all', [QuoteSectionController::class, 'hideAll'])->name('hide')->middleware('bouncer:Quote\Quote,update');
+                Route::get('/show-all', [QuoteSectionController::class, 'showAll'])->name('show')->middleware('bouncer:Quote\Quote,update');
                 Route::prefix('/{section}')->group(function () {
                     Route::get('/update', [QuoteSectionController::class, 'edit'])->name('edit')->middleware('bouncer:Quote\Quote,update');
                     Route::post('/update', [QuoteSectionController::class, 'update'])->name('update')->middleware('bouncer:Quote\Quote,update');

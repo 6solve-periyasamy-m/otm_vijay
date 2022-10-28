@@ -24,6 +24,24 @@ class QuoteSectionController extends Controller
         return redirect()->route('quotes.view', ['quote' => $quote,]);
     }
 
+    public function hideAll(Quote $quote)
+    {
+        foreach ($quote->sections as $section) {
+            $section->hidden = true;
+            $section->save();
+        }
+        return redirect()->route('quotes.view', ['quote' => $quote,]);
+    }
+
+    public function showAll(Quote $quote)
+    {
+        foreach ($quote->sections as $section) {
+            $section->hidden = false;
+            $section->save();
+        }
+        return redirect()->route('quotes.view', ['quote' => $quote,]);
+    }
+
     public function edit(Quote $quote, QuoteSection $section)
     {
         return view('pages.admin.quote.section.form', ['quote' => $quote, 'section' => $section,]);
