@@ -107,6 +107,16 @@ class QuoteFlightRepository extends QuoteComponentRepository
         return $tourComponent->repository;
     }
 
+    public function priceShown(): bool
+    {
+        return $this->quoteComponent->price_shown ?? false;
+    }
+
+    public function getSalesPrice(): float
+    {
+        return $this->quoteComponent->tour_sales_price ?? 0;
+    }
+
     public function convertToQuoteSection(): QuoteSection
     {
         return QuoteSection::create([

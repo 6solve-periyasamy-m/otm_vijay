@@ -113,4 +113,14 @@ class QuoteAccommodationRepository extends QuoteComponentRepository
             'quote_id' => $this->quoteComponent->quote_id,
         ]);
     }
+
+    public function priceShown(): bool
+    {
+        return $this->quoteComponent->price_shown ?? false;
+    }
+
+    public function getSalesPrice(): float
+    {
+        return $this->quoteComponent->tour_sales_price ?? 0;
+    }
 }

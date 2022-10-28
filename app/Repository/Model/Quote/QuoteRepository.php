@@ -559,7 +559,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $data = [
                 'inventory' => $component->getInventory()->get()->id,
                 'tour_component_type' => $component->getTourComponentType(),
-                'tour_sales_price' => $component->get()->tour_sales_price
+                'tour_sales_price' => $component->get()->tour_sales_price,
+                'price_shown' => $component->priceShown(),
             ];
             switch ($component->getComponentType()) {
                 case 'accommodation':
@@ -595,6 +596,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 'tour_component_type' => $datum['tour_component_type'],
                 'tour_sales_price' => $datum['tour_sales_price'],
                 'is_template' => $datum['is_template'],
+                'price_shown' => $datum['price_shown'],
             ]);
         }
         $activity = [];
@@ -603,6 +605,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 'activity_inventory_id' => $datum['inventory'],
                 'tour_component_type' => $datum['tour_component_type'],
                 'tour_sales_price' => $datum['tour_sales_price'],
+                'price_shown' => $datum['price_shown'],
             ]);
         }
         $flight = [];
@@ -612,6 +615,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 'tour_component_type' => $datum['tour_component_type'],
                 'tour_sales_price' => $datum['tour_sales_price'],
                 'flight_type' => $datum['flight_type'],
+                'price_shown' => $datum['price_shown'],
             ]);
         }
         $transport = [];
@@ -620,6 +624,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 'transport_inventory_id' => $datum['inventory'],
                 'tour_component_type' => $datum['tour_component_type'],
                 'tour_sales_price' => $datum['tour_sales_price'],
+                'price_shown' => $datum['price_shown'],
             ]);
         }
         $merchandise = [];
@@ -628,6 +633,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 'merchandise_inventory_id' => $datum['inventory'],
                 'tour_component_type' => $datum['tour_component_type'],
                 'tour_sales_price' => $datum['tour_sales_price'],
+                'price_shown' => $datum['price_shown'],
             ]);
         }
         unset($data['accommodation']);
