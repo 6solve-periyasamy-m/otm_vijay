@@ -16,6 +16,7 @@
             $('.transport').DataTable({fixedHeader: true, autoWidth: false,});
             $('.extras').DataTable({fixedHeader: true, autoWidth: false,});
             $('.sent-quotes').DataTable({fixedHeader: true, order: [[0, 'desc'],]});
+            $('.sections').DataTable({fixedHeader: true, order: [[0, 'asc'],]});
             update(getPayingAmount(), getTravellingAmount());
         });
 
@@ -708,27 +709,23 @@
                 <table class="table table-striped sections" id="sent-quotes-table">
                     <thead>
                     <tr>
+                        <th scope="col">{{ __('quotes.view.cards.sections.order') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.sections.title') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.sections.body') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.sections.image') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.sections.hidden') }}</th>
-                        <th scope="col">{{ __('quotes.view.cards.sections.order') }}</th>
                         <th scope="col">{{ __('custom.table.actions') }}</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($quote->sections as $section)
                         <tr>
+                            <td>{{ $section->order }}</td>
                             <td>{{ $section->title }}</td>
                             <td>{!! $section->body !!}</td>
                             <td>{{ f_bool(isset($section->image_url)) }}</td>
                             <td>{{ f_bool($section->hidden) }}</td>
-                            <td>{{ $section->order }}</td>
-                            <td class="actions-3">
-                                <a href="{{ route('quotes.section.edit', ['quote' => $quote, 'section' => $section,]) }}"
-                                   class="btn btn-outline-info btn-sm mb-1">
-                                    <i class="icon-magnifier"></i>
-                                </a>
+                            <td class="actions">
                                 <a href="{{ route('quotes.section.edit', ['quote' => $quote, 'section' => $section,]) }}"
                                    class="btn btn-outline-success btn-sm mb-1">
                                     <i class="icon-note"></i>
