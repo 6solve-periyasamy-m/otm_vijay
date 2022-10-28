@@ -5,7 +5,7 @@
 @section('footer-script')
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#orders').DataTable({fixedHeader: true,columnDefs:[{targets:0,searchable:true,visible:false}],scrollX:false});
+            $('#orders').DataTable({fixedHeader: true,columnDefs:[{targets:0,searchable:true,visible:false}],});
         });
     </script>
 @endsection
@@ -26,7 +26,7 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <table class="table table-striped" id="orders">
+            <table class="table table-striped" id="orders" style="width: 100%;">
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">Customers</th>
@@ -45,7 +45,7 @@
                                 {{ $oCustomer->customer->first_name . ' ' . $oCustomer->customer->last_name . ', '}}
                             @endforeach
                         </td>
-                        <td>{{ $order->ordered_on }}</td>
+                        <td>{{ f_datetime($order->ordered_on) }}</td>
                         <td>{{ $order->leadBooker->customer->first_name . ' ' . $order->leadBooker->customer->last_name }}</td>
                         <td><a href="{{ route('orders.view', ['order' => $order->id]) }}" class="link-info"><u>{{ $order->booking_reference }}</u></a></td>
                         <td>{{ $order->tour->name }}</td>
