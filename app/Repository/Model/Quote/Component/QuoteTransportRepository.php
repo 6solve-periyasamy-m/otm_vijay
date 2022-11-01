@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Quote\Component;
 
 use App\Models\Quote\Component\QuoteTransport;
+use App\Models\Quote\QuoteSection;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Abstracts\InventoryTourRepository;
@@ -101,5 +102,25 @@ class QuoteTransportRepository extends QuoteComponentRepository
             'transport_inventory_id' => $this->quoteComponent->transport_inventory_id,
         ]);
         return $tourComponent->repository;
+    }
+
+    public function convertToQuoteSection(): QuoteSection
+    {
+        return QuoteSection::create([
+            'title' => $this->quoteComponent->inventory->component->name,
+            'body' => $this->quoteComponent->inventory->component->description,
+            'image_url' => $this->quoteComponent->inventory->component->image_url,
+            'quote_id' => $this->quoteComponent->quote_id,
+        ]);
+    }
+
+    public function priceShown(): bool
+    {
+        return $this->quoteComponent->price_shown ?? false;
+    }
+
+    public function getSalesPrice(): float
+    {
+        return $this->quoteComponent->tour_sales_price ?? 0;
     }
 }

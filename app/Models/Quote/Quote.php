@@ -53,6 +53,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read string $ref Reference-Revision
  * @property-read Collection|QuoteAccommodation[] $accommodation
+ * @property-read Collection|QuoteSection[] $sections
  * @property-read int|null $accommodation_count
  * @property-read Collection|QuoteActivity[] $activities
  * @property-read int|null $activities_count
@@ -127,6 +128,11 @@ class Quote extends Model
     public function sentQuotes(): HasMany
     {
         return $this->hasMany(SentQuote::class, 'quote_id')->orderBy('sent', 'desc');
+    }
+
+    public function sections(): HasMany
+    {
+        return $this->hasMany(QuoteSection::class, 'quote_id')->orderBy('order');
     }
 
     public function event(): BelongsTo
