@@ -155,13 +155,9 @@ class AccommodationInventoryTour extends Model
         $keys = [];
         if (empty($upgrades->all())) {
             $upgrades = $this->parent()->upgrades;
-            $included = $this->parent();
         }
-        if ($included->available_stock > $required - 1) {
-            $keys[0] = 'Included - ' . f_currency(0);
-        }
+        $keys[0] = 'Included - ' . f_currency(0);
         foreach ($upgrades as $upgrade) {
-            if ($upgrade->upgrade->available_stock <= $required - 1) continue;
             $keys[$upgrade->id] = $upgrade->description . ' - ' . f_currency($upgrade->upgrade->tour_sales_price);
         }
         return $keys;

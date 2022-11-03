@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Activity;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Booking\BookingTraveller;
@@ -20,6 +21,7 @@ use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Order\Component\OrderActivityRepository;
 use App\Repository\Model\Quote\Component\QuoteActivityRepository;
 use App\Repository\Traits\Component\IsActivity;
+use Illuminate\Support\Collection;
 
 class ActivityInventoryTourRepository extends InventoryTourRepository
 {
@@ -75,6 +77,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
     public function onUpgradeTree(ComponentUpgradeRepository $upgradeRepository): bool
     {
         $upgrade = $upgradeRepository->get();
+        if (!($upgrade instanceof ActivityInventoryTourUpgrade)) return false;
         if ($upgrade->base_id == $this->tourComponent->id) return true;
         foreach ($this->tourComponent->parent()->upgrades as $inventoryTourUpgrade) {
             if ($inventoryTourUpgrade->id == $upgrade->id) return true;
@@ -162,21 +165,13 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
         return $this->tourComponent->tour_component_type;
     }
 
-    public function getAvailableForUpgrade(): array
+    /**
+     * @return Collection<ActivityInventory>
+     */
+    public function getAvailableForUpgrade(): Collection
     {
         $tour = $this->tourComponent->tour;
-        $included = [];
-        foreach ($tour->activityInventoryTours as $inventoryTour) {
-            $included[$inventoryTour->activityInventory->id] = $inventoryTour->activityInventory->id;
-        }
-        $data = [];
-        foreach ($this->tourComponent->activityInventory->activity->activityInventory as $inventory) {
-            if (in_array($inventory->id, $included)) continue;
-            if ($inventory->starts_at->gte($tour->date_from->setTime(0, 0)) && $inventory->ends_at->lte($tour->date_to->setTime(23, 59, 59))) {
-                $data[$inventory->id] = $inventory;
-            }
-        }
-        return $data;
+        return ActivityInventoryRepository::getBetweenDates($tour->date_from->setTime(0,0), $tour->date_to->setTime(23,59,59), $tour->repository);
     }
 
     public function getUpgradeId(): int

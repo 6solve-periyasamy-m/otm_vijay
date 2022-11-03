@@ -9,11 +9,11 @@ use App\Models\Flight\FlightInventoryTour;
 use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Order\OrderCustomer;
 use App\Models\Quote\Quote;
-use App\Models\Tour\Merchandise;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Interfaces\HasStockControl;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 abstract class InventoryTourRepository extends InventoryContainerRepository implements HasStockControl
 {
@@ -29,7 +29,7 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
 
     public abstract function onUpgradeTree(ComponentUpgradeRepository $upgradeRepository): bool;
 
-    public abstract function getAvailableForUpgrade(): array;
+    public abstract function getAvailableForUpgrade(): array|Collection;
 
     public abstract function getUpgradeId(): int;
 

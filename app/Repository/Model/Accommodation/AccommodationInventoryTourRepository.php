@@ -2,6 +2,7 @@
 
 namespace App\Repository\Model\Accommodation;
 
+use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\Booking\BookingTraveller;
@@ -15,9 +16,9 @@ use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
-use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
 use App\Repository\Traits\Component\IsAccommodation;
+use Illuminate\Support\Collection;
 
 class AccommodationInventoryTourRepository extends InventoryTourRepository
 {
@@ -174,21 +175,13 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         return $this->tourComponent->tour_component_type;
     }
 
-    public function getAvailableForUpgrade(): array
+    /**
+     * @return Collection<AccommodationInventory>
+     */
+    public function getAvailableForUpgrade(): Collection
     {
         $tour = $this->tourComponent->tour;
-        $included = [];
-        foreach ($tour->accommodationInventoryTours as $inventoryTour) {
-            $included[$inventoryTour->accommodationInventory->id] = $inventoryTour->accommodationInventory->id;
-        }
-        $data = [];
-        foreach ($this->tourComponent->accommodationInventory->accommodation->inventory as $inventory) {
-            if (in_array($inventory->id, $included)) continue;
-            if ($inventory->check_in->gte($tour->date_from->setTime(0, 0)) && $inventory->check_out->lte($tour->date_to->setTime(23, 59, 59))) {
-                $data[$inventory->id] = $inventory;
-            }
-        }
-        return $data;
+        return AccommodationInventoryRepository::getBetweenDates($tour->date_from->setTime(0,0), $tour->date_to->setTime(23,59,59), $tour->repository);
     }
 
     public function getUpgradeId(): int

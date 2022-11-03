@@ -89,10 +89,10 @@ class ActivityTransforms implements ActivityTransformsInterface
     public static function getSelectInventoryForActivity(ActivityInventoryTour $tourInventory, $filter) {
         $available = $tourInventory->repository->getAvailableForUpgrade();
         $data = [];
-        foreach ($available as $id => $inventory) {
+        foreach ($available as $inventory) {
             $subData = [];
             $subData['id'] = $inventory->id;
-            $subData['text'] = $inventory->ticketType->name . ' - ' . $inventory->starts_at . ' to ' . $inventory->ends_at;
+            $subData['text'] = $inventory->activity->name . ' - ' . $inventory->ticketType->name . ' - ' . $inventory->starts_at . ' to ' . $inventory->ends_at;
             if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
