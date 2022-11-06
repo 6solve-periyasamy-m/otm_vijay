@@ -177,7 +177,7 @@
                                                     @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
                                                         Not Available
                                                     @else
-                                                        @if(count($orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, true)) < 1)
+                                                        @if(count($orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, false)) < 1)
                                                             No Upgrades Available
                                                         @else
                                                             @include('partials.fields.selector.upgrade-purchase',
@@ -187,7 +187,7 @@
                                                                 'onclickPurchase' => 'event.preventDefault();purchaseUpgrade("accommodation_' . $orderComponent->id . '_upgrade-input", this, \'accommodation\')',
                                                                 'target' => '',
                                                                 'selected' => $orderComponent->tourComponent->repository->getUpgradeId(),
-                                                                'options' => $orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, true),])
+                                                                'options' => $orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, false),])
                                                         @endif
                                                     @endif
                                                 </td>
@@ -249,7 +249,7 @@
                                                     @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
                                                         Not Available
                                                     @else
-                                                        @if(count($orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, true)) < 1)
+                                                        @if(count($orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, false)) < 1)
                                                             No Upgrades Available
                                                         @else
                                                             @include('partials.fields.selector.upgrade-purchase',
@@ -259,7 +259,7 @@
                                                                 'onclickPurchase' => 'event.preventDefault();purchaseUpgrade("activity_' . $orderComponent->id . '_upgrade-input", this, \'activity\')',
                                                                 'target' => '',
                                                                 'selected' => $orderComponent->tourComponent->repository->getUpgradeId(),
-                                                    'options' => $orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, true),])
+                                                    'options' => $orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, false),])
                                                         @endif
                                                     @endif
                                                 </td>
@@ -322,7 +322,7 @@
                                                     @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
                                                         Not Available
                                                     @else
-                                                        @if(count($orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, true)) < 1)
+                                                        @if(count($orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, false)) < 1)
                                                             No Upgrades Available
                                                         @else
                                                             @include('partials.fields.selector.upgrade-purchase',
@@ -332,7 +332,7 @@
                                                                 'onclickPurchase' => 'event.preventDefault();purchaseUpgrade("flight_' . $orderComponent->id . '_upgrade-input", this, \'flight\')',
                                                                 'target' => '',
                                                                 'selected' => $orderComponent->tourComponent->repository->getUpgradeId(),
-                                                    'options' => $orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, true),])
+                                                    'options' => $orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, false),])
                                                         @endif
                                                     @endif
                                                 </td>
@@ -396,7 +396,7 @@
                                                     @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
                                                         Not Available
                                                     @else
-                                                        @if(count($orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, true)) < 1)
+                                                        @if(count($orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, false)) < 1)
                                                             No Upgrades Available
                                                         @else
                                                             @include('partials.fields.selector.upgrade-purchase',
@@ -406,7 +406,7 @@
                                                                 'onclickPurchase' => 'event.preventDefault();purchaseUpgrade("transport_' . $orderComponent->id . '_upgrade-input", this, \'transport\')',
                                                                 'target' => '',
                                                                 'selected' => $orderComponent->tourComponent->repository->getUpgradeId(),
-                                                    'options' => $orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, true),])
+                                                    'options' => $orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, false),])
                                                         @endif
                                                     @endif
                                                 </td>
