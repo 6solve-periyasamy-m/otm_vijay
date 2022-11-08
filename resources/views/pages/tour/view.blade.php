@@ -230,7 +230,7 @@
                                                             class="icon-magic-wand"></i></a>
                                                 <form action="{{ route('accommodation-inventory-tours.restore', ['tour' => $tour, 'accommodationInventoryTour' => $tourComponent,]) }}"
                                                       method="post"
-                                                      id="accommodation-{{$accommodationEntry["tour"]->id}}-restore">
+                                                      id="accommodation-{{$tourComponent->id}}-restore">
                                                     @csrf
                                                 </form>
                                             @endif
