@@ -59,6 +59,8 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
         foreach ($upgrades as $upgrade) {
             if ($required > 0 && $upgrade->upgrade->repository->getAvailableStock() < $required) continue;
             if (!$downgrade && $upgrade->upgrade->tour_sales_price < $cost) continue;
+            if (!$downgrade &&
+                $upgrade->upgrade->repository->getInventory()->get()->id === $this->getInventory()->get()->id) continue;
             $data[$upgrade->id] = $upgrade->description . ' - ' . f_currency($upgrade->upgrade->tour_sales_price)
                 . ($stock ? ' - Stock ' . $upgrade->upgrade->repository->getAvailableStock() . '/' . $upgrade->upgrade->repository->getTotalStock() : '');
         }
