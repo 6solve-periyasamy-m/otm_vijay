@@ -218,10 +218,8 @@ class OrderCustomer extends Model
 
     public function getHasSurchargeAttribute(): bool
     {
-        foreach ($this->groups as $group) {
-            if ($group->orderCustomers()->count() == 1) return true;
-        }
-        return false;
+        $highest = $this->groups()->withCount('orderCustomers')->orderBy('order_customers_count', 'desc')->first();
+        return isset($highest) && $highest->order_customers_count > 1;
     }
 
     public function getHasOccupancyAttribute(): bool
