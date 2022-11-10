@@ -37,7 +37,7 @@ class AccommodationController extends Controller
             $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('accommodation'));
         } else {
             $request->validate(Address::getValidationRules());
-            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('name'), AddressParent::getParentId('accommodation')));
+            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::getParentId('accommodation')));
             $address->repository->save();
         }
         if ($request->has('image') && $request->file('image') != null) {
@@ -82,7 +82,7 @@ class AccommodationController extends Controller
             Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('accommodation'), $accommodation->address);
         } else {
             $request->validate(Address::getValidationRules());
-            $accommodation->address->repository->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('name'), AddressParent::getParentId('accommodation')));
+            $accommodation->address->repository->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::getParentId('accommodation')));
         }
         if ($request->has('image') && $request->file('image') != null) {
             if (isset($accommodation->image_url)) {

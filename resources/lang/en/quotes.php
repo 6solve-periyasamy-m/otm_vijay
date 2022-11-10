@@ -106,6 +106,7 @@ return [
                     'dates' => 'Dates',
                     'details' => 'Description',
                     'price' => 'Purchase Price',
+                    'sales_price' => 'Sales Price',
                     'na' => 'Not Applicable',
                 ],
                 'tabs' => [
@@ -124,6 +125,14 @@ return [
                 'paying' => 'Paying Travellers',
                 'travelling' => 'Non-Paying Travellers',
                 'reference' => 'Reference'
+            ],
+            'sections' => [
+                'header' => 'Quote Sections',
+                'title' => 'Title',
+                'body' => 'Body',
+                'image' => 'Has Image?',
+                'hidden' => 'Hidden?',
+                'order' => 'Order'
             ],
         ]
     ],

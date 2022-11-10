@@ -5,6 +5,7 @@ namespace App\Repository\Model\Quote\Component;
 
 use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Quote\Component\QuoteMerchandise;
+use App\Models\Quote\QuoteSection;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
@@ -107,5 +108,25 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
             'merchandise_inventory_id' => $this->quoteComponent->merchandise_inventory_id,
         ]);
         return $tourComponent->repository;
+    }
+
+    public function priceShown(): bool
+    {
+        return $this->quoteComponent->price_shown ?? false;
+    }
+
+    public function getSalesPrice(): float
+    {
+        return $this->quoteComponent->tour_sales_price ?? 0;
+    }
+
+    public function convertToQuoteSection(): QuoteSection
+    {
+        return QuoteSection::create([
+            'title' => $this->quoteComponent->inventory->component->name,
+            'body' => $this->quoteComponent->inventory->component->type,
+            'image_url' => $this->quoteComponent->inventory->component->image_url,
+            'quote_id' => $this->quoteComponent->quote_id,
+        ]);
     }
 }
