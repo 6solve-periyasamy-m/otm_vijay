@@ -251,7 +251,7 @@ class OrderRepository extends ModelRepository
      * Get the current status of the order
      * @return OrderStatus Status code for order
      */
-    public function getOrderStatus(bool $forceCache = false): OrderStatus
+    public function getOrderStatus(bool $forceCache = true): OrderStatus
     {
         /** @var OrderStatus $status */
         if (!$forceCache) {
@@ -302,23 +302,7 @@ class OrderRepository extends ModelRepository
      */
     public function getNextPaymentDetails(): ?OrderInstallment
     {
-        $paid = $this->order->paid;
-        $paid -= $this->order->total_adjustments; // Negative adjustments add to the total paid, so minus is required
-        $paid -= $this->order->calculated_deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
-        $paid = sigfig($paid);
-        foreach ($this->order->installments as $installment) {
-            $paid -= $installment->calculated_amount;
-            $paid = sigfig($paid);
-            if ($paid < 0) {
-                return new OrderInstallment([
-                    'id' => $installment->id,
-                    'amount' => min($installment->calculated_amount, $paid * -1),
-                    'due_on' => $installment->due_on,
-                    'order_id' => $this->order->id,
-                ]);
-            }
-        }
-        return null;
+        return $this->getInstallments()->firstWhere('remaining', '>', 0);
     }
 
     public function resetInstallments(): void
