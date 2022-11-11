@@ -5,7 +5,53 @@
 @section('footer-script')
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#orders').DataTable({fixedHeader: true,columnDefs:[{targets:0,searchable:true,visible:false}],});
+            $('#orders').DataTable({
+                fixedHeader: true,
+                ajax: {
+                    'url': "{{ route('api.orders.all') }}",
+                    'type': "POST",
+                    'dataSrc': "",
+                    'data': {
+                        '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
+                    },
+                },
+                columns:[
+                    {
+                        searchable: true,
+                        visible: false,
+                        data: 'travellers'
+                    },
+                    {
+                        data: 'ordered',
+                        render: {
+                            '_': 'format',
+                            'display': 'format',
+                            'sort': 'unix',
+                        },
+                    },
+                    {
+                        data: 'lead'
+                    },
+                    {
+                        data: 'reference',
+                        render: function (data, type, row, meta) {
+                            return '<a href="' + row.view + '" class="link-info"><u>' + data + '</u></a>'
+                        }
+                    },
+                    {
+                        data: 'tour',
+                    },
+                    {
+                        data: 'passengers',
+                    },
+                    {
+                        data: 'status',
+                        render: function (data, type, row, meta) {
+                            return '<h6 class="badge badge-' + data.color + ' fw-bold">' + data.status + '</h6>'
+                        }
+                    }
+                ],
+            });
         });
     </script>
 @endsection
@@ -38,6 +84,7 @@
                     <th scope="col">Order Status</th>
                 </tr>
                 </thead>
+                {{--}}
                 @foreach($orders as $order)
                     <tr>
                         <td>
@@ -53,6 +100,7 @@
                         <td><h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6></td>
                     </tr>
                 @endforeach
+                {{--}}
             </table>
         </div>
     </div>

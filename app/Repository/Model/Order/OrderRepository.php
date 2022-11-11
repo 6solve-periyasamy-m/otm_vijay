@@ -32,6 +32,26 @@ class OrderRepository extends ModelRepository
         $this->atolRepository = new AtolRepository($order);
     }
 
+    public static function getOrdersOverview(): array
+    {
+        $orders = Order::with(
+            'leadBooker',
+            'orderCustomers',
+            'orderCustomers.customer',
+            'orderCustomers.orderAccommodation',
+            'orderCustomers.groups',
+            'orderCustomers.orderActivities',
+            'orderCustomers.orderFlights',
+            'orderCustomers.orderTransports',
+            'orderCustomers.orderMerchandise',
+        )->get();
+        $data = [];
+        foreach ($orders as $order) {
+            $data[] = $order->repository->getOverview();
+        }
+        return $data;
+    }
+
     /**
      * @param Tour $tour
      * @param array $data
@@ -251,7 +271,7 @@ class OrderRepository extends ModelRepository
      * Get the current status of the order
      * @return OrderStatus Status code for order
      */
-    public function getOrderStatus(bool $forceCache = true): OrderStatus
+    public function getOrderStatus(bool $forceCache = false): OrderStatus
     {
         /** @var OrderStatus $status */
         if (!$forceCache) {
@@ -424,5 +444,26 @@ class OrderRepository extends ModelRepository
         $query->where("{$single}_inventory_tours.tour_component_type", '!=', 'Included');
         $query->select(DB::raw("'{$single}' as 'table'"), "order_{$plural}.id as id", "order_{$plural}.cost as cost", "{$single}_inventory_tours.tour_component_type as type");
         return $query;
+    }
+
+    public function getOverview(): array
+    {
+        $travellers = "";
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            $travellers .= "{$orderCustomer->customer_name}, ";
+        }
+        return [
+            'ordered' => [
+                'unix' => $this->order->ordered_on->unix(),
+                'format' => f_datetime($this->order->ordered_on),
+            ],
+            'lead' => $this->order->lead_booker_name,
+            'reference' => $this->order->booking_reference,
+            'tour' => $this->order->tour->name,
+            'passengers' => $this->order->orderCustomers()->count(),
+            'travellers' => $travellers,
+            'status' => $this->order->status->getStatusArray(),
+            'view' => route('orders.view', ['order' => $this->order,]),
+        ];
     }
 }
