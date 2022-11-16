@@ -19,7 +19,6 @@ abstract class QuoteComponentRepository extends InventoryContainerRepository
     public abstract function convertToTourComponent(Tour $tour): InventoryTourRepository;
     public abstract function convertToQuoteSection(): QuoteSection;
     public abstract function priceShown(): bool;
-    public abstract function getSalesPrice(): float;
 
     public function getEditUrl(): string
     {

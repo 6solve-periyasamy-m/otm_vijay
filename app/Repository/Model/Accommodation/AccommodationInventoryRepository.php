@@ -144,4 +144,9 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
             'accommodationInventoryTour.accommodationInventory.boardType'
         )->get();
     }
+
+    public function getSalesPrice(): ?float
+    {
+        return $this->inventory->sales_price;
+    }
 }

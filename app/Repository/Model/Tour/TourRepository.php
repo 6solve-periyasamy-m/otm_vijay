@@ -17,6 +17,7 @@ use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Interfaces\HasRoomingList;
+use App\Repository\Costing\Tour\TourCostingRepository;
 use App\Repository\Interfaces\HasStockControl;
 use App\Repository\RoomingRepository;
 use Carbon\Carbon;
@@ -25,10 +26,12 @@ use Illuminate\Support\Collection;
 class TourRepository extends ComponentPackageRepository implements HasStockControl, HasRoomingList
 {
     private Tour $tour;
+    private TourCostingRepository $costing;
 
     public function __construct(Tour $tour)
     {
         $this->tour = $tour;
+        $this->costing = new TourCostingRepository($tour);
     }
 
     public static function create(array $data): Tour
@@ -313,5 +316,33 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             'accommodationInventoryTour.accommodationInventory.roomType',
             'accommodationInventoryTour.accommodationInventory.boardType'
         )->get();
+    }
+
+    public function getPotentialRevenue(): float
+    {
+        return $this->tour->stock_control_active ? $this->tour->base_price_per_person * $this->tour->stock : -1;
+    }
+
+    public function getReceivedRevenue(): float
+    {
+        $total = 0;
+        foreach ($this->tour->orders as $order) {
+            $total += $order->paid;
+        }
+        return $total;
+    }
+
+    public function getRemainingRevenue(): float
+    {
+        $total = 0;
+        foreach ($this->tour->orders as $order) {
+            $total += $order->remaining;
+        }
+        return $total;
+    }
+
+    public function getCosting(): TourCostingRepository
+    {
+        return $this->costing;
     }
 }

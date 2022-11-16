@@ -41,7 +41,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $this->generateOrderCustomer(false, $orderCustomer->order);
         $inventory = $this->generateAccommodationInventory();
         $tourComponent = AccommodationInventoryTour::create(
-            ['accommodation_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour->id, 'tour_sales_price' => 100, 'tour_component_type' => 'Upgrade',                ]);
+            ['accommodation_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour_id, 'tour_sales_price' => 100, 'tour_component_type' => 'Upgrade',                ]);
         $upgradeRoom = $tourComponent->addToOrder($orderCustomer->primary_group);
         $upgradeRoom->update(['cost' => 100,]);
         $upgradeRoom->save();
@@ -73,7 +73,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         for ($i = 0; $i < 5; $i++) {
             $inventory = $this->generateAccommodationInventory();
             $tourComponent = AccommodationInventoryTour::create(
-                ['accommodation_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour->id, 'tour_sales_price' => 100, 'tour_component_type' => 'Upgrade',                ]);
+                ['accommodation_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour_id, 'tour_sales_price' => 100, 'tour_component_type' => 'Upgrade',                ]);
             $upgradeRoom = $tourComponent->addToOrder($orderCustomer->primary_group);
             $upgradeRoom->update(['cost' => 100,]);
             $upgradeRoom->save();
@@ -107,7 +107,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $this->generateOrderCustomer(true, $orderCustomer->order);
         $inventory = $this->generateActivityInventory();
         $tourComponent = ActivityInventoryTour::create(
-            ['activity_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour->id, 'tour_sales_price' => 100, 'tour_component_type' => 'Upgrade',]);
+            ['activity_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour_id, 'tour_sales_price' => 100, 'tour_component_type' => 'Upgrade',]);
         $upgradeRoom = $tourComponent->addToOrder($orderCustomer);
         $upgradeRoom->update(['cost' => 100,]);
         $upgradeRoom->save();
@@ -139,7 +139,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         for ($i = 0; $i < 5; $i++) {
             $inventory = $this->generateActivityInventory();
             $tourComponent = ActivityInventoryTour::create(
-                ['activity_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour->id, 'tour_sales_price' => 100, 'tour_component_type' => 'Upgrade',]);
+                ['activity_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour_id, 'tour_sales_price' => 100, 'tour_component_type' => 'Upgrade',]);
             $orderComponent = $tourComponent->addToOrder($orderCustomer);
             $orderComponent->update(['cost' => 100,]);
             $orderComponent->save();
@@ -172,7 +172,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $this->generateOrderCustomer(true, $orderCustomer->order);
         $inventory = $this->generateFlightInventory();
         $tourComponent = FlightInventoryTour::create(
-            ['flight_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour->id, 'tour_sales_price' => 100, 'tour_component_type' => 'Upgrade',]);
+            ['flight_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour_id, 'tour_sales_price' => 100, 'tour_component_type' => 'Upgrade',]);
         $upgradeRoom = $tourComponent->addToOrder($orderCustomer);
         $upgradeRoom->update(['cost' => 100,]);
         $upgradeRoom->save();
@@ -204,7 +204,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         for ($i = 0; $i < 5; $i++) {
             $inventory = $this->generateFlightInventory();
             $tourComponent = FlightInventoryTour::create(
-                ['flight_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour->id, 'tour_sales_price' => 100, 'tour_component_type' => 'Upgrade',]);
+                ['flight_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour_id, 'tour_sales_price' => 100, 'tour_component_type' => 'Upgrade',]);
             $orderComponent = $tourComponent->addToOrder($orderCustomer);
             $orderComponent->update(['cost' => 100,]);
             $orderComponent->save();
@@ -237,7 +237,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $this->generateOrderCustomer(true, $orderCustomer->order);
         $inventory = $this->generateTransportInventory();
         $tourComponent = TransportInventoryTour::create(
-            ['transport_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour->id, 'tour_sales_price' => 100, 'tour_component_type' => 'Upgrade',]);
+            ['transport_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour_id, 'tour_sales_price' => 100, 'tour_component_type' => 'Upgrade',]);
         $upgradeRoom = $tourComponent->addToOrder($orderCustomer);
         $upgradeRoom->update(['cost' => 100,]);
         $upgradeRoom->save();
@@ -269,7 +269,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         for ($i = 0; $i < 5; $i++) {
             $inventory = $this->generateTransportInventory();
             $tourComponent = TransportInventoryTour::create(
-                ['transport_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour->id, 'tour_sales_price' => 100, 'tour_component_type' => 'Upgrade',]);
+                ['transport_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour_id, 'tour_sales_price' => 100, 'tour_component_type' => 'Upgrade',]);
             $orderComponent = $tourComponent->addToOrder($orderCustomer);
             $orderComponent->update(['cost' => 100,]);
             $orderComponent->save();
@@ -302,7 +302,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $this->generateOrderCustomer(false, $orderCustomer->order);
         $inventory = $this->generateAccommodationInventory();
         $tourComponent = AccommodationInventoryTour::create(
-            ['accommodation_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour->id, 'tour_sales_price' => 100, 'tour_component_type' => 'Add-on',                ]);
+            ['accommodation_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour_id, 'tour_sales_price' => 100, 'tour_component_type' => 'Add-on',                ]);
         $upgradeRoom = $tourComponent->addToOrder($orderCustomer->primary_group);
         $upgradeRoom->update(['cost' => 100,]);
         $upgradeRoom->save();
@@ -334,7 +334,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         for ($i = 0; $i < 5; $i++) {
             $inventory = $this->generateAccommodationInventory();
             $tourComponent = AccommodationInventoryTour::create(
-                ['accommodation_inventory_id' => 1, 'tour_id' => $orderCustomer->order->tour->id, 'tour_sales_price' => 100, 'tour_component_type' => 'Add-on',                ]);
+                ['accommodation_inventory_id' => 1, 'tour_id' => $orderCustomer->order->tour_id, 'tour_sales_price' => 100, 'tour_component_type' => 'Add-on',                ]);
             $upgradeRoom = $tourComponent->addToOrder($orderCustomer->primary_group);
             $upgradeRoom->update(['cost' => 100,]);
             $upgradeRoom->save();
@@ -368,7 +368,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $this->generateOrderCustomer(true, $orderCustomer->order);
         $inventory = $this->generateActivityInventory();
         $tourComponent = ActivityInventoryTour::create(
-            ['activity_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour->id, 'tour_sales_price' => 100, 'tour_component_type' => 'Add-on',]);
+            ['activity_inventory_id' => $inventory->id, 'tour_id' => $orderCustomer->order->tour_id, 'tour_sales_price' => 100, 'tour_component_type' => 'Add-on',]);
         $upgradeRoom = $tourComponent->addToOrder($orderCustomer);
         $upgradeRoom->update(['cost' => 100,]);
         $upgradeRoom->save();
@@ -400,7 +400,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         for ($i = 0; $i < 5; $i++) {
             $inv = $this->generateActivityInventory();
             $tourComponent = ActivityInventoryTour::create(
-                ['activity_inventory_id' => $inv->id, 'tour_id' => $orderCustomer->order->tour->id, 'tour_sales_price' => 100, 'tour_component_type' => 'Add-on',]);
+                ['activity_inventory_id' => $inv->id, 'tour_id' => $orderCustomer->order->tour_id, 'tour_sales_price' => 100, 'tour_component_type' => 'Add-on',]);
             $orderComponent = $tourComponent->addToOrder($orderCustomer);
             $orderComponent->update(['cost' => 100,]);
             $orderComponent->save();
@@ -433,7 +433,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $this->generateOrderCustomer(true, $orderCustomer->order);
         $inv = $this->generateFlightInventory();
         $tourComponent = FlightInventoryTour::create(
-            ['flight_inventory_id' => $inv->id, 'tour_id' => $orderCustomer->order->tour->id, 'tour_sales_price' => 100, 'tour_component_type' => 'Add-on',]);
+            ['flight_inventory_id' => $inv->id, 'tour_id' => $orderCustomer->order->tour_id, 'tour_sales_price' => 100, 'tour_component_type' => 'Add-on',]);
         $upgradeRoom = $tourComponent->addToOrder($orderCustomer);
         $upgradeRoom->update(['cost' => 100,]);
         $upgradeRoom->save();
@@ -465,7 +465,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         for ($i = 0; $i < 5; $i++) {
             $inv = $this->generateFlightInventory();
             $tourComponent = FlightInventoryTour::create(
-                ['flight_inventory_id' => $inv->id, 'tour_id' => $orderCustomer->order->tour->id, 'tour_sales_price' => 100, 'tour_component_type' => 'Add-on',]);
+                ['flight_inventory_id' => $inv->id, 'tour_id' => $orderCustomer->order->tour_id, 'tour_sales_price' => 100, 'tour_component_type' => 'Add-on',]);
             $orderComponent = $tourComponent->addToOrder($orderCustomer);
             $orderComponent->update(['cost' => 100,]);
             $orderComponent->save();
@@ -498,7 +498,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $this->generateOrderCustomer(true, $orderCustomer->order);
         $inv = $this->generateTransportInventory();
         $tourComponent = TransportInventoryTour::create(
-            ['transport_inventory_id' => $inv->id, 'tour_id' => $orderCustomer->order->tour->id, 'tour_sales_price' => 100, 'tour_component_type' => 'Add-on',]);
+            ['transport_inventory_id' => $inv->id, 'tour_id' => $orderCustomer->order->tour_id, 'tour_sales_price' => 100, 'tour_component_type' => 'Add-on',]);
         $upgradeRoom = $tourComponent->addToOrder($orderCustomer);
         $upgradeRoom->update(['cost' => 100,]);
         $upgradeRoom->save();
@@ -530,7 +530,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         for ($i = 0; $i < 5; $i++) {
             $inv = $this->generateTransportInventory();
             $tourComponent = TransportInventoryTour::create(
-                ['transport_inventory_id' => $inv->id, 'tour_id' => $orderCustomer->order->tour->id, 'tour_sales_price' => 100, 'tour_component_type' => 'Add-on',]);
+                ['transport_inventory_id' => $inv->id, 'tour_id' => $orderCustomer->order->tour_id, 'tour_sales_price' => 100, 'tour_component_type' => 'Add-on',]);
             $orderComponent = $tourComponent->addToOrder($orderCustomer);
             $orderComponent->update(['cost' => 100,]);
             $orderComponent->save();

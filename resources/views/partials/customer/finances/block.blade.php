@@ -70,7 +70,7 @@ $next = $order->next_installment;
                             <th scope="col">Due By</th>
                             <th scope="col">Type</th>
                             <th scope="col">Amount Due</th>
-                            <th scope="col">Paid?</th>
+                            <th scope="col">Outstanding</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,21 +78,42 @@ $next = $order->next_installment;
                             <td data-content="Due By" class="fw-bold">With Order</td>
                             <td data-content="Type">Deposit</td>
                             <td data-content="Amount Due">{{ f_currency($order->calculated_deposit) }}</td>
-                            <td data-content="Paid?">{{ f_bool($order->calculated_deposit <= $order->paid) }}</td>
+                            <td data-content="Outstanding">
+                                @php $amount = $order->calculated_deposit - min($order->paid, $order->calculated_deposit); @endphp
+                                @if($amount <= 0)
+                                    Paid
+                                @else
+                                    {{ f_currency($amount) }}
+                                @endif
+                            </td>
                         </tr>
                         @foreach($order->installments as $installment)
                             <tr>
                                 <td data-content="Due By" class="fw-bold">{{ f_date($installment->due_on) }}</td>
                                 <td data-content="Type">Instalment</td>
                                 <td data-content="Amount Due">{{ f_currency($installment->calculated_amount) }}</td>
-                                <td data-content="Paid?">{{ f_bool($installment->paid) }}</td>
+                                <td data-content="Outstanding">
+                                    @php $amount = $installment->calculated_amount - $installment->repository->getAmountPaid(); @endphp
+                                    @if($amount <= 0)
+                                        Paid
+                                    @else
+                                        {{ f_currency($amount) }}
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                         <tr>
                             <td data-content="Due By" class="fw-bold">{{ f_date($order->tour->final_payment) }}</td>
                             <td data-content="Type">Remaining</td>
                             <td data-content="Amount Due">{{ f_currency($order->remaining_installment) }}</td>
-                            <td data-content="Paid?">{{ f_bool($order->remaining <= 0) }}</td>
+                            <td data-content="Outstanding">
+                                @php $amount = min($order->remaining, $order->remaining_installment); @endphp
+                                @if($amount <= 0)
+                                    Paid
+                                @else
+                                    {{ f_currency($amount) }}
+                                @endif
+                            </td>
                         </tr>
                     </tbody>
                 </table>

@@ -131,4 +131,9 @@ class TransportInventoryRepository extends InventoryRepository
     {
         return $this->inventory->purchase_price;
     }
+
+    public function getSalesPrice(): ?float
+    {
+        return $this->inventory->sales_price;
+    }
 }

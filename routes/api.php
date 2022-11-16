@@ -7,6 +7,7 @@
 
 use App\Http\Controllers\Api\Admin\QuoteController;
 use App\Http\Controllers\Api\Admin\MerchandiseController;
+use App\Http\Controllers\Api\Admin\RevenueController;
 use App\Http\Controllers\Api\CustomerBookingController;
 use App\Http\Gateways\FellohGateway;
 use Illuminate\Http\Request;
@@ -231,9 +232,13 @@ Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(functio
 });
 
 Route::middleware('api.token.auth')->name('api.')->group(function () {
+    Route::prefix('/costing')->name('costing.')->group(function () {
+       Route::get('/revenue', [RevenueController::class, 'revenue'])->name('revenue');
+       Route::get('/revenue/set', [RevenueController::class, 'revenueSet'])->name('revenue.set');
+    });
     Route::post('/merchandise/fulfil', [MerchandiseController::class, 'fulfil'])->name('merchandise.fulfil');
     Route::post('accommodation/rooming/{order}/save', [AccommodationController::class, 'saveRoomingData'])->name('roomings.save');
-
+    Route::post('/orders', [OrderController::class, 'getOverview'])->name('orders.all');
     Route::prefix('select')->group(function () {
         Route::post('locations', [SelectController::class, 'getLocations'])->name('locations.select');
         Route::post('addresses', [SelectController::class, 'getAddresses'])->name('addresses.select');
