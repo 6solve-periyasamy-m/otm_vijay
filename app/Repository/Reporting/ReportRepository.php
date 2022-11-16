@@ -5,13 +5,11 @@ namespace App\Repository\Reporting;
 use App\Helpers\QuarterHelper;
 use App\Models\Booking\Booking;
 use App\Models\Location\Address;
-use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
-use App\Repository\Interfaces\HasRoomingList;
 use Illuminate\Support\Collection;
 
 class ReportRepository
@@ -221,6 +219,11 @@ class ReportRepository
             $row->purchased = $orderActivity?->orderCustomer?->order?->ordered_on;
             $row->cost = $orderActivity?->tourComponent?->tour_component_type === "Included" ? 0 : $orderActivity?->cost;
             $row->component = $orderActivity?->tourComponent?->tour_component_type;
+            $row->activity_notes = $orderActivity?->orderCustomer?->activity_notes;
+            $row->order_customer_notes_internal = $orderActivity?->orderCustomer?->internal_notes;
+            $row->order_customer_notes_external = $orderActivity?->orderCustomer?->external_notes;
+            $row->customer_notes_internal = $orderActivity?->orderCustomer?->customer?->internal_notes;
+            $row->customer_notes_external = $orderActivity?->orderCustomer?->customer?->external_notes;
             $data[] = $row;
         }
         return $data;

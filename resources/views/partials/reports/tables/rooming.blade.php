@@ -12,6 +12,10 @@
             <th scope="col">Empty Beds</th>
             <th scope="col">Occupants</th>
             <th scope="col">Accommodation Notes</th>
+            <th scope="col">Internal Customer Notes</th>
+            <th scope="col">External Customer Notes</th>
+            <th scope="col">Internal Order Customer Notes</th>
+            <th scope="col">External Order Customer Notes</th>
         </tr>
     </thead>
     <tbody>
@@ -27,16 +31,41 @@
                 <td>{{ $row->to }}</td>
                 <td>{{ $row->occupants }}</td>
                 <td>{{ $row->empty_beds }}</td>
+
+                @php
+                    $travellers = "";
+                    $acc_notes = "";
+                    $internal_c = "";
+                    $external_c = "";
+                    $internal_oc = "";
+                    $external_oc = "";
+                    /** @var \App\Models\Order\OrderCustomer $traveller */
+                    foreach ($row->travellers as $traveller) {
+                        $travellers .= ($traveller->customer?->first_name ?? 'Redacted') . " " . ($traveller->customer?->last_name ?? 'Redacted') . ',';
+                        $acc_notes .= ($traveller->accommodation_notes ?? "No Notes") . "\n";
+                        $internal_c .= ($traveller->customer?->internal_notes ?? 'No Notes') . "\n";
+                        $external_c .= ($traveller->customer?->external_notes ?? 'No Notes') . "\n";
+                        $internal_oc .= ($traveller->internal_notes ?? 'No Notes') . "\n";
+                        $external_oc .= ($traveller->external_notes ?? 'No Notes') . "\n";
+                    }
+                @endphp
                 <td>
-                    @php /** @var \App\Models\Order\OrderCustomer $traveller */ @endphp
-                    @foreach($row->travellers as $traveller)
-                        {{ $traveller->customer?->first_name ?? 'Redacted' }} {{ $traveller->customer?->last_name ?? 'Redacted' }},
-                    @endforeach
+                    {{ $travellers }}
                 </td>
                 <td>
-                    @foreach($row->travellers as $traveller)
-                        {{$traveller->accommodation_notes}}<br />
-                    @endforeach
+                    {!! nl2br(e($acc_notes)) !!}
+                </td>
+                <td>
+                    {!! nl2br(e($internal_c)) !!}
+                </td>
+                <td>
+                    {!! nl2br(e($external_c)) !!}
+                </td>
+                <td>
+                    {!! nl2br(e($internal_oc)) !!}
+                </td>
+                <td>
+                    {!! nl2br(e($external_oc)) !!}
                 </td>
             </tr>
         @endforeach
