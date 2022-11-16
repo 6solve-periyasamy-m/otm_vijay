@@ -168,6 +168,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::get('/invoice', [OrderController::class, 'invoice'])->name('orders.invoice.latest')->middleware('bouncer:Order\Order,read');
             Route::get('/atol', [OrderController::class, 'atol'])->name('orders.atol')->middleware('bouncer:Order\Order,read');
             Route::get('/occupancy', [OrderController::class, 'occupancy'])->name('orders.occupancy')->middleware('bouncer:Order\Order,update');
+            Route::get('/migrate', [OrderController::class, 'switchTour'])->name('orders.switch')->middleware('bouncer:Order\Order,update');
+            Route::post('/migrate', [OrderController::class, 'migrate'])->name('orders.migrate')->middleware('bouncer:Order\Order,update');
             Route::prefix('installments')->group(function () {
                 Route::get('/create', [OrderInstallmentController::class, 'create'])->name('order-installments.create')->middleware('bouncer:Order\Order,update');
                 Route::post('/create', [OrderInstallmentController::class, 'store'])->name('order-installments.store')->middleware('bouncer:Order\Order,update');

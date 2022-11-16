@@ -8,6 +8,7 @@ use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderEditedEvent;
 use App\Events\Order\OrderRestoredEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Order\MigrateRequest;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
@@ -78,6 +79,19 @@ class OrderController extends Controller
     {
         $order->repository->refresh();
         return view('pages.models.orders.view', ['order' => $order,]);
+    }
+
+    public function switchTour(Order $order)
+    {
+        return view('pages.orders.migrate', ['order' => $order,]);
+    }
+
+    public function migrate(MigrateRequest $request, Order $order)
+    {
+        $tour = Tour::find($request->tour_id);
+        if (!isset($tour)) abort(404);
+        $order->repository->migrate($tour, $request->resetPrices(), $request->resetAdjustments());
+        return redirect()->route('orders.view', ['order' => $order,]);
     }
 
     public function invoice(Order $order)

@@ -3,7 +3,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form action="{{ $action }}" method="post" {!! isset($multipart) && $multipart ? 'enctype="multipart/form-data"' : '' !!}>
+            <form id="form-main" action="{{ $action }}" method="post" {!! isset($multipart) && $multipart ? 'enctype="multipart/form-data"' : '' !!}>
                 @csrf
                 <div class="row">
                     @yield('form-body')
