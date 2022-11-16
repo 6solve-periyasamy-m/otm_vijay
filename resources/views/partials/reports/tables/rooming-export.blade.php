@@ -32,7 +32,7 @@
                     <td>{{ $traveller->customer?->first_name ?? 'Redacted' }} {{ $traveller->customer?->last_name ?? 'Redacted' }}</td>
                 @endforeach
                 @foreach($row->travellers as $traveller)
-                    <td>{{ $traveller->customer?->first_name ?? 'Redacted' }} {{ $traveller->customer?->last_name ?? 'Redacted' }}</td>
+                    <td>{{ $traveller->accommodation_notes ?? '' }}</td>
                 @endforeach
             </tr>
         @endforeach
