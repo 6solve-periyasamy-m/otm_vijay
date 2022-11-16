@@ -480,10 +480,12 @@ class OrderRepository extends ModelRepository
         foreach ($this->order->orderCustomers as $orderCustomer) {
             if ($resetPrice) {
                 $orderCustomer->tour_cost = $tour->base_price_per_person;
+                $orderCustomer->single_occupancy_surcharge = $tour->single_occupancy_surcharge;
                 $orderCustomer->save();
             }
             $orderCustomer->repository->addAllIncluded();
         }
+        $this->resetInstallments();
         foreach ($this->order->groups as $group) {
             $group->repository->refreshRooming();
         }
