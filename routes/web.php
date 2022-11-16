@@ -832,7 +832,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
 
     Route::prefix('reports')->group(function () {
         Route::prefix('bespoke')->group(function () {
-            Route::get('/', [BespokeReportController::class, 'index'])->name('reports.bespoke.all');
+            Route::get('/', function() { return redirect()->route('reports.all'); })->name('reports.bespoke.all');
             Route::get('create/{parent}', [BespokeReportController::class, 'create'])->name('reports.bespoke.create');
             Route::post('temporary', [BespokeReportController::class, 'showTemporary'])->name('reports.bespoke.temporary.show');
             Route::prefix('{report}')->group(function () {
@@ -844,7 +844,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             });
 
         });
-        Route::get('/', [ReportController::class, 'viewReports'])->name('reports.all');
+        Route::get('/', [BespokeReportController::class, 'index'])->name('reports.all');
         Route::get('/orders', [ReportController::class, 'getOrderReport'])->name('reports.order');
         Route::get('/orders/{extension}', [ReportController::class, 'exportOrderReport'])->name('reports.order.export');
         Route::get('/tour-stock', [ReportController::class, 'getTourStockReport'])->name('reports.tour-stock');
