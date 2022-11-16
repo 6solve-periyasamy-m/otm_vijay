@@ -69,6 +69,12 @@ class ReportRepository
                 'view' => 'reports.merchandise',
                 'export' => 'reports.merchandise.export',
             ],
+            [
+                'name' => 'Rooming',
+                'details' => 'Information about all ordered rooms',
+                'view' => 'reports.rooming',
+                'export' => 'reports.rooming.export',
+            ],
         ];
     }
 
