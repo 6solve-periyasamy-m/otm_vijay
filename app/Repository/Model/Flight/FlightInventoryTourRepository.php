@@ -19,6 +19,7 @@ use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Order\Component\OrderFlightRepository;
 use App\Repository\Model\Quote\Component\QuoteFlightRepository;
 use App\Repository\Traits\Component\IsFlight;
+use Illuminate\Support\Collection;
 
 class FlightInventoryTourRepository extends InventoryTourRepository
 {
@@ -168,21 +169,13 @@ class FlightInventoryTourRepository extends InventoryTourRepository
         return $this->tourComponent->tour_component_type;
     }
 
-    public function getAvailableForUpgrade(): array
+    /**
+     * @return Collection<FlightInventoryTour>
+     */
+    public function getAvailableForUpgrade(): \Illuminate\Support\Collection
     {
         $tour = $this->tourComponent->tour;
-        $included = [];
-        foreach ($tour->flightInventoryTours as $inventoryTour) {
-            $included[$inventoryTour->flightInventory->id] = $inventoryTour->flightInventory->id;
-        }
-        $data = [];
-        foreach ($this->tourComponent->flightInventory->flight->flightInventory as $inventory) {
-            if (in_array($inventory->id, $included)) continue;
-            if ($inventory->check_in->gte($tour->date_from->setTime(0, 0)) && $inventory->arrives_at->lte($tour->date_to->setTime(23, 59, 59))) {
-                $data[$inventory->id] = $inventory;
-            }
-        }
-        return $data;
+        return FlightInventoryRepository::getBetweenDates($tour->date_from->setTime(0,0), $tour->date_to->setTime(23,59,59), $tour->repository);
     }
 
     public function getUpgradeId(): int

@@ -363,13 +363,13 @@ $(document).ready( function () {
                                         @if($orderAccommodation->tourComponent->tour_component_type == 'Add-on')
                                             Not Available
                                         @else
-                                            @if(count($orderAccommodation->tourComponent->getUpgradeKeyMap()) < 2)
+                                            @if(count($orderAccommodation->tourComponent->repository->getUpgradeKeyMap()) < 2)
                                                 No Upgrades Available
                                             @else
                                                 @include('partials.fields.selector.adder-preset',
                                                     ['field' => 'accommodation_' . $orderAccommodation->id . '_upgrade', 'preselect' => false,
                                                     'createRoute' => '#', 'onclick' => 'applyAccommodationUpgrade("accommodation_' . $orderAccommodation->id . '_upgrade-input", this)', 'target' => '',
-                                                    'selected' => $orderAccommodation->tourComponent->repository->getUpgradeId(), 'options' => $orderAccommodation->tourComponent->getUpgradeKeyMap(),])
+                                                    'selected' => $orderAccommodation->tourComponent->repository->getUpgradeId(), 'options' => $orderAccommodation->tourComponent->repository->getUpgradeKeyMap(0, true),])
                                             @endif
                                         @endif
                                     </td>
@@ -432,13 +432,13 @@ $(document).ready( function () {
                                     @if($orderActivity->tourComponent->tour_component_type == 'Add-on')
                                         Not Available
                                     @else
-                                        @if(count($orderActivity->tourComponent->getUpgradeKeyMap()) < 2)
+                                        @if(count($orderActivity->tourComponent->repository->getUpgradeKeyMap(0, true)) < 2)
                                             No Upgrades Available
                                         @else
                                             @include('partials.fields.selector.adder-preset',
                                                 ['field' => 'activity_' . $orderActivity->id . '_upgrade', 'preselect' => false,
                                                 'createRoute' => '#', 'onclick' => 'applyActivityUpgrade("activity_' . $orderActivity->id . '_upgrade-input", this)', 'target' => '',
-                                                'selected' => $orderActivity->tourComponent->repository->getUpgradeId(), 'options' => $orderActivity->tourComponent->getUpgradeKeyMap(),])
+                                                'selected' => $orderActivity->tourComponent->repository->getUpgradeId(), 'options' => $orderActivity->tourComponent->repository->getUpgradeKeyMap(0, true),])
                                         @endif
                                     @endif
                                 </td>
@@ -501,13 +501,13 @@ $(document).ready( function () {
                                     @if($orderFlight->tourComponent->tour_component_type == 'Add-on')
                                         Not Available
                                     @else
-                                        @if(count($orderFlight->tourComponent->getUpgradeKeyMap()) < 2)
+                                        @if(count($orderFlight->tourComponent->repository->getUpgradeKeyMap(0, true)) < 2)
                                             No Upgrades Available
                                         @else
                                             @include('partials.fields.selector.adder-preset',
                                                 ['field' => 'flight_' . $orderFlight->id . '_upgrade', 'preselect' => false,
                                                 'createRoute' => '#', 'onclick' => 'applyFlightUpgrade("flight_' . $orderFlight->id . '_upgrade-input", this)', 'target' => '',
-                                                'selected' => $orderFlight->tourComponent->repository->getUpgradeId(), 'options' => $orderFlight->tourComponent->getUpgradeKeyMap(),])
+                                                'selected' => $orderFlight->tourComponent->repository->getUpgradeId(), 'options' => $orderFlight->tourComponent->repository->getUpgradeKeyMap(0, true),])
                                         @endif
                                     @endif
                                 </td>
@@ -572,13 +572,13 @@ $(document).ready( function () {
                                     @if($orderTransport->tourComponent->tour_component_type == 'Add-on')
                                         Not Available
                                     @else
-                                        @if(count($orderTransport->tourComponent->getUpgradeKeyMap()) < 2)
+                                        @if(count($orderTransport->tourComponent->repository->getUpgradeKeyMap(0, true)) < 2)
                                             No Upgrades Available
                                         @else
                                             @include('partials.fields.selector.adder-preset',
                                                 ['field' => 'transport_' . $orderTransport->id . '_upgrade', 'preselect' => false,
                                                 'createRoute' => '#', 'onclick' => 'applyTransportUpgrade("transport_' . $orderTransport->id . '_upgrade-input", this)', 'target' => '',
-                                                'selected' => $orderTransport->tourComponent->repository->getUpgradeId(), 'options' => $orderTransport->tourComponent->getUpgradeKeyMap(),])
+                                                'selected' => $orderTransport->tourComponent->repository->getUpgradeId(), 'options' => $orderTransport->tourComponent->repository->getUpgradeKeyMap(0, true),])
                                         @endif
                                     @endif
                                 </td>

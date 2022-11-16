@@ -9,11 +9,11 @@ use App\Models\Flight\FlightInventoryTour;
 use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Order\OrderCustomer;
 use App\Models\Quote\Quote;
-use App\Models\Tour\Merchandise;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Interfaces\HasStockControl;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 abstract class InventoryTourRepository extends InventoryContainerRepository implements HasStockControl
 {
@@ -29,7 +29,7 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
 
     public abstract function onUpgradeTree(ComponentUpgradeRepository $upgradeRepository): bool;
 
-    public abstract function getAvailableForUpgrade(): array;
+    public abstract function getAvailableForUpgrade(): array|Collection;
 
     public abstract function getUpgradeId(): int;
 
@@ -40,6 +40,32 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
     public abstract function isBookable(): bool;
 
     public abstract function getUsedOnOrderCount(): int;
+
+    public function getUpgradeKeyMap(int $required = 0, bool $stock = false, bool $downgrade = true): array
+    {
+        $component = $this->get();
+        $parent = $this->getUpgradeParent();
+        if ($component->id == $parent->id) {
+            $upgrades = $component->upgrades;
+            $cost = 0;
+        } else {
+            $upgrades = $parent->upgrades;
+            $cost = $component->tour_sales_price;
+        }
+        $data = [];
+        if ($downgrade && ($required <= 0 || $parent->repository->getAvailableStock() >= $required)) {
+            $data[0] = 'Included - ' . f_currency(0) . ($stock ? ' - Stock ' . $parent->repository->getAvailableStock() . '/' . $parent->repository->getTotalStock() : '');
+        }
+        foreach ($upgrades as $upgrade) {
+            if ($required > 0 && $upgrade->upgrade->repository->getAvailableStock() < $required) continue;
+            if (!$downgrade && $upgrade->upgrade->tour_sales_price < $cost) continue;
+            if (!$downgrade &&
+                $upgrade->upgrade->repository->getInventory()->get()->id === $this->getInventory()->get()->id) continue;
+            $data[$upgrade->id] = $upgrade->description . ' - ' . f_currency($upgrade->upgrade->tour_sales_price)
+                . ($stock ? ' - Stock ' . $upgrade->upgrade->repository->getAvailableStock() . '/' . $upgrade->upgrade->repository->getTotalStock() : '');
+        }
+        return $data;
+    }
 
     public static function getComponent(string $type, int $id): ?InventoryTourRepository
     {
