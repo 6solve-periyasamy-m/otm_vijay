@@ -30,26 +30,26 @@
     @can('create', \App\Models\Tour\Tour::class)
         @include('partials.fields.selector.adder',
                     ['name' => 'Tour', 'field' => 'tour_id', 'value' => $tour_id ?? 0,
-                     'route' => 'tours', 'createRoute' => route('tours.create'),])
+                     'route' => 'tours', 'createRoute' => route('tours.create'), 'width' => 6])
     @else
         @include('partials.fields.selector.default',
                   ['name' => 'Tour', 'field' => 'tour_id', 'value' => $tour_id ?? 0,
-                   'route' => 'tours',])
+                   'route' => 'tours', 'width' => 6])
     @endcan
     @can('create', \App\Models\Customer\Customer::class)
         @include('partials.fields.selector.adder',
                     ['name' => 'Lead Booker', 'field' => 'lead_booker_id', 'value' => null,
-                     'route' => 'customers', 'createRoute' => route('customers.create'),])
+                     'route' => 'customers', 'createRoute' => route('customers.create'), 'width' => 6])
     @else
         @include('partials.fields.selector.default',
                 ['name' => 'Lead Booker', 'field' => 'lead_booker_id', 'value' => null,
-                 'route' => 'customers',])
+                 'route' => 'customers', 'width' => 6])
     @endcan
 @endif
-@include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'value' => $deposit ?? null, ])
-@include('partials.fields.datetime', ['name' => 'Ordered On', 'field' => 'ordered_on', 'value' => $ordered_on ?? null, ])
-@include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'value' => $internal_notes ?? null, ])
-@include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'value' => $external_notes ?? null, ])
+@include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'value' => $deposit ?? null, 'width' => 6 ])
+@include('partials.fields.datetime', ['name' => 'Ordered On', 'field' => 'ordered_on', 'value' => $ordered_on ?? null, 'width' => 6 ])
+@include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'value' => $internal_notes ?? null, 'width' => 6 ])
+@include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'value' => $external_notes ?? null, 'width' => 6 ])
 @if(isset($update))
     @include('partials.fields.ckeditor', ['name' => 'Invoice Footer', 'field' => 'invoice_footer', 'value' => $order->invoice_footer, ])
 @endif
