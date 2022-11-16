@@ -476,6 +476,9 @@ class OrderRepository extends ModelRepository
             }
         }
         $this->order->tour_id = $tour->id;
+        if ($resetPrice) {
+            $this->order->deposit = $tour->deposit;
+        }
         $this->order->save();
         foreach ($this->order->orderCustomers as $orderCustomer) {
             if ($resetPrice) {
