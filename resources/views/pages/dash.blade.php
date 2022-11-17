@@ -56,7 +56,7 @@
         function formatCurrency(number) {
             let formatter = new Intl.NumberFormat('en-US', {
                 style: 'currency',
-                currency: '{{ setting('system.currency') }}'
+                currency: '{{ setting('system.currency', 'gbp') }}'
             })
             return formatter.format(number);
         }
