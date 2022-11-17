@@ -160,21 +160,33 @@
         function createCustomerBox(id, name, avatar) {
             return `<div class="customer" customer="${id}"><div class="customer-container"><div class="customer-section"><img src="${avatar}" class="image"></div><div class="customer-section">${name}</div></div></div>`;
         }
-        function createRoomBox(id, name, roomName, size, customers = null) {
+        function createRoomBox(id, name, roomName, size, customers = null, locked = false) {
             let bedString = '';
             if (customers != null) {
                 for (let customer in customers) {
                     let customerBox = createCustomerBox(customers[customer]['id'], customers[customer]['name'], customers[customer]['avatar']);
-                    bedString += `<div class="bed">${customerBox}</div>`
+                    if (locked) {
+                        bedString += `<div class="bed locked">${customerBox}</div>`
+                    } else {
+                        bedString += `<div class="bed">${customerBox}</div>`
+                    }
                 }
                 if (customers.length < size) {
                     for (let i = 0; i < size - customers.length; i++) {
-                        bedString += `<div class="bed"></div>`
+                        if (locked) {
+                            bedString += `<div class="bed locked"></div>`
+                        } else {
+                            bedString += `<div class="bed"></div>`
+                        }
                     }
                 }
             } else {
                 for (let i = 0; i < size; i++) {
-                    bedString += `<div class="bed"></div>`
+                    if (locked) {
+                        bedString += `<div class="bed locked"></div>`
+                    } else {
+                        bedString += `<div class="bed"></div>`
+                    }
                 }
             }
             return `
@@ -233,7 +245,7 @@
         }
         function addRoomToManager(roomBox) {
             $('.manager').append(roomBox);
-            $('.bed').droppable({
+            $('.bed:not(.locked)').droppable({
                 accept: function (element) {
                     return !$(this).is(':parent');
                 },
@@ -268,8 +280,8 @@
         }
         $(document).ready(function () {
             initialize();
-            $('.customer').draggable({ revert: 'invalid', });
-            $('.customers').droppable({
+            $('.customer:not(.locked)').draggable({ revert: 'invalid', });
+            $('.customers:not(.locked)').droppable({
                 drop: function(e, ui) {
                     $(e.target).append($(ui.draggable).detach().css({'top':'','left':''}));
                 }
