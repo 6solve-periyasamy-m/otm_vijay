@@ -13,9 +13,7 @@
         "@fortawesome/free-brands-svg-icons": "^5.15.4",
         "@fortawesome/free-regular-svg-icons": "^5.15.4",
         "@fortawesome/free-solid-svg-icons": "^5.15.4",
-        "@fortawesome/vue-fontawesome": "^2.0.5",
         "@popperjs/core": "^2.10.2",
-        "@vue/cli": "^4.5.13",
         "autoprefixer": "^10.3.7",
         "axios": "^0.21.1",
         "bootstrap": "^5.0.2",
@@ -24,19 +22,16 @@
         "laravel-mix": "^6.0.34",
         "lodash": "^4.17.19",
         "mdb": "^0.1.0",
-        "pdfmake": "^0.2.2",
         "popper": "^1.0.1",
         "popper.js": "^1.16.1",
         "postcss": "^8.3.9",
         "resolve-url-loader": "^4.0.0",
         "sass": "^1.38.0",
-        "sass-loader": "^12.1.0",
-        "vue": "^2.6.14",
-        "vue-loader": "^15.9.8",
-        "vue-template-compiler": "^2.6.12"
+        "sass-loader": "^12.1.0"
     },
     "dependencies": {
-        "chart.js": "^3.6.2",
-        "puppeteer": "^14.4.1"
+        "chart.js": "^3.9.1",
+        "puppeteer": "^14.4.1",
+        "select2": "^4.1.0-rc.0"
     }
 }
