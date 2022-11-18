@@ -279,7 +279,7 @@ class Order extends Model
      */
     public function getDepositPercentageAttribute(): float
     {
-        return $this->cost == 0 ? 0 : round(($this->calculated_deposit / $this->cost) * 100, 2);
+        return $this->total == 0 ? 0 : round(($this->calculated_deposit / $this->total) * 100, 2);
     }
 
     /**
@@ -287,7 +287,7 @@ class Order extends Model
      */
     public function getRemainingPercentageAttribute(): float
     {
-        return $this->cost == 0 ? 0 : round(($this->remaining_installment / $this->cost) * 100, 2);
+        return $this->total == 0 ? 0 : round(($this->remaining_installment / $this->total) * 100, 2);
     }
 
     /**
