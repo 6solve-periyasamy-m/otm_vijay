@@ -466,4 +466,25 @@ class OrderRepository extends ModelRepository
             'view' => route('orders.view', ['order' => $this->order,]),
         ];
     }
+
+    public function getRoomingData(): array
+    {
+        $rooms = [];
+        foreach (RoomingRepository::getAvailableRoomTypes($this->order->tour) as $roomType) {
+            $rooms[$roomType->id] = ['name' => $roomType->name, 'size' => $roomType->maximum_occupancy,];
+        }
+        $customers = [];
+        foreach ($this->order->orderCustomers()->with('customer')->get() as $orderCustomer) {
+            $customers[$orderCustomer->id] = ['name' => $orderCustomer->customer_name, 'avatar' => $orderCustomer->customer->avatar_url,];
+        }
+        $groups = [];
+        foreach ($this->order->groups as $group) {
+            $groupCustomers = [];
+            foreach ($group->orderCustomers as $orderCustomer) {
+                $groupCustomers[] = $orderCustomer->id;
+            }
+            $groups[$group->id] = ['name' => $group->name, 'room' => $group->room_type_id, 'customers' => $groupCustomers,];
+        }
+        return ['rooms' => $rooms, 'customers' => $customers, 'groups' => $groups,];
+    }
 }

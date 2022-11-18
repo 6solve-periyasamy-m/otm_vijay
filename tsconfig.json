@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "allowJs": true,
+    "strict": true,
+    "alwaysStrict": true,
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "baseUrl": "types",
+    "typeRoots": ["types"]
+  },
+  "include": [
+    "resources/assets/typescript",
+    "node_modules/@types/jquery/JQuery.d.ts",
+    "node_modules/@types/jquery/misc.d.ts"
+  ]
+}

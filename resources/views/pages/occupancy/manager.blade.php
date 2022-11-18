@@ -3,126 +3,9 @@
 @section('title', 'Occupancy Manager')
 
 @push('header-stack')
-    <style>
-        :root {
-            --customer-box-size: 100px;
-            --bed-size: calc(var(--customer-box-size) + 2px);
-            --shadow-color: #808080;
-            --section-color: #9ccff6;
-            --internal-section-color: #7dabd5;
-            --bed-color: #bfbaba;
-            --customer-color: white;
-            --shallow-radius: 10px;
-            --image-size: 50px;
-            --margin: 10px;
-            --padding: 5px;
-        }
-        .drop-shadow {
-            box-shadow: -2px 2px 5px var(--shadow-color);
-        }
-        .section-box {
-            border-radius: var(--shallow-radius);
-            background: var(--section-color);
-            width: calc(100% - 20px);
-            padding: 5px;
-            margin: var(--margin);
-        }
-        .customers {
-            min-height: 120px;
-            display: flex;
-            max-width: 100%;
-            flex-wrap: wrap;
-            gap: var(--margin);
-        }
-        .customers > .customer {
-            box-shadow: -2px 2px 5px var(--shadow-color);
-        }
-        .manager {
-            height: auto;
-            min-height: 300px;
-        }
-        .customer {
-            border-radius: var(--shallow-radius);
-            background-color: var(--customer-color);
-            min-width: var(--customer-box-size);
-            width: var(--customer-box-size);
-            max-width: var(--customer-box-size);
-            height: var(--customer-box-size);
-        }
-        .customer-container {
-            display: grid;
-            justify-items: center;
-            align-items: center;
-            padding: var(--padding);
-            height: 100%;
-            font-size: 12px;
-        }
-        .customer:hover {
-            filter: brightness(95%);
-            cursor: pointer;
-        }
-        .customer-section {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-content: center;
-            text-align: center;
-        }
-        .room {
-            display: flex;
-            flex-wrap: wrap;
-            padding: var(--padding);
-            width: calc(100% - 10px);
-            margin: var(--margin) calc(var(--margin) / 2);
-            border-radius: var(--shallow-radius);
-            background-color: var(--internal-section-color);
-        }
-        .beds {
-            display: flex;
-            max-width: 60vw;
-            flex-wrap: wrap;
-            gap: var(--margin);
-        }
-        .bed {
-            border-radius: var(--shallow-radius);
-            width: var(--bed-size);
-            min-width: var(--bed-size);
-            height: var(--bed-size);
-            display: inline-block;
-            border: 1px dashed black;
-        }
-        .image {
-            width: var(--image-size);
-            height: var(--image-size);
-            border-radius: 50%;
-        }
-        .details {
-            display: inline;
-            height: 10%;
-            width: 100%;
-            padding: 2px 2px 5px 2px;
-        }
-        .details:after {
-            content: "";
-            display: block;
-            float: left;
-            background: var(--section-color);
-            width: 100%;
-            height: 5px;
-            border-radius: 3px;
-            margin-top: 5px;
-            margin-bottom: 2px
-        }
-        .group-input {
-            display:inline;
-        }
-        .name-input {
-            border-radius: 10px;
-        }
-        .round {
-            border-radius: var(--shallow-radius);
-        }
-    </style>
+    <link href="{{ asset('css/admin/occupancy.css') }}" type="text/css" rel="stylesheet" />
+    <script src="{{ asset('js/admin/functions.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/occupancy.js') }}" type="text/javascript"></script>
 @endpush
 
 @section('content')
@@ -145,147 +28,80 @@
     </div>
 @endsection
 
-{{-- Initialize JavaScript Variables --}}
+{{-- Templates --}}
 @push('footer-stack')
-    <script type="text/javascript">
-        customerBox = $('.customers');
-        manager = $('.manager');
-        customers = {!! json_encode($customers) !!};
-    </script>
+<script type="text/template" data-template="bed">
+    <div class="bed">${content}</div>
+</script>
+
+<script type="text/template" data-template="bed-locked">
+    <div class="bed locked">${content}</div>
+</script>
+
+<script type="text/template" data-template="customer">
+    <div class="customer" customer="${id}">
+        <div class="customer-container">
+            <div class="customer-section">
+                <img src="${avatar}" class="image">
+            </div>
+            <div class="customer-section">
+                ${name}
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" data-template="customer-locked">
+    <div class="customer locked" customer="${id}">
+        <div class="customer-container">
+            <div class="customer-section">
+                <img src="${avatar}" class="image">
+            </div>
+            <div class="customer-section">
+                ${name}
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" data-template="room">
+    <div class="room drop-shadow" typeid="${id}">
+        <div class="details">
+            <div class="group-input">
+                <input name="name" class="name-input" type="text" value="${name}"/>
+            </div>
+            ${room}
+        </div>
+        <div class="beds">
+            ${beds}
+        </div>
+    </div>
+</script>
 @endpush
 
-{{-- Builder Functions --}}
+{{-- JavaScript --}}
 @push('footer-stack')
-    <script type="text/javascript">
-        function createCustomerBox(id, name, avatar) {
-            return `<div class="customer" customer="${id}"><div class="customer-container"><div class="customer-section"><img src="${avatar}" class="image"></div><div class="customer-section">${name}</div></div></div>`;
+<script type="text/javascript">
+    manager = null;
+    function initialize() {
+        let templates = {
+            'bed': template('bed'),
+            'bedLocked': template('bed-locked'),
+            'customer': template('customer'),
+            'customerLocked': template('customer-locked'),
+        };
+        let sections = {
+            'rooms': $('.manager'),
+            'customers': $('.customers'),
         }
-        function createRoomBox(id, name, roomName, size, customers = null, locked = false) {
-            let bedString = '';
-            if (customers != null) {
-                for (let customer in customers) {
-                    let customerBox = createCustomerBox(customers[customer]['id'], customers[customer]['name'], customers[customer]['avatar']);
-                    if (locked) {
-                        bedString += `<div class="bed locked">${customerBox}</div>`
-                    } else {
-                        bedString += `<div class="bed">${customerBox}</div>`
-                    }
-                }
-                if (customers.length < size) {
-                    for (let i = 0; i < size - customers.length; i++) {
-                        if (locked) {
-                            bedString += `<div class="bed locked"></div>`
-                        } else {
-                            bedString += `<div class="bed"></div>`
-                        }
-                    }
-                }
-            } else {
-                for (let i = 0; i < size; i++) {
-                    if (locked) {
-                        bedString += `<div class="bed locked"></div>`
-                    } else {
-                        bedString += `<div class="bed"></div>`
-                    }
-                }
-            }
-            return `
-        <div class="room drop-shadow" typeid="${id}">
-            <div class="details">
-                <div class="group-input">
-                    <input name="name" class="name-input" type="text" value="${name}"/>
-                </div>
-                ${roomName}
-            </div>
-            <div class="beds">
-                ${bedString}
-            </div>
-        </div>`;
-        }
-    </script>
-@endpush
+        let parameters = { __api_token: '{{ \Auth::user()->getCurrentToken()->token }}', }
 
-{{-- Functionality --}}
-@push('footer-stack')
-    <script type="text/javascript">
-        function initialize() {
-            let groups = [
-                    @foreach ($groups as $group)
-                {name: "{{ $group['name'] }}", roomType: {name: "{{ $group['roomType']['name'] }}", id: {{ $group['roomType']['id'] }}, size: {{ $group['roomType']['size'] }}},
-                    customers: [
-                            @foreach ($group['customers'] as $customer)
-                        {name: "{{$customer['name']}}", id: {{$customer['id']}}, avatar: "{{$customer['avatar']}}",},
-                        @endforeach
-                    ]},
-                @endforeach
-            ];
-            for (let groupid in groups) {
-                addRoomToManager(createRoomBox(groups[groupid]['roomType']['id'], groups[groupid]['name'], groups[groupid]['roomType']['name'],groups[groupid]['roomType']['size'], groups[groupid]['customers'],));
-            }
-            let unused = {!! json_encode($unused) !!};
-            for (let key in {!! json_encode($unused) !!}) {
-                customerBox.append(createCustomerBox(unused[key]['id'], unused[key]['name'], unused[key]['avatar']));
-            }
-        }
-        function reset() {
-            customerBox.empty();
-            $('.manager').empty();
-            build();
-        }
-        function build() {
-            for (let key in customers) {
-                customerBox.append(createCustomerBox(customers[key]['id'], customers[key]['name'], customers[key]['avatar']));
-            }
-            $('.customer').draggable({ revert: 'invalid', });
-        }
-
-        function addRoom() {
-            let selected = $('.room-types').find(':selected')
-            addRoomToManager(createRoomBox(selected.val(), "Group " + $('.room').length, selected.attr('name'), selected.attr('occupancy')))
-        }
-        function addRoomToManager(roomBox) {
-            $('.manager').append(roomBox);
-            $('.bed:not(.locked)').droppable({
-                accept: function (element) {
-                    return !$(this).is(':parent');
-                },
-                drop: function(e, ui) {
-                    $(e.target).append($(ui.draggable).detach().css({'top':'','left':''}));
-                }
-            })
-        }
-
-        function submit() {
-            if ($('.customers').is(':parent')) return alert("Not all customers are assigned!");
-            let roomingData = [];
-            $('.room').each(function (index) {
-                    let roomedCustomers = [];
-                    let name = $(this).find('.name-input').val();
-                    $(this).children('.beds').first().children('.bed').each(function (index) {
-                        if ($(this).children().first().attr('customer') === undefined) return;
-                        roomedCustomers.push($(this).children().first().attr('customer'));
-                    });
-                    roomingData.push({name: name, roomType: $(this).attr('typeid'), customers: roomedCustomers})
-                }
-            );
-            let request = $.post({
-                url: "{{ route('api.roomings.save', ['order' => $order,]) }}",
-                dataType: "json",
-                data: { "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', "data": roomingData, },
-                statusCode: {
-                    200: function(xhr) { alert('Success'); },
-                    500: function(xhr) { alert('Failed: ' + xhr.message); }
-                }
-            });
-        }
-        $(document).ready(function () {
-            initialize();
-            $('.customer:not(.locked)').draggable({ revert: 'invalid', });
-            $('.customers:not(.locked)').droppable({
-                drop: function(e, ui) {
-                    $(e.target).append($(ui.draggable).detach().css({'top':'','left':''}));
-                }
-            })
+        occupancy.generate('{{ route('api.orders.rooming.get', ['order' => $order,]) }}', parameters, templates, sections).then((rooming) => {
+            manager = rooming;
         });
-    </script>
+    }
+    $(document).ready(() => {
+       initialize();
+    });
+</script>
 @endpush
