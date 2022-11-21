@@ -799,11 +799,11 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         });
     });
 
-    Route::prefix('organization')->group(function () {
+    Route::prefix('organizations')->group(function () {
         Route::get('/', [OrganizationController::class, 'index'])->name('organizations.all')->middleware('bouncer:Customer\Customer,read');
         Route::get('/create', [OrganizationController::class, 'create'])->name('organizations.create')->middleware('bouncer:Customer\Customer,create');
         Route::post('/create', [OrganizationController::class, 'store'])->name('organizations.store')->middleware('bouncer:Customer\Customer,create');
-        Route::prefix('{customer}')->group(function () {
+        Route::prefix('{organization}')->group(function () {
             Route::get('/', [OrganizationController::class, 'view'])->name('organizations.view')->middleware('bouncer:Customer\Customer,read');
             Route::get('/update', [OrganizationController::class, 'edit'])->name('organizations.edit')->middleware('bouncer:Customer\Customer,update');
             Route::post('/update', [OrganizationController::class, 'update'])->name('organizations.update')->middleware('bouncer:Customer\Customer,update');

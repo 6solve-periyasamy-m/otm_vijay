@@ -7,6 +7,7 @@ $organization = $organization ?? null;
 
 @extends('layout.form', ['action' => empty($organization) ? route('organizations.store') : route('organizations.update', ['organization' => $organization])])
 
+@section('title', empty($organization) ? 'Create Organization': 'Update Organization')
 
 @section('form-body')
 <x-admin.input name="name" width="4" value="{{ $organization?->name }}">Organization Name</x-admin.input>

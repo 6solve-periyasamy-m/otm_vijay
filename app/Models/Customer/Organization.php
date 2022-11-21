@@ -46,6 +46,8 @@ class Organization extends Model
     use HasFactory;
     use HasRelationships;
 
+    protected $guarded = [];
+
     public function customers(): HasMany
     {
         return $this->hasMany(Customer::class, 'organization_id');
@@ -53,17 +55,19 @@ class Organization extends Model
 
     public function quotes(): HasManyDeep
     {
-        return $this->hasManyDeep(Quote::class, [
-            Customer::class,
-            QuoteProspect::class,
-        ])->groupBy('quotes.id');
+        return $this->hasManyDeepFromRelations(
+            $this->customers(),
+            (new Customer())->quoteProspects(),
+            (new QuoteProspect())->quote(),
+        )->groupBy('quotes.id');
     }
 
     public function orders(): HasManyDeep
     {
-        return $this->hasManyDeep(Order::class, [
-            Customer::class,
-            OrderCustomer::class,
-        ])->groupBy('orders.id');
+        return $this->hasManyDeepFromRelations(
+            $this->customers(),
+            (new Customer())->orderCustomers(),
+            (new OrderCustomer())->order(),
+        )->groupBy('orders.id');
     }
 }

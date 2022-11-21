@@ -17,8 +17,8 @@ class OrganizationRequest extends FormRequest
     {
         return [
             'name' => $this->name,
-            'company_phone' => $this->phone,
-            'company_email' => $this->email,
+            'contact_number' => $this->phone,
+            'contact_email' => $this->email,
             'internal_notes' => $this->internal_notes,
             'external_notes' => $this->external_notes,
         ];

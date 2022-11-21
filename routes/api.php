@@ -260,6 +260,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::post('airlines', [SelectController::class, 'getAirlines'])->name('airlines.select');
         Route::post('quotes', [SelectController::class, 'getQuotes'])->name('quotes.select');
         Route::post('customer', [SelectController::class, 'getCustomers'])->name('customers.select');
+        Route::post('organizations', [SelectController::class, 'getAvailableOrganizations'])->name('organizations.select');
         Route::post('customer/{order}', [SelectController::class, 'getAvailableCustomers'])->name('available-customers.select');
         Route::post('payment-method', [SelectController::class, 'getPaymentMethods'])->name('payment-method.select');
         Route::post('tour-category', [SelectController::class, 'getTourCategories'])->name('tour-categories.select');
@@ -302,6 +303,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
             Route::post('merchandise-types/{id}', [SelectController::class, 'getSelectedMerchandiseType'])->name('merchandise-types.selected');
             Route::post('variants/{id}', [SelectController::class, 'getSelectedVariant'])->name('variants.selected');
             Route::post('sizes/{id}', [SelectController::class, 'getSelectedSize'])->name('sizes.selected');
+            Route::post('organizations/{id}', [SelectController::class, 'getSelectedOrganization'])->name('organizations.selected');
             Route::prefix('inventory/{id}')->group(function () {
                 Route::post('accommodation', [SelectController::class, 'getSelectedAccommodationInventory'])->name('inventory.accommodation.selected');
                 Route::post('activity', [SelectController::class, 'getSelectedActivityInventory'])->name('inventory.activity.selected');
