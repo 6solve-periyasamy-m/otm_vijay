@@ -36,30 +36,6 @@ class Group {
     }
 }
 
-class OccupancyManager {
-    private original: RoomingData;
-    private data: RoomingData;
-    private templates: ComponentTemplates;
-    private sections: Sections;
-    // Callback function to be run after any operation
-    private readonly cbFunction: CallbackHandler|null;
-
-    constructor(data: RoomingData, templates: ComponentTemplates, sections: Sections, cbFunction: CallbackHandler|null) {
-        this.original = Object.assign({}, data);
-        this.data = data;
-        this.templates = templates;
-        this.sections = sections;
-        this.cbFunction = cbFunction;
-        this.callback()
-    }
-
-    private callback() {
-        if (this.callback !== null) {
-            this.callback();
-        }
-    }
-}
-
 class RoomingData {
     groups: Group[];
     customers: Customer[];
@@ -69,30 +45,6 @@ class RoomingData {
         this.groups = groups;
         this.customers = customers;
         this.rooms = rooms;
-    }
-}
-
-class ComponentTemplates {
-    room: string;
-    lockedRoom: string;
-    bed: string;
-    customer: string;
-
-    constructor(room: string, lockedRoom: string, bed: string, customer: string) {
-        this.room = room;
-        this.lockedRoom = lockedRoom;
-        this.bed = bed;
-        this.customer = customer;
-    }
-}
-
-class Sections {
-    rooms: JQuery;
-    customers: JQuery;
-
-    constructor(rooms: JQuery, customers: JQuery) {
-        this.rooms = rooms;
-        this.customers = customers;
     }
 }
 
@@ -118,21 +70,7 @@ interface RemoteRoomingData {
     groups: RemoteGroup[];
 }
 
-interface SectionsParameter {
-    rooms: any;
-    customers: any;
-}
-
-interface TemplatesParameters {
-    room: any;
-    lockedRoom: any;
-    bed: any;
-    customer: any;
-}
-
-declare type CallbackHandler = () => void;
-
-async function generateRoomingManager(url: string, parameters: Object  = {}, templates: TemplatesParameters, sections: SectionsParameter, callback: CallbackHandler): Promise<OccupancyManager> {
+async function generateRoomingManager(url: string, parameters: Object  = {}): Promise<RoomingData> {
     let data :RemoteRoomingData = await $.post({
         url: url,
         dataType: "json",
@@ -157,11 +95,7 @@ async function generateRoomingManager(url: string, parameters: Object  = {}, tem
         }
         groups.push(new Group(nId, data.groups[nId].name, data.groups[nId].room, groupCustomers));
     }
-    let rooming = new RoomingData(rooms, customers, groups);
-    let section = new Sections(sections.rooms, sections.customers);
-    let template = new ComponentTemplates(templates.room, templates.lockedRoom, templates.bed, templates.customer);
-
-    return new OccupancyManager(rooming, template, section, callback);
+    return new RoomingData(rooms, customers, groups);
 }
 
 (window as any).occupancy = {};

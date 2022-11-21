@@ -80,22 +80,12 @@
 {{-- JavaScript --}}
 @push('footer-stack')
 <script type="text/javascript">
-    manager = null;
+    data = null;
     function initialize() {
-        let templates = {
-            'room': template('room'),
-            'lockedRoom': template('room-locked'),
-            'bed': template('bed'),
-            'customer': template('customer'),
-        };
-        let sections = {
-            'rooms': $('.manager'),
-            'customers': $('.customers'),
-        }
         let parameters = { __api_token: '{{ \Auth::user()->getCurrentToken()->token }}', }
 
-        occupancy.generate('{{ route('api.orders.rooming.get', ['order' => $order,]) }}', parameters, templates, sections, initiateUI).then((rooming) => {
-            manager = rooming;
+        occupancy.generate('{{ route('api.orders.rooming.get', ['order' => $order,]) }}', parameters).then((rooming) => {
+            data = rooming;
         });
     }
     function initiateUI() {
