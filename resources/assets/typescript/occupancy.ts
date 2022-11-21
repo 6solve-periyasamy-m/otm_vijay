@@ -46,6 +46,19 @@ class RoomingData {
         this.customers = customers;
         this.rooms = rooms;
     }
+
+    public getRooms(): Room[]
+    {
+        return this.rooms;
+    }
+
+    public getRoom(id: number): Room|null
+    {
+        for (const room of this.rooms) {
+            if (room.id === id) return room;
+        }
+        return null;
+    }
 }
 
 interface RemoteRoom {

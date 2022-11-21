@@ -14,11 +14,7 @@
         <div class="card-body col-12">
             <div class="customers section-box drop-shadow col-12"></div>
             <div class="col-12" style="margin: 10px;">
-                <select class="room-types">
-                    @foreach($rooms as $data)
-                        <option value="{{ $data['id'] }}" name="{{ $data['name'] }}" occupancy="{{ $data['size'] }}">{{ $data['name'] }} - Space: {{ $data['size'] }}</option>
-                    @endforeach
-                </select>
+                <select class="room-types"></select>
                 <a href="#" class="btn btn-danger round" onclick="reset()">Reset</a>
                 <a href="#" class="btn btn-warning round" onclick="addRoom()">Add Room</a>
                 <a href="#" class="btn btn-success round" onclick="submit()">Save</a>
@@ -33,6 +29,10 @@
 @push('footer-stack')
 <script type="text/template" data-template="bed">
     <div class="bed">${content}</div>
+</script>
+
+<script type="text/template" data-template="room-option">
+    <option value="${id}">${name} - Size: ${size}</option>
 </script>
 
 <script type="text/template" data-template="customer">
@@ -86,6 +86,10 @@
 
         occupancy.generate('{{ route('api.orders.rooming.get', ['order' => $order,]) }}', parameters).then((rooming) => {
             data = rooming;
+            let selector = $('.room-types');
+            for (const room of data.getRooms()) {
+                selector.append(render(template('room-option'), {id: room.id, name: room.name, size: room.size,}))
+            }
         });
     }
     function initiateUI() {
