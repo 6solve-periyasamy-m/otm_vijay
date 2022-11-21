@@ -94,9 +94,17 @@
         }
         let parameters = { __api_token: '{{ \Auth::user()->getCurrentToken()->token }}', }
 
-        occupancy.generate('{{ route('api.orders.rooming.get', ['order' => $order,]) }}', parameters, templates, sections).then((rooming) => {
+        occupancy.generate('{{ route('api.orders.rooming.get', ['order' => $order,]) }}', parameters, templates, sections, initiateUI).then((rooming) => {
             manager = rooming;
         });
+    }
+    function initiateUI() {
+        $('.customer:not(.locked)').draggable({ revert: 'invalid', });
+        $('.customers:not(.locked)').droppable({
+            drop: function(e, ui) {
+                $(e.target).append($(ui.draggable).detach().css({'top':'','left':''}));
+            }
+        })
     }
     $(document).ready(() => {
        initialize();

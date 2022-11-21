@@ -41,12 +41,22 @@ class OccupancyManager {
     private data: RoomingData;
     private templates: ComponentTemplates;
     private sections: Sections;
+    // Callback function to be run after any operation
+    private readonly cbFunction: CallbackHandler|null;
 
-    constructor(data: RoomingData, templates: ComponentTemplates, sections: Sections) {
+    constructor(data: RoomingData, templates: ComponentTemplates, sections: Sections, cbFunction: CallbackHandler|null) {
         this.original = Object.assign({}, data);
         this.data = data;
         this.templates = templates;
         this.sections = sections;
+        this.cbFunction = cbFunction;
+        this.callback()
+    }
+
+    private callback() {
+        if (this.callback !== null) {
+            this.callback();
+        }
     }
 }
 
@@ -120,7 +130,9 @@ interface TemplatesParameters {
     customer: any;
 }
 
-async function generateRoomingManager(url: string, parameters: Object  = {}, templates: TemplatesParameters, sections: SectionsParameter): Promise<OccupancyManager> {
+declare type CallbackHandler = () => void;
+
+async function generateRoomingManager(url: string, parameters: Object  = {}, templates: TemplatesParameters, sections: SectionsParameter, callback: CallbackHandler): Promise<OccupancyManager> {
     let data :RemoteRoomingData = await $.post({
         url: url,
         dataType: "json",
@@ -149,7 +161,7 @@ async function generateRoomingManager(url: string, parameters: Object  = {}, tem
     let section = new Sections(sections.rooms, sections.customers);
     let template = new ComponentTemplates(templates.room, templates.lockedRoom, templates.bed, templates.customer);
 
-    return new OccupancyManager(rooming, template, section);
+    return new OccupancyManager(rooming, template, section, callback);
 }
 
 (window as any).occupancy = {};
