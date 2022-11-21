@@ -42,6 +42,14 @@ class Group {
     public removeCustomer(customer: Customer) {
         this.customers = removeElement<Customer>(this.customers, customer, (obj1, obj2) => { return obj1.id == obj2.id; })
     }
+
+    public getCustomerIds() {
+        let ids: number[] = [];
+        for (const customer of this.customers) {
+            ids.push(customer.id);
+        }
+        return ids;
+    }
 }
 
 class RoomingData {
@@ -141,6 +149,30 @@ class RoomingData {
     public reset(): void {
         this.groups = [];
     }
+
+    private formatObject(): ExportedGroup[] {
+        let data: ExportedGroup[] = [];
+        for (const group of this.groups) {
+            if (group.customers.length <= 0) continue;
+            data.push(new ExportedGroup(group.name, group.room, group.getCustomerIds()))
+        }
+        return data;
+    }
+
+    public async save(url: string, parameters: Record<string, any> = {}): Promise<boolean> {
+        parameters.data = this.formatObject();
+        let results = await $.post({
+            url: url,
+            dataType: "json",
+            data: parameters,
+        });
+        if (results.success == true) {
+            return true;
+        } else {
+            console.log(results.msg);
+            return false;
+        }
+    }
 }
 
 interface RemoteRoom {
@@ -163,6 +195,18 @@ interface RemoteRoomingData {
     rooms: RemoteRoom[];
     customers: RemoteCustomer[];
     groups: RemoteGroup[];
+}
+
+class ExportedGroup {
+    name: string;
+    roomType: number;
+    customers: number[];
+
+    constructor(name: string, roomType: number, customers: number[]) {
+        this.name = name;
+        this.roomType = roomType;
+        this.customers = customers;
+    }
 }
 
 interface EquivalenceCallback<T> {
