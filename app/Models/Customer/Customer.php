@@ -66,6 +66,7 @@ use Laravel\Cashier\Subscription;
  * @property string $profile_picture Asset link to profile picture
  * @property int|null $t_shirt_size_id
  * @property int|null $hat_size_id
+ * @property int|null $organization_id
  * @property string|null $internal_notes
  * @property string|null $external_notes
  * @property string|null $dietary_notes
@@ -84,6 +85,7 @@ use Laravel\Cashier\Subscription;
  * @property-read bool $registered Is the customer a registered user
  * @property-read Address $homeAddress Home address. Should be a unique entry in the database
  * @property-read Collection|Order[] $leadingOrders Orders where they are the lead booker
+ * @property-read Organization|null $organization
  * @property-read int|null $leading_orders_count Amount of orders where they are the lead booker
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications System notifications for customer
  * @property-read int|null $notifications_count Amount of system notifications for customer
@@ -118,6 +120,7 @@ use Laravel\Cashier\Subscription;
  * @method static Builder|Customer whereGender($value)
  * @method static Builder|Customer whereHatSizeId($value)
  * @method static Builder|Customer whereHomeAddressId($value)
+ * @method static Builder|Customer whereOrganizationId($value)
  * @method static Builder|Customer whereId($value)
  * @method static Builder|Customer whereInternalNotes($value)
  * @method static Builder|Customer whereLastName($value)
@@ -231,6 +234,11 @@ class Customer extends Authenticatable
     public function hatSize(): BelongsTo
     {
         return $this->belongsTo(HatSize::class, 'hat_size_id');
+    }
+
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class, 'organization_id');
     }
 
     public function orderCustomers(): HasMany
