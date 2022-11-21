@@ -114,10 +114,10 @@ interface SectionsParameter {
 }
 
 interface TemplatesParameters {
+    room: any;
+    lockedRoom: any;
     bed: any;
-    bedLocked: any;
     customer: any;
-    customerLocked: any;
 }
 
 async function generateRoomingManager(url: string, parameters: Object  = {}, templates: TemplatesParameters, sections: SectionsParameter): Promise<OccupancyManager> {
@@ -147,7 +147,7 @@ async function generateRoomingManager(url: string, parameters: Object  = {}, tem
     }
     let rooming = new RoomingData(rooms, customers, groups);
     let section = new Sections(sections.rooms, sections.customers);
-    let template = new ComponentTemplates(templates.bed, templates.bedLocked, templates.customer, templates.customerLocked);
+    let template = new ComponentTemplates(templates.room, templates.lockedRoom, templates.bed, templates.customer);
 
     return new OccupancyManager(rooming, template, section);
 }

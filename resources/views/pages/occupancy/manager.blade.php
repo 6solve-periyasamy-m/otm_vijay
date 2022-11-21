@@ -3,6 +3,7 @@
 @section('title', 'Occupancy Manager')
 
 @push('header-stack')
+    <!--suppress HtmlUnknownTarget -->
     <link href="{{ asset('css/admin/occupancy.css') }}" type="text/css" rel="stylesheet" />
     <script src="{{ asset('js/admin/functions.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/occupancy.js') }}" type="text/javascript"></script>
@@ -34,25 +35,8 @@
     <div class="bed">${content}</div>
 </script>
 
-<script type="text/template" data-template="bed-locked">
-    <div class="bed locked">${content}</div>
-</script>
-
 <script type="text/template" data-template="customer">
     <div class="customer" customer="${id}">
-        <div class="customer-container">
-            <div class="customer-section">
-                <img src="${avatar}" class="image">
-            </div>
-            <div class="customer-section">
-                ${name}
-            </div>
-        </div>
-    </div>
-</script>
-
-<script type="text/template" data-template="customer-locked">
-    <div class="customer locked" customer="${id}">
         <div class="customer-container">
             <div class="customer-section">
                 <img src="${avatar}" class="image">
@@ -77,6 +61,20 @@
         </div>
     </div>
 </script>
+
+<script type="text/template" data-template="room-locked">
+    <div class="room drop-shadow locked" typeid="${id}">
+        <div class="details">
+            <div class="group-input">
+                <input name="name" class="name-input" type="text" value="${name}"/>
+            </div>
+            ${room}
+        </div>
+        <div class="beds">
+            ${beds}
+        </div>
+    </div>
+</script>
 @endpush
 
 {{-- JavaScript --}}
@@ -85,10 +83,10 @@
     manager = null;
     function initialize() {
         let templates = {
+            'room': template('room'),
+            'lockedRoom': template('room-locked'),
             'bed': template('bed'),
-            'bedLocked': template('bed-locked'),
             'customer': template('customer'),
-            'customerLocked': template('customer-locked'),
         };
         let sections = {
             'rooms': $('.manager'),
