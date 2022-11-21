@@ -28,11 +28,11 @@ class Group {
     customers: Customer[];
     room: number;
 
-    constructor(id: number, name: string, room: number, customers: Customer[]) {
+    constructor(id: number, room: Room, customers: Customer[]) {
         this.id = id;
-        this.name = name;
+        this.name = room.name + " - Size: " + room.size;
         this.customers = customers;
-        this.room = room;
+        this.room = room.id;
     }
 
     public addCustomer(customer: Customer) {
@@ -92,7 +92,7 @@ class RoomingData {
         return null;
     }
 
-    public addGroup(room: number): Group {
+    public addGroup(room: number): Group | null {
         let found = false;
         let id = Date.now();
         do {
@@ -104,7 +104,9 @@ class RoomingData {
             }
             if (found) id++;
         } while (found)
-        let group = new Group(id, 'New Group', room, []);
+        let type = this.getRoom(room);
+        if (type == null) return null;
+        let group = new Group(id, type, []);
         this.groups.push(group);
         return group;
     }
@@ -205,7 +207,16 @@ async function generateRoomingManager(url: string, parameters: Object = {}): Pro
         for (const [key, customer] of Object.entries(customers)) {
             if (data.groups[nId].customers.includes(customer.id)) groupCustomers.push(customer);
         }
-        groups.push(new Group(nId, data.groups[nId].name, data.groups[nId].room, groupCustomers));
+        let type = null;
+        for (const [key, room] of Object.entries(rooms)) {
+            if (room.id == data.groups[nId].room) {
+                type = room;
+                break;
+            }
+        }
+        if (type !== null) {
+            groups.push(new Group(nId, type, groupCustomers));
+        }
     }
     return new RoomingData(rooms, customers, groups);
 }

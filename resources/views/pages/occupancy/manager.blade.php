@@ -51,10 +51,7 @@
 <script type="text/template" data-template="room">
     <div class="room drop-shadow" roomid="${id}">
         <div class="details">
-            <div class="group-input">
-                <input name="name" class="name-input" type="text" value="${name}"/>
-            </div>
-            ${room}
+            <span class="fw-bold">${name}</span>
         </div>
         <div class="beds">
             ${beds}
