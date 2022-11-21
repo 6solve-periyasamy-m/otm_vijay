@@ -113,14 +113,14 @@ interface SectionsParameter {
     customers: any;
 }
 
-interface TeplatesParameters {
+interface TemplatesParameters {
     bed: any;
     bedLocked: any;
     customer: any;
     customerLocked: any;
 }
 
-async function generateRoomingManager(url: string, parameters: Object  = {}, templates: TeplatesParameters, sections: SectionsParameter): Promise<OccupancyManager> {
+async function generateRoomingManager(url: string, parameters: Object  = {}, templates: TemplatesParameters, sections: SectionsParameter): Promise<OccupancyManager> {
     let data :RemoteRoomingData = await $.post({
         url: url,
         dataType: "json",
