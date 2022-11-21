@@ -92,6 +92,23 @@ class RoomingData {
         return null;
     }
 
+    public addGroup(room: number): Group {
+        let found = false;
+        let id = Date.now();
+        do {
+            for (const group of this.groups) {
+                if (group.id == id) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) id++;
+        } while (found)
+        let group = new Group(id, 'New Group', room, []);
+        this.groups.push(group);
+        return group;
+    }
+
     public removeFromGroup(groupId: number, customerId: number) {
         let group = this.getGroup(groupId);
         let customer = this.getCustomer(customerId);

@@ -16,7 +16,7 @@
             <div class="col-12" style="margin: 10px;">
                 <select class="room-types"></select>
                 <a href="#" class="btn btn-danger round" onclick="reset()">Reset</a>
-                <a href="#" class="btn btn-warning round" onclick="addRoom()">Add Room</a>
+                <a href="#" class="btn btn-warning round" onclick="addGroup()">Add Room</a>
                 <a href="#" class="btn btn-success round" onclick="submit()">Save</a>
                 <a href="{{ route('orders.view', ['order' => $order,]) }}" class="btn btn-info round">Return to Order</a>
             </div>
@@ -168,6 +168,15 @@
             }
             console.log(data.getGroups());
         }
+    }
+
+    function addGroup() {
+        let type = selector.find(':selected');
+        if (data !== null) {
+            let group = data.addGroup(parseInt(type.val()));
+            rooms.append(renderGroup(group));
+        }
+        setupDragDrop();
     }
 
     function reset() {
