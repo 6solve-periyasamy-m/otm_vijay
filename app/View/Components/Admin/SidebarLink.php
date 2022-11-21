@@ -72,6 +72,7 @@ class SidebarLink extends Component
             new SidebarLink('Orders', route('orders.all'), 'credit-card', 'orders', Order::class, 'read'),
             new SidebarLink('Quotes', route('quotes.all'), 'wallet', 'quotes', Quote::class, 'read'),
             new SidebarLink('Customers', route('customers.all'), 'user', 'customers', Customer::class, 'read'),
+            new SidebarLink('Organizations', route('organizations.all'), 'graduation', 'organization', Customer::class, 'read'),
             new SidebarLink('Settings', route('settings.edit'), 'settings', 'settings', Setting::class, 'update'),
             new SidebarLink('Attributes Manager', route('attributes.edit'), 'flag', 'attributes'),
             new SidebarLink('Users', route('users.all'), 'people', 'users', User::class, 'read'),
