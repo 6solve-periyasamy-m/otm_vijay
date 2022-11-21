@@ -72,6 +72,12 @@
         </div>
     </div>
 </script>
+
+<script type="text/template" data-template="loader">
+    <div class="waiter">
+        <x-loading-spinner></x-loading-spinner>
+    </div>
+</script>
 @endpush
 
 {{-- JavaScript --}}
@@ -86,7 +92,7 @@
 
         occupancy.generate('{{ route('api.orders.rooming.get', ['order' => $order,]) }}', parameters).then((rooming) => {
             data = rooming;
-            loadData();
+            loadData(true);
             setupDragDrop();
         });
     }
@@ -117,10 +123,12 @@
         return render(template('bed'), {content: content,})
     }
 
-    function loadData() {
+    function loadData(dropdown = false) {
         if (data !== null) {
-            for (const room of data.getRooms()) {
-                selector.append(render(template('room-option'), {id: room.id, name: room.name, size: room.size,}))
+            if (dropdown) {
+                for (const room of data.getRooms()) {
+                    selector.append(render(template('room-option'), {id: room.id, name: room.name, size: room.size,}))
+                }
             }
             for (const customer of data.getOrphanedCustomers()) {
                 customers.append(renderCustomer(customer));
@@ -146,6 +154,14 @@
                 processDropEvent($(ui.draggable), e.target)
             }
         });
+    }
+
+    function showSpinner() {
+        $('body').append(render(template('loader'), {}));
+    }
+
+    function hideSpinner() {
+        $('.waiter').remove();
     }
 
     function processDropEvent(element, target) {
@@ -188,8 +204,10 @@
         if (customers.children().length > 0) {
             return alert('Not all customers have rooms');
         }
+        showSpinner();
         let parameters = { __api_token: '{{ \Auth::user()->getCurrentToken()->token }}', }
         data.save('{{ route('api.roomings.save', ['order' => $order,]) }}', parameters).then((success) => {
+            hideSpinner();
             if (success) {
                 alert('Data has been saved');
             } else {
