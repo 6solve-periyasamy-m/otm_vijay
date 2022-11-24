@@ -68,6 +68,11 @@ class Group {
     public isOnNight(night: Date): boolean {
         return this.room.containsDate(night);
     }
+
+    public editable(night: Date): boolean {
+        let start = new Date(this.room.start.valueOf()).setHours(0,0,0);
+        return night.setHours(0,0,0) == start;
+    }
 }
 
 class RoomingData {
@@ -211,7 +216,9 @@ class RoomingData {
     public reset(date: Date|null): void {
         if (date !== null) {
             for (const group of this.getGroups(date)) {
-                removeElement(this.groups, group, (group1, group2) => group1.room.id == group2.room.id);
+                if (group.editable(date)) {
+                    removeElement(this.groups, group, (group1, group2) => group1.room.id == group2.room.id);
+                }
             }
             return;
         }

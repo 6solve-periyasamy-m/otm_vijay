@@ -67,10 +67,7 @@
 <script type="text/template" data-template="room-locked">
     <div class="room drop-shadow locked" roomid="${id}">
         <div class="details">
-            <div class="group-input">
-                <input name="name" class="name-input" type="text" value="${name}"/>
-            </div>
-            ${room}
+            <span class="fw-bold">${name} - ${price} (Locked, Editable on ${editable})</span>
         </div>
         <div class="beds">
             ${beds}
@@ -123,6 +120,17 @@
             beds += renderBed();
         }
         let price = group.room.price > 0 ? formatCurrency(group.room.price) : 'Included';
+        let locked = !group.editable(window.date);
+        if (locked) {
+            return render(template('room-locked'), {
+                beds: beds,
+                id: group.id,
+                name: group.name,
+                price: price,
+                roomId: group.room.id,
+                editable: group.room.start.toLocaleDateString()
+            });
+        }
         return render(template('room'), {
             beds: beds,
             id: group.id,
@@ -197,13 +205,13 @@
     }
 
     function setupDragDrop() {
-        $('.draggable:not(.locked)').draggable({ revert: 'invalid', });
-        $('.droppable:not(.locked, .single)').droppable({
+        $('.draggable:not(.locked)').filter(function (e) { return $(this).parents('.locked').length == 0; }).draggable({ revert: 'invalid', });
+        $('.droppable:not(.locked, .single)').filter(function (e) { return $(this).parents('.locked').length == 0; }).droppable({
             drop: function(e, ui) {
                 processDropEvent($(ui.draggable), e.target)
             }
         })
-        $('.droppable.single:not(.locked)').droppable({
+        $('.droppable.single:not(.locked)').filter(function (e) { return $(this).parents('.locked').length == 0; }).droppable({
             accept: function (element) {
                 return !$(this).is(':parent');
             },
