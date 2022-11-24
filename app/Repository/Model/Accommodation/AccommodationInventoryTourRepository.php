@@ -125,6 +125,13 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         return $component->name . ' (' . f_datetime($inventory->check_in) . ' to ' . f_datetime($inventory->check_out) . ') (' . $inventory->roomType->name . ', ' . $inventory->boardType->name . ')';
     }
 
+    public function formatAdminOccupancy(): string
+    {
+        $inventory = $this->tourComponent->accommodationInventory;
+        $component = $inventory->accommodation;
+        return $component->name . ' (' . f_datetime($inventory->check_in) . ' to ' . f_datetime($inventory->check_out) . ') (' . $inventory->roomType->name . ' (' . $inventory->roomType->maximum_occupancy . '), ' . $inventory->boardType->name . ')';
+    }
+
     public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
         $component = BookingAccommodation::create([
