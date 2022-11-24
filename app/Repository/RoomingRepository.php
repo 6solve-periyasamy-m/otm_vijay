@@ -24,10 +24,9 @@ class RoomingRepository
     /**
      * @throws RoomingFailedException
      */
-    public static function addRoomsToGroup(Order $order, Group $group): void
+    public static function addRoomsToGroup(Order $order, Group $group, RoomType $roomType): void
     {
         $templates = RoomingRepository::getTemplateTourInventory($order->tour);
-        $roomType = $group->roomType;
         foreach ($templates as $template) {
             $found = RoomingRepository::getInventoryWithRoomType($template, $roomType);
             if (!isset($found)) {
@@ -116,13 +115,10 @@ class RoomingRepository
             if ($singleRoom->maximum_occupancy == 1) break;
         }
         if (!isset($singleRoom)) return false;
-        $group = Group::create([
-            'room_type_id' => $singleRoom->id,
-            'name' => $orderCustomer->customer_name,
-        ]);
+        $group = Group::create();
         $group->repository->addCustomerToGroup($orderCustomer);
         try {
-            self::addRoomsToGroup($orderCustomer->order, $group);
+            self::addRoomsToGroup($orderCustomer->order, $group, $singleRoom);
             return true;
         } catch (RoomingFailedException $e) {
             Log::error($e->getMessage());

@@ -51,7 +51,7 @@ class RemoteGroup
 
     public function convertToGroup(): Group
     {
-        $group = Group::create(['name' => 'Dummy', 'room_type_id' => 1,]);
+        $group = Group::create();
         foreach ($this->customers as $customer) {
             $group->repository->addCustomerToGroup($customer);
         }

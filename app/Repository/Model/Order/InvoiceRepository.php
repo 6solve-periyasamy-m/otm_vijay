@@ -48,7 +48,7 @@ class InvoiceRepository
             }
         }
         foreach ($order->groups as $group) {
-            $groups[$group->name] = InvoiceRepository::processGroupComponentsForInvoice($group);
+            $groups[$group->id] = InvoiceRepository::processGroupComponentsForInvoice($group);
         }
         foreach ($order->adjustments as $adjustment) {
             $adjustments[] = ['description' => "Manual Adjustment: {$adjustment->reason}", 'cost' => $adjustment->amount,];
@@ -133,7 +133,7 @@ class InvoiceRepository
     {
         $data = [];
         $totalCost = 0;
-        $name = $group->name . ': ';
+        $name = $group->getMembers() . ': ';
         foreach ($group->orderCustomers as $orderCustomer) {
             $name .= $orderCustomer->customer_name . ', ';
         }

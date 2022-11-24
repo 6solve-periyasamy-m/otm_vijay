@@ -487,7 +487,7 @@ class OrderRepository extends ModelRepository
             foreach ($group->rooms as $room) {
                 $groupRooms[] = $room->accommodation_inventory_tour_id;
             }
-            $groups[$group->id] = ['name' => $group->name, 'rooms' => $groupRooms, 'customers' => $groupCustomers,];
+            $groups[$group->id] = ['rooms' => $groupRooms, 'customers' => $groupCustomers,];
         }
         return ['rooms' => $rooms, 'customers' => $customers, 'groups' => $groups,];
     }
