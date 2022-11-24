@@ -4,15 +4,6 @@
 
 @section('header-script')
 <script type="text/javascript">
-function addAccommodationAddon() {
-    let id = $('#accommodation_id-input').find(':selected').val()
-    if (id != null) {
-        $.post('{{ route('api.order.addon.add.accommodation') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $orderCustomer->id }}', 'accommodation_id': id})
-            .done(function () { location.reload();})
-            .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
-    }
-}
-
 function addActivityAddon() {
     let id = $('#activity_id-input').find(':selected').val()
     if (id != null) {
@@ -324,10 +315,7 @@ $(document).ready( function () {
             {{-- Accommodation Table --}}
             <div id="accommodation" role="tabpanel" class="tab-pane fade show active">
                 <div id="accommodation-new" class="d-flex justify-content-between mb-3 flex-wrap">
-                    @include('partials.fields.selector.adder',
-                        ['field' => 'accommodation_id', 'preselect' => false,
-                        'fullRoute' => route('api.available-accommodation.select', ['orderCustomer' => $orderCustomer,]),
-                        'createRoute' => '#', 'onclick' => 'addAccommodationAddon()', 'target' => ''])
+                    <span class="fw-bold">Accommodation components are managed through the <a href="{{ route('orders.occupancy', ['order' => $orderCustomer->order,]) }}">Occupancy Manager</a>.</span>
                 </div>
                 <div id="accommodation-details">
                     <table id="accommodation-table" class="table table-striped table-responsive-sm">
