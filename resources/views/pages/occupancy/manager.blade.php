@@ -257,9 +257,6 @@
     }
 
     function submit() {
-        if (customers.children().length > 0) {
-            return alert('Not all customers have rooms');
-        }
         showSpinner();
         let parameters = { __api_token: '{{ \Auth::user()->getCurrentToken()->token }}', }
         data.save('{{ route('api.roomings.save', ['order' => $order,]) }}', parameters).then((success) => {
