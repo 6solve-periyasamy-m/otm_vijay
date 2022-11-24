@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Exceptions\RoomingFailedException;
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\RoomingRequest;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Booking\AccommodationGroup;
@@ -170,12 +171,8 @@ class AccommodationController extends ApiController
         return null;
     }
 
-    public function saveRoomingData(Request $request, Order $order) {
-        try {
-            RoomingRepository::buildGroupRooming($order, $request->data);
-            return response()->json(['success' => true, 'msg' => 'Building Saved'], 200);
-        } catch (RoomingFailedException $e) {
-            abort(500, $e->getMessage());
-        }
+    public function saveRoomingData(RoomingRequest $request, Order $order) {
+        $order->repository->importRoomingData($request->getData());
+        return response()->json(['success' => true, 'msg' => 'Building Saved']);
     }
 }

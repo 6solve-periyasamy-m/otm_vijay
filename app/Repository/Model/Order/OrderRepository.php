@@ -14,6 +14,7 @@ use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Mailing\MailRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
+use App\Repository\Storage\RemoteGroup;
 use Cache;
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
@@ -496,5 +497,26 @@ class OrderRepository extends ModelRepository
             $groups[$group->id] = ['name' => $group->name, 'rooms' => $groupRooms, 'customers' => $groupCustomers,];
         }
         return ['rooms' => $rooms, 'customers' => $customers, 'groups' => $groups,];
+    }
+
+    private function wipeGroups(): void
+    {
+        foreach ($this->order->groups as $group) {
+            $group->rooms()->delete();
+            $group->pivot()->delete();
+            $group->delete();
+        }
+    }
+
+    /**
+     * @param RemoteGroup[] $remoteGroups
+     * @return void
+     */
+    public function importRoomingData(array $remoteGroups): void
+    {
+        $this->wipeGroups();
+        foreach ($remoteGroups as $remoteGroup) {
+            $remoteGroup->convertToGroup();
+        }
     }
 }

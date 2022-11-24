@@ -237,7 +237,7 @@ class RoomingData {
         let data: ExportedGroup[] = [];
         for (const group of this.groups) {
             if (group.customers.length <= 0) continue;
-            data.push(new ExportedGroup(group.name, group.room.id, group.getCustomerIds()))
+            data.push(new ExportedGroup(group.room.id, group.getCustomerIds()))
         }
         return data;
     }
@@ -269,13 +269,11 @@ interface RemoteRoomingData {
 }
 
 class ExportedGroup {
-    name: string;
-    roomType: number;
+    rooms: number[];
     customers: number[];
 
-    constructor(name: string, roomType: number, customers: number[]) {
-        this.name = name;
-        this.roomType = roomType;
+    constructor(room: number, customers: number[]) {
+        this.rooms = [room,];
         this.customers = customers;
     }
 }
