@@ -292,13 +292,6 @@ class OrderRepository extends ModelRepository
                     $status = OrderStatus::CANCELLED_REFUND_REQUIRED;
                 }
             } else {
-                foreach ($this->order->orderCustomers as $orderCustomer) {
-                    if (!$orderCustomer->has_occupancy) {
-                        $status = OrderStatus::OCCUPANCY_NOT_SET;
-                        Cache::put("orders.{$this->order->id}.status", $status, self::STATUS_CACHE_TIME);
-                        return $status;
-                    }
-                }
                 if ($total > $paidAmount) {
                     $next = $this->order->next_installment;
                     if (isset($next) && Carbon::now()->isAfter($next->due_on)) {

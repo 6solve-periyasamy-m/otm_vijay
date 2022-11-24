@@ -59,7 +59,6 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read string $booking_reference The booking reference of the order
  * @property-read string $customer_name The full name of the customer
  * @property-read string $tour_name The name of the tour the order is for
- * @property-read bool $has_occupancy Whether the customer has occupancy set correctly
  * @property-read bool $has_surcharge Whether the customer should be charged for single occupancy
  * @property-read bool $is_lead_booker Whether the customer is the lead booker
  * @property-read bool $cancelled Whether the customer is cancelled
@@ -220,11 +219,6 @@ class OrderCustomer extends Model
     {
         $highest = $this->groups()->withCount('orderCustomers')->orderBy('order_customers_count', 'desc')->first();
         return isset($highest) && $highest->order_customers_count === 1;
-    }
-
-    public function getHasOccupancyAttribute(): bool
-    {
-        return RoomingRepository::checkOccupancy($this);
     }
 
     /**
