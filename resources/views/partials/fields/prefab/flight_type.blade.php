@@ -4,6 +4,7 @@
     'values' => [
         'Inbound' => 'Inbound',
         'Outbound' => 'Outbound',
+        'Mid-Package' => 'Mid-Package'
     ],
-    'selected' => $value ?? 'Inbound',
+    'selected' => $value ?? 'Mid-Package',
 ])
