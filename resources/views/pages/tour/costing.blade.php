@@ -17,6 +17,19 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
         $(document).ready(function () {
             $('.data-table').DataTable({fixedHeader: true,});
         });
+        function updateProfit(input) {
+            let value = parseFloat($(input).val());
+            let ctc = parseFloat($(input).attr('ctc'));
+            $('.base-price').text(formatCurrency(ctc * (value/100)));
+            $('.base-profit').text(formatCurrency((ctc * (value/100)) - ctc));
+        }
+        function formatCurrency(number) {
+            let formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: '{{ setting('system.currency', 'GBP') }}',
+            })
+            return formatter.format(number);
+        }
     </script>
     <style>
         .inactive {
@@ -70,7 +83,7 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
     <hr class="splitter"/>
     <div class="card">
         <div class="card-body">
-            <table class="table table-striped data-table">
+            <table class="table table-striped">
                 <thead>
                 <tr>
                     <td style="width: 20%"></td>
@@ -84,9 +97,15 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                 <tr>
                     <th scope="row" style="width: 20%">Base Package</th>
                     <td class="text-center" style="width: 20%">{{ f_currency($basicCtC) }}</td>
-                    <td class="text-center" style="width: 20%">{{ $basicCtC > 0 ? sigfig((($tour->base_price_per_person-$basicCtC)/$basicCtC)*100) . '%' : 'No Cost'}}</td>
-                    <td class="text-center" style="width: 20%">{{ f_currency($tour->base_price_per_person) }}</td>
-                    <td class="text-center" style="width: 20%">{{ f_currency($tour->base_price_per_person - $basicCtC) }}</td>
+                    <td class="text-center" style="width: 20%">
+                        @if ($basicCtC > 0)
+                            <input type="number" ctc="{{ $basicCtC }}" value="{{ sigfig((($tour->base_price_per_person-$basicCtC)/$basicCtC)*100) }}" onchange="updateProfit(this)"/>%
+                        @else
+                            No Cost
+                        @endif
+                    </td>
+                    <td class="text-center base-price" style="width: 20%">{{ f_currency($tour->base_price_per_person) }}</td>
+                    <td class="text-center base-profit" style="width: 20%">{{ f_currency($tour->base_price_per_person - $basicCtC) }}</td>
                 </tr>
                 <tr>
                     <th scope="row" style="width: 20%">Full Package - All add-ons & Upgrades</th>
