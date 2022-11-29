@@ -82,6 +82,11 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $merchandise_count
  * @property-read Collection|Order[] $orders
  * @property-read int|null $orders_count
+ * @property-read Collection|TourCost[] $costs
+ * @property-read int|null $costs_count
+ * @property-read Collection|OrderAccommodation[] $orderAccommodation
+ * @property-read int|null $order_accommodation_count
+ * @property-read int|null $order_installments_count
  * @property-read Collection|PaymentInstallment[] $paymentInstallments
  * @property-read int|null $payment_installments_count
  * @property-read Collection|TransportInventory[] $transportInventory
@@ -151,6 +156,11 @@ class Tour extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');
+    }
+
+    public function costs(): HasMany
+    {
+        return $this->hasMany(TourCost::class, 'tour_id');
     }
 
     public function flightInventory(): BelongsToMany
