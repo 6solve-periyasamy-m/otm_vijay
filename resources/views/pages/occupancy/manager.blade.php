@@ -12,7 +12,7 @@
 @section('content')
     <div class="card">
         <div class="card-body col-12">
-            <div class="date-switcher" style="display: flex; justify-content: space-between; padding: 0 5rem;">
+            <div class="date-switcher">
                 <button class="btn border-dark bg-white" onclick="changeDay(-1)">&lt;</button>
                 <button class="btn border-dark bg-white active-date">Waiting for Data</button>
                 <button class="btn border-dark bg-white" onclick="changeDay(1)">&gt;</button>
