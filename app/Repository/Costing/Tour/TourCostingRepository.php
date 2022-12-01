@@ -29,6 +29,9 @@ class TourCostingRepository extends CostingRepository
         foreach ($this->tour->templates as $template) {
             $cost += $template->inventory->purchase_price;
         }
+        foreach ($this->tour->costs()->where('per_customer', '=', '1')->get() as $tourCost) {
+            $cost += $tourCost->amount;
+        }
         return $cost;
     }
 
@@ -52,6 +55,9 @@ class TourCostingRepository extends CostingRepository
                 }
             }
             $cost += $max?->repository?->getPurchasePrice() ?? $template->inventory->purchase_price;
+        }
+        foreach ($this->tour->costs()->where('per_customer', '=', '1')->get() as $tourCost) {
+            $cost += $tourCost->amount;
         }
         return $cost;
     }
