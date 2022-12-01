@@ -81,48 +81,158 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
         </div>
     </div>
     <hr class="splitter"/>
-    <div class="card">
-        <div class="card-body">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <td style="width: 20%"></td>
-                    <th scope="col" class="fw-bold text-center" style="width: 20%">Cost to Company</th>
-                    <th scope="col" class="fw-bold text-center" style="width: 20%">Margin</th>
-                    <th scope="col" class="fw-bold text-center" style="width: 20%">Cost to Customer</th>
-                    <th scope="col" class="fw-bold text-center" style="width: 20%">Profit</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <th scope="row" style="width: 20%">Base Package</th>
-                    <td class="text-center" style="width: 20%">{{ f_currency($basicCtC) }}</td>
-                    <td class="text-center" style="width: 20%">
-                        @if ($basicCtC > 0)
-                            <input type="number" ctc="{{ $basicCtC }}" value="{{ sigfig((($tour->base_price_per_person-$basicCtC)/$basicCtC)*100) }}" onchange="updateProfit(this)"/>%
-                        @else
-                            No Cost
-                        @endif
-                    </td>
-                    <td class="text-center base-price" style="width: 20%">{{ f_currency($tour->base_price_per_person) }}</td>
-                    <td class="text-center base-profit" style="width: 20%">{{ f_currency($tour->base_price_per_person - $basicCtC) }}</td>
-                </tr>
-                <tr>
-                    <th scope="row" style="width: 20%">Full Package - All add-ons & Upgrades</th>
-                    <td class="text-center" style="width: 20%">{{ f_currency($fullCtC) }}</td>
-                    <td class="text-center" style="width: 20%">{{ $fullCtC > 0 ? sigfig((($fullCustomer-$fullCtC)/$fullCtC)*100) . '%' : 'No Cost' }}</td>
-                    <td class="text-center" style="width: 20%">{{ f_currency($fullCustomer) }}</td>
-                    <td class="text-center" style="width: 20%">{{ f_currency($fullCustomer - $fullCtC) }}</td>
-                </tr>
-                <tr>
-                    <th scope="row" style="width: 20%">Average (Median)</th>
-                    <td class="text-center" style="width: 20%">{{ f_currency($averageCtC) }}</td>
-                    <td class="text-center" style="width: 20%">{{$averageCtC > 0 ? sigfig((($averageCustomer - $averageCtC)/$averageCtC)*100) . '%' : 'No Cost' }}</td>
-                    <td class="text-center" style="width: 20%">{{ f_currency($averageCustomer) }}</td>
-                    <td class="text-center" style="width: 20%">{{ f_currency($averageCustomer - $averageCtC) }}</td>
-                </tr>
-                </tbody>
-            </table>
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <td style="width: 20%"></td>
+                            <th scope="col" class="fw-bold text-center" style="width: 20%">Cost to Company</th>
+                            <th scope="col" class="fw-bold text-center" style="width: 20%">Margin</th>
+                            <th scope="col" class="fw-bold text-center" style="width: 20%">Cost to Customer</th>
+                            <th scope="col" class="fw-bold text-center" style="width: 20%">Profit</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row" style="width: 20%">Base Package</th>
+                            <td class="text-center" style="width: 20%">{{ f_currency($basicCtC) }}</td>
+                            <td class="text-center" style="width: 20%">
+                                @if ($basicCtC > 0)
+                                    <input style="width: 5rem;" ctc="{{ $basicCtC }}" value="{{ sigfig((($tour->base_price_per_person-$basicCtC)/$basicCtC)*100) }}" onchange="updateProfit(this)"/>%
+                                @else
+                                    No Cost
+                                @endif
+                            </td>
+                            <td class="text-center base-price" style="width: 20%">{{ f_currency($tour->base_price_per_person) }}</td>
+                            <td class="text-center base-profit" style="width: 20%">{{ f_currency($tour->base_price_per_person - $basicCtC) }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width: 20%">Average (Median)</th>
+                            <td class="text-center" style="width: 20%">{{ f_currency($averageCtC) }}</td>
+                            <td class="text-center" style="width: 20%">{{$averageCtC > 0 ? sigfig((($averageCustomer - $averageCtC)/$averageCtC)*100) . '%' : 'No Cost' }}</td>
+                            <td class="text-center" style="width: 20%">{{ f_currency($averageCustomer) }}</td>
+                            <td class="text-center" style="width: 20%">{{ f_currency($averageCustomer - $averageCtC) }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width: 20%">Full Package - All add-ons & Upgrades</th>
+                            <td class="text-center" style="width: 20%">{{ f_currency($fullCtC) }}</td>
+                            <td class="text-center" style="width: 20%">{{ $fullCtC > 0 ? sigfig((($fullCustomer-$fullCtC)/$fullCtC)*100) . '%' : 'No Cost' }}</td>
+                            <td class="text-center" style="width: 20%">{{ f_currency($fullCustomer) }}</td>
+                            <td class="text-center" style="width: 20%">{{ f_currency($fullCustomer - $fullCtC) }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4 class="fw-bold">Per-Customer Costs</h4>
+                    </div>
+                    <form class="form-group row per_customer-create" action="{{ route('tour-cost.store', ['tour' => $tour,]) }}" method="post">
+                        @csrf
+                        <x-admin.input name="name" width="5">Name</x-admin.input>
+                        <x-admin.input name="amount" width="5">Amount</x-admin.input>
+                        <input type="hidden" name="per_customer" value="1" />
+                        <x-admin.button href="javascript:$('.per_customer-create').submit()" width="2" color="primary">
+                            <i class="icon-plus"></i>
+                            <span>Create</span>
+                        </x-admin.button>
+                    </form>
+                    <table class="table table-striped data-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($tour->costs()->where('per_customer', '=', '1')->get() as $cost)
+                            <tr>
+                                <form class="form-group row cost-edit-{{$cost->id}}" action="{{ route('tour-cost.update', ['tour' => $tour, 'cost' => $cost,]) }}" method="post">
+                                    @csrf
+                                    <td data-order="{{ $cost->name }}" data-search="{{ $cost->name }}">
+                                        <x-admin.input name="name" value="{{ $cost->name }}">Name</x-admin.input>
+                                    </td>
+                                    <td data-order="{{ $cost->amount }}" data-search="{{ $cost->amount }}">
+                                        <x-admin.input name="amount" value="{{ $cost->amount }}">Amount</x-admin.input>
+                                    </td>
+                                    <input type="hidden" name="per_customer" value="1" />
+                                </form>
+                                <td>
+                                    <a href="javascript:$('.cost-edit-{{$cost->id}}').submit()" class="btn btn-outline-success btn-sm mb-1">
+                                        <i class="icon-note"></i>
+                                    </a>
+                                    <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                    <form id="cost-{{ $cost->id }}-delete" action="{{ route('tour-cost.delete', ['tour' => $tour, 'cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4 class="fw-bold">Whole Package Costs</h4>
+                    </div>
+                    <form class="form-group row whole-tour-create" action="{{ route('tour-cost.store', ['tour' => $tour,]) }}" method="post">
+                        @csrf
+                        <x-admin.input name="name" width="5">Name</x-admin.input>
+                        <x-admin.input name="amount" width="5">Amount</x-admin.input>
+                        <input type="hidden" name="per_customer" value="0" />
+                        <x-admin.button href="javascript:$('.whole-tour-create').submit()" width="2" color="primary">
+                            <i class="icon-plus"></i>
+                            <span>Create</span>
+                        </x-admin.button>
+                    </form>
+                    <table class="table table-striped data-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($tour->costs()->where('per_customer', '=', '0')->get() as $cost)
+                            <tr>
+                                <form class="form-group row cost-edit-{{$cost->id}}" action="{{ route('tour-cost.update', ['tour' => $tour, 'cost' => $cost,]) }}" method="post">
+                                    @csrf
+                                    <td data-order="{{ $cost->name }}" data-search="{{ $cost->name }}">
+                                        <x-admin.input name="name" value="{{ $cost->name }}">Name</x-admin.input>
+                                    </td>
+                                    <td data-order="{{ $cost->amount }}" data-search="{{ $cost->amount }}">
+                                        <x-admin.input name="amount" value="{{ $cost->amount }}">Amount</x-admin.input>
+                                    </td>
+                                    <input type="hidden" name="per_customer" value="1" />
+                                </form>
+                                <td>
+                                    <a href="javascript:$('.cost-edit-{{$cost->id}}').submit()" class="btn btn-outline-success btn-sm mb-1">
+                                        <i class="icon-note"></i>
+                                    </a>
+                                    <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                    <form id="cost-{{ $cost->id }}-delete" action="{{ route('tour-cost.delete', ['tour' => $tour, 'cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
     <hr class="splitter"/>

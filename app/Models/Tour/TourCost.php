@@ -15,7 +15,7 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $tour_id
  * @property string $name
- * @property string $amount
+ * @property float $amount
  * @property bool $per_customer
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -35,7 +35,7 @@ use Illuminate\Support\Carbon;
 class TourCost extends Model
 {
     protected $guarded = [];
-    protected $casts = ['per_customer' => 'boolean',];
+    protected $casts = ['per_customer' => 'boolean', 'amount' => 'float'];
 
     public function tour(): BelongsTo
     {

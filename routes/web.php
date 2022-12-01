@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\Quote\QuoteInstallmentController;
 use App\Http\Controllers\Admin\Quote\QuotePricePointController;
 use App\Http\Controllers\Admin\Quote\QuoteSectionController;
 use App\Http\Controllers\Admin\Quote\QuoteStatusController;
+use App\Http\Controllers\Admin\Tour\TourCostController;
 use App\Http\Controllers\AtolController;
 use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\BookingController;
@@ -687,6 +688,13 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                     Route::get('/update', [PaymentInstallmentController::class, 'edit'])->name('payment-installments.edit')->middleware('bouncer:Tour\Tour,update');
                     Route::post('/update', [PaymentInstallmentController::class, 'update'])->name('payment-installments.update')->middleware('bouncer:Tour\Tour,update');
                     Route::post('/delete', [PaymentInstallmentController::class, 'destroy'])->name('payment-installments.delete')->middleware('bouncer:Tour\Tour,update');
+                });
+            });
+            Route::prefix('cost')->group(function () {
+                Route::post('/create', [TourCostController::class, 'store'])->name('tour-cost.store');
+                Route::prefix('{cost}')->group(function () {
+                    Route::post('/update', [TourCostController::class, 'update'])->name('tour-cost.update');
+                    Route::post('/delete', [TourCostController::class, 'destroy'])->name('tour-cost.delete');
                 });
             });
         });
