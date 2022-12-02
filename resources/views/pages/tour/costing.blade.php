@@ -257,7 +257,7 @@ $profit = $revenue - $costOfTour;
                                     <td data-order="{{ $cost->amount }}" data-search="{{ $cost->amount }}">
                                         <x-admin.input name="amount" value="{{ $cost->amount }}">Amount</x-admin.input>
                                     </td>
-                                    <input type="hidden" name="per_customer" value="1" />
+                                    <input type="hidden" name="per_customer" value="0" />
                                 </form>
                                 <td>
                                     <a href="javascript:$('.cost-edit-{{$cost->id}}').submit()" class="btn btn-outline-success btn-sm mb-1">
