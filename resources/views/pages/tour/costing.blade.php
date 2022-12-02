@@ -7,6 +7,10 @@ $fullCtC = $tour->repository->getCosting()->getMaxCostOfComponents();
 $fullCustomer = $tour->repository->getCosting()->getMaxCostToCustomer();
 $averageCtC = ($basicCtC+$fullCtC)/2;
 $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
+$costOfTour = $tour->repository->getCosting()->getCostOfTour();
+$revenue = $tour->repository->getReceivedRevenue();
+$remaining = $tour->repository->getRemainingRevenue();
+$profit = $revenue - $costOfTour;
 @endphp
 @extends('layout.master')
 
@@ -128,7 +132,7 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                 </div>
             </div>
         </div>
-        <div class="col-xl-6">
+        <div class="col-xl-4">
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">
@@ -141,7 +145,6 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                         <input type="hidden" name="per_customer" value="1" />
                         <x-admin.button href="javascript:$('.per_customer-create').submit()" width="2" color="primary">
                             <i class="icon-plus"></i>
-                            <span>Create</span>
                         </x-admin.button>
                     </form>
                     <table class="table table-striped data-table">
@@ -181,7 +184,46 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                 </div>
             </div>
         </div>
-        <div class="col-xl-6">
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4 class="fw-bold">Key Financials</h4>
+                    </div>
+                    <div class="row">
+                        <x-admin.section.otm-text width="6">
+                            <x-slot:header>
+                                Received
+                            </x-slot:header>
+                            {{ f_currency($revenue) }}
+                        </x-admin.section.otm-text>
+                        <x-admin.section.otm-text width="6">
+                            <x-slot:header>
+                                Remaining
+                            </x-slot:header>
+                            {{ f_currency($remaining) }}
+                        </x-admin.section.otm-text>
+                        <x-admin.section.otm-text width="6">
+                            <x-slot:header>
+                                Cost to Company
+                            </x-slot:header>
+                            {{ f_currency($costOfTour) }}
+                        </x-admin.section.otm-text>
+                        <x-admin.section.otm-text width="6">
+                            <x-slot:header>
+                                Profit
+                            </x-slot:header>
+                            @if($profit <= 0)
+                                <span style="color: red">{{ f_currency($profit) }}</span>
+                            @else
+                                <span style="color: green">{{ f_currency($profit) }}</span>
+                            @endif
+                        </x-admin.section.otm-text>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">
@@ -194,7 +236,6 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                         <input type="hidden" name="per_customer" value="0" />
                         <x-admin.button href="javascript:$('.whole-tour-create').submit()" width="2" color="primary">
                             <i class="icon-plus"></i>
-                            <span>Create</span>
                         </x-admin.button>
                     </form>
                     <table class="table table-striped data-table">

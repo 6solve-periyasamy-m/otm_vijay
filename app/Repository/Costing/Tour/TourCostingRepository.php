@@ -86,6 +86,38 @@ class TourCostingRepository extends CostingRepository
         return $cost;
     }
 
+    public function getCostOfTour(): float
+    {
+        $orders = $this->tour->orders()->with(
+            ['orderCustomers',
+            'orderCustomers.orderAccommodation',
+            'orderCustomers.orderAccommodation.tourComponent',
+            'orderCustomers.orderAccommodation.tourComponent.inventory',
+            'orderCustomers.orderActivities',
+            'orderCustomers.orderActivities.tourComponent',
+            'orderCustomers.orderActivities.tourComponent.inventory',
+            'orderCustomers.orderFlights',
+            'orderCustomers.orderFlights.tourComponent',
+            'orderCustomers.orderFlights.tourComponent.inventory',
+            'orderCustomers.orderTransports',
+            'orderCustomers.orderTransports.tourComponent',
+            'orderCustomers.orderTransports.tourComponent.inventory',
+            'orderCustomers.orderMerchandise',
+            'orderCustomers.orderMerchandise.tourComponent',
+            'orderCustomers.orderMerchandise.tourComponent.inventory',
+        ])->where('cancelled', false)->get();
+        $cost = 0;
+        $travellers = 0;
+        foreach ($orders as $order) {
+            $cost += $order->repository->getCostToCompany();
+            $travellers += $order->orderCustomers()->count();
+        }
+        foreach ($this->tour->costs as $extra) {
+            $cost += $extra->amount * ($extra->per_customer ? $travellers : 1);
+        }
+        return $cost;
+    }
+
     public function getBaseMargin(): float
     {
         return ($this->tour->base_price_per_person / $this->getCostOfComponents(['Included'])) * 100;

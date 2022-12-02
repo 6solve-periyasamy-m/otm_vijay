@@ -239,4 +239,13 @@ class OrderCustomerRepository extends ModelRepository
             $component->delete();
         }
     }
+
+    public function getCostToCompany(): float
+    {
+        $cost = 0;
+        foreach ($this->getComponents() as $component) {
+            $cost += $component->getTourComponent()->getPurchasePrice();
+        }
+        return $cost;
+    }
 }
