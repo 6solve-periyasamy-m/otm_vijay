@@ -270,6 +270,14 @@
                         <i class="icon-bag"></i>
                         {{ __('quotes.view.cards.quick.calculator.convert') }}
                     </a>
+                    <form class="d-none costing-form" action="{{ route('quotes.costing', ['quote' => $quote,]) }}" method="get">
+                        <input type="hidden" name="paying" class="paying-input" value="0">
+                        <input type="hidden" name="travelling" class="travelling-input" value="0">
+                    </form>
+                    <a href="javascript:$('.costing-form').submit()" class="btn btn-secondary">
+                        <i class="icon-wallet"></i>
+                        {{ __('quotes.view.cards.quick.calculator.costing') }}
+                    </a>
                 </x-admin.section.otm-text>
             </x-admin.section.otm-card>
         </div>
