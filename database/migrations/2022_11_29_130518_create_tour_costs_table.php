@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tour_costs', function (Blueprint $table) {
+        Schema::create('additional_costs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tour_id')->constrained()->cascadeOnDelete();
+            $table->numericMorphs('owner');
             $table->string('name');
             $table->decimal('amount', 12);
             $table->boolean('per_customer')->default(false);
