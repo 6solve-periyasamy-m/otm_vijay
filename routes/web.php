@@ -12,7 +12,7 @@ use App\Http\Controllers\Admin\Quote\QuoteInstallmentController;
 use App\Http\Controllers\Admin\Quote\QuotePricePointController;
 use App\Http\Controllers\Admin\Quote\QuoteSectionController;
 use App\Http\Controllers\Admin\Quote\QuoteStatusController;
-use App\Http\Controllers\Admin\Tour\TourCostController;
+use App\Http\Controllers\Admin\Tour\AdditionalCostController;
 use App\Http\Controllers\AtolController;
 use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\BookingController;
@@ -691,13 +691,6 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                     Route::post('/delete', [PaymentInstallmentController::class, 'destroy'])->name('payment-installments.delete')->middleware('bouncer:Tour\Tour,update');
                 });
             });
-            Route::prefix('cost')->group(function () {
-                Route::post('/create', [TourCostController::class, 'store'])->name('tour-cost.store');
-                Route::prefix('{cost}')->group(function () {
-                    Route::post('/update', [TourCostController::class, 'update'])->name('tour-cost.update');
-                    Route::post('/delete', [TourCostController::class, 'destroy'])->name('tour-cost.delete');
-                });
-            });
         });
         Route::prefix('tour-categories')->group(function () {
             Route::get('/', [TourCategoryController::class, 'index'])->name('tour-categories.all')->middleware('bouncer:Tour\TourCategory,read');
@@ -710,6 +703,14 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                 Route::post('/update', [TourCategoryController::class, 'update'])->name('tour-categories.update')->middleware('bouncer:Tour\TourCategory,update');
                 Route::post('/delete', [TourCategoryController::class, 'destroy'])->name('tour-categories.delete')->middleware('bouncer:Tour\TourCategory,delete');
             });
+        });
+    });
+
+    Route::prefix('cost')->group(function () {
+        Route::post('/{model}/{id}/create/', [AdditionalCostController::class, 'store'])->name('additional-cost.store');
+        Route::prefix('{cost}')->group(function () {
+            Route::post('/update', [AdditionalCostController::class, 'update'])->name('additional-cost.update');
+            Route::post('/delete', [AdditionalCostController::class, 'destroy'])->name('additional-cost.delete');
         });
     });
 

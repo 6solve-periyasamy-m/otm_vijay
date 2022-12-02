@@ -761,7 +761,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $cost = $this->quote->repository->getPurchaseTotal();
         foreach ($this->quote->costs()->where('per_customer', true)->get() as $additional) {
-            $cost += $cost->amount;
+            $cost += $additional->amount;
         }
         return $cost;
     }

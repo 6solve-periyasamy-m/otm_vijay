@@ -138,7 +138,7 @@ $profit = $revenue - $costOfTour;
                     <div class="card-title">
                         <h4 class="fw-bold">Per-Customer Costs</h4>
                     </div>
-                    <form class="form-group row per_customer-create" action="{{ route('tour-cost.store', ['tour' => $tour,]) }}" method="post">
+                    <form class="form-group row per_customer-create" action="{{ route('additional-cost.store', ['model' => 'tour', 'id' => $tour->id]) }}" method="post">
                         @csrf
                         <x-admin.input name="name" width="5">Name</x-admin.input>
                         <x-admin.input name="amount" width="5">Amount</x-admin.input>
@@ -158,7 +158,7 @@ $profit = $revenue - $costOfTour;
                         <tbody>
                         @foreach($tour->costs()->where('per_customer', '=', '1')->get() as $cost)
                             <tr>
-                                <form class="form-group row cost-edit-{{$cost->id}}" action="{{ route('tour-cost.update', ['tour' => $tour, 'cost' => $cost,]) }}" method="post">
+                                <form class="form-group row cost-edit-{{$cost->id}}" action="{{ route('additional-cost.update', ['cost' => $cost,]) }}" method="post">
                                     @csrf
                                     <td data-order="{{ $cost->name }}" data-search="{{ $cost->name }}">
                                         <x-admin.input name="name" value="{{ $cost->name }}">Name</x-admin.input>
@@ -175,7 +175,7 @@ $profit = $revenue - $costOfTour;
                                     <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
                                         <i class="icon-trash"></i>
                                     </a>
-                                    <form id="cost-{{ $cost->id }}-delete" action="{{ route('tour-cost.delete', ['tour' => $tour, 'cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
+                                    <form id="cost-{{ $cost->id }}-delete" action="{{ route('additional-cost.delete', ['cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                                 </td>
                             </tr>
                         @endforeach
@@ -229,7 +229,7 @@ $profit = $revenue - $costOfTour;
                     <div class="card-title">
                         <h4 class="fw-bold">Whole Package Costs</h4>
                     </div>
-                    <form class="form-group row whole-tour-create" action="{{ route('tour-cost.store', ['tour' => $tour,]) }}" method="post">
+                    <form class="form-group row whole-tour-create" action="{{ route('additional-cost.store', ['model' => 'tour', 'id' => $tour->id]) }}" method="post">
                         @csrf
                         <x-admin.input name="name" width="5">Name</x-admin.input>
                         <x-admin.input name="amount" width="5">Amount</x-admin.input>
@@ -249,7 +249,7 @@ $profit = $revenue - $costOfTour;
                         <tbody>
                         @foreach($tour->costs()->where('per_customer', '=', '0')->get() as $cost)
                             <tr>
-                                <form class="form-group row cost-edit-{{$cost->id}}" action="{{ route('tour-cost.update', ['tour' => $tour, 'cost' => $cost,]) }}" method="post">
+                                <form class="form-group row cost-edit-{{$cost->id}}" action="{{ route('additional-cost.update', ['cost' => $cost,]) }}" method="post">
                                     @csrf
                                     <td data-order="{{ $cost->name }}" data-search="{{ $cost->name }}">
                                         <x-admin.input name="name" value="{{ $cost->name }}">Name</x-admin.input>
@@ -266,7 +266,7 @@ $profit = $revenue - $costOfTour;
                                     <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
                                         <i class="icon-trash"></i>
                                     </a>
-                                    <form id="cost-{{ $cost->id }}-delete" action="{{ route('tour-cost.delete', ['tour' => $tour, 'cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
+                                    <form id="cost-{{ $cost->id }}-delete" action="{{ route('additional-cost.delete', ['cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                                 </td>
                             </tr>
                         @endforeach

@@ -9,7 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property bool $per_customer
  * @property float $amount
  */
-class TourCostRequest extends FormRequest
+class AdditionalCostRequest extends FormRequest
 {
     public function getData()
     {

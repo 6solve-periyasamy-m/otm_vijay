@@ -41,7 +41,7 @@ $profit = $remaining - $costOfTour;
             <div class="col-12">
                 <h4 class="fw-bold">{{ $quote->name }} @isset($quote->event)({{$quote->event->name}})@endisset</h4>
             </div>
-            <div class="col-12 col-xl-4">
+            <div class="col-12 col-xl-2">
                 <p>Quote Status</p>
                 {{ $quote->status->badge() }}
             </div>
@@ -69,7 +69,7 @@ $profit = $remaining - $costOfTour;
                     {{ f_currency($quote->single_occupancy_surcharge) }}
                 </h6>
             </div>
-            <div class="col-12 col-xl-4">
+            <div class="col-12 col-xl-2">
                 <p>Dates</p>
                 <h6 class="fw-bold">
                     {{ f_date($quote->date_from) }} to {{ f_date($quote->date_to) }}
@@ -123,7 +123,7 @@ $profit = $remaining - $costOfTour;
                     <div class="card-title">
                         <h4 class="fw-bold">Per-Customer Costs</h4>
                     </div>
-                    <form class="form-group row per_customer-create" action="{{ route('tour-cost.store', ['tour' => $quote,]) }}" method="post">
+                    <form class="form-group row per_customer-create" action="{{ route('additional-cost.store', ['model' => 'quote', 'id' => $quote->id]) }}" method="post">
                         @csrf
                         <x-admin.input name="name" width="5">Name</x-admin.input>
                         <x-admin.input name="amount" width="5">Amount</x-admin.input>
@@ -143,7 +143,7 @@ $profit = $remaining - $costOfTour;
                         <tbody>
                         @foreach($quote->costs()->where('per_customer', '=', '1')->get() as $cost)
                             <tr>
-                                <form class="form-group row cost-edit-{{$cost->id}}" action="{{ route('tour-cost.update', ['tour' => $quote, 'cost' => $cost,]) }}" method="post">
+                                <form class="form-group row cost-edit-{{$cost->id}}" action="{{ route('additional-cost.update', [ 'cost' => $cost,]) }}" method="post">
                                     @csrf
                                     <td data-order="{{ $cost->name }}" data-search="{{ $cost->name }}">
                                         <x-admin.input name="name" value="{{ $cost->name }}">Name</x-admin.input>
@@ -160,7 +160,7 @@ $profit = $remaining - $costOfTour;
                                     <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
                                         <i class="icon-trash"></i>
                                     </a>
-                                    <form id="cost-{{ $cost->id }}-delete" action="{{ route('tour-cost.delete', ['tour' => $quote, 'cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
+                                    <form id="cost-{{ $cost->id }}-delete" action="{{ route('additional-cost.delete', ['cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                                 </td>
                             </tr>
                         @endforeach
@@ -208,7 +208,7 @@ $profit = $remaining - $costOfTour;
                     <div class="card-title">
                         <h4 class="fw-bold">Whole Package Costs</h4>
                     </div>
-                    <form class="form-group row whole-tour-create" action="{{ route('tour-cost.store', ['tour' => $quote,]) }}" method="post">
+                    <form class="form-group row whole-tour-create" action="{{ route('additional-cost.store', ['model' => 'quote', 'id' => $quote->id]) }}" method="post">
                         @csrf
                         <x-admin.input name="name" width="5">Name</x-admin.input>
                         <x-admin.input name="amount" width="5">Amount</x-admin.input>
@@ -228,7 +228,7 @@ $profit = $remaining - $costOfTour;
                         <tbody>
                         @foreach($quote->costs()->where('per_customer', '=', '0')->get() as $cost)
                             <tr>
-                                <form class="form-group row cost-edit-{{$cost->id}}" action="{{ route('tour-cost.update', ['tour' => $quote, 'cost' => $cost,]) }}" method="post">
+                                <form class="form-group row cost-edit-{{$cost->id}}" action="{{ route('additional-cost.update', ['cost' => $cost,]) }}" method="post">
                                     @csrf
                                     <td data-order="{{ $cost->name }}" data-search="{{ $cost->name }}">
                                         <x-admin.input name="name" value="{{ $cost->name }}">Name</x-admin.input>
@@ -245,7 +245,7 @@ $profit = $remaining - $costOfTour;
                                     <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
                                         <i class="icon-trash"></i>
                                     </a>
-                                    <form id="cost-{{ $cost->id }}-delete" action="{{ route('tour-cost.delete', ['tour' => $quote, 'cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
+                                    <form id="cost-{{ $cost->id }}-delete" action="{{ route('additional-cost.delete', ['cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                                 </td>
                             </tr>
                         @endforeach
