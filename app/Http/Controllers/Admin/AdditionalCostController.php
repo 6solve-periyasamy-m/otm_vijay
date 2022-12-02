@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Tour;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Tour\AdditionalCostRequest;
+use App\Http\Requests\Admin\AdditionalCostRequest;
 use App\Models\AdditionalCost;
 use App\Repository\Costing\AdditionalCostRepository;
 
