@@ -157,7 +157,7 @@
                             </a>
                         </div>
                         <div class="col-12 col-xl-5">
-                            <x-admin.input name="paying" value="1" onchange="textUpdate()" nofloat></x-admin.input>
+                            <x-admin.input name="paying" value="{{ $quote->leadTraveller->paying ? 1 : 0 }}" onchange="textUpdate()" nofloat></x-admin.input>
                         </div>
                         <div class="col-12 col-xl-3">
                             <a href="javascript:plusPaying()" class="btn btn-outline-success btn-sm mb-1">
@@ -175,7 +175,7 @@
                             </a>
                         </div>
                         <div class="col-12 col-xl-6">
-                            <x-admin.input name="travelling" value="1" onchange="textUpdate()" nofloat></x-admin.input>
+                            <x-admin.input name="travelling" value="{{ $quote->leadTraveller->travelling && !$quote->leadTraveller->paying ? 1 : 0 }}" onchange="textUpdate()" nofloat></x-admin.input>
                         </div>
                         <div class="col-12 col-xl-3">
                             <a href="javascript:plusTravelling()" class="btn btn-outline-success btn-sm mb-1">

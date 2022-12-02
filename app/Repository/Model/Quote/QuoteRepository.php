@@ -756,4 +756,22 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         }
         return false;
     }
+
+    public function getCustomerCostToCompany(): float
+    {
+        $cost = $this->quote->repository->getPurchaseTotal();
+        foreach ($this->quote->costs()->where('per_customer', true)->get() as $additional) {
+            $cost += $cost->amount;
+        }
+        return $cost;
+    }
+
+    public function getTotalCostToCompany(int $travellers = 1): float
+    {
+        $cost = $this->getCustomerCostToCompany() * $travellers;
+        foreach ($this->quote->costs()->where('per_customer', false)->get() as $additional) {
+            $cost += $additional->amount;
+        }
+        return $cost;
+    }
 }

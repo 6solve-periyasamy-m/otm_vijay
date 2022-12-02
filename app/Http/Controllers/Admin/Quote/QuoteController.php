@@ -108,6 +108,11 @@ class QuoteController extends Controller
         return view('pages.admin.quote.view', ['quote' => $quote,]);
     }
 
+    public function costing(Quote $quote, int $paying = 1, int $travelling = 0)
+    {
+        return view('pages.admin.quote.costing', ['quote' => $quote, 'paying' => $paying, 'travelling' => $travelling,]);
+    }
+
     public function edit(Quote $quote)
     {
         return view('pages.admin.quote.edit', ['quote' => $quote,]);
