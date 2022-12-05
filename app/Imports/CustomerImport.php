@@ -45,7 +45,7 @@ class CustomerImport implements ToModel
             'first_name' => trim($row[2]),
             'middle_names' => trim($row[3] ?? ''),
             'last_name' => trim($row[4]),
-            'date_of_birth' => Carbon::createFromFormat('d/m/Y', trim($row[5])),
+            'date_of_birth' => (isset($row[5]) ? Carbon::createFromFormat('d/m/Y', trim($row[5])) : null),
             'gender' => trim($row[8]),
             'mobile_number' => trim($row[6]),
             'other_phone_number' => trim($row[7] ?? ''),
