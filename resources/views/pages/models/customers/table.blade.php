@@ -39,7 +39,7 @@
                         <td><a href="{{ route('customers.view', ['customer' => $customer,]) }}">{{ $customer->full_name }}</a></td>
                         <td>{{ $customer->email_address ?? 'No Email Address' }}</td>
                         <td>{{ f_bool($customer->registered) }}</td>
-                        <td>{{ f_date($customer->date_of_birth) }}</td>
+                        <td>{{ isset($customer->date_of_birth) ? f_date($customer->date_of_birth) : 'Date of Birth not set' }}</td>
                         <td>{{ $customer->homeAddress }}</td>
                         <td>{{ $customer->mobile_number }}</td>
                         <td>{{ f_date($customer->passport_expiry_date) }}</td>

@@ -8,7 +8,7 @@
       'first_name' => $customer->first_name,
       'middle_names' => $customer->middle_names,
       'last_name' => $customer->last_name,
-      'date_of_birth' => $customer->date_of_birth,
+      'date_of_birth' => $customer->date_of_birth ?? null,
       'mobile_number' => $customer->mobile_number,
       'other_phone_number' => $customer->other_phone_number,
       'email_address' => $customer->email_address,
