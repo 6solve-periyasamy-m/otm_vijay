@@ -53,7 +53,6 @@ class QuoteProspect extends Model
 
     protected $guarded = [];
     protected $casts = ['paying' => 'boolean', 'travelling' => 'boolean'];
-    protected array $cascadeDeletes = ['quote',];
 
     public function quote(): HasOne
     {

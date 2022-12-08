@@ -201,7 +201,7 @@ class OrderRepository extends ModelRepository
      */
     public function getRemaining(): float
     {
-        return ($this->order->cost + $this->order->total_adjustments) - $this->order->paid;
+        return sigfig(($this->order->cost + $this->order->total_adjustments) - $this->order->paid);
     }
 
     /**
