@@ -157,7 +157,7 @@
                             </a>
                         </div>
                         <div class="col-12 col-xl-5">
-                            <x-admin.input name="paying" value="1" onchange="textUpdate()" nofloat></x-admin.input>
+                            <x-admin.input name="paying" value="{{ $quote->leadTraveller->paying ? 1 : 0 }}" onchange="textUpdate()" nofloat></x-admin.input>
                         </div>
                         <div class="col-12 col-xl-3">
                             <a href="javascript:plusPaying()" class="btn btn-outline-success btn-sm mb-1">
@@ -175,7 +175,7 @@
                             </a>
                         </div>
                         <div class="col-12 col-xl-6">
-                            <x-admin.input name="travelling" value="1" onchange="textUpdate()" nofloat></x-admin.input>
+                            <x-admin.input name="travelling" value="{{ $quote->leadTraveller->travelling && !$quote->leadTraveller->paying ? 1 : 0 }}" onchange="textUpdate()" nofloat></x-admin.input>
                         </div>
                         <div class="col-12 col-xl-3">
                             <a href="javascript:plusTravelling()" class="btn btn-outline-success btn-sm mb-1">
@@ -269,6 +269,14 @@
                     <a href="javascript:$('.convert-form').submit()" class="btn btn-warning">
                         <i class="icon-bag"></i>
                         {{ __('quotes.view.cards.quick.calculator.convert') }}
+                    </a>
+                    <form class="d-none costing-form" action="{{ route('quotes.costing', ['quote' => $quote,]) }}" method="get">
+                        <input type="hidden" name="paying" class="paying-input" value="0">
+                        <input type="hidden" name="travelling" class="travelling-input" value="0">
+                    </form>
+                    <a href="javascript:$('.costing-form').submit()" class="btn btn-secondary">
+                        <i class="icon-wallet"></i>
+                        {{ __('quotes.view.cards.quick.calculator.costing') }}
                     </a>
                 </x-admin.section.otm-text>
             </x-admin.section.otm-card>

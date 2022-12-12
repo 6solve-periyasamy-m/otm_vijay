@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdditionalCostController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseInventoryController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseInventoryTourController;
@@ -268,6 +269,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::post('/update', [QuoteController::class, 'update'])->name('update')->middleware('bouncer:Quote\Quote,update');
             Route::get('/unlink', [QuoteComponentController::class, 'unlink'])->name('unlink')->middleware('bouncer:Quote\Quote,update');
             Route::get('/preview', [QuoteController::class, 'preview'])->name('preview')->middleware('bouncer:Quote\Quote,read');
+            Route::get('/costing', [QuoteController::class, 'costing'])->name('costing')->middleware('bouncer:Quote\Quote,read');
             Route::post('/conversion', [QuoteController::class, 'conversion'])->name('conversion')->middleware('bouncer:Quote\Quote,update');
             Route::post('/convert', [QuoteController::class, 'convert'])->name('convert')->middleware('bouncer:Quote\Quote,update');
             Route::post('/send', [QuoteController::class, 'send'])->name('send')->middleware('bouncer:Quote\Quote,update');
@@ -702,6 +704,14 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                 Route::post('/update', [TourCategoryController::class, 'update'])->name('tour-categories.update')->middleware('bouncer:Tour\TourCategory,update');
                 Route::post('/delete', [TourCategoryController::class, 'destroy'])->name('tour-categories.delete')->middleware('bouncer:Tour\TourCategory,delete');
             });
+        });
+    });
+
+    Route::prefix('cost')->group(function () {
+        Route::post('/{model}/{id}/create/', [AdditionalCostController::class, 'store'])->name('additional-cost.store');
+        Route::prefix('{cost}')->group(function () {
+            Route::post('/update', [AdditionalCostController::class, 'update'])->name('additional-cost.update');
+            Route::post('/delete', [AdditionalCostController::class, 'destroy'])->name('additional-cost.delete');
         });
     });
 

@@ -3,6 +3,7 @@
 namespace App\Models\Quote;
 
 use App\Models\Helper\QuoteStatus;
+use App\Models\Helper\Traits\HasAdditionalCosts;
 use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;
 use App\Models\Quote\Component\QuoteActivity;
@@ -109,7 +110,7 @@ use Illuminate\Support\Carbon;
  */
 class Quote extends Model
 {
-    use HasFactory, SoftDeletes, CascadeSoftDeletes;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes, HasAdditionalCosts;
 
     protected $guarded = [];
     protected $casts = [
@@ -123,7 +124,7 @@ class Quote extends Model
         'quote_status' => QuoteStatus::class
     ];
     private QuoteRepository $internal_repository;
-    protected array $cascadeDeletes = ['sentQuotes', 'leadTraveller', 'pricePoints', 'installments', 'accommodation', 'activities', 'flights', 'transport', 'merchandise'];
+    protected array $cascadeDeletes = ['sentQuotes', 'leadTraveller', 'pricePoints', 'installments', 'accommodation', 'activities', 'flights', 'transport', 'merchandise', 'costs'];
 
     public function sentQuotes(): HasMany
     {
