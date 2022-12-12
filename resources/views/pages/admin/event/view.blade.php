@@ -81,7 +81,11 @@
                                 <td>{{ $tour->description }}</td>
                                 <td>{{ $tour->orders()->count() }}</td>
                                 <td>
+                                    @if(isset($tour->booking_form_url))
                                     <a href="{{route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,])}}" class="link link-primary">{{ $tour->booking_form_url }}</a>
+                                    @else
+                                    No Booking URL Set
+                                    @endif
                                 </td>
                                 <td class="actions">
                                     <a href="{{route('tours.edit', ['tour' => $tour,])}}"
