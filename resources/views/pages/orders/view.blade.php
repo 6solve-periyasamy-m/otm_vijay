@@ -146,7 +146,7 @@
                         @endcan
                     </h6>
                     <p>Born</p>
-                    <h6 class="fw-bold">{{ f_date($ordersCustomer->customer->date_of_birth) }}</h6>
+                    <h6 class="fw-bold">{{ isset($ordersCustomer->customer->date_of_birth) ? f_date($ordersCustomer->customer->date_of_birth) : 'Date of Birth not set' }}</h6>
                     <p>Passport Number</p>
                     <h6 class="fw-bold">{{ $ordersCustomer->customer->passport_number ?? 'Not Set' }}</h6>
                 </div>

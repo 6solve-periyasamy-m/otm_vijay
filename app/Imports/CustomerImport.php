@@ -38,14 +38,13 @@ class CustomerImport implements ToModel
             'country_id' => $billingCountry?->id,
             'postcode' => trim($row[20]),
         ]);
-        $customer = Customer::create([
+        return Customer::create([
             'email_address' => empty(trim($row[0])) ? null : trim($row[0]),
-            'password' => Hash::make(Str::random(60)),
             'title' => trim($row[1]),
             'first_name' => trim($row[2]),
             'middle_names' => trim($row[3] ?? ''),
             'last_name' => trim($row[4]),
-            'date_of_birth' => Carbon::createFromFormat('d/m/Y', trim($row[5])),
+            'date_of_birth' => (isset($row[5]) ? Carbon::createFromFormat('d/m/Y', trim($row[5])) : null),
             'gender' => trim($row[8]),
             'mobile_number' => trim($row[6]),
             'other_phone_number' => trim($row[7] ?? ''),
@@ -62,6 +61,5 @@ class CustomerImport implements ToModel
             'passport_country_of_issue' => trim($row[29] ?? ''),
             'loyalty_number' => trim($row[30] ?? ''),
         ]);
-        return $customer;
     }
 }

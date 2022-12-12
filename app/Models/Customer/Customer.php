@@ -47,7 +47,7 @@ use Laravel\Cashier\Subscription;
  * @property string $first_name
  * @property string|null $middle_names
  * @property string $last_name
- * @property Carbon $date_of_birth
+ * @property Carbon|null $date_of_birth
  * @property string|null $mobile_number
  * @property string|null $other_phone_number
  * @property int $home_address_id
