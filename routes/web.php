@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Merchandise\MerchandiseInventoryTourController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseSizeController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseTypeController;
 use App\Http\Controllers\Admin\Merchandise\VariantController;
+use App\Http\Controllers\Admin\OrganizationController;
 use App\Http\Controllers\Admin\Quote\QuoteComponentController;
 use App\Http\Controllers\Admin\Quote\QuoteController;
 use App\Http\Controllers\Admin\Quote\QuoteInstallmentController;
@@ -596,7 +597,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                         Route::get('/update', [AccommodationInventoryTourController::class, 'edit'])->name('accommodation-inventory-tours.edit')->middleware('bouncer:Accommodation\AccommodationInventoryTour,update');
                         Route::post('/update', [AccommodationInventoryTourController::class, 'update'])->name('accommodation-inventory-tours.update')->middleware('bouncer:Accommodation\AccommodationInventoryTour,update');
                         Route::post('/delete', [AccommodationInventoryTourController::class, 'destroy'])->name('accommodation-inventory-tours.delete')->middleware('bouncer:Accommodation\AccommodationInventoryTour,delete');
-                        Route::post('/restore', [AccommodationInventoryTourController::class, 'restore'])->name('accommodation-inventory-tours.restore')->middleware('bouncer:AccommodationInventoryTour,delete');
+                        Route::post('/restore', [AccommodationInventoryTourController::class, 'restore'])->name('accommodation-inventory-tours.restore')->middleware('bouncer:Accommodation\AccommodationInventoryTour,delete');
                     });
                     Route::prefix('upgrade/{inventoryTour}')->group(function () {
                         Route::get('/', [UpgradeController::class, 'viewAccommodationUpgrade'])->name('accommodation-upgrade.view')->middleware('bouncer:Accommodation\AccommodationInventoryTour,read');
@@ -810,6 +811,18 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         });
     });
 
+    Route::prefix('organizations')->group(function () {
+        Route::get('/', [OrganizationController::class, 'index'])->name('organizations.all')->middleware('bouncer:Customer\Customer,read');
+        Route::get('/create', [OrganizationController::class, 'create'])->name('organizations.create')->middleware('bouncer:Customer\Customer,create');
+        Route::post('/create', [OrganizationController::class, 'store'])->name('organizations.store')->middleware('bouncer:Customer\Customer,create');
+        Route::prefix('{organization}')->group(function () {
+            Route::get('/', [OrganizationController::class, 'view'])->name('organizations.view')->middleware('bouncer:Customer\Customer,read');
+            Route::get('/update', [OrganizationController::class, 'edit'])->name('organizations.edit')->middleware('bouncer:Customer\Customer,update');
+            Route::post('/update', [OrganizationController::class, 'update'])->name('organizations.update')->middleware('bouncer:Customer\Customer,update');
+            Route::post('/delete', [OrganizationController::class, 'destroy'])->name('organizations.delete')->middleware('bouncer:Customer\Customer,delete');
+        });
+    });
+
     Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('users.all')->middleware('bouncer:User,read');
         Route::get('/create', [UserController::class, 'create'])->name('users.create')->middleware('bouncer:User,create');
@@ -844,7 +857,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
 
     Route::prefix('reports')->group(function () {
         Route::prefix('bespoke')->group(function () {
-            Route::get('/', [BespokeReportController::class, 'index'])->name('reports.bespoke.all');
+            Route::get('/', function() { return redirect()->route('reports.all'); })->name('reports.bespoke.all');
             Route::get('create/{parent}', [BespokeReportController::class, 'create'])->name('reports.bespoke.create');
             Route::post('temporary', [BespokeReportController::class, 'showTemporary'])->name('reports.bespoke.temporary.show');
             Route::prefix('{report}')->group(function () {
@@ -856,7 +869,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             });
 
         });
-        Route::get('/', [ReportController::class, 'viewReports'])->name('reports.all');
+        Route::get('/', [BespokeReportController::class, 'index'])->name('reports.all');
         Route::get('/orders', [ReportController::class, 'getOrderReport'])->name('reports.order');
         Route::get('/orders/{extension}', [ReportController::class, 'exportOrderReport'])->name('reports.order.export');
         Route::get('/tour-stock', [ReportController::class, 'getTourStockReport'])->name('reports.tour-stock');

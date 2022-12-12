@@ -56,9 +56,8 @@
         @yield('footer')
 
     </div>
-    <script src="{{ asset('js/customer/sidebarmenu.js') . '?' . date('U')  }}"></script>
-    <script src="{{ asset('js/customer/customer.js') . '?' . date('U')  }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript" defer>$(".preloader").fadeOut();</script>
 
     @yield('footer-script')
     @stack('footer-stack')

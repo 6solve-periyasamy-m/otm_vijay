@@ -65,7 +65,7 @@ class FlightController extends ApiController
     public function addFlightInventoryToTour(Request $request, Tour $tour) {
         // TODO: Get actual enum values
         if ($request->has('type') && in_array($request->input('type'), ['Included', 'Add-on', 'Upgrade'])) {
-            if ($request->has('direction') && in_array($request->input('direction'), ['Inbound', 'Outbound',])) {
+            if ($request->has('direction') && in_array($request->input('direction'), ['Inbound', 'Outbound', 'Mid-Package'])) {
                 if ($request->has('ids')) {
                     foreach ($request->input('ids') as $id) {
                         $inventory = FlightInventory::findOrFail($id);

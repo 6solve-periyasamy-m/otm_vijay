@@ -37,6 +37,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $request->validate(Order::getValidationRules());
+        $request->validate(['tour_id' => 'required|integer|exists:tours,id',]);
         $tour = Tour::findOrFail($request->input('tour_id'));
         $order = Order::create([
             'tour_id' => $request->input('tour_id'),
@@ -118,10 +119,8 @@ class OrderController extends Controller
     {
         $request->validate(Order::getValidationRules());
         $request->validate(['deposit' => 'required|numeric',]);
-        $shouldInvoice = $order->tour_id != $request->input('tour_id') ||
-                          $order->deposit != $request->input('deposit');
+        $shouldInvoice = $order->deposit != $request->input('deposit');
         $order->update([
-            'tour_id' => $request->input('tour_id'),
             'ordered_on' => $request->input('ordered_on'),
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),

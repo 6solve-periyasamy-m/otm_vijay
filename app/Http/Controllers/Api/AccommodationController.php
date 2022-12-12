@@ -173,7 +173,7 @@ class AccommodationController extends ApiController
     public function saveRoomingData(Request $request, Order $order) {
         try {
             RoomingRepository::buildGroupRooming($order, $request->data);
-            return response('Building Saved', 200);
+            return response()->json(['success' => true, 'msg' => 'Building Saved'], 200);
         } catch (RoomingFailedException $e) {
             abort(500, $e->getMessage());
         }

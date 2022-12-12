@@ -120,8 +120,6 @@ class Order extends Model
     public static function getValidationRules(): array
     {
         return [
-            'quote_id' => 'nullable|exists:quotes,id',
-            'tour_id' => 'required|exists:tours,id',
             'ordered_on' => 'required|date'
         ];
     }

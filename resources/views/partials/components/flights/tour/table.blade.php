@@ -38,7 +38,8 @@
             <option value="Add-on">Add-on</option>
         </select>
         <select class="form-select flight-direction-select">
-            <option value="Outbound" selected>Outbound</option>
+            <option value="Outbound">Outbound</option>
+            <option value="Mid-Package" selected>Mid-Package</option>
             <option value="Inbound">Inbound</option>
         </select>
     </div>

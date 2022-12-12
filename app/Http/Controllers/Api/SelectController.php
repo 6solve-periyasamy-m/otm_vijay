@@ -348,4 +348,15 @@ class SelectController extends ApiController
     {
         return MerchandiseTransforms::getSelectedSize($id);
     }
+
+    public function getAvailableOrganizations(Request $request)
+    {
+        $filter = $request->has('filter') ? $request->filter : "";
+        return CustomerTransforms::getSelectOrganizations($filter);
+    }
+    
+    public function getSelectedOrganization($id)
+    {
+        return CustomerTransforms::getSelectedOrganization($id);
+    }
 }

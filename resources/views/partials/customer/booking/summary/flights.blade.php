@@ -8,6 +8,7 @@
         <tr>
             <th scope="col">Times</th>
             <th scope="col">Description</th>
+            <th scope="col">Direction</th>
             <th scope="col">Type</th>
             <th scope="col">Cost</th>
         </tr>
@@ -23,6 +24,9 @@
                     to
                     {{ $component->tourComponent->inventory->flight->arrivalAirport }}
                     ({{ $component->tourComponent->inventory->travelClass }})
+                </td>
+                <td data-content="Direction">
+                    {{ $component->tourComponent->flight_type }}
                 </td>
                 @if($component->tourComponent->tour_component_type == 'Included')
                     <td colspan="2" data-content="Type">
