@@ -81,6 +81,9 @@ class BookingRepository extends ModelRepository
         $components = $this->booking->tour->repository->getComponents(false, true, false, true, false, ['Included',]);
         foreach ($this->booking->travellers as $traveller) {
             $traveller->repository->addComponents($components);
+            foreach ($this->booking->tour->flightInventoryTours()->where('flight_type', '=', 'Mid-Package')->get() as $flight) {
+                $traveller->repository->addComponent($flight->repository);
+            }
         }
     }
 
