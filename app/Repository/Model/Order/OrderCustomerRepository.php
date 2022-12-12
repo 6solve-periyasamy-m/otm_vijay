@@ -232,4 +232,11 @@ class OrderCustomerRepository extends ModelRepository
     {
         return $this->orderCustomer->trashed();
     }
+
+    public function removeAllComponents(bool $accommodation = false)
+    {
+        foreach ($this->getComponents($accommodation) as $component) {
+            $component->delete();
+        }
+    }
 }

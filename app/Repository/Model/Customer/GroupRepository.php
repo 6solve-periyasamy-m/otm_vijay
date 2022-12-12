@@ -7,6 +7,7 @@ use App\Models\Customer\Group;
 use App\Models\Customer\OrderCustomerGroup;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\OrderCustomer;
+use App\Repository\RoomingRepository;
 use DB;
 
 class GroupRepository
@@ -70,5 +71,16 @@ class GroupRepository
             }
         }
         return ['addons' => $addons, 'upgrades' => $upgrades, 'additionalValue' => $additionalValue,];
+    }
+
+    public function refreshRooming(): void
+    {
+        $this->group->rooms()->delete();
+        $order = $this->group->orderCustomers()->first()->order;
+        $templates = RoomingRepository::getTemplateTourInventory($order->tour);
+        foreach ($templates as $template) {
+            $room = RoomingRepository::getInventoryWithRoomType($template, $this->group->roomType);
+            $this->addRoomToGroup($room);
+        }
     }
 }

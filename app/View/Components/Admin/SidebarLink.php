@@ -76,7 +76,7 @@ class SidebarLink extends Component
             new SidebarLink('Attributes Manager', route('attributes.edit'), 'flag', 'attributes'),
             new SidebarLink('Users', route('users.all'), 'people', 'users', User::class, 'read'),
             new SidebarLink('Roles', route('roles.all'), 'organization', 'roles', User::class, 'read'),
-            new SidebarLink('Reports', route('reports.bespoke.all'), 'list', 'reports', Report::class, 'read'),
+            new SidebarLink('Reports', route('reports.all'), 'list', 'reports', Report::class, 'read'),
         ];
     }
 

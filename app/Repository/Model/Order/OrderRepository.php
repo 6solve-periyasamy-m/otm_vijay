@@ -201,7 +201,7 @@ class OrderRepository extends ModelRepository
      */
     public function getRemaining(): float
     {
-        return ($this->order->cost + $this->order->total_adjustments) - $this->order->paid;
+        return sigfig(($this->order->cost + $this->order->total_adjustments) - $this->order->paid);
     }
 
     /**
@@ -465,6 +465,36 @@ class OrderRepository extends ModelRepository
             'status' => $this->order->status->getStatusArray(),
             'view' => route('orders.view', ['order' => $this->order,]),
         ];
+    }
+
+    public function migrate(Tour $tour, bool $resetPrice = true, bool $resetAdjustments = false)
+    {
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            $orderCustomer->repository->removeAllComponents();
+            if ($resetAdjustments) {
+                $orderCustomer->adjustments()->delete();
+            }
+        }
+        $this->order->tour_id = $tour->id;
+        if ($resetPrice) {
+            $this->order->deposit = $tour->deposit;
+        }
+        $this->order->save();
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            if ($resetPrice) {
+                $orderCustomer->tour_cost = $tour->base_price_per_person;
+                $orderCustomer->single_occupancy_surcharge = $tour->single_occupancy_surcharge;
+                $orderCustomer->save();
+            }
+            $orderCustomer->repository->addAllIncluded();
+        }
+        $this->resetInstallments();
+        foreach ($this->order->groups as $group) {
+            $group->repository->refreshRooming();
+        }
+        if ($resetAdjustments) {
+            $this->order->adjustments()->delete();
+        }
     }
 
     public function getRoomingData(): array
