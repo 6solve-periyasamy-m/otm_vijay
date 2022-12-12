@@ -10,8 +10,14 @@ class OrderController extends ApiController
     public function getOrderStatus(Order $order) {
         return $order->status;
     }
+
     public function getOverview()
     {
         return response()->json(OrderRepository::getOrdersOverview());
+    }
+
+    public function getRoomingInformation(Order $order)
+    {
+        return $order->repository->getRoomingData();
     }
 }
