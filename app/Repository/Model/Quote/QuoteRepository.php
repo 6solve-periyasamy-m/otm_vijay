@@ -596,7 +596,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 'tour_component_type' => $datum['tour_component_type'],
                 'tour_sales_price' => $datum['tour_sales_price'],
                 'is_template' => $datum['is_template'],
-                'price_shown' => $datum['price_shown'],
+                'price_shown' => $datum['price_shown'] ?? false,
             ]);
         }
         $activity = [];
@@ -605,7 +605,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 'activity_inventory_id' => $datum['inventory'],
                 'tour_component_type' => $datum['tour_component_type'],
                 'tour_sales_price' => $datum['tour_sales_price'],
-                'price_shown' => $datum['price_shown'],
+                'price_shown' => $datum['price_shown'] ?? false,
             ]);
         }
         $flight = [];
@@ -615,7 +615,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 'tour_component_type' => $datum['tour_component_type'],
                 'tour_sales_price' => $datum['tour_sales_price'],
                 'flight_type' => $datum['flight_type'],
-                'price_shown' => $datum['price_shown'],
+                'price_shown' => $datum['price_shown'] ?? false,
             ]);
         }
         $transport = [];
@@ -624,7 +624,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 'transport_inventory_id' => $datum['inventory'],
                 'tour_component_type' => $datum['tour_component_type'],
                 'tour_sales_price' => $datum['tour_sales_price'],
-                'price_shown' => $datum['price_shown'],
+                'price_shown' => $datum['price_shown'] ?? false,
             ]);
         }
         $merchandise = [];
@@ -633,7 +633,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 'merchandise_inventory_id' => $datum['inventory'],
                 'tour_component_type' => $datum['tour_component_type'],
                 'tour_sales_price' => $datum['tour_sales_price'],
-                'price_shown' => $datum['price_shown'],
+                'price_shown' => $datum['price_shown'] ?? false,
             ]);
         }
         unset($data['accommodation']);
@@ -652,7 +652,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         }
         unset($data['pricepoints']);
         $sections = [];
-        foreach ($data['sections'] as $datum) {
+        foreach ($data['sections'] ?? [] as $datum) {
             $sections[] = QuoteSection::make($datum);
         }
         unset($data['sections']);

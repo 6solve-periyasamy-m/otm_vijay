@@ -28,12 +28,38 @@
                 {{-- Exporter strips 0 values for some reason, hence formatting with decimal place --}}
                 <td>{{ $row->occupants == 0 ? number_format(0, 2) : $row->occupants }}</td>
                 <td>{{ $row->empty_beds == 0 ? number_format(0, 2) : $row->empty_beds }}</td>
-                @foreach($row->travellers as $traveller)
-                    <td>{{ $traveller->customer?->first_name ?? 'Redacted' }} {{ $traveller->customer?->last_name ?? 'Redacted' }}</td>
-                @endforeach
-                @foreach($row->travellers as $traveller)
-                    <td>{{ $traveller->customer?->first_name ?? 'Redacted' }} {{ $traveller->customer?->last_name ?? 'Redacted' }}</td>
-                @endforeach
+
+                @for($x = 0; $x < $data->largest; $x++)
+                    @php
+                        /** @var \App\Models\Order\OrderCustomer $traveller */
+                        $traveller = $row->travellers->get($x);
+                    @endphp
+                    @isset($traveller)
+                        <td>{{ $traveller->customer?->first_name ?? 'Redacted' }} {{ $traveller->customer?->last_name ?? 'Redacted' }}</td>
+                    @else
+                        <td></td>
+                    @endisset
+                @endfor
+
+                @for($x = 0; $x < $data->largest; $x++)
+                    @php $traveller = $row->travellers->get($x); @endphp
+                    @isset($traveller)
+                        <td>
+                            Customer Accommodation Notes: <br />
+                            {{ $traveller->accommodation_notes ?? '' }} <br /><br />
+                            Customer Internal Notes: <br />
+                            {{ $traveller->customer?->internal_notes ?? '' }} <br /><br />
+                            Customer External Notes: <br />
+                            {{ $traveller->customer?->external_notes ?? '' }} <br /><br />
+                            Order Customer Internal Notes: <br />
+                            {{ $traveller->internal_notes ?? '' }} <br /><br />
+                            Order Customer External Notes: <br />
+                            {{ $traveller->external_notes ?? '' }} <br /><br />
+                        </td>
+                    @else
+                        <td></td>
+                    @endisset
+                @endfor
             </tr>
         @endforeach
     </tbody>

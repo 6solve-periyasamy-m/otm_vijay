@@ -75,6 +75,10 @@
                 <i class="icon-note"></i>
                 Edit Order
             </a>
+            <a href="{{ route('orders.migrate', ['order' => $order,]) }}" class="btn btn-danger">
+                <i class="icon-note"></i>
+                Change Tour
+            </a>
             <a href="{{ route('orders.occupancy', ['order' => $order,]) }}" class="btn btn-info">
                 <i class="icon-note"></i>
                 Edit Room Sharing Data

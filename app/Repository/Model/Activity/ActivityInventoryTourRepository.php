@@ -211,4 +211,26 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
         ]);
         return $component->repository;
     }
+
+    public function getBookingUpgradeKeyMap(int $required = 1): array
+    {
+        $upgrades = $this->tourComponent->upgrades;
+        $included = $this->tourComponent;
+        $keys = [];
+        if (empty($upgrades->all())) {
+            $upgrades = $this->tourComponent->parent()->upgrades;
+            $included = $this->tourComponent->parent();
+        }
+        $disabled = $included->available_stock <= $required - 1;
+        if ($included->is_bookable) {
+            $keys[0] = ['name' => 'Included - ' . ($disabled ? 'Out of Stock' : f_currency(0)), 'disabled' => $disabled,];
+        }
+
+        foreach ($upgrades as $upgrade) {
+            if (!$upgrade->upgrade->is_bookable) continue;
+            $disabled = $upgrade->upgrade->available_stock <= $required - 1;
+            $keys[$upgrade->id] = ['name' => $upgrade->description . ' - ' . ($disabled ? 'Out of Stock' : f_currency($upgrade->upgrade->tour_sales_price)), 'disabled' => $disabled,];
+        }
+        return $keys;
+    }
 }

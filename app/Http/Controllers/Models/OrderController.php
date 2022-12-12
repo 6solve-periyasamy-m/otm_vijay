@@ -8,6 +8,7 @@ use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderEditedEvent;
 use App\Events\Order\OrderRestoredEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Order\MigrateRequest;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
@@ -36,6 +37,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $request->validate(Order::getValidationRules());
+        $request->validate(['tour_id' => 'required|integer|exists:tours,id',]);
         $tour = Tour::findOrFail($request->input('tour_id'));
         $order = Order::create([
             'tour_id' => $request->input('tour_id'),
@@ -80,6 +82,19 @@ class OrderController extends Controller
         return view('pages.models.orders.view', ['order' => $order,]);
     }
 
+    public function switchTour(Order $order)
+    {
+        return view('pages.orders.migrate', ['order' => $order,]);
+    }
+
+    public function migrate(MigrateRequest $request, Order $order)
+    {
+        $tour = Tour::find($request->tour_id);
+        if (!isset($tour)) abort(404);
+        $order->repository->migrate($tour, $request->resetPrices(), $request->resetAdjustments());
+        return redirect()->route('orders.view', ['order' => $order,]);
+    }
+
     public function invoice(Order $order)
     {
         return $order->repository->getInvoiceRepository()->getResponseStream();
@@ -104,10 +119,8 @@ class OrderController extends Controller
     {
         $request->validate(Order::getValidationRules());
         $request->validate(['deposit' => 'required|numeric',]);
-        $shouldInvoice = $order->tour_id != $request->input('tour_id') ||
-                          $order->deposit != $request->input('deposit');
+        $shouldInvoice = $order->deposit != $request->input('deposit');
         $order->update([
-            'tour_id' => $request->input('tour_id'),
             'ordered_on' => $request->input('ordered_on'),
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),

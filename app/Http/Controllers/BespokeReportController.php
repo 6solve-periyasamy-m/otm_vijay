@@ -91,6 +91,6 @@ class BespokeReportController extends Controller
 
     public function delete(Report $report) {
         $report->delete();
-        return redirect()->route('reports.bespoke.all');
+        return redirect()->route('reports.all');
     }
 }

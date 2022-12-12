@@ -152,7 +152,7 @@ class InvoiceRepository
         $data = [
             [
                 'due' => 'With Order',
-                'description' => InvoiceRepository::buildInstallmentString('Deposit', $order, $order->deposit, $order->calculated_deposit),
+                'description' => InvoiceRepository::buildInstallmentString('Deposit', $order, $order->deposit ?? 0, $order->calculated_deposit ?? 0),
                 'amount' => $order->calculated_deposit,
                 'paid' => $order->paid >= $order->calculated_deposit,
             ],
@@ -160,7 +160,7 @@ class InvoiceRepository
         foreach ($order->installments as $installment) {
             $data[] = [
                 'due' => $installment->due_on,
-                'description' => InvoiceRepository::buildInstallmentString('Installment', $order, $installment->amount, $installment->calculated_amount),
+                'description' => InvoiceRepository::buildInstallmentString('Installment', $order, $installment->amount ?? 0, $installment->calculated_amount ?? 0),
                 'amount' => $installment->calculated_amount,
                 'paid' => $installment->paid,
             ];
