@@ -23,11 +23,15 @@ abstract class InventoryContainerRepository extends ModelRepository implements H
 
     public function getMargin(): ?float
     {
-        $upgrade = $this->getUpgradeParent();
-        if ($upgrade->id === $this->get()->id) {
-            $p = $this->getPurchasePrice();
+        if (method_exists($this, 'getUpgradeParent')) {
+            $upgrade = $this->getUpgradeParent();
+            if ($upgrade->id === $this->get()->id) {
+                $p = $this->getPurchasePrice();
+            } else {
+                $p = ($this->getPurchasePrice() - $this->getUpgradeParent()->repository->getPurchasePrice());
+            }
         } else {
-            $p = ($this->getPurchasePrice() - $this->getUpgradeParent()->repository->getPurchasePrice());
+            $p = $this->getPurchasePrice();
         }
         $s = $this->getCost();
         if (empty($p)) return null;

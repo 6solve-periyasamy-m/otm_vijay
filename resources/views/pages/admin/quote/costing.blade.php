@@ -1,20 +1,18 @@
 @php
 /** 
- * @var \App\Models\Tour\Tour $tour 
+ * @var \App\Models\Quote\Quote $quote
+ * @var int $paying
+ * @var int $travelling
  */
-$basicCtC = $tour->repository->getCosting()->getCostOfComponents(['Included']);
-$fullCtC = $tour->repository->getCosting()->getMaxCostOfComponents();
-$fullCustomer = $tour->repository->getCosting()->getMaxCostToCustomer();
-$averageCtC = ($basicCtC+$fullCtC)/2;
-$averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
-$costOfTour = $tour->repository->getCosting()->getCostOfTour();
-$revenue = $tour->repository->getReceivedRevenue();
-$remaining = $tour->repository->getRemainingRevenue();
-$profit = $revenue - $costOfTour;
+$pricePerPerson = $quote->repository->getPricePerPerson($paying)->price_per_person;
+$basicCtC = $quote->repository->getCustomerCostToCompany();
+$remaining = $pricePerPerson * $paying;
+$costOfTour = $quote->repository->getTotalCostToCompany($paying + $travelling);
+$profit = $remaining - $costOfTour;
 @endphp
 @extends('layout.master')
 
-@section('title', "Tour Costing")
+@section('title', "Quote Costing")
 
 @section('header-script')
     <script>
@@ -35,51 +33,52 @@ $profit = $revenue - $costOfTour;
             return formatter.format(number);
         }
     </script>
-    <style>
-        .inactive {
-            background-color: #ccbbcc !important;
-        }
-    </style>
 @endsection
 
 @section('content')
-    <div class="otm-callout @if(!$tour->is_active) inactive @endif">
+    <div class="otm-callout">
         <div class="row">
             <div class="col-12">
-                <h4 class="fw-bold">{{ $tour->name }} @isset($tour->event)({{$tour->event->name}})@endisset</h4>
+                <h4 class="fw-bold">{{ $quote->name }} @isset($quote->event)({{$quote->event->name}})@endisset</h4>
             </div>
-            <div class="col-12 col-xl-4">
-                <p>Booking URL</p>
+            <div class="col-12 col-xl-2">
+                <p>Quote Status</p>
+                {{ $quote->status->badge() }}
+            </div>
+            <div class="col-12 col-xl-2">
+                <p>Paying Travellers</p>
                 <h6 class="fw-bold">
-                    @isset($tour->booking_form_url)
-                        <a href="{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,]) }}">{{$tour->booking_form_url}}</a>
-                    @else
-                        No Booking URL Set
-                    @endisset
+                    {{ f_currency($paying) }}
+                </h6>
+            </div>
+            <div class="col-12 col-xl-2">
+                <p>Free Travellers</p>
+                <h6 class="fw-bold">
+                    {{ f_currency($travelling) }}
                 </h6>
             </div>
             <div class="col-12 col-xl-2">
                 <p>Price per Person</p>
                 <h6 class="fw-bold">
-                    {{ f_currency($tour->base_price_per_person) }}
+                    {{ f_currency($pricePerPerson) }}
                 </h6>
             </div>
             <div class="col-12 col-xl-2">
                 <p>Surcharge</p>
                 <h6 class="fw-bold">
-                    {{ f_currency($tour->single_occupancy_surcharge) }}
+                    {{ f_currency($quote->single_occupancy_surcharge) }}
                 </h6>
             </div>
-            <div class="col-12 col-xl-4">
+            <div class="col-12 col-xl-2">
                 <p>Dates</p>
                 <h6 class="fw-bold">
-                    {{ f_date($tour->date_from) }} to {{ f_date($tour->date_to) }}
+                    {{ f_date($quote->date_from) }} to {{ f_date($quote->date_to) }}
                 </h6>
             </div>
             <div class="col-12">
-                <a class="btn btn-warning" href="{{route('tours.view', ['tour' => $tour,])}}">
+                <a class="btn btn-warning" href="{{route('quotes.view', ['quote' => $quote,])}}">
                     <i class="icon-action-redo"></i>
-                    <span>Back To Tour</span>
+                    <span>Back To Quote</span>
                 </a>
             </div>
         </div>
@@ -101,31 +100,17 @@ $profit = $revenue - $costOfTour;
                         </thead>
                         <tbody>
                         <tr>
-                            <th scope="row" style="width: 20%">Base Package</th>
+                            <th scope="row" style="width: 20%">Costing Details</th>
                             <td class="text-center" style="width: 20%">{{ f_currency($basicCtC) }}</td>
                             <td class="text-center" style="width: 20%">
                                 @if ($basicCtC > 0)
-                                    <input style="width: 5rem;" ctc="{{ $basicCtC }}" value="{{ sigfig((($tour->base_price_per_person-$basicCtC)/$basicCtC)*100) }}" onchange="updateProfit(this)"/>%
+                                    <input style="width: 5rem;" ctc="{{ $basicCtC }}" value="{{ sigfig((($pricePerPerson-$basicCtC)/$basicCtC)*100) }}" onchange="updateProfit(this)"/>%
                                 @else
                                     No Cost
                                 @endif
                             </td>
-                            <td class="text-center base-price" style="width: 20%">{{ f_currency($tour->base_price_per_person) }}</td>
-                            <td class="text-center base-profit" style="width: 20%">{{ f_currency($tour->base_price_per_person - $basicCtC) }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row" style="width: 20%">Average (Median)</th>
-                            <td class="text-center" style="width: 20%">{{ f_currency($averageCtC) }}</td>
-                            <td class="text-center" style="width: 20%">{{$averageCtC > 0 ? sigfig((($averageCustomer - $averageCtC)/$averageCtC)*100) . '%' : 'No Cost' }}</td>
-                            <td class="text-center" style="width: 20%">{{ f_currency($averageCustomer) }}</td>
-                            <td class="text-center" style="width: 20%">{{ f_currency($averageCustomer - $averageCtC) }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row" style="width: 20%">Full Package - All add-ons & Upgrades</th>
-                            <td class="text-center" style="width: 20%">{{ f_currency($fullCtC) }}</td>
-                            <td class="text-center" style="width: 20%">{{ $fullCtC > 0 ? sigfig((($fullCustomer-$fullCtC)/$fullCtC)*100) . '%' : 'No Cost' }}</td>
-                            <td class="text-center" style="width: 20%">{{ f_currency($fullCustomer) }}</td>
-                            <td class="text-center" style="width: 20%">{{ f_currency($fullCustomer - $fullCtC) }}</td>
+                            <td class="text-center base-price" style="width: 20%">{{ f_currency($pricePerPerson) }}</td>
+                            <td class="text-center base-profit" style="width: 20%">{{ f_currency($pricePerPerson - $basicCtC) }}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -138,7 +123,7 @@ $profit = $revenue - $costOfTour;
                     <div class="card-title">
                         <h4 class="fw-bold">Per-Customer Costs</h4>
                     </div>
-                    <form class="form-group row per_customer-create" action="{{ route('additional-cost.store', ['model' => 'tour', 'id' => $tour->id]) }}" method="post">
+                    <form class="form-group row per_customer-create" action="{{ route('additional-cost.store', ['model' => 'quote', 'id' => $quote->id]) }}" method="post">
                         @csrf
                         <x-admin.input name="name" width="5">Name</x-admin.input>
                         <x-admin.input name="amount" width="5">Amount</x-admin.input>
@@ -156,9 +141,9 @@ $profit = $revenue - $costOfTour;
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($tour->costs()->where('per_customer', '=', '1')->get() as $cost)
+                        @foreach($quote->costs()->where('per_customer', '=', '1')->get() as $cost)
                             <tr>
-                                <form class="form-group row cost-edit-{{$cost->id}}" action="{{ route('additional-cost.update', ['cost' => $cost,]) }}" method="post">
+                                <form class="form-group row cost-edit-{{$cost->id}}" action="{{ route('additional-cost.update', [ 'cost' => $cost,]) }}" method="post">
                                     @csrf
                                     <td data-order="{{ $cost->name }}" data-search="{{ $cost->name }}">
                                         <x-admin.input name="name" value="{{ $cost->name }}">Name</x-admin.input>
@@ -191,32 +176,26 @@ $profit = $revenue - $costOfTour;
                         <h4 class="fw-bold">Key Financials</h4>
                     </div>
                     <div class="row">
-                        <x-admin.section.otm-text width="6">
+                        <x-admin.section.otm-text width="4">
                             <x-slot:header>
-                                Received
+                                Expected
                             </x-slot:header>
-                            {{ f_currency($revenue) }}
+                            {{ f_currency($remaining ?? 0) }}
                         </x-admin.section.otm-text>
-                        <x-admin.section.otm-text width="6">
-                            <x-slot:header>
-                                Remaining
-                            </x-slot:header>
-                            {{ f_currency($remaining) }}
-                        </x-admin.section.otm-text>
-                        <x-admin.section.otm-text width="6">
+                        <x-admin.section.otm-text width="4">
                             <x-slot:header>
                                 Cost to Company
                             </x-slot:header>
-                            {{ f_currency($costOfTour) }}
+                            {{ f_currency($costOfTour ?? 0) }}
                         </x-admin.section.otm-text>
                         <x-admin.section.otm-text width="6">
                             <x-slot:header>
                                 Profit
                             </x-slot:header>
-                            @if($profit <= 0)
-                                <span style="color: red">{{ f_currency($profit) }}</span>
+                            @if(($profit ?? 0) <= 0)
+                                <span style="color: red">{{ f_currency($profit ?? 0) }}</span>
                             @else
-                                <span style="color: green">{{ f_currency($profit) }}</span>
+                                <span style="color: green">{{ f_currency($profit ?? 0) }}</span>
                             @endif
                         </x-admin.section.otm-text>
                     </div>
@@ -229,7 +208,7 @@ $profit = $revenue - $costOfTour;
                     <div class="card-title">
                         <h4 class="fw-bold">Whole Package Costs</h4>
                     </div>
-                    <form class="form-group row whole-tour-create" action="{{ route('additional-cost.store', ['model' => 'tour', 'id' => $tour->id]) }}" method="post">
+                    <form class="form-group row whole-tour-create" action="{{ route('additional-cost.store', ['model' => 'quote', 'id' => $quote->id]) }}" method="post">
                         @csrf
                         <x-admin.input name="name" width="5">Name</x-admin.input>
                         <x-admin.input name="amount" width="5">Amount</x-admin.input>
@@ -247,7 +226,7 @@ $profit = $revenue - $costOfTour;
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($tour->costs()->where('per_customer', '=', '0')->get() as $cost)
+                        @foreach($quote->costs()->where('per_customer', '=', '0')->get() as $cost)
                             <tr>
                                 <form class="form-group row cost-edit-{{$cost->id}}" action="{{ route('additional-cost.update', ['cost' => $cost,]) }}" method="post">
                                     @csrf
@@ -322,12 +301,10 @@ $profit = $revenue - $costOfTour;
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
-                        <th scope="col">{{ __('tours.costing.view.cards.components.common.sold') }}</th>
-                        <th scope="col">{{ __('tours.costing.view.cards.components.common.available') }}</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($tour->repository->getComponents() as $componentRepository)
+                    @foreach($quote->repository->getComponents() as $componentRepository)
                         <tr>
                             <td>
                                 {{ ucwords($componentRepository->getComponentType()) }}
@@ -356,12 +333,6 @@ $profit = $revenue - $costOfTour;
                             <td>
                                 {{ $componentRepository->getMargin() !== null ? $componentRepository->getMargin() . '%' : 'No Cost to Company' }}
                             </td>
-                            <td>
-                                {{ $componentRepository->getUsedOnOrderCount() }}
-                            </td>
-                            <td>
-                                {{ $componentRepository->getAvailableStock() }}
-                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -377,12 +348,10 @@ $profit = $revenue - $costOfTour;
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
-                        <th scope="col">{{ __('tours.costing.view.cards.components.common.sold') }}</th>
-                        <th scope="col">{{ __('tours.costing.view.cards.components.common.available') }}</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($tour->accommodationInventoryTours()->with('inventory')->get() as $component)
+                    @foreach($quote->accommodation()->with('inventory')->get() as $component)
                         <tr>
                             <td>
                                 {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
@@ -403,12 +372,6 @@ $profit = $revenue - $costOfTour;
                             </td>
                             <td>
                                 {{ $component->repository->getMargin() !== null ? $component->repository->getMargin() . '%' : 'Not Set' }}
-                            </td>
-                            <td>
-                                {{ $component->repository->getUsedOnOrderCount() }}
-                            </td>
-                            <td>
-                                {{ $component->repository->getAvailableStock() }}
                             </td>
                         </tr>
                     @endforeach
@@ -425,12 +388,10 @@ $profit = $revenue - $costOfTour;
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
-                        <th scope="col">{{ __('tours.costing.view.cards.components.common.sold') }}</th>
-                        <th scope="col">{{ __('tours.costing.view.cards.components.common.available') }}</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($tour->activityInventoryTours()->with('inventory')->get() as $component)
+                    @foreach($quote->activities()->with('inventory')->get() as $component)
                         <tr>
                             <td>
                                 {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
@@ -451,12 +412,6 @@ $profit = $revenue - $costOfTour;
                             </td>
                             <td>
                                 {{ $component->repository->getMargin() !== null ? $component->repository->getMargin() . '%' : 'Not Set' }}
-                            </td>
-                            <td>
-                                {{ $component->repository->getUsedOnOrderCount() }}
-                            </td>
-                            <td>
-                                {{ $component->repository->getAvailableStock() }}
                             </td>
                         </tr>
                     @endforeach
@@ -473,12 +428,10 @@ $profit = $revenue - $costOfTour;
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
-                        <th scope="col">{{ __('tours.costing.view.cards.components.common.sold') }}</th>
-                        <th scope="col">{{ __('tours.costing.view.cards.components.common.available') }}</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($tour->flightInventoryTours()->with('inventory')->get() as $component)
+                    @foreach($quote->flights()->with('inventory')->get() as $component)
                         <tr>
                             <td>
                                 {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
@@ -499,12 +452,6 @@ $profit = $revenue - $costOfTour;
                             </td>
                             <td>
                                 {{ $component->repository->getMargin() !== null ? $component->repository->getMargin() . '%' : 'Not Set' }}
-                            </td>
-                            <td>
-                                {{ $component->repository->getUsedOnOrderCount() }}
-                            </td>
-                            <td>
-                                {{ $component->repository->getAvailableStock() }}
                             </td>
                         </tr>
                     @endforeach
@@ -521,12 +468,10 @@ $profit = $revenue - $costOfTour;
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
-                        <th scope="col">{{ __('tours.costing.view.cards.components.common.sold') }}</th>
-                        <th scope="col">{{ __('tours.costing.view.cards.components.common.available') }}</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($tour->transportInventoryTours()->with('inventory')->get() as $component)
+                    @foreach($quote->transport()->with('inventory')->get() as $component)
                         <tr>
                             <td>
                                 {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
@@ -548,12 +493,6 @@ $profit = $revenue - $costOfTour;
                             <td>
                                 {{ $component->repository->getMargin() !== null ? $component->repository->getMargin() . '%' : 'Not Set' }}
                             </td>
-                            <td>
-                                {{ $component->repository->getUsedOnOrderCount() }}
-                            </td>
-                            <td>
-                                {{ $component->repository->getAvailableStock() }}
-                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -568,11 +507,10 @@ $profit = $revenue - $costOfTour;
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
-                        <th scope="col">{{ __('tours.costing.view.cards.components.common.sold') }}</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($tour->merchandise()->with('inventory')->get() as $component)
+                    @foreach($quote->merchandise()->with('inventory')->get() as $component)
                         <tr>
                             <td>
                                 {{ $component->repository->__toString() }}
@@ -589,9 +527,6 @@ $profit = $revenue - $costOfTour;
                             <td>
                                 {{ $component->repository->getMargin() !== null ? $component->repository->getMargin() . '%' : 'Not Set' }}
                             </td>
-                            <td>
-                                {{ $component->repository->getUsedOnOrderCount() }}
-                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -599,89 +534,4 @@ $profit = $revenue - $costOfTour;
             </div>
         </div>
     </x-admin.section.card>
-    <hr class="splitter"/>
-    <div class="row">
-        <div class="col-xl-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">Expected Installment Revenue</h4>
-                    </div>
-                    <table class="table table-striped data-table">
-                        <thead>
-                        <tr>
-                            <th scope="col">Due Date</th>
-                            <th scope="col">Count</th>
-                            <th scope="col">Expected</th>
-                            <th scope="col">Paid</th>
-                            <th scope="col">Remaining</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($tour->repository->getCosting()->getInstallmentData() as $row)
-                            <tr>
-                                <td data-order="{{ $row->date->unix() }}">{{ f_date($row->date) }}</td>
-                                <td>{{ $row->count }}</td>
-                                <td>{{ f_currency($row->expected) }}</td>
-                                <td>{{ f_currency($row->received) }}</td>
-                                <td>{{ f_currency($row->expected - $row->received) }}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">Potential Revenue</h4>
-                    </div>
-                    {{ $tour->repository->getCosting()->getTourRevenueDonut() }}
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">Orders</h4>
-                    </div>
-                    <table class="table table-striped data-table">
-                        <thead>
-                        <tr>
-                            <th scope="col">Booking Reference</th>
-                            <th scope="col">Paying Travellers</th>
-                            <th scope="col">Expected</th>
-                            <th scope="col">Paid</th>
-                            <th scope="col">Remaining</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($tour->orders as $order)
-                            <tr>
-                                <td>{{ $order->booking_reference }}</td>
-                                <td>{{ $order->paying_customers }}</td>
-                                <td>{{ f_currency($order->cost) }}</td>
-                                <td>{{ f_currency($order->paid) }}</td>
-                                <td>{{ f_currency($order->remaining) }}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">Orders Over Time</h4>
-                    </div>
-                    {{ $tour->repository->getCosting()->getOrdersOverTime() ?? "No orders have been placed" }}
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection

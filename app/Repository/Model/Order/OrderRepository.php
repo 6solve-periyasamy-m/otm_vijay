@@ -491,6 +491,15 @@ class OrderRepository extends ModelRepository
         }
     }
 
+    public function getCostToCompany(): float
+    {
+        $cost = 0;
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            $cost += $orderCustomer->repository->getCostToCompany();
+        }
+        return $cost;
+    }
+
     public function getRoomingData(): array
     {
         $rooms = [];

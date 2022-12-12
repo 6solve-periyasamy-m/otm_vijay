@@ -64,6 +64,7 @@ return [
                     'paying' => 'Paying',
                     'travelling' => 'Non-paying',
                     'convert' => 'Convert',
+                    'costing' => 'Costs',
                     'send' => 'Send',
                     'preview' => 'Preview',
                 ],

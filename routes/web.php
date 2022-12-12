@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\AdditionalCostController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseInventoryController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseInventoryTourController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseSizeController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseTypeController;
 use App\Http\Controllers\Admin\Merchandise\VariantController;
+use App\Http\Controllers\Admin\OrganizationController;
 use App\Http\Controllers\Admin\Quote\QuoteComponentController;
 use App\Http\Controllers\Admin\Quote\QuoteController;
 use App\Http\Controllers\Admin\Quote\QuoteInstallmentController;
@@ -267,6 +269,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::post('/update', [QuoteController::class, 'update'])->name('update')->middleware('bouncer:Quote\Quote,update');
             Route::get('/unlink', [QuoteComponentController::class, 'unlink'])->name('unlink')->middleware('bouncer:Quote\Quote,update');
             Route::get('/preview', [QuoteController::class, 'preview'])->name('preview')->middleware('bouncer:Quote\Quote,read');
+            Route::get('/costing', [QuoteController::class, 'costing'])->name('costing')->middleware('bouncer:Quote\Quote,read');
             Route::post('/conversion', [QuoteController::class, 'conversion'])->name('conversion')->middleware('bouncer:Quote\Quote,update');
             Route::post('/convert', [QuoteController::class, 'convert'])->name('convert')->middleware('bouncer:Quote\Quote,update');
             Route::post('/send', [QuoteController::class, 'send'])->name('send')->middleware('bouncer:Quote\Quote,update');
@@ -704,6 +707,14 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         });
     });
 
+    Route::prefix('cost')->group(function () {
+        Route::post('/{model}/{id}/create/', [AdditionalCostController::class, 'store'])->name('additional-cost.store');
+        Route::prefix('{cost}')->group(function () {
+            Route::post('/update', [AdditionalCostController::class, 'update'])->name('additional-cost.update');
+            Route::post('/delete', [AdditionalCostController::class, 'destroy'])->name('additional-cost.delete');
+        });
+    });
+
     Route::prefix('locations')->group(function () {
         Route::prefix('addresses')->group(function () {
             Route::get('/', [AddressController::class, 'index'])->name('addresses.all')->middleware('bouncer:Location\Address,read');
@@ -797,6 +808,18 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                 Route::post('/update', [HatSizeController::class, 'update'])->name('hat-sizes.update')->middleware('bouncer:Customer\HatSize,update');
                 Route::post('/delete', [HatSizeController::class, 'destroy'])->name('hat-sizes.delete')->middleware('bouncer:Customer\HatSize,delete');
             });
+        });
+    });
+
+    Route::prefix('organizations')->group(function () {
+        Route::get('/', [OrganizationController::class, 'index'])->name('organizations.all')->middleware('bouncer:Customer\Customer,read');
+        Route::get('/create', [OrganizationController::class, 'create'])->name('organizations.create')->middleware('bouncer:Customer\Customer,create');
+        Route::post('/create', [OrganizationController::class, 'store'])->name('organizations.store')->middleware('bouncer:Customer\Customer,create');
+        Route::prefix('{organization}')->group(function () {
+            Route::get('/', [OrganizationController::class, 'view'])->name('organizations.view')->middleware('bouncer:Customer\Customer,read');
+            Route::get('/update', [OrganizationController::class, 'edit'])->name('organizations.edit')->middleware('bouncer:Customer\Customer,update');
+            Route::post('/update', [OrganizationController::class, 'update'])->name('organizations.update')->middleware('bouncer:Customer\Customer,update');
+            Route::post('/delete', [OrganizationController::class, 'destroy'])->name('organizations.delete')->middleware('bouncer:Customer\Customer,delete');
         });
     });
 
