@@ -60,7 +60,7 @@ class UserController extends Controller
         if (!$this->verifyUser($user, true)) abort(403);
         return view('pages.users.update', ['user' => $user,
             'roles' => PermissionTransforms::getRolesForDropdown(PermissionsRepository::getAvailableRoles()),
-            'current' => $user->getCurrentRole()->name,]);
+            'current' => $user->getCurrentRole()?->name,]);
     }
 
     private function verifyUser($user, $allowSelfEdit): bool
