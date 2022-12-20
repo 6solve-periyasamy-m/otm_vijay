@@ -269,7 +269,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::post('/update', [QuoteController::class, 'update'])->name('update')->middleware('bouncer:Quote\Quote,update');
             Route::get('/unlink', [QuoteComponentController::class, 'unlink'])->name('unlink')->middleware('bouncer:Quote\Quote,update');
             Route::get('/preview', [QuoteController::class, 'preview'])->name('preview')->middleware('bouncer:Quote\Quote,read');
-            Route::get('/costing', [QuoteController::class, 'costing'])->name('costing')->middleware('bouncer:Quote\Quote,read');
+            Route::get('/costing', [QuoteController::class, 'costing'])->name('costing')->middleware('bouncer:Quote\Quote,costing');
             Route::post('/conversion', [QuoteController::class, 'conversion'])->name('conversion')->middleware('bouncer:Quote\Quote,update');
             Route::post('/convert', [QuoteController::class, 'convert'])->name('convert')->middleware('bouncer:Quote\Quote,update');
             Route::post('/send', [QuoteController::class, 'send'])->name('send')->middleware('bouncer:Quote\Quote,update');
@@ -576,7 +576,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::post('/create', [\App\Http\Controllers\Models\TourController::class, 'store'])->name('tours.store')->middleware('bouncer:Tour\Tour,create');
         Route::prefix('{tour}')->group(function () {
             Route::get('/', [\App\Http\Controllers\Models\TourController::class, 'view'])->name('tours.view')->middleware('bouncer:Tour\Tour,read');
-            Route::get('/costing', [\App\Http\Controllers\Models\TourController::class, 'costing'])->name('tours.costing')->middleware('bouncer:Tour\Tour,read');
+            Route::get('/costing', [\App\Http\Controllers\Models\TourController::class, 'costing'])->name('tours.costing')->middleware('bouncer:Tour\Tour,costing');
             Route::get('/update', [\App\Http\Controllers\Models\TourController::class, 'edit'])->name('tours.edit')->middleware('bouncer:Tour\Tour,update');
             Route::post('/update', [\App\Http\Controllers\Models\TourController::class, 'update'])->name('tours.update')->middleware('bouncer:Tour\Tour,update');
             Route::get('/duplicate', [\App\Http\Controllers\Models\TourController::class, 'duplicate'])->name('tours.duplicate')->middleware('bouncer:Tour\Tour,create');

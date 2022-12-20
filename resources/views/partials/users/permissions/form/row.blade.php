@@ -13,6 +13,11 @@
         @include('partials.users.permissions.form.values', ['class' => $field, 'action' => 'delete', 'value' => $data['delete']])
     </td>
     <td>
+        @if(array_key_exists('costing', $data))
+            @include('partials.users.permissions.form.values', ['class' => $field, 'action' => 'costing', 'value' => $data['costing']])
+        @endif
+    </td>
+    <td>
         <div class="form-group">
             <input type="checkbox" name="{{ $class }}-all" class="{{ $group }} form-check-input" id="{{ $class }}-all"
                    @if((old($class.'-all') != null && old($class.'-all') == 'on')||(isset($value) && $value == true)) checked @endif

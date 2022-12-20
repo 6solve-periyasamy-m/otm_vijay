@@ -14,13 +14,14 @@
             <th scope="col">Create</th>
             <th scope="col">Edit</th>
             <th scope="col">Delete</th>
+            <th scope="col">Costing</th>
             <th scope="col">All</th>
         </tr>
         </thead>
         <tbody>
             @foreach($permissions as $group => $classes)
                 <tr>
-                    <td colspan="5"><h4 style="text-decoration: underline">{{ $group }}</h4></td>
+                    <td colspan="6"><h4 style="text-decoration: underline">{{ $group }}</h4></td>
                     <td>
                         <div class="form-group">
                             <input type="checkbox" name="{{ str_replace(' ', '', $group).'Group' }}-all"

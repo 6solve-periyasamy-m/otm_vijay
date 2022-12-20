@@ -104,10 +104,12 @@
                     <i class="icon-list"></i>
                     <span>View Rooming List</span>
                 </a>
+                @can('costing', \App\Models\Tour\Tour::class)
                 <a class="btn btn-warning" href="{{route('tours.costing', ['tour' => $tour,])}}">
                     <i class="icon-chart"></i>
                     <span>View Cost Information</span>
                 </a>
+                @endcan
             </div>
         </div>
     </div>
