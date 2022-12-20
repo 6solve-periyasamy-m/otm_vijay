@@ -751,7 +751,6 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function hasSections(): bool
     {
         foreach ($this->quote->sections as $section) {
-            \Log::info($section);
             if (!$section->hidden) return true;
         }
         return false;
@@ -773,5 +772,21 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $cost += $additional->amount;
         }
         return $cost;
+    }
+
+    public function forceDelete()
+    {
+        $this->quote->leadTraveller()->forceDelete();
+        $this->quote->accommodation()->forceDelete();
+        $this->quote->activities()->forceDelete();
+        $this->quote->flights()->forceDelete();
+        $this->quote->transport()->forceDelete();
+        $this->quote->merchandise()->forceDelete();
+        $this->quote->sentQuotes()->forceDelete();
+        $this->quote->sections()->forceDelete();
+        $this->quote->pricePoints()->forceDelete();
+        $this->quote->installments()->forceDelete();
+        $this->quote->costs()->forceDelete();
+        $this->quote->forceDelete();
     }
 }

@@ -193,11 +193,13 @@ class OrderCustomer extends Model
 
     public function getLeadBookerNameAttribute(): string
     {
+        if ($this->order->leadBooker->customer === null) return "Lead Booker Unknown";
         return "{$this->order->leadBooker->customer->first_name} {$this->order->leadBooker->customer->last_name}";
     }
 
     public function getCustomerNameAttribute(): string
     {
+        if ($this->customer === null) return "Customer Unknown";
         return "{$this->customer->first_name} {$this->customer->last_name}";
     }
 
