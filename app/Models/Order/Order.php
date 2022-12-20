@@ -172,7 +172,6 @@ class Order extends Model
 
     public function quote(): HasOne
     {
-
         return $this->hasOne(Quote::class, 'order_id');
     }
 

@@ -248,4 +248,17 @@ class OrderCustomerRepository extends ModelRepository
         }
         return $cost;
     }
+
+    public function forceDelete(): void
+    {
+        foreach ($this->orderCustomer->groups as $group) {
+            $group->repository->removeCustomerFromGroup($this->orderCustomer);
+        }
+        $this->orderCustomer->adjustments()->forceDelete();
+        $this->orderCustomer->orderActivities()->forceDelete();
+        $this->orderCustomer->orderFlights()->forceDelete();
+        $this->orderCustomer->orderTransports()->forceDelete();
+        $this->orderCustomer->orderMerchandise()->forceDelete();
+        $this->orderCustomer->forceDelete();
+    }
 }

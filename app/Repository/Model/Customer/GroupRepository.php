@@ -83,4 +83,11 @@ class GroupRepository
             $this->addRoomToGroup($room);
         }
     }
+
+    public function forceDelete(): void
+    {
+        $this->group->rooms()->forceDelete();
+        $this->group->pivot()->forceDelete();
+        $this->group->forceDelete();
+    }
 }
