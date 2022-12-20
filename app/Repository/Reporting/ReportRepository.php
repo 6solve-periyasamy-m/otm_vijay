@@ -3,6 +3,7 @@
 namespace App\Repository\Reporting;
 
 use App\Helpers\QuarterHelper;
+use App\Helpers\RevenueHelper;
 use App\Models\Booking\Booking;
 use App\Models\Location\Address;
 use App\Models\Order\Component\OrderActivity;
@@ -10,6 +11,7 @@ use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class ReportRepository
@@ -74,6 +76,12 @@ class ReportRepository
                 'details' => 'Information about all ordered rooms',
                 'view' => 'reports.rooming',
                 'export' => 'reports.rooming.export',
+            ],
+            [
+                'name' => 'Installment Revenue',
+                'details' => 'Information about days revenue',
+                'view' => 'reports.installment-revenue',
+                'export' => 'reports.installment-revenue.export',
             ],
         ];
     }
@@ -309,5 +317,19 @@ class ReportRepository
     public static function getOrdersDepartingAfterQuarterReport(int $year, int $quarter): Collection
     {
         return self::generateAtolReport(QuarterHelper::getOrdersFromToursAfterQuarter($year, $quarter));
+    }
+
+    public static function getInstallmentRevenueReport(): array
+    {
+        $data = [];
+        foreach (RevenueHelper::getAllExpectedRevenue() as $key => $item) {
+            $row = collect();
+            $row->date = Carbon::createFromTimestamp($key);
+            $row->amount = $item['count'];
+            $row->expected = $item['expected'];
+            $row->paid = $item['paid'];
+            $data[] = $row;
+        }
+        return $data;
     }
 }

@@ -888,6 +888,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::get('/merchandise/{extension}', [ReportController::class, 'exportOrderMerchandiseReport'])->name('reports.merchandise.export');
         Route::get('/rooming', [ReportController::class, 'getRoomingReport'])->name('reports.rooming');
         Route::get('/rooming/{extension}', [ReportController::class, 'exportRoomingReport'])->name('reports.rooming.export');
+        Route::get('/installment-revenue', [ReportController::class, 'getInstallmentRevenueReport'])->name('reports.installment-revenue');
+        Route::get('/installment-revenue/{extension}', [ReportController::class, 'exportInstallmentRevenueReport'])->name('reports.installment-revenue.export');
         Route::prefix('atol')->name('reports.atol.')->group(function () {
             Route::get('/ordered/{year}/{quarter}', [AtolController::class, 'getOrderedInQuarterReport'])->name('ordered');
             Route::get('/departed-in/{year}/{quarter}', [AtolController::class, 'getDepartingInQuarterReport'])->name('departed-in');
