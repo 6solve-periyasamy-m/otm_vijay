@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\AbandonedBookingsReportExport;
 use App\Exports\ActivitiesReportExport;
 use App\Exports\FlightManifestReportExport;
+use App\Exports\InstallmentRevenueReportExport;
 use App\Exports\OrderReminderReportExport;
 use App\Exports\OrderReportExport;
 use App\Exports\PaymentReportExport;
@@ -123,4 +124,17 @@ class ReportController extends Controller
     {
         return RoomingReportRepository::exportReport(new RoomingReportRepository(), $extension);
     }
+
+    public function getInstallmentRevenueReport() {
+        return view('pages.reports.view', ['tableView' => 'partials.reports.tables.installment-revenue',
+            'data' => ReportRepository::getInstallmentRevenueReport(),'title' => 'Installment Revenue',
+            'xlsxExport' => route('reports.installment-revenue.export', ['extension' => 'xlsx']),
+            'csvExport' => route('reports.installment-revenue.export', ['extension' => 'csv']),]);
+    }
+
+    public function exportInstallmentRevenueReport(string $extension = 'xlsx')
+    {
+        return Excel::download(new InstallmentRevenueReportExport(), 'installment-revenue.' . $extension);
+    }
+
 }

@@ -23,6 +23,7 @@ class PermissionsRepository
             'Tour\Tour' => [
                 'name' => 'Tour',
                 'group' => 'Tour and Components',
+                'costing' => true,
                 'order' => 0,
             ],
             'Tour\Event' => [
@@ -63,6 +64,7 @@ class PermissionsRepository
             'Quote\Quote' => [
                 'name' => 'Quote',
                 'group' => 'Tour and Components',
+                'costing' => true,
                 'order' => 8,
             ],
             // Accommodations
@@ -220,6 +222,9 @@ class PermissionsRepository
                 'update' => isset($role) && self::getPermissionStatus($role, 'update', $class),
                 'delete' => isset($role) && self::getPermissionStatus($role, 'delete', $class),
             ];
+            if (array_key_exists('costing', $values)) {
+                $permissions[$values['group']][$class]['costing'] = isset($role) && self::getPermissionStatus($role, 'costing', $class);
+            }
         }
         return $permissions;
     }

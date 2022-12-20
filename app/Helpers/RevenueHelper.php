@@ -42,4 +42,28 @@ class RevenueHelper
         return $query->get();
     }
 
+    public static function getAllExpectedRevenue(): array
+    {
+        $installments = OrderInstallment::with('order', 'order.payments')->get();
+        $data = [];
+        $counter = 0;
+        foreach ($installments as $installment) {
+            if ($installment->order->cancelled) continue;
+            if (array_key_exists($installment->due_on->unix(), $data)) {
+                $data[$installment->due_on->unix()] = [
+                    'count' => $data[$installment->due_on->unix()]['count'] + 1,
+                    'expected' => sigfig($data[$installment->due_on->unix()]['expected'] + $installment->calculated_amount),
+                    'paid' => sigfig($data[$installment->due_on->unix()]['paid'] + $installment->repository->getAmountPaid())
+                ];
+            } else {
+                $data[$installment->due_on->unix()] = [
+                    'count' => 1,
+                    'expected' => sigfig($installment->calculated_amount),
+                    'paid' => sigfig($installment->repository->getAmountPaid())
+                ];
+            }
+        }
+        return $data;
+    }
+
 }

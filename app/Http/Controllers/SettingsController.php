@@ -23,8 +23,6 @@ class SettingsController extends Controller
             'postcode' => 'required',
             'booking_prefix' => 'required',
             'quote_prefix' => 'required',
-            'atol_issuer' => 'required',
-            'atol_number' => 'required',
             'company_logo' => 'nullable|image',
             'atol_stamp' => 'nullable|image',
             'currency_id' => 'required|exists:currencies,id',

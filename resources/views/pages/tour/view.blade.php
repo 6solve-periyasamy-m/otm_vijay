@@ -104,10 +104,12 @@
                     <i class="icon-list"></i>
                     <span>View Rooming List</span>
                 </a>
+                @can('costing', \App\Models\Tour\Tour::class)
                 <a class="btn btn-warning" href="{{route('tours.costing', ['tour' => $tour,])}}">
                     <i class="icon-chart"></i>
                     <span>View Cost Information</span>
                 </a>
+                @endcan
             </div>
         </div>
     </div>
@@ -132,7 +134,7 @@
                 </li>
                 <li class="nav-item col-6 col-md-3">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities">
-                        <i class="icon-settings"></i> Activities
+                        <i class="icon-game-controller"></i> Activities
                     </button>
                 </li>
                 <li class="nav-item col-6 col-md-3">

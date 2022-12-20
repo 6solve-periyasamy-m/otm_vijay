@@ -5,7 +5,7 @@
            id="{{ $attributes->get('name') }}"
            name="{{ $attributes->get('name') }}"
            placeholder="placeholder"
-           value="{{ old( $attributes->get('name')) ?? $attributes->get('value', '') }}"
+           value="{!! old( $attributes->get('name')) ?? $attributes->get('value', '') !!}"
            {{ $attributes->has('autocomplete') ? "autocomplete=\"{$attributes->get('autocomplete')}\"" : '' }}
            {{ $attributes->has('required') ? 'required' :  ''}}
            @if($attributes->has('onchange')) onchange="{{ $attributes->get('onchange') }}" @endif>
