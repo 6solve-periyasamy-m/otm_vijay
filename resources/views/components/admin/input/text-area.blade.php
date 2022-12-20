@@ -7,6 +7,6 @@
               {{ $attributes->has('autocomplete') ? "autocomplete=\"{$attributes->get('autocomplete')}\"" : '' }}
               {{ $attributes->has('required') ? 'required' :  ''}}
               @if($attributes->has('onchange')) onchange="{{ $onChange }}" @endif
-    >{{ old( $attributes->get('name')) ?? $attributes->get('value', '') }}</textarea>
+    >{!! old( $attributes->get('name')) ?? $attributes->get('value', '') !!} </textarea>
     <label for="{{ $attributes->get('name') }}" style="padding-top: 10px;">{{ $slot }}</label>
 </div>

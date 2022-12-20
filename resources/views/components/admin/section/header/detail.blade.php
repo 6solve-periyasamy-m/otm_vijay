@@ -3,6 +3,6 @@
     @if ($attributes->has('raw'))
         {{ $slot }}
     @else
-        <h6 class="fw-bold">{{ $slot }}</h6>
+        <h6 class="fw-bold">{!! $slot !!}</h6>
     @endif
 </div>
