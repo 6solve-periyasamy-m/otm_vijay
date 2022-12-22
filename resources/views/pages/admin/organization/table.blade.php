@@ -44,7 +44,7 @@
                 @foreach($organizations as $organization)
                     <tr>
                         <td><a href="{{ route('organizations.view', ['organization' => $organization,]) }}">{{ $organization->name }}</a></td>
-                        <td>{{ $organization->name }}</td>
+                        <td>{{ $organization->contact_email }}</td>
                         <td>{{ $organization->customers_count }}</td>
                         <td>{{ $organization->orders_count }}</td>
                         <td>{{ $organization->quotes_count }}</td>
