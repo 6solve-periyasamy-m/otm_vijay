@@ -139,6 +139,7 @@ class DetailsRequest extends FormRequest
             'emergency_contact_name' => 'required',
             'emergency_contact_relationship' => 'required',
             'emergency_contact_telephone' => 'required',
+            'profile_picture' => 'nullable|image'
         ];
     }
 }
