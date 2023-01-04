@@ -566,6 +566,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::prefix('{type}')->group(function () {
                 Route::get('/update', [VariantController::class, 'edit'])->name('edit');
                 Route::post('/update', [VariantController::class, 'update'])->name('update');
+                Route::post('/delete', [VariantController::class, 'delete'])->name('delete');
             });
         });
     });
