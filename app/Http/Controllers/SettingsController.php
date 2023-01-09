@@ -8,7 +8,6 @@ use Settings;
 
 class SettingsController extends Controller
 {
-
     public static function getValidationRules() {
         return [
             'company_name' => 'required',
@@ -58,6 +57,7 @@ class SettingsController extends Controller
             'purchase.upgrade.success.redirect' => $request->input('upgrade_redirect'),
             'atol.issuer' => $request->input('atol_issuer'),
             'atol.number' => $request->input('atol_number'),
+            'atol.enabled' => $request->input('atol_enabled') == 'on' ? 1 : 0,
             'billing.stripe.key' => $request->input('stripe_key'),
             'system.format.date' => $request->input('date_format'),
             'system.format.time' => $request->input('time_format'),
