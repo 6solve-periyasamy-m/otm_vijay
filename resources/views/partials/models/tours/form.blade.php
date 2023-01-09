@@ -39,10 +39,10 @@
             ['name' => 'End Date', 'field' => 'date_to', 'value' => $date_to ?? null,
              'onChange' => 'removeAutoset($(\'#date_from-input\'), $(\'#date_to-input\'));', 'classes' => 'autoset', 'width' => 4,])
 <hr class="splitter"/>
-@include('partials.fields.text', ['name' => 'Base Price Per Person', 'field' => 'base_price_per_person', 'value' => $base_price_per_person ?? null, 'width' => 3,])
-@include('partials.fields.text', ['name' => 'Margin', 'field' => 'margin', 'value' => $margin ?? null, 'width' => 3,])
-@include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'value' => $deposit ?? null, 'width' => 3,])
-@include('partials.fields.text', ['name' => 'Single Occupancy Surcharge', 'field' => 'single_occupancy_surcharge', 'value' => $single_occupancy_surcharge ?? null, 'width' => 3,])
+@include('partials.fields.text', ['name' => 'Base Price Per Person', 'field' => 'base_price_per_person', 'value' => $base_price_per_person ?? null, 'width' => 6,])
+@include('partials.fields.text', ['name' => 'Margin', 'field' => 'margin', 'value' => $margin ?? null, 'width' => 6,])
+@include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'value' => $deposit ?? null, 'width' => 6,])
+@include('partials.fields.text', ['name' => 'Single Occupancy Surcharge', 'field' => 'single_occupancy_surcharge', 'value' => $single_occupancy_surcharge ?? null, 'width' => 6,])
 <hr class="splitter"/>
 @include('partials.fields.checkbox', ['name' => 'Stock Control Active', 'field' => 'stock_control_active', 'value' => $stock_control_active ?? null,])
 @include('partials.fields.text', ['name' => 'Stock', 'field' => 'stock', 'value' => $stock ?? null,])
