@@ -9,11 +9,14 @@ use App\Events\Order\OrderEditedEvent;
 use App\Events\Order\OrderRestoredEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Order\MigrateRequest;
+use App\Models\Customer\Customer;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
+use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Reporting\ReportRepository;
 use App\Repository\RoomingRepository;
+use App\Repository\Storage\ConvertedCustomer;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -41,42 +44,21 @@ class OrderController extends Controller
         /** @var Tour $tour */
         $tour = Tour::with(['accommodationInventoryTours', 'activityInventoryTours', 'flightInventoryTours', 'transportInventoryTours',])->where('id', '=', $request->input('tour_id'))->first();
         if ($tour == null) abort(404);
-        $order = Order::create([
-            'tour_id' => $request->input('tour_id'),
+        $data = [
             'ordered_on' => $request->input('ordered_on'),
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
             'deposit' => $tour->deposit,
             'invoice_footer' => $tour->invoice_footer,
-        ]);
-        $orderCustomer = OrderCustomer::make([
-            'customer_id' => $request->input('lead_booker_id'),
-            'tour_cost' => $order->tour->base_price_per_person,
-            'single_occupancy_surcharge' => $order->tour->single_occupancy_surcharge,
-        ]);
-        $order->orderCustomers()->save($orderCustomer);
-        $order->lead_booker_id = $orderCustomer->id;
-        $order->booking_reference = Order::generateBookingReference($order);
-        $order->save();
-        $defaultRooms = RoomingRepository::getDefaultRoomList($tour);
-        $included = $tour->repository->getComponentSetForSaving();
-        $orderCustomer->repository->bulkSaveStandard($included->clone());
-        RoomingRepository::createGroupFromRoomList($orderCustomer, $defaultRooms);
-        $order->repository->resetInstallments();
-        event(new OrderCreatedEvent($order));
-        event(new OrderCustomerCreatedEvent($orderCustomer, false));
+        ];
+        $lead = new ConvertedCustomer(Customer::find($request->input('lead_booker_id')));
+        $travellers = [];
         if (isset($request->customers)) {
             foreach ($request->customers as $customerId) {
-                $orderCustomer = OrderCustomer::make([
-                    'customer_id' => $customerId,
-                    'tour_cost' => $order->tour->base_price_per_person,
-                    'single_occupancy_surcharge' => $order->tour->single_occupancy_surcharge,
-                ]);
-                $order->orderCustomers()->save($orderCustomer);
-                $orderCustomer->repository->bulkSaveStandard($included->clone());
-                RoomingRepository::createGroupFromRoomList($orderCustomer, $defaultRooms);
+                $travellers[] = new ConvertedCustomer(Customer::find($customerId));
             }
         }
+        $order = OrderRepository::create($tour, $data, $lead, $travellers);
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
