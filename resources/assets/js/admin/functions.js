@@ -27,10 +27,12 @@ function flipButton(btn, state) {
     if (state) {
         console.log('On');
         btn.removeClass('btn-danger');
+        btn.removeClass('cross-out');
         btn.addClass('btn-success');
     } else {
         console.log('Off');
         btn.removeClass('btn-success');
         btn.addClass('btn-danger');
+        btn.addClass('cross-out');
     }
 }
