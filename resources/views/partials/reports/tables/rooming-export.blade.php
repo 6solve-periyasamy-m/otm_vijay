@@ -42,19 +42,32 @@
                 @endfor
 
                 @for($x = 0; $x < $data->largest; $x++)
-                    @php $traveller = $row->travellers->get($x); @endphp
+                    @php
+                        /** @var \App\Models\Order\OrderCustomer $traveller */
+                        $traveller = $row->travellers->get($x);
+                    @endphp
                     @isset($traveller)
                         <td>
-                            Customer Accommodation Notes: <br />
-                            {{ $traveller->accommodation_notes ?? '' }} <br /><br />
-                            Customer Internal Notes: <br />
-                            {{ $traveller->customer?->internal_notes ?? '' }} <br /><br />
-                            Customer External Notes: <br />
-                            {{ $traveller->customer?->external_notes ?? '' }} <br /><br />
-                            Order Customer Internal Notes: <br />
-                            {{ $traveller->internal_notes ?? '' }} <br /><br />
-                            Order Customer External Notes: <br />
-                            {{ $traveller->external_notes ?? '' }} <br /><br />
+                            @if(!empty($traveller->accommodation_notes))
+                            Customer Accommodation Notes: <br /><br />
+                            {{ $traveller->accommodation_notes }} <br /><br />
+                            @endif
+                            @if(!empty($traveller->customer?->internal_notes))
+                            Internal Customer Notes: <br /><br />
+                            {{ $traveller->customer?->internal_notes }} <br /><br />
+                            @endif
+                            @if(!empty($traveller->customer?->external_notes))
+                            External Customer Notes: <br /><br />
+                            {{ $traveller->customer?->external_notes }} <br /><br />
+                            @endif
+                            @if(!empty($traveller->internal_notes))
+                            Internal Order Customer Notes: <br /><br />
+                            {{ $traveller->internal_notes }} <br /><br />
+                            @endif
+                            @if(!empty($traveller->external_notes))
+                            External Order Customer Notes: <br /><br />
+                            {{ $traveller->external_notes }} <br /><br />
+                            @endif
                         </td>
                     @else
                         <td></td>
