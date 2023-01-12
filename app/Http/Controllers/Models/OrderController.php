@@ -38,7 +38,8 @@ class OrderController extends Controller
     {
         $request->validate(Order::getValidationRules());
         $request->validate(['tour_id' => 'required|integer|exists:tours,id',]);
-        $tour = Tour::findOrFail($request->input('tour_id'));
+        $tour = Tour::with(['accommodationInventoryTours', 'activityInventoryTours', 'flightInventoryTours', 'transportInventoryTours',])->where('id', '=', $request->input('tour_id'))->first();
+        if ($tour == null) abort(404);
         $order = Order::create([
             'tour_id' => $request->input('tour_id'),
             'ordered_on' => $request->input('ordered_on'),
@@ -63,6 +64,7 @@ class OrderController extends Controller
         event(new OrderCustomerCreatedEvent($orderCustomer, false));
         if (isset($request->customers)) {
             foreach ($request->customers as $customerId) {
+                \Log::info('Start: ' . now()->unix());
                 $orderCustomer = OrderCustomer::make([
                     'customer_id' => $customerId,
                     'tour_cost' => $order->tour->base_price_per_person,
