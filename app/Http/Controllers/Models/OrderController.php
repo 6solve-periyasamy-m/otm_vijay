@@ -38,6 +38,7 @@ class OrderController extends Controller
     {
         $request->validate(Order::getValidationRules());
         $request->validate(['tour_id' => 'required|integer|exists:tours,id',]);
+        /** @var Tour $tour */
         $tour = Tour::with(['accommodationInventoryTours', 'activityInventoryTours', 'flightInventoryTours', 'transportInventoryTours',])->where('id', '=', $request->input('tour_id'))->first();
         if ($tour == null) abort(404);
         $order = Order::create([
@@ -57,22 +58,23 @@ class OrderController extends Controller
         $order->lead_booker_id = $orderCustomer->id;
         $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
-        $orderCustomer->repository->addAllIncluded();
-        RoomingRepository::assignDefaultRooming($orderCustomer);
+        $defaultRooms = RoomingRepository::getDefaultRoomList($tour);
+        $included = $tour->repository->getComponentSetForSaving();
+        $orderCustomer->repository->bulkSaveStandard($included->clone());
+        RoomingRepository::createGroupFromRoomList($orderCustomer, $defaultRooms);
         $order->repository->resetInstallments();
         event(new OrderCreatedEvent($order));
         event(new OrderCustomerCreatedEvent($orderCustomer, false));
         if (isset($request->customers)) {
             foreach ($request->customers as $customerId) {
-                \Log::info('Start: ' . now()->unix());
                 $orderCustomer = OrderCustomer::make([
                     'customer_id' => $customerId,
                     'tour_cost' => $order->tour->base_price_per_person,
                     'single_occupancy_surcharge' => $order->tour->single_occupancy_surcharge,
                 ]);
                 $order->orderCustomers()->save($orderCustomer);
-                $orderCustomer->repository->addAllIncluded();
-                RoomingRepository::assignDefaultRooming($orderCustomer);
+                $orderCustomer->repository->bulkSaveStandard($included->clone());
+                RoomingRepository::createGroupFromRoomList($orderCustomer, $defaultRooms);
             }
         }
         return redirect()->route('orders.view', ['order' => $order,]);

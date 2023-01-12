@@ -10,6 +10,7 @@ use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
+use App\Repository\Model\Customer\GroupRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Log;
@@ -308,5 +309,44 @@ class RoomingRepository
     public static function getHydratedRoomTypesForInventory(AccommodationInventoryTour $inventoryTour): array
     {
         return RoomingRepository::hydrateRoomTypes(RoomingRepository::getRoomTypesForInventory($inventoryTour));
+    }
+
+    /**
+     * Returns a list of rooms to be given by default to a traveller
+     * @return AccommodationInventoryTour[]
+     */
+    public static function getDefaultRoomList(Tour $tour): array
+    {
+        $singleRoom = null;
+        foreach (RoomingRepository::getAvailableRoomTypes($tour) as $roomType) {
+            if ($singleRoom != null && $singleRoom->maximum_occupancy <= $roomType->maximum_occupancy) continue;
+            $singleRoom = $roomType;
+            if ($singleRoom->maximum_occupancy == 1) break;
+        }
+        if (!isset($singleRoom)) return [];
+        $rooms = [];
+        foreach ($tour->templates as $template) {
+            $rooms[] = self::getInventoryWithRoomType($template, $singleRoom);
+        }
+        return $rooms;
+    }
+
+    /**
+     * @param OrderCustomer $orderCustomer
+     * @param AccommodationInventoryTour[] $rooms
+     * @return void
+     */
+    public static function createGroupFromRoomList(OrderCustomer $orderCustomer, array $rooms): void
+    {
+        if (!empty($rooms)) {
+            $group = Group::create([
+                'room_type_id' => $rooms[0]->inventory->room_type_id,
+                'name' => $orderCustomer->customer_name,
+            ]);
+            $group->repository->addCustomerToGroup($orderCustomer);
+            foreach ($rooms as $room) {
+                $group->repository->addRoomToGroup($room);
+            }
+        }
     }
 }
