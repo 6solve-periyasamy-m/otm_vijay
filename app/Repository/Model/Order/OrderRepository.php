@@ -4,6 +4,8 @@ namespace App\Repository\Model\Order;
 
 use App\Models\Customer\Customer;
 use App\Models\Helper\OrderStatus;
+use App\Models\Location\Address;
+use App\Models\Location\AddressParent;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
@@ -543,5 +545,21 @@ class OrderRepository extends ModelRepository
         $this->order->payments()->forceDelete();
         $this->order->installments()->forceDelete();
         $this->order->reminders()->forceDelete();
+    }
+
+    public static function generateGenericCustomer(string $first, string $last): Customer
+    {
+        $homeAddress = Address::create([
+            'name' => 'Generic Customer Address',
+            'address_parent_id' => AddressParent::getParentId('customer'),
+        ]);
+        $billingAddress = $homeAddress->repository->cloneToNew(AddressParent::getParentId('customer'));
+        return Customer::create([
+            'first_name' => $first,
+            'last_name' => $last,
+            'home_address_id' => $homeAddress->id,
+            'billing_address_id' => $billingAddress->id,
+            'date_of_birth' => now(),
+        ]);
     }
 }

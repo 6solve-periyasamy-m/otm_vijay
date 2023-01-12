@@ -8,6 +8,7 @@ use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderEditedEvent;
 use App\Events\Order\OrderRestoredEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Order\CreateOrderRequest;
 use App\Http\Requests\Admin\Order\MigrateRequest;
 use App\Models\Customer\Customer;
 use App\Models\Order\Order;
@@ -37,28 +38,9 @@ class OrderController extends Controller
         return view('pages.models.orders.create');
     }
 
-    public function store(Request $request)
+    public function store(CreateOrderRequest $request)
     {
-        $request->validate(Order::getValidationRules());
-        $request->validate(['tour_id' => 'required|integer|exists:tours,id',]);
-        /** @var Tour $tour */
-        $tour = Tour::with(['accommodationInventoryTours', 'activityInventoryTours', 'flightInventoryTours', 'transportInventoryTours',])->where('id', '=', $request->input('tour_id'))->first();
-        if ($tour == null) abort(404);
-        $data = [
-            'ordered_on' => $request->input('ordered_on'),
-            'internal_notes' => $request->input('internal_notes'),
-            'external_notes' => $request->input('external_notes'),
-            'deposit' => $tour->deposit,
-            'invoice_footer' => $tour->invoice_footer,
-        ];
-        $lead = new ConvertedCustomer(Customer::find($request->input('lead_booker_id')));
-        $travellers = [];
-        if (isset($request->customers)) {
-            foreach ($request->customers as $customerId) {
-                $travellers[] = new ConvertedCustomer(Customer::find($customerId));
-            }
-        }
-        $order = OrderRepository::create($tour, $data, $lead, $travellers);
+        $order = OrderRepository::create($request->getTour(), $request->getData(), $request->getLeadBooker(), $request->getCustomers());
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 

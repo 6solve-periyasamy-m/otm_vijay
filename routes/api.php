@@ -349,6 +349,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
     });
 
     Route::prefix('orders')->name('order.')->group(function() {
+        Route::post('/unknown/{order?}', [OrderController::class, 'generateUnknown'])->name('unknown-traveller');
         Route::prefix('addons')->name('addon.')->group(function () {
             Route::prefix('available')->name('get.')->group(function () {
                 Route::get('/accommodation/{oCustomerId}', [TourComponentController::class, 'getAvailableAccommodationAddons'])->name('accommodation');
