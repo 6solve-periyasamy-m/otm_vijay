@@ -89,7 +89,7 @@ class BookingRepository extends ModelRepository
 
     public function getTotalCost(): float
     {
-        $cost = 0;
+        $cost = $this->booking->tour->booking_fee ?? 0;
         foreach ($this->booking->travellers as $traveller) {
             $cost += $traveller->total_cost;
         }
@@ -98,7 +98,7 @@ class BookingRepository extends ModelRepository
 
     public function getDueTodayAmount(): float
     {
-        return $this->booking->tour->deposit * $this->booking->travellers()->count();
+        return ($this->booking->tour->booking_fee ?? 0) + ($this->booking->tour->deposit * $this->booking->travellers()->count());
     }
 
     public function getSingleOccupancyCount(): int
@@ -175,6 +175,7 @@ class BookingRepository extends ModelRepository
             'deposit' => $tour->deposit,
             'invoice_footer' => $tour->invoice_footer,
             'ordered_on' => $orderedOn ?? now(),
+            'booking_fee' => $tour->booking_fee,
         ]);
         foreach ($this->booking->travellers as $traveller) {
             $orderCustomer = $traveller->repository->convertToOrderCustomer($order);

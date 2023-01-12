@@ -283,7 +283,7 @@ class OrderRepository extends ModelRepository
             $adjustments = $this->order->total_adjustments;
             $total = $cost + $adjustments;
             if ($this->order->trashed() || $this->order->cancelled) {
-                if ($paidAmount == 0) {
+                if ($paidAmount == ($this->order->booking_fee ?? 0)) {
                     $status = OrderStatus::CANCELLED_FULL_REFUND;
                 } else if ($paidAmount <= $this->order->calculated_deposit) {
                     $status = OrderStatus::CANCELLED_DEPOSIT_HELD;

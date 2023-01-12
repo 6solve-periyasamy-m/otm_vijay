@@ -37,6 +37,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int|null $lead_booker_id
  * @property string|null $booking_reference Unique reference for the booking
  * @property float|null $deposit The expected deposit amount
+ * @property float|null $booking_fee The fee paid at time of booking
  * @property Carbon $ordered_on When the order was placed
  * @property bool $cancelled Is the order cancelled?
  * @property string|null $internal_notes The notes shown only to the operator
