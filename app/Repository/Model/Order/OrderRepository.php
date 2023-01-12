@@ -14,6 +14,7 @@ use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Mailing\MailRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
+use App\Repository\Storage\OrderComponentStorage;
 use Cache;
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
@@ -66,13 +67,15 @@ class OrderRepository extends ModelRepository
         $leadBooker = $order->repository->addCustomer($lead);
         $order->repository->update(['lead_booker_id' => $leadBooker->id,]);
         $order->repository->update(['booking_reference' => Order::generateBookingReference($order),]); // Merging will lead to lead booker id not being set at generation
-        $leadBooker->repository->addAllIncluded();
-        RoomingRepository::assignDefaultRooming($leadBooker);
+        $included = $tour->repository->getComponentSetForSaving();
+        $defaultRooms = RoomingRepository::getDefaultRoomList($tour);
+        $leadBooker->repository->bulkSaveStandard($included->clone());
+        RoomingRepository::createGroupFromRoomList($leadBooker, $defaultRooms);
         $order->repository->resetInstallments();
         foreach ($customers as $customer) {
             $orderCustomer = $order->repository->addCustomer($customer);
-            $orderCustomer->repository->addAllIncluded();
-            RoomingRepository::assignDefaultRooming($orderCustomer);
+            $orderCustomer->repository->bulkSaveStandard($included->clone());
+            RoomingRepository::createGroupFromRoomList($orderCustomer, $defaultRooms);
         }
         //event(new OrderCreatedEvent($order));
         return $order;
