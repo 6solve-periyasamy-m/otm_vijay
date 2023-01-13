@@ -961,5 +961,3 @@ Route::prefix('/booking/{bookingUrl}')->group(function () {
     Route::get('/{token}/addon/purchase/{id}/{type}', [CustomerBookingController::class, 'purchaseAddon'])->name('customer-booking.purchase-addon');
     Route::get('/{token}/addon/remove/{id}/{type}', [CustomerBookingController::class, 'removeAddon'])->name('customer-booking.remove-addon');
 });
-
-Route::get('ckbox', function () { return view('pages.checkbox'); });
