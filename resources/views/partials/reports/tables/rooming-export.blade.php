@@ -52,6 +52,14 @@
                             Customer Accommodation Notes: <br /><br />
                             {{ $traveller->accommodation_notes }} <br /><br />
                             @endif
+                            @if(!empty($traveller->order->internal_notes))
+                            Order Internal Notes: <br />
+                            {{ $traveller->order->internal_notes ?? '' }} <br /><br />
+                            @endif
+                            @if(!empty($traveller->order->external_notes))
+                            Order External Notes: <br />
+                            {{ $traveller->order->external_notes ?? '' }} <br /><br />
+                            @endif
                             @if(!empty($traveller->customer?->internal_notes))
                             Internal Customer Notes: <br /><br />
                             {{ $traveller->customer?->internal_notes }} <br /><br />
