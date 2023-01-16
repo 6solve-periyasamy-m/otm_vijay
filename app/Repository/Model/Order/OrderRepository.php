@@ -108,7 +108,7 @@ class OrderRepository extends ModelRepository
     public function getInstallments(): Collection|array
     {
         $customers = $this->order->orderCustomers()->count();
-        $paid = $this->order->paid - ($this->order->deposit * $customers);
+        $paid = $this->order->paid - (($this->order->deposit ?? 0) * $customers) - ($this->order->booking_fee ?? 0);
         DB::statement("SET @total:={$paid};");
         $installments = OrderInstallment::where('order_id', '=', $this->order->id)
             ->orderBy('due_on')
@@ -162,7 +162,7 @@ class OrderRepository extends ModelRepository
      */
     public function getCost(): float
     {
-        $total = 0;
+        $total = $this->order->booking_fee ?? 0;
         foreach ($this->order->orderCustomers()->where('is_charged', '=', 1)->get() as $orderCustomer) {
             $total += $orderCustomer->tour_cost;
             if ($orderCustomer->has_surcharge) $total += $orderCustomer->single_occupancy_surcharge;

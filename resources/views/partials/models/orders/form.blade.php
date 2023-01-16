@@ -1,4 +1,5 @@
-@if(!isset($update))
+@php /** @var \App\Models\Order\Order $order */ $order = $order ?? null; @endphp
+@if($order === null)
     @push('header-stack')
         <script type="text/javascript">
             var customerCount = 0;
@@ -26,14 +27,14 @@
         </script>
     @endpush
 @endif
-@if(!isset($update))
+@if($order === null)
     @can('create', \App\Models\Tour\Tour::class)
         @include('partials.fields.selector.adder',
-                    ['name' => 'Tour', 'field' => 'tour_id', 'value' => $tour_id ?? 0,
+                    ['name' => 'Tour', 'field' => 'tour_id', 'value' => 0,
                      'route' => 'tours', 'createRoute' => route('tours.create'), 'width' => 6])
     @else
         @include('partials.fields.selector.default',
-                  ['name' => 'Tour', 'field' => 'tour_id', 'value' => $tour_id ?? 0,
+                  ['name' => 'Tour', 'field' => 'tour_id', 'value' => 0,
                    'route' => 'tours', 'width' => 6])
     @endcan
     @can('create', \App\Models\Customer\Customer::class)
@@ -46,14 +47,15 @@
                  'route' => 'customers', 'width' => 6])
     @endcan
 @endif
-@include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'value' => $deposit ?? null, 'width' => 6 ])
-@include('partials.fields.datetime', ['name' => 'Ordered On', 'field' => 'ordered_on', 'value' => $ordered_on ?? null, 'width' => 6 ])
-@include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'value' => $internal_notes ?? null, 'width' => 6 ])
-@include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'value' => $external_notes ?? null, 'width' => 6 ])
-@if(isset($update))
+@include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'value' => $order?->deposit, 'width' => 4 ])
+@include('partials.fields.text', ['name' => 'Booking Fee', 'field' => 'booking_fee', 'value' => $order?->booking_fee, 'width' => 4 ])
+@include('partials.fields.datetime', ['name' => 'Ordered On', 'field' => 'ordered_on', 'value' => $order?->ordered_on, 'width' => 4 ])
+@include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'value' => $order?->internal_notes, 'width' => 6 ])
+@include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'value' => $order?->external_notes, 'width' => 6 ])
+@if($order !== null)
     @include('partials.fields.ckeditor', ['name' => 'Invoice Footer', 'field' => 'invoice_footer', 'value' => $order->invoice_footer, ])
 @endif
-@if(!isset($update))
+@if($order === null)
 <hr class="splitter">
 <div class="customers-section row form-group">
     <div class="col-12 col-xl-10">
