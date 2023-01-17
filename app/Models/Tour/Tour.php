@@ -53,6 +53,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $tour_category_id
  * @property int|null $tour_merchandise_id
  * @property bool $is_active
+ * @property bool|null $atol_protected NULL if should inherit from system settings (default)
  * @property Carbon $date_from
  * @property Carbon $date_to
  * @property string|null $invoice_footer
@@ -77,6 +78,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $flight_inventory_tours_count
  * @property-read float $deposit_percentage
  * @property-read bool $has_atol_certificate
+ * @property-read bool $protected
  * @property-read float $remaining_installment
  * @property-read float $remaining_percentage
  * @property-read TourRepository $repository
@@ -131,7 +133,7 @@ class Tour extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes, HasAdditionalCosts;
 
-    protected $fillable = ['event_id', 'name', 'description', 'date_from', 'date_to', 'base_price_per_person', 'margin', 'single_occupancy_surcharge', 'stock_control_active', 'stock', 'deposit', 'booking_form_url', 'tour_category_id', 'is_active', 'notes', 'invoice_footer', 'final_payment', 'terms', 'booking_fee'];
+    protected $fillable = ['event_id', 'name', 'description', 'date_from', 'date_to', 'base_price_per_person', 'margin', 'single_occupancy_surcharge', 'stock_control_active', 'stock', 'deposit', 'booking_form_url', 'tour_category_id', 'is_active', 'notes', 'invoice_footer', 'final_payment', 'terms', 'atol_protected', 'booking_fee'];
     protected $casts = ['date_from' => 'date', 'date_to' => 'date', 'final_payment' => 'date', 'is_active' => 'boolean',
         'base_price_per_person' => 'double', 'deposit' => 'double', 'margin' => 'double', 'stock_control_active' => 'boolean'];
     protected array $cascadeDeletes = ['accommodationInventoryTours', 'activityInventoryTours', 'flightInventoryTours', 'transportInventoryTours', 'merchandise', 'paymentInstallments', 'costs'];
@@ -262,6 +264,11 @@ class Tour extends Model
     public function getAccommodationTemplateData(): array
     {
         return $this->repository->getTemplateData();
+    }
+
+    public function getProtectedAttribute(): bool
+    {
+        return $this->atol_protected ?? flag('atol.enabled', true);
     }
 
     public function getTemplatesAttribute(): \Illuminate\Support\Collection

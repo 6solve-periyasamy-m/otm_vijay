@@ -1,22 +1,34 @@
+@php /** @var \App\Models\Tour\Tour $tour */ $tour = $tour ?? null @endphp
 @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $name ?? null,])
 @include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $description ?? null,])
 @can('create', \App\Models\Tour\Event::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Event', 'field' => 'event_id', 'value' => $event_id ?? 0,
-             'route' => 'events', 'createRoute' => route('events.create'), 'width' => 6,])
+             'route' => 'events', 'createRoute' => route('events.create'), 'width' => 4,])
 @else
 @include('partials.fields.selector.default',
             ['name' => 'Event', 'field' => 'event_id', 'value' => $event_id ?? 0,
-             'route' => 'events', 'width' => 6,])
+             'route' => 'events', 'width' => 4,])
 @endcan
+@include('partials.fields.dropdown', [
+             'name' => 'ATOL Protected',
+             'field' => 'atol_protected',
+             'width' => 4,
+             'selected' => $tour?->atol_protected ?? -1,
+             'values' => [
+                 -1 => "Match System (Currently: " . (flag('atol.enabled', true) ? 'Enabled' : 'Disabled') . ")",
+                 0 => "Disabled",
+                 1 => "Enabled",
+             ]
+         ])
 @can('create', \App\Models\Tour\TourCategory::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Tour Category', 'field' => 'tour_category_id', 'value' => $tour_category_id ?? null,
-             'route' => 'tour-categories', 'createRoute' => route('tour-categories.create'), 'width' => 6,])
+             'route' => 'tour-categories', 'createRoute' => route('tour-categories.create'), 'width' => 4,])
 @else
 @include('partials.fields.selector.default',
         ['name' => 'Tour Category', 'field' => 'tour_category_id', 'value' => $tour_category_id ?? null,
-         'route' => 'tour-categories', 'width' => 6,])
+         'route' => 'tour-categories', 'width' => 4,])
 @endcan
 <hr class="splitter"/>
 @include('partials.fields.date',

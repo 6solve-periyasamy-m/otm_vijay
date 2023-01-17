@@ -8,12 +8,16 @@ use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderEditedEvent;
 use App\Events\Order\OrderRestoredEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Order\CreateOrderRequest;
 use App\Http\Requests\Admin\Order\MigrateRequest;
+use App\Models\Customer\Customer;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
+use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Reporting\ReportRepository;
 use App\Repository\RoomingRepository;
+use App\Repository\Storage\ConvertedCustomer;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -34,45 +38,9 @@ class OrderController extends Controller
         return view('pages.models.orders.create');
     }
 
-    public function store(Request $request)
+    public function store(CreateOrderRequest $request)
     {
-        $request->validate(Order::getValidationRules());
-        $request->validate(['tour_id' => 'required|integer|exists:tours,id',]);
-        $tour = Tour::findOrFail($request->input('tour_id'));
-        $order = Order::create([
-            'tour_id' => $request->input('tour_id'),
-            'ordered_on' => $request->input('ordered_on'),
-            'internal_notes' => $request->input('internal_notes'),
-            'external_notes' => $request->input('external_notes'),
-            'deposit' => $tour->deposit,
-            'invoice_footer' => $tour->invoice_footer,
-        ]);
-        $orderCustomer = OrderCustomer::make([
-            'customer_id' => $request->input('lead_booker_id'),
-            'tour_cost' => $order->tour->base_price_per_person,
-            'single_occupancy_surcharge' => $order->tour->single_occupancy_surcharge,
-        ]);
-        $order->orderCustomers()->save($orderCustomer);
-        $order->lead_booker_id = $orderCustomer->id;
-        $order->booking_reference = Order::generateBookingReference($order);
-        $order->save();
-        $orderCustomer->repository->addAllIncluded();
-        RoomingRepository::assignDefaultRooming($orderCustomer);
-        $order->repository->resetInstallments();
-        event(new OrderCreatedEvent($order));
-        event(new OrderCustomerCreatedEvent($orderCustomer, false));
-        if (isset($request->customers)) {
-            foreach ($request->customers as $customerId) {
-                $orderCustomer = OrderCustomer::make([
-                    'customer_id' => $customerId,
-                    'tour_cost' => $order->tour->base_price_per_person,
-                    'single_occupancy_surcharge' => $order->tour->single_occupancy_surcharge,
-                ]);
-                $order->orderCustomers()->save($orderCustomer);
-                $orderCustomer->repository->addAllIncluded();
-                RoomingRepository::assignDefaultRooming($orderCustomer);
-            }
-        }
+        $order = OrderRepository::create($request->getTour(), $request->getData(), $request->getLeadBooker(), $request->getCustomers());
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
@@ -107,7 +75,7 @@ class OrderController extends Controller
 
     public function occupancy(Order $order)
     {
-        return view('pages.occupancy.manager', array_merge(RoomingRepository::exportRoomingData($order), ['order' => $order,]));
+        return view('pages.occupancy.manager', ['order' => $order,]);
     }
 
     public function edit(Order $order)

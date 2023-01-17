@@ -3,6 +3,7 @@
 namespace App\Models\Tour;
 
 use App\Models\Helper\SimpleModel;
+use App\Models\Traits\HasRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -37,7 +38,7 @@ use Illuminate\Support\Carbon;
  */
 class TourCategory extends SimpleModel
 {
-    use HasFactory, SoftDeletes;
+    use HasRepository, SoftDeletes;
 
     protected $fillable = ['name',];
 

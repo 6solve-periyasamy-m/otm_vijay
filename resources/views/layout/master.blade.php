@@ -17,6 +17,7 @@
         <!-- App (including Lodash, jQuery, Bootstrap via NPM) -->
         <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
         <script src="{{ asset('js/app.js') . '?' . date('U')  }}"></script>
+        <script src="{{ asset('js/admin/functions.js')  }}"></script>
         <!-- TODO: Remove IonIcons -->
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>

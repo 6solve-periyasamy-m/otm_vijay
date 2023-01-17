@@ -12,6 +12,11 @@
 @section('content')
     <div class="card">
         <div class="card-body col-12">
+            <div class="date-switcher">
+                <button class="btn border-dark bg-white" onclick="changeDay(-1)">&lt;</button>
+                <button class="btn border-dark bg-white active-date">Waiting for Data</button>
+                <button class="btn border-dark bg-white" onclick="changeDay(1)">&gt;</button>
+            </div>
             <div class="customers section-box drop-shadow col-12 droppable"></div>
             <div class="col-12" style="margin: 10px;">
                 <select class="room-types"></select>
@@ -32,7 +37,7 @@
 </script>
 
 <script type="text/template" data-template="room-option">
-    <option value="${id}">${name} - Size: ${size}</option>
+    <option value="${id}">${name} - ${price}</option>
 </script>
 
 <script type="text/template" data-template="customer">
@@ -51,7 +56,7 @@
 <script type="text/template" data-template="room">
     <div class="room drop-shadow" roomid="${id}">
         <div class="details">
-            <span class="fw-bold">${name}</span>
+            <span class="fw-bold">${name} - ${price}</span>
         </div>
         <div class="beds">
             ${beds}
@@ -62,10 +67,7 @@
 <script type="text/template" data-template="room-locked">
     <div class="room drop-shadow locked" roomid="${id}">
         <div class="details">
-            <div class="group-input">
-                <input name="name" class="name-input" type="text" value="${name}"/>
-            </div>
-            ${room}
+            <span class="fw-bold">${name} - ${price} (Locked, Editable on ${editable})</span>
         </div>
         <div class="beds">
             ${beds}
@@ -86,7 +88,9 @@
     const selector = $('.room-types');
     const customers = $('.customers');
     const rooms = $('.manager');
+    const activeDate = $('.active-date');
     data = null;
+    window.date = null;
     function initialize() {
         let parameters = { __api_token: '{{ \Auth::user()->getCurrentToken()->token }}', }
 
@@ -98,13 +102,16 @@
     }
 
     function renderCustomer(customer) {
-        return render(template('customer'), {id: customer.id, name: customer.name, avatar: customer.avatar, })
+        return render(template('customer'), {
+            id: customer.id,
+            name: customer.name,
+            avatar: customer.avatar,
+        });
     }
 
     function renderGroup(group) {
-        let room = data.getRoom(group.room);
         let beds = "";
-        let counter = room.size;
+        let counter = group.room.size;
         for (const customer of group.customers) {
             beds += renderBed(customer);
             counter--;
@@ -112,7 +119,25 @@
         for (;counter > 0; counter--) {
             beds += renderBed();
         }
-        return render(template('room'), {beds: beds, id: group.id, name: group.name})
+        let price = group.room.price > 0 ? formatCurrency(group.room.price) : 'Included';
+        let locked = !group.editable(window.date);
+        if (locked) {
+            return render(template('room-locked'), {
+                beds: beds,
+                id: group.id,
+                name: group.name,
+                price: price,
+                roomId: group.room.id,
+                editable: group.room.start.toLocaleDateString()
+            });
+        }
+        return render(template('room'), {
+            beds: beds,
+            id: group.id,
+            name: group.name,
+            price: price,
+            roomId: group.room.id
+        });
     }
 
     function renderBed(customer = null) {
@@ -123,30 +148,70 @@
         return render(template('bed'), {content: content,})
     }
 
-    function loadData(dropdown = false) {
+    function updateDate() {
+        activeDate.text("Night of " + window.date.toLocaleDateString());
+        updateSelector(data.getRooms(window.date));
+        updateRooms(data.getGroups(window.date));
+        updateOrphans(data.getOrphanedCustomers(window.date));
+        setupDragDrop();
+    }
+
+    function updateRooms(groups) {
+        rooms.empty();
+        for (const group of groups) {
+            rooms.append(renderGroup(group));
+        }
+    }
+
+    function updateOrphans(orphans) {
+        customers.empty();
+
+        for (const customer of orphans) {
+            customers.append(renderCustomer(customer));
+        }
+    }
+
+    function changeDay(days) {
+        if (data === null) return;
+        let newDate = new Date(window.date.valueOf());
+        newDate.addDays(days);
+        if (newDate > data.getEndDate() || newDate < data.getStartDate()) {
+            return;
+        }
+        window.date = newDate;
+        updateDate();
+    }
+
+    function updateSelector(rooms) {
+        selector.empty();
+        for (const room of rooms) {
+            let price = room.price > 0 ? formatCurrency(room.price) : 'Included';
+            selector.append(render(template('room-option'), {
+                id: room.id,
+                name: room.name,
+                size: room.size,
+                price: price
+            }));
+        }
+    }
+
+    function loadData(date = false) {
         if (data !== null) {
-            if (dropdown) {
-                for (const room of data.getRooms()) {
-                    selector.append(render(template('room-option'), {id: room.id, name: room.name, size: room.size,}))
-                }
+            if (date) {
+                window.date = data.getStartDate();
             }
-            for (const customer of data.getOrphanedCustomers()) {
-                customers.append(renderCustomer(customer));
-            }
-            for (const group of data.getGroups()) {
-                rooms.append(renderGroup(group));
-            }
+            updateDate();
         }
     }
 
     function setupDragDrop() {
-        $('.draggable:not(.locked)').draggable({ revert: 'invalid', });
-        $('.droppable:not(.locked, .single)').droppable({
+        $('.draggable:not(.locked)').filter(function (e) { return $(this).parents('.locked').length == 0; }).draggable({ revert: 'invalid', });
+        $('.droppable:not(.locked, .single)').filter(function (e) { return $(this).parents('.locked').length == 0; }).droppable({
             drop: function(e, ui) {
                 processDropEvent($(ui.draggable), e.target)
             }
         })
-        $('.droppable.single:not(.locked)').droppable({
+        $('.droppable.single:not(.locked)').filter(function (e) { return $(this).parents('.locked').length == 0; }).droppable({
             accept: function (element) {
                 return !$(this).is(':parent');
             },
@@ -179,7 +244,6 @@
 
                 data.addToGroup(room.attr('roomid'), customer)
             }
-            console.log(data.getGroups());
         }
     }
 
@@ -195,15 +259,12 @@
     function reset() {
         customers.empty();
         rooms.empty();
-        data.reset();
+        data.reset(window.date);
         loadData();
         setupDragDrop()
     }
 
     function submit() {
-        if (customers.children().length > 0) {
-            return alert('Not all customers have rooms');
-        }
         showSpinner();
         let parameters = { __api_token: '{{ \Auth::user()->getCurrentToken()->token }}', }
         data.save('{{ route('api.roomings.save', ['order' => $order,]) }}', parameters).then((success) => {
@@ -214,6 +275,14 @@
                 alert('Data failed to save');
             }
         });
+    }
+
+    function formatCurrency(number) {
+        let formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: '{{ setting('system.currency', 'gbp') }}'
+        })
+        return formatter.format(number);
     }
 
     $(document).ready(() => {

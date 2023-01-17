@@ -10,6 +10,8 @@
             <th scope="col">Check Out</th>
             <th scope="col">Occupant Count</th>
             <th scope="col">Empty Beds</th>
+            <th scope="col">Order Internal Notes</th>
+            <th scope="col">Order External Notes</th>
             <th scope="col">Occupants</th>
             <th scope="col">Accommodation Notes</th>
             <th scope="col">Internal Customer Notes</th>
@@ -34,11 +36,14 @@
 
                 @php
                     $travellers = "";
+                    $order_i_notes = "";
+                    $order_e_notes = "";
                     $acc_notes = "";
                     $internal_c = "";
                     $external_c = "";
                     $internal_oc = "";
                     $external_oc = "";
+                    $orders = [];
                     /** @var \App\Models\Order\OrderCustomer $traveller */
                     foreach ($row->travellers as $traveller) {
                         $travellers .= ($traveller->customer?->first_name ?? 'Redacted') . " " . ($traveller->customer?->last_name ?? 'Redacted') . ',';
@@ -47,8 +52,19 @@
                         $external_c .= ($traveller->customer?->external_notes ?? 'No Notes') . "\n";
                         $internal_oc .= ($traveller->internal_notes ?? 'No Notes') . "\n";
                         $external_oc .= ($traveller->external_notes ?? 'No Notes') . "\n";
+                        if (!in_array($traveller->order_id, $orders)) {
+                            $order_i_notes .= ($traveller->order->internal_notes ?? "No Notes") . "\n";
+                            $order_e_notes .= ($traveller->order->external_notes ?? "No Notes") . "\n";
+                            $orders[] = $traveller->order_id;
+                        }
                     }
                 @endphp
+                <td>
+                    {{ $order_i_notes }}
+                </td>
+                <td>
+                    {{ $order_e_notes }}
+                </td>
                 <td>
                     {{ $travellers }}
                 </td>

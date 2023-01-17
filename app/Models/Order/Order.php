@@ -313,7 +313,7 @@ class Order extends Model
      */
     public function getHasAtolAttribute(): bool
     {
-        return $this->repository->hasFlight();
+        return $this->tour->protected && $this->repository->hasFlight();
     }
 
     /**

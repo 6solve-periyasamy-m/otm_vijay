@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 
 class TourController extends Controller
 {
-
     public function index()
     {
         return view('pages.models.tours.table', ['tours' => Tour::all(),]);
@@ -35,6 +34,7 @@ class TourController extends Controller
             'margin' => $request->input('margin'),
             'single_occupancy_surcharge' => $request->input('single_occupancy_surcharge'),
             'stock_control_active' => $request->input('stock_control_active') === 'on' ? 1 : 0,
+            'atol_protected' => $request->input('atol_protected') == -1 ? null : $request->input('atol_protected'),
             'stock' => $request->input('stock'),
             'booking_form_url' => $request->input('booking_form_url'),
             'tour_category_id' => $request->input('tour_category_id'),
@@ -118,6 +118,7 @@ class TourController extends Controller
             'booking_fee' => $request->input('booking_fee'),
             'single_occupancy_surcharge' => $request->input('single_occupancy_surcharge'),
             'stock_control_active' => $request->input('stock_control_active') === 'on' ? 1 : 0,
+            'atol_protected' => $request->input('atol_protected') == -1 ? null : $request->input('atol_protected'),
             'stock' => $request->input('stock'),
             'booking_form_url' => $request->input('booking_form_url'),
             'tour_category_id' => $request->input('tour_category_id'),

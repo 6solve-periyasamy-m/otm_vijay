@@ -1,3 +1,4 @@
+@php $transportInventory = $transportInventory ?? null; @endphp
 @include('partials.fields.text', ['name' => 'Ticket Number', 'field' => 'ticket_number', 'value' => $transportInventory?->ticket_number, 'width' => 6,])
 @can('create', \App\Models\TravelClass::class)
     @include('partials.fields.selector.adder',

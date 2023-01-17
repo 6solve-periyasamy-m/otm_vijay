@@ -5,6 +5,7 @@
 @push('header-stack')
     <script type="text/javascript">
         $(document).ready(function () { $('#reports').DataTable({fixedHeader: true,}); });
+        @if(flag('atol.enabled', true))
         function showOrderedOnReport() {
             let year = $('#year-input').val(); let quarter = $('#quarter-input').val();
             if (isNaN(year) || isNaN(quarter) || year === "" || quarter === "") {
@@ -53,6 +54,7 @@
             let route = "{{ route('reports.atol.certificate.departs-after', ['year' => 'year', 'quarter'=>'quarter',]) }}"
             window.location = route.replace('year', year).replace('quarter', quarter);
         }
+        @endif
     </script>
 @endpush
 
@@ -157,6 +159,7 @@
             </table>
         </div>
     </div>
+    @if(flag('atol.enabled', true))
     <div class="heading pt-md-4 pb-md-3 pt-3">
         <h2 class="fw-bold">ATOL Reporting</h2>
     </div>
@@ -180,4 +183,5 @@
             </div>
         </div>
     </div>
+    @endif
 @endsection

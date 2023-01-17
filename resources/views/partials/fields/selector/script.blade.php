@@ -1,5 +1,9 @@
-let {{ $field }}Select = $('.{{ $field }}-input');
-{{ $field }}Select.select2({
+@php
+\Log::info($field);
+\Log::info(old($field));
+@endphp
+let {{ $sanitized ?? $field }}Select = $('.{{ $fieldId ?? $field . '-input'}}');
+{{ $sanitized ?? $field }}Select.select2({
     placeholder: "Please Select a Value",
     ajax: {
         url: '{{ $fullRoute ?? route('api.' . $route . '.select') }}',
@@ -18,9 +22,9 @@ $.ajax({
     url: '{{ route('api.' . $route . '.selected', ['id' => old($field) ?? $id ?? 0, ]) }}',
     type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }
 }).then(function (data) {
-    {{ $field }}Select.append(new Option(data.text, data.id, true, true)).trigger('change');
+    {{ $sanitized ?? $field }}Select.append(new Option(data.text, data.id, true, true)).trigger('change');
 
-    {{ $field }}Select.trigger({
+    {{ $sanitized ?? $field }}Select.trigger({
         type: 'select2:select',
         params: { data: data, }
     });
