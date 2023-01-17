@@ -602,4 +602,15 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         }
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
+
+    public function testOrderCostDoubleWithBookingFee()
+    {
+        $orderCustomer = $this->generateOrderCustomer();
+        $this->generateOrderCustomer(false, $orderCustomer->order);
+        $order = $orderCustomer->order;
+        $order->booking_fee = 200;
+        $order->save();
+        self::assertEquals($this->getDefaultCost($orderCustomer->order) + 200, $orderCustomer->order->cost);
+    }
+
 }
