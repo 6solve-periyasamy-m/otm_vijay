@@ -17,6 +17,7 @@ use App\Repository\Mailing\MailRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
 use App\Repository\Storage\OrderComponentStorage;
+use App\Repository\Storage\RemoteGroup;
 use Cache;
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
@@ -296,13 +297,6 @@ class OrderRepository extends ModelRepository
                     $status = OrderStatus::CANCELLED_REFUND_REQUIRED;
                 }
             } else {
-                foreach ($this->order->orderCustomers as $orderCustomer) {
-                    if (!$orderCustomer->has_occupancy) {
-                        $status = OrderStatus::OCCUPANCY_NOT_SET;
-                        Cache::put("orders.{$this->order->id}.status", $status, self::STATUS_CACHE_TIME);
-                        return $status;
-                    }
-                }
                 if ($total > $paidAmount) {
                     $next = $this->order->next_installment;
                     if (isset($next) && Carbon::now()->isAfter($next->due_on)) {
@@ -514,8 +508,14 @@ class OrderRepository extends ModelRepository
     public function getRoomingData(): array
     {
         $rooms = [];
-        foreach (RoomingRepository::getAvailableRoomTypes($this->order->tour) as $roomType) {
-            $rooms[$roomType->id] = ['name' => $roomType->name, 'size' => $roomType->maximum_occupancy,];
+        foreach ($this->order->tour->accommodationInventoryTours()->with('inventory', 'inventory.component')->get() as $inventoryTour) {
+            $rooms[$inventoryTour->id] = [
+                'name' => $inventoryTour->repository->formatAdminOccupancy(),
+                'size' => $inventoryTour->inventory->roomType->maximum_occupancy,
+                'price' => $inventoryTour->tour_component_type === 'Included' ? 0 : $inventoryTour->tour_sales_price,
+                'start' => $inventoryTour->inventory->check_in->unix(),
+                'end' => $inventoryTour->inventory->check_out->unix(),
+            ];
         }
         $customers = [];
         foreach ($this->order->orderCustomers()->with('customer')->get() as $orderCustomer) {
@@ -527,9 +527,34 @@ class OrderRepository extends ModelRepository
             foreach ($group->orderCustomers as $orderCustomer) {
                 $groupCustomers[] = $orderCustomer->id;
             }
-            $groups[$group->id] = ['name' => $group->name, 'room' => $group->room_type_id, 'customers' => $groupCustomers,];
+            $groupRooms = [];
+            foreach ($group->rooms as $room) {
+                $groupRooms[] = $room->accommodation_inventory_tour_id;
+            }
+            $groups[$group->id] = ['rooms' => $groupRooms, 'customers' => $groupCustomers,];
         }
         return ['rooms' => $rooms, 'customers' => $customers, 'groups' => $groups,];
+    }
+
+    private function wipeGroups(): void
+    {
+        foreach ($this->order->groups as $group) {
+            $group->rooms()->delete();
+            $group->pivot()->delete();
+            $group->delete();
+        }
+    }
+
+    /**
+     * @param RemoteGroup[] $remoteGroups
+     * @return void
+     */
+    public function importRoomingData(array $remoteGroups): void
+    {
+        $this->wipeGroups();
+        foreach ($remoteGroups as $remoteGroup) {
+            $remoteGroup->convertToGroup();
+        }
     }
 
     public function forceDelete(): void

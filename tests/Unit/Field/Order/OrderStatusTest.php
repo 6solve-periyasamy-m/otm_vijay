@@ -128,13 +128,4 @@ class OrderStatusTest extends DatabaseTestCase
         $this->generatepayment($order, 5000);
         $this->assertEquals(OrderStatus::OVERPAID, $order->status);
     }
-
-    public function testOccupancyNotSet()
-    {
-        $order = $this->generateOrder();
-        foreach ($order->leadBooker->groups as $group) {
-            $group->delete();
-        }
-        $this->assertEquals(OrderStatus::OCCUPANCY_NOT_SET, $order->status);
-    }
 }

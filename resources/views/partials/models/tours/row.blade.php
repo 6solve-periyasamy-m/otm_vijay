@@ -3,8 +3,8 @@
     <td>{{ isset($tour->event) ? $tour->event->name : "No Event" }}</td>
     <td>{{ isset($tour->category) ? $tour->category->name : "No Category" }}</td>
     <td>{{ $description }}</td>
-    <td>{{ f_date($date_from) }}</td>
-    <td>{{ f_date($date_to) }}</td>
+    <td data-sort="{{$date_from->unix()}}">{{ f_date($date_from) }}</td>
+    <td data-sort="{{$date_to->unix()}}">{{ f_date($date_to) }}</td>
     <td>{{ f_currency($base_price_per_person) }}</td>
     <td>{{ f_currency($margin) }}</td>
     <td>{{ f_currency($deposit) }}</td>

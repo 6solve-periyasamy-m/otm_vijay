@@ -105,6 +105,18 @@
         </div>
     </div>
     <div class="card">
+        <div class="card-body" data-target="#tour" onclick="toggleAccordion(this)">
+            <h4 class="fw-bold">
+                <i class="icon-arrow-up"></i> Tour
+            </h4>
+        </div>
+    </div>
+    <div class="row collapse show" id="tour">
+        <div class="col-xl-4">
+            @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Tour\TourCategoryRepository::class])
+        </div>
+    </div>
+    <div class="card">
         <div class="card-body" data-target="#customer" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
                 <i class="icon-arrow-up"></i> Customer

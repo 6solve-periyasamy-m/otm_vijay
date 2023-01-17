@@ -31,6 +31,18 @@
 .customers > .customer {
   box-shadow: -2px 2px 5px var(--shadow-color);
 }
+.date-switcher {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5rem;
+  > .btn {
+    padding-left: 10rem;
+    padding-right: 10rem;
+    border-width: 1px;
+    border-radius: var(--shallow-radius);
+  }
+}
+
 .manager {
   height: auto;
   min-height: 300px;
