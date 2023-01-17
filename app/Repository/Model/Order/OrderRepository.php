@@ -4,6 +4,8 @@ namespace App\Repository\Model\Order;
 
 use App\Models\Customer\Customer;
 use App\Models\Helper\OrderStatus;
+use App\Models\Location\Address;
+use App\Models\Location\AddressParent;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
@@ -14,6 +16,7 @@ use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Mailing\MailRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
+use App\Repository\Storage\OrderComponentStorage;
 use App\Repository\Storage\RemoteGroup;
 use Cache;
 use Carbon\Carbon;
@@ -67,13 +70,15 @@ class OrderRepository extends ModelRepository
         $leadBooker = $order->repository->addCustomer($lead);
         $order->repository->update(['lead_booker_id' => $leadBooker->id,]);
         $order->repository->update(['booking_reference' => Order::generateBookingReference($order),]); // Merging will lead to lead booker id not being set at generation
-        $leadBooker->repository->addAllIncluded();
-        RoomingRepository::assignDefaultRooming($leadBooker);
+        $included = $tour->repository->getComponentSetForSaving();
+        $defaultRooms = RoomingRepository::getDefaultRoomList($tour);
+        $leadBooker->repository->bulkSaveStandard($included->clone());
+        RoomingRepository::createGroupFromRoomList($leadBooker, $defaultRooms);
         $order->repository->resetInstallments();
         foreach ($customers as $customer) {
             $orderCustomer = $order->repository->addCustomer($customer);
-            $orderCustomer->repository->addAllIncluded();
-            RoomingRepository::assignDefaultRooming($orderCustomer);
+            $orderCustomer->repository->bulkSaveStandard($included->clone());
+            RoomingRepository::createGroupFromRoomList($orderCustomer, $defaultRooms);
         }
         //event(new OrderCreatedEvent($order));
         return $order;
@@ -565,5 +570,21 @@ class OrderRepository extends ModelRepository
         $this->order->payments()->forceDelete();
         $this->order->installments()->forceDelete();
         $this->order->reminders()->forceDelete();
+    }
+
+    public static function generateGenericCustomer(string $first, string $last): Customer
+    {
+        $homeAddress = Address::create([
+            'name' => 'Generic Customer Address',
+            'address_parent_id' => AddressParent::getParentId('customer'),
+        ]);
+        $billingAddress = $homeAddress->repository->cloneToNew(AddressParent::getParentId('customer'));
+        return Customer::create([
+            'first_name' => $first,
+            'last_name' => $last,
+            'home_address_id' => $homeAddress->id,
+            'billing_address_id' => $billingAddress->id,
+            'date_of_birth' => now(),
+        ]);
     }
 }

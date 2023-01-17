@@ -3,10 +3,16 @@
 namespace App\Repository\Model\Order;
 
 use App\Models\Customer\Customer;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderMerchandise;
+use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
+use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Storage\OrderComponentStorage;
 
 class OrderCustomerRepository extends ModelRepository
 {
@@ -130,6 +136,29 @@ class OrderCustomerRepository extends ModelRepository
         foreach ($this->orderCustomer->order->tour->repository->getComponents(false, true, true, true, false, ['Included',]) as $inventoryTourRepository) {
             if (!$inventoryTourRepository->isBookable()) continue;
             $inventoryTourRepository->grantToCustomer($this->orderCustomer);
+        }
+    }
+
+    /**
+     * @param OrderComponentStorage $components
+     * @return void
+     */
+    public function bulkSaveStandard(OrderComponentStorage $components): void
+    {
+        $this->orderCustomer->orderActivities()->saveMany($components->activities);
+        $this->orderCustomer->orderFlights()->saveMany($components->flights);
+        $this->orderCustomer->orderTransports()->saveMany($components->transport);
+        $this->orderCustomer->orderMerchandise()->saveMany($components->merchandise);
+    }
+
+    /**
+     * @param InventoryTourRepository[] $components
+     * @return void
+     */
+    public function grantAll(array $components): void
+    {
+        foreach ($components as $component) {
+            $component->grantToCustomer($this->orderCustomer);
         }
     }
 
