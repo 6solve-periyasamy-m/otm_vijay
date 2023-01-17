@@ -21,16 +21,17 @@
     @include('partials.fields.text', ['name' => 'ATOL Issuer', 'field' => 'atol_issuer', 'value' => setting('atol.issuer', ''), 'width' => 3])
     @include('partials.fields.text', ['name' => 'ATOL Number', 'field' => 'atol_number', 'value' => setting('atol.number', ''), 'width' => 3])
     <hr class="splitter"/>
-    @include('partials.fields.file', ['name' => 'Company Logo', 'field' => 'company_logo', 'width' => 6])
-    @include('partials.fields.file', ['name' => 'ATOL Stamp', 'field' => 'atol_stamp', 'width' => 6])
+    @include('partials.fields.file', ['name' => 'Company Logo', 'field' => 'company_logo', 'width' => 4])
+    @include('partials.fields.file', ['name' => 'ATOL Stamp', 'field' => 'atol_stamp', 'width' => 4])
+    @include('partials.fields.checkbox', ['name' => 'Enable ATOL Certificate Generation', 'field' => 'atol_enabled', 'value' => flag('atol.enabled', true), 'width' => 4,])
     <hr class="splitter"/>
     @include('partials.fields.selector.default',
         ['name' => 'System Currency', 'field' => 'currency_id', 'value' => \App\Repository\LocationsRepository::getCurrencyIdByCode(setting('system.currency', '')) ?? null, 'route' => 'currencies', 'width' => 6,])
     @include('partials.fields.checkbox', ['name' => 'Require Immediate Payment For Upgrades/Add-ons', 'field' => 'payment_required', 'value' => flag('payment.required', true), 'width' => 6,])
-@include('partials.fields.text', ['name' => 'Booking Success Page', 'field' => 'booking_redirect', 'value' => setting('booking.success.redirect', ''), 'width' => 3,])
-@include('partials.fields.text', ['name' => 'Installment Payment Success Page', 'field' => 'payment_redirect', 'value' => setting('payment.success.redirect', ''), 'width' => 3,])
-@include('partials.fields.text', ['name' => 'Add-on Purchase Success Page', 'field' => 'addon_redirect', 'value' => setting('purchase.addon.success.redirect', ''), 'width' => 3,])
-@include('partials.fields.text', ['name' => 'Upgrade Purchase Success Page', 'field' => 'upgrade_redirect', 'value' => setting('purchase.upgrade.success.redirect', ''), 'width' => 3,])
+    @include('partials.fields.text', ['name' => 'Booking Success Page', 'field' => 'booking_redirect', 'value' => setting('booking.success.redirect', ''), 'width' => 3,])
+    @include('partials.fields.text', ['name' => 'Installment Payment Success Page', 'field' => 'payment_redirect', 'value' => setting('payment.success.redirect', ''), 'width' => 3,])
+    @include('partials.fields.text', ['name' => 'Add-on Purchase Success Page', 'field' => 'addon_redirect', 'value' => setting('purchase.addon.success.redirect', ''), 'width' => 3,])
+    @include('partials.fields.text', ['name' => 'Upgrade Purchase Success Page', 'field' => 'upgrade_redirect', 'value' => setting('purchase.upgrade.success.redirect', ''), 'width' => 3,])
     <hr class="splitter"/>
     @include('partials.fields.dropdown', [
         'name' => 'Date Format',

@@ -94,7 +94,7 @@
                         <span>Create Quote</span>
                     </a>
                 @endcan
-                @if($tour->has_atol_certificate)
+                @if($tour->protected && $tour->has_atol_certificate)
                     <a class="btn btn-info" href="{{route('tours.atol', ['tour' => $tour,])}}">
                         <i class="icon-folder-alt"></i>
                         <span>Export ATOL Certificates</span>
@@ -175,7 +175,7 @@
                                         {{ f_datetime($tourComponent->inventory->check_in) }}
                                         <input type="checkbox" disabled
                                                @if($tourComponent->inventory->check_in_time_confirmed == 1) checked @endif>
-                                        &nbspto&nbsp
+                                        &nbsp;to&nbsp;
                                         {{ f_datetime($tourComponent->inventory->check_out) }}
                                         <input type="checkbox" disabled
                                                @if($tourComponent->inventory->check_out_time_confirmed == 1) checked @endif>
