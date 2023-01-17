@@ -187,10 +187,7 @@ class BookingRepository extends ModelRepository
         $order->booking_reference = Order::generateBookingReference($order);
         $order->repository->save();
         foreach ($this->booking->groups as $bookingGroup) {
-            $group = Group::create([
-                'name' => $bookingGroup->name,
-                'room_type_id' => $bookingGroup->travellers()->first()->room_type_id
-            ]);
+            $group = Group::create();
             foreach ($bookingGroup->travellers as $traveller) {
                 $group->repository->addCustomerToGroup($traveller->orderCustomer);
             }

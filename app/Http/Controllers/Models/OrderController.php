@@ -107,7 +107,7 @@ class OrderController extends Controller
 
     public function occupancy(Order $order)
     {
-        return view('pages.occupancy.manager', array_merge(RoomingRepository::exportRoomingData($order), ['order' => $order,]));
+        return view('pages.occupancy.manager', ['order' => $order,]);
     }
 
     public function edit(Order $order)

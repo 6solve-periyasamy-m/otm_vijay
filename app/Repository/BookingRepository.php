@@ -178,7 +178,7 @@ class BookingRepository implements BookingRepositoryInterface
             $customer = $customers[$bookingAccommodation->customer_id];
             $groupName = $bookingAccommodation->group_id > 0 ? AccommodationGroup::find($bookingAccommodation->group_id)->name : $customer->customer_name;
             $group = key_exists($bookingAccommodation->group_id, $groups) ? $groups[$bookingAccommodation->group_id]
-                : Group::create(['name' => $groupName, 'room_type_id' => $bookingAccommodation->room_type_id,]);
+                : Group::create();
             $group->orderCustomers()->save($customer);
             $groups[$bookingAccommodation->group_id] = $group;
         }

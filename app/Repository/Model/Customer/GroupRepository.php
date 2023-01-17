@@ -62,11 +62,11 @@ class GroupRepository
         $additionalValue = 0;
         foreach ($this->group->rooms as $orderAccommodation) {
             if ($orderAccommodation->tourComponent->tour_component_type == 'Upgrade') {
-                $upgrades[] = ['upgrade' => $orderAccommodation, 'description' => "{$orderAccommodation->tourComponent}  ({$this->group->name})"];
+                $upgrades[] = ['upgrade' => $orderAccommodation, 'description' => "{$orderAccommodation->tourComponent}  ({$this->group->getMembers()})"];
                 $additionalValue += $orderAccommodation->cost;
             }
             if ($orderAccommodation->tourComponent->tour_component_type == 'Add-on') {
-                $addons[] = ['addon' => $orderAccommodation, 'description' => "{$orderAccommodation->tourComponent}  ({$this->group->name})",];
+                $addons[] = ['addon' => $orderAccommodation, 'description' => "{$orderAccommodation->tourComponent}  ({$this->group->getMembers()})",];
                 $additionalValue += $orderAccommodation->cost;
             }
         }
