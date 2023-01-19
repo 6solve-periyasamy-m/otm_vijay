@@ -1,7 +1,3 @@
-@php
-\Log::info($field);
-\Log::info(old($field));
-@endphp
 let {{ $sanitized ?? $field }}Select = $('.{{ $fieldId ?? $field . '-input'}}');
 {{ $sanitized ?? $field }}Select.select2({
     placeholder: "Please Select a Value",
