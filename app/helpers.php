@@ -72,6 +72,18 @@ if (!function_exists('f_datetime')) {
     }
 }
 
+if (!function_exists('f_time')) {
+    /**
+     * Alias for StringFormatter::formatTime
+     * @param $date
+     * @return string
+     */
+    function f_time($date): string
+    {
+        return StringFormatter::formatTime($date);
+    }
+}
+
 if (!function_exists('f_bool')) {
     /**
      * Alias for StringFormatter::formatBoolean

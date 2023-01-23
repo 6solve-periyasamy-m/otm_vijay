@@ -7,8 +7,10 @@
             <th scope="col">Hotel</th>
             <th scope="col">Room Type</th>
             <th scope="col">Board Type</th>
-            <th scope="col">Check In</th>
-            <th scope="col">Check Out</th>
+            <th scope="col">Check In Date</th>
+            <th scope="col">Check In Time</th>
+            <th scope="col">Check Out Date</th>
+            <th scope="col">Check Out Time</th>
             <th scope="col">Occupant Count</th>
             <th scope="col">Empty Beds</th>
             @if($notes)
@@ -34,8 +36,10 @@
                 <td>{{ $row->hotel }}</td>
                 <td>{{ $row->room }}</td>
                 <td>{{ $row->board }}</td>
-                <td>{{ $row->from }}</td>
-                <td>{{ $row->to }}</td>
+                <td>{{ f_date($row->from) }}</td>
+                <td>{{ f_time($row->from) }}</td>
+                <td>{{ f_date($row->to) }}</td>
+                <td>{{ f_time($row->to) }}</td>
                 <td>{{ $row->occupants }}</td>
                 <td>{{ $row->empty_beds }}</td>
                 @php

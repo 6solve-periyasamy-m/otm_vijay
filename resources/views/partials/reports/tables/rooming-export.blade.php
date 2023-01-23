@@ -7,8 +7,10 @@
             <th scope="col">Hotel</th>
             <th scope="col">Room Type</th>
             <th scope="col">Board Type</th>
-            <th scope="col">Check In</th>
-            <th scope="col">Check Out</th>
+            <th scope="col">Check In Date</th>
+            <th scope="col">Check In Time</th>
+            <th scope="col">Check Out Date</th>
+            <th scope="col">Check Out Time</th>
             <th scope="col">Occupant Count</th>
             <th scope="col">Empty Beds</th>
             <th scope="col" colspan="{{$data->largest}}">Occupants</th>
@@ -26,8 +28,10 @@
                 <td>{{ $row->hotel }}</td>
                 <td>{{ $row->room }}</td>
                 <td>{{ $row->board }}</td>
-                <td>{{ $row->from }}</td>
-                <td>{{ $row->to }}</td>
+                <td>{{ $row->from->format('Y-m-d') }}</td>
+                <td>{{ $row->from->format('H:i:s') }}</td>
+                <td>{{ $row->to->format('Y-m-d') }}</td>
+                <td>{{ $row->to->format('H:i:s') }}</td>
                 {{-- Exporter strips 0 values for some reason, hence formatting with decimal place --}}
                 <td>{{ $row->occupants == 0 ? number_format(0, 2) : $row->occupants }}</td>
                 <td>{{ $row->empty_beds == 0 ? number_format(0, 2) : $row->empty_beds }}</td>
