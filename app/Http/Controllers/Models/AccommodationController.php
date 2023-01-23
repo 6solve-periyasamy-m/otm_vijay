@@ -54,14 +54,16 @@ class AccommodationController extends Controller
         return view('pages.components.accommodation', ['accommodation' => $accommodation,]);
     }
 
-    public function rooming(Accommodation $accommodation)
+    public function rooming(Request $request, Accommodation $accommodation)
     {
-        return RoomingReportRepository::viewReport($accommodation->repository, 'accommodations.rooming.export', ['accommodation' => $accommodation,]);
+        $notes = !$request->has('notes') || $request->notes == 1;
+        return RoomingReportRepository::viewReport($accommodation->repository, 'accommodations.rooming.export', $notes, ['accommodation' => $accommodation,]);
     }
 
-    public function exportRooming(Accommodation $accommodation, string $extension)
+    public function exportRooming(Request $request, Accommodation $accommodation, string $extension)
     {
-        return RoomingReportRepository::exportReport($accommodation->repository, $extension);
+        $notes = !$request->has('notes') || $request->notes == 1;
+        return RoomingReportRepository::exportReport($accommodation->repository, $extension, $notes);
     }
 
     public function edit(Accommodation $accommodation)

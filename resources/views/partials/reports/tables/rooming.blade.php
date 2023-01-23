@@ -1,3 +1,4 @@
+@php $notes = $notes ?? true; @endphp
 <table class="table table-striped report-table">
     <thead>
         <tr>
@@ -10,14 +11,18 @@
             <th scope="col">Check Out</th>
             <th scope="col">Occupant Count</th>
             <th scope="col">Empty Beds</th>
+            @if($notes)
             <th scope="col">Order Internal Notes</th>
             <th scope="col">Order External Notes</th>
+            @endif
             <th scope="col">Occupants</th>
+            @if($notes)
             <th scope="col">Accommodation Notes</th>
             <th scope="col">Internal Customer Notes</th>
             <th scope="col">External Customer Notes</th>
             <th scope="col">Internal Order Customer Notes</th>
             <th scope="col">External Order Customer Notes</th>
+            @endif
         </tr>
     </thead>
     <tbody>
@@ -33,7 +38,6 @@
                 <td>{{ $row->to }}</td>
                 <td>{{ $row->occupants }}</td>
                 <td>{{ $row->empty_beds }}</td>
-
                 @php
                     $travellers = "";
                     $order_i_notes = "";
@@ -59,15 +63,18 @@
                         }
                     }
                 @endphp
+                @if($notes)
                 <td>
                     {{ $order_i_notes }}
                 </td>
                 <td>
                     {{ $order_e_notes }}
                 </td>
+                @endif
                 <td>
                     {{ $travellers }}
                 </td>
+                @if($notes)
                 <td>
                     {!! nl2br(e($acc_notes)) !!}
                 </td>
@@ -83,6 +90,7 @@
                 <td>
                     {!! nl2br(e($external_oc)) !!}
                 </td>
+                @endif
             </tr>
         @endforeach
     </tbody>

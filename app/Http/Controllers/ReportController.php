@@ -14,6 +14,7 @@ use App\Models\Order\Component\OrderAccommodation;
 use App\Repository\Reporting\ReportRepository;
 use App\Repository\Reporting\RoomingReportRepository;
 use Excel;
+use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
@@ -115,14 +116,16 @@ class ReportController extends Controller
         return Excel::download(new OrderReminderReportExport(), 'reminders.' . $extension);
     }
 
-    public function getRoomingReport()
+    public function getRoomingReport(Request $request)
     {
-        return RoomingReportRepository::viewReport(new RoomingReportRepository(), 'reports.rooming.export');
+        $notes = !$request->has('notes') || $request->notes == 1;
+        return RoomingReportRepository::viewReport(new RoomingReportRepository(), 'reports.rooming.export', $notes);
     }
 
-    public function exportRoomingReport(string $extension = 'xlsx')
+    public function exportRoomingReport(Request $request, string $extension = 'xlsx')
     {
-        return RoomingReportRepository::exportReport(new RoomingReportRepository(), $extension);
+        $notes = !$request->has('notes') || $request->notes == 1;
+        return RoomingReportRepository::exportReport(new RoomingReportRepository(), $extension, $notes);
     }
 
     public function getInstallmentRevenueReport() {
