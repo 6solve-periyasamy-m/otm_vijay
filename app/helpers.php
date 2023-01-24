@@ -125,3 +125,16 @@ if (!function_exists('random_colors')) {
         return $colors;
     }
 }
+if (!function_exists('truncate')) {
+    /**
+     * Truncate a string to a certain length, and append ellipsis to the end
+     * @param string|null $str The string to truncate
+     * @param int $chars The number of characters to truncate to (default: 150)
+     * @param string $append The string to append to the end (default: ...)
+     * @return string The truncated string
+     */
+    function truncate(?string $str, int $chars = 150, string $append = '...'): string
+    {
+        return Str::limit($str ?? "", $chars, $append);
+    }
+}
