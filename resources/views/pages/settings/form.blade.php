@@ -7,7 +7,8 @@
     @include('partials.fields.text', ['name' => 'Company Email', 'field' => 'company_email', 'value' => setting('company.contact.email', ''), 'width' => 6])
     @include('partials.fields.text', ['name' => 'Company Phone Number', 'field' => 'company_phone', 'value' => setting('company.contact.phone', ''), 'width' => 6])
     @include('partials.fields.text', ['name' => 'Company VAT', 'field' => 'company_vat', 'value' => setting('company.vat', ''), 'width' => 6])
-    @include('partials.fields.text', ['name' => 'Company Link', 'field' => 'company_url', 'value' => setting('company.url', ''), 'width' => 12])
+    @include('partials.fields.text', ['name' => 'Company Link', 'field' => 'company_url', 'value' => setting('company.url', ''), 'width' => 6])
+    @include('partials.fields.checkbox', ['name' => 'Enable Automatically Sending Emails', 'field' => 'mail_enabled', 'value' => flag('system.mail.enabled', true), 'width' => 6,])
     <hr class="splitter"/>
     @include('partials.fields.text', ['name' => 'Company Address Line 1', 'field' => 'address_line_1', 'value' => setting('company.address.line_1', ''), 'width' => 6])
     @include('partials.fields.text', ['name' => 'Company Address Line 2', 'field' => 'address_line_2', 'value' => setting('company.address.line_2', ''), 'width' => 6])

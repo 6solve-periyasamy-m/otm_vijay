@@ -26,6 +26,7 @@ use App\Repository\Interfaces\SerializesToJson;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Model\Tour\TourRepository;
 use App\Repository\Storage\ConvertedCustomer;
+use Auth;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
@@ -696,7 +697,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $mailable = new TemplatedMailable(setting('email.quote.subject', 'Template Quote'), setting('email.quote.template', 'Template Quote Body'));
         try {
-            $mail = Mail::to($email);
+            $mail = Mail::to($email ?? $sent->recipient);
             if (config('mail.bcc') !== null) { $mail->bcc(config('mail.bcc')); }
             $mailable->attachData($this->getStream($sent), $this->quote->reference . '.pdf', ['mime' => 'application/pdf',]);
             $mail->send($mailable);

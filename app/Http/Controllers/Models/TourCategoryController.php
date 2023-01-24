@@ -11,7 +11,7 @@ class TourCategoryController extends Controller
 
     public function index()
     {
-        return view('pages.models.tour_categories.table', ['tourCategories' => TourCategory::all(),]);
+        return redirect()->route('attributes.edit');
     }
 
     public function create()
@@ -25,17 +25,17 @@ class TourCategoryController extends Controller
         $tourCategory = TourCategory::create([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('tour-categories.view', ['tourCategory' => $tourCategory,]);
+        return $tourCategory->repository->getReturnURL();
     }
 
     public function view(TourCategory $tourCategory)
     {
-        return view('pages.models.tour_categories.view', ['tourCategory' => $tourCategory,]);
+        return $tourCategory->repository->getReturnURL();
     }
 
     public function edit(TourCategory $tourCategory)
     {
-        return view('pages.models.tour_categories.update', ['tourCategory' => $tourCategory,]);
+        return $tourCategory->repository->getReturnURL();
     }
 
     public function update(Request $request, TourCategory $tourCategory)
@@ -44,12 +44,12 @@ class TourCategoryController extends Controller
         $tourCategory->update([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('tour-categories.view', ['tourCategory' => $tourCategory,]);
+        return $tourCategory->repository->getReturnURL();
     }
 
     public function destroy(TourCategory $tourCategory)
     {
         $tourCategory->delete();
-        return redirect()->route('tour-categories.all');
+        return redirect()->route('attributes.edit');
     }
 }

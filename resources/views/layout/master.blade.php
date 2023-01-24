@@ -25,6 +25,12 @@
         @yield('header-script')
         @stack('header-stack') <!-- TODO: Rename to script once all sections are converted -->
         <script type="text/javascript">
+            function sysFormatDate(date) {
+                return formatDate(date, '{{ setting('system.format.date') }}');
+            }
+            function sysFormatDateTime(date) {
+                return formatDate(date, '{{ setting('system.format.date', 'd/m/Y') . ' ' . setting('system.format.time', 'H:i') }}');
+            }
             $(document).ready(function () {
                 @stack('header-ready')
             });

@@ -206,10 +206,7 @@ class RoomingRepository
     public static function createGroupFromRoomList(OrderCustomer $orderCustomer, array $rooms): void
     {
         if (!empty($rooms)) {
-            $group = Group::create([
-                'room_type_id' => $rooms[0]->inventory->room_type_id,
-                'name' => $orderCustomer->customer_name,
-            ]);
+            $group = Group::create();
             $group->repository->addCustomerToGroup($orderCustomer);
             foreach ($rooms as $room) {
                 $group->repository->addRoomToGroup($room);

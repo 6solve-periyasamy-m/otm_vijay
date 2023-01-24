@@ -2,6 +2,7 @@
 
 namespace App\Repository\Model\Order;
 
+use App\Events\Order\OrderCreatedEvent;
 use App\Models\Customer\Customer;
 use App\Models\Helper\OrderStatus;
 use App\Models\Location\Address;
@@ -63,7 +64,7 @@ class OrderRepository extends ModelRepository
      * @param ConvertedCustomer[] $customers
      * @return Order
      */
-    public static function create(Tour $tour, array $data, ConvertedCustomer $lead, array $customers = []): Order
+    public static function create(Tour $tour, array $data, ConvertedCustomer $lead, array $customers = [], bool $shouldInvoice = true): Order
     {
         $order = Order::make($data);
         $tour->orders()->save($order);
@@ -80,7 +81,7 @@ class OrderRepository extends ModelRepository
             $orderCustomer->repository->bulkSaveStandard($included->clone());
             RoomingRepository::createGroupFromRoomList($orderCustomer, $defaultRooms);
         }
-        //event(new OrderCreatedEvent($order));
+        event(new OrderCreatedEvent($order, $shouldInvoice));
         return $order;
     }
 
