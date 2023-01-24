@@ -207,7 +207,6 @@ class RoomingRepository
     {
         if (!empty($rooms)) {
             $group = Group::create([
-                'room_type_id' => $rooms[0]->inventory->room_type_id,
                 'name' => $orderCustomer->customer_name,
             ]);
             $group->repository->addCustomerToGroup($orderCustomer);
