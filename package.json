@@ -14,10 +14,12 @@
         "@fortawesome/free-regular-svg-icons": "^5.15.4",
         "@fortawesome/free-solid-svg-icons": "^5.15.4",
         "@popperjs/core": "^2.10.2",
+        "@types/jquery": "^3.5.14",
+        "@types/node": "^18.11.9",
         "autoprefixer": "^10.3.7",
         "axios": "^0.21.1",
         "bootstrap": "^5.0.2",
-        "date-fns": "^2.23.0",
+        "date-fns": "^2.29.3",
         "jquery": "^3.5.1",
         "laravel-mix": "^6.0.34",
         "lodash": "^4.17.19",
@@ -28,9 +30,7 @@
         "resolve-url-loader": "^4.0.0",
         "sass": "^1.38.0",
         "sass-loader": "^12.1.0",
-        "ts-loader": "^9.4.1",
-        "@types/jquery": "^3.5.14",
-        "@types/node": "^18.11.9"
+        "ts-loader": "^9.4.1"
     },
     "dependencies": {
         "chart.js": "^3.9.1",

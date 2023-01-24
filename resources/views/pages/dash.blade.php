@@ -6,8 +6,16 @@
     <script type="text/javascript">
         let datatable;
         let rows = 0;
-        $(document).ready(function () {
+        function initTable() {
             datatable = $('.revenue-table').DataTable({fixedHeader: true, autoWidth: false, columnDefs: [{target: 0, visible: false, searchable: false,},]});
+        }
+        function refreshTable() {
+            datatable.destroy();
+            initTable();
+            datatable.draw();
+        }
+        $(document).ready(function () {
+            initTable();
             initDates();
         });
         function initDates() {
@@ -40,15 +48,17 @@
             });
         }
         function addRow(from, to, total, paid, count) {
-            datatable.row.add([
-                from + ' to ' + to,
-                formatCurrency(total),
-                formatCurrency(paid),
-                formatCurrency(total - paid),
-                (total === 0 ? 100 : Math.round(((paid/total)*100)*100)/100) + "%",
-            ]);
+            datatable.row.add($(render(template('row'), {
+                'unix': toUnix(from),
+                'from': sysFormatDate(new Date(from)),
+                'to': sysFormatDate(new Date(to)),
+                'expected': formatCurrency(total),
+                'received': formatCurrency(paid),
+                'remaining': formatCurrency(total - paid),
+                'percentage': (total === 0 ? 100 : Math.round(((paid/total)*100)*100)/100) + "%",
+            })));
             if (rows <= 0) {
-                datatable.draw();
+                refreshTable();
                 $('.loader-replace').hide();
                 $('.revenue-container').show();
             }
@@ -60,15 +70,15 @@
             })
             return formatter.format(number);
         }
-        function formatDate(dateString) {
-            let date = dateString.split('-');
-            return date[2] + '/' + date[1] + '/' + date[0];
-        }
         function toUnix(dateString) {
             let date = Date.parse(dateString);
             return date.toString();
         }
     </script>
+@endpush
+
+@push('footer-stack')
+<script type="text/template" data-template='row'><tr><td data-sort="${unix}">${from} to ${to}</td><td>${expected}</td><td>${received}</td><td>${remaining}</td><td>${percentage}</td></tr></script>
 @endpush
 
 @section('content')
