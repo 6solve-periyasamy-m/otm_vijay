@@ -101,6 +101,7 @@ class MailRepository
      */
     public static function sendMailable(string $mail, string $email, ?Model $model = null): bool
     {
+        if (!flag('system.mail.enabled', true)) return false;
         if (!self::doesTemplateExist($mail)) return false;
         $mailable = self::generateEmail($mail, $model);
         if (!isset($mailable)) return false;
