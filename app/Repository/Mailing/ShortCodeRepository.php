@@ -5,6 +5,7 @@ namespace App\Repository\Mailing;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\Payment\Payment;
+use Auth;
 use Faker\Factory as Faker;
 use StringFormatter as Formatter;
 
@@ -72,6 +73,9 @@ class ShortCodeRepository
             'SETTING_ATOL_ISSUER' => setting('atol.issuer'),
             'SETTING_ATOL_NUMBER' => setting('atol.number'),
             'SETTING_ATOL_STAMP' => asset(setting('atol.stamp')),
+            'CURRENT_USER_NAME' => Auth::user()?->name ?? 'No User Found',
+            'CURRENT_USER_EMAIL' => Auth::user()?->email ?? 'No User Found',
+            'CURRENT_USER_IMAGE_URL' => Auth::user()?->avatar_url ?? 'No User Found',
         ];
     }
 
