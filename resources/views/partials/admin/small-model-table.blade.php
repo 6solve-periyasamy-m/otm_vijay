@@ -1,20 +1,17 @@
 @php
     /** @var string $repository */
 @endphp
-@if($repository::getCreateUrl() !== null)
-    <div class="card">
-        <div class="card-body">
-            <a class="btn btn-primary float-end" href="{{ $repository::getCreateUrl() }}">
-                <i class="icon-plus"></i>
-                <span>Create New</span>
-            </a>
-        </div>
-    </div>
-@endif
+
 <div class="card">
     <div class="card-body">
-        <div class="card-title">
+        <div class="card-title d-flex justify-content-between">
             <h4 class="fw-bold">{{ $repository::getName() }}</h4>
+            @if($repository::getCreateUrl() !== null)
+                <a class="btn btn-primary" href="{{ $repository::getCreateUrl() }}">
+                    <i class="icon-plus"></i>
+                    <span>Create New</span>
+                </a>
+            @endif
         </div>
         <table style="width: 100%;" class="table table-striped datatable">
             <thead class="thead-dark">
