@@ -4,6 +4,7 @@ return [
     'table' => [
         'reference' => 'Reference',
         'package' => 'Tour',
+        'description' => 'Description',
         'lead' => 'Lead Traveller',
         'email' => 'Email Address',
         'expiry' => 'Expiry Date',
