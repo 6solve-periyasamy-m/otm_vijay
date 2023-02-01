@@ -15,6 +15,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property array|null $customers
  * @property string|null $internal_notes
  * @property string|null $external_notes
+ * @property string|null $should_invoice
  */
 class CreateOrderRequest extends FormRequest
 {
@@ -27,6 +28,11 @@ class CreateOrderRequest extends FormRequest
             $this->tour = $tour;
         }
         return $this->tour;
+    }
+
+    public function doEmail(): bool
+    {
+        return $this->should_invoice == 'on';
     }
 
     public function getData(): array
