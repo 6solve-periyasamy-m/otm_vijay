@@ -1,0 +1,155 @@
+$buttonSize: 7rem;
+$gridPadding: 0.625rem;
+$maxSize: 10;
+$iconSize: 24px;
+$textSize: 12px;
+$panelPadding: 1rem;
+$colors: (
+  "primary": #4285F4,
+  "secondary": #AA66CC,
+  "success": #00C851,
+  "warning": #FFBB33,
+  "danger": #FF3547,
+  "info": #33B5E5,
+  "otm-header": #295F92,
+  "otm-sidebar": #93B7D7,
+  "violet": #9966ff,
+  "indigo": #6666ff,
+  "blue": #6699ff,
+  "mint": #66ff99,
+  "yellow": #ffff66,
+  "orange": #ffcc66,
+  "red": #ff6666,
+);
+
+@function size($cells, $cellSize, $cellPadding, $containerPadding) {
+  @return calc(calc($cellSize * ($cells)) + calc($cellPadding * ($cells - 1)) + ($containerPadding * 2))
+}
+
+.panel-overlay {
+  width: 100%;
+  height: 100%;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(128, 128, 128, 0.4);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 999;
+
+  &.hidden {
+    visibility: hidden;
+  }
+}
+
+.panel-grid {
+  padding: $panelPadding;
+  background-color: white;
+  border-radius: 20px;
+  overflow: hidden;
+
+  display: grid;
+  gap: $gridPadding;
+}
+
+@for $size from 1 to $maxSize + 1 {
+  .panel-grid-#{$size} {
+    grid-template-columns: repeat($size, $buttonSize);
+    grid-template-rows: repeat($size, $buttonSize);
+    width: size($size, $buttonSize, $gridPadding, $panelPadding);
+    height: size($size, $buttonSize, $gridPadding, $panelPadding);
+  }
+}
+
+@for $rows from 1 to $maxSize + 1 {
+  @for $columns from 1 to $maxSize + 1 {
+    .panel-grid-#{$columns}-#{$rows} {
+      grid-template-columns: repeat($columns, $buttonSize);
+      grid-template-rows: repeat($rows, $buttonSize);
+      width: size($columns, $buttonSize, $gridPadding, $panelPadding);
+      height: size($rows, $buttonSize, $gridPadding, $panelPadding);
+    }
+  }
+}
+
+.plain-anchor {
+  color: inherit;
+  text-decoration: inherit;
+  &:hover {
+    color: inherit;
+    text-decoration: inherit;
+  }
+}
+
+.popup-grid-item {
+  @extend .plain-anchor;
+  display: block;
+  width: $buttonSize;
+  height: $buttonSize;
+  border-radius: 5px;
+  padding: $gridPadding;
+
+  &:hover {
+    filter: brightness(80%);
+  }
+
+  @each $name, $color in $colors {
+    &.color-#{$name} {
+      background-color: #{$color};
+    }
+  }
+
+  &.row-auto {
+    grid-row-start: auto;
+  }
+
+  @for $x from 0 to $maxSize {
+    &.row-#{$x + 1} {
+      grid-row-start: #{$x + 1};
+    }
+  }
+
+  @for $x from $maxSize * -1 to 0 {
+    &.row-sub-#{$x} {
+      grid-row-start: #{$x};
+    }
+  }
+
+  &.column-auto {
+    grid-column-start: auto;
+  }
+
+  @for $x from 0 to $maxSize {
+    &.column-#{$x + 1} {
+      grid-column-start: #{$x + 1};
+    }
+  }
+
+  @for $x from $maxSize * -1 to 0 {
+    &.column-sub-#{$x} {
+      grid-column-start: #{$x};
+    }
+  }
+
+  >.icon {
+    text-align: center;
+    font-size: $iconSize;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  >.text {
+    text-align: center;
+    font-size: $textSize;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

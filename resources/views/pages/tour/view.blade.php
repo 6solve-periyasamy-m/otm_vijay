@@ -24,6 +24,7 @@
 @endsection
 
 @section('content')
+    @include('pages.tour.popup')
     <div class="otm-callout">
         <div class="row">
             <div class="col-12">
