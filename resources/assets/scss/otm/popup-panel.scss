@@ -23,7 +23,7 @@ $colors: (
 );
 
 @function size($cells, $cellSize, $cellPadding, $containerPadding) {
-  @return calc(calc($cellSize * ($cells)) + calc($cellPadding * ($cells - 1)) + ($containerPadding * 2))
+  @return calc(calc($cellSize * ($cells)) + calc($cellPadding * ($cells - 1)) + ($containerPadding * 2));
 }
 
 .panel-overlay {
