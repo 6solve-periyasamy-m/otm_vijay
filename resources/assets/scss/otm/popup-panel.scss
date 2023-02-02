@@ -56,8 +56,11 @@ $colors: (
   gap: $gridPadding;
 }
 
+// Removing the extend reduces package size by about 2KiB, but I feel its worth leaving in for ease-of-use
+
 @for $size from 1 to $maxSize + 1 {
   .panel-grid-#{$size} {
+    @extend .panel-grid;
     grid-template-columns: repeat($size, $buttonSize);
     grid-template-rows: repeat($size, $buttonSize);
     width: size($size, $buttonSize, $gridPadding, $panelPadding);
@@ -67,7 +70,8 @@ $colors: (
 
 @for $rows from 1 to $maxSize + 1 {
   @for $columns from 1 to $maxSize + 1 {
-    .panel-grid-#{$columns}-#{$rows} {
+    .panel-grid-#{$rows}-#{$columns} {
+      @extend .panel-grid;
       grid-template-columns: repeat($columns, $buttonSize);
       grid-template-rows: repeat($rows, $buttonSize);
       width: size($columns, $buttonSize, $gridPadding, $panelPadding);
@@ -97,44 +101,6 @@ $colors: (
     filter: brightness(80%);
   }
 
-  @each $name, $color in $colors {
-    &.color-#{$name} {
-      background-color: #{$color};
-    }
-  }
-
-  &.row-auto {
-    grid-row-start: auto;
-  }
-
-  @for $x from 0 to $maxSize {
-    &.row-#{$x + 1} {
-      grid-row-start: #{$x + 1};
-    }
-  }
-
-  @for $x from $maxSize * -1 to 0 {
-    &.row-sub-#{$x} {
-      grid-row-start: #{$x};
-    }
-  }
-
-  &.column-auto {
-    grid-column-start: auto;
-  }
-
-  @for $x from 0 to $maxSize {
-    &.column-#{$x + 1} {
-      grid-column-start: #{$x + 1};
-    }
-  }
-
-  @for $x from $maxSize * -1 to 0 {
-    &.column-sub-#{$x} {
-      grid-column-start: #{$x};
-    }
-  }
-
   >.icon {
     text-align: center;
     font-size: $iconSize;
@@ -151,5 +117,43 @@ $colors: (
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+}
+
+@each $name, $color in $colors {
+  .color-#{$name} {
+    background-color: #{$color};
+  }
+}
+
+.row-auto {
+  grid-row-start: auto;
+}
+
+@for $x from 0 to $maxSize {
+  .row-#{$x + 1} {
+    grid-row-start: #{$x + 1};
+  }
+}
+
+@for $x from $maxSize * -1 to 0 {
+  .row-sub-#{$x} {
+    grid-row-start: #{$x};
+  }
+}
+
+.column-auto {
+  grid-column-start: auto;
+}
+
+@for $x from 0 to $maxSize {
+  .column-#{$x + 1} {
+    grid-column-start: #{$x + 1};
+  }
+}
+
+@for $x from $maxSize * -1 to 0 {
+  .column-sub-#{$x} {
+    grid-column-start: #{$x};
   }
 }
