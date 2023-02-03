@@ -100,12 +100,12 @@ class DetailsRequest extends FormRequest
     public function getBillingAddress(): array
     {
         return [
-            'address_line_1' => $this->home_address_line_1,
-            'address_line_2' => $this->home_address_line_2,
-            'town' => $this->home_town,
-            'region' => $this->home_region,
-            'country_id' => $this->home_country_id,
-            'postcode' => $this->home_postcode,
+            'address_line_1' => $this->billing_address_line_1,
+            'address_line_2' => $this->billing_address_line_2,
+            'town' => $this->billing_town,
+            'region' => $this->billing_region,
+            'country_id' => $this->billing_country_id,
+            'postcode' => $this->billing_postcode,
         ];
     }
 
