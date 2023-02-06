@@ -13,30 +13,30 @@
         <div class="card-body">
             <div class="mb-3">
                 <a href="{{ route('quotes.view', ['quote' => $quote, ])}}" class="btn btn-primary text-white">
-                    <i class="icon-arrow-left"></i>
+                    <x-icon icon="arrow-left" />
                     Back to Quote
                 </a>
             </div>
             <ul class="nav nav-pills otm-tab">
                 <li class="nav-item col-6 col-md-3">
                     <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#accommodation">
-                        <i class="icon-home"></i> Accommodation
+                        <x-icon icon="home" /> Accommodation
                     </button>
                 </li>
                 <li class="nav-item col-6 col-md-3">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities">
-                        <i class="icon-settings"></i> Activities
+                        <x-icon icon="settings" /> Activities
                     </button>
                 </li>
                 <li class="nav-item col-6 col-md-3">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#flights">
-                        <i class="icon-plane"></i>
+                        <x-icon icon="plane" />
                         Flights
                     </button>
                 </li>
                 <li class="nav-item col-6 col-md-3">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transports">
-                        <i class="icon-directions"></i>
+                        <x-icon icon="directions" />
                         Transport
                     </button>
                 </li>

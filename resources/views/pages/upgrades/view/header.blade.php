@@ -51,7 +51,7 @@
         </div>
     </div>
     <a href="{{ route('tours.view', ['tour' => $tour, ])}}" class="btn btn-primary text-white">
-        <i class="icon-arrow-left"></i>
+        <x-icon icon="arrow-left" />
         Back to Tour
     </a>
 </div>

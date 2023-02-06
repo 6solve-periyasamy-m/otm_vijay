@@ -26,13 +26,13 @@
                     <td>{{ $inventory->notes }}</td>
                     <td>
                         <a href="{{route('merchandise.inventory.duplicate', ['merchandise' => $merchandise, 'inventory' => $inventory, 'view' => 'detailed',])}}" class="btn btn-sm btn-outline-info mb-1">
-                            <i class="icon-layers"></i>
+                            <x-icon icon="layers" />
                         </a>
                         <a href="{{route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $inventory, 'view' => 'detailed',])}}" class="btn btn-sm btn-outline-success mb-1">
-                            <i class="icon-note"></i>
+                            <x-icon icon="note" />
                         </a>
                         <a href="javascript:$('#inventory-{{ $inventory->id }}-delete').submit();" class="btn btn-sm btn-outline-danger mb-1">
-                            <i class="icon-trash"></i>
+                            <x-icon icon="trash" />
                         </a>
                         <form id="inventory-{{ $inventory->id }}-delete"
                               action="{{ route('merchandise.inventory.delete', ['merchandise' => $merchandise, 'inventory' => $inventory, 'view' => 'detailed',]) }}" method="POST"

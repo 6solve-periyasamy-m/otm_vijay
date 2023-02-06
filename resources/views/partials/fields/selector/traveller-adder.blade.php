@@ -7,7 +7,7 @@
     <div class="d-flex">
         <select class="form-control {{ $sanitized }}-input" id="{{ $id ?? $sanitized . '-field' }}" name="{{ $field }}[id]"></select>
         <a href="{{ $createRoute }}" target="{{ $target ?? '_blank' }}" class="btn btn-success d-inline ms-1" onclick="{{$onclick ?? ''}}">+</a>
-        <a href="javascript:getUnknownCustomer('#{{$id ?? $sanitized . '-field'}}')" class="btn btn-info d-inline ms-1"><i class="icon-user"></i></a>
+        <a href="javascript:getUnknownCustomer('#{{$id ?? $sanitized . '-field'}}')" class="btn btn-info d-inline ms-1"><x-icon icon="user" /></a>
         @include('partials.fields.btn-checkbox', ['field' => "{$field}[travelling]", 'icon' => 'plane', 'value' => 1,])
         @include('partials.fields.btn-checkbox', ['field' => "{$field}[paying]", 'icon' => 'wallet', 'value' => 1,])
     </div>

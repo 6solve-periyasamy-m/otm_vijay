@@ -77,7 +77,7 @@ $profit = $remaining - $costOfTour;
             </div>
             <div class="col-12">
                 <a class="btn btn-warning" href="{{route('quotes.view', ['quote' => $quote,])}}">
-                    <i class="icon-action-redo"></i>
+                    <x-icon icon="action-redo" />
                     <span>Back To Quote</span>
                 </a>
             </div>
@@ -129,7 +129,7 @@ $profit = $remaining - $costOfTour;
                         <x-admin.input name="amount" width="5">Amount</x-admin.input>
                         <input type="hidden" name="per_customer" value="1" />
                         <x-admin.button href="javascript:$('.per_customer-create').submit()" width="2" color="primary">
-                            <i class="icon-plus"></i>
+                            <x-icon icon="plus" />
                         </x-admin.button>
                     </form>
                     <table class="table table-striped data-table">
@@ -155,10 +155,10 @@ $profit = $remaining - $costOfTour;
                                 </form>
                                 <td>
                                     <a href="javascript:$('.cost-edit-{{$cost->id}}').submit()" class="btn btn-outline-success btn-sm mb-1">
-                                        <i class="icon-note"></i>
+                                        <x-icon icon="note" />
                                     </a>
                                     <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
-                                        <i class="icon-trash"></i>
+                                        <x-icon icon="trash" />
                                     </a>
                                     <form id="cost-{{ $cost->id }}-delete" action="{{ route('additional-cost.delete', ['cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                                 </td>
@@ -214,7 +214,7 @@ $profit = $remaining - $costOfTour;
                         <x-admin.input name="amount" width="5">Amount</x-admin.input>
                         <input type="hidden" name="per_customer" value="0" />
                         <x-admin.button href="javascript:$('.whole-tour-create').submit()" width="2" color="primary">
-                            <i class="icon-plus"></i>
+                            <x-icon icon="plus" />
                         </x-admin.button>
                     </form>
                     <table class="table table-striped data-table">
@@ -240,10 +240,10 @@ $profit = $remaining - $costOfTour;
                                 </form>
                                 <td>
                                     <a href="javascript:$('.cost-edit-{{$cost->id}}').submit()" class="btn btn-outline-success btn-sm mb-1">
-                                        <i class="icon-note"></i>
+                                        <x-icon icon="note" />
                                     </a>
                                     <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
-                                        <i class="icon-trash"></i>
+                                        <x-icon icon="trash" />
                                     </a>
                                     <form id="cost-{{ $cost->id }}-delete" action="{{ route('additional-cost.delete', ['cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                                 </td>
@@ -260,32 +260,32 @@ $profit = $remaining - $costOfTour;
         <ul class="nav nav-pills otm-tab">
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#summary">
-                    <i class="icon-list"></i> {{ __('tours.costing.view.cards.components.tabs.summary') }}
+                    <x-icon icon="list" /> {{ __('tours.costing.view.cards.components.tabs.summary') }}
                 </button>
             </li>
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#accommodation">
-                    <i class="icon-home"></i> {{ __('tours.costing.view.cards.components.tabs.accommodation') }}
+                    <x-icon icon="home" /> {{ __('tours.costing.view.cards.components.tabs.accommodation') }}
                 </button>
             </li>
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities">
-                    <i class="icon-settings"></i> {{ __('tours.costing.view.cards.components.tabs.activities') }}
+                    <x-icon icon="settings" /> {{ __('tours.costing.view.cards.components.tabs.activities') }}
                 </button>
             </li>
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#flights">
-                    <i class="icon-plane"></i> {{ __('tours.costing.view.cards.components.tabs.flights') }}
+                    <x-icon icon="plane" /> {{ __('tours.costing.view.cards.components.tabs.flights') }}
                 </button>
             </li>
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transport">
-                    <i class="icon-directions"></i> {{ __('tours.costing.view.cards.components.tabs.transport') }}
+                    <x-icon icon="directions" /> {{ __('tours.costing.view.cards.components.tabs.transport') }}
                 </button>
             </li>
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#extras">
-                    <i class="icon-briefcase"></i> {{ __('tours.costing.view.cards.components.tabs.extras') }}
+                    <x-icon icon="briefcase" /> {{ __('tours.costing.view.cards.components.tabs.extras') }}
                 </button>
             </li>
         </ul>

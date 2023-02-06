@@ -15,7 +15,7 @@
 <div class="card">
     <div class="card-body">
         <a class="btn btn-primary float-end" href="{{ route('transports.create') }}">
-            <i class="icon-plus"></i>
+            <x-icon icon="plus" />
             <span>Create New</span>
         </a>
     </div>

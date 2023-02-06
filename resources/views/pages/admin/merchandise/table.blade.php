@@ -32,7 +32,7 @@
         <div class="card">
             <div class="card-body">
                 <a class="btn btn-primary float-end" href="{{ route('merchandise.create') }}">
-                    <i class="icon-plus"></i>
+                    <x-icon icon="plus" />
                     <span>Create New</span>
                 </a>
             </div>
@@ -62,23 +62,23 @@
                         <td class="actions">
                             @can('update', \App\Models\Merchandise\Merchandise::class)
                                 <a href="{{route('merchandise.edit', ['merchandise' => $merch,])}}" class="btn btn-outline-success btn-sm mb-1">
-                                    <i class="icon-note"></i>
+                                    <x-icon icon="note" />
                                 </a>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
-                                    <i class="icon-note"></i>
+                                    <x-icon icon="note" />
                                 </span>
                             @endcan
                             @can('delete', \App\Models\Merchandise\Merchandise::class)
                                 <a href="javascript:$('#merchandise-{{ $merch->id }}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
-                                    <i class="icon-trash"></i>
+                                    <x-icon icon="trash" />
                                 </a>
                                 <form id="merchandise-{{ $merch->id }}-delete"
                                       action="{{ route('merchandise.delete', ['merchandise' => $merch,]) }}" method="POST"
                                       style="display: none;">{{ csrf_field() }}</form>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
-                                    <i class="icon-trash"></i>
+                                    <x-icon icon="trash" />
                                 </span>
                             @endcan
                         </td>

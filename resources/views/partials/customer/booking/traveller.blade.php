@@ -51,7 +51,7 @@
         </div>
         @endif
         <a class="btn btn-danger float-end text-white" href="" onclick="event.preventDefault();removeCustomer(this)">
-            <i class="icon-trash"></i>
+            <x-icon icon="trash" />
             Remove Customer
         </a>
     </div>

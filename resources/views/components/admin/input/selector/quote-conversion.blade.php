@@ -6,7 +6,7 @@
             <label for="{{ $attributes->get('name', '') }}" style="padding-top: 10px;">{{ $slot }}</label>
         </div>
         <a href="{{ $create ?? "" }}" target="{{ $create->attributes->get('target', '_blank') }}" class="btn btn-success d-inline ms-1" onclick="{{ $create->attributes->get('onclick', '') }}">+</a>
-        <a href="javascript:getUnknownCustomer('#{{$sanitizedName}}', {{ $attributes->get('paying', 0) }})" class="btn btn-info d-inline ms-1"><i class="icon-user"></i></a>
+        <a href="javascript:getUnknownCustomer('#{{$sanitizedName}}', {{ $attributes->get('paying', 0) }})" class="btn btn-info d-inline ms-1"><x-icon icon="user" /></a>
     </div>
 </div>
 @push('header-stack')

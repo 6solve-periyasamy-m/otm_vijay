@@ -32,7 +32,7 @@
         <option value="Add-on">Add-on</option>
     </select>
     <a href="javascript:getSelectedAccommodationInventory()" class="btn btn-primary ms-3 text-white">
-        <i class="icon-plus"></i>
+        <x-icon icon="plus" />
         <span>Add Selected Rows</span>
     </a>
 </div>

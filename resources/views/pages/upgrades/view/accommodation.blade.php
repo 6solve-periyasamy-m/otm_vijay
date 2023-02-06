@@ -47,7 +47,7 @@
     <div class="card">
         <div class="card-body text-end">
             <a href="{{ route('accommodation-upgrade.create', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]) }}" class="btn btn-primary">
-                <i class="icon-plus"></i>
+                <x-icon icon="plus" />
                 <span>Create</span>
             </a>
         </div>
@@ -82,20 +82,20 @@
                                     <td>{{ f_currency($upgrade->upgrade->tour_sales_price) }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\Accommodation\AccommodationInventoryTour::class)
-                                            <a href="{{ route('accommodation-upgrade.edit', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                                            <a href="{{ route('accommodation-upgrade.edit', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade]) }}" class="btn btn-outline-primary btn-sm mb-1"><x-icon icon="note" /></a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                                    <i class="icon-note"></i>
+                                                    <x-icon icon="note" />
                                                 </span>
                                         @endcan
                                         @can('delete', \App\Models\Accommodation\AccommodationInventoryTour::class)
-                                            <a href="#" onclick="$('#accommodation-{{$upgrade->upgrade->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                            <a href="#" onclick="$('#accommodation-{{$upgrade->upgrade->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><x-icon icon="trash" /></a>
                                             <form action="{{ route('accommodation-upgrade.delete', ['tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade' => $upgrade]) }}" method="post" id="accommodation-{{$upgrade->upgrade->id}}-delete">
                                                 @csrf
                                             </form>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                                    <i class="icon-trash"></i>
+                                                    <x-icon icon="trash" />
                                                 </span>
                                         @endcan
                                     </td>

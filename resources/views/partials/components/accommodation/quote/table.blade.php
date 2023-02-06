@@ -30,7 +30,7 @@
 <div class="d-flex justify-content-between mb-3">
     <div></div>
     <a href="javascript:getSelectedAccommodationInventory()" class="btn btn-primary ms-3 text-white">
-        <i class="icon-plus"></i>
+        <x-icon icon="plus" />
         <span>Add Selected Rows</span>
     </a>
 </div>

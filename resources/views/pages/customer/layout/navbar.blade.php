@@ -93,8 +93,8 @@
                         </span>
                         <span class="p-3 d-flex flex-column">
                             <span>{{ setting('company.name', '') }}</span>
-                            <span><i class="icon-envelope"></i> {{ setting('company.contact.email', '') }}</span>
-                            <span><i class="icon-call-end"></i> {{ setting('company.contact.phone', '') }}</span>
+                            <span><x-icon icon="envelope" /> {{ setting('company.contact.email', '') }}</span>
+                            <span><x-icon icon="call-end" /> {{ setting('company.contact.phone', '') }}</span>
                         </span>
                     </div>
                 </div>

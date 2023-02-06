@@ -39,7 +39,7 @@
                         @endforeach
                     </select>
                     <a href="{{route('merchandise.inventory.duplicate', ['merchandise' => $merchandise, 'inventory' => $inventory,])}}" class="btn btn-info">
-                        <i class="icon-plus"></i>
+                        <x-icon icon="plus" />
                         Add Size
                     </a>
                     <hr class="splitter">
@@ -53,11 +53,11 @@
                     <hr class="splitter">
                     <div>
                         <a href="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}" class="btn btn-success edit-btn">
-                            <i class="icon-note"></i>
+                            <x-icon icon="note" />
                             Edit Inventory
                         </a>
                         <a href="javascript:$('#inventory-{{ $inventory->id }}-delete').submit();" class="btn btn-danger delete-btn">
-                            <i class="icon-trash"></i>
+                            <x-icon icon="trash" />
                             Delete Inventory
                         </a>
                         <form id="inventory-{{ $inventory->id }}-delete" class="delete-link"

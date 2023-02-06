@@ -9,7 +9,7 @@
     <div class="card-body">
         {{--<a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>--}}
         <a href="{{ route('activity-inventories.create', ['activity' => $activity, ]) }}" class="btn btn-primary float-end">
-            <i class="icon-plus"></i>
+            <x-icon icon="plus" />
             <span>Add Inventory</span>
         </a>
     </div>
@@ -49,34 +49,34 @@
                     <td class="actions-3">
                         @can('create', \App\Models\Activity\ActivityInventory::class)
                             <a href="{{route('activity-inventories.duplicate', ['activity' => $activity, 'activityInventory' => $activityInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
-                                <i class="icon-layers"></i>
+                                <x-icon icon="layers" />
                             </a>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                <i class="icon-layers"></i>
+                                <x-icon icon="layers" />
                             </span>
                         @endcan
                         @can('update', \App\Models\Activity\ActivityInventory::class)
                             <a href="{{route('activity-inventories.edit', ['activity' => $activity, 'activityInventory' => $activityInventory,])}}"
                                class="btn btn-outline-success btn-sm mb-1">
-                                <i class="icon-note"></i>
+                                <x-icon icon="note" />
                             </a>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                <i class="icon-note"></i>
+                                <x-icon icon="note" />
                             </span>
                         @endcan
                         @can('delete', \App\Models\Activity\ActivityInventory::class)
                             <a href="#" class="btn btn-sm btn-outline-danger mb-1"
                                onclick="event.preventDefault();document.getElementById('activityInventory-{{ $activityInventory->id }}-delete').submit();">
-                                <i class="icon-trash"></i>
+                                <x-icon icon="trash" />
                             </a>
                             <form id="activityInventory-{{ $activityInventory->id }}-delete"
                                   action="{{ route('activity-inventories.delete', ['activity' => $activity, 'activityInventory' => $activityInventory,]) }}"
                                   method="POST" style="display: none;">{{ csrf_field() }}</form>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                <i class="icon-trash"></i>
+                                <x-icon icon="trash" />
                             </span>
                         @endcan
                     </td>

@@ -26,7 +26,7 @@
         @can('update', \App\Models\Flight\Flight::class)
         <div class="col-12">
             <a class="btn btn-success" href="{{route('flights.edit', ['flight' => $flight,])}}">
-                <i class="icon-note"></i>
+                <x-icon icon="note" />
                 <span>Edit Flight</span>
             </a>
         </div>

@@ -7,16 +7,16 @@
         <div class="card-body">
             @can('update', \App\Models\System\Report::class)
                 <a class="btn btn-warning float-end" href="{{ route('reports.bespoke.edit', ['report' => $report,]) }}">
-                    <i class="icon-note"></i>
+                    <x-icon icon="note" />
                     <span>Edit Report</span>
                 </a>
             @endcan
             <a class="btn btn-primary float-end" target="_blank" href="{{ route('reports.bespoke.export', ['report' => $report, 'extension' => 'csv']) }}" style="margin-right: 5px">
-                <i class="icon-list"></i>
+                <x-icon icon="list" />
                 <span>Export to CSV</span>
             </a>
             <a class="btn btn-info float-end" target="_blank"  href="{{ route('reports.bespoke.export', ['report' => $report, 'extension' => 'xlsx']) }}" style="margin-right: 5px">
-                <i class="icon-chart"></i>
+                <x-icon icon="chart" />
                 <span>Export to XLSX</span>
             </a>
         </div>

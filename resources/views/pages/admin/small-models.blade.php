@@ -26,7 +26,7 @@
     <div class="card">
         <div class="card-body" data-target="#accommodation" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
-                <i class="icon-arrow-up"></i> Accommodation
+                <x-icon icon="arrow-up" /> Accommodation
             </h4>
         </div>
     </div>
@@ -41,7 +41,7 @@
     <div class="card">
         <div class="card-body" data-target="#activity" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
-                <i class="icon-arrow-up"></i> Activity
+                <x-icon icon="arrow-up" /> Activity
             </h4>
         </div>
     </div>
@@ -56,7 +56,7 @@
     <div class="card">
         <div class="card-body" data-target="#flight" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
-                <i class="icon-arrow-up"></i> Flight
+                <x-icon icon="arrow-up" /> Flight
             </h4>
         </div>
     </div>
@@ -74,7 +74,7 @@
     <div class="card">
         <div class="card-body" data-target="#transport" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
-                <i class="icon-arrow-up"></i> Transport
+                <x-icon icon="arrow-up" /> Transport
             </h4>
         </div>
     </div>
@@ -89,7 +89,7 @@
     <div class="card">
         <div class="card-body" data-target="#merchandise" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
-                <i class="icon-arrow-up"></i> Merchandise
+                <x-icon icon="arrow-up" /> Merchandise
             </h4>
         </div>
     </div>
@@ -107,7 +107,7 @@
     <div class="card">
         <div class="card-body" data-target="#tour" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
-                <i class="icon-arrow-up"></i> Tour
+                <x-icon icon="arrow-up" /> Tour
             </h4>
         </div>
     </div>
@@ -119,7 +119,7 @@
     <div class="card">
         <div class="card-body" data-target="#customer" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
-                <i class="icon-arrow-up"></i> Customer
+                <x-icon icon="arrow-up" /> Customer
             </h4>
         </div>
     </div>

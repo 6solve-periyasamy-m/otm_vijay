@@ -8,7 +8,7 @@
             <h4 class="fw-bold">{{ $repository::getName() }}</h4>
             @if($repository::getCreateUrl() !== null)
                 <a class="btn btn-primary" href="{{ $repository::getCreateUrl() }}">
-                    <i class="icon-plus"></i>
+                    <x-icon icon="plus" />
                     <span>Create New</span>
                 </a>
             @endif
@@ -29,21 +29,21 @@
                     <td class="actions">
                         @if($model->repository->getEditUrl() !== null)
                             <a href="{{$model->repository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1">
-                                <i class="icon-note"></i>
+                                <x-icon icon="note" />
                             </a>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                    <i class="icon-note"></i>
+                                    <x-icon icon="note" />
                                 </span>
                         @endif
                         @if($model->repository->getDeleteUrl() !== null)
                             <a href="javascript:$('#{{$repository::getSafeName()}}-{{ $model->id }}-delete').submit();" class="btn btn-sm btn-outline-danger mb-1">
-                                <i class="icon-trash"></i>
+                                <x-icon icon="trash" />
                             </a>
                             <form id="{{$repository::getSafeName()}}-{{ $model->id }}-delete" action="{{$model->repository->getDeleteUrl()}}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                    <i class="icon-trash"></i>
+                                    <x-icon icon="trash" />
                                 </span>
                         @endif
                     </td>

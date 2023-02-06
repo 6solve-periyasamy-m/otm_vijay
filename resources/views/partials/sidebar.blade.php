@@ -10,7 +10,7 @@
         </div>
         <div class="nav-item">
             <a class="nav-link sidebar-toggle" href="javascript:toggleSidebar()">
-                <i class="sidebar-arrow icon-arrow-right"></i>
+                <i class="sidebar-arrow icon-arrow-right" />
             </a>
         </div>
     </div>

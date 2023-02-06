@@ -30,18 +30,18 @@
         <div class="card-body">
             @can('create', \App\Models\System\Report::class)
             <a class="btn btn-success float-end" href="#" onclick="save()">
-                <i class="icon-plus"></i>
+                <x-icon icon="plus" />
                 <span>Save Report</span>
             </a>
             @endcan
             @if(false)
             {{-- TODO: Fix temporary exporting --}}
             <a class="btn btn-primary float-end" href="#" onclick="exportCsv()" style="margin-right: 5px">
-                <i class="icon-list"></i>
+                <x-icon icon="list" />
                 <span>Export to CSV</span>
             </a>
             <a class="btn btn-info float-end" href="#" onclick="exportXlsx()" style="margin-right: 5px">
-                <i class="icon-chart"></i>
+                <x-icon icon="chart" />
                 <span>Export to XLSX</span>
             </a>
             @endif

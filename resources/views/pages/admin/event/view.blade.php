@@ -48,7 +48,7 @@
             <div class="col-12">
                 @can('update', \App\Models\Tour\Event::class)
                     <a class="btn btn-success" href="{{route('events.edit', ['event' => $event,])}}">
-                        <i class="icon-note"></i>
+                        <x-icon icon="note" />
                         <span>Edit Event</span>
                     </a>
                 @endcan
@@ -90,7 +90,7 @@
                                 <td class="actions">
                                     <a href="{{route('tours.edit', ['tour' => $tour,])}}"
                                        class="btn btn-outline-success btn-sm mb-1">
-                                        <i class="icon-note"></i>
+                                        <x-icon icon="note" />
                                     </a>
                                 </td>
                             </tr>
