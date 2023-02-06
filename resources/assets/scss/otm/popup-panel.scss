@@ -4,6 +4,7 @@ $maxSize: 10;
 $iconSize: 24px;
 $textSize: 12px;
 $panelPadding: 1rem;
+$closeMargin: 1rem;
 $colors: (
   "primary": #4285F4,
   "secondary": #AA66CC,
@@ -46,7 +47,17 @@ $colors: (
   }
 }
 
-.panel-grid {
+.panel-close {
+  position: absolute;
+  top: 64px; // Size of top bar
+  right: 0;
+  margin: $closeMargin;
+  width: 2rem;
+  height: 2rem;
+  font-size: 24px;
+}
+
+%panel-grid {
   padding: $panelPadding;
   background-color: white;
   border-radius: 20px;
@@ -60,7 +71,7 @@ $colors: (
 
 @for $size from 1 to $maxSize + 1 {
   .panel-grid-#{$size} {
-    @extend .panel-grid;
+    @extend %panel-grid;
     grid-template-columns: repeat($size, $buttonSize);
     grid-template-rows: repeat($size, $buttonSize);
     width: size($size, $buttonSize, $gridPadding, $panelPadding);
@@ -71,7 +82,7 @@ $colors: (
 @for $rows from 1 to $maxSize + 1 {
   @for $columns from 1 to $maxSize + 1 {
     .panel-grid-#{$rows}-#{$columns} {
-      @extend .panel-grid;
+      @extend %panel-grid;
       grid-template-columns: repeat($columns, $buttonSize);
       grid-template-rows: repeat($rows, $buttonSize);
       width: size($columns, $buttonSize, $gridPadding, $panelPadding);
