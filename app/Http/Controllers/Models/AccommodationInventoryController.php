@@ -48,13 +48,13 @@ class AccommodationInventoryController extends Controller
 
     public function rooming(Request $request, Accommodation $accommodation, AccommodationInventory $accommodationInventory)
     {
-        $notes = !$request->has('notes') || $request->notes == 1;
+        $notes = !$request->has('notes') || $request->notes == true;
         return RoomingReportRepository::viewReport($accommodationInventory->repository, 'accommodation-inventories.rooming.export', $notes, ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,]);
     }
 
     public function exportRooming(Request $request, Accommodation $accommodation, AccommodationInventory $accommodationInventory, string $extension)
     {
-        $notes = !$request->has('notes') || $request->notes == 1;
+        $notes = !$request->has('notes') || $request->notes == true;
         return RoomingReportRepository::exportReport($accommodationInventory->repository, $extension, $notes);
     }
 

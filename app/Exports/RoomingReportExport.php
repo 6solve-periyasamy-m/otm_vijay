@@ -10,16 +10,16 @@ use Maatwebsite\Excel\Concerns\FromView;
 class RoomingReportExport implements FromView
 {
     private HasRoomingList $roomingList;
-    private bool $notes;
+    private bool $showNotes;
 
-    public function __construct(HasRoomingList $roomingList, bool $notes = true)
+    public function __construct(HasRoomingList $roomingList, bool $showNotes = true)
     {
         $this->roomingList = $roomingList;
-        $this->notes = $notes;
+        $this->showNotes = $showNotes;
     }
 
     public function view(): View
     {
-        return view('partials.reports.tables.rooming-export', ['data' => RoomingReportRepository::generateRoomingList($this->roomingList), 'notes' => $this->notes,]);
+        return view('partials.reports.tables.rooming-export', ['data' => RoomingReportRepository::generateRoomingList($this->roomingList), 'notes' => $this->showNotes,]);
     }
 }

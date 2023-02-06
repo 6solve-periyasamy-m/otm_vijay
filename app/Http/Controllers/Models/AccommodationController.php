@@ -56,13 +56,13 @@ class AccommodationController extends Controller
 
     public function rooming(Request $request, Accommodation $accommodation)
     {
-        $notes = !$request->has('notes') || $request->notes == 1;
+        $notes = !$request->has('notes') || $request->notes == true;
         return RoomingReportRepository::viewReport($accommodation->repository, 'accommodations.rooming.export', $notes, ['accommodation' => $accommodation,]);
     }
 
     public function exportRooming(Request $request, Accommodation $accommodation, string $extension)
     {
-        $notes = !$request->has('notes') || $request->notes == 1;
+        $notes = !$request->has('notes') || $request->notes == true;
         return RoomingReportRepository::exportReport($accommodation->repository, $extension, $notes);
     }
 

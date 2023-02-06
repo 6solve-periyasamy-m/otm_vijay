@@ -75,13 +75,13 @@ class TourController extends Controller
 
     public function rooming(Request $request, Tour $tour)
     {
-        $notes = !$request->has('notes') || $request->notes == 1;
+        $notes = !$request->has('notes') || $request->notes == true;
         return RoomingReportRepository::viewReport($tour->repository, 'tours.rooming.export', $notes, ['tour' => $tour,]);
     }
 
     public function exportRooming(Request $request, Tour $tour, string $extension)
     {
-        $notes = !$request->has('notes') || $request->notes == 1;
+        $notes = !$request->has('notes') || $request->notes == true;
         return RoomingReportRepository::exportReport($tour->repository, $extension, $notes);
     }
 

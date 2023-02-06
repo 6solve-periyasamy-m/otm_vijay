@@ -118,13 +118,13 @@ class ReportController extends Controller
 
     public function getRoomingReport(Request $request)
     {
-        $notes = !$request->has('notes') || $request->notes == 1;
+        $notes = !$request->has('notes') || $request->notes == true;
         return RoomingReportRepository::viewReport(new RoomingReportRepository(), 'reports.rooming.export', $notes);
     }
 
     public function exportRoomingReport(Request $request, string $extension = 'xlsx')
     {
-        $notes = !$request->has('notes') || $request->notes == 1;
+        $notes = !$request->has('notes') || $request->notes == true;
         return RoomingReportRepository::exportReport(new RoomingReportRepository(), $extension, $notes);
     }
 
