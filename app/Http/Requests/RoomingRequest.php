@@ -17,7 +17,7 @@ class RoomingRequest extends FormRequest
     {
         if (!isset($this->inflated)) {
             $data = [];
-            foreach ($this->data as $datum) {
+            foreach ($this->data ?? [] as $datum) {
                 $data[] = new RemoteGroup($datum['customers'], $datum['rooms']);
             }
             $this->inflated = $data;

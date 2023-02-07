@@ -40,7 +40,7 @@ class OrderController extends Controller
 
     public function store(CreateOrderRequest $request)
     {
-        $order = OrderRepository::create($request->getTour(), $request->getData(), $request->getLeadBooker(), $request->getCustomers());
+        $order = OrderRepository::create($request->getTour(), $request->getData(), $request->getLeadBooker(), $request->getCustomers(), $request->doEmail());
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
