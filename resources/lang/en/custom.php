@@ -13,6 +13,7 @@ return [
             'cancelled' => [
                 'deposit' => 'Cancelled: Deposit Held',
                 'full' => 'Cancelled: Fully Refunded',
+                'over' => 'Cancelled: Over-Refunded',
                 'required' => 'Cancelled: Requires Refund',
             ]
         ]
