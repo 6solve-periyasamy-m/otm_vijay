@@ -51,7 +51,7 @@
         </div>
         @endif
         <a class="btn btn-danger float-end text-white" href="" onclick="event.preventDefault();removeCustomer(this)">
-            <x-icon icon="trash" />
+            {{ Icon::delete() }}
             Remove Customer
         </a>
     </div>

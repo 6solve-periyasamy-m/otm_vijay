@@ -30,7 +30,7 @@
         @can('update', \App\Models\Transport\Transport::class)
         <div class="col-12">
             <a class="btn btn-success" href="{{route('transports.edit', ['transport' => $transport,])}}">
-                <x-icon icon="note" />
+                {{ Icon::edit() }}
                 <span>Edit Transport</span>
             </a>
         </div>

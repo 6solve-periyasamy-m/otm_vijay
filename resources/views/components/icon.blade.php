@@ -1,1 +1,1 @@
-<i class="icon-{{$attributes->get('icon', 'redo')}}">{{$slot}}</i>
+<i class="icon-{{$icon ?? $attributes->get('icon', 'redo')}}">{{$slot??""}}</i>

@@ -9,7 +9,7 @@
     <div class="card-body ">
         {{--<a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>--}}
         <a href="{{ route('accommodation-inventories.create', ['accommodation' => $accommodation, ]) }}" class="btn btn-primary float-end me-1">
-            <x-icon icon="plus" />
+            {{ Icon::create() }}
             <span>Add Inventory</span>
         </a>
     </div>
@@ -57,43 +57,43 @@
                     <td class="actions-4">
                         @can('read', \App\Models\Accommodation\AccommodationInventory::class)
                             <a href="{{route('accommodation-inventories.rooming', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}" class="btn btn-outline-secondary btn-sm mb-1">
-                                <x-icon icon="list" />
+                                {{ Icon::list() }}
                             </a>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                <x-icon icon="list" />
+                                {{ Icon::list() }}
                             </span>
                         @endcan
                         @can('create', \App\Models\Accommodation\AccommodationInventory::class)
                             <a href="{{route('accommodation-inventories.duplicate', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
-                                <x-icon icon="layers" />
+                                {{ Icon::copy() }}
                             </a>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                <x-icon icon="layers" />
+                                {{ Icon::copy() }}
                             </span>
                         @endcan
                         @can('update', \App\Models\Accommodation\AccommodationInventory::class)
                             <a href="{{route('accommodation-inventories.edit', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}"
                                 class="btn btn-outline-success btn-sm mb-1">
-                                <x-icon icon="note" />
+                                {{ Icon::edit() }}
                             </a>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                <x-icon icon="note" />
+                                {{ Icon::edit() }}
                             </span>
                         @endcan
                         @can('delete', \App\Models\Accommodation\AccommodationInventory::class)
                             <a href="#" class="btn btn-outline-danger btn-sm mb-1"
                             onclick="event.preventDefault();document.getElementById('accommodationInventory-{{ $accommodationInventory->id }}-delete').submit();">
-                                <x-icon icon="trash" />
+                                {{ Icon::delete() }}
                             </a>
                             <form id="accommodationInventory-{{ $accommodationInventory->id }}-delete"
                                 action="{{ route('accommodation-inventories.delete', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,]) }}"
                                 method="POST" style="display: none;">{{ csrf_field() }}</form>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                <x-icon icon="trash" />
+                                {{ Icon::delete() }}
                             </span>
                         @endcan
                     </td>

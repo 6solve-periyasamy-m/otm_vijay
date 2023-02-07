@@ -14,7 +14,7 @@
     <div class="card">
         <div class="card-body">
             <a class="btn btn-primary float-end" href="{{ route('roles.create') }}">
-                <x-icon icon="plus" />
+                {{ Icon::create() }}
                 <span>Create New</span>
             </a>
         </div>
@@ -39,12 +39,12 @@
                             @if(Auth::user()->getHighestRoleLevel() > $role->level)
                                 <td>
                                     <a href="{{route('roles.edit', ['role' => $role,])}}" class="btn btn-outline-success btn-sm mb-1">
-                                        <x-icon icon="note" />
+                                        {{ Icon::edit() }}
                                     </a>
                                     @can('delete', \App\Models\User::class)
                                     <a href="#" class="btn btn-outline-danger btn-sm mb-1"
                                        onclick="event.preventDefault();document.getElementById('role-{{ $role->id }}-delete').submit();">
-                                        <x-icon icon="trash" />
+                                        {{ Icon::delete() }}
                                     </a>
                                     <form id="user-{{ $role->id }}-delete"
                                           action="{{ route('roles.delete', ['role' => $role,]) }}" method="POST"
@@ -54,11 +54,11 @@
                             @else
                                 <td>
                                     <span class="btn btn-outline-dark btn-sm mb-1">
-                                        <x-icon icon="note" />
+                                        {{ Icon::edit() }}
                                     </span>
                                     @can('delete', \App\Models\User::class)
                                         <span class="btn btn-outline-dark btn-sm mb-1">
-                                            <x-icon icon="trash" />
+                                            {{ Icon::delete() }}
                                         </span>
                                     @endcan
                                 </td>

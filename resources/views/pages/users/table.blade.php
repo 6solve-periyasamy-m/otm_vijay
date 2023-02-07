@@ -15,12 +15,12 @@
         <div class="card-body">
             @if(\App\Repository\Authentication\UserRepository::getRemainingUserCount() > 0)
                 <a class="btn btn-primary float-end" href="{{ route('users.create') }}">
-                    <x-icon icon="plus" />
+                    {{ Icon::create() }}
                     <span>Create New</span>
                 </a>
             @else
                 <span class="btn btn-dark float-end" href="{{ route('users.create') }}">
-                    <x-icon icon="plus" />
+                    {{ Icon::create() }}
                     <span>User limit reached</span>
                 </span>
             @endif
@@ -55,29 +55,29 @@
                                 <td>
                                     @if($user->trashed())
                                         <span class="btn btn-outline-dark btn-sm mb-1">
-                                        <x-icon icon="note" />
+                                        {{ Icon::edit() }}
                                     </span>
                                     @else
                                         <a href="{{route('users.edit', ['user' => $user,])}}"
                                            class="btn btn-outline-success btn-sm mb-1">
-                                            <x-icon icon="note" />
+                                            {{ Icon::edit() }}
                                         </a>
                                     @endif
                                     @can('delete', \App\Models\User::class)
                                         @if(Auth::user()->id == $user->id)
                                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                            <x-icon icon="trash" />
+                                            {{ Icon::delete() }}
                                         </span>
                                         @else
                                             @if($user->trashed())
                                                 @if(\App\Repository\Authentication\UserRepository::getRemainingUserCount() <= 0)
                                                     <span class="btn btn-outline-dark btn-sm mb-1">
-                                                    <x-icon icon="magic-wand" />
+                                                    {{ Icon::enable() }}
                                                 </span>
                                                 @else
                                                     <a href="#" class="btn btn-outline-warning btn-sm mb-1"
                                                        onclick="event.preventDefault();document.getElementById('user-{{ $user->id }}-restore').submit();">
-                                                        <x-icon icon="magic-wand" />
+                                                        {{ Icon::enable() }}
                                                     </a>
                                                     <form id="user-{{ $user->id }}-restore"
                                                           action="{{ route('users.restore', ['user' => $user->id,]) }}"
@@ -87,7 +87,7 @@
                                             @else
                                                 <a href="#" class="btn btn-outline-danger btn-sm mb-1"
                                                    onclick="event.preventDefault();document.getElementById('user-{{ $user->id }}-delete').submit();">
-                                                    <x-icon icon="trash" />
+                                                    {{ Icon::delete() }}
                                                 </a>
                                                 <form id="user-{{ $user->id }}-delete"
                                                       action="{{ route('users.delete', ['user' => $user,]) }}"
@@ -100,11 +100,11 @@
                             @else
                                 <td>
                                     <span class="btn btn-outline-dark btn-sm mb-1">
-                                        <x-icon icon="note" />
+                                        {{ Icon::edit() }}
                                     </span>
                                     @can('delete', \App\Models\User::class)
                                         <span class="btn btn-outline-dark btn-sm mb-1">
-                                            <x-icon icon="trash" />
+                                            {{ Icon::delete() }}
                                         </span>
                                     @endcan
                                 </td>

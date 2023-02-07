@@ -42,9 +42,12 @@
             <div class="form-group col-12 col-xl-4">
                 <label for="customers[${id}]-input">Additional Traveller</label>
                 <div class="d-flex">
-                    <select class="form-control customers[${id}]-input" id="customers-${id}" name="customers[${id}][id]"></select>
-                    <a href="{{ route('customers.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
-                    <a href="javascript:getUnknownCustomer('#customer-${id}')" class="btn btn-info d-inline ms-1"><x-icon icon="user" /></a>
+                    <select class="form-control customers[${id}]-input" id="customers-${id}"
+                            name="customers[${id}][id]"></select>
+                    <a href="{{ route('customers.create') }}" target="_blank"
+                       class="btn btn-success d-inline ms-1">+</a>
+                    <a href="javascript:getUnknownCustomer('#customer-${id}')"
+                       class="btn btn-info d-inline ms-1">{{ Icon::unknownCustomer() }}</a>
                     @include('partials.fields.btn-checkbox', ['field' => 'customers[${id}][travelling]', 'icon' => 'plane', 'value' => 1,])
                     @include('partials.fields.btn-checkbox', ['field' => 'customers[${id}][paying]', 'icon' => 'wallet', 'value' => 1,])
                 </div>

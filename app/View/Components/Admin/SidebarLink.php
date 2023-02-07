@@ -17,19 +17,19 @@ use App\Models\Tour\Tour;
 use App\Models\Transport\Transport;
 use App\Models\User;
 use Bouncer;
+use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use Silber\Bouncer\Database\Role;
 
 class SidebarLink extends Component
 {
     private string $name;
     private string $url;
-    private string $icon;
+    private View|string|Closure $icon;
     private ?string $search;
     private bool $permitted;
 
-    public function __construct(string $name, string $url, string $icon, ?string $search = null, ?string $class = null, ?string $permission = null)
+    public function __construct(string $name, string $url, View|string|Closure $icon, ?string $search = null, ?string $class = null, ?string $permission = null)
     {
         $this->name = $name;
         $this->url = $url;

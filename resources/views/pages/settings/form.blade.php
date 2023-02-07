@@ -93,10 +93,10 @@
                     <td>
                         <a href="{{route('email.edit', ['mail' => $mail,])}}"
                            class="btn btn-outline-success btn-sm mb-1">
-                            <x-icon icon="note">&nbsp;Edit</x-icon>
+                            {{ Icon::edit() }}Edit
                         </a>
                         <a href="{{route('email.demo', ['mail' => $mail,])}}" class="btn btn-outline-info btn-sm mb-1">
-                            <x-icon icon="envelope-letter">&nbsp;Demo</x-icon>
+                            {{ Icon::email() }}Demo
                         </a>
                     </td>
                 </tr>

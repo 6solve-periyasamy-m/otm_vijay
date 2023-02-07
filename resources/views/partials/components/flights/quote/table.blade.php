@@ -40,7 +40,7 @@
         </select>
     </div>
     <a href="javascript:getSelectedFlightInventory()" class="btn btn-primary ms-3 text-white">
-        <x-icon icon="plus" />
+        {{ Icon::create() }}
         <span>Add Selected Rows</span>
     </a>
 </div>

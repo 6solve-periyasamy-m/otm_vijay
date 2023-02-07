@@ -20,8 +20,9 @@
                     <img src="{{ asset(Auth::user()->avatar_url) }}" class="img-thumbnail">
                 </a>
                 <div class="dp-content">
-                    <a href="{{ route('users.edit', ['user' => Auth::user(),]) }}"><x-icon icon="note" />&nbsp;Edit Account</a>
-                    <a href="#" onclick="event.preventDefault();logout();"><x-icon icon="login" />&nbsp;Logout</a>
+                    <a href="{{ route('users.edit', ['user' => Auth::user(),]) }}">{{ Icon::edit() }}&nbsp;Edit
+                        Account</a>
+                    <a href="#" onclick="event.preventDefault();logout();">{{ Icon::logout() }}&nbsp;Logout</a>
                 </div>
             </div>
         @else
@@ -31,7 +32,7 @@
                 </a>
             </div>
         @endif
-    </div>       
+    </div>
 </div>
 
 @push('footer-stack')

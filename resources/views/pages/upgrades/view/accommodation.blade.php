@@ -47,7 +47,7 @@
     <div class="card">
         <div class="card-body text-end">
             <a href="{{ route('accommodation-upgrade.create', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]) }}" class="btn btn-primary">
-                <x-icon icon="plus" />
+                {{ Icon::create() }}
                 <span>Create</span>
             </a>
         </div>
@@ -73,7 +73,8 @@
                             </thead>
                             @foreach($inventoryTour->upgrades as $upgrade)
                                 <tr>
-                                    <td style="min-width: 200px">{{ f_datetime($upgrade->upgrade->accommodationInventory->check_in) }} to {{ f_datetime($upgrade->upgrade->accommodationInventory->check_out) }}</td>
+                                    <td style="min-width: 200px">{{ f_datetime($upgrade->upgrade->accommodationInventory->check_in) }}
+                                        to {{ f_datetime($upgrade->upgrade->accommodationInventory->check_out) }}</td>
                                     <td>{{ $upgrade->upgrade->accommodationInventory->accommodation->name }}</td>
                                     <td>{{ $upgrade->upgrade->accommodationInventory->roomType->name }}</td>
                                     <td>{{ $upgrade->upgrade->accommodationInventory->boardType->name }}</td>
@@ -82,20 +83,24 @@
                                     <td>{{ f_currency($upgrade->upgrade->tour_sales_price) }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\Accommodation\AccommodationInventoryTour::class)
-                                            <a href="{{ route('accommodation-upgrade.edit', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade]) }}" class="btn btn-outline-primary btn-sm mb-1"><x-icon icon="note" /></a>
+                                            <a href="{{ route('accommodation-upgrade.edit', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade]) }}"
+                                               class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                                    <x-icon icon="note" />
+                                                    {{ Icon::edit() }}
                                                 </span>
                                         @endcan
                                         @can('delete', \App\Models\Accommodation\AccommodationInventoryTour::class)
-                                            <a href="#" onclick="$('#accommodation-{{$upgrade->upgrade->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><x-icon icon="trash" /></a>
-                                            <form action="{{ route('accommodation-upgrade.delete', ['tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade' => $upgrade]) }}" method="post" id="accommodation-{{$upgrade->upgrade->id}}-delete">
+                                            <a href="#"
+                                               onclick="$('#accommodation-{{$upgrade->upgrade->id}}-delete').submit()"
+                                               class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
+                                            <form action="{{ route('accommodation-upgrade.delete', ['tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade' => $upgrade]) }}"
+                                                  method="post" id="accommodation-{{$upgrade->upgrade->id}}-delete">
                                                 @csrf
                                             </form>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                                    <x-icon icon="trash" />
+                                                    {{ Icon::delete() }}
                                                 </span>
                                         @endcan
                                     </td>

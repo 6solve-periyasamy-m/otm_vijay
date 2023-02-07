@@ -64,21 +64,21 @@
                     <div class="col-12">
                         @if(isset($detailed) && $detailed)
                             <a href="{{ route('merchandise.view', ['merchandise' => $merchandise,]) }}" class="btn btn-info">
-                                <x-icon icon="layers" />
+                                {{ Icon::overview() }}
                                 Overview
                             </a>
                         @else
                             <a href="{{ route('merchandise.detailed', ['merchandise' => $merchandise,]) }}" class="btn btn-primary">
-                                <x-icon icon="list" />
+                                {{ Icon::list() }}
                                 Detailed View
                             </a>
                         @endif
                         <a href="{{ route('merchandise.edit', ['merchandise' => $merchandise, 'view' => isset($detailed) && $detailed ? 'detailed' : 'overview']) }}" class="btn btn-success">
-                            <x-icon icon="note" />
+                            {{ Icon::edit() }}
                             Edit Merchandise
                         </a>
                         <a href="{{ route('merchandise.delete', ['merchandise' => $merchandise,]) }}" class="btn btn-danger">
-                            <x-icon icon="trash" />
+                            {{ Icon::delete() }}
                             Delete Merchandise
                         </a>
                     </div>
@@ -90,7 +90,7 @@
     <div class="card">
         <div class="card-body">
             <a class="btn btn-primary float-end" href="{{ route('merchandise.inventory.create', ['merchandise' => $merchandise,]) }}">
-                <x-icon icon="plus" />
+                {{ Icon::create() }}
                 Create Inventory
             </a>
         </div>

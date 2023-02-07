@@ -21,7 +21,7 @@
 <div class="card">
     <div class="card-body">
         <a class="btn btn-primary float-end" href="{{ route('events.create') }}">
-            <x-icon icon="plus" />
+            {{ Icon::create() }}
             <span>Create New</span>
         </a>
     </div>
@@ -51,23 +51,23 @@
                     <td>
                         @can('update', \App\Models\Tour\Event::class)
                             <a href="{{route('events.edit', ['event' => $event,])}}" class="btn btn-sm btn-outline-success mb-1">
-                                <x-icon icon="note" />
+                                {{ Icon::edit() }}
                             </a>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                <x-icon icon="note" />
+                                {{ Icon::edit() }}
                             </span>
                         @endcan
                         @can('delete', \App\Models\Tour\Event::class)
                             <a href="javascript:$('#events-{{ $event->id }}-delete').submit()" class="btn btn-sm btn-outline-danger mb-1">
-                                <x-icon icon="trash" />
+                                {{ Icon::delete() }}
                             </a>
                             <form id="events-{{ $event->id }}-delete"
                                   action="{{ route('events.delete', ['event' => $event,]) }}" method="POST"
                                   style="display: none;">{{ csrf_field() }}</form>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                <x-icon icon="trash" />
+                                {{ Icon::delete() }}
                             </span>
                         @endcan
                     </td>

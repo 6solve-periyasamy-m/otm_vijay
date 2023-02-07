@@ -30,7 +30,7 @@
 <div class="d-flex justify-content-between mb-3">
     <div></div>
     <a href="javascript:getSelectedActivityInventory()" class="btn btn-primary ms-3 text-white">
-        <x-icon icon="plus" />
+        {{ Icon::create() }}
         <span>Add Selected Rows</span>
     </a>
 </div>

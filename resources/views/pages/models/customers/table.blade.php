@@ -14,7 +14,7 @@
     <div class="card">
         <div class="card-body text-end">
             <a class="btn btn-primary text-white" href="{{ route('customers.create') }}">
-                <x-icon icon="plus" />
+                {{ Icon::create() }}
                 Create New
             </a>
         </div>
@@ -45,11 +45,11 @@
                         <td>{{ f_date($customer->passport_expiry_date) }}</td>
                         <td class="actions">
                             <a href="{{route('customers.edit', ['customer' => $customer,])}}" class="btn btn-outline-success btn-sm mb-1">
-                                <x-icon icon="note" />
+                                {{ Icon::edit() }}
                             </a>
                             <a href="#" class="btn btn-outline-danger btn-sm mb-1"
                                onclick="event.preventDefault();document.getElementById('customer-{{ $customer->id }}-delete').submit();">
-                                <x-icon icon="trash" />
+                                {{ Icon::delete() }}
                             </a>
                             <form id="customer-{{ $customer->id }}-delete"
                                   action="{{ route('customers.delete', ['customer' => $customer,]) }}" method="POST"

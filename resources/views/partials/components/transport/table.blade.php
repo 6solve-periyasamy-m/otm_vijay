@@ -13,7 +13,7 @@ $(document).ready(function() {
     <div class="card-body">
         {{--<a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>--}}
         <a href="{{ route('transport-inventories.create', ['transport' => $transport, ]) }}" class="btn btn-primary float-end me-1">
-            <x-icon icon="plus" />
+            {{ Icon::create() }}
             <span>Add Inventory</span>
         </a>
     </div>
@@ -61,34 +61,34 @@ $(document).ready(function() {
                 <td class="actions-3">
                     @can('create', \App\Models\Transport\TransportInventory::class)
                         <a href="{{route('transport-inventories.duplicate', ['transport' => $transport, 'transportInventory' => $transportInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
-                            <x-icon icon="layers" />
+                            {{ Icon::copy() }}
                         </a>
                     @else
                         <span class="btn btn-outline-dark btn-sm mb-1">
-                            <x-icon icon="layers" />
+                            {{ Icon::copy() }}
                         </span>
                     @endcan
                     @can('update', \App\Models\Transport\TransportInventory::class)
                         <a href="{{route('transport-inventories.edit', ['transport' => $transport, 'transportInventory' => $transportInventory,])}}"
                            class="btn btn-sm btn-outline-success mb-1">
-                            <x-icon icon="note" />
+                            {{ Icon::edit() }}
                         </a>
                     @else
                         <span class="btn btn-outline-dark btn-sm mb-1">
-                            <x-icon icon="note" />
+                            {{ Icon::edit() }}
                         </span>
                     @endcan
                     @can('delete', \App\Models\Transport\TransportInventory::class)
                         <a href="#" class="btn btn-sm btn-outline-danger mb-1"
                            onclick="event.preventDefault();document.getElementById('transportInventory-{{ $transportInventory->id }}-delete').submit();">
-                            <x-icon icon="trash" />
+                            {{ Icon::delete() }}
                         </a>
                         <form id="transportInventory-{{ $transportInventory->id }}-delete"
                               action="{{ route('transport-inventories.delete', ['transport' => $transport, 'transportInventory' => $transportInventory,]) }}"
                               method="POST" style="display: none;">{{ csrf_field() }}</form>
                     @else
                         <span class="btn btn-outline-dark btn-sm mb-1">
-                            <x-icon icon="trash" />
+                            {{ Icon::delete() }}
                         </span>
                     @endcan
                 </td>

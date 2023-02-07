@@ -47,7 +47,7 @@
                     </div>
                     <div class="col-12">
                         <a href="{{ route('organizations.edit', ['organization' => $organization,]) }}" class="btn btn-success">
-                            <x-icon icon="note" />
+                            {{ Icon::edit() }}
                             Edit Organization
                         </a>
                     </div>

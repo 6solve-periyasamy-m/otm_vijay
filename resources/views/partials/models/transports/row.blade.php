@@ -11,33 +11,33 @@
     <td class="actions-3">
         @can('create', \App\Models\Transport\Transport::class)
             <a href="{{route('transports.return', ['transport' => $transport,])}}" class="btn btn-outline-blue btn-sm mb-1">
-                <x-icon icon="directions" />
+                {{ Icon::returnTrip() }}
             </a>
         @else
             <span class="btn btn-outline-dark btn-sm mb-1">
-            <x-icon icon="directions" />
+            {{ Icon::returnTrip() }}
         </span>
         @endcan
         @can('update', \App\Models\Transport\Transport::class)
             <a href="{{route('transports.edit', ['transport' => $transport,])}}" class="btn btn-sm btn-outline-success mb-1">
-                <x-icon icon="note" />
+                {{ Icon::edit() }}
             </a>
         @else
             <span class="btn btn-outline-dark btn-sm mb-1">
-            <x-icon icon="note" />
+            {{ Icon::edit() }}
         </span>
         @endcan
         @can('delete', \App\Models\Transport\Transport::class)
             <a href="#" class="btn btn-sm btn-outline-danger mb-1"
                onclick="event.preventDefault();document.getElementById('transport-{{ $transport->id }}-delete').submit();">
-                <x-icon icon="trash" />
+                {{ Icon::delete() }}
             </a>
             <form id="transport-{{ $transport->id }}-delete"
                   action="{{ route('transports.delete', ['transport' => $transport,]) }}" method="POST"
                   style="display: none;">{{ csrf_field() }}</form>
         @else
             <span class="btn btn-outline-dark btn-sm mb-1">
-            <x-icon icon="trash" />
+            {{ Icon::delete() }}
         </span>
         @endcan
     </td>

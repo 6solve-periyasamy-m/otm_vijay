@@ -10,7 +10,7 @@
     <td>{{ $address->postcode ?? 'Not Set' }}</td>
     <td class="actions">
         <a href="{{route('addresses.edit', ['address' => $address,])}}" class="btn btn-outline-success btn-sm mb-1">
-            <x-icon icon="note" />
+            {{ Icon::edit() }}
         </a>
     </td>
 </tr>

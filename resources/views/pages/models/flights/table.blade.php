@@ -13,7 +13,7 @@
 <div class="card">
     <div class="card-body">
         <a class="btn btn-primary float-end" href="{{ route('flights.create') }}">
-            <x-icon icon="plus" />
+            {{ Icon::create() }}
             <span>Create New</span>
         </a>
     </div>

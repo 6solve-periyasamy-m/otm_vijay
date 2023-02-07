@@ -13,7 +13,7 @@
             @can('create', \App\Models\Order\Order::class)
             <div class="mb-3">
                 <a href="{{ route('orders.create') }}" class="btn btn-primary text-white">
-                    <x-icon icon="plus" />
+                    {{ Icon::create() }}
                     Create Order
                 </a>
             </div>

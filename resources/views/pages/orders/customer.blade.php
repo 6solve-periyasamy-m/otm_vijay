@@ -142,12 +142,12 @@ $(document).ready( function () {
         <div class="col-12">
             @can('update', \App\Models\Order\Order::class)
                 <a href="{{ route('orders.edit', ['order' => $orderCustomer->order,]) }}" class="btn btn-success">
-                    <x-icon icon="note" />
+                    {{ Icon::edit() }}
                     Edit Order
                 </a>
             @endcan
             <a href="{{ route('orders.view', ['order' => $orderCustomer->order,]) }}" class="btn btn-amber">
-                <x-icon icon="home" />
+                {{ Icon::home() }}
                 Return to Order
             </a>
         </div>
@@ -248,28 +248,33 @@ $(document).ready( function () {
         </div>
         <div class="col-12">
             @can('create', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
-            <a href="{{ route('order-customer-adjustments.create', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}" class="btn btn-success mb-1">
-                <x-icon icon="plus" />
-                Add Adjustment
-            </a>
+                <a href="{{ route('order-customer-adjustments.create', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}"
+                   class="btn btn-success mb-1">
+                    {{ Icon::create() }}
+                    Add Adjustment
+                </a>
             @endcan
             @can('update', \App\Models\Order\OrderCustomer::class)
-            <a href="{{ route('order-customers.edit', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}" class="btn btn-amber mb-1">
-                <x-icon icon="note" />
-                Edit Order Customer
-            </a>
+                <a href="{{ route('order-customers.edit', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}"
+                   class="btn btn-amber mb-1">
+                    {{ Icon::edit() }}
+                    Edit Order Customer
+                </a>
             @endcan
             @can('delete', \App\Models\Order\OrderCustomer::class)
                 @if($orderCustomer->id !== $orderCustomer->order->lead_booker_id)
-                    <a href="#" onclick="$('#customer-delete').submit()" class="btn btn-danger mb-1"><x-icon icon="trash" />Remove Customer</a>
-                    <form action="{{ route('order-customers.delete', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer]) }}" method="post" id="customer-delete">
+                    <a href="#" onclick="$('#customer-delete').submit()"
+                       class="btn btn-danger mb-1">{{ Icon::delete() }}Remove Customer</a>
+                    <form action="{{ route('order-customers.delete', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer]) }}"
+                          method="post" id="customer-delete">
                         @csrf
                     </form>
                 @endcan
             @endcan
             @can('read', \App\Models\Customer\Customer::class)
-                <a href="{{ route('customers.view', ['customer' => $orderCustomer->customer, ]) }}" class="btn btn-info mb-1" target="_blank">
-                    <x-icon icon="user" />
+                <a href="{{ route('customers.view', ['customer' => $orderCustomer->customer, ]) }}"
+                   class="btn btn-info mb-1" target="_blank">
+                    {{ Icon::customer() }}
                     View Customer
                 </a>
             @endcan
@@ -279,7 +284,7 @@ $(document).ready( function () {
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;">
 
 <div class="heading pt-2 pb-md-3 pb-2">
-    <h2 class="fw-bold">Tour Components</h2>        
+    <h2 class="fw-bold">Tour Components</h2>
 </div>
 
 {{-- Components Section --}}
@@ -288,23 +293,23 @@ $(document).ready( function () {
         <ul class="nav nav-pills otm-tab">
             <li class="nav-item col-6 col-md-3">
                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#accommodation">
-                    <x-icon icon="home" /> Accommodation
+                    {{ Icon::accommodation() }} Accommodation
                 </button>
             </li>
             <li class="nav-item col-6 col-md-3">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities">
-                    <x-icon icon="settings" /> Activities
+                    {{ Icon::activity() }} Activities
                 </button>
             </li>
             <li class="nav-item col-6 col-md-3">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#flights">
-                    <x-icon icon="plane" />
+                    {{ Icon::flight() }}
                     Flights
                 </button>
             </li>
             <li class="nav-item col-6 col-md-3">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transports">
-                    <x-icon icon="directions" />
+                    {{ Icon::transport() }}
                     Transport
                 </button>
             </li>
@@ -362,15 +367,18 @@ $(document).ready( function () {
                                         @endif
                                     </td>
                                     <td>
-                                        <form action="{{ route('orderAccommodationDelete', ['id' => $orderAccommodation->id,]) }}" method="post">
+                                        <form action="{{ route('orderAccommodationDelete', ['id' => $orderAccommodation->id,]) }}"
+                                              method="post">
                                             @csrf
-                                            <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}" />
-                                            <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm"><x-icon icon="trash" /></a>
+                                            <input type="hidden" name="redirect"
+                                                   value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}"/>
+                                            <a href="#" onclick="this.parentNode.submit()"
+                                               class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
                                         </form>
                                     </td>
                                 </tr>
-                            @endforeach
-                        </table>
+                        @endforeach
+                    </table>
                 </div>
                 @if(!empty($orderCustomer->accommodation_notes))
                     <hr class="splitter">
@@ -431,10 +439,13 @@ $(document).ready( function () {
                                     @endif
                                 </td>
                                 <td>
-                                    <form action="{{ route('orderActivityDelete', ['id' => $orderActivity->id,]) }}" method="post">
+                                    <form action="{{ route('orderActivityDelete', ['id' => $orderActivity->id,]) }}"
+                                          method="post">
                                         @csrf
-                                        <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}" />
-                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm"><x-icon icon="trash" /></a>
+                                        <input type="hidden" name="redirect"
+                                               value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}"/>
+                                        <a href="#" onclick="this.parentNode.submit()"
+                                           class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
                                     </form>
                                 </td>
                             </tr>
@@ -500,10 +511,13 @@ $(document).ready( function () {
                                     @endif
                                 </td>
                                 <td>
-                                    <form action="{{ route('orderFlightDelete', ['id' => $orderFlight->id,]) }}" method="post">
+                                    <form action="{{ route('orderFlightDelete', ['id' => $orderFlight->id,]) }}"
+                                          method="post">
                                         @csrf
-                                        <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}" />
-                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm"><x-icon icon="trash" /></a>
+                                        <input type="hidden" name="redirect"
+                                               value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}"/>
+                                        <a href="#" onclick="this.parentNode.submit()"
+                                           class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
                                     </form>
                                 </td>
                             </tr>
@@ -571,10 +585,13 @@ $(document).ready( function () {
                                     @endif
                                 </td>
                                 <td>
-                                    <form action="{{ route('orderTransportDelete', ['id' => $orderTransport->id,]) }}" method="post">
+                                    <form action="{{ route('orderTransportDelete', ['id' => $orderTransport->id,]) }}"
+                                          method="post">
                                         @csrf
-                                        <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}" />
-                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm"><x-icon icon="trash" /></a>
+                                        <input type="hidden" name="redirect"
+                                               value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}"/>
+                                        <a href="#" onclick="this.parentNode.submit()"
+                                           class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
                                     </form>
                                 </td>
                             </tr>
@@ -618,19 +635,27 @@ $(document).ready( function () {
                 </thead>
                 @foreach($orderCustomer->orderMerchandise()->with('tourComponent', 'tourComponent.inventory', 'tourComponent.inventory.component')->get() as $orderMerchandise)
                     <tr>
-                        <td><img src="{{ $orderMerchandise->tourComponent->inventory->asset }}" class="image tiny"/></td>
-                        <td>{{ $orderMerchandise->tourComponent->inventory->component->name }} ({{ $orderMerchandise->tourComponent->inventory->variant->name }}) ({{ $orderMerchandise->tourComponent->inventory->size?->name ?? 'No Size'  }})</td>
+                        <td><img src="{{ $orderMerchandise->tourComponent->inventory->asset }}" class="image tiny"/>
+                        </td>
+                        <td>{{ $orderMerchandise->tourComponent->inventory->component->name }}
+                            ({{ $orderMerchandise->tourComponent->inventory->variant->name }})
+                            ({{ $orderMerchandise->tourComponent->inventory->size?->name ?? 'No Size'  }})
+                        </td>
                         <td>{{ f_currency($orderMerchandise->tourComponent->tour_sales_price) }}</td>
                         <td>{{ $orderMerchandise->tourComponent->tour_component_type }}</td>
                         <td>{{ f_bool($orderMerchandise->fulfilled) }}</td>
                         <td class="actions">
-                            <a href="{{ route('merchandise.inventory.tour.order.fulfil', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderMerchandise' => $orderMerchandise]) }}" class="btn btn-outline-primary btn-sm">
-                                <x-icon icon="action-redo" />
+                            <a href="{{ route('merchandise.inventory.tour.order.fulfil', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderMerchandise' => $orderMerchandise]) }}"
+                               class="btn btn-outline-primary btn-sm">
+                                {{ Icon::fulfil() }}
                             </a>
-                            <a href="javascript:$('#m-{{$orderMerchandise->id}}-delete').submit()" class="btn btn-outline-danger btn-sm"><x-icon icon="trash" /></a>
-                            <form action="{{ route('orderMerchandiseDelete', ['id' => $orderMerchandise->id,]) }}" method="post" id="m-{{$orderMerchandise->id}}-delete" class="d-none">
+                            <a href="javascript:$('#m-{{$orderMerchandise->id}}-delete').submit()"
+                               class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
+                            <form action="{{ route('orderMerchandiseDelete', ['id' => $orderMerchandise->id,]) }}"
+                                  method="post" id="m-{{$orderMerchandise->id}}-delete" class="d-none">
                                 @csrf
-                                <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}" />
+                                <input type="hidden" name="redirect"
+                                       value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}"/>
 
                             </form>
                         </td>
@@ -648,7 +673,7 @@ $(document).ready( function () {
             @can('create', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
             <div class="pb-3 text-end">
                 <a href="{{ route('order-customer-adjustments.create', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer]) }}" class="btn btn-success text-white">
-                    <x-icon icon="plus" />
+                    {{ Icon::create() }}
                     Add Adjustment
                 </a>
             </div>
@@ -671,20 +696,23 @@ $(document).ready( function () {
                         <td>{{ f_date($adjustment->date) }}</td>
                         <td class="actions">
                             @can('update', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
-                                <a href="{{ route('order-customer-adjustments.edit', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><x-icon icon="note" /></a>
+                                <a href="{{ route('order-customer-adjustments.edit', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}"
+                                   class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
-                                                <x-icon icon="note" />
+                                                {{ Icon::edit() }}
                                             </span>
                             @endcan
                             @can('delete', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
-                                <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><x-icon icon="trash" /></a>
-                                <form action="{{ route('order-customer-adjustments.delete', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" method="post" id="oadjustment-{{$adjustment->id}}-delete">
+                                <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()"
+                                   class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
+                                <form action="{{ route('order-customer-adjustments.delete', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}"
+                                      method="post" id="oadjustment-{{$adjustment->id}}-delete">
                                     @csrf
                                 </form>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
-                                                <x-icon icon="trash" />
+                                                {{ Icon::delete() }}
                                             </span>
                             @endcan
                         </td>
