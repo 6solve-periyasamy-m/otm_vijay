@@ -34,6 +34,16 @@
             $(document).ready(function () {
                 @stack('header-ready')
             });
+            function showOverlay(overlay) {
+                let jOverlay = $(overlay);
+                jOverlay.removeClass('hidden');
+                $('body').addClass('overflow-hidden');
+            }
+            function hideOverlay(overlay) {
+                let jOverlay = $(overlay);
+                jOverlay.addClass('hidden');
+                $('body').removeClass('overflow-hidden');
+            }
         </script>
     </head>
 <body>
