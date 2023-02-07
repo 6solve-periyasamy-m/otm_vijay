@@ -153,11 +153,12 @@ a {
 
     .nav-link {
         padding: 0.8rem 1rem;
+        overflow: hidden;
         color: #151515;
         font-size: 1rem;
         position: relative;
-        line-height: 1rem;
-        font-weight: 500;
+        line-height: 1;
+        font-weight: 400;
         display: flex;
         white-space: nowrap;
         transition-duration: 0.5s;
