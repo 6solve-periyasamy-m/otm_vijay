@@ -107,12 +107,12 @@
                 <tbody>
                 @foreach($system as $report)
                     <tr>
-                        <th scope="row"><a href="{{ route($report['view']) }}">{{ $report['name'] }}</a></th>
+                        <th scope="row"><a href="{{ route($report['view'], ($report['params'] ?? [])) }}">{{ $report['name'] }}</a></th>
                         <td>{{ $report['details'] }}</td>
                         <td>System</td>
                         <td>
-                            <a href="{{ route($report['export'], ['extension' => 'csv',]) }}" class="btn btn-outline-primary btn-sm mb-1" title="Export as CSV"><i class="icon-list"></i></a>
-                            <a href="{{ route($report['export'], ['extension' => 'xlsx',]) }}" class="btn btn-outline-info btn-sm mb-1" title="Export as XLSX"><i class="icon-chart"></i></a>
+                            <a href="{{ route($report['export'], ['extension' => 'csv', ...($report['params'] ?? [])]) }}" class="btn btn-outline-primary btn-sm mb-1" title="Export as CSV"><i class="icon-list"></i></a>
+                            <a href="{{ route($report['export'], ['extension' => 'xlsx', ...($report['params'] ?? [])]) }}" class="btn btn-outline-info btn-sm mb-1" title="Export as XLSX"><i class="icon-chart"></i></a>
                             <span class="btn btn-outline-dark btn-sm mb-1">
                                 <i class="icon-note"></i>
                             </span>

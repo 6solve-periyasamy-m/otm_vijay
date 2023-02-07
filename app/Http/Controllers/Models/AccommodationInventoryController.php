@@ -46,14 +46,16 @@ class AccommodationInventoryController extends Controller
         return view('pages.models.accommodation_inventories.view', ['accommodationInventory' => $accommodationInventory,]);
     }
 
-    public function rooming(Accommodation $accommodation, AccommodationInventory $accommodationInventory)
+    public function rooming(Request $request, Accommodation $accommodation, AccommodationInventory $accommodationInventory)
     {
-        return RoomingReportRepository::viewReport($accommodationInventory->repository, 'accommodation-inventories.rooming.export', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,]);
+        $notes = !$request->has('notes') || $request->notes == true;
+        return RoomingReportRepository::viewReport($accommodationInventory->repository, 'accommodation-inventories.rooming.export', $notes, ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,]);
     }
 
-    public function exportRooming(Accommodation $accommodation, AccommodationInventory $accommodationInventory, string $extension)
+    public function exportRooming(Request $request, Accommodation $accommodation, AccommodationInventory $accommodationInventory, string $extension)
     {
-        return RoomingReportRepository::exportReport($accommodationInventory->repository, $extension);
+        $notes = !$request->has('notes') || $request->notes == true;
+        return RoomingReportRepository::exportReport($accommodationInventory->repository, $extension, $notes);
     }
 
     public function edit(Accommodation $accommodation, AccommodationInventory $accommodationInventory)

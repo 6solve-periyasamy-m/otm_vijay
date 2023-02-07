@@ -74,14 +74,16 @@ class TourController extends Controller
         return view('pages.tour.costing', ['tour' => $tour,]);
     }
 
-    public function rooming(Tour $tour)
+    public function rooming(Request $request, Tour $tour)
     {
-        return RoomingReportRepository::viewReport($tour->repository, 'tours.rooming.export', ['tour' => $tour,]);
+        $notes = !$request->has('notes') || $request->notes == true;
+        return RoomingReportRepository::viewReport($tour->repository, 'tours.rooming.export', $notes, ['tour' => $tour,]);
     }
 
-    public function exportRooming(Tour $tour, string $extension)
+    public function exportRooming(Request $request, Tour $tour, string $extension)
     {
-        return RoomingReportRepository::exportReport($tour->repository, $extension);
+        $notes = !$request->has('notes') || $request->notes == true;
+        return RoomingReportRepository::exportReport($tour->repository, $extension, $notes);
     }
 
     public function duplicate(Tour $tour)

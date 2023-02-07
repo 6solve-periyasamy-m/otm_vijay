@@ -82,6 +82,7 @@
     @include('partials.fields.ckeditor', ['name' => 'Invoice Footer', 'field' => 'invoice_footer', 'value' => $order->invoice_footer, ])
 @endif
 @if($order === null)
+    @include('partials.fields.checkbox', ['name' => 'Send Booking Confirmation Email?', 'field' => 'should_invoice', 'value' => flag('order.manual.mail', false),])
 <hr class="splitter">
 <div class="customers-section row form-group">
     <div class="col-12 col-xl-10">
