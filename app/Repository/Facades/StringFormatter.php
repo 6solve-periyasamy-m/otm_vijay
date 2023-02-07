@@ -25,13 +25,17 @@ class StringFormatter
         }
     }
 
-    public function formatDateTime($date) : string {
-        $format = setting('system.format.date', 'd/m/Y') . ' ' . setting('system.format.time', 'H:i');
+    public function formatTime($date): string {
+        $format = setting('system.format.time', 'H:i');
         try {
             return Carbon::parse($date)->format($format);
         } catch (InvalidFormatException $exception) {
             return $date;
         }
+    }
+
+    public function formatDateTime($date) : string {
+        return $this->formatDate($date) . ' ' . $this->formatTime($date);
     }
 
     public function formatBoolean($boolean) : string {

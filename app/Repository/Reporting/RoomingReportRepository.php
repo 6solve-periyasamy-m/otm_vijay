@@ -28,20 +28,21 @@ class RoomingReportRepository implements HasRoomingList
         )->get();
     }
 
-    public static function viewReport(HasRoomingList $roomingList, string $export, array $data = []): Factory|View|Application
+    public static function viewReport(HasRoomingList $roomingList, string $export, bool $notes = true, array $data = []): Factory|View|Application
     {
         return view('pages.reports.view', [
             'tableView' => 'partials.reports.tables.rooming',
             'data' => self::generateRoomingList($roomingList),
             'title' => 'Rooming Report',
-            'xlsxExport' => route($export, ['extension' => 'xlsx', ...$data]),
-            'csvExport' => route($export, ['extension' => 'csv', ...$data]),
+            'notes' => $notes,
+            'xlsxExport' => route($export, ['extension' => 'xlsx', 'notes' => $notes, ...$data]),
+            'csvExport' => route($export, ['extension' => 'csv', 'notes' => $notes, ...$data]),
         ]);
     }
 
-    public static function exportReport(HasRoomingList $roomingList, string $extension): BinaryFileResponse
+    public static function exportReport(HasRoomingList $roomingList, string $extension, bool $notes = true): BinaryFileResponse
     {
-        return Excel::download(new RoomingReportExport($roomingList), 'rooming.' . $extension);
+        return Excel::download(new RoomingReportExport($roomingList, $notes), 'rooming.' . $extension);
     }
 
     /**
