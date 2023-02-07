@@ -200,7 +200,7 @@ class Icon
 
     public function user(): View|string|Closure
     {
-        return $this->person();
+        return $this->new('people');
     }
 
     public function customer(): View|string|Closure
@@ -306,5 +306,70 @@ class Icon
     public function convert(): View|string|Closure
     {
         return $this->new('bag');
+    }
+
+    public function dashboard(): View|string|Closure
+    {
+        return $this->list();
+    }
+
+    public function address(): View|string|Closure
+    {
+        return $this->new('envelope-letter');
+    }
+
+    public function order(): View|string|Closure
+    {
+        return $this->new('credit-card');
+    }
+
+    public function quote(): View|string|Closure
+    {
+        return $this->wallet();
+    }
+
+    public function organization(): View|string|Closure
+    {
+        return $this->new('graduation');
+    }
+
+    public function setting(): View|string|Closure
+    {
+        return $this->new('settings');
+    }
+
+    public function role(): View|string|Closure
+    {
+        return $this->new('organization');
+    }
+
+    public function logs(): View|string|Closure
+    {
+        return $this->layers();
+    }
+
+    public function report(): View|string|Closure
+    {
+        return $this->list();
+    }
+
+    public function flag(): View|string|Closure
+    {
+        return $this->new('flag');
+    }
+
+    public function attribute(): View|string|Closure
+    {
+        return $this->flag();
+    }
+
+    public function calendar(): View|string|Closure
+    {
+        return $this->new('calendar');
+    }
+
+    public function event(): View|string|Closure
+    {
+        return $this->calendar();
     }
 }
