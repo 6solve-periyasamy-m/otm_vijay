@@ -33,7 +33,7 @@ class RoomingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'data.*.customers.*' => 'required|integer|exists:customers,id',
+            'data.*.customers.*' => 'required|integer|exists:order_customers,id',
             'data.*.rooms.*' => 'required|integer|exists:accommodation_inventory_tours,id',
         ];
     }
