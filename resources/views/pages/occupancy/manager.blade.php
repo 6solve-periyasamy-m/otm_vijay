@@ -274,6 +274,10 @@
             } else {
                 alert('Data failed to save');
             }
+        }).catch((error) => {
+            console.log(error);
+            hideSpinner();
+            alert('Data failed to save');
         });
     }
 
