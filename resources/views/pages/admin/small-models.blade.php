@@ -26,7 +26,7 @@
     <div class="card">
         <div class="card-body" data-target="#accommodation" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
-                <i class="icon-arrow-up"></i> Accommodation
+                {{ Icon::minimize() }} Accommodation
             </h4>
         </div>
     </div>
@@ -41,7 +41,7 @@
     <div class="card">
         <div class="card-body" data-target="#activity" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
-                <i class="icon-arrow-up"></i> Activity
+                {{ Icon::minimize() }} Activity
             </h4>
         </div>
     </div>
@@ -56,7 +56,7 @@
     <div class="card">
         <div class="card-body" data-target="#flight" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
-                <i class="icon-arrow-up"></i> Flight
+                {{ Icon::minimize() }} Flight
             </h4>
         </div>
     </div>
@@ -74,7 +74,7 @@
     <div class="card">
         <div class="card-body" data-target="#transport" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
-                <i class="icon-arrow-up"></i> Transport
+                {{ Icon::minimize() }} Transport
             </h4>
         </div>
     </div>
@@ -89,7 +89,7 @@
     <div class="card">
         <div class="card-body" data-target="#merchandise" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
-                <i class="icon-arrow-up"></i> Merchandise
+                {{ Icon::minimize() }} Merchandise
             </h4>
         </div>
     </div>
@@ -107,7 +107,7 @@
     <div class="card">
         <div class="card-body" data-target="#tour" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
-                <i class="icon-arrow-up"></i> Tour
+                {{ Icon::minimize() }} Tour
             </h4>
         </div>
     </div>
@@ -119,7 +119,7 @@
     <div class="card">
         <div class="card-body" data-target="#customer" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
-                <i class="icon-arrow-up"></i> Customer
+                {{ Icon::minimize() }} Customer
             </h4>
         </div>
     </div>

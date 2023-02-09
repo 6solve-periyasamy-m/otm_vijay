@@ -78,7 +78,7 @@ $profit = $revenue - $costOfTour;
             </div>
             <div class="col-12">
                 <a class="btn btn-warning" href="{{route('tours.view', ['tour' => $tour,])}}">
-                    <i class="icon-action-redo"></i>
+                    {{ Icon::back() }}
                     <span>Back To Tour</span>
                 </a>
             </div>
@@ -144,7 +144,7 @@ $profit = $revenue - $costOfTour;
                         <x-admin.input name="amount" width="5">Amount</x-admin.input>
                         <input type="hidden" name="per_customer" value="1" />
                         <x-admin.button href="javascript:$('.per_customer-create').submit()" width="2" color="primary">
-                            <i class="icon-plus"></i>
+                            {{ Icon::create() }}
                         </x-admin.button>
                     </form>
                     <table class="table table-striped data-table">
@@ -170,10 +170,10 @@ $profit = $revenue - $costOfTour;
                                 </form>
                                 <td>
                                     <a href="javascript:$('.cost-edit-{{$cost->id}}').submit()" class="btn btn-outline-success btn-sm mb-1">
-                                        <i class="icon-note"></i>
+                                        {{ Icon::edit() }}
                                     </a>
                                     <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
-                                        <i class="icon-trash"></i>
+                                        {{ Icon::delete() }}
                                     </a>
                                     <form id="cost-{{ $cost->id }}-delete" action="{{ route('additional-cost.delete', ['cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                                 </td>
@@ -235,7 +235,7 @@ $profit = $revenue - $costOfTour;
                         <x-admin.input name="amount" width="5">Amount</x-admin.input>
                         <input type="hidden" name="per_customer" value="0" />
                         <x-admin.button href="javascript:$('.whole-tour-create').submit()" width="2" color="primary">
-                            <i class="icon-plus"></i>
+                            {{ Icon::create() }}
                         </x-admin.button>
                     </form>
                     <table class="table table-striped data-table">
@@ -261,10 +261,10 @@ $profit = $revenue - $costOfTour;
                                 </form>
                                 <td>
                                     <a href="javascript:$('.cost-edit-{{$cost->id}}').submit()" class="btn btn-outline-success btn-sm mb-1">
-                                        <i class="icon-note"></i>
+                                        {{ Icon::edit() }}
                                     </a>
                                     <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
-                                        <i class="icon-trash"></i>
+                                        {{ Icon::delete() }}
                                     </a>
                                     <form id="cost-{{ $cost->id }}-delete" action="{{ route('additional-cost.delete', ['cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                                 </td>
@@ -281,32 +281,32 @@ $profit = $revenue - $costOfTour;
         <ul class="nav nav-pills otm-tab">
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#summary">
-                    <i class="icon-list"></i> {{ __('tours.costing.view.cards.components.tabs.summary') }}
+                    {{ Icon::list() }} {{ __('tours.costing.view.cards.components.tabs.summary') }}
                 </button>
             </li>
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#accommodation">
-                    <i class="icon-home"></i> {{ __('tours.costing.view.cards.components.tabs.accommodation') }}
+                    {{ Icon::accommodation() }} {{ __('tours.costing.view.cards.components.tabs.accommodation') }}
                 </button>
             </li>
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities">
-                    <i class="icon-settings"></i> {{ __('tours.costing.view.cards.components.tabs.activities') }}
+                    {{ Icon::activity() }} {{ __('tours.costing.view.cards.components.tabs.activities') }}
                 </button>
             </li>
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#flights">
-                    <i class="icon-plane"></i> {{ __('tours.costing.view.cards.components.tabs.flights') }}
+                    {{ Icon::flight() }} {{ __('tours.costing.view.cards.components.tabs.flights') }}
                 </button>
             </li>
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transport">
-                    <i class="icon-directions"></i> {{ __('tours.costing.view.cards.components.tabs.transport') }}
+                    {{ Icon::transport() }} {{ __('tours.costing.view.cards.components.tabs.transport') }}
                 </button>
             </li>
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#extras">
-                    <i class="icon-briefcase"></i> {{ __('tours.costing.view.cards.components.tabs.extras') }}
+                    {{ Icon::merchandise() }} {{ __('tours.costing.view.cards.components.tabs.extras') }}
                 </button>
             </li>
         </ul>

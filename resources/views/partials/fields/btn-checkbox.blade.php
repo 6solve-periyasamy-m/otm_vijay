@@ -1,6 +1,6 @@
 @php $checked = (old($field) != null && old($field) == 'on')||(isset($value) && $value == 1); @endphp
 <a href="javascript:void(0)" id="{{ $field }}-button" onclick="event.preventDefault();swapButton(this, '{{ $field }}')" class="d-inline ms-1 btn {{ $checked ? "btn-success" : "btn-danger" }}">
-    <i class="icon-{{ $icon ?? 'list' }}"></i>
+    <x-icon icon="{{ $icon ?? 'list' }}" />
 </a>
 <input
         type="checkbox"

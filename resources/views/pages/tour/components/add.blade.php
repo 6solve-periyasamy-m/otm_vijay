@@ -56,36 +56,36 @@
         <div class="card-body">
             <div class="mb-3">
                 <a href="{{ route('tours.view', ['tour' => $tour, ])}}" class="btn btn-primary text-white">
-                    <i class="icon-arrow-left"></i>
+                    {{ Icon::back() }}
                     Back to Tour
                 </a>
             </div>
             <ul class="nav nav-pills otm-tab">
                 <li class="nav-item col-6 col-md-2">
                     <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#accommodation">
-                        <i class="icon-home"></i> Accommodation
+                        {{ Icon::accommodation() }} Accommodation
                     </button>
                 </li>
                 <li class="nav-item col-6 col-md-2">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities">
-                        <i class="icon-game-controller"></i> Activities
+                        {{ Icon::accommodation() }} Activities
                     </button>
                 </li>
                 <li class="nav-item col-6 col-md-2">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#flights">
-                        <i class="icon-plane"></i>
+                        {{ Icon::flight() }}
                         Flights
                     </button>
                 </li>
                 <li class="nav-item col-6 col-md-2">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transports">
-                        <i class="icon-directions"></i>
+                        {{ Icon::transport() }}
                         Transport
                     </button>
                 </li>
                 <li class="nav-item col-6 col-md-2">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#merchandise">
-                        <i class="icon-mustache"></i>
+                        {{ Icon::merchandise() }}
                         Merchandise
                     </button>
                 </li>

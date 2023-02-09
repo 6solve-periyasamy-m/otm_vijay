@@ -23,16 +23,16 @@
         <div class="col-12">
             @can('update', \App\Models\Accommodation\Accommodation::class)
             <a class="btn btn-success" href="{{route('accommodations.edit', ['accommodation' => $accommodation,])}}">
-                <i class="icon-note"></i>
+                {{ Icon::edit() }}
                 <span>Edit Accommodation</span>
             </a>
             @endcan
             <a class="btn btn-secondary" href="{{route('accommodations.rooming', ['accommodation' => $accommodation,])}}">
-                <i class="icon-list"></i>
+                {{ Icon::list() }}
                 <span>View Rooming List</span>
             </a>
             <a class="btn btn-secondary" href="{{route('accommodations.rooming', ['accommodation' => $accommodation, 'notes' => false,])}}">
-                <i class="icon-list"></i>
+                {{ Icon::list() }}
                 <span>View Rooming List (No Notes)</span>
             </a>
         </div>

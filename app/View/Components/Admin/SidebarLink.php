@@ -17,19 +17,20 @@ use App\Models\Tour\Tour;
 use App\Models\Transport\Transport;
 use App\Models\User;
 use Bouncer;
+use Closure;
+use Icon;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use Silber\Bouncer\Database\Role;
 
 class SidebarLink extends Component
 {
     private string $name;
     private string $url;
-    private string $icon;
+    private View|string|Closure $icon;
     private ?string $search;
     private bool $permitted;
 
-    public function __construct(string $name, string $url, string $icon, ?string $search = null, ?string $class = null, ?string $permission = null)
+    public function __construct(string $name, string $url, View|string|Closure $icon, ?string $search = null, ?string $class = null, ?string $permission = null)
     {
         $this->name = $name;
         $this->url = $url;
@@ -60,29 +61,29 @@ class SidebarLink extends Component
     public static function getSidebarLinks(): array
     {
         return [
-            new SidebarLink('Dashboard', route('dash'), 'list'),
-            new SidebarLink('Events', route('events.all'), 'calendar', 'events', Event::class, 'read'),
-            new SidebarLink('Tours', route('tours.all'), 'globe', 'tours', Tour::class, 'read'),
-            new SidebarLink('Accommodation', route('accommodations.all'), 'home', 'accommodation', Accommodation::class, 'read'),
-            new SidebarLink('Activities', route('activities.all'), 'game-controller', 'activities', Activity::class, 'read'),
-            new SidebarLink('Flights', route('flights.all'), 'plane', 'flights', Flight::class, 'read'),
-            new SidebarLink('Transport', route('transports.all'), 'directions', 'transport', Transport::class, 'read'),
-            new SidebarLink('Merchandise', route('merchandise.all'), 'badge', 'merchandise', Merchandise::class, 'read'),
-            new SidebarLink('Addresses', route('addresses.all'), 'envelope-letter', 'addresses', Address::class, 'read'),
-            new SidebarLink('Orders', route('orders.all'), 'credit-card', 'orders', Order::class, 'read'),
-            new SidebarLink('Quotes', route('quotes.all'), 'wallet', 'quotes', Quote::class, 'read'),
-            new SidebarLink('Customers', route('customers.all'), 'user', 'customers', Customer::class, 'read'),
-            new SidebarLink('Organizations', route('organizations.all'), 'graduation', 'organization', Customer::class, 'read'),
-            new SidebarLink('Settings', route('settings.edit'), 'settings', 'settings', Setting::class, 'update'),
-            new SidebarLink('Attributes Manager', route('attributes.edit'), 'flag', 'attributes'),
-            new SidebarLink('Users', route('users.all'), 'people', 'users', User::class, 'read'),
-            new SidebarLink('Roles', route('roles.all'), 'organization', 'roles', User::class, 'read'),
-            new SidebarLink('Reports', route('reports.all'), 'list', 'reports', Report::class, 'read'),
+            new SidebarLink('Dashboard', route('dash'), Icon::dashboard()),
+            new SidebarLink('Events', route('events.all'), Icon::event(), 'events', Event::class, 'read'),
+            new SidebarLink('Tours', route('tours.all'), Icon::tour(), 'tours', Tour::class, 'read'),
+            new SidebarLink('Accommodation', route('accommodations.all'), Icon::accommodation(), 'accommodation', Accommodation::class, 'read'),
+            new SidebarLink('Activities', route('activities.all'), Icon::activity(), 'activities', Activity::class, 'read'),
+            new SidebarLink('Flights', route('flights.all'), Icon::flight(), 'flights', Flight::class, 'read'),
+            new SidebarLink('Transport', route('transports.all'), Icon::transport(), 'transport', Transport::class, 'read'),
+            new SidebarLink('Merchandise', route('merchandise.all'), Icon::merchandise(), 'merchandise', Merchandise::class, 'read'),
+            new SidebarLink('Addresses', route('addresses.all'), Icon::address(), 'addresses', Address::class, 'read'),
+            new SidebarLink('Orders', route('orders.all'), Icon::order(), 'orders', Order::class, 'read'),
+            new SidebarLink('Quotes', route('quotes.all'), Icon::quote(), 'quotes', Quote::class, 'read'),
+            new SidebarLink('Customers', route('customers.all'), Icon::customer(), 'customers', Customer::class, 'read'),
+            new SidebarLink('Organizations', route('organizations.all'), Icon::organization(), 'organization', Customer::class, 'read'),
+            new SidebarLink('Settings', route('settings.edit'), Icon::setting(), 'settings', Setting::class, 'update'),
+            new SidebarLink('Attributes Manager', route('attributes.edit'), Icon::attribute(), 'attributes'),
+            new SidebarLink('Users', route('users.all'), Icon::user(), 'users', User::class, 'read'),
+            new SidebarLink('Roles', route('roles.all'), Icon::role(), 'roles', User::class, 'read'),
+            new SidebarLink('Reports', route('reports.all'), Icon::report(), 'reports', Report::class, 'read'),
         ];
     }
 
     public static function getLogsURL(): SidebarLink
     {
-        return new SidebarLink('Log Viewer', url('/system/logs'), 'layers');
+        return new SidebarLink('Log Viewer', url('/system/logs'), Icon::logs());
     }
 }

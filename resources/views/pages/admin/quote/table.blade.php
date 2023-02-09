@@ -21,7 +21,7 @@
         <div class="card">
             <div class="card-body">
                 <a class="btn btn-primary float-end" href="{{ route('quotes.create') }}">
-                    <i class="icon-plus"></i>
+                    {{ Icon::create() }}
                     <span>Create New</span>
                 </a>
             </div>
@@ -55,22 +55,22 @@
                         <td class="actions">
                             @can('update', \App\Models\Quote\Quote::class)
                                 <a href="{{route('quotes.edit', ['quote' => $quote,])}}" class="btn btn-sm btn-outline-success mb-1">
-                                    <i class="icon-note"></i>
+                                    {{ Icon::edit() }}
                                 </a>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
-                                    <i class="icon-note"></i>
+                                    {{ Icon::edit() }}
                                 </span>
                             @endcan
                             @can('delete', \App\Models\Quote\Quote::class)
                                 <a href="#" class="btn btn-sm btn-outline-danger mb-1"
                                    onclick="event.preventDefault();document.getElementById('quote-{{ $quote->id }}-delete').submit();">
-                                    <i class="icon-trash"></i>
+                                    {{ Icon::delete() }}
                                 </a>
                                 <form id="quote-{{ $quote->id }}-delete" action="{{ route('quotes.delete', ['quote' => $quote,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
-                                    <i class="icon-trash"></i>
+                                    {{ Icon::delete() }}
                                 </span>
                             @endcan
                         </td>
