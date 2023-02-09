@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ApiController;
-use App\Models\Customer\Customer;
+use App\Http\Requests\Admin\TableRequest;
 use App\Models\Order\Order;
 use App\Repository\Model\Order\OrderRepository;
 
@@ -12,9 +12,9 @@ class OrderController extends ApiController
         return $order->status;
     }
 
-    public function getOverview()
+    public function getOverview(TableRequest $request)
     {
-        return response()->json(OrderRepository::getOrdersOverview());
+        return response()->json(OrderRepository::getOrdersOverview(($request->historic ?? true)));
     }
 
     public function getRoomingInformation(Order $order)

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Admin\TableRequest;
 use App\Models\Order\Order;
 use Illuminate\Http\Request;
 
 class OrderSystemController extends Controller
 {
-    public function index() {
-        return view('pages.orders.search2', ['orders' => Order::all(),]);
+    public function index(TableRequest $request) {
+        return view('pages.orders.search2', ['orders' => Order::all(), 'historic' => $request->historic ?? false,]);
     }
 
     public function create()

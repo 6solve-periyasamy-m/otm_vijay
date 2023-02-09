@@ -2,30 +2,25 @@
 
 namespace App\Http\Controllers\Models;
 
-use App\Events\Order\Customer\OrderCustomerCreatedEvent;
 use App\Events\Order\OrderCancelledEvent;
-use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderEditedEvent;
 use App\Events\Order\OrderRestoredEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Order\CreateOrderRequest;
 use App\Http\Requests\Admin\Order\MigrateRequest;
-use App\Models\Customer\Customer;
+use App\Http\Requests\Admin\TableRequest;
 use App\Models\Order\Order;
-use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Reporting\ReportRepository;
-use App\Repository\RoomingRepository;
-use App\Repository\Storage\ConvertedCustomer;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
 
-    public function index()
+    public function index(TableRequest $request)
     {
-        return view('pages.models.orders.table', ['orders' => Order::all(),]);
+        return view('pages.models.orders.table', ['orders' => Order::all(), 'historic' => $request->historic ?? false]);
     }
 
     public function reminders(int $max = 7, int $min = -1000)
