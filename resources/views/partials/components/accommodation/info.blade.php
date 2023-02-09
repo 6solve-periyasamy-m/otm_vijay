@@ -32,7 +32,7 @@
                 <span>View Rooming List</span>
             </a>
             <a class="btn btn-secondary" href="{{route('accommodations.rooming', ['accommodation' => $accommodation, 'notes' => false,])}}">
-                <i class="icon-list"></i>
+                {{ Icon::list() }}
                 <span>View Rooming List (No Notes)</span>
             </a>
         </div>

@@ -86,7 +86,7 @@
             </div>
             <div class="col-12">
                 <a class="btn btn-success" href="#" onclick="showOverlay('.tour-options')">
-                    <i class="icon-equalizer"></i>
+                    {{ Icon::options() }}
                     <span>Options</span>
                 </a>
             </div>

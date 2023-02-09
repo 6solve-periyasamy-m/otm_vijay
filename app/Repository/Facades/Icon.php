@@ -372,4 +372,14 @@ class Icon
     {
         return $this->calendar();
     }
+
+    public function equalizer(): View|string|Closure
+    {
+        return $this->new('equalizer');
+    }
+
+    public function options(): View|string|Closure
+    {
+        return $this->equalizer();
+    }
 }
