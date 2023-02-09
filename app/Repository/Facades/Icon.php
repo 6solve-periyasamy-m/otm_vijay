@@ -209,7 +209,7 @@ class Icon
 
     public function copy(): View|string|Closure
     {
-        return $this->layers();
+        return $this->solid('copy');
     }
 
     public function person(): View|string|Closure
