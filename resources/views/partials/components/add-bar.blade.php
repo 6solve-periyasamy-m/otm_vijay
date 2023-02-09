@@ -7,7 +7,7 @@
     </div>
     <div class="col-xl-2">
         <a href="{{$href}}" class="btn btn-primary ms-3 text-white">
-            <i class="icon-plus"></i>
+            {{ Icon::create() }}
             <span>Add Selected Rows</span>
         </a>
     </div>
