@@ -349,7 +349,7 @@ class Icon
 
     public function organization(): View|string|Closure
     {
-        return $this->solid('sitemap');
+        return $this->solid('university');
     }
 
     public function setting(): View|string|Closure
@@ -359,7 +359,7 @@ class Icon
 
     public function role(): View|string|Closure
     {
-        return $this->solid('users');
+        return $this->solid('sitemap');
     }
 
     public function logs(): View|string|Closure
