@@ -582,6 +582,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::post('/update', [\App\Http\Controllers\Models\TourController::class, 'update'])->name('tours.update')->middleware('bouncer:Tour\Tour,update');
             Route::get('/duplicate', [\App\Http\Controllers\Models\TourController::class, 'duplicate'])->name('tours.duplicate')->middleware('bouncer:Tour\Tour,create');
             Route::post('/delete', [\App\Http\Controllers\Models\TourController::class, 'destroy'])->name('tours.delete')->middleware('bouncer:Tour\Tour,delete');
+            Route::post('/restore', [\App\Http\Controllers\Models\TourController::class, 'restore'])->name('tours.restore')->middleware('bouncer:Tour\Tour,delete');
             Route::get('/atol', [\App\Http\Controllers\Models\TourController::class, 'exportAtol'])->name('tours.atol')->middleware('bouncer:Tour\Tour,read');
             Route::get('/add', function (Tour $tour) {
                 return view('pages.tour.components.add', ['tour' => $tour,]);
