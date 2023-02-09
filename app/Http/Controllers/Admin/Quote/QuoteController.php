@@ -8,20 +8,24 @@ use App\Http\Requests\Admin\Quote\CreateBasicQuoteRequest;
 use App\Http\Requests\Admin\Quote\CreateBespokeQuoteRequest;
 use App\Http\Requests\Admin\Quote\QuoteEditRequest;
 use App\Http\Requests\Admin\Quote\StartConversionRequest;
+use App\Http\Requests\Admin\TableRequest;
 use App\Models\Helper\QuoteStatus;
 use App\Models\Quote\Quote;
 use App\Models\Quote\SentQuote;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Quote\QuoteRepository;
 use App\Repository\Storage\ConvertedCustomer;
-use Illuminate\Http\Request;
 
 class QuoteController extends Controller
 {
-    public function index()
+    public function index(TableRequest $request)
     {
-        $quotes = Quote::with('leadTraveller', 'tour')->get();
-        return view('pages.admin.quote.table', ['quotes' => $quotes,]);
+        if ($request->historic ?? false) {
+            $quotes = Quote::with('leadTraveller', 'tour')->get();
+        } else {
+            $quotes = Quote::with('leadTraveller', 'tour')->whereDate('date_to', '>', now()->subMonths(setting('system.historic', 6)))->get();
+        }
+        return view('pages.admin.quote.table', ['quotes' => $quotes, 'historic' => $request->historic ?? false,]);
     }
 
     public function create(?Tour $tour = null)
