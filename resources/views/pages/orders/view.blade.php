@@ -313,7 +313,7 @@
                                 </td>
                                 <td class="actions">
                                     <a href="{{route('orders.edit', ['order' => $order,])}}" class="btn btn-outline-success btn-sm mb-1">
-                                        <i class="icon-note"></i>
+                                        {{ Icon::edit() }}
                                     </a>
                                 </td>
                             </tr>

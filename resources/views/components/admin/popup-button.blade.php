@@ -1,6 +1,6 @@
 <a {{ $attributes->class(['popup-grid-item']) }}>
     <div class="icon">
-        <i class="icon-{{ $icon }}"></i>
+        {{ Icon::new($icon) }}
     </div>
     <div class="text">
         {{ $slot }}
