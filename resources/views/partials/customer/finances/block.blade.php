@@ -74,12 +74,13 @@ $next = $order->next_installment;
                         </tr>
                     </thead>
                     <tbody>
+                        @if(($order->booking_fee ?? 0) > 0)
                         <tr>
                             <td data-content="Due By" class="fw-bold">With Order</td>
-                            <td data-content="Type">Deposit</td>
-                            <td data-content="Amount Due">{{ f_currency($order->calculated_deposit) }}</td>
+                            <td data-content="Type">Booking Fee</td>
+                            <td data-content="Amount Due">{{ f_currency($order->booking_fee) }}</td>
                             <td data-content="Outstanding">
-                                @php $amount = $order->calculated_deposit - min($order->paid, $order->calculated_deposit); @endphp
+                                @php $amount = $order->booking_fee - min($order->paid, $order->booking_fee); @endphp
                                 @if($amount <= 0)
                                     Paid
                                 @else
@@ -87,6 +88,22 @@ $next = $order->next_installment;
                                 @endif
                             </td>
                         </tr>
+                        @endif
+                        @if(($order->deposit ?? 0) > 0)
+                        <tr>
+                            <td data-content="Due By" class="fw-bold">With Order</td>
+                            <td data-content="Type">Deposit</td>
+                            <td data-content="Amount Due">{{ f_currency($order->calculated_deposit) }}</td>
+                            <td data-content="Outstanding">
+                                @php $amount = $order->calculated_deposit - min(($order->paid - ($order->booking_fee ?? 0)), $order->calculated_deposit); @endphp
+                                @if($amount <= 0)
+                                    Paid
+                                @else
+                                    {{ f_currency($amount) }}
+                                @endif
+                            </td>
+                        </tr>
+                        @endif
                         @foreach($order->installments as $installment)
                             <tr>
                                 <td data-content="Due By" class="fw-bold">{{ f_date($installment->due_on) }}</td>

@@ -94,6 +94,7 @@ class OrderController extends Controller
             'external_notes' => $request->input('external_notes'),
             'deposit' => $request->input('deposit'),
             'invoice_footer' => $request->input('invoice_footer'),
+            'booking_fee' => $request->input('booking_fee')
         ]);
         event(new OrderEditedEvent($order, $shouldInvoice));
         return redirect()->route('orders.view', ['order' => $order,]);

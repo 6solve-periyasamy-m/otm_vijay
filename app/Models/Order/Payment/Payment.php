@@ -24,13 +24,13 @@ use Illuminate\Validation\Rule;
  * @property int|null $customer_id
  * @property float $amount
  * @property Carbon $paid_on Date when payment was made
- * @property string $payment_type Payment Type. Should be Deposit/Installment/Refund
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Customer|null $customer Customer who made the payment
  * @property-read Order $order Which order the payment is for
  * @property-read PaymentMethod $paymentMethod Which payment method was used
+ * @property-read string $payment_type Payment Type. Will be payment or refund
  * @method static PaymentFactory factory(...$parameters)
  * @method static Builder|Payment newModelQuery()
  * @method static Builder|Payment newQuery()
@@ -54,7 +54,7 @@ class Payment extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['order_id', 'payment_method_id', 'amount', 'paid_on', 'payment_type', 'customer_id'];
+    protected $fillable = ['order_id', 'payment_method_id', 'amount', 'paid_on', 'customer_id'];
     protected $casts = ['paid_on' => 'datetime', 'amount' => 'double'];
 
     public static function getValidationRules(): array
@@ -84,5 +84,10 @@ class Payment extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'customer_id');
+    }
+
+    public function getPaymentTypeAttribute(): string
+    {
+        return $this->amount >= 0 ? "Payment" : "Refund";
     }
 }

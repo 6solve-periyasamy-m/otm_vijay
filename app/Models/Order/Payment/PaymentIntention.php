@@ -111,7 +111,6 @@ class PaymentIntention extends Model
             'paid_on' => Carbon::parse($created),
             'customer_id' => $this->customer_id,
             'amount' => $amount,
-            'payment_type' => $this->type,
         ]);
     }
 

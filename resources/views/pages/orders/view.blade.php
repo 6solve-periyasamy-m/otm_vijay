@@ -299,12 +299,32 @@
                                 <th scope="col" class="actions">Actions</th>
                             </tr>
                             </thead>
+                            @if(($order->booking_fee ?? 0) > 0)
+                            <tr>
+                                <th scope="row">Booking Fee</th>
+                                <td>With Order</td>
+                                <td>{{ f_currency($order->booking_fee) }}</td>
+                                <td>
+                                    @if($order->booking_fee <= $order->paid)
+                                        Paid
+                                    @else
+                                        {{ f_currency($order->booking_fee - min($order->booking_fee, $order->paid)) }}
+                                    @endif
+                                </td>
+                                <td class="actions">
+                                    <a href="{{route('orders.edit', ['order' => $order,])}}" class="btn btn-outline-success btn-sm mb-1">
+                                        <i class="icon-note"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            @endif
+                            @if(($order->calculated_deposit ?? 0) > 0)
                             <tr>
                                 <th scope="row">Deposit</th>
                                 <td>With Order</td>
                                 <td>{{ f_currency($order->calculated_deposit) }} ({{ $order->deposit_percentage }}%)</td>
                                 <td>
-                                    @php $amount = $order->calculated_deposit - min($order->paid, $order->calculated_deposit); @endphp
+                                    @php $amount = $order->calculated_deposit - min(($order->paid - ($order->booking_fee ?? 0)), $order->calculated_deposit); @endphp
                                     @if($amount <= 0)
                                         Paid
                                     @else
@@ -317,6 +337,7 @@
                                     </a>
                                 </td>
                             </tr>
+                            @endif
                             @foreach($order->installments as $installment)
                                 @php $paid = $installment->repository->getAmountPaid(); @endphp
                                 <tr>
