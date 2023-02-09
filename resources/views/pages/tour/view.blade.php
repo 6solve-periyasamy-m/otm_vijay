@@ -31,6 +31,7 @@
 @endsection
 
 @section('content')
+    @include('pages.tour.popup')
     <div class="otm-callout">
         <div class="row">
             <div class="col-12">
@@ -84,40 +85,10 @@
                 <h6 class="fw-bold">{{ $tour->description }}</h6>
             </div>
             <div class="col-12">
-                @can('update', Tour::class)
-                    <a class="btn btn-success" href="{{route('tours.edit', ['tour' => $tour,])}}">
-                        {{ Icon::edit() }}
-                        <span>Edit Tour</span>
-                    </a>
-                @endcan
-                @can('update', Merchandise::class)
-                    <a class="btn btn-danger" href="{{route('tours.fulfil', ['tour' => $tour,])}}">
-                        {{ Icon::fulfil() }}
-                        <span>Fulfil Merchandise Orders</span>
-                    </a>
-                @endcan
-                @can('create', Quote::class)
-                    <a class="btn btn-primary" href="{{route('quotes.create', ['tour' => $tour,])}}">
-                        {{ Icon::wallet() }}
-                        <span>Create Quote</span>
-                    </a>
-                @endcan
-                @if($tour->protected && $tour->has_atol_certificate)
-                    <a class="btn btn-info" href="{{route('tours.atol', ['tour' => $tour,])}}">
-                        {{ Icon::atol() }}
-                        <span>Export ATOL Certificates</span>
-                    </a>
-                @endif
-                <a class="btn btn-secondary" href="{{route('tours.rooming', ['tour' => $tour,])}}">
-                    {{ Icon::list() }}
-                    <span>View Rooming List</span>
+                <a class="btn btn-success" href="#" onclick="showOverlay('.tour-options')">
+                    <i class="icon-equalizer"></i>
+                    <span>Options</span>
                 </a>
-                @can('costing', Tour::class)
-                    <a class="btn btn-warning" href="{{route('tours.costing', ['tour' => $tour,])}}">
-                        {{ Icon::chart() }}
-                        <span>View Cost Information</span>
-                    </a>
-                @endcan
             </div>
         </div>
     </div>

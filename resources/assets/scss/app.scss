@@ -3,24 +3,6 @@ app.scss
 npm run dev creates the files in public that the website can use
 */
 
-// @import 'sections/laravel';
-// @import 'sections/listing';
-// @import 'sections/home-page';
-// @import 'sections/homepage';
-@import 'components/bookingform';
 @import 'bootstrap/app.scss';
 @import 'otm/layout.scss';
 @import 'spinner';
-
-// @fa_path: "../node_modules/font-awesome/less";
-// @import "../node_modules/font-awesome/less/variables.less";
-// @import "../node_modules/font-awesome/less/mixins.less";
-// @import "../node_modules/font-awesome/less/path.less";
-// @import "../node_modules/font-awesome/less/core.less";
-// @import "../node_modules/font-awesome/less/icons.less";
-
-// @import '~@fortawesome/fontawesome-free/scss/fontawesome';
-// @import '~@fortawesome/fontawesome-free/scss/brands';
-// @import '~@fortawesome/fontawesome-free/scss/regular';
-// @import '~@fortawesome/fontawesome-free/scss/solid';
-
