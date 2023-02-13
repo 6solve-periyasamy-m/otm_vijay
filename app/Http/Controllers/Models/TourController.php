@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\AtolRepository;
-use App\Repository\Reporting\RoomingReportRepository;
-use App\Repository\TourRepository;
+use App\Repository\Reporting\Manifest\RoomingReportRepository;
 use Illuminate\Http\Request;
 
 class TourController extends Controller

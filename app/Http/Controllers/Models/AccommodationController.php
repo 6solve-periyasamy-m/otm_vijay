@@ -7,7 +7,7 @@ use App\Models\Accommodation\Accommodation;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Repository\Model\Location\AddressRepository;
-use App\Repository\Reporting\RoomingReportRepository;
+use App\Repository\Reporting\Manifest\RoomingReportRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
