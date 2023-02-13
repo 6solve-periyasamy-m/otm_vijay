@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api\Admin\Quote;
+namespace App\Http\Requests\Api\Admin\Order;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * @property bool $paying
  * @property int|null $count
  */
 class UnknownTravellerRequest extends FormRequest

@@ -2,8 +2,32 @@
 @if($order === null)
     @push('header-stack')
         <script type="text/javascript">
+            class Customer {
+                constructor(id, name) {
+                    this.id = id;
+                    this.name = name;
+                }
+            }
+            function getCustomers(count = 1) {
+                return new Promise(resolve => {
+                    return $.ajax({
+                        url: '{{ route('api.order.unknown - traveller') }}',
+                        type: 'post', data: {__api_token: '{{ Auth::user()->getCurrentToken()->token }}', 'count': count,}
+                    })
+                    .then(data => {
+                        let customers = [];
+                        for (let x in data.data) {
+                            customers.push(new Customer(data.data[x].id, data.data[x].text))
+                        }
+                        resolve(customers);
+                    }).catch(data => {
+                        console.log(data);
+                        resolve(null);
+                    });
+                });
+            }
             var customerCount = 0;
-            function addCustomer() {
+            function addCustomer(customer = null) {
                 let rd = render(template('additional-traveller'), {id: customerCount});
                 $('.customers-section').append(rd);
                 $(document).ready(function () {
@@ -20,21 +44,29 @@
                             type: 'post',
                         }
                     });
-                    customerCount++;
-                });
-            }
-            function getUnknownCustomer(selector) {
-                $.ajax({
-                    url: '{{ route('api.order.unknown-traveller') }}',
-                    type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }
-                })
-                    .then(function (data) {
-                        $(selector).append(new Option(data.text, data.id, true, true)).trigger('change');
+                    if (customer !== null) {
+                        $(selector).append(new Option(customer.name, customer.id, true, true)).trigger('change');
                         $(selector).trigger({
                             type: 'select2:select',
                             params: { data: data, }
                         });
-                    });
+                    }
+                    customerCount++;
+                });
+            }
+            function getUnknownCustomers(selector) {
+                getCustomers().then(function (customers) {
+                    for (let x in customers) {
+                        addCustomer(customers[x])
+                    }
+                });
+            }
+            function setCustomer(selector, customer) {
+                $(selector).append(new Option(customer.text, customer.id, true, true)).trigger('change');
+                $(selector).trigger({
+                    type: 'select2:select',
+                    params: { data: data, }
+                });
             }
         </script>
     @endpush
