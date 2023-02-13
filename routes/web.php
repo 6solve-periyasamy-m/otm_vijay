@@ -27,6 +27,7 @@ use App\Http\Controllers\Customer\CustomerRegisterController;
 use App\Http\Controllers\Customer\CustomerResetPasswordController;
 use App\Http\Controllers\Customer\CustomerTourController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\ManifestController;
 use App\Http\Controllers\Models\AccommodationController;
 use App\Http\Controllers\Models\AccommodationInventoryController;
 use App\Http\Controllers\Models\AccommodationInventoryTourController;
@@ -891,6 +892,12 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::get('/rooming/{extension}', [ReportController::class, 'exportRoomingReport'])->name('reports.rooming.export');
         Route::get('/installment-revenue', [ReportController::class, 'getInstallmentRevenueReport'])->name('reports.installment-revenue');
         Route::get('/installment-revenue/{extension}', [ReportController::class, 'exportInstallmentRevenueReport'])->name('reports.installment-revenue.export');
+        Route::prefix('manifest')->name('reports.manifest.')->group(function () {
+            Route::prefix('activity')->name('activity.')->group(function () {
+                Route::get('/', [ManifestController::class, 'viewActivity'])->name('view');
+                Route::get('/export/{extension}', [ManifestController::class, 'exportActivity'])->name('export');
+            });
+        });
         Route::prefix('atol')->name('reports.atol.')->group(function () {
             Route::get('/ordered/{year}/{quarter}', [AtolController::class, 'getOrderedInQuarterReport'])->name('ordered');
             Route::get('/departed-in/{year}/{quarter}', [AtolController::class, 'getDepartingInQuarterReport'])->name('departed-in');

@@ -85,6 +85,12 @@ class ReportRepository
                 'params' => ['notes' => false,],
             ],
             [
+                'name' => 'Activity Manifest',
+                'details' => 'Manifest of Ordered Activity Tickets',
+                'view' => 'reports.manifest.activity.view',
+                'export' => 'reports.manifest.activity.export',
+            ],
+            [
                 'name' => 'Installment Revenue',
                 'details' => 'Information about days revenue',
                 'view' => 'reports.installment-revenue',
