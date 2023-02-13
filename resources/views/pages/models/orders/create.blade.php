@@ -4,12 +4,7 @@
 
 @push('header-stack')
     <script type="text/javascript">
-        class Customer {
-            constructor(id, name) {
-                this.id = id;
-                this.name = name;
-            }
-        }
+        class Customer { constructor(id, name) { this.id = id; this.name = name; }}
         function getCustomers(count = 1) {
             return new Promise(resolve => {
                 return $.ajax({

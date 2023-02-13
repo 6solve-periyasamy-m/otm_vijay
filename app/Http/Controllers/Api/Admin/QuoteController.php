@@ -58,7 +58,12 @@ class QuoteController extends ApiController
 
     public function getUnknownTraveller(UnknownTravellerRequest $request, Quote $quote)
     {
-        $customer = $quote->repository->generateGenericCustomer($request->paying);
-        return response()->json(['success' => true, 'id' => $customer->id, 'text' => $customer->first_name . ' ' . $customer->last_name,]);
+        $customers = [];
+        \Log::info($request);
+        for ($x = 0; $x < ($request->count ?? 1); $x++) {
+            $customer = $quote->repository->generateGenericCustomer($request->paying);
+            $customers[] = ['id' => $customer->id, 'text' => $customer->first_name . ' ' . $customer->last_name,];
+        }
+        return response()->json(['success' => true, 'data' => $customers,]);
     }
 }
