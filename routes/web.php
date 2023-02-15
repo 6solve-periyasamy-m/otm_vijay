@@ -75,6 +75,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\TourController;
+use App\Http\Controllers\TourManifestController;
 use App\Http\Controllers\UpgradeController;
 use App\Http\Gateways\FellohGateway;
 use App\Models\Tour\Tour;
@@ -484,6 +485,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::post('/create', [ActivityController::class, 'store'])->name('activities.store')->middleware('bouncer:Activity\Activity,create');
         Route::prefix('{activity}')->group(function () {
             Route::get('/', [ActivityController::class, 'view'])->name('activities.view')->middleware('bouncer:Activity\Activity,read');
+            Route::get('/manifest', [ActivityController::class, 'manifest'])->name('activities.manifest.view')->middleware('bouncer:Activity\Activity,read');
+            Route::get('/manifest/export/{extension?}', [ActivityController::class, 'export'])->name('activities.manifest.export')->middleware('bouncer:Activity\Activity,read');
             Route::get('/update', [ActivityController::class, 'edit'])->name('activities.edit')->middleware('bouncer:Activity\Activity,update');
             Route::post('/update', [ActivityController::class, 'update'])->name('activities.update')->middleware('bouncer:Activity\Activity,update');
             Route::post('/delete', [ActivityController::class, 'destroy'])->name('activities.delete')->middleware('bouncer:Activity\Activity,delete');
@@ -492,6 +495,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                 Route::post('/create', [ActivityInventoryController::class, 'store'])->name('activity-inventories.store')->middleware('bouncer:Activity\ActivityInventory,create');
                 Route::prefix('{activityInventory}')->group(function () {
                     Route::get('/', [ActivityInventoryController::class, 'view'])->name('activity-inventories.view')->middleware('bouncer:Activity\ActivityInventory,read');
+                    Route::get('/manifest', [ActivityInventoryController::class, 'manifest'])->name('activity-inventories.manifest.view')->middleware('bouncer:Activity\ActivityInventory,read');
+                    Route::get('/manifest/export/{extension?}', [ActivityInventoryController::class, 'export'])->name('activity-inventories.manifest.export')->middleware('bouncer:Activity\ActivityInventory,read');
                     Route::get('/update', [ActivityInventoryController::class, 'edit'])->name('activity-inventories.edit')->middleware('bouncer:Activity\ActivityInventory,update');
                     Route::post('/update', [ActivityInventoryController::class, 'update'])->name('activity-inventories.update')->middleware('bouncer:Activity\ActivityInventory,update');
                     Route::post('/delete', [ActivityInventoryController::class, 'destroy'])->name('activity-inventories.delete')->middleware('bouncer:Activity\ActivityInventory,delete');
@@ -588,8 +593,12 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                 return view('pages.tour.components.add', ['tour' => $tour,]);
             })->name('tours.add')->middleware('bouncer:Tour\Tour,update');
             Route::get('/fulfil', [\App\Http\Controllers\Models\TourController::class, 'fulfil'])->name('tours.fulfil')->middleware('bouncer:Merchandise\Merchandise,update');
-            Route::get('/rooming', [\App\Http\Controllers\Models\TourController::class, 'rooming'])->name('tours.rooming')->middleware('bouncer:Tour\Tour,read');
-            Route::get('/rooming/{extension}', [\App\Http\Controllers\Models\TourController::class, 'exportRooming'])->name('tours.rooming.export')->middleware('bouncer:Tour\Tour,read');
+            Route::get('/rooming', [TourManifestController::class, 'rooming'])->name('tours.rooming')->middleware('bouncer:Tour\Tour,read');
+            Route::get('/rooming/{extension}', [TourManifestController::class, 'exportRooming'])->name('tours.rooming.export')->middleware('bouncer:Tour\Tour,read');
+            Route::prefix('/manifest')->name('tours.manifest.')->group(function () {
+                Route::get('/activity', [TourManifestController::class, 'activity'])->name('activity.view');
+                Route::get('/activity/export/{extension?}', [TourManifestController::class, 'exportActivity'])->name('activity.export');
+            });
             Route::prefix('inventory')->group(function () {
                 Route::prefix('accommodation')->group(function () {
                     Route::get('/create', [AccommodationInventoryTourController::class, 'create'])->name('accommodation-inventory-tours.create')->middleware('bouncer:Accommodation\AccommodationInventoryTour,create');

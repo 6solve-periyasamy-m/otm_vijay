@@ -14,9 +14,14 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ActivityManifestRepository implements HasActivityManifest
 {
-    public function getManifest(): Collection|array
+    public function getActivityManifest(): Collection|array
     {
-        return OrderActivity::with(
+        return OrderActivity::with(self::getRelations())->get();
+    }
+
+    public static function getRelations(): array
+    {
+        return [
             'orderCustomer',
             'orderCustomer.order',
             'orderCustomer.customer',
@@ -25,7 +30,7 @@ class ActivityManifestRepository implements HasActivityManifest
             'tourComponent.inventory.component',
             'tourComponent.inventory.ticketType',
             'tourComponent.inventory.component.activityType',
-        )->get();
+        ];
     }
 
 
@@ -48,7 +53,7 @@ class ActivityManifestRepository implements HasActivityManifest
     public static function generateReport(HasActivityManifest $manifest): array
     {
         $data = [];
-        foreach ($manifest->getManifest() as $orderComponent) {
+        foreach ($manifest->getActivityManifest() as $orderComponent) {
             if ($orderComponent->cancelled) continue;
             $row = collect();
             $row->reference = $orderComponent->orderCustomer->order->booking_reference;

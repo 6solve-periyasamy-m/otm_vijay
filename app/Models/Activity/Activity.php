@@ -4,6 +4,9 @@ namespace App\Models\Activity;
 
 use App\Models\Location\Address;
 use App\Models\Location\Currency;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Traits\HasRepository;
+use App\Repository\Model\Activity\ActivityRepository;
 use Database\Factories\Activity\ActivityFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -16,6 +19,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 
 /**
@@ -33,9 +38,11 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read Collection|ActivityInventory[] $activityInventory
+ * @property-read Collection|OrderActivity[] $orders
  * @property-read int|null $activity_inventory_count
  * @property-read ActivityType $activityType
  * @property-read Address $address
+ * @property-read ActivityRepository $repository
  * @property-read Currency|null $currency
  * @method static ActivityFactory factory(...$parameters)
  * @method static Builder|Activity newModelQuery()
@@ -59,7 +66,7 @@ use Illuminate\Support\Carbon;
  */
 class Activity extends Model
 {
-    use SoftDeletes, CascadeSoftDeletes, HasFactory;
+    use SoftDeletes, CascadeSoftDeletes, HasFactory, HasRelationships, HasRepository;
 
     protected $fillable = ['activity_type_id', 'address_id', 'name', 'description', 'currency_id', 'notes', 'image_url'];
     protected array $cascadeDeletes = ['activityInventory'];
@@ -76,6 +83,11 @@ class Activity extends Model
     public function activityInventory(): HasMany
     {
         return $this->hasMany(ActivityInventory::class, 'activity_id');
+    }
+
+    public function orders(): HasManyDeep
+    {
+        return $this->hasManyDeep(OrderActivity::class, [ActivityInventory::class, ActivityInventoryTour::class]);
     }
 
     public function address(): BelongsTo

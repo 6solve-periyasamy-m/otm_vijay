@@ -10,5 +10,5 @@ interface HasActivityManifest
     /**
      * @return Collection|OrderActivity[]
      */
-    public function getManifest(): Collection|array;
+    public function getActivityManifest(): Collection|array;
 }
