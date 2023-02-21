@@ -12,9 +12,7 @@
                     type: 'post', data: {__api_token: '{{ Auth::user()->getCurrentToken()->token }}', 'count': count,}
                 })
                 .then(data => {
-                    let customers = [];
-                    data.data.map(customer => customers.push(new Customer(customer.id, customer.text)));
-                    resolve(customers);
+                    resolve(data.data.map(customer => new Customer(customer.id, customer.text)));
                 })
                 .catch(data => {
                     console.error(data);
