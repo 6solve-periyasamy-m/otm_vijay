@@ -17,7 +17,7 @@ class UnknownTravellerRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'count' => 'nullable|integer',
         ];
     }
 }
