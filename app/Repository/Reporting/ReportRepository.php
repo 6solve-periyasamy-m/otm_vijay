@@ -97,6 +97,12 @@ class ReportRepository
                 'export' => 'reports.manifest.flight.export',
             ],
             [
+                'name' => 'Transport Manifest',
+                'details' => 'Manifest of Ordered Transport Tickets',
+                'view' => 'reports.manifest.transport.view',
+                'export' => 'reports.manifest.transport.export',
+            ],
+            [
                 'name' => 'Installment Revenue',
                 'details' => 'Information about days revenue',
                 'view' => 'reports.installment-revenue',

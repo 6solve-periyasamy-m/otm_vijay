@@ -24,14 +24,16 @@ use App\Repository\Interfaces\HasStockControl;
 use App\Repository\Interfaces\Manifest\HasActivityManifest;
 use App\Repository\Interfaces\Manifest\HasFlightManifest;
 use App\Repository\Interfaces\Manifest\HasRoomingList;
+use App\Repository\Interfaces\Manifest\HasTransportManifest;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use App\Repository\Reporting\Manifest\FlightManifestRepository;
+use App\Repository\Reporting\Manifest\TransportManifestRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\OrderComponentStorage;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-class TourRepository extends ComponentPackageRepository implements HasStockControl, HasRoomingList, HasActivityManifest, HasFlightManifest
+class TourRepository extends ComponentPackageRepository implements HasStockControl, HasRoomingList, HasActivityManifest, HasFlightManifest, HasTransportManifest
 {
     private Tour $tour;
     private TourCostingRepository $costing;
@@ -431,5 +433,10 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
     public function getFlightManifest(): Collection|array
     {
         return $this->tour->orderFlights()->with(FlightManifestRepository::getRelations())->get();
+    }
+
+    public function getTransportManifest(): Collection|array
+    {
+        return $this->tour->orderTransport()->with(TransportManifestRepository::getRelations())->get();
     }
 }

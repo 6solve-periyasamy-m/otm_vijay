@@ -4,6 +4,7 @@ namespace App\Models\Transport;
 
 use App\Models\Location\Address;
 use App\Models\Location\Currency;
+use App\Models\Order\Component\OrderTransport;
 use Database\Factories\Transport\TransportFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -17,6 +18,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 /**
  * App\Models\Transport\Transport
@@ -67,7 +70,7 @@ use Illuminate\Support\Carbon;
  */
 class Transport extends Model
 {
-    use HasFactory, SoftDeletes, CascadeSoftDeletes;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes, HasRelationships;
 
     protected $fillable = ['transport_type_id', 'operator_id', 'departure_address_id', 'arrival_address_id', 'name', 'description', 'currency_id', 'is_domestic', 'notes', 'image_url'];
     protected array $cascadeDeletes = ['transportInventory'];
@@ -108,6 +111,11 @@ class Transport extends Model
     public function arrivalAddress(): HasOne
     {
         return $this->hasOne(Address::class, 'id', 'arrival_address_id');
+    }
+
+    public function orders(): HasManyDeep
+    {
+        return $this->hasManyDeep(OrderTransport::class, [TransportInventory::class, TransportInventoryTour::class]);
     }
 
     public function currency(): BelongsTo
