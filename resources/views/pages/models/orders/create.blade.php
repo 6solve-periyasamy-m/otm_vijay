@@ -19,7 +19,8 @@
                     resolve(customers);
                 })
                 .catch(data => {
-                    console.log(data);
+                    console.error(data);
+                    alert('An error occurred. Please check the console for more information.')
                     resolve([]);
                 });
             });

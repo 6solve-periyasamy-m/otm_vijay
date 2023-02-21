@@ -21,7 +21,8 @@
                     resolve(customers);
                 })
                 .catch(data => {
-                    console.log(data);
+                    console.error(data);
+                    alert('An error occurred. Please check the console for more information.')
                     resolve([]);
                 });
             });
@@ -40,7 +41,6 @@
                 getCustomers(paying, fields.length).then((customers) => {
                     if (customers.length >= fields.length) {
                         fields.each((index, element) => {
-                            console.log(element);
                             setCustomer($(element), customers[x]);
                             x++;
                         });
