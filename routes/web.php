@@ -598,6 +598,10 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::prefix('/manifest')->name('tours.manifest.')->group(function () {
                 Route::get('/activity', [TourManifestController::class, 'activity'])->name('activity.view');
                 Route::get('/activity/export/{extension?}', [TourManifestController::class, 'exportActivity'])->name('activity.export');
+                Route::get('/flight', [TourManifestController::class, 'flight'])->name('flight.view');
+                Route::get('/flight/export/{extension?}', [TourManifestController::class, 'exportFlight'])->name('flight.export');
+                Route::get('/transport', [TourManifestController::class, 'transport'])->name('transport.view');
+                Route::get('/transport/export/{extension?}', [TourManifestController::class, 'exportTransport'])->name('transport.export');
             });
             Route::prefix('inventory')->group(function () {
                 Route::prefix('accommodation')->group(function () {

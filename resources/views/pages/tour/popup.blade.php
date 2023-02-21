@@ -5,7 +5,7 @@
     <a href="#" class="panel-close plain-anchor" onclick="hideOverlay('.panel-overlay')">
         X
     </a>
-    <div class="panel-grid panel-grid-5-7">
+    <div class="panel-grid panel-grid-5-5">
         @can('update', \App\Models\Tour\Tour::class)
         <x-admin.popup-button href="{{ route('tours.edit', ['tour' => $tour,]) }}" class="color-success row-1">
             <x-slot:icon>note</x-slot:icon>
@@ -47,6 +47,14 @@
         <x-admin.popup-button href="{{ route('tours.manifest.activity.view', ['tour' => $tour,]) }}" class="color-secondary row-5">
             <x-slot:icon>list</x-slot:icon>
             View Activity Manifest
+        </x-admin.popup-button>
+        <x-admin.popup-button href="{{ route('tours.manifest.flight.view', ['tour' => $tour,]) }}" class="color-secondary row-5">
+            <x-slot:icon>list</x-slot:icon>
+            View Flight Manifest
+        </x-admin.popup-button>
+        <x-admin.popup-button href="{{ route('tours.manifest.transport.view', ['tour' => $tour,]) }}" class="color-secondary row-5">
+            <x-slot:icon>list</x-slot:icon>
+            View Transport Manifest
         </x-admin.popup-button>
     </div>
 </div>
