@@ -3,6 +3,7 @@
 namespace App\Models\Flight;
 
 use App\Models\Location\Currency;
+use App\Models\Order\Component\OrderFlight;
 use Database\Factories\Flight\FlightFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -15,6 +16,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 
 /**
@@ -62,7 +65,7 @@ use Illuminate\Support\Carbon;
  */
 class Flight extends Model
 {
-    use HasFactory, SoftDeletes, CascadeSoftDeletes;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes, HasRelationships;
 
     protected array $cascadeDeletes = ['flightInventory'];
     protected $fillable = ['airline_id', 'departure_airport_id', 'arrival_airport_id', 'is_domestic', 'currency_id', 'notes', 'available_from', 'image_url'];
@@ -116,6 +119,11 @@ class Flight extends Model
     public function airline(): BelongsTo
     {
         return $this->belongsTo(Airline::class, 'airline_id');
+    }
+
+    public function orders(): HasManyDeep
+    {
+        return $this->hasManyDeep(OrderFlight::class, [FlightInventory::class, FlightInventoryTour::class]);
     }
 
     public function currency(): BelongsTo

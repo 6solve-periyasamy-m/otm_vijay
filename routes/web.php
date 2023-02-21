@@ -906,6 +906,10 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                 Route::get('/', [ManifestController::class, 'viewActivity'])->name('view');
                 Route::get('/export/{extension}', [ManifestController::class, 'exportActivity'])->name('export');
             });
+            Route::prefix('flight')->name('flight.')->group(function () {
+                Route::get('/', [ManifestController::class, 'viewFlight'])->name('view');
+                Route::get('/export/{extension}', [ManifestController::class, 'exportFlight'])->name('export');
+            });
         });
         Route::prefix('atol')->name('reports.atol.')->group(function () {
             Route::get('/ordered/{year}/{quarter}', [AtolController::class, 'getOrderedInQuarterReport'])->name('ordered');

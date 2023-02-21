@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exports;
+namespace App\Exports\Manifest;
 
 use App\Repository\Interfaces\Manifest\HasActivityManifest;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;

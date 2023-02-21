@@ -22,14 +22,16 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Costing\Tour\TourCostingRepository;
 use App\Repository\Interfaces\HasStockControl;
 use App\Repository\Interfaces\Manifest\HasActivityManifest;
+use App\Repository\Interfaces\Manifest\HasFlightManifest;
 use App\Repository\Interfaces\Manifest\HasRoomingList;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
+use App\Repository\Reporting\Manifest\FlightManifestRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\OrderComponentStorage;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-class TourRepository extends ComponentPackageRepository implements HasStockControl, HasRoomingList, HasActivityManifest
+class TourRepository extends ComponentPackageRepository implements HasStockControl, HasRoomingList, HasActivityManifest, HasFlightManifest
 {
     private Tour $tour;
     private TourCostingRepository $costing;
@@ -169,7 +171,6 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         return $components;
     }
 
-    /** @noinspection PhpMethodParametersCountMismatchInspection */
     public function fixUpgrades(): void
     {
         foreach ($this->tour->accommodationInventoryTours as $inventoryTour) {
@@ -425,5 +426,10 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
     public function getActivityManifest(): Collection|array
     {
         return $this->tour->orderActivities()->with(ActivityManifestRepository::getRelations())->get();
+    }
+
+    public function getFlightManifest(): Collection|array
+    {
+        return $this->tour->orderFlights()->with(FlightManifestRepository::getRelations())->get();
     }
 }

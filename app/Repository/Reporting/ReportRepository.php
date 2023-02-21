@@ -42,7 +42,7 @@ class ReportRepository
                 'export' => 'reports.payment.export',
             ],
             [
-                'name' => 'Flight Manifest',
+                'name' => 'Flight Details',
                 'details' => 'List of all flights and passengers',
                 'view' => 'reports.flight-manifest',
                 'export' => 'reports.flight-manifest.export',
@@ -89,6 +89,12 @@ class ReportRepository
                 'details' => 'Manifest of Ordered Activity Tickets',
                 'view' => 'reports.manifest.activity.view',
                 'export' => 'reports.manifest.activity.export',
+            ],
+            [
+                'name' => 'Flight Manifest',
+                'details' => 'Manifest of Ordered Flight Tickets',
+                'view' => 'reports.manifest.flight.view',
+                'export' => 'reports.manifest.flight.export',
             ],
             [
                 'name' => 'Installment Revenue',

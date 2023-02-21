@@ -2,7 +2,7 @@
 
 namespace App\Repository\Reporting\Manifest;
 
-use App\Exports\ActivityManifestExport;
+use App\Exports\Manifest\ActivityManifestExport;
 use App\Models\Order\Component\OrderActivity;
 use App\Repository\Interfaces\Manifest\HasActivityManifest;
 use Excel;
