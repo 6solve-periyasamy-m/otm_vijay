@@ -145,8 +145,8 @@ $next = $order->next_installment;
                     <p class="heading">Next Payment Details</p>
                     <div class="col-md-6 text-center">
                         <p class="payment-value">
-                            <a href="" class="text-dark cursor-pointer payable-amount"  onclick="event.preventDefault();$('.amount-input').val({{$next->amount}})">
-                                {{ f_currency($next->amount) }}
+                            <a href="" class="text-dark cursor-pointer payable-amount"  onclick="event.preventDefault();$('.amount-input').val({{$next->remaining}})">
+                                {{ f_currency($next->remaining) }}
                             </a>
                         </p>
                         <label class="payment-label">Amount due to fulfil next instalment</label>
