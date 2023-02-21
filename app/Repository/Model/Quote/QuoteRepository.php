@@ -739,7 +739,6 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'address_parent_id' => AddressParent::getParentId('customer'),
         ]);
         $billingAddress = $homeAddress->repository->cloneToNew(AddressParent::getParentId('customer'));
-        \Log::info($paying);
         return Customer::create([
             'first_name' => "Unknown " . ($paying ? "Paying" : "Non-Paying") . " Traveller",
             'last_name' => $this->quote->reference,
