@@ -49,9 +49,7 @@
         }
         function generateUnknownCustomers(count = 1) {
             getCustomers(count).then(function (customers) {
-                for (let x in customers) {
-                    addCustomer(customers[x])
-                }
+                customers.map(customer => addCustomer(customer));
             });
         }
         function generateKnownTravellers(count = 1) {
