@@ -14,11 +14,11 @@
     <div class="card">
         <div class="card-body">
             <a class="btn btn-primary float-end" href="{{ $csv }}" style="margin-right: 5px">
-                <i class="icon-list"></i>
+                {{ Icon::csv() }}
                 <span>Export to CSV</span>
             </a>
             <a class="btn btn-info float-end" href="{{ $xlsx }}" style="margin-right: 5px">
-                <i class="icon-chart"></i>
+                {{ Icon::excel() }}
                 <span>Export to XLSX</span>
             </a>
         </div>

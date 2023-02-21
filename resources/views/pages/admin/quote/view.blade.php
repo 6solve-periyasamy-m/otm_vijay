@@ -104,30 +104,30 @@
 
             @if(isset($quote->order))
                 <a href="{{ route('orders.view', ['order' => $quote->order,]) }}" class="btn btn-warning">
-                    <i class="icon-credit-card"></i>
+                    {{ Icon::wallet() }}
                     View Order
                 </a>
             @endif
             <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}" class="btn btn-warning">
-                <i class="icon-note"></i>
+                {{ Icon::edit() }}
                 {{ __('quotes.view.buttons.edit') }}
             </a>
             <a href="{{ route('quotes.components.add', ['quote' => $quote,]) }}" class="btn btn-primary">
-                <i class="icon-plus"></i>
+                {{ Icon::create() }}
                 {{ __('quotes.view.buttons.add') }}
             </a>
             @if($quote->status == \App\Models\Helper\QuoteStatus::AWAITING)
                 <a href="{{ route('quotes.status.approve', ['quote' => $quote,]) }}" class="btn btn-success">
-                    <i class="icon-paper-plane"></i>
+                    {{ Icon::aprove() }}
                     {{ __('quotes.view.buttons.approve') }}
                 </a>
                 <a href="{{ route('quotes.status.changes', ['quote' => $quote,]) }}" class="btn btn-info">
-                    <i class="icon-refresh"></i>
+                    {{ Icon::refresh() }}
                     {{ __('quotes.view.buttons.change') }}
                 </a>
             @endif
             <a href="{{ route('quotes.status.close', ['quote' => $quote,]) }}" class="btn btn-danger">
-                <i class="icon-minus"></i>
+                {{ Icon::close() }}
                 {{ __('quotes.view.buttons.close') }}
             </a>
         </div>
@@ -153,7 +153,7 @@
                         </div>
                         <div class="col-12 col-xl-3">
                             <a href="javascript:minusPaying()" class="btn btn-outline-danger btn-sm mb-1">
-                                <i class="icon-minus"></i>
+                                {{ Icon::minus() }}
                             </a>
                         </div>
                         <div class="col-12 col-xl-5">
@@ -161,7 +161,7 @@
                         </div>
                         <div class="col-12 col-xl-3">
                             <a href="javascript:plusPaying()" class="btn btn-outline-success btn-sm mb-1">
-                                <i class="icon-plus"></i>
+                                {{ Icon::plus() }}
                             </a>
                         </div>
                     </div>
@@ -171,7 +171,7 @@
                         </div>
                         <div class="col-12 col-xl-3">
                             <a href="javascript:minusTravelling()" class="btn btn-outline-danger btn-sm mb-1">
-                                <i class="icon-minus"></i>
+                                {{ Icon::minus() }}
                             </a>
                         </div>
                         <div class="col-12 col-xl-6">
@@ -179,7 +179,7 @@
                         </div>
                         <div class="col-12 col-xl-3">
                             <a href="javascript:plusTravelling()" class="btn btn-outline-success btn-sm mb-1">
-                                <i class="icon-plus"></i>
+                                {{ Icon::plus() }}
                             </a>
                         </div>
                     </div>
@@ -249,7 +249,7 @@
                         <input type="hidden" name="travelling" class="travelling-input" value="0">
                     </form>
                     <a class="btn btn-info" onclick="event.preventDefault();$('.preview-form').submit();">
-                        <i class="icon-magnifier"></i>
+                        {{ Icon::view() }}
                         {{ __('quotes.view.cards.quick.calculator.preview') }}
                     </a>
                     <form class="d-none send-form" action="{{ route('quotes.send', ['quote' => $quote,]) }}" method="post">
@@ -258,7 +258,7 @@
                         <input type="hidden" name="travelling" class="travelling-input" value="0">
                     </form>
                     <a href="javascript:$('.send-form').submit()" class="btn btn-success">
-                        <i class="icon-envelope"></i>
+                        {{ Icon::email() }}
                         {{ __('quotes.view.cards.quick.calculator.send') }}
                     </a>
                     <form class="d-none convert-form" action="{{ route('quotes.conversion', ['quote' => $quote,]) }}" method="post">
@@ -267,7 +267,7 @@
                         <input type="hidden" name="travelling" class="travelling-input" value="0">
                     </form>
                     <a href="javascript:$('.convert-form').submit()" class="btn btn-warning">
-                        <i class="icon-bag"></i>
+                        {{ Icon::convert() }}
                         {{ __('quotes.view.cards.quick.calculator.convert') }}
                     </a>
                     @can('costing', \App\Models\Quote\Quote::class)
@@ -276,7 +276,7 @@
                         <input type="hidden" name="travelling" class="travelling-input" value="0">
                     </form>
                     <a href="javascript:$('.costing-form').submit()" class="btn btn-secondary">
-                        <i class="icon-wallet"></i>
+                        {{ Icon::wallet() }}
                         {{ __('quotes.view.cards.quick.calculator.costing') }}
                     </a>
                     @endcan
@@ -290,32 +290,32 @@
         <ul class="nav nav-pills otm-tab">
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#summary">
-                    <i class="icon-list"></i> {{ __('quotes.view.cards.components.tabs.summary') }}
+                    {{ Icon::list() }} {{ __('quotes.view.cards.components.tabs.summary') }}
                 </button>
             </li>
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#accommodation">
-                    <i class="icon-home"></i> {{ __('quotes.view.cards.components.tabs.accommodation') }}
+                    {{ Icon::accommodation() }} {{ __('quotes.view.cards.components.tabs.accommodation') }}
                 </button>
             </li>
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities">
-                    <i class="icon-settings"></i> {{ __('quotes.view.cards.components.tabs.activities') }}
+                    {{ Icon::activity() }} {{ __('quotes.view.cards.components.tabs.activities') }}
                 </button>
             </li>
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#flights">
-                    <i class="icon-plane"></i> {{ __('quotes.view.cards.components.tabs.flights') }}
+                    {{ Icon::flight() }} {{ __('quotes.view.cards.components.tabs.flights') }}
                 </button>
             </li>
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transport">
-                    <i class="icon-directions"></i> {{ __('quotes.view.cards.components.tabs.transport') }}
+                    {{ Icon::transport() }} {{ __('quotes.view.cards.components.tabs.transport') }}
                 </button>
             </li>
             <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#extras">
-                    <i class="icon-briefcase"></i> {{ __('quotes.view.cards.components.tabs.extras') }}
+                    {{ Icon::merchandise() }} {{ __('quotes.view.cards.components.tabs.extras') }}
                 </button>
             </li>
         </ul>
@@ -359,15 +359,15 @@
                             <td>
                                 @can('update', \App\Models\Quote\Quote::class)
                                     <a href="{{$componentRepository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1">
-                                        <i class="icon-note"></i>
+                                        {{ Icon::edit() }}
                                     </a>
                                 @else
                                     <span class="btn btn-outline-dark btn-sm mb-1">
-                                    <i class="icon-note"></i>
+                                    {{ Icon::edit() }}
                                 </span>
                                 @endcan
                                 <a href="{{$componentRepository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1">
-                                    <i class="icon-list"></i>
+                                    {{ Icon::list() }}
                                 </a>
                                 <form class="d-none all-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}"
                                       action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $componentRepository->getComponentType(), 'id' => $componentRepository->get()->id]) }}"
@@ -375,7 +375,7 @@
                                     @csrf
                                 </form>
                                 <a href="javascript:$('.all-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
-                                    <i class="icon-trash"></i>
+                                    {{ Icon::delete() }}
                                 </a>
                             </td>
                         </tr>
@@ -414,15 +414,15 @@
                             <td>
                                 @can('update', \App\Models\Quote\Quote::class)
                                     <a href="{{$component->repository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1">
-                                        <i class="icon-note"></i>
+                                        {{ Icon::edit() }}
                                     </a>
                                 @else
                                     <span class="btn btn-outline-dark btn-sm mb-1">
-                                    <i class="icon-note"></i>
+                                    {{ Icon::edit() }}
                                 </span>
                                 @endcan
                                 <a href="{{$component->repository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1">
-                                    <i class="icon-list"></i>
+                                    {{ Icon::list() }}
                                 </a>
                                 <form class="d-none accommodation-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}"
                                       action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $component->repository->getComponentType(), 'id' => $component->repository->get()->id]) }}"
@@ -430,7 +430,7 @@
                                     @csrf
                                 </form>
                                 <a href="javascript:$('.accommodation-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
-                                    <i class="icon-trash"></i>
+                                    {{ Icon::delete() }}
                                 </a>
                             </td>
                         </tr>
@@ -469,15 +469,15 @@
                             <td>
                                 @can('update', \App\Models\Quote\Quote::class)
                                     <a href="{{$component->repository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1">
-                                        <i class="icon-note"></i>
+                                        {{ Icon::edit() }}
                                     </a>
                                 @else
                                     <span class="btn btn-outline-dark btn-sm mb-1">
-                                    <i class="icon-note"></i>
+                                    {{ Icon::edit() }}
                                 </span>
                                 @endcan
                                 <a href="{{$component->repository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1">
-                                    <i class="icon-list"></i>
+                                    {{ Icon::list() }}
                                 </a>
                                 <form class="d-none activity-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}"
                                       action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $component->repository->getComponentType(), 'id' => $component->repository->get()->id]) }}"
@@ -485,7 +485,7 @@
                                     @csrf
                                 </form>
                                 <a href="javascript:$('.activity-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
-                                    <i class="icon-trash"></i>
+                                    {{ Icon::delete() }}
                                 </a>
                             </td>
                         </tr>
@@ -523,15 +523,15 @@
                             <td>
                                 @can('update', \App\Models\Quote\Quote::class)
                                     <a href="{{$component->repository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1">
-                                        <i class="icon-note"></i>
+                                        {{ Icon::edit() }}
                                     </a>
                                 @else
                                     <span class="btn btn-outline-dark btn-sm mb-1">
-                                    <i class="icon-note"></i>
+                                    {{ Icon::edit() }}
                                 </span>
                                 @endcan
                                 <a href="{{$component->repository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1">
-                                    <i class="icon-list"></i>
+                                    {{ Icon::list() }}
                                 </a>
                                 <form class="d-none flight-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}"
                                       action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $component->repository->getComponentType(), 'id' => $component->repository->get()->id]) }}"
@@ -539,7 +539,7 @@
                                     @csrf
                                 </form>
                                 <a href="javascript:$('.flight-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
-                                    <i class="icon-trash"></i>
+                                    {{ Icon::delete() }}
                                 </a>
                             </td>
                         </tr>
@@ -577,15 +577,15 @@
                             <td>
                                 @can('update', \App\Models\Quote\Quote::class)
                                     <a href="{{$component->repository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1">
-                                        <i class="icon-note"></i>
+                                        {{ Icon::edit() }}
                                     </a>
                                 @else
                                     <span class="btn btn-outline-dark btn-sm mb-1">
-                                    <i class="icon-note"></i>
+                                    {{ Icon::edit() }}
                                 </span>
                                 @endcan
                                 <a href="{{$component->repository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1">
-                                    <i class="icon-list"></i>
+                                    {{ Icon::list() }}
                                 </a>
                                 <form class="d-none transport-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}"
                                       action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $component->repository->getComponentType(), 'id' => $component->repository->get()->id]) }}"
@@ -593,7 +593,7 @@
                                     @csrf
                                 </form>
                                 <a href="javascript:$('.transport-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
-                                    <i class="icon-trash"></i>
+                                    {{ Icon::delete() }}
                                 </a>
                             </td>
                         </tr>
@@ -626,15 +626,15 @@
                             <td>
                                 @can('update', \App\Models\Quote\Quote::class)
                                     <a href="{{$component->repository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1">
-                                        <i class="icon-note"></i>
+                                        {{ Icon::edit() }}
                                     </a>
                                 @else
                                     <span class="btn btn-outline-dark btn-sm mb-1">
-                                    <i class="icon-note"></i>
+                                    {{ Icon::edit() }}
                                 </span>
                                 @endcan
                                 <a href="{{$component->repository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1">
-                                    <i class="icon-list"></i>
+                                    {{ Icon::list() }}
                                 </a>
                                 <form class="d-none merchandise-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}"
                                       action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $component->repository->getComponentType(), 'id' => $component->repository->get()->id]) }}"
@@ -642,7 +642,7 @@
                                     @csrf
                                 </form>
                                 <a href="javascript:$('.merchandise-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
-                                    <i class="icon-trash"></i>
+                                    {{ Icon::delete() }}
                                 </a>
                             </td>
                         </tr>
@@ -666,7 +666,7 @@
                     <x-admin.input name="amount"
                                    width="5">{{ __('quotes.view.cards.installments.form.amount') }}</x-admin.input>
                     <x-admin.button href="javascript:$('.installment-create').submit()" width="2" color="primary">
-                        <i class="icon-plus"></i>
+                        {{ Icon::create() }}
                         <span>{{ __('quotes.view.cards.installments.form.create') }}</span>
                     </x-admin.button>
                 </form>
@@ -687,7 +687,7 @@
                         <td>
                             <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}"
                                class="btn btn-outline-success btn-sm mb-1">
-                                <i class="icon-note"></i>
+                                {{ Icon::edit() }}
                             </a>
                         </td>
                     </tr>
@@ -711,11 +711,11 @@
                                 <td>
                                     <a href="javascript:$('.installment-{{$installment->id}}').submit()"
                                        class="btn btn-outline-success btn-sm mb-1">
-                                        <i class="icon-note"></i>
+                                        {{ Icon::edit() }}
                                     </a>
                                     <a href="javascript:$('#installment-{{ $installment->id }}-delete').submit()"
                                        class="btn btn-outline-danger btn-sm mb-1">
-                                        <i class="icon-trash"></i>
+                                        {{ Icon::delete() }}
                                     </a>
                                 </td>
                             </form>
@@ -730,7 +730,7 @@
                         <td>
                             <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}"
                                class="btn btn-outline-success btn-sm mb-1">
-                                <i class="icon-note"></i>
+                                {{ Icon::edit() }}
                             </a>
                         </td>
                     </tr>
@@ -749,7 +749,7 @@
                     <x-admin.input name="cost"
                                    width="5">{{ __('quotes.view.cards.price-points.form.cost') }}</x-admin.input>
                     <x-admin.button href="javascript:$('.pricepoint-create').submit()" width="2" color="primary">
-                        <i class="icon-plus"></i>
+                        {{ Icon::create() }}
                         <span>{{ __('quotes.view.cards.price-points.form.create') }}</span>
                     </x-admin.button>
                 </form>
@@ -780,11 +780,11 @@
                                 <td>
                                     <a href="javascript:$('.pricepoint-{{$pricePoint->id}}').submit()"
                                        class="btn btn-outline-success btn-sm mb-1">
-                                        <i class="icon-note"></i>
+                                        {{ Icon::edit() }}
                                     </a>
                                     <a href="javascript:$('#pricepoint-{{ $pricePoint->id }}-delete').submit()"
                                        class="btn btn-outline-danger btn-sm mb-1">
-                                        <i class="icon-trash"></i>
+                                        {{ Icon::delete() }}
                                     </a>
                                 </td>
                             </form>
@@ -801,15 +801,15 @@
                 <x-slot:header>{{ __('quotes.view.cards.sections.header') }}</x-slot:header>
                 <div class="pb-3 text-end">
                     <a href="{{ route('quotes.section.show', ['quote' => $quote, ]) }}" class="btn btn-primary text-white mb-1">
-                        <i class="icon-key"></i>
+                        {{ Icon::show() }}
                         Show All
                     </a>
                     <a href="{{ route('quotes.section.hide', ['quote' => $quote, ]) }}" class="btn btn-info text-white mb-1">
-                        <i class="icon-lock"></i>
+                        {{ Icon::hide() }}
                         Hide All
                     </a>
                     <a href="{{ route('quotes.section.create', ['quote' => $quote, ]) }}" class="btn btn-success text-white mb-1">
-                        <i class="icon-plus"></i>
+                        {{ Icon::create() }}
                         New Section
                     </a>
                 </div>
@@ -835,10 +835,10 @@
                             <td class="actions">
                                 <a href="{{ route('quotes.section.edit', ['quote' => $quote, 'section' => $section,]) }}"
                                    class="btn btn-outline-success btn-sm mb-1">
-                                    <i class="icon-note"></i>
+                                    {{ Icon::edit() }}
                                 </a>
                                 <a href="javascript:$('#section-{{$section->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
-                                    <i class="icon-trash"></i>
+                                    {{ Icon::delete() }}
                                 </a>
                                 <form id="section-{{$section->id}}-delete" class="d-none" method="post" action="{{ route('quotes.section.delete', ['quote' => $quote, 'section' => $section,]) }}">
                                     @csrf
@@ -875,15 +875,15 @@
                             <td class="actions-3">
                                 <a href="{{ route('quotes.sent.view', ['quote' => $quote, 'sent' => $sent,]) }}"
                                    class="btn btn-outline-info btn-sm mb-1">
-                                    <i class="icon-magnifier"></i>
+                                    {{ Icon::view() }}
                                 </a>
                                 <a href="{{ route('quotes.sent.resend', ['quote' => $quote, 'sent' => $sent,]) }}"
                                    class="btn btn-outline-success btn-sm mb-1">
-                                    <i class="icon-envelope"></i>
+                                    {{ Icon::email() }}
                                 </a>
                                 <a href="{{ route('quotes.sent.rebuild', ['quote' => $quote, 'sent' => $sent,]) }}"
                                    class="btn btn-outline-danger btn-sm mb-1">
-                                    <i class="icon-layers"></i>
+                                    {{ Icon::rebuild() }}
                                 </a>
                             </td>
                         </tr>

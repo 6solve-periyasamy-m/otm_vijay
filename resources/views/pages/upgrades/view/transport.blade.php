@@ -47,7 +47,7 @@
     <div class="card">
         <div class="card-body text-end">
             <a href="{{ route('transport-upgrade.create', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]) }}" class="btn btn-primary">
-                <i class="icon-plus"></i>
+                {{ Icon::create() }}
                 <span>Create</span>
             </a>
         </div>
@@ -77,31 +77,37 @@
                                     <td>{{ $upgrade->upgrade->transportInventory->travelClass->name }}</td>
                                     <td>
                                         {{ f_datetime($upgrade->upgrade->transportInventory->departs_at) }}
-                                        <input type="checkbox" disabled @if($inventoryTour->departure_time_confirmed == 1) checked @endif>
+                                        <input type="checkbox" disabled
+                                               @if($inventoryTour->departure_time_confirmed == 1) checked @endif>
                                     </td>
                                     <td>
                                         {{ f_datetime($upgrade->upgrade->transportInventory->arrives_at) }}
-                                        <input type="checkbox" disabled @if($inventoryTour->arrival_time_confirmed == 1) checked @endif>
+                                        <input type="checkbox" disabled
+                                               @if($inventoryTour->arrival_time_confirmed == 1) checked @endif>
                                     </td>
                                     <td>{{ $upgrade->upgrade->transportInventory->stock }}</td>
                                     <td>{{ $upgrade->description }}</td>
                                     <td>{{ f_currency($upgrade->upgrade->tour_sales_price) }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\Transport\TransportInventoryTour::class)
-                                            <a href="{{ route('transport-upgrade.edit', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                                            <a href="{{ route('transport-upgrade.edit', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade]) }}"
+                                               class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                                    <i class="icon-note"></i>
+                                                    {{ Icon::edit() }}
                                                 </span>
                                         @endcan
                                         @can('delete', \App\Models\Transport\TransportInventoryTour::class)
-                                            <a href="#" onclick="$('#transport-{{$upgrade->upgrade->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                            <form action="{{ route('transport-upgrade.delete', ['tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade' => $upgrade]) }}" method="post" id="transport-{{$upgrade->upgrade->id}}-delete">
+                                            <a href="#"
+                                               onclick="$('#transport-{{$upgrade->upgrade->id}}-delete').submit()"
+                                               class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
+                                            <form action="{{ route('transport-upgrade.delete', ['tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade' => $upgrade]) }}"
+                                                  method="post" id="transport-{{$upgrade->upgrade->id}}-delete">
                                                 @csrf
                                             </form>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                                    <i class="icon-trash"></i>
+                                                    {{ Icon::delete() }}
                                                 </span>
                                         @endcan
                                     </td>

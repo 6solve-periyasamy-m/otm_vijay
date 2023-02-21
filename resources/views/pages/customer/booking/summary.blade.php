@@ -96,7 +96,7 @@ $shouldRooming = $tour->templates->count();
                 {{ csrf_field() }}
                 <input type="hidden" name="booking_reference" id="form-booking-reference">
                 <div class="form-material row">
-                    <x-customer.input name="amount" value="{{ $booking->tour->deposit * $booking->traveller_count }}" width="10" required>
+                    <x-customer.input name="amount" value="{{ ($booking->tour->deposit * $booking->traveller_count) + ($tour->booking_fee ?? 0) }}" width="10" required>
                         How much do you want to pay today?
                     </x-customer.input>
                     <div class="form-group col-12 col-xl-2" style="padding-top: 19px;">

@@ -256,4 +256,13 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
         }
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
+
+    public function testOrderCostSingleWithBookingFee()
+    {
+        $orderCustomer = $this->generateOrder()->leadBooker;
+        $order = $orderCustomer->order;
+        $order->booking_fee = 200;
+        $order->save();
+        self::assertEquals($orderCustomer->tour_cost + $orderCustomer->single_occupancy_surcharge + 200, $orderCustomer->order->cost);
+    }
 }

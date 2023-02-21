@@ -12,7 +12,7 @@
     <div class='card'>
         <div class="card-body">
             <a class="btn btn-success float-end" href="{{ route('tours.create') }}">
-                <i class="icon-plus"></i>
+                {{ Icon::create() }}
                 <span>Create New</span>
             </a>
             <a class="btn btn-primary float-end" style="margin-right: 5px;" href="{{ route('tours.all', ['historic' => !($historic ?? true),]) }}">
@@ -68,14 +68,14 @@
                         <td>{{ $tour->is_active ? "Yes" : "No" }}</td>
                         <td class="actions-3">
                             <a href="{{route('tours.duplicate', ['tour' => $tour,])}}" class="btn btn-outline-info btn-sm mb-1">
-                                <i class="icon-layers"></i>
+                                {{ Icon::copy() }}
                             </a>
                             <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
-                                <i class="icon-note"></i>
+                                {{ Icon::edit() }}
                             </a>
                             @if(!$tour->trashed())
                             <a href="#" onclick="event.preventDefault();document.getElementById('tour-{{ $tour->id }}-delete').submit();" class="btn btn-outline-danger btn-sm mb-1">
-                                <i class="icon-trash"></i>
+                                {{ Icon::delete() }}
                             </a>
                             <form id="tour-{{ $tour->id }}-delete" action="{{ route('tours.delete', ['tour' => $tour,]) }}" method="POST"
                                   style="display: none;">{{ csrf_field() }}</form>

@@ -26,7 +26,7 @@ trait TestsOrder
     function generatePayment(?Order $order, float $amount): Payment
     {
         if (!isset($order)) $order = $this->generateOrder();
-        $payment = new Payment(['amount' => $amount, 'customer_id' => 1, 'payment_method_id' => 1, 'payment_type' => 'Installment', 'paid_on' => now(),]);
+        $payment = new Payment(['amount' => $amount, 'customer_id' => 1, 'payment_method_id' => 1, 'paid_on' => now(),]);
         $order->payments()->save($payment);
         return $payment;
     }

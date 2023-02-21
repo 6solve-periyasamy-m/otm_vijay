@@ -66,7 +66,7 @@
     <div class="card">
         <div class="card-body">
             <a class="btn btn-success float-end" href="{{ route('orders.create') }}">
-                <i class="icon-plus"></i>
+                {{ Icon::create() }}
                 <span>Create New</span>
             </a>
             <a class="btn btn-primary float-end" style="margin-right: 5px;" href="{{ route('orders.all', ['historic' => !($historic ?? true),]) }}">

@@ -180,6 +180,7 @@ return [
         App\Providers\StringFormatProvider::class,
         App\Providers\SettingsProvider::class,
         App\Providers\GatewayProvider::class,
+        App\Providers\IconProvider::class,
 
     ],
 
@@ -237,6 +238,7 @@ return [
         'StringFormatter' => StringFormatterFacade::class,
         'Settings' => \App\Facades\SettingsFacade::class,
         'Gateway' => \App\Facades\GatewayFacade::class,
+        'Icon' => \App\Facades\IconFacade::class,
 
     ],
     // this apps settings
