@@ -14,12 +14,14 @@
             <th scope="col">Order Status</th>
             <th scope="col">Due Date</th>
             <th scope="col">Due Amount</th>
+            <th scope="col">Internal Notes</th>
+            <th scope="col">External Notes</th>
         </tr>
     </thead>
     <tbody>
         @foreach($data as $row)
             <tr>
-                <td>{{ $row->ordered_on }}</td>
+                <td>{{ f_datetime($row->ordered_on) }}</td>
                 <th scope="row">{{ $row->booking_reference }}</th>
                 <td>{{ $row->lb_first_name }}</td>
                 <td>{{ $row->lb_last_name }}</td>
@@ -31,7 +33,9 @@
                 <td>{{ $row->balance_outstanding }}</td>
                 <td class="bg-{{ $row->orderStatus->color() }}">{{ $row->orderStatus->description() }}</td>
                 <td>{{ $row->due_date ?? 'No Payment Due' }}</td>
-                <td>{{ $row->due_amount }}</td>
+                <td>{{ f_datetime($row->due_amount) }}</td>
+                <td>{{ $row->internal_notes }}</td>
+                <td>{{ $row->external_notes }}</td>
             </tr>
         @endforeach
     </tbody>
