@@ -13,9 +13,7 @@
                 })
                 .then(data => {
                     let customers = [];
-                    for (let x in data.data) {
-                        customers.push(new Customer(data.data[x].id, data.data[x].text))
-                    }
+                    data.data.map(customer => customers.push(new Customer(customer.id, customer.text)));
                     resolve(customers);
                 })
                 .catch(data => {
