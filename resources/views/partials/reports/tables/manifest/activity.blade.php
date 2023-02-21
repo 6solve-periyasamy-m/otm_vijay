@@ -11,7 +11,7 @@
         <th scope="col">Start Time</th>
         <th scope="col">End Date</th>
         <th scope="col">End Time</th>
-        <th scope="col">Notes</th>
+        <th scope="col">Customer Activity Notes</th>
     </tr>
     </thead>
     <tbody>

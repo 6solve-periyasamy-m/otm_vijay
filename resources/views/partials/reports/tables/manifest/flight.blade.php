@@ -13,7 +13,7 @@
         <th scope="col">Arrival Time</th>
         <th scope="col">Arrival Airport</th>
         <th scope="col">Component Type</th>
-        <th scope="col">Notes</th>
+        <th scope="col">Customer Flight Notes</th>
     </tr>
     </thead>
     <tbody>

@@ -13,7 +13,7 @@
         <th scope="col">Arrival Time</th>
         <th scope="col">Arrival Address</th>
         <th scope="col">Component Type</th>
-        <th scope="col">Notes</th>
+        <th scope="col">Customer Transport Notes</th>
     </tr>
     </thead>
     <tbody>
@@ -26,10 +26,10 @@
             <td>{{ $row->number }}</td>
             <td>{{ f_date($row->start)}}</td>
             <td>{{ f_time($row->start)}}</td>
-            <td>{{ $row->departure }}</td>
+            <td>{{ $row->departure->name }}</td>
             <td>{{ f_date($row->end)}}</td>
             <td>{{ f_time($row->end)}}</td>
-            <td>{{ $row->arrival }}</td>
+            <td>{{ $row->arrival->name }}</td>
             <td>{{ $row->component }}</td>
             <td>{{ $row->notes }}</td>
         </tr>
