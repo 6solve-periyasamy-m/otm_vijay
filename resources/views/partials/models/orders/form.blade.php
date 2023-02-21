@@ -1,4 +1,5 @@
-@if(!isset($update))
+@php /** @var \App\Models\Order\Order $order */ $order = $order ?? null; @endphp
+@if($order === null)
     @push('header-stack')
         <script type="text/javascript">
             var customerCount = 0;
@@ -42,9 +43,12 @@
             <div class="form-group col-12 col-xl-4">
                 <label for="customers[${id}]-input">Additional Traveller</label>
                 <div class="d-flex">
-                    <select class="form-control customers[${id}]-input" id="customers-${id}" name="customers[${id}][id]"></select>
-                    <a href="{{ route('customers.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
-                    <a href="javascript:getUnknownCustomer('#customer-${id}')" class="btn btn-info d-inline ms-1"><i class="icon-user"></i></a>
+                    <select class="form-control customers[${id}]-input" id="customers-${id}"
+                            name="customers[${id}][id]"></select>
+                    <a href="{{ route('customers.create') }}" target="_blank"
+                       class="btn btn-success d-inline ms-1">+</a>
+                    <a href="javascript:getUnknownCustomer('#customer-${id}')"
+                       class="btn btn-info d-inline ms-1">{{ Icon::unknownCustomer() }}</a>
                     @include('partials.fields.btn-checkbox', ['field' => 'customers[${id}][travelling]', 'icon' => 'plane', 'value' => 1,])
                     @include('partials.fields.btn-checkbox', ['field' => 'customers[${id}][paying]', 'icon' => 'wallet', 'value' => 1,])
                 </div>
@@ -52,14 +56,14 @@
         </script>
     @endpush
 @endif
-@if(!isset($update))
+@if($order === null)
     @can('create', \App\Models\Tour\Tour::class)
         @include('partials.fields.selector.adder',
-                    ['name' => 'Tour', 'field' => 'tour_id', 'value' => $tour_id ?? 0,
+                    ['name' => 'Tour', 'field' => 'tour_id', 'value' => 0,
                      'route' => 'tours', 'createRoute' => route('tours.create'), 'width' => 6])
     @else
         @include('partials.fields.selector.default',
-                  ['name' => 'Tour', 'field' => 'tour_id', 'value' => $tour_id ?? 0,
+                  ['name' => 'Tour', 'field' => 'tour_id', 'value' => 0,
                    'route' => 'tours', 'width' => 6])
     @endcan
     @can('create', \App\Models\Customer\Customer::class)
@@ -72,14 +76,16 @@
                  'route' => 'customers', 'width' => 6])
     @endcan
 @endif
-@include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'value' => $deposit ?? null, 'width' => 6 ])
-@include('partials.fields.datetime', ['name' => 'Ordered On', 'field' => 'ordered_on', 'value' => $ordered_on ?? null, 'width' => 6 ])
-@include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'value' => $internal_notes ?? null, 'width' => 6 ])
-@include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'value' => $external_notes ?? null, 'width' => 6 ])
-@if(isset($update))
+@include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'value' => $order?->deposit, 'width' => 4 ])
+@include('partials.fields.text', ['name' => 'Booking Fee', 'field' => 'booking_fee', 'value' => $order?->booking_fee, 'width' => 4 ])
+@include('partials.fields.datetime', ['name' => 'Ordered On', 'field' => 'ordered_on', 'value' => $order?->ordered_on, 'width' => 4 ])
+@include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'value' => $order?->internal_notes, 'width' => 6 ])
+@include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'value' => $order?->external_notes, 'width' => 6 ])
+@if($order !== null)
     @include('partials.fields.ckeditor', ['name' => 'Invoice Footer', 'field' => 'invoice_footer', 'value' => $order->invoice_footer, ])
 @endif
-@if(!isset($update))
+@if($order === null)
+    @include('partials.fields.checkbox', ['name' => 'Send Booking Confirmation Email?', 'field' => 'should_invoice', 'value' => flag('order.manual.mail', false),])
 <hr class="splitter">
 <div class="customers-section row form-group">
     <div class="col-12 col-xl-10">

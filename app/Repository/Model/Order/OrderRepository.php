@@ -115,7 +115,7 @@ class OrderRepository extends ModelRepository
     public function getInstallments(): Collection|array
     {
         $customers = $this->order->orderCustomers()->count();
-        $paid = $this->order->paid - ($this->order->deposit * $customers);
+        $paid = $this->order->paid - (($this->order->deposit ?? 0) * $customers) - ($this->order->booking_fee ?? 0);
         DB::statement("SET @total:={$paid};");
         $installments = OrderInstallment::where('order_id', '=', $this->order->id)
             ->orderBy('due_on')
@@ -169,7 +169,7 @@ class OrderRepository extends ModelRepository
      */
     public function getCost(): float
     {
-        $total = 0;
+        $total = $this->order->booking_fee ?? 0;
         foreach ($this->order->orderCustomers()->where('is_charged', '=', 1)->get() as $orderCustomer) {
             $total += $orderCustomer->tour_cost;
             if ($orderCustomer->has_surcharge) $total += $orderCustomer->single_occupancy_surcharge;
@@ -290,9 +290,9 @@ class OrderRepository extends ModelRepository
             $adjustments = $this->order->total_adjustments;
             $total = $cost + $adjustments;
             if ($this->order->trashed() || $this->order->cancelled) {
-                if ($paidAmount == 0) {
-                    $status = OrderStatus::CANCELLED_FULL_REFUND;
-                } else if ($paidAmount <= $this->order->calculated_deposit) {
+                if ($paidAmount <= ($this->order->booking_fee ?? 0)) {
+                    $status = $paidAmount < 0 ? OrderStatus::CANCELLED_OVER_REFUNDED : OrderStatus::CANCELLED_FULL_REFUND;
+                }  else if ($paidAmount <= $this->order->calculated_deposit) {
                     $status = OrderStatus::CANCELLED_DEPOSIT_HELD;
                 } else {
                     $status = OrderStatus::CANCELLED_REFUND_REQUIRED;

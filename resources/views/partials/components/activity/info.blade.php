@@ -22,7 +22,7 @@
         @can('update', \App\Models\Activity\Activity::class)
         <div class="col-12">
             <a class="btn btn-success" href="{{ route('activities.edit', ['activity' => $activity, ]) }}">
-                <i class="icon-note"></i>
+                {{ Icon::edit() }}
                 <span>Edit Activity</span>
             </a>
         </div>

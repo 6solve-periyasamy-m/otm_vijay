@@ -65,4 +65,66 @@ class IsOrderInstallmentPaidTest extends DatabaseTestCase
         $this->generatePayment($installment->order, 100);
         $this->assertFalse($installment->paid);
     }
+
+    public function testInstallmentPaidSinglePaymentWithBookingFee()
+    {
+        $installment = $this->generateOrderInstallment(now(), 100);
+        $order = $installment->order;
+        $order->booking_fee = 100;
+        $order->save();
+        $this->generatePayment($installment->order, 200);
+        $this->assertTrue($installment->paid);
+    }
+
+    public function testInstallmentPaidMultiplePaymentsWithBookingFee()
+    {
+        $installment = $this->generateOrderInstallment(now(), 100);
+        $order = $installment->order;
+        $order->booking_fee = 100;
+        $order->save();
+        $this->generatePayment($installment->order, 100);
+        $this->generatePayment($installment->order, 100);
+        $this->assertTrue($installment->paid);
+    }
+
+    public function testInstallmentPaidWithDepositWithBookingFee()
+    {
+        $order = $this->generateOrder(true, true, 300, 50, 100);
+        $order->booking_fee = 100;
+        $order->save();
+        $installment = $this->generateOrderInstallment(now(), 100, $order);
+        $this->generatePayment($order, 300);
+        $this->assertTrue($installment->paid);
+    }
+
+    public function testInstallmentUnpaidSinglePaymentWithBookingFee()
+    {
+        $installment = $this->generateOrderInstallment(now(), 100);
+        $order = $installment->order;
+        $order->booking_fee = 100;
+        $order->save();
+        $this->generatePayment($installment->order, 100);
+        $this->assertFalse($installment->paid);
+    }
+
+    public function testInstallmentUnpaidMultiplePaymentsWithBookingFee()
+    {
+        $installment = $this->generateOrderInstallment(now(), 100);
+        $order = $installment->order;
+        $order->booking_fee = 100;
+        $order->save();
+        $this->generatePayment($installment->order, 50);
+        $this->generatePayment($installment->order, 50);
+        $this->assertFalse($installment->paid);
+    }
+
+    public function testInstallmentUnpaidWithDepositWithBookingFee()
+    {
+        $order = $this->generateOrder(true, true, 300, 50, 100);
+        $order->booking_fee = 100;
+        $order->save();
+        $installment = $this->generateOrderInstallment(now(), 100, $order);
+        $this->generatePayment($order, 200);
+        $this->assertFalse($installment->paid);
+    }
 }

@@ -39,6 +39,7 @@ class TourController extends Controller
             'booking_form_url' => $request->input('booking_form_url'),
             'tour_category_id' => $request->input('tour_category_id'),
             'deposit' => $request->input('deposit'),
+            'booking_fee' => $request->input('booking_fee'),
             'is_active' => $request->input('is_active') === 'on' ? 1 : 0,
             'notes' => $request->input('notes'),
             'invoice_footer' => $request->input('invoice_footer'),
@@ -73,14 +74,16 @@ class TourController extends Controller
         return view('pages.tour.costing', ['tour' => $tour,]);
     }
 
-    public function rooming(Tour $tour)
+    public function rooming(Request $request, Tour $tour)
     {
-        return RoomingReportRepository::viewReport($tour->repository, 'tours.rooming.export', ['tour' => $tour,]);
+        $notes = !$request->has('notes') || $request->notes == true;
+        return RoomingReportRepository::viewReport($tour->repository, 'tours.rooming.export', $notes, ['tour' => $tour,]);
     }
 
-    public function exportRooming(Tour $tour, string $extension)
+    public function exportRooming(Request $request, Tour $tour, string $extension)
     {
-        return RoomingReportRepository::exportReport($tour->repository, $extension);
+        $notes = !$request->has('notes') || $request->notes == true;
+        return RoomingReportRepository::exportReport($tour->repository, $extension, $notes);
     }
 
     public function duplicate(Tour $tour)
@@ -114,6 +117,7 @@ class TourController extends Controller
             'base_price_per_person' => $request->input('base_price_per_person'),
             'margin' => $request->input('margin'),
             'deposit' => $request->input('deposit'),
+            'booking_fee' => $request->input('booking_fee'),
             'single_occupancy_surcharge' => $request->input('single_occupancy_surcharge'),
             'stock_control_active' => $request->input('stock_control_active') === 'on' ? 1 : 0,
             'atol_protected' => $request->input('atol_protected') == -1 ? null : $request->input('atol_protected'),

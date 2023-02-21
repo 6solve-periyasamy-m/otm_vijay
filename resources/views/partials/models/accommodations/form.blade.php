@@ -1,6 +1,6 @@
 @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $name ?? null, 'width' => 10])
 @include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'width' => 2,])
-@include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $name ?? null,])
+@include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $description ?? null,])
 @include('partials.fields.date', ['name' => 'Audit Date', 'field' => 'audit_date', 'value' => $audit_date ?? null,])
 @include('partials.fields.prefab.addresses.switcher', [
                     'location_type_id' => isset($address) ? $address->location_type_id : 0,

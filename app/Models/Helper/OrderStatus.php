@@ -5,6 +5,7 @@ namespace App\Models\Helper;
 enum OrderStatus: int
 {
 
+    case CANCELLED_OVER_REFUNDED = -4;
     case CANCELLED_FULL_REFUND = -3;
     case CANCELLED_DEPOSIT_HELD = -2;
     case CANCELLED_REFUND_REQUIRED = -1;
@@ -23,6 +24,7 @@ enum OrderStatus: int
     public function getStatusArray(): array
     {
         return match ($this) {
+            self::CANCELLED_OVER_REFUNDED => ['status' => trans('custom.order.status.cancelled.over'), 'color' => 'secondary',],
             self::CANCELLED_FULL_REFUND => ['status' => trans('custom.order.status.cancelled.full'), 'color' => 'secondary',],
             self::CANCELLED_DEPOSIT_HELD => ['status' => trans('custom.order.status.cancelled.deposit'), 'color' => 'secondary',],
             self::CANCELLED_REFUND_REQUIRED => ['status' => trans('custom.order.status.cancelled.required'), 'color' => 'secondary',],

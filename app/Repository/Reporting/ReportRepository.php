@@ -78,6 +78,13 @@ class ReportRepository
                 'export' => 'reports.rooming.export',
             ],
             [
+                'name' => 'Rooming (No Notes)',
+                'details' => 'Information about all ordered rooms, without the notes fields',
+                'view' => 'reports.rooming',
+                'export' => 'reports.rooming.export',
+                'params' => ['notes' => false,],
+            ],
+            [
                 'name' => 'Installment Revenue',
                 'details' => 'Information about days revenue',
                 'view' => 'reports.installment-revenue',

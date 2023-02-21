@@ -31,22 +31,28 @@
     @endcan
 </script>
 @can('create', \App\Models\Flight\FlightInventoryTour::class)
-<div class="d-flex justify-content-between mb-3">
-    <div class="d-inline-flex col-12 col-xl-10">
-        <select class="form-select flight-component-type-select">
-            <option value="Included" selected>Included</option>
-            <option value="Add-on">Add-on</option>
-        </select>
-        <select class="form-select flight-direction-select">
-            <option value="Outbound">Outbound</option>
-            <option value="Mid-Package" selected>Mid-Package</option>
-            <option value="Inbound">Inbound</option>
-        </select>
+<div class="d-flex justify-content-between mb-3 col-12">
+    <div class="d-inline-flex col-xl-12">
+        <div class="col-xl-5">
+            <select class="form-select flight-component-type-select">
+                <option value="Included" selected>Included</option>
+                <option value="Add-on">Add-on</option>
+            </select>
+        </div>
+        <div class="col-xl-5">
+            <select class="form-select flight-direction-select">
+                <option value="Outbound">Outbound</option>
+                <option value="Mid-Package" selected>Mid-Package</option>
+                <option value="Inbound">Inbound</option>
+            </select>
+        </div>
+        <div class="col-xl-2">
+            <a href="javascript:getSelectedFlightInventory()" class="btn btn-primary ms-3 text-white">
+                {{ Icon::create() }}
+                <span>Add Selected Rows</span>
+            </a>
+        </div>
     </div>
-    <a href="javascript:getSelectedFlightInventory()" class="btn btn-primary ms-3 text-white">
-        <i class="icon-plus"></i>
-        <span>Add Selected Rows</span>
-    </a>
 </div>
 @endcan
 <table style="width: 100%;" class="table table-striped flight-inventory-table">

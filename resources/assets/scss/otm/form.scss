@@ -1,27 +1,27 @@
 .form-group {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 
-    .form-control {
-        height: 2.5rem;
-        box-shadow: none!important;
-        border-radius: 0;
-        background-color: white;
-    }
-    
-    .form-check-input[type=checkbox] {
-        width: 1rem;
-        height: 1rem;
-        box-shadow: none!important;        
-        border-radius: 0px;
-    }
-    
-    textarea.form-control {
-        height: auto;
-    }
+  .form-control {
+    height: 2.5rem;
+    box-shadow: none !important;
+    border-radius: 0;
+    background-color: white;
+  }
 
-    .form-select {
-        max-width: none;
-        border-radius: 0px;
-        box-shadow: none!important;
-    }
+  .form-check-input[type=checkbox] {
+    width: 1rem;
+    height: 1rem;
+    box-shadow: none !important;
+    border-radius: 0;
+  }
+
+  textarea.form-control {
+    height: auto;
+  }
+
+  .form-select {
+    max-width: none;
+    border-radius: 0;
+    box-shadow: none !important;
+  }
 }

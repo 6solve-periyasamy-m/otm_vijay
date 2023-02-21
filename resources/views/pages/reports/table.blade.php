@@ -63,31 +63,31 @@
         <div class="card">
             <div class="card-body">
                 <a class="btn btn-primary float-end" style="margin-right: 5px" href="{{ route('reports.bespoke.create', ['parent' => 'accommodation']) }}">
-                    <i class="icon-plus"></i>
+                    {{ Icon::create() }}
                     <span>Accommodation Report</span>
                 </a>
                 <a class="btn btn-primary float-end" style="margin-right: 5px" href="{{ route('reports.bespoke.create', ['parent' => 'activity']) }}">
-                    <i class="icon-plus"></i>
+                    {{ Icon::create() }}
                     <span>Activity Report</span>
                 </a>
                 <a class="btn btn-primary float-end" style="margin-right: 5px" href="{{ route('reports.bespoke.create', ['parent' => 'flight']) }}">
-                    <i class="icon-plus"></i>
+                    {{ Icon::create() }}
                     <span>Flight Report</span>
                 </a>
                 <a class="btn btn-primary float-end" style="margin-right: 5px" href="{{ route('reports.bespoke.create', ['parent' => 'transport']) }}">
-                    <i class="icon-plus"></i>
+                    {{ Icon::create() }}
                     <span>Transport Report</span>
                 </a>
                 <a class="btn btn-primary float-end" style="margin-right: 5px" href="{{ route('reports.bespoke.create', ['parent' => 'customer']) }}">
-                    <i class="icon-plus"></i>
+                    {{ Icon::create() }}
                     <span>Customer Report</span>
                 </a>
                 <a class="btn btn-primary float-end" style="margin-right: 5px" href="{{ route('reports.bespoke.create', ['parent' => 'order-installment']) }}">
-                    <i class="icon-plus"></i>
+                    {{ Icon::create() }}
                     <span>Order Installment Report</span>
                 </a>
                 <a class="btn btn-primary float-end" style="margin-right: 5px" href="{{ route('reports.bespoke.create', ['parent' => 'payment']) }}">
-                    <i class="icon-plus"></i>
+                    {{ Icon::create() }}
                     <span>Payment Report</span>
                 </a>
             </div>
@@ -107,49 +107,56 @@
                 <tbody>
                 @foreach($system as $report)
                     <tr>
-                        <th scope="row"><a href="{{ route($report['view']) }}">{{ $report['name'] }}</a></th>
+                        <th scope="row"><a href="{{ route($report['view'], ($report['params'] ?? [])) }}">{{ $report['name'] }}</a></th>
                         <td>{{ $report['details'] }}</td>
                         <td>System</td>
                         <td>
-                            <a href="{{ route($report['export'], ['extension' => 'csv',]) }}" class="btn btn-outline-primary btn-sm mb-1" title="Export as CSV"><i class="icon-list"></i></a>
-                            <a href="{{ route($report['export'], ['extension' => 'xlsx',]) }}" class="btn btn-outline-info btn-sm mb-1" title="Export as XLSX"><i class="icon-chart"></i></a>
+                            <a href="{{ route($report['export'], ['extension' => 'csv', ...($report['params'] ?? [])]) }}"
+                               class="btn btn-outline-primary btn-sm mb-1" title="Export as CSV">{{ Icon::csv() }}</a>
+                            <a href="{{ route($report['export'], ['extension' => 'xlsx', ...($report['params'] ?? [])]) }}"
+                               class="btn btn-outline-info btn-sm mb-1" title="Export as XLSX">{{ Icon::excel() }}</a>
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                <i class="icon-note"></i>
+                                {{ Icon::edit() }}
                             </span>
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                <i class="icon-trash"></i>
+                                {{ Icon::delete() }}
                             </span>
                         </td>
                     </tr>
                 @endforeach
                 @foreach($reports as $report)
                     <tr>
-                        <th scope="row"><a href="{{ route('reports.bespoke.show', ['report' => $report,]) }}">{{ $report->name }}</a></th>
+                        <th scope="row"><a
+                                    href="{{ route('reports.bespoke.show', ['report' => $report,]) }}">{{ $report->name }}</a>
+                        </th>
                         <td>{{ $report->description }}</td>
                         <td>Custom</td>
                         <td>
-                            <a href="{{ route('reports.bespoke.export', ['report' => $report, 'extension' => 'csv']) }}" class="btn btn-outline-primary btn-sm mb-1" title="Export as CSV"><i class="icon-list"></i></a>
-                            <a href="{{ route('reports.bespoke.export', ['report' => $report, 'extension' => 'xlsx']) }}" class="btn btn-outline-info btn-sm mb-1" title="Export as XLSX"><i class="icon-chart"></i></a>
+                            <a href="{{ route('reports.bespoke.export', ['report' => $report, 'extension' => 'csv']) }}"
+                               class="btn btn-outline-primary btn-sm mb-1" title="Export as CSV">{{ Icon::csv() }}</a>
+                            <a href="{{ route('reports.bespoke.export', ['report' => $report, 'extension' => 'xlsx']) }}"
+                               class="btn btn-outline-info btn-sm mb-1" title="Export as XLSX">{{ Icon::excel() }}</a>
                             @can('update', \App\Models\System\Report::class)
-                                <a href="{{route('reports.bespoke.edit', ['report' => $report,])}}" class="btn btn-outline-success btn-sm mb-1">
-                                    <i class="icon-note"></i>
+                                <a href="{{route('reports.bespoke.edit', ['report' => $report,])}}"
+                                   class="btn btn-outline-success btn-sm mb-1">
+                                    {{ Icon::edit() }}
                                 </a>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
-                                    <i class="icon-note"></i>
+                                    {{ Icon::edit() }}
                                 </span>
                             @endcan
                             @can('delete', \App\Models\System\Report::class)
                                 <a href="#" class="btn btn-outline-danger btn-sm mb-1"
                                    onclick="event.preventDefault();document.getElementById('report-{{ $report->id }}-delete').submit();">
-                                    <i class="icon-trash"></i>
+                                    {{ Icon::delete() }}
                                 </a>
                                 <form id="report-{{ $report->id }}-delete"
                                       action="{{ route('reports.bespoke.delete', ['report' => $report,]) }}" method="POST"
                                       style="display: none;">{{ csrf_field() }}</form>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
-                                    <i class="icon-trash"></i>
+                                    {{ Icon::delete() }}
                                 </span>
                             @endcan
                         </td>
@@ -160,28 +167,42 @@
         </div>
     </div>
     @if(flag('atol.enabled', true))
-    <div class="heading pt-md-4 pb-md-3 pt-3">
-        <h2 class="fw-bold">ATOL Reporting</h2>
-    </div>
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                @include('partials.fields.text', ['name'=>'Year','field'=>'year','width'=>6])
-                @include('partials.fields.text', ['name'=>'Quarter','field'=>'quarter','width'=>6])
-                <hr class="splitter">
+        <div class="heading pt-md-4 pb-md-3 pt-3">
+            <h2 class="fw-bold">ATOL Reporting</h2>
+        </div>
+        <div class="card">
+            <div class="card-body">
                 <div class="row">
-                    <button class="btn m-2 btn-primary col-3" onclick="showOrderedOnReport()"><i class="icon-plus"></i>Show Ordered On Report</button>
-                    <button class="btn m-2 btn-primary col-3" onclick="showDepartedInReport()"><i class="icon-plus"></i>Show Departed In Report</button>
-                    <button class="btn m-2 btn-primary col-3" onclick="showDepartedAfterReport()"><i class="icon-plus"></i>Show Departed After Report</button>
-                </div>
-                <hr class="splitter">
-                <div class="row">
-                    <button class="btn m-2 btn-primary col-3" onclick="showOrderedOnCertificates()"><i class="icon-plus"></i>Export Ordered On Certificates</button>
-                    <button class="btn m-2 btn-primary col-3" onclick="showDepartedInCertificates()"><i class="icon-plus"></i>Export Departed In Certificates</button>
-                    <button class="btn m-2 btn-primary col-3" onclick="showDepartedAfterCertificates()"><i class="icon-plus"></i>Export Departed After Certificates</button>
+                    @include('partials.fields.text', ['name'=>'Year','field'=>'year','width'=>6])
+                    @include('partials.fields.text', ['name'=>'Quarter','field'=>'quarter','width'=>6])
+                    <hr class="splitter">
+                    <div class="row">
+                        <button class="btn m-2 btn-primary col-3" onclick="showOrderedOnReport()">{{ Icon::create() }}
+                            Show Ordered On Report
+                        </button>
+                        <button class="btn m-2 btn-primary col-3" onclick="showDepartedInReport()">{{ Icon::create() }}
+                            Show Departed In Report
+                        </button>
+                        <button class="btn m-2 btn-primary col-3"
+                                onclick="showDepartedAfterReport()">{{ Icon::create() }}Show Departed After Report
+                        </button>
+                    </div>
+                    <hr class="splitter">
+                    <div class="row">
+                        <button class="btn m-2 btn-primary col-3"
+                                onclick="showOrderedOnCertificates()">{{ Icon::create() }}Export Ordered On Certificates
+                        </button>
+                        <button class="btn m-2 btn-primary col-3"
+                                onclick="showDepartedInCertificates()">{{ Icon::create() }}Export Departed In
+                            Certificates
+                        </button>
+                        <button class="btn m-2 btn-primary col-3"
+                                onclick="showDepartedAfterCertificates()">{{ Icon::create() }}Export Departed After
+                            Certificates
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     @endif
 @endsection
