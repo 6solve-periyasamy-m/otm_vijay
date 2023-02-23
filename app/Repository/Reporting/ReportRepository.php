@@ -42,7 +42,7 @@ class ReportRepository
                 'export' => 'reports.payment.export',
             ],
             [
-                'name' => 'Flight Manifest',
+                'name' => 'Flight Details',
                 'details' => 'List of all flights and passengers',
                 'view' => 'reports.flight-manifest',
                 'export' => 'reports.flight-manifest.export',
@@ -85,6 +85,24 @@ class ReportRepository
                 'params' => ['notes' => false,],
             ],
             [
+                'name' => 'Activity Manifest',
+                'details' => 'Manifest of Ordered Activity Tickets',
+                'view' => 'reports.manifest.activity.view',
+                'export' => 'reports.manifest.activity.export',
+            ],
+            [
+                'name' => 'Flight Manifest',
+                'details' => 'Manifest of Ordered Flight Tickets',
+                'view' => 'reports.manifest.flight.view',
+                'export' => 'reports.manifest.flight.export',
+            ],
+            [
+                'name' => 'Transport Manifest',
+                'details' => 'Manifest of Ordered Transport Tickets',
+                'view' => 'reports.manifest.transport.view',
+                'export' => 'reports.manifest.transport.export',
+            ],
+            [
                 'name' => 'Installment Revenue',
                 'details' => 'Information about days revenue',
                 'view' => 'reports.installment-revenue',
@@ -115,6 +133,8 @@ class ReportRepository
             $row->balance_paid = $order->paid;
             $row->due_date = $nextPayment?->due_on;
             $row->due_amount = $nextPayment?->amount;
+            $row->internal_notes = $order->internal_notes;
+            $row->external_notes = $order->external_notes;
             $row->orderStatus = $order->status;
             $data[$order->id] = $row;
         }

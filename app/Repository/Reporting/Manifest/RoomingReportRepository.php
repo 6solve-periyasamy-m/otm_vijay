@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repository\Reporting;
+namespace App\Repository\Reporting\Manifest;
 
 use App\Exports\RoomingReportExport;
 use App\Models\Order\Component\OrderAccommodation;
-use App\Repository\Interfaces\HasRoomingList;
+use App\Repository\Interfaces\Manifest\HasRoomingList;
 use Excel;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
