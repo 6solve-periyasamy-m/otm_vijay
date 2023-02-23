@@ -10,7 +10,7 @@
         </div>
         <div class="nav-item">
             <a class="nav-link sidebar-toggle" href="javascript:toggleSidebar()">
-                <i class="sidebar-arrow icon-arrow-right"></i>
+                <x-icon icon="arrow-right" class="sidebar-arrow" />
             </a>
         </div>
     </div>
@@ -22,12 +22,12 @@
             let arrow = $(".sidebar-arrow");
             if (sidebar.hasClass('shown')) {
                 sidebar.removeClass('shown');
-                arrow.removeClass('icon-arrow-left');
-                arrow.addClass('icon-arrow-right');
+                arrow.removeClass('fa-arrow-left');
+                arrow.addClass('fa-arrow-right');
             } else {
                 sidebar.addClass('shown');
-                arrow.addClass('icon-arrow-left');
-                arrow.removeClass('icon-arrow-right');
+                arrow.addClass('fa-arrow-left');
+                arrow.removeClass('fa-arrow-right');
             }
         }
     </script>
