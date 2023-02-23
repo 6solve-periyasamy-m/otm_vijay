@@ -115,6 +115,8 @@ class ReportRepository
             $row->balance_paid = $order->paid;
             $row->due_date = $nextPayment?->due_on;
             $row->due_amount = $nextPayment?->amount;
+            $row->internal_notes = $order->internal_notes;
+            $row->external_notes = $order->external_notes;
             $row->orderStatus = $order->status;
             $data[$order->id] = $row;
         }
