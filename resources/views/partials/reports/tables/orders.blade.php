@@ -8,6 +8,7 @@
             <th scope="col">Lead Booker Email</th>
             <th scope="col">Passenger Count</th>
             <th scope="col">Tour Name</th>
+            <th scope="col">Event Name</th>
             <th scope="col">Total Order Value</th>
             <th scope="col">Balance Paid</th>
             <th scope="col">Balance Outstanding</th>
@@ -28,6 +29,7 @@
                 <td>{{ $row->lb_email }}</td>
                 <td>{{ $row->customer_count }}</td>
                 <td>{{ $row->tour_name }}</td>
+                <td>{{ $row->event_name }}</td>
                 <td>{{ $row->total_order_value }}</td>
                 <td>{{ $row->balance_paid }}</td>
                 <td>{{ $row->balance_outstanding }}</td>

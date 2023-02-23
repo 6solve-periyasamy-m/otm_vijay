@@ -8,6 +8,7 @@
             <th scope="col">Arrives At</th>
             <th scope="col">Booking Reference</th>
             <th scope="col">Tour</th>
+            <th scope="col">Event</th>
             <th scope="col">Customer Name</th>
             <th scope="col">Is Lead?</th>
             <th scope="col">Flight Notes</th>
@@ -27,6 +28,7 @@
                 <td>{{ f_datetime($row->arrive_time) }}</td>
                 <td>{{ $row->reference }}</td>
                 <td>{{ $row->tour }}</td>
+                <td>{{ $row->event }}</td>
                 <td>{{ $row->customer }}</td>
                 <td>{{ f_bool($row->is_lead) }}</td>
                 <td>{{ $row->flight_notes }}</td>
