@@ -85,4 +85,20 @@ class AddressRepository extends ModelRepository
         if (isset($this->address->postcode)) $address .= ", " . $this->address->postcode;
         return empty($address) ? "Address details empty" : $address;
     }
+
+    public function forget(): void
+    {
+        $this->update([
+            "name" => "Forgotten Address",
+            "address_parent_id" => 1,
+            "location_type_id" => null,
+            "address_line_1" => null,
+            "address_line_2" => null,
+            "address_line_3" => null,
+            "town" => null,
+            "region" => null,
+            "country_id" => null,
+            "postcode" => null,
+        ]);
+    }
 }
