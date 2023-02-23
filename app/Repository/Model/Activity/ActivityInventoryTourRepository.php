@@ -17,13 +17,14 @@ use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
-use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Interfaces\Manifest\HasActivityManifest;
 use App\Repository\Model\Order\Component\OrderActivityRepository;
 use App\Repository\Model\Quote\Component\QuoteActivityRepository;
+use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use App\Repository\Traits\Component\IsActivity;
 use Illuminate\Support\Collection;
 
-class ActivityInventoryTourRepository extends InventoryTourRepository
+class ActivityInventoryTourRepository extends InventoryTourRepository implements HasActivityManifest
 {
     use IsActivity;
 
@@ -232,5 +233,10 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
             $keys[$upgrade->id] = ['name' => $upgrade->description . ' - ' . ($disabled ? 'Out of Stock' : f_currency($upgrade->upgrade->tour_sales_price)), 'disabled' => $disabled,];
         }
         return $keys;
+    }
+
+    public function getActivityManifest(): Collection|array
+    {
+        return $this->tourComponent->orders()->with(ActivityManifestRepository::getRelations())->get();
     }
 }

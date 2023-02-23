@@ -9,14 +9,15 @@ use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
-use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Interfaces\Manifest\HasFlightManifest;
 use App\Repository\Model\Quote\Component\QuoteFlightRepository;
+use App\Repository\Reporting\Manifest\FlightManifestRepository;
 use App\Repository\Traits\Component\IsFlight;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
 
-class FlightInventoryRepository extends InventoryRepository
+class FlightInventoryRepository extends InventoryRepository implements HasFlightManifest
 {
     use IsFlight;
 
@@ -135,5 +136,10 @@ class FlightInventoryRepository extends InventoryRepository
     public function getSalesPrice(): ?float
     {
         return $this->inventory->sales_price;
+    }
+
+    public function getFlightManifest(): Collection|array
+    {
+        return $this->inventory->orders()->with(FlightManifestRepository::getRelations())->get();
     }
 }

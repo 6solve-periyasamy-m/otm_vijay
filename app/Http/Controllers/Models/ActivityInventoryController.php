@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Activity\Activity;
 use App\Models\Activity\ActivityInventory;
+use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use Illuminate\Http\Request;
 
 class ActivityInventoryController extends Controller
@@ -40,6 +41,16 @@ class ActivityInventoryController extends Controller
     public function view(Activity $activity, ActivityInventory $activityInventory)
     {
         return view('pages.models.activity_inventories.view', ['activity' => $activity, 'activityInventory' => $activityInventory,]);
+    }
+
+    public function manifest(Activity $activity, ActivityInventory $activityInventory)
+    {
+        return ActivityManifestRepository::viewReport($activityInventory->repository, 'activity-inventories.manifest.export', ['activity' => $activity, 'activityInventory' => $activityInventory]);
+    }
+
+    public function export(Activity $activity, ActivityInventory $activityInventory, string $extension = 'xlsx')
+    {
+        return ActivityManifestRepository::exportReport($activityInventory->repository, $extension);
     }
 
     public function edit(Activity $activity, ActivityInventory $activityInventory)

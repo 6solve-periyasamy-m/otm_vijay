@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository\Interfaces;
+namespace App\Repository\Interfaces\Manifest;
 
 use App\Models\Order\Component\OrderAccommodation;
 use Illuminate\Support\Collection;
