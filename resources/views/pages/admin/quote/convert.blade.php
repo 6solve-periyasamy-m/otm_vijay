@@ -10,7 +10,7 @@
         function getCustomers(paying = false, count = 1) {
             return new Promise(resolve => {
                 $.ajax({
-                    url: '{{ route('api.quote.unknown-traveller', ['quote' => $quote,]) }}',
+                    url: '{{ route("api.quote.unknown-traveller", ["quote" => $quote,]) }}',
                     type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', paying: paying ? 1 : 0, count: count,}
                 })
                 .then(data => {

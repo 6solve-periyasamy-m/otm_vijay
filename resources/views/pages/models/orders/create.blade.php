@@ -8,7 +8,7 @@
         function getCustomers(count = 1) {
             return new Promise(resolve => {
                 return $.ajax({
-                    url: '{{ route('api.order.unknown-traveller') }}',
+                    url: '{{ route("api.order.unknown-traveller") }}',
                     type: 'post', data: {__api_token: '{{ Auth::user()->getCurrentToken()->token }}', 'count': count,}
                 })
                 .then(data => {
@@ -30,7 +30,7 @@
                 selector.select2({
                     placeholder: "Please Select a Value",
                     ajax: {
-                        url: '{{route('api.customers.select')}}',
+                        url: '{{route("api.customers.select")}}',
                         data: function (params) {
                             return {
                                 filter: params.term,
