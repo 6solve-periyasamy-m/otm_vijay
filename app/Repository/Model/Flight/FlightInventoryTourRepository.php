@@ -16,12 +16,14 @@ use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Interfaces\Manifest\HasFlightManifest;
 use App\Repository\Model\Order\Component\OrderFlightRepository;
 use App\Repository\Model\Quote\Component\QuoteFlightRepository;
+use App\Repository\Reporting\Manifest\FlightManifestRepository;
 use App\Repository\Traits\Component\IsFlight;
 use Illuminate\Support\Collection;
 
-class FlightInventoryTourRepository extends InventoryTourRepository
+class FlightInventoryTourRepository extends InventoryTourRepository implements HasFlightManifest
 {
     use IsFlight;
 
@@ -215,5 +217,10 @@ class FlightInventoryTourRepository extends InventoryTourRepository
             'flight_type' => $this->tourComponent->flight_type,
         ]);
         return $component->repository;
+    }
+
+    public function getFlightManifest(): Collection|array
+    {
+        return $this->tourComponent->orders()->with(FlightManifestRepository::getRelations())->get();
     }
 }

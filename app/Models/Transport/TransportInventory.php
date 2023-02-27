@@ -2,6 +2,7 @@
 
 namespace App\Models\Transport;
 
+use App\Models\Order\Component\OrderTransport;
 use App\Models\Tour\Tour;
 use App\Models\TravelClass;
 use App\Repository\Model\Transport\TransportInventoryRepository;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -121,6 +123,11 @@ class TransportInventory extends Model
     public function tour(): BelongsToMany
     {
         return $this->belongsToMany(Tour::class, 'transport_inventory_tour')->withPivot('sales_price');
+    }
+
+    public function orders(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderTransport::class, TransportInventoryTour::class, 'transport_inventory_id', 'transport_inventory_tour_id');
     }
 
     public function travelClass(): BelongsTo

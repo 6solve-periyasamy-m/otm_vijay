@@ -85,6 +85,18 @@
                 <h6 class="fw-bold">{{ $tour->description }}</h6>
             </div>
             <div class="col-12">
+                @can('update', \App\Models\Tour\Tour::class)
+                    <a class="btn btn-warning" href="{{route('tours.edit', ['tour' => $tour,])}}">
+                        {{ Icon::edit() }}
+                        <span>Edit Tour</span>
+                    </a>
+                @endcan
+                @can('create', \App\Models\Quote\Quote::class)
+                    <a class="btn btn-primary" href="{{route('quotes.create', ['tour' => $tour,])}}">
+                        {{ Icon::quote() }}
+                        <span>Create Quote</span>
+                    </a>
+                @endcan
                 <a class="btn btn-success" href="#" onclick="showOverlay('.tour-options')">
                     {{ Icon::options() }}
                     <span>Options</span>

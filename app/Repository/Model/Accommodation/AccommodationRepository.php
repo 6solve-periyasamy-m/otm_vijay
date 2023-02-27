@@ -4,7 +4,7 @@ namespace App\Repository\Model\Accommodation;
 
 use App\Models\Accommodation\Accommodation;
 use App\Repository\Abstracts\ModelRepository;
-use App\Repository\Interfaces\HasRoomingList;
+use App\Repository\Interfaces\Manifest\HasRoomingList;
 use Illuminate\Support\Collection;
 
 class AccommodationRepository extends ModelRepository implements HasRoomingList

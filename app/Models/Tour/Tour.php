@@ -6,12 +6,14 @@ use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
-use App\Models\AdditionalCost;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Helper\Traits\HasAdditionalCosts;
 use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
 use App\Models\Transport\TransportInventory;
@@ -29,7 +31,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -89,6 +90,9 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|Order[] $orders
  * @property-read int|null $orders_count
  * @property-read Collection|OrderAccommodation[] $orderAccommodation
+ * @property-read Collection|OrderActivity[] $OrderActivities
+ * @property-read Collection|OrderFlight[] $OrderFlights
+ * @property-read Collection|OrderTransport[] $OrderTransport
  * @property-read int|null $order_accommodation_count
  * @property-read int|null $order_installments_count
  * @property-read Collection|PaymentInstallment[] $paymentInstallments
@@ -195,6 +199,21 @@ class Tour extends Model
     public function orderAccommodation(): HasManyThrough
     {
         return $this->hasManyThrough(OrderAccommodation::class, AccommodationInventoryTour::class, 'tour_id', 'accommodation_inventory_tour_id');
+    }
+
+    public function orderActivities(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderActivity::class, ActivityInventoryTour::class, 'tour_id', 'activity_inventory_tour_id');
+    }
+
+    public function orderFlights(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderFlight::class, FlightInventoryTour::class, 'tour_id', 'flight_inventory_tour_id');
+    }
+
+    public function orderTransport(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderTransport::class, TransportInventoryTour::class, 'tour_id', 'transport_inventory_tour_id');
     }
 
     public function transportInventoryTours(): HasMany

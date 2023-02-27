@@ -9,14 +9,15 @@ use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
-use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Interfaces\Manifest\HasActivityManifest;
 use App\Repository\Model\Quote\Component\QuoteActivityRepository;
+use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use App\Repository\Traits\Component\IsActivity;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
 
-class ActivityInventoryRepository extends InventoryRepository
+class ActivityInventoryRepository extends InventoryRepository implements HasActivityManifest
 {
     use IsActivity;
 
@@ -135,5 +136,10 @@ class ActivityInventoryRepository extends InventoryRepository
     public function getSalesPrice(): ?float
     {
         return $this->inventory->sales_price;
+    }
+
+    public function getActivityManifest(): Collection|array
+    {
+        return $this->inventory->orders()->with(ActivityManifestRepository::getRelations())->get();
     }
 }

@@ -26,16 +26,7 @@
     @endcan
 </script>
 @can('create', \App\Models\Activity\ActivityInventoryTour::class)
-<div class="d-flex justify-content-between mb-3">
-    <select class="form-select activity-component-type-select">
-        <option value="Included" selected>Included</option>
-        <option value="Add-on">Add-on</option>
-    </select>    
-    <a href="javascript:getSelectedActivityInventory()" class="btn btn-primary ms-3 text-white">
-        {{ Icon::create() }}
-        <span>Add Selected Rows</span>
-    </a>
-</div>
+    @include('partials.components.add-bar', ['component' => 'activity', 'href' => 'javascript:getSelectedActivityInventory()'])
 @endcan
 <table style="width: 100%;" class="table table-striped activity-inventory-table">
     <thead class="thead-dark">
