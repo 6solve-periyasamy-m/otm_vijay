@@ -1,4 +1,4 @@
-@extends('layout.form', ['action' => route('customers.update', ['customer' => $customer,]), 'multipart' => true,])
+@extends('layout.form', ['action' => route('customers.update', ['customer' => $customer,]), 'multipart' => true, 'autocomplete' => false,])
 
 @section('title', 'Update Customer')
 
