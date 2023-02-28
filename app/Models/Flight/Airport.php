@@ -2,10 +2,8 @@
 
 namespace App\Models\Flight;
 
-use App\Models\Activity\Activity;
 use App\Models\Location\Address;
 use App\Models\Traits\HasRepository;
-use App\Repository\Model\Activity\ActivityTypeRepository;
 use App\Repository\Model\Flight\AirportRepository;
 use Database\Factories\Flight\AirportFactory;
 use Eloquent;
@@ -61,7 +59,12 @@ class Airport extends Model
 
     public static function getValidationRules(): array
     {
-        return ['name' => 'required|unique:airports,name', 'iata_code' => 'required|size:3',];
+        return [
+            'name' => 'required|unique:airports,name',
+            'iata_code' => 'required|size:3',
+            'address_name' => 'required_unless:use_existing,on',
+            'address_id' => 'required_if:use_existing,on'
+        ];
     }
 
     public function flightInventory(): HasManyThrough
