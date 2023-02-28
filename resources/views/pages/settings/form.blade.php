@@ -24,8 +24,14 @@
     @include('partials.fields.text', ['name' => 'ATOL Issuer', 'field' => 'atol_issuer', 'value' => setting('atol.issuer', ''), 'width' => 3])
     @include('partials.fields.text', ['name' => 'ATOL Number', 'field' => 'atol_number', 'value' => setting('atol.number', ''), 'width' => 3])
     <hr class="splitter"/>
-    @include('partials.fields.file', ['name' => 'Company Logo', 'field' => 'company_logo', 'width' => 4])
-    @include('partials.fields.file', ['name' => 'ATOL Stamp', 'field' => 'atol_stamp', 'width' => 4])
+    @include('partials.fields.file', ['name' => 'Company Logo', 'field' => 'company_logo', 'width' => 2])
+    <div class="col-12 col-xl-2">
+        <img class="image small" src="{{ asset(setting('company.logo')) }}"/>
+    </div>
+    @include('partials.fields.file', ['name' => 'ATOL Stamp', 'field' => 'atol_stamp', 'width' => 2])
+    <div class="col-12 col-xl-2">
+        <img class="image tiny" src="{{ asset(setting('atol.stamp')) }}"/>
+    </div>
     @include('partials.fields.checkbox', ['name' => 'Enable ATOL Certificate Generation', 'field' => 'atol_enabled', 'value' => flag('atol.enabled', true), 'width' => 4,])
     <hr class="splitter"/>
     @include('partials.fields.selector.default',
