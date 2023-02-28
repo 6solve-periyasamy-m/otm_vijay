@@ -118,7 +118,7 @@
             </a>
             @if($quote->status == \App\Models\Helper\QuoteStatus::AWAITING)
                 <a href="{{ route('quotes.status.approve', ['quote' => $quote,]) }}" class="btn btn-success">
-                    {{ Icon::aprove() }}
+                    {{ Icon::approve() }}
                     {{ __('quotes.view.buttons.approve') }}
                 </a>
                 <a href="{{ route('quotes.status.changes', ['quote' => $quote,]) }}" class="btn btn-info">
