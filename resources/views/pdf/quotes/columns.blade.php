@@ -260,11 +260,11 @@ $paying = $sent->paid;
             </div>
             @endif
             <!-- Footer Section -->
-            @if(!empty($quote->footer))
+            @if(!empty($quote->invoice_footer))
             <div class="section pagebreak-inside">
                 <h2 class="section-title header-title">Additional Information</h2>
                 <div class="notes">
-                    <div style="margin-top: 0">{!! $quote->footer !!}</div>
+                    <div style="margin-top: 0">{!! $quote->invoice_footer !!}</div>
                 </div>
             </div>
             @endif
