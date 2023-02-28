@@ -93,7 +93,7 @@ class CustomerComponentController extends Controller
         $orderCustomer = $orderComponent->group?->orderCustomers()?->first() ?? $orderComponent->orderCustomer;
         $data = [
             'upgrades' => [[
-                'customer' => $orderCustomer?->customer->id,
+                'customer' => $orderCustomer?->id,
                 'component' => $component,
                 'from' => $orderComponent->tourComponent->id,
                 'to' => $upgrade->upgrade->id,
