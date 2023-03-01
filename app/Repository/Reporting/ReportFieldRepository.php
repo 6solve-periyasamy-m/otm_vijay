@@ -605,7 +605,7 @@ class ReportFieldRepository
                 'fields' => [
                     'amount' => [
                         'name' => 'Amount',
-                        'method' => 'amount',
+                        'method' => 'calculated_amount',
                         'format' => 'currency',
                     ],
                     'due_on' => [
