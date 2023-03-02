@@ -4,6 +4,7 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Tour</th>
+            <th scope="col">Event</th>
             <th scope="col">Hotel</th>
             <th scope="col">Room Type</th>
             <th scope="col">Board Type</th>
@@ -33,6 +34,7 @@
             <tr>
                 <td>{{ $count++ }}</td>
                 <td>{{ $row->tour }}</td>
+                <td>{{ $row->event }}</td>
                 <td>{{ $row->hotel }}</td>
                 <td>{{ $row->room }}</td>
                 <td>{{ $row->board }}</td>

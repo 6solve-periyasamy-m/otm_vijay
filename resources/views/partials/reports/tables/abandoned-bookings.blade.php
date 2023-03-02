@@ -3,6 +3,7 @@
         <tr>
             <th scope="col">Customer Name</th>
             <th scope="col">Tour</th>
+            <th scope="col">Event</th>
             <th scope="col">Date Created</th>
             <th scope="col">Travellers</th>
             <th scope="col">Expected Cost</th>
@@ -16,6 +17,7 @@
             <tr>
                 <th scope="row">{{ $row->name }}</th>
                 <td>{{ $row->tour }}</td>
+                <td>{{ $row->event }}</td>
                 <td>{{ $row->date }}</td>
                 <td>{{ $row->travellers }}</td>
                 <td>{{ f_currency($row->expected) }}</td>
