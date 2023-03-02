@@ -20,7 +20,7 @@
                 <td>{{ $row->order->leadBooker->customer->mobile_number }}</td>
                 <td>{{ $row->days }}</td>
                 <td>{{ f_date($row->next->due_on) }}</td>
-                <td>{{ f_currency($row->next->amount) }}</td>
+                <td>{{ f_currency($row->next->calculated_amount) }}</td>
                 <td>{{ f_bool($row->reminded) }}</td>
             </tr>
         @endforeach
