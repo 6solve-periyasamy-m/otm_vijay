@@ -132,7 +132,7 @@ class ReportRepository
             $row->balance_outstanding = $order->remaining;
             $row->balance_paid = $order->paid;
             $row->due_date = $nextPayment?->due_on;
-            $row->due_amount = $nextPayment?->amount;
+            $row->due_amount = $nextPayment?->calculated_amount;
             $row->internal_notes = $order->internal_notes;
             $row->external_notes = $order->external_notes;
             $row->orderStatus = $order->status;

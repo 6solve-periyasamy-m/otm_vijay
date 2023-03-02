@@ -19,7 +19,6 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\Model\Order\OrderRepository;
 use Gateway;
-use Illuminate\Http\Request;
 
 class CustomerTourController extends Controller
 {
@@ -122,7 +121,7 @@ class CustomerTourController extends Controller
 
         $data = [
             'additions' => [[
-                'customer' => $componentType == 'accommodation' ? $orderCustomer->primary_group->id : $orderCustomer->customer->id,
+                'customer' => $componentType == 'accommodation' ? $orderCustomer->primary_group->id : $orderCustomer->id,
                 'component' => $componentType,
                 'id' => $tourComponent->id,
         ],],];
