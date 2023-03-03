@@ -76,6 +76,8 @@ class Accommodation extends Model
             'audit_date' => 'date',
             'currency_id' => 'nullable|exists:currencies,id',
             'image' => 'nullable|image',
+            'address_name' => 'required_unless:use_existing,on',
+            'address_id' => 'required_if:use_existing,on'
         ];
     }
 

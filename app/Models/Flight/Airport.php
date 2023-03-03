@@ -69,7 +69,12 @@ class Airport extends Model
                 'iata_code' => 'required|size:3',
             ];
         }
-        return ['name' => 'required|unique:airports,name', 'iata_code' => 'required|size:3',];
+        return [
+            'name' => 'required|unique:airports,name',
+            'iata_code' => 'required|size:3',
+            'address_name' => 'required_unless:use_existing,on',
+            'address_id' => 'required_if:use_existing,on'
+        ];
     }
 
     public function flightInventory(): HasManyThrough

@@ -77,6 +77,8 @@ class Activity extends Model
             'activity_type_id' => 'required|exists:activity_types,id',
             'name' => 'required',
             'image' => 'nullable|image',
+            'address_name' => 'required_unless:use_existing,on',
+            'address_id' => 'required_if:use_existing,on'
         ];
     }
 
