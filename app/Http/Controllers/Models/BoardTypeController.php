@@ -40,7 +40,7 @@ class BoardTypeController extends Controller
 
     public function update(Request $request, BoardType $boardType)
     {
-        $request->validate(BoardType::getValidationRules());
+        $request->validate(BoardType::getValidationRules($boardType->id));
         $boardType->update([
             'name' => $request->input('name'),
         ]);

@@ -40,7 +40,7 @@ class AirlineController extends Controller
 
     public function update(Request $request, Airline $airline)
     {
-        $request->validate(Airline::getValidationRules());
+        $request->validate(Airline::getValidationRules($airline->id));
         $airline->update([
             'name' => $request->input('name'),
         ]);

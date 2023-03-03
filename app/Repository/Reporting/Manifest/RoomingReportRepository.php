@@ -59,6 +59,7 @@ class RoomingReportRepository implements HasRoomingList
             if ($largest < $occupancy) $largest = $occupancy;
             $row = collect();
             $row->tour = $orderAccommodation->accommodationInventoryTour->tour->name;
+            $row->event = $orderAccommodation->accommodationInventoryTour->tour->event?->name;
             $row->hotel = $orderAccommodation->accommodation->name;
             $row->from = $orderAccommodation->accommodation_inventory->check_in;
             $row->to = $orderAccommodation->accommodation_inventory->check_out;

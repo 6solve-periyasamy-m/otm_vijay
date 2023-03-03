@@ -5,7 +5,6 @@ namespace App\Models\Accommodation;
 use App\Models\Helper\SimpleModel;
 use App\Models\Traits\HasRepository;
 use App\Repository\Model\Accommodation\BoardTypeRepository;
-use App\Repository\Model\Accommodation\RoomTypeRepository;
 use Database\Factories\Accommodation\BoardTypeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\Rule;
 
 /**
  * App\Models\BoardType
@@ -46,8 +46,16 @@ class BoardType extends SimpleModel
 
     protected $fillable = ['name',];
 
-    public static function getValidationRules(): array
+    public static function getValidationRules(int|null $id = null): array
     {
+        if (!empty($id)) {
+            return [
+                'name' => [
+                    'required',
+                    Rule::unique('board_types', 'name')->ignore($id),
+                ],
+            ];
+        }
         return ['name' => 'required|unique:board_types,name',];
     }
 
