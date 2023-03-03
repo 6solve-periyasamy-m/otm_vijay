@@ -32,7 +32,7 @@ class OrderComponentStorage
      * @param OrderTransport[] $transport
      * @param OrderMerchandise[] $merchandise
      */
-    public function __construct(array $activities, array $flights, array $transport, array $merchandise) {
+    public function __construct(array $activities = [], array $flights = [], array $transport = [], array $merchandise = []) {
         $this->activities = $activities;
         $this->flights = $flights;
         $this->transport = $transport;
