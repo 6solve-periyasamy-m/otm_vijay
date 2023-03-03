@@ -1,7 +1,7 @@
 @php
     $authorization = setting('authorization.reminders', 0);
     $authDate = $authorization >= 0 ? Carbon\Carbon::createFromTimestamp($authorization) : null;
-    $authorized = $authorization < 0 || $authDate->isAfter(now());
+    $authorized = \Settings::authorized('authorization.reminders')
 @endphp
 <div class="card">
     <div class="card-body row">
