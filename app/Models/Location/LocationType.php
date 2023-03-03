@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 
 
 /**
@@ -37,8 +38,16 @@ class LocationType extends SimpleModel
 
     protected $fillable = ['name',];
 
-    public static function getValidationRules(): array
+    public static function getValidationRules(int|null $id = null): array
     {
+        if (!empty($id)) {
+            return [
+                'name' => [
+                    'required',
+                    Rule::unique('location_types', 'name')->ignore($id),
+                ],
+            ];
+        }
         return ['name' => 'required|unique:location_types,name',];
     }
 }

@@ -2,10 +2,8 @@
 
 namespace App\Models\Flight;
 
-use App\Models\Activity\Activity;
 use App\Models\Location\Address;
 use App\Models\Traits\HasRepository;
-use App\Repository\Model\Activity\ActivityTypeRepository;
 use App\Repository\Model\Flight\AirportRepository;
 use Database\Factories\Flight\AirportFactory;
 use Eloquent;
@@ -19,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 
 
 /**
@@ -59,8 +58,17 @@ class Airport extends Model
 
     protected $fillable = ['name', 'iata_code', 'address_id'];
 
-    public static function getValidationRules(): array
+    public static function getValidationRules(int|null $id = null): array
     {
+        if (!empty($id)) {
+            return [
+                'name' => [
+                    'required',
+                    Rule::unique('airports', 'name')->ignore($id),
+                ],
+                'iata_code' => 'required|size:3',
+            ];
+        }
         return ['name' => 'required|unique:airports,name', 'iata_code' => 'required|size:3',];
     }
 

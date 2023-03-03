@@ -40,7 +40,7 @@ class LocationTypeController extends Controller
 
     public function update(Request $request, LocationType $locationType)
     {
-        $request->validate(LocationType::getValidationRules());
+        $request->validate(LocationType::getValidationRules($locationType->id));
         $locationType->update([
             'name' => $request->input('name'),
         ]);
