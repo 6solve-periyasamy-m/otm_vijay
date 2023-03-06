@@ -17,7 +17,6 @@ use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Mailing\MailRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
-use App\Repository\Storage\OrderComponentStorage;
 use App\Repository\Storage\RemoteGroup;
 use Cache;
 use Carbon\Carbon;
@@ -348,9 +347,9 @@ class OrderRepository extends ModelRepository
         return $this->order->save();
     }
 
-    public function hasBeenReminded(OrderInstallment $installment): bool
+    public function hasBeenReminded(OrderInstallment $installment, int $period): bool
     {
-        $reminder = PaymentReminder::where('order_id', $this->order->id)->where('order_installment_id', $installment->id)->first();
+        $reminder = PaymentReminder::where('order_id', $this->order->id)->where('order_installment_id', $installment->id)->where('period', $period)->first();
         return isset($reminder);
     }
 
@@ -358,7 +357,7 @@ class OrderRepository extends ModelRepository
     {
         if (!$this->shouldRemind($days, $minDays)) return;
         $nextInstallment = $this->order->next_installment;
-        if ($this->hasBeenReminded($nextInstallment)) return;
+        if ($this->hasBeenReminded($nextInstallment, $days)) return;
         PaymentReminder::create([
             'order_id' => $this->order->id,
             'order_installment_id' => $nextInstallment->id,
