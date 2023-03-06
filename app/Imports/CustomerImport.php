@@ -7,59 +7,60 @@ use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Models\Location\Country;
 use Carbon\Carbon;
-use Hash;
 use Maatwebsite\Excel\Concerns\ToModel;
-use Str;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class CustomerImport implements ToModel
+class CustomerImport implements ToModel, WithHeadingRow
 {
 
     public function model(array $row)
     {
-        $homeCountry = Country::where('name', 'like', trim($row[13]))->first();
-        $billingCountry = Country::where('name', 'like', trim($row[19]))->first();
+        $homeCountry = Country::where('name', 'like', trim($row['home_country']))->first();
+        $billingCountry = Country::where('name', 'like', trim($row['billing_country']))->first();
+        $addressName = "(".trim($row['email']).")" . trim($row['first_name']) . " " . trim($row['last_name']);
+        $addressParent = AddressParent::getParentId('customer');
         $homeAddress = Address::create([
-            'name' => "(".trim($row[0]).")" . trim($row[2]) . " " . trim($row[4]),
-            'address_parent_id' => AddressParent::getParentId('customer'),
-            'address_line_1' => trim($row[9]),
-            'address_line_2' => trim($row[10] ?? ''),
-            'town' => trim($row[11] ?? ''),
-            'region' => trim($row[12] ?? ''),
+            'name' => $addressName,
+            'address_parent_id' => $addressParent,
+            'address_line_1' => trim($row['home_line_1']),
+            'address_line_2' => trim($row['home_line_2'] ?? ''),
+            'town' => trim($row['home_town'] ?? ''),
+            'region' => trim($row['home_region'] ?? ''),
             'country_id' => $homeCountry?->id,
-            'postcode' => trim($row[14]),
+            'postcode' => trim($row['home_postcode']),
         ]);
         $billingAddress = Address::create([
-            'name' => "(".trim($row[0]).")" . trim($row[2]) . " " . trim($row[4]),
-            'address_parent_id' => AddressParent::getParentId('customer'),
-            'address_line_1' => trim($row[15]),
-            'address_line_2' => trim($row[16] ?? ''),
-            'town' => trim($row[17] ?? ''),
-            'region' => trim($row[18] ?? ''),
+            'name' => $addressName,
+            'address_parent_id' => $addressParent,
+            'address_line_1' => trim($row['billing_line_1']),
+            'address_line_2' => trim($row['billing_line_2'] ?? ''),
+            'town' => trim($row['billing_town'] ?? ''),
+            'region' => trim($row['billing_region'] ?? ''),
             'country_id' => $billingCountry?->id,
-            'postcode' => trim($row[20]),
+            'postcode' => trim($row['billing_postcode']),
         ]);
         return Customer::create([
-            'email_address' => empty(trim($row[0])) ? null : trim($row[0]),
-            'title' => trim($row[1]),
-            'first_name' => trim($row[2]),
-            'middle_names' => trim($row[3] ?? ''),
-            'last_name' => trim($row[4]),
-            'date_of_birth' => (isset($row[5]) ? Carbon::createFromFormat('d/m/Y', trim($row[5])) : null),
-            'gender' => trim($row[8]),
-            'mobile_number' => trim($row[6]),
-            'other_phone_number' => trim($row[7] ?? ''),
+            'email_address' => empty(trim($row['email'])) ? null : trim($row['email']),
+            'title' => trim($row['title']),
+            'first_name' => trim($row['first_name']),
+            'middle_names' => trim($row['middle_names'] ?? ''),
+            'last_name' => trim($row['last_name']),
+            'date_of_birth' => (isset($row['date_of_birth']) ? Carbon::createFromFormat('d/m/Y', trim($row['date_of_birth'])) : null),
+            'gender' => trim($row['gender']),
+            'mobile_number' => trim($row['mobile_number']),
+            'other_phone_number' => trim($row['other_number'] ?? ''),
             'home_address_id' => $homeAddress->id,
             'billing_address_id' => $billingAddress->id,
-            'emergency_contact_name' => trim($row[21] ?? ''),
-            'emergency_contact_telephone' => trim($row[22] ?? ''),
-            'emergency_contact_relationship' => trim($row[23] ?? ''),
-            'passport_first_name' => trim($row[24] ?? ''),
-            'passport_middle_name' => trim($row[25] ?? ''),
-            'passport_last_name' => trim($row[26] ?? ''),
-            'passport_number' => trim($row[27] ?? ''),
-            'passport_expiry_date' => isset($row[28]) ? Carbon::createFromFormat('d/m/Y', trim($row[28])) : null,
-            'passport_country_of_issue' => trim($row[29] ?? ''),
-            'loyalty_number' => trim($row[30] ?? ''),
+            'emergency_contact_name' => trim($row['emergency_contact_name'] ?? ''),
+            'emergency_contact_telephone' => trim($row['emergency_contact_telephone'] ?? ''),
+            'emergency_contact_relationship' => trim($row['emergency_contact_relationship'] ?? ''),
+            'passport_first_name' => trim($row['passport_first_name'] ?? ''),
+            'passport_middle_name' => trim($row['passport_middle_name'] ?? ''),
+            'passport_last_name' => trim($row['passport_last_name'] ?? ''),
+            'passport_number' => trim($row['passport_number'] ?? ''),
+            'passport_expiry_date' => isset($row['passport_expiry_date']) ? Carbon::createFromFormat('d/m/Y', trim($row[28])) : null,
+            'passport_country_of_issue' => trim($row['passport_country_of_issue'] ?? ''),
+            'loyalty_number' => trim($row['loyalty_number'] ?? ''),
         ]);
     }
 }
