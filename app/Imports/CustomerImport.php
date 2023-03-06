@@ -9,8 +9,9 @@ use App\Models\Location\Country;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
-class CustomerImport implements ToModel, WithHeadingRow
+class CustomerImport implements ToModel, WithHeadingRow, WithValidation
 {
 
     public function model(array $row)
@@ -62,5 +63,15 @@ class CustomerImport implements ToModel, WithHeadingRow
             'passport_country_of_issue' => trim($row['passport_country_of_issue'] ?? ''),
             'loyalty_number' => trim($row['loyalty_number'] ?? ''),
         ]);
+    }
+
+    public function rules(): array
+    {
+        return [
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'date_of_birth' => 'nullable|date|date_format:d/m/Y',
+            'passport_expiry_date' => 'nullable|date|date_format:d/m/Y',
+        ];
     }
 }
