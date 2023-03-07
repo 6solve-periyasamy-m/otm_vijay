@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\Quote\QuoteInstallmentController;
 use App\Http\Controllers\Admin\Quote\QuotePricePointController;
 use App\Http\Controllers\Admin\Quote\QuoteSectionController;
 use App\Http\Controllers\Admin\Quote\QuoteStatusController;
+use App\Http\Controllers\Admin\System\ImportController;
 use App\Http\Controllers\AtolController;
 use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\BookingController;
@@ -786,9 +787,15 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         });
     });
 
-    Route::prefix('settings')->group(function () {
-        Route::get('/', [SettingsController::class, 'edit'])->name('settings.edit')->middleware('bouncer:System\Setting,update');
-        Route::post('/', [SettingsController::class, 'update'])->name('settings.update')->middleware('bouncer:System\Setting,update');
+    Route::prefix('system')->group(function () {
+        Route::prefix('settings')->middleware('bouncer:System\Setting,update')->name('settings.')->group(function () {
+            Route::get('/', [SettingsController::class, 'edit'])->name('edit');
+            Route::post('/', [SettingsController::class, 'update'])->name('update');
+        });
+        Route::prefix('import')->name('import.')->group(function () {
+            Route::get('/', [ImportController::class, 'index'])->name('view');
+            Route::post('/customer', [ImportController::class, 'customer'])->name('customer');
+        });
     });
 
     Route::prefix('customers')->group(function () {
