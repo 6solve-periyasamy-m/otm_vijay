@@ -17,10 +17,10 @@ class CustomerImport implements ToCollection, WithHeadingRow, WithValidation
 {
     use Importable;
 
-    public function collection(Collection $rows)
+    public function collection(Collection $collection): array
     {
         $models = [];
-        foreach ($rows as $row) {
+        foreach ($collection as $row) {
             $homeCountry = Country::where('name', 'like', trim($row['home_country']))->first();
             $billingCountry = Country::where('name', 'like', trim($row['billing_country']))->first();
             $addressName = "(" . trim($row['email']) . ")" . trim($row['first_name']) . " " . trim($row['last_name']);
