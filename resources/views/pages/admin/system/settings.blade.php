@@ -14,6 +14,26 @@
         @include('partials.admin.system.settings.form')
     </div>
     <div class="card">
+        <div class="card-body" data-target="#reminders" onclick="toggleAccordion(this)">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h4 class="fw-bold">
+                        {{ Icon::maximize() }} Order Reminders
+                    </h4>
+                </div>
+                <div>
+                    <a href="{{ route('orders.reminders') }}"
+                       class="btn btn-outline-success btn-sm mb-1">
+                        {{ Icon::list() }}View Due Reminders
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="collapse mx-1" id="reminders">
+        @include('partials.orders.reminder.authorize')
+    </div>
+    <div class="card">
         <div class="card-body" data-target="#mail" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
                 {{ Icon::maximize() }} Mail Templates
