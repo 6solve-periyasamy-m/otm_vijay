@@ -2,9 +2,15 @@
 
 namespace App\Mail\Storage;
 
+use App\Exceptions\MailDisabledException;
 use App\Mail\TemplatedMailable;
+use Exception;
 use Faker\Factory as Faker;
 use Faker\Generator;
+use Illuminate\Support\Facades\Mail;
+use Log;
+use Settings;
+
 
 abstract class TemplatedMail
 {
@@ -17,31 +23,89 @@ abstract class TemplatedMail
         $this->faker = Faker::create();
     }
 
-    public abstract function getShortcodes($model = null): array;
-
-    public function getBody($model = null): string
+    /**
+     * @return string|null
+     */
+    public function getCode(): ?string
     {
-        if ($this->code === null) return "";
-        return $this->replaceShortcodes(setting("email.{$this->code}.template"), $this->getShortcodes($model));
+        return $this->code;
     }
 
-    public function getSubject($model = null): string
+    public abstract function getShortcodes($model = null): array;
+
+    public function getSubject(): string
     {
         if ($this->code === null) return "";
-        return $this->replaceShortcodes(setting("email.{$this->code}.subject"), $this->getShortcodes($model));
+        return setting("email.{$this->code}.subject", '');
+    }
+
+    public function getBody(): string
+    {
+        if ($this->code === null) return "";
+        return setting("email.{$this->code}.template", '');
+    }
+
+    public function getFormattedSubject($model = null): string
+    {
+        return $this->replaceShortcodes($this->getSubject(), $model);
+    }
+
+    public function getFormattedBody($model = null): string
+    {
+        return $this->replaceShortcodes($this->getBody(), $model);
     }
 
     public function getTemplatedMailable($model = null): TemplatedMailable
     {
-        return new TemplatedMailable($this->getSubject($model), $this->getBody($model));
+        return new TemplatedMailable($this->getFormattedSubject($model), $this->getFormattedBody($model));
     }
 
-    protected final function replaceShortcodes(string $body, array $shortcodes): string
+    public final function replaceShortcodes(string $body, $model = null): string
     {
         $replacement = $body;
-        foreach ($shortcodes as $key => $value) {
+        foreach ($this->getShortcodes($model) as $key => $value) {
             $replacement = str_replace('[' . $key . ']', $value, $replacement);
         }
         return $replacement;
+    }
+
+    /**
+     * @throws MailDisabledException
+     */
+    public final function send(string $email, $model = null): bool
+    {
+        if (!flag('system.mail.enabled', true)) {
+            throw new MailDisabledException('Sending Emails is disabled on this system');
+        }
+        try {
+            $mail = Mail::to($email);
+            if (config('mail.bcc') !== null) { $mail->bcc(config('mail.bcc')); }
+            $mail->send($this->getTemplatedMailable($model));
+            return true;
+        } catch (Exception $e) {
+            Log::error($e);
+            return false;
+        }
+    }
+
+    public final function update(string $subject, string $body): void
+    {
+        Settings::set("email.{$this->code}.subject", $subject);
+        Settings::set("email.{$this->code}.template", $body);
+    }
+
+    public final function getEditUrl(): string
+    {
+        return route('email.edit', ['mail' => $this->code,]);
+    }
+
+    public final function getUpdateUrl(): string
+    {
+        return route('email.update', ['mail' => $this->code,]);
+    }
+
+    public final function getDemoUrl(): string
+    {
+        return route('email.demo', ['mail' => $this->code,]);
     }
 }

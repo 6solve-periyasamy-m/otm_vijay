@@ -95,15 +95,15 @@
             </tr>
             </thead>
             <tbody>
-            @foreach(\App\Repository\Mailing\MailRepository::getAvailableMail() as $mail => $info)
+            @foreach(\App\Repository\Mailing\MailRepository::getAvailableMail() as $code => $template)
                 <tr>
-                    <td>{{ ucwords(str_replace('-', ' ', $mail)) }}</td>
+                    <td>{{ ucwords(str_replace('-', ' ', $code)) }}</td>
                     <td>
-                        <a href="{{route('email.edit', ['mail' => $mail,])}}"
+                        <a href="{{ $template->getEditUrl() }}"
                            class="btn btn-outline-success btn-sm mb-1">
                             {{ Icon::edit() }}Edit
                         </a>
-                        <a href="{{route('email.demo', ['mail' => $mail,])}}" class="btn btn-outline-info btn-sm mb-1">
+                        <a href="{{ $template->getDemoUrl() }}" class="btn btn-outline-info btn-sm mb-1">
                             {{ Icon::email() }}Demo
                         </a>
                     </td>

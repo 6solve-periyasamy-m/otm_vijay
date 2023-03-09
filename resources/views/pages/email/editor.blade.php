@@ -1,10 +1,8 @@
-@extends('layout.form', ['action' => $action,])
+@php/** @var \App\Mail\Storage\TemplatedMail $mail */@endphp
+@extends('layout.form', ['action' => $mail->getUpdateUrl(),])
 
-@section('title', 'Update ' . $templateName . ' Template')
+@section('title', 'Update ' . $mail->getCode() . ' Template')
 
 @section('form-body')
-    @include('partials.email.form', [
-                'codes' => $codes,
-                'body' => $body,
-                'subject' => $subject])
+    @include('partials.email.form', ['mail' => $mail,])
 @endsection

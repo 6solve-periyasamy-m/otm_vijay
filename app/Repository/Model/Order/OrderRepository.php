@@ -3,6 +3,8 @@
 namespace App\Repository\Model\Order;
 
 use App\Events\Order\OrderCreatedEvent;
+use App\Exceptions\MailDisabledException;
+use App\Mail\Storage\OrderMail;
 use App\Models\Customer\Customer;
 use App\Models\Helper\OrderStatus;
 use App\Models\Location\Address;
@@ -14,7 +16,6 @@ use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
-use App\Repository\Mailing\MailRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
 use App\Repository\Storage\RemoteGroup;
@@ -363,11 +364,14 @@ class OrderRepository extends ModelRepository
             'order_installment_id' => $nextInstallment->id,
             'period' => $days
         ]);
-        if ($days < 0) {
-            MailRepository::sendMailable('payment-overdue', $this->order->leadBooker->customer->email_address, $this->order);
-        } else {
-            MailRepository::sendMailable('payment-due', $this->order->leadBooker->customer->email_address, $this->order);
-        }
+        try {
+            if ($days < 0) {
+                (new OrderMail('payment-overdue'))->send($this->order->leadBooker->customer->email_address, $this->order);
+            } else {
+                (new OrderMail('payment-due'))->send($this->order->leadBooker->customer->email_address, $this->order);
+            }
+        } catch (MailDisabledException) {}
+
     }
 
     public function shouldRemind(int $days, int $minDays = -1000): bool
