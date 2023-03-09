@@ -55,9 +55,13 @@ abstract class TemplatedMail
         return $this->replaceShortcodes($this->getBody(), $model);
     }
 
-    public function getTemplatedMailable($model = null): TemplatedMailable
+    public function getTemplatedMailable($model = null, array $attachments = []): TemplatedMailable
     {
-        return new TemplatedMailable($this->getFormattedSubject($model), $this->getFormattedBody($model));
+        $template = new TemplatedMailable($this->getFormattedSubject($model), $this->getFormattedBody($model));
+        foreach ($attachments as $attachment) {
+            $template->attachData($attachment->data, $attachment->filename, $attachment->opts);
+        }
+        return $template;
     }
 
     public final function replaceShortcodes(string $body, $model = null): string
@@ -70,17 +74,22 @@ abstract class TemplatedMail
     }
 
     /**
+     * @param string $email
+     * @param null $model
+     * @param Attachment[] $attachments
+     * @param bool $force
+     * @return bool
      * @throws MailDisabledException
      */
-    public final function send(string $email, $model = null): bool
+    public final function send(string $email, $model = null, array $attachments = [], bool $force = false): bool
     {
-        if (!flag('system.mail.enabled', true)) {
+        if (!flag('system.mail.enabled', true) && !$force ) {
             throw new MailDisabledException('Sending Emails is disabled on this system');
         }
         try {
             $mail = Mail::to($email);
             if (config('mail.bcc') !== null) { $mail->bcc(config('mail.bcc')); }
-            $mail->send($this->getTemplatedMailable($model));
+            $mail->send($this->getTemplatedMailable($model, $attachments));
             return true;
         } catch (Exception $e) {
             Log::error($e);

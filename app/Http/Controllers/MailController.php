@@ -30,7 +30,7 @@ class MailController extends Controller
         $template = MailRepository::getMail($mail);
         if (!isset($template)) abort(404);
         try {
-            $sent = $template->send(Auth::user()->email);
+            $sent = $template->send(Auth::user()->email, null, [], true);
         } catch (MailDisabledException $e) {
             return back()->withErrors(['msg' => $e->getMessage()]);
         }
