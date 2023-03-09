@@ -1,4 +1,5 @@
-<form enctype="multipart/form-data" autocomplete="off" action="{{ route('settings.update') }}" method="post" class="row">
+<form enctype="multipart/form-data" id="settings-form" autocomplete="off" action="{{ route('settings.update') }}" method="post" class="row">
+    @csrf
     <div class="col-xl-6">
         <div class="card">
             <div class="card-body">

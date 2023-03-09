@@ -5,9 +5,19 @@
 @section('content')
     <div class="card">
         <div class="card-body" data-target="#settings" onclick="toggleAccordion(this)">
-            <h4 class="fw-bold">
-                {{ Icon::minimize() }} System Settings
-            </h4>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h4 class="fw-bold">
+                        {{ Icon::minimize() }} System Settings
+                    </h4>
+                </div>
+                <div>
+                    <a href="#" onclick="event.preventDefault();$('#settings-form').submit()"
+                       class="btn btn-outline-success btn-sm mb-1">
+                        {{ Icon::save() }} Update Settings
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
     <div class="collapse show mx-1" id="settings">

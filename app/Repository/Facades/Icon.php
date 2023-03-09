@@ -411,4 +411,9 @@ class Icon
     {
         return $this->equalizer();
     }
+
+    public function save(): View|string|Closure
+    {
+        return $this->solid('floppy-disk');
+    }
 }
