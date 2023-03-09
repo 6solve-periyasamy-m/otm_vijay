@@ -72,9 +72,19 @@ class Icon
         return $this->solid('arrow-up');
     }
 
+    public function down(): View|string|Closure
+    {
+        return $this->solid('arrow-down');
+    }
+
     public function minimize(): View|string|Closure
     {
         return $this->up();
+    }
+
+    public function maximize(): View|string|Closure
+    {
+        return $this->down();
     }
 
     public function upgrade(): View|string|Closure

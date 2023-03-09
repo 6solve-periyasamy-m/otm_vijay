@@ -23,6 +23,11 @@ abstract class TemplatedMail
         $this->faker = Faker::create();
     }
 
+    public function getName(): ?string
+    {
+        return ucwords(str_replace('-', ' ', $this->code));
+    }
+
     /**
      * @return string|null
      */

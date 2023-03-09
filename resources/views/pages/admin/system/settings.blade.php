@@ -2,23 +2,6 @@
 
 @section('title', 'Edit System Settings')
 
-@push('footer-stack')
-    <script type="text/javascript">
-        function toggleAccordion(accordion) {
-            let body = $($(accordion).attr('data-target'));
-            if (body.hasClass('show')) {
-                body.removeClass('show');
-                $(accordion).find("i").first().removeClass("fa-arrow-up")
-                $(accordion).find("i").first().addClass("fa-arrow-down")
-            } else {
-                body.addClass('show');
-                $(accordion).find("i").first().removeClass("fa-arrow-down")
-                $(accordion).find("i").first().addClass("fa-arrow-up")
-            }
-        }
-    </script>
-@endpush
-
 @section('content')
     <div class="card">
         <div class="card-body" data-target="#settings" onclick="toggleAccordion(this)">
@@ -27,7 +10,21 @@
             </h4>
         </div>
     </div>
-    <div class="row collapse show" id="settings">
+    <div class="collapse show mx-1" id="settings">
         @include('partials.admin.system.settings.form')
+    </div>
+    <div class="card">
+        <div class="card-body" data-target="#mail" onclick="toggleAccordion(this)">
+            <h4 class="fw-bold">
+                {{ Icon::maximize() }} Mail Templates
+            </h4>
+        </div>
+    </div>
+    <div class="collapse row mx-1" id="mail">
+        @foreach(\App\Repository\Mailing\MailRepository::getAvailableMail() as $template)
+            <div class="col-xl-6">
+                @include('partials.admin.system.mail.card', ['template' => $template,])
+            </div>
+        @endforeach
     </div>
 @endsection

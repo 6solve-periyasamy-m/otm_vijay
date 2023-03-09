@@ -7,18 +7,6 @@
         $(document).ready(function () {
             $('.datatable').DataTable({fixedHeader: true});
         });
-        function toggleAccordion(accordion) {
-            let body = $($(accordion).attr('data-target'));
-            if (body.hasClass('show')) {
-                body.removeClass('show');
-                $(accordion).find("i").first().removeClass("icon-arrow-up")
-                $(accordion).find("i").first().addClass("icon-arrow-down")
-            } else {
-                body.addClass('show');
-                $(accordion).find("i").first().removeClass("icon-arrow-down")
-                $(accordion).find("i").first().addClass("icon-arrow-up")
-            }
-        }
     </script>
 @endsection
 
