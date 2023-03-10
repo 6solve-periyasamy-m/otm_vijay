@@ -16,13 +16,6 @@ import {
 import {faFacebook, faFacebookSquare, faInstagramSquare, faTwitterSquare} from '@fortawesome/free-brands-svg-icons';
 import Chart from 'chart.js/auto';
 import {format} from 'date-fns';
-import Alpine from 'alpinejs';
-import focus from '@alpinejs/focus';
-import collapse from '@alpinejs/collapse'
-
-Alpine.plugin(collapse)
-Alpine.plugin(focus)
-window.Alpine = Alpine
 
 window.Chart = Chart;
 
@@ -41,8 +34,6 @@ library.add(
     faTwitterSquare,
     faInstagramSquare,
 );
-
-Alpine.start()
 
 window.formatDate = function (date, dateFormat, preformatted = false) {
     if (!preformatted) {
