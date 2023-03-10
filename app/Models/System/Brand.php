@@ -1,0 +1,87 @@
+<?php
+
+namespace App\Models\System;
+
+use App\Models\Location\Address;
+use App\Models\Location\Country;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
+
+/**
+ * App\Models\System\Brand
+ *
+ * @property int $id
+ * @property string $name
+ * @property string|null $email
+ * @property string|null $phone
+ * @property string|null $url
+ * @property string|null $logo
+ * @property string|null $facebook
+ * @property string|null $twitter
+ * @property string|null $instagram
+ * @property int|null $address_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Address|null $address
+ * @property-read Address $active_address
+ * @method static Builder|Brand newModelQuery()
+ * @method static Builder|Brand newQuery()
+ * @method static Builder|Brand query()
+ * @method static Builder|Brand whereAddressId($value)
+ * @method static Builder|Brand whereCreatedAt($value)
+ * @method static Builder|Brand whereEmail($value)
+ * @method static Builder|Brand whereFacebook($value)
+ * @method static Builder|Brand whereId($value)
+ * @method static Builder|Brand whereInstagram($value)
+ * @method static Builder|Brand whereLogo($value)
+ * @method static Builder|Brand whereName($value)
+ * @method static Builder|Brand wherePhone($value)
+ * @method static Builder|Brand whereTwitter($value)
+ * @method static Builder|Brand whereUpdatedAt($value)
+ * @method static Builder|Brand whereUrl($value)
+ * @mixin Eloquent
+ */
+class Brand extends Model
+{
+    public function address(): BelongsTo
+    {
+        return $this->belongsTo(Address::class, 'address_id');
+    }
+
+    public function getActiveAddressAttribute(): Address
+    {
+        return $this->address ?? self::getSystemAddress();
+    }
+
+    public static function getSystemAddress(): Address
+    {
+        return new Address([
+            'name' => 'System Address',
+            'address_line_1' => setting('company.address.line_1', ''),
+            'address_line_2' => setting('company.address.line_2', ''),
+            'town' => setting('company.address.city', ''),
+            'region' => setting('company.address.region', ''),
+            'country_id' => Country::where('name', 'like', setting('company.address.country', ''))->first()->id,
+            'postcode' => setting('company.address.postcode', ''),
+        ]);
+    }
+
+    public static function getSystemBrand(): Brand
+    {
+        $brand = new Brand([
+            'name' => setting('company.name', ''),
+            'email' => setting('company.contact.email', ''),
+            'phone' => setting('company.contact.phone', ''),
+            'logo' => setting('company.logo'),
+            'url' => setting('company.url', ''),
+            'facebook' => setting('social.facebook', ''),
+            'twitter' => setting('social.twitter', ''),
+            'instagram' => setting('social.instagram', ''),
+        ]);
+        $brand->setRelation('address', self::getSystemAddress());
+        return $brand;
+    }
+}
