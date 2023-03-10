@@ -57,6 +57,7 @@
                 $('body').removeClass('overflow-hidden');
             }
         </script>
+        @livewireStyles
     </head>
 <body>
 @include('partials.navbar')
@@ -107,5 +108,6 @@
     }
 </script>
 @stack('footer-stack')
+@livewireScripts
 </body>
 </html>
