@@ -97,5 +97,6 @@
 </script>
 @stack('footer-stack')
 @livewireScripts
+@livewire('livewire-ui-modal')
 </body>
 </html>
