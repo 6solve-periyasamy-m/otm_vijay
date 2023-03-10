@@ -22,15 +22,15 @@
             </div>
             <div class="form-group col-12 col-xl-3" style="padding-left: 5px;">
                 <label>Brand Facebook</label>
-                <input type="text" class="form-control" wire:model="brand.url">
+                <input type="text" class="form-control" wire:model="brand.facebook">
             </div>
             <div class="form-group col-12 col-xl-3" style="padding-left: 5px;">
                 <label>Brand Twitter</label>
-                <input type="text" class="form-control" wire:model="brand.url">
+                <input type="text" class="form-control" wire:model="brand.twitter">
             </div>
             <div class="form-group col-12 col-xl-3" style="padding-left: 5px;">
                 <label>Brand Instagram</label>
-                <input type="text" class="form-control" wire:model="brand.url">
+                <input type="text" class="form-control" wire:model="brand.instagram">
             </div>
             <div class="form-group col-12 col-xl-12">
                 <label></label>

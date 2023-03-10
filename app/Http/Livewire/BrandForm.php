@@ -60,6 +60,12 @@ class BrandForm extends ModalComponent
     {
         return [
             'brand.name' => 'required',
+            'brand.email' => 'required',
+            'brand.phone' => 'required',
+            'brand.url' => 'required',
+            'brand.facebook' => 'required',
+            'brand.twitter' => 'required',
+            'brand.instagram' => 'required',
         ];
     }
 }
