@@ -57,4 +57,16 @@
             </div>
         @endforeach
     </div>
+    <div class="card">
+        <div class="card-body" data-target="#brands" onclick="toggleAccordion(this)">
+            <h4 class="fw-bold">
+                {{ Icon::maximize() }} Company Brands
+            </h4>
+        </div>
+    </div>
+    <div class="collapse show row mx-1" id="brands">
+        <div class="col-xl-4">
+            @include('partials.admin.system.brand.card', ['brand' => \App\Models\System\Brand::getSystemBrand(),])
+        </div>
+    </div>
 @endsection

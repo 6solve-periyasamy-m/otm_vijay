@@ -46,6 +46,8 @@ use Illuminate\Support\Carbon;
  */
 class Brand extends Model
 {
+    protected $guarded = [];
+
     public function address(): BelongsTo
     {
         return $this->belongsTo(Address::class, 'address_id');

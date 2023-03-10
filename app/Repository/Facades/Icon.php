@@ -287,6 +287,11 @@ class Icon
         return $this->globe();
     }
 
+    public function website(): View|string|Closure
+    {
+        return $this->globe();
+    }
+
     public function magnifier(): View|string|Closure
     {
         return $this->solid('search');
@@ -415,5 +420,20 @@ class Icon
     public function save(): View|string|Closure
     {
         return $this->solid('floppy-disk');
+    }
+    
+    public function facebook(): View|string|Closure
+    {
+        return $this->brand('facebook');
+    }
+    
+    public function twitter(): View|string|Closure
+    {
+        return $this->brand('twitter');
+    }
+    
+    public function instagram(): View|string|Closure
+    {
+        return $this->brand('instagram');
     }
 }
