@@ -4,9 +4,8 @@ module.exports = {
     preflight: false,
   },
   content: [
-    //"./resources/**/*.blade.php",
-    //"./resources/**/*.js",
-    //"./resources/**/*.vue",
+    "./resources/**/*.blade.php",
+    "./resources/**/*.js",
     "./vendor/wire-elements/modal/resources/**/*.blade.php",
   ],
   theme: {
