@@ -72,13 +72,17 @@ class OrderRepository extends ModelRepository
         $order->repository->update(['booking_reference' => Order::generateBookingReference($order),]); // Merging will lead to lead booker id not being set at generation
         $included = $tour->repository->getComponentSetForSaving();
         $defaultRooms = RoomingRepository::getDefaultRoomList($tour);
-        $leadBooker->repository->bulkSaveStandard($included->clone());
-        RoomingRepository::createGroupFromRoomList($leadBooker, $defaultRooms);
+        if ($lead->travelling) {
+            $leadBooker->repository->bulkSaveStandard($included->clone());
+            RoomingRepository::createGroupFromRoomList($leadBooker, $defaultRooms);
+        }
         $order->repository->resetInstallments();
         foreach ($customers as $customer) {
             $orderCustomer = $order->repository->addCustomer($customer);
-            $orderCustomer->repository->bulkSaveStandard($included->clone());
-            RoomingRepository::createGroupFromRoomList($orderCustomer, $defaultRooms);
+            if ($customer->travelling) {
+                $orderCustomer->repository->bulkSaveStandard($included->clone());
+                RoomingRepository::createGroupFromRoomList($orderCustomer, $defaultRooms);
+            }
         }
         event(new OrderCreatedEvent($order, $shouldInvoice));
         return $order;
@@ -519,12 +523,14 @@ class OrderRepository extends ModelRepository
         }
         $customers = [];
         foreach ($this->order->orderCustomers()->with('customer')->get() as $orderCustomer) {
+            if (!$orderCustomer->is_travelling) continue;
             $customers[$orderCustomer->id] = ['name' => $orderCustomer->customer_name, 'avatar' => $orderCustomer->customer->avatar_url,];
         }
         $groups = [];
         foreach ($this->order->groups as $group) {
             $groupCustomers = [];
             foreach ($group->orderCustomers as $orderCustomer) {
+                if (!$orderCustomer->is_travelling) continue;
                 $groupCustomers[] = $orderCustomer->id;
             }
             $groupRooms = [];
