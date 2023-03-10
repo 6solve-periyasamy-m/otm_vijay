@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const tailwindcss = require("tailwindcss");
 
 /*
  |--------------------------------------------------------------------------
@@ -23,5 +24,8 @@ mix.copy('resources/assets/js/addons', 'public/js')
     .copy('resources/assets/images', 'public/images')
     .copy('resources/assets/css', 'public/css')
     .copy('resources/assets/external-css', 'public/css')
+    .postCss("resources/assets/css/tailwind.css", "public/css", [
+        require("tailwindcss"),
+    ])
     .setPublicPath('public');
 
