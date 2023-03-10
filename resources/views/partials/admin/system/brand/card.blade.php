@@ -2,7 +2,7 @@
 <div class="card">
     <div class="card-body row">
         <div class="col-xl-12 d-flex justify-content-center">
-            <img src="{{ asset($brand->logo) }}" alt="company logo" width="200" />
+            <img src="{{ $brand->image }}" alt="company logo" width="200" />
         </div>
         <div class="col-xl-6">
             <div>

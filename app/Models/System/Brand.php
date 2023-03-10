@@ -4,6 +4,8 @@ namespace App\Models\System;
 
 use App\Models\Location\Address;
 use App\Models\Location\Country;
+use App\Models\Traits\HasRepository;
+use App\Repository\Model\System\BrandRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -27,6 +29,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Address|null $address
  * @property-read Address $active_address
+ * @property-read BrandRepository $repository
+ * @property-read string $image
  * @method static Builder|Brand newModelQuery()
  * @method static Builder|Brand newQuery()
  * @method static Builder|Brand query()
@@ -47,6 +51,7 @@ use Illuminate\Support\Carbon;
 class Brand extends Model
 {
     protected $guarded = [];
+    use HasRepository;
 
     public function address(): BelongsTo
     {
@@ -56,6 +61,11 @@ class Brand extends Model
     public function getActiveAddressAttribute(): Address
     {
         return $this->address ?? self::getSystemAddress();
+    }
+
+    public function getImageAttribute(): string
+    {
+        return asset($this->logo ?? setting('company.logo', ''));
     }
 
     public static function getSystemAddress(): Address

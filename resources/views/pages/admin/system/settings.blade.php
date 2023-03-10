@@ -59,14 +59,28 @@
     </div>
     <div class="card">
         <div class="card-body" data-target="#brands" onclick="toggleAccordion(this)">
-            <h4 class="fw-bold">
-                {{ Icon::maximize() }} Company Brands
-            </h4>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h4 class="fw-bold">
+                        {{ Icon::maximize() }} Company Brands
+                    </h4>
+                </div>
+                <div>
+                    <button onclick="Livewire.emit('openModal', 'brand-form');" class="btn btn-outline-success btn-sm mb-1">
+                        {{ Icon::list() }} Create new Brand
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
     <div class="collapse show row mx-1" id="brands">
         <div class="col-xl-4">
             @include('partials.admin.system.brand.card', ['brand' => \App\Models\System\Brand::getSystemBrand(),])
         </div>
+        @foreach(\App\Models\System\Brand::all() as $brand)
+            <div class="col-xl-4">
+                @include('partials.admin.system.brand.card', ['brand' => $brand,])
+            </div>
+        @endforeach
     </div>
 @endsection
