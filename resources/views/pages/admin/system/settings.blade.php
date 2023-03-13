@@ -2,6 +2,15 @@
 
 @section('title', 'Edit System Settings')
 
+@push('footer-stack')
+<script type="text/javascript">
+    function showBrandForm(event) {
+        Livewire.emit('openModal', 'brand-form');
+        event.stopPropagation();
+    }
+</script>
+@endpush
+
 @section('content')
     <div class="card">
         <div class="card-body" data-target="#settings" onclick="toggleAccordion(this)">
@@ -66,7 +75,7 @@
                     </h4>
                 </div>
                 <div>
-                    <button onclick="Livewire.emit('openModal', 'brand-form');" class="btn btn-outline-success btn-sm mb-1">
+                    <button onclick="showBrandForm(event)" class="btn btn-outline-success btn-sm mb-1">
                         {{ Icon::list() }} Create new Brand
                     </button>
                 </div>
