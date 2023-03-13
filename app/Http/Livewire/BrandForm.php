@@ -4,40 +4,24 @@ namespace App\Http\Livewire;
 
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
+use App\Models\Location\Country;
 use App\Models\System\Brand;
 use LivewireUI\Modal\ModalComponent;
 
 class BrandForm extends ModalComponent
 {
     public Brand $brand;
-    public bool $useSystemAddress = true;
-    public string|null $adLine1;
-    public string|null $adLine2;
-    public string|null $adTown;
-    public string|null $adRegion;
-    public string|null $adCountry;
-    public string|null $adPostcode;
-
+    public bool $useSystemAddress = false;
+    public Address $address;
+    public string $country;
     public function mount(Brand|null $brand)
     {
         if ($brand === null) {
             $brand = new Brand();
         }
         $this->brand = $brand;
-    }
-
-    private function getAddress(): Address
-    {
-        return new Address([
-            'name' => $this->brand?->name ?? 'Unknown Brand Address',
-            'address_parent_id' => AddressParent::getParentId('other'),
-            'address_line_1' => $this->adLine1,
-            'address_line_2' => $this->adLine2,
-            'town' => $this->adTown,
-            'region' => $this->adRegion,
-            'country_id' => $this->adCountry,
-            'postcode' => $this->adPostcode,
-        ]);
+        $this->address = $brand?->address ?? new Address();
+        $this->country = $this->address->country?->name ?? "";
     }
 
     public function submit()
@@ -46,7 +30,10 @@ class BrandForm extends ModalComponent
         if ($this->useSystemAddress) {
             $this->brand->repository->updateAddress(null);
         } else {
-            $this->brand->repository->updateAddress($this->getAddress());
+            $this->address->name = $this->brand->name;
+            $this->address->address_parent_id = AddressParent::getParentId('other');
+            $this->address->country_id = Country::where('name', 'like', $this->country)->first()?->id;
+            $this->brand->repository->updateAddress($this->address);
         }
         $this->brand->save();
         if ($create) {
@@ -68,10 +55,16 @@ class BrandForm extends ModalComponent
             'brand.name' => 'required',
             'brand.email' => 'required',
             'brand.phone' => 'required',
-            'brand.url' => 'required',
-            'brand.facebook' => 'required',
-            'brand.twitter' => 'required',
-            'brand.instagram' => 'required',
+            'brand.url' => 'nullable',
+            'brand.facebook' => 'nullable',
+            'brand.twitter' => 'nullable',
+            'brand.instagram' => 'nullable',
+            'address.address_line_1' => 'nullable',
+            'address.address_line_2' => 'nullable',
+            'address.town' => 'nullable',
+            'address.region' => 'nullable',
+            'address.country_id' => 'nullable',
+            'address.postcode' => 'nullable',
         ];
     }
 }
