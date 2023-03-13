@@ -73,14 +73,7 @@
             </div>
         </div>
     </div>
-    <div class="collapse show row mx-1" id="brands">
-        <div class="col-xl-4">
-            @include('partials.admin.system.brand.card', ['brand' => \App\Models\System\Brand::getSystemBrand(),])
-        </div>
-        @foreach(\App\Models\System\Brand::all() as $brand)
-            <div class="col-xl-4">
-                @include('partials.admin.system.brand.card', ['brand' => $brand,])
-            </div>
-        @endforeach
+    <div class="collapse show mx-1" id="brands">
+        <livewire:brand-list />
     </div>
 @endsection

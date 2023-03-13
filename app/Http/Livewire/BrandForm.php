@@ -42,12 +42,18 @@ class BrandForm extends ModalComponent
 
     public function submit()
     {
+        $create = !isset($this->brand?->id);
         if ($this->useSystemAddress) {
             $this->brand->repository->updateAddress(null);
         } else {
             $this->brand->repository->updateAddress($this->getAddress());
         }
         $this->brand->save();
+        if ($create) {
+            $this->emit('brandCreated', $this->brand->id);
+        } else {
+            $this->emit('brandUpdated', $this->brand->id);
+        }
         $this->closeModal();
     }
 
