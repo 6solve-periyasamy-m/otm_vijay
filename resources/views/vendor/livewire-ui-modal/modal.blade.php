@@ -29,7 +29,7 @@
 
         </div>
             @forelse($components as $id => $component)
-                <div class="modal" x-show.immediate="activeComponent == '{{ $id }}'" x-ref="{{ $id }}" wire:key="{{ $id }}">
+                <div class="sized-modal" x-show.immediate="activeComponent == '{{ $id }}'" x-ref="{{ $id }}" wire:key="{{ $id }}">
                     @livewire($component['name'], $component['attributes'], key($id))
                 </div>
             @empty
