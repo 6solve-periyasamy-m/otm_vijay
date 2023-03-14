@@ -63,7 +63,7 @@
             <span class="fw-bold">{{ $brand->active_address->address_line_2 }}</span><br />
             <span class="fw-bold">{{ $brand->active_address->town }}</span><br />
             <span class="fw-bold">{{ $brand->active_address->region }}</span><br />
-            <span class="fw-bold">{{ $brand->active_address->country->name }}</span><br />
+            <span class="fw-bold">{{ $brand->active_address->country?->name }}</span><br />
             <span class="fw-bold">{{ $brand->active_address->postcode }}</span>
             @if($brand->id !== null)
             <div>
