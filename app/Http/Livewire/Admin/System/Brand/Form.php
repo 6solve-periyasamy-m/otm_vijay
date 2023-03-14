@@ -13,20 +13,24 @@ class Form extends ModalComponent
 {
     use WithFileUploads;
 
-    public Brand $brand;
+    public $brand;
     public bool $useSystemAddress = false;
     public Address $address;
     public string $country;
     public $logo;
 
-    public function mount(Brand|null $brand)
+    public function mount(Brand|int|null $brand)
     {
         if ($brand === null) {
             $brand = new Brand();
         }
+        if (is_int($brand)) {
+            $brand = Brand::find($brand);
+        }
         $this->brand = $brand;
         $this->address = $brand?->address ?? new Address();
         $this->country = $this->address->country?->name ?? "";
+        $this->useSystemAddress = $brand?->address_id === null;
     }
 
     public function submit()

@@ -16,7 +16,7 @@
                 <span>Brand Phone</span>
                 <h6 class="fw-bold">{{ $brand->phone }}</h6>
             </div>
-            <div class="col-12">
+            <div>
                 <span>Brand Links</span>
                 <br />
                 @empty($brand->url)
@@ -65,6 +65,13 @@
             <span class="fw-bold">{{ $brand->active_address->region }}</span><br />
             <span class="fw-bold">{{ $brand->active_address->country->name }}</span><br />
             <span class="fw-bold">{{ $brand->active_address->postcode }}</span>
+            @if($brand->id !== null)
+            <div>
+                <button wire:click='$emit("openModal", "admin.system.brand.form", {{ json_encode(['brand' => $brand->id,]) }})' class="btn btn-outline-success btn-sm mb-1" target="_blank">
+                    {{ Icon::edit() }}
+                </button>
+            </div>
+            @endif
         </div>
     </div>
 </div>
