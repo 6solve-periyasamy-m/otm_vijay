@@ -1,4 +1,3 @@
-@php /** @var \App\Models\System\Brand $brand */ @endphp
 <div class="card">
     <div class="card-body row">
         <div class="col-xl-12 d-flex justify-content-center">
