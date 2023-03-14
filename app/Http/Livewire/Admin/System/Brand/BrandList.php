@@ -10,9 +10,14 @@ class BrandList extends Component
 {
 
     public Collection $brands;
-    protected $listeners = ['brandCreated' => 'addBrand',];
+    protected $listeners = ['brandCreated' => 'render', 'brandDeleted' => 'render'];
 
     public function mount()
+    {
+        $this->brands = Brand::all();
+    }
+
+    public function refresh()
     {
         $this->brands = Brand::all();
     }

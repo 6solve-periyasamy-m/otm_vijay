@@ -11,6 +11,12 @@ class Card extends Component
 
     protected $listeners = ['brandUpdated' => 'update',];
 
+    public function delete()
+    {
+        $this->brand->delete();
+        $this->emit('brandDeleted', $this->brand);
+    }
+
     public function update(Brand $brand)
     {
         if ($this->brand->id === null) return;

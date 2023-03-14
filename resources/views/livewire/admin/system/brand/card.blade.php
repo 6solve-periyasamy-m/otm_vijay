@@ -67,8 +67,11 @@
             <span class="fw-bold">{{ $brand->active_address->postcode }}</span>
             @if($brand->id !== null)
             <div>
-                <button wire:click='$emit("openModal", "admin.system.brand.form", {{ json_encode(['brand' => $brand->id,]) }})' class="btn btn-outline-success btn-sm mb-1" target="_blank">
+                <button wire:click='$emit("openModal", "admin.system.brand.form", {{ json_encode(['brand' => $brand->id,]) }})' class="btn btn-outline-success btn-sm mb-1">
                     {{ Icon::edit() }}
+                </button>
+                <button wire:click='delete' class="btn btn-outline-danger btn-sm mb-1">
+                    {{ Icon::delete() }}
                 </button>
             </div>
             @endif
