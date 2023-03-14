@@ -76,7 +76,7 @@ class Brand extends Model
             'address_line_2' => setting('company.address.line_2', ''),
             'town' => setting('company.address.city', ''),
             'region' => setting('company.address.region', ''),
-            'country_id' => Country::where('name', 'like', setting('company.address.country', ''))->first()->id,
+            'country_id' => Country::where('name', 'like', setting('company.address.country', ''))->first()?->id,
             'postcode' => setting('company.address.postcode', ''),
         ]);
     }
