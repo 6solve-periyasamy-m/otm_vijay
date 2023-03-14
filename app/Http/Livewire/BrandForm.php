@@ -6,14 +6,19 @@ use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Models\Location\Country;
 use App\Models\System\Brand;
+use Livewire\WithFileUploads;
 use LivewireUI\Modal\ModalComponent;
 
 class BrandForm extends ModalComponent
 {
+    use WithFileUploads;
+
     public Brand $brand;
     public bool $useSystemAddress = false;
     public Address $address;
     public string $country;
+    public $logo;
+
     public function mount(Brand|null $brand)
     {
         if ($brand === null) {
@@ -34,6 +39,10 @@ class BrandForm extends ModalComponent
             $this->address->address_parent_id = AddressParent::getParentId('other');
             $this->address->country_id = Country::where('name', 'like', $this->country)->first()?->id;
             $this->brand->repository->updateAddress($this->address);
+        }
+        if (isset($this->logo)) {
+            $file = store_file($this->logo, $this->brand->logo);
+            $this->brand->logo = $file;
         }
         $this->brand->save();
         if ($create) {
@@ -59,6 +68,7 @@ class BrandForm extends ModalComponent
             'brand.facebook' => 'nullable',
             'brand.twitter' => 'nullable',
             'brand.instagram' => 'nullable',
+            'logo' => 'nullable|image',
             'address.address_line_1' => 'nullable',
             'address.address_line_2' => 'nullable',
             'address.town' => 'nullable',
