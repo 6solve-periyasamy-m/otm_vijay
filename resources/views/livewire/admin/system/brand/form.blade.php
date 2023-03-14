@@ -1,4 +1,4 @@
-<div class="card w-80">
+<div class="card">
     <div class="card-body">
         <div class="card-title">
             <h4 class="fw-bold">Create Brand</h4>
