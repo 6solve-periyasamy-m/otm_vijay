@@ -5,7 +5,7 @@
 @push('footer-stack')
 <script type="text/javascript">
     function showBrandForm(event) {
-        Livewire.emit('openModal', 'admin.system.brand.form');
+        Livewire.emit('openModal', 'admin.system.brand.form', {!! json_encode(['brand' => null,]) !!});
         event.stopPropagation();
     }
 </script>
