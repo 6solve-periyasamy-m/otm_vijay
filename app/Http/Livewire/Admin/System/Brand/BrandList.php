@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Admin\System\Brand;
 
 use App\Models\System\Brand;
 use Illuminate\Support\Collection;
@@ -24,6 +24,6 @@ class BrandList extends Component
 
     public function render()
     {
-        return view('livewire.brand-list', ['system' => Brand::getSystemBrand(),]);
+        return view('livewire.admin.system.brand.list', ['system' => Brand::getSystemBrand(),]);
     }
 }

@@ -5,7 +5,7 @@
 @push('footer-stack')
 <script type="text/javascript">
     function showBrandForm(event) {
-        Livewire.emit('openModal', 'brand-form');
+        Livewire.emit('openModal', 'admin.system.brand.form');
         event.stopPropagation();
     }
 </script>
@@ -83,6 +83,6 @@
         </div>
     </div>
     <div class="collapse show mx-1" id="brands">
-        <livewire:brand-list />
+        <livewire:admin.system.brand.brand-list />
     </div>
 @endsection

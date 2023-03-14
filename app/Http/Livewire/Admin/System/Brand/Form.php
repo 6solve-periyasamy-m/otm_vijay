@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Admin\System\Brand;
 
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
@@ -9,7 +9,7 @@ use App\Models\System\Brand;
 use Livewire\WithFileUploads;
 use LivewireUI\Modal\ModalComponent;
 
-class BrandForm extends ModalComponent
+class Form extends ModalComponent
 {
     use WithFileUploads;
 
@@ -55,7 +55,7 @@ class BrandForm extends ModalComponent
 
     public function render()
     {
-        return view('livewire.brand-form');
+        return view('livewire.admin.system.brand.form');
     }
 
     protected function rules()
