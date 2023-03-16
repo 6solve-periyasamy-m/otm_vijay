@@ -83,5 +83,54 @@
                 </div>
             </div>
         </div>
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title d-flex justify-content-between">
+                        <h4 class="fw-bold">Activity</h4>
+                        <div>
+                            <a class="btn btn-primary pr-2" href="{{ asset('import/activity.csv') }}" target="_blank">
+                                Get Template
+                            </a>
+                            <button class="btn btn-success" onclick="$('#activity-file-upload').click()">
+                                Upload File
+                            </button>
+                        </div>
+                    </div>
+                    If you wish to use Activity Inventory importing, please ensure that all Activity have unique names, otherwise inventory may be mis-assigned.
+                    If required, you can change the name after both imports if you require duplicate names.
+                    All activity must have a name, and the audit date must be in the correct format where provided.
+                    <form action="{{ route('import.activity') }}" enctype="multipart/form-data" method="post" class="d-none">
+                        @csrf
+                        <input id="activity-file-upload" type="file" name="file" class="d-none" onchange="form.submit()">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title d-flex justify-content-between">
+                        <h4 class="fw-bold">Activity Inventory</h4>
+                        <div>
+                            <a class="btn btn-primary pr-2" href="{{ asset('import/activity_inventory.csv') }}" target="_blank">
+                                Get Template
+                            </a>
+                            <button class="btn btn-success" onclick="$('#activity-inventory-file-upload').click()">
+                                Upload File
+                            </button>
+                        </div>
+                    </div>
+                    The contents of the Activity field must be an exact match to an existing Activity Name in the system.
+                    Each row must have the following: activity, ticket type, starts at, ends at, stock and purchase price.
+                    If sales price is not provided, it will default to the purchase price.
+                    Starts at and ends at should be in the date-time format, and fit selectable should be in yes/no format.
+                    <form action="{{ route('import.activity.inventory') }}" enctype="multipart/form-data" method="post" class="d-none">
+                        @csrf
+                        <input id="activity-inventory-file-upload" type="file" name="file" class="d-none" onchange="form.submit()">
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
