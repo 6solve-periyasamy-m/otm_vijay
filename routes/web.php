@@ -793,7 +793,6 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::post('/', [SettingsController::class, 'update'])->name('update');
         });
         Route::prefix('import')->name('import.')->group(function () {
-            Route::get('/', [ImportController::class, 'index'])->name('view');
             Route::post('/customer', [ImportController::class, 'customer'])->name('customer');
         });
     });
