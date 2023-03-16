@@ -9,37 +9,51 @@ use App\Models\Location\AddressParent;
 use App\Models\Location\Country;
 use App\Models\Location\Currency;
 use App\Models\Location\LocationType;
-use Maatwebsite\Excel\Concerns\ToModel;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
-class ActivityImport implements ToModel
+class ActivityImport implements ToCollection, WithHeadingRow, WithValidation
 {
     /**
-    * @param array $row
-    *
-    * @return Activity
+     * @param Collection $collection
+     * @return array
      */
-    public function model(array $row)
+    public function collection(Collection $collection)
     {
-        $country = Country::where('name', 'like', trim($row[8]))->first();
-        $currency = Currency::where('code', '=', trim($row[10]))->first();
-        $address = Address::create([
-            'name' => $row[0],
-            'address_parent_id' => AddressParent::getParentId('Activity'),
-            'location_type_id' => LocationType::findOrCreate(trim($row[3]))->id,
-            'address_line_1' => trim($row[4]),
-            'address_line_2' => trim($row[5]),
-            'town' => trim($row[6]),
-            'region' => trim($row[7]),
-            'country_id' => $country->id,
-            'postcode' => trim($row[9]),
-        ]);
-        return new Activity([
-            'name' => trim($row[0]),
-            'description' => trim($row[1]),
-            'activity_type_id' => ActivityType::findOrCreate(trim($row[2]))->id,
-            'address_id' => $address->id,
-            'currency_id' => $currency->id,
-            'notes' => trim($row[11] ?? ''),
-        ]);
+        $data = [];
+        foreach ($collection as $row) {
+            $country = Country::where('name', 'like', trim($row['country']))->first();
+            $currency = Currency::where('code', '=', trim($row['currency']))->first();
+            $address = Address::create([
+                'name' => $row['name'],
+                'address_parent_id' => AddressParent::getParentId('Activity'),
+                'location_type_id' => LocationType::findOrCreate(trim($row['location_type']))->id,
+                'address_line_1' => trim($row['address_line_1']),
+                'address_line_2' => trim($row['address_line_2']),
+                'town' => trim($row['town']),
+                'region' => trim($row['region']),
+                'country_id' => $country?->id,
+                'postcode' => trim($row['postcode']),
+            ]);
+            $data[] = Activity::create([
+                'name' => trim($row['name']),
+                'description' => trim($row['description']),
+                'activity_type_id' => ActivityType::findOrCreate(trim($row['activity_type']))->id,
+                'address_id' => $address->id,
+                'currency_id' => $currency?->id,
+                'notes' => trim($row['notes'] ?? ''),
+            ]);
+        }
+        return $data;
+    }
+
+    public function rules(): array
+    {
+        return [
+            'name' => 'required',
+            'location_type' => 'required',
+        ];
     }
 }
