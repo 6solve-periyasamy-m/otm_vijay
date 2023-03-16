@@ -10,12 +10,15 @@ use App\Models\Location\Country;
 use App\Models\Location\Currency;
 use App\Models\Location\LocationType;
 use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
 class ActivityImport implements ToCollection, WithHeadingRow, WithValidation
 {
+    use Importable;
+
     /**
      * @param Collection $collection
      * @return array

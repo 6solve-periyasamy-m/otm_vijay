@@ -8,12 +8,15 @@ use App\Models\Activity\TicketType;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
 class ActivityInventoryImport implements ToCollection, WithHeadingRow, WithValidation
 {
+    use Importable;
+
     /**
      * @param Collection $collection
      * @return array
