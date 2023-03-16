@@ -54,6 +54,7 @@ class ActivityImport implements ToCollection, WithHeadingRow, WithValidation
         return [
             'name' => 'required',
             'location_type' => 'required',
+            'activity_type' => 'required',
         ];
     }
 }
