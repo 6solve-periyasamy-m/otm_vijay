@@ -6,29 +6,50 @@ use App\Models\Activity\Activity;
 use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\TicketType;
 use Carbon\Carbon;
-use Maatwebsite\Excel\Concerns\ToModel;
+use Illuminate\Support\Collection;
+use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
-class ActivityInventoryImport implements ToModel
+class ActivityInventoryImport implements ToCollection, WithHeadingRow, WithValidation
 {
     /**
-    * @param array $row
-    *
-    * @return ActivityInventory
-    */
-    public function model(array $row)
+     * @param Collection $collection
+     * @return array
+     */
+    public function collection(Collection $collection)
     {
-        $activity = Activity::where('name', 'like', trim($row[0]))->first();
-        if ($activity == null) return null;
-        return new ActivityInventory([
-            'activity_id' => $activity->id,
-            'ticket_type_id' => TicketType::findOrCreate($row[1])->id,
-            'starts_at' => Carbon::createFromFormat('d/m/Y H:i', trim($row[2])),
-            'ends_at' => Carbon::createFromFormat('d/m/Y H:i', trim($row[3])),
-            'fit_selectable' => trim($row[4]) == 'YES',
-            'stock' => trim($row[5]),
-            'purchase_price' => trim($row[6]),
-            'sales_price' => trim($row[7]) != '' ? trim($row[7]) : trim($row[6]),
-            'notes' => trim($row[8]),
-        ]);
+        $data = [];
+        foreach ($collection as $row) {
+            $activity = Activity::where('name', 'like', trim($row['activity']))->first();
+            if ($activity == null) return null;
+            $data[] = ActivityInventory::create([
+                'activity_id' => $activity->id,
+                'ticket_type_id' => TicketType::findOrCreate($row['ticket_type'])->id,
+                'starts_at' => Carbon::createFromFormat('d/m/Y H:i', trim($row['starts_at'])),
+                'ends_at' => Carbon::createFromFormat('d/m/Y H:i', trim($row['ends_at'])),
+                'fit_selectable' => trim($row['fit_selectable']) == 'YES',
+                'stock' => trim($row['stock']),
+                'purchase_price' => trim($row['purchase_price']),
+                'sales_price' => trim($row['sales_price']) != '' ? trim($row['sales_price']) : trim($row['purchase_price']),
+                'notes' => trim($row['notes']),
+            ]);
+        }
+        return $data;
+    }
+
+    public function rules(): array
+    {
+        return [
+            'accommodation' => 'required|exists:activities,name',
+            'ticket_type' => 'required',
+            'starts_at' => 'required|date|date_format:d/m/Y H:i',
+            'ends_at' => 'required|date|date_format:d/m/Y H:i',
+            'fit_selectable' => ['nullable', Rule::in(['YES', 'NO', null])],
+            'stock' => 'required|integer',
+            'purchase_price' => 'required|numeric',
+            'sales_price' => 'nullable|numeric',
+        ];
     }
 }
