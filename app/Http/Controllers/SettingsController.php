@@ -32,7 +32,8 @@ class SettingsController extends Controller
     }
 
     public function edit() {
-        return view('pages.settings.form');
+        //return view('pages.settings.form');
+        return view('pages.admin.system.settings');
     }
 
     public function update(Request $request) {

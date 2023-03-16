@@ -1,4 +1,4 @@
-<label for="tour_component_type-input" class="{{ $labelClasses ?? "" }}">{{ $name }}</label>
+<label for="{{ $field }}-input" class="{{ $labelClasses ?? "" }}">{{ $name }}</label>
 <select class="form-select {{ $classes ?? "" }}" name="{{ $field }}" id="{{ $field }}-input" autocomplete="off">
 @php($set = isset($selected))
 @foreach($values as $key => $value)

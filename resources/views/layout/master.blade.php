@@ -34,6 +34,18 @@
             $(document).ready(function () {
                 @stack('header-ready')
             });
+            function toggleAccordion(accordion) {
+                let body = $($(accordion).attr('data-target'));
+                if (body.hasClass('show')) {
+                    body.removeClass('show');
+                    $(accordion).find("i").first().removeClass("fa-arrow-up")
+                    $(accordion).find("i").first().addClass("fa-arrow-down")
+                } else {
+                    body.addClass('show');
+                    $(accordion).find("i").first().removeClass("fa-arrow-down")
+                    $(accordion).find("i").first().addClass("fa-arrow-up")
+                }
+            }
             function showOverlay(overlay) {
                 let jOverlay = $(overlay);
                 jOverlay.removeClass('hidden');

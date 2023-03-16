@@ -3,7 +3,6 @@
 namespace App\Listeners\Email;
 
 use App\Events\Order\Payment\PaymentCreatedEvent;
-use App\Repository\Mailing\MailRepository;
 
 class SendPaymentMadeEmail
 {
@@ -29,11 +28,11 @@ class SendPaymentMadeEmail
         $customer =  $event->order->leadBooker->customer;
         if ($event->payment->payment_type === 'Refund') {
             if (isset($customer->email_address)) {
-                MailRepository::sendMailable('refund-given', $customer->email_address, $event->payment);
+                $event->sendMail('refund-given', $customer->email_address);
             }
         } else {
             if (isset($customer->email_address)) {
-                MailRepository::sendMailable('payment-made', $customer->email_address, $event->payment);
+                $event->sendMail('payment-made', $customer->email_address);
             }
         }
     }
