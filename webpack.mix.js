@@ -1,4 +1,6 @@
 const mix = require('laravel-mix');
+require('mix-tailwindcss');
+const tailwindcss = require("tailwindcss");
 
 /*
  |--------------------------------------------------------------------------
@@ -16,12 +18,15 @@ mix.copy('resources/assets/js/addons', 'public/js')
     .sass('resources/assets/scss/customer.scss', 'css')
     .sass('resources/assets/scss/pdf/invoice.scss', 'css')
     .sass('resources/assets/scss/admin/occupancy.scss', 'css/admin')
+    .postCss('resources/assets/css/tailwind.css', 'public/css', [
+        tailwindcss(),
+    ])
     .js('resources/assets/js/app.js', 'js')
     .ts('resources/assets/typescript/occupancy.ts', 'js')
     .copy('resources/assets/js/admin', 'public/js/admin')
     .copy('resources/assets/js/modules', 'public/js/modules')
     .copy('resources/assets/images', 'public/images')
-    .copy('resources/assets/css', 'public/css')
+    .copy('resources/assets/css/preprocessed', 'public/css')
     .copy('resources/assets/external-css', 'public/css')
     .setPublicPath('public');
 
