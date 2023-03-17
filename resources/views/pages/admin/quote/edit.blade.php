@@ -5,11 +5,14 @@
 @section('title', 'Create Bespoke Quote')
 
 @section('form-body')
-    <x-admin.input name="name" width="8" value="{{$quote->name}}">Name</x-admin.input>
+    <x-admin.input name="name" width="4" value="{{$quote->name}}">Name</x-admin.input>
     <x-admin.input.selector.add name="customer_id" route="customers" width="4" value="{{$quote->leadTraveller->customer_id}}">
         <x-slot:create>{{ route('customers.create') }}</x-slot:create>
         Lead Traveller
     </x-admin.input.selector.add>
+    <x-admin.input.selector.standard name="brand_id" route="brands" width="4">
+        Quote Branding
+    </x-admin.input.selector.standard>
     <x-admin.input name="deposit" width="6" value="{{$quote->deposit}}">Deposit</x-admin.input>
     <x-admin.input name="single_occupancy_surcharge" width="6" value="{{$quote->single_occupancy_surcharge}}">Single Occupancy Surcharge</x-admin.input>
     <x-admin.input.text-area name="description" value="{{$quote->description}}">Description</x-admin.input.text-area>
