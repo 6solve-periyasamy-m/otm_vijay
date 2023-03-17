@@ -787,8 +787,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         });
     });
 
-    Route::prefix('system')->group(function () {
-        Route::prefix('settings')->middleware('bouncer:System\Setting,update')->name('settings.')->group(function () {
+    Route::prefix('settings')->group(function () {
+        Route::middleware('bouncer:System\Setting,update')->name('settings.')->group(function () {
             Route::get('/', [SettingsController::class, 'edit'])->name('edit');
             Route::post('/', [SettingsController::class, 'update'])->name('update');
         });
