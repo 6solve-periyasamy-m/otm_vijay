@@ -10,7 +10,7 @@
         <x-slot:create>{{ route('customers.create') }}</x-slot:create>
         Lead Traveller
     </x-admin.input.selector.add>
-    <x-admin.input.selector.standard name="brand_id" route="brands" width="4">
+    <x-admin.input.selector.standard name="brand_id" route="brands" value="{{$quote->brand_id}}" width="4">
         Quote Branding
     </x-admin.input.selector.standard>
     <x-admin.input name="deposit" width="6" value="{{$quote->deposit}}">Deposit</x-admin.input>
