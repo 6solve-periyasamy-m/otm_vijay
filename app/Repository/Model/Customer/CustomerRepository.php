@@ -82,4 +82,12 @@ class CustomerRepository extends ModelRepository
         }
         return false;
     }
+
+    public function isPassportLocked(): bool
+    {
+        foreach ($this->customer->orders()->with('tour')->where('cancelled', '=', 0)->get() as $order) {
+            if ($order->tour->repository->isPassportLocked()) return true;
+        }
+        return false;
+    }
 }

@@ -30,7 +30,7 @@ class CustomerDetailsController extends CustomerController
 
     public function update(DetailsRequest $request)
     {
-        $this->user()->update($request->getCustomerDetails());
+        $this->user()->update($request->getCustomerDetails(!$this->user()->repository->isPassportLocked()));
         $this->user()->homeAddress->repository->update($request->getHomeAddress());
         $this->user()->billingAddress->repository->update($request->getBillingAddress());
 
@@ -52,7 +52,7 @@ class CustomerDetailsController extends CustomerController
     {
         if (!$this->user()->repository->canEditCustomer($customer)) abort(404);
 
-        $customer->update($request->getCustomerDetails());
+        $customer->update($request->getCustomerDetails(!$customer->repository->isPassportLocked()));
         $customer->homeAddress->repository->update($request->getHomeAddress());
         $customer->billingAddress->repository->update($request->getBillingAddress());
 
