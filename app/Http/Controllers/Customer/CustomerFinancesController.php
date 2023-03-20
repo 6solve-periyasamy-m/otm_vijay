@@ -13,7 +13,7 @@ class CustomerFinancesController extends CustomerController
 {
     public function show()
     {
-        return view('pages.customer.finances', ['orders' => $this->user()->orders]);
+        return view('pages.customer.finances', ['orders' => $this->user()->orders()->orderBy('cancelled', 'asc')->get() ]);
     }
 
     public function makePayment(FinancesRequest $request)

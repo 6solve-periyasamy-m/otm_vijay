@@ -15,9 +15,10 @@
                     <select class="form-select order-select" onchange="onOrderChange();" id="booking_reference">
                         @foreach($orders as $selector)
                             <option value='{{ $selector->booking_reference }}'>{{ $selector->tour->name }}
-                                ({{ $selector->booking_reference }}@if($selector->cancelled)
+                                ({{ $selector->booking_reference }})
+                                @if($selector->cancelled)
                                     (Cancelled)
-                                @endif&#41;
+                                @endif
                             </option>
                         @endforeach
                     </select>
