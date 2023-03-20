@@ -3,24 +3,13 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Events\Customer\CustomerEditedEvent;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\CustomerController;
 use App\Http\Requests\Customer\DetailsRequest;
 use App\Models\Customer\Customer;
-use App\Repository\Authentication\CustomerAuthenticationRepository;
 use Hash;
 
-class CustomerDetailsController extends Controller
+class CustomerDetailsController extends CustomerController
 {
-    private Customer $user;
-
-    public function __construct()
-    {
-        $this->user = CustomerAuthenticationRepository::getCustomer();
-        if (!isset($this->user)) {
-            abort(404);
-        }
-    }
-
     public function edit()
     {
         return view('pages.customer.details', [
