@@ -23,14 +23,10 @@ use Gateway;
 
 class CustomerTourController extends CustomerController
 {
-    public function showItinerary(?string $reference = null, ?Customer $customer = null)
+    public function showItinerary(?Order $reference = null, ?Customer $customer = null)
     {
         $customer = $customer ?? $this->user();
-        if (isset($reference)) {
-            $order = $this->fetchOrder($reference);
-        } else {
-            $order = $customer->orders()->orderByDesc('ordered_on')->first();
-        }
+        $order = $reference ??  $customer->repository->getDefaultOrder();
         if (!$this->user()->repository->canEditCustomer($customer)) abort(404);
         if (!isset($order)) abort(404);
         $oCustomer = null;
@@ -50,19 +46,10 @@ class CustomerTourController extends CustomerController
         ]);
     }
 
-    public function showExtras(?string $reference = null, ?Customer $customer = null)
+    public function showExtras(?Order $reference = null, ?Customer $customer = null)
     {
         $customer = $customer ?? $this->user();
-        if (isset($reference)) {
-            $order = $this->fetchOrder($reference);
-        } else {
-            foreach ($customer->orders()->orderBy('ordered_on', 'desc')->get() as $o) {
-                if (!$o->cancelled) {
-                    $order = $o;
-                    break;
-                }
-            }
-        }
+        $order = $reference ??  $customer->repository->getDefaultOrder();
         if (!isset($order) || $order->cancelled) abort(404);
         if ($this->user()->id != $customer->id) {
             if ($order->leadBooker->customer_id != $this->user()->id) abort(404);
@@ -99,7 +86,7 @@ class CustomerTourController extends CustomerController
         ]);
     }
 
-    public function purchaseExtra(string $reference, string $componentType, int $componentId, ?Customer $customer = null)
+    public function purchaseExtra(Order $reference, string $componentType, int $componentId, ?Customer $customer = null)
     {
         $order = $this->fetchOrder($reference);
         if (!isset($order) || $order->cancelled) abort(404);
@@ -138,9 +125,9 @@ class CustomerTourController extends CustomerController
         return redirect(Gateway::getDefaultGateway()->checkout([$item,], $intention, $this->user(), $redirect));
     }
 
-    public function addExtra(string $reference, string $componentType, int $componentId, ?Customer $customer = null)
+    public function addExtra(Order $reference, string $componentType, int $componentId, ?Customer $customer = null)
     {
-        $order = $this->fetchOrder($reference);
+        $order = $reference;
         if (!isset($order) || $order->cancelled) abort(404);
         $customer = $customer ?? $this->user();
         if (!isset($customer)) abort(404);
@@ -169,11 +156,11 @@ class CustomerTourController extends CustomerController
         return redirect()->route('customer.extras', ['reference' => $reference,]);
     }
 
-    public function updateNotes(TourDetailsRequest $request, string $reference, OrderCustomer $orderCustomer)
+    public function updateNotes(TourDetailsRequest $request, Order $reference, OrderCustomer $orderCustomer)
     {
         $customer = $this->user();
         if (!isset($customer)) abort(404);
-        $order = $this->fetchOrder($reference);
+        $order = $reference;
 
         if (!isset($order) || $order->cancelled) abort(404);
         if (!$order->repository->isLeadBooker($customer)) abort(404);

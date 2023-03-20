@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Customer;
 
 use App\Models\Customer\Customer;
+use App\Models\Order\Order;
 use App\Repository\Abstracts\ModelRepository;
 
 class CustomerRepository extends ModelRepository
@@ -44,6 +45,15 @@ class CustomerRepository extends ModelRepository
     public function __toString(): string
     {
         return $this->customer->full_name;
+    }
+
+    public function getDefaultOrder(bool $forceActive = true): Order|null
+    {
+        $order = $this->customer->orders()->where('cancelled', '=', 0)->orderByDesc('ordered_on')->first();
+        if (!isset($order) && !$forceActive) {
+            $order = $this->customer->orders()->orderByDesc('ordered_on')->first();
+        }
+        return $order;
     }
 
     public function getEditableCustomers(): array
