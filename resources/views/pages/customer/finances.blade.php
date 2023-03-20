@@ -39,7 +39,7 @@
                                     {{ csrf_field() }}
                                     <input type="hidden" name="booking_reference" id="form-booking-reference">
                                     <div class="row">
-                                        <x-customer.input name="amount" width="10">
+                                        <x-customer.input name="amount" :width="10">
                                             Enter Amount
                                         </x-customer.input>
                                         <div class="col-12 col-xl-2 d-flex justify-content-center align-items-center">
