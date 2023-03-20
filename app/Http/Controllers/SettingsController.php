@@ -68,6 +68,16 @@ class SettingsController extends Controller
             'social.instagram' => $request->input('social_instagram'),
             'system.year.start' => $request->input('year_start'),
             'payment.required' => $request->input('payment_required') == 'on' ? 1 : 0,
+            'passport.lock' => $request->input('passport_lock'),
+            'passport.unlock' => $request->input('passport_unlock'),
+            'accommodation.lock' => $request->input('accommodation_lock'),
+            'accommodation.unlock' => $request->input('accommodation_unlock'),
+            'activity.lock' => $request->input('activity_lock'),
+            'activity.unlock' => $request->input('activity_unlock'),
+            'flight.lock' => $request->input('flight_lock'),
+            'flight.unlock' => $request->input('flight_unlock'),
+            'transport.lock' => $request->input('transport_lock'),
+            'transport.unlock' => $request->input('transport_unlock'),
         ]);
         if ($request->has('company_logo')  && $request->file('company_logo') != null) {
             Settings::set('company.logo', $this->saveImage($request->file('company_logo')));
