@@ -8,18 +8,16 @@ use App\Repository\Model\Order\OrderRepository;
 
 class CustomerController extends Controller
 {
-    protected Customer $user;
-
-    public function __construct()
-    {
-        $this->user = CustomerAuthenticationRepository::getCustomer();
-        if (!isset($this->user)) {
-            abort(404);
-        }
-    }
+    private Customer $iUser;
 
     protected function fetchOrder(string $booking)
     {
         return OrderRepository::getFromBookingReference($booking);
+    }
+
+    public function user(): Customer|null
+    {
+        if (!isset($this->iUser)) $this->iUser = CustomerAuthenticationRepository::getCustomer();
+        return $this->iUser;
     }
 }

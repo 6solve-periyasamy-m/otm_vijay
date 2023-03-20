@@ -13,7 +13,7 @@ class CustomerFinancesController extends CustomerController
 {
     public function show()
     {
-        return view('pages.customer.finances', ['orders' => $this->user->orders]);
+        return view('pages.customer.finances', ['orders' => $this->user()->orders]);
     }
 
     public function makePayment(FinancesRequest $request)
@@ -22,7 +22,7 @@ class CustomerFinancesController extends CustomerController
         $order = OrderRepository::getFromBookingReference($request->input('booking_reference'));
 
         if (!isset($order) ||
-            $order->repository->getOrderCustomer($this->user) === null) {
+            $order->repository->getOrderCustomer($this->user()) === null) {
             return back()->withErrors('Cannot make a payment for an invalid order');
         }
         if ($request->amount > $order->remaining) {
@@ -33,9 +33,9 @@ class CustomerFinancesController extends CustomerController
         $redirect = setting('payment.success.redirect', route('payment.gateway.stripe.success'));
 
         $item = new LineItem("Installment Payment ({$order->booking_reference})", $request->amount);
-        $intention = PaymentIntention::build($this->user, $order->booking_reference, 'Installment');
+        $intention = PaymentIntention::build($this->user(), $order->booking_reference, 'Installment');
 
-        return redirect($gateway->checkout([$item,], $intention, $this->user, $redirect));
+        return redirect($gateway->checkout([$item,], $intention, $this->user(), $redirect));
     }
 
     public function showInvoice(string $reference)
@@ -44,7 +44,7 @@ class CustomerFinancesController extends CustomerController
         if (!isset($order)) {
             abort(404);
         }
-        if ($order->repository->getOrderCustomer($this->user) === null) {
+        if ($order->repository->getOrderCustomer($this->user()) === null) {
             abort(404);
         }
         return $order->repository->getInvoiceRepository()->getResponseStream();
