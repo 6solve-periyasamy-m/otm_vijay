@@ -62,6 +62,7 @@ class CustomerRepository extends ModelRepository
 
     public function canEditCustomer(Customer $customer): bool
     {
+        if ($this->customer->id === $customer->id) return true;
         if (!isset($edited->email_address) || !isset($edited->password)) {
             foreach ($this->customer->leadingOrders as $order) {
                 if ($order->repository->getOrderCustomer($customer) !== null) {
