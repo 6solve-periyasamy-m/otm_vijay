@@ -3,6 +3,7 @@
 @php
 $currentUser = \App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer();
 $self = $currentUser->id === $customer->id;
+$passport = $customer->repository->isPassportLocked();
 @endphp
 
 @section('title', 'Edit Customer Profile')
@@ -192,41 +193,40 @@ $self = $currentUser->id === $customer->id;
                                 <h4 class="mb-0">Passport Details</h4>
                             </div>
                             <hr class="splitter">
-                            @if ($customer->repository->isPassportLocked())
-                                Your passport details are currently locked due to an upcoming tour. If you need to update your passport details, please contact us.
-                            @else
-                            <x-customer.input name="passport_first_name" value="{{ $customer->passport_first_name ?? '' }}" width="4" autocomplete="given-name">
+                            @if ($passport)
+                                <span class="fw-bold">Passport details are currently locked due to an upcoming tour. If you need to update your passport details, please contact us.</span>
+                            @endif
+                            <x-customer.input :disable="$passport" name="passport_first_name" value="{{ $customer->passport_first_name ?? '' }}" width="4" autocomplete="given-name">
                                 First Name
                             </x-customer.input>
 
-                            <x-customer.input name="passport_middle_name" value="{{ $customer->passport_middle_name ?? '' }}" width="4" autocomplete="additional-name">
+                            <x-customer.input :disable="$passport" name="passport_middle_name" value="{{ $customer->passport_middle_name ?? '' }}" width="4" autocomplete="additional-name">
                                 Middle Name
                             </x-customer.input>
 
-                            <x-customer.input name="passport_last_name" value="{{ $customer->passport_last_name ?? '' }}" width="4" autocomplete="family-name">
+                            <x-customer.input :disable="$passport" name="passport_last_name" value="{{ $customer->passport_last_name ?? '' }}" width="4" autocomplete="family-name">
                                 Last Name
                             </x-customer.input>
 
-                            <x-customer.input name="gender" value="{{ $customer->gender ?? '' }}" width="2" autocomplete="sex">
+                            <x-customer.input :disable="$passport" name="gender" value="{{ $customer->gender ?? '' }}" width="2" autocomplete="sex">
                                 Gender
                             </x-customer.input>
 
-                            <x-customer.input name="passport_number" value="{{ $customer->passport_number ?? '' }}" width="2">
+                            <x-customer.input :disable="$passport" name="passport_number" value="{{ $customer->passport_number ?? '' }}" width="2">
                                 Number
                             </x-customer.input>
 
-                            <x-customer.input name="passport_country" value="{{ $customer->passport_country_of_issue ?? '' }}" width="4">
+                            <x-customer.input :disable="$passport" name="passport_country" value="{{ $customer->passport_country_of_issue ?? '' }}" width="4">
                                 Country of Issue
                             </x-customer.input>
 
-                            <x-customer.input type="date" name="passport_issue_date" value="{{ $customer->passport_issue_date?->format('Y-m-d') ?? '' }}" width="2">
+                            <x-customer.input :disable="$passport" type="date" name="passport_issue_date" value="{{ $customer->passport_issue_date?->format('Y-m-d') ?? '' }}" width="2">
                                 Issue Date
                             </x-customer.input>
 
-                            <x-customer.input type="date" name="passport_expiry_date" value="{{ $customer->passport_expiry_date?->format('Y-m-d') ?? '' }}" width="2">
+                            <x-customer.input :disable="$passport" type="date" name="passport_expiry_date" value="{{ $customer->passport_expiry_date?->format('Y-m-d') ?? '' }}" width="2">
                                 Expiry Date
                             </x-customer.input>
-                            @endif
                             <hr class="splitter">
                             <div class="form-group">
                                 <h4 class="mb-0">Merchandise Clothing Sizes</h4>
