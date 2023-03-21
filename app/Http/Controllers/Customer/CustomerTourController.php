@@ -116,7 +116,7 @@ class CustomerTourController extends CustomerController
             ],
         ];
 
-        $redirect = setting('purchase.addon.success.redirect', url()->previous(route('customer.extras', ['reference' => $reference, 'customer' => $customer,])));
+        $redirect = setting('purchase.addon.success.redirect', url()->previous(route('customer.extras', ['reference' => $order->booking_reference, 'customer' => $customer,])));
 
 
         $item = new LineItem("{$tourComponent}", $tourComponent->tour_sales_price);
@@ -153,25 +153,29 @@ class CustomerTourController extends CustomerController
             event(new OrderCustomerComponentAddedEvent($orderComponent));
         }
 
-        return redirect()->route('customer.extras', ['reference' => $reference,]);
+        return redirect()->route('customer.extras', ['reference' => $order->booking_reference,]);
     }
 
     public function updateNotes(TourDetailsRequest $request, Order $reference, OrderCustomer $orderCustomer)
     {
         $customer = $this->user();
-        if (!isset($customer)) abort(404);
+        if (!isset($customer)) abort(403);
         $order = $reference;
 
-        if (!isset($order) || $order->cancelled) abort(404);
-        if (!$order->repository->isLeadBooker($customer)) abort(404);
+        if (!isset($order) || $order->cancelled) abort(402);
+        if (!$order->repository->isLeadBooker($customer)) abort(401);
 
         if ($order->repository->isLeadBooker($this->user())) {
             $order->update(['external_notes' => $request->order_notes,]);
             $order->save();
         }
-
-        $orderCustomer->repository->update($request->getOrderCustomerDetails());
-        return redirect()->route('customer.itinerary', ['reference' => $reference,]);
+        $details = $request->getOrderCustomerDetails();
+        if ($order->tour->repository->isAccommodationLocked()) { unset($details['accommodation_notes']); }
+        if ($order->tour->repository->isActivityLocked()) { unset($details['activity_notes']); }
+        if ($order->tour->repository->isFlightLocked()) { unset($details['flight_notes']); }
+        if ($order->tour->repository->isTransportLocked()) { unset($details['transport_notes']); }
+        $orderCustomer->repository->update($details);
+        return redirect()->route('customer.itinerary', ['reference' => $order->booking_reference,]);
     }
 
     private function getOrderCustomers(Order $order, Customer $customer): array
