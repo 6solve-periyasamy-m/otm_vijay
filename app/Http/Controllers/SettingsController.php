@@ -68,6 +68,7 @@ class SettingsController extends Controller
             'social.instagram' => $request->input('social_instagram'),
             'system.year.start' => $request->input('year_start'),
             'payment.required' => $request->input('payment_required') == 'on' ? 1 : 0,
+            'components.lock' => $request->input('components_lock'),
             'passport.lock' => $request->input('passport_lock'),
             'passport.unlock' => $request->input('passport_unlock'),
             'accommodation.lock' => $request->input('accommodation_lock'),

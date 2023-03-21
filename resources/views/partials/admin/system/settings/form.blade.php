@@ -155,6 +155,7 @@
                     <h4 class="fw-bold">Customer Data Locking</h4>
                 </div>
                 <div class="row">
+                    @include('partials.admin.system.settings.lock', ['name' => 'Purchasing Components', 'field' => 'components', 'unlock' => false])
                     @include('partials.admin.system.settings.lock', ['name' => 'Passport Details', 'field' => 'passport'])
                     @include('partials.admin.system.settings.lock', ['name' => 'Accommodation Notes', 'field' => 'accommodation'])
                     @include('partials.admin.system.settings.lock', ['name' => 'Activity Notes', 'field' => 'activity'])

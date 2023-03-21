@@ -469,4 +469,9 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
     {
         return $this->isLocked('transport');
     }
+
+    public function isComponentsLocked(): bool
+    {
+        return $this->tour->date_from->subDays(setting("components.lock", 30))->lte(now());
+    }
 }
