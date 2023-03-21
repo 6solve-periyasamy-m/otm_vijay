@@ -1,11 +1,11 @@
 <span class="d-inline">
     <span class="fw-bold">{{ $name }}</span> should lock
     <div class="d-inline-block col-1">
-        @include('partials.admin.system.settings.lock-dropdown', ['name' => null, 'field' => "{$field}_lock", 'value' => setting("{$field}.lock", 30), 'classes' => 'd-inline'])
+        @include('partials.fields.raw.text', ['name' => null, 'field' => "{$field}_lock", 'value' => setting("{$field}.lock", 0),])
     </div>
-    before the tour starts and unlock again
+    days before the tour starts and unlock again
     <div class="d-inline-block col-1">
-        @include('partials.admin.system.settings.lock-dropdown', ['name' => null, 'field' => "{$field}_unlock", 'value' => setting("{$field}.unlock", 0), 'lock' => false])
+        @include('partials.fields.raw.text', ['name' => null, 'field' => "{$field}_unlock", 'value' => setting("{$field}.unlock", 0),])
     </div>
-    after the tour as ended.
+    days after the tour as ended.
 </span>
