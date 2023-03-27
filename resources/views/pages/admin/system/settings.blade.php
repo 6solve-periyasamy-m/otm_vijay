@@ -2,6 +2,15 @@
 
 @section('title', 'Edit System Settings')
 
+@push('footer-stack')
+<script type="text/javascript">
+    function showBrandForm(event) {
+        Livewire.emit('openModal', 'admin.system.brand.form', {!! json_encode(['brand' => null,]) !!});
+        event.stopPropagation();
+    }
+</script>
+@endpush
+
 @section('content')
     <div class="card">
         <div class="card-body" data-target="#settings" onclick="toggleAccordion(this)">
@@ -56,6 +65,25 @@
                 @include('partials.admin.system.mail.card', ['template' => $template,])
             </div>
         @endforeach
+    </div>
+    <div class="card">
+        <div class="card-body" data-target="#brands" onclick="toggleAccordion(this)">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h4 class="fw-bold">
+                        {{ Icon::maximize() }} Company Brands
+                    </h4>
+                </div>
+                <div>
+                    <button onclick="showBrandForm(event)" class="btn btn-outline-success btn-sm mb-1">
+                        {{ Icon::list() }} Create new Brand
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="collapse show mx-1" id="brands">
+        <livewire:admin.system.brand.brand-list />
     </div>
     <div class="card">
         <div class="card-body" data-target="#import" onclick="toggleAccordion(this)">

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
-
+@php
+    $branding = $branding ?? \App\Models\System\Brand::getSystemBrand();
+@endphp
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -37,7 +39,7 @@
 
     <div id="app" data-layout="vertical" class="vh-100">
         <!-- Topbar header -->
-        @include('pages.customer.layout.navbar')
+        @include('pages.customer.layout.navbar', ['branding' => $branding,])
 
         @if ($errors->any())
             <div class="container topbar-padding">

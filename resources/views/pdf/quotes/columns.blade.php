@@ -6,6 +6,7 @@ use App\Models\Helper\QuoteStatus;
 $quote = $sent->built;
 $travelling = $sent->free;
 $paying = $sent->paid;
+$brand = $sent->quote->brand;
 @endphp
 
 <!DOCTYPE html>
@@ -33,7 +34,7 @@ $paying = $sent->paid;
                 <div class="header">
                     <div class="flex-container titles">
                         <div class="flex-items site-info vert-align">
-                            <img src="{{ asset(setting('company.logo', 'images/octlogo.png')) }}" class="header-logo" alt="{{ setting('company.name') }}" />
+                            <img src="{{ $brand->image }}" class="header-logo" alt="{{ $brand->name }}" />
                         </div>
                         <div class="flex-items vert-align">
                             <h2 class="header-title tour-name">{{ $quote->name }}</h2>
@@ -44,9 +45,9 @@ $paying = $sent->paid;
                     </div>
                     <div class="flex-container">
                         <div class="flex-items">
-                            <span class="metadata">Website:</span> <a class="site-info-padding" href="{{ setting('company.url', URL::to('/')) }}">{{ setting('company.url', URL::to('/')) }}</a>
-                            <br /><span class="metadata">Email:</span> <a class="site-info-padding" href="mailto:{{ setting('company.contact.email', 'Email not set') }}">{{ setting('company.contact.email', 'Email not set') }}</a>
-                            <br /><span class="metadata">Telephone:</span> <a class="site-info-padding" href="tel:{{ setting('company.contact.phone', 'Phone number not set') }}">{{ setting('company.contact.phone', 'Phone number not set') }}</a>
+                            <span class="metadata">Website:</span> <a class="site-info-padding" href="{{ $brand->url ?? setting('company.url', URL::to('/')) }}">{{ $brand->url ?? setting('company.url', URL::to('/')) }}</a>
+                            <br /><span class="metadata">Email:</span> <a class="site-info-padding" href="mailto:{{ $brand->email ?? setting('company.contact.email', 'Email not set') }}">{{ $brand->email ??  setting('company.contact.email', 'Email not set') }}</a>
+                            <br /><span class="metadata">Telephone:</span> <a class="site-info-padding" href="tel:{{ $brand->phone ?? setting('company.contact.phone', 'Phone number not set') }}">{{ $brand->phone ?? setting('company.contact.phone', 'Phone number not set') }}</a>
                         </div>
                         <div class="flex-items metadata-wrapper">
                             <div class="metadata divider">Paying Travellers<br /><span class="metadata-text">{{ $paying }}</span></div>
@@ -78,12 +79,12 @@ $paying = $sent->paid;
                         <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->postcode }}{!! isset($quote->leadTraveller->customer->billingAddress->postcode) ? "<br />" : "" !!}</div>
                     </div>
                     <div class="flex-items billing-info-wrapper">
-                        <div class="billing-info">{{ setting('company.address.line_1', 'Company Address Line 1 Not Set') }}</div>
-                        <div class="billing-info">{{ setting('company.address.line_2', 'Company Address Line 2 Not Set') }}</div>
-                        <div class="billing-info">{{ setting('company.address.city', 'Company City Not Set') }}</div>
-                        <div class="billing-info">{{ setting('company.address.region', 'Company Region Not Set') }}</div>
-                        <div class="billing-info">{{ setting('company.address.country', 'Company Country Not Set') }}</div>
-                        <div class="billing-info">{{ setting('company.address.postcode', 'Company Postcode Not Set') }}</div>
+                        <div class="billing-info">{{ $brand->active_address->address_line_1 }}</div>
+                        <div class="billing-info">{{ $brand->active_address->address_line_2 }}</div>
+                        <div class="billing-info">{{ $brand->active_address->town  }}</div>
+                        <div class="billing-info">{{ $brand->active_address->region  }}</div>
+                        <div class="billing-info">{{ $brand->active_address->country->name  }}</div>
+                        <div class="billing-info">{{ $brand->active_address->postcode  }}</div>
                     </div>
                 </div>
             </div>

@@ -5,32 +5,32 @@
 |--------------------------------------------------------------------------
 */
 
-use App\Http\Controllers\Api\Admin\QuoteController;
+use App\Http\Controllers\Api\AccommodationController;
+use App\Http\Controllers\Api\ActivitiesController;
+use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\Admin\MerchandiseController;
+use App\Http\Controllers\Api\Admin\QuoteController;
 use App\Http\Controllers\Api\Admin\RevenueController;
+use App\Http\Controllers\Api\AirlinesController;
+use App\Http\Controllers\Api\BookingActivityController;
+use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\BookingCustomerController;
+use App\Http\Controllers\Api\CountryApiController;
 use App\Http\Controllers\Api\CustomerBookingController;
+use App\Http\Controllers\Api\CustomerComponentController;
+use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\DataTablesController;
+use App\Http\Controllers\Api\FlightController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\SelectController;
+use App\Http\Controllers\Api\TourComponentController;
+use App\Http\Controllers\Api\TourController;
+use App\Http\Controllers\Api\TransportController;
+use App\Http\Controllers\ApiController;
+use App\Http\Controllers\BespokeReportController;
 use App\Http\Gateways\FellohGateway;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ApiController;
-use App\Http\Controllers\Api\TourController;
-use App\Http\Controllers\Api\OrderController;
-use App\Http\Controllers\Api\FlightController;
-use App\Http\Controllers\Api\SelectController;
-use App\Http\Controllers\Api\BookingController;
-use App\Http\Controllers\Api\ActivityController;
-use App\Http\Controllers\Api\AirlinesController;
-use App\Http\Controllers\Api\CustomerController;
-use App\Http\Controllers\Api\TransportController;
-use App\Http\Controllers\BespokeReportController;
-use App\Http\Controllers\Api\ActivitiesController;
-use App\Http\Controllers\Api\CountryApiController;
-use App\Http\Controllers\Api\DataTablesController;
-use App\Http\Controllers\Api\AccommodationController;
-use App\Http\Controllers\Api\TourComponentController;
-use App\Http\Controllers\Api\BookingActivityController;
-use App\Http\Controllers\Api\BookingCustomerController;
-use App\Http\Controllers\Api\CustomerComponentController;
 
 /**
  * Booking form routes are PUBLIC (do not use api auth)
@@ -268,6 +268,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::post('merchandise-types', [SelectController::class, 'getAvailableMerchandiseTypes'])->name('merchandise-types.select');
         Route::post('variants', [SelectController::class, 'getAvailableVariants'])->name('variants.select');
         Route::post('sizes', [SelectController::class, 'getAvailableSizes'])->name('sizes.select');
+        Route::post('brands', [SelectController::class, 'getAvailableBrands'])->name('brands.select');
         Route::prefix('inventory')->group(function () {
             Route::post('accommodation', [SelectController::class, 'getAccommodationInventory'])->name('inventory.accommodation.select');
             Route::post('activity', [SelectController::class, 'getActivityInventory'])->name('inventory.activity.select');
@@ -305,6 +306,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
             Route::post('variants/{id}', [SelectController::class, 'getSelectedVariant'])->name('variants.selected');
             Route::post('sizes/{id}', [SelectController::class, 'getSelectedSize'])->name('sizes.selected');
             Route::post('organizations/{id}', [SelectController::class, 'getSelectedOrganization'])->name('organizations.selected');
+            Route::post('brands/{id}', [SelectController::class, 'getSelectedBrand'])->name('brands.selected');
             Route::prefix('inventory/{id}')->group(function () {
                 Route::post('accommodation', [SelectController::class, 'getSelectedAccommodationInventory'])->name('inventory.accommodation.selected');
                 Route::post('activity', [SelectController::class, 'getSelectedActivityInventory'])->name('inventory.activity.selected');
