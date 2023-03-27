@@ -796,6 +796,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::post('/customer', [ImportController::class, 'customer'])->name('customer');
             Route::post('/accommodation', [ImportController::class, 'accommodation'])->name('accommodation');
             Route::post('/accommodation/inventory', [ImportController::class, 'accommodationInventory'])->name('accommodation.inventory');
+            Route::post('/activity', [ImportController::class, 'activity'])->name('activity');
+            Route::post('/activity/inventory', [ImportController::class, 'activityInventory'])->name('activity.inventory');
         });
     });
 
