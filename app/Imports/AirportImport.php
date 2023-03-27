@@ -7,10 +7,13 @@ use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Models\Location\Country;
 use App\Models\Location\LocationType;
+use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
 
 class AirportImport implements ToModel
 {
+    use Importable;
+
     /**
     * @param array $row
     *

@@ -19,6 +19,7 @@ use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Order\Component\OrderTransportRepository;
 use App\Repository\Model\Quote\Component\QuoteTransportRepository;
 use App\Repository\Traits\Component\IsTransport;
+use Illuminate\Support\Collection;
 
 class TransportInventoryTourRepository extends InventoryTourRepository
 {
@@ -58,7 +59,7 @@ class TransportInventoryTourRepository extends InventoryTourRepository
         $orderComponent = OrderTransport::create([
             'order_customer_id' => $orderCustomer->id,
             'transport_inventory_tour_id' => $this->tourComponent->id,
-            'cost' => $this->tourComponent->tour_sales_price,
+            'cost' => $this->tourComponent->tour_sales_price ?? 0
         ]);
         event(new OrderCustomerComponentAddedEvent($orderComponent));
         return $orderComponent->repository;
@@ -165,21 +166,13 @@ class TransportInventoryTourRepository extends InventoryTourRepository
         return $this->tourComponent->tour_component_type;
     }
 
-    public function getAvailableForUpgrade(): array
+    /**
+     * @return Collection<TransportInventoryTour>
+     */
+    public function getAvailableForUpgrade(): Collection
     {
         $tour = $this->tourComponent->tour;
-        $included = [];
-        foreach ($tour->transportInventoryTours as $inventoryTour) {
-            $included[$inventoryTour->transportInventory->id] = $inventoryTour->transportInventory->id;
-        }
-        $data = [];
-        foreach ($this->tourComponent->transportInventory->transport->transportInventory as $inventory) {
-            if (in_array($inventory->id, $included)) continue;
-            if ($inventory->departs_at->gte($tour->date_from->setTime(0, 0)) && $inventory->arrives_at->lte($tour->date_to->setTime(23, 59, 59))) {
-                $data[$inventory->id] = $inventory;
-            }
-        }
-        return $data;
+        return TransportInventoryRepository::getBetweenDates($tour->date_from->setTime(0,0), $tour->date_to->setTime(23,59,59), $tour->repository);
     }
 
     public function getUpgradeId(): int

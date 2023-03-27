@@ -72,6 +72,18 @@ if (!function_exists('f_datetime')) {
     }
 }
 
+if (!function_exists('f_time')) {
+    /**
+     * Alias for StringFormatter::formatTime
+     * @param $date
+     * @return string
+     */
+    function f_time($date): string
+    {
+        return StringFormatter::formatTime($date);
+    }
+}
+
 if (!function_exists('f_bool')) {
     /**
      * Alias for StringFormatter::formatBoolean
@@ -109,5 +121,32 @@ if (!function_exists('store_file')) {
         $path = $file->storePublicly('uploads/images');
         isset($old) && Storage::delete($old);
         return $path;
+    }
+}
+if (!function_exists('random_colors')) {
+    /**
+     * Generate a random set of distinct colors
+     */
+    function random_colors(int $count = 1): array
+    {
+        if ($count < 1) $count = 1;
+        $colors = [];
+        for ($x = 0; $x < $count; $x++) {
+            $colors[] = "hsl(" . ($x * (360 / $count) % 360) . ",75%,50%)";
+        }
+        return $colors;
+    }
+}
+if (!function_exists('truncate')) {
+    /**
+     * Truncate a string to a certain length, and append ellipsis to the end
+     * @param string|null $str The string to truncate
+     * @param int $chars The number of characters to truncate to (default: 150)
+     * @param string $append The string to append to the end (default: ...)
+     * @return string The truncated string
+     */
+    function truncate(?string $str, int $chars = 150, string $append = '...'): string
+    {
+        return Str::limit($str ?? "", $chars, $append);
     }
 }

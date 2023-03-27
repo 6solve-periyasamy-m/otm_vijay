@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Http\Gateways\StripeGateway;
+use App\Http\Gateways\Storage\LineItem;
+use App\Models\Order\Payment\PaymentIntention;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\Model\Order\OrderRepository;
+use Gateway;
 use Illuminate\Http\Request;
 
 class CustomerFinancesController extends Controller
@@ -17,9 +19,10 @@ class CustomerFinancesController extends Controller
 
     public function makePayment(Request $request)
     {
-        $request->validate(['booking_reference' => 'required|exists:orders,booking_reference', 'amount' => 'required|numeric|min:0.3|max:999999.99']);
+        $request->validate(['booking_reference' => 'required|exists:orders,booking_reference', 'amount' => 'required',]);
         $order = OrderRepository::getFromBookingReference($request->input('booking_reference'));
-        $amount = $request->input('amount');
+        $amount = sigfig((float)preg_replace('/[^0-9.]/', '', $request->amount));
+
         if (!isset($order) ||
             $order->repository->getOrderCustomer(CustomerAuthenticationRepository::getCustomer()) === null) {
             return back()->withErrors('Cannot make a payment for an invalid order');
@@ -27,9 +30,20 @@ class CustomerFinancesController extends Controller
         if ($amount > $order->remaining) {
             return back()->withErrors('Cannot pay more than you owe');
         }
-        $redirect = setting('payment.success.redirect', url()->previous(route('customer.finances')));
+        if ($amount >= 1_000_000) {
+            return back()->withErrors('We cannot process payments that large');
+        }
+        if ($amount <= 0.3) {
+            return back()->withErrors('We cannot process payments that small');
+        }
 
-        return StripeGateway::checkout([['name' => "Installment Payment ({$order->booking_reference})", 'quantity' => 1, 'cost' => $amount]], $order->booking_reference, 'Installment', CustomerAuthenticationRepository::getCustomer()->id, $redirect);
+        $gateway = Gateway::getDefaultGateway();
+        $redirect = setting('payment.success.redirect', route('payment.gateway.stripe.success'));
+
+        $item = new LineItem("Installment Payment ({$order->booking_reference})", $amount);
+        $intention = PaymentIntention::build(CustomerAuthenticationRepository::getCustomer(), $order->booking_reference, 'Installment');
+
+        return redirect($gateway->checkout([$item,], $intention, CustomerAuthenticationRepository::getCustomer(), $redirect));
     }
 
     public function showInvoice(string $reference)

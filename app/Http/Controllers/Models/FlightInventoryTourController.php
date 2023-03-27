@@ -27,7 +27,7 @@ class FlightInventoryTourController extends Controller
             'flight_inventory_id' => $request->input('flight_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),
             'flight_type' => $request->input('flight_type'),
-            'tour_sales_price' => $request->input('tour_sales_price'),
+            'tour_sales_price' => $request->input('tour_sales_price') ?? 0,
             'stock_control_active' => $request->input('stock_control_active')  == 'on' ? 1 : 0,
         ]);
         $tour->flightInventoryTours()->save($flightInventoryTour);
@@ -51,7 +51,7 @@ class FlightInventoryTourController extends Controller
             'flight_inventory_id' => $request->input('flight_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),
             'flight_type' => $request->input('flight_type'),
-            'tour_sales_price' => $request->input('tour_sales_price'),
+            'tour_sales_price' => $request->input('tour_sales_price') ?? 0,
             'stock_control_active' => $request->input('stock_control_active')  == 'on' ? 1 : 0,
         ]);
         return redirect()->route('tours.view', ['tour' => $tour,]);

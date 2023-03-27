@@ -22,7 +22,7 @@ $next = $order->next_installment;
                         <label class="payment-label">Balance Outstanding</label>
                     </div>
                     <div class="col-md-3 text-center">
-                        <p class="payment-value" id="order_status">{{ $order->status->description() }}</p>
+                        <p class="payment-value" id="order_status">{{ $order->repository->getOrderStatus(true)->description() }}</p>
                         <label class="payment-label">Order Status</label>
                     </div>
                 </div>
@@ -70,29 +70,67 @@ $next = $order->next_installment;
                             <th scope="col">Due By</th>
                             <th scope="col">Type</th>
                             <th scope="col">Amount Due</th>
-                            <th scope="col">Paid?</th>
+                            <th scope="col">Outstanding</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @if(($order->booking_fee ?? 0) > 0)
+                        <tr>
+                            <td data-content="Due By" class="fw-bold">With Order</td>
+                            <td data-content="Type">Booking Fee</td>
+                            <td data-content="Amount Due">{{ f_currency($order->booking_fee) }}</td>
+                            <td data-content="Outstanding">
+                                @php $amount = $order->booking_fee - min($order->paid, $order->booking_fee); @endphp
+                                @if($amount <= 0)
+                                    Paid
+                                @else
+                                    {{ f_currency($amount) }}
+                                @endif
+                            </td>
+                        </tr>
+                        @endif
+                        @if(($order->deposit ?? 0) > 0)
                         <tr>
                             <td data-content="Due By" class="fw-bold">With Order</td>
                             <td data-content="Type">Deposit</td>
                             <td data-content="Amount Due">{{ f_currency($order->calculated_deposit) }}</td>
-                            <td data-content="Paid?">{{ f_bool($order->calculated_deposit <= $order->paid) }}</td>
+                            <td data-content="Outstanding">
+                                @php $amount = $order->calculated_deposit - min(($order->paid - ($order->booking_fee ?? 0)), $order->calculated_deposit); @endphp
+                                @if($amount <= 0)
+                                    Paid
+                                @else
+                                    {{ f_currency($amount) }}
+                                @endif
+                            </td>
                         </tr>
+                        @endif
                         @foreach($order->installments as $installment)
                             <tr>
                                 <td data-content="Due By" class="fw-bold">{{ f_date($installment->due_on) }}</td>
                                 <td data-content="Type">Instalment</td>
                                 <td data-content="Amount Due">{{ f_currency($installment->calculated_amount) }}</td>
-                                <td data-content="Paid?">{{ f_bool($installment->paid) }}</td>
+                                <td data-content="Outstanding">
+                                    @php $amount = $installment->calculated_amount - $installment->repository->getAmountPaid(); @endphp
+                                    @if($amount <= 0)
+                                        Paid
+                                    @else
+                                        {{ f_currency($amount) }}
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                         <tr>
                             <td data-content="Due By" class="fw-bold">{{ f_date($order->tour->final_payment) }}</td>
                             <td data-content="Type">Remaining</td>
                             <td data-content="Amount Due">{{ f_currency($order->remaining_installment) }}</td>
-                            <td data-content="Paid?">{{ f_bool($order->remaining <= 0) }}</td>
+                            <td data-content="Outstanding">
+                                @php $amount = min($order->remaining, $order->remaining_installment); @endphp
+                                @if($amount <= 0)
+                                    Paid
+                                @else
+                                    {{ f_currency($amount) }}
+                                @endif
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -107,8 +145,8 @@ $next = $order->next_installment;
                     <p class="heading">Next Payment Details</p>
                     <div class="col-md-6 text-center">
                         <p class="payment-value">
-                            <a href="" class="text-dark cursor-pointer payable-amount"  onclick="event.preventDefault();$('.amount-input').val({{$next->amount}})">
-                                {{ f_currency($next->amount) }}
+                            <a href="" class="text-dark cursor-pointer payable-amount"  onclick="event.preventDefault();$('.amount-input').val({{$next->remaining}})">
+                                {{ f_currency($next->remaining) }}
                             </a>
                         </p>
                         <label class="payment-label">Amount due to fulfil next instalment</label>

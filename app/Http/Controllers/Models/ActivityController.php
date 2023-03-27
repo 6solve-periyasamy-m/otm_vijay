@@ -7,6 +7,7 @@ use App\Models\Activity\Activity;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Repository\Model\Location\AddressRepository;
+use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -37,7 +38,7 @@ class ActivityController extends Controller
             $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('activity'));
         } else {
             $request->validate(Address::getValidationRules());
-            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('name'), AddressParent::getParentId('activity')));
+            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::getParentId('activity')));
             $address->repository->save();
         }
         if ($request->has('image') && $request->file('image') != null) {
@@ -51,6 +52,16 @@ class ActivityController extends Controller
     public function view(Activity $activity)
     {
         return view('pages.components.activity', ['activity' => $activity,]);
+    }
+
+    public function manifest(Activity $activity)
+    {
+        return ActivityManifestRepository::viewReport($activity->repository, 'activities.manifest.export', ['activity' => $activity,]);
+    }
+
+    public function export(Activity $activity, string $extension = 'xlsx')
+    {
+        return ActivityManifestRepository::exportReport($activity->repository, $extension);
     }
 
     public function edit(Activity $activity)
@@ -72,7 +83,7 @@ class ActivityController extends Controller
             Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('activity'), $activity->address);
         } else {
             $request->validate(Address::getValidationRules());
-            $activity->address->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('name'), AddressParent::getParentId('activity')));
+            $activity->address->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::getParentId('activity')));
         }
         if ($request->has('image') && $request->file('image') != null) {
             if (isset($activity->image_url)) {

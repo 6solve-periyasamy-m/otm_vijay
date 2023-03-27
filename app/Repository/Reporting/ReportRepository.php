@@ -3,6 +3,7 @@
 namespace App\Repository\Reporting;
 
 use App\Helpers\QuarterHelper;
+use App\Helpers\RevenueHelper;
 use App\Models\Booking\Booking;
 use App\Models\Location\Address;
 use App\Models\Order\Component\OrderActivity;
@@ -10,6 +11,7 @@ use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class ReportRepository
@@ -40,7 +42,7 @@ class ReportRepository
                 'export' => 'reports.payment.export',
             ],
             [
-                'name' => 'Flight Manifest',
+                'name' => 'Flight Details',
                 'details' => 'List of all flights and passengers',
                 'view' => 'reports.flight-manifest',
                 'export' => 'reports.flight-manifest.export',
@@ -69,6 +71,43 @@ class ReportRepository
                 'view' => 'reports.merchandise',
                 'export' => 'reports.merchandise.export',
             ],
+            [
+                'name' => 'Rooming',
+                'details' => 'Information about all ordered rooms',
+                'view' => 'reports.rooming',
+                'export' => 'reports.rooming.export',
+            ],
+            [
+                'name' => 'Rooming (No Notes)',
+                'details' => 'Information about all ordered rooms, without the notes fields',
+                'view' => 'reports.rooming',
+                'export' => 'reports.rooming.export',
+                'params' => ['notes' => false,],
+            ],
+            [
+                'name' => 'Activity Manifest',
+                'details' => 'Manifest of Ordered Activity Tickets',
+                'view' => 'reports.manifest.activity.view',
+                'export' => 'reports.manifest.activity.export',
+            ],
+            [
+                'name' => 'Flight Manifest',
+                'details' => 'Manifest of Ordered Flight Tickets',
+                'view' => 'reports.manifest.flight.view',
+                'export' => 'reports.manifest.flight.export',
+            ],
+            [
+                'name' => 'Transport Manifest',
+                'details' => 'Manifest of Ordered Transport Tickets',
+                'view' => 'reports.manifest.transport.view',
+                'export' => 'reports.manifest.transport.export',
+            ],
+            [
+                'name' => 'Installment Revenue',
+                'details' => 'Information about days revenue',
+                'view' => 'reports.installment-revenue',
+                'export' => 'reports.installment-revenue.export',
+            ],
         ];
     }
 
@@ -86,13 +125,17 @@ class ReportRepository
             $row->booking_reference = $order->booking_reference;
             $row->lb_first_name = $order->leadBooker->customer->first_name;
             $row->lb_last_name = $order->leadBooker->customer->last_name;
+            $row->lb_email = $order->leadBooker->customer->email_address;
             $row->customer_count = $order->customer_count;
             $row->tour_name = $order->tour->name;
+            $row->event_name = $order->tour->event?->name;
             $row->total_order_value = $order->total;
             $row->balance_outstanding = $order->remaining;
             $row->balance_paid = $order->paid;
             $row->due_date = $nextPayment?->due_on;
-            $row->due_amount = $nextPayment?->amount;
+            $row->due_amount = $nextPayment?->calculated_amount;
+            $row->internal_notes = $order->internal_notes;
+            $row->external_notes = $order->external_notes;
             $row->orderStatus = $order->status;
             $data[$order->id] = $row;
         }
@@ -110,6 +153,7 @@ class ReportRepository
             $row->variant = $inventory->variant->name;
             $row->size = $inventory->size->name;
             $row->tour = $orderMerchandise->orderCustomer->order->tour->name;
+            $row->event = $orderMerchandise->orderCustomer->order->tour->event?->name;
             $row->fulfilled = $orderMerchandise->fulfilled;
             $row->fulfil_route = route('merchandise.inventory.tour.order.fulfil', ['order' => $orderMerchandise->orderCustomer->order, 'orderCustomer' => $orderMerchandise->orderCustomer, 'orderMerchandise' => $orderMerchandise]);
             $row->customer = $orderMerchandise->orderCustomer->customer->full_name;
@@ -137,7 +181,7 @@ class ReportRepository
         foreach (Tour::all() as $tour) {
             $row = collect();
             $row->name = $tour->name;
-            $row->event = isset($tour->event) ? $tour->event->name : 'No Event';
+            $row->event = isset($tour->event) ? $tour->event?->name : 'No Event';
             $row->active = $tour->is_active;
             $row->stock = $tour->stock_control_active ? $tour->stock : 'Not Controlled';
             $row->booked = $tour->getUsedStock();
@@ -162,6 +206,7 @@ class ReportRepository
                 $row = collect();
                 $row->booking_reference = $order->booking_reference;
                 $row->tour_name = $order->tour->name;
+                $row->event_name = $order->tour->event?->name;
                 $row->lb_first_name = $order->leadBooker->customer->first_name;
                 $row->lb_last_name = $order->leadBooker->customer->last_name;
                 $row->payment_method = $payment->paymentMethod->name;
@@ -190,6 +235,7 @@ class ReportRepository
             $row->customer = $orderFlight?->orderCustomer?->customer_name;
             $row->reference = $orderFlight?->orderCustomer?->order?->booking_reference;
             $row->tour = $orderFlight?->orderCustomer?->order?->tour?->name;
+            $row->event = $orderFlight?->orderCustomer?->order?->tour?->event?->name;
             $row->is_lead = $orderFlight?->orderCustomer?->is_lead_booker;
             $row->flight_notes = $orderFlight?->orderCustomer?->flight_notes;
             $row->order_customer_notes_internal = $orderFlight?->orderCustomer?->internal_notes;
@@ -218,6 +264,11 @@ class ReportRepository
             $row->purchased = $orderActivity?->orderCustomer?->order?->ordered_on;
             $row->cost = $orderActivity?->tourComponent?->tour_component_type === "Included" ? 0 : $orderActivity?->cost;
             $row->component = $orderActivity?->tourComponent?->tour_component_type;
+            $row->activity_notes = $orderActivity?->orderCustomer?->activity_notes;
+            $row->order_customer_notes_internal = $orderActivity?->orderCustomer?->internal_notes;
+            $row->order_customer_notes_external = $orderActivity?->orderCustomer?->external_notes;
+            $row->customer_notes_internal = $orderActivity?->orderCustomer?->customer?->internal_notes;
+            $row->customer_notes_external = $orderActivity?->orderCustomer?->customer?->external_notes;
             $data[] = $row;
         }
         return $data;
@@ -229,13 +280,14 @@ class ReportRepository
         foreach (Booking::whereNull('order_id')->with('tour', 'leadTraveller', 'leadTraveller.customer')->get() as $booking) {
             $row = collect();
             $cDetailsSource = $booking->leadTraveller->customer ?? $booking->leadTraveller;
-            $row->name = $cDetailsSource->title . ' ' . $cDetailsSource->first_name . ' ' . $cDetailsSource->last_name;
-            $row->tour = $booking->tour->name;
+            $row->name = $cDetailsSource?->title . ' ' . $cDetailsSource?->first_name . ' ' . $cDetailsSource?->last_name;
+            $row->tour = $booking->tour?->name ?? 'Deleted Tour';
+            $row->event = $booking->tour?->event?->name ?? 'No Event';
             $row->date = $booking->created_at;
             $row->travellers = $booking->travellers()->count();
             $row->expected = $booking->repository->getTotalCost();
-            $row->contact_email = $cDetailsSource->email_address;
-            $row->contact_number = $cDetailsSource->mobile_number;
+            $row->contact_email = $cDetailsSource?->email_address ?? "Unknown";
+            $row->contact_number = $cDetailsSource?->mobile_number ?? "Unknown";
             $row->continue = route('customer-booking.summary', ['bookingUrl' => $booking->tour->booking_form_url, 'token' => $booking->token,]);
             $data[] = $row;
         }
@@ -251,7 +303,7 @@ class ReportRepository
                 $row->order = $order;
                 $row->days = $order->days_until_next_payment;
                 $row->next = $order->next_installment;
-                $row->reminded = $order->repository->hasBeenReminded($row->next);
+                $row->reminded = $order->repository->hasBeenReminded($row->next, $max);
                 $data[] = $row;
             }
         }
@@ -297,5 +349,19 @@ class ReportRepository
     public static function getOrdersDepartingAfterQuarterReport(int $year, int $quarter): Collection
     {
         return self::generateAtolReport(QuarterHelper::getOrdersFromToursAfterQuarter($year, $quarter));
+    }
+
+    public static function getInstallmentRevenueReport(): array
+    {
+        $data = [];
+        foreach (RevenueHelper::getAllExpectedRevenue() as $key => $item) {
+            $row = collect();
+            $row->date = Carbon::createFromTimestamp($key);
+            $row->amount = $item['count'];
+            $row->expected = $item['expected'];
+            $row->paid = $item['paid'];
+            $data[] = $row;
+        }
+        return $data;
     }
 }

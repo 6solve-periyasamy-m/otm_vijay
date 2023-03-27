@@ -3,7 +3,6 @@
 namespace App\Listeners\Email;
 
 use App\Events\Order\Customer\OrderCustomerCreatedEvent;
-use App\Repository\Mailing\MailRepository;
 
 class SendAdditionalTravellerAddedEmail
 {
@@ -28,7 +27,7 @@ class SendAdditionalTravellerAddedEmail
         if (!$event->shouldInvoice) return;
         $customer = $event->orderCustomer->customer;
         if (isset($customer->email_address)) {
-            MailRepository::sendMailable('additional-traveller-added', $customer->email_address, $event->orderCustomer);
+            $event->sendMail('additional-traveller-added', $customer->email_address);
         }
     }
 }

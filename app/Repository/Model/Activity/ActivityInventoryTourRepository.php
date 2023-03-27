@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Activity;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Booking\BookingTraveller;
@@ -16,11 +17,14 @@ use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Interfaces\Manifest\HasActivityManifest;
 use App\Repository\Model\Order\Component\OrderActivityRepository;
 use App\Repository\Model\Quote\Component\QuoteActivityRepository;
+use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use App\Repository\Traits\Component\IsActivity;
+use Illuminate\Support\Collection;
 
-class ActivityInventoryTourRepository extends InventoryTourRepository
+class ActivityInventoryTourRepository extends InventoryTourRepository implements HasActivityManifest
 {
     use IsActivity;
 
@@ -58,7 +62,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
         $orderComponent = OrderActivity::create([
             'order_customer_id' => $orderCustomer->id,
             'activity_inventory_tour_id' => $this->tourComponent->id,
-            'cost' => $this->tourComponent->tour_sales_price,
+            'cost' => $this->tourComponent->tour_sales_price ?? 0,
         ]);
         event(new OrderCustomerComponentAddedEvent($orderComponent));
         return $orderComponent->repository;
@@ -74,6 +78,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
     public function onUpgradeTree(ComponentUpgradeRepository $upgradeRepository): bool
     {
         $upgrade = $upgradeRepository->get();
+        if (!($upgrade instanceof ActivityInventoryTourUpgrade)) return false;
         if ($upgrade->base_id == $this->tourComponent->id) return true;
         foreach ($this->tourComponent->parent()->upgrades as $inventoryTourUpgrade) {
             if ($inventoryTourUpgrade->id == $upgrade->id) return true;
@@ -161,21 +166,13 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
         return $this->tourComponent->tour_component_type;
     }
 
-    public function getAvailableForUpgrade(): array
+    /**
+     * @return Collection<ActivityInventory>
+     */
+    public function getAvailableForUpgrade(): Collection
     {
         $tour = $this->tourComponent->tour;
-        $included = [];
-        foreach ($tour->activityInventoryTours as $inventoryTour) {
-            $included[$inventoryTour->activityInventory->id] = $inventoryTour->activityInventory->id;
-        }
-        $data = [];
-        foreach ($this->tourComponent->activityInventory->activity->activityInventory as $inventory) {
-            if (in_array($inventory->id, $included)) continue;
-            if ($inventory->starts_at->gte($tour->date_from->setTime(0, 0)) && $inventory->ends_at->lte($tour->date_to->setTime(23, 59, 59))) {
-                $data[$inventory->id] = $inventory;
-            }
-        }
-        return $data;
+        return ActivityInventoryRepository::getBetweenDates($tour->date_from->setTime(0,0), $tour->date_to->setTime(23,59,59), $tour->repository);
     }
 
     public function getUpgradeId(): int
@@ -224,5 +221,32 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
     public function hasEnoughStock(int $amount = 1): bool
     {
         return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
+    }
+
+    public function getBookingUpgradeKeyMap(int $required = 1): array
+    {
+        $upgrades = $this->tourComponent->upgrades;
+        $included = $this->tourComponent;
+        $keys = [];
+        if (empty($upgrades->all())) {
+            $upgrades = $this->tourComponent->parent()->upgrades;
+            $included = $this->tourComponent->parent();
+        }
+        $disabled = $included->available_stock <= $required - 1;
+        if ($included->is_bookable) {
+            $keys[0] = ['name' => 'Included - ' . ($disabled ? 'Out of Stock' : f_currency(0)), 'disabled' => $disabled,];
+        }
+
+        foreach ($upgrades as $upgrade) {
+            if (!$upgrade->upgrade->is_bookable) continue;
+            $disabled = $upgrade->upgrade->available_stock <= $required - 1;
+            $keys[$upgrade->id] = ['name' => $upgrade->description . ' - ' . ($disabled ? 'Out of Stock' : f_currency($upgrade->upgrade->tour_sales_price)), 'disabled' => $disabled,];
+        }
+        return $keys;
+    }
+
+    public function getActivityManifest(): Collection|array
+    {
+        return $this->tourComponent->orders()->with(ActivityManifestRepository::getRelations())->get();
     }
 }

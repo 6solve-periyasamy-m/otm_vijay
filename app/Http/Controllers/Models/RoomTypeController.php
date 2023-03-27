@@ -41,7 +41,7 @@ class RoomTypeController extends Controller
 
     public function update(Request $request, RoomType $roomType)
     {
-        $request->validate(RoomType::getValidationRules());
+        $request->validate(RoomType::getValidationRules($roomType->id));
         $roomType->update([
             'name' => $request->input('name'),
             'maximum_occupancy' => abs($request->input('maximum_occupancy')),
@@ -51,7 +51,8 @@ class RoomTypeController extends Controller
 
     public function destroy(RoomType $roomType)
     {
-        $roomType->delete();
-        return redirect()->route('room-types.all');
+        $repo = $roomType->repository;
+        $repo->delete();
+        return $repo->getReturnURL();
     }
 }

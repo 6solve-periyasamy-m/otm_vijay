@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Exports\AbandonedBookingsReportExport;
 use App\Exports\ActivitiesReportExport;
 use App\Exports\FlightManifestReportExport;
+use App\Exports\InstallmentRevenueReportExport;
 use App\Exports\OrderReminderReportExport;
 use App\Exports\OrderReportExport;
 use App\Exports\PaymentReportExport;
 use App\Exports\TourStockReportExport;
+use App\Repository\Reporting\Manifest\RoomingReportRepository;
 use App\Repository\Reporting\ReportRepository;
 use Excel;
+use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
@@ -90,8 +93,8 @@ class ReportController extends Controller
     public function getOrderRemindersReport(int $max = 7, int $min = -1000) {
         return view('pages.reports.reminders', ['tableView' => 'partials.reports.tables.reminders',
             'data' => ReportRepository::getRemindersReport($max, $min),'title' => 'Order Reminders',
-            'xlsxExport' => route('reports.reminders.export', ['extension' => 'xlsx']),
-            'csvExport' => route('reports.reminders.export', ['extension' => 'csv']),
+            'xlsxExport' => route('reports.reminders.export', ['extension' => 'xlsx', 'max' => $max, 'min' => $min,]),
+            'csvExport' => route('reports.reminders.export', ['extension' => 'csv', 'max' => $max, 'min' => $min,]),
             'min' => $min, 'max' => $max,]);
     }
 
@@ -111,4 +114,29 @@ class ReportController extends Controller
     {
         return Excel::download(new OrderReminderReportExport(), 'reminders.' . $extension);
     }
+
+    public function getRoomingReport(Request $request)
+    {
+        $notes = !$request->has('notes') || $request->notes == true;
+        return RoomingReportRepository::viewReport(new RoomingReportRepository(), 'reports.rooming.export', $notes);
+    }
+
+    public function exportRoomingReport(Request $request, string $extension = 'xlsx')
+    {
+        $notes = !$request->has('notes') || $request->notes == true;
+        return RoomingReportRepository::exportReport(new RoomingReportRepository(), $extension, $notes);
+    }
+
+    public function getInstallmentRevenueReport() {
+        return view('pages.reports.view', ['tableView' => 'partials.reports.tables.installment-revenue',
+            'data' => ReportRepository::getInstallmentRevenueReport(),'title' => 'Installment Revenue',
+            'xlsxExport' => route('reports.installment-revenue.export', ['extension' => 'xlsx']),
+            'csvExport' => route('reports.installment-revenue.export', ['extension' => 'csv']),]);
+    }
+
+    public function exportInstallmentRevenueReport(string $extension = 'xlsx')
+    {
+        return Excel::download(new InstallmentRevenueReportExport(), 'installment-revenue.' . $extension);
+    }
+
 }

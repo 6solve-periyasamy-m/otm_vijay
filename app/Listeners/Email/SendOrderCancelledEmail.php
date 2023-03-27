@@ -4,7 +4,6 @@ namespace App\Listeners\Email;
 
 use App\Events\Order\OrderCancelledEvent;
 use App\Events\Parent\OrderEvent;
-use App\Repository\Mailing\MailRepository;
 
 class SendOrderCancelledEmail
 {
@@ -21,7 +20,7 @@ class SendOrderCancelledEmail
     /**
      * Handle the event.
      *
-     * @param  OrderEvent  $event
+     * @param  OrderEvent $event
      * @return void
      */
     public function handle(OrderCancelledEvent $event)
@@ -29,7 +28,8 @@ class SendOrderCancelledEmail
         if (!$event->shouldInvoice) return;
         $customer =  $event->order->leadBooker->customer;
         if (isset($customer->email_address)) {
-            MailRepository::sendMailable('order-cancelled', $customer->email_address, $event->order);
+            $event->sendMail('order-cancelled', $customer->email_address);
+
         }
     }
 }

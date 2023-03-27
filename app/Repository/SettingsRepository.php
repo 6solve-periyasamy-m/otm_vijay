@@ -81,7 +81,7 @@ class SettingsRepository
     {
         $time = $this->getOrDefault($key, 0);
         if ($time == 0) return false;
-        return $time === -1 || Carbon::createFromTimestamp($time)->isAfter(now());
+        return $time < 0 || Carbon::createFromTimestamp($time)->isAfter(now());
     }
 
     public function verifyCache(): SettingsRepository

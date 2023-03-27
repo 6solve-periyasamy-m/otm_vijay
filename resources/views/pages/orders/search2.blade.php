@@ -5,28 +5,69 @@
 @section('footer-script')
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#orders').DataTable({fixedHeader: true,columnDefs:[{targets:0,searchable:true,visible:false}],scrollX:false});
+            $('#orders').DataTable({
+                fixedHeader: true,
+                ajax: {
+                    'url': "{{ route('api.orders.all') }}",
+                    'type': "POST",
+                    'dataSrc': "",
+                    'data': {
+                        '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
+                    },
+                },
+                columns:[
+                    {
+                        searchable: true,
+                        visible: false,
+                        data: 'travellers'
+                    },
+                    {
+                        data: 'ordered',
+                        render: {
+                            '_': 'format',
+                            'display': 'format',
+                            'sort': 'unix',
+                        },
+                    },
+                    {
+                        data: 'lead'
+                    },
+                    {
+                        data: 'reference',
+                        render: function (data, type, row, meta) {
+                            return '<a href="' + row.view + '" class="link-info"><u>' + data + '</u></a>'
+                        }
+                    },
+                    {
+                        data: 'tour',
+                    },
+                    {
+                        data: 'passengers',
+                    },
+                    {
+                        data: 'status',
+                        render: function (data, type, row, meta) {
+                            return '<h6 class="badge badge-' + data.color + ' fw-bold">' + data.status + '</h6>'
+                        }
+                    }
+                ],
+            });
         });
     </script>
 @endsection
 
 @section('content')
-    <div class="row row justify-content-center">
-        <div class="col-6 col-md-5 col-xl-3">
-            <img src="{{ asset('images/octlogo.png') }}" class="maxwidth"/>
-        </div>
-    </div>
     <div class="card">
         <div class="card-body">
             <a class="btn btn-primary float-end" href="{{ route('orders.create') }}">
-                <i class="icon-plus"></i>
+                {{ Icon::create() }}
                 <span>Create New</span>
             </a>
         </div>
     </div>
     <div class="card">
         <div class="card-body">
-            <table class="table table-striped" id="orders">
+            <table class="table table-striped" id="orders" style="width: 100%;">
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">Customers</th>
@@ -38,6 +79,7 @@
                     <th scope="col">Order Status</th>
                 </tr>
                 </thead>
+                {{--}}
                 @foreach($orders as $order)
                     <tr>
                         <td>
@@ -45,7 +87,7 @@
                                 {{ $oCustomer->customer->first_name . ' ' . $oCustomer->customer->last_name . ', '}}
                             @endforeach
                         </td>
-                        <td>{{ $order->ordered_on }}</td>
+                        <td>{{ f_datetime($order->ordered_on) }}</td>
                         <td>{{ $order->leadBooker->customer->first_name . ' ' . $order->leadBooker->customer->last_name }}</td>
                         <td><a href="{{ route('orders.view', ['order' => $order->id]) }}" class="link-info"><u>{{ $order->booking_reference }}</u></a></td>
                         <td>{{ $order->tour->name }}</td>
@@ -53,6 +95,7 @@
                         <td><h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6></td>
                     </tr>
                 @endforeach
+                {{--}}
             </table>
         </div>
     </div>

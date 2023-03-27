@@ -3,10 +3,16 @@
 namespace App\Repository\Model\Order;
 
 use App\Models\Customer\Customer;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderMerchandise;
+use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
+use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Storage\OrderComponentStorage;
 
 class OrderCustomerRepository extends ModelRepository
 {
@@ -134,6 +140,29 @@ class OrderCustomerRepository extends ModelRepository
     }
 
     /**
+     * @param OrderComponentStorage $components
+     * @return void
+     */
+    public function bulkSaveStandard(OrderComponentStorage $components): void
+    {
+        $this->orderCustomer->orderActivities()->saveMany($components->activities);
+        $this->orderCustomer->orderFlights()->saveMany($components->flights);
+        $this->orderCustomer->orderTransports()->saveMany($components->transport);
+        $this->orderCustomer->orderMerchandise()->saveMany($components->merchandise);
+    }
+
+    /**
+     * @param InventoryTourRepository[] $components
+     * @return void
+     */
+    public function grantAll(array $components): void
+    {
+        foreach ($components as $component) {
+            $component->grantToCustomer($this->orderCustomer);
+        }
+    }
+
+    /**
      * @return OrderComponentRepository[]
      */
     public function getComponents(bool $accommodation = true, bool $activities = true, bool $flights = true, bool $transport = true, bool $extras = true, array $typeFilters = ['Included', 'Upgrade', 'Add-on']): array
@@ -231,5 +260,34 @@ class OrderCustomerRepository extends ModelRepository
     public function isDeleted(): bool
     {
         return $this->orderCustomer->trashed();
+    }
+
+    public function removeAllComponents(bool $accommodation = false)
+    {
+        foreach ($this->getComponents($accommodation) as $component) {
+            $component->delete();
+        }
+    }
+
+    public function getCostToCompany(): float
+    {
+        $cost = 0;
+        foreach ($this->getComponents() as $component) {
+            $cost += $component->getTourComponent()->getPurchasePrice();
+        }
+        return $cost;
+    }
+
+    public function forceDelete(): void
+    {
+        foreach ($this->orderCustomer->groups as $group) {
+            $group->repository->removeCustomerFromGroup($this->orderCustomer);
+        }
+        $this->orderCustomer->adjustments()->forceDelete();
+        $this->orderCustomer->orderActivities()->forceDelete();
+        $this->orderCustomer->orderFlights()->forceDelete();
+        $this->orderCustomer->orderTransports()->forceDelete();
+        $this->orderCustomer->orderMerchandise()->forceDelete();
+        $this->orderCustomer->forceDelete();
     }
 }

@@ -22,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property string $tour_component_type
  * @property float $tour_sales_price
  * @property int $quantity
+ * @property bool $price_shown
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -52,6 +53,8 @@ class QuoteMerchandise extends Model
 
     protected $guarded = [];
     protected $casts = ['purchase_price' => 'double', 'tour_sales_price' => 'double',];
+
+    private QuoteMerchandiseRepository $internal_repository;
 
     public function quote(): BelongsTo
     {

@@ -266,7 +266,7 @@ class ReportFieldRepository
                     ],
                 ], self::getInventoryFooter()),
             ],
-            2 => self::getTourInventoryFooter('Flight\FlightInventoryTour', ['inventory.travelClass', 'flight.departureAirport', 'inventory.flight.departureAirport.address', 'inventory.flight.arrivalAirport', 'inventory.flight.arrivalAirport.address', 'tour'],)
+            2 => self::getTourInventoryFooter('Flight\FlightInventoryTour', ['inventory.travelClass', 'inventory.flight.departureAirport', 'inventory.flight.departureAirport.address', 'inventory.flight.arrivalAirport', 'inventory.flight.arrivalAirport.address', 'tour'],)
         ];
     }
 
@@ -330,6 +330,10 @@ class ReportFieldRepository
                     'travel_class' => [
                         'name' => 'Travel Class',
                         'method' => 'travelClass',
+                    ],
+                    'ticket_number' => [
+                        'name' => 'Ticket Number',
+                        'method' => 'ticket_number',
                     ],
                     'departs_at' => [
                         'name' => 'Departs At',
@@ -464,6 +468,11 @@ class ReportFieldRepository
                         'name' => 'Hat Size',
                         'method' => 'hatSize',
                     ],
+                    'registered' => [
+                        'name' => 'Has Account',
+                        'method' => 'registered',
+                        'format' => 'boolean',
+                    ],
                     'internal_notes' => [
                         'name' => 'Internal Notes',
                         'method' => 'internal_notes',
@@ -596,7 +605,7 @@ class ReportFieldRepository
                 'fields' => [
                     'amount' => [
                         'name' => 'Amount',
-                        'method' => 'amount',
+                        'method' => 'calculated_amount',
                         'format' => 'currency',
                     ],
                     'due_on' => [

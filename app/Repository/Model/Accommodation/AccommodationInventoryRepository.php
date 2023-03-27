@@ -9,12 +9,13 @@ use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
+use App\Repository\Interfaces\Manifest\HasRoomingList;
 use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
 use App\Repository\Traits\Component\IsAccommodation;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-class AccommodationInventoryRepository extends InventoryRepository
+class AccommodationInventoryRepository extends InventoryRepository implements HasRoomingList
 {
     use IsAccommodation;
 
@@ -116,7 +117,7 @@ class AccommodationInventoryRepository extends InventoryRepository
     public function addToQuote(Quote $quote, string $tourComponentType, float $price = -1): ?QuoteAccommodationRepository
     {
         $inventoryTour = QuoteAccommodation::make([
-            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price ?? 0 : $price,
             'tour_component_type' => $tourComponentType,
             'quote_id' => $quote->id,
         ]);
@@ -127,6 +128,25 @@ class AccommodationInventoryRepository extends InventoryRepository
     public function getPurchasePrice(): float
     {
         return $this->inventory->purchase_price;
+    }
+
+    public function getRoomingList(): Collection|array
+    {
+        return $this->inventory->orderComponents()->with(
+            'group',
+            'group.orderCustomers',
+            'group.orderCustomers.customer',
+            'accommodationInventoryTour',
+            'accommodationInventoryTour.inventory',
+            'accommodationInventoryTour.accommodationInventory.accommodation',
+            'accommodationInventoryTour.accommodationInventory.roomType',
+            'accommodationInventoryTour.accommodationInventory.boardType'
+        )->get();
+    }
+
+    public function getSalesPrice(): ?float
+    {
+        return $this->inventory->sales_price;
     }
 
     public function isStockControlActive(): bool

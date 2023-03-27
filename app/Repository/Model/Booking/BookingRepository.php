@@ -81,12 +81,15 @@ class BookingRepository extends ModelRepository
         $components = $this->booking->tour->repository->getComponents(false, true, false, true, false, ['Included',]);
         foreach ($this->booking->travellers as $traveller) {
             $traveller->repository->addComponents($components);
+            foreach ($this->booking->tour->flightInventoryTours()->where('flight_type', '=', 'Mid-Package')->get() as $flight) {
+                $traveller->repository->addComponent($flight->repository);
+            }
         }
     }
 
     public function getTotalCost(): float
     {
-        $cost = 0;
+        $cost = $this->booking->tour->booking_fee ?? 0;
         foreach ($this->booking->travellers as $traveller) {
             $cost += $traveller->total_cost;
         }
@@ -95,7 +98,7 @@ class BookingRepository extends ModelRepository
 
     public function getDueTodayAmount(): float
     {
-        return $this->booking->tour->deposit * $this->booking->travellers()->count();
+        return ($this->booking->tour->booking_fee ?? 0) + ($this->booking->tour->deposit * $this->booking->travellers()->count());
     }
 
     public function getSingleOccupancyCount(): int
@@ -172,6 +175,7 @@ class BookingRepository extends ModelRepository
             'deposit' => $tour->deposit,
             'invoice_footer' => $tour->invoice_footer,
             'ordered_on' => $orderedOn ?? now(),
+            'booking_fee' => $tour->booking_fee,
         ]);
         foreach ($this->booking->travellers as $traveller) {
             $orderCustomer = $traveller->repository->convertToOrderCustomer($order);
@@ -184,10 +188,7 @@ class BookingRepository extends ModelRepository
         $order->booking_reference = Order::generateBookingReference($order);
         $order->repository->save();
         foreach ($this->booking->groups as $bookingGroup) {
-            $group = Group::create([
-                'name' => $bookingGroup->name,
-                'room_type_id' => $bookingGroup->travellers()->first()->room_type_id
-            ]);
+            $group = Group::create();
             foreach ($bookingGroup->travellers as $traveller) {
                 $group->repository->addCustomerToGroup($traveller->orderCustomer);
             }

@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @property int $customer_id
+ * @property int|null $brand_id
  * @property string $name
  * @property string|null $description
  * @property string $from

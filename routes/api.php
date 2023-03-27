@@ -5,30 +5,32 @@
 |--------------------------------------------------------------------------
 */
 
-use App\Http\Controllers\Api\Admin\QuoteController;
+use App\Http\Controllers\Api\AccommodationController;
+use App\Http\Controllers\Api\ActivitiesController;
+use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\Admin\MerchandiseController;
+use App\Http\Controllers\Api\Admin\QuoteController;
+use App\Http\Controllers\Api\Admin\RevenueController;
+use App\Http\Controllers\Api\AirlinesController;
+use App\Http\Controllers\Api\BookingActivityController;
+use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\BookingCustomerController;
+use App\Http\Controllers\Api\CountryApiController;
 use App\Http\Controllers\Api\CustomerBookingController;
+use App\Http\Controllers\Api\CustomerComponentController;
+use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\DataTablesController;
+use App\Http\Controllers\Api\FlightController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\SelectController;
+use App\Http\Controllers\Api\TourComponentController;
+use App\Http\Controllers\Api\TourController;
+use App\Http\Controllers\Api\TransportController;
+use App\Http\Controllers\ApiController;
+use App\Http\Controllers\BespokeReportController;
+use App\Http\Gateways\FellohGateway;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ApiController;
-use App\Http\Controllers\Api\TourController;
-use App\Http\Controllers\Api\OrderController;
-use App\Http\Controllers\Api\FlightController;
-use App\Http\Controllers\Api\SelectController;
-use App\Http\Controllers\Api\BookingController;
-use App\Http\Controllers\Api\ActivityController;
-use App\Http\Controllers\Api\AirlinesController;
-use App\Http\Controllers\Api\CustomerController;
-use App\Http\Controllers\Api\TransportController;
-use App\Http\Controllers\BespokeReportController;
-use App\Http\Controllers\Api\ActivitiesController;
-use App\Http\Controllers\Api\CountryApiController;
-use App\Http\Controllers\Api\DataTablesController;
-use App\Http\Controllers\Api\AccommodationController;
-use App\Http\Controllers\Api\TourComponentController;
-use App\Http\Controllers\Api\BookingActivityController;
-use App\Http\Controllers\Api\BookingCustomerController;
-use App\Http\Controllers\Api\CustomerComponentController;
 
 /**
  * Booking form routes are PUBLIC (do not use api auth)
@@ -175,6 +177,7 @@ Route::prefix('/orders')->group(function () {
 });
 
 Route::stripeWebhooks('/stripe/webhooks');
+Route::post('/felloh/webhook', [FellohGateway::class, 'webhook'])->name('api.felloh.webhook');
 
 Route::middleware('auth:api')->group(function() {
     Route::get('/booking/info', [BookingController::class, 'getInfo']);
@@ -186,6 +189,7 @@ Route::middleware('auth:api')->group(function() {
 Route::post('/dual/select/countries', [SelectController::class, 'getCountries'])->name('api.countries.select');
 Route::post('/php/booking/upgrade/activity/{token}', [CustomerBookingController::class, 'upgradeActivity'])->name('api.booking.upgrade-activity');
 Route::post('/php/booking/customer/remove/{token}', [CustomerBookingController::class, 'removeCustomer'])->name('api.booking.remove-customer');
+Route::post('/admin/orders/{order}/rooming/get', [OrderController::class, 'getRoomingInformation'])->name('api.orders.rooming.get');
 
 Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(function () {
 
@@ -229,9 +233,13 @@ Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(functio
 });
 
 Route::middleware('api.token.auth')->name('api.')->group(function () {
+    Route::prefix('/costing')->name('costing.')->group(function () {
+       Route::get('/revenue', [RevenueController::class, 'revenue'])->name('revenue');
+       Route::get('/revenue/set', [RevenueController::class, 'revenueSet'])->name('revenue.set');
+    });
     Route::post('/merchandise/fulfil', [MerchandiseController::class, 'fulfil'])->name('merchandise.fulfil');
     Route::post('accommodation/rooming/{order}/save', [AccommodationController::class, 'saveRoomingData'])->name('roomings.save');
-
+    Route::post('/orders', [OrderController::class, 'getOverview'])->name('orders.all');
     Route::prefix('select')->group(function () {
         Route::post('locations', [SelectController::class, 'getLocations'])->name('locations.select');
         Route::post('addresses', [SelectController::class, 'getAddresses'])->name('addresses.select');
@@ -253,12 +261,14 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::post('airlines', [SelectController::class, 'getAirlines'])->name('airlines.select');
         Route::post('quotes', [SelectController::class, 'getQuotes'])->name('quotes.select');
         Route::post('customer', [SelectController::class, 'getCustomers'])->name('customers.select');
+        Route::post('organizations', [SelectController::class, 'getAvailableOrganizations'])->name('organizations.select');
         Route::post('customer/{order}', [SelectController::class, 'getAvailableCustomers'])->name('available-customers.select');
         Route::post('payment-method', [SelectController::class, 'getPaymentMethods'])->name('payment-method.select');
         Route::post('tour-category', [SelectController::class, 'getTourCategories'])->name('tour-categories.select');
         Route::post('merchandise-types', [SelectController::class, 'getAvailableMerchandiseTypes'])->name('merchandise-types.select');
         Route::post('variants', [SelectController::class, 'getAvailableVariants'])->name('variants.select');
         Route::post('sizes', [SelectController::class, 'getAvailableSizes'])->name('sizes.select');
+        Route::post('brands', [SelectController::class, 'getAvailableBrands'])->name('brands.select');
         Route::prefix('inventory')->group(function () {
             Route::post('accommodation', [SelectController::class, 'getAccommodationInventory'])->name('inventory.accommodation.select');
             Route::post('activity', [SelectController::class, 'getActivityInventory'])->name('inventory.activity.select');
@@ -295,6 +305,8 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
             Route::post('merchandise-types/{id}', [SelectController::class, 'getSelectedMerchandiseType'])->name('merchandise-types.selected');
             Route::post('variants/{id}', [SelectController::class, 'getSelectedVariant'])->name('variants.selected');
             Route::post('sizes/{id}', [SelectController::class, 'getSelectedSize'])->name('sizes.selected');
+            Route::post('organizations/{id}', [SelectController::class, 'getSelectedOrganization'])->name('organizations.selected');
+            Route::post('brands/{id}', [SelectController::class, 'getSelectedBrand'])->name('brands.selected');
             Route::prefix('inventory/{id}')->group(function () {
                 Route::post('accommodation', [SelectController::class, 'getSelectedAccommodationInventory'])->name('inventory.accommodation.selected');
                 Route::post('activity', [SelectController::class, 'getSelectedActivityInventory'])->name('inventory.activity.selected');
@@ -339,6 +351,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
     });
 
     Route::prefix('orders')->name('order.')->group(function() {
+        Route::post('/unknown/{order?}', [OrderController::class, 'generateUnknown'])->name('unknown-traveller');
         Route::prefix('addons')->name('addon.')->group(function () {
             Route::prefix('available')->name('get.')->group(function () {
                 Route::get('/accommodation/{oCustomerId}', [TourComponentController::class, 'getAvailableAccommodationAddons'])->name('accommodation');

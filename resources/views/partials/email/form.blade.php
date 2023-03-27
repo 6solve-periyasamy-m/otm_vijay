@@ -1,16 +1,17 @@
+@php/** @var \App\Mail\Storage\TemplatedMail $mail */@endphp
 <div class="col-12 col-xl-8">
     @include('partials.fields.text', [
         'field' => 'subject',
         'name' => 'Email Subject',
-        'value' => $subject
+        'value' => $mail->getSubject()
     ])
     @include('partials.fields.ckeditor', [
         'field' => 'body',
         'name' => 'Email Body',
-        'value' => $body
+        'value' => $mail->getBody()
     ])
     @include('partials.fields.submit')
-    <a class="d-inline-flex btn btn-amber" href="{{ $demo }}">Demo Email</a>
+    <a class="d-inline-flex btn btn-amber" href="{{ $mail->getDemoUrl() }}">Demo Email</a>
 </div>
 <div class="col-12 col-xl-4">
     <table class="table table-striped">
@@ -21,7 +22,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($codes as $code => $example)
+        @foreach($mail->getShortcodes() as $code => $example)
             <tr>
                 <th scope="row">[{{$code}}]</th>
                 <td>{{$example}}</td>

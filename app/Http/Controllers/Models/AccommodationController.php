@@ -7,6 +7,7 @@ use App\Models\Accommodation\Accommodation;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Repository\Model\Location\AddressRepository;
+use App\Repository\Reporting\Manifest\RoomingReportRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -36,7 +37,7 @@ class AccommodationController extends Controller
             $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('accommodation'));
         } else {
             $request->validate(Address::getValidationRules());
-            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('name'), AddressParent::getParentId('accommodation')));
+            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::getParentId('accommodation')));
             $address->repository->save();
         }
         if ($request->has('image') && $request->file('image') != null) {
@@ -51,6 +52,18 @@ class AccommodationController extends Controller
     public function view(Accommodation $accommodation)
     {
         return view('pages.components.accommodation', ['accommodation' => $accommodation,]);
+    }
+
+    public function rooming(Request $request, Accommodation $accommodation)
+    {
+        $notes = !$request->has('notes') || $request->notes == true;
+        return RoomingReportRepository::viewReport($accommodation->repository, 'accommodations.rooming.export', $notes, ['accommodation' => $accommodation,]);
+    }
+
+    public function exportRooming(Request $request, Accommodation $accommodation, string $extension)
+    {
+        $notes = !$request->has('notes') || $request->notes == true;
+        return RoomingReportRepository::exportReport($accommodation->repository, $extension, $notes);
     }
 
     public function edit(Accommodation $accommodation)
@@ -71,7 +84,7 @@ class AccommodationController extends Controller
             Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('accommodation'), $accommodation->address);
         } else {
             $request->validate(Address::getValidationRules());
-            $accommodation->address->repository->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('name'), AddressParent::getParentId('accommodation')));
+            $accommodation->address->repository->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::getParentId('accommodation')));
         }
         if ($request->has('image') && $request->file('image') != null) {
             if (isset($accommodation->image_url)) {

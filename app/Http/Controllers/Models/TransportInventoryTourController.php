@@ -26,7 +26,7 @@ class TransportInventoryTourController extends Controller
         $transportInventoryTour = TransportInventoryTour::make([
             'transport_inventory_id' => $request->input('transport_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),
-            'tour_sales_price' => $request->input('tour_sales_price'),
+            'tour_sales_price' => $request->input('tour_sales_price') ?? 0,
             'stock_control_active' => $request->input('stock_control_active')  == 'on' ? 1 : 0,
         ]);
         $tour->transportInventoryTours()->save($transportInventoryTour);
@@ -49,7 +49,7 @@ class TransportInventoryTourController extends Controller
         $transportInventoryTour->update([
             'transport_inventory_id' => $request->input('transport_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),
-            'tour_sales_price' => $request->input('tour_sales_price'),
+            'tour_sales_price' => $request->input('tour_sales_price') ?? 0,
             'stock_control_active' => $request->input('stock_control_active')  == 'on' ? 1 : 0,
         ]);
         return redirect()->route('tours.view', ['tour' => $tour,]);

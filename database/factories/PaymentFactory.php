@@ -24,7 +24,6 @@ class PaymentFactory extends Factory
         return [
             'payment_method_id' => $this->faker->numberBetween(1, 3),
             'amount' => $this->faker->numberBetween(100, 200),
-            'payment_type' => 'Installment',
             'paid_on' => now(),
         ];
     }

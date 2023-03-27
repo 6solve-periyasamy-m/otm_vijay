@@ -9,13 +9,15 @@ use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
+use App\Repository\Interfaces\Manifest\HasFlightManifest;
 use App\Repository\Model\Quote\Component\QuoteFlightRepository;
+use App\Repository\Reporting\Manifest\FlightManifestRepository;
 use App\Repository\Traits\Component\IsFlight;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
 
-class FlightInventoryRepository extends InventoryRepository
+class FlightInventoryRepository extends InventoryRepository implements HasFlightManifest
 {
     use IsFlight;
 
@@ -119,7 +121,7 @@ class FlightInventoryRepository extends InventoryRepository
     public function addToQuote(Quote $quote, string $tourComponentType, float $price = -1): ?QuoteFlightRepository
     {
         $inventoryTour = QuoteFlight::make([
-            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price ?? 0 : $price,
             'tour_component_type' => $tourComponentType,
             'quote_id' => $quote->id,
         ]);
@@ -130,6 +132,16 @@ class FlightInventoryRepository extends InventoryRepository
     public function getPurchasePrice(): float
     {
         return $this->inventory->purchase_price;
+    }
+
+    public function getSalesPrice(): ?float
+    {
+        return $this->inventory->sales_price;
+    }
+
+    public function getFlightManifest(): Collection|array
+    {
+        return $this->inventory->orders()->with(FlightManifestRepository::getRelations())->get();
     }
 
     public function isStockControlActive(): bool

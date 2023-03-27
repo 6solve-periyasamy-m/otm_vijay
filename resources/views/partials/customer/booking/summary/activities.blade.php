@@ -31,7 +31,7 @@
                      <td data-content="Cost">{{ f_currency($component->tourComponent->tour_sales_price) }}</td>
                  @endif
                  <td data-content="Upgrades">
-                     @if(count($component->tourComponent->getBookingUpgradeKeyMap()) < 2)
+                     @if(count($component->tourComponent->repository->getUpgradeKeyMap($traveller->booking->travellers()->count())) < 2)
                          @if($component->tourComponent->tour_component_type == 'Included')
                              No Upgrades Available
                          @elseif($component->tourComponent->tour_component_type == 'Upgrade')
@@ -46,7 +46,7 @@
                          @include('partials.fields.selector.adder-preset-booking',
                              ['field' => 'activity_' . $component->id . '_upgrade', 'preselect' => false,
                              'createRoute' => '#', 'onclick' => 'applyActivityUpgrade("activity_' . $component->id . '_upgrade-input", this)', 'target' => '',
-                             'selected' => $component->tourComponent->repository->getUpgradeId(), 'options' => $component->tourComponent->getBookingUpgradeKeyMap($booking->travellers()->count()),])
+                             'selected' => $component->tourComponent->repository->getUpgradeId(), 'options' => $component->tourComponent->repository->getBookingUpgradeKeyMap($traveller->booking->travellers()->count()),])
                      @endif
                  </td>
              </tr>

@@ -11,6 +11,7 @@ use App\Models\System\CustomerApiToken;
 use App\Notifications\CustomerResetPassword;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use Database\Factories\Customer\CustomerFactory;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Gravatar;
 use Illuminate\Database\Eloquent\Builder;
@@ -46,7 +47,7 @@ use Laravel\Cashier\Subscription;
  * @property string $first_name
  * @property string|null $middle_names
  * @property string $last_name
- * @property Carbon $date_of_birth
+ * @property Carbon|null $date_of_birth
  * @property string|null $mobile_number
  * @property string|null $other_phone_number
  * @property int $home_address_id
@@ -65,6 +66,7 @@ use Laravel\Cashier\Subscription;
  * @property string $profile_picture Asset link to profile picture
  * @property int|null $t_shirt_size_id
  * @property int|null $hat_size_id
+ * @property int|null $organization_id
  * @property string|null $internal_notes
  * @property string|null $external_notes
  * @property string|null $dietary_notes
@@ -80,8 +82,10 @@ use Laravel\Cashier\Subscription;
  * @property-read string $customer_full_name (Deprecated) Full name of the customer
  * @property-read string $full_name Full name of customer
  * @property-read HatSize|null $hatSize Customer hat size
+ * @property-read bool $registered Is the customer a registered user
  * @property-read Address $homeAddress Home address. Should be a unique entry in the database
  * @property-read Collection|Order[] $leadingOrders Orders where they are the lead booker
+ * @property-read Organization|null $organization
  * @property-read int|null $leading_orders_count Amount of orders where they are the lead booker
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications System notifications for customer
  * @property-read int|null $notifications_count Amount of system notifications for customer
@@ -116,6 +120,7 @@ use Laravel\Cashier\Subscription;
  * @method static Builder|Customer whereGender($value)
  * @method static Builder|Customer whereHatSizeId($value)
  * @method static Builder|Customer whereHomeAddressId($value)
+ * @method static Builder|Customer whereOrganizationId($value)
  * @method static Builder|Customer whereId($value)
  * @method static Builder|Customer whereInternalNotes($value)
  * @method static Builder|Customer whereLastName($value)
@@ -152,6 +157,7 @@ class Customer extends Authenticatable
     use HasFactory;
     use Notifiable;
     use Billable;
+    use CascadeSoftDeletes;
 
     protected string $guard = 'customer';
 
@@ -159,20 +165,19 @@ class Customer extends Authenticatable
         'email_address', 'password', 'gender', 'emergency_contact_name', 'emergency_contact_relationship', 'emergency_contact_telephone',
         'passport_first_name', 'passport_middle_name', 'passport_last_name', 'passport_number', 'passport_issue_date', 'passport_expiry_date',
         'passport_country_of_issue', 't_shirt_size_id', 'hat_size_id', 'notes', 'loyalty_number', 'login_token', 'home_address_id',
-        'billing_address_id', 'internal_notes', 'external_notes', 'dietary_notes', 'mobility_notes'];
+        'billing_address_id', 'internal_notes', 'external_notes', 'dietary_notes', 'mobility_notes', 'organization_id'];
 
     protected $casts = ['date_of_birth' => 'date', 'passport_issue_date' => 'date', 'passport_expiry_date' => 'date',];
 
     protected $hidden = ['password', 'pm_type', 'pm_last_four', 'trial_ends_at'];
+    protected array $cascadeDeletes = ['quoteProspects',];
 
     public static function getValidationRules(): array
     {
         return [
-            'title' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
             'date_of_birth' => 'required|date',
-            'mobile_number' => 'required',
             'email_address' => 'nullable|email|unique:customers,email_address',
         ];
     }
@@ -185,11 +190,9 @@ class Customer extends Authenticatable
     public function getUpdateValidationRules(): array
     {
         return [
-            'title' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
             'date_of_birth' => 'required|date',
-            'mobile_number' => 'required',
             'email_address' => [
                 'nullable',
                 'email',
@@ -231,6 +234,11 @@ class Customer extends Authenticatable
     public function hatSize(): BelongsTo
     {
         return $this->belongsTo(HatSize::class, 'hat_size_id');
+    }
+
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class, 'organization_id');
     }
 
     public function orderCustomers(): HasMany
@@ -292,5 +300,10 @@ class Customer extends Authenticatable
     {
         if (isset($this->profile_picture)) return asset($this->profile_picture);
         return isset($this->email_address) ? Gravatar::get($this->email_address) : ('https://secure.gravatar.com/avatar/?d=mp&s=300');
+    }
+
+    public function getRegisteredAttribute(): bool
+    {
+        return isset($this->email_address) && isset($this->password);
     }
 }

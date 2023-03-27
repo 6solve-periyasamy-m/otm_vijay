@@ -7,6 +7,7 @@ use App\Models\Customer\Group;
 use App\Models\Customer\OrderCustomerGroup;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\OrderCustomer;
+use App\Repository\RoomingRepository;
 use DB;
 
 class GroupRepository
@@ -61,14 +62,32 @@ class GroupRepository
         $additionalValue = 0;
         foreach ($this->group->rooms as $orderAccommodation) {
             if ($orderAccommodation->tourComponent->tour_component_type == 'Upgrade') {
-                $upgrades[] = ['upgrade' => $orderAccommodation, 'description' => "{$orderAccommodation->tourComponent}  ({$this->group->name})"];
+                $upgrades[] = ['upgrade' => $orderAccommodation, 'description' => "{$orderAccommodation->tourComponent}  ({$this->group->getMembers()})"];
                 $additionalValue += $orderAccommodation->cost;
             }
             if ($orderAccommodation->tourComponent->tour_component_type == 'Add-on') {
-                $addons[] = ['addon' => $orderAccommodation, 'description' => "{$orderAccommodation->tourComponent}  ({$this->group->name})",];
+                $addons[] = ['addon' => $orderAccommodation, 'description' => "{$orderAccommodation->tourComponent}  ({$this->group->getMembers()})",];
                 $additionalValue += $orderAccommodation->cost;
             }
         }
         return ['addons' => $addons, 'upgrades' => $upgrades, 'additionalValue' => $additionalValue,];
+    }
+
+    public function refreshRooming(): void
+    {
+        $this->group->rooms()->delete();
+        $order = $this->group->orderCustomers()->first()->order;
+        $templates = RoomingRepository::getTemplateTourInventory($order->tour);
+        foreach ($templates as $template) {
+            $room = RoomingRepository::getInventoryWithRoomType($template, $this->group->roomType);
+            $this->addRoomToGroup($room);
+        }
+    }
+
+    public function forceDelete(): void
+    {
+        $this->group->rooms()->forceDelete();
+        $this->group->pivot()->forceDelete();
+        $this->group->forceDelete();
     }
 }

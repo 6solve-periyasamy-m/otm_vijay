@@ -5,12 +5,10 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\AtolRepository;
-use App\Repository\TourRepository;
 use Illuminate\Http\Request;
 
 class TourController extends Controller
 {
-
     public function index()
     {
         return view('pages.models.tours.table', ['tours' => Tour::all(),]);
@@ -30,14 +28,17 @@ class TourController extends Controller
             'description' => $request->input('description'),
             'date_from' => $request->input('date_from'),
             'date_to' => $request->input('date_to'),
+            'brand_id' => $request->input('brand_id') == 0 ? null : $request->input('brand_id'),
             'base_price_per_person' => $request->input('base_price_per_person'),
             'margin' => $request->input('margin'),
             'single_occupancy_surcharge' => $request->input('single_occupancy_surcharge'),
             'stock_control_active' => $request->input('stock_control_active') === 'on' ? 1 : 0,
+            'atol_protected' => $request->input('atol_protected') == -1 ? null : $request->input('atol_protected'),
             'stock' => $request->input('stock'),
             'booking_form_url' => $request->input('booking_form_url'),
             'tour_category_id' => $request->input('tour_category_id'),
             'deposit' => $request->input('deposit'),
+            'booking_fee' => $request->input('booking_fee') ?? 0,
             'is_active' => $request->input('is_active') === 'on' ? 1 : 0,
             'notes' => $request->input('notes'),
             'invoice_footer' => $request->input('invoice_footer'),
@@ -58,9 +59,23 @@ class TourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
-    public function view(Tour $tour)
+    public function view($tour)
     {
-        return view('pages.tour.view', TourRepository::getTourDetails($tour->id));
+        $tour = Tour::with(
+            'accommodationInventoryTours', 'accommodationInventoryTours.inventory','accommodationInventoryTours.inventory.roomType','accommodationInventoryTours.inventory.boardType', 'accommodationInventoryTours.inventory.component',
+            'activityInventoryTours', 'activityInventoryTours.inventory','activityInventoryTours.inventory.ticketType', 'activityInventoryTours.inventory.component', 'activityInventoryTours.inventory.component.activityType',
+            'flightInventoryTours', 'flightInventoryTours.inventory', 'flightInventoryTours.inventory.component', 'flightInventoryTours.inventory.component.airline', 'flightInventoryTours.inventory.component.departureAirport', 'transportInventoryTours.inventory.component.arrivalAddress',
+            'transportInventoryTours', 'transportInventoryTours.inventory', 'transportInventoryTours.inventory.travelClass', 'transportInventoryTours.inventory.component', 'transportInventoryTours.inventory.component.operator', 'transportInventoryTours.inventory.component.departureAddress', 'transportInventoryTours.inventory.component.arrivalAddress',
+            'merchandise', 'merchandise.inventory', 'merchandise.inventory.size', 'merchandise.inventory.variant', 'merchandise.inventory.component', 'merchandise.inventory.component.type',
+            'paymentInstallments', 'orders', 'orders.leadBooker'
+        )->find($tour);
+        if (!isset($tour)) abort(404);
+        return view('pages.tour.view', ['tour' => $tour,]);
+    }
+
+    public function costing(Tour $tour)
+    {
+        return view('pages.tour.costing', ['tour' => $tour,]);
     }
 
     public function duplicate(Tour $tour)
@@ -91,11 +106,14 @@ class TourController extends Controller
             'description' => $request->input('description'),
             'date_from' => $request->input('date_from'),
             'date_to' => $request->input('date_to'),
+            'brand_id' => $request->input('brand_id') == 0 ? null : $request->input('brand_id'),
             'base_price_per_person' => $request->input('base_price_per_person'),
             'margin' => $request->input('margin'),
             'deposit' => $request->input('deposit'),
+            'booking_fee' => $request->input('booking_fee') ?? 0,
             'single_occupancy_surcharge' => $request->input('single_occupancy_surcharge'),
             'stock_control_active' => $request->input('stock_control_active') === 'on' ? 1 : 0,
+            'atol_protected' => $request->input('atol_protected') == -1 ? null : $request->input('atol_protected'),
             'stock' => $request->input('stock'),
             'booking_form_url' => $request->input('booking_form_url'),
             'tour_category_id' => $request->input('tour_category_id'),

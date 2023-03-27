@@ -49,6 +49,26 @@ class AirportsTableSeeder extends Seeder
                 'updated_at' => '2022-01-21 12:32:40',
                 'deleted_at' => NULL,
             ),
+            3 => 
+            array (
+                'id' => 4,
+                'name' => 'Banjul International Airport',
+                'address_id' => 97,
+                'iata_code' => 'BJL',
+                'created_at' => '2022-09-14 12:12:22',
+                'updated_at' => '2022-09-14 12:12:22',
+                'deleted_at' => NULL,
+            ),
+            4 => 
+            array (
+                'id' => 5,
+                'name' => 'Gatwick Airport',
+                'address_id' => 102,
+                'iata_code' => 'LGW',
+                'created_at' => '2022-09-20 18:44:05',
+                'updated_at' => '2022-09-20 18:44:05',
+                'deleted_at' => NULL,
+            ),
         ));
         
         

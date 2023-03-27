@@ -5,6 +5,7 @@
      * @var \App\Models\Tour\Tour $tour
      * @var \App\Models\Booking\BookingTraveller|null $customer
      */
+    $shouldRooming = $tour->templates->count();
 @endphp
 
 @section('title', 'Booking for ' . $tour->name)
@@ -18,6 +19,7 @@
                     <script>alert('Since you are logged into the dashboard, we have filled your details for you :)');</script>
                 @endif
                 <h2 class="col-md-12 mb-0">Lead Booker Details</h2>
+                Having trouble with this form? You can find our contact details by clicking the <span class="icon-menu"></span> icon in the top left corner
             </div>
         </div>
         <div class="card">
@@ -54,9 +56,11 @@
                 <x-customer.input name="lead_mobile_number" value="{{ $customer?->mobile_number ?? '' }}" width="3" autocomplete="tel" required>
                     Mobile Number
                 </x-customer.input>
-
+                @if($shouldRooming)
                 <div class="form-group col-md-12">
-                    Sharing is designated by the selection of a room, selecting the same room as another traveller indicates that the room will be shared by those travellers
+                    Selecting the same room as another traveller indicates that the room will be shared by those individuals.
+                    <br />
+                    For example, two people sharing a twin/double room should select <span class="fw-bold">Ideal Room Type</span> followed by <span class="fw-bold">Room 1</span>
                 </div>
                 <div class="form-group col-md-6">
                     <label class="col-md-12 mb-0">Ideal Room Type</label>
@@ -69,14 +73,14 @@
                     </select>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="col-md-12 mb-0">Room Sharing Group</label>
+                    <label class="col-md-12 mb-0">Room</label>
                     <select name="lead_group" class="w-100">
                         @for($group = 1; $group < 31; $group++)
                             <option value="{{ $group }}">Room {{ $group }}</option>
                         @endfor
                     </select>
                 </div>
-
+                @endif
                 <hr class="splitter">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -102,7 +106,7 @@
                         <label class="col-md-12 mb-0">Home Country</label>
                         <div class="col-md-12">
                             <select name="lead_home_country" class="w-100" required>
-                                <option value="" @if(!isset($leadTraveller)) selected @endif disabled>Please Select</option>
+                                <option value="" @if(!isset($customer?->homeAddress?->country_id)) selected @endif disabled>Please Select</option>
                                 @foreach(\App\Models\Location\Country::orderBy('name', 'asc')->get() as $country)
                                     <option value="{{ $country->id }}" @if(isset($customer) && $customer?->homeAddress?->country_id == $country->id) selected @endif>
                                         {{ $country->name }}
@@ -112,7 +116,7 @@
                         </div>
                     </div>
 
-                    <x-customer.input name="lead_home_postcode" value="{{ $customer->homeAddress->postcode ?? '' }}" autocomplete="postcode" required>
+                    <x-customer.input name="lead_home_postcode" value="{{ $customer->homeAddress->postcode ?? '' }}" autocomplete="postcode">
                         Postcode
                     </x-customer.input>
                 </div>
@@ -141,7 +145,7 @@
                         <label class="col-md-12 mb-0">Billing Country</label>
                         <div class="col-md-12">
                             <select name="lead_billing_country" class="w-100" required>
-                                <option value="" @if(!isset($leadTraveller)) selected @endif disabled>Please Select</option>
+                                <option value="" @if(!isset($customer?->billingAddress?->country_id)) selected @endif disabled>Please Select</option>
                                 @foreach(\App\Models\Location\Country::orderBy('name', 'asc')->get() as $country)
                                     <option value="{{ $country->id }}" @if(isset($customer) && $customer?->billingAddress?->country_id === $country->id) selected @endif>
                                         {{ $country->name }}
@@ -151,7 +155,7 @@
                         </div>
                     </div>
 
-                    <x-customer.input name="lead_billing_postcode" value="{{ $customer->billingAddress->postcode ?? '' }}" autocomplete="postcode" required>
+                    <x-customer.input name="lead_billing_postcode" value="{{ $customer->billingAddress->postcode ?? '' }}" autocomplete="postcode">
                         Postcode
                     </x-customer.input>
                 </div>
@@ -219,7 +223,7 @@
         @php $additionals = 0 @endphp
         @foreach($additionalTravellers ?? [] as $traveller)
             @if(!isset($traveller)) @continue @endif
-            @include('partials.customer.booking.traveller', ['number' => $additionals, 'traveller' => $traveller,])
+            @include('partials.customer.booking.traveller', ['number' => $additionals, 'traveller' => $traveller, 'shouldRooming' => $shouldRooming])
             @php $additionals++ @endphp
         @endforeach
         <div class="card customer-before">
@@ -232,7 +236,7 @@
 
 @section('footer-script')
     <script type="text/javascript">
-        const customerSection = `@include('partials.customer.booking.traveller', ['number' => '%NUMBER%', 'traveller' => null,])`;
+        const customerSection = `@include('partials.customer.booking.traveller', ['number' => '%NUMBER%', 'traveller' => null, 'shouldRooming' => $shouldRooming])`;
         additional = {{ $additionals ?? 0 }};
         available = {{ $available - $additionals - 1}};
 

@@ -40,7 +40,7 @@ class ActivityTypeController extends Controller
 
     public function update(Request $request, ActivityType $activityType)
     {
-        $request->validate(ActivityType::getValidationRules());
+        $request->validate(ActivityType::getValidationRules($activityType->id));
         $activityType->update([
             'name' => $request->input('name'),
         ]);
@@ -49,7 +49,8 @@ class ActivityTypeController extends Controller
 
     public function destroy(ActivityType $activityType)
     {
-        $activityType->delete();
-        return redirect()->route('activity-types.all');
+        $repo = $activityType->repository;
+        $repo->delete();
+        return $repo->getReturnURL();
     }
 }

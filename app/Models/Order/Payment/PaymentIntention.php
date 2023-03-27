@@ -8,6 +8,7 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Customer\Customer;
 use App\Models\Customer\Group;
 use App\Models\Flight\FlightInventoryTour;
+use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
@@ -15,7 +16,6 @@ use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
-use App\Models\Tour\Merchandise;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Model\Order\OrderRepository;
 use Carbon\Carbon;
@@ -111,7 +111,6 @@ class PaymentIntention extends Model
             'paid_on' => Carbon::parse($created),
             'customer_id' => $this->customer_id,
             'amount' => $amount,
-            'payment_type' => $this->type,
         ]);
     }
 
@@ -206,7 +205,7 @@ class PaymentIntention extends Model
                 $model = TransportInventoryTour::class;
                 break;
             case 'merchandise':
-                $model = Merchandise::class;
+                $model = MerchandiseInventoryTour::class;
                 break;
             default:
                 return null;

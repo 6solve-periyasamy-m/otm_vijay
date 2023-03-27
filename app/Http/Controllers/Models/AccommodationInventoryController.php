@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
+use App\Repository\Reporting\Manifest\RoomingReportRepository;
 use Illuminate\Http\Request;
 
 class AccommodationInventoryController extends Controller
@@ -32,8 +33,8 @@ class AccommodationInventoryController extends Controller
             'check_out_time_confirmed' => $request->input('check_out_time_confirmed') == 'on' ? 1 : 0,
             'fit_selectable' => $request->input('fit_selectable') == 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
-            'purchase_price' => $request->input('purchase_price'),
-            'sales_price' => $request->input('sales_price'),
+            'purchase_price' => $request->input('purchase_price') ?? 0,
+            'sales_price' => $request->input('sales_price') ?? 0,
             'notes' => $request->input('notes'),
         ]);
         $accommodation->inventory()->save($accommodationInventory);
@@ -43,6 +44,18 @@ class AccommodationInventoryController extends Controller
     public function view(Accommodation $accommodation, AccommodationInventory $accommodationInventory)
     {
         return view('pages.models.accommodation_inventories.view', ['accommodationInventory' => $accommodationInventory,]);
+    }
+
+    public function rooming(Request $request, Accommodation $accommodation, AccommodationInventory $accommodationInventory)
+    {
+        $notes = !$request->has('notes') || $request->notes == true;
+        return RoomingReportRepository::viewReport($accommodationInventory->repository, 'accommodation-inventories.rooming.export', $notes, ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,]);
+    }
+
+    public function exportRooming(Request $request, Accommodation $accommodation, AccommodationInventory $accommodationInventory, string $extension)
+    {
+        $notes = !$request->has('notes') || $request->notes == true;
+        return RoomingReportRepository::exportReport($accommodationInventory->repository, $extension, $notes);
     }
 
     public function edit(Accommodation $accommodation, AccommodationInventory $accommodationInventory)
@@ -62,8 +75,8 @@ class AccommodationInventoryController extends Controller
             'check_out_time_confirmed' => $request->input('check_out_time_confirmed') == 'on' ? 1 : 0,
             'fit_selectable' => $request->input('fit_selectable') == 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
-            'purchase_price' => $request->input('purchase_price'),
-            'sales_price' => $request->input('sales_price'),
+            'purchase_price' => $request->input('purchase_price') ?? 0,
+            'sales_price' => $request->input('sales_price') ?? 0,
             'notes' => $request->input('notes'),
         ]);
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);

@@ -119,7 +119,7 @@ class TransportInventoryRepository extends InventoryRepository
     public function addToQuote(Quote $quote, string $tourComponentType, float $price = -1): ?QuoteTransportRepository
     {
         $inventoryTour = QuoteTransport::make([
-            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price ?? 0 : $price,
             'tour_component_type' => $tourComponentType,
             'quote_id' => $quote->id,
         ]);
@@ -140,5 +140,10 @@ class TransportInventoryRepository extends InventoryRepository
     public function hasEnoughStock(int $amount = 1): bool
     {
         return true;
+    }
+
+    public function getSalesPrice(): ?float
+    {
+        return $this->inventory->sales_price;
     }
 }

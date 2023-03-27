@@ -23,7 +23,6 @@ use Illuminate\Support\Carbon;
  * App\Models\Customer\Group
  *
  * @property int $id
- * @property string $name
  * @property int|null $room_type_id
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
@@ -32,7 +31,6 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $order_customers_count
  * @property-read Collection|OrderCustomerGroup[] $pivot
  * @property-read int|null $pivot_count
- * @property-read RoomType|null $roomType
  * @property-read Collection|OrderAccommodation[] $rooms
  * @property-read int|null $rooms_count
  * @property-read GroupRepository $repository
@@ -55,7 +53,7 @@ class Group extends Model
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
     protected array $cascadeDeletes = ['pivot', 'rooms'];
-    protected $fillable = ['room_type_id', 'name'];
+    protected $guarded = [];
     private GroupRepository $internal_repository;
 
     public function orderCustomers(): BelongsToMany
@@ -73,16 +71,11 @@ class Group extends Model
         return $this->hasMany(OrderAccommodation::class, 'group_id');
     }
 
-    public function roomType(): BelongsTo
-    {
-        return $this->belongsTo(RoomType::class, 'room_type_id');
-    }
-
     public function getMembers(OrderCustomer $exclude = null): string
     {
         $members = "";
         foreach ($this->orderCustomers as $orderCustomer) {
-            if ($orderCustomer->id == $exclude->id) continue;
+            if ($orderCustomer->id == $exclude?->id) continue;
             $members .= $orderCustomer->customer_name . ', ';
         }
         if (empty($members)) return $members;

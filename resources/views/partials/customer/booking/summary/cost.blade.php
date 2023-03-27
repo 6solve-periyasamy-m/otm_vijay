@@ -4,7 +4,7 @@
      */
     $travellerCount = $booking->traveller_count; // Stored to reduce query count
 @endphp
-<x-customer.accordion id="cost-collapse" nobg>
+<x-customer.accordion id="cost-collapse" nobg hide>
     <x-slot:header>
         <h2 class="col-md-12 mb-0">Cost Summary</h2>
     </x-slot:header>
@@ -44,6 +44,15 @@
             <td colspan="3" data-content="Description">Total Cost</td>
             <td data-content="Cost">{{ f_currency($booking->repository->getTotalCost()) }}</td>
         </tr>
+        @if(($booking->tour->booking_fee ?? 0)> 0)
+        <tr>
+            <td data-content="Description">Booking Fee (Due Today)</td>
+            <td data-content="Cost">{{ f_currency($booking->tour->booking_fee) }}</td>
+            <td data-content="Quantity">1</td>
+            <td data-content="Total">{{ f_currency($booking->tour->booking_fee) }}</td>
+        </tr>
+        @endif
+        @if(($booking->tour->deposit ?? 0) > 0)
         <tr>
             <td data-content="Description">Deposit (Due Today)</td>
             <td data-content="Cost">{{ f_currency($booking->tour->deposit) }}</td>
@@ -51,5 +60,6 @@
             <td data-content="Total">{{ f_currency($booking->tour->deposit * $travellerCount) }}</td>
         </tr>
         </tbody>
+        @endif
     </table>
 </x-customer.accordion>

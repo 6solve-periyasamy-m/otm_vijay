@@ -47,7 +47,7 @@
     <div class="card">
         <div class="card-body text-end">
             <a href="{{ route('flight-upgrade.create', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]) }}" class="btn btn-primary">
-                <i class="icon-plus"></i>
+                {{ Icon::create() }}
                 <span>Create</span>
             </a>
         </div>
@@ -84,20 +84,23 @@
                                     <td>{{ f_currency($upgrade->upgrade->tour_sales_price) }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\Flight\FlightInventoryTour::class)
-                                            <a href="{{ route('flight-upgrade.edit', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                                            <a href="{{ route('flight-upgrade.edit', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade]) }}"
+                                               class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                                    <i class="icon-note"></i>
+                                                    {{ Icon::edit() }}
                                                 </span>
                                         @endcan
                                         @can('delete', \App\Models\Flight\FlightInventoryTour::class)
-                                            <a href="#" onclick="$('#flight-{{$upgrade->upgrade->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                            <form action="{{ route('flight-upgrade.delete', ['tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade' => $upgrade]) }}" method="post" id="flight-{{$upgrade->upgrade->id}}-delete">
+                                            <a href="#" onclick="$('#flight-{{$upgrade->upgrade->id}}-delete').submit()"
+                                               class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
+                                            <form action="{{ route('flight-upgrade.delete', ['tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade' => $upgrade]) }}"
+                                                  method="post" id="flight-{{$upgrade->upgrade->id}}-delete">
                                                 @csrf
                                             </form>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                                    <i class="icon-trash"></i>
+                                                    {{ Icon::delete() }}
                                                 </span>
                                         @endcan
                                     </td>

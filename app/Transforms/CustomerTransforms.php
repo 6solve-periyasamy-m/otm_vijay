@@ -3,6 +3,7 @@
 namespace App\Transforms;
 
 use App\Models\Customer\HatSize;
+use App\Models\Customer\Organization;
 use App\Models\Customer\TShirtSize;
 
 interface CustomerTransformsInterface
@@ -62,6 +63,29 @@ class CustomerTransforms implements CustomerTransformsInterface
         $data = [];
         $data['id'] = $size->id;
         $data['text'] = $size->name;
+        return $data;
+    }
+
+    public static function getSelectOrganizations($filter): array
+    {
+        $data = [];
+        foreach (Organization::all() as $organization) {
+            $subData = [];
+            $subData['id'] = $organization->id;
+            $subData['text'] = $organization->name;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        }
+        return $data;
+    }
+
+
+    public static function getSelectedOrganization($id)
+    {
+        if ($id == 0) return null;
+        $organization = Organization::findOrFail($id);
+        $data = [];
+        $data['id'] = $organization->id;
+        $data['text'] = $organization->name;
         return $data;
     }
 }

@@ -40,7 +40,7 @@ class HatSizeController extends Controller
 
     public function update(Request $request, HatSize $hatSize)
     {
-        $request->validate(HatSize::getValidationRules());
+        $request->validate(HatSize::getValidationRules($hatSize->id));
         $hatSize->update([
             'name' => $request->input('name'),
         ]);
@@ -49,7 +49,8 @@ class HatSizeController extends Controller
 
     public function destroy(HatSize $hatSize)
     {
-        $hatSize->delete();
-        return redirect()->route('hat-sizes.all');
+        $repo = $hatSize->repository;
+        $repo->delete();
+        return $repo->getReturnURL();
     }
 }

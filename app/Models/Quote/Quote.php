@@ -3,12 +3,14 @@
 namespace App\Models\Quote;
 
 use App\Models\Helper\QuoteStatus;
+use App\Models\Helper\Traits\HasAdditionalCosts;
 use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;
 use App\Models\Quote\Component\QuoteActivity;
 use App\Models\Quote\Component\QuoteFlight;
 use App\Models\Quote\Component\QuoteMerchandise;
 use App\Models\Quote\Component\QuoteTransport;
+use App\Models\System\Brand;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Quote\QuoteRepository;
@@ -33,6 +35,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $order_id
  * @property int|null $lead_traveller_id
  * @property int|null $event_id
+ * @property int|null $brand_id
  * @property int $revision
  * @property string|null $reference
  * @property string $name
@@ -53,6 +56,9 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read string $ref Reference-Revision
  * @property-read Collection|QuoteAccommodation[] $accommodation
+ * @property-read Collection|QuoteSection[] $sections
+ * @property-read Brand|null $linkedBrand
+ * @property-read Brand $brand
  * @property-read int|null $accommodation_count
  * @property-read Collection|QuoteActivity[] $activities
  * @property-read int|null $activities_count
@@ -74,6 +80,7 @@ use Illuminate\Support\Carbon;
  * @property-read Tour|null $tour
  * @property-read Collection|QuoteTransport[] $transport
  * @property-read int|null $transport_count
+ * @property-read float $remaining
  * @method static QuoteFactory factory(...$parameters)
  * @method static Builder|Quote newModelQuery()
  * @method static Builder|Quote newQuery()
@@ -107,7 +114,7 @@ use Illuminate\Support\Carbon;
  */
 class Quote extends Model
 {
-    use HasFactory, SoftDeletes, CascadeSoftDeletes;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes, HasAdditionalCosts;
 
     protected $guarded = [];
     protected $casts = [
@@ -121,11 +128,16 @@ class Quote extends Model
         'quote_status' => QuoteStatus::class
     ];
     private QuoteRepository $internal_repository;
-    protected array $cascadeDeletes = ['sentQuotes', 'leadTraveller', 'pricePoints', 'installments', 'accommodation', 'activities', 'flights', 'transport', 'merchadise'];
+    protected array $cascadeDeletes = ['sentQuotes', 'leadTraveller', 'pricePoints', 'installments', 'accommodation', 'activities', 'flights', 'transport', 'merchandise', 'costs'];
 
     public function sentQuotes(): HasMany
     {
         return $this->hasMany(SentQuote::class, 'quote_id')->orderBy('sent', 'desc');
+    }
+
+    public function sections(): HasMany
+    {
+        return $this->hasMany(QuoteSection::class, 'quote_id')->orderBy('order');
     }
 
     public function event(): BelongsTo
@@ -151,6 +163,11 @@ class Quote extends Model
     public function tour(): BelongsTo
     {
         return $this->belongsTo(Tour::class, 'tour_id');
+    }
+
+    public function linkedBrand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class, 'brand_id');
     }
 
     public function order(): BelongsTo
@@ -199,8 +216,24 @@ class Quote extends Model
         return $this->internal_repository;
     }
 
+    public function getBrandAttribute(): Brand
+    {
+        return $this->linkedBrand ?? Brand::getSystemBrand();
+    }
+
+    public function setBrandAttribute(Brand $brand)
+    {
+        $this->brand_id = $brand->id;
+        $this->save();
+    }
+
     public function getRefAttribute(): string
     {
         return $this->reference . '-' . $this->revision;
+    }
+
+    public function getRemainingAttribute(): float
+    {
+        return $this->repository->getRemainingInstallment();
     }
 }

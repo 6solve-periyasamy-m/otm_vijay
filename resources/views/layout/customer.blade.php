@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
-
+@php
+    $branding = $branding ?? \App\Models\System\Brand::getSystemBrand();
+@endphp
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -37,7 +39,7 @@
 
     <div id="app" data-layout="vertical" class="vh-100">
         <!-- Topbar header -->
-        @include('pages.customer.layout.navbar')
+        @include('pages.customer.layout.navbar', ['branding' => $branding,])
 
         @if ($errors->any())
             <div class="container topbar-padding">
@@ -56,9 +58,8 @@
         @yield('footer')
 
     </div>
-    <script src="{{ asset('js/customer/sidebarmenu.js') . '?' . date('U')  }}"></script>
-    <script src="{{ asset('js/customer/customer.js') . '?' . date('U')  }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript" defer>$(".preloader").fadeOut();</script>
 
     @yield('footer-script')
     @stack('footer-stack')

@@ -28,7 +28,7 @@ class MerchandiseController extends Controller
             'name' => $request->input('name'),
             'tour_component_type' => $request->input('tour_component_type'),
             'stock' => $request->input('stock'),
-            'purchase_price' => $request->input('purchase_price'),
+            'purchase_price' => $request->input('purchase_price') ?? 0,
             'tour_sales_price' => $request->input('sales_price'),
             'notes' => $request->input('notes'),
         ]);
@@ -56,7 +56,7 @@ class MerchandiseController extends Controller
             'name' => $request->input('name'),
             'tour_component_type' => $request->input('tour_component_type'),
             'stock' => $request->input('stock'),
-            'purchase_price' => $request->input('purchase_price'),
+            'purchase_price' => $request->input('purchase_price') ?? 0,
             'tour_sales_price' => $request->input('sales_price'),
             'notes' => $request->input('notes'),
         ]);

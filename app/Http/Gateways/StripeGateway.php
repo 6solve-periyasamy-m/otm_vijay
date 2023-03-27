@@ -2,28 +2,35 @@
 
 namespace App\Http\Gateways;
 
+use App\Events\Order\OrderCreatedEvent;
+use App\Events\Order\Payment\PaymentCreatedEvent;
+use App\Models\Booking\Booking;
+use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Order\Payment\PaymentIntention;
+use App\Models\Order\Payment\PaymentMethod;
+use App\Repository\Model\Order\OrderRepository;
 use Stripe\Checkout\Session;
 
 class StripeGateway extends Gateway
 {
-    public static function checkout(array $items, string $reference, string $paymentType, int $customerId, string $redirect, ?array $intentionData = null)
+    private string $success;
+    private string $cancelled;
+
+    public function __construct(?string $success = null, ?string $cancelled = null)
+    {
+        $this->success = $success ?? route('payment.gateway.stripe.success');
+        $this->cancelled = $cancelled ?? route('payment.gateway.stripe.cancelled');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
     {
         $lineItems = [];
-        foreach ($items as $item) {
-            $lineItems[] = [
-                'price_data' => [
-                    'currency' => config('app.currency'),
-                    'product_data' => [
-                        'name' => $item['name'],
-                    ],
-                    'unit_amount' => round($item['cost'] * 100),
-                ],
-                'quantity' => $item['quantity'],
-            ];
-        }
-        $intention = PaymentIntention::build(Customer::find($customerId), $reference, $paymentType, $intentionData);
+        foreach ($items as $item) { $lineItems[] = $item->toStripe(); }
+
         $session = Session::create([
             'line_items' => $lineItems,
             'mode' => 'payment',
@@ -35,10 +42,17 @@ class StripeGateway extends Gateway
             'metadata' => [
                 'intention_id' => $intention->id,
             ],
-            'success_url' => $redirect,
-            'cancel_url' => route('payment.gateway.stripe.cancelled'),
+            'success_url' => $success ?? $this->success,
+            'cancel_url' => $this->cancelled,
         ]);
 
-        return response(null, 303, ['Location' => $session->url,]);
+        return $session->url;
+    }
+
+    public function process(string $reference, float $amount, mixed $created = null): void
+    {
+        $intention = PaymentIntention::fetch($reference);
+        if (!isset($intention)) return;
+        $this->processIntention($intention, $amount, 'Stripe', $created);
     }
 }

@@ -1,0 +1,139 @@
+@extends('layout.master')
+
+@section('title', 'View Event')
+
+@php
+/**
+ * @var \App\Models\Tour\Event $event
+ */
+@endphp
+
+@section('header-script')
+    <script>
+        $(document).ready(function () {
+            $('#orders').DataTable({fixedHeader: true, order: [[0, 'desc']],});
+            $('#tours').DataTable({fixedHeader: true, order: [[2, 'desc']],});
+        });
+    </script>
+@endsection
+
+@section('content')
+    <div class="otm-callout">
+        <div class="row">
+            <div class="col-12">
+                <h4 class="fw-bold">{{ $event->name }}</h4>
+            </div>
+            <div class="col-12 col-xl-4">
+                <p>Booking URL</p>
+                <h6 class="fw-bold">
+                    {{ $event->booking_url ?? 'No Booking URL Set' }}
+                </h6>
+            </div>
+            <div class="col-12 col-xl-4">
+                <p>From</p>
+                <h6 class="fw-bold">{{ f_date($event->starts_at) }}</h6>
+            </div>
+            <div class="col-12 col-xl-4">
+                <p>To</p>
+                <h6 class="fw-bold">{{ f_date($event->ends_at) }}</h6>
+            </div>
+            <div class="col-12 col-xl-6">
+                <p>Description</p>
+                <h6 class="fw-bold">{{ $event->description }}</h6>
+            </div>
+            <div class="col-12 col-xl-6">
+                <p>Notes</p>
+                <h6 class="fw-bold">{{ $event->notes }}</h6>
+            </div>
+            <div class="col-12">
+                @can('update', \App\Models\Tour\Event::class)
+                    <a class="btn btn-success" href="{{route('events.edit', ['event' => $event,])}}">
+                        {{ Icon::edit() }}
+                        <span>Edit Event</span>
+                    </a>
+                @endcan
+            </div>
+        </div>
+    </div>
+    <hr class="splitter"/>
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="heading pt-2 pb-md-3 pb-2">
+                <h2 class="fw-bold">Tours</h2>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <table id="tours" class="table table-striped datatable">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Orders</th>
+                            <th scope="col">Booking URL</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        @foreach($event->tours as $tour)
+                            <tr>
+                                <td>
+                                    <a href="{{route('tours.view', ['tour' => $tour,])}}" class="link link-primary">{{ $tour->name }}</a>
+                                </td>
+                                <td>{{ $tour->description }}</td>
+                                <td>{{ $tour->orders()->count() }}</td>
+                                <td>
+                                    @if(isset($tour->booking_form_url))
+                                    <a href="{{route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,])}}" class="link link-primary">{{ $tour->booking_form_url }}</a>
+                                    @else
+                                    No Booking URL Set
+                                    @endif
+                                </td>
+                                <td class="actions">
+                                    <a href="{{route('tours.edit', ['tour' => $tour,])}}"
+                                       class="btn btn-outline-success btn-sm mb-1">
+                                        {{ Icon::edit() }}
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="heading pt-2 pb-md-3 pb-2">
+                <h2 class="fw-bold">Orders</h2>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <table id="orders" class="table table-striped datatable">
+                        <thead>
+                        <tr>
+                            <th scope="col">Ordered On</th>
+                            <th scope="col">Booking Reference</th>
+                            <th scope="col">Tour</th>
+                            <th scope="col">Travelling</th>
+                            <th scope="col">Order Status</th>
+                        </tr>
+                        </thead>
+                        @foreach($event->orders as $order)
+                            @php $count = $order->orderCustomers()->count() - 1; @endphp
+                            <tr>
+                                <td data-sort="{{$order->ordered_on->unix()}}">{{ f_datetime($order->ordered_on) }}</td>
+                                <td>
+                                    <a href="{{route('orders.view', ['order' => $order,])}}" class="link link-primary">{{ $order->booking_reference }}</a>
+                                </td>
+                                <td>
+                                    <a href="{{route('tours.view', ['tour' => $order->tour,])}}" class="link link-primary">{{ $order->tour->name }}</a>
+                                </td>
+                                <td>{{ $order->leadBooker->customer_name }}{{ $count > 0 ? " + $count" : '' }}</td>
+                                <td>
+                                    <h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection

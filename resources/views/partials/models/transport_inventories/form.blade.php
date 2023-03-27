@@ -1,11 +1,13 @@
+@php $transportInventory = $transportInventory ?? null; @endphp
+@include('partials.fields.text', ['name' => 'Ticket Number', 'field' => 'ticket_number', 'value' => $transportInventory?->ticket_number, 'width' => 6,])
 @can('create', \App\Models\TravelClass::class)
     @include('partials.fields.selector.adder',
                 ['name' => 'Travel Class', 'field' => 'travel_class_id', 'value' => $travel_class_id ?? 0,
-                 'route' => 'travel-classes', 'createRoute' => route('travel-classes.create'), ])
+                 'route' => 'travel-classes', 'createRoute' => route('travel-classes.create'), 'width' => 6,])
 @else
     @include('partials.fields.selector.default',
             ['name' => 'Travel Class', 'field' => 'travel_class_id', 'value' => $travel_class_id ?? 0,
-             'route' => 'travel-classes',])
+             'route' => 'travel-classes', 'width' => 6,])
 @endcan
 <div class="form-group col-xl-6">
     @include('partials.fields.raw.datetime',

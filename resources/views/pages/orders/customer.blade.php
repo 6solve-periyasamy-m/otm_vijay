@@ -4,15 +4,7 @@
 
 @section('header-script')
 <script type="text/javascript">
-function addAccommodationAddon() {
-    let id = $('#accommodation_id-input').find(':selected').val()
-    if (id != null) {
-        $.post('{{ route('api.order.addon.add.accommodation') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $orderCustomer->id }}', 'accommodation_id': id})
-            .done(function () { location.reload();})
-            .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
-    }
-}
-
+@if ($orderCustomer->is_travelling)
 function addActivityAddon() {
     let id = $('#activity_id-input').find(':selected').val()
     if (id != null) {
@@ -118,12 +110,15 @@ function applyTransportUpgrade(selector, btn) {
         .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
     }
 }
+@endif
 $(document).ready( function () {
+    @if($orderCustomer->is_travelling)
     $('#accommodation-table').DataTable({fixedHeader: true});
     $('#activities-table').DataTable({fixedHeader: true});
     $('#flights-table').DataTable({fixedHeader: true});
     $('#transports-table').DataTable({fixedHeader: true});
     $('#merchandise-table').DataTable({fixedHeader: true});
+    @endif
     $('#customer-adjustment-table').DataTable({fixedHeader: true});
 });
 </script>
@@ -151,12 +146,12 @@ $(document).ready( function () {
         <div class="col-12">
             @can('update', \App\Models\Order\Order::class)
                 <a href="{{ route('orders.edit', ['order' => $orderCustomer->order,]) }}" class="btn btn-success">
-                    <i class="icon-note"></i>
+                    {{ Icon::edit() }}
                     Edit Order
                 </a>
             @endcan
             <a href="{{ route('orders.view', ['order' => $orderCustomer->order,]) }}" class="btn btn-amber">
-                <i class="icon-home"></i>
+                {{ Icon::home() }}
                 Return to Order
             </a>
         </div>
@@ -257,28 +252,33 @@ $(document).ready( function () {
         </div>
         <div class="col-12">
             @can('create', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
-            <a href="{{ route('order-customer-adjustments.create', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}" class="btn btn-success mb-1">
-                <i class="icon-plus"></i>
-                Add Adjustment
-            </a>
+                <a href="{{ route('order-customer-adjustments.create', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}"
+                   class="btn btn-success mb-1">
+                    {{ Icon::create() }}
+                    Add Adjustment
+                </a>
             @endcan
             @can('update', \App\Models\Order\OrderCustomer::class)
-            <a href="{{ route('order-customers.edit', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}" class="btn btn-amber mb-1">
-                <i class="icon-note"></i>
-                Edit Order Customer
-            </a>
+                <a href="{{ route('order-customers.edit', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}"
+                   class="btn btn-amber mb-1">
+                    {{ Icon::edit() }}
+                    Edit Order Customer
+                </a>
             @endcan
             @can('delete', \App\Models\Order\OrderCustomer::class)
                 @if($orderCustomer->id !== $orderCustomer->order->lead_booker_id)
-                    <a href="#" onclick="$('#customer-delete').submit()" class="btn btn-danger mb-1"><i class="icon-trash"></i>Remove Customer</a>
-                    <form action="{{ route('order-customers.delete', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer]) }}" method="post" id="customer-delete">
+                    <a href="#" onclick="$('#customer-delete').submit()"
+                       class="btn btn-danger mb-1">{{ Icon::delete() }}Remove Customer</a>
+                    <form action="{{ route('order-customers.delete', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer]) }}"
+                          method="post" id="customer-delete">
                         @csrf
                     </form>
                 @endcan
             @endcan
             @can('read', \App\Models\Customer\Customer::class)
-                <a href="{{ route('customers.view', ['customer' => $orderCustomer->customer, ]) }}" class="btn btn-info mb-1" target="_blank">
-                    <i class="icon-user"></i>
+                <a href="{{ route('customers.view', ['customer' => $orderCustomer->customer, ]) }}"
+                   class="btn btn-info mb-1" target="_blank">
+                    {{ Icon::customer() }}
                     View Customer
                 </a>
             @endcan
@@ -286,9 +286,9 @@ $(document).ready( function () {
     </div>
 </div>
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;">
-
+@if($orderCustomer->is_travelling)
 <div class="heading pt-2 pb-md-3 pb-2">
-    <h2 class="fw-bold">Tour Components</h2>        
+    <h2 class="fw-bold">Tour Components</h2>
 </div>
 
 {{-- Components Section --}}
@@ -297,23 +297,23 @@ $(document).ready( function () {
         <ul class="nav nav-pills otm-tab">
             <li class="nav-item col-6 col-md-3">
                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#accommodation">
-                    <i class="icon-home"></i> Accommodation
+                    {{ Icon::accommodation() }} Accommodation
                 </button>
             </li>
             <li class="nav-item col-6 col-md-3">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities">
-                    <i class="icon-settings"></i> Activities
+                    {{ Icon::activity() }} Activities
                 </button>
             </li>
             <li class="nav-item col-6 col-md-3">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#flights">
-                    <i class="icon-plane"></i>
+                    {{ Icon::flight() }}
                     Flights
                 </button>
             </li>
             <li class="nav-item col-6 col-md-3">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transports">
-                    <i class="icon-directions"></i>
+                    {{ Icon::transport() }}
                     Transport
                 </button>
             </li>
@@ -324,10 +324,7 @@ $(document).ready( function () {
             {{-- Accommodation Table --}}
             <div id="accommodation" role="tabpanel" class="tab-pane fade show active">
                 <div id="accommodation-new" class="d-flex justify-content-between mb-3 flex-wrap">
-                    @include('partials.fields.selector.adder',
-                        ['field' => 'accommodation_id', 'preselect' => false,
-                        'fullRoute' => route('api.available-accommodation.select', ['orderCustomer' => $orderCustomer,]),
-                        'createRoute' => '#', 'onclick' => 'addAccommodationAddon()', 'target' => ''])
+                    <span class="fw-bold">Accommodation components are managed through the <a href="{{ route('orders.occupancy', ['order' => $orderCustomer->order,]) }}">Occupancy Manager</a>.</span>
                 </div>
                 <div id="accommodation-details">
                     <table id="accommodation-table" class="table table-striped table-responsive-sm">
@@ -363,26 +360,29 @@ $(document).ready( function () {
                                         @if($orderAccommodation->tourComponent->tour_component_type == 'Add-on')
                                             Not Available
                                         @else
-                                            @if(count($orderAccommodation->tourComponent->getUpgradeKeyMap()) < 2)
+                                            @if(count($orderAccommodation->tourComponent->repository->getUpgradeKeyMap()) < 2)
                                                 No Upgrades Available
                                             @else
                                                 @include('partials.fields.selector.adder-preset',
                                                     ['field' => 'accommodation_' . $orderAccommodation->id . '_upgrade', 'preselect' => false,
                                                     'createRoute' => '#', 'onclick' => 'applyAccommodationUpgrade("accommodation_' . $orderAccommodation->id . '_upgrade-input", this)', 'target' => '',
-                                                    'selected' => $orderAccommodation->tourComponent->repository->getUpgradeId(), 'options' => $orderAccommodation->tourComponent->getUpgradeKeyMap(),])
+                                                    'selected' => $orderAccommodation->tourComponent->repository->getUpgradeId(), 'options' => $orderAccommodation->tourComponent->repository->getUpgradeKeyMap(0, true),])
                                             @endif
                                         @endif
                                     </td>
                                     <td>
-                                        <form action="{{ route('orderAccommodationDelete', ['id' => $orderAccommodation->id,]) }}" method="post">
+                                        <form action="{{ route('orderAccommodationDelete', ['id' => $orderAccommodation->id,]) }}"
+                                              method="post">
                                             @csrf
-                                            <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}" />
-                                            <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm"><i class="icon-trash"></i></a>
+                                            <input type="hidden" name="redirect"
+                                                   value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}"/>
+                                            <a href="#" onclick="this.parentNode.submit()"
+                                               class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
                                         </form>
                                     </td>
                                 </tr>
-                            @endforeach
-                        </table>
+                        @endforeach
+                    </table>
                 </div>
                 @if(!empty($orderCustomer->accommodation_notes))
                     <hr class="splitter">
@@ -432,21 +432,24 @@ $(document).ready( function () {
                                     @if($orderActivity->tourComponent->tour_component_type == 'Add-on')
                                         Not Available
                                     @else
-                                        @if(count($orderActivity->tourComponent->getUpgradeKeyMap()) < 2)
+                                        @if(count($orderActivity->tourComponent->repository->getUpgradeKeyMap(0, true)) < 2)
                                             No Upgrades Available
                                         @else
                                             @include('partials.fields.selector.adder-preset',
                                                 ['field' => 'activity_' . $orderActivity->id . '_upgrade', 'preselect' => false,
                                                 'createRoute' => '#', 'onclick' => 'applyActivityUpgrade("activity_' . $orderActivity->id . '_upgrade-input", this)', 'target' => '',
-                                                'selected' => $orderActivity->tourComponent->repository->getUpgradeId(), 'options' => $orderActivity->tourComponent->getUpgradeKeyMap(),])
+                                                'selected' => $orderActivity->tourComponent->repository->getUpgradeId(), 'options' => $orderActivity->tourComponent->repository->getUpgradeKeyMap(0, true),])
                                         @endif
                                     @endif
                                 </td>
                                 <td>
-                                    <form action="{{ route('orderActivityDelete', ['id' => $orderActivity->id,]) }}" method="post">
+                                    <form action="{{ route('orderActivityDelete', ['id' => $orderActivity->id,]) }}"
+                                          method="post">
                                         @csrf
-                                        <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}" />
-                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm"><i class="icon-trash"></i></a>
+                                        <input type="hidden" name="redirect"
+                                               value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}"/>
+                                        <a href="#" onclick="this.parentNode.submit()"
+                                           class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
                                     </form>
                                 </td>
                             </tr>
@@ -501,21 +504,24 @@ $(document).ready( function () {
                                     @if($orderFlight->tourComponent->tour_component_type == 'Add-on')
                                         Not Available
                                     @else
-                                        @if(count($orderFlight->tourComponent->getUpgradeKeyMap()) < 2)
+                                        @if(count($orderFlight->tourComponent->repository->getUpgradeKeyMap(0, true)) < 2)
                                             No Upgrades Available
                                         @else
                                             @include('partials.fields.selector.adder-preset',
                                                 ['field' => 'flight_' . $orderFlight->id . '_upgrade', 'preselect' => false,
                                                 'createRoute' => '#', 'onclick' => 'applyFlightUpgrade("flight_' . $orderFlight->id . '_upgrade-input", this)', 'target' => '',
-                                                'selected' => $orderFlight->tourComponent->repository->getUpgradeId(), 'options' => $orderFlight->tourComponent->getUpgradeKeyMap(),])
+                                                'selected' => $orderFlight->tourComponent->repository->getUpgradeId(), 'options' => $orderFlight->tourComponent->repository->getUpgradeKeyMap(0, true),])
                                         @endif
                                     @endif
                                 </td>
                                 <td>
-                                    <form action="{{ route('orderFlightDelete', ['id' => $orderFlight->id,]) }}" method="post">
+                                    <form action="{{ route('orderFlightDelete', ['id' => $orderFlight->id,]) }}"
+                                          method="post">
                                         @csrf
-                                        <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}" />
-                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm"><i class="icon-trash"></i></a>
+                                        <input type="hidden" name="redirect"
+                                               value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}"/>
+                                        <a href="#" onclick="this.parentNode.submit()"
+                                           class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
                                     </form>
                                 </td>
                             </tr>
@@ -572,21 +578,24 @@ $(document).ready( function () {
                                     @if($orderTransport->tourComponent->tour_component_type == 'Add-on')
                                         Not Available
                                     @else
-                                        @if(count($orderTransport->tourComponent->getUpgradeKeyMap()) < 2)
+                                        @if(count($orderTransport->tourComponent->repository->getUpgradeKeyMap(0, true)) < 2)
                                             No Upgrades Available
                                         @else
                                             @include('partials.fields.selector.adder-preset',
                                                 ['field' => 'transport_' . $orderTransport->id . '_upgrade', 'preselect' => false,
                                                 'createRoute' => '#', 'onclick' => 'applyTransportUpgrade("transport_' . $orderTransport->id . '_upgrade-input", this)', 'target' => '',
-                                                'selected' => $orderTransport->tourComponent->repository->getUpgradeId(), 'options' => $orderTransport->tourComponent->getUpgradeKeyMap(),])
+                                                'selected' => $orderTransport->tourComponent->repository->getUpgradeId(), 'options' => $orderTransport->tourComponent->repository->getUpgradeKeyMap(0, true),])
                                         @endif
                                     @endif
                                 </td>
                                 <td>
-                                    <form action="{{ route('orderTransportDelete', ['id' => $orderTransport->id,]) }}" method="post">
+                                    <form action="{{ route('orderTransportDelete', ['id' => $orderTransport->id,]) }}"
+                                          method="post">
                                         @csrf
-                                        <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}" />
-                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm"><i class="icon-trash"></i></a>
+                                        <input type="hidden" name="redirect"
+                                               value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}"/>
+                                        <a href="#" onclick="this.parentNode.submit()"
+                                           class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
                                     </form>
                                 </td>
                             </tr>
@@ -630,19 +639,27 @@ $(document).ready( function () {
                 </thead>
                 @foreach($orderCustomer->orderMerchandise()->with('tourComponent', 'tourComponent.inventory', 'tourComponent.inventory.component')->get() as $orderMerchandise)
                     <tr>
-                        <td><img src="{{ $orderMerchandise->tourComponent->inventory->asset }}" class="image tiny"/></td>
-                        <td>{{ $orderMerchandise->tourComponent->inventory->component->name }} ({{ $orderMerchandise->tourComponent->inventory->variant->name }}) ({{ $orderMerchandise->tourComponent->inventory->size?->name ?? 'No Size'  }})</td>
+                        <td><img src="{{ $orderMerchandise->tourComponent->inventory->asset }}" class="image tiny"/>
+                        </td>
+                        <td>{{ $orderMerchandise->tourComponent->inventory->component->name }}
+                            ({{ $orderMerchandise->tourComponent->inventory->variant->name }})
+                            ({{ $orderMerchandise->tourComponent->inventory->size?->name ?? 'No Size'  }})
+                        </td>
                         <td>{{ f_currency($orderMerchandise->tourComponent->tour_sales_price) }}</td>
                         <td>{{ $orderMerchandise->tourComponent->tour_component_type }}</td>
                         <td>{{ f_bool($orderMerchandise->fulfilled) }}</td>
                         <td class="actions">
-                            <a href="{{ route('merchandise.inventory.tour.order.fulfil', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderMerchandise' => $orderMerchandise]) }}" class="btn btn-outline-primary btn-sm">
-                                <i class="icon-action-redo"></i>
+                            <a href="{{ route('merchandise.inventory.tour.order.fulfil', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderMerchandise' => $orderMerchandise]) }}"
+                               class="btn btn-outline-primary btn-sm">
+                                {{ Icon::fulfil() }}
                             </a>
-                            <a href="javascript:$('#m-{{$orderMerchandise->id}}-delete').submit()" class="btn btn-outline-danger btn-sm"><i class="icon-trash"></i></a>
-                            <form action="{{ route('orderMerchandiseDelete', ['id' => $orderMerchandise->id,]) }}" method="post" id="m-{{$orderMerchandise->id}}-delete" class="d-none">
+                            <a href="javascript:$('#m-{{$orderMerchandise->id}}-delete').submit()"
+                               class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
+                            <form action="{{ route('orderMerchandiseDelete', ['id' => $orderMerchandise->id,]) }}"
+                                  method="post" id="m-{{$orderMerchandise->id}}-delete" class="d-none">
                                 @csrf
-                                <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}" />
+                                <input type="hidden" name="redirect"
+                                       value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}"/>
 
                             </form>
                         </td>
@@ -652,6 +669,7 @@ $(document).ready( function () {
         </div>
     </div>
 </div>
+@endif
 {{-- Adjustments Section --}}
 <div class="card">
     <div class="card-body">
@@ -660,7 +678,7 @@ $(document).ready( function () {
             @can('create', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
             <div class="pb-3 text-end">
                 <a href="{{ route('order-customer-adjustments.create', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer]) }}" class="btn btn-success text-white">
-                    <i class="icon-plus"></i>
+                    {{ Icon::create() }}
                     Add Adjustment
                 </a>
             </div>
@@ -683,20 +701,23 @@ $(document).ready( function () {
                         <td>{{ f_date($adjustment->date) }}</td>
                         <td class="actions">
                             @can('update', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
-                                <a href="{{ route('order-customer-adjustments.edit', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                                <a href="{{ route('order-customer-adjustments.edit', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}"
+                                   class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
-                                                <i class="icon-note"></i>
+                                                {{ Icon::edit() }}
                                             </span>
                             @endcan
                             @can('delete', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
-                                <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                <form action="{{ route('order-customer-adjustments.delete', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" method="post" id="oadjustment-{{$adjustment->id}}-delete">
+                                <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()"
+                                   class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
+                                <form action="{{ route('order-customer-adjustments.delete', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}"
+                                      method="post" id="oadjustment-{{$adjustment->id}}-delete">
                                     @csrf
                                 </form>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
-                                                <i class="icon-trash"></i>
+                                                {{ Icon::delete() }}
                                             </span>
                             @endcan
                         </td>

@@ -33,7 +33,7 @@ class AirportController extends Controller
             $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('airport'));
         } else {
             $request->validate(Address::getValidationRules());
-            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('name'), AddressParent::getParentId('airport')));
+            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::getParentId('airport')));
             $address->repository->save();
         }
         $airport->address_id = $address->id;
@@ -53,7 +53,7 @@ class AirportController extends Controller
 
     public function update(Request $request, Airport $airport)
     {
-        $request->validate(Airport::getValidationRules());
+        $request->validate(Airport::getValidationRules($airport->id));
         $airport->update([
             'name' => $request->input('name'),
             'iata_code' => $request->input('iata_code'),
@@ -62,14 +62,15 @@ class AirportController extends Controller
             Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('airport'), $airport->address);
         } else {
             $request->validate(Address::getValidationRules());
-            $airport->address->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('name'), AddressParent::getParentId('airport')));
+            $airport->address->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::getParentId('airport')));
         }
         return view('pages.close');
     }
 
     public function destroy(Airport $airport)
     {
-        $airport->delete();
-        return redirect()->route('airports.all');
+        $repo = $airport->repository;
+        $repo->delete();
+        return $repo->getReturnURL();
     }
 }

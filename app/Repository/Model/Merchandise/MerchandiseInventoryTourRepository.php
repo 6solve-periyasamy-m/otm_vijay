@@ -54,7 +54,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
         return OrderMerchandise::create([
             'order_customer_id' => $orderCustomer->id,
             'merchandise_inventory_tour_id' => $this->tourComponent->id,
-            'cost' => $this->tourComponent->tour_sales_price,
+            'cost' => $this->tourComponent->tour_sales_price ?? 0,
         ])->repository;
     }
 
@@ -102,7 +102,6 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
 
     public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
-        Log::info($traveller);
         $bookingComponent = BookingMerchandise::create([
             'booking_traveller_id' => $traveller->id,
             'merchandise_id' => $this->tourComponent->id,
@@ -155,7 +154,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
     public function getUsedOnOrderCount(): int
     {
         $used = 0;
-        foreach ($this->tourComponent->orderMerchandise as $orderComponent) {
+        foreach ($this->tourComponent->orderComponents as $orderComponent) {
             if (!$orderComponent->cancelled) $used++;
         }
         return $used;

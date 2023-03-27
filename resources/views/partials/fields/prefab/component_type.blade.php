@@ -1,5 +1,5 @@
 @if($value == 'Upgrade')
-    <input type="hidden" name="tour_component_type-input" value="Upgrade">
+    <input type="hidden" name="tour_component_type" value="Upgrade">
 @else
 @include('partials.fields.dropdown', [
     'name' => 'Tour Component Type',

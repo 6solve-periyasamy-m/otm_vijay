@@ -2,6 +2,7 @@
 
 namespace App\Models\Transport;
 
+use App\Models\Order\Component\OrderTransport;
 use App\Models\Tour\Tour;
 use App\Models\TravelClass;
 use App\Repository\Model\Transport\TransportInventoryRepository;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -31,6 +33,7 @@ use Illuminate\Support\Carbon;
  * @property int $stock
  * @property float $purchase_price
  * @property float $sales_price
+ * @property string|null $ticket_number
  * @property string|null $notes
  * @property int $arrival_time_confirmed
  * @property int $departure_time_confirmed
@@ -76,7 +79,7 @@ class TransportInventory extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['transport_id', 'travel_class_id', 'departs_at', 'departure_time_confirmed', 'arrives_at', 'arrival_time_confirmed', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes',];
+    protected $fillable = ['transport_id', 'travel_class_id', 'departs_at', 'departure_time_confirmed', 'arrives_at', 'arrival_time_confirmed', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes', 'ticket_number'];
     protected array $cascadeDeletes = ['tourComponents'];
     protected $casts = [
         'departs_at' => 'datetime',
@@ -120,6 +123,11 @@ class TransportInventory extends Model
     public function tour(): BelongsToMany
     {
         return $this->belongsToMany(Tour::class, 'transport_inventory_tour')->withPivot('sales_price');
+    }
+
+    public function orders(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderTransport::class, TransportInventoryTour::class, 'transport_inventory_id', 'transport_inventory_tour_id');
     }
 
     public function travelClass(): BelongsTo

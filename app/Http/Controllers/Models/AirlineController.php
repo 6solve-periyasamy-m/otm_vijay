@@ -40,7 +40,7 @@ class AirlineController extends Controller
 
     public function update(Request $request, Airline $airline)
     {
-        $request->validate(Airline::getValidationRules());
+        $request->validate(Airline::getValidationRules($airline->id));
         $airline->update([
             'name' => $request->input('name'),
         ]);
@@ -49,7 +49,8 @@ class AirlineController extends Controller
 
     public function destroy(Airline $airline)
     {
-        $airline->delete();
-        return redirect()->route('airlines.all');
+        $repo = $airline->repository;
+        $repo->delete();
+        return $repo->getReturnURL();
     }
 }

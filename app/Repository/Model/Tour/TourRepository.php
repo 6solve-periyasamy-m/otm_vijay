@@ -9,23 +9,39 @@ use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Models\Merchandise\MerchandiseInventoryTour;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderMerchandise;
+use App\Models\Order\Component\OrderTransport;
 use App\Models\Tour\PaymentInstallment;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
+use App\Repository\Costing\Tour\TourCostingRepository;
 use App\Repository\Interfaces\HasStockControl;
+use App\Repository\Interfaces\Manifest\HasActivityManifest;
+use App\Repository\Interfaces\Manifest\HasFlightManifest;
+use App\Repository\Interfaces\Manifest\HasRoomingList;
+use App\Repository\Interfaces\Manifest\HasTransportManifest;
+use App\Repository\Reporting\Manifest\ActivityManifestRepository;
+use App\Repository\Reporting\Manifest\FlightManifestRepository;
+use App\Repository\Reporting\Manifest\TransportManifestRepository;
 use App\Repository\RoomingRepository;
+use App\Repository\Storage\OrderComponentStorage;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
-class TourRepository extends ComponentPackageRepository implements HasStockControl
+class TourRepository extends ComponentPackageRepository implements HasStockControl, HasRoomingList, HasActivityManifest, HasFlightManifest, HasTransportManifest
 {
     private Tour $tour;
+    private TourCostingRepository $costing;
 
     public function __construct(Tour $tour)
     {
         $this->tour = $tour;
+        $this->costing = new TourCostingRepository($tour);
     }
 
     public static function create(array $data): Tour
@@ -157,7 +173,6 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         return $components;
     }
 
-    /** @noinspection PhpMethodParametersCountMismatchInspection */
     public function fixUpgrades(): void
     {
         foreach ($this->tour->accommodationInventoryTours as $inventoryTour) {
@@ -296,6 +311,132 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         ]);
         $this->tour->paymentInstallments()->save($installment);
         return $installment;
+    }
+
+    public function getRoomingList(): Collection|array
+    {
+        return $this->tour->orderAccommodation()->with(
+            'group',
+            'group.orderCustomers',
+            'group.orderCustomers.customer',
+            'accommodationInventoryTour',
+            'accommodationInventoryTour.inventory',
+            'accommodationInventoryTour.accommodationInventory.accommodation',
+            'accommodationInventoryTour.accommodationInventory.roomType',
+            'accommodationInventoryTour.accommodationInventory.boardType'
+        )->get();
+    }
+
+    public function getPotentialRevenue(): float
+    {
+        return $this->tour->stock_control_active ? $this->tour->base_price_per_person * $this->tour->stock : -1;
+    }
+
+    public function getReceivedRevenue(): float
+    {
+        $total = 0;
+        foreach ($this->tour->orders as $order) {
+            $total += $order->paid;
+        }
+        return $total;
+    }
+
+    public function getRemainingRevenue(): float
+    {
+        $total = 0;
+        foreach ($this->tour->orders as $order) {
+            $total += $order->remaining;
+        }
+        return $total;
+    }
+
+    public function getCosting(): TourCostingRepository
+    {
+        return $this->costing;
+    }
+
+    /**
+     * @return OrderActivity[]
+     */
+    public function getIncludedActivitiesForSaving(): array
+    {
+        $components = [];
+        foreach ($this->tour->activityInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', true)->get() as $component) {
+            $components[] = OrderActivity::make([
+                'activity_inventory_tour_id' => $component->id,
+                'cost' => $component->tour_sales_price,
+            ]);
+        }
+        return $components;
+    }
+
+    /**
+     * @return OrderFlight[]
+     */
+    public function getIncludedFlightsForSaving(): array
+    {
+        $components = [];
+        foreach ($this->tour->flightInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
+            $components[] = OrderFlight::make([
+                'flight_inventory_tour_id' => $component->id,
+                'cost' => $component->tour_sales_price,
+            ]);
+        }
+        return $components;
+    }
+
+    /**
+     * @return OrderTransport[]
+     */
+    public function getIncludedTransportForSaving(): array
+    {
+        $components = [];
+        foreach ($this->tour->transportInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
+            $components[] = OrderTransport::make([
+                'transport_inventory_tour_id' => $component->id,
+                'cost' => $component->tour_sales_price,
+            ]);
+        }
+        return $components;
+    }
+
+    /**
+     * @return OrderMerchandise[]
+     */
+    public function getIncludedMerchandiseForSaving(): array
+    {
+        $components = [];
+        foreach ($this->tour->merchandise()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
+            $components[] = OrderMerchandise::make([
+                'merchandise_inventory_tour_id' => $component->id,
+                'cost' => $component->tour_sales_price,
+            ]);
+        }
+        return $components;
+    }
+
+    public function getComponentSetForSaving(): OrderComponentStorage
+    {
+        return new OrderComponentStorage(
+          $this->getIncludedActivitiesForSaving(),
+          $this->getIncludedFlightsForSaving(),
+          $this->getIncludedTransportForSaving(),
+        );
+    }
+
+    public function getActivityManifest(): Collection|array
+    {
+        return $this->tour->orderActivities()->with(ActivityManifestRepository::getRelations())->get();
+    }
+
+    public function getFlightManifest(): Collection|array
+    {
+        return $this->tour->orderFlights()->with(FlightManifestRepository::getRelations())->get();
+    }
+
+    public function getTransportManifest(): Collection|array
+    {
+        return $this->tour->orderTransport()->with(TransportManifestRepository::getRelations())->get();
     }
 
     public function isStockControlActive(): bool

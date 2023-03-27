@@ -1,3 +1,9 @@
+@php
+/**
+ * @var \App\Models\System\Brand $branding
+ */
+$branding = $branding ?? \App\Models\System\Brand::getSystemBrand();
+@endphp
 <header class="topbar">
     <nav class="navbar">
       <div class="container-fluid flex-nowrap">
@@ -6,14 +12,14 @@
           </button>
         <div class="navbar-brand" style="width: 100%; padding-right: 30px;">
           <div class="d-flex justify-content-center">
-            <img class="setting-logo" src="{{ asset(setting('company.logo', '')) }}">
+            <img class="setting-logo" src="{{ $branding->image }}">
           </div>
         </div>
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
           <div class="offcanvas-header">
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             <div style="width: 100%; display: flex; justify-content: center; align-items: center; ">
-                <img class="setting-logo sidebar-logo" style="margin-right: 20px;" src="{{ asset(setting('company.logo', '')) }}">
+                <img class="setting-logo sidebar-logo" style="margin-right: 20px;" src="{{ $branding->image }}">
             </div>
           </div>
           <div class="offcanvas-body">
@@ -61,40 +67,41 @@
                       @else
                         <li>
                           <a href="{{ route('customer.login') }}" class="nav-link link-dark">
-                            <span class="icon-login"></span>
-                            &nbsp;Login
+                              <span class="icon-login"></span>
+                              &nbsp;Login
                           </a>
                         </li>
-                      @endif
+                        @endif
                     </ul>
                 </div>
                 <div style="position: fixed; bottom: 0;">
-                    <hr />
+                    <hr/>
                     <div class="socials">
-                        @if(!empty(setting('social.facebook')))
-                          <div class="facebook">
-                              <a href="{{ setting('social.facebook') }}" class="icon-social-facebook"></a>
-                          </div>
-                        @endif
-                        @if(!empty(setting('social.twitter')))
-                          <div class="twitter">
-                            <a href="{{ setting('social.twitter') }}" class="icon-social-twitter"></a>
-                          </div>
-                        @endif
-                        @if(!empty(setting('social.instagram')))
-                            <div class="instagram">
-                                <a href="{{ setting('social.instagram') }}" class="icon-social-instagram"></a>
+                        @if(!empty($branding->facebook))
+                            <div class="facebook">
+                                <a href="{{ $branding->facebook }}" class="icon-social-facebook"></a>
                             </div>
                         @endif
-                      </div>
-                    <div class="d-flex justify-content-between align-items-center" style="font-size: 13px; font-weight: 600;">
+                        @if(!empty($branding->twitter))
+                            <div class="twitter">
+                                <a href="{{ $branding->twitter }}" class="icon-social-twitter"></a>
+                            </div>
+                        @endif
+                        @if(!empty($branding->instagram))
+                            <div class="instagram">
+                                <a href="{{ $branding->instagram }}" class="icon-social-instagram"></a>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center"
+                         style="font-size: 13px; font-weight: 600;">
                         <span class="p-3 pe-5 d-flex flex-column">
-                            <img class="stamp-logo sidebar-logo" src="{{ asset(setting('atol.stamp', '')) }}" />
+                            <img class="stamp-logo sidebar-logo" src="{{ asset(setting('atol.stamp', '')) }}"/>
                         </span>
                         <span class="p-3 d-flex flex-column">
-                            <span>{{ setting('company.name', '') }}</span>
-                            <span><i class="icon-envelope"></i> {{ setting('company.contact.email', '') }}</span>
-                            <span><i class="icon-call-end"></i> {{ setting('company.contact.phone', '') }}</span>
+                            <span>{{ $branding->name }}</span>
+                            <span>{{ Icon::email() }} {{ $branding->email }}</span>
+                            <span>{{ Icon::phone() }} {{ $branding->phone }}</span>
                         </span>
                     </div>
                 </div>

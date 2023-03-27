@@ -20,8 +20,9 @@
                     <img src="{{ asset(Auth::user()->avatar_url) }}" class="img-thumbnail">
                 </a>
                 <div class="dp-content">
-                    <a href="{{ route('users.edit', ['user' => Auth::user(),]) }}"><i class="icon-note"></i>&nbsp;Edit Account</a>
-                    <a href="#" onclick="event.preventDefault();logout();"><i class="icon-login"></i>&nbsp;Logout</a>
+                    <a href="{{ route('users.edit', ['user' => Auth::user(),]) }}">{{ Icon::edit() }}&nbsp;Edit
+                        Account</a>
+                    <a href="#" onclick="event.preventDefault();logout();">{{ Icon::logout() }}&nbsp;Logout</a>
                 </div>
             </div>
         @else
@@ -31,13 +32,13 @@
                 </a>
             </div>
         @endif
-    </div>       
+    </div>
 </div>
 
 @push('footer-stack')
     <script type="text/javascript">
         function logout() {
-            $.post('{{ route('logout') }}', {'_token': '{{ csrf_token() }}',}).then(function () { window.location = '{{ route('homepage') }}'; });
+            $.post('{{ route('logout') }}', {'_token': '{{ csrf_token() }}',}).always(function () { window.location = '{{ route('homepage') }}'; });
         }
     </script>
 @endpush

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Quote;
 
+use App\Exceptions\MailDisabledException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Quote\ConversionRequest;
 use App\Http\Requests\Admin\Quote\CreateBasicQuoteRequest;
@@ -14,7 +15,6 @@ use App\Models\Quote\SentQuote;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Quote\QuoteRepository;
 use App\Repository\Storage\ConvertedCustomer;
-use Illuminate\Http\Request;
 
 class QuoteController extends Controller
 {
@@ -86,7 +86,11 @@ class QuoteController extends Controller
         if (!isset($pricePoint)) {
             return back()->withErrors(['msg' => "No price points exist for {$paying} paying travellers",]);
         }
-        $quote->repository->resend($quote->repository->generateSent($quote->leadTraveller->email, $request->paying, $request->travelling));
+        try {
+            $quote->repository->resend($quote->repository->generateSent($quote->leadTraveller->email, $request->paying, $request->travelling));
+        } catch (MailDisabledException) {
+            return back()->withErrors(['msg' => 'Emails are not enabled on this system']);
+        }
         return redirect()->route('quotes.view', ['quote' => $quote,]);
     }
 
@@ -106,6 +110,11 @@ class QuoteController extends Controller
     public function view(Quote $quote)
     {
         return view('pages.admin.quote.view', ['quote' => $quote,]);
+    }
+
+    public function costing(StartConversionRequest $request, Quote $quote)
+    {
+        return view('pages.admin.quote.costing', ['quote' => $quote, 'paying' => $request->paying, 'travelling' => $request->travelling,]);
     }
 
     public function edit(Quote $quote)

@@ -25,6 +25,9 @@
                         <h6 class="fw-bold">
                             @if(isset($customer->email_address))
                             <a href="mailto:{{ $customer->email_address }}">{{ $customer->email_address }}</a>
+                                @if($customer->registered)
+                                    (Registered)
+                                @endif
                             @else
                             Email Address Not Set
                             @endif
@@ -76,8 +79,16 @@
                     </div>
                     <div class="col-12">
                         <a href="{{ route('customers.edit', ['customer' => $customer,]) }}" class="btn btn-success">
-                            <i class="icon-note"></i>
+                            {{ Icon::edit() }}
                             Edit Customer
+                        </a>
+                        <form class="d-none login-as" method="post" action="{{ route('customers.login-as') }}">
+                            @csrf
+                            <input type="hidden" name="customer_id" value="{{$customer->id}}">
+                        </form>
+                        <a href="javascript:$('.login-as').submit()" class="btn btn-warning">
+                            {{ Icon::customer() }}
+                            Login as Customer
                         </a>
                     </div>
                 </div>

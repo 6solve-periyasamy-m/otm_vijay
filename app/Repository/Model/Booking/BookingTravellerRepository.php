@@ -148,24 +148,24 @@ class BookingTravellerRepository extends ModelRepository
         $components = [];
         if ($includeAccommodation) {
             foreach ($this->traveller->accommodation()->with('tourComponent')->get() as $orderComponent) {
-                if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+                if (!isset($orderComponent->tourComponent) || !in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
                 $components[] = $orderComponent->repository;
             }
         }
         foreach ($this->traveller->activities()->with('tourComponent')->get() as $orderComponent) {
-            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+            if (!isset($orderComponent->tourComponent) || !in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
             $components[] = $orderComponent->repository;
         }
         foreach ($this->traveller->flights()->with('tourComponent')->get() as $orderComponent) {
-            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+            if (!isset($orderComponent->tourComponent) || !in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
             $components[] = $orderComponent->repository;
         }
         foreach ($this->traveller->transport()->with('tourComponent')->get() as $orderComponent) {
-            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+            if (!isset($orderComponent->tourComponent) || !in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
             $components[] = $orderComponent->repository;
         }
         foreach ($this->traveller->merchandise()->with('tourComponent')->get() as $orderComponent) {
-            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+            if (!isset($orderComponent->tourComponent) || !in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
             $components[] = $orderComponent->repository;
         }
         return $components;

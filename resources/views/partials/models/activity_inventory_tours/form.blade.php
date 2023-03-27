@@ -6,4 +6,3 @@
 @include('partials.fields.text', ['name' => 'Tour Sales Price', 'field' => 'tour_sales_price', 'value' => $activityInventoryTour?->tour_sales_price ?? null,])
 @include('partials.fields.checkbox', ['name' => 'Stock Control Active', 'field' => 'stock_control_active', 'value' => $activityInventoryTour?->stock_control_active ?? false,])
 @include('partials.fields.submit')
-

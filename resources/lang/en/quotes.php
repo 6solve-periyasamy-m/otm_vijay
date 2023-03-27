@@ -4,6 +4,7 @@ return [
     'table' => [
         'reference' => 'Reference',
         'package' => 'Tour',
+        'description' => 'Description',
         'lead' => 'Lead Traveller',
         'email' => 'Email Address',
         'expiry' => 'Expiry Date',
@@ -64,6 +65,7 @@ return [
                     'paying' => 'Paying',
                     'travelling' => 'Non-paying',
                     'convert' => 'Convert',
+                    'costing' => 'Costs',
                     'send' => 'Send',
                     'preview' => 'Preview',
                 ],
@@ -106,6 +108,7 @@ return [
                     'dates' => 'Dates',
                     'details' => 'Description',
                     'price' => 'Purchase Price',
+                    'sales_price' => 'Sales Price',
                     'na' => 'Not Applicable',
                 ],
                 'tabs' => [
@@ -124,6 +127,14 @@ return [
                 'paying' => 'Paying Travellers',
                 'travelling' => 'Non-Paying Travellers',
                 'reference' => 'Reference'
+            ],
+            'sections' => [
+                'header' => 'Quote Sections',
+                'title' => 'Title',
+                'body' => 'Body',
+                'image' => 'Has Image?',
+                'hidden' => 'Hidden?',
+                'order' => 'Order'
             ],
         ]
     ],

@@ -1,3 +1,4 @@
+@php /** @var \App\Models\Activity\Activity $activity */ @endphp
 @section('footer-script')
 <script type="text/javascript">
     $(document).ready(function () { $('#activityInventory').DataTable({fixedHeader: true}); });
@@ -8,7 +9,7 @@
     <div class="card-body">
         {{--<a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>--}}
         <a href="{{ route('activity-inventories.create', ['activity' => $activity, ]) }}" class="btn btn-primary float-end">
-            <i class="icon-plus"></i>
+            {{ Icon::create() }}
             <span>Add Inventory</span>
         </a>
     </div>
@@ -33,8 +34,8 @@
             @foreach($activity->activityInventory as $activityInventory)
                 <tr>
                     <td>{{ $activityInventory->ticketType->name }}</td>
-                    <td>{{ f_datetime($activityInventory->starts_at) }}</td>
-                    <td>{{ f_datetime($activityInventory->ends_at) }}</td>
+                    <td data-sort="{{$activityInventory->starts_at->unix()}}">{{ f_datetime($activityInventory->starts_at) }}</td>
+                    <td data-sort="{{$activityInventory->ends_at->unix()}}">{{ f_datetime($activityInventory->ends_at) }}</td>
                     <td>
                         <input type="checkbox" disabled @if($activityInventory->fit_selectable == 1) checked @endif>
                     </td>
@@ -48,34 +49,34 @@
                     <td class="actions-3">
                         @can('create', \App\Models\Activity\ActivityInventory::class)
                             <a href="{{route('activity-inventories.duplicate', ['activity' => $activity, 'activityInventory' => $activityInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
-                                <i class="icon-layers"></i>
+                                {{ Icon::copy() }}
                             </a>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                <i class="icon-layers"></i>
+                                {{ Icon::copy() }}
                             </span>
                         @endcan
                         @can('update', \App\Models\Activity\ActivityInventory::class)
                             <a href="{{route('activity-inventories.edit', ['activity' => $activity, 'activityInventory' => $activityInventory,])}}"
                                class="btn btn-outline-success btn-sm mb-1">
-                                <i class="icon-note"></i>
+                                {{ Icon::edit() }}
                             </a>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                <i class="icon-note"></i>
+                                {{ Icon::edit() }}
                             </span>
                         @endcan
                         @can('delete', \App\Models\Activity\ActivityInventory::class)
                             <a href="#" class="btn btn-sm btn-outline-danger mb-1"
                                onclick="event.preventDefault();document.getElementById('activityInventory-{{ $activityInventory->id }}-delete').submit();">
-                                <i class="icon-trash"></i>
+                                {{ Icon::delete() }}
                             </a>
                             <form id="activityInventory-{{ $activityInventory->id }}-delete"
                                   action="{{ route('activity-inventories.delete', ['activity' => $activity, 'activityInventory' => $activityInventory,]) }}"
                                   method="POST" style="display: none;">{{ csrf_field() }}</form>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                <i class="icon-trash"></i>
+                                {{ Icon::delete() }}
                             </span>
                         @endcan
                     </td>

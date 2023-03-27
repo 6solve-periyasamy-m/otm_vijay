@@ -41,7 +41,7 @@ class OperatorController extends Controller
 
     public function update(Request $request, Operator $operator)
     {
-        $request->validate(Operator::getValidationRules());
+        $request->validate(Operator::getValidationRules($operator->id));
         $operator->update([
             'name' => $request->input('name'),
             'notes' => $request->input('notes'),
@@ -51,7 +51,8 @@ class OperatorController extends Controller
 
     public function destroy(Operator $operator)
     {
-        $operator->delete();
-        return redirect()->route('operators.all');
+        $repo = $operator->repository;
+        $repo->delete();
+        return $repo->getReturnURL();
     }
 }

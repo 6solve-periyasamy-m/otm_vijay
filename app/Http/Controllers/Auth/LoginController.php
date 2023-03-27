@@ -47,6 +47,8 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        Auth::logoutOtherDevices($request->input('password'));
+        if ($user->getHighestRoleLevel() < 999) {
+            Auth::logoutOtherDevices($request->input('password'));
+        }
     }
 }

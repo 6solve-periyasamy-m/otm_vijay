@@ -12,7 +12,7 @@
                         <center class="mt-4">
                             <div class="overlay-container">
                                 <label for="profile_picture">
-                                    <img src="{{ $customer->avatar_url }}" class="rounded-circle hover-upload"/>
+                                    <img src="{{ $customer->avatar_url }}" class="rounded-circle hover-upload" alt="{{ $customer->full_name }}"/>
                                     <div class="image-overlay">Upload new picture</div>
                                 </label>
                             </div>
@@ -84,11 +84,11 @@
                             <div class="form-group"><h4 class="mb-0">Basic Information</h4></div>
                             <hr class="splitter">
 
-                            <x-customer.input name="title" value="{{ $customer->title ?? '' }}" width="2" autocomplete="honorific-prefix">
+                            <x-customer.input name="title" value="{{ $customer->title ?? '' }}" width="2" autocomplete="honorific-prefix" required>
                                 Title
                             </x-customer.input>
 
-                            <x-customer.input name="first_name" value="{{ $customer->first_name ?? '' }}" width="3" autocomplete="given-name">
+                            <x-customer.input name="first_name" value="{{ $customer->first_name ?? '' }}" width="3" autocomplete="given-name" required>
                                 First Name
                             </x-customer.input>
 
@@ -96,11 +96,11 @@
                                 Middle Names
                             </x-customer.input>
 
-                            <x-customer.input name="last_name" value="{{ $customer->last_name ?? '' }}" width="4" autocomplete="family-name">
+                            <x-customer.input name="last_name" value="{{ $customer->last_name ?? '' }}" width="4" autocomplete="family-name" required>
                                 Last Name
                             </x-customer.input>
 
-                            <x-customer.input type="date" name="date_of_birth" value="{{ $customer->date_of_birth?->format('Y-m-d') ?? '' }}" width="4" autocomplete="bday">
+                            <x-customer.input type="date" name="date_of_birth" value="{{ $customer->date_of_birth?->format('Y-m-d') ?? '' }}" width="4" autocomplete="bday" required>
                                 Date of Birth
                             </x-customer.input>
 
@@ -129,7 +129,7 @@
                                 <x-customer.input name="home_town" value="{{ $customer->homeAddress->town ?? '' }}" autocomplete="address-level2">
                                     Town
                                 </x-customer.input>
-                                <x-customer.input name="home_town" value="{{ $customer->homeAddress->region ?? '' }}" autocomplete="address-level1">
+                                <x-customer.input name="home_region" value="{{ $customer->homeAddress->region ?? '' }}" autocomplete="address-level1">
                                     Region
                                 </x-customer.input>
 
@@ -156,7 +156,7 @@
                                 <x-customer.input name="billing_town" value="{{ $customer->billingAddress->town ?? '' }}" autocomplete="address-level2">
                                     Town
                                 </x-customer.input>
-                                <x-customer.input name="billing_town" value="{{ $customer->billingAddress->region ?? '' }}" autocomplete="address-level1">
+                                <x-customer.input name="billing_region" value="{{ $customer->billingAddress->region ?? '' }}" autocomplete="address-level1">
                                     Region
                                 </x-customer.input>
 
@@ -170,15 +170,15 @@
                             <div class="form-group"><h4 class="mb-0">Emergency Contact Details</h4></div>
                             <hr class="splitter">
 
-                            <x-customer.input name="emergency_contact_name" value="{{ $customer->emergency_contact_name ?? '' }}" width="4">
+                            <x-customer.input name="emergency_contact_name" value="{{ $customer->emergency_contact_name ?? '' }}" width="4" required>
                                 Name
                             </x-customer.input>
 
-                            <x-customer.input name="emergency_contact_relationship" value="{{ $customer->emergency_contact_relationship ?? '' }}" width="4">
+                            <x-customer.input name="emergency_contact_relationship" value="{{ $customer->emergency_contact_relationship ?? '' }}" width="4" required>
                                 Relationship
                             </x-customer.input>
 
-                            <x-customer.input name="emergency_contact_telephone" value="{{ $customer->emergency_contact_telephone ?? '' }}" width="4">
+                            <x-customer.input name="emergency_contact_telephone" value="{{ $customer->emergency_contact_telephone ?? '' }}" width="4" required>
                                 Telephone
                             </x-customer.input>
 

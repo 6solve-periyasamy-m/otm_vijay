@@ -1,23 +1,37 @@
-@php /** @var \App\Models\Tour\Tour|null $tour */ @endphp
-@include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $tour?->name,])
+@php /** @var \App\Models\Tour\Tour $tour */ $tour = $tour ?? null @endphp
+@include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $tour?->name, 'width' => 8])
+@include('partials.fields.selector.default',
+        ['name' => 'Branding', 'field' => 'brand_id', 'value' => $tour?->brand_id ?? null,
+         'route' => 'brands', 'width' => 4,])
 @include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $tour?->description,])
 @can('create', \App\Models\Tour\Event::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Event', 'field' => 'event_id', 'value' => $tour?->event_id ?? 0,
-             'route' => 'events', 'createRoute' => route('events.create'), 'width' => 6,])
+             'route' => 'events', 'createRoute' => route('events.create'), 'width' => 4,])
 @else
 @include('partials.fields.selector.default',
             ['name' => 'Event', 'field' => 'event_id', 'value' => $tour?->event_id ?? 0,
-             'route' => 'events', 'width' => 6,])
+             'route' => 'events', 'width' => 4,])
 @endcan
+@include('partials.fields.dropdown', [
+             'name' => 'ATOL Protected',
+             'field' => 'atol_protected',
+             'width' => 4,
+             'selected' => $tour?->atol_protected ?? -1,
+             'values' => [
+                 -1 => "Match System (Currently: " . (flag('atol.enabled', true) ? 'Enabled' : 'Disabled') . ")",
+                 0 => "Disabled",
+                 1 => "Enabled",
+             ]
+         ])
 @can('create', \App\Models\Tour\TourCategory::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Tour Category', 'field' => 'tour_category_id', 'value' => $tour?->tour_category_id,
-             'route' => 'tour-categories', 'createRoute' => route('tour-categories.create'), 'width' => 6,])
+             'route' => 'tour-categories', 'createRoute' => route('tour-categories.create'), 'width' => 4,])
 @else
 @include('partials.fields.selector.default',
         ['name' => 'Tour Category', 'field' => 'tour_category_id', 'value' => $tour?->tour_category_id,
-         'route' => 'tour-categories', 'width' => 6,])
+         'route' => 'tour-categories', 'width' => 4,])
 @endcan
 <hr class="splitter"/>
 @include('partials.fields.date',
@@ -30,7 +44,8 @@
 <hr class="splitter"/>
 @include('partials.fields.text', ['name' => 'Base Price Per Person', 'field' => 'base_price_per_person', 'value' => $tour?->base_price_per_person, 'width' => 6,])
 @include('partials.fields.text', ['name' => 'Margin', 'field' => 'margin', 'value' => $tour?->margin, 'width' => 6,])
-@include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'value' => $tour?->deposit, 'width' => 6,])
+@include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'value' => $tour?->deposit, 'width' => 3,])
+@include('partials.fields.text', ['name' => 'Booking Fee', 'field' => 'booking_fee', 'value' => $tour?->booking_fee ?? null, 'width' => 3,])
 @include('partials.fields.text', ['name' => 'Single Occupancy Surcharge', 'field' => 'single_occupancy_surcharge', 'value' => $tour?->single_occupancy_surcharge, 'width' => 6,])
 <hr class="splitter"/>
 <h6 class="fw-bold">Warning: Updating this does not update existing components</h6>

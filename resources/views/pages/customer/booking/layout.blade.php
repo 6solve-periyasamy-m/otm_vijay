@@ -1,10 +1,10 @@
-@extends('layout.customer')
-
 @php
 /**
  * @var \App\Models\Tour\Tour $tour
  */
 @endphp
+
+@extends('layout.customer', ['branding' => $tour->brand])
 
 @section('content')
     <hr class="splitter">

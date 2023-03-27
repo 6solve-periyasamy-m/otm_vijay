@@ -179,6 +179,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\StringFormatProvider::class,
         App\Providers\SettingsProvider::class,
+        App\Providers\GatewayProvider::class,
+        App\Providers\IconProvider::class,
 
     ],
 
@@ -235,6 +237,8 @@ return [
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
         'StringFormatter' => StringFormatterFacade::class,
         'Settings' => \App\Facades\SettingsFacade::class,
+        'Gateway' => \App\Facades\GatewayFacade::class,
+        'Icon' => \App\Facades\IconFacade::class,
 
     ],
     // this apps settings
@@ -249,7 +253,14 @@ return [
         'stripe' => [
             'publishable' => env('STRIPE_KEY'),
             'secret' => env('STRIPE_SECRET'),
-        ]
+        ],
+        'felloh' => [
+            'client' => env('FELLOH_CLIENT'),
+            'secret' => env('FELLOH_SECRET'),
+            'account' => env('FELLOH_ACCOUNT'),
+            'connected' => env('FELLOH_CONNECTED'),
+            'env' => env('FELLOH_ENVIRONMENT', 'api')
+        ],
     ],
 
     'user-limit' => env('USER_LIMIT', 0),

@@ -5,6 +5,7 @@ namespace App\Models\Quote;
 use App\Models\Customer\Customer;
 use App\Models\Location\Address;
 use Database\Factories\Quote\QuoteProspectFactory;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -48,7 +49,7 @@ use Illuminate\Support\Carbon;
  */
 class QuoteProspect extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
     protected $guarded = [];
     protected $casts = ['paying' => 'boolean', 'travelling' => 'boolean'];
@@ -65,16 +66,16 @@ class QuoteProspect extends Model
 
     public function getNameAttribute(): string
     {
-        return "{$this->customer->title} {$this->customer->first_name} {$this->customer->last_name}";
+        return isset($this->customer) ? "{$this->customer->title} {$this->customer->first_name} {$this->customer->last_name}" : "Customer Not Found";
     }
 
     public function getEmailAttribute(): string
     {
-        return "{$this->customer->email_address}";
+        return $this->customer?->email_address ?? "Customer Not Found";
     }
 
     public function getPhoneAttribute(): string
     {
-        return "{$this->customer->mobile_number}";
+        return $this->customer?->mobile_number ?? "Customer Not Found";
     }
 }

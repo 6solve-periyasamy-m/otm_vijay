@@ -1,0 +1,139 @@
+:root {
+  --customer-box-size: 100px;
+  --bed-size: calc(var(--customer-box-size) + 2px);
+  --shadow-color: #808080;
+  --section-color: #9ccff6;
+  --internal-section-color: #7dabd5;
+  --bed-color: #bfbaba;
+  --customer-color: white;
+  --shallow-radius: 10px;
+  --image-size: 50px;
+  --margin: 10px;
+  --padding: 5px;
+}
+.drop-shadow {
+  box-shadow: -2px 2px 5px var(--shadow-color);
+}
+.section-box {
+  border-radius: var(--shallow-radius);
+  background: var(--section-color);
+  width: calc(100% - 20px);
+  padding: 5px;
+  margin: var(--margin);
+}
+.customers {
+  min-height: 120px;
+  display: flex;
+  max-width: 100%;
+  flex-wrap: wrap;
+  gap: var(--margin);
+}
+.customers > .customer {
+  box-shadow: -2px 2px 5px var(--shadow-color);
+}
+.date-switcher {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5rem;
+  > .btn {
+    padding-left: 10rem;
+    padding-right: 10rem;
+    border-width: 1px;
+    border-radius: var(--shallow-radius);
+  }
+}
+
+.manager {
+  height: auto;
+  min-height: 300px;
+}
+.customer {
+  border-radius: var(--shallow-radius);
+  background-color: var(--customer-color);
+  min-width: var(--customer-box-size);
+  width: var(--customer-box-size);
+  max-width: var(--customer-box-size);
+  height: var(--customer-box-size);
+}
+.customer-container {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  padding: var(--padding);
+  height: 100%;
+  font-size: 12px;
+}
+.customer:hover {
+  filter: brightness(95%);
+  cursor: pointer;
+}
+.customer-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+}
+.room {
+  display: flex;
+  flex-wrap: wrap;
+  padding: var(--padding);
+  width: calc(100% - 10px);
+  margin: var(--margin) calc(var(--margin) / 2);
+  border-radius: var(--shallow-radius);
+  background-color: var(--internal-section-color);
+}
+.beds {
+  display: flex;
+  max-width: 60vw;
+  flex-wrap: wrap;
+  gap: var(--margin);
+}
+.bed {
+  border-radius: var(--shallow-radius);
+  width: var(--bed-size);
+  min-width: var(--bed-size);
+  height: var(--bed-size);
+  display: inline-block;
+  border: 1px dashed black;
+}
+.image {
+  width: var(--image-size);
+  height: var(--image-size);
+  border-radius: 50%;
+}
+.details {
+  display: inline;
+  height: 10%;
+  width: 100%;
+  padding: 2px 2px 5px 2px;
+}
+.details:after {
+  content: "";
+  display: block;
+  float: left;
+  background: var(--section-color);
+  width: 100%;
+  height: 5px;
+  border-radius: 3px;
+  margin-top: 5px;
+  margin-bottom: 2px
+}
+.group-input {
+  display:inline;
+}
+.name-input {
+  border-radius: 10px;
+}
+.round {
+  border-radius: var(--shallow-radius);
+}
+
+.waiter {
+  background-color: black;
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  opacity: 0.2;
+  -moz-opacity: 0.2;
+  z-index: 10;
+}

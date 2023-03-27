@@ -40,7 +40,7 @@ class TicketTypeController extends Controller
 
     public function update(Request $request, TicketType $ticketType)
     {
-        $request->validate(TicketType::getValidationRules());
+        $request->validate(TicketType::getValidationRules($ticketType->id));
         $ticketType->update([
             'name' => $request->input('name'),
         ]);
@@ -49,7 +49,8 @@ class TicketTypeController extends Controller
 
     public function destroy(TicketType $ticketType)
     {
-        $ticketType->delete();
-        return redirect()->route('ticket-types.all');
+        $repo = $ticketType->repository;
+        $repo->delete();
+        return $repo->getReturnURL();
     }
 }

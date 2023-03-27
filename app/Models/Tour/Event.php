@@ -2,12 +2,14 @@
 
 namespace App\Models\Tour;
 
+use App\Models\Order\Order;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -27,6 +29,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property-read string $event_details
  * @property-read Collection|Tour[] $tours
+ * @property-read Collection|Order[] $orders
  * @property-read int|null $tours_count
  * @method static Builder|Event newModelQuery()
  * @method static Builder|Event newQuery()
@@ -70,5 +73,10 @@ class Event extends Model
     public function tours(): HasMany
     {
         return $this->hasMany(Tour::class, 'event_id');
+    }
+
+    public function orders(): HasManyThrough
+    {
+        return $this->hasManyThrough(Order::class, Tour::class, 'event_id', 'tour_id');
     }
 }

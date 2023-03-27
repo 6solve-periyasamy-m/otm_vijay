@@ -31,8 +31,9 @@ class TransportInventoryController extends Controller
             'arrival_time_confirmed' => $request->input('arrival_time_confirmed') === 'on' ? 1 : 0,
             'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
-            'purchase_price' => $request->input('purchase_price'),
-            'sales_price' => $request->input('sales_price'),
+            'purchase_price' => $request->input('purchase_price') ?? 0,
+            'sales_price' => $request->input('sales_price') ?? 0,
+            'ticket_number' => $request->input('ticket_number'),
             'notes' => $request->input('notes'),
         ]);
         $transport->transportInventory()->save($transportInventory);
@@ -60,8 +61,9 @@ class TransportInventoryController extends Controller
             'arrival_time_confirmed' => $request->input('arrival_time_confirmed') === 'on' ? 1 : 0,
             'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
-            'purchase_price' => $request->input('purchase_price'),
-            'sales_price' => $request->input('sales_price'),
+            'purchase_price' => $request->input('purchase_price') ?? 0,
+            'sales_price' => $request->input('sales_price') ?? 0,
+            'ticket_number' => $request->input('ticket_number'),
             'notes' => $request->input('notes'),
         ]);
         return redirect()->route('transports.view', ['transport' => $transport,]);

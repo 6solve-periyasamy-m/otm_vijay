@@ -1,3 +1,4 @@
+@php /** @var \App\Models\Flight\Flight $flight */ @endphp
 @section('footer-script')
 <script type="text/javascript">
     $(document).ready(function () { $('#flightInventory').DataTable({fixedHeader: true}); });
@@ -8,7 +9,7 @@
     <div class="card-body">
         {{--<a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>--}}
         <a href="{{ route('flight-inventories.create', ['flight' => $flight, ]) }}" class="btn btn-primary float-end me-1">
-            <i class="icon-plus"></i>
+            {{ Icon::create() }}
             <span>Add Inventory</span>
         </a>
     </div>
@@ -36,9 +37,9 @@
                 <tr>
                     <td>{{ $flightInventory->flight_number }}</td>
                     <td>{{ $flightInventory->travelClass->name }}</td>
-                    <td>{{ f_datetime($flightInventory->check_in) }}</td>
-                    <td>{{ f_datetime($flightInventory->departs_at) }}</td>
-                    <td>{{ f_datetime($flightInventory->arrives_at) }}</td>
+                    <td data-sort="{{$flightInventory->check_in->unix()}}">{{ f_datetime($flightInventory->check_in) }}</td>
+                    <td data-sort="{{$flightInventory->departs_at->unix()}}">{{ f_datetime($flightInventory->departs_at) }}</td>
+                    <td data-sort="{{$flightInventory->arrives_at->unix()}}">{{ f_datetime($flightInventory->arrives_at) }}</td>
                     <td>
                         <input type="checkbox" disabled @if($flightInventory->fit_selectable == 1) checked @endif>
                     </td>
@@ -52,34 +53,34 @@
                     <td class="actions-3">
                         @can('create', \App\Models\Flight\FlightInventory::class)
                             <a href="{{route('flight-inventories.duplicate', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
-                                <i class="icon-layers"></i>
+                                {{ Icon::copy() }}
                             </a>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                <i class="icon-layers"></i>
+                                {{ Icon::copy() }}
                             </span>
                         @endcan
                         @can('update', \App\Models\Flight\FlightInventory::class)
                             <a href="{{route('flight-inventories.edit', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}"
                                class="btn btn-outline-success btn-sm mb-1">
-                                <i class="icon-note"></i>
+                                {{ Icon::edit() }}
                             </a>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                <i class="icon-note"></i>
+                                {{ Icon::edit() }}
                             </span>
                         @endcan
                         @can('delete', \App\Models\Flight\FlightInventory::class)
                             <a href="#" class="btn btn-outline-danger btn-sm mb-1"
                                onclick="event.preventDefault();document.getElementById('flightInventory-{{ $flightInventory->id }}-delete').submit();">
-                                <i class="icon-trash"></i>
+                                {{ Icon::delete() }}
                             </a>
                             <form id="flightInventory-{{ $flightInventory->id }}-delete"
                                   action="{{ route('flight-inventories.delete', ['flight' => $flight, 'flightInventory' => $flightInventory,]) }}" method="POST"
                                   style="display: none;">{{ csrf_field() }}</form>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                <i class="icon-trash"></i>
+                                {{ Icon::delete() }}
                             </span>
                         @endcan
                     </td>

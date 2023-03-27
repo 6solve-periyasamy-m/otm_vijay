@@ -48,7 +48,7 @@ class InvoiceRepository
             }
         }
         foreach ($order->groups as $group) {
-            $groups[$group->name] = InvoiceRepository::processGroupComponentsForInvoice($group);
+            $groups[$group->id] = InvoiceRepository::processGroupComponentsForInvoice($group);
         }
         foreach ($order->adjustments as $adjustment) {
             $adjustments[] = ['description' => "Manual Adjustment: {$adjustment->reason}", 'cost' => $adjustment->amount,];
@@ -79,7 +79,7 @@ class InvoiceRepository
             $data[] = ['description' => 'Single Occupancy Surcharge', 'cost' => $orderCustomer->single_occupancy_surcharge,];
             $totalCost += $orderCustomer->single_occupancy_surcharge;
         }
-        foreach ($orderCustomer->orderAccommodation() as $orderInventory) {
+        foreach ($orderCustomer->orderAccommodation as $orderInventory) {
             $tourInventory = $orderInventory->tourComponent;
             if ($tourInventory->tour_component_type == 'Included') {
                 $included .= $tourInventory . "\n";
@@ -133,7 +133,7 @@ class InvoiceRepository
     {
         $data = [];
         $totalCost = 0;
-        $name = $group->name . ': ';
+        $name = $group->getMembers() . ': ';
         foreach ($group->orderCustomers as $orderCustomer) {
             $name .= $orderCustomer->customer_name . ', ';
         }
@@ -152,7 +152,7 @@ class InvoiceRepository
         $data = [
             [
                 'due' => 'With Order',
-                'description' => InvoiceRepository::buildInstallmentString('Deposit', $order, $order->deposit, $order->calculated_deposit),
+                'description' => InvoiceRepository::buildInstallmentString('Deposit', $order, $order->deposit ?? 0, $order->calculated_deposit ?? 0),
                 'amount' => $order->calculated_deposit,
                 'paid' => $order->paid >= $order->calculated_deposit,
             ],
@@ -160,7 +160,7 @@ class InvoiceRepository
         foreach ($order->installments as $installment) {
             $data[] = [
                 'due' => $installment->due_on,
-                'description' => InvoiceRepository::buildInstallmentString('Installment', $order, $installment->amount, $installment->calculated_amount),
+                'description' => InvoiceRepository::buildInstallmentString('Installment', $order, $installment->amount ?? 0, $installment->calculated_amount ?? 0),
                 'amount' => $installment->calculated_amount,
                 'paid' => $installment->paid,
             ];

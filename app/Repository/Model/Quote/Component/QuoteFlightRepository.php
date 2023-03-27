@@ -2,10 +2,13 @@
 
 namespace App\Repository\Model\Quote\Component;
 
+use App\Models\Flight\FlightInventoryTour;
 use App\Models\Quote\Component\QuoteFlight;
+use App\Models\Quote\QuoteSection;
+use App\Models\Tour\Tour;
+use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Flight\FlightInventoryRepository;
-use App\Repository\Model\Flight\FlightInventoryTourRepository;
 use App\Repository\Traits\Component\IsFlight;
 
 class QuoteFlightRepository extends QuoteComponentRepository
@@ -90,5 +93,37 @@ class QuoteFlightRepository extends QuoteComponentRepository
     public function getItineraryAsset(): string
     {
         return asset($this->getInventory()->get()->component->image_url);
+    }
+
+    public function convertToTourComponent(Tour $tour): InventoryTourRepository
+    {
+        $tourComponent = FlightInventoryTour::create([
+            'tour_id' => $tour->id,
+            'tour_component_type' => $this->quoteComponent->tour_component_type,
+            'tour_sales_price' => $this->quoteComponent->tour_sales_price,
+            'flight_inventory_id' => $this->quoteComponent->flight_inventory_id,
+            'flight_type' => $this->quoteComponent->flight_type,
+        ]);
+        return $tourComponent->repository;
+    }
+
+    public function priceShown(): bool
+    {
+        return $this->quoteComponent->price_shown ?? false;
+    }
+
+    public function getSalesPrice(): float
+    {
+        return $this->quoteComponent->tour_sales_price ?? 0;
+    }
+
+    public function convertToQuoteSection(): QuoteSection
+    {
+        return QuoteSection::create([
+            'title' => $this->quoteComponent->inventory->component->departureAirport . ' to ' . $this->quoteComponent->inventory->component->arrivalAirport,
+            'body' => $this->quoteComponent->inventory->travelClass,
+            'image_url' => $this->quoteComponent->inventory->component->image_url,
+            'quote_id' => $this->quoteComponent->quote_id,
+        ]);
     }
 }

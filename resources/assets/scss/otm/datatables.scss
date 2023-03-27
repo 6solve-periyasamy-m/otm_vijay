@@ -1,38 +1,42 @@
 .dataTables_wrapper {
-    .row:nth-child(2) {
-        margin-left: 0px;
-        margin-right: 0px;
-        margin-bottom: 1rem;
+  .row:nth-child(2) {
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 1rem;
 
-        & > div {
-            overflow: auto;
-            padding-left: 0px;
-            padding-right: 0px;
-        }
+    & > div {
+      overflow: auto;
+      padding-left: 0;
+      padding-right: 0;
     }
+  }
 
-    td.actions {
-        width: 5%;
-    }
+  td.actions {
+    width: 6%;
+  }
 
-    td.actions-3 {
-        width: 10%
-    }
+  td.actions-3 {
+    width: 12%
+  }
 
-    td {
-        a {
-            color: $primaryColor;
-        }
+  td.actions-4 {
+    width: 18%
+  }
+
+  td {
+    a {
+      color: $primaryColor;
     }
+  }
 }
 
-table.dataTable tbody > tr.selected, 
+table.dataTable tbody > tr.selected,
 table.dataTable tbody > tr > .selected {
-    background: $sideBarColor;
+  background: $sideBarColor;
 }
 
-table.dataTable tbody tr.selected, 
-table.dataTable tbody th.selected, 
+table.dataTable tbody tr.selected,
+table.dataTable tbody th.selected,
 table.dataTable tbody td.selected {
-    color: $textColor;
+  color: $textColor;
 }

@@ -40,7 +40,7 @@ class BoardTypeController extends Controller
 
     public function update(Request $request, BoardType $boardType)
     {
-        $request->validate(BoardType::getValidationRules());
+        $request->validate(BoardType::getValidationRules($boardType->id));
         $boardType->update([
             'name' => $request->input('name'),
         ]);
@@ -49,7 +49,8 @@ class BoardTypeController extends Controller
 
     public function destroy(BoardType $boardType)
     {
-        $boardType->delete();
-        return redirect()->route('board-types.all');
+        $repo = $boardType->repository;
+        $repo->delete();
+        return $repo->getReturnURL();
     }
 }

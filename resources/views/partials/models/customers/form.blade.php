@@ -56,10 +56,12 @@
 @include('partials.fields.date', ['name' => 'Passport Expiry Date', 'field' => 'passport_expiry_date', 'value' => $passport_expiry_date ?? null, 'width' => 3,])
 <hr class="splitter"/>
 @include('partials.fields.selector.adder', ['name' => 'T-Shirt Size', 'field' => 't_shirt_size_id', 'value' => $t_shirt_size_id ?? 0,
-'route' => 't-shirt-size', 'createRoute' => route('t-shirt-sizes.create'), 'width' => 4])
+'route' => 't-shirt-size', 'createRoute' => route('t-shirt-sizes.create'), 'width' => 3])
 @include('partials.fields.selector.adder', ['name' => 'Hat Size', 'field' => 'hat_size_id', 'value' => $hat_size_id ?? 0,
-'route' => 'hat-size', 'createRoute' => route('hat-sizes.create'), 'width' => 4])
-@include('partials.fields.text', ['name' => 'Loyalty Number', 'field' => 'loyalty_number', 'value' => $loyalty_number ?? null, 'width' => 4])
+'route' => 'hat-size', 'createRoute' => route('hat-sizes.create'), 'width' => 3])
+@include('partials.fields.selector.adder', ['name' => 'Organization', 'field' => 'organization_id', 'value' => $customer?->organization_id ?? 0,
+'route' => 'organizations', 'createRoute' => route('organizations.create'), 'width' => 3])
+@include('partials.fields.text', ['name' => 'Loyalty Number', 'field' => 'loyalty_number', 'value' => $loyalty_number ?? null, 'width' => 3])
 <hr class="splitter"/>
 @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'value' => $internal_notes ?? null, ])
 @include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'value' => $external_notes ?? null, ])

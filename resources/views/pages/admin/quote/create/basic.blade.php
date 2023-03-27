@@ -5,12 +5,15 @@
 @section('title', 'Create Basic Quote for ' . $tour->name)
 
 @section('form-body')
-    <x-admin.input.selector.add name="customer_id" route="customers" width="4">
+    <x-admin.input.selector.add name="customer_id" route="customers" width="3">
         <x-slot:create>{{ route('customers.create') }}</x-slot:create>
         Lead Traveller
     </x-admin.input.selector.add>
-    <x-admin.input type="date" name="expires" width="4">Expiry Date</x-admin.input>
-    <x-admin.input name="single_occupancy_surcharge" width="4">Single Occupancy Surcharge</x-admin.input>
+    <x-admin.input.selector.standard name="brand_id" route="brands" width="3">
+        Quote Branding
+    </x-admin.input.selector.standard>
+    <x-admin.input type="date" name="expires" width="3">Expiry Date</x-admin.input>
+    <x-admin.input name="single_occupancy_surcharge" width="3">Single Occupancy Surcharge</x-admin.input>
     <hr class="splitter">
     <x-admin.input.checkbox name="travelling" value="1" width="6" nofloat>Lead Travelling?</x-admin.input.checkbox >
     <x-admin.input.checkbox name="paying" value="1" width="6" nofloat>Lead Paying?</x-admin.input.checkbox >

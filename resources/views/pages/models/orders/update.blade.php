@@ -1,18 +1,15 @@
+@php /** @var \App\Models\Order\Order $order */ @endphp
+
 @extends('layout.form', ['action' => route('orders.update', ['order' => $order,]),])
 
 @section('title', 'Update Order')
 
 @section('form-body')
-    @include('partials.models.orders.form', [
-      'update' => true,
-      'quote_id' => $order->quote_id,
-      'tour_id' => $order->tour_id,
-      'lead_booker_id' => $order->lead_booker_id,
-      'token' => $order->token,
-      'deposit' => $order->deposit,
-      'booking_reference' => $order->booking_reference,
-      'ordered_on' => $order->ordered_on,
-      'internal_notes' => $order->internal_notes,
-      'external_notes' => $order->external_notes,
-    ])
+    @include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'value' => $order?->deposit, 'width' => 4 ])
+    @include('partials.fields.text', ['name' => 'Booking Fee', 'field' => 'booking_fee', 'value' => $order?->booking_fee, 'width' => 4 ])
+    @include('partials.fields.datetime', ['name' => 'Ordered On', 'field' => 'ordered_on', 'value' => $order?->ordered_on, 'width' => 4 ])
+    @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'value' => $order?->internal_notes, 'width' => 6 ])
+    @include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'value' => $order?->external_notes, 'width' => 6 ])
+    @include('partials.fields.ckeditor', ['name' => 'Invoice Footer', 'field' => 'invoice_footer', 'value' => $order->invoice_footer, ])
+    @include('partials.fields.submit')
 @endsection

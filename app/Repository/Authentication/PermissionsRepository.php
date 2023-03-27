@@ -23,6 +23,7 @@ class PermissionsRepository
             'Tour\Tour' => [
                 'name' => 'Tour',
                 'group' => 'Tour and Components',
+                'costing' => true,
                 'order' => 0,
             ],
             'Tour\Event' => [
@@ -63,6 +64,7 @@ class PermissionsRepository
             'Quote\Quote' => [
                 'name' => 'Quote',
                 'group' => 'Tour and Components',
+                'costing' => true,
                 'order' => 8,
             ],
             // Accommodations
@@ -149,6 +151,11 @@ class PermissionsRepository
                 'group' => 'Transport',
                 'order' => 3,
             ],
+            'Location\LocationType' => [
+                'name' => 'Location Type',
+                'group' => 'Transport',
+                'order' => 4,
+            ],
             // Orders
             'Order\Order' => [
                 'name' => 'Order',
@@ -215,6 +222,9 @@ class PermissionsRepository
                 'update' => isset($role) && self::getPermissionStatus($role, 'update', $class),
                 'delete' => isset($role) && self::getPermissionStatus($role, 'delete', $class),
             ];
+            if (array_key_exists('costing', $values)) {
+                $permissions[$values['group']][$class]['costing'] = isset($role) && self::getPermissionStatus($role, 'costing', $class);
+            }
         }
         return $permissions;
     }
@@ -241,6 +251,7 @@ class PermissionsRepository
 
     public static function canCurrentUser(string $action, string $class): bool
     {
+        $class = str_replace('App\\Models\\', '', $class);
         return Bouncer::can($action, '\\App\\Models\\' . $class);
     }
 

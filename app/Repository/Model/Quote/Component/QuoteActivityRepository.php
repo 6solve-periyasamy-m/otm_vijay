@@ -2,10 +2,13 @@
 
 namespace App\Repository\Model\Quote\Component;
 
+use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Quote\Component\QuoteActivity;
+use App\Models\Quote\QuoteSection;
+use App\Models\Tour\Tour;
+use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Activity\ActivityInventoryRepository;
-use App\Repository\Model\Activity\ActivityInventoryTourRepository;
 use App\Repository\Traits\Component\IsActivity;
 
 class QuoteActivityRepository extends QuoteComponentRepository
@@ -88,5 +91,36 @@ class QuoteActivityRepository extends QuoteComponentRepository
     public function getItineraryAsset(): string
     {
         return asset($this->getInventory()->get()->component->image_url);
+    }
+
+    public function convertToTourComponent(Tour $tour): InventoryTourRepository
+    {
+        $tourComponent = ActivityInventoryTour::create([
+            'tour_id' => $tour->id,
+            'tour_component_type' => $this->quoteComponent->tour_component_type,
+            'tour_sales_price' => $this->quoteComponent->tour_sales_price,
+            'activity_inventory_id' => $this->quoteComponent->activity_inventory_id,
+        ]);
+        return $tourComponent->repository;
+    }
+
+    public function convertToQuoteSection(): QuoteSection
+    {
+        return QuoteSection::create([
+            'title' => $this->quoteComponent->inventory->component->name,
+            'body' => $this->quoteComponent->inventory->component->description,
+            'image_url' => $this->quoteComponent->inventory->component->image_url,
+            'quote_id' => $this->quoteComponent->quote_id,
+        ]);
+    }
+
+    public function priceShown(): bool
+    {
+        return $this->quoteComponent->price_shown ?? false;
+    }
+
+    public function getSalesPrice(): float
+    {
+        return $this->quoteComponent->tour_sales_price ?? 0;
     }
 }

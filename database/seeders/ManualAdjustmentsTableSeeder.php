@@ -23,7 +23,7 @@ class ManualAdjustmentsTableSeeder extends Seeder
             array (
                 'id' => 1,
                 'order_id' => 1,
-                'amount' => -398.0,
+                'amount' => '-398.00',
                 'reason' => 'Discount for Repeat Customer',
                 'date' => '2022-01-23',
                 'deleted_at' => NULL,

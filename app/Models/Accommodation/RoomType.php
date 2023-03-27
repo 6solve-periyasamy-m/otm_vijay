@@ -2,14 +2,19 @@
 
 namespace App\Models\Accommodation;
 
+use App\Models\Traits\HasRepository;
+use App\Repository\Model\Accommodation\RoomTypeRepository;
 use Database\Factories\Accommodation\RoomTypeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
+use Illuminate\Validation\Rule;
 
 
 /**
@@ -21,6 +26,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read Collection|AccommodationInventory[] $inventories
+ * @property-read RoomTypeRepository $repository
  * @method static RoomTypeFactory factory(...$parameters)
  * @method static Builder|RoomType newModelQuery()
  * @method static Builder|RoomType newQuery()
@@ -38,12 +45,21 @@ use Illuminate\Support\Carbon;
  */
 class RoomType extends Model
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory, HasRepository;
 
     protected $fillable = ['name', 'maximum_occupancy',];
 
-    public static function getValidationRules(): array
+    public static function getValidationRules(int|null $id = null): array
     {
+        if (!empty($id)) {
+            return [
+                'name' => [
+                    'required',
+                    Rule::unique('room_types', 'name')->ignore($id),
+                ],
+                'maximum_occupancy' => 'required|integer|min:1'
+            ];
+        }
         return ['name' => 'required|unique:room_types,name', 'maximum_occupancy' => 'required|integer|min:1'];
     }
 
@@ -56,8 +72,13 @@ class RoomType extends Model
         return $type;
     }
 
+    public function inventories(): HasMany
+    {
+        return $this->hasMany(AccommodationInventory::class, 'room_type_id');
+    }
+
     public function __toString(): string
     {
-        return $this->name . ' (Occupancy ' . $this->maximum_occupancy . ')';
+        return $this->repository->__toString();
     }
 }

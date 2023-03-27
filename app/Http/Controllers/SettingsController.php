@@ -8,7 +8,6 @@ use Settings;
 
 class SettingsController extends Controller
 {
-
     public static function getValidationRules() {
         return [
             'company_name' => 'required',
@@ -23,8 +22,6 @@ class SettingsController extends Controller
             'postcode' => 'required',
             'booking_prefix' => 'required',
             'quote_prefix' => 'required',
-            'atol_issuer' => 'required',
-            'atol_number' => 'required',
             'company_logo' => 'nullable|image',
             'atol_stamp' => 'nullable|image',
             'currency_id' => 'required|exists:currencies,id',
@@ -35,7 +32,8 @@ class SettingsController extends Controller
     }
 
     public function edit() {
-        return view('pages.settings.form');
+        //return view('pages.settings.form');
+        return view('pages.admin.system.settings');
     }
 
     public function update(Request $request) {
@@ -60,6 +58,8 @@ class SettingsController extends Controller
             'purchase.upgrade.success.redirect' => $request->input('upgrade_redirect'),
             'atol.issuer' => $request->input('atol_issuer'),
             'atol.number' => $request->input('atol_number'),
+            'atol.enabled' => $request->input('atol_enabled') == 'on' ? 1 : 0,
+            'system.mail.enabled' => $request->input('mail_enabled') == 'on' ? 1 : 0,
             'billing.stripe.key' => $request->input('stripe_key'),
             'system.format.date' => $request->input('date_format'),
             'system.format.time' => $request->input('time_format'),

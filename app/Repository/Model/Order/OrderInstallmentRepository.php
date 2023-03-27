@@ -14,16 +14,19 @@ class OrderInstallmentRepository extends ModelRepository
         $this->installment = $installment;
     }
 
+    public function getAmountPaid(): float
+    {
+        return $this->installment->calculated_amount - $this->getRemainingAmount();
+    }
+
+    public function getRemainingAmount(): float
+    {
+        return $this->installment->order->repository->getInstallments()->firstWhere('id', '=', $this->installment->id)->remaining;
+    }
+
     public function isInstallmentPaid(): bool
     {
-        $order = $this->installment->order;
-        $paid = sigfig(($order->total_adjustments * -1) + $order->paid - $order->calculated_deposit);
-        foreach ($order->installments as $orderInstallment) {
-            $paid = sigfig($paid - $orderInstallment->calculated_amount);
-            if ($paid < 0) return false;
-            if ($orderInstallment->id == $this->installment->id) return true;
-        }
-        return $paid >= 0;
+        return $this->getAmountPaid() == $this->installment->calculated_amount;
     }
 
     public function get(): OrderInstallment

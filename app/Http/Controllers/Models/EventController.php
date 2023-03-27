@@ -11,12 +11,12 @@ class EventController extends Controller
 
     public function index()
     {
-        return view('pages.models.events.table', ['events' => Event::all(),]);
+        return view('pages.admin.event.table', ['events' => Event::all(),]);
     }
 
     public function create()
     {
-        return view('pages.models.events.create');
+        return view('pages.admin.event.create');
     }
 
     public function store(Request $request)
@@ -35,12 +35,12 @@ class EventController extends Controller
 
     public function view(Event $event)
     {
-        return view('pages.models.events.view', ['event' => $event,]);
+        return view('pages.admin.event.view', ['event' => $event,]);
     }
 
     public function edit(Event $event)
     {
-        return view('pages.models.events.update', ['event' => $event,]);
+        return view('pages.admin.event.update', ['event' => $event,]);
     }
 
     public function update(Request $request, Event $event)

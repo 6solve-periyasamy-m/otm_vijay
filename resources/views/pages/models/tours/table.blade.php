@@ -12,7 +12,7 @@
     <div class='card'>
         <div class="card-body">
             <a class="btn btn-success float-end" href="{{ route('tours.create') }}">
-                <i class="icon-plus"></i>
+                {{ Icon::create() }}
                 <span>Create New</span>
             </a>
         </div>
@@ -29,35 +29,53 @@
                     <th scope="col">Date From</th>
                     <th scope="col">Date To</th>
                     <th scope="col">Base Price Per Person</th>
-                    <th scope="col">Margin</th>
                     <th scope="col">Deposit</th>
-                    <th scope="col">Single Occupancy Surcharge</th>
-                    <th scope="col">Stock Control Active</th>
                     <th scope="col">Stock</th>
                     <th scope="col">Booking Form Url</th>
                     <th scope="col">Is Active</th>
-                    <th scope="col">Notes</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
                 @foreach($tours as $tour)
-                    @include('partials.models.tours.row', [
-                    'tour' => $tour,
-                    'event' => isset($tour->event) ? $tour->event->event_title : "None",
-                    'name' => $tour->name,
-                    'description' => $tour->description,
-                    'date_from' => $tour->date_from,
-                    'date_to' => $tour->date_to,
-                    'base_price_per_person' => $tour->base_price_per_person,
-                    'margin' => $tour->margin,
-                    'deposit' => $tour->deposit,
-                    'single_occupancy_surcharge' => $tour->single_occupancy_surcharge,
-                    'stock_control_active' => $tour->stock_control_active,
-                    'stock' => $tour->stock,
-                    'booking_form_url' => $tour->booking_form_url,
-                    'is_active' => $tour->is_active,
-                    'notes' => $tour->notes,
-                    ])
+                    <tr>
+                        <td><a href="{{ route('tours.view', ['tour' => $tour->id,]) }}">{{ $tour->name }}</a></td>
+                        <td>{{ isset($tour->event) ? $tour->event->name : "No Event" }}</td>
+                        <td>{{ isset($tour->category) ? $tour->category->name : "No Category" }}</td>
+                        <td>{{ truncate($tour->description) }}</td>
+                        <td data-sort="{{$tour->date_from->unix()}}">{{ f_date($tour->date_from) }}</td>
+                        <td data-sort="{{$tour->date_to->unix()}}">{{ f_date($tour->date_to) }}</td>
+                        <td>{{ f_currency($tour->base_price_per_person) }}</td>
+                        <td>{{ f_currency($tour->deposit) }}</td>
+                        <td>
+                            @if($tour->stock_control_active)
+                                {{$tour->stock - $tour->getUsedStock()}}/{{ $tour->stock }}<br/>
+                                ({{$tour->getUsedStock()}} Sold)
+                            @else
+                                {{$tour->getUsedStock()}} Sold
+                            @endif
+                        </td>
+                        <td>
+                            @if($tour->booking_form_url !== null)
+                            <a href="{{route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,])}}">{{ $tour->booking_form_url }}</a>
+                            @else
+                            No URL
+                            @endif
+                        </td>
+                        <td>{{ $tour->is_active ? "Yes" : "No" }}</td>
+                        <td class="actions-3">
+                            <a href="{{route('tours.duplicate', ['tour' => $tour,])}}" class="btn btn-outline-info btn-sm mb-1">
+                                {{ Icon::copy() }}
+                            </a>
+                            <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
+                                {{ Icon::edit() }}
+                            </a>
+                            <a href="#" onclick="event.preventDefault();document.getElementById('tour-{{ $tour->id }}-delete').submit();" class="btn btn-outline-danger btn-sm mb-1">
+                                {{ Icon::delete() }}
+                            </a>
+                            <form id="tour-{{ $tour->id }}-delete" action="{{ route('tours.delete', ['tour' => $tour,]) }}" method="POST"
+                                  style="display: none;">{{ csrf_field() }}</form>
+                        </td>
+                    </tr>
                 @endforeach
             </table>
         </div>

@@ -8,8 +8,15 @@ use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
+use App\Models\Helper\Traits\HasAdditionalCosts;
 use App\Models\Merchandise\MerchandiseInventoryTour;
+use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
+use App\Models\Order\OrderInstallment;
+use App\Models\System\Brand;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Model\Tour\TourRepository;
@@ -24,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -40,6 +48,7 @@ use Illuminate\Support\Carbon;
  * @property float|null $margin
  * @property float|null $single_occupancy_surcharge
  * @property float|null $deposit
+ * @property float|null $booking_fee
  * @property bool $stock_control_active
  * @property bool $accommodation_stock_control
  * @property bool $activity_stock_control
@@ -50,7 +59,9 @@ use Illuminate\Support\Carbon;
  * @property string|null $booking_form_url
  * @property int|null $tour_category_id
  * @property int|null $tour_merchandise_id
+ * @property int|null $brand_id
  * @property bool $is_active
+ * @property bool|null $atol_protected NULL if should inherit from system settings (default)
  * @property Carbon $date_from
  * @property Carbon $date_to
  * @property string|null $invoice_footer
@@ -75,14 +86,24 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $flight_inventory_tours_count
  * @property-read float $deposit_percentage
  * @property-read bool $has_atol_certificate
+ * @property-read bool $protected
  * @property-read float $remaining_installment
  * @property-read float $remaining_percentage
  * @property-read TourRepository $repository
- * @property-read Collection $templates
+ * @property-read Brand|null $linkedBrand
+ * @property-read Brand $brand
+ * @property-read Collection|AccommodationInventoryTour[] $templates
  * @property-read Collection|MerchandiseInventoryTour[] $merchandise
+ * @property-read Collection|OrderInstallment[] $orderInstallments All order-installments from non-cancelled orders
  * @property-read int|null $merchandise_count
  * @property-read Collection|Order[] $orders
  * @property-read int|null $orders_count
+ * @property-read Collection|OrderAccommodation[] $orderAccommodation
+ * @property-read Collection|OrderActivity[] $OrderActivities
+ * @property-read Collection|OrderFlight[] $OrderFlights
+ * @property-read Collection|OrderTransport[] $OrderTransport
+ * @property-read int|null $order_accommodation_count
+ * @property-read int|null $order_installments_count
  * @property-read Collection|PaymentInstallment[] $paymentInstallments
  * @property-read int|null $payment_installments_count
  * @property-read Collection|TransportInventory[] $transportInventory
@@ -128,7 +149,7 @@ use Illuminate\Support\Carbon;
  */
 class Tour extends Model
 {
-    use HasFactory, SoftDeletes, CascadeSoftDeletes;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes, HasAdditionalCosts;
 
     protected $guarded = [];
     protected $casts = [
@@ -172,6 +193,11 @@ class Tour extends Model
         return $this->belongsTo(Event::class, 'event_id');
     }
 
+    public function linkedBrand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class, 'brand_id');
+    }
+
     public function flightInventory(): BelongsToMany
     {
         return $this->belongsToMany(FlightInventory::class, 'flight_inventory_tours')->withPivot('sales_price', 'tour_component_type');
@@ -202,6 +228,26 @@ class Tour extends Model
         return $this->hasMany(ActivityInventoryTour::class, 'tour_id');
     }
 
+    public function orderAccommodation(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderAccommodation::class, AccommodationInventoryTour::class, 'tour_id', 'accommodation_inventory_tour_id');
+    }
+
+    public function orderActivities(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderActivity::class, ActivityInventoryTour::class, 'tour_id', 'activity_inventory_tour_id');
+    }
+
+    public function orderFlights(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderFlight::class, FlightInventoryTour::class, 'tour_id', 'flight_inventory_tour_id');
+    }
+
+    public function orderTransport(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderTransport::class, TransportInventoryTour::class, 'tour_id', 'transport_inventory_tour_id');
+    }
+
     public function transportInventoryTours(): HasMany
     {
         return $this->hasMany(TransportInventoryTour::class, 'tour_id');
@@ -220,6 +266,11 @@ class Tour extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(TourCategory::class, 'tour_category_id');
+    }
+
+    public function orderInstallments(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderInstallment::class, Order::class, 'tour_id', 'order_id')->where('cancelled', '=', false);
     }
 
     public function getUsedStock(): int
@@ -256,6 +307,17 @@ class Tour extends Model
         return $this->flightInventoryTours()->count() > 0;
     }
 
+    public function getBrandAttribute(): Brand
+    {
+        return $this->linkedBrand ?? Brand::getSystemBrand();
+    }
+
+    public function setBrandAttribute(Brand $brand)
+    {
+        $this->brand_id = $brand->id;
+        $this->save();
+    }
+
     public function flightInventoryTours(): HasMany
     {
         return $this->hasMany(FlightInventoryTour::class, 'tour_id');
@@ -264,6 +326,11 @@ class Tour extends Model
     public function getAccommodationTemplateData(): array
     {
         return $this->repository->getTemplateData();
+    }
+
+    public function getProtectedAttribute(): bool
+    {
+        return $this->atol_protected ?? flag('atol.enabled', true);
     }
 
     public function getTemplatesAttribute(): \Illuminate\Support\Collection

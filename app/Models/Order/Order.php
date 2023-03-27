@@ -37,6 +37,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int|null $lead_booker_id
  * @property string|null $booking_reference Unique reference for the booking
  * @property float|null $deposit The expected deposit amount
+ * @property float|null $booking_fee The fee paid at time of booking
  * @property Carbon $ordered_on When the order was placed
  * @property bool $cancelled Is the order cancelled?
  * @property string|null $internal_notes The notes shown only to the operator
@@ -110,7 +111,7 @@ class Order extends Model
 {
     use SoftDeletes, CascadeSoftDeletes, HasFactory, HasRelationships;
 
-    protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes', 'deposit', 'invoice_footer'];
+    protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes', 'deposit', 'invoice_footer', 'booking_fee'];
     protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double',];
 
     protected array $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments', 'installments', 'invoices'];
@@ -120,8 +121,6 @@ class Order extends Model
     public static function getValidationRules(): array
     {
         return [
-            'quote_id' => 'nullable|exists:quotes,id',
-            'tour_id' => 'required|exists:tours,id',
             'ordered_on' => 'required|date'
         ];
     }
@@ -174,7 +173,6 @@ class Order extends Model
 
     public function quote(): HasOne
     {
-
         return $this->hasOne(Quote::class, 'order_id');
     }
 
@@ -235,7 +233,7 @@ class Order extends Model
      */
     public function getTotalAttribute(): float
     {
-        return $this->cancelled ? $this->paid : $this->cost;
+        return $this->cancelled ? $this->paid : ($this->cost + $this->total_adjustments);
     }
 
     /**
@@ -259,7 +257,7 @@ class Order extends Model
      */
     public function getRemainingInstallmentAttribute(): float
     {
-        $cost = $this->cost - $this->calculated_deposit;
+        $cost = $this->cost - $this->calculated_deposit + $this->total_adjustments;
         foreach ($this->installments as $installment) {
             $cost -= $installment->calculated_amount;
         }
@@ -279,7 +277,7 @@ class Order extends Model
      */
     public function getDepositPercentageAttribute(): float
     {
-        return $this->cost == 0 ? 0 : round(($this->calculated_deposit / $this->cost) * 100, 2);
+        return $this->total == 0 ? 0 : round(($this->calculated_deposit / $this->total) * 100, 2);
     }
 
     /**
@@ -287,7 +285,7 @@ class Order extends Model
      */
     public function getRemainingPercentageAttribute(): float
     {
-        return $this->cost == 0 ? 0 : round(($this->remaining_installment / $this->cost) * 100, 2);
+        return $this->total == 0 ? 0 : round(($this->remaining_installment / $this->total) * 100, 2);
     }
 
     /**
@@ -315,7 +313,7 @@ class Order extends Model
      */
     public function getHasAtolAttribute(): bool
     {
-        return $this->repository->hasFlight();
+        return $this->tour->protected && $this->repository->hasFlight();
     }
 
     /**

@@ -14,7 +14,7 @@
     <div class="card">
         <div class="card-body text-end">
             <a class="btn btn-primary text-white" href="{{ route('customers.create') }}">
-                <i class="icon-plus"></i>
+                {{ Icon::create() }}
                 Create New
             </a>
         </div>
@@ -25,6 +25,8 @@
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">Name</th>
+                    <th scope="col">Email Address</th>
+                    <th scope="col">Registered</th>
                     <th scope="col">Date of Birth</th>
                     <th scope="col">Home Address</th>
                     <th scope="col">Mobile Number</th>
@@ -35,17 +37,19 @@
                 @foreach($customers as $customer)
                     <tr>
                         <td><a href="{{ route('customers.view', ['customer' => $customer,]) }}">{{ $customer->full_name }}</a></td>
-                        <td>{{ f_date($customer->date_of_birth) }}</td>
+                        <td>{{ $customer->email_address ?? 'No Email Address' }}</td>
+                        <td>{{ f_bool($customer->registered) }}</td>
+                        <td>{{ isset($customer->date_of_birth) ? f_date($customer->date_of_birth) : 'Date of Birth not set' }}</td>
                         <td>{{ $customer->homeAddress }}</td>
                         <td>{{ $customer->mobile_number }}</td>
                         <td>{{ f_date($customer->passport_expiry_date) }}</td>
                         <td class="actions">
                             <a href="{{route('customers.edit', ['customer' => $customer,])}}" class="btn btn-outline-success btn-sm mb-1">
-                                <i class="icon-note"></i>
+                                {{ Icon::edit() }}
                             </a>
                             <a href="#" class="btn btn-outline-danger btn-sm mb-1"
                                onclick="event.preventDefault();document.getElementById('customer-{{ $customer->id }}-delete').submit();">
-                                <i class="icon-trash"></i>
+                                {{ Icon::delete() }}
                             </a>
                             <form id="customer-{{ $customer->id }}-delete"
                                   action="{{ route('customers.delete', ['customer' => $customer,]) }}" method="POST"

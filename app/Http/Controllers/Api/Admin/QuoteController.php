@@ -22,7 +22,7 @@ class QuoteController extends ApiController
         }
         $customers = $request->paying + $request->travelling;
         $cost = $quote->repository->getPricePerPerson($request->paying);
-        if ($cost === null && $request->paying > 0) {
+        if ($cost === null) {
             return response()->json(['success' => false, 'message' => 'No price point exists for that few travellers']);
         }
         $cost = $request->paying == 0 ? 0 : $cost->price_per_person;
@@ -58,7 +58,11 @@ class QuoteController extends ApiController
 
     public function getUnknownTraveller(UnknownTravellerRequest $request, Quote $quote)
     {
-        $customer = $quote->repository->generateGenericCustomer($request->paying);
-        return response()->json(['success' => true, 'id' => $customer->id, 'text' => $customer->first_name . ' ' . $customer->last_name,]);
+        $customers = [];
+        for ($x = 0; $x < ($request->count ?? 1); $x++) {
+            $customer = $quote->repository->generateGenericCustomer($request->paying);
+            $customers[] = ['id' => $customer->id, 'text' => $customer->first_name . ' ' . $customer->last_name,];
+        }
+        return response()->json(['success' => true, 'data' => $customers,]);
     }
 }

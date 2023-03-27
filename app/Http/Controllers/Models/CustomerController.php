@@ -6,9 +6,11 @@ use App\Events\Customer\CustomerCreatedEvent;
 use App\Events\Customer\CustomerEditedEvent;
 use App\Events\Customer\CustomerRemovedEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginAsCustomerRequest;
 use App\Models\Customer\Customer;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Log;
@@ -34,8 +36,6 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $request->validate(Customer::getValidationRules());
-        $request->validate(self::HOME_RULES);
-        $request->validate(self::BILLING_RULES);
         $customer = Customer::make([
             'title' => $request->input('title'),
             'first_name' => $request->input('first_name'),
@@ -58,6 +58,7 @@ class CustomerController extends Controller
             'passport_expiry_date' => $request->input('passport_expiry_date'),
             't_shirt_size_id' => $request->input('t_shirt_size_id'),
             'hat_size_id' => $request->input('hat_size_id'),
+            'organization_id' => $request->input('organization_id'),
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
             'dietary_notes' => $request->input('dietary_notes'),
@@ -101,6 +102,12 @@ class CustomerController extends Controller
         return redirect()->route('customers.view', ['customer' => $customer,]);
     }
 
+    public function login(LoginAsCustomerRequest $request)
+    {
+        Auth::guard('customer')->loginUsingId($request->customer_id);
+        return redirect()->route('customer.portal');
+    }
+
     public function view(Customer $customer)
     {
         return view('pages.models.customers.view', ['customer' => $customer,]);
@@ -136,6 +143,7 @@ class CustomerController extends Controller
             'passport_country_of_issue' => $request->input('passport_country_of_issue'),
             't_shirt_size_id' => $request->input('t_shirt_size_id'),
             'hat_size_id' => $request->input('hat_size_id'),
+            'organization_id' => $request->input('organization_id'),
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
             'dietary_notes' => $request->input('dietary_notes'),

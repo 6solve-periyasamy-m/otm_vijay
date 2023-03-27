@@ -59,10 +59,10 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read string $booking_reference The booking reference of the order
  * @property-read string $customer_name The full name of the customer
  * @property-read string $tour_name The name of the tour the order is for
- * @property-read bool $has_occupancy Whether the customer has occupancy set correctly
  * @property-read bool $has_surcharge Whether the customer should be charged for single occupancy
  * @property-read bool $is_lead_booker Whether the customer is the lead booker
  * @property-read bool $cancelled Whether the customer is cancelled
+ * @property-read bool $registered Is the traveller a registered user
  * @property-read string $lead_booker_name The full name of the lead booker
  * @property-read Carbon $ordered_on When the order was placed
  * @property-read float $adjustment_total The sum of all adjustments for the OrderCustomer
@@ -192,11 +192,13 @@ class OrderCustomer extends Model
 
     public function getLeadBookerNameAttribute(): string
     {
+        if ($this->order->leadBooker->customer === null) return "Lead Booker Unknown";
         return "{$this->order->leadBooker->customer->first_name} {$this->order->leadBooker->customer->last_name}";
     }
 
     public function getCustomerNameAttribute(): string
     {
+        if ($this->customer === null) return "Customer Unknown";
         return "{$this->customer->first_name} {$this->customer->last_name}";
     }
 
@@ -217,15 +219,8 @@ class OrderCustomer extends Model
 
     public function getHasSurchargeAttribute(): bool
     {
-        foreach ($this->groups as $group) {
-            if ($group->orderCustomers()->count() == 1) return true;
-        }
-        return false;
-    }
-
-    public function getHasOccupancyAttribute(): bool
-    {
-        return RoomingRepository::checkOccupancy($this);
+        $highest = $this->groups()->withCount('orderCustomers')->orderBy('order_customers_count', 'desc')->first();
+        return isset($highest) && $highest->order_customers_count === 1;
     }
 
     /**
@@ -258,5 +253,10 @@ class OrderCustomer extends Model
     public function getAdditionalCosts(): array
     {
         return $this->repository->getAdditionalCosts();
+    }
+
+    public function getRegisteredAttribute(): bool
+    {
+        return $this->customer?->registered ?? false;
     }
 }

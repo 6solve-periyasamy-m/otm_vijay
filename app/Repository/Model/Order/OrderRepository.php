@@ -3,8 +3,12 @@
 namespace App\Repository\Model\Order;
 
 use App\Events\Order\OrderCreatedEvent;
+use App\Exceptions\MailDisabledException;
+use App\Mail\Storage\OrderMail;
 use App\Models\Customer\Customer;
 use App\Models\Helper\OrderStatus;
+use App\Models\Location\Address;
+use App\Models\Location\AddressParent;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
@@ -12,11 +16,13 @@ use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
-use App\Repository\Mailing\MailRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
+use App\Repository\Storage\RemoteGroup;
 use Cache;
 use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class OrderRepository extends ModelRepository
@@ -31,6 +37,26 @@ class OrderRepository extends ModelRepository
         $this->atolRepository = new AtolRepository($order);
     }
 
+    public static function getOrdersOverview(): array
+    {
+        $orders = Order::with(
+            'leadBooker',
+            'orderCustomers',
+            'orderCustomers.customer',
+            'orderCustomers.orderAccommodation',
+            'orderCustomers.groups',
+            'orderCustomers.orderActivities',
+            'orderCustomers.orderFlights',
+            'orderCustomers.orderTransports',
+            'orderCustomers.orderMerchandise',
+        )->get();
+        $data = [];
+        foreach ($orders as $order) {
+            $data[] = $order->repository->getOverview();
+        }
+        return $data;
+    }
+
     /**
      * @param Tour $tour
      * @param array $data
@@ -38,22 +64,28 @@ class OrderRepository extends ModelRepository
      * @param ConvertedCustomer[] $customers
      * @return Order
      */
-    public static function create(Tour $tour, array $data, ConvertedCustomer $lead, array $customers = []): Order
+    public static function create(Tour $tour, array $data, ConvertedCustomer $lead, array $customers = [], bool $shouldInvoice = true): Order
     {
         $order = Order::make($data);
         $tour->orders()->save($order);
         $leadBooker = $order->repository->addCustomer($lead);
         $order->repository->update(['lead_booker_id' => $leadBooker->id,]);
         $order->repository->update(['booking_reference' => Order::generateBookingReference($order),]); // Merging will lead to lead booker id not being set at generation
-        $leadBooker->repository->addAllIncluded();
-        RoomingRepository::assignDefaultRooming($leadBooker);
+        $included = $tour->repository->getComponentSetForSaving();
+        $defaultRooms = RoomingRepository::getDefaultRoomList($tour);
+        if ($lead->travelling) {
+            $leadBooker->repository->bulkSaveStandard($included->clone());
+            RoomingRepository::createGroupFromRoomList($leadBooker, $defaultRooms);
+        }
         $order->repository->resetInstallments();
         foreach ($customers as $customer) {
             $orderCustomer = $order->repository->addCustomer($customer);
-            $orderCustomer->repository->addAllIncluded();
-            RoomingRepository::assignDefaultRooming($orderCustomer);
+            if ($customer->travelling) {
+                $orderCustomer->repository->bulkSaveStandard($included->clone());
+                RoomingRepository::createGroupFromRoomList($orderCustomer, $defaultRooms);
+            }
         }
-        //event(new OrderCreatedEvent($order));
+        event(new OrderCreatedEvent($order, $shouldInvoice));
         return $order;
     }
 
@@ -78,6 +110,21 @@ class OrderRepository extends ModelRepository
     public static function getFromBookingReference(string $reference): ?Order
     {
         return Order::whereBookingReference($reference)->first();
+    }
+
+    /**
+     * Return the installments with calculated remaining field
+     * @return Collection|OrderInstallment[]
+     */
+    public function getInstallments(): Collection|array
+    {
+        $customers = $this->order->orderCustomers()->count();
+        $paid = $this->order->paid - (($this->order->deposit ?? 0) * $customers) - ($this->order->booking_fee ?? 0);
+        DB::statement("SET @total:={$paid};");
+        $installments = OrderInstallment::where('order_id', '=', $this->order->id)
+            ->orderBy('due_on')
+            ->selectRaw("*, GREATEST((GREATEST(@total,0)-(amount*{$customers}))*-1,0) as remaining, (@total := @total - (amount*{$customers})) AS rt");
+        return $installments->get();
     }
 
     /**
@@ -126,22 +173,12 @@ class OrderRepository extends ModelRepository
      */
     public function getCost(): float
     {
-        $total = 0;
+        $total = $this->order->booking_fee ?? 0;
         foreach ($this->order->orderCustomers()->where('is_charged', '=', 1)->get() as $orderCustomer) {
             $total += $orderCustomer->tour_cost;
             if ($orderCustomer->has_surcharge) $total += $orderCustomer->single_occupancy_surcharge;
-            foreach ($orderCustomer->repository->getComponents(false) as $component) {
-                if ($component->getTourComponentType() !== "Included") {
-                    $total += $component->getCost();
-                }
-            }
         }
-        foreach ($this->order->groups()->with('rooms')->get() as $group) {
-            foreach ($group->rooms()->with('tourComponent')->get() as $orderComponent) {
-                if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
-                $total += $orderComponent->cost;
-            }
-        }
+        $total += $this->getAdditionalComponentTotal();
         return $total;
     }
 
@@ -175,7 +212,7 @@ class OrderRepository extends ModelRepository
      */
     public function getRemaining(): float
     {
-        return ($this->order->cost + $this->order->total_adjustments) - $this->order->paid;
+        return sigfig(($this->order->cost + $this->order->total_adjustments) - $this->order->paid);
     }
 
     /**
@@ -257,21 +294,14 @@ class OrderRepository extends ModelRepository
             $adjustments = $this->order->total_adjustments;
             $total = $cost + $adjustments;
             if ($this->order->trashed() || $this->order->cancelled) {
-                if ($paidAmount == 0) {
-                    $status = OrderStatus::CANCELLED_FULL_REFUND;
-                } else if ($paidAmount <= $this->order->calculated_deposit) {
+                if ($paidAmount <= ($this->order->booking_fee ?? 0)) {
+                    $status = $paidAmount < 0 ? OrderStatus::CANCELLED_OVER_REFUNDED : OrderStatus::CANCELLED_FULL_REFUND;
+                }  else if ($paidAmount <= $this->order->calculated_deposit) {
                     $status = OrderStatus::CANCELLED_DEPOSIT_HELD;
                 } else {
                     $status = OrderStatus::CANCELLED_REFUND_REQUIRED;
                 }
             } else {
-                foreach ($this->order->orderCustomers as $orderCustomer) {
-                    if (!$orderCustomer->has_occupancy) {
-                        $status = OrderStatus::OCCUPANCY_NOT_SET;
-                        Cache::put("orders.{$this->order->id}.status", $status, self::STATUS_CACHE_TIME);
-                        return $status;
-                    }
-                }
                 if ($total > $paidAmount) {
                     $next = $this->order->next_installment;
                     if (isset($next) && Carbon::now()->isAfter($next->due_on)) {
@@ -296,23 +326,7 @@ class OrderRepository extends ModelRepository
      */
     public function getNextPaymentDetails(): ?OrderInstallment
     {
-        $paid = $this->order->paid;
-        $paid -= $this->order->total_adjustments; // Negative adjustments add to the total paid, so minus is required
-        $paid -= $this->order->calculated_deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
-        $paid = sigfig($paid);
-        foreach ($this->order->installments as $installment) {
-            $paid -= $installment->calculated_amount;
-            $paid = sigfig($paid);
-            if ($paid < 0) {
-                return new OrderInstallment([
-                    'id' => $installment->id,
-                    'amount' => min($installment->calculated_amount, $paid * -1),
-                    'due_on' => $installment->due_on,
-                    'order_id' => $this->order->id,
-                ]);
-            }
-        }
-        return null;
+        return $this->getInstallments()->firstWhere('remaining', '>', 0);
     }
 
     public function resetInstallments(): void
@@ -338,9 +352,9 @@ class OrderRepository extends ModelRepository
         return $this->order->save();
     }
 
-    public function hasBeenReminded(OrderInstallment $installment): bool
+    public function hasBeenReminded(OrderInstallment $installment, int $period): bool
     {
-        $reminder = PaymentReminder::where('order_id', $this->order->id)->where('order_installment_id', $installment->id)->first();
+        $reminder = PaymentReminder::where('order_id', $this->order->id)->where('order_installment_id', $installment->id)->where('period', $period)->first();
         return isset($reminder);
     }
 
@@ -348,17 +362,20 @@ class OrderRepository extends ModelRepository
     {
         if (!$this->shouldRemind($days, $minDays)) return;
         $nextInstallment = $this->order->next_installment;
-        if ($this->hasBeenReminded($nextInstallment)) return;
+        if ($this->hasBeenReminded($nextInstallment, $days)) return;
         PaymentReminder::create([
             'order_id' => $this->order->id,
             'order_installment_id' => $nextInstallment->id,
             'period' => $days
         ]);
-        if ($days < 0) {
-            MailRepository::sendMailable('payment-overdue', $this->order->leadBooker->customer->email_address, $this->order);
-        } else {
-            MailRepository::sendMailable('payment-due', $this->order->leadBooker->customer->email_address, $this->order);
-        }
+        try {
+            if ($days < 0) {
+                (new OrderMail('payment-overdue'))->send($this->order->leadBooker->customer->email_address, $this->order);
+            } else {
+                (new OrderMail('payment-due'))->send($this->order->leadBooker->customer->email_address, $this->order);
+            }
+        } catch (MailDisabledException) {}
+
     }
 
     public function shouldRemind(int $days, int $minDays = -1000): bool
@@ -387,5 +404,197 @@ class OrderRepository extends ModelRepository
     public function refresh()
     {
         $this->getOrderStatus(true);
+    }
+
+    public function getAdditionalComponentTotal():float
+    {
+        $query = DB::query();
+        $query->from(function ($query) {
+            $query->from($this->getAccommodationQuery())
+                ->union($this->getSingleOwnedTableQuery('activity', 'activities'))
+                ->union($this->getSingleOwnedTableQuery('flight', 'flights'))
+                ->union($this->getSingleOwnedTableQuery('transport', 'transports'))
+                ->union($this->getSingleOwnedTableQuery('merchandise', 'merchandises'))
+                ->select('table', 'id', 'cost', 'type');
+        });
+        $query->select(DB::raw('SUM(`cost`) as total'));
+        return $query->first()?->total ?? 0;
+    }
+
+    private function getAccommodationQuery(): Builder
+    {
+        $query = DB::table('order_accommodations');
+        $query->join('accommodation_inventory_tours', 'order_accommodations.accommodation_inventory_tour_id', '=', 'accommodation_inventory_tours.id');
+        $query->join('groups', 'order_accommodations.group_id', '=', 'groups.id');
+        $query->join('order_customer_group', 'order_customer_group.group_id', '=', 'groups.id');
+        $query->join('order_customers', 'order_customers.id', '=', 'order_customer_group.order_customer_id');
+        $query->where('order_customers.order_id', '=', $this->order->id);
+        $query->whereNull('groups.deleted_at');
+        $query->whereNull('order_customer_group.deleted_at');
+        $query->whereNull('order_customers.deleted_at');
+        $query->whereNull('order_accommodations.deleted_at');
+        $query->where('accommodation_inventory_tours.tour_component_type', '!=', 'Included');
+        $query->groupBy('order_accommodations.id');
+        $query->select(DB::raw("'accommodation' as 'table'"), 'order_accommodations.id as id', 'order_accommodations.cost as cost', 'accommodation_inventory_tours.tour_component_type as type');
+        return $query;
+    }
+
+    public function getSingleOwnedTableQuery(string $single, string $plural): Builder
+    {
+        $query = DB::table("order_{$plural}");
+        $query->join("{$single}_inventory_tours", "order_{$plural}.{$single}_inventory_tour_id", '=', "{$single}_inventory_tours.id");
+        $query->join('order_customers', 'order_customers.id', '=', "order_{$plural}.order_customer_id");
+        $query->where('order_customers.order_id', '=', $this->order->id);
+        $query->whereNull('order_customers.deleted_at');
+        $query->whereNull("order_{$plural}.deleted_at");
+        $query->where('order_customers.is_charged', '=', 1);
+        $query->where("{$single}_inventory_tours.tour_component_type", '!=', 'Included');
+        $query->select(DB::raw("'{$single}' as 'table'"), "order_{$plural}.id as id", "order_{$plural}.cost as cost", "{$single}_inventory_tours.tour_component_type as type");
+        return $query;
+    }
+
+    public function getOverview(): array
+    {
+        $travellers = "";
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            $travellers .= "{$orderCustomer->customer_name}, ";
+        }
+        return [
+            'ordered' => [
+                'unix' => $this->order->ordered_on->unix(),
+                'format' => f_datetime($this->order->ordered_on),
+            ],
+            'lead' => $this->order->lead_booker_name,
+            'reference' => $this->order->booking_reference,
+            'tour' => $this->order->tour->name,
+            'passengers' => $this->order->orderCustomers()->count(),
+            'travellers' => $travellers,
+            'status' => $this->order->status->getStatusArray(),
+            'view' => route('orders.view', ['order' => $this->order,]),
+        ];
+    }
+
+    public function migrate(Tour $tour, bool $resetPrice = true, bool $resetAdjustments = false)
+    {
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            $orderCustomer->repository->removeAllComponents();
+            if ($resetAdjustments) {
+                $orderCustomer->adjustments()->delete();
+            }
+        }
+        $this->order->tour_id = $tour->id;
+        if ($resetPrice) {
+            $this->order->deposit = $tour->deposit;
+        }
+        $this->order->save();
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            if ($resetPrice) {
+                $orderCustomer->tour_cost = $tour->base_price_per_person;
+                $orderCustomer->single_occupancy_surcharge = $tour->single_occupancy_surcharge;
+                $orderCustomer->save();
+            }
+            $orderCustomer->repository->addAllIncluded();
+        }
+        $this->resetInstallments();
+        foreach ($this->order->groups as $group) {
+            $group->repository->refreshRooming();
+        }
+        if ($resetAdjustments) {
+            $this->order->adjustments()->delete();
+        }
+    }
+
+    public function getCostToCompany(): float
+    {
+        $cost = 0;
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            $cost += $orderCustomer->repository->getCostToCompany();
+        }
+        return $cost;
+    }
+
+    public function getRoomingData(): array
+    {
+        $rooms = [];
+        foreach ($this->order->tour->accommodationInventoryTours()->with('inventory', 'inventory.component')->get() as $inventoryTour) {
+            $rooms[$inventoryTour->id] = [
+                'name' => $inventoryTour->repository->formatAdminOccupancy(),
+                'size' => $inventoryTour->inventory->roomType->maximum_occupancy,
+                'price' => $inventoryTour->tour_component_type === 'Included' ? 0 : $inventoryTour->tour_sales_price,
+                'start' => $inventoryTour->inventory->check_in->unix(),
+                'end' => $inventoryTour->inventory->check_out->unix(),
+            ];
+        }
+        $customers = [];
+        foreach ($this->order->orderCustomers()->with('customer')->get() as $orderCustomer) {
+            if (!$orderCustomer->is_travelling) continue;
+            $customers[$orderCustomer->id] = ['name' => $orderCustomer->customer_name, 'avatar' => $orderCustomer->customer->avatar_url,];
+        }
+        $groups = [];
+        foreach ($this->order->groups as $group) {
+            $groupCustomers = [];
+            foreach ($group->orderCustomers as $orderCustomer) {
+                if (!$orderCustomer->is_travelling) continue;
+                $groupCustomers[] = $orderCustomer->id;
+            }
+            $groupRooms = [];
+            foreach ($group->rooms as $room) {
+                $groupRooms[] = $room->accommodation_inventory_tour_id;
+            }
+            $groups[$group->id] = ['rooms' => $groupRooms, 'customers' => $groupCustomers,];
+        }
+        return ['rooms' => $rooms, 'customers' => $customers, 'groups' => $groups,];
+    }
+
+    private function wipeGroups(): void
+    {
+        foreach ($this->order->groups as $group) {
+            $group->rooms()->delete();
+            $group->pivot()->delete();
+            $group->delete();
+        }
+    }
+
+    /**
+     * @param RemoteGroup[] $remoteGroups
+     * @return void
+     */
+    public function importRoomingData(array $remoteGroups): void
+    {
+        $this->wipeGroups();
+        foreach ($remoteGroups as $remoteGroup) {
+            $remoteGroup->convertToGroup();
+        }
+    }
+
+    public function forceDelete(): void
+    {
+        foreach ($this->order->groups as $group) {
+            $group->repository->forceDelete();
+        }
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            $orderCustomer->repository->forceDelete();
+        }
+        $this->order->adjustments()->forceDelete();
+        $this->order->invoices()->forceDelete();
+        $this->order->payments()->forceDelete();
+        $this->order->installments()->forceDelete();
+        $this->order->reminders()->forceDelete();
+    }
+
+    public static function generateGenericCustomer(string $first, string $last): Customer
+    {
+        $homeAddress = Address::create([
+            'name' => 'Generic Customer Address',
+            'address_parent_id' => AddressParent::getParentId('customer'),
+        ]);
+        $billingAddress = $homeAddress->repository->cloneToNew(AddressParent::getParentId('customer'));
+        return Customer::create([
+            'first_name' => $first,
+            'last_name' => $last,
+            'home_address_id' => $homeAddress->id,
+            'billing_address_id' => $billingAddress->id,
+            'date_of_birth' => now(),
+        ]);
     }
 }

@@ -30,7 +30,6 @@ class PaymentController extends Controller
         $payment = Payment::make([
             'payment_method_id' => $request->input('payment_method_id'),
             'amount' => $value,
-            'payment_type' => $request->input('payment_type'),
             'paid_on' => $request->input('paid_on'),
             'customer_id' => $request->input('customer_id'),
         ]);
@@ -56,7 +55,6 @@ class PaymentController extends Controller
         $payment->update([
             'payment_method_id' => $request->input('payment_method_id'),
             'amount' => $value,
-            'payment_type' => $request->input('payment_type'),
             'paid_on' => $request->input('paid_on'),
             'customer_id' => $request->input('customer_id'),
         ]);

@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Customer;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Http\Controllers\Controller;
-use App\Http\Gateways\StripeGateway;
+use App\Http\Gateways\Storage\LineItem;
+use App\Http\Requests\Customer\TourDetailsRequest;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Customer\Customer;
 use App\Models\Order\Component\OrderAccommodation;
@@ -13,10 +14,11 @@ use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
+use App\Models\Order\Payment\PaymentIntention;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\Model\Order\OrderRepository;
-use Illuminate\Http\Request;
+use Gateway;
 
 class CustomerTourController extends Controller
 {
@@ -119,16 +121,18 @@ class CustomerTourController extends Controller
 
         $data = [
             'additions' => [[
-                'customer' => $componentType == 'accommodation' ? $orderCustomer->primary_group->id : $orderCustomer->customer->id,
+                'customer' => $componentType == 'accommodation' ? $orderCustomer->primary_group->id : $orderCustomer->id,
                 'component' => $componentType,
                 'id' => $tourComponent->get()->id,
         ],],];
 
         $redirect = setting('purchase.addon.success.redirect', url()->previous(route('customer.extras', ['reference' => $reference, 'customer' => $customer,])));
 
-        return StripeGateway::checkout(
-            [['name' => $tourComponent->__toString(), 'cost' => $tourComponent->get()->tour_sales_price, 'quantity' => 1]],
-                $order->booking_reference, 'Installment', CustomerAuthenticationRepository::getCustomer()->id, $redirect, $data);
+
+        $item = new LineItem("{$tourComponent}", $tourComponent->get()->tour_sales_price);
+        $intention = PaymentIntention::build(CustomerAuthenticationRepository::getCustomer(), $order->booking_reference, 'Installment', $data);
+
+        return redirect(Gateway::getDefaultGateway()->checkout([$item,], $intention, CustomerAuthenticationRepository::getCustomer(), $redirect));
     }
 
     public function addExtra(string $reference, string $componentType, int $componentId, ?Customer $customer = null)
@@ -162,27 +166,21 @@ class CustomerTourController extends Controller
         return redirect()->route('customer.extras', ['reference' => $reference,]);
     }
 
-    public function updateNotes(Request $request, string $reference, OrderCustomer $orderCustomer)
+    public function updateNotes(TourDetailsRequest $request, string $reference, OrderCustomer $orderCustomer)
     {
         $customer = CustomerAuthenticationRepository::getCustomer();
         if (!isset($customer)) abort(404);
         $order = OrderRepository::getFromBookingReference($reference);
+
         if (!isset($order) || $order->cancelled) abort(404);
         if (!$order->repository->isLeadBooker($customer)) abort(404);
+
         if ($order->repository->isLeadBooker(CustomerAuthenticationRepository::getCustomer())) {
-            $order->update([
-                'external_notes' => $request->input('order_notes'),
-            ]);
+            $order->update(['external_notes' => $request->order_notes,]);
             $order->save();
         }
-        $orderCustomer->update([
-            'external_notes' => $request->input('order_customer_notes'),
-            'accommodation_notes' => $request->input('accommodation_notes'),
-            'activity_notes' => $request->input('activity_notes'),
-            'flight_notes' => $request->input('flight_notes'),
-            'transport_notes' => $request->input('transport_notes'),
-        ]);
-        $orderCustomer->save();
+
+        $orderCustomer->repository->update($request->getOrderCustomerDetails());
         return redirect()->route('customer.itinerary', ['reference' => $reference,]);
     }
 

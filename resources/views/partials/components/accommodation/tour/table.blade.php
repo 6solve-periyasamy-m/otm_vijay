@@ -26,16 +26,7 @@
     @endcan
 </script>
 @can('create', \App\Models\Accommodation\AccommodationInventoryTour::class)
-<div class="d-flex justify-content-between mb-3">
-    <select class="form-select accommodation-component-type-select">
-        <option value="Included" selected>Included</option>
-        <option value="Add-on">Add-on</option>
-    </select>
-    <a href="javascript:getSelectedAccommodationInventory()" class="btn btn-primary ms-3 text-white">
-        <i class="icon-plus"></i>
-        <span>Add Selected Rows</span>
-    </a>
-</div>
+    @include('partials.components.add-bar', ['component' => 'accommodation', 'href' => 'javascript:getSelectedAccommodationInventory()'])
 @endcan
 <table style="width: 100%;" class="table table-striped accommodation-inventory-table">
     <thead class="thead-dark">
