@@ -193,7 +193,7 @@
                                         ({{$tourComponent->repository->getAvailableStock()}} Available)
                                     </td>
                                     <td>{{ f_bool($tourComponent->is_bookable) }}</td>
-                                    <td>{{ f_bool($accommodationEntry["tour"]->stock_control_active) }}</td>
+                                    <td>{{ f_bool($tourComponent->stock_control_active) }}</td>
                                     <td class="actions-3">
                                         @can('update', AccommodationInventoryTour::class)
                                             @if($tourComponent->tour_component_type !== 'Add-on')
@@ -285,7 +285,7 @@
                                         ({{$tourComponent->repository->getAvailableStock()}} Available)
                                     </td>
                                     <td>{{ f_bool($tourComponent->is_bookable) }}</td>
-                                    <td>{{ f_bool($activity["tour"]->stock_control_active) }}</td>
+                                    <td>{{ f_bool($tourComponent->stock_control_active) }}</td>
                                     <td class="actions-3">
                                         @can('update', ActivityInventoryTour::class)
                                             @if($tourComponent->tour_component_type !== 'Add-on')
@@ -374,7 +374,7 @@
                                         ({{$tourComponent->repository->getAvailableStock()}} Available)
                                     </td>
                                     <td>{{ f_bool($tourComponent->is_bookable) }}</td>
-                                    <td>{{ f_bool($flight["tour"]->stock_control_active) }}</td>
+                                    <td>{{ f_bool($tourComponent->stock_control_active) }}</td>
                                     <td class="actions-3">
                                         @can('update', FlightInventoryTour::class)
                                             @if($tourComponent->tour_component_type !== 'Add-on')
@@ -461,7 +461,7 @@
                                         ({{$tourComponent->repository->getAvailableStock()}} Available)
                                     </td>
                                     <td>{{ f_bool($tourComponent->is_bookable) }}</td>
-                                    <td>{{ f_bool($transport["tour"]->stock_control_active) }}</td>
+                                    <td>{{ f_bool($tourComponent->stock_control_active) }}</td>
                                     <td class="actions-3">
                                         @can('update', TransportInventoryTour::class)
                                             @if($tourComponent->tour_component_type !== 'Add-on')
