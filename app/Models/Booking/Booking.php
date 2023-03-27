@@ -7,7 +7,6 @@ use App\Repository\Model\Booking\BookingRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -29,6 +28,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|BookingGroup[] $groups
  * @property-read int|null $groups_count
  * @property-read Collection|BookingTraveller[] $travellers
+ * @property-read Collection|BookingTraveller[] $additionalTravellers Travellers excluding lead traveller
  * @property-read int|null $travellers_count
  * @property-read int $traveller_count
  * @property-read float $total_cost
@@ -49,8 +49,6 @@ use Illuminate\Support\Carbon;
  */
 class Booking extends Model
 {
-    use HasFactory;
-
     protected $guarded = [];
     private BookingRepository $internal_repository;
 
@@ -88,6 +86,11 @@ class Booking extends Model
     public function travellers(): HasMany
     {
         return $this->hasMany(BookingTraveller::class, 'booking_id');
+    }
+
+    public function additionalTravellers(): HasMany
+    {
+        return $this->travellers()->whereNot('id', '=', $this->lead_traveller_id);
     }
 
     public function getDepositAttribute(): float
