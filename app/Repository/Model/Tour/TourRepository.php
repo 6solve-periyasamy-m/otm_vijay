@@ -88,7 +88,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
 
     public function getTotalStock(): int
     {
-        return $this->tour->stock;
+        return $this->tour->stock ?? 0;
     }
 
     public function getUsedStock(): int
