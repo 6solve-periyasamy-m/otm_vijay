@@ -57,4 +57,14 @@
             </div>
         @endforeach
     </div>
+    <div class="card">
+        <div class="card-body" data-target="#import" onclick="toggleAccordion(this)">
+            <h4 class="fw-bold">
+                {{ Icon::maximize() }} Bulk Import
+            </h4>
+        </div>
+    </div>
+    <div class="collapse row mx-1" id="import">
+        @include('partials.admin.system.import')
+    </div>
 @endsection
