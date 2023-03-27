@@ -9,10 +9,13 @@ use App\Models\Flight\FlightInventory;
 use App\Models\Location\Currency;
 use App\Models\TravelClass;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
 
 class FlightInventoryImport implements ToModel
 {
+    use Importable;
+
     /**
     * @param array $row
     *

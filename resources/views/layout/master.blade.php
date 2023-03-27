@@ -77,6 +77,14 @@
                         </div>
                     @endforeach
                 @endif
+                @if(\Session::has('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {!! \Session::get('success') !!}
+                        <button onclick="$(this).parent().remove()" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <ion-icon name="close"></ion-icon>
+                        </button>
+                    </div>
+                @endif
                 <div class="heading pt-md-4 pb-md-3 pt-3">
                     <h2 class="fw-bold">@yield('title')</h2>
                 </div>
