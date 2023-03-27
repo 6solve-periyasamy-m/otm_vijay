@@ -3,6 +3,7 @@
     <tr>
         <th scope="col">Booking Reference</th>
         <th scope="col">Customer Name</th>
+        <th scope="col">Passport Name</th>
         <th scope="col">Activity</th>
         <th scope="col">Type</th>
         <th scope="col">Ticket</th>
@@ -19,6 +20,7 @@
         <tr>
             <th scope="row">{{ $row->reference }}</th>
             <td>{{ $row->customer }}</td>
+            <td>{{ $row->passport }}</td>
             <td>{{ $row->activity }}</td>
             <td>{{ $row->type }}</td>
             <td>{{ $row->ticket }}</td>
