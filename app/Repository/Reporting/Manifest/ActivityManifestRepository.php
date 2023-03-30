@@ -59,6 +59,7 @@ class ActivityManifestRepository implements HasActivityManifest
             $row->reference = $orderComponent->orderCustomer->order->booking_reference;
             $row->customer = $orderComponent->orderCustomer->customer_name;
             $row->activity = $orderComponent->tourComponent->inventory->component->name;
+            $row->passport = $orderComponent->orderCustomer->customer->passport_first_name . ' ' . $orderComponent->orderCustomer->customer->passport_middle_name . ' ' . $orderComponent->orderCustomer->customer->passport_last_name;
             $row->type = $orderComponent->tourComponent->inventory->component->activityType->name;
             $row->ticket = $orderComponent->tourComponent->inventory->ticketType->name;
             $row->component = $orderComponent->tourComponent->tour_component_type;

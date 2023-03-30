@@ -43,6 +43,7 @@ class CreateBespokeQuoteRequest extends FormRequest
             'name' => $this->name,
             'description' => $this->description,
             'deposit' => $this->deposit,
+            'brand_id' => $this->brand_id == 0 ? null : $this->brand_id,
         ];
     }
 

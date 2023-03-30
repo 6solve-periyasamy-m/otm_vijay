@@ -3,6 +3,7 @@
     <tr>
         <th scope="col">Booking Reference</th>
         <th scope="col">Customer Name</th>
+        <th scope="col">Passport Name</th>
         <th scope="col">Airline</th>
         <th scope="col">Flight Number</th>
         <th scope="col">Travel Class</th>
@@ -21,6 +22,7 @@
         <tr>
             <th scope="row">{{ $row->reference }}</th>
             <td>{{ $row->customer }}</td>
+            <td>{{ $row->passport }}</td>
             <td>{{ $row->airline }}</td>
             <td>{{ $row->number }}</td>
             <td>{{ $row->ticket }}</td>
