@@ -32,6 +32,7 @@
         "spatie/laravel-stripe-webhooks": "^3.1",
         "staudenmeir/eloquent-has-many-deep": "^1.15",
         "stripe/stripe-php": "^7.110",
+        "vyuldashev/laravel-openapi": "^1.10",
         "wire-elements/modal": "^1.0"
     },
     "require-dev": {

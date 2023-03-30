@@ -10,3 +10,20 @@ npm run dev creates the files in public that the website can use
 @import '~@fortawesome/fontawesome-free/scss/regular';
 @import '~@fortawesome/fontawesome-free/scss/solid';
 @import '~@fortawesome/fontawesome-free/scss/brands';
+
+// Bootstrap uses !important, so do I to overwrite it ;-;
+
+.color-facebook {
+  color: #4267B2 !important;
+  border-color: #4267B2 !important;
+}
+
+.color-twitter {
+  color: #1DA1F2 !important;
+  border-color: #1DA1F2 !important;
+}
+
+.color-instagram {
+  color: #833AB4 !important;
+  border-color: #833AB4 !important;
+}

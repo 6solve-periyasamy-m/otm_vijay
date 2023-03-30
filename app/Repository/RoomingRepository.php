@@ -10,11 +10,9 @@ use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
-use App\Repository\Model\Customer\GroupRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Log;
-use Throwable;
 
 /**
  * Static Repository for Rooming and Occupancy
@@ -185,15 +183,28 @@ class RoomingRepository
     public static function getDefaultRoomList(Tour $tour): array
     {
         $singleRoom = null;
+        $availableTypes = [];
         foreach (RoomingRepository::getAvailableRoomTypes($tour) as $roomType) {
-            if ($singleRoom != null && $singleRoom->maximum_occupancy <= $roomType->maximum_occupancy) continue;
-            $singleRoom = $roomType;
-            if ($singleRoom->maximum_occupancy == 1) break;
+            if ($singleRoom != null && $singleRoom->maximum_occupancy < $roomType->maximum_occupancy) continue;
+            if (!isset($singleRoom) || $roomType?->maximum_occupancy < $singleRoom->maximum_occupancy) {
+                $singleRoom = $roomType;
+                $availableTypes = [];
+            }
+            $availableTypes[] = $roomType;
         }
         if (!isset($singleRoom)) return [];
         $rooms = [];
         foreach ($tour->templates as $template) {
-            $rooms[] = self::getInventoryWithRoomType($template, $singleRoom);
+            $room = self::getInventoryWithRoomType($template, $singleRoom);
+            if (empty($room)) {
+                for ($x = 1; $x < sizeof($availableTypes); $x++) {
+                    $room = self::getInventoryWithRoomType($template, $availableTypes[$x]);
+                    if (!empty($room)) break;
+                }
+            }
+            if (!empty($room)) {
+                $rooms[] = $room;
+            }
         }
         return $rooms;
     }
@@ -208,7 +219,14 @@ class RoomingRepository
         if (!empty($rooms)) {
             $group = Group::create();
             $group->repository->addCustomerToGroup($orderCustomer);
+            \Log::info(implode(',', $rooms));
+            $count = 0;
             foreach ($rooms as $room) {
+                $count++;
+                if (empty($room)) {
+                    \Log::info("Null Room Found: {$orderCustomer->order_id}, number: {$count}");
+                    continue;
+                }
                 $group->repository->addRoomToGroup($room);
             }
         }

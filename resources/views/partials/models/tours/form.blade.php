@@ -1,5 +1,8 @@
 @php /** @var \App\Models\Tour\Tour $tour */ $tour = $tour ?? null @endphp
-@include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $name ?? null,])
+@include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $name ?? null, 'width' => 8])
+@include('partials.fields.selector.default',
+        ['name' => 'Branding', 'field' => 'brand_id', 'value' => $tour?->brand_id ?? null,
+         'route' => 'brands', 'width' => 4,])
 @include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $description ?? null,])
 @can('create', \App\Models\Tour\Event::class)
 @include('partials.fields.selector.adder',
