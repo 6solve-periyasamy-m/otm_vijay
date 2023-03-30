@@ -15,7 +15,7 @@ class OrderCustomerMail extends TemplatedMail
             'CUSTOMER_FIRST_NAME' => $customer?->first_name ?? $this->faker->firstName,
             'CUSTOMER_MIDDLE_NAMES' => $customer?->middle_names ?? $this->faker->firstName,
             'CUSTOMER_LAST_NAME' => $customer?->last_name ?? $this->faker->lastName,
-            'CUSTOMER_PASSPORT_EXPIRY_DATE' => f_currency($customer?->passport_expiry_date ?? $this->faker->date),
+            'CUSTOMER_PASSPORT_EXPIRY_DATE' => f_date($customer?->passport_expiry_date ?? $this->faker->date),
             ...(new OrderMail())->getShortcodes($orderCustomer),
         ];
     }
