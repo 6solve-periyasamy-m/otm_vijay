@@ -128,7 +128,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'notes' => $this->quote->internal_notes,
             'description' => $this->quote->description,
             'date_from' => $this->quote->date_from,
-            'date_to' => $this->quote->date_from,
+            'date_to' => $this->quote->date_to,
             'terms' => $this->quote->terms,
             'final_payment' => $this->quote->final_payment,
             'stock_control_active' => false,
