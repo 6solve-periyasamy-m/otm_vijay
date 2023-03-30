@@ -229,4 +229,14 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         ]);
         return $component->repository;
     }
+
+    public function isStockControlActive(): bool
+    {
+        return $this->tourComponent->stock_control_active;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
+    }
 }

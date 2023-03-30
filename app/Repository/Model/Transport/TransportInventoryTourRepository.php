@@ -16,7 +16,6 @@ use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
-use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Order\Component\OrderTransportRepository;
 use App\Repository\Model\Quote\Component\QuoteTransportRepository;
 use App\Repository\Traits\Component\IsTransport;
@@ -212,5 +211,15 @@ class TransportInventoryTourRepository extends InventoryTourRepository
             'tour_sales_price' => $this->tourComponent->tour_sales_price,
         ]);
         return $component->repository;
+    }
+
+    public function isStockControlActive(): bool
+    {
+        return $this->tourComponent->stock_control_active;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
     }
 }

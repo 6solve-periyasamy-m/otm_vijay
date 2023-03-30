@@ -60,21 +60,18 @@ class BookingTravellerRepository extends ModelRepository
 
     public function addComponent(InventoryTourRepository $tourComponentRepository): bool
     {
-        // In booking, only activity is stock-controlled
-        if ($tourComponentRepository instanceof ActivityInventoryTourRepository) {
-            $travellers = $this->traveller->booking->travellers()->count();
-            if ($tourComponentRepository->getAvailableStock() < $travellers) {
-                $found = false;
-                foreach ($tourComponentRepository->get()->upgrades()->with('upgrade')->get() as $upgrade) {
-                    $repo = $upgrade->upgrade->repository;
-                    if ($repo->getAvailableStock() >= $travellers) {
-                        $tourComponentRepository = $repo;
-                        $found = true;
-                        break;
-                    }
+        $travellers = $this->traveller->booking->travellers()->count();
+        if (!$tourComponentRepository->hasEnoughStock($travellers)) {
+            $found = false;
+            foreach ($tourComponentRepository->get()->upgrades()->with('upgrade')->get() as $upgrade) {
+                $repo = $upgrade->upgrade->repository;
+                if ($repo->hasEnoughStock($travellers)) {
+                    $tourComponentRepository = $repo;
+                    $found = true;
+                    break;
                 }
-                if (!$found) return false;
             }
+            if (!$found) return false;
         }
         $component = $tourComponentRepository->grantToBookingTraveller($this->traveller);
         return isset($component);
@@ -88,7 +85,7 @@ class BookingTravellerRepository extends ModelRepository
     public function upgradeActivity(ActivityInventoryTour $from, ActivityInventoryTour $to, bool $verified = false): bool
     {
         if (!$verified) {
-            if ($to->available_stock < 1) return false;
+            if (!$to->repository->hasEnoughStock()) return false;
             if (!$to->is_bookable) return false;
         }
         try {

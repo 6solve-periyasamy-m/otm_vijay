@@ -213,6 +213,16 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
         return $component->repository;
     }
 
+    public function isStockControlActive(): bool
+    {
+        return $this->tourComponent->stock_control_active;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
+    }
+
     public function getBookingUpgradeKeyMap(int $required = 1): array
     {
         $upgrades = $this->tourComponent->upgrades;

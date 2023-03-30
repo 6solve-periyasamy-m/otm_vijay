@@ -219,6 +219,16 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
         return $component->repository;
     }
 
+    public function isStockControlActive(): bool
+    {
+        return $this->tourComponent->stock_control_active;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
+    }
+
     public function getFlightManifest(): Collection|array
     {
         return $this->tourComponent->orders()->with(FlightManifestRepository::getRelations())->get();

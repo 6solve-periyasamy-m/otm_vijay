@@ -28,8 +28,7 @@ class CustomerBookingController extends Controller
     {
         $tour = Tour::where('booking_form_url', $bookingUrl)->where('is_active', true)->first();
         if (!isset($tour)) return null;
-        if ($tour->stock_control_active &&
-            $tour->stock - $tour->getUsedStock() < $size) {
+        if (!$tour->repository->hasEnoughStock($size)) {
             return null;
         }
         return $tour;
@@ -55,7 +54,7 @@ class CustomerBookingController extends Controller
             'additionalTravellers' => $booking?->travellers()->whereNot('id', $booking->leadTraveller?->id)->get(),
             'flights' => $booking?->repository->getAvailableFlights() ?? BookingRepository::make($tour)->repository->getAvailableFlights(),
             'rooms' => RoomingRepository::getAvailableRoomTypes($tour),
-            'available' => $tour->stock - $tour->getUsedStock(),
+            'available' => $tour->repository->getAvailableStock(),
         ]);
     }
 
@@ -143,7 +142,7 @@ class CustomerBookingController extends Controller
         if (!isset($tour)) abort(404);
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
-        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= $booking->travellers()->count()) abort(404, 'That tour is out of stock');
+        if (!$tour->repository->hasEnoughStock($booking->travellers()->count())) abort(404, 'That tour is out of stock');
         return view('pages.customer.booking.summary', ['booking' => $booking, 'tour' => $tour,]);
     }
 
@@ -180,8 +179,8 @@ class CustomerBookingController extends Controller
         $tour = $this->getTour($bookingUrl);
         $request->validate(['amount' => 'required']);
         if (!isset($tour) || !$tour->is_active) abort(404);
-        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= 0) abort(404, 'That tour is out of stock');
         $booking = $this->getBooking($token);
+        if (!$tour->repository->hasEnoughStock($booking->travellers()->count())) abort(404, 'That tour is out of stock');
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
         $dueToday = $booking->repository->getDueTodayAmount();
         $amount = sigfig((float)preg_replace('/[^0-9.]/', '', $request->amount));

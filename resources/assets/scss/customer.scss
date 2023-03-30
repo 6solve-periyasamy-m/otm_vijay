@@ -6,3 +6,9 @@ npm run dev creates the files in public that the website can use
 
 @import 'customer_portal/style';
 @import 'spinner';
+
+// All fun and games when overwriting bootstrap .-.
+.form-control {
+  padding-top: 25px !important;
+  padding-left: 5px !important;
+}

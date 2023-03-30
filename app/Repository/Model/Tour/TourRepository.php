@@ -88,7 +88,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
 
     public function getTotalStock(): int
     {
-        return $this->tour->stock;
+        return $this->tour->stock ?? 0;
     }
 
     public function getUsedStock(): int
@@ -437,5 +437,15 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
     public function getTransportManifest(): Collection|array
     {
         return $this->tour->orderTransport()->with(TransportManifestRepository::getRelations())->get();
+    }
+
+    public function isStockControlActive(): bool
+    {
+        return $this->tour->stock_control_active;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
     }
 }

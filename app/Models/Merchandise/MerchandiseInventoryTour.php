@@ -25,6 +25,7 @@ use Illuminate\Support\Carbon;
  * @property int $tour_id
  * @property string $tour_component_type
  * @property float $tour_sales_price
+ * @property bool $stock_control_active
  * @property bool $is_bookable
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
@@ -46,6 +47,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|MerchandiseInventoryTour whereIsBookable($value)
  * @method static Builder|MerchandiseInventoryTour whereMerchandiseInventoryId($value)
  * @method static Builder|MerchandiseInventoryTour whereTourComponentType($value)
+ * @method static Builder|MerchandiseInventoryTour whereStockControlActive($value)
  * @method static Builder|MerchandiseInventoryTour whereTourId($value)
  * @method static Builder|MerchandiseInventoryTour whereTourSalesPrice($value)
  * @method static Builder|MerchandiseInventoryTour whereUpdatedAt($value)
@@ -62,7 +64,8 @@ class MerchandiseInventoryTour extends Model
     protected $guarded = [];
     protected $casts = [
         'tour_sales_price' => 'double',
-        'is_bookable' => 'boolean'
+        'is_bookable' => 'boolean',
+        'stock_control_active' => 'boolean',
     ];
 
     public function inventory(): BelongsTo

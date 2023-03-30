@@ -15,10 +15,8 @@ use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
-use App\Repository\Interfaces\HasStockControl;
 use App\Repository\Model\Quote\Component\QuoteMerchandiseRepository;
 use App\Repository\Traits\Component\IsMerchandise;
-use DB;
 use Log;
 
 class MerchandiseInventoryTourRepository extends InventoryTourRepository
@@ -186,5 +184,15 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
             'tour_component_type' => $this->tourComponent->tour_component_type,
         ]);
         return $component->repository;
+    }
+
+    public function isStockControlActive(): bool
+    {
+        return $this->tourComponent->stock_control_active;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
     }
 }

@@ -69,7 +69,7 @@ class CustomerComponentController extends Controller
             return response()->json(['success' => false, 'message' => 'Please contact us if you wish to downgrade',]);
         }
 
-        if ($upgrade->get()->upgrade->available_stock <= 0) {
+        if (!$upgrade->get()->upgrade->repository->hasEnoughStock(1)) {
             return response()->json(['success' => false, 'message' => 'This upgrade is currently out of stock',]);
         }
 

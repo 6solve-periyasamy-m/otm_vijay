@@ -159,6 +159,7 @@
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Stock</th>
                                 <th scope="col">Bookable?</th>
+                                <th scope="col">Stock Controlled?</th>
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>
@@ -192,6 +193,7 @@
                                         ({{$tourComponent->repository->getAvailableStock()}} Available)
                                     </td>
                                     <td>{{ f_bool($tourComponent->is_bookable) }}</td>
+                                    <td>{{ f_bool($tourComponent->stock_control_active) }}</td>
                                     <td class="actions-3">
                                         @can('update', AccommodationInventoryTour::class)
                                             @if($tourComponent->tour_component_type !== 'Add-on')
@@ -257,6 +259,7 @@
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Stock</th>
                                 <th scope="col">Bookable?</th>
+                                <th scope="col">Stock Controlled?</th>
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>
@@ -282,6 +285,7 @@
                                         ({{$tourComponent->repository->getAvailableStock()}} Available)
                                     </td>
                                     <td>{{ f_bool($tourComponent->is_bookable) }}</td>
+                                    <td>{{ f_bool($tourComponent->stock_control_active) }}</td>
                                     <td class="actions-3">
                                         @can('update', ActivityInventoryTour::class)
                                             @if($tourComponent->tour_component_type !== 'Add-on')
@@ -344,6 +348,7 @@
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Stock</th>
                                 <th scope="col">Bookable?</th>
+                                <th scope="col">Stock Controlled?</th>
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>
@@ -369,6 +374,7 @@
                                         ({{$tourComponent->repository->getAvailableStock()}} Available)
                                     </td>
                                     <td>{{ f_bool($tourComponent->is_bookable) }}</td>
+                                    <td>{{ f_bool($tourComponent->stock_control_active) }}</td>
                                     <td class="actions-3">
                                         @can('update', FlightInventoryTour::class)
                                             @if($tourComponent->tour_component_type !== 'Add-on')
@@ -430,6 +436,7 @@
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Stock</th>
                                 <th scope="col">Bookable?</th>
+                                <th scope="col">Stock Controlled?</th>
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>
@@ -454,6 +461,7 @@
                                         ({{$tourComponent->repository->getAvailableStock()}} Available)
                                     </td>
                                     <td>{{ f_bool($tourComponent->is_bookable) }}</td>
+                                    <td>{{ f_bool($tourComponent->stock_control_active) }}</td>
                                     <td class="actions-3">
                                         @can('update', TransportInventoryTour::class)
                                             @if($tourComponent->tour_component_type !== 'Add-on')
@@ -616,6 +624,7 @@
                     <th scope="col">Variant</th>
                     <th scope="col">Size</th>
                     <th scope="col">Component Type</th>
+                    <th scope="col">Stock Controlled?</th>
                     <th scope="col">Sales Price</th>
                     <th scope="col">Stock</th>
                     <th scope="col">Notes</th>
@@ -628,7 +637,7 @@
                         <td style="min-width: 100px">{{ $merchandise->inventory->component->name }}</td>
                         <td>{{ $merchandise->inventory->variant->name }}</td>
                         <td>{{ $merchandise->inventory->size?->name ?? 'No Size'  }}</td>
-                        <td>{{ $merchandise->tour_component_type }}</td>
+                        <td>{{ $merchandise->stock_control_active }}</td>
                         <td>{{ f_currency($merchandise->tour_sales_price) }}</td>
                         <td>
                             {{ $merchandise->repository->getUsedStock() }}

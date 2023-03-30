@@ -112,6 +112,7 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
             'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
             'tour_component_type' => $tourComponentType,
             'tour_id' => $tour->id,
+            'stock_control_active' => $tour->flight_stock_control,
         ]);
         $this->inventory->tourComponents()->save($inventoryTour);
         return $inventoryTour->repository;
@@ -141,5 +142,15 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
     public function getFlightManifest(): Collection|array
     {
         return $this->inventory->orders()->with(FlightManifestRepository::getRelations())->get();
+    }
+
+    public function isStockControlActive(): bool
+    {
+        return false;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return true;
     }
 }

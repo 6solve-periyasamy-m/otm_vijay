@@ -113,23 +113,23 @@ class CustomerTourController extends Controller
         $orderCustomer = $order->repository->getOrderCustomer($customer);
         if (!isset($orderCustomer)) abort(404);
 
-        $tourComponent = InventoryTourRepository::getComponent($componentType, $componentId)->get();
+        $tourComponent = InventoryTourRepository::getComponent($componentType, $componentId);
         if (!isset($tourComponent)) abort(404);
-        if (!$tourComponent->is_bookable) abort(404);
+        if (!$tourComponent->isBookable()) abort(404);
 
-        if ($tourComponent->available_stock <= 0) abort(404);
+        if ($tourComponent->hasEnoughStock()) abort(404);
 
         $data = [
             'additions' => [[
                 'customer' => $componentType == 'accommodation' ? $orderCustomer->primary_group->id : $orderCustomer->id,
                 'component' => $componentType,
-                'id' => $tourComponent->id,
+                'id' => $tourComponent->get()->id,
         ],],];
 
         $redirect = setting('purchase.addon.success.redirect', url()->previous(route('customer.extras', ['reference' => $reference, 'customer' => $customer,])));
 
 
-        $item = new LineItem("{$tourComponent}", $tourComponent->tour_sales_price);
+        $item = new LineItem("{$tourComponent}", $tourComponent->get()->tour_sales_price);
         $intention = PaymentIntention::build(CustomerAuthenticationRepository::getCustomer(), $order->booking_reference, 'Installment', $data);
 
         return redirect(Gateway::getDefaultGateway()->checkout([$item,], $intention, CustomerAuthenticationRepository::getCustomer(), $redirect));
@@ -147,18 +147,20 @@ class CustomerTourController extends Controller
         $orderCustomer = $order->repository->getOrderCustomer($customer);
         if (!isset($orderCustomer)) abort(404);
 
-        $tourComponent = InventoryTourRepository::getComponent($componentType, $componentId)->get();
+        $tourComponent = InventoryTourRepository::getComponent($componentType, $componentId);
         if (!isset($tourComponent)) abort(404);
-        if (!$tourComponent->is_bookable) abort(404);
+        if (!$tourComponent->isBookable()) abort(404);
+
+        if ($tourComponent->hasEnoughStock()) abort(404);
 
         if (flag('payment.required', true)) abort(404);
 
-        if ($tourComponent->available_stock <= 0) abort(404);
+        if ($tourComponent->getAvailableStock() <= 0) abort(404);
 
-        $orderComponent  = $tourComponent->repository->grantToCustomer($orderCustomer);
+        $orderComponent  = $tourComponent->grantToCustomer($orderCustomer);
 
         if (!($tourComponent instanceof AccommodationInventoryTour)) {
-            event(new OrderCustomerComponentAddedEvent($orderComponent));
+            event(new OrderCustomerComponentAddedEvent($orderComponent->get()));
         }
 
         return redirect()->route('customer.extras', ['reference' => $reference,]);
