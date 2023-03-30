@@ -159,11 +159,11 @@ class CustomerTourController extends CustomerController
     public function updateNotes(TourDetailsRequest $request, Order $reference, OrderCustomer $orderCustomer)
     {
         $customer = $this->user();
-        if (!isset($customer)) abort(403);
+        if (!isset($customer)) abort(404);
         $order = $reference;
 
-        if (!isset($order) || $order->cancelled) abort(402);
-        if (!$order->repository->isLeadBooker($customer)) abort(401);
+        if (!isset($order) || $order->cancelled) abort(404);
+        if (!$order->repository->isLeadBooker($customer)) abort(404);
 
         if ($order->repository->isLeadBooker($this->user())) {
             $order->update(['external_notes' => $request->order_notes,]);
