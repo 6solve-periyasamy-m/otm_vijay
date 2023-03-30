@@ -20,6 +20,7 @@ use App\Repository\Interfaces\Manifest\HasFlightManifest;
 use App\Repository\Model\Order\Component\OrderFlightRepository;
 use App\Repository\Model\Quote\Component\QuoteFlightRepository;
 use App\Repository\Reporting\Manifest\FlightManifestRepository;
+use App\Repository\Storage\ComponentInformation;
 use App\Repository\Traits\Component\IsFlight;
 use Illuminate\Support\Collection;
 
@@ -232,5 +233,20 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
     public function getFlightManifest(): Collection|array
     {
         return $this->tourComponent->orders()->with(FlightManifestRepository::getRelations())->get();
+    }
+
+    public function getComponentInformation(): ComponentInformation
+    {
+        $tourComponent = $this->tourComponent;
+        $inventory = $tourComponent->inventory;
+        $component = $inventory->component;
+        $name = "{$component->departureAirport->name} to {$component->arrivalAirport->name} ({$component->airline->name}) ({$inventory->flight_number}) ({$inventory->travelClass})";
+        return new ComponentInformation(
+            $name,
+            "Flight from {$component->departureAirport->name} to {$component->arrivalAirport->name}",
+            $component->image_url,
+            $inventory->departs_at,
+            $inventory->arrives_at
+        );
     }
 }

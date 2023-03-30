@@ -17,6 +17,7 @@ use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
+use App\Repository\Storage\ComponentInformation;
 use App\Repository\Traits\Component\IsAccommodation;
 use Illuminate\Support\Collection;
 
@@ -238,5 +239,20 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     public function hasEnoughStock(int $amount = 1): bool
     {
         return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
+    }
+
+    public function getComponentInformation(): ComponentInformation
+    {
+        $tourComponent = $this->tourComponent;
+        $inventory = $tourComponent->inventory;
+        $component = $inventory->component;
+        $name = "{$component->name}, {$inventory->roomType} ({$inventory->boardType->name})";
+        return new ComponentInformation(
+            $name,
+            $component->description,
+            $component->image_url,
+            $inventory->check_in,
+            $inventory->check_out
+        );
     }
 }

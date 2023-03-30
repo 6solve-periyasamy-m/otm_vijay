@@ -21,6 +21,7 @@ use App\Repository\Interfaces\Manifest\HasActivityManifest;
 use App\Repository\Model\Order\Component\OrderActivityRepository;
 use App\Repository\Model\Quote\Component\QuoteActivityRepository;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
+use App\Repository\Storage\ComponentInformation;
 use App\Repository\Traits\Component\IsActivity;
 use Illuminate\Support\Collection;
 
@@ -248,5 +249,20 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
     public function getActivityManifest(): Collection|array
     {
         return $this->tourComponent->orders()->with(ActivityManifestRepository::getRelations())->get();
+    }
+
+    public function getComponentInformation(): ComponentInformation
+    {
+        $tourComponent = $this->tourComponent;
+        $inventory = $tourComponent->inventory;
+        $component = $inventory->component;
+        $name = "{$component->name} ($component->activityType) ({$inventory->ticketType})";
+        return new ComponentInformation(
+            $name,
+            $component->description,
+            $component->image_url,
+            $inventory->starts_at,
+            $inventory->ends_at
+        );
     }
 }

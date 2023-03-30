@@ -18,6 +18,7 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Order\Component\OrderTransportRepository;
 use App\Repository\Model\Quote\Component\QuoteTransportRepository;
+use App\Repository\Storage\ComponentInformation;
 use App\Repository\Traits\Component\IsTransport;
 use Illuminate\Support\Collection;
 
@@ -221,5 +222,20 @@ class TransportInventoryTourRepository extends InventoryTourRepository
     public function hasEnoughStock(int $amount = 1): bool
     {
         return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
+    }
+
+    public function getComponentInformation(): ComponentInformation
+    {
+        $tourComponent = $this->tourComponent;
+        $inventory = $tourComponent->inventory;
+        $component = $inventory->component;
+        $name = "{$component->departureAddress->name} to {$component->arrivalAddress->name} ({$component->transportType}) ({$inventory->ticket_number}) ({$inventory->travelClass})";
+        return new ComponentInformation(
+            $name,
+            $component->description,
+            $component->image_url,
+            $inventory->departs_at,
+            $inventory->arrives_at
+        );
     }
 }

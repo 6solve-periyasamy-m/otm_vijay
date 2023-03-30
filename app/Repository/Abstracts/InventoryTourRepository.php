@@ -12,6 +12,7 @@ use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Interfaces\HasStockControl;
+use App\Repository\Storage\ComponentInformation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
@@ -40,6 +41,8 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
     public abstract function isBookable(): bool;
 
     public abstract function getUsedOnOrderCount(): int;
+
+    public abstract function getComponentInformation(): ComponentInformation;
 
     public function getUpgradeKeyMap(int $required = 0, bool $stock = false, bool $downgrade = true): array
     {

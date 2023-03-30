@@ -16,8 +16,8 @@ use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteMerchandiseRepository;
+use App\Repository\Storage\ComponentInformation;
 use App\Repository\Traits\Component\IsMerchandise;
-use Log;
 
 class MerchandiseInventoryTourRepository extends InventoryTourRepository
 {
@@ -194,5 +194,20 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
     public function hasEnoughStock(int $amount = 1): bool
     {
         return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
+    }
+
+    public function getComponentInformation(): ComponentInformation
+    {
+        $tourComponent = $this->tourComponent;
+        $inventory = $tourComponent->inventory;
+        $component = $inventory->component;
+        $name = "{$component->name} ({$inventory->variant}) ({$inventory->size})";
+        return new ComponentInformation(
+            $name,
+            "A {$inventory->size} {$inventory->variant} {$component->type}",
+            $component->image_url,
+            null,
+            null
+        );
     }
 }
