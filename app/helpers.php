@@ -150,3 +150,14 @@ if (!function_exists('truncate')) {
         return Str::limit($str ?? "", $chars, $append);
     }
 }
+if (!function_exists('snake_to_pascal')) {
+    /**
+     * Converts a camel case string to pascal case
+     * @param string $str
+     * @return string The Pascal String
+     */
+    function snake_to_pascal(string $str): string
+    {
+        return str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $str)));
+    }
+}
