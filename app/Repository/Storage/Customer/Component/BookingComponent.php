@@ -4,9 +4,10 @@ namespace App\Repository\Storage\Customer\Component;
 
 use App\Models\Booking\BookingTraveller;
 use App\Repository\Abstracts\InventoryTourRepository;
+use Livewire\Wireable;
 
 
-class BookingComponent extends AbstractComponent
+class BookingComponent extends AbstractComponent implements Wireable
 {
     private BookingTraveller $traveller;
     private bool $owned;
@@ -60,5 +61,23 @@ class BookingComponent extends AbstractComponent
     public function sellForAll(): bool
     {
         // TODO: Implement sellForAll() method.
+    }
+
+    public function toLivewire(): array
+    {
+        return [
+            'traveller' => $this->traveller->id,
+            'component' => [
+                'type' => $this->component->getComponentType(),
+                'id' => $this->component->get()->id,
+            ],
+        ];
+    }
+
+    public static function fromLivewire($value): static
+    {
+        $traveller = BookingTraveller::find($value['traveller']);
+        $component = InventoryTourRepository::getComponent($value['component']['type'], $value['component']['id']);
+        return new static($component, $traveller);
     }
 }
