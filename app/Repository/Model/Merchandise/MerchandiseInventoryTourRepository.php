@@ -102,6 +102,8 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
 
     public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
+        $active = $this->getActiveComponent($this, $traveller);
+        if ($active !== null) return $active;
         $bookingComponent = BookingMerchandise::create([
             'booking_traveller_id' => $traveller->id,
             'merchandise_id' => $this->tourComponent->id,

@@ -63,6 +63,8 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function grantToCustomer(OrderCustomer $orderCustomer): ?OrderComponentRepository
     {
+        $orderComponent = $this->getOrderComponent($orderCustomer);
+        if ($orderComponent !== null) return $orderComponent;
         $group = $orderCustomer->primary_group;
         if (!isset($group)) return null;
         $orderComponent = OrderAccommodation::create([
@@ -135,6 +137,9 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
+        $active = $this->getActiveComponent($this, $traveller);
+        if ($active !== null) return $active;
+        $this->getActiveUpgrade($traveller)?->delete();
         $component = BookingAccommodation::create([
             'booking_group_id' => $traveller->primary_group->id,
             'accommodation_inventory_tour_id' => $this->tourComponent->id,
@@ -254,5 +259,22 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             $inventory->check_in,
             $inventory->check_out
         );
+    }
+
+    public function getActiveUpgrade(BookingTraveller|OrderCustomer $traveller): AccommodationInventoryTourRepository|null
+    {
+        /**
+         * @var OrderAccommodation[]|BookingAccommodation[] $accommodation
+         */
+        $accommodation = ($traveller instanceof OrderCustomer) ? $traveller->orderAccommodation : $traveller->accommodation;
+        $parent = $this->getUpgradeParent();
+        $upgrades = $parent->upgrades;
+        foreach ($accommodation as $room) {
+            if ($room->accommodation_inventory_tour_id === $parent->id) return $parent->repository;
+            foreach ($upgrades as $upgrade) {
+                if ($room->accommodation_inventory_tour_id === $upgrade->upgrade_id) return $upgrade->upgrade->repository;
+            }
+        }
+        return null;
     }
 }

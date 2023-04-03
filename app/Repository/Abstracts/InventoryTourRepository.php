@@ -4,15 +4,19 @@ namespace App\Repository\Abstracts;
 
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Activity\ActivityInventoryTour;
+use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Merchandise\MerchandiseInventoryTour;
+use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Interfaces\HasStockControl;
 use App\Repository\Storage\ComponentInformation;
+use App\Repository\Storage\Customer\Component\BookingComponent;
+use App\Repository\Storage\Customer\Component\OrderComponent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
@@ -43,6 +47,48 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
     public abstract function getUsedOnOrderCount(): int;
 
     public abstract function getComponentInformation(): ComponentInformation;
+
+    public function getActiveUpgrade(BookingTraveller|OrderCustomer $traveller): InventoryTourRepository|null
+    {
+        $parent = $this->getUpgradeParent();
+        $owned = $this->getActiveComponent($parent->repository, $traveller);
+        if ($owned !== null) return $owned->getTourComponent();
+        foreach ($parent->upgrades as $upgrade) {
+            $component = $upgrade->upgrade->repository->getActiveUpgrade($traveller);
+            if ($component !== null) return $component;
+        }
+        return null;
+    }
+
+    public function getAbstractBookingComponent(BookingTraveller $traveller): BookingComponent
+    {
+        return new BookingComponent($this, $traveller);
+    }
+
+    public function getAbstractOrderComponent(OrderCustomer $orderCustomer): OrderComponent
+    {
+        return new OrderComponent($this, $orderCustomer);
+    }
+
+    public function bookForAll(Booking $booking): bool
+    {
+        if (!$this->hasEnoughStock($booking->travellers->count())) return false;
+        foreach ($booking->travellers as $traveller) {
+            if ($this->getBookingComponent($traveller) !== null) continue;
+            $this->grantToBookingTraveller($traveller);
+        }
+        return true;
+    }
+
+    public function purchaseForAll(Order $order): bool
+    {
+        if (!$this->hasEnoughStock($order->orderCustomers->count())) return false;
+        foreach ($order->orderCustomers as $traveller) {
+            if ($this->getOrderComponent($traveller) !== null) continue;
+            $this->grantToCustomer($traveller);
+        }
+        return true;
+    }
 
     public function getUpgradeKeyMap(int $required = 0, bool $stock = false, bool $downgrade = true): array
     {
@@ -80,5 +126,14 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
             'merchandise' => MerchandiseInventoryTour::find($id)?->repository,
             default => null,
         };
+    }
+
+    protected function getActiveComponent(InventoryTourRepository $tourComponent, OrderCustomer|BookingTraveller $traveller): OrderComponentRepository|BookingComponentRepository|null
+    {
+        if ($traveller instanceof OrderCustomer) {
+            return $tourComponent->getOrderComponent($traveller);
+        } else {
+            return $tourComponent->getBookingComponent($traveller);
+        }
     }
 }

@@ -29,21 +29,24 @@ class OrderComponent extends AbstractComponent
 
     public function purchaseForOne(): bool
     {
-        // TODO: Implement purchaseForOne() method.
+        if ($this->owned) return false;
+        $this->component->grantToCustomer($this->traveller);
+        return true;
     }
 
     public function purchaseForAll(): bool
     {
-        // TODO: Implement purchaseForAll() method.
+        $this->component->purchaseForAll($this->traveller->order);
+        return true;
     }
 
     public function sellForOne(): bool
     {
-        // TODO: Implement sellForOne() method.
+        return false;
     }
 
     public function sellForAll(): bool
     {
-        // TODO: Implement sellForAll() method.
+        return false;
     }
 }

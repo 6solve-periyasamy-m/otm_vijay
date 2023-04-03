@@ -123,6 +123,9 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
 
     public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
+        $active = $this->getActiveComponent($this, $traveller);
+        if ($active !== null) return $active;
+        $this->getActiveUpgrade($traveller)?->delete();
         $bookingComponent = BookingActivity::create([
             'booking_traveller_id' => $traveller->id,
             'activity_inventory_tour_id' => $this->tourComponent->id,

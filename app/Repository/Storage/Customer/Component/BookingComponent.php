@@ -30,12 +30,15 @@ class BookingComponent extends AbstractComponent
 
     public function purchaseForOne(): bool
     {
-        // TODO: Implement purchaseForOne() method.
+        if ($this->owned) return false;
+        $this->component->grantToBookingTraveller($this->traveller);
+        return true;
     }
 
     public function purchaseForAll(): bool
     {
-        // TODO: Implement purchaseForAll() method.
+        $this->component->bookForAll($this->traveller->booking);
+        return true;
     }
 
     public function sellForOne(): bool
