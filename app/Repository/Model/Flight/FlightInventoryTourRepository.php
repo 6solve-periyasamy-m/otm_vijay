@@ -128,13 +128,18 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
 
     public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
+        \Log::info('Finding Active Component');
         $active = $this->getActiveComponent($this, $traveller);
+        \Log::info('Found Active Component');
         if ($active !== null) return $active;
+        \Log::info('Active Component = null');
         $this->getActiveUpgrade($traveller)?->delete();
+        \Log::info('Removed upgrade (if exists)');
         $bookingComponent = BookingFlight::create([
             'booking_traveller_id' => $traveller->id,
             'flight_inventory_tour_id' => $this->tourComponent->id,
         ]);
+        \Log::info('Created Component');
         return $bookingComponent->repository;
     }
 
@@ -225,7 +230,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
 
     public function isStockControlActive(): bool
     {
-        return $this->tourComponent->stock_control_active;
+        return $this->tourComponent->stock_control_active ?? false;
     }
 
     public function hasEnoughStock(int $amount = 1): bool

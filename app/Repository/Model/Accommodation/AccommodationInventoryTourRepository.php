@@ -238,7 +238,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function isStockControlActive(): bool
     {
-        return $this->tourComponent->stock_control_active;
+        return $this->tourComponent->stock_control_active ?? false;
     }
 
     public function hasEnoughStock(int $amount = 1): bool
