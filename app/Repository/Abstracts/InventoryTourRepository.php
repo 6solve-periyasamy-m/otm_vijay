@@ -54,8 +54,8 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
         $owned = $this->getActiveComponent($parent->repository, $traveller);
         if ($owned !== null) return $owned->getTourComponent();
         foreach ($parent->upgrades as $upgrade) {
-            $component = $upgrade->upgrade->repository->getActiveUpgrade($traveller);
-            if ($component !== null) return $component;
+            $component = $this->getActiveComponent($upgrade->upgrade->repository, $traveller);
+            if ($component !== null) return $component->getTourComponent();
         }
         return null;
     }
