@@ -10,6 +10,10 @@ class BookingComponent extends AbstractComponent
 {
     private BookingTraveller $traveller;
     private bool $owned;
+    /**
+     * @var BookingComponent[] $upgrades
+     */
+    private array $upgrades;
 
     public function __construct(InventoryTourRepository $component, BookingTraveller $traveller)
     {
@@ -25,7 +29,14 @@ class BookingComponent extends AbstractComponent
 
     public function getAvailableUpgrades(): array
     {
-        // TODO: Implement getAvailableUpgrades() method.
+        if (!empty($this->upgrades)) return $this->upgrades;
+        $this->upgrades = [];
+        $parent = $this->component->getUpgradeParent();
+        $this->upgrades[] = $parent->repository->getAbstractBookingComponent();
+        foreach ($parent->upgrades as $upgrade) {
+            $this->upgrades[] = $upgrade->upgrade->repository->getAbstractBookingComponent();
+        }
+        return $this->upgrades;
     }
 
     public function purchaseForOne(): bool
