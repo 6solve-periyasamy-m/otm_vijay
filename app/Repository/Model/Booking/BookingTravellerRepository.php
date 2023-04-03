@@ -14,7 +14,7 @@ use App\Models\Order\OrderCustomer;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
-use App\Repository\Model\Activity\ActivityInventoryTourRepository;
+use App\Repository\Storage\Customer\Component\BookingComponent;
 use DB;
 use Log;
 use Throwable;
@@ -315,5 +315,24 @@ class BookingTravellerRepository extends ModelRepository
     public function __toString(): string
     {
         return "{$this->traveller->first_name} {$this->traveller->last_name} - {$this->traveller?->booking?->token}";
+    }
+
+    /**
+     * @return BookingComponent[]
+     */
+    public function getSummaryComponents(): array
+    {
+        /**
+         * @var BookingComponent[] $components
+         */
+        $components = [];
+        foreach ($this->getComponents() as $component) {
+            $components[] = $component->getTourComponent()->getAbstractBookingComponent($this->traveller);
+        }
+        uasort($components, function (BookingComponent $a, BookingComponent $b) {
+            if ($a->start->eq($b->start)) return 0;
+            return $a->start->lt($b->start) ? -1 : 1;
+        });
+        return $components;
     }
 }
