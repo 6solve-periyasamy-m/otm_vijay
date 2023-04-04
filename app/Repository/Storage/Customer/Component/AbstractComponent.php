@@ -52,6 +52,11 @@ abstract class AbstractComponent
         return $this->information->end;
     }
 
+    public function equals(AbstractComponent $component): bool
+    {
+        return $this->component->getComponentType() === $component->component->getComponentType() && $this->component->get()->id === $component->component->get()->id;
+    }
+
     public abstract function getOwnedAttribute(): bool;
 
     /**
