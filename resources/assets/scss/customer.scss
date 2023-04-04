@@ -7,8 +7,77 @@ npm run dev creates the files in public that the website can use
 @import 'customer_portal/style';
 @import 'spinner';
 
+$border: 1px solid #dee2e6;
+
 // All fun and games when overwriting bootstrap .-.
 .form-control {
   padding-top: 25px !important;
   padding-left: 5px !important;
+}
+
+.component-header {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 20px;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid grey;
+}
+
+.component-dates {
+  text-align: center;
+  border-left: 1px solid grey;
+}
+
+.component-text {
+  min-height: 10rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid grey;
+}
+
+.border-x {
+  border-left: $border;
+  border-right: $border;
+}
+
+.border-y {
+  border-top: $border;
+  border-bottom: $border;
+}
+
+.border-left {
+  border-left: $border;
+}
+
+.border-right {
+  border-right: $border
+}
+
+.border-top {
+  border-top: $border;
+}
+
+.border-bottom {
+  border-bottom: $border;
+}
+
+.booking-upgrade {
+  min-width: 100%;
+  max-width: 100%;
+}
+
+.booking-image {
+  width: 10rem;
+  height: 10rem;
+}
+
+.buy-button {
+  width: 4rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.buy-header {
+  margin-bottom: 0.5rem;
 }

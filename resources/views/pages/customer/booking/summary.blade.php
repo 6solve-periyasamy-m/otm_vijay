@@ -49,21 +49,7 @@ $shouldRooming = $tour->templates->count();
 @section('booking-body')
     @include('partials.customer.booking.summary.travellers', ['booking' => $booking, 'shouldRooming' => $shouldRooming])
 
-    @if($lead->accommodation()->count() > 0)
-        @include('partials.customer.booking.summary.accommodation', ['traveller' => $lead,])
-    @endif
-
-    @if($lead->activities()->count() > 0)
-        @include('partials.customer.booking.summary.activities', ['traveller' => $lead,])
-    @endif
-
-    @if($lead->flights()->count() > 0)
-        @include('partials.customer.booking.summary.flights', ['traveller' => $lead,])
-    @endif
-
-    @if($lead->transport()->count() > 0)
-        @include('partials.customer.booking.summary.transport', ['traveller' => $lead,])
-    @endif
+    <livewire:customer.booking.traveller-components :traveller="$lead"/>
 
     @if(sizeof($leadAddons) > 0)
         @include('partials.customer.booking.summary.addons', ['traveller' => $lead, 'addons' => $leadAddons])
