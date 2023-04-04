@@ -23,11 +23,14 @@
         </div>
         <div class="row">
             <div class="col-xl-8 col-lg-8 my-auto">
-                <select class="booking-upgrade">
-                    <option>Signature Lux Hotel by ONOMO Foreshore, Double Room (Occupancy 2) (Self-Catered)</option>
-                    <option>Signature Lux Hotel by ONOMO Foreshore, Double Room (Occupancy 2) (Self-Catered)</option>
-                    <option>Signature Lux Hotel by ONOMO Foreshore, Double Room (Occupancy 2) (Self-Catered)</option>
-                    <option>Signature Lux Hotel by ONOMO Foreshore, Double Room (Occupancy 2) (Self-Catered)</option>
+                <select class="booking-upgrade" wire:model="upgrade">
+                    <option selected>Please Select an Upgrade</option>
+                    @foreach($this->component->getAvailableUpgrades() as $upgrade)
+                        @php
+                            $owned = $this->component->equals($upgrade);
+                        @endphp
+                        <option value="{{ json_encode($upgrade->toLivewire()) }}" @if($owned) disabled @endif>{{ $upgrade->name }} @if($owned)(Current)@endif</option>
+                    @endforeach
                 </select>
             </div>
             <div class="col-6 col-lg-2 col-xl-2 row border-right mx-auto">
@@ -35,12 +38,12 @@
                     Buy for
                 </div>
                 <div class="col-6 border-right">
-                    <button class="btn btn-success text-dark buy-button">
+                    <button class="btn btn-success text-dark buy-button" wire:click="buyOne">
                         One
                     </button>
                 </div>
                 <div class="col-6">
-                    <button class="btn btn-success text-dark buy-button">
+                    <button class="btn btn-success text-dark buy-button" wire:click="buyAll">
                         All
                     </button>
                 </div>
@@ -50,12 +53,12 @@
                     Remove for
                 </div>
                 <div class="col-6 border-right">
-                    <button class="btn btn-warning text-dark buy-button">
+                    <button class="btn btn-warning text-dark buy-button" wire:click="sellOne">
                         One
                     </button>
                 </div>
                 <div class="col-6">
-                    <button class="btn btn-warning text-dark buy-button">
+                    <button class="btn btn-warning text-dark buy-button" wire:click="sellAll">
                         All
                     </button>
                 </div>
