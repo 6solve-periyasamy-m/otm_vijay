@@ -125,7 +125,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
     {
         $active = $this->getActiveComponent($this, $traveller);
         if ($active !== null) return $active;
-        $this->getActiveUpgrade($traveller)?->delete();
+        $this->getActiveUpgrade($traveller)?->getBookingComponent($traveller)?->delete();
         $bookingComponent = BookingActivity::create([
             'booking_traveller_id' => $traveller->id,
             'activity_inventory_tour_id' => $this->tourComponent->id,

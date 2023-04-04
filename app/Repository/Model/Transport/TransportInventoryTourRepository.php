@@ -125,7 +125,7 @@ class TransportInventoryTourRepository extends InventoryTourRepository
     {
         $active = $this->getActiveComponent($this, $traveller);
         if ($active !== null) return $active;
-        $this->getActiveUpgrade($traveller)?->delete();
+        $this->getActiveUpgrade($traveller)?->getBookingComponent($traveller)?->delete();
         $bookingComponent = BookingTransport::create([
             'booking_traveller_id' => $traveller->id,
             'transport_inventory_tour_id' => $this->tourComponent->id,

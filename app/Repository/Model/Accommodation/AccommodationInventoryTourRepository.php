@@ -139,7 +139,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     {
         $active = $this->getActiveComponent($this, $traveller);
         if ($active !== null) return $active;
-        $this->getActiveUpgrade($traveller)?->delete();
+        $this->getActiveUpgrade($traveller)?->getBookingComponent($traveller)?->delete();
         $component = BookingAccommodation::create([
             'booking_group_id' => $traveller->primary_group->id,
             'accommodation_inventory_tour_id' => $this->tourComponent->id,

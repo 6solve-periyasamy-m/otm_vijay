@@ -128,13 +128,9 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
 
     public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
-        \Log::info('Finding Active Component');
         $active = $this->getActiveComponent($this, $traveller);
-        \Log::info('Found Active Component');
         if ($active !== null) return $active;
-        \Log::info('Active Component = null');
-        $this->getActiveUpgrade($traveller)?->delete();
-        \Log::info('Removed upgrade (if exists)');
+        $this->getActiveUpgrade($traveller)?->getBookingComponent($traveller)?->delete();
         $bookingComponent = BookingFlight::create([
             'booking_traveller_id' => $traveller->id,
             'flight_inventory_tour_id' => $this->tourComponent->id,
