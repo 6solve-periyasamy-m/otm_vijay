@@ -259,7 +259,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
         $tourComponent = $this->tourComponent;
         $inventory = $tourComponent->inventory;
         $component = $inventory->component;
-        $name = "{$component->name} ($component->activityType) ({$inventory->ticketType})";
+        $name = "{$component->name} ({$inventory->ticketType})";
         return new ComponentInformation(
             $name,
             $component->description,
