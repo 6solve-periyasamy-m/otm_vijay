@@ -7,10 +7,12 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use Livewire\Wireable;
 
 
+/**
+ * @property-read bool $owned
+ */
 class BookingComponent extends AbstractComponent implements Wireable
 {
     private BookingTraveller $traveller;
-    private bool $owned;
     /**
      * @var BookingComponent[] $upgrades
      */
@@ -25,7 +27,7 @@ class BookingComponent extends AbstractComponent implements Wireable
 
     public function getOwnedAttribute(): bool
     {
-        return $this->owned;
+        return $this->component->getBookingComponent($this->traveller) !== null;
     }
 
     public function getAvailableUpgrades(): array
@@ -33,9 +35,9 @@ class BookingComponent extends AbstractComponent implements Wireable
         if (!empty($this->upgrades)) return $this->upgrades;
         $this->upgrades = [];
         $parent = $this->component->getUpgradeParent();
-        $this->upgrades[] = $parent->repository->getAbstractBookingComponent();
+        $this->upgrades[] = $parent->repository->getAbstractBookingComponent($this->traveller);
         foreach ($parent->upgrades as $upgrade) {
-            $this->upgrades[] = $upgrade->upgrade->repository->getAbstractBookingComponent();
+            $this->upgrades[] = $upgrade->upgrade->repository->getAbstractBookingComponent($this->traveller);
         }
         return $this->upgrades;
     }
