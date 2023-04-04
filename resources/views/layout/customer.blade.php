@@ -31,7 +31,11 @@
         $(document).ready(function () {
             @stack('header-ready')
         });
+        window.addEventListener('livewireAlert', event => {
+            alert(event.detail.message);
+        });
     </script>
+    @livewireStyles
 </head>
 <body>
     <!-- Preloader -->
@@ -63,4 +67,6 @@
 
     @yield('footer-script')
     @stack('footer-stack')
+    @livewireScripts
+    @livewire('livewire-ui-modal')
 </body>
