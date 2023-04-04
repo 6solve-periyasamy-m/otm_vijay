@@ -8,8 +8,10 @@ use App\Models\Order\OrderCustomer;
 use App\Models\Quote\QuoteProspect;
 use App\Models\System\ApiToken;
 use App\Models\System\CustomerApiToken;
+use App\Models\Traits\HasRepository;
 use App\Notifications\CustomerResetPassword;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
+use App\Repository\Model\Customer\CustomerRepository;
 use Database\Factories\Customer\CustomerFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -86,6 +88,7 @@ use Laravel\Cashier\Subscription;
  * @property-read Address $homeAddress Home address. Should be a unique entry in the database
  * @property-read Collection|Order[] $leadingOrders Orders where they are the lead booker
  * @property-read Organization|null $organization
+ * @property-read CustomerRepository $repository
  * @property-read int|null $leading_orders_count Amount of orders where they are the lead booker
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications System notifications for customer
  * @property-read int|null $notifications_count Amount of system notifications for customer
@@ -158,6 +161,7 @@ class Customer extends Authenticatable
     use Notifiable;
     use Billable;
     use CascadeSoftDeletes;
+    use HasRepository;
 
     protected string $guard = 'customer';
 

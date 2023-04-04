@@ -1,4 +1,4 @@
-<label for="{{ $field }}-input" class="{{ $labelClasses ?? "" }}">{{ $name }}</label>
+@isset($name)<label for="{{ $field }}-input" class="{{ $labelClasses ?? "" }}">{{ $name }}</label>@endisset
 <select class="form-select {{ $classes ?? "" }}" name="{{ $field }}" id="{{ $field }}-input" autocomplete="off">
 @php($set = isset($selected))
 @foreach($values as $key => $value)

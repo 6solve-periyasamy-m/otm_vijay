@@ -6,3 +6,9 @@ npm run dev creates the files in public that the website can use
 
 @import 'customer_portal/style';
 @import 'spinner';
+
+.float-padding {
+  // Overwriting bootstrap defaults
+  padding-top: 25px !important;
+  padding-left: 5px !important;
+}

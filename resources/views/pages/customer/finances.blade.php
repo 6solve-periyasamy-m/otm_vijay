@@ -15,9 +15,10 @@
                     <select class="form-select order-select" onchange="onOrderChange();" id="booking_reference">
                         @foreach($orders as $selector)
                             <option value='{{ $selector->booking_reference }}'>{{ $selector->tour->name }}
-                                ({{ $selector->booking_reference }}@if($selector->cancelled)
+                                ({{ $selector->booking_reference }})
+                                @if($selector->cancelled)
                                     (Cancelled)
-                                @endif&#41;
+                                @endif
                             </option>
                         @endforeach
                     </select>
@@ -39,7 +40,7 @@
                                     {{ csrf_field() }}
                                     <input type="hidden" name="booking_reference" id="form-booking-reference">
                                     <div class="row">
-                                        <x-customer.input name="amount" width="10">
+                                        <x-customer.input name="amount" :width="10">
                                             Enter Amount
                                         </x-customer.input>
                                         <div class="col-12 col-xl-2 d-flex justify-content-center align-items-center">
