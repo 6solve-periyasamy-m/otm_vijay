@@ -8,7 +8,7 @@ trait HasCustomAttributes
     {
         $pName = snake_to_pascal($name);
         $method = "get{$pName}Attribute";
-        if (method_exists($this, "get{$pName}Attribute")) {
+        if (method_exists($this, $method)) {
             return $this->{$method}();
         }
         return null;
@@ -18,7 +18,7 @@ trait HasCustomAttributes
     {
         $pName = snake_to_pascal($name);
         $method = "set{$pName}Attribute";
-        if (method_exists($this, "get{$pName}Attribute")) {
+        if (method_exists($this, $method)) {
             $this->{$method}();
         }
     }
