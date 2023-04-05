@@ -135,7 +135,7 @@ $brand = $sent->quote->brand;
                         </tr>
                     </thead>
                     <tbody>
-                        @if(sizeof($quote->activities))
+                        @if(sizeof($quote->accommodation))
                         <tr>
                             <td colspan="3" class="metadata center-text pagebreak">Accommodation</td>
                         </tr>

@@ -32,6 +32,7 @@ use App\Repository\RoomingRepository;
 use App\Repository\Storage\OrderComponentStorage;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Settings;
 
 class TourRepository extends ComponentPackageRepository implements HasStockControl, HasRoomingList, HasActivityManifest, HasFlightManifest, HasTransportManifest
 {
@@ -447,5 +448,40 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
     public function hasEnoughStock(int $amount = 1): bool
     {
         return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
+    }
+
+    public function isLocked(string $key): bool
+    {
+        return Settings::isLocked($key, $this->tour->date_from, $this->tour->date_to);
+    }
+
+    public function isPassportLocked(): bool
+    {
+        return $this->isLocked('passport');
+    }
+
+    public function isAccommodationLocked(): bool
+    {
+        return $this->isLocked('accommodation');
+    }
+
+    public function isActivityLocked(): bool
+    {
+        return $this->isLocked('activity');
+    }
+
+    public function isFlightLocked(): bool
+    {
+        return $this->isLocked('flight');
+    }
+
+    public function isTransportLocked(): bool
+    {
+        return $this->isLocked('transport');
+    }
+
+    public function isComponentsLocked(): bool
+    {
+        return $this->tour->date_from->subDays(setting("components.lock", 30))->lte(now());
     }
 }

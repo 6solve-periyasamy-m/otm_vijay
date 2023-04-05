@@ -3,6 +3,7 @@
 namespace App\Repository\Facades;
 
 use App\Repository\SettingsRepository;
+use Carbon\Carbon;
 
 class Settings
 {
@@ -41,5 +42,10 @@ class Settings
     public function authorized(string $key): bool
     {
         return $this->repository->authorized($key);
+    }
+
+    public function isLocked(string $key, Carbon $from, Carbon $to): bool
+    {
+        return $from->subDays(setting("{$key}.lock", 30))->lte(now()) && $to->addDays(setting("{$key}.unlock", 0))->gte(now());
     }
 }

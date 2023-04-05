@@ -56,7 +56,7 @@ use Illuminate\Validation\Rules\Password;
  */
 class DetailsRequest extends FormRequest
 {
-    public function getCustomerDetails(): array
+    public function getCustomerDetails(bool $passport = true): array
     {
         return [
             'title' => $this->title,
@@ -70,6 +70,18 @@ class DetailsRequest extends FormRequest
             'emergency_contact_name' => $this->emergency_contact_name,
             'emergency_contact_relationship' => $this->emergency_contact_relationship,
             'emergency_contact_telephone' => $this->emergency_contact_telephone,
+            't_shirt_size_id' => $this->t_shirt_size_id,
+            'hat_size_id' => $this->hat_size_id,
+            'external_notes' => $this->other_notes,
+            'dietary_notes' => $this->dietary_notes,
+            'mobility_notes' => $this->mobility_notes,
+            ...($passport ? $this->getPassportDetails() : [])
+        ];
+    }
+
+    private function getPassportDetails(): array
+    {
+        return [
             'passport_first_name' => $this->passport_first_name,
             'passport_middle_name' => $this->passport_middle_name,
             'passport_last_name' => $this->passport_last_name,
@@ -77,11 +89,6 @@ class DetailsRequest extends FormRequest
             'passport_country_of_issue' => $this->passport_country,
             'passport_issue_date' => $this->passport_issue_date,
             'passport_expiry_date' => $this->passport_expiry_date,
-            't_shirt_size_id' => $this->t_shirt_size_id,
-            'hat_size_id' => $this->hat_size_id,
-            'external_notes' => $this->other_notes,
-            'dietary_notes' => $this->dietary_notes,
-            'mobility_notes' => $this->mobility_notes,  
         ];
     }
     

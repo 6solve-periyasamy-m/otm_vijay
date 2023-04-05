@@ -81,3 +81,9 @@ $border: 1px solid #dee2e6;
 .buy-header {
   margin-bottom: 0.5rem;
 }
+
+.float-padding {
+  // Overwriting bootstrap defaults
+  padding-top: 25px !important;
+  padding-left: 5px !important;
+}

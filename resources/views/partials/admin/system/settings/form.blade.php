@@ -128,7 +128,8 @@
                 </div>
             </div>
         </div>
-    </div><div class="col-xl-4">
+    </div>
+    <div class="col-xl-4">
         <div class="card">
             <div class="card-body">
                 <div class="card-title">
@@ -143,6 +144,23 @@
                     <div class="col-12 col-xl-6">
                         <img class="image tiny" src="{{ asset(setting('atol.stamp')) }}"/>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">
+                    <h4 class="fw-bold">Customer Data Locking</h4>
+                </div>
+                <div class="row">
+                    @include('partials.admin.system.settings.lock', ['name' => 'Purchasing Components', 'field' => 'components', 'unlock' => false])
+                    @include('partials.admin.system.settings.lock', ['name' => 'Passport Details', 'field' => 'passport'])
+                    @include('partials.admin.system.settings.lock', ['name' => 'Accommodation Notes', 'field' => 'accommodation'])
+                    @include('partials.admin.system.settings.lock', ['name' => 'Activity Notes', 'field' => 'activity'])
+                    @include('partials.admin.system.settings.lock', ['name' => 'Flight Notes', 'field' => 'flight'])
+                    @include('partials.admin.system.settings.lock', ['name' => 'Transport Notes', 'field' => 'transport'])
                 </div>
             </div>
         </div>
