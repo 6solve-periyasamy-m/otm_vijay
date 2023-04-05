@@ -318,7 +318,7 @@ class BookingTravellerRepository extends ModelRepository
     }
 
     /**
-     * @return BookingComponent[]
+     * @return array<int, BookingComponent[]> Set of booking components, grouped by date
      */
     public function getSummaryComponents(): array
     {
@@ -333,6 +333,14 @@ class BookingTravellerRepository extends ModelRepository
             if ($a->start->eq($b->start)) return 0;
             return $a->start->lt($b->start) ? -1 : 1;
         });
-        return $components;
+        $ordered = [];
+        foreach ($components as $component) {
+            $day = $component->start->clone()->setTime(0,0);
+            if (!array_key_exists($day->unix(), $ordered)) {
+                $ordered[$day->unix()] = [];
+            }
+            $ordered[$day->unix()][] = $component;
+        }
+        return $ordered;
     }
 }
