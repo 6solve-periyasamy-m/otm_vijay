@@ -328,8 +328,11 @@ class BookingTravellerRepository extends ModelRepository
         $components = [];
         foreach ($this->traveller->booking->tour->repository->getComponents(false, true, true, true, false, ['Included', 'Add-on']) as $component) {
             $active = $component->getActiveUpgrade($this->traveller);
-            if ($active !== null && $active->get()->id !== $component->get()->id) continue;
-            $components[] = $component->getAbstractBookingComponent($this->traveller);
+            if ($active !== null) {
+                $components[] = $active->getAbstractBookingComponent($this->traveller);
+            } else {
+                $components[] = $component->getAbstractBookingComponent($this->traveller);
+            }
         }
         foreach ($this->traveller->accommodation as $accommodation) {
             $components[] = $accommodation->tourComponent->repository->getAbstractBookingComponent($this->traveller);
