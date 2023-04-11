@@ -21,12 +21,12 @@ $border: 1px solid #dee2e6;
   line-height: 20px;
   margin-bottom: 0.75rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid grey;
+  border-bottom: $border;
 }
 
 .component-dates {
   text-align: center;
-  border-left: 1px solid grey;
+  border-left: $border;
 }
 
 .component-text {
@@ -36,7 +36,7 @@ $border: 1px solid #dee2e6;
 }
 
 .component-upgrades {
-  border-top: 1px solid grey;
+  border-top: $border;
 }
 
 .border-x {
