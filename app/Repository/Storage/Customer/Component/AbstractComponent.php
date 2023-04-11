@@ -19,7 +19,7 @@ abstract class AbstractComponent
 {
     use HasCustomAttributes;
 
-    protected InventoryTourRepository $component;
+    public readonly InventoryTourRepository $component;
     private ComponentInformation $information;
 
     public function __construct(InventoryTourRepository $component)

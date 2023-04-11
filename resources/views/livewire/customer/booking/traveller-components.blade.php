@@ -16,5 +16,5 @@
             </div>
         @endforeach
     </x-customer.accordion>
-    <x-wire-loader />
+    <x-wire-loader longest />
 </div>

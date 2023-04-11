@@ -57,7 +57,7 @@ class BookingComponent extends AbstractComponent implements Wireable
 
     public function sellForOne(): bool
     {
-        // TODO: Implement sellForOne() method.
+        return $this->component->getBookingComponent($this->traveller)?->delete();
     }
 
     public function sellForAll(): bool

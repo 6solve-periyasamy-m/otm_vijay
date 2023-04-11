@@ -23,7 +23,7 @@
                 @endif
             </div>
         </div>
-        @if(!$this->component->owned || sizeof($this->component->getAvailableUpgrades()) > 1)
+        @if(!$this->component->owned || ($this->component->owned && $this->component->tour_component_type === 'Add-on') || sizeof($this->component->getAvailableUpgrades()) > 1)
         <div class="component-upgrades row">
             <div class="col-xl-10 col-lg-10 col-6 my-auto">
                 @if(sizeof($this->component->getAvailableUpgrades()) > 1)
@@ -36,6 +36,8 @@
                             <option value="{{ json_encode($upgrade->toLivewire()) }}" @if($owned) disabled @endif>{!! $upgrade->name !!} @if($owned)(Current)@endif</option>
                         @endforeach
                     </select>
+                @elseif($this->component->tour_component_type === 'Add-on')
+                    <div class="text-center fw-bold" style="font-size: 1.5rem">Cost per Traveller: {{ f_currency($this->component->component->getSalesPrice()) }}</div>
                 @endif
             </div>
             @if($this->component->tour_component_type === 'Add-on' && $this->component->owned)
@@ -46,5 +48,5 @@
         </div>
         @endif
     </div>
-    <x-wire-loader />
+    <x-wire-loader longest/>
 </div>

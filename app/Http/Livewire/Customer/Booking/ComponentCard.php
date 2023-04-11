@@ -39,7 +39,12 @@ class ComponentCard extends Component
 
     public function sellOne()
     {
-
+        $success = $this->component->sellForOne();
+        if (!$success) {
+            $this->showAlert('Failed to remove');
+        }
+        $this->emit('componentsChanged', $this->component->traveller->id);
+        $this->render();
     }
 
     public function sellAll()
