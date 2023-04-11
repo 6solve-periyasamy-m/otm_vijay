@@ -23,18 +23,16 @@
         @if(\Gateway::getDefaultGateway() !== null)
             <div class="card hidden">
                 <div class="card-body">
-                    <form class="form-material" action="{{ route('customer-booking.deposit', ['bookingUrl' => $this->booking->tour->booking_form_url, 'token' => $this->booking->token]) }}" method="post">
-                        {{ csrf_field() }}
-                        <input type="hidden" name="booking_reference" id="form-booking-reference">
+                    <div class="form-material">
                         <div class="form-material row">
-                            <x-customer.input name="amount" value="{{ $this->booking->due_today }}" width="10" required>
+                            <x-customer.input wire:model="amount" width="10" required>
                                 How much do you want to pay today?
                             </x-customer.input>
                             <div class="form-group col-12 col-xl-2" style="padding-top: 19px;">
-                                <input class="btn btn-primary text-white" type="submit" value="Make Payment">
+                                <button wire:click="pay" class="btn btn-primary text-white">Make Payment</button>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         @else

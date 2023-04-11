@@ -3,17 +3,20 @@
 namespace App\Repository\Model\Booking;
 
 use App\Exceptions\NotOnTourException;
+use App\Http\Gateways\Storage\LineItem;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Group;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
+use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
 use Carbon\Carbon;
 use DB;
+use Gateway;
 use Log;
 use Throwable;
 
@@ -233,5 +236,15 @@ class BookingRepository extends ModelRepository
     public function isDeleted(): bool
     {
         return !isset($this->booking);
+    }
+
+    public function getGatewayUrl(float $amount)
+    {
+        $gateway = Gateway::getDefaultGateway();
+        $item = new LineItem("Deposit for Booking from {$this->booking->leadTraveller->full_name}", $amount);
+        $intention = PaymentIntention::build($this->booking->leadTraveller->customer, $this->booking->token, 'Deposit');
+
+        $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
+        return $gateway->checkout([$item,], $intention, $this->booking->leadTraveller, $redirect);
     }
 }
