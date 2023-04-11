@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card mx-1">
     <div class="card-body">
         <div class="component-header row">
             <div class="col-8">
@@ -23,22 +23,22 @@
                 @endif
             </div>
         </div>
-        <div class="row">
+        @if(sizeof($this->component->getAvailableUpgrades()) > 1)
+        <div class="component-upgrades row">
             <div class="col-xl-10 col-lg-10 col-6 my-auto">
-                @if(sizeof($this->component->getAvailableUpgrades()) > 1)
-                    <select class="booking-upgrade" wire:model="upgrade">
-                        <option selected>Please Select an Upgrade</option>
-                        @foreach($this->component->getAvailableUpgrades() as $upgrade)
-                            @php
-                                $owned = $this->component->equals($upgrade);
-                            @endphp
-                            <option value="{{ json_encode($upgrade->toLivewire()) }}" @if($owned) disabled @endif>{{ $upgrade->name }} @if($owned)(Current)@endif</option>
-                        @endforeach
-                    </select>
-                @endif
+                <select class="booking-upgrade" wire:model="upgrade">
+                    <option selected>Please Select an Upgrade</option>
+                    @foreach($this->component->getAvailableUpgrades() as $upgrade)
+                        @php
+                            $owned = $this->component->equals($upgrade);
+                        @endphp
+                        <option value="{{ json_encode($upgrade->toLivewire()) }}" @if($owned) disabled @endif>{{ $upgrade->name }} @if($owned)(Current)@endif</option>
+                    @endforeach
+                </select>
             </div>
             @include('partials.customer.booking.component.buy-buttons')
         </div>
+        @endif
     </div>
     <x-wire-loader />
 </div>

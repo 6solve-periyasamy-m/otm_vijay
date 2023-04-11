@@ -33,7 +33,10 @@ $border: 1px solid #dee2e6;
   min-height: 10rem;
   padding-bottom: 0.75rem;
   margin-bottom: 0.75rem;
-  border-bottom: 1px solid grey;
+}
+
+.component-upgrades {
+  border-top: 1px solid grey;
 }
 
 .border-x {
