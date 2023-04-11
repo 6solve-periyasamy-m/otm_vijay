@@ -12,7 +12,7 @@ use Livewire\Wireable;
  */
 class BookingComponent extends AbstractComponent implements Wireable
 {
-    private BookingTraveller $traveller;
+    public readonly BookingTraveller $traveller;
     /**
      * @var BookingComponent[] $upgrades
      */

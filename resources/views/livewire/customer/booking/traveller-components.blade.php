@@ -10,7 +10,7 @@
                         <h2 class="mb-0">{{ \Carbon\Carbon::createFromTimestamp($day)->format('l jS F Y') }}</h2>
                     </x-slot:header>
                     @foreach($components as $component)
-                        <livewire:customer.booking.component-card :component="$component"/>
+                        <livewire:customer.booking.component-card key="{{now()}}" :component="$component"/>
                     @endforeach
                 </x-customer.accordion>
             </div>

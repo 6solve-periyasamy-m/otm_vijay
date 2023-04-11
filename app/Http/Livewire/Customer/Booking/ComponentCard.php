@@ -28,6 +28,7 @@ class ComponentCard extends Component
         } else {
             $this->component->purchaseForOne();
         }
+        $this->emit('componentsChanged', $this->component->traveller->id);
         $this->render();
     }
 
