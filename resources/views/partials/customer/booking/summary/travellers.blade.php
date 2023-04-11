@@ -1,8 +1,8 @@
 @php /** @var \App\Models\Booking\Booking $booking */ @endphp
 <x-customer.accordion id="travellers-collapse" nobg>
-<x-slot:header>
-    <h2 class="col-md-12 mb-0">Travellers</h2>
-</x-slot:header>
+    <x-slot:header>
+        <h2 class="col-md-12 mb-0">Travellers</h2>
+    </x-slot:header>
     Room assignments may differ slightly if incorrect group sizes were provided.
     <hr class="splitter">
     <table class="table table-striped text-center">
@@ -22,8 +22,8 @@
         </thead>
         <tbody>
         @foreach($booking->travellers as $traveller)
-            <tr>
-                <td data-content="Name">{{ $traveller->first_name . ' ' . $traveller->last_name }}</td>
+            <tr wire:click="changeActive({{$traveller->id}})">
+                <td data-content="Name">{{ $traveller->first_name . ' ' . $traveller->last_name }} @if($traveller->id === $active->id)(Active)@endif</td>
                 @if($shouldRooming)
                     <td data-content="Room">{{ $traveller->primary_group?->name }} ({{ $traveller->roomType->name }})</td>
                 @endif

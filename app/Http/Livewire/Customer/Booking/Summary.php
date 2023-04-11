@@ -34,6 +34,15 @@ class Summary extends Component
         return redirect()->to($this->booking->repository->getGatewayUrl($this->amount));
     }
 
+    public function changeActive($traveller)
+    {
+        $selected = $this->booking->travellers()->where('id', '=', $traveller)->first();
+        if ($selected !== null) {
+            $this->active = $selected;
+        }
+        $this->render();
+    }
+
     public function accept()
     {
         $this->accepted = true;
