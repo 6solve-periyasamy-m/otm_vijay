@@ -232,7 +232,10 @@ class TransportInventoryTourRepository extends InventoryTourRepository
         $tourComponent = $this->tourComponent;
         $inventory = $tourComponent->inventory;
         $component = $inventory->component;
-        $name = "{$component->departureAddress->name} to {$component->arrivalAddress->name} ({$component->transportType}) ({$inventory->ticket_number}) ({$inventory->travelClass})";
+        $transportType = nbsp($component->transportType->name);
+        $travelClass = nbsp($inventory->travelClass);
+        $ticketNumber = (isset($inventory->ticket_number) ? "({$inventory->ticket_number})" : "");
+        $name = "{$component->departureAddress->name} to {$component->arrivalAddress->name} ({$transportType}) {$ticketNumber} ({$travelClass})";
         return new ComponentInformation(
             $name,
             $component->description,

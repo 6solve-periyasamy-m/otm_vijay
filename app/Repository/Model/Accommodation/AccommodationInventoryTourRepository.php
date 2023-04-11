@@ -251,7 +251,8 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         $tourComponent = $this->tourComponent;
         $inventory = $tourComponent->inventory;
         $component = $inventory->component;
-        $name = "{$component->name}, {$inventory->roomType} ({$inventory->boardType->name})";
+        $boardType = nbsp($inventory->boardType->name);
+        $name = "{$component->name}, {$inventory->roomType} ({$boardType})";
         return new ComponentInformation(
             $name,
             $component->description,

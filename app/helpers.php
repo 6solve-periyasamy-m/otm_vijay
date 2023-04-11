@@ -161,3 +161,14 @@ if (!function_exists('snake_to_pascal')) {
         return str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $str)));
     }
 }
+if (!function_exists('nbsp')) {
+    /**
+     * Converts spaces into Non-breaking spaces for rendering
+     * @param string $str
+     * @return string
+     */
+    function nbsp(string $str): string
+    {
+        return str_replace(' ', '&nbsp;', $str);
+    }
+}

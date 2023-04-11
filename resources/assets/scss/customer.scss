@@ -99,3 +99,7 @@ $border: 1px solid #dee2e6;
   -moz-opacity: 0.2;
   z-index: 10;
 }
+
+.unowned {
+  filter: brightness(90%);
+}

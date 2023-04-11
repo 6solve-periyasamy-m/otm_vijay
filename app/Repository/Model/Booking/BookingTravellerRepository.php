@@ -326,13 +326,15 @@ class BookingTravellerRepository extends ModelRepository
          * @var BookingComponent[] $components
          */
         $components = [];
-        foreach ($this->getComponents() as $component) {
-            $components[] = $component->getTourComponent()->getAbstractBookingComponent($this->traveller);
+        foreach ($this->traveller->booking->tour->repository->getComponents(false, true, true, true, false, ['Included', 'Add-on']) as $component) {
+            $active = $component->getActiveUpgrade($this->traveller);
+            if ($active !== null && $active->get()->id !== $component->get()->id) continue;
+            $components[] = $component->getAbstractBookingComponent($this->traveller);
         }
-        uasort($components, function (BookingComponent $a, BookingComponent $b) {
-            if ($a->start->eq($b->start)) return 0;
-            return $a->start->lt($b->start) ? -1 : 1;
-        });
+        foreach ($this->traveller->accommodation as $accommodation) {
+            $components[] = $accommodation->tourComponent->repository->getAbstractBookingComponent($this->traveller);
+        }
+        uasort($components, ['static', 'compareStarts']);
         $ordered = [];
         foreach ($components as $component) {
             $day = $component->start->clone()->setTime(0,0);
@@ -341,6 +343,23 @@ class BookingTravellerRepository extends ModelRepository
             }
             $ordered[$day->unix()][] = $component;
         }
+        foreach ($ordered as $key => $values) {
+            uasort($values, ['static', 'compareComponents']);
+            $ordered[$key] = $values;
+        }
         return $ordered;
+    }
+
+    private static function compareStarts(BookingComponent $a, BookingComponent $b): int
+    {
+        if ($a->start->eq($b->start)) return 0;
+        return $a->start->lt($b->start) ? -1 : 1;
+    }
+
+    private static function compareComponents(BookingComponent $a, BookingComponent $b): int
+    {
+        if ($a->owned && !$b->owned) return -1;
+        if ($b->owned && !$a->owned) return 1;
+        return static::compareStarts($a, $b);
     }
 }

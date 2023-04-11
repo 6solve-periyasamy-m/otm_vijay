@@ -244,7 +244,10 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
         $tourComponent = $this->tourComponent;
         $inventory = $tourComponent->inventory;
         $component = $inventory->component;
-        $name = "{$component->departureAirport->name} to {$component->arrivalAirport->name} ({$component->airline->name}) ({$inventory->flight_number}) ({$inventory->travelClass})";
+        $airline = nbsp($component->airline->name);
+        $travelClass = nbsp($inventory->travelClass);
+        $flightNumber = (isset($inventory->flight_number) ? "({$inventory->flight_number})" : "");
+        $name = "{$component->departureAirport->name} to {$component->arrivalAirport->name} ({$airline}) {$flightNumber} ({$travelClass})";
         return new ComponentInformation(
             $name,
             "Flight from {$component->departureAirport->name} to {$component->arrivalAirport->name}",

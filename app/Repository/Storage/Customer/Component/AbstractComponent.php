@@ -10,6 +10,7 @@ use Carbon\Carbon;
 /**
  * @property string $name
  * @property string $description
+ * @property string $tour_component_type
  * @property string|null $image
  * @property Carbon|null $start
  * @property Carbon|null $end
@@ -25,6 +26,11 @@ abstract class AbstractComponent
     {
         $this->component = $component;
         $this->information = $component->getComponentInformation();
+    }
+
+    public function getTourComponentTypeAttribute(): string
+    {
+        return $this->component->getTourComponentType();
     }
 
     public function getNameAttribute(): string
