@@ -4,44 +4,7 @@
     <livewire:customer.booking.traveller-components key="{{ now() }}" :traveller="$this->active"/>
 
     @include('partials.customer.booking.summary.schedule', ['booking' => $this->booking,])
-    
-    @if(!$this->accepted)
-        <x-customer.accordion id="cost-collapse" nobg>
-            <x-slot:header>
-                <h2 class="mb-0">Terms and Conditions</h2>
-            </x-slot:header>
-            {!! $this->booking->tour->terms !!}
-            <br />
-            <button wire:click="accept" class="btn btn-success">Accept the Terms and Conditions</button>
-        </x-customer.accordion>
-    @else
-        <div class="card">
-            <div class="card-body">
-                <h2 class="mb-0">Make Payment</h2>
-            </div>
-        </div>
-        @if(\Gateway::getDefaultGateway() !== null)
-            <div class="card hidden">
-                <div class="card-body">
-                    <div class="form-material">
-                        <div class="form-material row">
-                            <x-customer.input wire:model="amount" width="10" required>
-                                How much do you want to pay today?
-                            </x-customer.input>
-                            <div class="form-group col-12 col-xl-2" style="padding-top: 19px;">
-                                <button wire:click="pay" class="btn btn-primary text-white">Make Payment</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @else
-            <div class="card hidden">
-                <div class="card-body">
-                    <h2 class="col-md-12 mb-0">The operator has not enabled online payments</h2>
-                </div>
-            </div>
-        @endif
-    @endif
+
+    <livewire:customer.booking.payment :booking="$this->booking" />
     <x-wire-loader />
 </div>
