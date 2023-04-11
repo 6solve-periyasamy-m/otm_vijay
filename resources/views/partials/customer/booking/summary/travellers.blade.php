@@ -1,7 +1,7 @@
 @php /** @var \App\Models\Booking\Booking $booking */ @endphp
 <x-customer.accordion id="travellers-collapse" nobg>
     <x-slot:header>
-        <h2 class="col-md-12 mb-0">Travellers</h2>
+        <h2 class="mb-0">Travellers</h2>
     </x-slot:header>
     Room assignments may differ slightly if incorrect group sizes were provided.
     <hr class="splitter">

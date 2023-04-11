@@ -6,7 +6,7 @@
 @endphp
 <x-customer.accordion id="schedule-collapse" nobg>
     <x-slot:header>
-        <h2 class="col-md-12 mb-0">Payment Schedule</h2>
+        <h2 class="mb-0">Payment Schedule</h2>
     </x-slot:header>
 
     <table class="table table-striped text-center table-mobile-sided">
