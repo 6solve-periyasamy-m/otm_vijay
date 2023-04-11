@@ -13,17 +13,14 @@ class ComponentCard extends Component
 
     public function buyOne()
     {
-        \Log::info('Called');
         $upgrade = $this->getUpgrade();
         if ($upgrade === null) {
             $this->showAlert('Please select an upgrade');
-            \Log::info('Upgrade Not Selected');
             return;
         }
         $success = $upgrade->purchaseForOne();
         if (!$success) {
             $this->showAlert('Upgrade Failed');
-            \Log::info('Upgrade Failed');
             return;
         }
         $this->component = $upgrade;
