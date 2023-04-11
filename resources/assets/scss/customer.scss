@@ -103,3 +103,9 @@ $border: 1px solid #dee2e6;
 .unowned {
   filter: brightness(90%);
 }
+
+@for $size from 1 through 30 {
+  .fs-#{$size} {
+    font-size: #{$size}px !important;
+  }
+}

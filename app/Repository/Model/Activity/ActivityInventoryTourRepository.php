@@ -259,14 +259,17 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
         $tourComponent = $this->tourComponent;
         $inventory = $tourComponent->inventory;
         $component = $inventory->component;
-        $ticketType = nbsp($inventory->ticketType);
-        $name = "{$component->name} ({$ticketType})";
         return new ComponentInformation(
-            $name,
+            $component->name,
             $component->description,
             $component->image_url,
             $inventory->starts_at,
-            $inventory->ends_at
+            $inventory->ends_at,
+            [
+                'Starts At' => f_datetime($inventory->starts_at),
+                'Ends At' => f_datetime($inventory->ends_at),
+                'Ticket Type' => $inventory->ticketType,
+            ]
         );
     }
 }

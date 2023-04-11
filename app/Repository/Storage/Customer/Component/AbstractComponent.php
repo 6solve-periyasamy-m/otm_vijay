@@ -14,6 +14,7 @@ use Carbon\Carbon;
  * @property string|null $image
  * @property Carbon|null $start
  * @property Carbon|null $end
+ * @property array<string, string> $attributes
  */
 abstract class AbstractComponent
 {
@@ -56,6 +57,14 @@ abstract class AbstractComponent
     public function getEndAttribute(): Carbon|null
     {
         return $this->information->end;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getAttributesAttribute(): array
+    {
+        return $this->information->attributes;
     }
 
     public function equals(AbstractComponent $component): bool

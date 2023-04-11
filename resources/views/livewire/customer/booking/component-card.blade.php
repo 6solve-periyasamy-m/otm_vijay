@@ -1,14 +1,11 @@
 <div class="card mx-1 @if(!$this->component->owned) unowned @endif">
     <div class="card-body">
         <div class="component-header row">
-            <div class="col-6 my-auto">
+            <div class="col-10 my-auto">
                 {!! $this->component->name !!}
             </div>
             <div class="col-2 component-dates fw-bold my-auto">
                 {{ $this->component->tour_component_type !== 'Included' ? f_currency($this->component->component->getSalesPrice()) : 'Included' }}
-            </div>
-            <div class="col-4 component-dates my-auto">
-                {{ f_datetime($this->component->start) }} to {{ f_datetime($this->component->end) }}
             </div>
         </div>
         <div class="component-text">
@@ -18,9 +15,11 @@
                         <img src="{{ asset($this->component->image) }}" class="booking-image"/>
                     </div>
                     <div class="col-xl-10 col-lg-9 col-md-8 col-6">
+                        @include('partials.customer.booking.component.attributes', ['attributes' => $this->component->attributes])
                         {{ $this->component->description }}
                     </div>
                 @else
+                    @include('partials.customer.booking.component.attributes', ['attributes' => $this->component->attributes])
                     {{ $this->component->description }}
                 @endif
             </div>

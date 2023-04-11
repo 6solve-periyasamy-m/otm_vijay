@@ -251,14 +251,18 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         $tourComponent = $this->tourComponent;
         $inventory = $tourComponent->inventory;
         $component = $inventory->component;
-        $boardType = nbsp($inventory->boardType->name);
-        $name = "{$component->name}, {$inventory->roomType} ({$boardType})";
         return new ComponentInformation(
-            $name,
+            $component->name,
             $component->description,
             $component->image_url,
             $inventory->check_in,
-            $inventory->check_out
+            $inventory->check_out,
+            [
+                'Check In' => f_datetime($inventory->check_in),
+                'Check Out' => f_datetime($inventory->check_out),
+                'Board Type' => $inventory->boardType->name,
+                'Room Type' => $inventory->roomType->__toString()
+            ]
         );
     }
 

@@ -241,7 +241,13 @@ class TransportInventoryTourRepository extends InventoryTourRepository
             $component->description,
             $component->image_url,
             $inventory->departs_at,
-            $inventory->arrives_at
+            $inventory->arrives_at,
+            [
+                'Transport Type' => $component->transportType->name,
+                'Departure' => f_datetime($inventory->departs_at),
+                'Arrival' => f_datetime($inventory->arrives_at),
+                'Travel Class' => $inventory->travelClass->__toString(),
+            ]
         );
     }
 }

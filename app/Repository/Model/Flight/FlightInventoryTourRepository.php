@@ -244,16 +244,19 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
         $tourComponent = $this->tourComponent;
         $inventory = $tourComponent->inventory;
         $component = $inventory->component;
-        $airline = nbsp($component->airline->name);
-        $travelClass = nbsp($inventory->travelClass);
-        $flightNumber = (isset($inventory->flight_number) ? "({$inventory->flight_number})" : "");
-        $name = "{$component->departureAirport->name} to {$component->arrivalAirport->name} ({$airline}) {$flightNumber} ({$travelClass})";
         return new ComponentInformation(
-            $name,
+            "{$component->departureAirport->name}, {$component->departureAirport->address->country->name} to {$component->arrivalAirport->name}, {$component->arrivalAirport->address->country->name}",
             "Flight from {$component->departureAirport->name} to {$component->arrivalAirport->name}",
             $component->image_url,
             $inventory->departs_at,
-            $inventory->arrives_at
+            $inventory->arrives_at,
+            [
+                'Airline' => $component->airline->name,
+                'Check In' => f_datetime($inventory->check_in),
+                'Departure' => f_datetime($inventory->departs_at),
+                'Arrival' => f_datetime($inventory->arrives_at),
+                'Travel Class' => $inventory->travelClass->__toString(),
+            ]
         );
     }
 }
