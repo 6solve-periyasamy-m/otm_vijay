@@ -33,6 +33,7 @@ use Illuminate\Support\Carbon;
  * @property-read int $traveller_count
  * @property-read float $total_cost
  * @property-read float $deposit
+ * @property-read float $due_today
  * @property-read BookingRepository $repository
  * @method static Builder|Booking newModelQuery()
  * @method static Builder|Booking newQuery()
@@ -96,5 +97,10 @@ class Booking extends Model
     public function getDepositAttribute(): float
     {
         return $this->tour->deposit;
+    }
+
+    public function getDueTodayAttribute(): float
+    {
+        return $this->repository->getDueTodayAmount();
     }
 }

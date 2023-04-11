@@ -98,7 +98,7 @@ class BookingRepository extends ModelRepository
 
     public function getDueTodayAmount(): float
     {
-        return ($this->booking->tour->booking_fee ?? 0) + ($this->booking->tour->deposit * $this->booking->travellers()->count());
+        return ($this->booking->tour->booking_fee ?? 0) + (($this->booking->tour->deposit ?? 0) * $this->booking->travellers()->count());
     }
 
     public function getSingleOccupancyCount(): int
