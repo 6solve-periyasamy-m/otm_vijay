@@ -13,17 +13,21 @@ class ComponentCard extends Component
 
     public function buyOne()
     {
-        $upgrade = $this->getUpgrade();
-        if ($upgrade === null) {
-            $this->showAlert('Please select an upgrade');
-            return;
+        if ($this->component->owned) {
+            $upgrade = $this->getUpgrade();
+            if ($upgrade === null) {
+                $this->showAlert('Please select an upgrade');
+                return;
+            }
+            $success = $upgrade->purchaseForOne();
+            if (!$success) {
+                $this->showAlert('Upgrade Failed');
+                return;
+            }
+            $this->component = $upgrade;
+        } else {
+            $this->component->purchaseForOne();
         }
-        $success = $upgrade->purchaseForOne();
-        if (!$success) {
-            $this->showAlert('Upgrade Failed');
-            return;
-        }
-        $this->component = $upgrade;
         $this->render();
     }
 
