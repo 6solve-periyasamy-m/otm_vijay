@@ -43,4 +43,5 @@
             </div>
         @endif
     @endif
+    <x-wire-loader />
 </div>

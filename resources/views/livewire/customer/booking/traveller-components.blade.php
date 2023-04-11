@@ -16,4 +16,5 @@
             </div>
         @endforeach
     </x-customer.accordion>
+    <x-wire-loader />
 </div>

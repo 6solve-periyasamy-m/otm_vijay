@@ -40,4 +40,5 @@
             @include('partials.customer.booking.component.buy-buttons')
         </div>
     </div>
+    <x-wire-loader />
 </div>
