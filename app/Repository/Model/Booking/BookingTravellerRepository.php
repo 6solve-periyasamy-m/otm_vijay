@@ -14,6 +14,7 @@ use App\Models\Order\OrderCustomer;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Model\Flight\FlightInventoryTourRepository;
 use App\Repository\Storage\Customer\Component\BookingComponent;
 use DB;
 use Log;
@@ -331,6 +332,9 @@ class BookingTravellerRepository extends ModelRepository
             if ($active !== null) {
                 $components[] = $active->getAbstractBookingComponent($this->traveller);
             } else {
+                if ($component instanceof FlightInventoryTourRepository) {
+                    if ($component->get()->flight_type !== 'Mid-Package' && $component->getBookingComponent($this->traveller) === null) continue;
+                }
                 $components[] = $component->getAbstractBookingComponent($this->traveller);
             }
         }
