@@ -342,7 +342,8 @@ class BookingRepository extends ModelRepository
                         $traveller->save();
                         $found = true;
                     } else {
-                        if ($groups[$newGroup]['type']?->id === $traveller->room_type_id) {
+                        if ($groups[$newGroup]['type']?->id === $traveller->room_type_id
+                            && $groups[$newGroup]['group']->travellers()->count() < $groups[$newGroup]['type']->maximum_occupancy) {
                             $traveller->group_id = $newGroup;
                             $traveller->save();
                             $found = true;
