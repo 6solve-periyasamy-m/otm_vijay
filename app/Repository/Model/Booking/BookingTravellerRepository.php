@@ -5,6 +5,9 @@ namespace App\Repository\Model\Booking;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
+use App\Models\Booking\Component\BookingActivity;
+use App\Models\Booking\Component\BookingFlight;
+use App\Models\Booking\Component\BookingTransport;
 use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Location\Address;
@@ -231,7 +234,7 @@ class BookingTravellerRepository extends ModelRepository
             return;
         }
         $this->traveller->save();
-        $this->saveComponentSet($this->traveller->booking->tour->repository->getBookingComponentSetForSaving());
+        $this->saveComponentSet($this->traveller->booking->leadTraveller->repository->cloneComponents());
         $this->traveller->booking->repository->evaluateSimpleRooming();
     }
 
@@ -285,6 +288,21 @@ class BookingTravellerRepository extends ModelRepository
             'room_type_id' => $details['room_type_id'],
             'group_id' => $details['group_id'],
         ]);
+    }
+    
+    public function cloneComponents(): BookingComponentStorage
+    {
+        $storage = new BookingComponentStorage();
+        foreach ($this->traveller->activities as $activity) {
+            $storage->activities[] = new BookingActivity(['activity_inventory_tour_id' => $activity->activity_inventory_tour_id,]);
+        }
+        foreach ($this->traveller->flights as $flight) {
+            $storage->flights[] = new BookingFlight(['flight_inventory_tour_id' => $flight->flight_inventory_tour_id,]);
+        }
+        foreach ($this->traveller->transport as $transport) {
+            $storage->transport[] = new BookingTransport(['transport_inventory_tour_id' => $transport->transport_inventory_tour_id,]);
+        }
+        return $storage;
     }
 
     public function getTotalCost(): float
