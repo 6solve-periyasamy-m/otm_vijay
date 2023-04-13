@@ -31,15 +31,20 @@
         </div>
     </div>
     <div class="d-block">
-        <div class="d-flex flex-between">
-            <div class="w-100 text-center px-1">
-                <span class="d-block fw-bold">Room</span>
-                <span class="d-block">{{ $traveller->primary_group?->name }}</span>
+
+            @if($traveller->booking->lead_traveller_id === $traveller->id)
+            <div class="flex-centered fs-14">
+                Lead Booker
             </div>
-            <div class="w-100 text-center border-left px-1">
-                <span class="d-block fw-bold">Type</span>
-                <span class="d-block">{{ $traveller->roomType?->name }}</span>
+            @else
+            <div class="d-flex flex-between">
+                <div class="w-100 text-center p-1">
+                    <button class="btn btn-warning text-dark" style="width: 4rem;" wire:click="$emit('openModal', 'customer.booking.form.additional-traveller', {{ json_encode(['booking' => $traveller->booking->id, 'traveller' => $traveller->id]) }})">Edit</button>
+                </div>
+                <div class="text-center p-1 border-left w-100">
+                    <button class="btn btn-danger text-dark" style="width: 4rem;" wire:click="$emit('openModal', 'customer.booking.form.additional-traveller', {{ json_encode(['booking' => $traveller->booking->id, 'traveller' => $traveller->id]) }})">Delete</button>
+                </div>
             </div>
-        </div>
+            @endif
     </div>
 </div>
