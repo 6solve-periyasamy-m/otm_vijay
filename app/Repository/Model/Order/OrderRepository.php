@@ -18,7 +18,7 @@ use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
-use App\Repository\Storage\RemoteGroup;
+use App\Repository\Storage\Rooming\RemoteGroup;
 use Cache;
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;

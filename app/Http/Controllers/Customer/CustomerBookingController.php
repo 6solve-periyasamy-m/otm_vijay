@@ -197,4 +197,14 @@ class CustomerBookingController extends Controller
         $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
         return redirect($gateway->checkout([$item,], $intention, $booking->leadTraveller, $redirect));
     }
+
+    public function rooming(string $bookingUrl, string $token)
+    {
+        $tour = $this->getTour($bookingUrl);
+        if (!isset($tour)) abort(404);
+        $booking = $this->getBooking($token);
+        if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
+        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= $booking->travellers()->count()) abort(404, 'That tour is out of stock');
+        return view('pages.customer.booking.rooming', ['booking' => $booking,]);
+    }
 }
