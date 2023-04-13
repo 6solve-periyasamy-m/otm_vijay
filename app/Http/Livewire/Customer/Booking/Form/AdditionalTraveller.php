@@ -22,9 +22,7 @@ class AdditionalTraveller extends ModalComponent
         } else {
             $this->booking = Booking::find($booking);
         }
-        \Log::info($traveller ?? 'Empty');
         $this->traveller = $traveller ?? new BookingTraveller(['booking_id' => $this->booking->id]);
-        \Log::info($this->traveller);
         $this->room_type = $this->traveller?->room_type_id ?? $this->getDefaultRoomType()?->id;
         $this->group = $this->traveller?->group_id ?? 1;
     }
