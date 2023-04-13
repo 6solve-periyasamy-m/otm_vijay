@@ -135,7 +135,6 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
             'booking_traveller_id' => $traveller->id,
             'flight_inventory_tour_id' => $this->tourComponent->id,
         ]);
-        \Log::info('Created Component');
         return $bookingComponent->repository;
     }
 
