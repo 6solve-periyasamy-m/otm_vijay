@@ -87,7 +87,7 @@ class BookingCustomerRequest extends FormRequest
             'additional.*.title' => 'required',
             'additional.*.first_name' => 'required',
             'additional.*.last_name' => 'required',
-            'additional.*.date_of_birth' => 'required',
+            'additional.*.date_of_birth' => 'nullable',
             'additional.*.email_address' => 'nullable|email',
         ];
     }

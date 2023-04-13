@@ -18,7 +18,7 @@
             Last Name
         </x-customer.input>
 
-        <x-customer.input type="date" name="additional[{{ $number }}][date_of_birth]" value="{{ $traveller?->date_of_birth?->format('Y-m-d') ?? '' }}" width="3" autocomplete="bday" required>
+        <x-customer.input type="date" name="additional[{{ $number }}][date_of_birth]" value="{{ $traveller?->date_of_birth?->format('Y-m-d') ?? '' }}" width="3" autocomplete="bday">
             Date of Birth
         </x-customer.input>
 
