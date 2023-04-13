@@ -21,7 +21,7 @@ class MailController extends Controller
     {
         $template = MailRepository::getMail($mail);
         if (!isset($template)) abort(404);
-        $template->update($request->input('body'), $request->input('body'));
+        $template->update($request->input('subject'), $request->input('body'));
         return redirect()->route('email.edit', ['mail' => $mail,]);
     }
 
