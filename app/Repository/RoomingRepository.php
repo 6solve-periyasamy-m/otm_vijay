@@ -105,15 +105,21 @@ class RoomingRepository
         return $available;
     }
 
-    public static function assignDefaultRooming(OrderCustomer $orderCustomer): bool
+    public static function getSingleRoomType(Tour $tour): RoomType|null
     {
         $singleRoom = null;
-        foreach (RoomingRepository::getAvailableRoomTypes($orderCustomer->order->tour) as $roomType) {
+        foreach (RoomingRepository::getAvailableRoomTypes($tour) as $roomType) {
             if ($singleRoom != null && $singleRoom->maximum_occupancy <= $roomType->maximum_occupancy) continue;
             $singleRoom = $roomType;
             if ($singleRoom->maximum_occupancy == 1) break;
         }
-        if (!isset($singleRoom)) return false;
+        return $singleRoom;
+    }
+
+    public static function assignDefaultRooming(OrderCustomer $orderCustomer): bool
+    {
+        $singleRoom = static::getSingleRoomType($orderCustomer->order->tour);
+        if (empty($singleRoom)) return false;
         $group = Group::create();
         $group->repository->addCustomerToGroup($orderCustomer);
         try {

@@ -3,9 +3,12 @@
 namespace App\Repository\Model\Booking;
 
 use App\Exceptions\NotOnTourException;
+use App\Exceptions\RoomingFailedException;
 use App\Http\Gateways\Storage\LineItem;
+use App\Models\Accommodation\RoomType;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Booking\Booking;
+use App\Models\Booking\BookingGroup;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Group;
 use App\Models\Flight\FlightInventoryTour;
@@ -14,6 +17,7 @@ use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\RoomingRepository;
 use App\Repository\Storage\Rooming\RemoteBookingGroup;
 use Carbon\Carbon;
 use DB;
@@ -297,5 +301,77 @@ class BookingRepository extends ModelRepository
         foreach ($remoteGroups as $remoteGroup) {
             $remoteGroup->convertToGroup($this->booking);
         }
+    }
+
+    public function evaluateSimpleRooming()
+    {
+        if (!$this->hasRooming()) return;
+        $this->wipeGroups();
+        $groups = [];
+        foreach ($this->booking->travellers as $traveller) {
+            if ($traveller->group_id === null || $traveller->room_type_id === null) {
+                $group = BookingGroup::create(['booking_id' => $this->booking->id,]);
+                $group->repository->addTravellerToGroup($traveller);
+                $single = RoomingRepository::getSingleRoomType($this->booking->tour);
+                if ($single !== null) {
+                    try {
+                        $group->repository->addTemplatesOfTypeToGroup($this->booking->tour, $single);
+                    } catch (RoomingFailedException) {}
+                }
+                continue;
+            }
+
+            if (!array_key_exists($traveller->group_id, $groups)) {
+                $groups[$traveller->group_id] = ['type' => $traveller->roomType, 'group' => BookingGroup::create(['booking_id' => $this->booking->id, 'name' => "Group {$traveller->group_id}"])];
+            }
+            $data = $groups[$traveller->group_id];
+            /** @var BookingGroup $group */
+            $group = $data['group'];
+            /** @var RoomType $type */
+            $type = $data['type'];
+
+            if ($group->travellers()->count() >= $type->maximum_occupancy || $type->id !== $traveller->room_type_id) {
+                $found = false;
+                $newGroup = null;
+                do {
+                    $newGroup = ($newGroup ?? $traveller->group_id) + 1;
+                    \Log::info("Checking Group $newGroup");
+                    if (!array_key_exists($newGroup, $groups)) {
+                        $groups[$newGroup] = ['type' => $traveller->roomType, 'group' => BookingGroup::create(['booking_id' => $this->booking->id, 'name' => "Group $newGroup"])];
+                        $traveller->group_id = $newGroup;
+                        $traveller->save();
+                        $found = true;
+                    } else {
+                        if ($groups[$newGroup]['type']?->id === $traveller->room_type_id) {
+                            $traveller->group_id = $newGroup;
+                            $traveller->save();
+                            $found = true;
+                        } else {
+                            \Log::info("{$groups[$newGroup]['type']?->id}, {$traveller->room_type_id}");
+                        }
+                    }
+                } while (!$found);
+            }
+
+            $data = $groups[$traveller->group_id];
+            /** @var BookingGroup $group */
+            $group = $data['group'];
+
+            $group->repository->addTravellerToGroup($traveller);
+        }
+        foreach ($groups as $data) {
+            /** @var BookingGroup $group */
+            $group = $data['group'];
+            /** @var RoomType $type */
+            $type = $data['type'];
+            try {
+                $group->repository->addTemplatesOfTypeToGroup($this->booking->tour, $type);
+            } catch (RoomingFailedException) {}
+        }
+    }
+
+    public function hasRooming(): bool
+    {
+        return $this->booking->tour->templates->count() > 0;
     }
 }
