@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Booking;
 
-use App\Repository\Storage\Rooming\RemoteGroup;
+use App\Repository\Storage\Rooming\RemoteBookingGroup;
 use Illuminate\Foundation\Http\FormRequest;
 
 
@@ -11,14 +11,14 @@ class RoomingRequest extends FormRequest
     private array $inflated;
 
     /**
-     * @return RemoteGroup[]
+     * @return RemoteBookingGroup[]
      */
     public function getData(): array
     {
         if (!isset($this->inflated)) {
             $data = [];
             foreach ($this->data ?? [] as $datum) {
-                $data[] = new RemoteGroup($datum['customers'], $datum['rooms']);
+                $data[] = new RemoteBookingGroup($datum['customers'], $datum['rooms']);
             }
             $this->inflated = $data;
         }
@@ -33,7 +33,7 @@ class RoomingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'data.*.customers.*' => 'required|integer|exists:order_customers,id',
+            'data.*.customers.*' => 'required|integer|exists:booking_travellers,id',
             'data.*.rooms.*' => 'required|integer|exists:accommodation_inventory_tours,id',
         ];
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository\Storage;
+namespace App\Repository\Storage\Rooming;
 
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Customer\Group;

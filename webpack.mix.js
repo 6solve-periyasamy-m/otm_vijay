@@ -18,9 +18,8 @@ mix.copy('resources/assets/js/addons', 'public/js')
     .sass('resources/assets/scss/customer.scss', 'css')
     .sass('resources/assets/scss/pdf/invoice.scss', 'css')
     .sass('resources/assets/scss/admin/occupancy.scss', 'css/admin')
-    .postCss('resources/assets/css/tailwind.css', 'public/css', [
-        tailwindcss(),
-    ])
+    .sass('resources/assets/scss/customer_portal/occupancy.scss', 'css/customer')
+    .postCss('resources/assets/css/tailwind.css', 'public/css', [tailwindcss(),])
     .js('resources/assets/js/app.js', 'js')
     .ts('resources/assets/typescript/occupancy.ts', 'js')
     .copy('resources/assets/js/admin', 'public/js/admin')

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Booking\RoomingRequest;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Booking\Component\BookingActivity;
+use App\Models\Tour\Tour;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Log;
@@ -54,5 +56,24 @@ class CustomerBookingController extends Controller
         $success = $customer->repository->delete();
         if (!$success) return response()->json(['success' => false, 'message' => 'Failed to remove that traveller']);
         return response()->json(['success' => true, 'message' => 'Customer Removed Successfully']);
+    }
+
+    public function getRoomingInformation(string $bookingUrl, string $token)
+    {
+        $tour = Tour::where('booking_form_url', '=', $bookingUrl)->first();
+        if (!isset($tour)) return response()->json(['success' => false, 'message' => 'That tour does not exist']);
+        $booking = Booking::where('token', $token)->first();
+        if (!isset($booking) || $booking->tour_id !== $tour->id) return response()->json(['success' => false, 'message' => 'That booking does not exist']);
+        return $booking->repository->getRoomingData();
+    }
+
+    public function saveRoomingInformation(RoomingRequest $request, string $bookingUrl, string $token)
+    {
+        $tour = Tour::where('booking_form_url', '=', $bookingUrl)->first();
+        if (!isset($tour)) return response()->json(['success' => false, 'message' => 'That tour does not exist']);
+        $booking = Booking::where('token', $token)->first();
+        if (!isset($booking) || $booking->tour_id !== $tour->id) return response()->json(['success' => false, 'message' => 'That booking does not exist']);
+        $booking->repository->importRoomingData($request->getData());
+        return response()->json(['success' => true, 'msg' => 'Building Saved']);
     }
 }

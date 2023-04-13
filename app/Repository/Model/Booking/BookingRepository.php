@@ -12,6 +12,7 @@ use App\Models\Order\Order;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Storage\Rooming\RemoteBookingGroup;
 use Carbon\Carbon;
 use DB;
 use Log;
@@ -233,5 +234,55 @@ class BookingRepository extends ModelRepository
     public function isDeleted(): bool
     {
         return !isset($this->booking);
+    }
+
+    public function getRoomingData(): array
+    {
+        $rooms = [];
+        foreach ($this->booking->tour->accommodationInventoryTours()->with('inventory', 'inventory.component')->get() as $inventoryTour) {
+            $rooms[$inventoryTour->id] = [
+                'name' => $inventoryTour->repository->formatAdminOccupancy(),
+                'size' => $inventoryTour->inventory->roomType->maximum_occupancy,
+                'price' => $inventoryTour->tour_component_type === 'Included' ? 0 : $inventoryTour->tour_sales_price,
+                'start' => $inventoryTour->inventory->check_in->unix(),
+                'end' => $inventoryTour->inventory->check_out->unix(),
+            ];
+        }
+        $customers = [];
+        foreach ($this->booking->travellers()->get() as $traveller) {
+            $customers[$traveller->id] = ['name' => $traveller->full_name, 'avatar' => null,];
+        }
+        $groups = [];
+        foreach ($this->booking->groups as $group) {
+            $groupCustomers = [];
+            foreach ($group->travellers as $traveller) {
+                $groupCustomers[] = $traveller->id;
+            }
+            $groupRooms = [];
+            foreach ($group->accommodation as $room) {
+                $groupRooms[] = $room->accommodation_inventory_tour_id;
+            }
+            $groups[$group->id] = ['rooms' => $groupRooms, 'customers' => $groupCustomers,];
+        }
+        return ['rooms' => $rooms, 'customers' => $customers, 'groups' => $groups,];
+    }
+
+    private function wipeGroups()
+    {
+        foreach ($this->booking->groups as $group) {
+            $group->delete();
+        }
+    }
+
+    /**
+     * @param RemoteBookingGroup[] $remoteGroups
+     * @return void
+     */
+    public function importRoomingData(array $remoteGroups): void
+    {
+        $this->wipeGroups();
+        foreach ($remoteGroups as $remoteGroup) {
+            $remoteGroup->convertToGroup($this->booking);
+        }
     }
 }
