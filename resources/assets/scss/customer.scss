@@ -154,3 +154,8 @@ $border: 1px solid #dee2e6;
   align-items: center;
   height: 100%;
 }
+
+.px-auto {
+  padding-left: inherit !important;
+  padding-right: inherit !important;
+}
