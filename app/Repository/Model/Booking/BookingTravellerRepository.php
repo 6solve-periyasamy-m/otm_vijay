@@ -15,6 +15,7 @@ use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Model\Flight\FlightInventoryTourRepository;
+use App\Repository\Storage\BookingComponentStorage;
 use App\Repository\Storage\Customer\Component\BookingComponent;
 use DB;
 use Log;
@@ -219,6 +220,26 @@ class BookingTravellerRepository extends ModelRepository
         $traveller = BookingTravellerRepository::make($details);
         $booking->travellers()->save($traveller);
         return $traveller;
+    }
+
+    public function formSave(int $roomType, int $group)
+    {
+        $this->traveller->room_type_id = $roomType;
+        $this->traveller->group_id = $group;
+        if (isset($this->traveller->id)) {
+            $this->traveller->save();
+            return;
+        }
+        $this->traveller->save();
+        $this->saveComponentSet($this->traveller->booking->tour->repository->getBookingComponentSetForSaving());
+        $this->traveller->booking->repository->evaluateSimpleRooming();
+    }
+
+    public function saveComponentSet(BookingComponentStorage $components)
+    {
+        $this->traveller->activities()->saveMany($components->activities);
+        $this->traveller->flights()->saveMany($components->flights);
+        $this->traveller->transport()->saveMany($components->transport);
     }
 
     public static function make(array $details): BookingTraveller

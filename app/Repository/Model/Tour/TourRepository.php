@@ -6,6 +6,10 @@ use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
+use App\Models\Booking\Component\BookingActivity;
+use App\Models\Booking\Component\BookingFlight;
+use App\Models\Booking\Component\BookingMerchandise;
+use App\Models\Booking\Component\BookingTransport;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Models\Merchandise\MerchandiseInventoryTour;
@@ -29,6 +33,7 @@ use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use App\Repository\Reporting\Manifest\FlightManifestRepository;
 use App\Repository\Reporting\Manifest\TransportManifestRepository;
 use App\Repository\RoomingRepository;
+use App\Repository\Storage\BookingComponentStorage;
 use App\Repository\Storage\OrderComponentStorage;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -422,6 +427,72 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
           $this->getIncludedActivitiesForSaving(),
           $this->getIncludedFlightsForSaving(),
           $this->getIncludedTransportForSaving(),
+        );
+    }
+
+
+    /**
+     * @return BookingActivity[]
+     */
+    public function getBookingIncludedActivitiesForSaving(): array
+    {
+        $components = [];
+        foreach ($this->tour->activityInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', true)->get() as $component) {
+            $components[] = BookingActivity::make([
+                'activity_inventory_tour_id' => $component->id,
+            ]);
+        }
+        return $components;
+    }
+
+    /**
+     * @return BookingFlight[]
+     */
+    public function getBookingIncludedFlightsForSaving(): array
+    {
+        $components = [];
+        foreach ($this->tour->flightInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
+            $components[] = BookingFlight::make([
+                'flight_inventory_tour_id' => $component->id,
+            ]);
+        }
+        return $components;
+    }
+
+    /**
+     * @return BookingTransport[]
+     */
+    public function getBookingIncludedTransportForSaving(): array
+    {
+        $components = [];
+        foreach ($this->tour->transportInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
+            $components[] = BookingTransport::make([
+                'transport_inventory_tour_id' => $component->id,
+            ]);
+        }
+        return $components;
+    }
+
+    /**
+     * @return BookingMerchandise[]
+     */
+    public function getBookingIncludedMerchandiseForSaving(): array
+    {
+        $components = [];
+        foreach ($this->tour->merchandise()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
+            $components[] = BookingMerchandise::make([
+                'merchandise_inventory_tour_id' => $component->id,
+            ]);
+        }
+        return $components;
+    }
+
+    public function getBookingComponentSetForSaving(): BookingComponentStorage
+    {
+        return new BookingComponentStorage(
+          $this->getBookingIncludedActivitiesForSaving(),
+          $this->getBookingIncludedFlightsForSaving(),
+          $this->getBookingIncludedTransportForSaving(),
         );
     }
 

@@ -147,3 +147,10 @@ $border: 1px solid #dee2e6;
     transform: rotate(0deg) !important;
   }
 }
+
+.flex-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}

@@ -38,7 +38,7 @@
             </div>
             <div class="w-100 text-center border-left px-1">
                 <span class="d-block fw-bold">Type</span>
-                <span class="d-block">{{ $traveller->roomType->name }}</span>
+                <span class="d-block">{{ $traveller->roomType?->name }}</span>
             </div>
         </div>
     </div>
