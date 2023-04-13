@@ -1,5 +1,14 @@
 <div>
-    @include('partials.customer.booking.summary.travellers', ['booking' => $this->booking, 'active' => $this->active, 'shouldRooming' => $this->booking->tour->templates->count() > 0])
+    <div class="mb-4">
+        <x-customer.expander id="travellers" nobg>
+            <x-slot:header>
+                <h2 class="mb-0">All Travellers</h2>
+            </x-slot:header>
+            @foreach($this->booking->travellers as $traveller)
+                @include('partials.customer.booking.customer', ['traveller' => $traveller])
+            @endforeach
+        </x-customer.expander>
+    </div>
 
     <livewire:customer.booking.traveller-components key="{{ now() }}" :traveller="$this->active"/>
 

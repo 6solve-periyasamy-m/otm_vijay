@@ -111,3 +111,39 @@ $border: 1px solid #dee2e6;
     font-size: #{$size}px !important;
   }
 }
+
+.customer-card {
+  border: $border;
+  border-radius: 5px;
+  background: white;
+  min-width: 10rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+  padding: 0.25rem;
+  margin: 0.25rem;
+}
+
+.flex-scroll {
+  display: flex;
+  flex-direction: row;
+  scrollbar-width: thin;
+  overflow-x: hidden;
+  padding-bottom: 8px; // Width of thin scrollbar
+  &:hover:not(.flex-wrap) {
+    overflow-x: scroll;
+    padding-bottom: inherit;
+  }
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.accordion-button {
+  &[aria-expanded='false']::after {
+    transform: rotate(-180deg) !important;
+  }
+  &[aria-expanded='true']::after  {
+    transform: rotate(0deg) !important;
+  }
+}

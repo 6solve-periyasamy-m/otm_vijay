@@ -34,6 +34,17 @@
         window.addEventListener('livewireAlert', event => {
             alert(event.detail.message);
         });
+        function toggleExpander(accordion) {
+            accordion = $(accordion);
+            let body = $(accordion.attr('data-target'));
+            if (body.hasClass('flex-wrap')) {
+                body.removeClass('flex-wrap');
+                accordion.attr('aria-expanded', 'false');
+            } else {
+                body.addClass('flex-wrap');
+                accordion.attr('aria-expanded', 'true');
+            }
+        }
     </script>
     @livewireStyles
 </head>
