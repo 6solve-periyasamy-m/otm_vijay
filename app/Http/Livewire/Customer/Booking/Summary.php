@@ -28,6 +28,14 @@ class Summary extends Component
         $this->render();
     }
 
+    public function deleteTraveller($traveller)
+    {
+        $selected = $this->booking->travellers()->where('id', '=', $traveller)->first();
+        $selected?->delete();
+        $this->booking = Booking::find($this->booking->id);
+        $this->render();
+    }
+
     public function render()
     {
         return view('livewire.customer.booking.summary');

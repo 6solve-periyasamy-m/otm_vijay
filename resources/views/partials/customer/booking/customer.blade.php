@@ -42,7 +42,7 @@
                     <button class="btn btn-warning text-dark px-auto" style="width: 4rem;" wire:click="$emit('openModal', 'customer.booking.form.additional-traveller', {{ json_encode(['booking' => $traveller->booking->id, 'traveller' => $traveller->id]) }})">Edit</button>
                 </div>
                 <div class="text-center p-1 border-left w-100">
-                    <button class="btn btn-danger text-dark px-auto" style="width: 4rem;" wire:click="$emit('openModal', 'customer.booking.form.additional-traveller', {{ json_encode(['booking' => $traveller->booking->id, 'traveller' => $traveller->id]) }})">Delete</button>
+                    <button class="btn btn-danger text-dark px-auto" style="width: 4rem;" wire:click="deleteTraveller({{$traveller->id}})">Delete</button>
                 </div>
             </div>
             @endif

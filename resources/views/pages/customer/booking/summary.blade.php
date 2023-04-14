@@ -9,5 +9,5 @@
 @section('title', 'Confirm Booking')
 
 @section('booking-body')
-    <livewire:customer.booking.summary :booking="$booking"/>
+    <livewire:customer.booking.summary :booking="$booking" key="{{now()}}"/>
 @endsection
