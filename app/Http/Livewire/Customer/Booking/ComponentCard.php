@@ -34,7 +34,23 @@ class ComponentCard extends Component
 
     public function buyAll()
     {
-
+        if ($this->component->tour_component_type !== 'Add-on') {
+            $upgrade = $this->getUpgrade();
+            if ($upgrade === null) {
+                $this->showAlert('Please select an upgrade');
+                return;
+            }
+            $success = $upgrade->purchaseForAll();
+            if (!$success) {
+                $this->showAlert('Upgrade Failed');
+                return;
+            }
+            $this->component = $upgrade;
+        } else {
+            $this->component->purchaseForAll();
+        }
+        $this->emit('allComponentsChanged', $this->component->traveller->booking->id);
+        $this->render();
     }
 
     public function sellOne()
@@ -49,7 +65,12 @@ class ComponentCard extends Component
 
     public function sellAll()
     {
-
+        $success = $this->component->sellForAll();
+        if (!$success) {
+            $this->showAlert('Failed to remove');
+        }
+        $this->emit('allComponentsChanged', $this->component->traveller->booking->id);
+        $this->render();
     }
 
     private function getUpgrade(): BookingComponent|null

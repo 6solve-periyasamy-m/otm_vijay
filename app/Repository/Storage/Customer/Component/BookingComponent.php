@@ -62,7 +62,7 @@ class BookingComponent extends AbstractComponent implements Wireable
 
     public function sellForAll(): bool
     {
-        // TODO: Implement sellForAll() method.
+        return $this->component->unbookForAll($this->traveller->booking);
     }
 
     public function toLivewire(): array

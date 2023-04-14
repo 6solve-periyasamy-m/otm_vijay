@@ -70,6 +70,14 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
         return new OrderComponent($this, $orderCustomer);
     }
 
+    public function unbookForAll(Booking $booking): bool
+    {
+        foreach ($booking->travellers as $traveller) {
+            $this->getBookingComponent($traveller)?->delete();
+        }
+        return true;
+    }
+
     public function bookForAll(Booking $booking): bool
     {
         if (!$this->hasEnoughStock($booking->travellers->count())) return false;
