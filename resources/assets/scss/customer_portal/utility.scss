@@ -1,0 +1,93 @@
+$border: 1px solid #dee2e6 !default;
+
+.flex-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.px-auto {
+  padding-left: inherit !important;
+  padding-right: inherit !important;
+}
+
+@for $size from 1 through 30 {
+  .fs-#{$size} {
+    font-size: #{$size}px !important;
+  }
+}
+
+.border-x {
+  border-left: $border;
+  border-right: $border;
+}
+
+.border-y {
+  border-top: $border;
+  border-bottom: $border;
+}
+
+.border-left {
+  border-left: $border;
+}
+
+.border-right {
+  border-right: $border
+}
+
+.border-top {
+  border-top: $border;
+}
+
+.border-bottom {
+  border-bottom: $border;
+}
+
+// All fun and games when overwriting bootstrap .-.
+.form-control {
+  &.form-floating {
+    padding-top: 25px !important;
+    padding-left: 5px !important;
+  }
+}
+
+.float-padding {
+  // Overwriting bootstrap defaults
+  padding-top: 25px !important;
+  padding-left: 5px !important;
+}
+
+.waiter {
+  background-color: black;
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  opacity: 0.2;
+  -moz-opacity: 0.2;
+  z-index: 10;
+}
+
+.flex-scroll {
+  display: flex;
+  flex-direction: row;
+  scrollbar-width: thin;
+  overflow-x: hidden;
+  padding-bottom: 8px; // Width of thin scrollbar
+  &:hover:not(.flex-wrap) {
+    overflow-x: scroll;
+    padding-bottom: inherit;
+  }
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.accordion-button {
+  &[aria-expanded='false']::after {
+    transform: rotate(-180deg) !important;
+  }
+  &[aria-expanded='true']::after  {
+    transform: rotate(0deg) !important;
+  }
+}
