@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\CustomerController;
 use App\Http\Gateways\Storage\LineItem;
 use App\Http\Requests\Customer\FinancesRequest;
+use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Repository\Model\Order\OrderRepository;
 use Gateway;
@@ -38,13 +39,16 @@ class CustomerFinancesController extends CustomerController
         return redirect($gateway->checkout([$item,], $intention, $this->user(), $redirect));
     }
 
-    public function showInvoice(string $reference)
+    public function showInvoice(Order|string $reference)
     {
-        $order = OrderRepository::getFromBookingReference($reference);
+        \Log::info($reference);
+        $order = $reference instanceof Order ?  $reference : OrderRepository::getFromBookingReference($reference);
         if (!isset($order)) {
+            \Log::info('order not set');
             abort(404);
         }
         if ($order->repository->getOrderCustomer($this->user()) === null) {
+            \Log::info('Is not customer');
             abort(404);
         }
         return $order->repository->getInvoiceRepository()->getResponseStream();
