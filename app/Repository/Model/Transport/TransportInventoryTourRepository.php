@@ -232,16 +232,21 @@ class TransportInventoryTourRepository extends InventoryTourRepository
         $tourComponent = $this->tourComponent;
         $inventory = $tourComponent->inventory;
         $component = $inventory->component;
-        $transportType = nbsp($component->transportType->name);
-        $travelClass = nbsp($inventory->travelClass);
-        $ticketNumber = (isset($inventory->ticket_number) ? "({$inventory->ticket_number})" : "");
-        $name = "{$component->departureAddress->name} to {$component->arrivalAddress->name} ({$transportType}) {$ticketNumber} ({$travelClass})";
+        if ($tourComponent->tour_component_type === 'Add-on') {
+            $upgradeName = "Add-on";
+        } elseif ($tourComponent->tour_component_type === 'Included') {
+            $upgradeName = "Included";
+        } else {
+            $upgrade = TransportInventoryTourUpgrade::where('upgrade_id', '=', $tourComponent->id)->first();
+            $upgradeName = "$upgrade->description - " . f_currency($tourComponent->tour_sales_price);
+        }
         return new ComponentInformation(
-            $name,
+            $component->name,
             $component->description,
             $component->image_url,
             $inventory->departs_at,
             $inventory->arrives_at,
+            $upgradeName,
             [
                 'Transport Type' => $component->transportType->name,
                 'Departure' => f_datetime($inventory->departs_at),

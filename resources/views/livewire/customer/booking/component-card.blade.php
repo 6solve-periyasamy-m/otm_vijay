@@ -34,7 +34,7 @@
                             @php
                                 $owned = $this->component->equals($upgrade);
                             @endphp
-                            <option value="{{ json_encode($upgrade->toLivewire()) }}" @if($owned) disabled @endif>{!! $upgrade->name !!} @if($owned)(Current)@endif</option>
+                            <option value="{{ json_encode($upgrade->toLivewire()) }}" @if($owned) disabled @endif>{!! $upgrade->upgrade_name !!} @if($owned)(Current)@endif</option>
                         @endforeach
                     </select>
                 @elseif($this->component->tour_component_type === 'Add-on')

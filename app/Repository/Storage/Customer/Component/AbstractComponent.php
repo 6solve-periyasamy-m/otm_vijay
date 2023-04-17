@@ -11,6 +11,7 @@ use Carbon\Carbon;
  * @property string $name
  * @property string $description
  * @property string $tour_component_type
+ * @property string $upgrade_name
  * @property string|null $image
  * @property Carbon|null $start
  * @property Carbon|null $end
@@ -57,6 +58,11 @@ abstract class AbstractComponent
     public function getEndAttribute(): Carbon|null
     {
         return $this->information->end;
+    }
+
+    public function getUpgradeNameAttribute(): string
+    {
+        return $this->information->upgrade_name;
     }
 
     /**

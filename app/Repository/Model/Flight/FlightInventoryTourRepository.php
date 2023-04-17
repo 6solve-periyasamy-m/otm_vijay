@@ -243,12 +243,21 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
         $tourComponent = $this->tourComponent;
         $inventory = $tourComponent->inventory;
         $component = $inventory->component;
+        if ($tourComponent->tour_component_type === 'Add-on') {
+            $upgradeName = "Add-on";
+        } elseif ($tourComponent->tour_component_type === 'Included') {
+            $upgradeName = "Included";
+        } else {
+            $upgrade = FlightInventoryTourUpgrade::where('upgrade_id', '=', $tourComponent->id)->first();
+            $upgradeName = "$upgrade->description - " . f_currency($tourComponent->tour_sales_price);
+        }
         return new ComponentInformation(
             "{$component->departureAirport->name}, {$component->departureAirport->address->country->name} to {$component->arrivalAirport->name}, {$component->arrivalAirport->address->country->name}",
             "Flight from {$component->departureAirport->name} to {$component->arrivalAirport->name}",
             $component->image_url,
             $inventory->departs_at,
             $inventory->arrives_at,
+            $upgradeName,
             [
                 'Airline' => $component->airline->name,
                 'Check In' => f_datetime($inventory->check_in),

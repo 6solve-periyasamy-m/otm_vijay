@@ -251,12 +251,21 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         $tourComponent = $this->tourComponent;
         $inventory = $tourComponent->inventory;
         $component = $inventory->component;
+        if ($tourComponent->tour_component_type === 'Add-on') {
+            $upgradeName = "Add-on";
+        } elseif ($tourComponent->tour_component_type === 'Included') {
+            $upgradeName = "Included";
+        } else {
+            $upgrade = AccommodationInventoryTourUpgrade::where('upgrade_id', '=', $tourComponent->id)->first();
+            $upgradeName = "$upgrade->description - " . f_currency($tourComponent->tour_sales_price);
+        }
         return new ComponentInformation(
             $component->name,
             $component->description,
             $component->image_url,
             $inventory->check_in,
             $inventory->check_out,
+            $upgradeName,
             [
                 'Check In' => f_datetime($inventory->check_in),
                 'Check Out' => f_datetime($inventory->check_out),

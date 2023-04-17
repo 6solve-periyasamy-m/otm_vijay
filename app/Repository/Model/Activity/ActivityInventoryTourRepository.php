@@ -259,12 +259,21 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
         $tourComponent = $this->tourComponent;
         $inventory = $tourComponent->inventory;
         $component = $inventory->component;
+        if ($tourComponent->tour_component_type === 'Add-on') {
+            $upgradeName = "Add-on";
+        } elseif ($tourComponent->tour_component_type === 'Included') {
+            $upgradeName = "Included";
+        } else {
+            $upgrade = ActivityInventoryTourUpgrade::where('upgrade_id', '=', $tourComponent->id)->first();
+            $upgradeName = "$upgrade->description - " . f_currency($tourComponent->tour_sales_price);
+        }
         return new ComponentInformation(
             $component->name,
             $component->description,
             $component->image_url,
             $inventory->starts_at,
             $inventory->ends_at,
+            $upgradeName,
             [
                 'Starts At' => f_datetime($inventory->starts_at),
                 'Ends At' => f_datetime($inventory->ends_at),
