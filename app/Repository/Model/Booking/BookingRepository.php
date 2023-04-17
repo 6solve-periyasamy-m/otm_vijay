@@ -303,6 +303,17 @@ class BookingRepository extends ModelRepository
         }
     }
 
+    public function getRemainingInstallmentAmount(): float|int
+    {
+        $base = 0;
+        foreach ($this->booking->travellers as $traveller) {
+            $base += $this->booking->tour->remaining_installment;
+            $base += $traveller->surcharge_amount;
+            $base += $traveller->additional_cost;
+        }
+        return $base;
+    }
+
     public function evaluateSimpleRooming()
     {
         if (!$this->hasRooming()) return;

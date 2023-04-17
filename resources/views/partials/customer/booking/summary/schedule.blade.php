@@ -43,12 +43,12 @@
                 <td data-content="Total Owed">{{ f_currency($cumulative) }}</td>
             </tr>
         @endforeach
-        @php $cumulative += ($booking->tour->remaining_installment * $travellerCount) @endphp
+        @php $remaining = $booking->repository->getRemainingInstallmentAmount(); $cumulative += ($remaining) @endphp
         <tr>
             <td data-content="Description">{{ f_date($booking->tour->final_payment) }}</td>
-            <td data-content="Cost">{{ f_currency($booking->tour->remaining_installment) }}</td>
-            <td data-content="Quantity">{{ $travellerCount }}</td>
-            <td data-content="Instalment total">{{ f_currency($booking->tour->remaining_installment * $travellerCount) }}</td>
+            <td data-content="Cost">-</td>
+            <td data-content="Quantity">-</td>
+            <td data-content="Instalment total">{{ f_currency($remaining) }}</td>
             <td data-content="Total Owed">{{ f_currency($cumulative) }}</td>
         </tr>
         </tbody>
