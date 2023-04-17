@@ -82,7 +82,7 @@ $brand = $order->tour->brand;
                         <div class="billing-info">{{ $brand->active_address->address_line_2 }}</div>
                         <div class="billing-info">{{ $brand->active_address->town  }}</div>
                         <div class="billing-info">{{ $brand->active_address->region  }}</div>
-                        <div class="billing-info">{{ $brand->active_address->country->name  }}</div>
+                        <div class="billing-info">{{ $brand->active_address->country?->name  }}</div>
                         <div class="billing-info">{{ $brand->active_address->postcode  }}</div>
                     </div>
                 </div>
