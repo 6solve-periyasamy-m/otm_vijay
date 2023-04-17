@@ -15,6 +15,18 @@
         </x-customer.expander>
     </div>
 
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title">
+                Rooming Manager
+                <a href="{{ route('customer-booking.rooming', ['bookingUrl' => $this->booking->tour->booking_form_url, 'token' => $this->booking->token]) }}" class="btn btn-success float-end">
+                    Edit Rooming
+                </a>
+            </div>
+            Please make sure all travellers are added before editing rooming, as adding additional travellers will reset room assignments. Deleting/editing travellers will <span class="fw-bold">not</span> reset the rooming.
+        </div>
+    </div>
+
     <livewire:customer.booking.traveller-components key="{{ now() }}" :traveller="$this->active"/>
 
     @include('partials.customer.booking.summary.schedule', ['booking' => $this->booking,])
