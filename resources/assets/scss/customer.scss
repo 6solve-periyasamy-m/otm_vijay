@@ -9,3 +9,13 @@ $border: 1px solid #dee2e6;
 @import 'customer_portal/booking';
 @import 'customer_portal/style';
 @import 'spinner';
+
+body {
+  background-color: #f5f7fb
+}
+
+.booking-title {
+  font-size: 24px;
+  text-align: center;
+  font-weight: bold;
+}

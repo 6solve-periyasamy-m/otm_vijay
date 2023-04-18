@@ -82,7 +82,7 @@
                 </div>
                 @endif
                 <hr class="splitter">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-group">
                         <h4 class="mb-0">Home Address</h4>
                     </div>
@@ -120,28 +120,28 @@
                         Postcode
                     </x-customer.input>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-group">
                         <h4 class="mb-0">Billing Address</h4>
                     </div>
                     <hr class="splitter">
 
-                    <x-customer.input name="lead_billing_address_line_1" value="{{ $customer->billingAddress->address_line_1 ?? '' }}" autocomplete="address-line1" required>
+                    <x-customer.input name="lead_billing_address_line_1" value="{{ $customer->billingAddress->address_line_1 ?? '' }}" width="6" autocomplete="address-line1" required>
                         Address Line 1
                     </x-customer.input>
 
-                    <x-customer.input name="lead_billing_address_line_2" value="{{ $customer->billingAddress->address_line_2 ?? '' }}" autocomplete="address-line2">
+                    <x-customer.input name="lead_billing_address_line_2" value="{{ $customer->billingAddress->address_line_2 ?? '' }}" width="6" autocomplete="address-line2">
                         Address Line 2
                     </x-customer.input>
 
-                    <x-customer.input name="lead_billing_town" value="{{ $customer->billingAddress->town ?? '' }}" autocomplete="address-level2">
+                    <x-customer.input name="lead_billing_town" value="{{ $customer->billingAddress->town ?? '' }}" width="6" autocomplete="address-level2">
                         Town
                     </x-customer.input>
-                    <x-customer.input name="lead_billing_town" value="{{ $customer->billingAddress->region ?? '' }}" autocomplete="address-level1">
+                    <x-customer.input name="lead_billing_town" value="{{ $customer->billingAddress->region ?? '' }}" width="6" autocomplete="address-level1">
                         Region
                     </x-customer.input>
 
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-6">
                         <label class="col-md-12 mb-0">Billing Country</label>
                         <div class="col-md-12">
                             <select name="lead_billing_country" class="w-100" required>

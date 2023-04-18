@@ -2,7 +2,7 @@
     @if(!$this->accepted)
         <x-customer.accordion id="cost-collapse" nobg>
             <x-slot:header>
-                <h2 class="mb-0">Terms and Conditions</h2>
+                <h2 class="mb-0" style="width: 100%; text-align: center;">Terms and Conditions</h2>
             </x-slot:header>
             {!! $this->booking->tour->terms !!}
             <br />
@@ -11,7 +11,7 @@
     @else
         <div class="card">
             <div class="card-body">
-                <h2 class="mb-0">Make Payment</h2>
+                <h2 class="mb-0" style="width: 100%; text-align: center;">Make Payment</h2>
             </div>
         </div>
         @if(\Gateway::getDefaultGateway() !== null)

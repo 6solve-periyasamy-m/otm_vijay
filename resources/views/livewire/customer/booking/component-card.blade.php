@@ -1,7 +1,10 @@
 <div class="card mx-1 @if(!$this->component->owned) unowned @endif">
     <div class="card-body">
         <div class="component-header row">
-            <div class="col-10 my-auto">
+            <div class="col-9 my-auto d-flex">
+                <div class="px-2">
+                    {{ Icon::accommodation() }}
+                </div>
                 {!! $this->component->name !!}
             </div>
             <div class="col-2 component-dates fw-bold my-auto">

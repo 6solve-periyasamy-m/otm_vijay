@@ -2,7 +2,7 @@
     <div class="mb-4">
         <x-customer.expander id="travellers" nobg>
             <x-slot:header>
-                <h2 class="mb-0">All Travellers</h2>
+                <h2 class="mb-0" style="width: 100%; text-align: center;">All Travellers</h2>
             </x-slot:header>
             @foreach($this->booking->travellers as $traveller)
                 @include('partials.customer.booking.customer', ['traveller' => $traveller])
