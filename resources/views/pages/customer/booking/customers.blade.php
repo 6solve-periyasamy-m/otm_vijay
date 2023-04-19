@@ -81,28 +81,27 @@
                     </select>
                 </div>
                 @endif
-                <hr class="splitter">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <h4 class="mb-0">Home Address</h4>
-                    </div>
-                    <hr class="splitter">
-
-                    <x-customer.input name="lead_home_address_line_1" value="{{ $customer->homeAddress->address_line_1 ?? '' }}" autocomplete="address-line1" required>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">
+                    <h2 class="col-md-12 mb-0">Home Address</h2>
+                </div>
+                <div class="row">
+                    <x-customer.input name="lead_home_address_line_1" value="{{ $customer->homeAddress->address_line_1 ?? '' }}" width="6" autocomplete="address-line1" required>
                         Address Line 1
                     </x-customer.input>
-
-                    <x-customer.input name="lead_home_address_line_2" value="{{ $customer->homeAddress->address_line_2 ?? '' }}" autocomplete="address-line2">
+                    <x-customer.input name="lead_home_address_line_2" value="{{ $customer->homeAddress->address_line_2 ?? '' }}" width="6" autocomplete="address-line2">
                         Address Line 2
                     </x-customer.input>
-                    <x-customer.input name="lead_home_town" value="{{ $customer->homeAddress->town ?? '' }}" autocomplete="address-level2">
+                    <x-customer.input name="lead_home_town" value="{{ $customer->homeAddress->town ?? '' }}" width="6" autocomplete="address-level2">
                         Town
                     </x-customer.input>
-                    <x-customer.input name="lead_home_town" value="{{ $customer->homeAddress->region ?? '' }}" autocomplete="address-level1">
+                    <x-customer.input name="lead_home_town" value="{{ $customer->homeAddress->region ?? '' }}" width="6" autocomplete="address-level1">
                         Region
                     </x-customer.input>
-
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-xl-6">
                         <label class="col-md-12 mb-0">Home Country</label>
                         <div class="col-md-12">
                             <select name="lead_home_country" class="w-100" required>
@@ -115,33 +114,36 @@
                             </select>
                         </div>
                     </div>
-
-                    <x-customer.input name="lead_home_postcode" value="{{ $customer->homeAddress->postcode ?? '' }}" autocomplete="postcode">
+                    <x-customer.input name="lead_home_postcode" value="{{ $customer->homeAddress->postcode ?? '' }}" width="6" autocomplete="postcode">
                         Postcode
                     </x-customer.input>
                 </div>
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <h4 class="mb-0">Billing Address</h4>
-                    </div>
-                    <hr class="splitter">
-
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <x-customer.input.checkbox name="home_is_billing" onclick="hideBilling()">Home address is billing address</x-customer.input.checkbox>
+            </div>
+        </div>
+        <div class="card" id="billing-card">
+            <div class="card-body">
+                <div class="card-title">
+                    <h2 class="col-md-12 mb-0">Billing Address</h2>
+                </div>
+                <div class="row">
                     <x-customer.input name="lead_billing_address_line_1" value="{{ $customer->billingAddress->address_line_1 ?? '' }}" width="6" autocomplete="address-line1" required>
                         Address Line 1
                     </x-customer.input>
-
                     <x-customer.input name="lead_billing_address_line_2" value="{{ $customer->billingAddress->address_line_2 ?? '' }}" width="6" autocomplete="address-line2">
                         Address Line 2
                     </x-customer.input>
-
                     <x-customer.input name="lead_billing_town" value="{{ $customer->billingAddress->town ?? '' }}" width="6" autocomplete="address-level2">
                         Town
                     </x-customer.input>
                     <x-customer.input name="lead_billing_town" value="{{ $customer->billingAddress->region ?? '' }}" width="6" autocomplete="address-level1">
                         Region
                     </x-customer.input>
-
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-xl-6">
                         <label class="col-md-12 mb-0">Billing Country</label>
                         <div class="col-md-12">
                             <select name="lead_billing_country" class="w-100" required>
@@ -154,12 +156,10 @@
                             </select>
                         </div>
                     </div>
-
-                    <x-customer.input name="lead_billing_postcode" value="{{ $customer->billingAddress->postcode ?? '' }}" autocomplete="postcode">
+                    <x-customer.input name="lead_billing_postcode" value="{{ $customer->billingAddress->postcode ?? '' }}" width="6" autocomplete="postcode">
                         Postcode
                     </x-customer.input>
                 </div>
-                <hr class="splitter">
             </div>
         </div>
         {{-- Flight Selection --}}
@@ -260,6 +260,15 @@
                 });
             }
         );
+
+        function hideBilling() {
+            const billing = $('#billing-card');
+            if (billing.hasClass('d-none')) {
+                billing.removeClass('d-none');
+            } else {
+                billing.addClass('d-none');
+            }
+        }
 
         function addCustomer() {
             @if ($tour->stock_control_active)

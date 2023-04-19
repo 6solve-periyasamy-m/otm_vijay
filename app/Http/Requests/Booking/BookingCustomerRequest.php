@@ -18,6 +18,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property-read string|null $lead_home_region
  * @property-read int $lead_home_country
  * @property-read string $lead_home_postcode
+ * @property-read string $home_is_billing
  * @property-read string $lead_billing_address_line_1
  * @property-read string|null $lead_billing_address_line_2
  * @property-read string|null $lead_billing_town
@@ -39,6 +40,7 @@ class BookingCustomerRequest extends FormRequest
      */
     public function getLeadTravellerDetails(): array
     {
+        $hib = $this->home_is_billing == 'on';
         return [
             'title' => $this->lead_title,
             'first_name' => $this->lead_first_name,
@@ -53,12 +55,12 @@ class BookingCustomerRequest extends FormRequest
             'home_region' => $this->lead_home_region,
             'home_country' => $this->lead_home_country,
             'home_postcode' => $this->lead_home_postcode,
-            'billing_address_line_1' => $this->lead_billing_address_line_1,
-            'billing_address_line_2' => $this->lead_billing_address_line_2,
-            'billing_town' => $this->lead_billing_town,
-            'billing_region' => $this->lead_billing_region,
-            'billing_country' => $this->lead_billing_country,
-            'billing_postcode' => $this->lead_billing_postcode,
+            'billing_address_line_1' => $hib ? $this->lead_home_address_line_1 : $this->lead_billing_address_line_1,
+            'billing_address_line_2' => $hib ? $this->lead_home_address_line_2 : $this->lead_billing_address_line_2,
+            'billing_town' => $hib ? $this->lead_home_town : $this->lead_billing_town,
+            'billing_region' => $hib ? $this->lead_home_region : $this->lead_billing_region,
+            'billing_country' => $hib ? $this->lead_home_country : $this->lead_billing_country,
+            'billing_postcode' => $hib ? $this->lead_home_postcode : $this->lead_billing_postcode,
             'room_type_id' => $this->lead_room_type,
             'group_id' => $this->lead_group,
         ];
