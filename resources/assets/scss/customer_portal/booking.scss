@@ -5,9 +5,11 @@ $border: 1px solid #dee2e6 !default;
 .component-card {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
-  &.unowned {
-    filter: brightness(90%);
-  }
+}
+
+.unowned {
+  filter: brightness(90%);
+  background-color: rgba(170, 221, 255, 0.25);
 }
 
 .component-header {
