@@ -41,14 +41,11 @@ class CustomerFinancesController extends CustomerController
 
     public function showInvoice(Order|string $reference)
     {
-        \Log::info($reference);
         $order = $reference instanceof Order ?  $reference : OrderRepository::getFromBookingReference($reference);
         if (!isset($order)) {
-            \Log::info('order not set');
             abort(404);
         }
         if ($order->repository->getOrderCustomer($this->user()) === null) {
-            \Log::info('Is not customer');
             abort(404);
         }
         return $order->repository->getInvoiceRepository()->getResponseStream();

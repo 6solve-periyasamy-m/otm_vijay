@@ -225,12 +225,10 @@ class RoomingRepository
         if (!empty($rooms)) {
             $group = Group::create();
             $group->repository->addCustomerToGroup($orderCustomer);
-            \Log::info(implode(',', $rooms));
             $count = 0;
             foreach ($rooms as $room) {
                 $count++;
                 if (empty($room)) {
-                    \Log::info("Null Room Found: {$orderCustomer->order_id}, number: {$count}");
                     continue;
                 }
                 $group->repository->addRoomToGroup($room);

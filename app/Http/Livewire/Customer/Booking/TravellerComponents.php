@@ -13,7 +13,6 @@ class TravellerComponents extends Component
 
     public function componentsChanged(int $travellerId) {
         if ($this->traveller->id === $travellerId) {
-            \Log::info('Matches');
             $this->render();
         }
     }

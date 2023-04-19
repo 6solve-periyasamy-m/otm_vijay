@@ -346,7 +346,6 @@ class BookingRepository extends ModelRepository
                 $newGroup = null;
                 do {
                     $newGroup = ($newGroup ?? $traveller->group_id) + 1;
-                    \Log::info("Checking Group $newGroup");
                     if (!array_key_exists($newGroup, $groups)) {
                         $groups[$newGroup] = ['type' => $traveller->roomType, 'group' => BookingGroup::create(['booking_id' => $this->booking->id, 'name' => "Group $newGroup"])];
                         $traveller->group_id = $newGroup;
