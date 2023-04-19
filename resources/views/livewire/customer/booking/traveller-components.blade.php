@@ -4,7 +4,7 @@
             <h2 class="mb-0" style="width: 100%; text-align: center;">Components for {{ $this->traveller->full_name }}</h2>
         </x-slot:header>
         @foreach($this->traveller->repository->getSummaryComponents() as $day => $components)
-            <div class="mx-1">
+            <div class="mx-2">
                 <x-customer.accordion id="day-{{$day}}" nobg nocontainer>
                     <x-slot:header class="card-body">
                         <h2 class="mb-0" style="width: 100%; text-align: center;">{{ \Carbon\Carbon::createFromTimestamp($day)->format('l jS F Y') }}</h2>

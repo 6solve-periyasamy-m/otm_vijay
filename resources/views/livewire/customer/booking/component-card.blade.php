@@ -1,7 +1,7 @@
 <div class="card mx-1 @if(!$this->component->owned) unowned @endif">
     <div class="card-body">
         <div class="component-header row">
-            <div class="col-9 my-auto d-flex">
+            <div class="col-10 my-auto d-flex">
                 <div class="px-2">
                     {{ $this->component->icon }}
                 </div>
@@ -13,16 +13,15 @@
         </div>
         <div class="component-text">
             <div class="mx-2 row">
+                @include('partials.customer.booking.component.attributes', ['attributes' => $this->component->attributes])
                 @if($this->component->image !== null)
                     <div class="col-xl-2 col-lg-3 col-md-4 col-6 border-right">
                         <img src="{{ asset($this->component->image) }}" class="booking-image"/>
                     </div>
                     <div class="col-xl-10 col-lg-9 col-md-8 col-6">
-                        @include('partials.customer.booking.component.attributes', ['attributes' => $this->component->attributes])
                         {{ $this->component->description }}
                     </div>
                 @else
-                    @include('partials.customer.booking.component.attributes', ['attributes' => $this->component->attributes])
                     {{ $this->component->description }}
                 @endif
             </div>
