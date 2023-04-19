@@ -370,12 +370,14 @@ class BookingTravellerRepository extends ModelRepository
             $active = $component->getActiveUpgrade($this->traveller);
             if ($active !== null) {
                 $components[] = $active->getAbstractBookingComponent($this->traveller);
-            } else {
-                if ($component instanceof FlightInventoryTourRepository) {
-                    if ($component->get()->flight_type !== 'Mid-Package' && $component->getBookingComponent($this->traveller) === null) continue;
-                }
-                $components[] = $component->getAbstractBookingComponent($this->traveller);
+                continue;
             }
+            if ($component instanceof FlightInventoryTourRepository &&
+                $component->get()->flight_type !== 'Mid-Package' &&
+                $component->getBookingComponent($this->traveller) === null) {
+                continue;
+            }
+            $components[] = $component->getAbstractBookingComponent($this->traveller);
         }
         foreach ($this->traveller->accommodation as $accommodation) {
             $components[] = $accommodation->tourComponent->repository->getAbstractBookingComponent($this->traveller);
