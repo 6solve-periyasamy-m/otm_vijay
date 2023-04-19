@@ -1,15 +1,18 @@
+@php $isIncluded = $this->component->tour_component_type == 'Included'; @endphp
 <div class="card mx-1 @if(!$this->component->owned) unowned @endif">
     <div class="card-body">
         <div class="component-header row">
-            <div class="col-10 my-auto d-flex">
+            <div class="col-{{ $isIncluded ? 12 : 10 }} my-auto d-flex">
                 <div class="px-2">
                     {{ $this->component->icon }}
                 </div>
                 {!! $this->component->name !!}
             </div>
+            @if (!$isIncluded)
             <div class="col-2 component-dates fw-bold my-auto">
-                {{ $this->component->tour_component_type !== 'Included' ? f_currency($this->component->component->getSalesPrice()) : 'Included' }}
+                {{ f_currency($this->component->component->getSalesPrice()) }}
             </div>
+            @endif
         </div>
         <div class="component-text">
             <div class="mx-2 row">
