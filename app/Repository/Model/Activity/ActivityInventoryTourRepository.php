@@ -23,6 +23,7 @@ use App\Repository\Model\Quote\Component\QuoteActivityRepository;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use App\Repository\Storage\ComponentInformation;
 use App\Repository\Traits\Component\IsActivity;
+use Icon;
 use Illuminate\Support\Collection;
 
 class ActivityInventoryTourRepository extends InventoryTourRepository implements HasActivityManifest
@@ -273,6 +274,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
             $component->image_url,
             $inventory->starts_at,
             $inventory->ends_at,
+            Icon::baseball(),
             $upgradeName,
             [
                 'Starts At' => f_datetime($inventory->starts_at),

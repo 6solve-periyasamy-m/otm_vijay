@@ -22,6 +22,7 @@ use App\Repository\Model\Quote\Component\QuoteFlightRepository;
 use App\Repository\Reporting\Manifest\FlightManifestRepository;
 use App\Repository\Storage\ComponentInformation;
 use App\Repository\Traits\Component\IsFlight;
+use Icon;
 use Illuminate\Support\Collection;
 
 class FlightInventoryTourRepository extends InventoryTourRepository implements HasFlightManifest
@@ -257,6 +258,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
             $component->image_url,
             $inventory->departs_at,
             $inventory->arrives_at,
+            Icon::flight(),
             $upgradeName,
             [
                 'Airline' => $component->airline->name,

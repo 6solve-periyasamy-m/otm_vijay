@@ -6,6 +6,8 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Storage\ComponentInformation;
 use App\Repository\Traits\HasCustomAttributes;
 use Carbon\Carbon;
+use Closure;
+use Illuminate\View\View;
 
 /**
  * @property string $name
@@ -15,6 +17,7 @@ use Carbon\Carbon;
  * @property string|null $image
  * @property Carbon|null $start
  * @property Carbon|null $end
+ * @property View|string|Closure $icon
  * @property array<string, string> $attributes
  */
 abstract class AbstractComponent
@@ -71,6 +74,11 @@ abstract class AbstractComponent
     public function getAttributesAttribute(): array
     {
         return $this->information->attributes;
+    }
+
+    public function getIconAttribute(): View|string|Closure
+    {
+        return $this->information->icon;
     }
 
     public function equals(AbstractComponent $component): bool

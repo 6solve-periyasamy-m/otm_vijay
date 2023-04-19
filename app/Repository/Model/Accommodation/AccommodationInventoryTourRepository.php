@@ -19,6 +19,7 @@ use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
 use App\Repository\Storage\ComponentInformation;
 use App\Repository\Traits\Component\IsAccommodation;
+use Icon;
 use Illuminate\Support\Collection;
 
 class AccommodationInventoryTourRepository extends InventoryTourRepository
@@ -265,6 +266,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             $component->image_url,
             $inventory->check_in,
             $inventory->check_out,
+            Icon::accommodation(),
             $upgradeName,
             [
                 'Check In' => f_datetime($inventory->check_in),

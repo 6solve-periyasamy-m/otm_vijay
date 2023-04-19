@@ -3,7 +3,7 @@
         <div class="component-header row">
             <div class="col-9 my-auto d-flex">
                 <div class="px-2">
-                    {{ Icon::accommodation() }}
+                    {{ $this->component->icon }}
                 </div>
                 {!! $this->component->name !!}
             </div>

@@ -20,6 +20,7 @@ use App\Repository\Model\Order\Component\OrderTransportRepository;
 use App\Repository\Model\Quote\Component\QuoteTransportRepository;
 use App\Repository\Storage\ComponentInformation;
 use App\Repository\Traits\Component\IsTransport;
+use Icon;
 use Illuminate\Support\Collection;
 
 class TransportInventoryTourRepository extends InventoryTourRepository
@@ -246,6 +247,7 @@ class TransportInventoryTourRepository extends InventoryTourRepository
             $component->image_url,
             $inventory->departs_at,
             $inventory->arrives_at,
+            Icon::transport(),
             $upgradeName,
             [
                 'Transport Type' => $component->transportType->name,
