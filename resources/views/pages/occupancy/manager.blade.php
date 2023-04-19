@@ -1,4 +1,4 @@
-@extends('layout.master')
+@extends('layout.master', ['tailwind' => false])
 
 @section('title', 'Occupancy Manager')
 
