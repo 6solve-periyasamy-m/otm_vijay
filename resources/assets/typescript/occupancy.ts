@@ -235,7 +235,7 @@ class RoomingData {
         if (results.success == true) {
             return true;
         } else {
-            console.log(results.msg);
+            console.error(results.msg);
             return false;
         }
     }
@@ -310,7 +310,6 @@ async function generateRoomingManager(url: string, parameters: Object = {}): Pro
         dataType: "json",
         data: parameters,
     });
-    console.log(data);
     let customers: Customer[] = [];
     for (const id of Object.keys(data.customers)) {
         let nId: number = parseInt(id);
