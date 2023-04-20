@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Customer\Booking;
 
 use App\Models\Booking\Booking;
-use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 
 class Payment extends Component
@@ -24,7 +23,7 @@ class Payment extends Component
         $this->amount = $booking->due_today;
     }
 
-    public function pay(): RedirectResponse
+    public function pay()
     {
         $this->validate();
 
