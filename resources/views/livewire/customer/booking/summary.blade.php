@@ -7,9 +7,9 @@
                     Back to Start
                 </a>
             </div>
-            If you return to the start, any changes made to components will be reset.
+            If you return to the start, any changes made to the itinerary will be reset.
             <br/>
-            If you want to edit a specific customers components, please click on their details below.
+            If you want to edit a specific customers itineraries, please click on their details below.
         </div>
     </div>
     <div class="mb-4">
