@@ -9,6 +9,7 @@
       'departure_address_id' => $transport->departure_address_id,
       'arrival_address_id' => $transport->arrival_address_id,
       'name' => $transport->name,
+      'image_url' => $transport->image_url,
       'description' => $transport->description,
       'currency' => $transport->currency,
       'is_domestic' => $transport->is_domestic,
