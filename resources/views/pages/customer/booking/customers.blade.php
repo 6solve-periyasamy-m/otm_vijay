@@ -131,7 +131,7 @@
                     <h2 class="col-md-12 mb-0">Billing Address</h2>
                 </div>
                 <div class="row">
-                    <x-customer.input name="lead_billing_address_line_1" value="{{ $customer->billingAddress->address_line_1 ?? '' }}" width="6" autocomplete="address-line1" required>
+                    <x-customer.input name="lead_billing_address_line_1" value="{{ $customer->billingAddress->address_line_1 ?? '' }}" width="6" autocomplete="address-line1">
                         Address Line 1
                     </x-customer.input>
                     <x-customer.input name="lead_billing_address_line_2" value="{{ $customer->billingAddress->address_line_2 ?? '' }}" width="6" autocomplete="address-line2">
@@ -146,7 +146,7 @@
                     <div class="form-group col-xl-6">
                         <label class="col-md-12 mb-0">Billing Country</label>
                         <div class="col-md-12">
-                            <select name="lead_billing_country" class="w-100" required>
+                            <select name="lead_billing_country" class="w-100">
                                 <option value="" @if(!isset($customer?->billingAddress?->country_id)) selected @endif disabled>Please Select</option>
                                 @foreach(\App\Models\Location\Country::orderBy('name', 'asc')->get() as $country)
                                     <option value="{{ $country->id }}" @if(isset($customer) && $customer?->billingAddress?->country_id === $country->id) selected @endif>
