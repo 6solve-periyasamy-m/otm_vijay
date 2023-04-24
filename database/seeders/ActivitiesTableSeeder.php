@@ -108,7 +108,7 @@ class ActivitiesTableSeeder extends Seeder
                 'id' => 7,
                 'activity_type_id' => 3,
                 'description' => 'Gorée is a tiny, car-free island off the coast of Dakar, in Senegal. It’s known for its role in the 15th- to 19th-century Atlantic slave trade. On the narrow streets, colonial buildings include the House of Slaves, now a museum',
-                'image_url' => 'images/activity_1.webp',
+                'image_url' => 'images/activity/activity_1.webp',
                 'address_id' => 104,
                 'currency_id' => 154,
                 'name' => 'Visit to Gorée Island',

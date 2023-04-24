@@ -64,7 +64,7 @@ class AccommodationsTableSeeder extends Seeder
                 'name' => 'Senegambia Hotel',
                 'description' => 'Client Advice: Senegambia Hotel: We recommend booking on bed and breakfast as it is likely half board and other dining packages may be cheaper locally; Please note the hotel only accepts payment by cash',
                 'audit_date' => '2022-09-20',
-                'image_url' => 'images/hotel_1.jpg',
+                'image_url' => 'images/accommodation/hotel_1.jpg',
                 'currency_id' => 154,
                 'address_id' => 103,
                 'created_at' => '2022-09-20 18:51:56',
