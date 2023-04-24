@@ -6,7 +6,7 @@
                 <img src="{{ asset($transport->image_url) }}" class="img-thumbnail image large">
             </div>
         @endif
-        <div class="col-{{ isset($flight->image_url) ? 10 : 12 }} row">
+        <div class="col-{{ isset($transport->image_url) ? 10 : 12 }} row">
             <div class="col-12 text-capitalize">
                 <h4 class="fw-bold">{{ $transport->name }}</h4>
             </div>
