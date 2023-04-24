@@ -37,6 +37,7 @@ class TransportController extends Controller
         if ($request->has('image') && $request->file('image') != null) {
             $transport->image_url = $request->file('image')->storePublicly('uploads/images');
         }
+        $transport->save();
         return redirect()->route('transports.view', ['transport' => $transport,]);
     }
 
@@ -70,6 +71,7 @@ class TransportController extends Controller
             }
             $transport->image_url = $request->file('image')->storePublicly('uploads/images');
         }
+        $transport->save();
         return redirect()->route('transports.view', ['transport' => $transport,]);
     }
 
