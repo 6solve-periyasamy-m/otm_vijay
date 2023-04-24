@@ -1,5 +1,5 @@
 @php $isIncluded = $this->component->tour_component_type == 'Included'; @endphp
-<div class="card mx-1 @if(!$this->component->owned) unowned @endif">
+<div class="card mx-1 @if(!$this->component->owned) unowned @endif @if($this->component->tour_component_type !== 'Included') costed @endif">
     <div class="card-body">
         <div class="component-header row">
             <div class="col-{{ $isIncluded ? 12 : 10 }} my-auto d-flex">

@@ -8,7 +8,13 @@ $border: 1px solid #dee2e6 !default;
 }
 
 .unowned {
-  filter: brightness(90%);
+  filter: brightness(80%);
+  &.costed {
+    background-color: rgba(170, 221, 255, 0.25);
+  }
+}
+
+.costed {
   background-color: rgba(170, 221, 255, 0.25);
 }
 
