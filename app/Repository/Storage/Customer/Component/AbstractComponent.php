@@ -45,7 +45,7 @@ abstract class AbstractComponent
 
     public function getDescriptionAttribute(): string
     {
-        return $this->information->description;
+        return $this->information->description ?? "";
     }
 
     public function getImageAttribute(): string|null
