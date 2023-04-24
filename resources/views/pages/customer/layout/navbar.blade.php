@@ -66,7 +66,7 @@ $branding = $branding ?? \App\Models\System\Brand::getSystemBrand();
                       </li>
                       @else
                         <li>
-                          <a href="{{ route('customer.login') }}" class="nav-link link-dark">
+                          <a href="{{ route('customer.login', ['from' => Request::path(),]) }}" class="nav-link link-dark">
                               <span class="icon-login"></span>
                               &nbsp;Login
                           </a>
