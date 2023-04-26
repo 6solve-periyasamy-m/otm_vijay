@@ -45,7 +45,7 @@ class ActivityInventoryImport implements ToCollection, WithHeadingRow, WithValid
     public function rules(): array
     {
         return [
-            'accommodation' => 'required|exists:activities,name',
+            'activity' => 'required|exists:activities,name',
             'ticket_type' => 'required',
             'starts_at' => 'required|date|date_format:d/m/Y H:i',
             'ends_at' => 'required|date|date_format:d/m/Y H:i',
