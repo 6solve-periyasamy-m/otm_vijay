@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Transport;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Booking\Component\BookingTransport;
 use App\Models\Order\Component\OrderTransport;
@@ -256,5 +257,10 @@ class TransportInventoryTourRepository extends InventoryTourRepository
                 'Travel Class' => $inventory->travelClass->__toString(),
             ]
         );
+    }
+
+    public function getStockUsedOnBooking(Booking $booking): int
+    {
+        return $booking->transport()->where('transport_inventory_tour_id', '=', $this->tourComponent->id)->count();
     }
 }

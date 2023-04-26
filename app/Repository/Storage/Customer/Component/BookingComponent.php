@@ -45,6 +45,7 @@ class BookingComponent extends AbstractComponent implements Wireable
     public function purchaseForOne(): bool
     {
         if ($this->owned) return false;
+        if (!$this->component->hasEnoughStock($this->component->getStockUsedOnBooking($this->traveller->booking) + 1)) return false;
         $this->component->grantToBookingTraveller($this->traveller);
         return true;
     }

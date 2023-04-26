@@ -5,6 +5,7 @@ namespace App\Repository\Model\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
+use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Booking\Component\BookingAccommodation;
 use App\Models\Order\Component\OrderAccommodation;
@@ -292,5 +293,10 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             }
         }
         return null;
+    }
+
+    public function getStockUsedOnBooking(Booking $booking): int
+    {
+        return $booking->accommodation()->where('accommodation_inventory_tour_id', '=', $this->tourComponent->id)->count();
     }
 }
