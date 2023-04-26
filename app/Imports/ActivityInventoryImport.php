@@ -30,8 +30,8 @@ class ActivityInventoryImport implements ToCollection, WithHeadingRow, WithValid
             $data[] = ActivityInventory::create([
                 'activity_id' => $activity->id,
                 'ticket_type_id' => TicketType::findOrCreate($row['ticket_type'])->id,
-                'starts_at' => Carbon::createFromFormat('d/m/Y H:i', trim($row['starts_at'])),
-                'ends_at' => Carbon::createFromFormat('d/m/Y H:i', trim($row['ends_at'])),
+                'starts_at' => Carbon::createFromFormat('d-m-Y H:i', trim($row['starts_at'])),
+                'ends_at' => Carbon::createFromFormat('d-m-Y H:i', trim($row['ends_at'])),
                 'fit_selectable' => trim($row['fit_selectable']) == 'YES',
                 'stock' => trim($row['stock']),
                 'purchase_price' => trim($row['purchase_price']),
@@ -47,8 +47,8 @@ class ActivityInventoryImport implements ToCollection, WithHeadingRow, WithValid
         return [
             'activity' => 'required|exists:activities,name',
             'ticket_type' => 'required',
-            'starts_at' => 'required|date',
-            'ends_at' => 'required|date',
+            'starts_at' => 'required|date|date_format:"d-m-Y H:i"',
+            'ends_at' => 'required|date|date_format:"d-m-Y H:i"',
             'fit_selectable' => ['nullable', Rule::in(['YES', 'NO', null])],
             'stock' => 'required|integer',
             'purchase_price' => 'required|numeric',

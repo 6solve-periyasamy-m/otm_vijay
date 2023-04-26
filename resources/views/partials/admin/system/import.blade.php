@@ -5,7 +5,7 @@
         Please verify that all countries are available in the system (we use the ISO country list), as any not found will be skipped and have to be manually set later.
         For example, <span class="fw-bold">England</span>, <span class="fw-bold">Scotland</span>, <span class="fw-bold">Wales</span> and <span class="fw-bold">Northern Island</span> should all be <span class="fw-bold">United Kingdom</span>
         <br />
-        All dates should be in the format DD/MM/YYYY, i.e 31/12/2022. Dates with time should be in the format DD/MM/YYYY HH:mm, i.e 31/12/2022 23:45.
+        All dates should be in the format DD-MM-YYYY, i.e 31-12-2022. Dates with time should be in the format DD-MM-YYYY HH:mm, i.e 31-12-2022 23:45.
         <br />
         All yes/no (boolean) fields should be <span class="fw-bold">YES</span> or <span class="fw-bold">NO</span>
     </div>
