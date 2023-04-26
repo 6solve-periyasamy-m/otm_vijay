@@ -29,6 +29,7 @@ use Illuminate\Validation\Rule;
  * @property string $tour_component_type
  * @property float|null $tour_sales_price
  * @property bool $is_bookable
+ * @property bool $stock_control_active
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -56,6 +57,8 @@ use Illuminate\Validation\Rule;
  * @method static Builder|ActivityInventoryTour whereId($value)
  * @method static Builder|ActivityInventoryTour whereTourComponentType($value)
  * @method static Builder|ActivityInventoryTour whereTourId($value)
+ * @method static Builder|ActivityInventoryTour whereIsBookable($value)
+ * @method static Builder|ActivityInventoryTour whereStockControlActive($value)
  * @method static Builder|ActivityInventoryTour whereTourSalesPrice($value)
  * @method static Builder|ActivityInventoryTour whereUpdatedAt($value)
  * @method static QueryBuilder|ActivityInventoryTour withTrashed()
@@ -67,8 +70,8 @@ class ActivityInventoryTour extends Model
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
-    protected $fillable = ['tour_id', 'activity_inventory_id', 'tour_component_type', 'tour_sales_price',];
-    protected $casts = ['tour_sales_price' => 'double', 'is_bookable' => 'boolean',];
+    protected $fillable = ['tour_id', 'activity_inventory_id', 'tour_component_type', 'tour_sales_price', 'stock_control_active'];
+    protected $casts = ['tour_sales_price' => 'double', 'is_bookable' => 'boolean', 'stock_control_active' => 'boolean',];
     private ActivityInventoryTourRepository $internal_repository;
 
     public static function getValidationRules(): array

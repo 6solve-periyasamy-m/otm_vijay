@@ -31,7 +31,22 @@
         $(document).ready(function () {
             @stack('header-ready')
         });
+        window.addEventListener('livewireAlert', event => {
+            alert(event.detail.message);
+        });
+        function toggleExpander(accordion) {
+            accordion = $(accordion);
+            let body = $(accordion.attr('data-target'));
+            if (body.hasClass('flex-wrap')) {
+                body.removeClass('flex-wrap');
+                accordion.attr('aria-expanded', 'false');
+            } else {
+                body.addClass('flex-wrap');
+                accordion.attr('aria-expanded', 'true');
+            }
+        }
     </script>
+    @livewireStyles
 </head>
 <body>
     <!-- Preloader -->
@@ -60,7 +75,12 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script type="text/javascript" defer>$(".preloader").fadeOut();</script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
 
     @yield('footer-script')
     @stack('footer-stack')
+    @livewireScripts
+    @livewire('livewire-ui-modal')
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
 </body>

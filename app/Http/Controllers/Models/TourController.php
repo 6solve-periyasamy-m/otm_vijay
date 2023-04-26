@@ -43,6 +43,11 @@ class TourController extends Controller
             'notes' => $request->input('notes'),
             'invoice_footer' => $request->input('invoice_footer'),
             'final_payment' => $request->input('final_payment'),
+            'accommodation_stock_control' => $request->input('accommodation_stock_control') === 'on' ? 1 : 0,
+            'activity_stock_control' => $request->input('activity_stock_control') === 'on' ? 1 : 0,
+            'flight_stock_control' => $request->input('flight_stock_control') === 'on' ? 1 : 0,
+            'transport_stock_control' => $request->input('transport_stock_control') === 'on' ? 1 : 0,
+            'merchandise_stock_control' => $request->input('merchandise_stock_control') === 'on' ? 1 : 0,
             'terms' => $request->input('terms'),
         ]);
         return redirect()->route('tours.view', ['tour' => $tour,]);
@@ -115,6 +120,11 @@ class TourController extends Controller
             'is_active' => $request->input('is_active') === 'on' ? 1 : 0,
             'notes' => $request->input('notes'),
             'invoice_footer' => $request->input('invoice_footer'),
+            'accommodation_stock_control' => $request->input('accommodation_stock_control') === 'on' ? 1 : 0,
+            'activity_stock_control' => $request->input('activity_stock_control') === 'on' ? 1 : 0,
+            'flight_stock_control' => $request->input('flight_stock_control') === 'on' ? 1 : 0,
+            'transport_stock_control' => $request->input('transport_stock_control') === 'on' ? 1 : 0,
+            'merchandise_stock_control' => $request->input('merchandise_stock_control') === 'on' ? 1 : 0,
             'terms' => $request->input('terms'),
             'final_payment' => $request->input('final_payment'),
         ]);

@@ -189,6 +189,8 @@ Route::middleware('auth:api')->group(function() {
 Route::post('/dual/select/countries', [SelectController::class, 'getCountries'])->name('api.countries.select');
 Route::post('/php/booking/upgrade/activity/{token}', [CustomerBookingController::class, 'upgradeActivity'])->name('api.booking.upgrade-activity');
 Route::post('/php/booking/customer/remove/{token}', [CustomerBookingController::class, 'removeCustomer'])->name('api.booking.remove-customer');
+Route::post('/php/booking/rooming/get/{bookingUrl}/{token}', [CustomerBookingController::class, 'getRoomingInformation'])->name('api.booking.rooming.get');
+Route::post('/php/booking/rooming/save/{bookingUrl}/{token}', [CustomerBookingController::class, 'saveRoomingInformation'])->name('api.booking.rooming.save');
 Route::post('/admin/orders/{order}/rooming/get', [OrderController::class, 'getRoomingInformation'])->name('api.orders.rooming.get');
 
 Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(function () {

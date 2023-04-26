@@ -30,6 +30,7 @@ use Illuminate\Validation\Rule;
  * @property float|null $tour_sales_price
  * @property string|null $flight_type
  * @property bool $is_bookable
+ * @property bool $stock_control_active
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -60,6 +61,8 @@ use Illuminate\Validation\Rule;
  * @method static Builder|FlightInventoryTour whereId($value)
  * @method static Builder|FlightInventoryTour whereTourComponentType($value)
  * @method static Builder|FlightInventoryTour whereTourId($value)
+ * @method static Builder|FlightInventoryTour whereIsBookable($value)
+ * @method static Builder|FlightInventoryTour whereStockControlActive($value)
  * @method static Builder|FlightInventoryTour whereTourSalesPrice($value)
  * @method static Builder|FlightInventoryTour whereUpdatedAt($value)
  * @method static QueryBuilder|FlightInventoryTour withTrashed()
@@ -70,9 +73,9 @@ class FlightInventoryTour extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['tour_id', 'flight_inventory_id', 'tour_component_type', 'flight_type', 'tour_sales_price',];
+    protected $fillable = ['tour_id', 'flight_inventory_id', 'tour_component_type', 'flight_type', 'tour_sales_price', 'stock_control_active'];
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
-    protected $casts = ['tour_sales_price' => 'double', 'is_bookable' => 'boolean',];
+    protected $casts = ['tour_sales_price' => 'double', 'is_bookable' => 'boolean','stock_control_active' => 'boolean',];
 
     private FlightInventoryTourRepository $internal_repository;
 

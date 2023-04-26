@@ -436,4 +436,29 @@ class Icon
     {
         return $this->brand('instagram');
     }
+
+    public function baseball(): View|string|Closure
+    {
+        return $this->solid('baseball-bat-ball');
+    }
+
+    public function rugby(): View|string|Closure
+    {
+        return $this->solid('football');
+    }
+
+    public function basketball(): View|string|Closure
+    {
+        return $this->solid('basketball');
+    }
+
+    public function football(): View|string|Closure
+    {
+        return $this->solid('futbol');
+    }
+
+    public function ticket(): View|string|Closure
+    {
+        return $this->solid('ticket');
+    }
 }

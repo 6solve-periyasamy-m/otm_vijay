@@ -5,6 +5,13 @@
     @isset($cssPath)
         <style>{!! file_get_contents($cssPath) !!}</style>
     @endisset
+    <script>
+        function closeModalOnClick(event) {
+            let target = $(event.target);
+            if (target.attr('data-role') !== 'modal-backdrop') return;
+            Livewire.emit('closeModal');
+        }
+    </script>
 
     <div
         x-data="LivewireUIModal()"
@@ -15,6 +22,8 @@
         x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
         x-show="show"
         class="panel-overlay"
+        data-role="modal-backdrop"
+        onclick="closeModalOnClick(event)"
         style="display: none;">
             <div
                     x-show="show"

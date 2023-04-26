@@ -4,9 +4,15 @@
             {{ $header }}
         </div>
     </div>
-    <div class="card accordion-collapse {{ $attributes->has('hidden') ? 'collapse' : 'show' }}" id="{{ $attributes->get('id') }}">
-        <div class="card-body">
+    @if($attributes->has('nocontainer'))
+        <div class="accordion-collapse {{ $attributes->has('hidden') ? 'collapse' : 'show' }}" id="{{ $attributes->get('id') }}">
             {{ $slot }}
         </div>
-    </div>
+    @else
+        <div class="card accordion-collapse {{ $attributes->has('hidden') ? 'collapse' : 'show' }}" id="{{ $attributes->get('id') }}">
+            <div class="card-body">
+                {{ $slot }}
+            </div>
+        </div>
+    @endif
 </div>

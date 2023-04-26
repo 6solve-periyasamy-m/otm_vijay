@@ -9,7 +9,6 @@ use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
-use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteTransportRepository;
 use App\Repository\Traits\Component\IsTransport;
 use Carbon\Carbon;
@@ -111,6 +110,7 @@ class TransportInventoryRepository extends InventoryRepository
             'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
             'tour_component_type' => $tourComponentType,
             'tour_id' => $tour->id,
+            'stock_control_active' => $tour->transport_stock_control,
         ]);
         $this->inventory->tourComponents()->save($inventoryTour);
         return $inventoryTour->repository;
@@ -130,6 +130,16 @@ class TransportInventoryRepository extends InventoryRepository
     public function getPurchasePrice(): float
     {
         return $this->inventory->purchase_price;
+    }
+
+    public function isStockControlActive(): bool
+    {
+        return false;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return true;
     }
 
     public function getSalesPrice(): ?float

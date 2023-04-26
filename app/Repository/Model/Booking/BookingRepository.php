@@ -3,17 +3,25 @@
 namespace App\Repository\Model\Booking;
 
 use App\Exceptions\NotOnTourException;
+use App\Exceptions\RoomingFailedException;
+use App\Http\Gateways\Storage\LineItem;
+use App\Models\Accommodation\RoomType;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Booking\Booking;
+use App\Models\Booking\BookingGroup;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Group;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
+use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\RoomingRepository;
+use App\Repository\Storage\Rooming\RemoteBookingGroup;
 use Carbon\Carbon;
 use DB;
+use Gateway;
 use Log;
 use Throwable;
 
@@ -37,7 +45,7 @@ class BookingRepository extends ModelRepository
 
     public function upgradeActivityForAll(ActivityInventoryTour $from, ActivityInventoryTour $to): bool
     {
-        if ($to->available_stock < $this->booking->travellers()->count()) return false;
+        if (!$to->repository->hasEnoughStock($this->booking->travellers()->count())) return false;
         if (!$to->is_bookable) return false;
         try {
             DB::beginTransaction();
@@ -98,7 +106,7 @@ class BookingRepository extends ModelRepository
 
     public function getDueTodayAmount(): float
     {
-        return ($this->booking->tour->booking_fee ?? 0) + ($this->booking->tour->deposit * $this->booking->travellers()->count());
+        return ($this->booking->tour->booking_fee ?? 0) + (($this->booking->tour->deposit ?? 0) * $this->booking->travellers()->count());
     }
 
     public function getSingleOccupancyCount(): int
@@ -142,7 +150,7 @@ class BookingRepository extends ModelRepository
         $selected = $this?->booking->leadTraveller?->repository->getSelectedFlights() ?? ['outbound' => 0, 'inbound' => 0];
         $flights = ['outbound' => [], 'inbound' => [],];
         foreach ($this->booking->tour->flightInventoryTours as $flight) {
-            //if ($flight->available_stock <= 0) continue; // Disabled due to lack of current requirement
+            if (!$flight->repository->hasEnoughStock($this->booking->travellers()->count())) continue;
             if (!$flight->is_bookable) continue;
             if ($flight->flight_type == 'Outbound') {
                 $flights['outbound'][] =
@@ -233,5 +241,148 @@ class BookingRepository extends ModelRepository
     public function isDeleted(): bool
     {
         return !isset($this->booking);
+    }
+
+    public function getGatewayUrl(float $amount)
+    {
+        $gateway = Gateway::getDefaultGateway();
+        $item = new LineItem("Deposit for Booking from {$this->booking->leadTraveller->full_name}", $amount);
+        $intention = PaymentIntention::build($this->booking->leadTraveller->customer, $this->booking->token, 'Deposit');
+
+        $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
+        return $gateway->checkout([$item,], $intention, $this->booking->leadTraveller, $redirect);
+    }
+
+    public function getRoomingData(): array
+    {
+        $rooms = [];
+        foreach ($this->booking->tour->accommodationInventoryTours()->with('inventory', 'inventory.component')->get() as $inventoryTour) {
+            $rooms[$inventoryTour->id] = [
+                'name' => $inventoryTour->repository->formatAdminOccupancy(),
+                'size' => $inventoryTour->inventory->roomType->maximum_occupancy,
+                'price' => $inventoryTour->tour_component_type === 'Included' ? 0 : $inventoryTour->tour_sales_price,
+                'start' => $inventoryTour->inventory->check_in->unix(),
+                'end' => $inventoryTour->inventory->check_out->unix(),
+            ];
+        }
+        $customers = [];
+        foreach ($this->booking->travellers()->get() as $traveller) {
+            $customers[$traveller->id] = ['name' => $traveller->full_name, 'avatar' => null,];
+        }
+        $groups = [];
+        foreach ($this->booking->groups as $group) {
+            $groupCustomers = [];
+            foreach ($group->travellers as $traveller) {
+                $groupCustomers[] = $traveller->id;
+            }
+            $groupRooms = [];
+            foreach ($group->accommodation as $room) {
+                $groupRooms[] = $room->accommodation_inventory_tour_id;
+            }
+            $groups[$group->id] = ['rooms' => $groupRooms, 'customers' => $groupCustomers,];
+        }
+        return ['rooms' => $rooms, 'customers' => $customers, 'groups' => $groups,];
+    }
+
+    private function wipeGroups()
+    {
+        foreach ($this->booking->groups as $group) {
+            $group->delete();
+        }
+    }
+
+    /**
+     * @param RemoteBookingGroup[] $remoteGroups
+     * @return void
+     */
+    public function importRoomingData(array $remoteGroups): void
+    {
+        $this->wipeGroups();
+        foreach ($remoteGroups as $remoteGroup) {
+            $remoteGroup->convertToGroup($this->booking);
+        }
+    }
+
+    public function getRemainingInstallmentAmount(): float|int
+    {
+        $base = 0;
+        foreach ($this->booking->travellers as $traveller) {
+            $base += $this->booking->tour->remaining_installment;
+            $base += $traveller->surcharge_amount;
+            $base += $traveller->additional_cost;
+        }
+        return $base;
+    }
+
+    public function evaluateSimpleRooming()
+    {
+        if (!$this->hasRooming()) return;
+        $this->wipeGroups();
+        $groups = [];
+        foreach ($this->booking->travellers as $traveller) {
+            if ($traveller->group_id === null || $traveller->room_type_id === null) {
+                $group = BookingGroup::create(['booking_id' => $this->booking->id,]);
+                $group->repository->addTravellerToGroup($traveller);
+                $single = RoomingRepository::getSingleRoomType($this->booking->tour);
+                if ($single !== null) {
+                    try {
+                        $group->repository->addTemplatesOfTypeToGroup($this->booking->tour, $single);
+                    } catch (RoomingFailedException) {}
+                }
+                continue;
+            }
+
+            if (!array_key_exists($traveller->group_id, $groups)) {
+                $groups[$traveller->group_id] = ['type' => $traveller->roomType, 'group' => BookingGroup::create(['booking_id' => $this->booking->id, 'name' => "Group {$traveller->group_id}"])];
+            }
+            $data = $groups[$traveller->group_id];
+            /** @var BookingGroup $group */
+            $group = $data['group'];
+            /** @var RoomType $type */
+            $type = $data['type'];
+
+            if ($group->travellers()->count() >= $type->maximum_occupancy || $type->id !== $traveller->room_type_id) {
+                $found = false;
+                $newGroup = null;
+                do {
+                    $newGroup = ($newGroup ?? $traveller->group_id) + 1;
+                    if (!array_key_exists($newGroup, $groups)) {
+                        $groups[$newGroup] = ['type' => $traveller->roomType, 'group' => BookingGroup::create(['booking_id' => $this->booking->id, 'name' => "Group $newGroup"])];
+                        $traveller->group_id = $newGroup;
+                        $traveller->save();
+                        $found = true;
+                    } else {
+                        if ($groups[$newGroup]['type']?->id === $traveller->room_type_id
+                            && $groups[$newGroup]['group']->travellers()->count() < $groups[$newGroup]['type']->maximum_occupancy) {
+                            $traveller->group_id = $newGroup;
+                            $traveller->save();
+                            $found = true;
+                        } else {
+                            \Log::info("{$groups[$newGroup]['type']?->id}, {$traveller->room_type_id}");
+                        }
+                    }
+                } while (!$found);
+            }
+
+            $data = $groups[$traveller->group_id];
+            /** @var BookingGroup $group */
+            $group = $data['group'];
+
+            $group->repository->addTravellerToGroup($traveller);
+        }
+        foreach ($groups as $data) {
+            /** @var BookingGroup $group */
+            $group = $data['group'];
+            /** @var RoomType $type */
+            $type = $data['type'];
+            try {
+                $group->repository->addTemplatesOfTypeToGroup($this->booking->tour, $type);
+            } catch (RoomingFailedException) {}
+        }
+    }
+
+    public function hasRooming(): bool
+    {
+        return $this->booking->tour->templates->count() > 0;
     }
 }
