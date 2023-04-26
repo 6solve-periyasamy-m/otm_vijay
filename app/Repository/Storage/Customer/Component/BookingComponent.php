@@ -42,16 +42,37 @@ class BookingComponent extends AbstractComponent implements Wireable
         return $this->upgrades;
     }
 
+    public function canBookForAll(): bool
+    {
+        return !$this->component->isStockControlActive() || $this->component->hasEnoughStock($this->traveller->booking->travellers()->count());
+    }
+
+    public function canBookForOne(): bool
+    {
+        return !$this->component->isStockControlActive() || $this->component->hasEnoughStock($this->component->getStockUsedOnBooking($this->traveller->booking) + 1);
+    }
+
+    public function getAvailableStock(): int
+    {
+        return $this->component->getAvailableStock();
+    }
+
+    public function getUsedStockOnBooking(): int
+    {
+        return $this->component->getStockUsedOnBooking($this->traveller->booking);
+    }
+
     public function purchaseForOne(): bool
     {
         if ($this->owned) return false;
-        if (!$this->component->hasEnoughStock($this->component->getStockUsedOnBooking($this->traveller->booking) + 1)) return false;
+        if (!$this->canBookForOne()) return false;
         $this->component->grantToBookingTraveller($this->traveller);
         return true;
     }
 
     public function purchaseForAll(): bool
     {
+        if (!$this->canBookForAll()) return false;
         $this->component->bookForAll($this->traveller->booking);
         return true;
     }

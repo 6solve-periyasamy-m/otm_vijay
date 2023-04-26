@@ -299,4 +299,9 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     {
         return $booking->accommodation()->where('accommodation_inventory_tour_id', '=', $this->tourComponent->id)->count();
     }
+
+    public function getCostToCustomer(): float
+    {
+        return $this->tourComponent->tour_component_type === 'Included' ? 0 : $this->tourComponent->tour_sales_price;
+    }
 }
