@@ -35,6 +35,7 @@ class FlightController extends Controller
         if ($request->has('image') && $request->file('image') != null) {
             $flight->image_url = $request->file('image')->storePublicly('uploads/images');
         }
+        $flight->save();
         return redirect()->route('flights.view', ['flight' => $flight,]);
     }
 
@@ -66,7 +67,7 @@ class FlightController extends Controller
             }
             $flight->image_url = $request->file('image')->storePublicly('uploads/images');
         }
-
+        $flight->save();
         return redirect()->route('flights.view', ['flight' => $flight,]);
     }
 

@@ -92,6 +92,7 @@ class AccommodationController extends Controller
             }
             $accommodation->image_url = $request->file('image')->storePublicly('uploads/images');
         }
+        $accommodation->save();
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 

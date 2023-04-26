@@ -8,7 +8,7 @@
              'route' => 'activity-types',])
 @endcan
 @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $name ?? null,'width' => 10,])
-@include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'width' => 2,])
+@include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'width' => 2, 'value' => $image_url ?? null,])
 @include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $description ?? null,])
 @include('partials.fields.prefab.addresses.switcher', [
     'name' => isset($address) ? $address->name : '',
