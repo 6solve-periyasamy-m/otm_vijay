@@ -47,8 +47,8 @@ class ActivityInventoryImport implements ToCollection, WithHeadingRow, WithValid
         return [
             'activity' => 'required|exists:activities,name',
             'ticket_type' => 'required',
-            'starts_at' => 'required|date|date_format:"d/m/Y H:i"',
-            'ends_at' => 'required|date|date_format:"d/m/Y H:i"',
+            'starts_at' => 'required|date',
+            'ends_at' => 'required|date',
             'fit_selectable' => ['nullable', Rule::in(['YES', 'NO', null])],
             'stock' => 'required|integer',
             'purchase_price' => 'required|numeric',

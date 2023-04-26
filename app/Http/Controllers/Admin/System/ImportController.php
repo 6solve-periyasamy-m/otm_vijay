@@ -50,7 +50,7 @@ class ImportController extends Controller
             throw $e;
         } catch (Exception $e) {
             Log::error($e);
-            return back()->withErrors(['msg' => 'Please check that the file is a .csv or .xlsx file, and try again']);
+            return back()->withErrors(['msg' => 'An error occurred. Please check that the file is a .csv or .xlsx file, all fields are formatted correctly, and try again']);
         }
         return back()->with('success', 'Data imported successfully');
     }
