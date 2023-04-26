@@ -11,6 +11,7 @@ use App\Imports\ActivityInventoryImport;
 use App\Imports\CustomerImport;
 use Exception;
 use Illuminate\Http\UploadedFile;
+use Log;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Validators\ValidationException;
 
@@ -48,6 +49,7 @@ class ImportController extends Controller
         } catch (ValidationException $e) {
             throw $e;
         } catch (Exception $e) {
+            Log::error($e);
             return back()->withErrors(['msg' => 'Please check that the file is a .csv or .xlsx file, and try again']);
         }
         return back()->with('success', 'Data imported successfully');
