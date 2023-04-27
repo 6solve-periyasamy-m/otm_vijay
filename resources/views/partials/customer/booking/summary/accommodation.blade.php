@@ -21,7 +21,7 @@
                 </td>
                 <td data-content="Description">
                     {{ $component->tourComponent->inventory->accommodation->name }}
-                    ({{ $component->tourComponent->inventory->accommodation->address->region . ', ' .  $component->tourComponent->inventory->accommodation->address->country->name}})
+                    ({{ $component->tourComponent->inventory->accommodation->address->region . ', ' .  $component->tourComponent->inventory->accommodation->address->country?->name}})
                     ({{ $component->tourComponent->inventory->boardType }})
                 </td>
                 @if($component->tourComponent->tour_component_type == 'Included')
