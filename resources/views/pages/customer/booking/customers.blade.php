@@ -108,7 +108,7 @@
                                 <option value="" @if(!isset($customer?->homeAddress?->country_id)) selected @endif disabled>Please Select</option>
                                 @foreach(\App\Models\Location\Country::orderBy('name', 'asc')->get() as $country)
                                     <option value="{{ $country->id }}" @if(isset($customer) && $customer?->homeAddress?->country_id == $country->id) selected @endif>
-                                        {{ $country->name }}
+                                        {{ $country?->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -150,7 +150,7 @@
                                 <option value="" @if(!isset($customer?->billingAddress?->country_id)) selected @endif disabled>Please Select</option>
                                 @foreach(\App\Models\Location\Country::orderBy('name', 'asc')->get() as $country)
                                     <option value="{{ $country->id }}" @if(isset($customer) && $customer?->billingAddress?->country_id === $country->id) selected @endif>
-                                        {{ $country->name }}
+                                        {{ $country?->name }}
                                     </option>
                                 @endforeach
                             </select>

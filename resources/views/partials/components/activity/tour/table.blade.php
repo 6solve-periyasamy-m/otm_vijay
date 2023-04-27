@@ -47,7 +47,7 @@
     @foreach(\App\Repository\Model\Activity\ActivityInventoryRepository::getBetweenDates($tour->date_from, $tour->date_to, $tour->repository) as $inventory)
         <tr inventory_id="{{ $inventory->id }}">
             <td>{{ $inventory->component->name }}</td>
-            <td>{{ $inventory->component->address->region . ' - ' . $inventory->component->address->country->name }}</td>
+            <td>{{ $inventory->component->address->region . ' - ' . $inventory->component->address->country?->name }}</td>
             <td>{{ $inventory->component->activityType }}</td>
             <td>{{ $inventory->ticketType }}</td>
             <td>
