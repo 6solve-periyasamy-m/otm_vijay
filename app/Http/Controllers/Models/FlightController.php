@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
 use App\Models\Flight\Flight;
+use App\Repository\Reporting\Manifest\FlightManifestRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -42,6 +43,16 @@ class FlightController extends Controller
     public function view(Flight $flight)
     {
         return view('pages.components.flight', ['flight' => $flight,]);
+    }
+
+    public function manifest(Flight $flight)
+    {
+        return FlightManifestRepository::viewReport($flight->repository, 'flights.manifest.export', ['flight' => $flight,]);
+    }
+
+    public function export(Flight $flight, string $extension = 'xlsx')
+    {
+        return FlightManifestRepository::exportReport($flight->repository, $extension);
     }
 
     public function edit(Flight $flight)

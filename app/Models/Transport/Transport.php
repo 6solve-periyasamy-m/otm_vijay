@@ -5,6 +5,8 @@ namespace App\Models\Transport;
 use App\Models\Location\Address;
 use App\Models\Location\Currency;
 use App\Models\Order\Component\OrderTransport;
+use App\Models\Traits\HasRepository;
+use App\Repository\Model\Transport\TransportRepository;
 use Database\Factories\Transport\TransportFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -45,6 +47,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Collection|TransportInventory[] $transportInventory
  * @property-read int|null $transport_inventory_count
  * @property-read TransportType $transportType
+ * @property-read TransportRepository $repository
  * @method static TransportFactory factory(...$parameters)
  * @method static Builder|Transport newModelQuery()
  * @method static Builder|Transport newQuery()
@@ -70,7 +73,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  */
 class Transport extends Model
 {
-    use HasFactory, SoftDeletes, CascadeSoftDeletes, HasRelationships;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes, HasRelationships, HasRepository;
 
     protected $fillable = ['transport_type_id', 'operator_id', 'departure_address_id', 'arrival_address_id', 'name', 'description', 'currency_id', 'is_domestic', 'notes', 'image_url'];
     protected array $cascadeDeletes = ['transportInventory'];
