@@ -2,22 +2,16 @@
 
 namespace App\Http\Controllers\Models;
 
-use App\Events\Order\Customer\OrderCustomerCreatedEvent;
 use App\Events\Order\OrderCancelledEvent;
-use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderEditedEvent;
 use App\Events\Order\OrderRestoredEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Order\CreateOrderRequest;
 use App\Http\Requests\Admin\Order\MigrateRequest;
-use App\Models\Customer\Customer;
 use App\Models\Order\Order;
-use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Reporting\ReportRepository;
-use App\Repository\RoomingRepository;
-use App\Repository\Storage\ConvertedCustomer;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -106,6 +100,13 @@ class OrderController extends Controller
         $order->save();
         event(new OrderCancelledEvent($order));
         return redirect()->route('orders.view', ['order' => $order,]);
+    }
+
+    public function forceDelete(Order $order)
+    {
+        if (!is_otm()) abort(403);
+        $order->repository->forceDelete();
+        return redirect()->route('orders.all');
     }
 
     public function restore(Order $order)
