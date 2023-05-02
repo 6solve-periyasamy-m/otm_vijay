@@ -48,6 +48,11 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
 
     public abstract function getComponentInformation(): ComponentInformation;
 
+    public function getCostToCustomer(): float|int
+    {
+        return $this->getTourComponentType() === 'Included' ? 0 : ($this->get()?->tour_sales_price ?? 0);
+    }
+
     public function getActiveUpgrade(BookingTraveller|OrderCustomer $traveller): InventoryTourRepository|null
     {
         $parent = $this->getUpgradeParent();
