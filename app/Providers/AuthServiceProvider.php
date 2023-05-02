@@ -29,7 +29,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('viewLogViewer', function (?User $user) {
            if (!isset($user) && (!$user instanceof User)) return false;
 
-           if ($user->getHighestRoleLevel() < 999) {
+           if (!is_otm()) {
                return false;
            }
 
