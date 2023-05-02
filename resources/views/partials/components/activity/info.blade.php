@@ -34,6 +34,10 @@
                 </a>
             </div>
             @endcan
+            <a class="btn btn-secondary" href="{{route('activities.manifest.view', ['activity' => $activity,])}}">
+                {{ Icon::list() }}
+                <span>View Manifest</span>
+            </a>
         </div>
     </div>
 </div>
