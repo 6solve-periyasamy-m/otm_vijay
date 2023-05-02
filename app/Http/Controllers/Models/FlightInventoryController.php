@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Flight\Flight;
 use App\Models\Flight\FlightInventory;
+use App\Repository\Reporting\Manifest\FlightManifestRepository;
 use Illuminate\Http\Request;
 
 class FlightInventoryController extends Controller
@@ -42,6 +43,16 @@ class FlightInventoryController extends Controller
     public function view(Flight $flight, FlightInventory $flightInventory)
     {
         return view('pages.models.flight_inventories.view', ['flight' => $flight, 'flightInventory' => $flightInventory,]);
+    }
+
+    public function manifest(Flight $flight, FlightInventory $flightInventory)
+    {
+        return FlightManifestRepository::viewReport($flightInventory->repository, 'flight-inventories.manifest.export', ['flight' => $flight, 'flightInventory' => $flightInventory]);
+    }
+
+    public function export(Flight $flight, FlightInventory $flightInventory, string $extension = 'xlsx')
+    {
+        return FlightManifestRepository::exportReport($flightInventory->repository, $extension);
     }
 
     public function edit(Flight $flight, FlightInventory $flightInventory)
