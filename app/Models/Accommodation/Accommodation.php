@@ -32,6 +32,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property string|null $image_url Asset link for image
  * @property int|null $currency_id
  * @property int $address_id
+ * @property string|null $notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -63,7 +64,7 @@ class Accommodation extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes, HasRelationships;
 
-    protected $fillable = ['name', 'description', 'audit_date', 'address_id', 'currency_id', 'image_url'];
+    protected $fillable = ['name', 'description', 'audit_date', 'address_id', 'currency_id', 'image_url', 'notes'];
     protected array $cascadeDeletes = ['inventory'];
     protected $casts = ['audit_date' => 'date',];
 

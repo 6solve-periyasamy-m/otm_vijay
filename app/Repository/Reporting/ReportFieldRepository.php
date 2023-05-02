@@ -91,6 +91,10 @@ class ReportFieldRepository
                         'name' => 'Address',
                         'method' => 'address',
                     ],
+                    'notes' => [
+                        'name' => 'Notes',
+                        'method' => 'notes',
+                    ],
                 ],
             ],
             1 => [

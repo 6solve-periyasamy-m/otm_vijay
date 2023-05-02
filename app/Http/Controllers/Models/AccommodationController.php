@@ -32,6 +32,7 @@ class AccommodationController extends Controller
             'description' => $request->input('description'),
             'audit_date' => $request->input('audit_date'),
             'currency_id' => $request->input('currency_id'),
+            'notes' => $request->input('notes'),
         ]);
         if ($request->input('use_existing') == 'on') {
             $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('accommodation'));
@@ -79,6 +80,7 @@ class AccommodationController extends Controller
             'description' => $request->input('description'),
             'audit_date' => $request->input('audit_date'),
             'currency_id' => $request->input('currency_id'),
+            'notes' => $request->input('notes'),
         ]);
         if ($request->input('use_existing') == 'on') {
             Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('accommodation'), $accommodation->address);
