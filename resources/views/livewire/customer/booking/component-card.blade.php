@@ -10,7 +10,7 @@
             </div>
             @if (!$isIncluded)
             <div class="col-2 component-dates fw-bold my-auto">
-                {{ f_currency($this->component->component->getSalesPrice()) }}
+                {{ f_currency($this->component->component->getCostToCustomer()) }}
             </div>
             @endif
         </div>
@@ -43,7 +43,7 @@
                         @endforeach
                     </select>
                 @elseif($this->component->tour_component_type === 'Add-on')
-                    <div class="text-center fw-bold" style="font-size: 1.5rem">Cost per Traveller: {{ f_currency($this->component->component->getSalesPrice()) }}</div>
+                    <div class="text-center fw-bold" style="font-size: 1.5rem">Cost per Traveller: {{ f_currency($this->component->component->getCostToCustomer()) }}</div>
                 @endif
             </div>
             @if($this->component->tour_component_type === 'Add-on' && $this->component->owned)
