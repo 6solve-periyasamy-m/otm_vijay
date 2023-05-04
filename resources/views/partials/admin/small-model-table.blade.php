@@ -18,7 +18,7 @@
             <tr>
                 <th scope="col">Details</th>
                 <th scope="col">Related</th>
-                <th scope="col">{{ __('custom.table.actions') }}</th>
+                <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
             </tr>
             </thead>
             <tbody>
