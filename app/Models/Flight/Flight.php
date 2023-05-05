@@ -4,6 +4,8 @@ namespace App\Models\Flight;
 
 use App\Models\Location\Currency;
 use App\Models\Order\Component\OrderFlight;
+use App\Models\Traits\HasRepository;
+use App\Repository\Model\Flight\FlightRepository;
 use Database\Factories\Flight\FlightFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -42,6 +44,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Collection|FlightInventory[] $flightInventory
  * @property-read int|null $flight_inventory_count
  * @property-read string $flight_details
+ * @property-read FlightRepository $repository
  * @method static FlightFactory factory(...$parameters)
  * @method static Builder|Flight newModelQuery()
  * @method static Builder|Flight newQuery()
@@ -65,7 +68,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  */
 class Flight extends Model
 {
-    use HasFactory, SoftDeletes, CascadeSoftDeletes, HasRelationships;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes, HasRelationships, HasRepository;
 
     protected array $cascadeDeletes = ['flightInventory'];
     protected $fillable = ['airline_id', 'departure_airport_id', 'arrival_airport_id', 'is_domestic', 'currency_id', 'notes', 'available_from', 'image_url'];

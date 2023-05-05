@@ -26,14 +26,18 @@
                 <p>Notes</p>
                 <h6 class="fw-bold">{{ $activity->notes }}</h6>
             </div>
-            @can('update', \App\Models\Activity\Activity::class)
             <div class="col-12">
+                @can('update', \App\Models\Activity\Activity::class)
                 <a class="btn btn-success" href="{{ route('activities.edit', ['activity' => $activity, ]) }}">
                     {{ Icon::edit() }}
                     <span>Edit Activity</span>
                 </a>
+                @endcan
+                <a class="btn btn-secondary" href="{{route('activities.manifest.view', ['activity' => $activity,])}}">
+                    {{ Icon::list() }}
+                    <span>View Manifest</span>
+                </a>
             </div>
-            @endcan
         </div>
     </div>
 </div>

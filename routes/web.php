@@ -370,6 +370,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::post('/create', [TransportController::class, 'store'])->name('transports.store')->middleware('bouncer:Transport\Transport,create');
         Route::prefix('{transport}')->group(function () {
             Route::get('/', [TransportController::class, 'view'])->name('transports.view')->middleware('bouncer:Transport\Transport,read');
+            Route::get('/manifest', [TransportController::class, 'manifest'])->name('transports.manifest.view')->middleware('bouncer:Transport\Transport,read');
+            Route::get('/manifest/export/{extension?}', [TransportController::class, 'export'])->name('transports.manifest.export')->middleware('bouncer:Transport\Transport,read');
             Route::get('/update', [TransportController::class, 'edit'])->name('transports.edit')->middleware('bouncer:Transport\Transport,update');
             Route::post('/update', [TransportController::class, 'update'])->name('transports.update')->middleware('bouncer:Transport\Transport,update');
             Route::post('/delete', [TransportController::class, 'destroy'])->name('transports.delete')->middleware('bouncer:Transport\Transport,delete');
@@ -379,6 +381,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                 Route::post('/create', [TransportInventoryController::class, 'store'])->name('transport-inventories.store')->middleware('bouncer:Transport\TransportInventory,create');
                 Route::prefix('{transportInventory}')->group(function () {
                     Route::get('/', [TransportInventoryController::class, 'view'])->name('transport-inventories.view')->middleware('bouncer:Transport\TransportInventory,read');
+                    Route::get('/manifest', [TransportInventoryController::class, 'manifest'])->name('transport-inventories.manifest.view')->middleware('bouncer:Transport\TransportInventory,read');
+                    Route::get('/manifest/export/{extension?}', [TransportInventoryController::class, 'export'])->name('transport-inventories.manifest.export')->middleware('bouncer:Transport\TransportInventory,read');
                     Route::get('/update', [TransportInventoryController::class, 'edit'])->name('transport-inventories.edit')->middleware('bouncer:Transport\TransportInventory,update');
                     Route::post('/update', [TransportInventoryController::class, 'update'])->name('transport-inventories.update')->middleware('bouncer:Transport\TransportInventory,update');
                     Route::post('/delete', [TransportInventoryController::class, 'destroy'])->name('transport-inventories.delete')->middleware('bouncer:Transport\TransportInventory,delete');
@@ -429,6 +433,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::post('/create', [FlightController::class, 'store'])->name('flights.store')->middleware('bouncer:Flight\Flight,create');
         Route::prefix('{flight}')->group(function () {
             Route::get('/', [FlightController::class, 'view'])->name('flights.view')->middleware('bouncer:Flight\Flight,read');
+            Route::get('/manifest', [FlightController::class, 'manifest'])->name('flights.manifest.view')->middleware('bouncer:Flight\Flight,read');
+            Route::get('/manifest/export/{extension?}', [FlightController::class, 'export'])->name('flights.manifest.export')->middleware('bouncer:Flight\Flight,read');
             Route::get('/update', [FlightController::class, 'edit'])->name('flights.edit')->middleware('bouncer:Flight\Flight,update');
             Route::post('/update', [FlightController::class, 'update'])->name('flights.update')->middleware('bouncer:Flight\Flight,update');
             Route::post('/delete', [FlightController::class, 'destroy'])->name('flights.delete')->middleware('bouncer:Flight\Flight,delete');
@@ -439,6 +445,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                 Route::post('/create', [FlightInventoryController::class, 'store'])->name('flight-inventories.store')->middleware('bouncer:Flight\FlightInventory,create');
                 Route::prefix('{flightInventory}')->group(function () {
                     Route::get('/', [FlightInventoryController::class, 'view'])->name('flight-inventories.view')->middleware('bouncer:Flight\FlightInventory,read');
+                    Route::get('/manifest', [FlightInventoryController::class, 'manifest'])->name('flight-inventories.manifest.view')->middleware('bouncer:Flight\FlightInventory,read');
+                    Route::get('/manifest/export/{extension?}', [FlightInventoryController::class, 'export'])->name('flight-inventories.manifest.export')->middleware('bouncer:Flight\FlightInventory,read');
                     Route::get('/update', [FlightInventoryController::class, 'edit'])->name('flight-inventories.edit')->middleware('bouncer:Flight\FlightInventory,update');
                     Route::post('/update', [FlightInventoryController::class, 'update'])->name('flight-inventories.update')->middleware('bouncer:Flight\FlightInventory,update');
                     Route::post('/delete', [FlightInventoryController::class, 'destroy'])->name('flight-inventories.delete')->middleware('bouncer:Flight\FlightInventory,delete');
