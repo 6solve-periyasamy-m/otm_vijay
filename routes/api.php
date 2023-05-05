@@ -58,12 +58,12 @@ Route::prefix('booking')->group(function () {
 
     //Route::post('/activity/book', [BookingActivityController::class, 'bookActivityBooking']);
     Route::post('/activity/upgrade/cancel', [BookingActivityController::class, 'cancelActivityUpgradeBooking']);
-    
+
     Route::post('/activity/addon/book', [BookingActivityController::class, 'createActivityAddonBooking']);
 
     //Route::post('/activity/book', [BookingActivityController::class, 'bookActivityBooking']);
     Route::post('/activity/addon/cancel', [BookingActivityController::class, 'cancelActivityAddonBooking']);
-    
+
     // Transports
     Route::get('/transports/tour/{tour}', [TransportController::class, 'getTransportsInventoryForTour']);
     Route::get('/transports/booking/{token}/tour/{tour}', [TransportController::class, 'getTransportsBooking']);
@@ -133,7 +133,7 @@ Route::prefix('booking')->group(function () {
     Route::post('/create-booking', [BookingController::class, 'create']);
     Route::post('/name/update', [BookingController::class, 'update']);
     Route::post('/deposit/calculate', [BookingController::class, 'calculateDeposit']);
-    
+
     Route::post('/deposit/payment', [BookingController::class, 'payDeposit']);
 
 
@@ -141,7 +141,7 @@ Route::prefix('booking')->group(function () {
     Route::get('/events', [TourController::class, 'getEvents']);
     Route::get('/tours/{event_id?}', [TourController::class, 'getTours']);
     Route::get('/tour/{id}', [TourController::class, 'getTour']);
-    
+
     // Route::post('/set-login-token', [BookingCustomerController::class, 'updateLoginToken']);
     // Route::post('/create-order', [BookingController::class, 'createOrder']);
 
@@ -179,11 +179,11 @@ Route::prefix('/orders')->group(function () {
 Route::stripeWebhooks('/stripe/webhooks');
 Route::post('/felloh/webhook', [FellohGateway::class, 'webhook'])->name('api.felloh.webhook');
 
-Route::middleware('auth:api')->group(function() {
+Route::middleware('auth:api')->group(function () {
     Route::get('/booking/info', [BookingController::class, 'getInfo']);
     Route::get('/user', function (Request $request) {
         return $request->user();
-    });   
+    });
 });
 
 Route::post('/dual/select/countries', [SelectController::class, 'getCountries'])->name('api.countries.select');
@@ -211,7 +211,7 @@ Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(functio
         });
     });
 
-    Route::prefix('orders')->name('order.')->group(function() {
+    Route::prefix('orders')->name('order.')->group(function () {
         Route::prefix('addons')->name('addon.')->group(function () {
             Route::prefix('add')->name('add.')->group(function () {
                 Route::post('/accommodation/add', [TourComponentController::class, 'addAccommodationAddon'])->name('accommodation');
@@ -236,8 +236,8 @@ Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(functio
 
 Route::middleware('api.token.auth')->name('api.')->group(function () {
     Route::prefix('/costing')->name('costing.')->group(function () {
-       Route::get('/revenue', [RevenueController::class, 'revenue'])->name('revenue');
-       Route::get('/revenue/set', [RevenueController::class, 'revenueSet'])->name('revenue.set');
+        Route::get('/revenue', [RevenueController::class, 'revenue'])->name('revenue');
+        Route::get('/revenue/set', [RevenueController::class, 'revenueSet'])->name('revenue.set');
     });
     Route::post('/merchandise/fulfil', [MerchandiseController::class, 'fulfil'])->name('merchandise.fulfil');
     Route::post('accommodation/rooming/{order}/save', [AccommodationController::class, 'saveRoomingData'])->name('roomings.save');
@@ -331,28 +331,28 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::post('transport-inventory/{tour}', [DataTablesController::class, 'getTransportInventoryComponents'])->name('transport-inventory.datatables');
     });
 
-    Route::prefix('component')->group(function() {
-    Route::post('/quote/{quote}/{type}/add', [QuoteController::class, 'addComponents'])->name('quote.components.add');
-        Route::prefix('tour/{tour}')->group(function() {
-            Route::prefix('accommodation/inventory')->group(function() {
+    Route::prefix('component')->group(function () {
+        Route::post('/quote/{quote}/{type}/add', [QuoteController::class, 'addComponents'])->name('quote.components.add');
+        Route::prefix('tour/{tour}')->group(function () {
+            Route::prefix('accommodation/inventory')->group(function () {
                 Route::post('/add', [AccommodationController::class, 'addAccommodationInventoryToTour'])->name('tour.accommodation.inventory.add');
             });
-            Route::prefix('activity/inventory')->group(function() {
+            Route::prefix('activity/inventory')->group(function () {
                 Route::post('/add', [ActivityController::class, 'addActivityInventoryToTour'])->name('tour.activity.inventory.add');
             });
-            Route::prefix('flight/inventory')->group(function() {
+            Route::prefix('flight/inventory')->group(function () {
                 Route::post('/add', [FlightController::class, 'addFlightInventoryToTour'])->name('tour.flight.inventory.add');
             });
-            Route::prefix('transport/inventory')->group(function() {
+            Route::prefix('transport/inventory')->group(function () {
                 Route::post('/add', [TransportController::class, 'addTransportInventoryToTour'])->name('tour.transport.inventory.add');
             });
-            Route::prefix('merchandise/inventory')->group(function() {
+            Route::prefix('merchandise/inventory')->group(function () {
                 Route::post('/add', [MerchandiseController::class, 'addMerchandiseToTour'])->name('tour.merchandise.inventory.add');
             });
         });
     });
 
-    Route::prefix('orders')->name('order.')->group(function() {
+    Route::prefix('orders')->name('order.')->group(function () {
         Route::post('/unknown/{order?}', [OrderController::class, 'generateUnknown'])->name('unknown-traveller');
         Route::prefix('addons')->name('addon.')->group(function () {
             Route::prefix('available')->name('get.')->group(function () {
@@ -368,7 +368,8 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::post('transport/upgrade', [TourComponentController::class, 'applyTransportUpgrade'])->name('transport.upgrade');
         // Hack method to get route in order screen. TODO: Better solution?
         Route::post('/status/{order}', [OrderController::class, 'getOrderStatus'])->name('status');
-        Route::get('/status', function(){})->name('status.stub');
+        Route::get('/status', function () {
+        })->name('status.stub');
     });
 
     Route::prefix('quotes')->name('quote.')->group(function () {
@@ -378,8 +379,8 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         });
     });
 
-    Route::prefix('reports')->name('reports.')->group(function() {
-       Route::post('bespoke/save', [BespokeReportController::class, 'store'])->name('bespoke.save');
-       Route::post('bespoke/export', [BespokeReportController::class, 'apiExport'])->name('bespoke.export');
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::post('bespoke/save', [BespokeReportController::class, 'store'])->name('bespoke.save');
+        Route::post('bespoke/export', [BespokeReportController::class, 'apiExport'])->name('bespoke.export');
     });
 });
