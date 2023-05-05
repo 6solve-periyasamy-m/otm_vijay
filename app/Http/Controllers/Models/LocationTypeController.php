@@ -25,7 +25,7 @@ class LocationTypeController extends Controller
         $locationType = LocationType::create([
             'name' => $request->input('name'),
         ]);
-        return view('pages.close');
+        return redirect()->route('attributes.edit');
     }
 
     public function view(LocationType $locationType)
@@ -40,16 +40,16 @@ class LocationTypeController extends Controller
 
     public function update(Request $request, LocationType $locationType)
     {
-        $request->validate(LocationType::getValidationRules());
+        $request->validate(LocationType::getValidationRules($locationType->id));
         $locationType->update([
             'name' => $request->input('name'),
         ]);
-        return view('pages.close');
+        return redirect()->route('attributes.edit');
     }
 
     public function destroy(LocationType $locationType)
     {
         $locationType->delete();
-        return redirect()->route('location-types.all');
+        return redirect()->route('attributes.edit');
     }
 }

@@ -53,7 +53,7 @@ class AirportController extends Controller
 
     public function update(Request $request, Airport $airport)
     {
-        $request->validate(Airport::getValidationRules());
+        $request->validate(Airport::getValidationRules($airport->id));
         $airport->update([
             'name' => $request->input('name'),
             'iata_code' => $request->input('iata_code'),

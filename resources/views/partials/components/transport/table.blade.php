@@ -58,7 +58,16 @@ $(document).ready(function() {
                 <td>{{ f_currency($transportInventory->purchase_price) }}</td>
                 <td>{{ f_currency($transportInventory->sales_price) }}</td>
                 <td>{{ $transportInventory->notes }}</td>
-                <td class="actions-3">
+                <td class="actions-4">
+                    @can('read', \App\Models\Transport\TransportInventory::class)
+                        <a href="{{route('transport-inventories.manifest.view', ['transport' => $transport, 'transportInventory' => $transportInventory,])}}" class="btn btn-outline-secondary btn-sm mb-1">
+                            {{ Icon::list() }}
+                        </a>
+                    @else
+                        <span class="btn btn-outline-dark btn-sm mb-1">
+                                {{ Icon::list() }}
+                            </span>
+                    @endcan
                     @can('create', \App\Models\Transport\TransportInventory::class)
                         <a href="{{route('transport-inventories.duplicate', ['transport' => $transport, 'transportInventory' => $transportInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
                             {{ Icon::copy() }}

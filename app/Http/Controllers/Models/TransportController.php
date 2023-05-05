@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transport\Transport;
+use App\Repository\Reporting\Manifest\TransportManifestRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -37,12 +38,23 @@ class TransportController extends Controller
         if ($request->has('image') && $request->file('image') != null) {
             $transport->image_url = $request->file('image')->storePublicly('uploads/images');
         }
+        $transport->save();
         return redirect()->route('transports.view', ['transport' => $transport,]);
     }
 
     public function view(Transport $transport)
     {
         return view('pages.components.transport', ['transport' => $transport,]);
+    }
+
+    public function manifest(Transport $transport)
+    {
+        return TransportManifestRepository::viewReport($transport->repository, 'transports.manifest.export', ['transport' => $transport,]);
+    }
+
+    public function export(Transport $transport, string $extension = 'xlsx')
+    {
+        return TransportManifestRepository::exportReport($transport->repository, $extension);
     }
 
     public function edit(Transport $transport)
@@ -70,6 +82,7 @@ class TransportController extends Controller
             }
             $transport->image_url = $request->file('image')->storePublicly('uploads/images');
         }
+        $transport->save();
         return redirect()->route('transports.view', ['transport' => $transport,]);
     }
 

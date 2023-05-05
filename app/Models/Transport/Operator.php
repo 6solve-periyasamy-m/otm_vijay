@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 
 
 /**
@@ -49,9 +50,17 @@ class Operator extends SimpleModel
 
     protected $fillable = ['name', 'notes',];
 
-    public static function getValidationRules(): array
+    public static function getValidationRules(int|null $id = null): array
     {
-        return ['name' => 'required',];
+        if (!empty($id)) {
+            return [
+                'name' => [
+                    'required',
+                    Rule::unique('operators', 'name')->ignore($id),
+                ],
+            ];
+        }
+        return ['name' => 'required|unique:operators,name',];
     }
 
     public function transports(): HasMany

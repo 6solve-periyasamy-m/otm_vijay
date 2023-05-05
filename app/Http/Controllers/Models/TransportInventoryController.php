@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Transport\Transport;
 use App\Models\Transport\TransportInventory;
+use App\Repository\Reporting\Manifest\TransportManifestRepository;
 use Illuminate\Http\Request;
 
 class TransportInventoryController extends Controller
@@ -43,6 +44,16 @@ class TransportInventoryController extends Controller
     public function view(TransportInventory $transportInventory)
     {
         return view('pages.models.transport_inventories.view', ['transportInventory' => $transportInventory,]);
+    }
+
+    public function manifest(Transport $transport, TransportInventory $transportInventory)
+    {
+        return TransportManifestRepository::viewReport($transportInventory->repository, 'transport-inventories.manifest.export', ['transport' => $transport, 'transportInventory' => $transportInventory]);
+    }
+
+    public function export(Transport $transport, TransportInventory $transportInventory, string $extension = 'xlsx')
+    {
+        return TransportManifestRepository::exportReport($transportInventory->repository, $extension);
     }
 
     public function edit(Transport $transport, TransportInventory $transportInventory)

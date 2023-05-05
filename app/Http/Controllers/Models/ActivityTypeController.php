@@ -40,7 +40,7 @@ class ActivityTypeController extends Controller
 
     public function update(Request $request, ActivityType $activityType)
     {
-        $request->validate(ActivityType::getValidationRules());
+        $request->validate(ActivityType::getValidationRules($activityType->id));
         $activityType->update([
             'name' => $request->input('name'),
         ]);

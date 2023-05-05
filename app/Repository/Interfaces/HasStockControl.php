@@ -18,4 +18,15 @@ interface HasStockControl
      * @return int The amount of stock available to be sold
      */
     public function getAvailableStock(): int;
+
+    /**
+     * @return bool Whether stock levels should be checked
+     */
+    public function isStockControlActive(): bool;
+
+    /**
+     * @param int $amount The amount of stock that wishes to be used
+     * @return bool Whether there is enough stock, or if stock control is inactive
+     */
+    public function hasEnoughStock(int $amount = 1): bool;
 }

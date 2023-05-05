@@ -16,6 +16,7 @@ use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
+use App\Models\System\Brand;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Model\Tour\TourRepository;
@@ -49,10 +50,16 @@ use Illuminate\Support\Carbon;
  * @property float|null $deposit
  * @property float|null $booking_fee
  * @property bool $stock_control_active
+ * @property bool $accommodation_stock_control
+ * @property bool $activity_stock_control
+ * @property bool $flight_stock_control
+ * @property bool $transport_stock_control
+ * @property bool $merchandise_stock_control
  * @property int|null $stock
  * @property string|null $booking_form_url
  * @property int|null $tour_category_id
  * @property int|null $tour_merchandise_id
+ * @property int|null $brand_id
  * @property bool $is_active
  * @property bool|null $atol_protected NULL if should inherit from system settings (default)
  * @property Carbon $date_from
@@ -83,6 +90,8 @@ use Illuminate\Support\Carbon;
  * @property-read float $remaining_installment
  * @property-read float $remaining_percentage
  * @property-read TourRepository $repository
+ * @property-read Brand|null $linkedBrand
+ * @property-read Brand $brand
  * @property-read Collection|AccommodationInventoryTour[] $templates
  * @property-read Collection|MerchandiseInventoryTour[] $merchandise
  * @property-read Collection|OrderInstallment[] $orderInstallments All order-installments from non-cancelled orders
@@ -125,6 +134,11 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Tour whereSingleOccupancySurcharge($value)
  * @method static Builder|Tour whereStock($value)
  * @method static Builder|Tour whereStockControlActive($value)
+ * @method static Builder|Tour whereAccommodationStockControl($value)
+ * @method static Builder|Tour whereActivityStockControl($value)
+ * @method static Builder|Tour whereFlightStockControl($value)
+ * @method static Builder|Tour whereMerchandiseStockControl($value)
+ * @method static Builder|Tour whereTransportStockControl($value)
  * @method static Builder|Tour whereTerms($value)
  * @method static Builder|Tour whereTourCategoryId($value)
  * @method static Builder|Tour whereTourMerchandiseId($value)
@@ -137,10 +151,23 @@ class Tour extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes, HasAdditionalCosts;
 
-    protected $fillable = ['event_id', 'name', 'description', 'date_from', 'date_to', 'base_price_per_person', 'margin', 'single_occupancy_surcharge', 'stock_control_active', 'stock', 'deposit', 'booking_form_url', 'tour_category_id', 'is_active', 'notes', 'invoice_footer', 'final_payment', 'terms', 'atol_protected', 'booking_fee'];
-    protected $casts = ['date_from' => 'date', 'date_to' => 'date', 'final_payment' => 'date', 'is_active' => 'boolean',
-        'base_price_per_person' => 'double', 'deposit' => 'double', 'margin' => 'double', 'stock_control_active' => 'boolean'];
-    protected array $cascadeDeletes = ['accommodationInventoryTours', 'activityInventoryTours', 'flightInventoryTours', 'transportInventoryTours', 'merchandise', 'paymentInstallments', 'costs'];
+    protected $guarded = [];
+    protected $casts = [
+        'date_from' => 'date',
+        'date_to' => 'date',
+        'final_payment' => 'date',
+        'is_active' => 'boolean',
+        'base_price_per_person' => 'double',
+        'deposit' => 'double',
+        'margin' => 'double',
+        'stock_control_active' => 'boolean',
+        'accommodation_stock_control' => 'boolean',
+        'activity_stock_control' => 'boolean',
+        'flight_stock_control' => 'boolean',
+        'transport_stock_control' => 'boolean',
+        'merchandise_stock_control' => 'boolean',
+        ];
+    protected array $cascadeDeletes = ['accommodationInventoryTours', 'activityInventoryTours', 'flightInventoryTours', 'transportInventoryTours', 'merchandise', 'paymentInstallments'];
 
     private TourRepository $internal_repository;
 
@@ -164,6 +191,11 @@ class Tour extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');
+    }
+
+    public function linkedBrand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class, 'brand_id');
     }
 
     public function flightInventory(): BelongsToMany
@@ -273,6 +305,17 @@ class Tour extends Model
     public function getHasAtolCertificateAttribute(): bool
     {
         return $this->flightInventoryTours()->count() > 0;
+    }
+
+    public function getBrandAttribute(): Brand
+    {
+        return $this->linkedBrand ?? Brand::getSystemBrand();
+    }
+
+    public function setBrandAttribute(Brand $brand)
+    {
+        $this->brand_id = $brand->id;
+        $this->save();
     }
 
     public function flightInventoryTours(): HasMany

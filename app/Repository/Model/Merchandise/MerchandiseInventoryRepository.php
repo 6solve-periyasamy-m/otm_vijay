@@ -11,7 +11,6 @@ use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
-use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteMerchandiseRepository;
 use App\Repository\Traits\Component\IsMerchandise;
 use Carbon\Carbon;
@@ -144,6 +143,7 @@ class MerchandiseInventoryRepository extends InventoryRepository
             'merchandise_inventory_id' => $this->inventory->id,
             'tour_component_type' => $tourComponentType,
             'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'stock_control_active' => $tour->merchandise_stock_control,
         ]);
         $tour->merchandise()->save($mInvTour);
         return $mInvTour->repository;
@@ -172,6 +172,16 @@ class MerchandiseInventoryRepository extends InventoryRepository
     public function getPurchasePrice(): float
     {
         return $this->inventory->purchase_price;
+    }
+
+    public function isStockControlActive(): bool
+    {
+        return false;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return true;
     }
 
     public function getSalesPrice(): ?float

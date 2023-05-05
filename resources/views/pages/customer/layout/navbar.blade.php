@@ -1,3 +1,9 @@
+@php
+/**
+ * @var \App\Models\System\Brand $branding
+ */
+$branding = $branding ?? \App\Models\System\Brand::getSystemBrand();
+@endphp
 <header class="topbar">
     <nav class="navbar">
       <div class="container-fluid flex-nowrap">
@@ -6,14 +12,14 @@
           </button>
         <div class="navbar-brand" style="width: 100%; padding-right: 30px;">
           <div class="d-flex justify-content-center">
-            <img class="setting-logo" src="{{ asset(setting('company.logo', '')) }}">
+            <img class="setting-logo" src="{{ $branding->image }}">
           </div>
         </div>
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
           <div class="offcanvas-header">
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             <div style="width: 100%; display: flex; justify-content: center; align-items: center; ">
-                <img class="setting-logo sidebar-logo" style="margin-right: 20px;" src="{{ asset(setting('company.logo', '')) }}">
+                <img class="setting-logo sidebar-logo" style="margin-right: 20px;" src="{{ $branding->image }}">
             </div>
           </div>
           <div class="offcanvas-body">
@@ -60,7 +66,7 @@
                       </li>
                       @else
                         <li>
-                          <a href="{{ route('customer.login') }}" class="nav-link link-dark">
+                          <a href="{{ route('customer.login', ['from' => Request::path(),]) }}" class="nav-link link-dark">
                               <span class="icon-login"></span>
                               &nbsp;Login
                           </a>
@@ -71,19 +77,19 @@
                 <div style="position: fixed; bottom: 0;">
                     <hr/>
                     <div class="socials">
-                        @if(!empty(setting('social.facebook')))
+                        @if(!empty($branding->facebook))
                             <div class="facebook">
-                                <a href="{{ setting('social.facebook') }}" class="icon-social-facebook"></a>
+                                <a href="{{ $branding->facebook }}" class="icon-social-facebook"></a>
                             </div>
                         @endif
-                        @if(!empty(setting('social.twitter')))
+                        @if(!empty($branding->twitter))
                             <div class="twitter">
-                                <a href="{{ setting('social.twitter') }}" class="icon-social-twitter"></a>
+                                <a href="{{ $branding->twitter }}" class="icon-social-twitter"></a>
                             </div>
                         @endif
-                        @if(!empty(setting('social.instagram')))
+                        @if(!empty($branding->instagram))
                             <div class="instagram">
-                                <a href="{{ setting('social.instagram') }}" class="icon-social-instagram"></a>
+                                <a href="{{ $branding->instagram }}" class="icon-social-instagram"></a>
                             </div>
                         @endif
                     </div>
@@ -93,9 +99,9 @@
                             <img class="stamp-logo sidebar-logo" src="{{ asset(setting('atol.stamp', '')) }}"/>
                         </span>
                         <span class="p-3 d-flex flex-column">
-                            <span>{{ setting('company.name', '') }}</span>
-                            <span>{{ Icon::email() }} {{ setting('company.contact.email', '') }}</span>
-                            <span>{{ Icon::phone() }} {{ setting('company.contact.phone', '') }}</span>
+                            <span>{{ $branding->name }}</span>
+                            <span>{{ Icon::email() }} {{ $branding->email }}</span>
+                            <span>{{ Icon::phone() }} {{ $branding->phone }}</span>
                         </span>
                     </div>
                 </div>

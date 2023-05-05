@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\Rule;
 
 
 /**
@@ -49,8 +50,16 @@ class TravelClass extends SimpleModel
 
     protected $fillable = ['name',];
 
-    public static function getValidationRules(): array
+    public static function getValidationRules(int|null $id = null): array
     {
+        if (!empty($id)) {
+            return [
+                'name' => [
+                    'required',
+                    Rule::unique('travel_classes', 'name')->ignore($id),
+                ],
+            ];
+        }
         return ['name' => 'required|unique:travel_classes,name',];
     }
     

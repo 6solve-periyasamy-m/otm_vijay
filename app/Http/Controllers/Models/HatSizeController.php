@@ -40,7 +40,7 @@ class HatSizeController extends Controller
 
     public function update(Request $request, HatSize $hatSize)
     {
-        $request->validate(HatSize::getValidationRules());
+        $request->validate(HatSize::getValidationRules($hatSize->id));
         $hatSize->update([
             'name' => $request->input('name'),
         ]);

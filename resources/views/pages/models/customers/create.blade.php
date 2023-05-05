@@ -4,7 +4,7 @@
  */
 $customer = $customer ?? null;
 @endphp
-@extends('layout.form', ['action' => route('customers.store'), 'multipart' => true])
+@extends('layout.form', ['action' => route('customers.store'), 'multipart' => true, 'autocomplete' => false,])
 
 @section('title', 'Create Customer')
 

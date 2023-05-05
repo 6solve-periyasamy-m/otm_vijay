@@ -128,11 +128,12 @@ class ReportRepository
             $row->lb_email = $order->leadBooker->customer->email_address;
             $row->customer_count = $order->customer_count;
             $row->tour_name = $order->tour->name;
+            $row->event_name = $order->tour->event?->name;
             $row->total_order_value = $order->total;
             $row->balance_outstanding = $order->remaining;
             $row->balance_paid = $order->paid;
             $row->due_date = $nextPayment?->due_on;
-            $row->due_amount = $nextPayment?->amount;
+            $row->due_amount = $nextPayment?->calculated_amount;
             $row->internal_notes = $order->internal_notes;
             $row->external_notes = $order->external_notes;
             $row->orderStatus = $order->status;
@@ -152,6 +153,7 @@ class ReportRepository
             $row->variant = $inventory->variant->name;
             $row->size = $inventory->size->name;
             $row->tour = $orderMerchandise->orderCustomer->order->tour->name;
+            $row->event = $orderMerchandise->orderCustomer->order->tour->event?->name;
             $row->fulfilled = $orderMerchandise->fulfilled;
             $row->fulfil_route = route('merchandise.inventory.tour.order.fulfil', ['order' => $orderMerchandise->orderCustomer->order, 'orderCustomer' => $orderMerchandise->orderCustomer, 'orderMerchandise' => $orderMerchandise]);
             $row->customer = $orderMerchandise->orderCustomer->customer->full_name;
@@ -179,7 +181,7 @@ class ReportRepository
         foreach (Tour::all() as $tour) {
             $row = collect();
             $row->name = $tour->name;
-            $row->event = isset($tour->event) ? $tour->event->name : 'No Event';
+            $row->event = isset($tour->event) ? $tour->event?->name : 'No Event';
             $row->active = $tour->is_active;
             $row->stock = $tour->stock_control_active ? $tour->stock : 'Not Controlled';
             $row->booked = $tour->getUsedStock();
@@ -204,6 +206,7 @@ class ReportRepository
                 $row = collect();
                 $row->booking_reference = $order->booking_reference;
                 $row->tour_name = $order->tour->name;
+                $row->event_name = $order->tour->event?->name;
                 $row->lb_first_name = $order->leadBooker->customer->first_name;
                 $row->lb_last_name = $order->leadBooker->customer->last_name;
                 $row->payment_method = $payment->paymentMethod->name;
@@ -232,6 +235,7 @@ class ReportRepository
             $row->customer = $orderFlight?->orderCustomer?->customer_name;
             $row->reference = $orderFlight?->orderCustomer?->order?->booking_reference;
             $row->tour = $orderFlight?->orderCustomer?->order?->tour?->name;
+            $row->event = $orderFlight?->orderCustomer?->order?->tour?->event?->name;
             $row->is_lead = $orderFlight?->orderCustomer?->is_lead_booker;
             $row->flight_notes = $orderFlight?->orderCustomer?->flight_notes;
             $row->order_customer_notes_internal = $orderFlight?->orderCustomer?->internal_notes;
@@ -278,6 +282,7 @@ class ReportRepository
             $cDetailsSource = $booking->leadTraveller->customer ?? $booking->leadTraveller;
             $row->name = $cDetailsSource?->title . ' ' . $cDetailsSource?->first_name . ' ' . $cDetailsSource?->last_name;
             $row->tour = $booking->tour?->name ?? 'Deleted Tour';
+            $row->event = $booking->tour?->event?->name ?? 'No Event';
             $row->date = $booking->created_at;
             $row->travellers = $booking->travellers()->count();
             $row->expected = $booking->repository->getTotalCost();
@@ -298,7 +303,7 @@ class ReportRepository
                 $row->order = $order;
                 $row->days = $order->days_until_next_payment;
                 $row->next = $order->next_installment;
-                $row->reminded = $order->repository->hasBeenReminded($row->next);
+                $row->reminded = $order->repository->hasBeenReminded($row->next, $max);
                 $data[] = $row;
             }
         }

@@ -15,11 +15,9 @@ use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
-use App\Repository\Interfaces\HasStockControl;
 use App\Repository\Model\Quote\Component\QuoteMerchandiseRepository;
+use App\Repository\Storage\ComponentInformation;
 use App\Repository\Traits\Component\IsMerchandise;
-use DB;
-use Log;
 
 class MerchandiseInventoryTourRepository extends InventoryTourRepository
 {
@@ -104,6 +102,8 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
 
     public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
+        $active = $this->getActiveComponent($this, $traveller);
+        if ($active !== null) return $active;
         $bookingComponent = BookingMerchandise::create([
             'booking_traveller_id' => $traveller->id,
             'merchandise_id' => $this->tourComponent->id,
@@ -186,5 +186,30 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
             'tour_component_type' => $this->tourComponent->tour_component_type,
         ]);
         return $component->repository;
+    }
+
+    public function isStockControlActive(): bool
+    {
+        return $this->tourComponent->stock_control_active ?? false;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
+    }
+
+    public function getComponentInformation(): ComponentInformation
+    {
+        $tourComponent = $this->tourComponent;
+        $inventory = $tourComponent->inventory;
+        $component = $inventory->component;
+        $name = "{$component->name} ({$inventory->variant}) ({$inventory->size})";
+        return new ComponentInformation(
+            $name,
+            "A {$inventory->size} {$inventory->variant} {$component->type}",
+            $component->image_url,
+            null,
+            null
+        );
     }
 }

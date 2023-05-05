@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @property int $customer_id
+ * @property int|null $brand_id
  * @property string $name
  * @property string|null $description
  * @property string $from
@@ -42,6 +43,7 @@ class CreateBespokeQuoteRequest extends FormRequest
             'name' => $this->name,
             'description' => $this->description,
             'deposit' => $this->deposit,
+            'brand_id' => $this->brand_id == 0 ? null : $this->brand_id,
         ];
     }
 

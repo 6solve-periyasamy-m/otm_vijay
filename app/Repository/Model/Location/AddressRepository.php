@@ -81,7 +81,7 @@ class AddressRepository extends ModelRepository
         if (isset($this->address->address_line_3)) $address .= ", " . $this->address->address_line_3;
         if (isset($this->address->town)) $address .= ", " . $this->address->town;
         if (isset($this->address->region)) $address .= ", " . $this->address->region;
-        if (isset($this->address->country)) $address .= ", " . $this->address->country->name;
+        if (isset($this->address->country)) $address .= ", " . $this->address->country?->name;
         if (isset($this->address->postcode)) $address .= ", " . $this->address->postcode;
         return empty($address) ? "Address details empty" : $address;
     }

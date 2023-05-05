@@ -40,7 +40,7 @@ class TicketTypeController extends Controller
 
     public function update(Request $request, TicketType $ticketType)
     {
-        $request->validate(TicketType::getValidationRules());
+        $request->validate(TicketType::getValidationRules($ticketType->id));
         $ticketType->update([
             'name' => $request->input('name'),
         ]);

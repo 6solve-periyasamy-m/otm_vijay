@@ -9,14 +9,15 @@ use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
-use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Interfaces\Manifest\HasTransportManifest;
 use App\Repository\Model\Quote\Component\QuoteTransportRepository;
+use App\Repository\Reporting\Manifest\TransportManifestRepository;
 use App\Repository\Traits\Component\IsTransport;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
 
-class TransportInventoryRepository extends InventoryRepository
+class TransportInventoryRepository extends InventoryRepository implements HasTransportManifest
 {
     use IsTransport;
 
@@ -111,6 +112,7 @@ class TransportInventoryRepository extends InventoryRepository
             'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
             'tour_component_type' => $tourComponentType,
             'tour_id' => $tour->id,
+            'stock_control_active' => $tour->transport_stock_control,
         ]);
         $this->inventory->tourComponents()->save($inventoryTour);
         return $inventoryTour->repository;
@@ -132,8 +134,23 @@ class TransportInventoryRepository extends InventoryRepository
         return $this->inventory->purchase_price;
     }
 
+    public function isStockControlActive(): bool
+    {
+        return false;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return true;
+    }
+
     public function getSalesPrice(): ?float
     {
         return $this->inventory->sales_price;
+    }
+
+    public function getTransportManifest(): Collection|array
+    {
+        return $this->inventory->orders()->with(TransportManifestRepository::getRelations())->get();
     }
 }

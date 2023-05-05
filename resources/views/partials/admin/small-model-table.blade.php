@@ -7,7 +7,7 @@
         <div class="card-title d-flex justify-content-between">
             <h4 class="fw-bold">{{ $repository::getName() }}</h4>
             @if($repository::getCreateUrl() !== null)
-                <a class="btn btn-primary" href="{{ $repository::getCreateUrl() }}">
+                <a class="btn btn-primary" href="{{ $repository::getCreateUrl() }}" target="_blank">
                     {{ Icon::create() }}
                     <span>Create New</span>
                 </a>
@@ -18,7 +18,7 @@
             <tr>
                 <th scope="col">Details</th>
                 <th scope="col">Related</th>
-                <th scope="col">{{ __('custom.table.actions') }}</th>
+                <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
             </tr>
             </thead>
             <tbody>
@@ -28,7 +28,7 @@
                     <td>{{ $model->repository->getRelatedCount() }}</td>
                     <td class="actions">
                         @if($model->repository->getEditUrl() !== null)
-                            <a href="{{$model->repository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1">
+                            <a href="{{$model->repository->getEditUrl()}}" target="_blank" class="btn btn-sm btn-outline-success mb-1">
                                 {{ Icon::edit() }}
                             </a>
                         @else
