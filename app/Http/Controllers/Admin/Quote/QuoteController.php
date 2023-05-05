@@ -21,7 +21,7 @@ class QuoteController extends Controller
 {
     public function index(TableRequest $request)
     {
-        if ($request->historic ?? false) {
+        if ($request->historic ?? (setting('system.historic', 6) < 0)) {
             $quotes = Quote::with('leadTraveller', 'tour')->get();
         } else {
             $quotes = Quote::with('leadTraveller', 'tour')->whereDate('date_to', '>', now()->subMonths(setting('system.historic', 6)))->get();

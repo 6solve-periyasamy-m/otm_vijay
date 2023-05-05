@@ -13,7 +13,7 @@ class TourController extends Controller
 {
     public function index(TableRequest $request)
     {
-        if (($request->historic ?? false)) {
+        if (($request->historic ?? (setting('system.historic', 6) < 0))) {
             $tours = Tour::all();
         } else {
             $tours = Tour::whereDate('date_to', '>', now()->subMonths(setting('system.historic', 6)))->get();

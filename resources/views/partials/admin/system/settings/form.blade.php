@@ -108,8 +108,9 @@
                         'selected' => setting('system.format.date', 'H:i'),
                         'width' => 6,
                     ])
-                    @include('partials.fields.date', ['name' => 'Financial Year Start', 'field' => 'year_start', 'value' => setting('system.year.start', '2022-04-01'), 'width' => 6])
-                    @include('partials.fields.date', ['name' => 'ATOL Year Start', 'field' => 'atol_start', 'value' => setting('atol.year.start', '2022-04-01'), 'width' => 6])
+                    @include('partials.fields.date', ['name' => 'Financial Year Start', 'field' => 'year_start', 'value' => setting('system.year.start', '2022-04-01'), 'width' => 4])
+                    @include('partials.fields.date', ['name' => 'ATOL Year Start', 'field' => 'atol_start', 'value' => setting('atol.year.start', '2022-04-01'), 'width' => 4])
+                    @include('partials.fields.text', ['name' => 'Historic After X Months', 'field' => 'historic', 'value' => setting('system.historic', 6), 'width' => 4])
                 </div>
             </div>
         </div>

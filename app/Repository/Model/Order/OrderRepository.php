@@ -18,7 +18,6 @@ use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
-use App\Repository\Storage\RemoteGroup;
 use App\Repository\Storage\Rooming\RemoteGroup;
 use Cache;
 use Carbon\Carbon;
@@ -51,7 +50,7 @@ class OrderRepository extends ModelRepository
             'orderCustomers.orderTransports',
             'orderCustomers.orderMerchandise',
         )->whereHas('tour', function ($query) use ($historic) {
-            if (!$historic) {
+            if (!$historic && setting('system.historic', 6) >= 0) {
                 return $query->whereDate('date_to', '>', now()->subMonths(setting('system.historic', 6)));
             } else {
                 return $query;
