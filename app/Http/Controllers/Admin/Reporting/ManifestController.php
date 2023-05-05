@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Reporting;
 
+use App\Http\Controllers\Controller;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use App\Repository\Reporting\Manifest\FlightManifestRepository;
 use App\Repository\Reporting\Manifest\TransportManifestRepository;

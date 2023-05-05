@@ -19,7 +19,7 @@ class OrderController extends Controller
 
     public function index()
     {
-        return view('pages.models.orders.table', ['orders' => Order::all(),]);
+        return view('pages.orders.search2', ['orders' => Order::all(),]);
     }
 
     public function reminders(int $max = 7, int $min = -1000)
@@ -41,7 +41,7 @@ class OrderController extends Controller
     public function view(Order $order)
     {
         $order->repository->refresh();
-        return view('pages.models.orders.view', ['order' => $order,]);
+        return view('pages.orders.view', ['order' => $order,]);
     }
 
     public function switchTour(Order $order)

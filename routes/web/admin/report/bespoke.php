@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\BespokeReportController;
+use App\Http\Controllers\Admin\Reporting\BespokeReportController;
 
 Route::get('/', function () {
     return redirect()->route('reports.all');

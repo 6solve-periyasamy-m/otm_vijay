@@ -2,13 +2,13 @@
 
 use App\Http\Controllers\Admin\AdditionalCostController;
 use App\Http\Controllers\Admin\OrganizationController;
+use App\Http\Controllers\Admin\Reporting\BespokeReportController;
 use App\Http\Controllers\Admin\System\ImportController;
+use App\Http\Controllers\Admin\System\MailController;
+use App\Http\Controllers\Admin\System\PermissionsController;
+use App\Http\Controllers\Admin\System\SettingsController;
 use App\Http\Controllers\Admin\TravelClassController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\BespokeReportController;
-use App\Http\Controllers\MailController;
-use App\Http\Controllers\PermissionsController;
-use App\Http\Controllers\SettingsController;
 
 Auth::routes(['verify' => true, 'register' => false]);
 

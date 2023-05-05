@@ -4,12 +4,12 @@ use App\Http\Controllers\Admin\Accommodation\AccommodationInventoryTourControlle
 use App\Http\Controllers\Admin\Activity\ActivityInventoryTourController;
 use App\Http\Controllers\Admin\Flight\FlightInventoryTourController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseInventoryTourController;
+use App\Http\Controllers\Admin\Tour\Component\UpgradeController;
 use App\Http\Controllers\Admin\Tour\PaymentInstallmentController;
 use App\Http\Controllers\Admin\Tour\TourCategoryController;
 use App\Http\Controllers\Admin\Tour\TourController;
+use App\Http\Controllers\Admin\Tour\TourManifestController;
 use App\Http\Controllers\Admin\Transport\TransportInventoryTourController;
-use App\Http\Controllers\TourManifestController;
-use App\Http\Controllers\UpgradeController;
 use App\Models\Tour\Tour;
 
 Route::get('/', [TourController::class, 'index'])->name('tours.all')->middleware('bouncer:Tour\Tour,read');

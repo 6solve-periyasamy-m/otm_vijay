@@ -25,6 +25,11 @@ class OrderCustomerModelController extends Controller
         return view('pages.models.order_customers.create', ['order' => $order,]);
     }
 
+    public function show(Order $order, OrderCustomer $orderCustomer) {
+        $order->repository->refresh();
+        return view('pages.orders.customer', ['orderCustomer' => $orderCustomer,]);
+    }
+
     public function store(Request $request, Order $order)
     {
         $request->validate(OrderCustomer::getValidationRules());

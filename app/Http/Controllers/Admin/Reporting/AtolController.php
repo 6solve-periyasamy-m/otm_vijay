@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Reporting;
 
 use App\Exports\AtolReportExport;
 use App\Helpers\QuarterHelper;
+use App\Http\Controllers\Controller;
 use App\Repository\Model\Order\AtolRepository;
 use App\Repository\Reporting\ReportRepository;
 use Maatwebsite\Excel\Facades\Excel;

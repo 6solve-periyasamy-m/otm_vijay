@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Reporting;
 
 use App\Exports\AbandonedBookingsReportExport;
 use App\Exports\ActivitiesReportExport;
@@ -10,6 +10,7 @@ use App\Exports\OrderReminderReportExport;
 use App\Exports\OrderReportExport;
 use App\Exports\PaymentReportExport;
 use App\Exports\TourStockReportExport;
+use App\Http\Controllers\Controller;
 use App\Repository\Reporting\Manifest\RoomingReportRepository;
 use App\Repository\Reporting\ReportRepository;
 use Excel;

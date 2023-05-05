@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Order;
 
 //use App\Events\Order\Customer\Component\Accommodation\OrderCustomerAccommodationRemovedEvent;
 use App\Events\Order\Customer\Component\OrderCustomerComponentRemovedEvent;
+use App\Http\Controllers\Controller;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;

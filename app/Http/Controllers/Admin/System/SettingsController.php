@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\System;
 
+use App\Http\Controllers\Controller;
 use App\Models\Location\Currency;
 use Illuminate\Http\Request;
 use Settings;

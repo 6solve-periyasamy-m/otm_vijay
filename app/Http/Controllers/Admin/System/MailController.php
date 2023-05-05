@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\System;
 
 use App\Exceptions\MailDisabledException;
+use App\Http\Controllers\Controller;
 use App\Repository\Mailing\MailRepository;
 use Auth;
 use Illuminate\Http\RedirectResponse;

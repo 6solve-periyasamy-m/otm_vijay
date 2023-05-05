@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Reporting;
 
 use App\Exports\BespokeReportExport;
+use App\Http\Controllers\Controller;
 use App\Models\System\Report;
 use App\Repository\Reporting\BespokeReportRepository;
 use App\Repository\Reporting\ReportFieldRepository;
