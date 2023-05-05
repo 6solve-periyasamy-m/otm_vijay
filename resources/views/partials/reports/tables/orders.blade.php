@@ -8,30 +8,36 @@
             <th scope="col">Lead Booker Email</th>
             <th scope="col">Passenger Count</th>
             <th scope="col">Tour Name</th>
+            <th scope="col">Event Name</th>
             <th scope="col">Total Order Value</th>
             <th scope="col">Balance Paid</th>
             <th scope="col">Balance Outstanding</th>
             <th scope="col">Order Status</th>
             <th scope="col">Due Date</th>
             <th scope="col">Due Amount</th>
+            <th scope="col">Internal Notes</th>
+            <th scope="col">External Notes</th>
         </tr>
     </thead>
     <tbody>
         @foreach($data as $row)
             <tr>
-                <td>{{ $row->ordered_on }}</td>
+                <td>{{ $row->ordered_on}}</td>
                 <th scope="row">{{ $row->booking_reference }}</th>
                 <td>{{ $row->lb_first_name }}</td>
                 <td>{{ $row->lb_last_name }}</td>
                 <td>{{ $row->lb_email }}</td>
                 <td>{{ $row->customer_count }}</td>
                 <td>{{ $row->tour_name }}</td>
+                <td>{{ $row->event_name }}</td>
                 <td>{{ $row->total_order_value }}</td>
                 <td>{{ $row->balance_paid }}</td>
                 <td>{{ $row->balance_outstanding }}</td>
                 <td class="bg-{{ $row->orderStatus->color() }}">{{ $row->orderStatus->description() }}</td>
                 <td>{{ $row->due_date ?? 'No Payment Due' }}</td>
                 <td>{{ $row->due_amount }}</td>
+                <td>{{ $row->internal_notes }}</td>
+                <td>{{ $row->external_notes }}</td>
             </tr>
         @endforeach
     </tbody>

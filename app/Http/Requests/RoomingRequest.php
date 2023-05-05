@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Repository\Storage\RemoteGroup;
+use App\Repository\Storage\Rooming\RemoteGroup;
 use Illuminate\Foundation\Http\FormRequest;
 
 

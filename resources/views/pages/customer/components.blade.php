@@ -13,6 +13,7 @@
      * @var \App\Models\Order\OrderCustomer $orderCustomer
      * @var \App\Models\Order\OrderCustomer[] $editable
      */
+    $locked = $orderCustomer->order->tour->repository->isComponentsLocked();
 @endphp
 
 @push('header-stack')
@@ -125,7 +126,11 @@
                 <div class="card">
                     <div class="card-body">
                         <span class="h2">Order {{ $orderCustomer->order->booking_reference }} - {{ $orderCustomer->order->tour->name }}</span><br />
+                        @if(!$locked)
                         Please select Customer for whom you wish to purchase the Upgrade or Add-On for from the left hand list
+                        @else
+                        Components are locked for this tour. If you wish to view the components of another customer, please select them from the left-hand side
+                        @endif
                     </div>
                 </div>
                 {{-- Accommodation --}}
@@ -174,7 +179,7 @@
                                                     </td>
                                                 @endif
                                                 <td data-content="Available Upgrades">
-                                                    @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
+                                                    @if($orderComponent->tourComponent->tour_component_type == 'Add-on' || $locked)
                                                         Not Available
                                                     @else
                                                         @if(count($orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, false)) < 1)
@@ -246,7 +251,7 @@
                                                     </td>
                                                 @endif
                                                 <td data-content="Available Upgrades">
-                                                    @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
+                                                    @if($orderComponent->tourComponent->tour_component_type == 'Add-on' || $locked)
                                                         Not Available
                                                     @else
                                                         @if(count($orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, false)) < 1)
@@ -319,7 +324,7 @@
                                                     </td>
                                                 @endif
                                                 <td data-content="Available Upgrades">
-                                                    @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
+                                                    @if($orderComponent->tourComponent->tour_component_type == 'Add-on' || $locked)
                                                         Not Available
                                                     @else
                                                         @if(count($orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, false)) < 1)
@@ -395,7 +400,7 @@
                                                     </td>
                                                 @endif
                                                 <td data-content="Available Upgrades">
-                                                    @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
+                                                    @if($orderComponent->tourComponent->tour_component_type == 'Add-on' || $locked)
                                                         Not Available
                                                     @else
                                                         @if(count($orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, false)) < 1)
@@ -422,6 +427,7 @@
                 </div>
                 @endif
                 {{-- Add-ons and Extras --}}
+                @if(!$locked)
                 <div class="accordion" style="box-shadow: none;">
                     <div class="card card-heading accordion-header">
                         <div class="card-body accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseAddon" aria-expanded="true" aria-controls="collapseAddon">
@@ -495,6 +501,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
         </div>
     </div>

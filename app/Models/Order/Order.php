@@ -80,6 +80,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read int|null $invoices_count The amount of invoices for the order
  * @property-read OrderCustomer|null $leadBooker The lead booker for the order
  * @property-read Collection|OrderCustomer[] $orderCustomers The order customers
+ * @property-read Collection|OrderCustomer[] $additionalTravellers The order customers (excluding the lead booker)
  * @property-read int|null $order_customers_count The amount of order customers
  * @property-read Collection|Payment[] $payments The payments for the order
  * @property-read int|null $payments_count The amount of payments for the order
@@ -151,6 +152,11 @@ class Order extends Model
     public function orderCustomers(): HasMany
     {
         return $this->hasMany(OrderCustomer::class, 'order_id');
+    }
+
+    public function additionalTravellers(): HasMany
+    {
+        return $this->orderCustomers()->whereNot('id', '=', $this->lead_booker_id);
     }
 
     public function leadBooker(): BelongsTo

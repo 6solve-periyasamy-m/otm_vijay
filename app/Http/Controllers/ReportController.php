@@ -10,9 +10,8 @@ use App\Exports\OrderReminderReportExport;
 use App\Exports\OrderReportExport;
 use App\Exports\PaymentReportExport;
 use App\Exports\TourStockReportExport;
-use App\Models\Order\Component\OrderAccommodation;
+use App\Repository\Reporting\Manifest\RoomingReportRepository;
 use App\Repository\Reporting\ReportRepository;
-use App\Repository\Reporting\RoomingReportRepository;
 use Excel;
 use Illuminate\Http\Request;
 

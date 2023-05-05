@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Exceptions\NotOnTourException;
-use App\Exceptions\RoomingFailedException;
 use App\Http\Controllers\Controller;
 use App\Http\Gateways\Storage\LineItem;
 use App\Http\Requests\Booking\BookingCustomerRequest;
-use App\Models\Accommodation\RoomType;
 use App\Models\Booking\Booking;
-use App\Models\Booking\BookingGroup;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
@@ -28,8 +25,7 @@ class CustomerBookingController extends Controller
     {
         $tour = Tour::where('booking_form_url', $bookingUrl)->where('is_active', true)->first();
         if (!isset($tour)) return null;
-        if ($tour->stock_control_active &&
-            $tour->stock - $tour->getUsedStock() < $size) {
+        if (!$tour->repository->hasEnoughStock($size)) {
             return null;
         }
         return $tour;
@@ -55,7 +51,7 @@ class CustomerBookingController extends Controller
             'additionalTravellers' => $booking?->travellers()->whereNot('id', $booking->leadTraveller?->id)->get(),
             'flights' => $booking?->repository->getAvailableFlights() ?? BookingRepository::make($tour)->repository->getAvailableFlights(),
             'rooms' => RoomingRepository::getAvailableRoomTypes($tour),
-            'available' => $tour->stock - $tour->getUsedStock(),
+            'available' => $tour->repository->getAvailableStock(),
         ]);
     }
 
@@ -63,7 +59,6 @@ class CustomerBookingController extends Controller
     {
 
         $tour = $this->getTour($bookingUrl, 1 + sizeof($request->input('additional') ?? []));
-        $shouldRooming = $tour->templates->count() > 0;
         if (!isset($tour)) abort(404);
 
         if (!CustomerAuthenticationRepository::verifyForBooking($request->lead_email_address)) {
@@ -73,7 +68,7 @@ class CustomerBookingController extends Controller
 
         $bookedEmails = [strtolower(trim($request->lead_email_address)),];
         foreach ($request->additional ?? [] as $additional) {
-            if (in_array(strtolower(trim($additional['email_address'])), $bookedEmails)) {
+            if ($additional['email_address'] !== null && in_array(strtolower(trim($additional['email_address'])), $bookedEmails)) {
                 return back()->withErrors([
                     'msg' => 'You have used the email ' . $additional['email_address'] . ' for multiple customers. Please correct this.',
                 ]);
@@ -83,49 +78,11 @@ class CustomerBookingController extends Controller
 
         $booking = BookingRepository::create($tour, BookingTravellerRepository::make($request->getLeadTravellerDetails()));
 
-        if ($shouldRooming) {
-            $leadGroup = BookingGroup::create(['name' => "Room $request->lead_group", 'booking_id' => $booking->id]);
-            $leadRoomType = RoomType::find($request->lead_room_type);
-
-            try { $leadGroup->repository->addTemplatesOfTypeToGroup($tour, $leadRoomType); }
-            catch (RoomingFailedException) { /* Exception only thrown when using strict typing */ }
-
-            $leadGroup->repository->addTravellerToGroup($booking->leadTraveller);
-            $grouping = [$request->lead_group => ['group' => $leadGroup, 'roomType' => $leadRoomType,]];
-        }
-
         foreach ($request->additional ?? [] as $additional) {
-
-            $traveller = BookingTravellerRepository::create($booking, $additional);
-
-            if ($shouldRooming) {
-                $roomType = $traveller->roomType;
-                $groupNumber = $traveller->group_id;
-
-                do {
-                    if (key_exists($groupNumber, $grouping) &&
-                        ($grouping[$groupNumber]['roomType']->id !== $roomType->id ||
-                            $grouping[$groupNumber]['group']->travellers()->count() + 1 > $grouping[$groupNumber]['roomType']->maximum_occupancy)) {
-                        $groupNumber++;
-                        continue;
-                    }
-                    break;
-                } while (true);
-
-                $traveller->group_id = $groupNumber;
-                $traveller->save();
-
-                if (key_exists($groupNumber, $grouping)) {
-                    $grouping[$groupNumber]['group']->repository->addTravellerToGroup($traveller);
-                } else {
-                    $group = BookingGroup::create(['name' => "Room $groupNumber", 'booking_id' => $booking->id]);
-                    $group->repository->addTravellerToGroup($traveller);
-                    try { $group->repository->addTemplatesOfTypeToGroup($tour, $roomType); }
-                    catch (RoomingFailedException) { /* Exception only thrown when using strict typing */ }
-                    $grouping[$groupNumber] = ['group' => $group, 'roomType' => $roomType,];
-                }
-            }
+            BookingTravellerRepository::create($booking, $additional);
         }
+
+        $booking->repository->evaluateSimpleRooming();
 
         try {
             $booking->repository->selectFlights($request->inbound, $request->outbound);
@@ -143,7 +100,7 @@ class CustomerBookingController extends Controller
         if (!isset($tour)) abort(404);
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
-        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= $booking->travellers()->count()) abort(404, 'That tour is out of stock');
+        if (!$tour->repository->hasEnoughStock($booking->travellers()->count())) abort(404, 'That tour is out of stock');
         return view('pages.customer.booking.summary', ['booking' => $booking, 'tour' => $tour,]);
     }
 
@@ -180,8 +137,8 @@ class CustomerBookingController extends Controller
         $tour = $this->getTour($bookingUrl);
         $request->validate(['amount' => 'required']);
         if (!isset($tour) || !$tour->is_active) abort(404);
-        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= 0) abort(404, 'That tour is out of stock');
         $booking = $this->getBooking($token);
+        if (!$tour->repository->hasEnoughStock($booking->travellers()->count())) abort(404, 'That tour is out of stock');
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
         $dueToday = $booking->repository->getDueTodayAmount();
         $amount = sigfig((float)preg_replace('/[^0-9.]/', '', $request->amount));
@@ -197,5 +154,15 @@ class CustomerBookingController extends Controller
 
         $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
         return redirect($gateway->checkout([$item,], $intention, $booking->leadTraveller, $redirect));
+    }
+
+    public function rooming(string $bookingUrl, string $token)
+    {
+        $tour = $this->getTour($bookingUrl);
+        if (!isset($tour)) abort(404);
+        $booking = $this->getBooking($token);
+        if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
+        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= $booking->travellers()->count()) abort(404, 'That tour is out of stock');
+        return view('pages.customer.booking.rooming', ['booking' => $booking,]);
     }
 }

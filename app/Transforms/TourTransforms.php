@@ -2,6 +2,7 @@
 
 namespace App\Transforms;
 
+use App\Models\System\Brand;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Models\Tour\TourCategory;
@@ -128,5 +129,28 @@ class TourTransforms implements TourTransformsInterface
         $data['id'] = $category->id;
         $data['text'] = $category->name;
         return $data;
+    }
+
+    public static function getSelectBrands($filter): array
+    {
+        $data = [];
+        $subData = ['id' => 0, 'text' => 'Use System Brand'];
+        if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        foreach (Brand::all() as $brand) {
+            $subData = [];
+            $subData['id'] = $brand->id;
+            $subData['text'] = $brand->name;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        }
+        return $data;
+    }
+
+    public static function getSelectedBrand($id): array
+    {
+        $brand = Brand::find($id);
+        if ($id == 0 || $id == null || $brand == null) {
+            return ['id' => 0, 'text' => 'Use System Brand'];
+        }
+        return ['id' => $brand->id, 'text' => $brand->name,];
     }
 }

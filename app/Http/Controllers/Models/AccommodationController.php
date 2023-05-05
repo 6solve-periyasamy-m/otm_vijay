@@ -7,7 +7,7 @@ use App\Models\Accommodation\Accommodation;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Repository\Model\Location\AddressRepository;
-use App\Repository\Reporting\RoomingReportRepository;
+use App\Repository\Reporting\Manifest\RoomingReportRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -92,6 +92,7 @@ class AccommodationController extends Controller
             }
             $accommodation->image_url = $request->file('image')->storePublicly('uploads/images');
         }
+        $accommodation->save();
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 

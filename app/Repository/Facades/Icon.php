@@ -8,14 +8,33 @@ use Illuminate\Contracts\View\View;
 
 class Icon
 {
-    public function new(string $name): View|string|Closure
+    private const SOLID = 'fas';
+    private const REGULAR = 'far';
+    private const BRAND = 'fab';
+
+    public function new(string $name, string $base = Icon::SOLID): View|string|Closure
     {
-        return (new IconView($name))->render();
+        return (new IconView($name, $base))->render();
+    }
+
+    public function solid(string $name): View|string|Closure
+    {
+        return $this->new($name);
+    }
+
+    public function regular(string $name): View|string|Closure
+    {
+        return $this->new($name, Icon::REGULAR);
+    }
+
+    public function brand(string $name): View|string|Closure
+    {
+        return $this->new($name, Icon::BRAND);
     }
 
     public function plus(): View|string|Closure
     {
-        return $this->new('plus');
+        return $this->solid('plus');
     }
 
     public function create(): View|string|Closure
@@ -25,17 +44,17 @@ class Icon
 
     public function note(): View|string|Closure
     {
-        return $this->new('note');
+        return $this->solid('sticky-note');
     }
 
     public function edit(): View|string|Closure
     {
-        return $this->note();
+        return $this->solid('edit');
     }
 
     public function trash(): View|string|Closure
     {
-        return $this->new('trash');
+        return $this->solid('trash-alt');
     }
 
     public function delete(): View|string|Closure
@@ -45,17 +64,27 @@ class Icon
 
     public function list(): View|string|Closure
     {
-        return $this->new('list');
+        return $this->solid('list-alt');
     }
 
     public function up(): View|string|Closure
     {
-        return $this->new('arrow-up');
+        return $this->solid('arrow-up');
+    }
+
+    public function down(): View|string|Closure
+    {
+        return $this->solid('arrow-down');
     }
 
     public function minimize(): View|string|Closure
     {
         return $this->up();
+    }
+
+    public function maximize(): View|string|Closure
+    {
+        return $this->down();
     }
 
     public function upgrade(): View|string|Closure
@@ -65,7 +94,7 @@ class Icon
 
     public function left(): View|string|Closure
     {
-        return $this->new('arrow-left');
+        return $this->solid('arrow-left');
     }
 
     public function back(): View|string|Closure
@@ -75,7 +104,7 @@ class Icon
 
     public function wand(): View|string|Closure
     {
-        return $this->new('magic-wand');
+        return $this->solid('magic');
     }
 
     public function enable(): View|string|Closure
@@ -90,7 +119,7 @@ class Icon
 
     public function home(): View|string|Closure
     {
-        return $this->new('home');
+        return $this->solid('home');
     }
 
     public function accommodation(): View|string|Closure
@@ -100,7 +129,7 @@ class Icon
 
     public function game(): View|string|Closure
     {
-        return $this->new('game-controller');
+        return $this->solid('gamepad');
     }
 
     public function activity(): View|string|Closure
@@ -110,7 +139,7 @@ class Icon
 
     public function plane(): View|string|Closure
     {
-        return $this->new('plane');
+        return $this->solid('plane');
     }
 
     public function flight(): View|string|Closure
@@ -125,7 +154,7 @@ class Icon
 
     public function redo(): View|string|Closure
     {
-        return $this->new('action-redo');
+        return $this->solid('redo');
     }
 
     public function fulfil(): View|string|Closure
@@ -135,7 +164,7 @@ class Icon
 
     public function minus(): View|string|Closure
     {
-        return $this->new('minus');
+        return $this->solid('minus-square');
     }
 
     public function close(): View|string|Closure
@@ -145,7 +174,7 @@ class Icon
 
     public function chart(): View|string|Closure
     {
-        return $this->new('chart');
+        return $this->solid('chart-bar');
     }
 
     public function excel(): View|string|Closure
@@ -160,7 +189,7 @@ class Icon
 
     public function directions(): View|string|Closure
     {
-        return $this->new('directions');
+        return $this->solid('map-signs');
     }
 
     public function transport(): View|string|Closure
@@ -175,7 +204,7 @@ class Icon
 
     public function layers(): View|string|Closure
     {
-        return $this->new('layers');
+        return $this->solid('layer-group');
     }
 
     public function overview(): View|string|Closure
@@ -190,22 +219,22 @@ class Icon
 
     public function copy(): View|string|Closure
     {
-        return $this->layers();
+        return $this->solid('copy');
     }
 
     public function person(): View|string|Closure
     {
-        return $this->new('user');
+        return $this->solid('user');
     }
 
     public function user(): View|string|Closure
     {
-        return $this->new('people');
+        return $this->person();
     }
 
     public function customer(): View|string|Closure
     {
-        return $this->person();
+        return $this->solid('address-card');
     }
 
     public function unknownCustomer(): View|string|Closure
@@ -215,7 +244,7 @@ class Icon
 
     public function login(): View|string|Closure
     {
-        return $this->new('login');
+        return $this->solid('sign-in-alt');
     }
 
     public function logout(): View|string|Closure
@@ -225,17 +254,12 @@ class Icon
 
     public function email(): View|string|Closure
     {
-        return $this->new('envelope');
-    }
-
-    public function mustache(): View|string|Closure
-    {
-        return $this->new('mustache');
+        return $this->solid('envelope');
     }
 
     public function briefcase(): View|string|Closure
     {
-        return $this->new('briefcase');
+        return $this->solid('briefcase');
     }
 
     public function merchandise(): View|string|Closure
@@ -245,17 +269,17 @@ class Icon
 
     public function wallet(): View|string|Closure
     {
-        return $this->new('wallet');
+        return $this->solid('wallet');
     }
 
     public function phone(): View|string|Closure
     {
-        return $this->new('call-end');
+        return $this->solid('phone');
     }
 
     public function globe(): View|string|Closure
     {
-        return $this->new('globe');
+        return $this->solid('globe');
     }
 
     public function tour(): View|string|Closure
@@ -263,9 +287,14 @@ class Icon
         return $this->globe();
     }
 
+    public function website(): View|string|Closure
+    {
+        return $this->globe();
+    }
+
     public function magnifier(): View|string|Closure
     {
-        return $this->new('magnifier');
+        return $this->solid('search');
     }
 
     public function view(): View|string|Closure
@@ -275,12 +304,17 @@ class Icon
 
     public function lock(): View|string|Closure
     {
-        return $this->new('lock');
+        return $this->solid('lock');
+    }
+
+    public function unlock(): View|string|Closure
+    {
+        return $this->solid('unlock');
     }
 
     public function key(): View|string|Closure
     {
-        return $this->new('key');
+        return $this->solid('key');
     }
 
     public function show(): View|string|Closure
@@ -295,17 +329,17 @@ class Icon
 
     public function refresh(): View|string|Closure
     {
-        return $this->new('refresh');
+        return $this->solid('sync');
     }
 
     public function approve(): View|string|Closure
     {
-        return $this->new('paper-plane');
+        return $this->solid('paper-plane');
     }
 
     public function convert(): View|string|Closure
     {
-        return $this->new('bag');
+        return $this->solid('shopping-bag');
     }
 
     public function dashboard(): View|string|Closure
@@ -315,12 +349,12 @@ class Icon
 
     public function address(): View|string|Closure
     {
-        return $this->new('envelope-letter');
+        return $this->solid('map');
     }
 
     public function order(): View|string|Closure
     {
-        return $this->new('credit-card');
+        return $this->solid('credit-card');
     }
 
     public function quote(): View|string|Closure
@@ -330,17 +364,17 @@ class Icon
 
     public function organization(): View|string|Closure
     {
-        return $this->new('graduation');
+        return $this->solid('university');
     }
 
     public function setting(): View|string|Closure
     {
-        return $this->new('settings');
+        return $this->solid('wrench');
     }
 
     public function role(): View|string|Closure
     {
-        return $this->new('organization');
+        return $this->solid('sitemap');
     }
 
     public function logs(): View|string|Closure
@@ -355,7 +389,7 @@ class Icon
 
     public function flag(): View|string|Closure
     {
-        return $this->new('flag');
+        return $this->solid('flag');
     }
 
     public function attribute(): View|string|Closure
@@ -365,7 +399,7 @@ class Icon
 
     public function calendar(): View|string|Closure
     {
-        return $this->new('calendar');
+        return $this->solid('calendar');
     }
 
     public function event(): View|string|Closure
@@ -375,11 +409,56 @@ class Icon
 
     public function equalizer(): View|string|Closure
     {
-        return $this->new('equalizer');
+        return $this->solid('sliders-h');
     }
 
     public function options(): View|string|Closure
     {
         return $this->equalizer();
+    }
+
+    public function save(): View|string|Closure
+    {
+        return $this->solid('floppy-disk');
+    }
+    
+    public function facebook(): View|string|Closure
+    {
+        return $this->brand('facebook');
+    }
+    
+    public function twitter(): View|string|Closure
+    {
+        return $this->brand('twitter');
+    }
+    
+    public function instagram(): View|string|Closure
+    {
+        return $this->brand('instagram');
+    }
+
+    public function baseball(): View|string|Closure
+    {
+        return $this->solid('baseball-bat-ball');
+    }
+
+    public function rugby(): View|string|Closure
+    {
+        return $this->solid('football');
+    }
+
+    public function basketball(): View|string|Closure
+    {
+        return $this->solid('basketball');
+    }
+
+    public function football(): View|string|Closure
+    {
+        return $this->solid('futbol');
+    }
+
+    public function ticket(): View|string|Closure
+    {
+        return $this->solid('ticket');
     }
 }

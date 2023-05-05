@@ -23,7 +23,7 @@
             });
             @if($attributes->get('value'))
             $.ajax({
-                url: '{{ route('api.' . $route . '.selected', ['id' => old($attributes->get('name', '')) ?? $attributes->get('value', 0), ]) }}',
+                url: '{{ route('api.' . $attributes->get('route', '') . '.selected', ['id' => old($attributes->get('name', '')) ?? $attributes->get('value', 0), ]) }}',
                 type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }
             })
                 .then(function (data) {

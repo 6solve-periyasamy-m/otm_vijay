@@ -40,7 +40,7 @@ class TShirtSizeController extends Controller
 
     public function update(Request $request, TShirtSize $tShirtSize)
     {
-        $request->validate(TShirtSize::getValidationRules());
+        $request->validate(TShirtSize::getValidationRules($tShirtSize->id));
         $tShirtSize->update([
             'name' => $request->input('name'),
         ]);

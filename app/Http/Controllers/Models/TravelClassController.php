@@ -40,7 +40,7 @@ class TravelClassController extends Controller
 
     public function update(Request $request, TravelClass $travelClass)
     {
-        $request->validate(TravelClass::getValidationRules());
+        $request->validate(TravelClass::getValidationRules($travelClass->id));
         $travelClass->update([
             'name' => $request->input('name'),
         ]);

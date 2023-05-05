@@ -17,7 +17,9 @@ use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
+use App\Repository\Storage\ComponentInformation;
 use App\Repository\Traits\Component\IsAccommodation;
+use Icon;
 use Illuminate\Support\Collection;
 
 class AccommodationInventoryTourRepository extends InventoryTourRepository
@@ -62,6 +64,8 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function grantToCustomer(OrderCustomer $orderCustomer): ?OrderComponentRepository
     {
+        $orderComponent = $this->getOrderComponent($orderCustomer);
+        if ($orderComponent !== null) return $orderComponent;
         $group = $orderCustomer->primary_group;
         if (!isset($group)) return null;
         $orderComponent = OrderAccommodation::create([
@@ -134,6 +138,9 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
+        $active = $this->getActiveComponent($this, $traveller);
+        if ($active !== null) return $active;
+        $this->getActiveUpgrade($traveller)?->getBookingComponent($traveller)?->delete();
         $component = BookingAccommodation::create([
             'booking_group_id' => $traveller->primary_group->id,
             'accommodation_inventory_tour_id' => $this->tourComponent->id,
@@ -228,5 +235,62 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             'is_template' => $this->tourComponent->is_template,
         ]);
         return $component->repository;
+    }
+
+    public function isStockControlActive(): bool
+    {
+        return $this->tourComponent->stock_control_active ?? false;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
+    }
+
+    public function getComponentInformation(): ComponentInformation
+    {
+        $tourComponent = $this->tourComponent;
+        $inventory = $tourComponent->inventory;
+        $component = $inventory->component;
+        if ($tourComponent->tour_component_type === 'Add-on') {
+            $upgradeName = "Add-on";
+        } elseif ($tourComponent->tour_component_type === 'Included') {
+            $upgradeName = "Included";
+        } else {
+            $upgrade = AccommodationInventoryTourUpgrade::where('upgrade_id', '=', $tourComponent->id)->first();
+            $upgradeName = "$upgrade->description - " . f_currency($tourComponent->tour_sales_price);
+        }
+        return new ComponentInformation(
+            $component->name,
+            $component->description,
+            $component->image_url,
+            $inventory->check_in,
+            $inventory->check_out,
+            Icon::accommodation(),
+            $upgradeName,
+            [
+                'Check In' => f_datetime($inventory->check_in),
+                'Check Out' => f_datetime($inventory->check_out),
+                'Board Type' => $inventory->boardType->name,
+                'Room Type' => $inventory->roomType->__toString()
+            ]
+        );
+    }
+
+    public function getActiveUpgrade(BookingTraveller|OrderCustomer $traveller): AccommodationInventoryTourRepository|null
+    {
+        /**
+         * @var OrderAccommodation[]|BookingAccommodation[] $accommodation
+         */
+        $accommodation = ($traveller instanceof OrderCustomer) ? $traveller->orderAccommodation : $traveller->accommodation;
+        $parent = $this->getUpgradeParent();
+        $upgrades = $parent->upgrades;
+        foreach ($accommodation as $room) {
+            if ($room->accommodation_inventory_tour_id === $parent->id) return $parent->repository;
+            foreach ($upgrades as $upgrade) {
+                if ($room->accommodation_inventory_tour_id === $upgrade->upgrade_id) return $upgrade->upgrade->repository;
+            }
+        }
+        return null;
     }
 }

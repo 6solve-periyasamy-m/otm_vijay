@@ -17,13 +17,16 @@ use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
-use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Interfaces\Manifest\HasActivityManifest;
 use App\Repository\Model\Order\Component\OrderActivityRepository;
 use App\Repository\Model\Quote\Component\QuoteActivityRepository;
+use App\Repository\Reporting\Manifest\ActivityManifestRepository;
+use App\Repository\Storage\ComponentInformation;
 use App\Repository\Traits\Component\IsActivity;
+use Icon;
 use Illuminate\Support\Collection;
 
-class ActivityInventoryTourRepository extends InventoryTourRepository
+class ActivityInventoryTourRepository extends InventoryTourRepository implements HasActivityManifest
 {
     use IsActivity;
 
@@ -121,6 +124,9 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
 
     public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
+        $active = $this->getActiveComponent($this, $traveller);
+        if ($active !== null) return $active;
+        $this->getActiveUpgrade($traveller)?->getBookingComponent($traveller)?->delete();
         $bookingComponent = BookingActivity::create([
             'booking_traveller_id' => $traveller->id,
             'activity_inventory_tour_id' => $this->tourComponent->id,
@@ -212,6 +218,16 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
         return $component->repository;
     }
 
+    public function isStockControlActive(): bool
+    {
+        return $this->tourComponent->stock_control_active ?? false;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
+    }
+
     public function getBookingUpgradeKeyMap(int $required = 1): array
     {
         $upgrades = $this->tourComponent->upgrades;
@@ -232,5 +248,39 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
             $keys[$upgrade->id] = ['name' => $upgrade->description . ' - ' . ($disabled ? 'Out of Stock' : f_currency($upgrade->upgrade->tour_sales_price)), 'disabled' => $disabled,];
         }
         return $keys;
+    }
+
+    public function getActivityManifest(): Collection|array
+    {
+        return $this->tourComponent->orders()->with(ActivityManifestRepository::getRelations())->get();
+    }
+
+    public function getComponentInformation(): ComponentInformation
+    {
+        $tourComponent = $this->tourComponent;
+        $inventory = $tourComponent->inventory;
+        $component = $inventory->component;
+        if ($tourComponent->tour_component_type === 'Add-on') {
+            $upgradeName = "Add-on";
+        } elseif ($tourComponent->tour_component_type === 'Included') {
+            $upgradeName = "Included";
+        } else {
+            $upgrade = ActivityInventoryTourUpgrade::where('upgrade_id', '=', $tourComponent->id)->first();
+            $upgradeName = "$upgrade->description - " . f_currency($tourComponent->tour_sales_price);
+        }
+        return new ComponentInformation(
+            $component->name,
+            $component->description,
+            $component->image_url,
+            $inventory->starts_at,
+            $inventory->ends_at,
+            Icon::baseball(),
+            $upgradeName,
+            [
+                'Starts At' => f_datetime($inventory->starts_at),
+                'Ends At' => f_datetime($inventory->ends_at),
+                'Ticket Type' => $inventory->ticketType,
+            ]
+        );
     }
 }

@@ -4,6 +4,7 @@
 
 @section('header-script')
 <script type="text/javascript">
+@if ($orderCustomer->is_travelling)
 function addActivityAddon() {
     let id = $('#activity_id-input').find(':selected').val()
     if (id != null) {
@@ -109,12 +110,15 @@ function applyTransportUpgrade(selector, btn) {
         .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
     }
 }
+@endif
 $(document).ready( function () {
+    @if($orderCustomer->is_travelling)
     $('#accommodation-table').DataTable({fixedHeader: true});
     $('#activities-table').DataTable({fixedHeader: true});
     $('#flights-table').DataTable({fixedHeader: true});
     $('#transports-table').DataTable({fixedHeader: true});
     $('#merchandise-table').DataTable({fixedHeader: true});
+    @endif
     $('#customer-adjustment-table').DataTable({fixedHeader: true});
 });
 </script>
@@ -282,7 +286,7 @@ $(document).ready( function () {
     </div>
 </div>
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;">
-
+@if($orderCustomer->is_travelling)
 <div class="heading pt-2 pb-md-3 pb-2">
     <h2 class="fw-bold">Tour Components</h2>
 </div>
@@ -665,6 +669,7 @@ $(document).ready( function () {
         </div>
     </div>
 </div>
+@endif
 {{-- Adjustments Section --}}
 <div class="card">
     <div class="card-body">

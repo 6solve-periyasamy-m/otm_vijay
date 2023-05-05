@@ -10,6 +10,7 @@ use App\Models\Quote\Component\QuoteActivity;
 use App\Models\Quote\Component\QuoteFlight;
 use App\Models\Quote\Component\QuoteMerchandise;
 use App\Models\Quote\Component\QuoteTransport;
+use App\Models\System\Brand;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Quote\QuoteRepository;
@@ -34,6 +35,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $order_id
  * @property int|null $lead_traveller_id
  * @property int|null $event_id
+ * @property int|null $brand_id
  * @property int $revision
  * @property string|null $reference
  * @property string $name
@@ -55,6 +57,8 @@ use Illuminate\Support\Carbon;
  * @property-read string $ref Reference-Revision
  * @property-read Collection|QuoteAccommodation[] $accommodation
  * @property-read Collection|QuoteSection[] $sections
+ * @property-read Brand|null $linkedBrand
+ * @property-read Brand $brand
  * @property-read int|null $accommodation_count
  * @property-read Collection|QuoteActivity[] $activities
  * @property-read int|null $activities_count
@@ -161,6 +165,11 @@ class Quote extends Model
         return $this->belongsTo(Tour::class, 'tour_id');
     }
 
+    public function linkedBrand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class, 'brand_id');
+    }
+
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class, 'order_id');
@@ -205,6 +214,17 @@ class Quote extends Model
     {
         if (!isset($this->internal_repository)) $this->internal_repository = new QuoteRepository($this);
         return $this->internal_repository;
+    }
+
+    public function getBrandAttribute(): Brand
+    {
+        return $this->linkedBrand ?? Brand::getSystemBrand();
+    }
+
+    public function setBrandAttribute(Brand $brand)
+    {
+        $this->brand_id = $brand->id;
+        $this->save();
     }
 
     public function getRefAttribute(): string

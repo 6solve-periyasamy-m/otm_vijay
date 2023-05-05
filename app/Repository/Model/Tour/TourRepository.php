@@ -6,6 +6,10 @@ use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
+use App\Models\Booking\Component\BookingActivity;
+use App\Models\Booking\Component\BookingFlight;
+use App\Models\Booking\Component\BookingMerchandise;
+use App\Models\Booking\Component\BookingTransport;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Models\Merchandise\MerchandiseInventoryTour;
@@ -19,16 +23,23 @@ use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
-use App\Repository\Abstracts\ModelRepository;
-use App\Repository\Interfaces\HasRoomingList;
 use App\Repository\Costing\Tour\TourCostingRepository;
 use App\Repository\Interfaces\HasStockControl;
+use App\Repository\Interfaces\Manifest\HasActivityManifest;
+use App\Repository\Interfaces\Manifest\HasFlightManifest;
+use App\Repository\Interfaces\Manifest\HasRoomingList;
+use App\Repository\Interfaces\Manifest\HasTransportManifest;
+use App\Repository\Reporting\Manifest\ActivityManifestRepository;
+use App\Repository\Reporting\Manifest\FlightManifestRepository;
+use App\Repository\Reporting\Manifest\TransportManifestRepository;
 use App\Repository\RoomingRepository;
+use App\Repository\Storage\BookingComponentStorage;
 use App\Repository\Storage\OrderComponentStorage;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Settings;
 
-class TourRepository extends ComponentPackageRepository implements HasStockControl, HasRoomingList
+class TourRepository extends ComponentPackageRepository implements HasStockControl, HasRoomingList, HasActivityManifest, HasFlightManifest, HasTransportManifest
 {
     private Tour $tour;
     private TourCostingRepository $costing;
@@ -83,7 +94,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
 
     public function getTotalStock(): int
     {
-        return $this->tour->stock;
+        return $this->tour->stock ?? 0;
     }
 
     public function getUsedStock(): int
@@ -168,7 +179,6 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         return $components;
     }
 
-    /** @noinspection PhpMethodParametersCountMismatchInspection */
     public function fixUpgrades(): void
     {
         foreach ($this->tour->accommodationInventoryTours as $inventoryTour) {
@@ -417,7 +427,132 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
           $this->getIncludedActivitiesForSaving(),
           $this->getIncludedFlightsForSaving(),
           $this->getIncludedTransportForSaving(),
-          $this->getIncludedMerchandiseForSaving()
         );
+    }
+
+
+    /**
+     * @return BookingActivity[]
+     */
+    public function getBookingIncludedActivitiesForSaving(): array
+    {
+        $components = [];
+        foreach ($this->tour->activityInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', true)->get() as $component) {
+            $components[] = BookingActivity::make([
+                'activity_inventory_tour_id' => $component->id,
+            ]);
+        }
+        return $components;
+    }
+
+    /**
+     * @return BookingFlight[]
+     */
+    public function getBookingIncludedFlightsForSaving(): array
+    {
+        $components = [];
+        foreach ($this->tour->flightInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
+            $components[] = BookingFlight::make([
+                'flight_inventory_tour_id' => $component->id,
+            ]);
+        }
+        return $components;
+    }
+
+    /**
+     * @return BookingTransport[]
+     */
+    public function getBookingIncludedTransportForSaving(): array
+    {
+        $components = [];
+        foreach ($this->tour->transportInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
+            $components[] = BookingTransport::make([
+                'transport_inventory_tour_id' => $component->id,
+            ]);
+        }
+        return $components;
+    }
+
+    /**
+     * @return BookingMerchandise[]
+     */
+    public function getBookingIncludedMerchandiseForSaving(): array
+    {
+        $components = [];
+        foreach ($this->tour->merchandise()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
+            $components[] = BookingMerchandise::make([
+                'merchandise_inventory_tour_id' => $component->id,
+            ]);
+        }
+        return $components;
+    }
+
+    public function getBookingComponentSetForSaving(): BookingComponentStorage
+    {
+        return new BookingComponentStorage(
+          $this->getBookingIncludedActivitiesForSaving(),
+          $this->getBookingIncludedFlightsForSaving(),
+          $this->getBookingIncludedTransportForSaving(),
+        );
+    }
+
+    public function getActivityManifest(): Collection|array
+    {
+        return $this->tour->orderActivities()->with(ActivityManifestRepository::getRelations())->get();
+    }
+
+    public function getFlightManifest(): Collection|array
+    {
+        return $this->tour->orderFlights()->with(FlightManifestRepository::getRelations())->get();
+    }
+
+    public function getTransportManifest(): Collection|array
+    {
+        return $this->tour->orderTransport()->with(TransportManifestRepository::getRelations())->get();
+    }
+
+    public function isStockControlActive(): bool
+    {
+        return $this->tour->stock_control_active;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
+    }
+
+    public function isLocked(string $key): bool
+    {
+        return Settings::isLocked($key, $this->tour->date_from, $this->tour->date_to);
+    }
+
+    public function isPassportLocked(): bool
+    {
+        return $this->isLocked('passport');
+    }
+
+    public function isAccommodationLocked(): bool
+    {
+        return $this->isLocked('accommodation');
+    }
+
+    public function isActivityLocked(): bool
+    {
+        return $this->isLocked('activity');
+    }
+
+    public function isFlightLocked(): bool
+    {
+        return $this->isLocked('flight');
+    }
+
+    public function isTransportLocked(): bool
+    {
+        return $this->isLocked('transport');
+    }
+
+    public function isComponentsLocked(): bool
+    {
+        return $this->tour->date_from->subDays(setting("components.lock", 30))->lte(now());
     }
 }

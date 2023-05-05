@@ -1,0 +1,98 @@
+@extends('layout.master')
+
+@section('title', 'Edit System Settings')
+
+@push('footer-stack')
+<script type="text/javascript">
+    function showBrandForm(event) {
+        Livewire.emit('openModal', 'admin.system.brand.form', {!! json_encode(['brand' => null,]) !!});
+        event.stopPropagation();
+    }
+</script>
+@endpush
+
+@section('content')
+    <div class="card">
+        <div class="card-body" data-target="#settings" onclick="toggleAccordion(this)">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h4 class="fw-bold">
+                        {{ Icon::minimize() }} System Settings
+                    </h4>
+                </div>
+                <div>
+                    <a href="#" onclick="event.preventDefault();$('#settings-form').submit()"
+                       class="btn btn-outline-success btn-sm mb-1">
+                        {{ Icon::save() }} Update Settings
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="collapse show mx-1" id="settings">
+        @include('partials.admin.system.settings.form')
+    </div>
+    <div class="card">
+        <div class="card-body" data-target="#reminders" onclick="toggleAccordion(this)">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h4 class="fw-bold">
+                        {{ Icon::maximize() }} Order Reminders
+                    </h4>
+                </div>
+                <div>
+                    <a href="{{ route('orders.reminders') }}"
+                       class="btn btn-outline-success btn-sm mb-1">
+                        {{ Icon::list() }}View Due Reminders
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="collapse mx-1" id="reminders">
+        @include('partials.orders.reminder.authorize')
+    </div>
+    <div class="card">
+        <div class="card-body" data-target="#mail" onclick="toggleAccordion(this)">
+            <h4 class="fw-bold">
+                {{ Icon::maximize() }} Mail Templates
+            </h4>
+        </div>
+    </div>
+    <div class="collapse row mx-1" id="mail">
+        @foreach(\App\Repository\Mailing\MailRepository::getAvailableMail() as $template)
+            <div class="col-xl-6">
+                @include('partials.admin.system.mail.card', ['template' => $template,])
+            </div>
+        @endforeach
+    </div>
+    <div class="card">
+        <div class="card-body" data-target="#brands" onclick="toggleAccordion(this)">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h4 class="fw-bold">
+                        {{ Icon::maximize() }} Company Brands
+                    </h4>
+                </div>
+                <div>
+                    <button onclick="showBrandForm(event)" class="btn btn-outline-success btn-sm mb-1">
+                        {{ Icon::list() }} Create new Brand
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="collapse show mx-1" id="brands">
+        <livewire:admin.system.brand.brand-list />
+    </div>
+    <div class="card">
+        <div class="card-body" data-target="#import" onclick="toggleAccordion(this)">
+            <h4 class="fw-bold">
+                {{ Icon::maximize() }} Bulk Import
+            </h4>
+        </div>
+    </div>
+    <div class="collapse row mx-1" id="import">
+        @include('partials.admin.system.import')
+    </div>
+@endsection

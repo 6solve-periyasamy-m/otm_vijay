@@ -2,8 +2,8 @@
 
 namespace App\Exports;
 
-use App\Repository\Interfaces\HasRoomingList;
-use App\Repository\Reporting\RoomingReportRepository;
+use App\Repository\Interfaces\Manifest\HasRoomingList;
+use App\Repository\Reporting\Manifest\RoomingReportRepository;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 

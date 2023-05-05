@@ -3,6 +3,7 @@
         <tr>
             <th scope="col">Booking Reference</th>
             <th scope="col">Tour Name</th>
+            <th scope="col">Event Name</th>
             <th scope="col">Lead Booker First Name</th>
             <th scope="col">Lead Booker Last Name</th>
             <th scope="col">Payment Method</th>
@@ -16,6 +17,7 @@
             <tr>
                 <th scope="row">{{ $row->booking_reference }}</th>
                 <td>{{ $row->tour_name }}</td>
+                <td>{{ $row->event_name }}</td>
                 <td>{{ $row->lb_first_name }}</td>
                 <td>{{ $row->lb_last_name }}</td>
                 <td>{{ $row->payment_method }}</td>

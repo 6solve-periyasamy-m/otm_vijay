@@ -2,7 +2,9 @@
 
 namespace App\Repository\Model\Quote;
 
-use App\Mail\TemplatedMailable;
+use App\Exceptions\MailDisabledException;
+use App\Mail\Storage\Attachment;
+use App\Mail\Storage\SettingsMail;
 use App\Models\Customer\Customer;
 use App\Models\Helper\QuoteStatus;
 use App\Models\Location\Address;
@@ -26,12 +28,8 @@ use App\Repository\Interfaces\SerializesToJson;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Model\Tour\TourRepository;
 use App\Repository\Storage\ConvertedCustomer;
-use Auth;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Mail;
-use Log;
 use Spatie\Browsershot\Browsershot;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -130,7 +128,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'notes' => $this->quote->internal_notes,
             'description' => $this->quote->description,
             'date_from' => $this->quote->date_from,
-            'date_to' => $this->quote->date_from,
+            'date_to' => $this->quote->date_to,
             'terms' => $this->quote->terms,
             'final_payment' => $this->quote->final_payment,
             'stock_control_active' => false,
@@ -693,17 +691,13 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         return $sent;
     }
 
+    /**
+     * @throws MailDisabledException
+     */
     public function resend(SentQuote $sent, string $email = null): void
     {
-        $mailable = new TemplatedMailable(setting('email.quote.subject', 'Template Quote'), setting('email.quote.template', 'Template Quote Body'));
-        try {
-            $mail = Mail::to($email ?? $sent->recipient);
-            if (config('mail.bcc') !== null) { $mail->bcc(config('mail.bcc')); }
-            $mailable->attachData($this->getStream($sent), $this->quote->reference . '.pdf', ['mime' => 'application/pdf',]);
-            $mail->send($mailable);
-        } catch (Exception $e) {
-            Log::error($e);
-        }
+        $attachment = new Attachment($this->getStream($sent), $this->quote->reference . '.pdf', ['mime' => 'application/pdf',]);
+        (new SettingsMail('quote'))->send($email ?? $sent->recipient, $sent, [$attachment,], true);
     }
 
     public static function deserializeAndSave(SentQuote $sent): Quote

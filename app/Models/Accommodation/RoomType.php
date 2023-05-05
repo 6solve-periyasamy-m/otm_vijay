@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\Rule;
 
 
 /**
@@ -48,8 +49,17 @@ class RoomType extends Model
 
     protected $fillable = ['name', 'maximum_occupancy',];
 
-    public static function getValidationRules(): array
+    public static function getValidationRules(int|null $id = null): array
     {
+        if (!empty($id)) {
+            return [
+                'name' => [
+                    'required',
+                    Rule::unique('room_types', 'name')->ignore($id),
+                ],
+                'maximum_occupancy' => 'required|integer|min:1'
+            ];
+        }
         return ['name' => 'required|unique:room_types,name', 'maximum_occupancy' => 'required|integer|min:1'];
     }
 

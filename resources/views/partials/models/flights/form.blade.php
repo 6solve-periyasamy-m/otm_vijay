@@ -25,7 +25,7 @@
             ['name' => 'Arrival Airport', 'field' => 'arrival_airport_id', 'value' => $arrival_airport_id ?? 0,
              'route' => 'airports',])
 @endcan
-@include('partials.fields.file', ['name' => 'Image', 'field' => 'image',])
+@include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'value' => $image_url ?? null,])
 @include('partials.fields.checkbox', ['name' => 'Is Domestic', 'field' => 'is_domestic', 'value' => $is_domestic ?? null,])
 @include('partials.fields.date', ['name' => 'Available From', 'field' => 'available_from', 'value' => $available_from ?? null,])
 @include('partials.fields.selector.default',

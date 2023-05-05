@@ -5,6 +5,7 @@
            name="{{ $attributes->get('name') }}"
            placeholder="placeholder"
            rows="{{ $attributes->get('rows', 3) }}"
-            {{ $attributes->has('autocomplete') ? "autocomplete=\"{$attributes->get('autocomplete')}\"" : '' }}>{{ $attributes->get('value', '') }}</textarea>
+           {{ $attributes->get('disabled', false) ? 'disabled' : '' }}
+           {{ $attributes->has('autocomplete') ? "autocomplete=\"{$attributes->get('autocomplete')}\"" : '' }}>{{ $attributes->get('value', '') }}</textarea>
     <label for="{{ $attributes->get('id') }}">{{ $slot }}</label>
 </div>
