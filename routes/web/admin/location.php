@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Models\AddressController;
-use App\Http\Controllers\Models\CountryController;
-use App\Http\Controllers\Models\LocationTypeController;
+use App\Http\Controllers\Admin\Location\AddressController;
+use App\Http\Controllers\Admin\Location\CountryController;
+use App\Http\Controllers\Admin\Location\LocationTypeController;
 
 Route::prefix('addresses')->group(function () {
     Route::get('/', [AddressController::class, 'index'])->name('addresses.all')->middleware('bouncer:Location\Address,read');

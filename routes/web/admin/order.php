@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\Models\ManualAdjustmentController;
-use App\Http\Controllers\Models\OrderController;
-use App\Http\Controllers\Models\OrderCustomerAdjustmentController;
-use App\Http\Controllers\Models\OrderCustomerModelController;
-use App\Http\Controllers\Models\OrderInstallmentController;
-use App\Http\Controllers\Models\PaymentController;
-use App\Http\Controllers\Models\PaymentMethodController;
+use App\Http\Controllers\Admin\Order\Adjustment\ManualAdjustmentController;
+use App\Http\Controllers\Admin\Order\Adjustment\OrderCustomerAdjustmentController;
+use App\Http\Controllers\Admin\Order\OrderController;
+use App\Http\Controllers\Admin\Order\OrderCustomerModelController;
+use App\Http\Controllers\Admin\Order\OrderInstallmentController;
+use App\Http\Controllers\Admin\Order\Payment\PaymentController;
+use App\Http\Controllers\Admin\Order\Payment\PaymentMethodController;
 use App\Http\Controllers\OrderComponentController;
 use App\Http\Controllers\OrderCustomerController;
 use App\Http\Controllers\OrderSystemController;

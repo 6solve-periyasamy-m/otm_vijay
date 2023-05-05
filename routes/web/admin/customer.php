@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Models\CustomerController;
-use App\Http\Controllers\Models\HatSizeController;
-use App\Http\Controllers\Models\TShirtSizeController;
+use App\Http\Controllers\Admin\Customer\CustomerController;
+use App\Http\Controllers\Admin\Customer\HatSizeController;
+use App\Http\Controllers\Admin\Customer\TShirtSizeController;
 
 Route::get('/', [CustomerController::class, 'index'])->name('customers.all')->middleware('bouncer:Customer\Customer,read');
 Route::get('/create', [CustomerController::class, 'create'])->name('customers.create')->middleware('bouncer:Customer\Customer,create');

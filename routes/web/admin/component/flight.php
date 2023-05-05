@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Models\AirlineController;
-use App\Http\Controllers\Models\AirportController;
-use App\Http\Controllers\Models\FlightController;
-use App\Http\Controllers\Models\FlightInventoryController;
+use App\Http\Controllers\Admin\Flight\AirlineController;
+use App\Http\Controllers\Admin\Flight\AirportController;
+use App\Http\Controllers\Admin\Flight\FlightController;
+use App\Http\Controllers\Admin\Flight\FlightInventoryController;
 
 Route::get('/', [FlightController::class, 'index'])->name('flights.all')->middleware('bouncer:Flight\Flight,read');
 Route::get('/create', [FlightController::class, 'create'])->name('flights.create')->middleware('bouncer:Flight\Flight,create');

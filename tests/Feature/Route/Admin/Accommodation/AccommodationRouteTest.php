@@ -14,7 +14,7 @@ class AccommodationRouteTest extends AuthenticatedRouteTestCase
     private string $class = Accommodation::class;
 
     /**
-     * @covers \App\Http\Controllers\Models\AccommodationController::index
+     * @covers \App\Http\Controllers\Admin\Accommodation\AccommodationController::index
      * @return void
      */
     public function testAccommodationList(): void
@@ -24,7 +24,7 @@ class AccommodationRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\AccommodationController::view
+     * @covers \App\Http\Controllers\Admin\Accommodation\AccommodationController::view
      * @return void
      */
     public function testAccommodationView(): void
@@ -35,7 +35,7 @@ class AccommodationRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\AccommodationController::edit
+     * @covers \App\Http\Controllers\Admin\Accommodation\AccommodationController::edit
      * @return void
      */
     public function testAccommodationEdit(): void
@@ -45,7 +45,7 @@ class AccommodationRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\AccommodationController::create
+     * @covers \App\Http\Controllers\Admin\Accommodation\AccommodationController::create
      * @return void
      */
     public function testAccommodationCreate(): void
@@ -54,7 +54,7 @@ class AccommodationRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\AccommodationController::destroy
+     * @covers \App\Http\Controllers\Admin\Accommodation\AccommodationController::destroy
      * @return void
      */
     public function testAccommodationDelete(): void

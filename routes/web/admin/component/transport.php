@@ -1,10 +1,10 @@
 <?php
 
 
-use App\Http\Controllers\Models\OperatorController;
-use App\Http\Controllers\Models\TransportController;
-use App\Http\Controllers\Models\TransportInventoryController;
-use App\Http\Controllers\Models\TransportTypeController;
+use App\Http\Controllers\Admin\Transport\OperatorController;
+use App\Http\Controllers\Admin\Transport\TransportController;
+use App\Http\Controllers\Admin\Transport\TransportInventoryController;
+use App\Http\Controllers\Admin\Transport\TransportTypeController;
 
 Route::get('/', [TransportController::class, 'index'])->name('transports.all')->middleware('bouncer:Transport\Transport,read');
 Route::get('/create', [TransportController::class, 'create'])->name('transports.create')->middleware('bouncer:Transport\Transport,create');

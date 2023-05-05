@@ -3,10 +3,10 @@
 use App\Http\Controllers\Admin\AdditionalCostController;
 use App\Http\Controllers\Admin\OrganizationController;
 use App\Http\Controllers\Admin\System\ImportController;
+use App\Http\Controllers\Admin\TravelClassController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\MailController;
-use App\Http\Controllers\Models\TravelClassController;
-use App\Http\Controllers\Models\UserController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\SettingsController;
 

@@ -13,7 +13,7 @@ class OrderInstallmentRouteTest extends AuthenticatedRouteTestCase
     private string $class = Order::class;
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderInstallmentController::edit
+     * @covers \App\Http\Controllers\Admin\Order\OrderInstallmentController::edit
      * @return void
      */
     public function testOrderInstallmentEdit(): void
@@ -23,7 +23,7 @@ class OrderInstallmentRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderInstallmentController::create
+     * @covers \App\Http\Controllers\Admin\Order\OrderInstallmentController::create
      * @return void
      */
     public function testOrderInstallmentCreate(): void
@@ -33,7 +33,7 @@ class OrderInstallmentRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderInstallmentController::resync
+     * @covers \App\Http\Controllers\Admin\Order\OrderInstallmentController::resync
      * @return void
      */
     public function testOrderInstallmentResync(): void
@@ -43,7 +43,7 @@ class OrderInstallmentRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderInstallmentController::destroy
+     * @covers \App\Http\Controllers\Admin\Order\OrderInstallmentController::destroy
      * @return void
      */
     public function testOrderCustomerAdjustmentDelete(): void

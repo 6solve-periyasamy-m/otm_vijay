@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Models\ActivityController;
-use App\Http\Controllers\Models\ActivityInventoryController;
-use App\Http\Controllers\Models\ActivityTypeController;
-use App\Http\Controllers\Models\TicketTypeController;
+use App\Http\Controllers\Admin\Activity\ActivityController;
+use App\Http\Controllers\Admin\Activity\ActivityInventoryController;
+use App\Http\Controllers\Admin\Activity\ActivityTypeController;
+use App\Http\Controllers\Admin\Activity\TicketTypeController;
 
 Route::get('/', [ActivityController::class, 'index'])->name('activities.all')->middleware('bouncer:Activity\Activity,read');
 Route::get('/create', [ActivityController::class, 'create'])->name('activities.create')->middleware('bouncer:Activity\Activity,create');
