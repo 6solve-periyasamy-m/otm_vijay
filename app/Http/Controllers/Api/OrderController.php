@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Admin\TableRequest;
+use App\Http\Requests\Api\Admin\Order\UnknownTravellerRequest;
 use App\Models\Order\Order;
 use App\Repository\Model\Order\OrderRepository;
 
@@ -22,7 +23,7 @@ class OrderController extends ApiController
         return $order->repository->getRoomingData();
     }
 
-    public function generateUnknown(?Order $order)
+    public function generateUnknown(UnknownTravellerRequest $request, ?Order $order)
     {
         if (!empty($order) && isset($order->booking_reference)) {
             $firstName = "Unknown Traveller";
@@ -31,7 +32,11 @@ class OrderController extends ApiController
             $firstName = "Unknown";
             $lastName = "Traveller";
         }
-        $customer = OrderRepository::generateGenericCustomer($firstName, $lastName);
-        return response()->json(['success' => true, 'id' => $customer->id, 'text' => $customer->first_name . ' ' . $customer->last_name,]);
+        $customers = [];
+        for ($x = 0; $x < ($request->count ?? 1); $x++) {
+            $customer = OrderRepository::generateGenericCustomer($firstName, $lastName);
+            $customers[] = ['id' => $customer->id, 'text' => $customer->first_name . ' ' . $customer->last_name,];
+        }
+        return response()->json(['success' => true, 'data' => $customers,]);
     }
 }

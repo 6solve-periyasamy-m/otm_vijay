@@ -16,12 +16,16 @@ use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Interfaces\Manifest\HasFlightManifest;
 use App\Repository\Model\Order\Component\OrderFlightRepository;
 use App\Repository\Model\Quote\Component\QuoteFlightRepository;
+use App\Repository\Reporting\Manifest\FlightManifestRepository;
+use App\Repository\Storage\ComponentInformation;
 use App\Repository\Traits\Component\IsFlight;
+use Icon;
 use Illuminate\Support\Collection;
 
-class FlightInventoryTourRepository extends InventoryTourRepository
+class FlightInventoryTourRepository extends InventoryTourRepository implements HasFlightManifest
 {
     use IsFlight;
 
@@ -125,6 +129,9 @@ class FlightInventoryTourRepository extends InventoryTourRepository
 
     public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
+        $active = $this->getActiveComponent($this, $traveller);
+        if ($active !== null) return $active;
+        $this->getActiveUpgrade($traveller)?->getBookingComponent($traveller)?->delete();
         $bookingComponent = BookingFlight::create([
             'booking_traveller_id' => $traveller->id,
             'flight_inventory_tour_id' => $this->tourComponent->id,
@@ -215,5 +222,51 @@ class FlightInventoryTourRepository extends InventoryTourRepository
             'flight_type' => $this->tourComponent->flight_type,
         ]);
         return $component->repository;
+    }
+
+    public function isStockControlActive(): bool
+    {
+        return $this->tourComponent->stock_control_active ?? false;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
+    }
+
+    public function getFlightManifest(): Collection|array
+    {
+        return $this->tourComponent->orders()->with(FlightManifestRepository::getRelations())->get();
+    }
+
+    public function getComponentInformation(): ComponentInformation
+    {
+        $tourComponent = $this->tourComponent;
+        $inventory = $tourComponent->inventory;
+        $component = $inventory->component;
+        if ($tourComponent->tour_component_type === 'Add-on') {
+            $upgradeName = "Add-on";
+        } elseif ($tourComponent->tour_component_type === 'Included') {
+            $upgradeName = "Included";
+        } else {
+            $upgrade = FlightInventoryTourUpgrade::where('upgrade_id', '=', $tourComponent->id)->first();
+            $upgradeName = "$upgrade->description - " . f_currency($tourComponent->tour_sales_price);
+        }
+        return new ComponentInformation(
+            "{$component->departureAirport->name}, {$component->departureAirport->address->country?->name} to {$component->arrivalAirport->name}, {$component->arrivalAirport->address->country?->name}",
+            "Flight from {$component->departureAirport->name} to {$component->arrivalAirport->name}",
+            $component->image_url,
+            $inventory->departs_at,
+            $inventory->arrives_at,
+            Icon::flight(),
+            $upgradeName,
+            [
+                'Airline' => $component->airline->name,
+                'Check In' => f_datetime($inventory->check_in),
+                'Departure' => f_datetime($inventory->departs_at),
+                'Arrival' => f_datetime($inventory->arrives_at),
+                'Travel Class' => $inventory->travelClass->__toString(),
+            ]
+        );
     }
 }

@@ -51,7 +51,7 @@
 @include('partials.fields.text', ['name' => 'Passport Middle Name', 'field' => 'passport_middle_name', 'value' => $passport_middle_name ?? null, 'width' => 4,])
 @include('partials.fields.text', ['name' => 'Passport Last Name', 'field' => 'passport_last_name', 'value' => $passport_last_name ?? null, 'width' => 4,])
 @include('partials.fields.text', ['name' => 'Passport Number', 'field' => 'passport_number', 'value' => $passport_number ?? null, 'width' => 3,])
-@include('partials.fields.text', ['name' => 'Passport Issue Country', 'field' => 'passport_country_of_issue', 'value' => $passport_country_of_issue1 ?? null, 'width' => 3,])
+@include('partials.fields.text', ['name' => 'Passport Issue Country', 'field' => 'passport_country_of_issue', 'value' => $passport_country_of_issue ?? null, 'width' => 3,])
 @include('partials.fields.date', ['name' => 'Passport Issue Date', 'field' => 'passport_issue_date', 'value' => $passport_issue_date ?? null, 'width' => 3,])
 @include('partials.fields.date', ['name' => 'Passport Expiry Date', 'field' => 'passport_expiry_date', 'value' => $passport_expiry_date ?? null, 'width' => 3,])
 <hr class="splitter"/>

@@ -235,7 +235,7 @@ class RoomingData {
         if (results.success == true) {
             return true;
         } else {
-            console.log(results.msg);
+            console.error(results.msg);
             return false;
         }
     }

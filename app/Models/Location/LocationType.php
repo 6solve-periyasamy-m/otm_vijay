@@ -3,11 +3,14 @@
 namespace App\Models\Location;
 
 use App\Models\Helper\SimpleModel;
+use App\Models\Traits\HasRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 
 
 /**
@@ -33,12 +36,25 @@ use Illuminate\Support\Carbon;
  */
 class LocationType extends SimpleModel
 {
-    use SoftDeletes;
+    use SoftDeletes, HasRepository;
 
     protected $fillable = ['name',];
 
-    public static function getValidationRules(): array
+    public static function getValidationRules(int|null $id = null): array
     {
+        if (!empty($id)) {
+            return [
+                'name' => [
+                    'required',
+                    Rule::unique('location_types', 'name')->ignore($id),
+                ],
+            ];
+        }
         return ['name' => 'required|unique:location_types,name',];
+    }
+
+    public function addresses(): HasMany
+    {
+        return $this->hasMany(Address::class, 'location_type_id');
     }
 }

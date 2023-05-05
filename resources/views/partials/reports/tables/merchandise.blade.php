@@ -5,6 +5,7 @@
         <th scope="col">Variant</th>
         <th scope="col">Size</th>
         <th scope="col">Tour</th>
+        <th scope="col">Event</th>
         <th scope="col">Customer Name</th>
         <th scope="col">Shipping Address</th>
         <th scope="col">Cost to Customer</th>
@@ -19,6 +20,7 @@
             <td>{{ $row->variant }}</td>
             <td>{{ $row->size }}</td>
             <td>{{ $row->tour }}</td>
+            <td>{{ $row->event }}</td>
             <td>{{ $row->customer }}</td>
             <td>@if(!$row->has_address)(Lead Address)@endif {{ $row->address }}</td>
             <td>{{ $row->cost }}</td>

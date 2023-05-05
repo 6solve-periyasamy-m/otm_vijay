@@ -8,7 +8,6 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
-use App\Models\Tour\Merchandise;
 use App\Models\Transport\TransportInventoryTour;
 use App\Transforms\AccommodationTransforms;
 use App\Transforms\ActivityTransforms;
@@ -358,5 +357,16 @@ class SelectController extends ApiController
     public function getSelectedOrganization($id)
     {
         return CustomerTransforms::getSelectedOrganization($id);
+    }
+
+    public function getAvailableBrands(Request $request)
+    {
+        $filter = $request->has('filter') ? $request->filter : "";
+        return TourTransforms::getSelectBrands($filter);
+    }
+    
+    public function getSelectedBrand($id)
+    {
+        return TourTransforms::getSelectedBrand($id);
     }
 }

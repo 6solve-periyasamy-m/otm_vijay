@@ -2,6 +2,13 @@
 
 @section('title', 'View Itinerary')
 
+@php
+$accommodationLock = $order->tour->repository->isAccommodationLocked();
+$activityLock = $order->tour->repository->isActivityLocked();
+$flightLock = $order->tour->repository->isFlightLocked();
+$transportLock = $order->tour->repository->isTransportLocked();
+@endphp
+
 @push('footer-stack')
     <script>
         const route = "{{ route('customer.itinerary') }}"
@@ -11,6 +18,7 @@
         }
     </script>
 @endpush
+
 @section('content')
     <div class="row payment-balance">
         <div class="col-12">
@@ -154,16 +162,21 @@
                             <x-customer.input.text-area name="order_customer_notes" value="{{ $orderCustomer->external_notes }}" width="{{ $isLead ? 6 : 12 }}">
                                 Customer Specific Order Notes
                             </x-customer.input.text-area>
-                            <x-customer.input.text-area name="accommodation_notes" value="{{ $orderCustomer->accommodation_notes }}" width="3">
+                            @if($accommodationLock || $activityLock || $flightLock || $transportLock)
+                                <span class="fw-bold col-xl-12">
+                                    Some or all of the below sections may be locked due to the tour starting soon. Changes made may not be reflected, therefore if any urgent changes are required, please contact us.
+                                </span>
+                            @endif
+                            <x-customer.input.text-area disabled="{{$accommodationLock}}" name="accommodation_notes" value="{{ $orderCustomer->accommodation_notes }}" width="3">
                                 Accommodation Notes
                             </x-customer.input.text-area>
-                            <x-customer.input.text-area name="activity_notes" value="{{ $orderCustomer->activity_notes }}" width="3">
+                            <x-customer.input.text-area disabled="{{$activityLock}}" name="activity_notes" value="{{ $orderCustomer->activity_notes }}" width="3">
                                 Activity Notes
                             </x-customer.input.text-area>
-                            <x-customer.input.text-area name="flight_notes" value="{{ $orderCustomer->flight_notes }}" width="3">
+                            <x-customer.input.text-area disabled="{{$flightLock}}" name="flight_notes" value="{{ $orderCustomer->flight_notes }}" width="3">
                                 Flight Notes
                             </x-customer.input.text-area>
-                            <x-customer.input.text-area name="transport_notes" value="{{ $orderCustomer->transport_notes }}" width="3">
+                            <x-customer.input.text-area disabled="{{$transportLock}}" name="transport_notes" value="{{ $orderCustomer->transport_notes }}" width="3">
                                 Transport Notes
                             </x-customer.input.text-area>
                             @include('partials.fields.submit')

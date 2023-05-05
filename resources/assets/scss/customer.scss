@@ -2,7 +2,20 @@
 app.scss 
 npm run dev creates the files in public that the website can use
 */
-@import 'bootstrap/app.scss';
+$border: 1px solid #dee2e6;
 
+@import 'bootstrap/app.scss';
+@import 'customer_portal/utility';
+@import 'customer_portal/booking';
 @import 'customer_portal/style';
 @import 'spinner';
+
+body {
+  background-color: #f5f7fb
+}
+
+.booking-title {
+  font-size: 24px;
+  text-align: center;
+  font-weight: bold;
+}

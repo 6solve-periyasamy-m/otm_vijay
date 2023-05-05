@@ -13,6 +13,9 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.6.0/dt-1.11.2/fh-3.1.9/r-2.2.9/sl-1.3.3/datatables.min.css"/>
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> 
         <!-- Styles -->
+        @if(!isset($tailwind) || $tailwind === true)
+        <link href="{{ asset('css/tailwind.css') }}" rel="stylesheet">
+        @endif
         <link href="{{ asset('/css/mdb.css') }}" rel="stylesheet">
         <!-- App (including Lodash, jQuery, Bootstrap via NPM) -->
         <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
@@ -34,6 +37,18 @@
             $(document).ready(function () {
                 @stack('header-ready')
             });
+            function toggleAccordion(accordion) {
+                let body = $($(accordion).attr('data-target'));
+                if (body.hasClass('show')) {
+                    body.removeClass('show');
+                    $(accordion).find("i").first().removeClass("fa-arrow-up")
+                    $(accordion).find("i").first().addClass("fa-arrow-down")
+                } else {
+                    body.addClass('show');
+                    $(accordion).find("i").first().removeClass("fa-arrow-down")
+                    $(accordion).find("i").first().addClass("fa-arrow-up")
+                }
+            }
             function showOverlay(overlay) {
                 let jOverlay = $(overlay);
                 jOverlay.removeClass('hidden');
@@ -45,6 +60,7 @@
                 $('body').removeClass('overflow-hidden');
             }
         </script>
+        @livewireStyles
     </head>
 <body>
 @include('partials.navbar')
@@ -62,6 +78,14 @@
                             </button>
                         </div>
                     @endforeach
+                @endif
+                @if(\Session::has('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {!! \Session::get('success') !!}
+                        <button onclick="$(this).parent().remove()" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <ion-icon name="close"></ion-icon>
+                        </button>
+                    </div>
                 @endif
                 <div class="heading pt-md-4 pb-md-3 pt-3">
                     <h2 class="fw-bold">@yield('title')</h2>
@@ -95,5 +119,9 @@
     }
 </script>
 @stack('footer-stack')
+@livewireScripts
+@livewire('livewire-ui-modal')
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>

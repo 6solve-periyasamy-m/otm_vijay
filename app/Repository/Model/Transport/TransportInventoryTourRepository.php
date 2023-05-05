@@ -16,10 +16,11 @@ use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
-use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Order\Component\OrderTransportRepository;
 use App\Repository\Model\Quote\Component\QuoteTransportRepository;
+use App\Repository\Storage\ComponentInformation;
 use App\Repository\Traits\Component\IsTransport;
+use Icon;
 use Illuminate\Support\Collection;
 
 class TransportInventoryTourRepository extends InventoryTourRepository
@@ -123,6 +124,9 @@ class TransportInventoryTourRepository extends InventoryTourRepository
 
     public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
+        $active = $this->getActiveComponent($this, $traveller);
+        if ($active !== null) return $active;
+        $this->getActiveUpgrade($traveller)?->getBookingComponent($traveller)?->delete();
         $bookingComponent = BookingTransport::create([
             'booking_traveller_id' => $traveller->id,
             'transport_inventory_tour_id' => $this->tourComponent->id,
@@ -212,5 +216,45 @@ class TransportInventoryTourRepository extends InventoryTourRepository
             'tour_sales_price' => $this->tourComponent->tour_sales_price,
         ]);
         return $component->repository;
+    }
+
+    public function isStockControlActive(): bool
+    {
+        return $this->tourComponent->stock_control_active ?? false;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
+    }
+
+    public function getComponentInformation(): ComponentInformation
+    {
+        $tourComponent = $this->tourComponent;
+        $inventory = $tourComponent->inventory;
+        $component = $inventory->component;
+        if ($tourComponent->tour_component_type === 'Add-on') {
+            $upgradeName = "Add-on";
+        } elseif ($tourComponent->tour_component_type === 'Included') {
+            $upgradeName = "Included";
+        } else {
+            $upgrade = TransportInventoryTourUpgrade::where('upgrade_id', '=', $tourComponent->id)->first();
+            $upgradeName = "$upgrade->description - " . f_currency($tourComponent->tour_sales_price);
+        }
+        return new ComponentInformation(
+            $component->name,
+            $component->description,
+            $component->image_url,
+            $inventory->departs_at,
+            $inventory->arrives_at,
+            Icon::transport(),
+            $upgradeName,
+            [
+                'Transport Type' => $component->transportType->name,
+                'Departure' => f_datetime($inventory->departs_at),
+                'Arrival' => f_datetime($inventory->arrives_at),
+                'Travel Class' => $inventory->travelClass->__toString(),
+            ]
+        );
     }
 }

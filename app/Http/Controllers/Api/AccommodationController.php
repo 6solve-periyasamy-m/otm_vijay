@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Exceptions\RoomingFailedException;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\RoomingRequest;
 use App\Models\Accommodation\AccommodationInventory;

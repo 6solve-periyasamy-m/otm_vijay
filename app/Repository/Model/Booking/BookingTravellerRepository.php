@@ -5,6 +5,9 @@ namespace App\Repository\Model\Booking;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
+use App\Models\Booking\Component\BookingActivity;
+use App\Models\Booking\Component\BookingFlight;
+use App\Models\Booking\Component\BookingTransport;
 use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Location\Address;
@@ -14,7 +17,9 @@ use App\Models\Order\OrderCustomer;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
-use App\Repository\Model\Activity\ActivityInventoryTourRepository;
+use App\Repository\Model\Flight\FlightInventoryTourRepository;
+use App\Repository\Storage\BookingComponentStorage;
+use App\Repository\Storage\Customer\Component\BookingComponent;
 use DB;
 use Log;
 use Throwable;
@@ -60,21 +65,18 @@ class BookingTravellerRepository extends ModelRepository
 
     public function addComponent(InventoryTourRepository $tourComponentRepository): bool
     {
-        // In booking, only activity is stock-controlled
-        if ($tourComponentRepository instanceof ActivityInventoryTourRepository) {
-            $travellers = $this->traveller->booking->travellers()->count();
-            if ($tourComponentRepository->getAvailableStock() < $travellers) {
-                $found = false;
-                foreach ($tourComponentRepository->get()->upgrades()->with('upgrade')->get() as $upgrade) {
-                    $repo = $upgrade->upgrade->repository;
-                    if ($repo->getAvailableStock() >= $travellers) {
-                        $tourComponentRepository = $repo;
-                        $found = true;
-                        break;
-                    }
+        $travellers = $this->traveller->booking->travellers()->count();
+        if (!$tourComponentRepository->hasEnoughStock($travellers)) {
+            $found = false;
+            foreach ($tourComponentRepository->get()->upgrades()->with('upgrade')->get() as $upgrade) {
+                $repo = $upgrade->upgrade->repository;
+                if ($repo->hasEnoughStock($travellers)) {
+                    $tourComponentRepository = $repo;
+                    $found = true;
+                    break;
                 }
-                if (!$found) return false;
             }
+            if (!$found) return false;
         }
         $component = $tourComponentRepository->grantToBookingTraveller($this->traveller);
         return isset($component);
@@ -88,7 +90,7 @@ class BookingTravellerRepository extends ModelRepository
     public function upgradeActivity(ActivityInventoryTour $from, ActivityInventoryTour $to, bool $verified = false): bool
     {
         if (!$verified) {
-            if ($to->available_stock < 1) return false;
+            if (!$to->repository->hasEnoughStock()) return false;
             if (!$to->is_bookable) return false;
         }
         try {
@@ -223,6 +225,26 @@ class BookingTravellerRepository extends ModelRepository
         return $traveller;
     }
 
+    public function formSave(int $roomType, int $group)
+    {
+        $this->traveller->room_type_id = $roomType;
+        $this->traveller->group_id = $group;
+        if (isset($this->traveller->id)) {
+            $this->traveller->save();
+            return;
+        }
+        $this->traveller->save();
+        $this->saveComponentSet($this->traveller->booking->leadTraveller->repository->cloneComponents());
+        $this->traveller->booking->repository->evaluateSimpleRooming();
+    }
+
+    public function saveComponentSet(BookingComponentStorage $components)
+    {
+        $this->traveller->activities()->saveMany($components->activities);
+        $this->traveller->flights()->saveMany($components->flights);
+        $this->traveller->transport()->saveMany($components->transport);
+    }
+
     public static function make(array $details): BookingTraveller
     {
         $customer = array_key_exists('email_address', $details) && !empty($details['email_address'])
@@ -266,6 +288,21 @@ class BookingTravellerRepository extends ModelRepository
             'room_type_id' => $details['room_type_id'],
             'group_id' => $details['group_id'],
         ]);
+    }
+    
+    public function cloneComponents(): BookingComponentStorage
+    {
+        $storage = new BookingComponentStorage();
+        foreach ($this->traveller->activities as $activity) {
+            $storage->activities[] = new BookingActivity(['activity_inventory_tour_id' => $activity->activity_inventory_tour_id,]);
+        }
+        foreach ($this->traveller->flights as $flight) {
+            $storage->flights[] = new BookingFlight(['flight_inventory_tour_id' => $flight->flight_inventory_tour_id,]);
+        }
+        foreach ($this->traveller->transport as $transport) {
+            $storage->transport[] = new BookingTransport(['transport_inventory_tour_id' => $transport->transport_inventory_tour_id,]);
+        }
+        return $storage;
     }
 
     public function getTotalCost(): float
@@ -318,5 +355,59 @@ class BookingTravellerRepository extends ModelRepository
     public function __toString(): string
     {
         return "{$this->traveller->first_name} {$this->traveller->last_name} - {$this->traveller?->booking?->token}";
+    }
+
+    /**
+     * @return array<int, BookingComponent[]> Set of booking components, grouped by date
+     */
+    public function getSummaryComponents(): array
+    {
+        /**
+         * @var BookingComponent[] $components
+         */
+        $components = [];
+        foreach ($this->traveller->booking->tour->repository->getComponents(false, true, true, true, false, ['Included', 'Add-on']) as $component) {
+            $active = $component->getActiveUpgrade($this->traveller);
+            if ($active !== null) {
+                $components[] = $active->getAbstractBookingComponent($this->traveller);
+                continue;
+            }
+            if ($component instanceof FlightInventoryTourRepository &&
+                $component->get()->flight_type !== 'Mid-Package' &&
+                $component->getBookingComponent($this->traveller) === null) {
+                continue;
+            }
+            $components[] = $component->getAbstractBookingComponent($this->traveller);
+        }
+        foreach ($this->traveller->accommodation as $accommodation) {
+            $components[] = $accommodation->tourComponent->repository->getAbstractBookingComponent($this->traveller);
+        }
+        uasort($components, ['static', 'compareStarts']);
+        $ordered = [];
+        foreach ($components as $component) {
+            $day = $component->start->clone()->setTime(0,0);
+            if (!array_key_exists($day->unix(), $ordered)) {
+                $ordered[$day->unix()] = [];
+            }
+            $ordered[$day->unix()][] = $component;
+        }
+        foreach ($ordered as $key => $values) {
+            uasort($values, ['static', 'compareComponents']);
+            $ordered[$key] = $values;
+        }
+        return $ordered;
+    }
+
+    private static function compareStarts(BookingComponent $a, BookingComponent $b): int
+    {
+        if ($a->start->eq($b->start)) return 0;
+        return $a->start->lt($b->start) ? -1 : 1;
+    }
+
+    private static function compareComponents(BookingComponent $a, BookingComponent $b): int
+    {
+        if ($a->owned && !$b->owned) return -1;
+        if ($b->owned && !$a->owned) return 1;
+        return static::compareStarts($a, $b);
     }
 }

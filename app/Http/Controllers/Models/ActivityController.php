@@ -7,6 +7,7 @@ use App\Models\Activity\Activity;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Repository\Model\Location\AddressRepository;
+use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -51,6 +52,16 @@ class ActivityController extends Controller
     public function view(Activity $activity)
     {
         return view('pages.components.activity', ['activity' => $activity,]);
+    }
+
+    public function manifest(Activity $activity)
+    {
+        return ActivityManifestRepository::viewReport($activity->repository, 'activities.manifest.export', ['activity' => $activity,]);
+    }
+
+    public function export(Activity $activity, string $extension = 'xlsx')
+    {
+        return ActivityManifestRepository::exportReport($activity->repository, $extension);
     }
 
     public function edit(Activity $activity)

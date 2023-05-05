@@ -46,7 +46,16 @@
                     <td>{{ f_currency($activityInventory->purchase_price) }}</td>
                     <td>{{ f_currency($activityInventory->sales_price) }}</td>
                     <td>{{ $activityInventory->notes }}</td>
-                    <td class="actions-3">
+                    <td class="actions-4">
+                        @can('read', \App\Models\Activity\ActivityInventory::class)
+                            <a href="{{route('activity-inventories.manifest.view', ['activity' => $activity, 'activityInventory' => $activityInventory,])}}" class="btn btn-outline-secondary btn-sm mb-1">
+                                {{ Icon::list() }}
+                            </a>
+                        @else
+                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                {{ Icon::list() }}
+                            </span>
+                        @endcan
                         @can('create', \App\Models\Activity\ActivityInventory::class)
                             <a href="{{route('activity-inventories.duplicate', ['activity' => $activity, 'activityInventory' => $activityInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
                                 {{ Icon::copy() }}

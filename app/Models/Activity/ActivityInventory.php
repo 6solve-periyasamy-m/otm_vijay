@@ -2,6 +2,7 @@
 
 namespace App\Models\Activity;
 
+use App\Models\Order\Component\OrderActivity;
 use App\Repository\Model\Activity\ActivityInventoryRepository;
 use Database\Factories\Activity\ActivityInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -40,6 +42,7 @@ use Illuminate\Support\Carbon;
  * @property-read int $used_stock How much stock is sold
  * @property-read TicketType $ticketType
  * @property-read Collection|ActivityInventoryTour[] $tourComponents
+ * @property-read Collection|OrderActivity[] $orders
  * @property-read int|null $tour_components_count
  * @property-read ActivityInventoryRepository $repository
  * @method static ActivityInventoryFactory factory(...$parameters)
@@ -106,6 +109,11 @@ class ActivityInventory extends Model
     public function component(): BelongsTo
     {
         return $this->belongsTo(Activity::class, 'activity_id');
+    }
+
+    public function orders(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderActivity::class, ActivityInventoryTour::class, 'activity_inventory_id', 'activity_inventory_tour_id');
     }
 
     public function ticketType(): BelongsTo

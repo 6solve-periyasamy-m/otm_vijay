@@ -35,6 +35,7 @@ class TourController extends Controller
             'description' => $request->input('description'),
             'date_from' => $request->input('date_from'),
             'date_to' => $request->input('date_to'),
+            'brand_id' => $request->input('brand_id') == 0 ? null : $request->input('brand_id'),
             'base_price_per_person' => $request->input('base_price_per_person'),
             'margin' => $request->input('margin'),
             'single_occupancy_surcharge' => $request->input('single_occupancy_surcharge'),
@@ -44,11 +45,16 @@ class TourController extends Controller
             'booking_form_url' => $request->input('booking_form_url'),
             'tour_category_id' => $request->input('tour_category_id'),
             'deposit' => $request->input('deposit'),
-            'booking_fee' => $request->input('booking_fee'),
+            'booking_fee' => $request->input('booking_fee') ?? 0,
             'is_active' => $request->input('is_active') === 'on' ? 1 : 0,
             'notes' => $request->input('notes'),
             'invoice_footer' => $request->input('invoice_footer'),
             'final_payment' => $request->input('final_payment'),
+            'accommodation_stock_control' => $request->input('accommodation_stock_control') === 'on' ? 1 : 0,
+            'activity_stock_control' => $request->input('activity_stock_control') === 'on' ? 1 : 0,
+            'flight_stock_control' => $request->input('flight_stock_control') === 'on' ? 1 : 0,
+            'transport_stock_control' => $request->input('transport_stock_control') === 'on' ? 1 : 0,
+            'merchandise_stock_control' => $request->input('merchandise_stock_control') === 'on' ? 1 : 0,
             'terms' => $request->input('terms'),
         ]);
         return redirect()->route('tours.view', ['tour' => $tour,]);
@@ -79,18 +85,6 @@ class TourController extends Controller
         return view('pages.tour.costing', ['tour' => $tour,]);
     }
 
-    public function rooming(Request $request, Tour $tour)
-    {
-        $notes = !$request->has('notes') || $request->notes == true;
-        return RoomingReportRepository::viewReport($tour->repository, 'tours.rooming.export', $notes, ['tour' => $tour,]);
-    }
-
-    public function exportRooming(Request $request, Tour $tour, string $extension)
-    {
-        $notes = !$request->has('notes') || $request->notes == true;
-        return RoomingReportRepository::exportReport($tour->repository, $extension, $notes);
-    }
-
     public function duplicate(Tour $tour)
     {
         $newTour = $tour->clone();
@@ -119,10 +113,11 @@ class TourController extends Controller
             'description' => $request->input('description'),
             'date_from' => $request->input('date_from'),
             'date_to' => $request->input('date_to'),
+            'brand_id' => $request->input('brand_id') == 0 ? null : $request->input('brand_id'),
             'base_price_per_person' => $request->input('base_price_per_person'),
             'margin' => $request->input('margin'),
             'deposit' => $request->input('deposit'),
-            'booking_fee' => $request->input('booking_fee'),
+            'booking_fee' => $request->input('booking_fee') ?? 0,
             'single_occupancy_surcharge' => $request->input('single_occupancy_surcharge'),
             'stock_control_active' => $request->input('stock_control_active') === 'on' ? 1 : 0,
             'atol_protected' => $request->input('atol_protected') == -1 ? null : $request->input('atol_protected'),
@@ -132,6 +127,11 @@ class TourController extends Controller
             'is_active' => $request->input('is_active') === 'on' ? 1 : 0,
             'notes' => $request->input('notes'),
             'invoice_footer' => $request->input('invoice_footer'),
+            'accommodation_stock_control' => $request->input('accommodation_stock_control') === 'on' ? 1 : 0,
+            'activity_stock_control' => $request->input('activity_stock_control') === 'on' ? 1 : 0,
+            'flight_stock_control' => $request->input('flight_stock_control') === 'on' ? 1 : 0,
+            'transport_stock_control' => $request->input('transport_stock_control') === 'on' ? 1 : 0,
+            'merchandise_stock_control' => $request->input('merchandise_stock_control') === 'on' ? 1 : 0,
             'terms' => $request->input('terms'),
             'final_payment' => $request->input('final_payment'),
         ]);

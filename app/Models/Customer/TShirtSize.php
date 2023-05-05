@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\Rule;
 
 /**
  * App\Models\TShirtSize
@@ -45,8 +46,16 @@ class TShirtSize extends SimpleModel
 
     protected $fillable = ['name',];
 
-    public static function getValidationRules(): array
+    public static function getValidationRules(int|null $id = null): array
     {
+        if (!empty($id)) {
+            return [
+                'name' => [
+                    'required',
+                    Rule::unique('t_shirt_sizes', 'name')->ignore($id),
+                ],
+            ];
+        }
         return ['name' => 'required|unique:t_shirt_sizes,name',];
     }
 

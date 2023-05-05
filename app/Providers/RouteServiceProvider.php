@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Order\Order;
+use App\Repository\Model\Order\OrderRepository;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -36,6 +38,12 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->configureRateLimiting();
+
+        Route::bind('reference', function (string $value): Order|null {
+            $order = OrderRepository::getFromBookingReference($value);
+            if (!isset($order)) abort(404);
+            return $order;
+        });
 
         $this->routes(function () {
             Route::prefix('api')

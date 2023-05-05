@@ -40,7 +40,7 @@ class TransportTypeController extends Controller
 
     public function update(Request $request, TransportType $transportType)
     {
-        $request->validate(TransportType::getValidationRules());
+        $request->validate(TransportType::getValidationRules($transportType->id));
         $transportType->update([
             'name' => $request->input('name'),
         ]);

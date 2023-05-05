@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @property bool $paying
+ * @property int|null $count
  */
 class UnknownTravellerRequest extends FormRequest
 {
@@ -17,7 +18,8 @@ class UnknownTravellerRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'paying' => 'required|boolean',
+            'count' => 'nullable|integer'
         ];
     }
 }

@@ -68,7 +68,7 @@
                 </li>
                 <li class="nav-item col-6 col-md-2">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities">
-                        {{ Icon::accommodation() }} Activities
+                        {{ Icon::activity() }} Activities
                     </button>
                 </li>
                 <li class="nav-item col-6 col-md-2">

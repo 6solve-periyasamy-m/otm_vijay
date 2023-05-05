@@ -58,11 +58,6 @@
 @endsection
 
 @section('content')
-    <div class="row row justify-content-center">
-        <div class="col-6 col-md-5 col-xl-3">
-            <img src="{{ asset('images/octlogo.png') }}" class="maxwidth"/>
-        </div>
-    </div>
     <div class="card">
         <div class="card-body">
             <a class="btn btn-success float-end" href="{{ route('orders.create') }}">

@@ -32,7 +32,8 @@ class SettingsController extends Controller
     }
 
     public function edit() {
-        return view('pages.settings.form');
+        //return view('pages.settings.form');
+        return view('pages.admin.system.settings');
     }
 
     public function update(Request $request) {
@@ -68,6 +69,17 @@ class SettingsController extends Controller
             'system.year.start' => $request->input('year_start'),
             'system.historic' => $request->input('historic'),
             'payment.required' => $request->input('payment_required') == 'on' ? 1 : 0,
+            'components.lock' => $request->input('components_lock'),
+            'passport.lock' => $request->input('passport_lock'),
+            'passport.unlock' => $request->input('passport_unlock'),
+            'accommodation.lock' => $request->input('accommodation_lock'),
+            'accommodation.unlock' => $request->input('accommodation_unlock'),
+            'activity.lock' => $request->input('activity_lock'),
+            'activity.unlock' => $request->input('activity_unlock'),
+            'flight.lock' => $request->input('flight_lock'),
+            'flight.unlock' => $request->input('flight_unlock'),
+            'transport.lock' => $request->input('transport_lock'),
+            'transport.unlock' => $request->input('transport_unlock'),
         ]);
         if ($request->has('company_logo')  && $request->file('company_logo') != null) {
             Settings::set('company.logo', $this->saveImage($request->file('company_logo')));

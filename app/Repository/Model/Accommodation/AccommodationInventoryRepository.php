@@ -9,9 +9,7 @@ use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
-use App\Repository\Abstracts\InventoryTourRepository;
-use App\Repository\Abstracts\QuoteComponentRepository;
-use App\Repository\Interfaces\HasRoomingList;
+use App\Repository\Interfaces\Manifest\HasRoomingList;
 use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
 use App\Repository\Traits\Component\IsAccommodation;
 use Carbon\Carbon;
@@ -110,6 +108,7 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
             'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
             'tour_component_type' => $tourComponentType,
             'tour_id' => $tour->id,
+            'stock_control_active' => $tour->accommodation_stock_control,
         ]);
         $this->inventory->tourComponents()->save($inventoryTour);
         return $inventoryTour->repository;
@@ -148,5 +147,15 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
     public function getSalesPrice(): ?float
     {
         return $this->inventory->sales_price;
+    }
+
+    public function isStockControlActive(): bool
+    {
+        return false;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return true;
     }
 }

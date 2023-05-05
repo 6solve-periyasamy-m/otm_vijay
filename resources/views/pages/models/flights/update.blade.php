@@ -8,6 +8,7 @@
       'departure_airport_id' => $flight->departure_airport_id,
       'arrival_airport_id' => $flight->arrival_airport_id,
       'is_domestic' => $flight->is_domestic,
+      'image_url' => $flight->image_url,
       'notes' => $flight->notes,
       'currency' => $flight->currency_id,
       'available_from' => $flight->available_from,

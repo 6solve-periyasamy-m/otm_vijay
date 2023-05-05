@@ -2,6 +2,7 @@
 
 namespace App\Models\Flight;
 
+use App\Models\Order\Component\OrderFlight;
 use App\Models\TravelClass;
 use App\Repository\Model\Flight\FlightInventoryRepository;
 use Database\Factories\Flight\FlightInventoryFactory;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -41,6 +43,7 @@ use Illuminate\Support\Carbon;
  * @property-read Airport|null $departureAirport
  * @property-read Flight $flight
  * @property-read Collection|FlightInventoryTour[] $flightInventoryTour
+ * @property-read Collection|OrderFlight[] $orders
  * @property-read int|null $flight_inventory_tour_count
  * @property-read string $flight_for_tour
  * @property-read int $used_on_tour_count
@@ -178,5 +181,10 @@ class FlightInventory extends Model
     {
         if (!isset($this->internal_repository)) $this->internal_repository = new FlightInventoryRepository($this);
         return $this->internal_repository;
+    }
+
+    public function orders(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderFlight::class, FlightInventoryTour::class, 'flight_inventory_id', 'flight_inventory_tour_id');
     }
 }
