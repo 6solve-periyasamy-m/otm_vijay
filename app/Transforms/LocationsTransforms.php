@@ -27,7 +27,7 @@ class LocationsTransforms implements LocationsTransformsInterface
         foreach (Country::orderBy('name')->get() as $country) {
             $subData = [];
             $subData['id'] = $country->id;
-            $subData['text'] = $country->name . ' - ' . $country->alpha_code;
+            $subData['text'] = $country?->name . ' - ' . $country->alpha_code;
             if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
@@ -50,7 +50,7 @@ class LocationsTransforms implements LocationsTransformsInterface
         $country = Country::findOrFail($id);
         $data = [];
         $data['id'] = $country->id;
-        $data['text'] = $country->name . ' - ' . $country->alpha_code;
+        $data['text'] = $country?->name . ' - ' . $country->alpha_code;
         return $data;
     }
 

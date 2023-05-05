@@ -254,7 +254,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
             $upgradeName = "$upgrade->description - " . f_currency($tourComponent->tour_sales_price);
         }
         return new ComponentInformation(
-            "{$component->departureAirport->name}, {$component->departureAirport->address->country->name} to {$component->arrivalAirport->name}, {$component->arrivalAirport->address->country->name}",
+            "{$component->departureAirport->name}, {$component->departureAirport->address->country?->name} to {$component->arrivalAirport->name}, {$component->arrivalAirport->address->country?->name}",
             "Flight from {$component->departureAirport->name} to {$component->arrivalAirport->name}",
             $component->image_url,
             $inventory->departs_at,

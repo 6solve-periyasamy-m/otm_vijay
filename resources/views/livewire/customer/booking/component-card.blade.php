@@ -10,7 +10,7 @@
             </div>
             @if (!$isIncluded)
             <div class="col-2 component-dates fw-bold my-auto">
-                {{ f_currency($this->component->component->getSalesPrice()) }}
+                {{ f_currency($this->component->component->getCostToCustomer()) }}
             </div>
             @endif
         </div>
