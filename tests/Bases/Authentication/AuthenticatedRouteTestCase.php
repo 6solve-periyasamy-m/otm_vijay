@@ -1,6 +1,6 @@
 <?php /** @noinspection LaravelFunctionsInspection */
 
-namespace Tests;
+namespace Tests\Bases\Authentication;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;

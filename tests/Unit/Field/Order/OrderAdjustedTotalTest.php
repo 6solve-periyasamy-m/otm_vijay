@@ -3,8 +3,8 @@
 namespace Field\Order;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\DatabaseTestCase;
-use Tests\Traits\TestsOrder;
+use Tests\Bases\DatabaseTestCase;
+use Tests\Traits\Model\TestsOrder;
 
 /**
  * @covers \App\Models\Order\Order::getTotalAdjustmentsAttribute

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Traits;
+namespace Tests\Traits\Model;
 
 use App\Models\Flight\Airline;
 use App\Models\Flight\Airport;

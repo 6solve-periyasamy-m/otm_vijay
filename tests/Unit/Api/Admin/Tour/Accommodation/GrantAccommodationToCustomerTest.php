@@ -2,8 +2,8 @@
 
 namespace Api\Admin\Tour\Accommodation;
 
-use Tests\AuthenticationTestCase;
-use Tests\Traits\TestsOrder;
+use Tests\Bases\Authentication\AuthenticationTestCase;
+use Tests\Traits\Model\TestsOrder;
 
 /**
  * @covers \App\Http\Controllers\Api\TourComponentController::addAccommodationAddon

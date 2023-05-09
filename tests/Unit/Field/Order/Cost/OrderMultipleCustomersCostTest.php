@@ -7,8 +7,8 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Transport\TransportInventoryTour;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\DatabaseTestCase;
-use Tests\Traits\TestsOrder;
+use Tests\Bases\DatabaseTestCase;
+use Tests\Traits\Model\TestsOrder;
 
 /**
  * @covers \App\Models\Order\Order::getCostAttribute

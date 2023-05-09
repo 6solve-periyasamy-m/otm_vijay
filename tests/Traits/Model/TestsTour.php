@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Traits;
+namespace Tests\Traits\Model;
 
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
@@ -8,7 +8,6 @@ use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
-use App\Models\Merchandise\Merchandise;
 use App\Models\Merchandise\MerchandiseInventory;
 use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Tour\Tour;

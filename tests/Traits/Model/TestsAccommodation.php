@@ -1,10 +1,9 @@
 <?php
 
-namespace Tests\Traits;
+namespace Tests\Traits\Model;
 
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
-use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\BoardType;
 use App\Models\Accommodation\RoomType;
 

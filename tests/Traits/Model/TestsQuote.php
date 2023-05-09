@@ -1,10 +1,9 @@
 <?php
 
-namespace Tests\Traits;
+namespace Tests\Traits\Model;
 
 use App\Models\Customer\Customer;
 use App\Models\Quote\Quote;
-use App\Repository\Model\Quote\QuoteRepository;
 
 trait TestsQuote
 {

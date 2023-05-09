@@ -1,9 +1,8 @@
 <?php
 
-namespace Tests;
+namespace Tests\Bases\Authentication;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Tests\Bases\DatabaseTestCase;
 use Tests\Traits\TestsAuthentication;
 
 abstract class AuthenticationTestCase extends DatabaseTestCase

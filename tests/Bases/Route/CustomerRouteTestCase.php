@@ -1,10 +1,11 @@
 <?php /** @noinspection LaravelFunctionsInspection */
 
-namespace Tests;
+namespace Tests\Bases\Route;
 
 use App\Models\Customer\Customer;
 use Illuminate\Testing\TestResponse;
-use Tests\Traits\TestsOrder;
+use Tests\Bases\Authentication\AuthenticationTestCase;
+use Tests\Traits\Model\TestsOrder;
 
 abstract class CustomerRouteTestCase extends AuthenticationTestCase
 {

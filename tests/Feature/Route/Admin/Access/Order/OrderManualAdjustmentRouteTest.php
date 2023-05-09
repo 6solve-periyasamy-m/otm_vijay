@@ -3,8 +3,8 @@
 namespace Route\Admin\Access\Order;
 
 use App\Models\Order\Adjustment\ManualAdjustment;
-use Tests\AuthenticatedRouteTestCase;
-use Tests\Traits\TestsOrder;
+use Tests\Bases\Authentication\AuthenticatedRouteTestCase;
+use Tests\Traits\Model\TestsOrder;
 
 class OrderManualAdjustmentRouteTest extends AuthenticatedRouteTestCase
 {

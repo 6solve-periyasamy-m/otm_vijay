@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests;
+namespace Tests\Bases\Route;
 
-use App\Models\User;
 use Illuminate\Testing\TestResponse;
+use Tests\Bases\TestCase;
 
-class RouteTestCase extends TestCase
+abstract class RouteTestCase extends TestCase
 {
     protected function performRouteRequest(string $route, array $params = []): TestResponse
     {

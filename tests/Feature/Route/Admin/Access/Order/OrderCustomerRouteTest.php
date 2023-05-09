@@ -3,8 +3,8 @@
 namespace Route\Admin\Access\Order;
 
 use App\Models\Order\OrderCustomer;
-use Tests\AuthenticatedRouteTestCase;
-use Tests\Traits\TestsOrder;
+use Tests\Bases\Authentication\AuthenticatedRouteTestCase;
+use Tests\Traits\Model\TestsOrder;
 
 class OrderCustomerRouteTest extends AuthenticatedRouteTestCase
 {

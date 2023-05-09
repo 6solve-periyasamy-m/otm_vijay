@@ -4,8 +4,8 @@ namespace Route\Admin\Access\Accommodation;
 
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
-use Tests\AuthenticatedRouteTestCase;
-use Tests\Traits\TestsAccommodation;
+use Tests\Bases\Authentication\AuthenticatedRouteTestCase;
+use Tests\Traits\Model\TestsAccommodation;
 
 class AccommodationRouteTest extends AuthenticatedRouteTestCase
 {
