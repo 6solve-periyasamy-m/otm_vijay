@@ -2,23 +2,17 @@
 
 namespace App\Http\Controllers\Models;
 
-use App\Events\Order\Customer\OrderCustomerCreatedEvent;
 use App\Events\Order\OrderCancelledEvent;
-use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderEditedEvent;
 use App\Events\Order\OrderRestoredEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Order\CreateOrderRequest;
 use App\Http\Requests\Admin\Order\MigrateRequest;
-use App\Models\Customer\Customer;
+use App\Http\Requests\Admin\Order\UpdateOrderRequest;
 use App\Models\Order\Order;
-use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Reporting\ReportRepository;
-use App\Repository\RoomingRepository;
-use App\Repository\Storage\ConvertedCustomer;
-use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -83,19 +77,10 @@ class OrderController extends Controller
         return view('pages.models.orders.update', ['order' => $order,]);
     }
 
-    public function update(Request $request, Order $order)
+    public function update(UpdateOrderRequest $request, Order $order)
     {
-        $request->validate(Order::getValidationRules());
-        $request->validate(['deposit' => 'required|numeric',]);
-        $shouldInvoice = $order->deposit != $request->input('deposit');
-        $order->update([
-            'ordered_on' => $request->input('ordered_on'),
-            'internal_notes' => $request->input('internal_notes'),
-            'external_notes' => $request->input('external_notes'),
-            'deposit' => $request->input('deposit'),
-            'invoice_footer' => $request->input('invoice_footer'),
-            'booking_fee' => $request->input('booking_fee')
-        ]);
+        $shouldInvoice = $order->deposit != $request->deposit;
+        $order->update($request->getData());
         event(new OrderEditedEvent($order, $shouldInvoice));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
