@@ -12,7 +12,7 @@ class OrderFormTest extends AuthenticatedFormTestCase
     use TestsOrder;
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderController::store
+     * @covers \App\Http\Controllers\Admin\Order\OrderController::store
      * @covers \App\Http\Requests\Admin\Order\CreateOrderRequest
      * @return void
      */
@@ -35,7 +35,7 @@ class OrderFormTest extends AuthenticatedFormTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderController::update
+     * @covers \App\Http\Controllers\Admin\Order\OrderController::update
      * @covers \App\Http\Requests\Admin\Order\UpdateOrderRequest
      * @return void
      */
