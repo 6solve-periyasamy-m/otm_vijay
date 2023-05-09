@@ -13,7 +13,7 @@ class OrderPagesRouteTest extends AuthenticatedRouteTestCase
     private string $class = Order::class;
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderController::index
+     * @covers \App\Http\Controllers\Admin\Order\OrderController::index
      * @return void
      */
     public function testOrderList(): void
@@ -22,7 +22,7 @@ class OrderPagesRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\OrderSystemController::show
+     * @covers \App\Http\Controllers\OrderController::show
      * @return void
      */
     public function testOrderView(): void
@@ -32,7 +32,7 @@ class OrderPagesRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderController::edit
+     * @covers \App\Http\Controllers\Admin\Order\OrderController::edit
      * @return void
      */
     public function testOrderEdit(): void
@@ -42,7 +42,7 @@ class OrderPagesRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderController::create
+     * @covers \App\Http\Controllers\Admin\Order\OrderController::create
      * @return void
      */
     public function testOrderCreate(): void
@@ -52,7 +52,7 @@ class OrderPagesRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderController::occupancy
+     * @covers \App\Http\Controllers\Admin\Order\OrderController::occupancy
      * @return void
      */
     public function testOrderOccupancy(): void

@@ -23,7 +23,7 @@ class OrderCustomerRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderCustomerModelController::edit
+     * @covers \App\Http\Controllers\Admin\Order\OrderCustomerModelController::edit
      * @return void
      */
     public function testOrderCustomerEdit(): void
@@ -33,7 +33,7 @@ class OrderCustomerRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderCustomerModelController::create
+     * @covers \App\Http\Controllers\Admin\Order\OrderCustomerModelController::create
      * @return void
      */
     public function testOrderCustomerCreate(): void
@@ -43,7 +43,7 @@ class OrderCustomerRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderCustomerModelController::destroy
+     * @covers \App\Http\Controllers\Admin\Order\OrderCustomerModelController::destroy
      * @return void
      */
     public function testOrderCustomerAdjustmentDelete(): void

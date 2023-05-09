@@ -1,0 +1,129 @@
+<?php
+
+use App\Http\Controllers\Admin\AdditionalCostController;
+use App\Http\Controllers\Admin\OrganizationController;
+use App\Http\Controllers\Admin\Reporting\BespokeReportController;
+use App\Http\Controllers\Admin\System\ImportController;
+use App\Http\Controllers\Admin\System\MailController;
+use App\Http\Controllers\Admin\System\PermissionsController;
+use App\Http\Controllers\Admin\System\SettingsController;
+use App\Http\Controllers\Admin\TravelClassController;
+use App\Http\Controllers\Admin\UserController;
+
+Auth::routes(['verify' => true, 'register' => false]);
+
+Route::middleware('auth:web')->group(function () {
+
+    Route::prefix('orders')->group(__DIR__ . '/admin/order.php');
+
+    Route::prefix('customers')->group(__DIR__ . '/admin/customer.php');
+
+    Route::prefix('quotes')->name('quotes.')->group(__DIR__ . '/admin/quote.php');
+
+    Route::prefix('tours')->group(__DIR__ . '/admin/tour.php');
+
+    Route::prefix('events')->group(__DIR__ . '/admin/event.php');
+
+    Route::prefix('accommodation')->group(__DIR__ . '/admin/component/accommodation.php');
+
+    Route::prefix('activities')->group(__DIR__ . '/admin/component/activity.php');
+
+    Route::prefix('flights')->group(__DIR__ . '/admin/component/flight.php');
+
+    Route::prefix('transports')->group(__DIR__ . '/admin/component/transport.php');
+
+    Route::prefix('merchandise')->name('merchandise.')->group(__DIR__ . '/admin/component/merchandise.php');
+
+    Route::prefix('travel-classes')->group(function () {
+        Route::get('/', [TravelClassController::class, 'index'])->name('travel-classes.all')->middleware('bouncer:TravelClass,read');
+        Route::get('/create', [TravelClassController::class, 'create'])->name('travel-classes.create')->middleware('bouncer:TravelClass,create');
+        Route::post('/create', [TravelClassController::class, 'store'])->name('travel-classes.store')->middleware('bouncer:TravelClass,create');
+        Route::prefix('{travelClass}')->group(function () {
+            Route::get('/', [TravelClassController::class, 'view'])->name('travel-classes.view')->middleware('bouncer:TravelClass,read');
+            Route::get('/update', [TravelClassController::class, 'edit'])->name('travel-classes.edit')->middleware('bouncer:TravelClass,update');
+            Route::post('/update', [TravelClassController::class, 'update'])->name('travel-classes.update')->middleware('bouncer:TravelClass,update');
+            Route::post('/delete', [TravelClassController::class, 'destroy'])->name('travel-classes.delete')->middleware('bouncer:TravelClass,delete');
+        });
+    });
+
+    Route::prefix('cost')->group(function () {
+        Route::post('/{model}/{id}/create/', [AdditionalCostController::class, 'store'])->name('additional-cost.store');
+        Route::prefix('{cost}')->group(function () {
+            Route::post('/update', [AdditionalCostController::class, 'update'])->name('additional-cost.update');
+            Route::post('/delete', [AdditionalCostController::class, 'destroy'])->name('additional-cost.delete');
+        });
+    });
+
+    Route::prefix('locations')->group(__DIR__ . '/admin/location.php');
+
+    Route::get('/', function () {
+        return view('pages.dash');
+    })->name('dash');
+
+    Route::get('/attributes', function () {
+        return view('pages.admin.small-models');
+    })->name('attributes.edit');
+
+    Route::prefix('settings')->group(function () {
+        Route::middleware('bouncer:System\Setting,update')->name('settings.')->group(function () {
+            Route::get('/', [SettingsController::class, 'edit'])->name('edit');
+            Route::post('/', [SettingsController::class, 'update'])->name('update');
+        });
+        Route::prefix('import')->name('import.')->group(function () {
+            Route::post('/customer', [ImportController::class, 'customer'])->name('customer');
+            Route::post('/accommodation', [ImportController::class, 'accommodation'])->name('accommodation');
+            Route::post('/accommodation/inventory', [ImportController::class, 'accommodationInventory'])->name('accommodation.inventory');
+            Route::post('/activity', [ImportController::class, 'activity'])->name('activity');
+            Route::post('/activity/inventory', [ImportController::class, 'activityInventory'])->name('activity.inventory');
+        });
+        Route::prefix('email/')->name('email.')->group(function () {
+            Route::prefix('{mail}')->group(function () {
+                Route::get('/edit', [MailController::class, 'edit'])->name('edit');
+                Route::post('/edit', [MailController::class, 'update'])->name('update');
+                Route::get('/demo', [MailController::class, 'demo'])->name('demo');
+            });
+        });
+    });
+
+    Route::prefix('organizations')->group(function () {
+        Route::get('/', [OrganizationController::class, 'index'])->name('organizations.all')->middleware('bouncer:Customer\Customer,read');
+        Route::get('/create', [OrganizationController::class, 'create'])->name('organizations.create')->middleware('bouncer:Customer\Customer,create');
+        Route::post('/create', [OrganizationController::class, 'store'])->name('organizations.store')->middleware('bouncer:Customer\Customer,create');
+        Route::prefix('{organization}')->group(function () {
+            Route::get('/', [OrganizationController::class, 'view'])->name('organizations.view')->middleware('bouncer:Customer\Customer,read');
+            Route::get('/update', [OrganizationController::class, 'edit'])->name('organizations.edit')->middleware('bouncer:Customer\Customer,update');
+            Route::post('/update', [OrganizationController::class, 'update'])->name('organizations.update')->middleware('bouncer:Customer\Customer,update');
+            Route::post('/delete', [OrganizationController::class, 'destroy'])->name('organizations.delete')->middleware('bouncer:Customer\Customer,delete');
+        });
+    });
+
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('users.all')->middleware('bouncer:User,read');
+        Route::get('/create', [UserController::class, 'create'])->name('users.create')->middleware('bouncer:User,create');
+        Route::post('/create', [UserController::class, 'store'])->name('users.store')->middleware('bouncer:User,create');
+        Route::prefix('{user}')->group(function () {
+            Route::get('/', [UserController::class, 'view'])->name('users.view')->middleware('bouncer:User,read');
+            Route::get('/update', [UserController::class, 'edit'])->name('users.edit')->middleware('bouncer:User,update');
+            Route::post('/update', [UserController::class, 'update'])->name('users.update')->middleware('bouncer:User,update');
+            Route::post('/delete', [UserController::class, 'destroy'])->name('users.delete')->middleware('bouncer:User,delete');
+            Route::post('/restore', [UserController::class, 'restore'])->name('users.restore')->middleware('bouncer:User,delete');
+        });
+    });
+
+    Route::prefix('roles')->group(function () {
+        Route::get('/', [PermissionsController::class, 'index'])->name('roles.all')->middleware('bouncer:User,read');
+        Route::get('/create', [PermissionsController::class, 'create'])->name('roles.create')->middleware('bouncer:User,create');
+        Route::post('/create', [PermissionsController::class, 'store'])->name('roles.store')->middleware('bouncer:User,create');
+        Route::prefix('{role}')->group(function () {
+            Route::get('/update', [PermissionsController::class, 'edit'])->name('roles.edit')->middleware('bouncer:User,update');
+            Route::post('/update', [PermissionsController::class, 'update'])->name('roles.update')->middleware('bouncer:User,update');
+            Route::post('/delete', [PermissionsController::class, 'destroy'])->name('roles.delete')->middleware('bouncer:User,delete');
+        });
+    });
+
+    Route::prefix('reports')->group(function () {
+        Route::get('/', [BespokeReportController::class, 'index'])->name('reports.all');
+        Route::prefix('bespoke')->group(__DIR__ . '/admin/report/bespoke.php');
+        Route::prefix('/')->group(__DIR__ . '/admin/report/system.php');
+    });
+});

@@ -13,7 +13,7 @@ class OrderManualAdjustmentRouteTest extends AuthenticatedRouteTestCase
     private string $class = ManualAdjustment::class;
 
     /**
-     * @covers \App\Http\Controllers\Models\ManualAdjustmentController::edit
+     * @covers \App\Http\Controllers\Admin\Order\Adjustment\ManualAdjustmentController::edit
      * @return void
      */
     public function testManualAdjustmentEdit(): void
@@ -23,7 +23,7 @@ class OrderManualAdjustmentRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\ManualAdjustmentController::create
+     * @covers \App\Http\Controllers\Admin\Order\Adjustment\ManualAdjustmentController::create
      * @return void
      */
     public function testManualAdjustmentCreate(): void
@@ -33,7 +33,7 @@ class OrderManualAdjustmentRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\ManualAdjustmentController::destroy
+     * @covers \App\Http\Controllers\Admin\Order\Adjustment\ManualAdjustmentController::destroy
      * @return void
      */
     public function testOrderCustomerAdjustmentDelete(): void

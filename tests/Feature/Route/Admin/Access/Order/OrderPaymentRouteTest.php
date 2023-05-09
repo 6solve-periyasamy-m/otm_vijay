@@ -13,7 +13,7 @@ class OrderPaymentRouteTest extends AuthenticatedRouteTestCase
     private string $class = Payment::class;
 
     /**
-     * @covers \App\Http\Controllers\Models\PaymentController::edit
+     * @covers \App\Http\Controllers\Admin\Order\Payment\PaymentController::edit
      * @return void
      */
     public function testPaymentEdit(): void
@@ -23,7 +23,7 @@ class OrderPaymentRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\PaymentController::create
+     * @covers \App\Http\Controllers\Admin\Order\Payment\PaymentController::create
      * @return void
      */
     public function testPaymentCreate(): void
@@ -33,7 +33,7 @@ class OrderPaymentRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\PaymentController::destroy
+     * @covers \App\Http\Controllers\Admin\Order\Payment\PaymentController::destroy
      * @return void
      */
     public function testPaymentDelete(): void
