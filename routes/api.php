@@ -5,6 +5,7 @@
 |--------------------------------------------------------------------------
 */
 
+use App\Http\Controllers\Admin\Reporting\BespokeReportController;
 use App\Http\Controllers\Api\AccommodationController;
 use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\Admin\MerchandiseController;
@@ -18,7 +19,6 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\TourComponentController;
 use App\Http\Controllers\Api\TransportController;
-use App\Http\Controllers\BespokeReportController;
 use App\Http\Gateways\FellohGateway;
 use Illuminate\Support\Facades\Route;
 

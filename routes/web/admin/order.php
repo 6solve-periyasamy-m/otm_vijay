@@ -1,24 +1,22 @@
 <?php
 
-use App\Http\Controllers\Models\ManualAdjustmentController;
-use App\Http\Controllers\Models\OrderController;
-use App\Http\Controllers\Models\OrderCustomerAdjustmentController;
-use App\Http\Controllers\Models\OrderCustomerModelController;
-use App\Http\Controllers\Models\OrderInstallmentController;
-use App\Http\Controllers\Models\PaymentController;
-use App\Http\Controllers\Models\PaymentMethodController;
-use App\Http\Controllers\OrderComponentController;
-use App\Http\Controllers\OrderCustomerController;
-use App\Http\Controllers\OrderSystemController;
-use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\Admin\Order\Adjustment\ManualAdjustmentController;
+use App\Http\Controllers\Admin\Order\Adjustment\OrderCustomerAdjustmentController;
+use App\Http\Controllers\Admin\Order\OrderComponentController;
+use App\Http\Controllers\Admin\Order\OrderController;
+use App\Http\Controllers\Admin\Order\OrderCustomerModelController;
+use App\Http\Controllers\Admin\Order\OrderInstallmentController;
+use App\Http\Controllers\Admin\Order\Payment\PaymentController;
+use App\Http\Controllers\Admin\Order\Payment\PaymentMethodController;
+use App\Http\Controllers\Admin\System\SettingsController;
 
-Route::get('/', [OrderSystemController::class, 'index'])->name("orders.all")->middleware('bouncer:Order\Order,read');
+Route::get('/', [OrderController::class, 'index'])->name("orders.all")->middleware('bouncer:Order\Order,read');
 Route::get('/create', [OrderController::class, 'create'])->name('orders.create')->middleware('bouncer:Order\Order,create');
 Route::post('/create', [OrderController::class, 'store'])->name('orders.store')->middleware('bouncer:Order\Order,create');
 Route::get('reminders/authorize/{days}', [SettingsController::class, 'authorizeReminders'])->name('orders.reminders.authorize')->middleware('bouncer:Order\Order,update');
 Route::get('reminders/{max?}/{min?}', [OrderController::class, 'reminders'])->name('orders.reminders')->middleware('bouncer:Order\Order,read');
 Route::prefix('{order}')->group(function () {
-    Route::get('/', [OrderSystemController::class, 'show'])->name("orders.view")->middleware('bouncer:Order\Order,read');
+    Route::get('/', [OrderController::class, 'show'])->name("orders.view")->middleware('bouncer:Order\Order,read');
     Route::get('/update/', [OrderController::class, 'edit'])->name('orders.edit')->middleware('bouncer:Order\Order,update');
     Route::post('/update/', [OrderController::class, 'update'])->name('orders.update')->middleware('bouncer:Order\Order,update');
     Route::post('/delete/', [OrderController::class, 'destroy'])->name('orders.delete')->middleware('bouncer:Order\Order,delete');
@@ -58,8 +56,7 @@ Route::prefix('{order}')->group(function () {
         Route::post('/create', [OrderCustomerModelController::class, 'store'])->name('order-customers.store')->middleware('bouncer:Order\OrderCustomer,create');
 
         Route::prefix('{orderCustomer}')->group(function () {
-            // This is staying in the OrderCustomerController, as moving it out breaks it somehow
-            Route::get('/', [OrderCustomerController::class, 'show'])->name("order-customers.view")->middleware('bouncer:Order\OrderCustomer,read');
+            Route::get('/', [OrderCustomerModelController::class, 'show'])->name("order-customers.view")->middleware('bouncer:Order\OrderCustomer,read');
             Route::get('/update', [OrderCustomerModelController::class, 'edit'])->name('order-customers.edit')->middleware('bouncer:Order\OrderCustomer,update');
             Route::post('/update', [OrderCustomerModelController::class, 'update'])->name('order-customers.update')->middleware('bouncer:Order\OrderCustomer,update');
             Route::post('/delete', [OrderCustomerModelController::class, 'destroy'])->name('order-customers.delete')->middleware('bouncer:Order\OrderCustomer,delete');

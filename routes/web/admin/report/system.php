@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\AtolController;
-use App\Http\Controllers\ManifestController;
-use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Admin\Reporting\AtolController;
+use App\Http\Controllers\Admin\Reporting\ManifestController;
+use App\Http\Controllers\Admin\Reporting\ReportController;
 
 Route::get('/orders', [ReportController::class, 'getOrderReport'])->name('reports.order');
 Route::get('/orders/{extension}', [ReportController::class, 'exportOrderReport'])->name('reports.order.export');

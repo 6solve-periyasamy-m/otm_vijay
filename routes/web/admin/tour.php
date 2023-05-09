@@ -1,15 +1,15 @@
 <?php
 
+use App\Http\Controllers\Admin\Accommodation\AccommodationInventoryTourController;
+use App\Http\Controllers\Admin\Activity\ActivityInventoryTourController;
+use App\Http\Controllers\Admin\Flight\FlightInventoryTourController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseInventoryTourController;
-use App\Http\Controllers\Models\AccommodationInventoryTourController;
-use App\Http\Controllers\Models\ActivityInventoryTourController;
-use App\Http\Controllers\Models\FlightInventoryTourController;
-use App\Http\Controllers\Models\PaymentInstallmentController;
-use App\Http\Controllers\Models\TourCategoryController;
-use App\Http\Controllers\Models\TourController;
-use App\Http\Controllers\Models\TransportInventoryTourController;
-use App\Http\Controllers\TourManifestController;
-use App\Http\Controllers\UpgradeController;
+use App\Http\Controllers\Admin\Tour\Component\UpgradeController;
+use App\Http\Controllers\Admin\Tour\PaymentInstallmentController;
+use App\Http\Controllers\Admin\Tour\TourCategoryController;
+use App\Http\Controllers\Admin\Tour\TourController;
+use App\Http\Controllers\Admin\Tour\TourManifestController;
+use App\Http\Controllers\Admin\Transport\TransportInventoryTourController;
 use App\Models\Tour\Tour;
 
 Route::get('/', [TourController::class, 'index'])->name('tours.all')->middleware('bouncer:Tour\Tour,read');

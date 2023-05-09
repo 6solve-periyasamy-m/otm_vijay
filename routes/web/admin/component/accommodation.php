@@ -1,10 +1,10 @@
 <?php
 
 
-use App\Http\Controllers\Models\AccommodationController;
-use App\Http\Controllers\Models\AccommodationInventoryController;
-use App\Http\Controllers\Models\BoardTypeController;
-use App\Http\Controllers\Models\RoomTypeController;
+use App\Http\Controllers\Admin\Accommodation\AccommodationController;
+use App\Http\Controllers\Admin\Accommodation\AccommodationInventoryController;
+use App\Http\Controllers\Admin\Accommodation\BoardTypeController;
+use App\Http\Controllers\Admin\Accommodation\RoomTypeController;
 
 Route::get('/', [AccommodationController::class, 'index'])->name('accommodations.all')->middleware('bouncer:Accommodation\Accommodation,read');
 Route::get('/create', [AccommodationController::class, 'create'])->name('accommodations.create')->middleware('bouncer:Accommodation\Accommodation,create');

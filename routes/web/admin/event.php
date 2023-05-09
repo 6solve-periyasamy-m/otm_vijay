@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Models\EventController;
+use App\Http\Controllers\Admin\Tour\EventController;
 
 Route::get('/', [EventController::class, 'index'])->name('events.all')->middleware('bouncer:Tour\Event,read');
 Route::get('/create', [EventController::class, 'create'])->name('events.create')->middleware('bouncer:Tour\Event,create');
