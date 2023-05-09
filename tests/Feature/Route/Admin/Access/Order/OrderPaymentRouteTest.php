@@ -1,8 +1,7 @@
 <?php
 
-namespace Route\Admin\Order;
+namespace Route\Admin\Access\Order;
 
-use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Payment\Payment;
 use Tests\AuthenticatedRouteTestCase;
 use Tests\Traits\TestsOrder;

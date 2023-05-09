@@ -1,6 +1,6 @@
 <?php
 
-namespace Route\Admin\Accommodation;
+namespace Route\Admin\Access\Accommodation;
 
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;

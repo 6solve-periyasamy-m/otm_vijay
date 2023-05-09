@@ -1,6 +1,6 @@
 <?php
 
-namespace Route\Admin\Order;
+namespace Route\Admin\Access\Order;
 
 use App\Models\Order\Adjustment\ManualAdjustment;
 use Tests\AuthenticatedRouteTestCase;
