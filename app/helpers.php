@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\UploadedFile;
 
 if (!function_exists('sigfig')) {
@@ -170,5 +171,13 @@ if (!function_exists('nbsp')) {
     function nbsp(string $str): string
     {
         return str_replace(' ', '&nbsp;', $str);
+    }
+}
+if (!function_exists('is_otm')) {
+    function is_otm(): bool
+    {
+        $user = Auth::user();
+        if (empty($user) || !($user instanceof User)) return false;
+        return $user->getHighestRoleLevel() >= 999;
     }
 }

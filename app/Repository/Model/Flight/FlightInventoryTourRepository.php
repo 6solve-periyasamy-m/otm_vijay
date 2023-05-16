@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Flight;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Booking\Component\BookingFlight;
 use App\Models\Flight\FlightInventoryTour;
@@ -268,5 +269,15 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
                 'Travel Class' => $inventory->travelClass->__toString(),
             ]
         );
+    }
+
+    public function getStockUsedOnBooking(Booking $booking): int
+    {
+        return $booking->flights()->where('flight_inventory_tour_id', '=', $this->tourComponent->id)->count();
+    }
+
+    public function getCostToCustomer(): float
+    {
+        return $this->tourComponent->tour_component_type === 'Included' ? 0 : $this->tourComponent->tour_sales_price;
     }
 }

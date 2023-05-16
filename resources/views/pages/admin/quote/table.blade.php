@@ -20,9 +20,13 @@
     @can('create', \App\Models\Quote\Quote::class)
         <div class="card">
             <div class="card-body">
-                <a class="btn btn-primary float-end" href="{{ route('quotes.create') }}">
+                <a class="btn btn-success float-end" href="{{ route('quotes.create') }}">
                     {{ Icon::create() }}
                     <span>Create New</span>
+                </a>
+                <a class="btn btn-primary float-end" style="margin-right: 5px;" href="{{ route('quotes.all', ['historic' => !($historic ?? true),]) }}">
+                    <i class="icon-eye"></i>
+                    <span>{{ !($historic ?? true) ? "Show" : "Hide" }} Historic (Older than {{ setting('system.historic', 6) }} month(s))</span>
                 </a>
             </div>
         </div>

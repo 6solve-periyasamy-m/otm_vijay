@@ -125,6 +125,11 @@
                     {{ Icon::refresh() }}
                     {{ __('quotes.view.buttons.change') }}
                 </a>
+            @else
+                <a href="{{ route('quotes.status.sent', ['quote' => $quote,]) }}" class="btn btn-info">
+                    {{ Icon::email() }}
+                    {{ __('quotes.view.buttons.sent') }}
+                </a>
             @endif
             <a href="{{ route('quotes.status.close', ['quote' => $quote,]) }}" class="btn btn-danger">
                 {{ Icon::close() }}

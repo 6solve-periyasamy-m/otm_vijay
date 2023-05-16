@@ -32,6 +32,7 @@ return [
             'lock' => 'Lock Quote',
             'unlock' => 'Unlink Quote',
             'send' => 'Send Quote',
+            'sent' => 'Mark Sent',
             'close' => 'Close Quote',
             'change' => 'Changes Required',
             'approve' => 'Approved',

@@ -461,4 +461,9 @@ class Icon
     {
         return $this->solid('ticket');
     }
+
+    public function forceDelete(): View|string|Closure
+    {
+        return $this->solid('triangle-exclamation');
+    }
 }

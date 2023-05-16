@@ -15,6 +15,10 @@
                 {{ Icon::create() }}
                 <span>Create New</span>
             </a>
+            <a class="btn btn-primary float-end" style="margin-right: 5px;" href="{{ route('tours.all', ['historic' => !($historic ?? true),]) }}">
+                <i class="icon-eye"></i>
+                <span>{{ !($historic ?? true) ? "Show" : "Hide" }} Historic (Older than {{ setting('system.historic', 6) }} month(s))</span>
+            </a>
         </div>
     </div>
     <div class="card">
@@ -69,11 +73,19 @@
                             <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
                                 {{ Icon::edit() }}
                             </a>
+                            @if(!$tour->trashed())
                             <a href="#" onclick="event.preventDefault();document.getElementById('tour-{{ $tour->id }}-delete').submit();" class="btn btn-outline-danger btn-sm mb-1">
                                 {{ Icon::delete() }}
                             </a>
                             <form id="tour-{{ $tour->id }}-delete" action="{{ route('tours.delete', ['tour' => $tour,]) }}" method="POST"
                                   style="display: none;">{{ csrf_field() }}</form>
+                            @else
+                            <a href="#" onclick="event.preventDefault();document.getElementById('tour-{{ $tour->id }}-delete').submit();" class="btn btn-outline-warning btn-sm mb-1">
+                                <i class="icon-magic-wand"></i>
+                            </a>
+                            <form id="tour-{{ $tour->id }}-delete" action="{{ route('tours.restore', ['tour' => $tour,]) }}" method="POST"
+                                  style="display: none;">{{ csrf_field() }}</form>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

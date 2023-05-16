@@ -4,7 +4,7 @@
             @foreach(\App\View\Components\Admin\SidebarLink::getSidebarLinks() as $sidebarLink)
                 {{ $sidebarLink->render() }}
             @endforeach
-            @if(Auth::user() !== null && Auth::user()->getHighestRoleLevel() === 999)
+            @if(is_otm())
                 {{ \App\View\Components\Admin\SidebarLink::getLogsURL()->render() }}
             @endif
         </div>
