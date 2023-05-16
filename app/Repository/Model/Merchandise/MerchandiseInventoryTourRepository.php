@@ -2,6 +2,7 @@
 
 namespace App\Repository\Model\Merchandise;
 
+use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Booking\Component\BookingMerchandise;
 use App\Models\Merchandise\MerchandiseInventoryTour;
@@ -211,5 +212,15 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
             null,
             null
         );
+    }
+
+    public function getStockUsedOnBooking(Booking $booking): int
+    {
+        return $booking->merchandise()->where('merchandise_inventory_tour_id', '=', $this->tourComponent->id)->count();
+    }
+
+    public function getCostToCustomer(): float
+    {
+        return $this->tourComponent->tour_component_type === 'Included' ? 0 : $this->tourComponent->tour_sales_price;
     }
 }
