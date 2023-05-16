@@ -103,6 +103,13 @@ class OrderController extends Controller
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
+    public function forceDelete(Order $order)
+    {
+        if (!is_otm()) abort(403);
+        $order->repository->forceDelete();
+        return redirect()->route('orders.all');
+    }
+
     public function restore(Order $order)
     {
         $order->cancelled = false;

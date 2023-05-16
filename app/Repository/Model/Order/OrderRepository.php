@@ -484,7 +484,7 @@ class OrderRepository extends ModelRepository
     public function migrate(Tour $tour, bool $resetPrice = true, bool $resetAdjustments = false)
     {
         foreach ($this->order->orderCustomers as $orderCustomer) {
-            $orderCustomer->repository->removeAllComponents();
+            $orderCustomer->repository->removeAllComponents(true);
             if ($resetAdjustments) {
                 $orderCustomer->adjustments()->delete();
             }
@@ -494,6 +494,7 @@ class OrderRepository extends ModelRepository
             $this->order->deposit = $tour->deposit;
         }
         $this->order->save();
+        $this->order->groups()->delete();
         foreach ($this->order->orderCustomers as $orderCustomer) {
             if ($resetPrice) {
                 $orderCustomer->tour_cost = $tour->base_price_per_person;
@@ -503,8 +504,8 @@ class OrderRepository extends ModelRepository
             $orderCustomer->repository->addAllIncluded();
         }
         $this->resetInstallments();
-        foreach ($this->order->groups as $group) {
-            $group->repository->refreshRooming();
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            RoomingRepository::assignDefaultRooming($orderCustomer);
         }
         if ($resetAdjustments) {
             $this->order->adjustments()->delete();
