@@ -3,15 +3,22 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\TableRequest;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\AtolRepository;
+use App\Repository\Reporting\RoomingReportRepository;
 use Illuminate\Http\Request;
 
 class TourController extends Controller
 {
-    public function index()
+    public function index(TableRequest $request)
     {
-        return view('pages.models.tours.table', ['tours' => Tour::all(),]);
+        if (($request->historic ?? (setting('system.historic', 6) < 0))) {
+            $tours = Tour::all();
+        } else {
+            $tours = Tour::whereDate('date_to', '>', now()->subMonths(setting('system.historic', 6)))->get();
+        }
+        return view('pages.models.tours.table', ['tours' => $tours, 'historic' => ($request->historic ?? false)]);
     }
 
     public function create()
@@ -137,6 +144,13 @@ class TourController extends Controller
             return back()->withErrors(trans('custom.used-elsewhere', ['model' => 'Tour', 'parent' => 'Order']));
         }
         $tour->delete();
+        return redirect()->route('tours.all');
+    }
+
+    public function restore($tour)
+    {
+        $tour = Tour::withTrashed()->findOrFail($tour);
+        $tour->restore();
         return redirect()->route('tours.all');
     }
 }
