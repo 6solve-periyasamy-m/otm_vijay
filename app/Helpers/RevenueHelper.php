@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
 use Carbon\Carbon;
 use DB;
@@ -45,10 +46,10 @@ class RevenueHelper
     public static function getAllExpectedRevenue(): array
     {
         $installments = OrderInstallment::with('order', 'order.payments')->get();
+        $installments->push(...self::getAllRemainingInstallments());
         $data = [];
-        $counter = 0;
         foreach ($installments as $installment) {
-            if ($installment->order->cancelled) continue;
+            if ($installment->order?->cancelled) continue;
             if (array_key_exists($installment->due_on->unix(), $data)) {
                 $data[$installment->due_on->unix()] = [
                     'count' => $data[$installment->due_on->unix()]['count'] + 1,
@@ -64,6 +65,16 @@ class RevenueHelper
             }
         }
         return $data;
+    }
+
+    private static function getAllRemainingInstallments(): array
+    {
+        $installments = [];
+        foreach (Order::where('cancelled', '=', false)->get() as $order) {
+            $installment = $order->repository->generateRemainingOrderInstallment();
+            $installments[] = $installment;
+        }
+        return $installments;
     }
 
 }

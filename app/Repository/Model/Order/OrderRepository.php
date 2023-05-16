@@ -116,7 +116,7 @@ class OrderRepository extends ModelRepository
      * Return the installments with calculated remaining field
      * @return Collection|OrderInstallment[]
      */
-    public function getInstallments(): Collection|array
+    public function getInstallments(bool $final = false): Collection|array
     {
         $customers = $this->order->orderCustomers()->count();
         $paid = $this->order->paid - (($this->order->deposit ?? 0) * $customers) - ($this->order->booking_fee ?? 0);
@@ -124,7 +124,21 @@ class OrderRepository extends ModelRepository
         $installments = OrderInstallment::where('order_id', '=', $this->order->id)
             ->orderBy('due_on')
             ->selectRaw("*, GREATEST((GREATEST(@total,0)-(amount*{$customers}))*-1,0) as remaining, (@total := @total - (amount*{$customers})) AS rt");
+        $collection = $installments->get();
+        if ($final) {
+            $collection->add($this->generateRemainingOrderInstallment());
+        }
         return $installments->get();
+    }
+
+    public function generateRemainingOrderInstallment(): OrderInstallment
+    {
+        return new OrderInstallment([
+            'order_id' => $this->order->id,
+            'amount' => $this->order->remaining_installment / $this->order->orderCustomers()->count(),
+            'remaining' => min($this->order->remaining, $this->order->remaining_installment),
+            'due_on' => $this->order->tour->final_payment,
+        ]);
     }
 
     /**

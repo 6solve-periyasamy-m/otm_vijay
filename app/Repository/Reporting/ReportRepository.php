@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpDynamicFieldDeclarationInspection */
 
 namespace App\Repository\Reporting;
 
