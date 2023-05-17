@@ -39,6 +39,7 @@ Route::prefix('{quote}')->group(function () {
         Route::get('/document', [QuoteController::class, 'document'])->name('view')->middleware('bouncer:Quote\Quote,read');
     });
     Route::prefix('status')->name('status.')->group(function () {
+        Route::get('/sent', [QuoteStatusController::class, 'sent'])->name('sent')->middleware('bouncer:Quote\Quote,update');
         Route::get('/changes', [QuoteStatusController::class, 'changes'])->name('changes')->middleware('bouncer:Quote\Quote,update');
         Route::get('/approve', [QuoteStatusController::class, 'approve'])->name('approve')->middleware('bouncer:Quote\Quote,update');
         Route::get('/close', [QuoteStatusController::class, 'close'])->name('close')->middleware('bouncer:Quote\Quote,read');
