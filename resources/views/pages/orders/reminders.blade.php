@@ -49,7 +49,8 @@
                         <div class="row">
                             <div class="col-2 text-center">{{ $row->order->booking_reference }}</div>
                             <div class="col-2 text-center">{{ $row->order->lead_booker_name }}</div>
-                            <div class="col-2 text-center">{{ $row->order->leadBooker->customer->email_address }}</div>
+                            <div class="col-3 text-center">{{ $row->order->leadBooker->customer->email_address }}</div>
+                            <div class="col-1 text-center">{{ $row->next?->id === 0 ? 'Remaining' : 'Installment' }}</div>
                             @if($row->days  > 0)
                                 <div class="col-4 text-center">{{ f_currency($row->next?->amount) }} is due
                                     in {{ $row->days }} days ({{ f_date($row->next?->due_on) }})

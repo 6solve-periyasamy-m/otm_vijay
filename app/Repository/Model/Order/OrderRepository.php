@@ -141,6 +141,7 @@ class OrderRepository extends ModelRepository
     public function generateRemainingOrderInstallment(): OrderInstallment
     {
         return new OrderInstallment([
+            'id' => 0,
             'order_id' => $this->order->id,
             'amount' => $this->order->remaining_installment / $this->order->orderCustomers()->count(),
             'remaining' => min($this->order->remaining, $this->order->remaining_installment),
@@ -347,7 +348,11 @@ class OrderRepository extends ModelRepository
      */
     public function getNextPaymentDetails(): ?OrderInstallment
     {
-        return $this->getInstallments()->firstWhere('remaining', '>', 0);
+        $installment = $this->getInstallments()->firstWhere('remaining', '>', 0);
+        if ($installment === null) {
+            $installment = $this->generateRemainingOrderInstallment();
+        }
+        return $installment->remaining > 0 ? $installment : null;
     }
 
     public function resetInstallments(): void
@@ -382,21 +387,25 @@ class OrderRepository extends ModelRepository
     public function sendReminderEmails(int $days, int $minDays = -1000): void
     {
         if (!$this->shouldRemind($days, $minDays)) return;
-        $nextInstallment = $this->order->next_installment;
-        if ($this->hasBeenReminded($nextInstallment, $days)) return;
+        $this->processInstallmentForReminder($this->order->next_installment, $days, $minDays);
+    }
+
+    public function processInstallmentForReminder(OrderInstallment $installment, int $days, int $minDays = -1000)
+    {
+        if ($this->hasBeenReminded($installment, $days)) return;
         PaymentReminder::create([
             'order_id' => $this->order->id,
-            'order_installment_id' => $nextInstallment->id,
+            'order_installment_id' => $installment->id,
             'period' => $days
         ]);
         try {
+            $prefix = $installment->id === 0 ? 'final-' : '';
             if ($days < 0) {
-                (new OrderMail('payment-overdue'))->send($this->order->leadBooker->customer->email_address, $this->order);
+                (new OrderMail($prefix . 'payment-overdue'))->send($this->order->leadBooker->customer->email_address, $this->order);
             } else {
-                (new OrderMail('payment-due'))->send($this->order->leadBooker->customer->email_address, $this->order);
+                (new OrderMail($prefix . 'payment-due'))->send($this->order->leadBooker->customer->email_address, $this->order);
             }
         } catch (MailDisabledException) {}
-
     }
 
     public function shouldRemind(int $days, int $minDays = -1000): bool

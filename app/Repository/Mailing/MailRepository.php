@@ -25,6 +25,8 @@ class MailRepository
             'booking-confirmation' => new OrderMail('booking-confirmation'),
             'payment-due' => new OrderMail('payment-due'),
             'payment-overdue' => new OrderMail('payment-overdue'),
+            'final-payment-due' => new OrderMail('final-payment-due'),
+            'final-payment-overdue' => new OrderMail('final-payment-overdue'),
             'payment-made' => new PaymentMail('payment-made'),
             'refund-given' => new PaymentMail('refund-given'),
             'additional-traveller-added' => new OrderCustomerMail('additional-traveller-added'),

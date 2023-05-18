@@ -30,6 +30,7 @@ class OrderMail extends TemplatedMail
             'ORDERED_ON' => f_date($order?->ordered_on ?? $this->faker->date),
             'DEPOSIT' => f_currency($order?->deposit ?? $this->faker?->numberBetween(100, 1000)),
             'TOTAL_PAID' => f_currency($order?->paid ?? $this->faker?->numberBetween(100, 1000)),
+            'TOTAL_REMAINING' => f_currency($order?->remaining ?? $this->faker?->numberBetween(100, 1000)),
             'DUE_PAYMENT_TOTAL' => f_currency(isset($order) ? $nextPayment?->calculated_amount : $this->faker->numberBetween(100, 1000)),
             'DUE_PAYMENT_REMAINING' => f_currency(isset($order) ? $nextPayment?->remaining : $this->faker->numberBetween(100, 1000)),
             'DUE_PAYMENT_DATE' => f_date(isset($order) ? $nextPayment?->due_on : $this->faker->date),
