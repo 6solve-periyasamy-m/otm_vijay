@@ -135,7 +135,7 @@ class OrderRepository extends ModelRepository
         if ($final) {
             $collection->add($this->generateRemainingOrderInstallment());
         }
-        return $installments->get();
+        return $collection;
     }
 
     public function generateRemainingOrderInstallment(): OrderInstallment
