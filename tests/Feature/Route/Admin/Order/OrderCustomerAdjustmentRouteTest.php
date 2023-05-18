@@ -2,7 +2,6 @@
 
 namespace Route\Admin\Order;
 
-use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Adjustment\OrderCustomerAdjustment;
 use Tests\AuthenticatedRouteTestCase;
 use Tests\Traits\TestsOrder;
@@ -14,7 +13,7 @@ class OrderCustomerAdjustmentRouteTest extends AuthenticatedRouteTestCase
     private string $class = OrderCustomerAdjustment::class;
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderCustomerAdjustmentController::edit
+     * @covers \App\Http\Controllers\Admin\Order\Adjustment\OrderCustomerAdjustmentController::edit
      * @return void
      */
     public function testOrderCustomerAdjustmentEdit(): void
@@ -25,7 +24,7 @@ class OrderCustomerAdjustmentRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderCustomerAdjustmentController::create
+     * @covers \App\Http\Controllers\Admin\Order\Adjustment\OrderCustomerAdjustmentController::create
      * @return void
      */
     public function testOrderCustomerAdjustmentCreate(): void
@@ -36,7 +35,7 @@ class OrderCustomerAdjustmentRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderCustomerAdjustmentController::destroy
+     * @covers \App\Http\Controllers\Admin\Order\Adjustment\OrderCustomerAdjustmentController::destroy
      * @return void
      */
     public function testOrderCustomerAdjustmentDelete(): void

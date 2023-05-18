@@ -149,22 +149,38 @@ class BookingRepository extends ModelRepository
     {
         $selected = $this?->booking->leadTraveller?->repository->getSelectedFlights() ?? ['outbound' => 0, 'inbound' => 0];
         $flights = ['outbound' => [], 'inbound' => [],];
+        $outboundIncluded = false;
+        $outboundSelected = false;
+        $inboundIncluded = false;
+        $inboundSelected = false;
         foreach ($this->booking->tour->flightInventoryTours as $flight) {
             if (!$flight->repository->hasEnoughStock($this->booking->travellers()->count())) continue;
             if (!$flight->is_bookable) continue;
             if ($flight->flight_type == 'Outbound') {
+                if ($flight->tour_component_type == 'Included') $outboundIncluded = true;
+                if ($selected['outbound'] == $flight->id) $outboundSelected = true;
                 $flights['outbound'][] =
                     ['id' => $flight->id,
                         'details' => $flight->__toString(),
                         'cost' => $flight->tour_component_type == 'Included' ? 0 : $flight->tour_sales_price,
                         'selected' => $selected['outbound'] == $flight->id,];
             } else if ($flight->flight_type == 'Inbound') {
+                if ($flight->tour_component_type == 'Included') $inboundIncluded = true;
+                if ($selected['inbound'] == $flight->id) $inboundSelected = true;
                 $flights['inbound'][] =
                     ['id' => $flight->id,
                         'details' => $flight->__toString(),
                         'cost' => $flight->tour_component_type == 'Included' ? 0 : $flight->tour_sales_price,
                         'selected' => $selected['inbound'] == $flight->id,];
             }
+        }
+        usort($flights['outbound'], function ($flight1, $flight2) { return $flight1['cost'] - $flight2['cost']; });
+        usort($flights['inbound'], function ($flight1, $flight2) { return $flight1['cost'] - $flight2['cost']; });
+        if (!$outboundIncluded) {
+            array_unshift($flights['outbound'], ['id' => 0, 'details' => 'No Flight', 'cost' => 0, 'selected' => $outboundSelected]);
+        }
+        if (!$inboundIncluded) {
+            array_unshift($flights['inbound'], ['id' => 0, 'details' => 'No Flight', 'cost' => 0, 'selected' => $inboundSelected]);
         }
         return $flights;
     }
