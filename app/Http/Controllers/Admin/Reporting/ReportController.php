@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Reporting;
 
 use App\Exports\AbandonedBookingsReportExport;
 use App\Exports\ActivitiesReportExport;
+use App\Exports\FinalPaymentReportExport;
 use App\Exports\FlightManifestReportExport;
 use App\Exports\InstallmentRevenueReportExport;
 use App\Exports\OrderReminderReportExport;
@@ -31,6 +32,17 @@ class ReportController extends Controller
 
     public function exportOrderReport(string $extension = 'xlsx') {
         return Excel::download(new OrderReportExport, 'orders.' . $extension);
+    }
+
+    public function getFinalPaymentReport() {
+        return view('pages.reports.view', ['tableView' => 'partials.reports.tables.final-payments',
+            'data' => ReportRepository::getFinalPaymentReport(),'title' => 'Final Payments',
+            'xlsxExport' => route('reports.final-payment.export', ['extension' => 'xlsx']),
+            'csvExport' => route('reports.final-payment.export', ['extension' => 'csv']),]);
+    }
+
+    public function exportFinalPaymentReport(string $extension = 'xlsx') {
+        return Excel::download(new FinalPaymentReportExport, 'final-payments.' . $extension);
     }
 
     public function getTourStockReport() {

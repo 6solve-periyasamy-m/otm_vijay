@@ -30,6 +30,12 @@ class ReportRepository
                 'export' => 'reports.order.export',
             ],
             [
+                'name' => 'Final Payments',
+                'details' => 'Details about all final payments',
+                'view' => 'reports.final-payment',
+                'export' => 'reports.final-payment.export',
+            ],
+            [
                 'name' => 'Tour Stock',
                 'details' => 'Details about all tours, and their available stock',
                 'view' => 'reports.tour-stock',
@@ -138,6 +144,32 @@ class ReportRepository
             $row->external_notes = $order->external_notes;
             $row->orderStatus = $order->status;
             $data[$order->id] = $row;
+        }
+        return $data;
+    }
+
+    public static function getFinalPaymentReport(): array
+    {
+        $data = [];
+        foreach (Order::where('cancelled', '=', false)->get() as $order) {
+            $final = $order->repository->generateRemainingOrderInstallment();
+            $row = collect();
+            $row->ordered_on = $order->ordered_on;
+            $row->booking_reference = $order->booking_reference;
+            $row->lb_first_name = $order->leadBooker->customer->first_name;
+            $row->lb_last_name = $order->leadBooker->customer->last_name;
+            $row->lb_email = $order->leadBooker->customer->email_address;
+            $row->customer_count = $order->customer_count;
+            $row->tour_name = $order->tour->name;
+            $row->event_name = $order->tour->event?->name;
+            $row->total_order_value = $order->total;
+            $row->balance_outstanding = $order->remaining;
+            $row->balance_paid = $order->paid;
+            $row->due = $order->tour->final_payment;
+            $row->final_amount = $final?->calculated_amount;
+            $row->final_paid = $final?->calculated_amount - $final->remaining;
+            $row->final_remaining = $final->remaining;
+            $data[] = $row;
         }
         return $data;
     }
