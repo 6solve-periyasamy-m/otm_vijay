@@ -327,10 +327,10 @@ class Order extends Model
      */
     public function getDaysUntilNextPaymentAttribute(): ?int
     {
-        $next = $this->next_installment?->due_on;
+        $next = $this->repository->getNextPaymentDetails(false)?->due_on;
         if (!isset($next)) return null;
         $next = Carbon::parse($next);
-        return $next->isBefore(Carbon::now()) ? ($next->diffInDays(Carbon::now())) * -1 : ($next->diffInDays(Carbon::now()));
+        return days_until($next);
     }
 
     /**

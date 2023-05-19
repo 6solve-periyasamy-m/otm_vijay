@@ -34,10 +34,10 @@ class TourFactory extends Factory
             'tour_category_id' => null,
             'tour_merchandise_id' => null,
             'is_active' => true,
-            'date_from' => now(),
+            'date_from' => now()->addDays(5),
             'date_to' => now()->addDays(30),
             'terms' => 'Default Terms',
-            'final_payment' => now(),
+            'final_payment' => now()->addDays(5),
         ];
     }
 }

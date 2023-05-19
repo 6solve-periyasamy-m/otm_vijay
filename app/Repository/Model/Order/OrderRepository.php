@@ -346,12 +346,13 @@ class OrderRepository extends ModelRepository
      * Get details about the next payment
      * @return OrderInstallment|null Details about the next installment. If installment is null, then no more installments are required
      */
-    public function getNextPaymentDetails(): ?OrderInstallment
+    public function getNextPaymentDetails(bool $includeFinal = true): ?OrderInstallment
     {
         $installment = $this->getInstallments()->firstWhere('remaining', '>', 0);
-        if ($installment === null) {
+        if ($includeFinal && $installment === null) {
             $installment = $this->generateRemainingOrderInstallment();
         }
+        if ($installment === null) return null;
         return $installment->remaining > 0 ? $installment : null;
     }
 
@@ -387,7 +388,15 @@ class OrderRepository extends ModelRepository
     public function sendReminderEmails(int $days, int $minDays = -1000): void
     {
         if (!$this->shouldRemind($days, $minDays)) return;
-        $this->processInstallmentForReminder($this->order->next_installment, $days, $minDays);
+        $installment = $this->order->next_installment;
+        if ($installment->id > 0) {
+            $this->processInstallmentForReminder($this->order->next_installment, $days, $minDays);
+        }
+    }
+
+    public function sendFinalPaymentEmails()
+    {
+
     }
 
     public function processInstallmentForReminder(OrderInstallment $installment, int $days, int $minDays = -1000)
