@@ -19,6 +19,7 @@ class OrderMail extends TemplatedMail
         }
         $customer = $order?->leadBooker->customer;
         $nextPayment = $order?->next_installment;
+        $finalPayment = $order?->repository->generateRemainingOrderInstallment();
         $tour = $order?->tour;
         return [
             'LEAD_TITLE' => $customer?->title ?? $this->faker?->title,
@@ -34,6 +35,9 @@ class OrderMail extends TemplatedMail
             'DUE_PAYMENT_TOTAL' => f_currency(isset($order) ? $nextPayment?->calculated_amount : $this->faker->numberBetween(100, 1000)),
             'DUE_PAYMENT_REMAINING' => f_currency(isset($order) ? $nextPayment?->remaining : $this->faker->numberBetween(100, 1000)),
             'DUE_PAYMENT_DATE' => f_date(isset($order) ? $nextPayment?->due_on : $this->faker->date),
+            'FINAL_PAYMENT_TOTAL' => f_currency(isset($order) ? $finalPayment?->calculated_amount : $this->faker->numberBetween(100, 1000)),
+            'FINAL_PAYMENT_REMAINING' => f_currency(isset($order) ? $finalPayment?->remaining : $this->faker->numberBetween(100, 1000)),
+            'FINAL_PAYMENT_DATE' => f_date(isset($order) ? $finalPayment?->due_on : $this->faker->date),
             'TOUR_NAME' => $tour?->name ?? implode(' ', $this->faker?->words),
             'TOUR_DESCRIPTION' => $tour?->description ?? $this->faker?->sentence,
             'TOUR_START' => f_date($tour?->date_from ?? $this->faker->date),
