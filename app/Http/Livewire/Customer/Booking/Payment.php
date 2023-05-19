@@ -9,7 +9,7 @@ class Payment extends Component
 {
     public Booking $booking;
     public bool $accepted;
-    public float $amount;
+    public $amount;
 
     protected $messages = [
         'amount.gte' => 'You must pay the minimum deposit',
@@ -25,6 +25,7 @@ class Payment extends Component
 
     public function pay()
     {
+        $this->amount = sigfig((float)preg_replace('/[^0-9.]/', '', $this->amount));
         $this->validate();
 
         return redirect()->to($this->booking->repository->getGatewayUrl($this->amount));
