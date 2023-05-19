@@ -389,9 +389,7 @@ class OrderRepository extends ModelRepository
     {
         if (!$this->shouldRemind($days, $minDays)) return;
         $installment = $this->order->next_installment;
-        if ($installment->id > 0) {
-            $this->processInstallmentForReminder($this->order->next_installment, $days, $minDays);
-        }
+        $this->processInstallmentForReminder($this->order->next_installment, $days, $minDays);
     }
 
     public function sendFinalPaymentEmails()
