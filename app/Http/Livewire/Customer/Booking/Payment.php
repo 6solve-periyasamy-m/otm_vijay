@@ -44,7 +44,7 @@ class Payment extends Component
 
     protected function rules()
     {
-        $max = min($this->booking->total_cost, 999_999);
+        $max = min($this->booking->repository->getTotalCost(), 999_999);
         $min = max($this->booking->due_today, 0.31);
         return [
             'amount' => "required|numeric|lte:$max|gte:$min",
