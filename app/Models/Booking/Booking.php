@@ -2,6 +2,11 @@
 
 namespace App\Models\Booking;
 
+use App\Models\Booking\Component\BookingAccommodation;
+use App\Models\Booking\Component\BookingActivity;
+use App\Models\Booking\Component\BookingFlight;
+use App\Models\Booking\Component\BookingMerchandise;
+use App\Models\Booking\Component\BookingTransport;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Booking\BookingRepository;
 use Eloquent;
@@ -10,6 +15,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
 
 /**
@@ -29,6 +35,11 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $groups_count
  * @property-read Collection|BookingTraveller[] $travellers
  * @property-read Collection|BookingTraveller[] $additionalTravellers Travellers excluding lead traveller
+ * @property-read Collection|BookingAccommodation[] $accommodation
+ * @property-read Collection|BookingActivity[] $activities
+ * @property-read Collection|BookingFlight[] $flights
+ * @property-read Collection|BookingTransport[] $transport
+ * @property-read Collection|BookingMerchandise[] $merchandise
  * @property-read int|null $travellers_count
  * @property-read int $traveller_count
  * @property-read float $total_cost
@@ -66,6 +77,31 @@ class Booking extends Model
     public function groups(): HasMany
     {
         return $this->hasMany(BookingGroup::class, 'booking_id');
+    }
+
+    public function accommodation(): HasManyThrough
+    {
+        return $this->hasManyThrough(BookingAccommodation::class, BookingGroup::class, 'booking_id', 'booking_group_id');
+    }
+
+    public function activities(): HasManyThrough
+    {
+        return $this->hasManyThrough(BookingActivity::class, BookingTraveller::class, 'booking_id', 'booking_traveller_id');
+    }
+
+    public function flights(): HasManyThrough
+    {
+        return $this->hasManyThrough(BookingFlight::class, BookingTraveller::class, 'booking_id', 'booking_traveller_id');
+    }
+
+    public function transport(): HasManyThrough
+    {
+        return $this->hasManyThrough(BookingTransport::class, BookingTraveller::class, 'booking_id', 'booking_traveller_id');
+    }
+
+    public function merchandise(): HasManyThrough
+    {
+        return $this->hasManyThrough(BookingMerchandise::class, BookingTraveller::class, 'booking_id', 'booking_traveller_id');
     }
 
     public function getRepositoryAttribute(): BookingRepository

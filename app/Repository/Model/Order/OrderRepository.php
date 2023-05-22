@@ -37,7 +37,7 @@ class OrderRepository extends ModelRepository
         $this->atolRepository = new AtolRepository($order);
     }
 
-    public static function getOrdersOverview(): array
+    public static function getOrdersOverview(bool $historic = false): array
     {
         $orders = Order::with(
             'leadBooker',
@@ -49,7 +49,13 @@ class OrderRepository extends ModelRepository
             'orderCustomers.orderFlights',
             'orderCustomers.orderTransports',
             'orderCustomers.orderMerchandise',
-        )->get();
+        )->whereHas('tour', function ($query) use ($historic) {
+            if (!$historic && setting('system.historic', 6) >= 0) {
+                return $query->whereDate('date_to', '>', now()->subMonths(setting('system.historic', 6)));
+            } else {
+                return $query;
+            }
+        })->get();
         $data = [];
         foreach ($orders as $order) {
             $data[] = $order->repository->getOverview();
@@ -62,6 +68,7 @@ class OrderRepository extends ModelRepository
      * @param array $data
      * @param ConvertedCustomer $lead
      * @param ConvertedCustomer[] $customers
+     * @param bool $shouldInvoice
      * @return Order
      */
     public static function create(Tour $tour, array $data, ConvertedCustomer $lead, array $customers = [], bool $shouldInvoice = true): Order
@@ -477,7 +484,7 @@ class OrderRepository extends ModelRepository
     public function migrate(Tour $tour, bool $resetPrice = true, bool $resetAdjustments = false)
     {
         foreach ($this->order->orderCustomers as $orderCustomer) {
-            $orderCustomer->repository->removeAllComponents();
+            $orderCustomer->repository->removeAllComponents(true);
             if ($resetAdjustments) {
                 $orderCustomer->adjustments()->delete();
             }
@@ -487,6 +494,7 @@ class OrderRepository extends ModelRepository
             $this->order->deposit = $tour->deposit;
         }
         $this->order->save();
+        $this->order->groups()->delete();
         foreach ($this->order->orderCustomers as $orderCustomer) {
             if ($resetPrice) {
                 $orderCustomer->tour_cost = $tour->base_price_per_person;
@@ -496,8 +504,8 @@ class OrderRepository extends ModelRepository
             $orderCustomer->repository->addAllIncluded();
         }
         $this->resetInstallments();
-        foreach ($this->order->groups as $group) {
-            $group->repository->refreshRooming();
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            RoomingRepository::assignDefaultRooming($orderCustomer);
         }
         if ($resetAdjustments) {
             $this->order->adjustments()->delete();

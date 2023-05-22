@@ -8,6 +8,7 @@ use App\Events\Order\OrderRestoredEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Order\CreateOrderRequest;
 use App\Http\Requests\Admin\Order\MigrateRequest;
+use App\Http\Requests\Admin\TableRequest;
 use App\Http\Requests\Admin\Order\UpdateOrderRequest;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
@@ -17,9 +18,9 @@ use App\Repository\Reporting\ReportRepository;
 class OrderController extends Controller
 {
 
-    public function index()
+    public function index(TableRequest $request)
     {
-        return view('pages.orders.search2', ['orders' => Order::all(),]);
+        return view('pages.orders.search2', ['orders' => Order::all(), 'historic' => $request->historic ?? false]);
     }
 
     public function reminders(int $max = 7, int $min = -1000)
@@ -91,6 +92,13 @@ class OrderController extends Controller
         $order->save();
         event(new OrderCancelledEvent($order));
         return redirect()->route('orders.view', ['order' => $order,]);
+    }
+
+    public function forceDelete(Order $order)
+    {
+        if (!is_otm()) abort(403);
+        $order->repository->forceDelete();
+        return redirect()->route('orders.all');
     }
 
     public function restore(Order $order)

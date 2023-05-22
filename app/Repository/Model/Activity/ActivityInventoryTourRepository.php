@@ -6,6 +6,7 @@ use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
+use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Booking\Component\BookingActivity;
 use App\Models\Order\Component\OrderActivity;
@@ -282,5 +283,15 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
                 'Ticket Type' => $inventory->ticketType,
             ]
         );
+    }
+
+    public function getStockUsedOnBooking(Booking $booking): int
+    {
+        return $booking->activities()->where('activity_inventory_tour_id', '=', $this->tourComponent->id)->count();
+    }
+
+    public function getCostToCustomer(): float
+    {
+        return $this->tourComponent->tour_component_type === 'Included' ? 0 : $this->tourComponent->tour_sales_price;
     }
 }

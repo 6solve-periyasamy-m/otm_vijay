@@ -22,6 +22,7 @@ Route::prefix('{tour}')->group(function () {
     Route::post('/update', [TourController::class, 'update'])->name('tours.update')->middleware('bouncer:Tour\Tour,update');
     Route::get('/duplicate', [TourController::class, 'duplicate'])->name('tours.duplicate')->middleware('bouncer:Tour\Tour,create');
     Route::post('/delete', [TourController::class, 'destroy'])->name('tours.delete')->middleware('bouncer:Tour\Tour,delete');
+    Route::post('/restore', [TourController::class, 'restore'])->name('tours.restore')->middleware('bouncer:Tour\Tour,delete');
     Route::get('/atol', [TourController::class, 'exportAtol'])->name('tours.atol')->middleware('bouncer:Tour\Tour,read');
     Route::get('/add', function (Tour $tour) {
         return view('pages.tour.components.add', ['tour' => $tour,]);
