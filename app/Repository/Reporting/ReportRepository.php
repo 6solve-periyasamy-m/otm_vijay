@@ -337,6 +337,16 @@ class ReportRepository
                 $row->next = $order->next_installment;
                 $row->reminded = $order->repository->hasBeenReminded($row->next, $max);
                 $data[] = $row;
+                $isFinal = $row->next->id == 0;
+            }
+            if ($order->repository->shouldRemindForFinal($max, $min) && !($isFinal ?? false)) {
+                $final = $order->repository->generateRemainingOrderInstallment();
+                $row = collect();
+                $row->order = $order;
+                $row->days = days_until($final->due_on);
+                $row->next = $final;
+                $row->reminded = $order->repository->hasBeenReminded($row->next, $max);
+                $data[] = $row;
             }
         }
         return $data;
