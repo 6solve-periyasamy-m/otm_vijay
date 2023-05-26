@@ -50,8 +50,12 @@ $brand = $sent->quote->brand;
                             <br /><span class="metadata">Telephone:</span> <a class="site-info-padding" href="tel:{{ $brand->phone ?? setting('company.contact.phone', 'Phone number not set') }}">{{ $brand->phone ?? setting('company.contact.phone', 'Phone number not set') }}</a>
                         </div>
                         <div class="flex-items metadata-wrapper">
+                            @if($paying > 0)
                             <div class="metadata divider">Paying Travellers<br /><span class="metadata-text">{{ $paying }}</span></div>
+                            @endif
+                            @if($travelling > 0)
                             <div class="metadata divider">Non-Paying Travellers<br /><span class="metadata-text">{{ $travelling }}</span></div>
+                            @endif
                             <div class="metadata divider">Quote Ref.<br /><span class="metadata-text">{{ $quote->ref }}</span></div>
                         </div>
                     </div>
