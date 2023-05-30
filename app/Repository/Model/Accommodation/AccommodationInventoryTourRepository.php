@@ -8,6 +8,7 @@ use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Booking\Component\BookingAccommodation;
+use App\Models\Customer\Group;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\OrderCustomer;
 use App\Models\Quote\Component\QuoteAccommodation;
@@ -68,15 +69,13 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         $orderComponent = $this->getOrderComponent($orderCustomer);
         if ($orderComponent !== null) return $orderComponent;
         $group = $orderCustomer->primary_group;
-        if (!isset($group)) return null;
-        $orderComponent = OrderAccommodation::create([
-            'group_id' => $group->id,
-            'accommodation_inventory_tour_id' => $this->tourComponent->id,
-            'share_with_user_id' => null,
-            'cost' => $this->tourComponent->tour_sales_price ?? 0,
-        ]);
+        if (!isset($group)) {
+            $group = Group::create();
+            $group->repository->addCustomerToGroup($orderCustomer);
+        }
+        $component = $group->repository->addRoomToGroup($this->tourComponent);
         //event(new OrderCustomerAccommodationAddedEvent($orderComponent));
-        return $orderComponent->repository;
+        return $component->repository;
     }
 
     public function getUpgradeParent(): AccommodationInventoryTour
