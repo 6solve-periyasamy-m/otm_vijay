@@ -251,7 +251,7 @@
                                                     </td>
                                                 @endif
                                                 <td data-content="Available Upgrades">
-                                                    @if($orderComponent->tourComponent->tour_component_type == 'Add-on' || !$locked)
+                                                    @if($orderComponent->tourComponent->tour_component_type == 'Add-on' || $locked)
                                                         Not Available
                                                     @else
                                                         @if(count($orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, false)) < 1)

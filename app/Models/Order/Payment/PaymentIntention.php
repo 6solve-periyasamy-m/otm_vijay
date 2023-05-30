@@ -33,7 +33,6 @@ use Illuminate\Database\Eloquent\Model;
 class PaymentIntention extends Model
 {
     public $incrementing = false;
-    public $timestamps = false;
     protected $primaryKey = 'id';
     protected $keyType = 'string';
     protected $fillable = ['id', 'customer_id', 'reference', 'data', 'type'];
