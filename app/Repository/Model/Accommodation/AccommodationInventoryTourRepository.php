@@ -165,7 +165,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function getOrderComponent(OrderCustomer $orderCustomer): ?OrderComponentRepository
     {
-        foreach ($orderCustomer->orderAccommodation as $accommodation) {
+        foreach ($orderCustomer->orderAccommodation()->get() as $accommodation) {
             if ($accommodation->accommodation_inventory_tour_id == $this->tourComponent->id) return $accommodation->repository;
         }
         return null;
