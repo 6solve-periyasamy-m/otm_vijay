@@ -92,11 +92,11 @@ class CustomerComponentController extends Controller
           FlightInventoryTourUpgrade|AccommodationInventoryTourUpgrade|TransportInventoryTourUpgrade|ActivityInventoryTourUpgrade $upgrade): JsonResponse
     {
         $orderCustomer = $orderComponent->orderCustomer;
-        $upgrade = UpgradeIntention::create($orderCustomer, $orderComponent->tourComponent->repository, $upgrade->parent->repository);
+        $uIntention = UpgradeIntention::create($orderCustomer, $orderComponent->tourComponent->repository, $upgrade->upgrade->repository);
         $redirect = setting('purchase.upgrade.success.redirect', route('customer.extras', ['reference' => $orderCustomer->order->booking_reference, 'customer' => $orderCustomer->customer,]));
 
         $item = new LineItem($upgrade->description, $upgrade->upgrade->tour_sales_price);
-        $intention = PaymentIntentionRepository::create($orderCustomer->order, $orderCustomer->customer, 'Installment', [$upgrade,]);
+        $intention = PaymentIntentionRepository::create($orderCustomer->order, $orderCustomer->customer, 'Installment', [$uIntention,]);
 
         return response()->json(['success' => true, 'location' => Gateway::getDefaultGateway()->checkout([$item,], $intention, $orderCustomer->customer, $redirect)]);
     }
