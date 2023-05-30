@@ -17,6 +17,7 @@ use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Transport\TransportInventoryTour;
+use App\Repository\Intention\PaymentIntentionRepository;
 use App\Repository\Model\Order\OrderRepository;
 use Carbon\Carbon;
 use DB;
@@ -27,35 +28,6 @@ use Log;
 use Throwable;
 use function app;
 
-/*
-  Data field should be in the structure as follows:
-  [
-   'additions' => [
-      [
-        'customer' => 'Customer ID (Group ID for accommodation)',
-        'component' => 'accommodation/activity/flight/transport/extra',
-        'id' => 'Relevant tour component id'
-      ]
-   ],
-   'upgrades' => [
-      [
-        'customer' => 'Customer ID (Group ID for accommodation)',
-        'component' => 'accommodation/activity/flight/transport/extra',
-        'from' => 'Relevant from tour component id',
-        'to' => 'Relevant new tour component id',
-      ],
-   ],
-   'removals' => [
-       [
-        'customer' => 'Customer ID (Group ID for accommodation)',
-        'component' => 'accommodation/activity/flight/transport/extra',
-        'from' => 'Relevant from tour component id',
-        'to' => 'Relevant new tour component id',
-      ]
-   ],
-  ]
- */
-
 /**
  * App\Models\Order\Payment\PaymentIntention
  *
@@ -65,6 +37,7 @@ use function app;
  * @property string $reference Order reference or Booking token
  * @property array|null $data Data to be processed once the intention is confirmed
  * @property bool $processed Has the intention been processed
+ * @property-read PaymentIntentionRepository $repository
  * @method static Builder|PaymentIntention newModelQuery()
  * @method static Builder|PaymentIntention newQuery()
  * @method static Builder|PaymentIntention query()
@@ -84,6 +57,8 @@ class PaymentIntention extends Model
     protected $keyType = 'string';
     protected $fillable = ['id', 'customer_id', 'reference', 'data', 'type'];
     protected $casts = ['data' => 'array',];
+
+    private PaymentIntentionRepository $repo;
 
     public static function build(?Customer $customer, string $reference, string $type, ?array $data = null): PaymentIntention
     {
@@ -245,5 +220,11 @@ class PaymentIntention extends Model
                 return null;
         }
         return app($model)->where($customer, '=', $owner->id)->where($field, '=', $id)->first();
+    }
+
+    public function getRepositoryAttribute(): PaymentIntentionRepository
+    {
+        $this->repo = $this->repo ?? new PaymentIntentionRepository($this);
+        return $this->repo;
     }
 }
