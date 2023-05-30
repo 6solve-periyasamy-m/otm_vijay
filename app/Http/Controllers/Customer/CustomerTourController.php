@@ -16,9 +16,10 @@ use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
-use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Abstracts\InventoryTourRepository;
+use App\Repository\Intention\PaymentIntentionRepository;
+use App\Repository\Intention\Storage\AdditionIntention;
 use Gateway;
 
 class CustomerTourController extends CustomerController
@@ -106,21 +107,12 @@ class CustomerTourController extends CustomerController
 
         if ($tourComponent->hasEnoughStock()) abort(404);
 
-        $data = [
-            'additions' => [
-                [
-                    'customer' => $componentType == 'accommodation' ? $orderCustomer->primary_group->id : $orderCustomer->id,
-                    'component' => $componentType,
-                    'id' => $tourComponent->get()->id,
-                ],
-            ],
-        ];
+        $data = AdditionIntention::create($orderCustomer, $tourComponent->repository);
 
         $redirect = setting('purchase.addon.success.redirect', url()->previous(route('customer.extras', ['reference' => $order->booking_reference, 'customer' => $customer,])));
 
-
         $item = new LineItem("{$tourComponent}", $tourComponent->get()->tour_sales_price);
-        $intention = PaymentIntention::build($this->user(), $order->booking_reference, 'Installment', $data);
+        $intention = PaymentIntentionRepository::create($order, $orderCustomer->customer, 'Installment', [$data,]);
 
         return redirect(Gateway::getDefaultGateway()->checkout([$item,], $intention, $this->user(), $redirect));
     }

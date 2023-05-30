@@ -13,34 +13,6 @@ use DB;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
-/*
-  Data field should be in the structure as follows:
-  [
-   'additions' => [
-      [
-        'customer' => 'Order Customer ID',
-        'component' => 'accommodation/activity/flight/transport/extra',
-        'id' => 'Relevant tour component id'
-      ]
-   ],
-   'upgrades' => [
-      [
-        'customer' => 'Order Customer ID',
-        'component' => 'accommodation/activity/flight/transport/extra',
-        'from' => 'Relevant from tour component id',
-        'to' => 'Relevant new tour component id',
-      ],
-   ],
-   'removals' => [
-       [
-        'customer' => 'Order Customer ID',
-        'component' => 'accommodation/activity/flight/transport/extra',
-        'from' => 'Relevant from tour component id',
-        'to' => 'Relevant new tour component id',
-      ]
-   ],
-  ]
- */
 class PaymentIntentionRepository
 {
     private PaymentIntention $intention;
