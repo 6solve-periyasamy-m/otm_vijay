@@ -144,8 +144,8 @@ class OrderRepository extends ModelRepository
         return new OrderInstallment([
             'id' => 0,
             'order_id' => $this->order->id,
-            'amount' => sigfig($this->order->remaining_installment / $this->order->orderCustomers()->count()),
-            'remaining' => sigfig(min($this->order->remaining, $this->order->remaining_installment)),
+            'amount' => $this->order->remaining_installment / $this->order->orderCustomers()->count(),
+            'remaining' => min($this->order->remaining, $this->order->remaining_installment),
             'due_on' => $this->order->tour->final_payment,
         ]);
     }
