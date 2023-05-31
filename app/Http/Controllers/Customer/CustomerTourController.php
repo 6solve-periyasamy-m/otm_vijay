@@ -87,10 +87,9 @@ class CustomerTourController extends CustomerController
         ]);
     }
 
-    public function purchaseExtra(Order $reference, string $componentType, int $componentId, ?Customer $customer = null)
+    public function purchaseExtra(Order $order, string $componentType, int $componentId, ?Customer $customer = null)
     {
-        $order = $this->fetchOrder($reference);
-        if (!isset($order) || $order->cancelled) abort(404);
+        if ($order->cancelled) abort(404);
         $customer = $customer ?? $this->user();
         if (!isset($customer)) abort(404);
         if ($this->user()->id != $customer->id) {
@@ -99,15 +98,17 @@ class CustomerTourController extends CustomerController
         }
         $orderCustomer = $order->repository->getOrderCustomer($customer);
         if (!isset($orderCustomer)) abort(404);
+        \Log::info('customer found');
 
-        /** @var AccommodationInventoryTour|ActivityInventoryTour|FlightInventoryTour|TransportInventoryTour $tourComponent */
+        /** @var InventoryTourRepository $tourComponent */
         $tourComponent = InventoryTourRepository::getComponent($componentType, $componentId);
         if (!isset($tourComponent)) abort(404);
+        \Log::info('component found');
         if (!$tourComponent->isBookable()) abort(404);
+        \Log::info('is bookable');
+        if (!$tourComponent->hasEnoughStock()) abort(404);
 
-        if ($tourComponent->hasEnoughStock()) abort(404);
-
-        $data = AdditionIntention::create($orderCustomer, $tourComponent->repository);
+        $data = AdditionIntention::create($orderCustomer, $tourComponent);
 
         $redirect = setting('purchase.addon.success.redirect', url()->previous(route('customer.extras', ['reference' => $order->booking_reference, 'customer' => $customer,])));
 
@@ -117,10 +118,9 @@ class CustomerTourController extends CustomerController
         return redirect(Gateway::getDefaultGateway()->checkout([$item,], $intention, $this->user(), $redirect));
     }
 
-    public function addExtra(Order $reference, string $componentType, int $componentId, ?Customer $customer = null)
+    public function addExtra(Order $order, string $componentType, int $componentId, ?Customer $customer = null)
     {
-        $order = $reference;
-        if (!isset($order) || $order->cancelled) abort(404);
+        if ($order->cancelled) abort(404);
         $customer = $customer ?? $this->user();
         if (!isset($customer)) abort(404);
         if ($this->user()->id != $customer->id) {
