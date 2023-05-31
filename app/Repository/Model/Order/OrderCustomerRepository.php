@@ -3,10 +3,6 @@
 namespace App\Repository\Model\Order;
 
 use App\Models\Customer\Customer;
-use App\Models\Order\Component\OrderActivity;
-use App\Models\Order\Component\OrderFlight;
-use App\Models\Order\Component\OrderMerchandise;
-use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Repository\Abstracts\InventoryTourRepository;
@@ -65,6 +61,7 @@ class OrderCustomerRepository extends ModelRepository
             if ($tourComponent->tour_component_type !== 'Upgrade') {
                 $inventory = $tourComponent->inventory;
                 if (in_array($tourComponent->id, $owned['flights'])) continue; // Owned components will be shown elsewhere
+                if ($tourComponent->flight_type === 'Inbound' || $tourComponent->flight_type === 'Outbound') continue;
                 if ($tourComponent->available_stock <= 0) continue;
                 $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'flight', 'type' => $tourComponent->tour_component_type,
                     'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(), 'owned' => false,];
