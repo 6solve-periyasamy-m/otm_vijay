@@ -151,7 +151,17 @@ class ReportRepository
     public static function getFinalPaymentReport(): array
     {
         $data = [];
-        foreach (Order::where('cancelled', '=', false)->get() as $order) {
+        $orders = Order::with([
+            'orderCustomers',
+            'adjustments',
+            'orderCustomers.adjustments',
+            'orderCustomers.groups',
+            'orderCustomers.orderAccommodation',
+            'orderCustomers.orderActivities',
+            'orderCustomers.orderFlights',
+            'orderCustomers.orderTransports',
+        ])->withSum('adjustments', 'amount')->withCount('orderCustomers', 'payingTravellers')->where('cancelled', '=', false)->get();
+        foreach ($orders as $order) {
             $final = $order->repository->generateRemainingOrderInstallment();
             $row = collect();
             $row->ordered_on = $order->ordered_on;
@@ -167,7 +177,7 @@ class ReportRepository
             $row->balance_paid = $order->paid;
             $row->due = $order->tour->final_payment;
             $row->final_amount = $final?->calculated_amount;
-            $row->final_paid = $final?->calculated_amount - $final->remaining;
+            $row->final_paid = sigfig($final?->calculated_amount - $final->remaining);
             $row->final_remaining = $final->remaining;
             $data[] = $row;
         }
