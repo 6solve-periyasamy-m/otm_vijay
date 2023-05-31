@@ -30,6 +30,7 @@ class OrderRepository extends ModelRepository
     private const STATUS_CACHE_TIME = 600;
     private Order $order;
     private AtolRepository $atolRepository;
+    private int|null $cost = null;
 
     public function __construct(Order $order)
     {
@@ -193,14 +194,18 @@ class OrderRepository extends ModelRepository
      * Get total cost amount for an order
      * @return float The total cost of the order
      */
-    public function getCost(): float
+    public function getCost(bool $recache = false): float
     {
+        if ($this->cost !== null && !$recache) {
+            return $this->cost;
+        }
         $total = $this->order->booking_fee ?? 0;
         foreach ($this->order->orderCustomers()->where('is_charged', '=', 1)->get() as $orderCustomer) {
             $total += $orderCustomer->tour_cost;
             if ($orderCustomer->has_surcharge) $total += $orderCustomer->single_occupancy_surcharge;
         }
         $total += $this->getAdditionalComponentTotal();
+        $this->cost = $total;
         return $total;
     }
 
