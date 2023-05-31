@@ -44,7 +44,7 @@ class TransportInventoryTourUpgrade extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['upgrade_id', 'description'];
+    protected $guarded = [];
 
     private TransportInventoryTourUpgradeRepository $internal_repository;
 
