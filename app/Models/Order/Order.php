@@ -147,6 +147,11 @@ class Order extends Model
         return $this->hasMany(OrderCustomer::class, 'order_id');
     }
 
+    public function payingTravellers(): HasMany
+    {
+        return $this->orderCustomers()->where('is_charged', true);
+    }
+
     public function additionalTravellers(): HasMany
     {
         return $this->orderCustomers()->whereNot('id', '=', $this->lead_booker_id);
@@ -354,7 +359,7 @@ class Order extends Model
 
     public function getPayingCustomersAttribute(): int
     {
-        return $this->orderCustomers()->where('is_charged', '=', true)->count();
+        return $this->payingTravellers()->count();
     }
 
     // Functions

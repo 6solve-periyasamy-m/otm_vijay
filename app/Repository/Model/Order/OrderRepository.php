@@ -30,6 +30,7 @@ class OrderRepository extends ModelRepository
     private const STATUS_CACHE_TIME = 600;
     private Order $order;
     private AtolRepository $atolRepository;
+    private int|null $cost = null;
 
     public function __construct(Order $order)
     {
@@ -143,8 +144,8 @@ class OrderRepository extends ModelRepository
         return new OrderInstallment([
             'id' => 0,
             'order_id' => $this->order->id,
-            'amount' => $this->order->remaining_installment / $this->order->orderCustomers()->count(),
-            'remaining' => min($this->order->remaining, $this->order->remaining_installment),
+            'amount' => sigfig($this->order->remaining_installment / $this->order->orderCustomers()->count()),
+            'remaining' => sigfig(min($this->order->remaining, $this->order->remaining_installment)),
             'due_on' => $this->order->tour->final_payment,
         ]);
     }
@@ -193,14 +194,18 @@ class OrderRepository extends ModelRepository
      * Get total cost amount for an order
      * @return float The total cost of the order
      */
-    public function getCost(): float
+    public function getCost(bool $recache = false): float
     {
+        if ($this->cost !== null && !$recache) {
+            return $this->cost;
+        }
         $total = $this->order->booking_fee ?? 0;
         foreach ($this->order->orderCustomers()->where('is_charged', '=', 1)->get() as $orderCustomer) {
             $total += $orderCustomer->tour_cost;
             if ($orderCustomer->has_surcharge) $total += $orderCustomer->single_occupancy_surcharge;
         }
         $total += $this->getAdditionalComponentTotal();
+        $this->cost = $total;
         return $total;
     }
 
