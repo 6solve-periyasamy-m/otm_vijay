@@ -98,24 +98,26 @@ class CustomerTourController extends CustomerController
         }
         $orderCustomer = $order->repository->getOrderCustomer($customer);
         if (!isset($orderCustomer)) abort(404);
-        \Log::info('customer found');
 
         /** @var InventoryTourRepository $tourComponent */
         $tourComponent = InventoryTourRepository::getComponent($componentType, $componentId);
         if (!isset($tourComponent)) abort(404);
-        \Log::info('component found');
         if (!$tourComponent->isBookable()) abort(404);
-        \Log::info('is bookable');
         if (!$tourComponent->hasEnoughStock()) abort(404);
-
-        $data = AdditionIntention::create($orderCustomer, $tourComponent);
 
         $redirect = setting('purchase.addon.success.redirect', url()->previous(route('customer.extras', ['reference' => $order->booking_reference, 'customer' => $customer,])));
 
-        $item = new LineItem("{$tourComponent}", $tourComponent->get()->tour_sales_price);
-        $intention = PaymentIntentionRepository::create($order, $orderCustomer->customer, 'Installment', [$data,]);
+        if ($tourComponent->get()->tour_sales_price > 0) {
+            $data = AdditionIntention::create($orderCustomer, $tourComponent);
 
-        return redirect(Gateway::getDefaultGateway()->checkout([$item,], $intention, $this->user(), $redirect));
+            $item = new LineItem("{$tourComponent}", $tourComponent->get()->tour_sales_price);
+            $intention = PaymentIntentionRepository::create($order, $orderCustomer->customer, 'Installment', [$data,]);
+
+            return redirect(Gateway::getDefaultGateway()->checkout([$item,], $intention, $this->user(), $redirect));
+        } else {
+            $tourComponent->grantToCustomer($orderCustomer);
+            return redirect($redirect);
+        }
     }
 
     public function addExtra(Order $order, string $componentType, int $componentId, ?Customer $customer = null)
