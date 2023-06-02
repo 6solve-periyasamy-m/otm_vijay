@@ -330,7 +330,11 @@ class ReportRepository
             $row->expected = $booking->repository->getTotalCost();
             $row->contact_email = $cDetailsSource?->email_address ?? "Unknown";
             $row->contact_number = $cDetailsSource?->mobile_number ?? "Unknown";
-            $row->continue = route('customer-booking.summary', ['bookingUrl' => $booking->tour->booking_form_url, 'token' => $booking->token,]);
+            if (isset($booking->tour?->booking_form_url)) {
+                $row->continue = route('customer-booking.summary', ['bookingUrl' => $booking->tour->booking_form_url, 'token' => $booking->token,]);
+            } else {
+                $row->continue = "Booking URL not found for tour: " . ($booking->tour_id ?? "ID not set");
+            }
             $data[] = $row;
         }
         return $data;
