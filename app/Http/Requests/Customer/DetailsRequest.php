@@ -146,7 +146,9 @@ class DetailsRequest extends FormRequest
             'emergency_contact_name' => 'required',
             'emergency_contact_relationship' => 'required',
             'emergency_contact_telephone' => 'required',
-            'profile_picture' => 'nullable|image'
+            'profile_picture' => 'nullable|image',
+            'passport_issue_date' => 'nullable|date',
+            'passport_expiry_date' => 'nullable|date',
         ];
     }
 }
