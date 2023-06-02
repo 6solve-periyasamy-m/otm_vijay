@@ -298,8 +298,8 @@ class BookingTravellerRepository extends ModelRepository
             'mobile_number' => $details['mobile_number'] ?? null,
             'home_address_id' => $homeAddress->id,
             'billing_address_id' => $billingAddress->id,
-            'room_type_id' => $details['room_type_id'],
-            'group_id' => $details['group_id'],
+            'room_type_id' => $details['room_type_id'] ?? null,
+            'group_id' => $details['group_id'] ?? null,
         ]);
     }
     

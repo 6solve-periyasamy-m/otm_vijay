@@ -82,6 +82,9 @@
             </div>
         </form>
     </div>
+    @php
+        $order = $orderCustomer->order;
+    @endphp
         <div class="container">
             <div class="row">
                 @if(sizeof($editable ?? []) > 1)
