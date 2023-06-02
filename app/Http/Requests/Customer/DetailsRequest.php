@@ -116,6 +116,13 @@ class DetailsRequest extends FormRequest
         ];
     }
 
+    public function prepareForValidation()
+    {
+        $this->passport_issue_date = generify_date($this->passport_issue_date);
+        $this->passport_expiry_date = generify_date($this->passport_expiry_date);
+        $this->date_of_birth = generify_date($this->date_of_birth);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
