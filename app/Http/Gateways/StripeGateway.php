@@ -2,14 +2,9 @@
 
 namespace App\Http\Gateways;
 
-use App\Events\Order\OrderCreatedEvent;
-use App\Events\Order\Payment\PaymentCreatedEvent;
-use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Order\Payment\PaymentIntention;
-use App\Models\Order\Payment\PaymentMethod;
-use App\Repository\Model\Order\OrderRepository;
 use Stripe\Checkout\Session;
 
 class StripeGateway extends Gateway

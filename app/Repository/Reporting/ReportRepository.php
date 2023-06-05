@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpDynamicFieldDeclarationInspection */
 
 namespace App\Repository\Reporting;
 
@@ -28,6 +28,12 @@ class ReportRepository
                 'details' => 'Details about all orders, lead bookers, payments and the orders overall status',
                 'view' => 'reports.order',
                 'export' => 'reports.order.export',
+            ],
+            [
+                'name' => 'Final Payments',
+                'details' => 'Details about all final payments',
+                'view' => 'reports.final-payment',
+                'export' => 'reports.final-payment.export',
             ],
             [
                 'name' => 'Tour Stock',
@@ -138,6 +144,42 @@ class ReportRepository
             $row->external_notes = $order->external_notes;
             $row->orderStatus = $order->status;
             $data[$order->id] = $row;
+        }
+        return $data;
+    }
+
+    public static function getFinalPaymentReport(): array
+    {
+        $data = [];
+        $orders = Order::with([
+            'orderCustomers',
+            'adjustments',
+            'orderCustomers.adjustments',
+            'orderCustomers.groups',
+            'orderCustomers.orderAccommodation',
+            'orderCustomers.orderActivities',
+            'orderCustomers.orderFlights',
+            'orderCustomers.orderTransports',
+        ])->withSum('adjustments', 'amount')->withCount('orderCustomers', 'payingTravellers')->where('cancelled', '=', false)->get();
+        foreach ($orders as $order) {
+            $final = $order->repository->generateRemainingOrderInstallment();
+            $row = collect();
+            $row->ordered_on = $order->ordered_on;
+            $row->booking_reference = $order->booking_reference;
+            $row->lb_first_name = $order->leadBooker->customer->first_name;
+            $row->lb_last_name = $order->leadBooker->customer->last_name;
+            $row->lb_email = $order->leadBooker->customer->email_address;
+            $row->customer_count = $order->customer_count;
+            $row->tour_name = $order->tour->name;
+            $row->event_name = $order->tour->event?->name;
+            $row->total_order_value = $order->total;
+            $row->balance_outstanding = $order->remaining;
+            $row->balance_paid = $order->paid;
+            $row->due = $order->tour->final_payment;
+            $row->final_amount = $final?->calculated_amount;
+            $row->final_paid = sigfig($final?->calculated_amount - $final->remaining);
+            $row->final_remaining = $final->remaining;
+            $data[] = $row;
         }
         return $data;
     }
@@ -288,7 +330,11 @@ class ReportRepository
             $row->expected = $booking->repository->getTotalCost();
             $row->contact_email = $cDetailsSource?->email_address ?? "Unknown";
             $row->contact_number = $cDetailsSource?->mobile_number ?? "Unknown";
-            $row->continue = route('customer-booking.summary', ['bookingUrl' => $booking->tour->booking_form_url, 'token' => $booking->token,]);
+            if (isset($booking->tour?->booking_form_url)) {
+                $row->continue = route('customer-booking.summary', ['bookingUrl' => $booking->tour->booking_form_url, 'token' => $booking->token,]);
+            } else {
+                $row->continue = "Booking URL not found for tour: " . ($booking->tour_id ?? "ID not set");
+            }
             $data[] = $row;
         }
         return $data;
@@ -303,6 +349,16 @@ class ReportRepository
                 $row->order = $order;
                 $row->days = $order->days_until_next_payment;
                 $row->next = $order->next_installment;
+                $row->reminded = $order->repository->hasBeenReminded($row->next, $max);
+                $data[] = $row;
+                $isFinal = $row->next->id == 0;
+            }
+            if ($order->repository->shouldRemindForFinal($max, $min) && !($isFinal ?? false)) {
+                $final = $order->repository->generateRemainingOrderInstallment();
+                $row = collect();
+                $row->order = $order;
+                $row->days = days_until($final->due_on);
+                $row->next = $final;
                 $row->reminded = $order->repository->hasBeenReminded($row->next, $max);
                 $data[] = $row;
             }

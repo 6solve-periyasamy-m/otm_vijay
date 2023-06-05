@@ -4,16 +4,19 @@ namespace Tests\Traits;
 
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
+use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
+use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
-use App\Models\Merchandise\Merchandise;
+use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Models\Merchandise\MerchandiseInventory;
 use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
+use App\Models\Transport\TransportInventoryTourUpgrade;
 
 trait TestsTour
 {
@@ -87,6 +90,48 @@ trait TestsTour
         ]);
         $inventory->tourComponents()->save($tourComponent);
         return $tourComponent;
+    }
+
+    function generateAccommodationUpgrade(AccommodationInventoryTour|null $component = null, float $cost = 100): AccommodationInventoryTour
+    {
+        $component = $component ?? $this->generateAccommodationInventoryTour();
+        $upgrade = $this->generateAccommodationInventoryTour($component->tour, 'Upgrade', $cost);
+        AccommodationInventoryTourUpgrade::create([
+            'base_id' => $component->id,
+            'upgrade_id' => $upgrade->id,
+        ]);
+        return $upgrade;
+    }
+
+    function generateActivityUpgrade(ActivityInventoryTour|null $component = null, float $cost = 100): ActivityInventoryTour
+    {
+        $component = $component ?? $this->generateActivityInventoryTour();
+        $upgrade = $this->generateActivityInventoryTour($component->tour, 'Upgrade', $cost);
+        ActivityInventoryTourUpgrade::create([
+            'base_id' => $component->id,
+            'upgrade_id' => $upgrade->id,
+        ]);
+        return $upgrade;
+    }
+    function generateFlightUpgrade(FlightInventoryTour|null $component = null, float $cost = 100): FlightInventoryTour
+    {
+        $component = $component ?? $this->generateFlightInventoryTour();
+        $upgrade = $this->generateFlightInventoryTour($component->tour, 'Upgrade', $cost);
+        FlightInventoryTourUpgrade::create([
+            'base_id' => $component->id,
+            'upgrade_id' => $upgrade->id,
+        ]);
+        return $upgrade;
+    }
+    function generateTransportUpgrade(TransportInventoryTour|null $component = null, float $cost = 100): TransportInventoryTour
+    {
+        $component = $component ?? $this->generateTransportInventoryTour();
+        $upgrade = $this->generateTransportInventoryTour($component->tour, 'Upgrade', $cost);
+        TransportInventoryTourUpgrade::create([
+            'base_id' => $component->id,
+            'upgrade_id' => $upgrade->id,
+        ]);
+        return $upgrade;
     }
 
 }

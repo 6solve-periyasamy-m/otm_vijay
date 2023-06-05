@@ -22,6 +22,7 @@ abstract class Gateway
     /**
      * @param LineItem[] $items
      * @param PaymentIntention $intention
+     * @param Customer|BookingTraveller $customer
      * @param string|null $success The redirect URL for
      * @return string The URL for the checkout gateway
      */

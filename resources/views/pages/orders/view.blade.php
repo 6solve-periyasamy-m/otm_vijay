@@ -103,17 +103,23 @@
                 @if($order->cancelled)
                     <a href="#" onclick="$('#order-restore').submit()" class="btn btn-warning">{{ Icon::delete() }}
                         Restore Order</a>
-                    <form action="{{ route('orders.restore', ['order' => $order,]) }}" method="post" id="order-restore">
+                    <form class="d-none" action="{{ route('orders.restore', ['order' => $order,]) }}" method="post" id="order-restore">
                         @csrf
                     </form>
                 @else
                     <a href="#" onclick="$('#order-delete').submit()" class="btn btn-danger">{{ Icon::delete() }}Cancel
                         Order</a>
-                    <form action="{{ route('orders.delete', ['order' => $order,]) }}" method="post" id="order-delete">
+                    <form class="d-none" action="{{ route('orders.delete', ['order' => $order,]) }}" method="post" id="order-delete">
                         @csrf
                     </form>
                 @endif
             @endcan
+            @if(is_otm())
+                <a href="#" onclick="$('#order-force-delete').submit()" class="btn btn-danger">{{ Icon::forceDelete() }}Force Delete Order</a>
+                <form class="d-none" onsubmit="return confirm('Are you sure you wish to PERMANENTLY delete this order?')" action="{{ route('orders.delete.force', ['order' => $order,]) }}" method="post" id="order-force-delete">
+                    @csrf
+                </form>
+            @endif
         </div>
     </div>
 </div>
