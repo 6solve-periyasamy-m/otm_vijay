@@ -2,6 +2,8 @@
 
 namespace App\Models\Voucher;
 
+use App\Models\Voucher\Executors\FlatCostReductionExecutor;
+use App\Models\Voucher\Executors\VoucherExecutor;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -31,9 +33,18 @@ use Illuminate\Support\Carbon;
  */
 class VoucherCodeResult extends Model
 {
+    protected $guarded = [];
     protected $casts = ['result_type' => ResultType::class, 'data' => 'json'];
     public function voucher(): BelongsTo
     {
         return $this->belongsTo(VoucherCode::class, 'voucher_code_id');
+    }
+
+    public function executor(): VoucherExecutor|null
+    {
+        return match ($this->result_type) {
+            ResultType::FLAT_ADJUSTMENT => new FlatCostReductionExecutor($this),
+            default => null,
+        };
     }
 }
