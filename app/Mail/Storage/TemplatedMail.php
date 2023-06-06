@@ -98,9 +98,7 @@ abstract class TemplatedMail
                 $bcc = " and " . config('mail.bcc');
             }
             $mail->send($this->getTemplatedMailable($model, $attachments));
-            $class = class_basename(get_class($this));
-            $bcc = $bcc ?? "";
-            Log::channel('mail')->debug($class . " mail sent to {$email}{$bcc}");
+            Log::channel('mail')->debug(class_basename(get_class($this)) . " mail sent to {$email}" . ($bcc ?? ""));
             return true;
         } catch (Exception $e) {
             Log::error($e);
