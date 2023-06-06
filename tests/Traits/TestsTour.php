@@ -26,9 +26,9 @@ trait TestsTour
     use TestsTransport;
     use TestsMerchandise;
 
-    function generateTour(): Tour
+    function generateTour(array $data = []): Tour
     {
-        return Tour::factory()->create();
+        return Tour::factory()->create($data);
     }
 
     function generateMerchandiseInventoryTour(?Tour $tour = null, string $componentType = 'Included', float $cost = 100, ?MerchandiseInventory $inventory = null): MerchandiseInventoryTour

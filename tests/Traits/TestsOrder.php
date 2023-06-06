@@ -17,7 +17,18 @@ trait TestsOrder
 
     function generateOrder(bool $withLead = true, bool $withIncluded = true, float $tour_cost = 300, float $surcharge = 50, float $deposit = 0): Order
     {
-        $order = Order::factory()->create(['deposit' => $deposit,]);
+        if ($withIncluded) {
+            $tour = $this->generateTour(['base_price_per_person' => $tour_cost,]);
+            for ($x = 0; $x < 5; $x++) {
+                $this->generateAccommodationInventoryTour($tour);
+                $this->generateActivityInventoryTour($tour);
+                $this->generateFlightInventoryTour($tour);
+                $this->generateTransportInventoryTour($tour);
+            }
+            $order = Order::factory()->create(['deposit' => $deposit, 'tour_id' => $tour->id,]);
+        } else {
+            $order = Order::factory()->create(['deposit' => $deposit,]);
+        }
         if ($withLead) $order->lead_booker_id = $this->generateOrderCustomer($withIncluded, $order, $tour_cost, $surcharge)->id;
         $order->save();
         return $order;

@@ -3,6 +3,7 @@
 namespace App\Models\Voucher;
 
 use App\Models\Voucher\Executors\FlatCostReductionExecutor;
+use App\Models\Voucher\Executors\PercentageCostReductionExecutor;
 use App\Models\Voucher\Executors\VoucherExecutor;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -44,6 +45,7 @@ class VoucherCodeResult extends Model
     {
         return match ($this->result_type) {
             ResultType::FLAT_ADJUSTMENT => new FlatCostReductionExecutor($this),
+            ResultType::PERCENTAGE_ADJUSTMENT => new PercentageCostReductionExecutor($this),
             default => null,
         };
     }

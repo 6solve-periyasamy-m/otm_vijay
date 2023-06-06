@@ -40,6 +40,11 @@ class OrderRepository extends ModelRepository
         $this->atolRepository = new AtolRepository($order);
     }
 
+    public function getTravellerBaseCosts(): float|int
+    {
+        return $this->order->orderCustomers()->where('is_charged', true)->sum('tour_cost');
+    }
+
     public static function getOrdersOverview(bool $historic = false): array
     {
         $orders = Order::with(
