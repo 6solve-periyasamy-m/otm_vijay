@@ -93,8 +93,14 @@ abstract class TemplatedMail
         }
         try {
             $mail = Mail::to($email);
-            if (config('mail.bcc') !== null) { $mail->bcc(config('mail.bcc')); }
+            if (config('mail.bcc') !== null) {
+                $mail->bcc(config('mail.bcc'));
+                $bcc = " and " . config('mail.bcc');
+            }
             $mail->send($this->getTemplatedMailable($model, $attachments));
+            $class = class_basename(get_class($this));
+            $bcc = $bcc ?? "";
+            Log::channel('mail')->debug($class . " mail sent to {$email}{$bcc}");
             return true;
         } catch (Exception $e) {
             Log::error($e);
