@@ -3,12 +3,14 @@
 namespace App\Repository\Model\Order;
 
 use App\Models\Customer\Customer;
+use App\Models\Order\Adjustment\OrderCustomerAdjustment;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Storage\OrderComponentStorage;
+use Illuminate\Support\Carbon;
 
 class OrderCustomerRepository extends ModelRepository
 {
@@ -286,5 +288,15 @@ class OrderCustomerRepository extends ModelRepository
         $this->orderCustomer->orderTransports()->forceDelete();
         $this->orderCustomer->orderMerchandise()->forceDelete();
         $this->orderCustomer->forceDelete();
+    }
+
+    public function addAdjustment(float|int $amount, string $reason, Carbon|null $when = null): OrderCustomerAdjustment|bool
+    {
+        if ($when === null) $when = now();
+        return $this->orderCustomer->adjustments()->save(new OrderCustomerAdjustment([
+            'amount' => $amount,
+            'reason' => $reason,
+            'date' => $when,
+        ]));
     }
 }

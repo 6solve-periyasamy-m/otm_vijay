@@ -41,7 +41,7 @@ class FreeComponentExecutor extends VoucherExecutor
         if ($component === null) {
             $this->component->grantToCustomer($orderCustomer);
             if ($this->component->getTourComponentType() !== 'Included') {
-                $orderCustomer->order->repository->addAdjustment(-$this->component->getCostToCustomer(), "Voucher Code {$this->voucher->code}: Free Component for {$orderCustomer->customer_name}");
+                $orderCustomer->repository->addAdjustment(-$this->component->getCostToCustomer(), "Voucher Code {$this->voucher->code}: Free Component {$this->component->__toString()}");
             }
         }
     }
