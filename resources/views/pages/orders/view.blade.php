@@ -19,6 +19,7 @@
         $('#schedule-table').DataTable({fixedHeader: true,});
     });
     function resend() {
+        hideOverlay('.panel-overlay')
         $.post('{{ route('api.order.resend.booking-confirmation') }}', {
             '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
             'order': {{ $order->id }},
@@ -36,6 +37,7 @@
 </script>
 @endsection
 @section('content')
+@include('pages.orders.popup')
 {{-- Header Details --}}
 <div class="otm-callout" id="header-details">
     <div class="row">
@@ -90,55 +92,10 @@
                 {{ Icon::edit() }}
                 Edit Order
             </a>
-            <a href="{{ route('orders.migrate', ['order' => $order,]) }}" class="btn btn-danger">
-                {{ Icon::edit() }}
-                Change Tour
+            <a class="btn btn-secondary" href="#" onclick="showOverlay('.order-options')">
+                {{ Icon::options() }}
+                <span>Options</span>
             </a>
-            <a href="{{ route('orders.occupancy', ['order' => $order,]) }}" class="btn btn-info">
-                {{ Icon::edit() }}
-                Edit Room Sharing Data
-            </a>
-            <a href="{{ route('tours.view', ['tour' => $order->tour,]) }}" class="btn btn-warning">
-                {{ Icon::tour() }}
-                View Tour
-            </a>
-            <button class="btn btn-warning" onclick="resend()">
-                {{ Icon::email() }}
-                Resend Booking Confirmation
-            </button>
-            @if(isset($order->quote))
-                <a href="{{ route('quotes.view', ['quote' => $order->quote,]) }}" class="btn btn-warning">
-                    {{ Icon::wallet() }}
-                    View Quote
-                </a>
-            @endif
-            @if($order->has_atol && !$order->cancelled)
-                <a href="{{ route('orders.atol', ['order' => $order,]) }}" class="btn btn-secondary">
-                    {{ Icon::atol() }}
-                    ATOL Certificate
-                </a>
-            @endif
-            @can('delete', \App\Models\Order\Order::class)
-                @if($order->cancelled)
-                    <a href="#" onclick="$('#order-restore').submit()" class="btn btn-warning">{{ Icon::delete() }}
-                        Restore Order</a>
-                    <form class="d-none" action="{{ route('orders.restore', ['order' => $order,]) }}" method="post" id="order-restore">
-                        @csrf
-                    </form>
-                @else
-                    <a href="#" onclick="$('#order-delete').submit()" class="btn btn-danger">{{ Icon::delete() }}Cancel
-                        Order</a>
-                    <form class="d-none" action="{{ route('orders.delete', ['order' => $order,]) }}" method="post" id="order-delete">
-                        @csrf
-                    </form>
-                @endif
-            @endcan
-            @if(is_otm())
-                <a href="#" onclick="$('#order-force-delete').submit()" class="btn btn-danger">{{ Icon::forceDelete() }}Force Delete Order</a>
-                <form class="d-none" onsubmit="return confirm('Are you sure you wish to PERMANENTLY delete this order?')" action="{{ route('orders.delete.force', ['order' => $order,]) }}" method="post" id="order-force-delete">
-                    @csrf
-                </form>
-            @endif
         </div>
     </div>
 </div>
