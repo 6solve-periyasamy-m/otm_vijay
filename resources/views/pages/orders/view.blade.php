@@ -18,6 +18,21 @@
         $('#customer-adjustment-table').DataTable({fixedHeader: true});
         $('#schedule-table').DataTable({fixedHeader: true,});
     });
+    function resend() {
+        $.post('{{ route('api.order.resend.booking-confirmation') }}', {
+            '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
+            'order': {{ $order->id }},
+        }).done(function (xhr, textStatus, errorThrown) {
+            console.log(xhr);
+            if (xhr.success) {
+                showToast('Resent Successfully', xhr.message, 'success');
+            } else {
+                showToast('Resend Failed', xhr.message, 'danger');
+            }
+        }).fail(function (xhr, textStatus, errorThrown) {
+            showToast('Resend Failed', xhr.responseText, 'danger');
+        });
+    }
 </script>
 @endsection
 @section('content')
@@ -87,6 +102,10 @@
                 {{ Icon::tour() }}
                 View Tour
             </a>
+            <button class="btn btn-warning" onclick="resend()">
+                {{ Icon::email() }}
+                Resend Booking Confirmation
+            </button>
             @if(isset($order->quote))
                 <a href="{{ route('quotes.view', ['quote' => $order->quote,]) }}" class="btn btn-warning">
                     {{ Icon::wallet() }}

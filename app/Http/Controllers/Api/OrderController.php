@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Admin\TableRequest;
 use App\Http\Requests\Api\Admin\Order\UnknownTravellerRequest;
+use App\Http\Requests\Api\Admin\OrderRequest;
 use App\Models\Order\Order;
 use App\Repository\Model\Order\OrderRepository;
 
@@ -38,5 +39,16 @@ class OrderController extends ApiController
             $customers[] = ['id' => $customer->id, 'text' => $customer->first_name . ' ' . $customer->last_name,];
         }
         return response()->json(['success' => true, 'data' => $customers,]);
+    }
+
+    public function resendOrderConfirmation(OrderRequest $request)
+    {
+        $order = $request->getOrder();
+        $success = $order->repository->mailer()->sendBookingConfirmation();
+        if ($success) {
+            return response()->json(['success' => true, 'message' => 'Successfully resent the booking confirmation email']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Mailing is currently disabled on this system']);
+        }
     }
 }
