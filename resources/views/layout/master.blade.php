@@ -96,7 +96,7 @@
     </div>
 </div>
 <div aria-live="polite" aria-atomic="true" class="position-relative">
-    <div class="toast-container position-absolute bottom-0 end-0 p-3">
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
         {{-- Toasts get added here in JS --}}
     </div>
 </div>
