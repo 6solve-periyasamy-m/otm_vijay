@@ -68,6 +68,16 @@ class OrderController extends Controller
         return $order->repository->getAtolRepository()->showAtolCertificate();
     }
 
+    public function resend(Order $order)
+    {
+        $success = $order->repository->mailer()->sendBookingConfirmation();
+        $redirect = redirect()->route('orders.view', ['order' => $order,]);
+        if (!$success) {
+            $redirect = $redirect->withErrors(['msg' => 'Mailing is currently disabled on the system']);
+        }
+        return $redirect;
+    }
+
     public function occupancy(Order $order)
     {
         return view('pages.occupancy.manager', ['order' => $order,]);
