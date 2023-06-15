@@ -71,7 +71,6 @@ return [
     */
 
     'exclude_files' => [
-        'mail.log',
         //'my_secret.log'
     ],
 
