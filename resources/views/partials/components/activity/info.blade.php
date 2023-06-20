@@ -23,8 +23,8 @@
                 <h6 class="fw-bold">{{ $activity->currency }}</h6>
             </div>
             <div class="col-12 col-xl-6">
-                <p>Notes</p>
-                <h6 class="fw-bold">{{ $activity->notes }}</h6>
+                <p>Internal Notes</p>
+                <h6 class="fw-bold">{{ $activity->internal_notes }}</h6>
             </div>
             @can('update', \App\Models\Activity\Activity::class)
             <div class="col-12">

@@ -29,7 +29,8 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int|null $arrival_airport_id
  * @property bool $is_domestic
  * @property string|null $image_url
- * @property string|null $notes
+ * @property string|null $internal_notes
+ * @property string|null $external_notes
  * @property int|null $currency_id
  * @property Carbon|null $available_from
  * @property Carbon|null $created_at
@@ -68,7 +69,7 @@ class Flight extends Model
     use HasFactory, SoftDeletes, CascadeSoftDeletes, HasRelationships;
 
     protected array $cascadeDeletes = ['flightInventory'];
-    protected $fillable = ['airline_id', 'departure_airport_id', 'arrival_airport_id', 'is_domestic', 'currency_id', 'notes', 'available_from', 'image_url'];
+    protected $guarded = [];
     protected $casts = ['available_from' => 'date', 'is_domestic' => 'boolean'];
 
     public static function getValidationRules(): array

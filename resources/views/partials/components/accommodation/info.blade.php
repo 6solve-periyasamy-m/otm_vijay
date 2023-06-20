@@ -27,8 +27,8 @@
                 <h6 class="fw-bold">{{ $accommodation->currency }}</h6>
             </div>
             <div class="col-12">
-                <p>Notes</p>
-                <h6 class="fw-bold">{{ $accommodation->notes }}</h6>
+                <p>Internal Notes</p>
+                <h6 class="fw-bold">{{ $accommodation->internal_notes }}</h6>
             </div>
             <div class="col-12">
                 @can('update', \App\Models\Accommodation\Accommodation::class)

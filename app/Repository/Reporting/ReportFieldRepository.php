@@ -91,9 +91,9 @@ class ReportFieldRepository
                         'name' => 'Address',
                         'method' => 'address',
                     ],
-                    'notes' => [
-                        'name' => 'Notes',
-                        'method' => 'notes',
+                    'internal_notes' => [
+                        'name' => 'Internal Notes',
+                        'method' => 'internal_notes',
                     ],
                 ],
             ],
@@ -169,9 +169,9 @@ class ReportFieldRepository
                         'name' => 'Address',
                         'method' => 'address',
                     ],
-                    'notes' => [
-                        'name' => 'Notes',
-                        'method' => 'notes',
+                    'internal_notes' => [
+                        'name' => 'Internal Notes',
+                        'method' => 'internal_notes',
                     ],
                 ],
             ],
@@ -234,9 +234,9 @@ class ReportFieldRepository
                         'name' => 'Currency',
                         'method' => 'currency',
                     ],
-                    'notes' => [
-                        'name' => 'Notes',
-                        'method' => 'notes',
+                    'internal_notes' => [
+                        'name' => 'Internal Notes',
+                        'method' => 'internal_notes',
                     ],
                 ],
             ],
@@ -320,9 +320,9 @@ class ReportFieldRepository
                         'name' => 'Currency',
                         'method' => 'currency',
                     ],
-                    'notes' => [
-                        'name' => 'Notes',
-                        'method' => 'notes',
+                    'internal_notes' => [
+                        'name' => 'Internal Notes',
+                        'method' => 'internal_notes',
                     ],
                 ],
             ],

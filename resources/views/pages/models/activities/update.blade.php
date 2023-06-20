@@ -10,6 +10,6 @@
       'image_url' => $activity->image_url,
       'description' => $activity->description,
       'currency' => $activity->currency,
-      'notes' => $activity->notes,
+      'notes' => $activity->internal_notes,
     ])
 @endsection

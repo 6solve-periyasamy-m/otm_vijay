@@ -11,6 +11,6 @@
       'audit_date' => $accommodation->audit_date,
       'address' => $accommodation->address,
       'currency' => $accommodation->currency,
-      'notes' => $accommodation->notes,
+      'notes' => $accommodation->internal_notes,
     ])
 @endsection

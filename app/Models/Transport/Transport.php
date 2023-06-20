@@ -33,7 +33,8 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property string $name
  * @property string|null $image_url Asset URL for the component image
  * @property string|null $description
- * @property string|null $notes
+ * @property string|null $internal_notes
+ * @property string|null $external_notes
  * @property int|null $currency_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -72,7 +73,7 @@ class Transport extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes, HasRelationships;
 
-    protected $fillable = ['transport_type_id', 'operator_id', 'departure_address_id', 'arrival_address_id', 'name', 'description', 'currency_id', 'is_domestic', 'notes', 'image_url'];
+    protected $guarded = [];
     protected array $cascadeDeletes = ['transportInventory'];
     protected $casts = ['is_domestic' => 'boolean'];
 
