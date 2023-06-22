@@ -11,9 +11,9 @@ return [
     |
     */
 
-    'default_time_format' => 'H:i',
-    'default_date_format' => 'd/m/Y',
-    'default_datetime_format' => 'd/m/Y H:i',
+    'default_time_format' => setting('system.format.time','H:i'),
+    'default_date_format' => setting('system.format.date','d/m/Y'),
+    'default_datetime_format' => setting('system.format.date','d/m/Y') . ' ' . setting('system.format.date','d/m/Y'),
 
     /*
     |--------------------------------------------------------------------------
