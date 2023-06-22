@@ -160,8 +160,7 @@
                                 @elseif($column['type'] === 'label')
                                     @include('datatables::label')
                                 @else
-
-                                    <div class="table-cell px-6 py-2 @unless($column['wrappable']) whitespace-nowrap truncate @endunless @if($column['contentAlign'] === 'right') text-right @elseif($column['contentAlign'] === 'center') text-center @else text-left @endif {{ $this->cellClasses($row, $column) }}">
+                                    <div class="table-cell align-middle px-6 py-2 @unless($column['wrappable']) whitespace-nowrap truncate @endunless @if($column['contentAlign'] === 'right') text-right @elseif($column['contentAlign'] === 'center') text-center @else text-left @endif {{ $this->cellClasses($row, $column) }}">
                                         {!! $row->{$column['name']} !!}
                                     </div>
                                 @endif
