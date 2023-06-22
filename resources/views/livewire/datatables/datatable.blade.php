@@ -1,7 +1,7 @@
 <div>
     @includeIf($beforeTableSlot)
     <div class="relative">
-        <div class="flex items-center justify-between mb-1">
+        <div class="flex items-center justify-between mb-3">
             <div class="flex items-center h-10">
                 @if($this->searchableColumns()->count())
                     <div class="flex rounded-lg w-96 shadow-sm">
