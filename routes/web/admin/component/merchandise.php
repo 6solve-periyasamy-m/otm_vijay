@@ -32,6 +32,7 @@ Route::prefix('type')->name('type.')->group(function () {
     Route::prefix('{type}')->group(function () {
         Route::get('/update', [MerchandiseTypeController::class, 'edit'])->name('edit');
         Route::post('/update', [MerchandiseTypeController::class, 'update'])->name('update');
+        Route::post('/delete', [MerchandiseTypeController::class, 'delete'])->name('delete');
     });
 });
 Route::prefix('size')->name('size.')->group(function () {
