@@ -14,6 +14,6 @@ class VoucherCodeController extends Controller
 
     public function view(VoucherCode $voucher)
     {
-
+        return view('pages.admin.voucher.view', ['voucher' => $voucher,]);
     }
 }
