@@ -17,6 +17,7 @@ use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Mailing\Mailer\Order\OrderMailer;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
 use App\Repository\Storage\Rooming\RemoteGroup;
@@ -38,6 +39,11 @@ class OrderRepository extends ModelRepository
     {
         $this->order = $order;
         $this->atolRepository = new AtolRepository($order);
+    }
+
+    public function mailer(): OrderMailer
+    {
+        return new OrderMailer($this->order);
     }
 
     public function getTravellerBaseCosts(): float|int

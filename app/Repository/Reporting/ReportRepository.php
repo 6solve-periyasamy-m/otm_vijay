@@ -316,10 +316,14 @@ class ReportRepository
         return $data;
     }
 
-    public static function getAbandonedBookingsReport(): array
+    public static function getAbandonedBookingsReport(int|null $limit = null): array
     {
         $data = [];
-        foreach (Booking::whereNull('order_id')->with('tour', 'leadTraveller', 'leadTraveller.customer')->get() as $booking) {
+        $bookings = Booking::whereNull('order_id')->with('tour', 'leadTraveller', 'leadTraveller.customer');
+        if ($limit !== null) {
+            $bookings = $bookings->where('updated_at', '>', now()->subDays($limit));
+        }
+        foreach ($bookings->get() as $booking) {
             $row = collect();
             $cDetailsSource = $booking->leadTraveller->customer ?? $booking->leadTraveller;
             $row->name = $cDetailsSource?->title . ' ' . $cDetailsSource?->first_name . ' ' . $cDetailsSource?->last_name;
