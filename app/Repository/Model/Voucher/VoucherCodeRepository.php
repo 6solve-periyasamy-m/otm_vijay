@@ -5,6 +5,7 @@ namespace App\Repository\Model\Voucher;
 use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\ModelRepository;
 use Illuminate\Database\Eloquent\Model;
+use Str;
 
 class VoucherCodeRepository extends ModelRepository
 {
@@ -17,6 +18,7 @@ class VoucherCodeRepository extends ModelRepository
 
     public function update(array $data): Model
     {
+        $data['code'] = Str::upper($data['code']);
         $this->voucher->update($data);
         $this->save();
         return $this->get();
@@ -24,6 +26,7 @@ class VoucherCodeRepository extends ModelRepository
 
     public function save(): bool
     {
+        $this->voucher->code = Str::upper($this->voucher->code);
         return $this->voucher->save();
     }
 

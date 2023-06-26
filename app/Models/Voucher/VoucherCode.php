@@ -4,6 +4,7 @@ namespace App\Models\Voucher;
 
 use App\Models\Order\Order;
 use App\Models\Traits\HasRepository;
+use App\Repository\Model\Voucher\VoucherCodeRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -32,6 +33,7 @@ use Illuminate\Support\Carbon;
  * @property-read bool $expired Has the voucher expired
  * @property-read bool $usable Is the voucher both active and not expired
  * @property-read int|null $results_count
+ * @property-read VoucherCodeRepository $repository
  * @method static Builder|VoucherCode whereActive($value)
  * @method static Builder|VoucherCode whereCode($value)
  * @method static Builder|VoucherCode whereCreatedAt($value)

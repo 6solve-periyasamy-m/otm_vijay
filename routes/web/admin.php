@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\System\PermissionsController;
 use App\Http\Controllers\Admin\System\SettingsController;
 use App\Http\Controllers\Admin\TravelClassController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\Voucher\VoucherCodeController;
 
 Auth::routes(['verify' => true, 'register' => false]);
 
@@ -83,6 +84,9 @@ Route::middleware('auth:web')->group(function () {
                 Route::get('/demo', [MailController::class, 'demo'])->name('demo');
             });
         });
+    });
+    Route::prefix('vouchers')->name('vouchers.')->group(function () {
+       Route::get('/', [VoucherCodeController::class, 'index'])->name('index');
     });
 
     Route::prefix('organizations')->group(function () {
