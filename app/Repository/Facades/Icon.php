@@ -62,6 +62,11 @@ class Icon
         return $this->trash();
     }
 
+    public function eye(): View|string|Closure
+    {
+        return $this->solid('eye');
+    }
+
     public function list(): View|string|Closure
     {
         return $this->solid('list-alt');
@@ -421,17 +426,17 @@ class Icon
     {
         return $this->solid('floppy-disk');
     }
-    
+
     public function facebook(): View|string|Closure
     {
         return $this->brand('facebook');
     }
-    
+
     public function twitter(): View|string|Closure
     {
         return $this->brand('twitter');
     }
-    
+
     public function instagram(): View|string|Closure
     {
         return $this->brand('instagram');

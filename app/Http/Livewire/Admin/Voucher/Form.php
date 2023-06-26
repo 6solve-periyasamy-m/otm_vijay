@@ -21,6 +21,8 @@ class Form extends ModalComponent
     public function save()
     {
         $this->voucher->repository->save();
+        $this->emit('refreshLivewireDatatable');
+        $this->emit('closeModal');
     }
     public function render()
     {

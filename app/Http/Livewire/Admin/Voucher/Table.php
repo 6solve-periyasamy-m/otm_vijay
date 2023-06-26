@@ -19,7 +19,11 @@ class Table extends LivewireDatatable
     public function columns()
     {
         return [
-            Column::name('code')
+            Column::callback(['code', 'id'], function ($code, $id) {
+                $route = route('vouchers.view', ['voucher' => $id]);
+                return "<a href=\"{$route}\">$code</a>";
+            })
+                ->label('Code')
                 ->sortable()
                 ->searchable(),
             Column::name('name')
@@ -39,6 +43,25 @@ class Table extends LivewireDatatable
             NumberColumn::name('results.id:count')
                 ->label('Results Count')
                 ->sortable(),
+
+            Column::callback(['id'], function ($id) {
+                return view('partials.admin.voucher.actions', [
+                    'id' => $id,
+                    'field' => 'voucher',
+                    'modal' => 'admin.voucher.form',
+                    'route' => 'vouchers.view'
+                ]);
+            })
+                ->label('Actions')
+                ->unsortable()
+                ->width('12rem'),
         ];
+    }
+
+    public function destroy($voucher)
+    {
+        /** @var VoucherCode $voucher */
+        $voucher = VoucherCode::find($voucher);
+        $voucher?->repository->delete();
     }
 }

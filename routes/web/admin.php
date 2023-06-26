@@ -87,6 +87,7 @@ Route::middleware('auth:web')->group(function () {
     });
     Route::prefix('vouchers')->name('vouchers.')->group(function () {
        Route::get('/', [VoucherCodeController::class, 'index'])->name('index');
+       Route::get('/{voucher}', [VoucherCodeController::class, 'view'])->name('view');
     });
 
     Route::prefix('organizations')->group(function () {
