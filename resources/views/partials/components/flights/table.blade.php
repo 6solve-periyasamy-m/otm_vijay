@@ -50,7 +50,16 @@
                     <td>{{ f_currency($flightInventory->purchase_price) }}</td>
                     <td>{{ f_currency($flightInventory->sales_price) }}</td>
                     <td>{{ $flightInventory->notes }}</td>
-                    <td class="actions-3">
+                    <td class="actions-4">
+                        @can('read', \App\Models\Flight\FlightInventory::class)
+                            <a href="{{route('flight-inventories.manifest.view', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}" class="btn btn-outline-secondary btn-sm mb-1">
+                                {{ Icon::list() }}
+                            </a>
+                        @else
+                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                {{ Icon::list() }}
+                            </span>
+                        @endcan
                         @can('create', \App\Models\Flight\FlightInventory::class)
                             <a href="{{route('flight-inventories.duplicate', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
                                 {{ Icon::copy() }}

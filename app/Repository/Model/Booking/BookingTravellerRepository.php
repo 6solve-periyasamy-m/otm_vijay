@@ -198,6 +198,19 @@ class BookingTravellerRepository extends ModelRepository
     public function convertToCustomer(): Customer
     {
         if (isset($this->traveller->customer_id)) return $this->traveller->customer;
+        if (!isset($this->traveller->home_address_id)) {
+            $this->traveller->home_address_id = Address::create([
+                'name' => "{$this->traveller->first_name} {$this->traveller->first_name} - Home Address",
+                'address_parent_id' => AddressParent::getParentId('customer'),
+            ])->id;
+        }
+        if (!isset($this->traveller->billing_address_id)) {
+            $this->traveller->billing_address_id = Address::create([
+                'name' => "{$this->traveller->first_name} {$this->traveller->first_name} - Billing Address",
+                'address_parent_id' => AddressParent::getParentId('customer'),
+            ])->id;
+        }
+        $this->traveller->save();
         $customer = Customer::create([
             'title' => $this->traveller->title ?? null,
             'first_name' => $this->traveller->first_name ?? null,
@@ -285,8 +298,8 @@ class BookingTravellerRepository extends ModelRepository
             'mobile_number' => $details['mobile_number'] ?? null,
             'home_address_id' => $homeAddress->id,
             'billing_address_id' => $billingAddress->id,
-            'room_type_id' => $details['room_type_id'],
-            'group_id' => $details['group_id'],
+            'room_type_id' => $details['room_type_id'] ?? null,
+            'group_id' => $details['group_id'] ?? null,
         ]);
     }
     

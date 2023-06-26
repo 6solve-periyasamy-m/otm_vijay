@@ -147,6 +147,11 @@ class Order extends Model
         return $this->hasMany(OrderCustomer::class, 'order_id');
     }
 
+    public function payingTravellers(): HasMany
+    {
+        return $this->orderCustomers()->where('is_charged', true);
+    }
+
     public function additionalTravellers(): HasMany
     {
         return $this->orderCustomers()->whereNot('id', '=', $this->lead_booker_id);
@@ -327,10 +332,10 @@ class Order extends Model
      */
     public function getDaysUntilNextPaymentAttribute(): ?int
     {
-        $next = $this->next_installment?->due_on;
+        $next = $this->repository->getNextPaymentDetails(false)?->due_on;
         if (!isset($next)) return null;
         $next = Carbon::parse($next);
-        return $next->isBefore(Carbon::now()) ? ($next->diffInDays(Carbon::now())) * -1 : ($next->diffInDays(Carbon::now()));
+        return days_until($next);
     }
 
     /**
@@ -354,7 +359,7 @@ class Order extends Model
 
     public function getPayingCustomersAttribute(): int
     {
-        return $this->orderCustomers()->where('is_charged', '=', true)->count();
+        return $this->payingTravellers()->count();
     }
 
     // Functions

@@ -40,12 +40,17 @@
             </div>
             @can('update', \App\Models\Transport\Transport::class)
             <div class="col-12">
+                @can('update', \App\Models\Transport\Transport::class)
                 <a class="btn btn-success" href="{{route('transports.edit', ['transport' => $transport,])}}">
                     {{ Icon::edit() }}
                     <span>Edit Transport</span>
                 </a>
+                @endcan
+                <a class="btn btn-secondary" href="{{route('transports.manifest.view', ['transport' => $transport,])}}">
+                    {{ Icon::list() }}
+                    <span>View Manifest</span>
+                </a>
             </div>
-            @endcan
         </div>
     </div>
 </div>

@@ -3,9 +3,15 @@
         Buy for
     </div>
     <div class="col-6 border-right">
-        <button class="btn btn-success text-dark buy-button" wire:click="buyOne">
-            One
-        </button>
+        @if($disabled ?? false)
+            <span class="btn btn-success text-dark buy-button">
+                One
+            </span>
+        @else
+            <button class="btn btn-success text-dark buy-button" wire:click="buyOne">
+                One
+            </button>
+        @endif
     </div>
     <div class="col-6">
         <button class="btn btn-success text-dark buy-button" wire:click="buyAll">

@@ -10,7 +10,7 @@
             </div>
             @if (!$isIncluded)
             <div class="col-2 component-dates fw-bold my-auto">
-                {{ f_currency($this->component->component->getSalesPrice()) }}
+                {{ f_currency($this->component->component->getCostToCustomer()) }}
             </div>
             @endif
         </div>
@@ -39,17 +39,43 @@
                             @php
                                 $owned = $this->component->equals($upgrade);
                             @endphp
-                            <option value="{{ json_encode($upgrade->toLivewire()) }}" @if($owned) disabled @endif>{!! $upgrade->upgrade_name !!} @if($owned)(Current)@endif</option>
+                            <option value="{{ json_encode($upgrade->toLivewire()) }}" @if($owned) disabled @endif>{!! $upgrade->upgrade_name !!} @if($owned)(Current)@endif @if(!$upgrade->canBookForAll()) ({{ $upgrade->getAvailableStock() }} available, {{ $upgrade->getUsedStockOnBooking() }} used) @endif</option>
                         @endforeach
                     </select>
                 @elseif($this->component->tour_component_type === 'Add-on')
-                    <div class="text-center fw-bold" style="font-size: 1.5rem">Cost per Traveller: {{ f_currency($this->component->component->getSalesPrice()) }}</div>
+                    <div class="text-center fw-bold" style="font-size: 1.5rem">Cost per Traveller: {{ f_currency($this->component->component->getCostToCustomer()) }}</div>
                 @endif
             </div>
             @if($this->component->tour_component_type === 'Add-on' && $this->component->owned)
                 @include('partials.customer.booking.component.sell-buttons')
             @else
-                @include('partials.customer.booking.component.buy-buttons')
+                <div class="col-6 col-lg-2 col-xl-2 row mx-auto">
+                    <div class="col-12 border-bottom text-center buy-header">
+                        Buy for
+                    </div>
+                    <div class="col-6 border-right">
+                        @if(!$this->canUpgradeForOne())
+                            <span class="btn btn-dark text-light buy-button">
+                                One
+                            </span>
+                        @else
+                            <button class="btn btn-success text-dark buy-button" wire:click="buyOne">
+                                One
+                            </button>
+                        @endif
+                    </div>
+                    <div class="col-6">
+                        @if(!$this->canUpgradeForAll())
+                            <span class="btn btn-dark text-light buy-button">
+                                All
+                            </span>
+                        @else
+                            <button class="btn btn-success text-dark buy-button" wire:click="buyOne">
+                                All
+                            </button>
+                        @endif
+                    </div>
+                </div>
             @endif
         </div>
         @endif

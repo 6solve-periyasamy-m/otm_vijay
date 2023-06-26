@@ -44,6 +44,7 @@ class SendPaymentDueReminders extends Command
             $min = $this->argument('min') ?? -1000;
             foreach (Order::where('cancelled',false)->get() as $order) {
                 $order->repository->sendReminderEmails($days, $min);
+                $order->repository->sendFinalPaymentEmails($days, $min);
             }
         } else {
             $this->error('Reminders are not authorized to run. Use --force to bypass this check');

@@ -40,6 +40,9 @@
         <div class="col-xl-4">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Activity\TicketTypeRepository::class])
         </div>
+        <div class="col-xl-4">
+            @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Location\LocationTypeRepository::class])
+        </div>
     </div>
     <div class="card">
         <div class="card-body" data-target="#flight" onclick="toggleAccordion(this)">

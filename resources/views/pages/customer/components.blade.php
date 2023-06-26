@@ -14,6 +14,7 @@
      * @var \App\Models\Order\OrderCustomer[] $editable
      */
     $locked = $orderCustomer->order->tour->repository->isComponentsLocked();
+    $addons = $orderCustomer->repository->getAvailableToAdd();
 @endphp
 
 @push('header-stack')
@@ -81,6 +82,9 @@
             </div>
         </form>
     </div>
+    @php
+        $order = $orderCustomer->order;
+    @endphp
         <div class="container">
             <div class="row">
                 @if(sizeof($editable ?? []) > 1)
@@ -264,7 +268,7 @@
                                                                 'onclickPurchase' => 'event.preventDefault();purchaseUpgrade("activity_' . $orderComponent->id . '_upgrade-input", this, \'activity\')',
                                                                 'target' => '',
                                                                 'selected' => $orderComponent->tourComponent->repository->getUpgradeId(),
-                                                    'options' => $orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, false),])
+                                                                'options' => $orderComponent->tourComponent->repository->getUpgradeKeyMap(1, false, false),])
                                                         @endif
                                                     @endif
                                                 </td>
@@ -427,7 +431,7 @@
                 </div>
                 @endif
                 {{-- Add-ons and Extras --}}
-                @if(!$locked)
+                @if(!$locked && sizeof($addons) > 0)
                 <div class="accordion" style="box-shadow: none;">
                     <div class="card card-heading accordion-header">
                         <div class="card-body accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseAddon" aria-expanded="true" aria-controls="collapseAddon">
@@ -449,7 +453,7 @@
                                         <th scope="col">Actions</th>
                                     </tr>
                                     </thead>
-                                    @foreach($orderCustomer->repository->getAvailableToAdd() as $orderComponent)
+                                    @foreach($addons as $orderComponent)
                                         <tr>
                                             <td data-content="Name">{{ $orderComponent['name'] }}</td>
                                             @if($orderComponent['type'] === 'Included')

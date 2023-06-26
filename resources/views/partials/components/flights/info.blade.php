@@ -30,14 +30,19 @@
                 <p>Internal Notes</p>
                 <h6 class="fw-bold">{{ $flight->internal_notes }}</h6>
             </div>
-            @can('update', \App\Models\Flight\Flight::class)
+
             <div class="col-12">
+                @can('update', \App\Models\Flight\Flight::class)
                 <a class="btn btn-success" href="{{route('flights.edit', ['flight' => $flight,])}}">
                     {{ Icon::edit() }}
                     <span>Edit Flight</span>
                 </a>
+                @endcan
+                <a class="btn btn-secondary" href="{{route('flights.manifest.view', ['flight' => $flight,])}}">
+                    {{ Icon::list() }}
+                    <span>View Manifest</span>
+                </a>
             </div>
-            @endcan
         </div>
     </div>
 </div>

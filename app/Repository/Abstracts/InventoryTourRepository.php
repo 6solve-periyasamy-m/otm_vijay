@@ -16,7 +16,6 @@ use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Interfaces\HasStockControl;
 use App\Repository\Storage\ComponentInformation;
 use App\Repository\Storage\Customer\Component\BookingComponent;
-use App\Repository\Storage\Customer\Component\OrderComponent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
@@ -48,6 +47,13 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
 
     public abstract function getComponentInformation(): ComponentInformation;
 
+    public abstract function getStockUsedOnBooking(Booking $booking): int;
+
+    public function getCostToCustomer(): float|int
+    {
+        return $this->getTourComponentType() === 'Included' ? 0 : ($this->get()?->tour_sales_price ?? 0);
+    }
+
     public function getActiveUpgrade(BookingTraveller|OrderCustomer $traveller): InventoryTourRepository|null
     {
         $parent = $this->getUpgradeParent();
@@ -63,11 +69,6 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
     public function getAbstractBookingComponent(BookingTraveller $traveller): BookingComponent
     {
         return new BookingComponent($this, $traveller);
-    }
-
-    public function getAbstractOrderComponent(OrderCustomer $orderCustomer): OrderComponent
-    {
-        return new OrderComponent($this, $orderCustomer);
     }
 
     public function unbookForAll(Booking $booking): bool
@@ -114,6 +115,7 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
             $data[0] = 'Included - ' . f_currency(0) . ($stock ? ' - Stock ' . $parent->repository->getAvailableStock() . '/' . $parent->repository->getTotalStock() : '');
         }
         foreach ($upgrades as $upgrade) {
+            if (!$upgrade->upgrade->is_bookable) continue;
             if ($required > 0 && $upgrade->upgrade->repository->getAvailableStock() < $required) continue;
             if (!$downgrade && $upgrade->upgrade->tour_sales_price < $cost) continue;
             if (!$downgrade &&
