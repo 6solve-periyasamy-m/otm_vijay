@@ -48,6 +48,10 @@
         <option value="${id}">${name} - ${price}</option>
     </script>
 
+    <script type="text/template" data-template="room-option-disabled">
+        <option value="${id}" disabled>${name} - ${price} (Out of Stock)</option>
+    </script>
+
     <script type="text/template" data-template="customer">
         <div class="customer draggable" customer="${id}">
             <div class="customer-container">
@@ -189,7 +193,7 @@
             selector.empty();
             for (const room of rooms) {
                 let price = room.price > 0 ? formatCurrency(room.price) : 'Included';
-                selector.append(render(template('room-option'), {
+                selector.append(render(template(room.available ? 'room-option' : 'room-option-disabled'), {
                     id: room.id,
                     name: room.name,
                     size: room.size,

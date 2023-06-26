@@ -279,6 +279,7 @@ class BookingRepository extends ModelRepository
                 'price' => $inventoryTour->tour_component_type === 'Included' ? 0 : $inventoryTour->tour_sales_price,
                 'start' => $inventoryTour->inventory->check_in->unix(),
                 'end' => $inventoryTour->inventory->check_out->unix(),
+                'available' => !$inventoryTour->repository->isStockControlActive() || $inventoryTour->repository->hasEnoughStock($this->booking->travellers()->count())
             ];
         }
         $customers = [];
