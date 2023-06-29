@@ -26,11 +26,30 @@ class PercentageCostReductionExecutor extends VoucherExecutor
 
     public function applyForOrderCustomer(OrderCustomer $orderCustomer)
     {
-        $percent = sigfig($orderCustomer->order->repository->getTravellerBaseCosts() * ($this->amount / 100)) * -1;
+        $percent = $this->calculate($orderCustomer->order->repository->getTravellerBaseCosts());
         $orderCustomer->order->repository->addAdjustment(
             $percent,
             "Voucher Code: {$this->voucher->code} - {$this->amount}% off",
             now(),
         );
+    }
+
+    private function calculate(int|float $cost): int|float
+    {
+        return sigfig($cost * ($this->amount / 100)) * -1;
+    }
+
+    public static function fromJson(array $data): VoucherExecutor
+    {
+        return new static(new VoucherCodeResult(['result_type' => ResultType::PERCENTAGE_ADJUSTMENT, 'data' => $data,]));
+    }
+
+    public function description(): string
+    {
+        return __('voucher.result.description.percentage_reduction',[
+            'total' => f_currency(1000),
+            'reduction' => $this->amount . '%',
+            'after' => f_currency($this->calculate(1000)),
+        ]);
     }
 }

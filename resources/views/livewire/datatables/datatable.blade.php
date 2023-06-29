@@ -1,6 +1,7 @@
 <div>
     @includeIf($beforeTableSlot)
     <div class="relative">
+        @if($showSearch ?? true)
         <div class="flex items-center justify-between mb-3">
             <div class="flex items-center h-10">
                 @if($this->searchableColumns()->count())
@@ -83,6 +84,7 @@
                 @includeIf($buttonsSlot)
             </div>
         </div>
+        @endif
 
         @if($hideable === 'buttons')
             <div class="p-2 grid grid-cols-8 gap-2">

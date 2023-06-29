@@ -31,4 +31,18 @@ class FlatCostReductionExecutor extends VoucherExecutor
             now(),
         );
     }
+
+    public static function fromJson(array $data): VoucherExecutor
+    {
+        return new static(new VoucherCodeResult(['result_type' => ResultType::FLAT_ADJUSTMENT, 'data' => $data,]));
+    }
+
+    public function description(): string
+    {
+        return __('voucher.result.description.flat_reduction',[
+            'total' => f_currency(1000),
+            'reduction' => f_currency($this->amount),
+            'after' => f_currency(1000 + $this->amount),
+        ]);
+    }
 }
