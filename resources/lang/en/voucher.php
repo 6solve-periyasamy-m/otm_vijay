@@ -3,14 +3,42 @@
 return [
     'result' => [
         'type' => [
-            'flat_reduction' => 'Flat Reduction',
-            'percentage_reduction' => 'Percentage Reduction',
-            'free_component' => 'Free Component',
+            'flat_reduction' => [
+                'name' => 'Flat Reduction',
+                'description' => 'An order of :total, will be adjusted by :reduction, and will now cost :after',
+                'toast' => [
+                    'success' => [
+                        'title' => 'Created Successfully',
+                        'body' => 'The flat reduction has been successfully created',
+                    ],
+                    'failed' => [
+                        'title' => 'Failed to Create',
+                        'body' => 'The flat reduction was unable to be created',
+                    ],
+                ],
+            ],
+            'percentage_reduction' => [
+                'name' => 'Percentage Reduction',
+                'description' => 'An order of :total, will be reduced by :reduction, and will now cost :after',
+                'toast' => [
+                    'success' => [
+                        'title' => 'Created Successfully',
+                        'body' => 'The percentage reduction has been successfully created',
+                    ],
+                    'failed' => [
+                        'title' => 'Failed to Create',
+                        'body' => 'The percentage reduction was unable to be created',
+                    ],
+                ],
+            ],
+            'free_component' => [
+                'name' => 'Free Component',
+                'description' => 'Free Component',
+            ],
         ],
-        'description' => [
-            'flat_reduction' => 'An order of :total, will be adjusted by :reduction, and will now cost :after',
-            'percentage_reduction' => 'An order of :total, will be reduced by :reduction, and will now cost :after',
-            'free_component' => 'Free Component',
+        'card' => [
+            'title' => 'Executors',
+            'create' => 'Create',
         ],
     ],
     'form' => [

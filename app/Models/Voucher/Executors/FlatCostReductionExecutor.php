@@ -39,7 +39,7 @@ class FlatCostReductionExecutor extends VoucherExecutor
 
     public function description(): string
     {
-        return __('voucher.result.description.flat_reduction',[
+        return __('voucher.result.type.flat_reduction.description',[
             'total' => f_currency(1000),
             'reduction' => f_currency($this->amount),
             'after' => f_currency(1000 + $this->amount),

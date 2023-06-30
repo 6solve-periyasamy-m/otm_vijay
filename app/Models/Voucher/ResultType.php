@@ -11,9 +11,9 @@ enum ResultType: int
     public function description(): string
     {
         return match ($this) {
-            self::FLAT_ADJUSTMENT => __('voucher.result.type.flat_reduction'),
-            self::PERCENTAGE_ADJUSTMENT => __('voucher.result.type.percentage_reduction'),
-            self::FREE_COMPONENT => __('voucher.result.type.free_component'),
+            self::FLAT_ADJUSTMENT => __('voucher.result.type.flat_reduction.name'),
+            self::PERCENTAGE_ADJUSTMENT => __('voucher.result.type.percentage_reduction.name'),
+            self::FREE_COMPONENT => __('voucher.result.type.free_component.name'),
         };
     }
 }
