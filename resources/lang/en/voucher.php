@@ -41,6 +41,19 @@ return [
             'create' => 'Create',
         ],
     ],
+    'tour' => [
+        'card' => [
+            'title' => 'Linked Tours',
+            'include' => 'Include',
+            'exclude' => 'Exclude'
+        ],
+        'error' => [
+            'not-found' => [
+                'title' => 'Tour not found',
+                'body' => 'No tour with that ID was found'
+            ]
+        ]
+    ],
     'form' => [
         'create' => 'Create Voucher Code',
         'edit' => 'Create Voucher Code',
