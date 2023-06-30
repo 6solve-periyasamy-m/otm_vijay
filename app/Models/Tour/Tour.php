@@ -21,6 +21,7 @@ use App\Models\System\Brand;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Voucher\VoucherCode;
+use App\Models\Voucher\VoucherTour;
 use App\Repository\Model\Tour\TourRepository;
 use App\Repository\RoomingRepository;
 use Database\Factories\Tour\TourFactory;
@@ -184,7 +185,7 @@ class Tour extends Model
         'transport_stock_control' => 'boolean',
         'merchandise_stock_control' => 'boolean',
         ];
-    protected array $cascadeDeletes = ['accommodationInventoryTours', 'activityInventoryTours', 'flightInventoryTours', 'transportInventoryTours', 'merchandise', 'paymentInstallments'];
+    protected array $cascadeDeletes = ['accommodationInventoryTours', 'activityInventoryTours', 'flightInventoryTours', 'transportInventoryTours', 'merchandise', 'paymentInstallments', 'voucherPivot'];
 
     private TourRepository $internal_repository;
 
@@ -288,6 +289,11 @@ class Tour extends Model
     public function orderInstallments(): HasManyThrough
     {
         return $this->hasManyThrough(OrderInstallment::class, Order::class, 'tour_id', 'order_id')->where('cancelled', '=', false);
+    }
+
+    private function voucherPivot(): HasMany
+    {
+        return $this->hasMany(VoucherTour::class, 'tour_id');
     }
 
     protected function vouchers(): BelongsToMany
