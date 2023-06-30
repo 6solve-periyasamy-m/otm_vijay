@@ -47,6 +47,12 @@ return [
             'include' => 'Include',
             'exclude' => 'Exclude'
         ],
+        'table' => [
+            'name' => 'Name',
+            'event' => 'Event',
+            'included' => 'Allowed',
+            'actions' => 'Actions',
+        ],
         'error' => [
             'not-found' => [
                 'title' => 'Tour not found',

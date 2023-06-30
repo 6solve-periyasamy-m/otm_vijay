@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-trait ShowsToast
+trait SendsEvents
 {
     /**
      * @param string $title
@@ -20,5 +20,10 @@ trait ShowsToast
     public function toastFromLang(string $lang, string $color = 'primary', bool $hide = false, int $delay = 5000): void
     {
         $this->toast(__("$lang.title"), __("$lang.body"), $color, $hide, $delay);
+    }
+
+    public function refreshTables(): void
+    {
+        $this->emit('refreshLivewireDatatable');
     }
 }

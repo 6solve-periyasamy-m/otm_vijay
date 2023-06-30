@@ -2,14 +2,14 @@
 
 namespace App\Http\Livewire\Admin\Voucher\Result\Create;
 
-use App\Http\Livewire\ShowsToast;
+use App\Http\Livewire\SendsEvents;
 use App\Models\Voucher\Executors\PercentageCostReductionExecutor;
 use App\Models\Voucher\VoucherCode;
 use LivewireUI\Modal\ModalComponent;
 
 class PercentageAdjustment extends ModalComponent
 {
-    use ShowsToast;
+    use SendsEvents;
 
     /** @var VoucherCode $voucher */
     public $voucher;

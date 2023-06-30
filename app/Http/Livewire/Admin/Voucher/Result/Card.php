@@ -2,14 +2,14 @@
 
 namespace App\Http\Livewire\Admin\Voucher\Result;
 
-use App\Http\Livewire\ShowsToast;
+use App\Http\Livewire\SendsEvents;
 use App\Models\Voucher\ResultType;
 use App\Models\Voucher\VoucherCode;
 use Livewire\Component;
 
 class Card extends Component
 {
-    use ShowsToast;
+    use SendsEvents;
 
     public $executor = 0;
     public VoucherCode $voucher;

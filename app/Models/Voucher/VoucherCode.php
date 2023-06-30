@@ -97,14 +97,22 @@ class VoucherCode extends Model
         return $this->tours()->where('invert', '=', 1);
     }
 
-    public function include(Tour $tour)
+    public function include(Tour|int $tour)
     {
-        $this->tours()->attach($tour->id, ['invert' => 0,]);
+        if ($tour instanceof Tour) $tour = $tour->id;
+        $this->tours()->attach($tour, ['invert' => 0,]);
     }
 
-    public function exclude(Tour $tour)
+    public function exclude(Tour|int $tour)
     {
-        $this->tours()->attach($tour->id, ['invert' => 1,]);
+        if ($tour instanceof Tour) $tour = $tour->id;
+        $this->tours()->attach($tour, ['invert' => 1,]);
+    }
+
+    public function detach(Tour|int $tour)
+    {
+        if ($tour instanceof Tour) $tour = $tour->id;
+        $this->tours()->detach($tour);
     }
 
     public function getExpiredAttribute(): bool

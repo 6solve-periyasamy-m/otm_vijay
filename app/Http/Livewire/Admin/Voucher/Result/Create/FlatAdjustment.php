@@ -2,14 +2,14 @@
 
 namespace App\Http\Livewire\Admin\Voucher\Result\Create;
 
-use App\Http\Livewire\ShowsToast;
+use App\Http\Livewire\SendsEvents;
 use App\Models\Voucher\Executors\FlatCostReductionExecutor;
 use App\Models\Voucher\VoucherCode;
 use LivewireUI\Modal\ModalComponent;
 
 class FlatAdjustment extends ModalComponent
 {
-    use ShowsToast;
+    use SendsEvents;
 
     /** @var VoucherCode $voucher */
     public $voucher;
