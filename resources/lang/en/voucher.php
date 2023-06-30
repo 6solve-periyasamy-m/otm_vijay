@@ -40,6 +40,18 @@ return [
             'title' => 'Executors',
             'create' => 'Create',
         ],
+        'success' => [
+            'deleted' => [
+                'title' => 'Executor Deleted',
+                'body' => 'Executor has been successfully deleted'
+            ],
+        ],
+        'error' => [
+            'not-found' => [
+                'title' => 'Executor Not Found',
+                'body' => 'Selected executor was not found'
+            ]
+        ]
     ],
     'tour' => [
         'card' => [
