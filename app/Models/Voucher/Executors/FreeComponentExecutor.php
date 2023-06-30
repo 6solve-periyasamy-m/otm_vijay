@@ -45,4 +45,16 @@ class FreeComponentExecutor extends VoucherExecutor
             }
         }
     }
+
+    public static function fromJson(array $data): VoucherExecutor
+    {
+        $component = $data['component'];
+        $component = InventoryTourRepository::getComponent($component['type'], $component['id']);
+        return static::create($component)->executor();
+    }
+
+    public function description(): string
+    {
+        return "";
+    }
 }
