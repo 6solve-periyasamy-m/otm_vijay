@@ -3,6 +3,7 @@
 namespace App\Models\Voucher;
 
 use App\Models\Order\Order;
+use App\Models\Tour\Tour;
 use App\Models\Traits\HasRepository;
 use App\Repository\Model\Voucher\VoucherCodeRepository;
 use Database\Factories\Voucher\VoucherCodeFactory;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
@@ -33,8 +35,14 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|OrderVoucher[] $orderVouchers
  * @property-read bool $expired Has the voucher expired
  * @property-read bool $usable Is the voucher both active and not expired
+ * @property-read int|null $order_vouchers_count
+ * @property-read int|null $orders_count
  * @property-read int|null $results_count
  * @property-read VoucherCodeRepository $repository
+ * @property-read Collection<int, Tour> $excluded
+ * @property-read int|null $excluded_count
+ * @property-read Collection<int, Tour> $included
+ * @property-read int|null $included_count
  * @method static Builder|VoucherCode whereActive($value)
  * @method static Builder|VoucherCode whereCode($value)
  * @method static Builder|VoucherCode whereCreatedAt($value)
@@ -45,8 +53,6 @@ use Illuminate\Support\Carbon;
  * @method static Builder|VoucherCode newModelQuery()
  * @method static Builder|VoucherCode newQuery()
  * @method static Builder|VoucherCode query()
- * @property-read int|null $order_vouchers_count
- * @property-read int|null $orders_count
  * @method static VoucherCodeFactory factory($count = null, $state = [])
  * @method static Builder|VoucherCode whereExpiry($value)
  * @method static Builder|VoucherCode whereGlobal($value)
@@ -74,6 +80,31 @@ class VoucherCode extends Model
     public function orders(): HasManyThrough
     {
         return $this->hasManyThrough(Order::class, OrderVoucher::class, 'voucher_code_id', 'id');
+    }
+
+    protected function tours(): BelongsToMany
+    {
+        return $this->belongsToMany(Tour::class, 'voucher_tours')->withPivot(['invert']);
+    }
+
+    public function included(): BelongsToMany
+    {
+        return $this->tours()->where('invert', '=', 0);
+    }
+
+    public function excluded(): BelongsToMany
+    {
+        return $this->tours()->where('invert', '=', 1);
+    }
+
+    public function include(Tour $tour)
+    {
+        $this->tours()->attach($tour->id, ['invert' => 0,]);
+    }
+
+    public function exclude(Tour $tour)
+    {
+        $this->tours()->attach($tour->id, ['invert' => 1,]);
     }
 
     public function getExpiredAttribute(): bool

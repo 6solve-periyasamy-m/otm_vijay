@@ -2,9 +2,11 @@
 
 namespace App\Repository\Model\Voucher;
 
+use App\Models\Tour\Tour;
 use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\ModelRepository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Str;
 
 class VoucherCodeRepository extends ModelRepository
@@ -48,5 +50,29 @@ class VoucherCodeRepository extends ModelRepository
     public function __toString(): string
     {
         return "{$this->voucher->name} - {$this->voucher->code}";
+    }
+
+    /**
+     * @return Collection<Tour>
+     */
+    public function getTours(): Collection
+    {
+        $id = $this->voucher->id;
+        if ($this->voucher->global) {
+            return Tour::whereDoesntHave('excludedVouchers', function ($query) use ($id) {
+                $query->where('voucher_codes.id', '=', $id);
+            })->get();
+        } else {
+            return $this->voucher->included;
+        }
+    }
+
+    public function usable(Tour $tour): bool
+    {
+        if ($this->voucher->excluded()->where('tours.id', '=', $tour->id)->count() > 0) {
+            return false;
+        }
+        return $this->voucher->global || $this->voucher->included()->where('tours.id', '=', $tour->id)->count() > 0;
+
     }
 }

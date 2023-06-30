@@ -6,6 +6,7 @@ use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
+use App\Models\AdditionalCost;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Helper\Traits\HasAdditionalCosts;
@@ -19,6 +20,7 @@ use App\Models\Order\OrderInstallment;
 use App\Models\System\Brand;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
+use App\Models\Voucher\VoucherCode;
 use App\Repository\Model\Tour\TourRepository;
 use App\Repository\RoomingRepository;
 use Database\Factories\Tour\TourFactory;
@@ -110,6 +112,18 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $transport_inventory_count
  * @property-read Collection|TransportInventoryTour[] $transportInventoryTours
  * @property-read int|null $transport_inventory_tours_count
+ * @property-read Collection<int, AdditionalCost> $costs
+ * @property-read int|null $costs_count
+ * @property-read Collection<int, VoucherCode> $excludedVouchers
+ * @property-read int|null $excluded_vouchers_count
+ * @property-read Collection<int, VoucherCode> $includedVouchers
+ * @property-read int|null $included_vouchers_count
+ * @property-read Collection<int, OrderActivity> $orderActivities
+ * @property-read int|null $order_activities_count
+ * @property-read Collection<int, OrderFlight> $orderFlights
+ * @property-read int|null $order_flights_count
+ * @property-read Collection<int, OrderTransport> $orderTransport
+ * @property-read int|null $order_transport_count
  * @method static TourFactory factory(...$parameters)
  * @method static Builder|Tour newModelQuery()
  * @method static Builder|Tour newQuery()
@@ -145,6 +159,9 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Tour whereUpdatedAt($value)
  * @method static QueryBuilder|Tour withTrashed()
  * @method static QueryBuilder|Tour withoutTrashed()
+ * @method static Builder|Tour whereAtolProtected($value)
+ * @method static Builder|Tour whereBookingFee($value)
+ * @method static Builder|Tour whereBrandId($value)
  * @mixin Eloquent
  */
 class Tour extends Model
@@ -271,6 +288,21 @@ class Tour extends Model
     public function orderInstallments(): HasManyThrough
     {
         return $this->hasManyThrough(OrderInstallment::class, Order::class, 'tour_id', 'order_id')->where('cancelled', '=', false);
+    }
+
+    protected function vouchers(): BelongsToMany
+    {
+        return $this->belongsToMany(VoucherCode::class, 'voucher_tours')->withPivot(['invert']);
+    }
+
+    public function includedVouchers(): BelongsToMany
+    {
+        return $this->vouchers()->where(['invert' => 0,]);
+    }
+
+    public function excludedVouchers(): BelongsToMany
+    {
+        return $this->vouchers()->where(['invert' => 1,]);
     }
 
     public function getUsedStock(): int
