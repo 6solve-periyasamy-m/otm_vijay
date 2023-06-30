@@ -6,8 +6,8 @@ use App\Models\Voucher\VoucherCode;
 
 trait TestsVoucher
 {
-    public function generateVoucher(): VoucherCode
+    public function generateVoucher(bool $global = true): VoucherCode
     {
-        return VoucherCode::factory()->create();
+        return VoucherCode::factory()->create(['global' => $global]);
     }
 }

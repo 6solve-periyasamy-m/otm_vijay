@@ -45,4 +45,13 @@ class FlatCostReductionExecutor extends VoucherExecutor
             'after' => f_currency(1000 + $this->amount),
         ]);
     }
+
+    /**
+     * @return float
+     */
+    public function getAmount(): float
+    {
+        return $this->amount;
+    }
+
 }

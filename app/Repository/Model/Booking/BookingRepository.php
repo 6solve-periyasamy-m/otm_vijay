@@ -15,6 +15,7 @@ use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Tour\Tour;
+use App\Models\Voucher\Executors\FlatCostReductionExecutor;
 use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
@@ -106,6 +107,15 @@ class BookingRepository extends ModelRepository
         $cost = $this->booking->tour->booking_fee ?? 0;
         foreach ($this->booking->travellers as $traveller) {
             $cost += $traveller->total_cost;
+        }
+        /** @var VoucherCode $voucher */
+        foreach ($this->booking->vouchers()->get() as $voucher) {
+            foreach ($voucher->results as $result) {
+                $executor = $result->executor();
+                if ($executor instanceof FlatCostReductionExecutor) {
+                    $cost += $executor->getAmount();
+                }
+            }
         }
         return $cost;
     }
