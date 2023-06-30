@@ -15,6 +15,7 @@ use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Tour\Tour;
+use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\RoomingRepository;
@@ -70,6 +71,11 @@ class BookingRepository extends ModelRepository
         foreach ($this->booking->travellers as $traveller) {
             $repository->grantToBookingTraveller($traveller);
         }
+    }
+
+    public function applyVoucher(VoucherCode $voucher): bool
+    {
+        return $this->booking->leadTraveller->repository->applyVoucher($voucher);
     }
 
     public function removeComponentFromAll(InventoryTourRepository $repository): void

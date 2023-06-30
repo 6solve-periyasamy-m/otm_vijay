@@ -14,6 +14,7 @@ use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
+use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
@@ -368,6 +369,14 @@ class BookingTravellerRepository extends ModelRepository
     public function __toString(): string
     {
         return "{$this->traveller->first_name} {$this->traveller->last_name} - {$this->traveller?->booking?->token}";
+    }
+
+    public function applyVoucher(VoucherCode $voucher): bool
+    {
+        if (!$voucher->repository->usable($this->traveller->booking->tour))  return false;
+        if ($this->traveller->vouchers()->where('voucher_code_id', '=', $voucher->id)->count() > 0) return false;
+        $this->traveller->vouchers()->attach($voucher);
+        return true;
     }
 
     /**

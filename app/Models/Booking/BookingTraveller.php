@@ -11,6 +11,7 @@ use App\Models\Booking\Component\BookingTransport;
 use App\Models\Customer\Customer;
 use App\Models\Location\Address;
 use App\Models\Order\OrderCustomer;
+use App\Models\Voucher\VoucherCode;
 use App\Repository\Model\Booking\BookingTravellerRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -107,6 +108,11 @@ class BookingTraveller extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'customer_id');
+    }
+
+    public function vouchers(): BelongsToMany
+    {
+        return $this->belongsToMany(VoucherCode::class, 'voucher_bookings');
     }
 
     public function orderCustomer(): BelongsTo
