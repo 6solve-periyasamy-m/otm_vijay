@@ -5,6 +5,7 @@ namespace App\Models\Voucher;
 use App\Models\Order\Order;
 use App\Models\Traits\HasRepository;
 use App\Repository\Model\Voucher\VoucherCodeRepository;
+use Database\Factories\Voucher\VoucherCodeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -44,6 +45,11 @@ use Illuminate\Support\Carbon;
  * @method static Builder|VoucherCode newModelQuery()
  * @method static Builder|VoucherCode newQuery()
  * @method static Builder|VoucherCode query()
+ * @property-read int|null $order_vouchers_count
+ * @property-read int|null $orders_count
+ * @method static VoucherCodeFactory factory($count = null, $state = [])
+ * @method static Builder|VoucherCode whereExpiry($value)
+ * @method static Builder|VoucherCode whereGlobal($value)
  * @mixin Eloquent
  */
 class VoucherCode extends Model
