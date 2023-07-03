@@ -19,6 +19,8 @@ class OrderStatusTest extends DatabaseTestCase
     public function testBalanceOutstandingNoInstallments()
     {
         $order = $this->generateOrder();
+        $order->tour->update(['final_payment' => now()->addDays(2)]);
+        $order->tour->save();
         $this->assertEquals(OrderStatus::BALANCE_OUTSTANDING, $order->status);
     }
 
