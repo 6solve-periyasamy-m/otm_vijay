@@ -4,6 +4,7 @@ namespace Route\Admin\Form\Order;
 
 use App\Models\Customer\Customer;
 use App\Models\Order\Order;
+use Illuminate\Support\Facades\DB;
 use Tests\Bases\Authentication\AuthenticatedFormTestCase;
 use Tests\Traits\Model\TestsOrder;
 
@@ -21,7 +22,8 @@ class OrderFormTest extends AuthenticatedFormTestCase
         $tour = $this->generateTour();
         $customer = Customer::factory()->create();
         $route = route('orders.create');
-        $id = Order::count() + 1;
+        $statement = DB::select("SHOW TABLE STATUS LIKE 'orders'");
+        $id = $statement[0]->Auto_increment;
         $data = ['tour_id' => $tour->id, 'lead_booker' => ['id' => $customer->id,], 'ordered_on' => now()->micro(0),]; // EQ fails without micro
 
         $this->performFailCases($route, (new Order())->getPermissionSet('create'), ['tour_id', 'ordered_on', 'lead_booker.id']);
