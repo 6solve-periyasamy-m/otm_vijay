@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Customer\Customer;
+use App\Models\Customer\Organization;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Models\Location\Country;
@@ -21,6 +22,7 @@ class CustomerImport implements ToCollection, WithHeadingRow, WithValidation
     {
         $models = [];
         foreach ($collection as $row) {
+            $organization = Organization::where('name', 'like', $row['organization'])->first();
             $homeCountry = Country::where('name', 'like', trim($row['home_country']))->first();
             $billingCountry = Country::where('name', 'like', trim($row['billing_country']))->first();
             $addressName = "(" . trim($row['email']) . ")" . trim($row['first_name']) . " " . trim($row['last_name']);
@@ -67,6 +69,7 @@ class CustomerImport implements ToCollection, WithHeadingRow, WithValidation
                 'passport_expiry_date' => isset($row['passport_expiry_date']) ? Carbon::createFromFormat('d/m/Y', trim($row[28])) : null,
                 'passport_country_of_issue' => trim($row['passport_country_of_issue'] ?? ''),
                 'loyalty_number' => trim($row['loyalty_number'] ?? ''),
+                'organization_id' => $organization?->id,
             ]);
             $models[] = $customer;
         }

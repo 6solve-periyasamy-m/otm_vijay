@@ -9,6 +9,7 @@ use App\Imports\AccommodationInventoryImport;
 use App\Imports\ActivityImport;
 use App\Imports\ActivityInventoryImport;
 use App\Imports\CustomerImport;
+use App\Imports\OrganizationImport;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Log;
@@ -20,6 +21,10 @@ class ImportController extends Controller
     public function customer(ImportRequest $request)
     {
         return $this->import((new CustomerImport()), $request->file);
+    }
+    public function organization(ImportRequest $request)
+    {
+        return $this->import((new OrganizationImport()), $request->file);
     }
 
     public function accommodation(ImportRequest $request)
