@@ -26,9 +26,18 @@ trait TestsTour
     use TestsTransport;
     use TestsMerchandise;
 
-    function generateTour(): Tour
+    function generateTour(bool $withIncluded = true, array $data = []): Tour
     {
-        return Tour::factory()->create();
+        $tour = Tour::factory()->create($data);
+        if ($withIncluded) {
+            for ($x = 0; $x < 5; $x++) {
+                $this->generateAccommodationInventoryTour($tour, 'Included', 100, $this->generateAccommodationInventory(null, null, null, ['check_in' => now()->addDays($x), 'check_out' => now()->addDays($x + 5)]));
+                $this->generateActivityInventoryTour($tour);
+                $this->generateFlightInventoryTour($tour);
+                $this->generateTransportInventoryTour($tour);
+            }
+        }
+        return $tour;
     }
 
     function generateMerchandiseInventoryTour(?Tour $tour = null, string $componentType = 'Included', float $cost = 100, ?MerchandiseInventory $inventory = null): MerchandiseInventoryTour
@@ -48,6 +57,7 @@ trait TestsTour
             'tour_component_type' => $componentType,
             'tour_sales_price' => $cost,
             'tour_id' => $tour->id,
+            'is_template' => $componentType === 'Included',
         ]);
         $inventory->tourComponents()->save($tourComponent);
         return $tourComponent;
