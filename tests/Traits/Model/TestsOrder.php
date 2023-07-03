@@ -8,6 +8,7 @@ use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
 use App\Models\Order\Payment\Payment;
+use App\Models\Tour\Tour;
 use App\Repository\RoomingRepository;
 use Carbon\Carbon;
 
@@ -17,7 +18,8 @@ trait TestsOrder
 
     function generateOrder(bool $withLead = true, bool $withIncluded = true, float $tour_cost = 300, float $surcharge = 50, float $deposit = 0): Order
     {
-        $order = Order::factory()->create(['deposit' => $deposit,]);
+        $tour = Tour::find(1) ?? $this->generateTour($withIncluded, ['base_price_per_person' => $tour_cost, 'single_occupancy_surcharge' => $surcharge, 'deposit' => $deposit]);
+        $order = Order::factory()->create(['tour_id' => $tour->id, 'deposit' => $deposit,]);
         if ($withLead) $order->lead_booker_id = $this->generateOrderCustomer($withIncluded, $order, $tour_cost, $surcharge)->id;
         $order->save();
         return $order;
@@ -94,5 +96,32 @@ trait TestsOrder
             $cost += $orderCustomer->tour_cost + ($orderCustomer->has_surcharge ? $orderCustomer->single_occupancy_surcharge : 0);
         }
         return $cost;
+    }
+
+    function logComponents(OrderCustomer $orderCustomer)
+    {
+        $string = "";
+        foreach ($orderCustomer->orderAccommodation()->with('tourComponent')->get() as  $component)
+        {
+            $string .= ("Accommodation({$component->tourComponent->id} - {$component->id}): {$component->tourComponent->tour_component_type} ($component->cost)\n");
+            print_r($component->tourComponent->inventory);
+        }
+        foreach ($orderCustomer->orderActivities()->with('tourComponent')->get() as  $component)
+        {
+            $string .= ("Activity({$component->tourComponent->id} - {$component->id}): {$component->tourComponent->tour_component_type} ($component->cost)\n");
+        }
+        foreach ($orderCustomer->orderFlights()->with('tourComponent')->get() as  $component)
+        {
+            $string .= ("Flight({$component->tourComponent->id} - {$component->id}): {$component->tourComponent->tour_component_type} ($component->cost)\n");
+        }
+        foreach ($orderCustomer->orderTransports()->with('tourComponent')->get() as  $component)
+        {
+            $string .= ("Transport({$component->tourComponent->id} - {$component->id}): {$component->tourComponent->tour_component_type} ($component->cost)\n");
+        }
+        foreach ($orderCustomer->orderMerchandise()->with('tourComponent')->get() as  $component)
+        {
+            $string .= ("Merchandise({$component->tourComponent->id} - {$component->id}): {$component->tourComponent->tour_component_type} ($component->cost)\n");
+        }
+        return empty($string) ? "No Components" : $string;
     }
 }
