@@ -32,7 +32,7 @@ class MerchandiseRequest extends FormRequest
         return [
             'name' => $this->name,
             'merchandise_type_id' => $this->type,
-            'notes' => $this->notes,
+            'internal_notes' => $this->notes,
         ];
     }
 }

@@ -116,6 +116,13 @@ class DetailsRequest extends FormRequest
         ];
     }
 
+    public function prepareForValidation()
+    {
+        $this->passport_issue_date = generify_date($this->passport_issue_date);
+        $this->passport_expiry_date = generify_date($this->passport_expiry_date);
+        $this->date_of_birth = generify_date($this->date_of_birth);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -146,7 +153,9 @@ class DetailsRequest extends FormRequest
             'emergency_contact_name' => 'required',
             'emergency_contact_relationship' => 'required',
             'emergency_contact_telephone' => 'required',
-            'profile_picture' => 'nullable|image'
+            'profile_picture' => 'nullable|image',
+            'passport_issue_date' => 'nullable|date',
+            'passport_expiry_date' => 'nullable|date',
         ];
     }
 }

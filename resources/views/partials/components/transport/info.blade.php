@@ -34,6 +34,11 @@
                 <p>Description</p>
                 <h6 class="fw-bold">{{ $transport->description }}</h6>
             </div>
+            <div class="col-12 col-xl-6">
+                <p>Internal Notes</p>
+                <h6 class="fw-bold">{{ $transport->internal_notes }}</h6>
+            </div>
+            @can('update', \App\Models\Transport\Transport::class)
             <div class="col-12">
                 @can('update', \App\Models\Transport\Transport::class)
                 <a class="btn btn-success" href="{{route('transports.edit', ['transport' => $transport,])}}">

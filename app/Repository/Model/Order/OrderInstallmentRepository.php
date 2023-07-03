@@ -21,6 +21,9 @@ class OrderInstallmentRepository extends ModelRepository
 
     public function getRemainingAmount(): float
     {
+        if (isset($this->installment->remaining)) {
+            return $this->installment->remaining;
+        }
         return $this->installment->order->repository->getInstallments()->firstWhere('id', '=', $this->installment->id)->remaining;
     }
 

@@ -45,7 +45,7 @@ class FlightInventoryTourUpgrade extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['upgrade_id', 'description'];
+    protected $guarded = [];
 
     private FlightInventoryTourUpgradeRepository $internal_repository;
 

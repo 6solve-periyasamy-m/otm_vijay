@@ -8,6 +8,6 @@
     @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'width' => 6, 'value' => $merchandise?->name])
     @include('partials.fields.selector.adder', ['name' => 'Merchandise Type', 'field' => 'type', 'width' => 5, 'route' => 'merchandise-types', 'createRoute' => route('merchandise.type.create'), 'value' => $merchandise?->merchandise_type_id ?? null])
     @include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'width' => 1])
-    @include('partials.fields.textarea', ['name' => 'Notes', 'field' => 'notes', 'value' => $merchandise?->notes,])
+    @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'notes', 'value' => $merchandise?->notes,])
     @include('partials.fields.submit')
 @endsection

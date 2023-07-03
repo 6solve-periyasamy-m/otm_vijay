@@ -17,6 +17,7 @@
         $(document).ready(function () {
             initTable();
             initDates();
+            $('.report-table').DataTable({fixedHeader: true, autoWidth: false,});
         });
         function initDates() {
             rows++;
@@ -119,5 +120,17 @@
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h4 class="fw-bold">Abandoned Bookings</h4>
+                        </div>
+                        @include('partials.reports.tables.abandoned-bookings', ['data' => \App\Repository\Reporting\ReportRepository::getAbandonedBookingsReport(7)])
+                    </div>
+                </div>
+            </div>
     </div>
 @endsection

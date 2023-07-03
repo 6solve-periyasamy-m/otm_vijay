@@ -71,6 +71,7 @@ Route::middleware('auth:web')->group(function () {
         });
         Route::prefix('import')->name('import.')->group(function () {
             Route::post('/customer', [ImportController::class, 'customer'])->name('customer');
+            Route::post('/organization', [ImportController::class, 'organization'])->name('organization');
             Route::post('/accommodation', [ImportController::class, 'accommodation'])->name('accommodation');
             Route::post('/accommodation/inventory', [ImportController::class, 'accommodationInventory'])->name('accommodation.inventory');
             Route::post('/activity', [ImportController::class, 'activity'])->name('activity');

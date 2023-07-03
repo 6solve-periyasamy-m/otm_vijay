@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\Reporting\ReportController;
 
 Route::get('/orders', [ReportController::class, 'getOrderReport'])->name('reports.order');
 Route::get('/orders/{extension}', [ReportController::class, 'exportOrderReport'])->name('reports.order.export');
+Route::get('/final-payment', [ReportController::class, 'getFinalPaymentReport'])->name('reports.final-payment');
+Route::get('/final-payment/{extension}', [ReportController::class, 'exportFinalPaymentReport'])->name('reports.final-payment.export');
 Route::get('/tour-stock', [ReportController::class, 'getTourStockReport'])->name('reports.tour-stock');
 Route::get('/tour-stock/{extension}', [ReportController::class, 'exportTourStockReport'])->name('reports.tour-stock.export');
 Route::get('/payments', [ReportController::class, 'getPaymentsReport'])->name('reports.payment');

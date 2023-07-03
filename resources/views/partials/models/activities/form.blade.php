@@ -22,5 +22,5 @@
 ])
 @include('partials.fields.selector.default',
     ['name' => 'Currency', 'field' => 'currency_id', 'value' => $currency ?? null, 'route' => 'currencies',])
-@include('partials.fields.prefab.notes')
+@include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'notes', 'value' => $notes ?? null])
 @include('partials.fields.submit')

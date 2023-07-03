@@ -141,6 +141,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::post('activity/upgrade', [TourComponentController::class, 'applyActivityUpgrade'])->name('activity.upgrade');
         Route::post('flight/upgrade', [TourComponentController::class, 'applyFlightUpgrade'])->name('flight.upgrade');
         Route::post('transport/upgrade', [TourComponentController::class, 'applyTransportUpgrade'])->name('transport.upgrade');
+        Route::post('resend/booking-confirmation', [OrderController::class, 'resendOrderConfirmation'])->name('resend.booking-confirmation');
     });
 
     Route::prefix('quotes')->name('quote.')->group(function () {

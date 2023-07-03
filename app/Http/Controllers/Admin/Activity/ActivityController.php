@@ -32,7 +32,7 @@ class ActivityController extends Controller
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'currency_id' => $request->input('currency_id'),
-            'notes' => $request->input('notes'),
+            'internal_notes' => $request->input('notes'),
         ]);
         if ($request->input('use_existing') == 'on') {
             $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('activity'));
@@ -77,7 +77,7 @@ class ActivityController extends Controller
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'currency_id' => $request->input('currency_id'),
-            'notes' => $request->input('notes'),
+            'internal_notes' => $request->input('notes'),
         ]);
         if ($request->input('use_existing') == 'on') {
             Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('activity'), $activity->address);
