@@ -1,7 +1,7 @@
 <div class="navbar navbar-expand text-light sticky-top otm-navbar px-md-3 flex-column flex-md-row">
     <div class="navbar-brand abs">
         <a class="text-light fw-bold" href="#">
-            <img src="{{ asset('images/logo.png') }}" class='logo'>
+            <img src="{{ asset('images/logo.png') }}" class="logo inline">
             <span>Octopus Travel Matrix</span>
         </a>
     </div> 
@@ -17,7 +17,7 @@
             <div class="nav-item dp-down">
                 <a class="nav-item nav-link dp-button" href="#">
                     <span class='text-light'>{{ Auth::user()->name }}</span>
-                    <img src="{{ asset(Auth::user()->avatar_url) }}" class="img-thumbnail">
+                    <img src="{{ asset(Auth::user()->avatar_url) }}" class="img-thumbnail inline">
                 </a>
                 <div class="dp-content">
                     <a href="{{ route('users.edit', ['user' => Auth::user(),]) }}">{{ Icon::edit() }}&nbsp;Edit
