@@ -19,11 +19,7 @@ trait TestsAccommodation
         if (!isset($accommodation)) $accommodation = $this->generateAccommodation();
         if (!isset($roomType)) $roomType = $this->generateRoomType();
         if (!isset($boardType)) $boardType = $this->generateBoardType();
-        $inventory = AccommodationInventory::factory()->makeOne($attributes);
-        $inventory->room_type_id = $roomType->id;
-        $inventory->board_type_id = $boardType->id;
-        $accommodation->inventory()->save($inventory);
-        return $inventory;
+        return AccommodationInventory::factory()->create(['accommodation_id' => $accommodation, 'room_type_id' => $roomType->id, 'board_type_id' => $boardType->id,]);
     }
 
     public function generateRoomType(int $size = 1): RoomType
