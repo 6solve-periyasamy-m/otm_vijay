@@ -58,7 +58,7 @@
                         <td><a href="{{ route('merchandise.view', ['merchandise' => $merch,]) }}">{{ $merch->name }}</a></td>
                         <td>{{ $merch->inventory()->count() }}</td>
                         <td>{{ $merch->repository->getOrderCount() }}</td>
-                        <td>{{ $merch->notes }}</td>
+                        <td>{{ $merch->internal_notes }}</td>
                         <td class="actions">
                             @can('update', \App\Models\Merchandise\Merchandise::class)
                                 <a href="{{route('merchandise.edit', ['merchandise' => $merch,])}}" class="btn btn-outline-success btn-sm mb-1">

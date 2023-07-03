@@ -55,10 +55,10 @@
                         <p>Merchandise Name</p>
                         <h6 class="fw-bold">{{ $merchandise->name }} ({{ $merchandise->type->name }})</h6>
                     </div>
-                    @if(isset($merchandise->notes))
+                    @if(isset($merchandise->internal_notes))
                     <div class="col-12">
                         <p>Notes</p>
-                        <h6 class="fw-bold">{{ $merchandise->notes }}</h6>
+                        <h6 class="fw-bold">{{ $merchandise->internal_notes }}</h6>
                     </div>
                     @endif
                     <div class="col-12">

@@ -27,6 +27,10 @@
                 <h6 class="fw-bold">{{ $accommodation->currency }}</h6>
             </div>
             <div class="col-12">
+                <p>Internal Notes</p>
+                <h6 class="fw-bold">{{ $accommodation->internal_notes }}</h6>
+            </div>
+            <div class="col-12">
                 @can('update', \App\Models\Accommodation\Accommodation::class)
                     <a class="btn btn-success" href="{{route('accommodations.edit', ['accommodation' => $accommodation,])}}">
                         {{ Icon::edit() }}
