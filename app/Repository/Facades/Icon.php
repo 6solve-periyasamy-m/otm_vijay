@@ -37,6 +37,11 @@ class Icon
         return $this->solid('plus');
     }
 
+    public function voucher(): View|string|Closure
+    {
+        return $this->ticket();
+    }
+
     public function create(): View|string|Closure
     {
         return $this->plus();
