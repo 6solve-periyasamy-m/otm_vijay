@@ -4,8 +4,8 @@ namespace Field\Order;
 
 use App\Models\Customer\Customer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\DatabaseTestCase;
-use Tests\Traits\TestsOrder;
+use Tests\Bases\DatabaseTestCase;
+use Tests\Traits\Model\TestsOrder;
 
 
 /**

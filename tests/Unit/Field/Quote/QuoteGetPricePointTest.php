@@ -2,8 +2,8 @@
 
 namespace Field\Quote;
 
-use Tests\DatabaseTestCase;
-use Tests\Traits\TestsQuote;
+use Tests\Bases\DatabaseTestCase;
+use Tests\Traits\Model\TestsQuote;
 
 /**
  * @covers \App\Repository\Model\Quote\QuoteRepository::getPricePerPerson

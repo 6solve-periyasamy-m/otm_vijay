@@ -2,8 +2,8 @@
 
 namespace Field\Stock;
 
-use Tests\DatabaseTestCase;
-use Tests\Traits\TestsOrder;
+use Tests\Bases\DatabaseTestCase;
+use Tests\Traits\Model\TestsOrder;
 
 /**
  * @covers \App\Models\Merchandise\Merchandise::getUsedStockAttribute

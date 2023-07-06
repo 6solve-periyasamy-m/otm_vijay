@@ -7,8 +7,8 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Transport\TransportInventoryTour;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\DatabaseTestCase;
-use Tests\Traits\TestsOrder;
+use Tests\Bases\DatabaseTestCase;
+use Tests\Traits\Model\TestsOrder;
 
 /**
  * @covers \App\Models\Order\Order::getCostAttribute
@@ -51,7 +51,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
     public function testOrderCostDoubleAllCustomerAccommodationUpgrade()
     {
         $orderCustomer = $this->generateOrderCustomer();
-        $this->generateOrderCustomer(false, $orderCustomer->order);
+        $this->generateOrderCustomer(true, $orderCustomer->order);
         $cost = $this->getDefaultCost($orderCustomer->order);
         foreach ($orderCustomer->order->orderCustomers as $oCustomer) {
             $upgradeRoom = $oCustomer->primary_group->rooms[0];

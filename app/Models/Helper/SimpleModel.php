@@ -2,6 +2,7 @@
 
 namespace App\Models\Helper;
 
+use App\Models\Helper\Traits\HasPermissions;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class SimpleModel extends Model
 {
+    use HasPermissions;
+
     public static function findOrCreate(string $name)
     {
         $type = self::where('name', '=', $name)->first();

@@ -29,7 +29,7 @@ class TransportFactory extends Factory
             'name' => $this->faker->words(3, true),
             'description' => $this->faker->sentence,
             'is_domestic' => true,
-            'notes' => $this->faker->sentence,
+            'internal_notes' => $this->faker->sentence,
         ];
     }
 }

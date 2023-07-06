@@ -2,7 +2,7 @@
 
 namespace Route\Customer;
 
-use Tests\CustomerRouteTestCase;
+use Tests\Bases\Route\CustomerRouteTestCase;
 
 class CustomerPortalTest extends CustomerRouteTestCase
 {
