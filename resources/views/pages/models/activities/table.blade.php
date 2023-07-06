@@ -39,7 +39,7 @@
                 'activity' => $activity,
                 'name' => $activity->name,
                 'description' => $activity->description,
-                'notes' => $activity->notes,
+                'notes' => $activity->internal_notes,
                 ])
             @endforeach
         </table>

@@ -221,3 +221,15 @@ if (!function_exists('generify_date')) {
         return null;
     }
 }
+if (!function_exists('img_to_b64')) {
+    function img_to_b64(string $file, string $prefix = "data:image/png;base64,"): string
+    {
+        return $prefix.base64_encode(file_get_contents(public_path($file)));
+    }
+}
+if (!function_exists('svg_to_b64')) {
+    function svg_to_b64(string $file): string
+    {
+        return img_to_b64($file, "data:image/svg+xml;base64,");
+    }
+}

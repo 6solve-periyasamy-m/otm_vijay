@@ -3,9 +3,8 @@
 namespace Method\Repository\Accommodation;
 
 use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
-use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
-use Tests\DatabaseTestCase;
-use Tests\Traits\TestsTour;
+use Tests\Bases\DatabaseTestCase;
+use Tests\Traits\Model\TestsTour;
 
 
 /**

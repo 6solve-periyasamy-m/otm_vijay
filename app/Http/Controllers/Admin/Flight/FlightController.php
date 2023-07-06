@@ -30,7 +30,7 @@ class FlightController extends Controller
             'arrival_airport_id' => $request->input('arrival_airport_id'),
             'is_domestic' => $request->input('is_domestic') === 'on' ? 1 : 0,
             'currency_id' => $request->input('currency_id'),
-            'notes' => $request->input('notes'),
+            'internal_notes' => $request->input('notes'),
             'available_from' => $request->input('available_from'),
         ]);
         if ($request->has('image') && $request->file('image') != null) {
@@ -69,7 +69,7 @@ class FlightController extends Controller
             'arrival_airport_id' => $request->input('arrival_airport_id'),
             'is_domestic' => $request->input('is_domestic') === 'on' ? 1 : 0,
             'currency_id' => $request->input('currency_id'),
-            'notes' => $request->input('notes'),
+            'internal_notes' => $request->input('notes'),
             'available_from' => $request->input('available_from'),
         ]);
         if ($request->has('image') && $request->file('image') != null) {

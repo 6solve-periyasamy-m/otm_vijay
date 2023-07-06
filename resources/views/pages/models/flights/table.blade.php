@@ -37,7 +37,7 @@
                 @include('partials.models.flights.row', [
                 'flight' => $flight,
                 'is_domestic' => $flight->is_domestic,
-                'notes' => $flight->notes,
+                'notes' => $flight->internal_notes,
                 'available_from' => $flight->available_from,
                 ])
             @endforeach

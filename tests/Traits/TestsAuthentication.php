@@ -23,7 +23,6 @@ trait TestsAuthentication
         $this->user->save();
         $this->guest = User::factory()->create();
         $this->guest->forbid()->everything();
-        \Log::info($this->guest);
         \Bouncer::refresh();
     }
 

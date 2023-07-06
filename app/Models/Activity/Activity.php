@@ -33,7 +33,8 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int $address_id
  * @property int|null $currency_id
  * @property string|null $name
- * @property string|null $notes
+ * @property string|null $internal_notes
+ * @property string|null $external_notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -68,7 +69,7 @@ class Activity extends Model
 {
     use SoftDeletes, CascadeSoftDeletes, HasFactory, HasRelationships, HasRepository;
 
-    protected $fillable = ['activity_type_id', 'address_id', 'name', 'description', 'currency_id', 'notes', 'image_url'];
+    protected $guarded = [];
     protected array $cascadeDeletes = ['activityInventory'];
 
     public static function getValidationRules(): array

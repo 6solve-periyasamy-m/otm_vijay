@@ -25,3 +25,5 @@ yarn-error.log
 /.idea
 Archived
 /storage/debugbar
+.npm/
+.cache/

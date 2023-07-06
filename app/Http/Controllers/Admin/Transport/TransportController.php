@@ -33,7 +33,7 @@ class TransportController extends Controller
             'description' => $request->input('description'),
             'currency_id' => $request->input('currency_id'),
             'is_domestic' => $request->input('is_domestic') === 'on' ? 1 : 0,
-            'notes' => $request->input('notes'),
+            'internal_notes' => $request->input('notes'),
         ]);
         if ($request->has('image') && $request->file('image') != null) {
             $transport->image_url = $request->file('image')->storePublicly('uploads/images');
@@ -74,7 +74,7 @@ class TransportController extends Controller
             'description' => $request->input('description'),
             'currency_id' => $request->input('currency_id'),
             'is_domestic' => $request->input('is_domestic') == "on" ? 1 : 0,
-            'notes' => $request->input('notes'),
+            'internal_notes' => $request->input('notes'),
         ]);
         if ($request->has('image') && $request->file('image') != null) {
             if (isset($transport->image_url)) {

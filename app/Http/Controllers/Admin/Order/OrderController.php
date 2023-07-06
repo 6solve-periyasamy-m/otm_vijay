@@ -9,11 +9,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Order\CreateOrderRequest;
 use App\Http\Requests\Admin\Order\MigrateRequest;
 use App\Http\Requests\Admin\TableRequest;
+use App\Http\Requests\Admin\Order\UpdateOrderRequest;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Reporting\ReportRepository;
-use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -78,19 +78,10 @@ class OrderController extends Controller
         return view('pages.models.orders.update', ['order' => $order,]);
     }
 
-    public function update(Request $request, Order $order)
+    public function update(UpdateOrderRequest $request, Order $order)
     {
-        $request->validate(Order::getValidationRules());
-        $request->validate(['deposit' => 'required|numeric',]);
-        $shouldInvoice = $order->deposit != $request->input('deposit');
-        $order->update([
-            'ordered_on' => $request->input('ordered_on'),
-            'internal_notes' => $request->input('internal_notes'),
-            'external_notes' => $request->input('external_notes'),
-            'deposit' => $request->input('deposit'),
-            'invoice_footer' => $request->input('invoice_footer'),
-            'booking_fee' => $request->input('booking_fee')
-        ]);
+        $shouldInvoice = $order->deposit != $request->deposit;
+        $order->update($request->getData());
         event(new OrderEditedEvent($order, $shouldInvoice));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
