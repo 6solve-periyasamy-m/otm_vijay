@@ -31,6 +31,7 @@ class FlatAdjustment extends ModalComponent
         } else {
             $this->toast(__('voucher.result.type.flat_reduction.toast.failed.title'), __('voucher.result.type.flat_reduction.toast.failed.body'), 'danger');
         }
+        $this->refreshTables();
         $this->closeModal();
     }
 

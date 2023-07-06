@@ -31,6 +31,7 @@ class PercentageAdjustment extends ModalComponent
         } else {
             $this->toast(__('voucher.result.type.percentage_reduction.toast.failed.title'), __('voucher.result.type.percentage_reduction.toast.failed.body'), 'danger');
         }
+        $this->refreshTables();
         $this->closeModal();
     }
 
