@@ -49,7 +49,7 @@ class PercentageCostReductionExecutor extends VoucherExecutor
         return __('voucher.result.type.percentage_reduction.description',[
             'total' => f_currency(1000),
             'reduction' => $this->amount . '%',
-            'after' => f_currency($this->calculate(1000)),
+            'after' => f_currency(1000 - $this->calculate(1000)),
         ]);
     }
 }
