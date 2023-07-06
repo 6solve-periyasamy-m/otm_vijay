@@ -414,6 +414,19 @@ class BookingRepository extends ModelRepository
         }
     }
 
+    public function getBreakdown()
+    {
+        $data = [];
+        foreach ($this->booking->travellers as $traveller) {
+            $data[$traveller->id] = [
+                'name' => $traveller->full_name,
+                'cost' => $traveller->repository->getBaseCost(),
+                'extras' => $traveller->repository->getExtrasBreakdown(),
+            ];
+        }
+        return $data;
+    }
+
     public function hasRooming(): bool
     {
         return $this->booking->tour->templates->count() > 0;

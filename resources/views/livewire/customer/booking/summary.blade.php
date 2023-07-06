@@ -44,6 +44,9 @@
 
     <livewire:customer.booking.schedule key="{{ now() }}" :booking="$this->booking"/>
 
+    <livewire:customer.booking.cost-breakdown key="{{ now() }}" :booking="$this->booking"/>
+
     <livewire:customer.booking.payment key="{{ $this->booking->due_today }}" :booking="$this->booking" />
+
     <x-wire-loader />
 </div>

@@ -62,6 +62,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
  * @property-read Collection|BookingMerchandise[] $merchandise
  * @property-read int|null $merchandise_count
  * @property-read Collection|BookingTransport[] $transport
+ * @property-read Collection|VoucherCode[] $vouchers
  * @property-read int|null $transport_count
  * @property-read BookingTravellerRepository $repository
  * @property-read BookingGroup|null $primary_group

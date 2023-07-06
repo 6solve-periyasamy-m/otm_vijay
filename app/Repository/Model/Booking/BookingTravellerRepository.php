@@ -14,6 +14,7 @@ use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
+use App\Models\Voucher\Executors\FlatCostReductionExecutor;
 use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
@@ -431,5 +432,28 @@ class BookingTravellerRepository extends ModelRepository
         if ($a->owned && !$b->owned) return -1;
         if ($b->owned && !$a->owned) return 1;
         return static::compareStarts($a, $b);
+    }
+
+    public function getExtrasBreakdown(): array
+    {
+        $data = [];
+        foreach ($this->getComponents(true, ['Upgrade', 'Add-on']) as $component) {
+            $data[] = [
+                'name' => $component->__toString(),
+                'cost' => $component->getCost(),
+            ];
+        }
+        foreach ($this->traveller->vouchers as $voucher) {
+            foreach ($voucher->results as $result) {
+                $executor = $result->executor();
+                if ($executor instanceof FlatCostReductionExecutor) {
+                    $data[] = [
+                        'name' => $voucher->name,
+                        'cost' => $executor->getAmount()
+                    ];
+                }
+            }
+        }
+        return $data;
     }
 }
