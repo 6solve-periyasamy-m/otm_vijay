@@ -20,6 +20,8 @@ class Form extends ModalComponent
 
     public function save()
     {
+        $this->validate();
+        $this->voucher->global = $this->voucher->global ?? false;
         $this->voucher->repository->save();
         $this->emit('refreshLivewireDatatable');
         $this->emit('closeModal');
