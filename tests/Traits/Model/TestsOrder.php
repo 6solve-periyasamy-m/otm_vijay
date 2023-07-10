@@ -19,7 +19,7 @@ trait TestsOrder
     function generateOrder(bool $withLead = true, bool $withIncluded = true, float $tour_cost = 300, float $surcharge = 50, float $deposit = 0): Order
     {
         if ($withIncluded) {
-            $tour = $this->generateTour(['base_price_per_person' => $tour_cost,]);
+            $tour = $this->generateTour(false, ['base_price_per_person' => $tour_cost,]);
             for ($x = 0; $x < 5; $x++) {
                 $this->generateAccommodationInventoryTour($tour);
                 $this->generateActivityInventoryTour($tour);

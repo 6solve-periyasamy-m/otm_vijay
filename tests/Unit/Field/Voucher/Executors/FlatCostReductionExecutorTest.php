@@ -4,9 +4,9 @@ namespace Field\Voucher\Executors;
 
 use App\Models\Voucher\Executors\FlatCostReductionExecutor;
 use App\Models\Voucher\VoucherCodeResult;
-use Tests\DatabaseTestCase;
-use Tests\Traits\TestsOrder;
-use Tests\Traits\TestsVoucher;
+use Tests\Bases\DatabaseTestCase;
+use Tests\Traits\Model\TestsOrder;
+use Tests\Traits\Model\TestsVoucher;
 
 class FlatCostReductionExecutorTest extends DatabaseTestCase
 {

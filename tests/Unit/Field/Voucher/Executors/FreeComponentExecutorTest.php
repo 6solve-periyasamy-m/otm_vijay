@@ -3,9 +3,9 @@
 namespace Field\Voucher\Executors;
 
 use App\Models\Voucher\Executors\FreeComponentExecutor;
-use Tests\DatabaseTestCase;
-use Tests\Traits\TestsOrder;
-use Tests\Traits\TestsVoucher;
+use Tests\Bases\DatabaseTestCase;
+use Tests\Traits\Model\TestsOrder;
+use Tests\Traits\Model\TestsVoucher;
 
 /**
  * @covers \App\Models\Voucher\Executors\FreeComponentExecutor

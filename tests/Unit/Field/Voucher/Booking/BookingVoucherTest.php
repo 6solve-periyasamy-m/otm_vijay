@@ -5,9 +5,9 @@ namespace Field\Voucher\Booking;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Voucher\VoucherCode;
-use Tests\DatabaseTestCase;
-use Tests\Traits\TestsBooking;
-use Tests\Traits\TestsVoucher;
+use Tests\Bases\DatabaseTestCase;
+use Tests\Traits\Model\TestsBooking;
+use Tests\Traits\Model\TestsVoucher;
 
 class BookingVoucherTest extends DatabaseTestCase
 {

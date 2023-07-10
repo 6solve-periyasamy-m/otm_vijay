@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Traits;
+namespace Tests\Traits\Model;
 
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
