@@ -26,6 +26,6 @@
         </tbody>
     </table>
     <div class="fw-bold font-16 float-end">
-        Total: {{ f_currency($booking->total_cost) }}
+        Total: {{ f_currency($booking->repository->getTotalCost()) }}
     </div>
 </x-customer.accordion>

@@ -443,12 +443,18 @@ class BookingTravellerRepository extends ModelRepository
                 'cost' => $component->getCost(),
             ];
         }
+        if ($this->traveller->has_single_occupancy) {
+            $data[] = [
+                'name' => 'Single Occupancy Surcharge',
+                'cost' => $this->traveller->booking->tour->single_occupancy_surcharge,
+            ];
+        }
         foreach ($this->traveller->vouchers as $voucher) {
             foreach ($voucher->results as $result) {
                 $executor = $result->executor();
                 if ($executor instanceof FlatCostReductionExecutor) {
                     $data[] = [
-                        'name' => $voucher->name,
+                        'name' => "$voucher->code - $voucher->name",
                         'cost' => $executor->getAmount()
                     ];
                 }

@@ -343,6 +343,14 @@ class BookingRepository extends ModelRepository
             $base += $this->booking->tour->remaining_installment;
             $base += $traveller->surcharge_amount;
             $base += $traveller->additional_cost;
+            foreach ($traveller->vouchers as $voucher) {
+                foreach ($voucher->results as $result) {
+                    $executor = $result->executor();
+                    if ($executor instanceof FlatCostReductionExecutor) {
+                        $base += $executor->getAmount();
+                    }
+                }
+            }
         }
         return $base;
     }
@@ -414,7 +422,7 @@ class BookingRepository extends ModelRepository
         }
     }
 
-    public function getBreakdown()
+    public function getBreakdown(): array
     {
         $data = [];
         foreach ($this->booking->travellers as $traveller) {
