@@ -13,6 +13,11 @@ class VoucherCodeRepository extends ModelRepository
 {
     public function __construct(private VoucherCode $voucher) { }
 
+    public static function find(string $code): VoucherCode|null
+    {
+        return VoucherCode::where('code', '=', Str::upper($code))->first();
+    }
+
     public function get(): Model
     {
         return $this->voucher;
