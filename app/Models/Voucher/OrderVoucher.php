@@ -3,6 +3,7 @@
 namespace App\Models\Voucher;
 
 use App\Models\Order\Order;
+use App\Models\Order\OrderCustomer;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,7 @@ use Illuminate\Support\Carbon;
  * App\Models\Voucher\OrderVoucher
  *
  * @property int $id
- * @property int $order_id
+ * @property int $order_customer_id
  * @property int $voucher_code_id
  * @property Carbon|null $entered
  * @property Carbon|null $applied
@@ -39,7 +40,7 @@ class OrderVoucher extends Model
     protected $with = ['voucher',];
     public function order(): BelongsTo
     {
-        return $this->belongsTo(Order::class, 'order_id');
+        return $this->belongsTo(OrderCustomer::class, 'order_customer_id');
     }
 
     public function voucher(): BelongsTo

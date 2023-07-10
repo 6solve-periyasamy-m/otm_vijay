@@ -6,6 +6,7 @@ use App\Models\Customer\Customer;
 use App\Models\Order\Adjustment\OrderCustomerAdjustment;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
+use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
@@ -80,6 +81,14 @@ class OrderCustomerRepository extends ModelRepository
             }
         }
         return $data;
+    }
+
+    public function applyVoucher(VoucherCode $voucherCode): void
+    {
+        foreach ($voucherCode->results as $result) {
+            $result->executor()->applyForOrderCustomer($this->orderCustomer);
+        }
+        $this->orderCustomer->vouchers()->attach($voucherCode->id);
     }
 
     public function getOwnedIds(): array

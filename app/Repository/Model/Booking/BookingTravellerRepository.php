@@ -193,6 +193,9 @@ class BookingTravellerRepository extends ModelRepository
         foreach ($this->getComponents(false) as $componentRepository) {
             $componentRepository->getTourComponent()->grantToCustomer($orderCustomer);
         }
+        foreach ($this->traveller->vouchers as $voucher) {
+            $orderCustomer->repository->applyVoucher($voucher);
+        }
         $this->traveller->order_customer_id = $orderCustomer->id;
         $this->save();
         return $orderCustomer;
