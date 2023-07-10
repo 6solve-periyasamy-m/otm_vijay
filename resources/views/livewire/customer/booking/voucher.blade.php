@@ -8,7 +8,7 @@
             Voucher Code
         </x-customer.input>
         <div class="col-xl-2">
-            <button wire:click="apply">
+            <button class="btn btn-success" wire:click="apply">
                 Apply Voucher
             </button>
         </div>
