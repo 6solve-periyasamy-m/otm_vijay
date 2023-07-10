@@ -16,6 +16,7 @@ use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Tour\Tour;
 use App\Models\Voucher\Executors\FlatCostReductionExecutor;
+use App\Models\Voucher\Executors\PercentageCostReductionExecutor;
 use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
@@ -114,6 +115,9 @@ class BookingRepository extends ModelRepository
                 $executor = $result->executor();
                 if ($executor instanceof FlatCostReductionExecutor) {
                     $cost += $executor->getAmount();
+                }
+                if ($executor instanceof PercentageCostReductionExecutor) {
+                    $cost -= $executor->getAmount($this->booking->tour->base_price_per_person);
                 }
             }
         }
@@ -348,6 +352,9 @@ class BookingRepository extends ModelRepository
                     $executor = $result->executor();
                     if ($executor instanceof FlatCostReductionExecutor) {
                         $base += $executor->getAmount();
+                    }
+                    if ($executor instanceof PercentageCostReductionExecutor) {
+                        $base += $executor->getAmount($traveller->base_cost);
                     }
                 }
             }

@@ -15,6 +15,7 @@ use App\Models\Location\AddressParent;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Voucher\Executors\FlatCostReductionExecutor;
+use App\Models\Voucher\Executors\PercentageCostReductionExecutor;
 use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
@@ -456,6 +457,12 @@ class BookingTravellerRepository extends ModelRepository
                     $data[] = [
                         'name' => "$voucher->code - $voucher->name",
                         'cost' => $executor->getAmount()
+                    ];
+                }
+                if ($executor instanceof PercentageCostReductionExecutor) {
+                    $data[] = [
+                        'name' => "$voucher->code - $voucher->name",
+                        'cost' => $executor->getAmount($this->traveller->base_cost),
                     ];
                 }
             }

@@ -52,4 +52,9 @@ class PercentageCostReductionExecutor extends VoucherExecutor
             'after' => f_currency(1000 - $this->calculate(1000)),
         ]);
     }
+
+    public function getAmount(int|float $amount): float|int
+    {
+        return $this->calculate($amount) * -1;
+    }
 }
