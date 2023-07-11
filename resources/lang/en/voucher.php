@@ -96,4 +96,20 @@ return [
             'delete' => 'Delete Voucher',
         ]
     ],
+    'booking' => [
+        'messages' => [
+            'not-found' => [
+                'title' => 'Voucher cannot be applied',
+                'body' => 'That voucher code does not exist, or is expired',
+            ],
+            'already-applied' => [
+                'title' => 'Voucher cannot be applied',
+                'body' => 'That voucher has already been applied to this booking'
+            ],
+            'success' => [
+                'title' => 'Voucher applied successfully',
+                'body' => 'Voucher has been successfully applied to the booking'
+            ]
+        ]
+    ]
 ];
