@@ -14,6 +14,7 @@
             <th scope="col">Check Out Time</th>
             <th scope="col">Occupant Count</th>
             <th scope="col">Empty Beds</th>
+            <th scope="col">Reference</th>
             <th scope="col" colspan="{{$data->largest}}">Occupants</th>
             @if($notes)
             <th scope="col" colspan="{{$data->largest}}">Accommodation Notes</th>
@@ -37,6 +38,7 @@
                 {{-- Exporter strips 0 values for some reason, hence formatting with decimal place --}}
                 <td>{{ $row->occupants == 0 ? number_format(0, 2) : $row->occupants }}</td>
                 <td>{{ $row->empty_beds == 0 ? number_format(0, 2) : $row->empty_beds }}</td>
+                <td>{{ $row->reference }}</td>
 
                 @for($x = 0; $x < $data->largest; $x++)
                     @php

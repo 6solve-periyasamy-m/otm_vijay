@@ -19,7 +19,7 @@ class RoomingReportRepository implements HasRoomingList
         return OrderAccommodation::with(
             'group',
             'group.orderCustomers',
-            'group.orderCustomers',
+            'group.orderCustomers.order',
             'accommodationInventoryTour',
             'accommodationInventoryTour.inventory',
             'accommodationInventoryTour.accommodationInventory.accommodation',
@@ -65,6 +65,7 @@ class RoomingReportRepository implements HasRoomingList
             $row->to = $orderAccommodation->accommodation_inventory->check_out;
             $row->room = $orderAccommodation->accommodation_inventory->roomType->name;
             $row->board = $orderAccommodation->accommodation_inventory->boardType->name;
+            $row->reference = $orderAccommodation->group->orderCustomers[0]->order->booking_reference;
             $row->travellers = $orderAccommodation->group->orderCustomers()->with('customer')->get();
             $row->occupancy = $occupancy;
             $row->occupants = $orderAccommodation->group->orderCustomers()->count();
