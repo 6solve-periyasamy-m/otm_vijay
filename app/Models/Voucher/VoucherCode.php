@@ -3,6 +3,7 @@
 namespace App\Models\Voucher;
 
 use App\Models\Order\Order;
+use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
 use App\Models\Traits\HasRepository;
 use App\Repository\Model\Voucher\VoucherCodeRepository;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 /**
  * App\Models\Voucher\VoucherCode
@@ -31,7 +33,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection|VoucherCodeResult[] $results
- * @property-read Collection|Order[] $orders
+ * @property-read Collection|Order[] $order_customers
  * @property-read Collection|OrderVoucher[] $orderVouchers
  * @property-read bool $expired Has the voucher expired
  * @property-read bool $usable Is the voucher both active and not expired
@@ -60,6 +62,7 @@ use Illuminate\Support\Carbon;
  */
 class VoucherCode extends Model
 {
+    use HasRelationships;
     use HasFactory;
     use HasRepository;
 
@@ -77,9 +80,9 @@ class VoucherCode extends Model
         return $this->hasMany(OrderVoucher::class, 'voucher_code_id');
     }
 
-    public function orders(): HasManyThrough
+    public function orderCustomers(): HasManyThrough
     {
-        return $this->hasManyThrough(Order::class, OrderVoucher::class, 'voucher_code_id', 'id');
+        return $this->hasManyThrough(OrderCustomer::class, OrderVoucher::class, 'voucher_code_id', 'id');
     }
 
     protected function tours(): BelongsToMany
