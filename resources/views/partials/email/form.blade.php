@@ -1,4 +1,6 @@
-@php/** @var \App\Mail\Storage\TemplatedMail $mail */@endphp
+@php
+    /** @var \App\Mail\Storage\TemplatedMail $mail */
+@endphp
 <div class="col-12 col-xl-8">
     @include('partials.fields.text', [
         'field' => 'subject',
