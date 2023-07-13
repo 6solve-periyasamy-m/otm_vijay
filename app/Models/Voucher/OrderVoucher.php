@@ -2,7 +2,6 @@
 
 namespace App\Models\Voucher;
 
-use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,7 +19,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $applied
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Order $order
+ * @property-read OrderCustomer $orderCustomer
  * @property-read VoucherCode $voucher
  * @method static Builder|OrderVoucher newModelQuery()
  * @method static Builder|OrderVoucher newQuery()
@@ -38,7 +37,7 @@ class OrderVoucher extends Model
 {
     protected $casts = ['applied' => 'datetime', 'entered' => 'datetime',];
     protected $with = ['voucher',];
-    public function order(): BelongsTo
+    public function orderCustomer(): BelongsTo
     {
         return $this->belongsTo(OrderCustomer::class, 'order_customer_id');
     }

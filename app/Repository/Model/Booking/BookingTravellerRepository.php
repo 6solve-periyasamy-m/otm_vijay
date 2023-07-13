@@ -66,6 +66,18 @@ class BookingTravellerRepository extends ModelRepository
         }
     }
 
+    public function validateVouchers()
+    {
+        foreach ($this->traveller->vouchers as $voucher) {
+            $stockAdjust = $voucher->pivot->created_at->addHours(6)->gt(now()) ? 1 : 0;
+            if ($voucher->repository->getAvailableStock() + $stockAdjust > 0) {
+                $voucher->pivot->touch();
+            } else {
+                $this->traveller->vouchers()->detach($voucher->id);
+            }
+        }
+    }
+
     public function addComponent(InventoryTourRepository $tourComponentRepository): bool
     {
         $travellers = $this->traveller->booking->travellers()->count();

@@ -12,9 +12,17 @@
             <p>{{ __('voucher.details.active') }}</p>
             <h6 class="fw-bold">{{ f_bool($voucher->active) }}</h6>
         </div>
-        <div class="col-2">
+        <div class="col-10">
             <p>{{ __('voucher.details.global') }}</p>
             <h6 class="fw-bold">{{ f_bool($voucher->global) }}</h6>
+        </div>
+        <div class="col-2">
+            <p>Usage Limit</p>
+            <h6 class="fw-bold">{{ ($voucher->limit ?? 0) <= 0 ? 'No Limit' : $voucher->limit  }}</h6>
+        </div>
+        <div class="col-10">
+            <p>Total Used</p>
+            <h6 class="fw-bold">{{ $voucher->repository->getUsedStock() }}</h6>
         </div>
         <div class="col-12">
             <p>{{ __('voucher.details.description') }}</p>

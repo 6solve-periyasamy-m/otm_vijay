@@ -2,6 +2,7 @@
 
 namespace App\Models\Voucher;
 
+use App\Models\Booking\BookingTraveller;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
@@ -15,7 +16,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
@@ -80,9 +80,14 @@ class VoucherCode extends Model
         return $this->hasMany(OrderVoucher::class, 'voucher_code_id');
     }
 
-    public function orderCustomers(): HasManyThrough
+    public function orderCustomers(): BelongsToMany
     {
-        return $this->hasManyThrough(OrderCustomer::class, OrderVoucher::class, 'voucher_code_id', 'id');
+        return $this->belongsToMany(OrderCustomer::class, OrderVoucher::class)->withPivot(['entered', 'applied']);
+    }
+
+    public function bookingTravellers(): BelongsToMany
+    {
+        return $this->belongsToMany(BookingTraveller::class, VoucherBooking::class)->withTimestamps()->with('booking');
     }
 
     protected function tours(): BelongsToMany
@@ -100,19 +105,19 @@ class VoucherCode extends Model
         return $this->tours()->where('invert', '=', 1);
     }
 
-    public function include(Tour|int $tour)
+    public function include(Tour|int $tour): void
     {
         if ($tour instanceof Tour) $tour = $tour->id;
         $this->tours()->attach($tour, ['invert' => 0,]);
     }
 
-    public function exclude(Tour|int $tour)
+    public function exclude(Tour|int $tour): void
     {
         if ($tour instanceof Tour) $tour = $tour->id;
         $this->tours()->attach($tour, ['invert' => 1,]);
     }
 
-    public function detach(Tour|int $tour)
+    public function detach(Tour|int $tour): void
     {
         if ($tour instanceof Tour) $tour = $tour->id;
         $this->tours()->detach($tour);
