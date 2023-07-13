@@ -446,4 +446,11 @@ class BookingRepository extends ModelRepository
     {
         return $this->booking->tour->templates->count() > 0;
     }
+
+    public function validateVouchers(): void
+    {
+        foreach ($this->booking->travellers()->with('vouchers')->get() as $traveller) {
+            $traveller->repository->validateVouchers();
+        }
+    }
 }

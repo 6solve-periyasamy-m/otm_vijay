@@ -113,7 +113,7 @@ class BookingTraveller extends Model
 
     public function vouchers(): BelongsToMany
     {
-        return $this->belongsToMany(VoucherCode::class, 'voucher_bookings');
+        return $this->belongsToMany(VoucherCode::class, 'voucher_bookings')->withTimestamps();
     }
 
     public function orderCustomer(): BelongsTo

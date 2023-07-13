@@ -22,6 +22,7 @@ class Form extends ModalComponent
     {
         $this->validate();
         $this->voucher->global = $this->voucher->global ?? false;
+        $this->voucher->limit = $this->voucher->limit ?? 0;
         $this->voucher->repository->save();
         $this->emit('refreshLivewireDatatable');
         $this->emit('closeModal');
@@ -38,6 +39,7 @@ class Form extends ModalComponent
             'voucher.name' => 'required',
             'voucher.expiry' => 'required|date|date_format:Y-m-d',
             'voucher.description' => 'nullable',
+            'voucher.limit' => 'nullable|integer',
             'voucher.active' => 'nullable|boolean',
             'voucher.global' => 'nullable|boolean',
         ];

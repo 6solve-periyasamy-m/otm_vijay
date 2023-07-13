@@ -96,7 +96,7 @@ class VoucherCodeRepository extends ModelRepository implements HasStockControl
 
     public function getTotalStock(): int
     {
-        return $this->voucher->limit;
+        return $this->voucher->limit ?? 0;
     }
 
     public function getAvailableStock(): int
