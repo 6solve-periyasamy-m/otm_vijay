@@ -14,6 +14,7 @@
             <th scope="col">Check Out Time</th>
             <th scope="col">Occupant Count</th>
             <th scope="col">Empty Beds</th>
+            <th scope="col">Reference</th>
             @if($notes)
             <th scope="col">Order Internal Notes</th>
             <th scope="col">Order External Notes</th>
@@ -44,6 +45,7 @@
                 <td>{{ f_time($row->to) }}</td>
                 <td>{{ $row->occupants }}</td>
                 <td>{{ $row->empty_beds }}</td>
+                <td>{{ $row->reference }}</td>
                 @php
                     $travellers = "";
                     $order_i_notes = "";
