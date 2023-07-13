@@ -1,4 +1,6 @@
-@php/** @var \App\Models\Accommodation\Accommodation $accommodation */@endphp
+@php
+    /** @var \App\Models\Accommodation\Accommodation $accommodation */
+@endphp
 <div class="otm-callout">
     <div class="row">
         @if(isset($accommodation->image_url))

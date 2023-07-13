@@ -1,4 +1,6 @@
-@php/** @var \App\Models\Flight\Flight $flight */@endphp
+@php
+    /** @var \App\Models\Flight\Flight $flight */
+@endphp
 <div class="otm-callout">
     <div class="row">
         @if(isset($flight->image_url))

@@ -7,6 +7,7 @@
 /public/mix-manifest.json
 /public/storage
 /public/uploads
+/temporary
 /storage/*.key
 /vendor
 /db
