@@ -31,7 +31,7 @@ class OrderRepository extends ModelRepository
     private const STATUS_CACHE_TIME = 600;
     private Order $order;
     private AtolRepository $atolRepository;
-    private int|null $cost = null;
+    private float|null $cost = null;
 
     public function __construct(Order $order)
     {
