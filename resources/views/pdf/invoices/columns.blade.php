@@ -103,7 +103,7 @@ $brand = $order->tour->brand;
                         @foreach($invoice->customers as $name => $data)
                             @if (empty($data['billables'])) @continue @endif
                             <tr>
-                                <td colspan="3" class="metadata center-text">{{ $name }}</td>
+                                <td colspan="3" class="metadata center-text">{{ $data['name'] }}</td>
                             </tr>
                             @foreach($data['billables'] as $billable)
                                 <tr>
