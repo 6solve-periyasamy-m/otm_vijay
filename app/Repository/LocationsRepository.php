@@ -7,7 +7,7 @@ use App\Models\Location\Currency;
 
 class LocationsRepository
 {
-    public static function updateCountry($ccn3, $cca3, $commonName, $dialing_code, $currencies): void
+    public static function updateCountry($ccn3, $cca3, $commonName, $dialing_code, $currencies, $cca2 = null): void
     {
         $country = Country::where('numeric_code', $ccn3)->first();
         if (!isset($country)) {
@@ -17,6 +17,7 @@ class LocationsRepository
         $country->alpha_code = $cca3;
         $country->name = $commonName;
         $country->dialing_code = $dialing_code;
+        $country->cca2 = $cca2;
         $country->save();
         foreach ($currencies as $code => $data) {
             self::processCurrencyForCountry($country, $code, $data['name'], $data['symbol'] ?? null);
