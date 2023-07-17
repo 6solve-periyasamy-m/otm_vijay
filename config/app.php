@@ -261,6 +261,10 @@ return [
             'connected' => env('FELLOH_CONNECTED'),
             'env' => env('FELLOH_ENVIRONMENT', 'api')
         ],
+        'opayo' => [
+            'vendor' => env('OPAYO_VENDOR'),
+            'live' => env('OPAYO_LIVE', false),
+        ]
     ],
 
     'user-limit' => env('USER_LIMIT', 0),
