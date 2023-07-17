@@ -264,6 +264,10 @@ return [
             'private' => env('FELLOH_PRIVATE'),
             'organisation' => env('FELLOH_ORGANIZATION')
         ],
+        'opayo' => [
+            'vendor' => env('OPAYO_VENDOR'),
+            'live' => env('OPAYO_LIVE', false),
+        ]
     ],
 
     'user-limit' => env('USER_LIMIT', 0),
