@@ -148,6 +148,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::prefix('{quote}')->group(function () {
             Route::get('/cost', [QuoteController::class, 'getCost'])->name('cost');
             Route::post('/unknown', [QuoteController::class, 'getUnknownTraveller'])->name('unknown-traveller');
+            Route::get('/sent', [QuoteController::class, 'sent'])->name('sent');
         });
     });
 
