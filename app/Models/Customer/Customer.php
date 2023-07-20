@@ -15,6 +15,7 @@ use App\Repository\Model\Customer\CustomerRepository;
 use Database\Factories\Customer\CustomerFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
+use Exception;
 use Gravatar;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -303,7 +304,11 @@ class Customer extends Authenticatable
     public function getAvatarUrlAttribute(): string
     {
         if (isset($this->profile_picture)) return asset($this->profile_picture);
-        return isset($this->email_address) ? Gravatar::get($this->email_address) : ('https://secure.gravatar.com/avatar/?d=mp&s=300');
+        try {
+            return isset($this->email_address) ? Gravatar::get($this->email_address) : ('https://secure.gravatar.com/avatar/?d=mp&s=300');
+        } catch (Exception $exception) {
+            return 'https://secure.gravatar.com/avatar/?d=mp&s=300';
+        }
     }
 
     public function getRegisteredAttribute(): bool

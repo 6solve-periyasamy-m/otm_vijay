@@ -78,7 +78,7 @@ class BookingCustomerRequest extends FormRequest
             'lead_first_name' => 'required',
             'lead_last_name' => 'required',
             'lead_date_of_birth' => 'required',
-            'lead_email_address' => 'required|confirmed',
+            'lead_email_address' => 'required|confirmed|email',
             'lead_mobile_number' => 'required',
             'lead_home_address_line_1' => 'required',
             'lead_home_country' => 'required|exists:countries,id',
