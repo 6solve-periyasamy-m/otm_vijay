@@ -166,6 +166,7 @@ class CustomerTourController extends CustomerController
             $order->save();
         }
         $details = $request->getOrderCustomerDetails();
+        if ($order->tour->repository->isOrderNotesLocked()) { unset($details['order_notes']); unset($details['order_customer_notes']); }
         if ($order->tour->repository->isAccommodationLocked()) { unset($details['accommodation_notes']); }
         if ($order->tour->repository->isActivityLocked()) { unset($details['activity_notes']); }
         if ($order->tour->repository->isFlightLocked()) { unset($details['flight_notes']); }
