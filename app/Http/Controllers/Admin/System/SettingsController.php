@@ -73,6 +73,8 @@ class SettingsController extends Controller
             'components.lock' => $request->input('components_lock'),
             'passport.lock' => $request->input('passport_lock'),
             'passport.unlock' => $request->input('passport_unlock'),
+            'order-notes.lock' => $request->input('order_notes_lock'),
+            'order-notes.unlock' => $request->input('order_notes_unlock'),
             'accommodation.lock' => $request->input('accommodation_lock'),
             'accommodation.unlock' => $request->input('accommodation_unlock'),
             'activity.lock' => $request->input('activity_lock'),
