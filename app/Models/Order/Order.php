@@ -6,6 +6,7 @@ use App\Models\Customer\Customer;
 use App\Models\Customer\Group;
 use App\Models\Customer\OrderCustomerGroup;
 use App\Models\Helper\OrderStatus;
+use App\Models\Helper\Traits\HasPermissions;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
@@ -110,7 +111,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  */
 class Order extends Model
 {
-    use SoftDeletes, CascadeSoftDeletes, HasFactory, HasRelationships;
+    use SoftDeletes, CascadeSoftDeletes, HasFactory, HasRelationships, HasPermissions;
 
     protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes', 'deposit', 'invoice_footer', 'booking_fee'];
     protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double',];
@@ -145,6 +146,11 @@ class Order extends Model
     public function orderCustomers(): HasMany
     {
         return $this->hasMany(OrderCustomer::class, 'order_id');
+    }
+
+    public function payingTravellers(): HasMany
+    {
+        return $this->orderCustomers()->where('is_charged', true);
     }
 
     public function additionalTravellers(): HasMany
@@ -327,10 +333,10 @@ class Order extends Model
      */
     public function getDaysUntilNextPaymentAttribute(): ?int
     {
-        $next = $this->next_installment?->due_on;
+        $next = $this->repository->getNextPaymentDetails(false)?->due_on;
         if (!isset($next)) return null;
         $next = Carbon::parse($next);
-        return $next->isBefore(Carbon::now()) ? ($next->diffInDays(Carbon::now())) * -1 : ($next->diffInDays(Carbon::now()));
+        return days_until($next);
     }
 
     /**
@@ -354,7 +360,7 @@ class Order extends Model
 
     public function getPayingCustomersAttribute(): int
     {
-        return $this->orderCustomers()->where('is_charged', '=', true)->count();
+        return $this->payingTravellers()->count();
     }
 
     // Functions

@@ -23,7 +23,7 @@ class FlightFactory extends Factory
     {
         return [
             'is_domestic' => false,
-            'notes' => $this->faker->sentence(),
+            'internal_notes' => $this->faker->sentence(),
             'available_from' => null
         ];
     }

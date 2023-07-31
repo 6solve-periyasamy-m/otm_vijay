@@ -13,6 +13,6 @@
       'description' => $transport->description,
       'currency' => $transport->currency,
       'is_domestic' => $transport->is_domestic,
-      'notes' => $transport->notes,
+      'notes' => $transport->internal_notes,
     ])
 @endsection

@@ -15,10 +15,12 @@ $brand = $order->tour->brand;
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Invoice</title>
-        <link rel="stylesheet" href="{{ asset('css/invoice.css') }}">
+        <style>
+            <?php include(public_path().'/css/invoice.css') ?>
+        </style>
         <style>
             .cancelled {
-                background-image: url('{{ asset('images/rubberstamp.svg') }}') !important;
+                background-image: url('{{ svg_to_b64('images/rubberstamp.svg') }}') !important;
                 background-repeat: no-repeat !important;
                 background-position-x: calc(50% + 3em) !important;
                 background-position-y: 8em;
@@ -33,7 +35,7 @@ $brand = $order->tour->brand;
                 <div class="header">
                     <div class="flex-container titles">
                         <div class="flex-items site-info vert-align">
-                            <img src="{{ $brand->image }}" class="header-logo" alt="{{ $brand->name }}" />
+                            <img src="{{ img_to_b64($brand->image_path) }}" class="header-logo" alt="{{ $brand->name }}" />
                         </div>
                         <div class="flex-items vert-align">
                             <h2 class="header-title tour-name">{{ $order->tour->name }}</h2>
@@ -101,7 +103,7 @@ $brand = $order->tour->brand;
                         @foreach($invoice->customers as $name => $data)
                             @if (empty($data['billables'])) @continue @endif
                             <tr>
-                                <td colspan="3" class="metadata center-text">{{ $name }}</td>
+                                <td colspan="3" class="metadata center-text">{{ $data['name'] }}</td>
                             </tr>
                             @foreach($data['billables'] as $billable)
                                 <tr>

@@ -16,9 +16,10 @@ use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
-use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Abstracts\InventoryTourRepository;
+use App\Repository\Intention\PaymentIntentionRepository;
+use App\Repository\Intention\Storage\AdditionIntention;
 use Gateway;
 
 class CustomerTourController extends CustomerController
@@ -86,10 +87,9 @@ class CustomerTourController extends CustomerController
         ]);
     }
 
-    public function purchaseExtra(Order $reference, string $componentType, int $componentId, ?Customer $customer = null)
+    public function purchaseExtra(Order $order, string $componentType, int $componentId, ?Customer $customer = null)
     {
-        $order = $this->fetchOrder($reference);
-        if (!isset($order) || $order->cancelled) abort(404);
+        if ($order->cancelled) abort(404);
         $customer = $customer ?? $this->user();
         if (!isset($customer)) abort(404);
         if ($this->user()->id != $customer->id) {
@@ -99,36 +99,30 @@ class CustomerTourController extends CustomerController
         $orderCustomer = $order->repository->getOrderCustomer($customer);
         if (!isset($orderCustomer)) abort(404);
 
-        /** @var AccommodationInventoryTour|ActivityInventoryTour|FlightInventoryTour|TransportInventoryTour $tourComponent */
+        /** @var InventoryTourRepository $tourComponent */
         $tourComponent = InventoryTourRepository::getComponent($componentType, $componentId);
         if (!isset($tourComponent)) abort(404);
         if (!$tourComponent->isBookable()) abort(404);
-
-        if ($tourComponent->hasEnoughStock()) abort(404);
-
-        $data = [
-            'additions' => [
-                [
-                    'customer' => $componentType == 'accommodation' ? $orderCustomer->primary_group->id : $orderCustomer->id,
-                    'component' => $componentType,
-                    'id' => $tourComponent->get()->id,
-                ],
-            ],
-        ];
+        if (!$tourComponent->hasEnoughStock()) abort(404);
 
         $redirect = setting('purchase.addon.success.redirect', url()->previous(route('customer.extras', ['reference' => $order->booking_reference, 'customer' => $customer,])));
 
+        if ($tourComponent->get()->tour_sales_price > 0) {
+            $data = AdditionIntention::create($orderCustomer, $tourComponent);
 
-        $item = new LineItem("{$tourComponent}", $tourComponent->get()->tour_sales_price);
-        $intention = PaymentIntention::build($this->user(), $order->booking_reference, 'Installment', $data);
+            $item = new LineItem("{$tourComponent}", $tourComponent->get()->tour_sales_price);
+            $intention = PaymentIntentionRepository::create($order, $orderCustomer->customer, 'Installment', [$data,]);
 
-        return redirect(Gateway::getDefaultGateway()->checkout([$item,], $intention, $this->user(), $redirect));
+            return redirect(Gateway::getDefaultGateway()->checkout([$item,], $intention, $this->user(), $redirect));
+        } else {
+            $tourComponent->grantToCustomer($orderCustomer);
+            return redirect($redirect);
+        }
     }
 
-    public function addExtra(Order $reference, string $componentType, int $componentId, ?Customer $customer = null)
+    public function addExtra(Order $order, string $componentType, int $componentId, ?Customer $customer = null)
     {
-        $order = $reference;
-        if (!isset($order) || $order->cancelled) abort(404);
+        if ($order->cancelled) abort(404);
         $customer = $customer ?? $this->user();
         if (!isset($customer)) abort(404);
         if ($this->user()->id != $customer->id) {
@@ -172,6 +166,7 @@ class CustomerTourController extends CustomerController
             $order->save();
         }
         $details = $request->getOrderCustomerDetails();
+        if ($order->tour->repository->isOrderNotesLocked()) { unset($details['order_notes']); unset($details['order_customer_notes']); }
         if ($order->tour->repository->isAccommodationLocked()) { unset($details['accommodation_notes']); }
         if ($order->tour->repository->isActivityLocked()) { unset($details['activity_notes']); }
         if ($order->tour->repository->isFlightLocked()) { unset($details['flight_notes']); }

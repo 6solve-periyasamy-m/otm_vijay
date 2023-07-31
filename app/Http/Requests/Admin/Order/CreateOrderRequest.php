@@ -84,6 +84,7 @@ class CreateOrderRequest extends FormRequest
             'ordered_on' => 'required|date',
             'deposit' => 'nullable|numeric|min:0',
             'tour_id' => 'required|integer|exists:tours,id',
+            'lead_booker.id' => 'required|integer|exists:customers,id',
         ];
     }
 }

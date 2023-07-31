@@ -32,7 +32,7 @@ Route::middleware('auth:customer')->group(function () {
     Route::get('/extras/apply/{reference}/{componentType}/{componentId}/{customer?}', [CustomerTourController::class, 'addExtra'])->name('extras.apply');
     Route::post('/order/notes/update/{reference}/{orderCustomer}', [CustomerTourController::class, 'updateNotes'])->name('notes.update');
 });
-Route::prefix('password')->name('password.')->group(function() {
+Route::prefix('password')->name('password.')->group(function () {
     Route::get('/reset', [CustomerForgotPasswordController::class, 'showLinkRequestForm'])->name('request');
     Route::post('/email', [CustomerForgotPasswordController::class, 'sendResetLinkEmail'])->name('email');
     Route::get('/reset/{token}', [CustomerResetPasswordController::class, 'showResetForm'])->name('reset');

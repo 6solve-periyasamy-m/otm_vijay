@@ -95,6 +95,21 @@
         </div>
     </div>
 </div>
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        {{-- Toasts get added here in JS --}}
+    </div>
+</div>
+<script type="text/javascript">
+    function showToast(title, body, color = 'primary', autohide = false, delay = 5000) {
+        let now = Date.now();
+        $('.toast-container').append(render(template('toast'), {id: now, title: title, body: body, color: color}));
+        bootstrap.Toast.getOrCreateInstance(document.getElementById(now.toString()), {'animation': true, 'autohide': autohide, 'delay': delay}).show();
+    }
+</script>
+<script type="text/template" data-template="toast">
+@include('partials.toast')
+</script>
 <script src="{{ asset('js/manifest.js') }}"></script>
 <script src="{{ asset('js/vendor.js') }}"></script>
 <script src="{{ asset('js/app.js') . '?' . date('U')  }}"></script>

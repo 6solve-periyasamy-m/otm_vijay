@@ -1,4 +1,6 @@
-@php/** @var \App\Models\Flight\Flight $flight */@endphp
+@php
+    /** @var \App\Models\Flight\Flight $flight */
+@endphp
 <div class="otm-callout">
     <div class="row">
         @if(isset($flight->image_url))
@@ -27,8 +29,8 @@
                 <h6 class="fw-bold">{{ $flight->currency }}</h6>
             </div>
             <div class="col-12 col-xl-6">
-                <p>Notes</p>
-                <h6 class="fw-bold">{{ $flight->notes }}</h6>
+                <p>Internal Notes</p>
+                <h6 class="fw-bold">{{ $flight->internal_notes }}</h6>
             </div>
 
             <div class="col-12">

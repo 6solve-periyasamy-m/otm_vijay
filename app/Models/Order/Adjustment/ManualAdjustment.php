@@ -49,7 +49,7 @@ class ManualAdjustment extends Model
 
     public static function getValidationRules(): array
     {
-        return ['date' => 'required|date', 'amount' => 'required|numeric',];
+        return ['date' => 'required|date', 'amount' => 'required|numeric', 'reason' => 'required'];
     }
 
     public function order(): BelongsTo

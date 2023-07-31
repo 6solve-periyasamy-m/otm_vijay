@@ -1,4 +1,6 @@
-@php/** @var \App\Models\Activity\Activity $activity */@endphp
+@php
+    /** @var \App\Models\Activity\Activity $activity */
+@endphp
 <div class="otm-callout">
     <div class="row">
         @if(isset($activity->image_url))
@@ -23,8 +25,8 @@
                 <h6 class="fw-bold">{{ $activity->currency }}</h6>
             </div>
             <div class="col-12 col-xl-6">
-                <p>Notes</p>
-                <h6 class="fw-bold">{{ $activity->notes }}</h6>
+                <p>Internal Notes</p>
+                <h6 class="fw-bold">{{ $activity->internal_notes }}</h6>
             </div>
             <div class="col-12">
                 @can('update', \App\Models\Activity\Activity::class)

@@ -644,7 +644,7 @@
                             /{{ $merchandise->repository->getTotalStock() }}<br/>
                             ({{$merchandise->repository->getAvailableStock()}} Available)
                         </td>
-                        <td>{{ $merchandise->notes }}</td>
+                        <td>{{ $merchandise->internal_notes }}</td>
                         <td class="actions">
                             @can('update', Merchandise::class)
                                 <a href="{{ route('merchandise.inventory.tour.edit', ['tour' => $tour, 'inventoryTour' => $merchandise,]) }}"

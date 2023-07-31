@@ -16,10 +16,12 @@ $brand = $sent->quote->brand;
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Quote - {{ $quote->reference }}</title>
-        <link rel="stylesheet" href="{{ asset('css/invoice.css') }}">
+        <style>
+            <?php include(public_path().'/css/invoice.css') ?>
+        </style>
         <style>
             .cancelled {
-                background-image: url('{{ asset('images/rubberstamp.svg') }}') !important;
+                background-image: url('{{ svg_to_b64('images/rubberstamp.svg') }}') !important;
                 background-repeat: no-repeat !important;
                 background-position-x: calc(50% + 3em) !important;
                 background-position-y: 8em;
@@ -34,7 +36,7 @@ $brand = $sent->quote->brand;
                 <div class="header">
                     <div class="flex-container titles">
                         <div class="flex-items site-info vert-align">
-                            <img src="{{ $brand->image }}" class="header-logo" alt="{{ $brand->name }}" />
+                            <img src="{{ img_to_b64($brand->image_path) }}" class="header-logo" alt="{{ $brand->name }}" />
                         </div>
                         <div class="flex-items vert-align">
                             <h2 class="header-title tour-name">{{ $quote->name }}</h2>
@@ -50,8 +52,12 @@ $brand = $sent->quote->brand;
                             <br /><span class="metadata">Telephone:</span> <a class="site-info-padding" href="tel:{{ $brand->phone ?? setting('company.contact.phone', 'Phone number not set') }}">{{ $brand->phone ?? setting('company.contact.phone', 'Phone number not set') }}</a>
                         </div>
                         <div class="flex-items metadata-wrapper">
+                            @if($paying > 0)
                             <div class="metadata divider">Paying Travellers<br /><span class="metadata-text">{{ $paying }}</span></div>
+                            @endif
+                            @if($travelling > 0)
                             <div class="metadata divider">Non-Paying Travellers<br /><span class="metadata-text">{{ $travelling }}</span></div>
+                            @endif
                             <div class="metadata divider">Quote Ref.<br /><span class="metadata-text">{{ $quote->ref }}</span></div>
                         </div>
                     </div>

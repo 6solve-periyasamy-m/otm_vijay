@@ -25,7 +25,7 @@ class MerchandisesTableSeeder extends Seeder
                 'merchandise_type_id' => 1,
                 'name' => 'Women\'s Fit T',
                 'image_url' => 'images/merchandise/shirt_white.jpg',
-                'notes' => NULL,
+                'internal_notes' => NULL,
                 'created_at' => '2022-09-09 08:01:46',
                 'updated_at' => '2022-09-09 08:01:46',
                 'deleted_at' => NULL,

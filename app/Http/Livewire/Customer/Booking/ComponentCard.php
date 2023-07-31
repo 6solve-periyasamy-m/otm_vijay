@@ -73,6 +73,18 @@ class ComponentCard extends Component
         $this->render();
     }
 
+    public function canUpgradeForOne(): bool
+    {
+        $upgrade = $this->component->tour_component_type === 'Add-on' ? $this->component : $this->getUpgrade();
+        return $upgrade?->canBookForOne() ?? false;
+    }
+
+    public function canUpgradeForAll(): bool
+    {
+        $upgrade = $this->component->tour_component_type === 'Add-on' ? $this->component : $this->getUpgrade();
+        return $upgrade?->canBookForAll() ?? false;
+    }
+
     private function getUpgrade(): BookingComponent|null
     {
         try {

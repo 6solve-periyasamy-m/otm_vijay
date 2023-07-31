@@ -42,7 +42,7 @@ class InvoiceRepository
         $adjustments = [];
         $payments = [];
         foreach ($order->orderCustomers as $customer) {
-            $customers[($customer->customer_name . ($customer->is_charged ? "" : " (Non-Paying)"))] = InvoiceRepository::processCustomerComponentsForInvoice($customer);
+            $customers[$customer->id] = ['name' => ($customer->customer_name . ($customer->is_charged ? "" : " (Non-Paying)")), ...InvoiceRepository::processCustomerComponentsForInvoice($customer)];
             foreach ($customer->adjustments as $adjustment) {
                 $adjustments[] = ['description' => "Customer Adjustment ({$customer->customer_name}): {$adjustment->reason}", 'cost' => $adjustment->amount,];
             }
@@ -182,7 +182,7 @@ class InvoiceRepository
 
     public function getResponseStream(): StreamedResponse
     {
-        $invoice = Browsershot::html(view('pdf.invoices.columns', ['invoice' => $this->invoice,])->render());
+        $invoice = Browsershot::html(view('pdf.invoices.columns', ['invoice' => $this->invoice,])->render())->noSandbox();
         $invoice->showBackground()->margins(10, 2, 10, 2);
         return response()->stream(function () use ($invoice) { echo $invoice->pdf(); }, 200, ['Content-Type' => 'application/pdf']);
     }

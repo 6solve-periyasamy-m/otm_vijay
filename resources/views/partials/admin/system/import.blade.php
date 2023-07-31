@@ -33,7 +33,29 @@
                     </form>
                 </div>
             </div>
-        </div>        
+        </div>
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title d-flex justify-content-between">
+                        <h4 class="fw-bold">Organization Import</h4>
+                        <div>
+                            <a class="btn btn-primary pr-2" href="{{ asset('import/organization.csv') }}" target="_blank">
+                                Get Template
+                            </a>
+                            <button class="btn btn-success" onclick="$('#organization-file-upload').click()">
+                                Upload File
+                            </button>
+                        </div>
+                    </div>
+                    Each row must have a name, and if you wish to use with customer import, then the names must be unique.
+                    <form action="{{ route('import.organization') }}" enctype="multipart/form-data" method="post" class="d-none">
+                        @csrf
+                        <input id="organization-file-upload" type="file" name="file" class="d-none" onchange="form.submit()">
+                    </form>
+                </div>
+            </div>
+        </div>
         <div class="col-xl-4">
             <div class="card">
                 <div class="card-body">

@@ -16,6 +16,7 @@ use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Mailing\Mailer\Order\OrderMailer;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
 use App\Repository\Storage\Rooming\RemoteGroup;
@@ -30,6 +31,7 @@ class OrderRepository extends ModelRepository
     private const STATUS_CACHE_TIME = 600;
     private Order $order;
     private AtolRepository $atolRepository;
+    private float|null $cost = null;
 
     public function __construct(Order $order)
     {
@@ -37,7 +39,12 @@ class OrderRepository extends ModelRepository
         $this->atolRepository = new AtolRepository($order);
     }
 
-    public static function getOrdersOverview(): array
+    public function mailer(): OrderMailer
+    {
+        return new OrderMailer($this->order);
+    }
+
+    public static function getOrdersOverview(bool $historic = false): array
     {
         $orders = Order::with(
             'leadBooker',
@@ -49,7 +56,13 @@ class OrderRepository extends ModelRepository
             'orderCustomers.orderFlights',
             'orderCustomers.orderTransports',
             'orderCustomers.orderMerchandise',
-        )->get();
+        )->whereHas('tour', function ($query) use ($historic) {
+            if (!$historic && setting('system.historic', 6) >= 0) {
+                return $query->whereDate('date_to', '>', now()->subMonths(setting('system.historic', 6)));
+            } else {
+                return $query;
+            }
+        })->get();
         $data = [];
         foreach ($orders as $order) {
             $data[] = $order->repository->getOverview();
@@ -62,6 +75,7 @@ class OrderRepository extends ModelRepository
      * @param array $data
      * @param ConvertedCustomer $lead
      * @param ConvertedCustomer[] $customers
+     * @param bool $shouldInvoice
      * @return Order
      */
     public static function create(Tour $tour, array $data, ConvertedCustomer $lead, array $customers = [], bool $shouldInvoice = true): Order
@@ -116,7 +130,7 @@ class OrderRepository extends ModelRepository
      * Return the installments with calculated remaining field
      * @return Collection|OrderInstallment[]
      */
-    public function getInstallments(): Collection|array
+    public function getInstallments(bool $final = false): Collection|array
     {
         $customers = $this->order->orderCustomers()->count();
         $paid = $this->order->paid - (($this->order->deposit ?? 0) * $customers) - ($this->order->booking_fee ?? 0);
@@ -124,7 +138,22 @@ class OrderRepository extends ModelRepository
         $installments = OrderInstallment::where('order_id', '=', $this->order->id)
             ->orderBy('due_on')
             ->selectRaw("*, GREATEST((GREATEST(@total,0)-(amount*{$customers}))*-1,0) as remaining, (@total := @total - (amount*{$customers})) AS rt");
-        return $installments->get();
+        $collection = $installments->get();
+        if ($final) {
+            $collection->add($this->generateRemainingOrderInstallment());
+        }
+        return $collection;
+    }
+
+    public function generateRemainingOrderInstallment(): OrderInstallment
+    {
+        return new OrderInstallment([
+            'id' => 0,
+            'order_id' => $this->order->id,
+            'amount' => $this->order->remaining_installment / $this->order->orderCustomers()->count(),
+            'remaining' => min($this->order->remaining, $this->order->remaining_installment),
+            'due_on' => $this->order->tour->final_payment,
+        ]);
     }
 
     /**
@@ -171,14 +200,18 @@ class OrderRepository extends ModelRepository
      * Get total cost amount for an order
      * @return float The total cost of the order
      */
-    public function getCost(): float
+    public function getCost(bool $recache = false): float
     {
+        if ($this->cost !== null && !$recache) {
+            return $this->cost;
+        }
         $total = $this->order->booking_fee ?? 0;
         foreach ($this->order->orderCustomers()->where('is_charged', '=', 1)->get() as $orderCustomer) {
             $total += $orderCustomer->tour_cost;
             if ($orderCustomer->has_surcharge) $total += $orderCustomer->single_occupancy_surcharge;
         }
         $total += $this->getAdditionalComponentTotal();
+        $this->cost = $total;
         return $total;
     }
 
@@ -324,9 +357,14 @@ class OrderRepository extends ModelRepository
      * Get details about the next payment
      * @return OrderInstallment|null Details about the next installment. If installment is null, then no more installments are required
      */
-    public function getNextPaymentDetails(): ?OrderInstallment
+    public function getNextPaymentDetails(bool $includeFinal = true): ?OrderInstallment
     {
-        return $this->getInstallments()->firstWhere('remaining', '>', 0);
+        $installment = $this->getInstallments()->firstWhere('remaining', '>', 0);
+        if ($includeFinal && $installment === null) {
+            $installment = $this->generateRemainingOrderInstallment();
+        }
+        if ($installment === null) return null;
+        return $installment->remaining > 0 ? $installment : null;
     }
 
     public function resetInstallments(): void
@@ -361,27 +399,49 @@ class OrderRepository extends ModelRepository
     public function sendReminderEmails(int $days, int $minDays = -1000): void
     {
         if (!$this->shouldRemind($days, $minDays)) return;
-        $nextInstallment = $this->order->next_installment;
-        if ($this->hasBeenReminded($nextInstallment, $days)) return;
+        $installment = $this->order->next_installment;
+        if ($installment->id > 0) {
+            $this->processInstallmentForReminder($this->order->next_installment, $days, $minDays);
+        }
+    }
+
+    public function sendFinalPaymentEmails(int $days, int $minDays = -1000)
+    {
+        $installment = $this->generateRemainingOrderInstallment();
+        if ($this->shouldRemindForFinal($days, $minDays, $installment)) {
+            $this->processInstallmentForReminder($installment, $days, $minDays);
+        }
+    }
+
+    public function processInstallmentForReminder(OrderInstallment $installment, int $days, int $minDays = -1000)
+    {
+        if ($this->hasBeenReminded($installment, $days)) return;
         PaymentReminder::create([
             'order_id' => $this->order->id,
-            'order_installment_id' => $nextInstallment->id,
+            'order_installment_id' => $installment->id,
             'period' => $days
         ]);
         try {
+            $prefix = $installment->id === 0 ? 'final-' : '';
             if ($days < 0) {
-                (new OrderMail('payment-overdue'))->send($this->order->leadBooker->customer->email_address, $this->order);
+                (new OrderMail($prefix . 'payment-overdue'))->send($this->order->leadBooker->customer->email_address, $this->order);
             } else {
-                (new OrderMail('payment-due'))->send($this->order->leadBooker->customer->email_address, $this->order);
+                (new OrderMail($prefix . 'payment-due'))->send($this->order->leadBooker->customer->email_address, $this->order);
             }
         } catch (MailDisabledException) {}
-
     }
 
     public function shouldRemind(int $days, int $minDays = -1000): bool
     {
         $daysUntil = $this->order->days_until_next_payment;
         return isset($daysUntil) && ($daysUntil <= $days && $daysUntil >= $minDays);
+    }
+
+    public function shouldRemindForFinal(int $days, int $minDays = -1000, OrderInstallment $installment = null)
+    {
+        $installment = $installment ?? $this->generateRemainingOrderInstallment();
+        $daysUntil = days_until($installment->due_on);
+        return $installment->remaining > 0 && (isset($daysUntil) && ($daysUntil <= $days && $daysUntil >= $minDays));
     }
 
     public function update(array $data): Order
@@ -477,7 +537,7 @@ class OrderRepository extends ModelRepository
     public function migrate(Tour $tour, bool $resetPrice = true, bool $resetAdjustments = false)
     {
         foreach ($this->order->orderCustomers as $orderCustomer) {
-            $orderCustomer->repository->removeAllComponents();
+            $orderCustomer->repository->removeAllComponents(true);
             if ($resetAdjustments) {
                 $orderCustomer->adjustments()->delete();
             }
@@ -487,6 +547,7 @@ class OrderRepository extends ModelRepository
             $this->order->deposit = $tour->deposit;
         }
         $this->order->save();
+        $this->order->groups()->delete();
         foreach ($this->order->orderCustomers as $orderCustomer) {
             if ($resetPrice) {
                 $orderCustomer->tour_cost = $tour->base_price_per_person;
@@ -496,8 +557,8 @@ class OrderRepository extends ModelRepository
             $orderCustomer->repository->addAllIncluded();
         }
         $this->resetInstallments();
-        foreach ($this->order->groups as $group) {
-            $group->repository->refreshRooming();
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            RoomingRepository::assignDefaultRooming($orderCustomer);
         }
         if ($resetAdjustments) {
             $this->order->adjustments()->delete();

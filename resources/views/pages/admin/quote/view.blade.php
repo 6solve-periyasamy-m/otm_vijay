@@ -58,6 +58,37 @@
             performRequest(paying, travelling);
         }
 
+        function markSent() {
+            $.get('{{ route('api.quote.sent', ['quote' => $quote,]) }}', {
+                '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
+                '_token': '{{ csrf_token() }}',
+                'paying': getPayingAmount(),
+                'travelling': getTravellingAmount(),
+            }).done(function (xhr, textStatus, errorThrown) {
+                if (xhr.success) {
+                    location.reload();
+                } else {
+                    alert(xhr.message);
+                }
+            }).fail(function (xhr, textStatus, errorThrown) {
+                switch (xhr.status) {
+                    case 429:
+                        alert("You're doing this too quickly! Please wait a second before trying again!")
+                        break;
+                    case 422:
+                        alert("Looks like that isn't a number, please try again!")
+                        break;
+                    case 403:
+                        alert("Looks like that failed, we'll refresh the page for you to try again!")
+                        location.reload();
+                        break;
+                    default:
+                        console.log(xhr);
+                        alert('Something went wrong, please try again');
+                }
+            });
+        }
+
         function performRequest(paying, travelling) {
             $.get('{{ route('api.quote.cost', ['quote' => $quote,]) }}', {
                 '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
@@ -125,6 +156,11 @@
                     {{ Icon::refresh() }}
                     {{ __('quotes.view.buttons.change') }}
                 </a>
+            @else
+                <button onclick="markSent()" class="btn btn-info">
+                    {{ Icon::email() }}
+                    {{ __('quotes.view.buttons.sent') }}
+                </button>
             @endif
             <a href="{{ route('quotes.status.close', ['quote' => $quote,]) }}" class="btn btn-danger">
                 {{ Icon::close() }}

@@ -427,7 +427,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getRemaining(int $paying = 1): float
     {
-        $cost = $this->getTotalCost(1);
+        $cost = $this->getTotalCost($paying);
         $cost -= $this->quote->deposit;
         foreach ($this->quote->installments as $installment) {
             $cost -= $installment->amount;

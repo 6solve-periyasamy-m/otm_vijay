@@ -3,8 +3,8 @@
 namespace Field\Order\Cost;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\DatabaseTestCase;
-use Tests\Traits\TestsOrder;
+use Tests\Bases\DatabaseTestCase;
+use Tests\Traits\Model\TestsOrder;
 
 /**
  * @covers \App\Models\Order\Order::getCostAttribute
@@ -138,7 +138,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
         $addonRoom->save();
         $tourRoom->update(['tour_component_type' => 'Add-on']);
         $tourRoom->save();
-        self::assertEquals($this->getDefaultCost($orderCustomer->order) + 100, $orderCustomer->order->cost);
+        self::assertEquals($this->getDefaultCost($orderCustomer->order) + 100, $orderCustomer->order->repository->getCost(true));
     }
 
     public function testOrderCostSingleWithSurchargeAndMultipleAccommodationAddon()

@@ -11,10 +11,11 @@ use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderTransport;
-use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Intention\PaymentIntentionRepository;
+use App\Repository\Intention\Storage\UpgradeIntention;
 use Gateway;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
@@ -90,19 +91,12 @@ class CustomerComponentController extends Controller
           OrderTransport|OrderFlight|OrderAccommodation|OrderActivity $orderComponent,
           FlightInventoryTourUpgrade|AccommodationInventoryTourUpgrade|TransportInventoryTourUpgrade|ActivityInventoryTourUpgrade $upgrade): JsonResponse
     {
-        $orderCustomer = $orderComponent->group?->orderCustomers()?->first() ?? $orderComponent->orderCustomer;
-        $data = [
-            'upgrades' => [[
-                'customer' => $orderCustomer?->id,
-                'component' => $component,
-                'from' => $orderComponent->tourComponent->id,
-                'to' => $upgrade->upgrade->id,
-            ],],
-        ];
+        $orderCustomer = $orderComponent->orderCustomer;
+        $uIntention = UpgradeIntention::create($orderCustomer, $orderComponent->tourComponent->repository, $upgrade->upgrade->repository);
         $redirect = setting('purchase.upgrade.success.redirect', route('customer.extras', ['reference' => $orderCustomer->order->booking_reference, 'customer' => $orderCustomer->customer,]));
 
         $item = new LineItem($upgrade->description, $upgrade->upgrade->tour_sales_price);
-        $intention = PaymentIntention::build($orderCustomer->customer, $orderCustomer->order->booking_reference, 'Installment', $data);
+        $intention = PaymentIntentionRepository::create($orderCustomer->order, $orderCustomer->customer, 'Installment', [$uIntention,]);
 
         return response()->json(['success' => true, 'location' => Gateway::getDefaultGateway()->checkout([$item,], $intention, $orderCustomer->customer, $redirect)]);
     }

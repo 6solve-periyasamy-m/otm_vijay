@@ -4,8 +4,8 @@ namespace Field\Order;
 
 use App\Models\Helper\OrderStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\DatabaseTestCase;
-use Tests\Traits\TestsOrder;
+use Tests\Bases\DatabaseTestCase;
+use Tests\Traits\Model\TestsOrder;
 
 /**
  * @covers \App\Models\Order\Order::getStatusAttribute
@@ -19,6 +19,8 @@ class OrderStatusTest extends DatabaseTestCase
     public function testBalanceOutstandingNoInstallments()
     {
         $order = $this->generateOrder();
+        $order->tour->update(['final_payment' => now()->addDays(2)]);
+        $order->tour->save();
         $this->assertEquals(OrderStatus::BALANCE_OUTSTANDING, $order->status);
     }
 

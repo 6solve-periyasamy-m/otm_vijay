@@ -13,6 +13,7 @@
                     'dataSrc': "",
                     'data': {
                         '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
+                        'historic': {{( $historic ?? false) ? 1 : 0 }},
                     },
                 },
                 columns:[
@@ -59,9 +60,13 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <a class="btn btn-primary float-end" href="{{ route('orders.create') }}">
+            <a class="btn btn-success float-end" href="{{ route('orders.create') }}">
                 {{ Icon::create() }}
                 <span>Create New</span>
+            </a>
+            <a class="btn btn-primary float-end" style="margin-right: 5px;" href="{{ route('orders.all', ['historic' => !($historic ?? true),]) }}">
+                <i class="icon-eye"></i>
+                <span>{{ !($historic ?? true) ? "Show" : "Hide" }} Historic (Older than {{ setting('system.historic', 6) }} month(s))</span>
             </a>
         </div>
     </div>

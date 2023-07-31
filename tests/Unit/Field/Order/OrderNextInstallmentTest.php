@@ -4,8 +4,8 @@ namespace Field\Order;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\DatabaseTestCase;
-use Tests\Traits\TestsOrder;
+use Tests\Bases\DatabaseTestCase;
+use Tests\Traits\Model\TestsOrder;
 
 /**
  * Tests related to getting the number of days until the next payment is due
@@ -70,7 +70,7 @@ class OrderNextInstallmentTest extends DatabaseTestCase
         $installment = $this->generateOrderInstallment($dueDate, 100);
         $this->generatePayment($installment->order, 100);
         $nextInstallment = $installment->order->next_installment;
-        $this->assertNull($nextInstallment);
+        $this->assertEquals(0, $nextInstallment->id); // Final installment is now included in next installment
     }
 
     /**
@@ -80,7 +80,7 @@ class OrderNextInstallmentTest extends DatabaseTestCase
     public function testNoInstallmentAvailable()
     {
         $order = $this->generateOrder();
-        $this->assertNull($order->next_installment);
+        $this->assertEquals(0, $order->next_installment->id);
     }
 
     /**
@@ -182,7 +182,7 @@ class OrderNextInstallmentTest extends DatabaseTestCase
         $this->generateOrderInstallment($dueDate, 100, $installment->order);
         $this->generatePayment($installment->order, 200);
         $nextInstallment = $installment->order->next_installment;
-        $this->assertNull($nextInstallment);
+        $this->assertEquals(0, $nextInstallment->id); // Final installment is now included in next installment
     }
 
     /**
@@ -196,7 +196,7 @@ class OrderNextInstallmentTest extends DatabaseTestCase
         $this->generateOrderInstallment($dueDate, 100, $installment->order);
         $this->generatePayment($installment->order, 200);
         $nextInstallment = $installment->order->next_installment;
-        $this->assertNull($nextInstallment);
+        $this->assertEquals(0, $nextInstallment->id); // Final installment is now included in next installment
     }
 
     /**
@@ -210,7 +210,7 @@ class OrderNextInstallmentTest extends DatabaseTestCase
         $this->generateOrderInstallment($dueDate, 100, $installment->order);
         $this->generatePayment($installment->order, 200);
         $nextInstallment = $installment->order->next_installment;
-        $this->assertNull($nextInstallment);
+        $this->assertEquals(0, $nextInstallment->id); // Final installment is now included in next installment
     }
 
 }

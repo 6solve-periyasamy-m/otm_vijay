@@ -8,6 +8,7 @@ use App\Models\Quote\Quote;
 
 class QuoteStatusController extends Controller
 {
+
     public function changes(Quote $quote)
     {
         $quote->repository->update(['quote_status' => QuoteStatus::CHANGES,]);

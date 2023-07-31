@@ -1,4 +1,6 @@
-@php/** @var \App\Models\Accommodation\Accommodation $accommodation */@endphp
+@php
+    /** @var \App\Models\Accommodation\Accommodation $accommodation */
+@endphp
 <div class="otm-callout">
     <div class="row">
         @if(isset($accommodation->image_url))
@@ -25,6 +27,10 @@
             <div class="col-12 col-xl-6">
                 <p>Currency</p>
                 <h6 class="fw-bold">{{ $accommodation->currency }}</h6>
+            </div>
+            <div class="col-12">
+                <p>Internal Notes</p>
+                <h6 class="fw-bold">{{ $accommodation->internal_notes }}</h6>
             </div>
             <div class="col-12">
                 @can('update', \App\Models\Accommodation\Accommodation::class)

@@ -17,14 +17,16 @@ class Room {
     price: number;
     start: Date;
     end: Date;
+    available: boolean;
 
-    constructor(id: number, name: string, price: number, size: number, start: Date, end: Date) {
+    constructor(id: number, name: string, price: number, size: number, start: Date, end: Date, available: boolean = true) {
         this.id = id;
         this.name = name;
         this.size = size;
         this.price = price;
         this.start = new Date(start.setHours(0, 0, 0));
         this.end = new Date(end.setHours(23, 59, 59));
+        this.available = available;
     }
 
     public containsDate(date: Date): boolean {
@@ -256,6 +258,7 @@ interface RemoteRoom {
     end: number;
     name: string;
     size: number;
+    available: boolean|null;
 }
 
 interface RemoteCustomer {
@@ -318,7 +321,7 @@ async function generateRoomingManager(url: string, parameters: Object = {}): Pro
     let rooms = [];
     for (const id of Object.keys(data.rooms)) {
         let nId: number = parseInt(id);
-        rooms.push(new Room(nId, data.rooms[nId].name, data.rooms[nId].price, data.rooms[nId].size, new Date(data.rooms[nId].start * 1000), new Date(data.rooms[nId].end * 1000)));
+        rooms.push(new Room(nId, data.rooms[nId].name, data.rooms[nId].price, data.rooms[nId].size, new Date(data.rooms[nId].start * 1000), new Date(data.rooms[nId].end * 1000), data.rooms[nId].available ?? true));
     }
     let groups = [];
     for (const id of Object.keys(data.groups)) {

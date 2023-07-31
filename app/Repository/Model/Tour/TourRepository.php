@@ -531,6 +531,11 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         return $this->isLocked('passport');
     }
 
+    public function isOrderNotesLocked(): bool
+    {
+        return $this->isLocked('order-notes');
+    }
+
     public function isAccommodationLocked(): bool
     {
         return $this->isLocked('accommodation');

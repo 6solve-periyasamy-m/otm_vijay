@@ -31,6 +31,7 @@ use Illuminate\Support\Carbon;
  * @property-read Address $active_address
  * @property-read BrandRepository $repository
  * @property-read string $image
+ * @property-read string $image_path The raw path to the image on the system
  * @method static Builder|Brand newModelQuery()
  * @method static Builder|Brand newQuery()
  * @method static Builder|Brand query()
@@ -65,7 +66,12 @@ class Brand extends Model
 
     public function getImageAttribute(): string
     {
-        return asset($this->logo ?? setting('company.logo', ''));
+        return asset($this->image_path);
+    }
+
+    public function getImagePathAttribute(): string
+    {
+        return $this->logo ?? setting('company.logo', '');
     }
 
     public static function getSystemAddress(): Address

@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\User;
+use Carbon\Carbon;
+use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Http\UploadedFile;
 
 if (!function_exists('sigfig')) {
@@ -170,5 +173,63 @@ if (!function_exists('nbsp')) {
     function nbsp(string $str): string
     {
         return str_replace(' ', '&nbsp;', $str);
+    }
+}
+if (!function_exists('is_otm')) {
+    function is_otm(): bool
+    {
+        $user = Auth::user();
+        if (empty($user) || !($user instanceof User)) return false;
+        return $user->getHighestRoleLevel() >= 999;
+    }
+}
+
+if (!function_exists('days_until')) {
+    /**
+     * Calculates the number of days until/since now. Returns negative if in the past
+     * @param Carbon|null $date The date to check. Returns null if null
+     * @return int|null The number of days, or null if null is passed
+     */
+    function days_until(Carbon|null $date): int|null
+    {
+        if (empty($date)) return null;
+        return $date->isBefore(Carbon::now()) ? ($date->diffInDays(Carbon::now())) * -1 : ($date->diffInDays(Carbon::now()));
+    }
+}
+
+if (!function_exists('generify_date')) {
+    /**
+     * Takes a date in an unknown format, and attempts to convert it to Y-m-d. Returns null if invalid
+     * @param string|null $date
+     * @return string|null
+     */
+    function generify_date(string|null $date): string|null
+    {
+        if ($date === null) return null;
+        try {
+            $carbon = Carbon::createFromFormat('Y-m-d', $date);
+            return $carbon->format('Y-m-d');
+        } catch (InvalidFormatException) {}
+        try {
+            $carbon = Carbon::createFromFormat('d/m/Y', $date);
+            return $carbon->format('Y-m-d');
+        } catch (InvalidFormatException) {}
+        try {
+            $carbon = Carbon::createFromFormat('m/d/Y', $date);
+            return $carbon->format('Y-m-d');
+        } catch (InvalidFormatException) {}
+        return null;
+    }
+}
+if (!function_exists('img_to_b64')) {
+    function img_to_b64(string $file, string $prefix = "data:image/png;base64,"): string
+    {
+        return $prefix.base64_encode(file_get_contents(public_path($file)));
+    }
+}
+if (!function_exists('svg_to_b64')) {
+    function svg_to_b64(string $file): string
+    {
+        return img_to_b64($file, "data:image/svg+xml;base64,");
     }
 }

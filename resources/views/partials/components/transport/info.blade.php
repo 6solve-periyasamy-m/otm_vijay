@@ -1,4 +1,6 @@
-@php/** @var \App\Models\Transport\Transport $transport */@endphp
+@php
+    /** @var \App\Models\Transport\Transport $transport */
+@endphp
 <div class="otm-callout">
     <div class="row">
         @if(isset($transport->image_url))
@@ -33,6 +35,10 @@
             <div class="col-12 col-xl-6">
                 <p>Description</p>
                 <h6 class="fw-bold">{{ $transport->description }}</h6>
+            </div>
+            <div class="col-12 col-xl-6">
+                <p>Internal Notes</p>
+                <h6 class="fw-bold">{{ $transport->internal_notes }}</h6>
             </div>
             <div class="col-12">
                 @can('update', \App\Models\Transport\Transport::class)

@@ -25,7 +25,8 @@ use Illuminate\Validation\Rule;
  * @property int|null $merchandise_type_id
  * @property string $name
  * @property string|null $image_url
- * @property string|null $notes
+ * @property string|null $internal_notes
+ * @property string|null $external_notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
