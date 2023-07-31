@@ -3,8 +3,8 @@
 namespace App\Repository\Model\Customer;
 
 use App\Models\Customer\Customer;
-use App\Repository\Abstracts\ModelRepository;
 use App\Models\Order\Order;
+use App\Repository\Abstracts\ModelRepository;
 
 class CustomerRepository extends ModelRepository
 {
@@ -94,7 +94,6 @@ class CustomerRepository extends ModelRepository
     public function forget(): void
     {
         $this->update([
-            "id" => 1,
             "email_address" => null,
             "password" => null,
             "email_verified_at" => null,
@@ -108,8 +107,6 @@ class CustomerRepository extends ModelRepository
             "date_of_birth" => null,
             "mobile_number" => null,
             "other_phone_number" => null,
-            "home_address_id" => 7,
-            "billing_address_id" => 8,
             "emergency_contact_name" => null,
             "emergency_contact_relationship" => null,
             "emergency_contact_telephone" => null,

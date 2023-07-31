@@ -90,6 +90,13 @@
                             {{ Icon::customer() }}
                             Login as Customer
                         </a>
+                        <form class="d-none forget" method="post" action="{{ route('customers.forget', ['customer' => $customer->id]) }}">
+                            @csrf
+                        </form>
+                        <a href="javascript:confirm('This will permanently wipe this customers personal details from the system, and cannot be reversed, continue?') && $('.forget').submit()" class="btn btn-danger">
+                            {{ Icon::forget() }}
+                            Forget Customer
+                        </a>
                     </div>
                 </div>
             </div>
