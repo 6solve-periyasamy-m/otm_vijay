@@ -106,7 +106,19 @@ class BookingRepository extends ModelRepository
 
     public function getDueTodayAmount(): float
     {
-        return ($this->booking->tour->booking_fee ?? 0) + (($this->booking->tour->deposit ?? 0) * $this->booking->travellers()->count());
+        $travellers = $this->booking->travellers()->count();
+        $upfront = ($this->booking->tour->booking_fee ?? 0) + (($this->booking->tour->deposit ?? 0) * $travellers);
+        if (flag('installments.force', false)) {
+            if ($this->booking->tour->final_payment->isBefore(now())) {
+                return $this->getTotalCost();
+            }
+            foreach ($this->booking->tour->paymentInstallments as $installment) {
+                if ($installment->due_on->isBefore(now())) {
+                    $upfront += $installment->amount * $travellers;
+                }
+            }
+        }
+        return $upfront;
     }
 
     public function getSingleOccupancyCount(): int
