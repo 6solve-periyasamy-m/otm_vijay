@@ -108,6 +108,12 @@ class CustomerController extends Controller
         return redirect()->route('customer.portal');
     }
 
+    public function forget(Customer $customer)
+    {
+        $customer->repository->forget();
+        return redirect()->route('customers.all');
+    }
+
     public function view(Customer $customer)
     {
         return view('pages.models.customers.view', ['customer' => $customer,]);
