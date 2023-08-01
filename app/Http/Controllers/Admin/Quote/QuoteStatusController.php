@@ -8,11 +8,6 @@ use App\Models\Quote\Quote;
 
 class QuoteStatusController extends Controller
 {
-    public function sent(Quote $quote)
-    {
-        $quote->repository->update(['quote_status' => QuoteStatus::AWAITING,]);
-        return redirect()->route('quotes.view', ['quote' => $quote,]);
-    }
 
     public function changes(Quote $quote)
     {

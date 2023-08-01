@@ -3,6 +3,7 @@
 @section('title', 'View Itinerary')
 
 @php
+$orderNotesLock = $order->tour->repository->isOrderNotesLocked();
 $accommodationLock = $order->tour->repository->isAccommodationLocked();
 $activityLock = $order->tour->repository->isActivityLocked();
 $flightLock = $order->tour->repository->isFlightLocked();
@@ -154,19 +155,19 @@ $transportLock = $order->tour->repository->isTransportLocked();
                     </div>
                     <div class="card">
                         <div class="card-body row">
-                            @if($isLead)
-                            <x-customer.input.text-area name="order_notes" value="{{ $order->external_notes }}" width="6">
-                                Order Notes
-                            </x-customer.input.text-area>
-                            @endif
-                            <x-customer.input.text-area name="order_customer_notes" value="{{ $orderCustomer->external_notes }}" width="{{ $isLead ? 6 : 12 }}">
-                                Customer Specific Order Notes
-                            </x-customer.input.text-area>
-                            @if($accommodationLock || $activityLock || $flightLock || $transportLock)
+                            @if($orderNotesLock || $accommodationLock || $activityLock || $flightLock || $transportLock)
                                 <span class="fw-bold col-xl-12">
                                     Some or all of the below sections may be locked due to the tour starting soon. Changes made may not be reflected, therefore if any urgent changes are required, please contact us.
                                 </span>
                             @endif
+                            @if($isLead)
+                            <x-customer.input.text-area disabled="{{$orderNotesLock}}" name="order_notes" value="{{ $order->external_notes }}" width="6">
+                                Order Notes
+                            </x-customer.input.text-area>
+                            @endif
+                            <x-customer.input.text-area disabled="{{$orderNotesLock}}" name="order_customer_notes" value="{{ $orderCustomer->external_notes }}" width="{{ $isLead ? 6 : 12 }}">
+                                Customer Specific Order Notes
+                            </x-customer.input.text-area>
                             <x-customer.input.text-area disabled="{{$accommodationLock}}" name="accommodation_notes" value="{{ $orderCustomer->accommodation_notes }}" width="3">
                                 Accommodation Notes
                             </x-customer.input.text-area>

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\Admin\Quote\StartConversionRequest;
 use App\Http\Requests\Api\Admin\Quote\AddComponentRequest;
 use App\Http\Requests\Api\Admin\Quote\QuoteCostRequest;
 use App\Http\Requests\Api\Admin\Quote\UnknownTravellerRequest;
+use App\Models\Helper\QuoteStatus;
 use App\Models\Quote\Quote;
 use App\Repository\Abstracts\InventoryRepository;
 
@@ -45,6 +47,14 @@ class QuoteController extends ApiController
             'f_ctc' => f_currency($costToCompany),
         ];
         return response()->json($data);
+    }
+
+
+    public function sent(StartConversionRequest $request, Quote $quote)
+    {
+        $quote->repository->update(['quote_status' => QuoteStatus::AWAITING,]);
+        $quote->repository->generateSent($quote->leadTraveller->email, $request->paying, $request->travelling);
+        return response()->json(['success' => true,]);
     }
 
     public function addComponents(AddComponentRequest $request, Quote $quote, string $component)

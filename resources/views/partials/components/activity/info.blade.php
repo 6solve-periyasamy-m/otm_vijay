@@ -1,4 +1,6 @@
-@php/** @var \App\Models\Activity\Activity $activity */@endphp
+@php
+    /** @var \App\Models\Activity\Activity $activity */
+@endphp
 <div class="otm-callout">
     <div class="row">
         @if(isset($activity->image_url))

@@ -1,4 +1,6 @@
-@php/** @var \App\Models\Transport\Transport $transport */@endphp
+@php
+    /** @var \App\Models\Transport\Transport $transport */
+@endphp
 <div class="otm-callout">
     <div class="row">
         @if(isset($transport->image_url))
