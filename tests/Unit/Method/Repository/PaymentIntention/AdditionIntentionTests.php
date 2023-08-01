@@ -4,8 +4,8 @@ namespace Method\Repository\PaymentIntention;
 
 use App\Repository\Intention\PaymentIntentionRepository;
 use App\Repository\Intention\Storage\AdditionIntention;
-use Tests\DatabaseTestCase;
-use Tests\Traits\TestsOrder;
+use Tests\Bases\DatabaseTestCase;
+use Tests\Traits\Model\TestsOrder;
 
 class AdditionIntentionTests extends DatabaseTestCase
 {
