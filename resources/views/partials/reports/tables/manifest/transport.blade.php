@@ -6,7 +6,7 @@
         <th scope="col">Passport Name</th>
         <th scope="col">Operator</th>
         <th scope="col">Travel Class</th>
-        <th scope="col">Ticket Number</th>
+        <th scope="col">Transport Number</th>
         <th scope="col">Departure Date</th>
         <th scope="col">Departure Time</th>
         <th scope="col">Departure Address</th>
