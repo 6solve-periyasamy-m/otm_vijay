@@ -15,6 +15,9 @@ use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Tour\Tour;
+use App\Models\Voucher\Executors\FlatCostReductionExecutor;
+use App\Models\Voucher\Executors\PercentageCostReductionExecutor;
+use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\RoomingRepository;
@@ -72,6 +75,11 @@ class BookingRepository extends ModelRepository
         }
     }
 
+    public function applyVoucher(VoucherCode $voucher): bool
+    {
+        return $this->booking->leadTraveller->repository->applyVoucher($voucher);
+    }
+
     public function removeComponentFromAll(InventoryTourRepository $repository): void
     {
         foreach ($this->booking->travellers as $traveller) {
@@ -100,6 +108,18 @@ class BookingRepository extends ModelRepository
         $cost = $this->booking->tour->booking_fee ?? 0;
         foreach ($this->booking->travellers as $traveller) {
             $cost += $traveller->total_cost;
+        }
+        /** @var VoucherCode $voucher */
+        foreach ($this->booking->vouchers()->get() as $voucher) {
+            foreach ($voucher->results as $result) {
+                $executor = $result->executor();
+                if ($executor instanceof FlatCostReductionExecutor) {
+                    $cost += $executor->getAmount();
+                }
+                if ($executor instanceof PercentageCostReductionExecutor) {
+                    $cost -= $executor->getAmount($this->booking->tour->base_price_per_person);
+                }
+            }
         }
         return $cost;
     }
@@ -339,6 +359,17 @@ class BookingRepository extends ModelRepository
             $base += $this->booking->tour->remaining_installment;
             $base += $traveller->surcharge_amount;
             $base += $traveller->additional_cost;
+            foreach ($traveller->vouchers as $voucher) {
+                foreach ($voucher->results as $result) {
+                    $executor = $result->executor();
+                    if ($executor instanceof FlatCostReductionExecutor) {
+                        $base += $executor->getAmount();
+                    }
+                    if ($executor instanceof PercentageCostReductionExecutor) {
+                        $base += $executor->getAmount($traveller->base_cost);
+                    }
+                }
+            }
         }
         return $base;
     }
@@ -410,8 +441,28 @@ class BookingRepository extends ModelRepository
         }
     }
 
+    public function getBreakdown(): array
+    {
+        $data = [];
+        foreach ($this->booking->travellers as $traveller) {
+            $data[$traveller->id] = [
+                'name' => $traveller->full_name,
+                'cost' => $traveller->repository->getBaseCost(),
+                'extras' => $traveller->repository->getExtrasBreakdown(),
+            ];
+        }
+        return $data;
+    }
+
     public function hasRooming(): bool
     {
         return $this->booking->tour->templates->count() > 0;
+    }
+
+    public function validateVouchers(): void
+    {
+        foreach ($this->booking->travellers()->with('vouchers')->get() as $traveller) {
+            $traveller->repository->validateVouchers();
+        }
     }
 }

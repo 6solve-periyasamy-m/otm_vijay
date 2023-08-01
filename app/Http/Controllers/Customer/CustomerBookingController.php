@@ -101,6 +101,7 @@ class CustomerBookingController extends Controller
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
         if (!$tour->repository->hasEnoughStock($booking->travellers()->count())) abort(404, 'That tour is out of stock');
+        $booking->repository->validateVouchers();
         return view('pages.customer.booking.summary', ['booking' => $booking, 'tour' => $tour,]);
     }
 

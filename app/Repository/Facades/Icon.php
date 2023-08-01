@@ -47,6 +47,11 @@ class Icon
         return $this->solid('plus');
     }
 
+    public function voucher(): View|string|Closure
+    {
+        return $this->ticket();
+    }
+
     public function create(): View|string|Closure
     {
         return $this->plus();
@@ -70,6 +75,11 @@ class Icon
     public function delete(): View|string|Closure
     {
         return $this->trash();
+    }
+
+    public function eye(): View|string|Closure
+    {
+        return $this->solid('eye');
     }
 
     public function list(): View|string|Closure
@@ -431,17 +441,17 @@ class Icon
     {
         return $this->solid('floppy-disk');
     }
-    
+
     public function facebook(): View|string|Closure
     {
         return $this->brand('facebook');
     }
-    
+
     public function twitter(): View|string|Closure
     {
         return $this->brand('twitter');
     }
-    
+
     public function instagram(): View|string|Closure
     {
         return $this->brand('instagram');
