@@ -6,9 +6,11 @@
         <h2 class="mb-0" style="width: 100%; text-align: center;">Payment Schedule</h2>
     </x-slot:header>
 
-    <div class="fw-bold">
-
-    </div>
+    @if(flag('installments.force', false))
+        <div class="fw-bold">
+            If there are past dated instalments in the schedule you will be expected to pay these in addition to the deposit in order to secure your booking.
+        </div>
+    @endif
 
     <table class="table table-striped text-center table-mobile-sided">
         <thead>
