@@ -267,6 +267,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             $inventory->check_in,
             $inventory->check_out,
             Icon::accommodation(),
+            $inventory->external_notes,
             $upgradeName,
             [
                 'Check In' => f_datetime($inventory->check_in),

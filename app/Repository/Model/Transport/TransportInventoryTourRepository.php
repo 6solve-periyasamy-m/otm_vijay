@@ -249,6 +249,7 @@ class TransportInventoryTourRepository extends InventoryTourRepository
             $inventory->departs_at,
             $inventory->arrives_at,
             Icon::transport(),
+            $inventory->external_notes,
             $upgradeName,
             [
                 'Transport Type' => $component->transportType->name,

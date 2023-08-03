@@ -22,8 +22,16 @@
                         <img src="{{ asset($component->image) }}" class="booking-image"/>
                     </div>
                     <div class="col-xl-10 col-lg-9 col-md-8 col-6">
-                        <span class="fw-bold">Description<br /></span>
-                        {{ $component->description }}
+                        <div>
+                            <span class="fw-bold">Description<br /></span>
+                            {{ $component->description }}
+                        </div>
+                        @if($component->notes)
+                        <div class="border-top mt-1">
+                            <span class="fw-bold">Notes<br /></span>
+                            {{ $component->notes }}
+                        </div>
+                        @endif
                     </div>
                 @else
                     {{ $component->description }}
