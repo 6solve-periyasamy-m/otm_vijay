@@ -6,6 +6,7 @@
 <html lang="en">
 <head>
     <title>Itinerary - {{$orderCustomer->order->booking_reference}} - {{$orderCustomer->customer_name}}</title>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/customer.css') }}"/>
 </head>
 <body>
