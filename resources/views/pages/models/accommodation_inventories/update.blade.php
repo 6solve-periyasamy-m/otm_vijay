@@ -16,6 +16,6 @@
       'purchase_price' => $accommodationInventory->purchase_price,
       'sales_price' => $accommodationInventory->sales_price,
       'currency' => $accommodationInventory->currency,
-      'notes' => $accommodationInventory->notes,
+      'notes' => $accommodationInventory->internal_notes,
     ])
 @endsection

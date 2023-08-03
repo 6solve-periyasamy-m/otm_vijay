@@ -6,3 +6,5 @@
     ['name' => 'Purchase Price', 'field' => 'purchase_price', 'value' => $purchase_price ?? null, 'width' => 6, ])
 @include('partials.fields.text',
     ['name' => 'Sales Price', 'field' => 'sales_price', 'value' => $sales_price ?? null, 'width' => 6, ])
+@include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'value' => $notes ?? null])
+@include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'value' => $external_notes ?? null])

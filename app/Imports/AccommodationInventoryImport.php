@@ -40,7 +40,7 @@ class AccommodationInventoryImport implements ToCollection, WithHeadingRow, With
                 'stock' => trim($row['stock']),
                 'purchase_price' => trim($row['purchase_price']),
                 'sales_price' => trim($row['sales_price']) != '' ? trim($row['sales_price']) : trim($row['purchase_price']),
-                'notes' => trim($row['notes']),
+                'internal_notes' => trim($row['notes']),
             ]);
         }
         return $data;

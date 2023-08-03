@@ -14,5 +14,5 @@
     Stock: {{ $accommodationInventory->stock }}<br/>
     Purchase Price: {{ $accommodationInventory->purchase_price }}<br/>
     Sales Price: {{ $accommodationInventory->sales_price }}<br/>
-    Notes: {{ $accommodationInventory->notes }}<br/>
+    Notes: {{ $accommodationInventory->internal_notes }}<br/>
 @endsection

@@ -14,5 +14,5 @@
     Purchase Price: {{ $flightInventory->purchase_price }}<br/>
     Sales Price: {{ $flightInventory->sales_price }}<br/>
     Currency: {{ $flightInventory->currency }}<br/>
-    Notes: {{ $flightInventory->notes }}<br/>
+    Notes: {{ $flightInventory->internal_notes }}<br/>
 @endsection

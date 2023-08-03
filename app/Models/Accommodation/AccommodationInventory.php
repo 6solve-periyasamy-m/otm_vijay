@@ -34,7 +34,8 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int $stock The available stock for this inventory
  * @property float|null $purchase_price
  * @property float|null $sales_price
- * @property string|null $notes
+ * @property string|null $internal_notes
+ * @property string|null $external_notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -80,7 +81,7 @@ class AccommodationInventory extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes, HasRelationships;
 
-    protected $fillable = ['accommodation_id', 'room_type_id', 'board_type_id', 'check_in', 'check_in_time_confirmed', 'check_out', 'check_out_time_confirmed', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'notes', 'currency_id'];
+    protected $guarded = [];
     protected array $cascadeDeletes = ['tourComponents'];
     protected $casts = [
         'check_in' => 'datetime',

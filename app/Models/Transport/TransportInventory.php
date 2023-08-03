@@ -34,7 +34,8 @@ use Illuminate\Support\Carbon;
  * @property float $purchase_price
  * @property float $sales_price
  * @property string|null $ticket_number
- * @property string|null $notes
+ * @property string|null $internal_notes
+ * @property string|null $external_notes
  * @property int $arrival_time_confirmed
  * @property int $departure_time_confirmed
  * @property Carbon|null $created_at
@@ -79,7 +80,7 @@ class TransportInventory extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['transport_id', 'travel_class_id', 'departs_at', 'departure_time_confirmed', 'arrives_at', 'arrival_time_confirmed', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes', 'ticket_number'];
+    protected $guarded = [];
     protected array $cascadeDeletes = ['tourComponents'];
     protected $casts = [
         'departs_at' => 'datetime',

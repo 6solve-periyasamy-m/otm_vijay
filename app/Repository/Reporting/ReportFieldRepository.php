@@ -741,9 +741,13 @@ class ReportFieldRepository
                 'method' => 'sales_price',
                 'format' => 'currency',
             ],
-            'notes' => [
-                'name' => 'Notes',
-                'method' => 'notes',
+            'internal_notes' => [
+                'name' => 'Internal Notes',
+                'method' => 'internal_notes',
+            ],
+            'external_notes' => [
+                'name' => 'External Notes',
+                'method' => 'external_notes',
             ],
             'tour_count' => [
                 'name' => 'Used on Tours',
