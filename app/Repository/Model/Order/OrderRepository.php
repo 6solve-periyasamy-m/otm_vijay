@@ -9,6 +9,7 @@ use App\Models\Customer\Customer;
 use App\Models\Helper\OrderStatus;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
+use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
@@ -22,6 +23,7 @@ use App\Repository\Storage\ConvertedCustomer;
 use App\Repository\Storage\Rooming\RemoteGroup;
 use Cache;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -42,6 +44,11 @@ class OrderRepository extends ModelRepository
     public function mailer(): OrderMailer
     {
         return new OrderMailer($this->order);
+    }
+
+    public function getTravellerBaseCosts(): float|int
+    {
+        return $this->order->orderCustomers()->where('is_charged', true)->sum('tour_cost');
     }
 
     public static function getOrdersOverview(bool $historic = false): array
@@ -191,9 +198,14 @@ class OrderRepository extends ModelRepository
         return $installment;
     }
 
-    public function addAdjustment(float $amount, string $reason, Carbon $when)
+    public function addAdjustment(float $amount, string $reason, Carbon|null $when = null): Model|bool
     {
-        
+        if ($when === null) {
+            $when = now();
+        }
+        $adjustment = $this->order->adjustments()->save(ManualAdjustment::make(['amount' => sigfig($amount), 'reason' => $reason, 'date' => $when,]));
+        $this->refresh();
+        return $adjustment;
     }
 
     /**
@@ -464,6 +476,7 @@ class OrderRepository extends ModelRepository
     public function refresh()
     {
         $this->getOrderStatus(true);
+        $this->getCost(true);
     }
 
     public function getAdditionalComponentTotal():float

@@ -335,9 +335,9 @@ class ReportFieldRepository
                         'name' => 'Travel Class',
                         'method' => 'travelClass',
                     ],
-                    'ticket_number' => [
-                        'name' => 'Ticket Number',
-                        'method' => 'ticket_number',
+                    'transport_number' => [
+                        'name' => 'Transport Number',
+                        'method' => 'transport_number',
                     ],
                     'departs_at' => [
                         'name' => 'Departs At',

@@ -12,6 +12,7 @@ use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
+use App\Models\Voucher\OrderVoucher;
 use App\Repository\Model\Order\OrderRepository;
 use Database\Factories\Order\OrderFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -49,6 +50,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property Carbon|null $deleted_at
  * @property string|null $token The token used during the booking process
  * @property-read Collection|ManualAdjustment[] $adjustments The manual adjustments on the order
+ * @property-read Collection|OrderVoucher[] $vouchers
  * @property-read int|null $adjustments_count The amount of manual adjustments on the order
  * @property-read int|null $days_until_next_payment The number of days until the next payment is due, or null if all installments are paid
  * @property-read Collection|Customer[] $customers The customers associated with this order
@@ -141,6 +143,11 @@ class Order extends Model
     public function tour(): BelongsTo
     {
         return $this->belongsTo(Tour::class, 'tour_id');
+    }
+
+    public function vouchers(): HasMany
+    {
+        return $this->hasMany(OrderVoucher::class, 'order_id');
     }
 
     public function orderCustomers(): HasMany

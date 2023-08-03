@@ -65,7 +65,7 @@ class TransportManifestRepository implements HasTransportManifest
             $row->operator = $orderComponent->tourComponent->inventory->component->operator->name;
             $row->departure = $orderComponent->tourComponent->inventory->component->departureAddress;
             $row->arrival = $orderComponent->tourComponent->inventory->component->arrivalAddress;
-            $row->number = $orderComponent->tourComponent->inventory->ticket_number;
+            $row->number = $orderComponent->tourComponent->inventory->transport_number;
             $row->ticket = $orderComponent->tourComponent->inventory->travelClass->name;
             $row->component = $orderComponent->tourComponent->tour_component_type;
             $row->start = $orderComponent->tourComponent->inventory->departs_at;

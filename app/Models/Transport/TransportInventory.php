@@ -33,7 +33,7 @@ use Illuminate\Support\Carbon;
  * @property int $stock
  * @property float $purchase_price
  * @property float $sales_price
- * @property string|null $ticket_number
+ * @property string|null $transport_number
  * @property string|null $internal_notes
  * @property string|null $external_notes
  * @property int $arrival_time_confirmed

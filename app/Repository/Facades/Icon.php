@@ -32,9 +32,24 @@ class Icon
         return $this->new($name, Icon::BRAND);
     }
 
+    public function eraser(): View|string|Closure
+    {
+        return $this->solid('eraser');
+    }
+
+    public function forget(): View|string|Closure
+    {
+        return $this->eraser();
+    }
+
     public function plus(): View|string|Closure
     {
         return $this->solid('plus');
+    }
+
+    public function voucher(): View|string|Closure
+    {
+        return $this->ticket();
     }
 
     public function create(): View|string|Closure
@@ -60,6 +75,11 @@ class Icon
     public function delete(): View|string|Closure
     {
         return $this->trash();
+    }
+
+    public function eye(): View|string|Closure
+    {
+        return $this->solid('eye');
     }
 
     public function list(): View|string|Closure
@@ -421,17 +441,17 @@ class Icon
     {
         return $this->solid('floppy-disk');
     }
-    
+
     public function facebook(): View|string|Closure
     {
         return $this->brand('facebook');
     }
-    
+
     public function twitter(): View|string|Closure
     {
         return $this->brand('twitter');
     }
-    
+
     public function instagram(): View|string|Closure
     {
         return $this->brand('instagram');

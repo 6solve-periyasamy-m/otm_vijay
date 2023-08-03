@@ -26,7 +26,7 @@
             <thead class="thead-dark">
             <tr>
                 <th scope="col">Travel Class</th>
-                <th scope="col">Ticket Number</th>
+                <th scope="col">Transport Number</th>
                 <th scope="col">Departure Date Time</th>
                 <th scope="col">Arrival Date Time</th>
                 <th scope="col">FIT Selectable</th>
@@ -41,7 +41,7 @@
             @foreach($transport->transportInventory as $inventory)
                 <tr>
                     <td>{{ $inventory->travelClass->name }}</td>
-                    <td>{{ $inventory->ticket_number ?? 'Not Set' }}</td>
+                    <td>{{ $inventory->transport_number ?? 'Not Set' }}</td>
                     <td data-sort="{{$inventory->departs_at->unix()}}">
                         {{ f_datetime($inventory->departs_at) }}&nbsp
                         <input type="checkbox" disabled

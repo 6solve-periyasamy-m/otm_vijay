@@ -2,7 +2,6 @@
 
 namespace Tests\Bases;
 
-use DB;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 abstract class DatabaseTestCase extends TestCase
@@ -12,13 +11,12 @@ abstract class DatabaseTestCase extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        DB::beginTransaction();
         $this->seed();
     }
 
     protected function tearDown(): void
     {
-        DB::rollBack();
         parent::tearDown();
+        gc_collect_cycles();
     }
 }
