@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="{{ asset('css/customer.css') }}"/>
 </head>
 <body>
+<div class="card">
+    <div class="card-body">
+        <h1 class="mb-0" style="width: 100%; text-align: center;">{{$orderCustomer->order->tour->name}} - {{$orderCustomer->order->booking_reference}} - {{$orderCustomer->customer_name}}</h1>
+    </div>
+</div>
 @foreach($orderCustomer->repository->getComponentsForItinerary() as $day => $components)
     <div class="card">
         <div class="card-body">
