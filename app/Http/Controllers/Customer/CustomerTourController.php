@@ -21,10 +21,11 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Intention\PaymentIntentionRepository;
 use App\Repository\Intention\Storage\AdditionIntention;
 use Gateway;
+use Spatie\Browsershot\Browsershot;
 
 class CustomerTourController extends CustomerController
 {
-    public function showItinerary(?Order $reference = null, ?Customer $customer = null)
+    private function getOrderCustomer(?Order $reference = null, ?Customer $customer = null): OrderCustomer|null
     {
         $customer = $customer ?? $this->user();
         $order = $reference ??  $customer->repository->getDefaultOrder();
@@ -37,49 +38,49 @@ class CustomerTourController extends CustomerController
                 break;
             }
         }
-        if (!isset($oCustomer)) abort(404);
+        return $oCustomer;
+    }
+
+    public function showItinerary(?Order $reference = null, ?Customer $customer = null)
+    {
+        $orderCustomer = $this->getOrderCustomer($reference, $customer);
+        if (!isset($orderCustomer)) abort(404);
         return view('pages.customer.itinerary', [
-            'itinerary' => $oCustomer->repository->getItinerary(),
-            'orderCustomer' => $oCustomer,
-            'order' => $order,
+            'orderCustomer' => $orderCustomer,
+            'order' => $orderCustomer->order,
             'orders' => $this->user()->orders,
-            'editable' => self::getOrderCustomers($order, $this->user()),
+            'editable' => self::getOrderCustomers($orderCustomer->order, $this->user()),
         ]);
+    }
+
+    public function downloadItinerary(?Order $reference = null, ?Customer $customer = null)
+    {
+        $orderCustomer = $this->getOrderCustomer($reference, $customer);
+        if (!isset($orderCustomer)) abort(404);$invoice = Browsershot::html(view('pdf.itinerary', ['orderCustomer' => $orderCustomer,])->render())->noSandbox();
+        $invoice->showBackground()->margins(10, 2, 10, 2);
+        return response()->stream(function () use ($invoice) { echo $invoice->pdf(); }, 200, ['Content-Type' => 'application/pdf']);
+
     }
 
     public function showExtras(?Order $reference = null, ?Customer $customer = null)
     {
-        $customer = $customer ?? $this->user();
-        $order = $reference ??  $customer->repository->getDefaultOrder();
-        if (!isset($order) || $order->cancelled) abort(404);
-        if ($this->user()->id != $customer->id) {
-            if ($order->leadBooker->customer_id != $this->user()->id) abort(404);
-            if (isset($customer->email_address) && isset($customer->password)) abort(404);
-        }
-        $oCustomer = null;
-        foreach ($order->orderCustomers as $orderCustomer) {
-            if ($orderCustomer->customer_id == $customer->id) {
-                $oCustomer = $orderCustomer;
-                break;
-            }
-        }
+        $orderCustomer = $this->getOrderCustomer($reference, $customer);
+        if (!isset($orderCustomer)) abort(404);
 
-        if (!isset($oCustomer)) abort(404);
-
-        $accommodation = collect($oCustomer->orderAccommodation)->getIterator();
+        $accommodation = collect($orderCustomer->orderAccommodation)->getIterator();
         $accommodation->uasort([OrderAccommodation::class, 'compare']);
-        $activities = $oCustomer->orderActivities->getIterator();
+        $activities = $orderCustomer->orderActivities->getIterator();
         $activities->uasort([OrderActivity::class, 'compare']);
-        $flights = $oCustomer->orderFlights->getIterator();
+        $flights = $orderCustomer->orderFlights->getIterator();
         $flights->uasort([OrderFlight::class, 'compare']);
-        $transport = $oCustomer->orderTransports->getIterator();
+        $transport = $orderCustomer->orderTransports->getIterator();
         $transport->uasort([OrderTransport::class, 'compare']);
 
         return view('pages.customer.components', [
-            'order' => $order,
+            'order' => $orderCustomer->order,
             'orders' => $this->user()->orders,
-            'orderCustomer' => $oCustomer,
-            'editable' => self::getOrderCustomers($order, $this->user()),
+            'orderCustomer' => $orderCustomer,
+            'editable' => self::getOrderCustomers($orderCustomer->order, $this->user()),
             'accommodation' => $accommodation,
             'activities' => $activities,
             'flights' => $flights,

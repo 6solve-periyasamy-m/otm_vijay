@@ -87,7 +87,10 @@ $transportLock = $order->tour->repository->isTransportLocked();
             <div class="col-sm-12 {{ sizeof($editable ?? []) > 1 ? 'col-md-9' : 'col-md-12' }}">
                 <div class="card">
                     <div class="card-body">
-                        <p class="heading">Your Itinerary for {{ $order->tour->name }} ({{ $order->booking_reference }})</p>
+                        <p class="heading d-inline">Your Itinerary for {{ $order->tour->name }} ({{ $order->booking_reference }})</p>
+
+                        <a href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id]) }}"
+                           target="_blank" class="float-end invoice btn btn-primary">Download Itinerary</a>
                     </div>
                 </div>
                 @foreach($orderCustomer->repository->getComponentsForItinerary() as $day => $components)
