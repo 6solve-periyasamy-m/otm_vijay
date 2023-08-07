@@ -52,8 +52,8 @@
                         <td><a href="{{ route('quotes.view', ['quote' => $quote,]) }}">{{ $quote->ref }}</a></td>
                         <td>{{ $quote->name }}</td>
                         <td>{{ $quote->description }}</td>
-                        <td>{{ $quote->leadTraveller->name }}</td>
-                        <td>{{ $quote->leadTraveller->email }}</td>
+                        <td>{{ $quote->leadTraveller?->name ?? 'Lead Traveller Not Set' }}</td>
+                        <td>{{ $quote->leadTraveller?->email ?? 'Lead Traveller Not Set' }}</td>
                         <td>{{ f_date($quote->expires)}}</td>
                         <td>{{ $quote->status->badge() }}</td>
                         <td class="actions">
