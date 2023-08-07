@@ -70,6 +70,7 @@ class SidebarLink extends Component
             new SidebarLink('Transport', route('transports.all'), Icon::transport(), 'transport', Transport::class, 'read'),
             new SidebarLink('Merchandise', route('merchandise.all'), Icon::merchandise(), 'merchandise', Merchandise::class, 'read'),
             new SidebarLink('Addresses', route('addresses.all'), Icon::address(), 'addresses', Address::class, 'read'),
+            new SidebarLink('Vouchers', route('vouchers.index'), Icon::voucher(), 'vouchers'),
             new SidebarLink('Orders', route('orders.all'), Icon::order(), 'orders', Order::class, 'read'),
             new SidebarLink('Quotes', route('quotes.all'), Icon::quote(), 'quotes', Quote::class, 'read'),
             new SidebarLink('Customers', route('customers.all'), Icon::customer(), 'customers', Customer::class, 'read'),

@@ -10,6 +10,7 @@ Route::post('/create', [CustomerController::class, 'store'])->name('customers.st
 Route::post('/login', [CustomerController::class, 'login'])->name('customers.login-as')->middleware('bouncer:Customer\Customer,read');
 Route::prefix('{customer}')->group(function () {
     Route::get('/', [CustomerController::class, 'view'])->name('customers.view')->middleware('bouncer:Customer\Customer,read');
+    Route::post('/forget', [CustomerController::class, 'forget'])->name('customers.forget')->middleware(['bouncer:Customer\Customer,update', 'password.confirm']);
     Route::get('/update', [CustomerController::class, 'edit'])->name('customers.edit')->middleware('bouncer:Customer\Customer,update');
     Route::post('/update', [CustomerController::class, 'update'])->name('customers.update')->middleware('bouncer:Customer\Customer,update');
     Route::post('/delete', [CustomerController::class, 'destroy'])->name('customers.delete')->middleware('bouncer:Customer\Customer,delete');

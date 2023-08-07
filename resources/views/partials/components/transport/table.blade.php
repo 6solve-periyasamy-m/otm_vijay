@@ -25,7 +25,7 @@ $(document).ready(function() {
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Travel Class</th>
-                    <th scope="col">Ticket Number</th>
+                    <th scope="col">Transport Number</th>
                     <th scope="col">Departure Date Time</th>
                     <th scope="col">Arrival Date Time</th>
                     <th scope="col">FIT Selectable</th>
@@ -39,7 +39,7 @@ $(document).ready(function() {
             @foreach($transport->transportInventory as $transportInventory)
             <tr>
                 <td>{{ $transportInventory->travelClass->name }}</td>
-                <td>{{ $transportInventory->ticket_number ?? 'Not Set' }}</td>
+                <td>{{ $transportInventory->transport_number ?? 'Not Set' }}</td>
                 <td data-sort="{{$transportInventory->departs_at->unix()}}">
                     {{ f_datetime($transportInventory->departs_at) }}&nbsp
                     <input type="checkbox" disabled @if($transportInventory->departure_time_confirmed == 1) checked @endif>

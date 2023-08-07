@@ -375,7 +375,7 @@
                                             <th scope="col">Date</th>
                                             <th scope="col">Name</th>
                                             <th scope="col">Transport Type</th>
-                                            <th scope="col">Ticket Number</th>
+                                            <th scope="col">Transport Number</th>
                                             <th scope="col">Transport Information</th>
                                             <th scope="col">Travel Class</th>
                                             <th scope="col">Component Type</th>
@@ -388,7 +388,7 @@
                                                 <td style="min-width: 200px" data-content="Date">{{ f_datetime($orderComponent->transport_inventory->departs_at) }} to {{ f_datetime($orderComponent->transport_inventory->arrives_at) }}</td>
                                                 <td data-content="Name">{{ $orderComponent->transport->name }}</td>
                                                 <td data-content="Transport Type">{{ $orderComponent->transport->transportType->name }}</td>
-                                                <td data-content="Ticket Number">{{ $orderComponent->tourComponent->inventory->ticket_number ?? 'Not Set'}}</td>
+                                                <td data-content="Transport Number">{{ $orderComponent->tourComponent->inventory->transport_number ?? 'Not Set'}}</td>
                                                 <td data-content="Transport Information">{{ $orderComponent->transport->departureAddress->name }} to {{ $orderComponent->transport->arrivalAddress->name }}</td>
                                                 <td data-content="Travel Class">{{ $orderComponent->transport_inventory->travelClass->name }}</td>
                                                 @if($orderComponent->tourComponent->tour_component_type === 'Included')

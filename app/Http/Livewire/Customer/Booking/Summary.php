@@ -11,7 +11,7 @@ class Summary extends Component
     public Booking $booking;
     public BookingTraveller $active;
 
-    protected $listeners = ['travellerAdded' => 'render', 'travellerRemoved' => 'render'];
+    protected $listeners = ['travellerAdded' => 'render', 'travellerRemoved' => 'render', 'voucherChanged' => 'render'];
 
     public function mount(Booking $booking)
     {

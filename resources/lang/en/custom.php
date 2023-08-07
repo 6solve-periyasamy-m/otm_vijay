@@ -18,6 +18,10 @@ return [
             ]
         ]
     ],
+    'required' => [
+        'symbol' => '*',
+        'alt' => 'This field is required to submit'
+    ],
     'table' => [
         'actions' => 'Actions',
     ]

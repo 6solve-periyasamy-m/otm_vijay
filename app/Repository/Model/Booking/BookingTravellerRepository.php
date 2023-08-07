@@ -14,6 +14,9 @@ use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
+use App\Models\Voucher\Executors\FlatCostReductionExecutor;
+use App\Models\Voucher\Executors\PercentageCostReductionExecutor;
+use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
@@ -60,6 +63,19 @@ class BookingTravellerRepository extends ModelRepository
     {
         foreach ($tourComponentRepositories as $tourComponentRepository) {
             $this->addComponent($tourComponentRepository);
+        }
+    }
+
+    public function validateVouchers(): void
+    {
+        foreach ($this->traveller->vouchers as $voucher) {
+            $stockAdjust = $voucher->pivot->updated_at->addHours(6)->gt(now()) ? 1 : 0;
+            if (!$voucher->repository->isStockControlActive()) continue;
+            if ($voucher->repository->getAvailableStock() + $stockAdjust > 0) {
+                $voucher->pivot->touch();
+            } else {
+                $this->traveller->vouchers()->detach($voucher->id);
+            }
         }
     }
 
@@ -189,6 +205,9 @@ class BookingTravellerRepository extends ModelRepository
         $order->orderCustomers()->save($orderCustomer);
         foreach ($this->getComponents(false) as $componentRepository) {
             $componentRepository->getTourComponent()->grantToCustomer($orderCustomer);
+        }
+        foreach ($this->traveller->vouchers as $voucher) {
+            $orderCustomer->repository->applyVoucher($voucher);
         }
         $this->traveller->order_customer_id = $orderCustomer->id;
         $this->save();
@@ -370,6 +389,14 @@ class BookingTravellerRepository extends ModelRepository
         return "{$this->traveller->first_name} {$this->traveller->last_name} - {$this->traveller?->booking?->token}";
     }
 
+    public function applyVoucher(VoucherCode $voucher): bool
+    {
+        if (!$voucher->repository->usable($this->traveller->booking->tour))  return false;
+        if ($this->traveller->vouchers()->where('voucher_code_id', '=', $voucher->id)->count() > 0) return false;
+        $this->traveller->vouchers()->attach($voucher);
+        return true;
+    }
+
     /**
      * @return array<int, BookingComponent[]> Set of booking components, grouped by date
      */
@@ -422,5 +449,40 @@ class BookingTravellerRepository extends ModelRepository
         if ($a->owned && !$b->owned) return -1;
         if ($b->owned && !$a->owned) return 1;
         return static::compareStarts($a, $b);
+    }
+
+    public function getExtrasBreakdown(): array
+    {
+        $data = [];
+        foreach ($this->getComponents(true, ['Upgrade', 'Add-on']) as $component) {
+            $data[] = [
+                'name' => $component->__toString(),
+                'cost' => $component->getCost(),
+            ];
+        }
+        if ($this->traveller->has_single_occupancy) {
+            $data[] = [
+                'name' => 'Single Occupancy Surcharge',
+                'cost' => $this->traveller->booking->tour->single_occupancy_surcharge,
+            ];
+        }
+        foreach ($this->traveller->vouchers as $voucher) {
+            foreach ($voucher->results as $result) {
+                $executor = $result->executor();
+                if ($executor instanceof FlatCostReductionExecutor) {
+                    $data[] = [
+                        'name' => "$voucher->code - $voucher->name",
+                        'cost' => $executor->getAmount()
+                    ];
+                }
+                if ($executor instanceof PercentageCostReductionExecutor) {
+                    $data[] = [
+                        'name' => "$voucher->code - $voucher->name",
+                        'cost' => $executor->getAmount($this->traveller->base_cost),
+                    ];
+                }
+            }
+        }
+        return $data;
     }
 }
