@@ -46,7 +46,7 @@ class AccommodationImport implements ToCollection, WithHeadingRow, WithValidatio
                 'audit_date' => Carbon::createFromFormat('d/m/Y', trim($row['audit_date'])),
                 'address_id' => $address?->id,
                 'currency_id' => $currency?->id,
-                'notes' => trim($row['notes'] ?? ''),
+                'internal_notes' => trim($row['notes'] ?? ''),
             ]);
         }
         return $data;
