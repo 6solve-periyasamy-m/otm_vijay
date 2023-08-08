@@ -46,7 +46,7 @@ class ActivityImport implements ToCollection, WithHeadingRow, WithValidation
                 'activity_type_id' => ActivityType::findOrCreate(trim($row['activity_type']))->id,
                 'address_id' => $address->id,
                 'currency_id' => $currency?->id,
-                'notes' => trim($row['notes'] ?? ''),
+                'internal_notes' => trim($row['notes'] ?? ''),
             ]);
         }
         return $data;
