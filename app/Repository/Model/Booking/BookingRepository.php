@@ -359,7 +359,7 @@ class BookingRepository extends ModelRepository
             $base += $this->booking->tour->remaining_installment;
             $base += $traveller->surcharge_amount;
             $base += $traveller->additional_cost;
-            foreach ($traveller->vouchers as $voucher) {
+            foreach ($traveller->vouchers()->get() as $voucher) {
                 foreach ($voucher->results as $result) {
                     $executor = $result->executor();
                     if ($executor instanceof FlatCostReductionExecutor) {

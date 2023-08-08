@@ -21,7 +21,7 @@ trait TestsOrder
         if ($withIncluded) {
             $tour = $this->generateTour(false, ['base_price_per_person' => $tour_cost,]);
             for ($x = 0; $x < 5; $x++) {
-                $this->generateAccommodationInventoryTour($tour);
+                $this->generateAccommodationInventoryTour($tour, 'Included', 100, $this->generateAccommodationInventory(null, $this->generateRoomType(2), null, ['check_in' => now()->addDays($x), 'check_out' => now()->addDays($x)]));
                 $this->generateActivityInventoryTour($tour);
                 $this->generateFlightInventoryTour($tour);
                 $this->generateTransportInventoryTour($tour);
