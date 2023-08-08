@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdditionalCostController;
+use App\Http\Controllers\Admin\AuthenticationController;
 use App\Http\Controllers\Admin\OrganizationController;
 use App\Http\Controllers\Admin\Reporting\BespokeReportController;
 use App\Http\Controllers\Admin\System\ImportController;
@@ -10,6 +11,18 @@ use App\Http\Controllers\Admin\System\SettingsController;
 use App\Http\Controllers\Admin\TravelClassController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\Voucher\VoucherCodeController;
+
+Route::name('admin.')->group(function () {
+    Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('show-login');
+    Route::post('/login', [AuthenticationController::class, 'login'])->name('login');
+
+    Route::prefix('password')->name('password.')->group(function () {
+        Route::get('/forgot', function () {})->name('forgot');
+        Route::post('/forgot', function () {})->name('send-reset');
+        Route::get('/reset', function () {})->name('get-new');
+        Route::post('/reset', function () {})->name('reset');
+    });
+});
 
 Auth::routes(['verify' => true, 'register' => false]);
 
