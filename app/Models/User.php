@@ -46,6 +46,7 @@ use Silber\Bouncer\Database\Role;
  * @property-read Collection|ApiToken[] $tokens
  * @property-read int|null $tokens_count
  * @property-read string $avatar_url The URL for the avatar
+ * @property-read UserRepository $repository
  * @method static UserFactory factory(...$parameters)
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
@@ -100,6 +101,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     protected string $guard = 'web';
+    private UserRepository $internal_repository;
 
     public static function getCreateValidationRules(): array
     {
@@ -152,22 +154,22 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getCurrentToken(): ApiToken
     {
-        return UserRepository::getLatestToken($this);
+        return $this->repository->getLatestToken();
     }
 
     public function generateToken(int $expiresIn = ApiToken::DEFAULT_EXPIRY): ApiToken
     {
-        return UserRepository::generateUserToken($this, $expiresIn);
+        return $this->repository->generateToken($expiresIn);
     }
 
     public function invalidateAllTokens()
     {
-        UserRepository::invalidateAllUserTokens($this);
+        $this->repository->invalidateAllUserTokens();
     }
 
     public function purgeTokens(int $limit = ApiToken::DEFAULT_LIMIT)
     {
-        UserRepository::purgeUserTokens($this, $limit);
+        $this->repository->purgeUserTokens($limit);
     }
 
     public function getHighestRoleLevel(): int
@@ -192,5 +194,11 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         if (isset($this->avatar)) return asset($this->avatar);
         return isset($this->email) ? Gravatar::get($this->email) : ('https://secure.gravatar.com/avatar/?d=mp&s=300');
+    }
+
+    public function getRepositoryAttribute(): UserRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new UserRepository($this);
+        return $this->internal_repository;
     }
 }
