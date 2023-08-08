@@ -17,10 +17,10 @@ Route::name('admin.')->group(function () {
     Route::post('/login', [AuthenticationController::class, 'login'])->name('login');
 
     Route::prefix('password')->name('password.')->group(function () {
-        Route::get('/forgot', function () {})->name('forgot');
-        Route::post('/forgot', function () {})->name('send-reset');
-        Route::get('/reset', function () {})->name('get-new');
-        Route::post('/reset', function () {})->name('reset');
+        Route::get('/forgot', [AuthenticationController::class, 'forgot'])->name('forgot');
+        Route::post('/forgot', [AuthenticationController::class, 'sendForgotEmail'])->name('send-reset');
+        Route::get('/reset', [AuthenticationController::class, 'getNewPassword'])->name('get-new');
+        Route::post('/reset', [AuthenticationController::class, 'resetPassword'])->name('reset');
     });
 });
 

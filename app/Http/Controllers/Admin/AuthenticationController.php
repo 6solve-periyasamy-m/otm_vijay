@@ -36,12 +36,12 @@ class AuthenticationController extends Controller
         return back()->withErrors('Could not authenticate with those credentials')->withInput($request->only('email', 'remember'));
     }
 
-    public function requestReset()
+    public function forgot()
     {
         return view('pages.auth.passwords.email');
     }
 
-    public function sendReset(SendResetRequest $request)
+    public function sendForgotEmail(SendResetRequest $request)
     {
         $user = User::where('email', '=', $request->email)->first();
         if ($user === null) {
