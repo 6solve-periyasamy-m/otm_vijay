@@ -9,7 +9,9 @@ use App\Models\Location\Country;
 use App\Models\Location\Currency;
 use App\Models\Location\LocationType;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Collection;
+use Log;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -40,10 +42,17 @@ class AccommodationImport implements ToCollection, WithHeadingRow, WithValidatio
                 'country_id' => $country?->id,
                 'postcode' => trim($row['postcode']),
             ]);
+            try {
+                $dString = trim($row['audit_date']);
+                $date = !empty($dString) ? Carbon::createFromFormat('d/m/Y', trim($row['audit_date'])) : null;
+            } catch (Exception $exception) {
+                Log::warning("Date (" . trim($row['audit_date']) . ") is not valid, so audit date has been skipped.", $exception->getTrace());
+                $date = null;
+            }
             $data[] = Accommodation::create([
                 'name' => trim($row['name']),
                 'description' => trim($row['description']),
-                'audit_date' => Carbon::createFromFormat('d/m/Y', trim($row['audit_date'])),
+                'audit_date' => $date,
                 'address_id' => $address?->id,
                 'currency_id' => $currency?->id,
                 'internal_notes' => trim($row['notes'] ?? ''),
