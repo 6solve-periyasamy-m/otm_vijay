@@ -17,6 +17,7 @@ use Illuminate\View\View;
  * @property string|null $image
  * @property Carbon|null $start
  * @property Carbon|null $end
+ * @property string|null $notes
  * @property View|string|Closure $icon
  * @property array<string, string> $attributes
  */
@@ -61,6 +62,11 @@ abstract class AbstractComponent
     public function getEndAttribute(): Carbon|null
     {
         return $this->information->end;
+    }
+
+    public function getNotesAttribute(): string|null
+    {
+        return empty($this->information->notes) ? null : $this->information->notes;
     }
 
     public function getUpgradeNameAttribute(): string

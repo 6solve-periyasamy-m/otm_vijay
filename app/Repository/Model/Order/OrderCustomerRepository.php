@@ -219,6 +219,22 @@ class OrderCustomerRepository extends ModelRepository
         return $data;
     }
 
+    public function getComponentsForItinerary(bool $grouped = true): array
+    {
+        $components = $this->getComponents(true, true, true, true, false);
+        usort($components, function (OrderComponentRepository $a, OrderComponentRepository $b) { return $a->getTourComponent()->getStartTime()->unix() <=> $b->getTourComponent()->getStartTime()->unix();});
+        if ($grouped) {
+            $data = [];
+            foreach ($components as $component) {
+                $key = $component->getTourComponent()->getStartTime()->setTime(0,0)->unix();
+                if (!array_key_exists($key, $data)) $data[$key] = [];
+                $data[$key][] = $component;
+            }
+            return $data;
+        }
+        return $components;
+    }
+
     /**
      * Get the addons and upgrades for a specific customer
      * @return array{addons:array,upgrades:array,additionalValue:float} The list of upgrades, addons and the sum of their costs

@@ -31,7 +31,8 @@ use Illuminate\Support\Carbon;
  * @property int $stock
  * @property float|null $purchase_price
  * @property float|null $sales_price
- * @property string|null $notes
+ * @property string|null $internal_notes
+ * @property string|null $external_notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -71,7 +72,7 @@ class ActivityInventory extends Model
 {
     use SoftDeletes, CascadeSoftDeletes, HasFactory;
 
-    protected $fillable = ['activity_id', 'ticket_type_id', 'starts_at', 'ends_at', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes',];
+    protected $guarded = [];
     protected array $cascadeDeletes = ['tourComponents'];
     protected $casts = [
         'starts_at' => 'datetime',

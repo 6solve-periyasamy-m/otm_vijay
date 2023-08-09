@@ -33,5 +33,4 @@
                 ['name' => 'Check Out Time Confirmed', 'field' => 'check_out_time_confirmed', 'value' => $check_out_time_confirmed ?? null, ])
 </div>
 @include('partials.fields.prefab.inventory_footer')
-@include('partials.fields.prefab.notes')
 @include('partials.fields.submit')

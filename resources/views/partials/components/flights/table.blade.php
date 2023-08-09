@@ -1,19 +1,22 @@
 @php /** @var \App\Models\Flight\Flight $flight */ @endphp
 @section('footer-script')
-<script type="text/javascript">
-    $(document).ready(function () { $('#flightInventory').DataTable({fixedHeader: true}); });
-</script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#flightInventory').DataTable({fixedHeader: true});
+        });
+    </script>
 @endsection
 @can('create', \App\Models\Flight\FlightInventory::class)
-<div class="card">
-    <div class="card-body">
-        {{--<a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>--}}
-        <a href="{{ route('flight-inventories.create', ['flight' => $flight, ]) }}" class="btn btn-primary float-end me-1">
-            {{ Icon::create() }}
-            <span>Add Inventory</span>
-        </a>
+    <div class="card">
+        <div class="card-body">
+            {{--<a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>--}}
+            <a href="{{ route('flight-inventories.create', ['flight' => $flight, ]) }}"
+               class="btn btn-primary float-end me-1">
+                {{ Icon::create() }}
+                <span>Add Inventory</span>
+            </a>
+        </div>
     </div>
-</div>
 @endcan
 <div class="card">
     <div class="card-body">
@@ -29,30 +32,33 @@
                 <th scope="col">Stock</th>
                 <th scope="col">Purchase Price</th>
                 <th scope="col">Sales Price</th>
-                <th scope="col">Notes</th>
+                <th scope="col">Internal Notes</th>
+                <th scope="col">External Notes</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
-            @foreach($flight->flightInventory as $flightInventory)
+            @foreach($flight->flightInventory as $inventory)
                 <tr>
-                    <td>{{ $flightInventory->flight_number }}</td>
-                    <td>{{ $flightInventory->travelClass->name }}</td>
-                    <td data-sort="{{$flightInventory->check_in->unix()}}">{{ f_datetime($flightInventory->check_in) }}</td>
-                    <td data-sort="{{$flightInventory->departs_at->unix()}}">{{ f_datetime($flightInventory->departs_at) }}</td>
-                    <td data-sort="{{$flightInventory->arrives_at->unix()}}">{{ f_datetime($flightInventory->arrives_at) }}</td>
+                    <td>{{ $inventory->flight_number }}</td>
+                    <td>{{ $inventory->travelClass->name }}</td>
+                    <td data-sort="{{$inventory->check_in->unix()}}">{{ f_datetime($inventory->check_in) }}</td>
+                    <td data-sort="{{$inventory->departs_at->unix()}}">{{ f_datetime($inventory->departs_at) }}</td>
+                    <td data-sort="{{$inventory->arrives_at->unix()}}">{{ f_datetime($inventory->arrives_at) }}</td>
                     <td>
-                        <input type="checkbox" disabled @if($flightInventory->fit_selectable == 1) checked @endif>
+                        <input type="checkbox" disabled @if($inventory->fit_selectable == 1) checked @endif>
                     </td>
                     <td>
-                        {{$flightInventory->stock - $flightInventory->used_stock}}/{{ $flightInventory->stock }}<br/>
-                        ({{$flightInventory->used_stock}} Sold)
+                        {{$inventory->stock - $inventory->used_stock}}/{{ $inventory->stock }}<br/>
+                        ({{$inventory->used_stock}} Sold)
                     </td>
-                    <td>{{ f_currency($flightInventory->purchase_price) }}</td>
-                    <td>{{ f_currency($flightInventory->sales_price) }}</td>
-                    <td>{{ $flightInventory->notes }}</td>
+                    <td>{{ f_currency($inventory->purchase_price) }}</td>
+                    <td>{{ f_currency($inventory->sales_price) }}</td>
+                    <td>{{ $inventory->internal_notes }}</td>
+                    <td>{{ $inventory->external_notes }}</td>
                     <td class="actions-4">
                         @can('read', \App\Models\Flight\FlightInventory::class)
-                            <a href="{{route('flight-inventories.manifest.view', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}" class="btn btn-outline-secondary btn-sm mb-1">
+                            <a href="{{route('flight-inventories.manifest.view', ['flight' => $flight, 'flightInventory' => $inventory,])}}"
+                               class="btn btn-outline-secondary btn-sm mb-1">
                                 {{ Icon::list() }}
                             </a>
                         @else
@@ -61,7 +67,8 @@
                             </span>
                         @endcan
                         @can('create', \App\Models\Flight\FlightInventory::class)
-                            <a href="{{route('flight-inventories.duplicate', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
+                            <a href="{{route('flight-inventories.duplicate', ['flight' => $flight, 'flightInventory' => $inventory,])}}"
+                               class="btn btn-outline-blue btn-sm mb-1">
                                 {{ Icon::copy() }}
                             </a>
                         @else
@@ -70,7 +77,7 @@
                             </span>
                         @endcan
                         @can('update', \App\Models\Flight\FlightInventory::class)
-                            <a href="{{route('flight-inventories.edit', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}"
+                            <a href="{{route('flight-inventories.edit', ['flight' => $flight, 'flightInventory' => $inventory,])}}"
                                class="btn btn-outline-success btn-sm mb-1">
                                 {{ Icon::edit() }}
                             </a>
@@ -81,11 +88,12 @@
                         @endcan
                         @can('delete', \App\Models\Flight\FlightInventory::class)
                             <a href="#" class="btn btn-outline-danger btn-sm mb-1"
-                               onclick="event.preventDefault();document.getElementById('flightInventory-{{ $flightInventory->id }}-delete').submit();">
+                               onclick="event.preventDefault();document.getElementById('flightInventory-{{ $inventory->id }}-delete').submit();">
                                 {{ Icon::delete() }}
                             </a>
-                            <form id="flightInventory-{{ $flightInventory->id }}-delete"
-                                  action="{{ route('flight-inventories.delete', ['flight' => $flight, 'flightInventory' => $flightInventory,]) }}" method="POST"
+                            <form id="flightInventory-{{ $inventory->id }}-delete"
+                                  action="{{ route('flight-inventories.delete', ['flight' => $flight, 'flightInventory' => $inventory,]) }}"
+                                  method="POST"
                                   style="display: none;">{{ csrf_field() }}</form>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">

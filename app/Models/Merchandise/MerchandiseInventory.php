@@ -28,7 +28,8 @@ use Illuminate\Support\Carbon;
  * @property int $stock
  * @property float|null $purchase_price
  * @property float|null $sales_price
- * @property string|null $notes
+ * @property string|null $internal_notes
+ * @property string|null $external_notes
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at

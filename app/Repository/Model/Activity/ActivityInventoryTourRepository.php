@@ -276,6 +276,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
             $inventory->starts_at,
             $inventory->ends_at,
             Icon::baseball(),
+            $inventory->external_notes,
             $upgradeName,
             [
                 'Starts At' => f_datetime($inventory->starts_at),

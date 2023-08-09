@@ -12,5 +12,5 @@
     Purchase Price: {{ $activityInventory->purchase_price }}<br/>
     Sales Price: {{ $activityInventory->sales_price }}<br/>
     Currency: {{ $activityInventory->currency }}<br/>
-    Notes: {{ $activityInventory->notes }}<br/>
+    Notes: {{ $activityInventory->internal_notes }}<br/>
 @endsection

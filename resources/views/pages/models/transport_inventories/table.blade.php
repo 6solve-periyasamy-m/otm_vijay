@@ -36,7 +36,7 @@
               'purchase_price' => $transportInventory->purchase_price,
               'sales_price' => $transportInventory->sales_price,
               'currency' => $transportInventory->currency,
-              'notes' => $transportInventory->notes,
+              'notes' => $transportInventory->internal_notes,
             ])
         @endforeach
     </table>

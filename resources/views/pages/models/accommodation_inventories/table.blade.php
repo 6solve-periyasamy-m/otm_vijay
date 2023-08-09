@@ -36,7 +36,7 @@
               'stock' => $accommodationInventory->stock,
               'purchase_price' => $accommodationInventory->purchase_price,
               'sales_price' => $accommodationInventory->sales_price,
-              'notes' => $accommodationInventory->notes,
+              'notes' => $accommodationInventory->internal_notes,
             ])
         @endforeach
     </table>

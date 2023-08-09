@@ -14,5 +14,5 @@
     Purchase Price: {{ $transportInventory->purchase_price }}<br/>
     Sales Price: {{ $transportInventory->sales_price }}<br/>
     Currency: {{ $transportInventory->currency }}<br/>
-    Notes: {{ $transportInventory->notes }}<br/>
+    Notes: {{ $transportInventory->internal_notes }}<br/>
 @endsection

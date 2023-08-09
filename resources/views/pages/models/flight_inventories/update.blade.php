@@ -15,6 +15,6 @@
       'purchase_price' => $flightInventory->purchase_price,
       'sales_price' => $flightInventory->sales_price,
       'currency' => $flightInventory->currency,
-      'notes' => $flightInventory->notes,
+      'notes' => $flightInventory->internal_notes,
     ])
 @endsection

@@ -26,5 +26,4 @@
                 ['name' => 'Arrival Confirmed', 'field' => 'arrival_time_confirmed', 'value' => $arrival_time_confirmed ?? null, ])
 </div>
 @include('partials.fields.prefab.inventory_footer')
-@include('partials.fields.prefab.notes')
 @include('partials.fields.submit')
