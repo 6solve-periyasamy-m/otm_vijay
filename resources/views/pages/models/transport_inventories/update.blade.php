@@ -16,5 +16,6 @@
       'sales_price' => $transportInventory->sales_price,
       'currency' => $transportInventory->currency,
       'notes' => $transportInventory->internal_notes,
+      'external_notes' => $transportInventory->external_notes,
     ])
 @endsection
