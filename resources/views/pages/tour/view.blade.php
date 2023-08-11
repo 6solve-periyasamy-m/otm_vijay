@@ -432,6 +432,7 @@
                             <tr>
                                 <th scope="col">Date</th>
                                 <th scope="col">Name</th>
+                                <th scope="col">Transport Number</th>
                                 <th scope="col">Travel Class</th>
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Stock</th>
@@ -445,6 +446,7 @@
                                     <td style="min-width: 200px">{{ f_datetime($tourComponent->inventory->departs_at) }}
                                         to {{ f_datetime($tourComponent->inventory->arrives_at) }}</td>
                                     <td>{{ $tourComponent->inventory->component->name }}</td>
+                                    <td>{{ $tourComponent->inventory->transport_number }}</td>
                                     <td>{{ $tourComponent->inventory->travelClass->name }}</td>
                                     <td>
                                         @if($tourComponent->tour_component_type == 'Upgrade')
