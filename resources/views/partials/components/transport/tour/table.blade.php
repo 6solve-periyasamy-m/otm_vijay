@@ -52,7 +52,7 @@
     </tr>
     </thead>
     <tbody>
-    @php /** @var \App\Models\Transport\TransportInventoryTour $inventory */ @endphp
+    @php /** @var \App\Models\Transport\TransportInventory $inventory */ @endphp
     @foreach(\App\Repository\Model\Transport\TransportInventoryRepository::getBetweenDates($tour->date_from, $tour->date_to, $tour->repository) as $inventory)
         <tr inventory_id="{{ $inventory->id }}">
             <td>{{ $inventory->component->name }}</td>
