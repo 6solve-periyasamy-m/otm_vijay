@@ -25,7 +25,7 @@
             });
             @if($attributes->has('value'))
             $.ajax({
-                url: '{{ route('api.' . $attributes->get('route') . '.selected', ['id' => $attributes->get('value', 0), ]) }}',
+                url: '{{ route('api.' . $attributes->get('route') . '.selected', ['id' => $attributes->get('value', 0),]) }}',
                 type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }
             }).then(function (data) {
                 selector.append(new Option(data.text, data.id, true, true)).trigger('change');
