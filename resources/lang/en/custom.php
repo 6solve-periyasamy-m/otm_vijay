@@ -24,5 +24,14 @@ return [
     ],
     'table' => [
         'actions' => 'Actions',
+    ],
+    'address' => [
+        'line-1' => 'Address Line 1',
+        'line-2' => 'Address Line 2',
+        'line-3' => 'Address Line 3',
+        'town' => 'Town',
+        'region' => 'Region',
+        'country' => 'Country',
+        'postcode' => 'Postcode',
     ]
 ];

@@ -35,6 +35,8 @@ Route::middleware('auth:web')->group(function () {
 
     Route::prefix('merchandise')->name('merchandise.')->group(__DIR__ . '/admin/component/merchandise.php');
 
+    Route::prefix('supplier')->name('supplier.')->group(__DIR__ . '/admin/supplier.php');
+
     Route::prefix('travel-classes')->group(function () {
         Route::get('/', [TravelClassController::class, 'index'])->name('travel-classes.all')->middleware('bouncer:TravelClass,read');
         Route::get('/create', [TravelClassController::class, 'create'])->name('travel-classes.create')->middleware('bouncer:TravelClass,create');

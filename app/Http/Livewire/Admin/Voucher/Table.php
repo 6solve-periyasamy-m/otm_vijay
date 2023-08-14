@@ -45,7 +45,7 @@ class Table extends LivewireDatatable
                 ->sortable(),
 
             Column::callback(['id'], function ($id) {
-                return view('partials.admin.voucher.actions', [
+                return view('partials.admin.livewire.table.actions', [
                     'id' => $id,
                     'field' => 'voucher',
                     'modal' => 'admin.voucher.form',

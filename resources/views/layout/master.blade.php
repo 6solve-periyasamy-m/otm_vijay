@@ -118,11 +118,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @yield('footer-script')
-@stack('footer-stack')
 @livewireScripts
 @livewire('livewire-ui-modal')
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+@stack('footer-stack')
 <script type="text/javascript">
     $(document).ready(function () {
         @stack('footer-ready')
