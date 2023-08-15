@@ -8,8 +8,8 @@ use App\Events\Customer\CustomerRemovedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginAsCustomerRequest;
 use App\Models\Customer\Customer;
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
-use App\Models\Location\AddressParent;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -70,7 +70,7 @@ class CustomerController extends Controller
         }
         $homeAddress = Address::create([
             'name' => $request->input('email') . ' (' . $request->input('first_name') . ' ' . $request->input('last_name') . ') (Home)',
-            'address_parent_id' => AddressParent::getParentId('customer'),
+            'parent' => AddressParent::CUSTOMER,
             'address_line_1' => $request->input('home_address_line_1'),
             'address_line_2' => $request->input('home_address_line_2'),
             'town' => $request->input('home_town'),
@@ -80,11 +80,11 @@ class CustomerController extends Controller
         ]);
         $customer->home_address_id = $homeAddress->id;
         if ($request->input('home_is_billing') == 'on') {
-            $customer->billing_address_id = $homeAddress->repository->cloneToNew(AddressParent::getParentId('customer'))->id;
+            $customer->billing_address_id = $homeAddress->repository->cloneToNew(AddressParent::CUSTOMER)->id;
         } else {
             $billingAddress = Address::create([
                 'name' => $request->input('email') . ' (' . $request->input('first_name') . ' ' . $request->input('last_name') . ') (Billing)',
-                'address_parent_id' => AddressParent::getParentId('customer'),
+                'parent' => AddressParent::CUSTOMER,
                 'address_line_1' => $request->input('billing_address_line_1'),
                 'address_line_2' => $request->input('billing_address_line_2'),
                 'town' => $request->input('billing_town'),
@@ -170,7 +170,7 @@ class CustomerController extends Controller
         ]);
         $customer->homeAddress->save();
         if ($request->input('home_is_billing') == 'on') {
-            $customer->homeAddress->repository->cloneToNew(AddressParent::getParentId('customer'), $customer->billingAddress);
+            $customer->homeAddress->repository->cloneToNew(AddressParent::CUSTOMER, $customer->billingAddress);
         } else {
             $customer->billingAddress->update([
                 'name' => $request->input('email') . ' (' . $request->input('first_name') . ' ' . $request->input('last_name') . ') (Billing)',

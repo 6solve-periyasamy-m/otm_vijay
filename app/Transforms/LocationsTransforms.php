@@ -2,8 +2,8 @@
 
 namespace App\Transforms;
 
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
-use App\Models\Location\AddressParent;
 use App\Models\Location\Country;
 use App\Models\Location\Currency;
 use App\Models\Location\LocationType;
@@ -68,7 +68,7 @@ class LocationsTransforms implements LocationsTransformsInterface
         if ($includeCustomer) {
             $addresses = Address::all();
         } else {
-            $addresses = Address::where('address_parent_id', '!=', AddressParent::getParentId('customer'))->get();
+            $addresses = Address::where('parent', '!=', AddressParent::CUSTOMER)->get();
         }
         foreach ($addresses as $address) {
             if (!(isset($address->locationType) || $includeCustomer)) continue; // Skip customer addresses unless filtered/included

@@ -18,7 +18,7 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property string $name
- * @property int $address_parent_id
+ * @property string $parent
  * @property int|null $location_type_id
  * @property string|null $address_line_1
  * @property string|null $address_line_2
@@ -30,7 +30,6 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read AddressParent $addressParent
  * @property-read AddressRepository $repository
  * @property-read Country|null $country
  * @property-read LocationType|null $locationType
@@ -42,7 +41,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Address whereAddressLine1($value)
  * @method static Builder|Address whereAddressLine2($value)
  * @method static Builder|Address whereAddressLine3($value)
- * @method static Builder|Address whereAddressParentId($value)
+ * @method static Builder|Address whereParent($value)
  * @method static Builder|Address whereCountryId($value)
  * @method static Builder|Address whereCreatedAt($value)
  * @method static Builder|Address whereDeletedAt($value)
@@ -61,7 +60,7 @@ class Address extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'address_parent_id', 'location_type_id', 'address_line_1', 'address_line_2', 'address_line_3', 'town', 'region', 'country_id', 'postcode',];
+    protected $guarded = [];
     protected $with = ['country'];
 
     private AddressRepository $internal_repository;
@@ -83,11 +82,6 @@ class Address extends Model
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class, 'country_id');
-    }
-
-    public function addressParent(): BelongsTo
-    {
-        return $this->belongsTo(AddressParent::class, 'address_parent_id');
     }
 
     public function getRepositoryAttribute(): AddressRepository
