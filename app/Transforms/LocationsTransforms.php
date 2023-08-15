@@ -69,13 +69,12 @@ class LocationsTransforms implements LocationsTransformsInterface
             $addresses = Address::all();
         } else {
             $addresses = Address::where('parent', '!=', AddressParent::CUSTOMER)->get();
-            \Log::info($addresses);
         }
         foreach ($addresses as $address) {
             if (!(isset($address->locationType) || $includeCustomer)) continue; // Skip customer addresses unless filtered/included
             $subData = [];
             $subData['id'] = $address->id;
-            $subData['text'] = $address->name . ' - ' . (isset($address->locationType) ?  $address->locationType?->name : 'Customer Address') . ' - ' . $address->parent . " - {$address->__toString()}";
+            $subData['text'] = $address->name . ' - ' . (isset($address->locationType) ?  $address->locationType?->name : 'Customer Address') . ' - ' . ucwords($address->parent) . " - {$address->__toString()}";
             if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
@@ -86,7 +85,7 @@ class LocationsTransforms implements LocationsTransformsInterface
         $address = Address::findOrFail($id);
         $data = [];
         $data['id'] = $address->id;
-        $data['text'] = $address->name . ' - ' . (isset($address->locationType) ?  $address->locationType->name : 'Customer Address') . ' - ' . $address->parent . " - {$address->__toString()}";
+        $data['text'] = $address->name . ' - ' . (isset($address->locationType) ?  $address->locationType->name : 'Customer Address') . ' - ' . ucwords($address->parent) . " - {$address->__toString()}";
         return $data;
     }
 
