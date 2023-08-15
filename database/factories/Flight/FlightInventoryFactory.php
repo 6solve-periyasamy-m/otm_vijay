@@ -30,7 +30,7 @@ class FlightInventoryFactory extends Factory
             'stock' => 5,
             'purchase_price' => 200,
             'sales_price' => 300,
-            'notes' => $this->faker->sentence
+            'internal_notes' => $this->faker->sentence
         ];
     }
 }
