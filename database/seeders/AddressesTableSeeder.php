@@ -23,7 +23,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 1,
                 'name' => 'Signature Lux Hotel by ONOMO Foreshore',
-                'address_parent_id' => 2,
+                'parent' => 'accommodation',
                 'location_type_id' => 1,
                 'address_line_1' => '31A Heerengracht Street',
                 'address_line_2' => 'Roggebaai Square',
@@ -40,7 +40,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 2,
                 'name' => 'Signature Lux Hotel by ONOMO, Sandton',
-                'address_parent_id' => 2,
+                'parent' => 'accommodation',
                 'location_type_id' => 1,
                 'address_line_1' => '135 West St, , Sandton, 2146, South Africa',
                 'address_line_2' => 'Sandown',
@@ -57,7 +57,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 3,
                 'name' => 'False Bay Braai',
-                'address_parent_id' => 3,
+                'parent' => 'activity',
                 'location_type_id' => 2,
                 'address_line_1' => 'False Bay Beach',
                 'address_line_2' => NULL,
@@ -74,7 +74,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 4,
                 'name' => 'Vineyards Tour',
-                'address_parent_id' => 3,
+                'parent' => 'activity',
                 'location_type_id' => 3,
                 'address_line_1' => 'Vineyard Row',
                 'address_line_2' => NULL,
@@ -91,7 +91,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 5,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '5990 Schiller Alley Apt. 171',
                 'address_line_2' => NULL,
@@ -108,7 +108,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 6,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '5990 Schiller Alley Apt. 171',
                 'address_line_2' => NULL,
@@ -125,7 +125,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 7,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '122 Spencer Summit Suite 319',
                 'address_line_2' => NULL,
@@ -142,7 +142,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 8,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '122 Spencer Summit Suite 319',
                 'address_line_2' => NULL,
@@ -159,7 +159,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 9,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '28072 Gleason River',
                 'address_line_2' => NULL,
@@ -176,7 +176,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 10,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '28072 Gleason River',
                 'address_line_2' => NULL,
@@ -193,7 +193,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 11,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '503 Fritsch Island',
                 'address_line_2' => NULL,
@@ -210,7 +210,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 12,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '503 Fritsch Island',
                 'address_line_2' => NULL,
@@ -227,7 +227,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 13,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '413 Hattie Road',
                 'address_line_2' => NULL,
@@ -244,7 +244,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 14,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '413 Hattie Road',
                 'address_line_2' => NULL,
@@ -261,7 +261,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 15,
             'name' => ' (Deron Herman) (Home)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '97303 Gerlach Green',
                 'address_line_2' => NULL,
@@ -278,7 +278,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 16,
             'name' => ' (Deron Herman) (Billing)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '97303 Gerlach Green',
                 'address_line_2' => NULL,
@@ -295,7 +295,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 17,
             'name' => ' (Claudie Rohan) (Home)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '5332 Federico Shore',
                 'address_line_2' => NULL,
@@ -312,7 +312,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 18,
             'name' => ' (Claudie Rohan) (Billing)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '5332 Federico Shore',
                 'address_line_2' => NULL,
@@ -329,7 +329,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 19,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '622 Earnest Keys',
                 'address_line_2' => NULL,
@@ -346,7 +346,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 20,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '622 Earnest Keys',
                 'address_line_2' => NULL,
@@ -363,7 +363,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 21,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '92575 Kara Junction',
                 'address_line_2' => NULL,
@@ -380,7 +380,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 22,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '92575 Kara Junction',
                 'address_line_2' => NULL,
@@ -397,7 +397,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 23,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '655 Jackie Meadow Suite 372',
                 'address_line_2' => NULL,
@@ -414,7 +414,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 24,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '655 Jackie Meadow Suite 372',
                 'address_line_2' => NULL,
@@ -431,7 +431,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 25,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '928 Kevon Glens Suite 279',
                 'address_line_2' => NULL,
@@ -448,7 +448,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 26,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '928 Kevon Glens Suite 279',
                 'address_line_2' => NULL,
@@ -465,7 +465,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 27,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '64707 Jerde View',
                 'address_line_2' => NULL,
@@ -482,7 +482,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 28,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '64707 Jerde View',
                 'address_line_2' => NULL,
@@ -499,7 +499,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 29,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '5605 Swift Meadows Suite 015',
                 'address_line_2' => NULL,
@@ -516,7 +516,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 30,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '5605 Swift Meadows Suite 015',
                 'address_line_2' => NULL,
@@ -533,7 +533,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 31,
             'name' => ' (Katheryn Ankunding) (Home)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '651 Lindgren Course',
                 'address_line_2' => NULL,
@@ -550,7 +550,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 32,
             'name' => ' (Katheryn Ankunding) (Billing)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '651 Lindgren Course',
                 'address_line_2' => NULL,
@@ -567,7 +567,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 33,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '98935 Fae Wells Apt. 590',
                 'address_line_2' => NULL,
@@ -584,7 +584,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 34,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '98935 Fae Wells Apt. 590',
                 'address_line_2' => NULL,
@@ -601,7 +601,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 35,
             'name' => ' (Pansy Ryan) (Home)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '1776 Powlowski Corner Suite 558',
                 'address_line_2' => NULL,
@@ -618,7 +618,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 36,
             'name' => ' (Pansy Ryan) (Billing)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '1776 Powlowski Corner Suite 558',
                 'address_line_2' => NULL,
@@ -635,7 +635,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 37,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '2932 Rylee Mall Apt. 117',
                 'address_line_2' => NULL,
@@ -652,7 +652,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 38,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '2932 Rylee Mall Apt. 117',
                 'address_line_2' => NULL,
@@ -669,7 +669,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 39,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '43217 Garry Tunnel',
                 'address_line_2' => NULL,
@@ -686,7 +686,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 40,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '43217 Garry Tunnel',
                 'address_line_2' => NULL,
@@ -703,7 +703,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 41,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '78150 Drew Run Suite 809',
                 'address_line_2' => NULL,
@@ -720,7 +720,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 42,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '78150 Drew Run Suite 809',
                 'address_line_2' => NULL,
@@ -737,7 +737,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 43,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '7161 Tyson Flats',
                 'address_line_2' => NULL,
@@ -754,7 +754,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 44,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '7161 Tyson Flats',
                 'address_line_2' => NULL,
@@ -771,7 +771,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 45,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '50339 Krajcik Hill',
                 'address_line_2' => NULL,
@@ -788,7 +788,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 46,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '50339 Krajcik Hill',
                 'address_line_2' => NULL,
@@ -805,7 +805,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 47,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '8678 Emil Hills Suite 000',
                 'address_line_2' => NULL,
@@ -822,7 +822,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 48,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '8678 Emil Hills Suite 000',
                 'address_line_2' => NULL,
@@ -839,7 +839,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 49,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '118 Beatty Road',
                 'address_line_2' => NULL,
@@ -856,7 +856,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 50,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '118 Beatty Road',
                 'address_line_2' => NULL,
@@ -873,7 +873,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 51,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '7416 Dahlia Plains',
                 'address_line_2' => NULL,
@@ -890,7 +890,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 52,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '7416 Dahlia Plains',
                 'address_line_2' => NULL,
@@ -907,7 +907,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 53,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '6828 Johns Mountain Suite 500',
                 'address_line_2' => NULL,
@@ -924,7 +924,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 54,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '6828 Johns Mountain Suite 500',
                 'address_line_2' => NULL,
@@ -941,7 +941,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 55,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '8731 Lebsack Summit Suite 848',
                 'address_line_2' => NULL,
@@ -958,7 +958,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 56,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '8731 Lebsack Summit Suite 848',
                 'address_line_2' => NULL,
@@ -975,7 +975,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 57,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '9184 Lonie Green Suite 134',
                 'address_line_2' => NULL,
@@ -992,7 +992,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 58,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '9184 Lonie Green Suite 134',
                 'address_line_2' => NULL,
@@ -1009,7 +1009,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 59,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '47149 Altenwerth Mission',
                 'address_line_2' => NULL,
@@ -1026,7 +1026,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 60,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '47149 Altenwerth Mission',
                 'address_line_2' => NULL,
@@ -1043,7 +1043,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 61,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '1946 Beatty Avenue',
                 'address_line_2' => NULL,
@@ -1060,7 +1060,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 62,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '1946 Beatty Avenue',
                 'address_line_2' => NULL,
@@ -1077,7 +1077,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 63,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '19143 Homenick Fall',
                 'address_line_2' => NULL,
@@ -1094,7 +1094,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 64,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '19143 Homenick Fall',
                 'address_line_2' => NULL,
@@ -1111,7 +1111,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 65,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '5001 Clifford Mountains',
                 'address_line_2' => NULL,
@@ -1128,7 +1128,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 66,
                 'name' => 'Pregenerated Customer Name',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '5001 Clifford Mountains',
                 'address_line_2' => NULL,
@@ -1145,7 +1145,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 67,
                 'name' => 'Gold Restaurant',
-                'address_parent_id' => 3,
+                'parent' => 'activity',
                 'location_type_id' => 4,
                 'address_line_1' => '15 Bennett St',
                 'address_line_2' => NULL,
@@ -1162,7 +1162,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 68,
                 'name' => 'Soweto Tour',
-                'address_parent_id' => 3,
+                'parent' => 'activity',
                 'location_type_id' => 5,
                 'address_line_1' => 'Soweto Tourist Centre',
                 'address_line_2' => NULL,
@@ -1179,7 +1179,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 69,
                 'name' => 'London Heathrow Airport',
-                'address_parent_id' => 4,
+                'parent' => 'airport',
                 'location_type_id' => 6,
                 'address_line_1' => 'The Compass Centre',
                 'address_line_2' => 'Nelson Road',
@@ -1196,7 +1196,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 70,
                 'name' => 'O.R. Tambo International Airport',
-                'address_parent_id' => 4,
+                'parent' => 'airport',
                 'location_type_id' => 6,
                 'address_line_1' => '1 Jones Rd',
                 'address_line_2' => NULL,
@@ -1213,7 +1213,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 71,
                 'name' => 'Cape Town International Airport',
-                'address_parent_id' => 4,
+                'parent' => 'airport',
                 'location_type_id' => 6,
                 'address_line_1' => 'Matroosfontein',
                 'address_line_2' => NULL,
@@ -1230,7 +1230,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 72,
                 'name' => 'Home address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => 1,
                 'address_line_1' => '23 Wodley Road',
                 'address_line_2' => 'Croyden',
@@ -1247,7 +1247,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 73,
                 'name' => 'Billing address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => 1,
                 'address_line_1' => '23 Wodley Road',
                 'address_line_2' => 'Croyden',
@@ -1264,7 +1264,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 74,
                 'name' => 'Home address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => 1,
                 'address_line_1' => '1 Spen Mount',
                 'address_line_2' => NULL,
@@ -1281,7 +1281,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 75,
                 'name' => 'Billing address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => 1,
                 'address_line_1' => '1 Spen Mount',
                 'address_line_2' => NULL,
@@ -1298,7 +1298,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 76,
                 'name' => 'Long Street Backpackers',
-                'address_parent_id' => 2,
+                'parent' => 'accommodation',
                 'location_type_id' => 7,
                 'address_line_1' => '209 Long Street',
                 'address_line_2' => 'Cape Town City Centre',
@@ -1315,7 +1315,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 77,
                 'name' => 'JonRedding - Home Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => NULL,
                 'address_line_2' => NULL,
@@ -1332,7 +1332,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 78,
                 'name' => 'JonRedding - Billing Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => NULL,
                 'address_line_2' => NULL,
@@ -1349,7 +1349,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 79,
                 'name' => 'CharlotteRedding - Home Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '1779 Powlowski Corner Suite 558',
                 'address_line_2' => NULL,
@@ -1366,7 +1366,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 80,
                 'name' => 'CharlotteRedding - Billing Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '1779 Powlowski Corner Suite 558',
                 'address_line_2' => NULL,
@@ -1383,7 +1383,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 81,
                 'name' => 'CharlotteRedding - Home Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Flat 1 222 Tech Street',
                 'address_line_2' => NULL,
@@ -1400,7 +1400,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 82,
                 'name' => 'CharlotteRedding - Billing Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Flat 1 222 Tech Street',
                 'address_line_2' => NULL,
@@ -1417,7 +1417,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 83,
                 'name' => 'CharlotteRedding - Home Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Flat 1 222 Tech Street',
                 'address_line_2' => NULL,
@@ -1434,7 +1434,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 84,
                 'name' => 'CharlotteRedding - Billing Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Flat 1 222 Tech Street',
                 'address_line_2' => NULL,
@@ -1451,7 +1451,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 85,
                 'name' => 'CharlotteRedding - Home Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Flat 1 222 Tech Street',
                 'address_line_2' => NULL,
@@ -1468,7 +1468,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 86,
                 'name' => 'CharlotteRedding - Billing Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Flat 1 222 Tech Street',
                 'address_line_2' => NULL,
@@ -1485,7 +1485,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 87,
                 'name' => 'CharlotteRedding - Home Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Flat 1 222 Tech Street',
                 'address_line_2' => NULL,
@@ -1502,7 +1502,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 88,
                 'name' => 'CharlotteRedding - Billing Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Flat 1 222 Tech Street',
                 'address_line_2' => NULL,
@@ -1519,7 +1519,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 89,
                 'name' => 'StevenEatherington - Home Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Waverley',
                 'address_line_2' => 'Mill Lane',
@@ -1536,7 +1536,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 90,
                 'name' => 'StevenEatherington - Billing Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Waverley',
                 'address_line_2' => 'Mill Lane',
@@ -1553,7 +1553,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 91,
                 'name' => 'CharlotteRedding - Home Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Welland View',
                 'address_line_2' => 'Glaston Road',
@@ -1570,7 +1570,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 92,
                 'name' => 'CharlotteRedding - Billing Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Welland View',
                 'address_line_2' => 'Glaston Road',
@@ -1587,7 +1587,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 93,
                 'name' => 'England v South Africa 1st Test',
-                'address_parent_id' => 3,
+                'parent' => 'activity',
                 'location_type_id' => 8,
                 'address_line_1' => 'Newlands Cricket Ground',
                 'address_line_2' => '146 Campground Rd',
@@ -1604,7 +1604,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 94,
                 'name' => 'England v South Africa 1st Test',
-                'address_parent_id' => 3,
+                'parent' => 'activity',
                 'location_type_id' => 8,
                 'address_line_1' => 'Newlands Cricket Ground',
                 'address_line_2' => '146 Campground Rd',
@@ -1621,7 +1621,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 95,
                 'name' => 'CharlotteRedding - Home Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => NULL,
                 'address_line_2' => NULL,
@@ -1638,7 +1638,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 96,
                 'name' => 'CharlotteRedding - Billing Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => NULL,
                 'address_line_2' => NULL,
@@ -1655,7 +1655,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 97,
                 'name' => 'Banjul International Airport',
-                'address_parent_id' => 4,
+                'parent' => 'airport',
                 'location_type_id' => 6,
                 'address_line_1' => 'Banjul International Airport',
                 'address_line_2' => NULL,
@@ -1672,7 +1672,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 98,
                 'name' => 'Generic Customer Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => NULL,
                 'address_line_2' => NULL,
@@ -1689,7 +1689,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 99,
                 'name' => 'Generic Customer Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => NULL,
                 'address_line_2' => NULL,
@@ -1706,7 +1706,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 100,
                 'name' => 'Generic Customer Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => NULL,
                 'address_line_2' => NULL,
@@ -1723,7 +1723,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 101,
                 'name' => 'Generic Customer Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => NULL,
                 'address_line_2' => NULL,
@@ -1740,7 +1740,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 102,
                 'name' => 'Gatwick Airport',
-                'address_parent_id' => 4,
+                'parent' => 'airport',
                 'location_type_id' => 6,
                 'address_line_1' => 'Horley',
                 'address_line_2' => NULL,
@@ -1757,7 +1757,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 103,
                 'name' => 'Senegambia Hotel',
-                'address_parent_id' => 2,
+                'parent' => 'accommodation',
                 'location_type_id' => 1,
                 'address_line_1' => 'Kololi',
                 'address_line_2' => NULL,
@@ -1774,7 +1774,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 104,
                 'name' => 'Visit to Gorée Island',
-                'address_parent_id' => 3,
+                'parent' => 'activity',
                 'location_type_id' => 5,
                 'address_line_1' => 'Island in Dakar,',
                 'address_line_2' => NULL,
@@ -1791,7 +1791,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 105,
                 'name' => 'AnneRouse - Home Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'An example house',
                 'address_line_2' => 'Standard Street',
@@ -1808,7 +1808,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 106,
                 'name' => 'AnneRouse - Billing Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'An example house',
                 'address_line_2' => 'Standard Street',
@@ -1825,7 +1825,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 107,
                 'name' => 'DonRouse - Home Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => NULL,
                 'address_line_2' => NULL,
@@ -1842,7 +1842,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 108,
                 'name' => 'DonRouse - Billing Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => NULL,
                 'address_line_2' => NULL,
@@ -1859,7 +1859,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 109,
                 'name' => 'Royal Ascot Windsor Enclosure',
-                'address_parent_id' => 3,
+                'parent' => 'activity',
                 'location_type_id' => 9,
                 'address_line_1' => 'Ascot Racecourse',
                 'address_line_2' => 'High St',
@@ -1876,7 +1876,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 110,
                 'name' => 'Brixton Town Hall',
-                'address_parent_id' => 5,
+                'parent' => 'transport',
                 'location_type_id' => 5,
                 'address_line_1' => '1 Brixton Hill',
                 'address_line_2' => NULL,
@@ -1893,7 +1893,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 111,
             'name' => ' (Erica Picton) (Home)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '44 Beech Avenue',
                 'address_line_2' => NULL,
@@ -1910,7 +1910,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 112,
             'name' => ' (Erica Picton) (Home)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '44 Beech Avenue',
                 'address_line_2' => NULL,
@@ -1927,7 +1927,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 113,
             'name' => ' (Nkechi Okeke) (Home)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '77 Deans Lane',
                 'address_line_2' => NULL,
@@ -1944,7 +1944,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 114,
             'name' => ' (Nkechi Okeke) (Billing)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '77 Deans Lane',
                 'address_line_2' => NULL,
@@ -1961,7 +1961,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 115,
             'name' => ' (Ermine King) (Home)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '42 Saltcroft Close',
                 'address_line_2' => NULL,
@@ -1978,7 +1978,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 116,
             'name' => ' (Ermine King) (Home)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '42 Saltcroft Close',
                 'address_line_2' => NULL,
@@ -1995,7 +1995,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 117,
             'name' => ' (Ermine King) (Home)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '42 Saltcroft Close',
                 'address_line_2' => NULL,
@@ -2012,7 +2012,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 118,
             'name' => ' (Selena Grant) (Home)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Flat 6',
                 'address_line_2' => '11 Mount Pleasant Road',
@@ -2029,7 +2029,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 119,
             'name' => ' (Selena Grant) (Home)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Flat 6',
                 'address_line_2' => '11 Mount Pleasant Road',
@@ -2046,7 +2046,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 120,
             'name' => ' (Abigail Nimblet-Hunt) (Home)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '11 Bilton Road',
                 'address_line_2' => NULL,
@@ -2063,7 +2063,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 121,
             'name' => ' (Abigail Nimblet-Hunt) (Home)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => '11 Bilton Road',
                 'address_line_2' => NULL,
@@ -2080,7 +2080,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 122,
             'name' => ' (Charlotte Redding) (Home)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Welland View',
                 'address_line_2' => 'Glaston Road',
@@ -2097,7 +2097,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 123,
             'name' => ' (Charlotte Redding) (Billing)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Welland View',
                 'address_line_2' => 'Glaston Road',
@@ -2114,7 +2114,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 124,
                 'name' => 'SophieRedding - Home Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Welland View',
                 'address_line_2' => 'Glaston Road',
@@ -2131,7 +2131,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 125,
                 'name' => 'SophieRedding - Billing Address',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => 'Welland View',
                 'address_line_2' => 'Glaston Road',
@@ -2148,7 +2148,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 126,
             'name' => ' (Sophie Redding) (Home)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => NULL,
                 'address_line_2' => NULL,
@@ -2165,7 +2165,7 @@ class AddressesTableSeeder extends Seeder
             array (
                 'id' => 127,
             'name' => ' (Sophie Redding) (Billing)',
-                'address_parent_id' => 1,
+                'parent' => 'customer',
                 'location_type_id' => NULL,
                 'address_line_1' => NULL,
                 'address_line_2' => NULL,

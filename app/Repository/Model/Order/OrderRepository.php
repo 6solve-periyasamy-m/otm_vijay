@@ -6,9 +6,9 @@ use App\Events\Order\OrderCreatedEvent;
 use App\Exceptions\MailDisabledException;
 use App\Mail\Storage\OrderMail;
 use App\Models\Customer\Customer;
+use App\Models\Helper\AddressParent;
 use App\Models\Helper\OrderStatus;
 use App\Models\Location\Address;
-use App\Models\Location\AddressParent;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
@@ -660,9 +660,9 @@ class OrderRepository extends ModelRepository
     {
         $homeAddress = Address::create([
             'name' => 'Generic Customer Address',
-            'address_parent_id' => AddressParent::getParentId('customer'),
+            'parent' => AddressParent::CUSTOMER,
         ]);
-        $billingAddress = $homeAddress->repository->cloneToNew(AddressParent::getParentId('customer'));
+        $billingAddress = $homeAddress->repository->cloneToNew(AddressParent::CUSTOMER);
         return Customer::create([
             'first_name' => $first,
             'last_name' => $last,
