@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin\Supplier;
 
 use App\Http\Livewire\SendsEvents;
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
 use App\Models\Supplier\Supplier;
 use Illuminate\Contracts\Foundation\Application;
@@ -32,7 +33,8 @@ class Form extends ModalComponent
 
     public function save()
     {
-        $this->address->address_parent_id = $this->address->address_parent_id ?? 1;
+        $this->address->name = $this->supplier->name;
+        $this->address->parent = $this->address->parent ?? AddressParent::SUPPLIER;
         $this->address->save();
         $this->supplier->address_id = $this->address->id;
         $this->supplier->save();
@@ -53,6 +55,12 @@ class Form extends ModalComponent
             'supplier.website' => 'nullable',
             'supplier.telephone' => 'nullable',
             'supplier.currency_id' => 'nullable|integer|exists:currencies,id',
+            'address.address_line_1' => 'required',
+            'address.address_line_2' => 'nullable',
+            'address.town' => 'nullable',
+            'address.region' => 'nullable',
+            'address.country_id' => 'required|integer|exists:countries,id',
+            'address.postcode' => 'nullable'
         ];
     }
 }

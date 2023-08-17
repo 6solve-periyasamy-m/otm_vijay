@@ -15,6 +15,14 @@ return [
             'currency' => 'Trading Currency',
             'exchange' => 'Agreed Exchange Rate',
             'notes' => 'Notes',
+            'address' => [
+                'line-1' => 'Address Line 1',
+                'line-2' => 'Address Line 2',
+                'town' => 'Town',
+                'region' => 'Region',
+                'country' => 'Country',
+                'postcode' => 'Postcode'
+            ]
         ]
     ]
 ];
