@@ -88,6 +88,9 @@ class AtolRepository
 
     public function generateFlightList(): array
     {
+        // Available Lines for FL: 6
+        // 1 Taken up by package name
+        // 3 for inbound, 2 for outbound
         $inbound = [];
         $outbound = [];
         foreach ($this->order->orderCustomers as $orderCustomer) {
@@ -99,9 +102,13 @@ class AtolRepository
                 }
             }
         }
-        $string = '';
+        $string = "{$this->order->tour->name}\n";
         $excessString = '';
-        $excess = 3 + (count($outbound) < 3 ? 3 - count($outbound) : 0);
+        if (sizeof($inbound) < 3) {
+            $excess = 3;
+        } else {
+            $excess = 3 + (count($outbound) < 3 ? 3 - count($outbound) : 0);
+        }
         foreach ($inbound as $tourComponent) {
             if ($excess > 0) {
                 $string .= $tourComponent->atol_string . "\n";
@@ -110,7 +117,7 @@ class AtolRepository
                 $excessString .= $tourComponent->atol_string . "\n";
             }
         }
-        $excess += 3;
+        $excess += 2;
         foreach ($outbound as $tourComponent) {
             if ($excess > 0) {
                 $string .= $tourComponent->atol_string . "\n";
