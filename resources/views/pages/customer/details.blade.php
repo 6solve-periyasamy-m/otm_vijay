@@ -176,15 +176,15 @@ $passport = $customer->repository->isPassportLocked();
                             <div class="form-group"><h4 class="mb-0">Emergency Contact Details</h4></div>
                             <hr class="splitter">
 
-                            <x-customer.input name="emergency_contact_name" value="{{ $customer->emergency_contact_name ?? '' }}" width="4" required>
+                            <x-customer.input name="emergency_contact_name" value="{{ $customer->emergency_contact_name ?? '' }}" width="4">
                                 Name
                             </x-customer.input>
 
-                            <x-customer.input name="emergency_contact_relationship" value="{{ $customer->emergency_contact_relationship ?? '' }}" width="4" required>
+                            <x-customer.input name="emergency_contact_relationship" value="{{ $customer->emergency_contact_relationship ?? '' }}" width="4">
                                 Relationship
                             </x-customer.input>
 
-                            <x-customer.input name="emergency_contact_telephone" value="{{ $customer->emergency_contact_telephone ?? '' }}" width="4" required>
+                            <x-customer.input name="emergency_contact_telephone" value="{{ $customer->emergency_contact_telephone ?? '' }}" width="4">
                                 Telephone
                             </x-customer.input>
 
