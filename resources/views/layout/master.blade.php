@@ -20,6 +20,7 @@
         <!-- App (including Lodash, jQuery, Bootstrap via NPM) -->
         <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
         @livewireStyles
+        <script src="{{ asset('/js/bootstrap.js') }}"></script>
     </head>
     <body>
         @include('partials.navbar')
