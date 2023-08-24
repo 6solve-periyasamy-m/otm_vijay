@@ -19,7 +19,6 @@
         <link href="{{ asset('/css/mdb.css') }}" rel="stylesheet">
         <!-- App (including Lodash, jQuery, Bootstrap via NPM) -->
         <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js" integrity="sha256-+8RZJua0aEWg+QVVKg4LEzEEm/8RFez5Tb4JBNiV5xA=" crossorigin="anonymous"></script>
         @livewireStyles
     </head>
     <body>
