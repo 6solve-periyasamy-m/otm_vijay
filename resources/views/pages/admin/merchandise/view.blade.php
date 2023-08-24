@@ -4,7 +4,7 @@
 
 @section('title', 'View Merchandise')
 
-@push('header-stack')
+@push('footer-stack')
     <style>
         .image {
             background-image: url('{{ asset(setting('company.logo')) }}');

@@ -2,7 +2,7 @@
 
 @section('title', 'View Reports')
 
-@push('header-stack')
+@push('footer-stack')
     <script type="text/javascript">
         @if(flag('atol.enabled', true))
         function showOrderedOnReport() {

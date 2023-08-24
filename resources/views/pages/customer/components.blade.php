@@ -17,7 +17,7 @@
     $addons = $orderCustomer->repository->getAvailableToAdd();
 @endphp
 
-@push('header-stack')
+@push('footer-stack')
     <script type="text/javascript">
         const route = "{{ route('customer.extras') }}"
         function onOrderChange(selector) {

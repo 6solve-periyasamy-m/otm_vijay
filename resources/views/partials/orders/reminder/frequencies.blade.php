@@ -30,7 +30,7 @@
         </div>
     </div>
 </div>
-@push('header-stack')
+@push('footer-stack')
     <script type="text/javascript">
         function showNewRange() {
             let max = $('#max-input').val();

@@ -2,7 +2,7 @@
 
 @section('title', 'Dashboard')
 
-@push('header-stack')
+@push('footer-stack')
     <script type="text/javascript">
         let datatable;
         let rows = 0;

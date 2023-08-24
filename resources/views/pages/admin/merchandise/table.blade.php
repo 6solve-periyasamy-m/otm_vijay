@@ -8,7 +8,7 @@
 
 @section('title', 'All Merchandise')
 
-@push('header-stack')
+@push('footer-stack')
     <style>
         .merch-thumbnail-container {
             width: 100px;
