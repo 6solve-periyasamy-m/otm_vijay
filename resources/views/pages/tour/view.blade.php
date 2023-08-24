@@ -15,7 +15,7 @@
 
 @section('title', 'View Tour')
 
-@section('header-script')
+@push('footer-stack')
     <script>
         $(document).ready(function () {
             $('#accommodation-table').DataTable({fixedHeader: true});
@@ -28,7 +28,7 @@
             $('#orders-table').DataTable({fixedHeader: true});
         });
     </script>
-@endsection
+@endpush
 
 @section('content')
     @include('pages.tour.popup')

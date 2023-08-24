@@ -8,14 +8,14 @@
  */
 @endphp
 
-@section('header-script')
+@push('footer-stack')
     <script>
         $(document).ready(function () {
             $('#orders').DataTable({fixedHeader: true, order: [[0, 'desc']],});
             $('#tours').DataTable({fixedHeader: true, order: [[2, 'desc']],});
         });
     </script>
-@endsection
+@endpush
 
 @section('content')
     <div class="otm-callout">

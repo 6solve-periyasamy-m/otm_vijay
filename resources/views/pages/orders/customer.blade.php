@@ -2,7 +2,7 @@
 
 @section('title', 'View Order Customer')
 
-@section('header-script')
+@push('footer-stack')
 <script type="text/javascript">
 @if ($orderCustomer->is_travelling)
 function addActivityAddon() {
@@ -122,7 +122,7 @@ $(document).ready( function () {
     $('#customer-adjustment-table').DataTable({fixedHeader: true});
 });
 </script>
-@endsection
+@endpush
 @section('content')
 {{-- Header Details --}}
 <div class="otm-callout" id="header-details">

@@ -16,7 +16,7 @@ $profit = $revenue - $costOfTour;
 
 @section('title', "Tour Costing")
 
-@section('header-script')
+@push('footer-stack')
     <script>
         $(document).ready(function () {
             $('.data-table').DataTable({fixedHeader: true,});
@@ -40,7 +40,7 @@ $profit = $revenue - $costOfTour;
             background-color: #ccbbcc !important;
         }
     </style>
-@endsection
+@endpush
 
 @section('content')
     <div class="otm-callout @if(!$tour->is_active) inactive @endif">

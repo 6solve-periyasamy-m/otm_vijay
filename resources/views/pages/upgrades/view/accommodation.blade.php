@@ -2,13 +2,13 @@
 
 @section('title', 'View Accommodation Inventory Upgrades')
 
-@section('header-script')
+@push('footer-stack')
     <script>
         $(document).ready( function () {
             $('#accommodation-table').DataTable({fixedHeader: true});
         });
     </script>
-@endsection
+@endpush
 
 @section('content')
     @include('pages.upgrades.view.header')

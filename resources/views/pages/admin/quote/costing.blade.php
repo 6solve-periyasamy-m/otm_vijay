@@ -14,7 +14,7 @@ $profit = $remaining - $costOfTour;
 
 @section('title', "Quote Costing")
 
-@section('header-script')
+@push('footer-stack')
     <script>
         $(document).ready(function () {
             $('.data-table').DataTable({fixedHeader: true,});
@@ -33,7 +33,7 @@ $profit = $remaining - $costOfTour;
             return formatter.format(number);
         }
     </script>
-@endsection
+@endpush
 
 @section('content')
     <div class="otm-callout">
