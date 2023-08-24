@@ -18,9 +18,6 @@ $profit = $revenue - $costOfTour;
 
 @push('footer-stack')
     <script>
-        $(document).ready(function () {
-            $('.data-table').DataTable({fixedHeader: true,});
-        });
         function updateProfit(input) {
             let value = parseFloat($(input).val());
             let ctc = parseFloat($(input).attr('ctc'));
@@ -147,7 +144,7 @@ $profit = $revenue - $costOfTour;
                             {{ Icon::create() }}
                         </x-admin.button>
                     </form>
-                    <table class="table table-striped data-table">
+                    <table class="table table-striped datatable">
                         <thead>
                         <tr>
                             <th scope="col">Name</th>
@@ -238,7 +235,7 @@ $profit = $revenue - $costOfTour;
                             {{ Icon::create() }}
                         </x-admin.button>
                     </form>
-                    <table class="table table-striped data-table">
+                    <table class="table table-striped datatable">
                         <thead>
                         <tr>
                             <th scope="col">Name</th>
@@ -312,7 +309,7 @@ $profit = $revenue - $costOfTour;
         </ul>
         <div id="tables" class="tab-content otm-tab-content">
             <div id="summary" role="tabpanel" class="tab-pane fade show active">
-                <table class="table table-striped summary data-table">
+                <table class="table table-striped summary datatable">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.type') }}</th>
@@ -368,7 +365,7 @@ $profit = $revenue - $costOfTour;
                 </table>
             </div>
             <div id="accommodation" role="tabpanel" class="tab-pane fade">
-                <table class="table table-striped summary data-table">
+                <table class="table table-striped summary datatable">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.dates') }}</th>
@@ -416,7 +413,7 @@ $profit = $revenue - $costOfTour;
                 </table>
             </div>
             <div id="activities" role="tabpanel" class="tab-pane fade">
-                <table class="table table-striped summary data-table">
+                <table class="table table-striped summary datatable">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.dates') }}</th>
@@ -464,7 +461,7 @@ $profit = $revenue - $costOfTour;
                 </table>
             </div>
             <div id="flights" role="tabpanel" class="tab-pane fade">
-                <table class="table table-striped summary data-table">
+                <table class="table table-striped summary datatable">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.dates') }}</th>
@@ -512,7 +509,7 @@ $profit = $revenue - $costOfTour;
                 </table>
             </div>
             <div id="transport" role="tabpanel" class="tab-pane fade">
-                <table class="table table-striped summary data-table">
+                <table class="table table-striped summary datatable">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.dates') }}</th>
@@ -560,7 +557,7 @@ $profit = $revenue - $costOfTour;
                 </table>
             </div>
             <div id="extras" role="tabpanel" class="tab-pane fade">
-                <table class="table table-striped summary data-table">
+                <table class="table table-striped summary datatable">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('tours.costing.view.cards.components.common.details') }}</th>
@@ -607,7 +604,7 @@ $profit = $revenue - $costOfTour;
                     <div class="card-title">
                         <h4 class="fw-bold">Expected Installment Revenue</h4>
                     </div>
-                    <table class="table table-striped data-table">
+                    <table class="table table-striped datatable">
                         <thead>
                         <tr>
                             <th scope="col">Due Date</th>
@@ -648,7 +645,7 @@ $profit = $revenue - $costOfTour;
                     <div class="card-title">
                         <h4 class="fw-bold">Orders</h4>
                     </div>
-                    <table class="table table-striped data-table">
+                    <table class="table table-striped datatable">
                         <thead>
                         <tr>
                             <th scope="col">Booking Reference</th>

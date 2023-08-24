@@ -2,12 +2,6 @@
 
 @section('title', 'All Flights')
 
-@section('footer-script')
-<script type="text/javascript">
-    $(document).ready(function () { $('#flight').DataTable({fixedHeader: true}); });
-</script>
-@endsection
-
 @section('content')
 @can('create', \App\Models\Flight\Flight::class)
 <div class="card">
@@ -21,7 +15,7 @@
 @endcan
 <div class="card">
     <div class="card-body">
-        <table id="flight" style="width: 100%;" class="table table-striped">
+        <table id="flight" style="width: 100%;" class="datatable table table-striped">
             <thead class="thead-dark">
             <tr>
                 <th scope="col">Airline</th>

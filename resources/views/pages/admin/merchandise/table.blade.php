@@ -25,8 +25,6 @@
     </style>
 @endpush
 
-@push('footer-ready', "$('#merchandise').DataTable({fixedHeader: true,});")
-
 @section('content')
     @can('create', \App\Models\Merchandise\Merchandise::class)
         <div class="card">
@@ -40,7 +38,7 @@
     @endcan
     <div class="card">
         <div class="card-body">
-            <table id="merchandise" style="width: 100%;" class="table table-striped">
+            <table id="merchandise" style="width: 100%;" class="datatable table table-striped">
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">Image</th>

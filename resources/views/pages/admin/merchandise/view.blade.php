@@ -41,8 +41,6 @@
     </script>
 @endpush
 
-@push('footer-ready', "$('#inventory').DataTable({fixedHeader: true,});")
-
 @section('content')
     <div class="otm-callout">
         <div class="row">

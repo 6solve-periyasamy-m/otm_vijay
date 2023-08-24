@@ -2,14 +2,6 @@
 
 @section('title', 'View Transport Inventory Upgrades')
 
-@push('footer-stack')
-    <script>
-        $(document).ready( function () {
-            $('#transport-table').DataTable({fixedHeader: true});
-        });
-    </script>
-@endpush
-
 @section('content')
     @include('pages.upgrades.view.header')
     {{-- Upgrades Section --}}
@@ -58,7 +50,7 @@
                 {{-- Transport Table --}}
                 <div id="transport" role="tabpanel" class="tab-pane fade show active">
                     <div id="transport-details">
-                        <table id="transport-table" class="table table-striped table-responsive-sm">
+                        <table id="transport-table" class="datatable table table-striped table-responsive-sm">
                             <thead>
                             <tr>
                                 <th scope="col">Name</th>

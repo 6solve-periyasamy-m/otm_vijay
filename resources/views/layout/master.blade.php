@@ -122,6 +122,9 @@
 <script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+        $('.datatable:not(.multiselect):not(.autowidth-off)').DataTable({fixedHeader: true,});
+        $('.datatable.multi-select').DataTable({fixedHeader: true, select: { style: "multi+shift" },});
+        $('.datatable.autowidth-off').DataTable({fixedHeader: true, autoWidth: false,});
         @stack('footer-ready')
     });
     function changeDate(invar, outvar) {

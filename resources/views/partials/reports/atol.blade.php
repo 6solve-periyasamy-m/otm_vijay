@@ -1,4 +1,4 @@
-<table class="table table-striped" id="report">
+<table class="datatable table table-striped" id="report">
     <thead>
     <tr>
         <td>Order Date</td>

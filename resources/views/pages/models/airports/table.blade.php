@@ -2,14 +2,6 @@
 
 @section('title', 'All Airports')
 
-@section('footer-script')
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#airport').DataTable({fixedHeader: true});
-    });
-</script>
-@endsection
-
 @section('content')
 <div class="card">
     <div class="card-body">
@@ -21,7 +13,7 @@
 </div>
 <div class="card">
     <div class="card-body">                
-        <table id="airport" style="width: 100%;" class="table table-striped">
+        <table id="airport" style="width: 100%;" class="datatable table table-striped">
             <thead class="thead-dark">
             <tr>
                 <th scope="col">Name</th>

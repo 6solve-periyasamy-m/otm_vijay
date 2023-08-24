@@ -2,14 +2,6 @@
 
 @section('title', 'View Accommodation Inventory Upgrades')
 
-@push('footer-stack')
-    <script>
-        $(document).ready( function () {
-            $('#accommodation-table').DataTable({fixedHeader: true});
-        });
-    </script>
-@endpush
-
 @section('content')
     @include('pages.upgrades.view.header')
     {{-- Upgrades Section --}}
@@ -58,7 +50,7 @@
                 {{-- Accommodation Table --}}
                 <div id="accommodation" role="tabpanel" class="tab-pane fade show active">
                     <div id="accommodation-details">
-                        <table id="accommodation-table" class="table table-striped table-responsive-sm">
+                        <table id="accommodation-table" class="datatable table table-striped table-responsive-sm">
                             <thead>
                             <tr>
                                 <th scope="col">Date</th>

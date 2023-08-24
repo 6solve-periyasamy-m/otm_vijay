@@ -2,14 +2,6 @@
 
 @section('title', 'View Flight Inventory Upgrades')
 
-@push('footer-stack')
-    <script>
-        $(document).ready( function () {
-            $('#flight-table').DataTable({fixedHeader: true});
-        });
-    </script>
-@endpush
-
 @section('content')
     @include('pages.upgrades.view.header')
     {{-- Upgrades Section --}}

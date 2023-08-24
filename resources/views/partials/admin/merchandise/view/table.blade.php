@@ -1,7 +1,7 @@
 @php /** @var \App\Models\Merchandise\Merchandise $merchandise */ @endphp
 <div class="card">
     <div class="card-body">
-        <table class="table table-striped" id="inventory">
+        <table class="datatable table table-striped" id="inventory">
             <thead>
             <tr>
                 <th>Icon</th>

@@ -17,7 +17,6 @@
         $(document).ready(function () {
             initTable();
             initDates();
-            $('.report-table').DataTable({fixedHeader: true, autoWidth: false,});
         });
         function initDates() {
             rows++;

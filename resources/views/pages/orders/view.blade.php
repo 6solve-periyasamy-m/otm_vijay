@@ -11,13 +11,6 @@
 
 @section('footer-script')
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('#payment-table').DataTable({fixedHeader: true});
-        $('#cost-table').DataTable({fixedHeader: true});
-        $('#order-adjustment-table').DataTable({fixedHeader: true});
-        $('#customer-adjustment-table').DataTable({fixedHeader: true});
-        $('#schedule-table').DataTable({fixedHeader: true,});
-    });
     function resend() {
         hideOverlay('.panel-overlay')
         $.post('{{ route('api.order.resend.booking-confirmation') }}', {
@@ -166,7 +159,7 @@
                         {{-- TODO: Implement <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">View Previous Invoices</button>--}}
                     </div>
                     <div class="pt-1">
-                        <table class="table table-striped" id="payment-table">
+                        <table class="datatable table table-striped" id="payment-table">
                             <thead>
                                 <tr>
                                     <th scope="col">Type</th>
@@ -218,7 +211,7 @@
                         <h4 class="fw-bold">Costs</h4>
                     </div>
                     <div>
-                        <table class="table table-striped" id="cost-table">
+                        <table class="datatable table table-striped" id="cost-table">
                             <thead>
                             <tr>
                                 <th scope="col">Type</th>
@@ -271,7 +264,7 @@
                         @endcan
                     </div>
                     <div>
-                        <table class="table table-striped" id="schedule-table">
+                        <table class="datatable table table-striped" id="schedule-table">
                             <thead>
                             <tr>
                                 <th scope="col">Type</th>
@@ -384,7 +377,7 @@
                     </div>
                     @endcan
                     <div class="pt-2">
-                        <table class="table table-striped" id="order-adjustment-table">
+                        <table class="datatable table table-striped" id="order-adjustment-table">
                             <thead>
                             <tr>
                                 <th scope="col">Amount</th>
@@ -430,7 +423,7 @@
                         <h4 class="fw-bold">Customer Adjustments</h4>
                     </div>
                     <div>
-                        <table class="table table-striped" id="customer-adjustment-table">
+                        <table class="datatable table table-striped" id="customer-adjustment-table">
                             <thead>
                             <tr>
                                 <th scope="col">Customer</th>

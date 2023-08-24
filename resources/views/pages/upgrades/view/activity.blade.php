@@ -2,14 +2,6 @@
 
 @section('title', 'View Activity Inventory Upgrades')
 
-@push('footer-stack')
-    <script>
-        $(document).ready( function () {
-            $('#activity-table').DataTable({fixedHeader: true});
-        });
-    </script>
-@endpush
-
 @section('content')
     @include('pages.upgrades.view.header')
     {{-- Upgrades Section --}}
@@ -58,7 +50,7 @@
                 {{-- Activity Table --}}
                 <div id="activity" role="tabpanel" class="tab-pane fade show active">
                     <div id="activity-details">
-                        <table id="activity-table" class="table table-striped table-responsive-sm">
+                        <table id="activity-table" class="datatable table table-striped table-responsive-sm">
                             <thead>
                             <tr>
                                 <th scope="col">Date</th>

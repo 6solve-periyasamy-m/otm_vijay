@@ -4,7 +4,6 @@
 
 @push('header-stack')
     <script type="text/javascript">
-        $(document).ready(function () { $('#reports').DataTable({fixedHeader: true,}); });
         @if(flag('atol.enabled', true))
         function showOrderedOnReport() {
             let year = $('#year-input').val(); let quarter = $('#quarter-input').val();
@@ -95,7 +94,7 @@
     @endcan
     <div class="card">
         <div class="card-body">
-            <table class="table table-striped" id="reports">
+            <table class="datatable table table-striped" id="reports">
                 <thead>
                     <tr>
                         <th scope="col">Name</th>
