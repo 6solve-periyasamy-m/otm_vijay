@@ -20,9 +20,9 @@ class Form extends ModalComponent
     public $associate;
     public $supplier;
 
-    public function mount(Supplier|int $supplier, SupplierAssociate|int|null $associate = null): void
+    public function mount(Supplier|int|null $supplier = null, SupplierAssociate|int|null $associate = null): void
     {
-        $this->supplier = (is_int($supplier) ? $supplier : $supplier->id);
+        $this->supplier = (is_int($supplier) ? $supplier : $supplier?->id);
         $this->associate = SupplierAssociate::fetch($associate);
     }
 
@@ -31,6 +31,7 @@ class Form extends ModalComponent
         $this->associate->supplier_id = $this->associate->supplier_id ?? $this->supplier;
         $this->associate->save();
         $this->refreshTables();
+        $this->closeModal();
     }
 
     public function render(): Factory|View|Application

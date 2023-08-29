@@ -20,7 +20,7 @@
                         </a>
                     </div>
                 </div>
-                <livewire:admin.supplier.associate.table />
+                <livewire:admin.supplier.associate.table :supplier="$supplier->id" />
             </div>
         </div>
 @endsection

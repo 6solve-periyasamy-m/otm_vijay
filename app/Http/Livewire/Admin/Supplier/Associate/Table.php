@@ -8,9 +8,12 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class Table extends LivewireDatatable
 {
+    public $supplier;
+
     public function builder()
     {
-        return SupplierAssociate::query();
+        return SupplierAssociate::query()
+            ->where('supplier_id', '=', $this->supplier);
     }
 
     public function columns()
@@ -36,6 +39,20 @@ class Table extends LivewireDatatable
                 ->label(__('supplier.associate.table.alternative_phone'))
                 ->searchable()
                 ->sortable(),
+            Column::callback(['id'],  function ($id) {
+                return view('partials.admin.livewire.table.actions', [
+                    'modal' => 'admin.supplier.associate.form',
+                    'field' => 'associate',
+                    'id' => $id,
+                ]);
+            })
+                ->label(__('custom.table.actions')),
         ];
+    }
+
+    public function delete($id)
+    {
+        $associate = SupplierAssociate::where('supplier_id', '=', $this->supplier)->where('id', '=', $id)->first();
+        $associate?->delete();
     }
 }
