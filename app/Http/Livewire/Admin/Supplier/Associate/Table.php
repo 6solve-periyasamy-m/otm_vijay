@@ -39,6 +39,10 @@ class Table extends LivewireDatatable
                 ->label(__('supplier.associate.table.alternative_phone'))
                 ->searchable()
                 ->sortable(),
+            Column::name('notes')
+                ->label(__('supplier.associate.table.notes'))
+                ->searchable()
+                ->sortable(),
             Column::callback(['id'],  function ($id) {
                 return view('partials.admin.livewire.table.actions', [
                     'modal' => 'admin.supplier.associate.form',
