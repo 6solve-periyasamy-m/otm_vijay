@@ -127,6 +127,9 @@
     $(document).ready(function () {
         @stack('footer-ready')
     });
+    function openModal(modal, options = {}) {
+        Livewire.emit('openModal', modal, options);
+    }
     function changeDate(invar, outvar) {
         if (outvar.hasClass('autoset')) {
             outvar.val(invar.val());

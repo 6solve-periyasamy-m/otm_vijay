@@ -2,6 +2,7 @@
 
 namespace App\Models\Supplier;
 
+use App\Models\Traits\Fetches;
 use Database\Factories\Supplier\SupplierAssociateFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -42,7 +43,9 @@ use Illuminate\Support\Carbon;
  */
 class SupplierAssociate extends Model
 {
-    use HasFactory;
+    protected $guarded = [];
+
+    use HasFactory, Fetches;
 
     public function supplier(): BelongsTo
     {
