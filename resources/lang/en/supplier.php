@@ -24,5 +24,26 @@ return [
                 'postcode' => 'Postcode'
             ]
         ]
-    ]
+    ],
+    'details' => [
+        'name' => 'Supplier Name',
+        'contact' => [
+            'address' => 'Address',
+            'website' => 'Website',
+            'telephone' => 'Telephone',
+            'email' => 'Email Address',
+        ],
+        'currency' => [
+            'name' => 'Trading Currency',
+            'none' => 'No currency set'
+        ],
+        'exchange' => [
+            'name' => 'Agreed Exchange',
+            'none' => 'No rate agreed'
+        ],
+        'buttons' => [
+            'edit' => 'Edit Supplier',
+            'delete' => 'Delete Supplier',
+        ]
+    ],
 ];

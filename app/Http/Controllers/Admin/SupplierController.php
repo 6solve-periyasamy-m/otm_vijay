@@ -14,7 +14,6 @@ class SupplierController extends Controller
 
     public function view(Supplier $supplier)
     {
-        // TODO: Implement
-        abort(404);
+        return view('pages.admin.supplier.view', ['supplier' => $supplier,]);
     }
 }
