@@ -252,6 +252,7 @@ class TransportInventoryTourRepository extends InventoryTourRepository
             $inventory->external_notes,
             $upgradeName,
             [
+                'Transport Number' => $inventory->transport_number,
                 'Transport Type' => $component->transportType->name,
                 'Departure' => f_datetime($inventory->departs_at),
                 'Arrival' => f_datetime($inventory->arrives_at),

@@ -34,7 +34,18 @@
                         @endif
                     </div>
                 @else
-                    {{ $component->description }}
+                    <div>
+                        <div>
+                            <span class="fw-bold">Description<br /></span>
+                            {{ $component->description }}
+                        </div>
+                        @if($component->notes)
+                            <div class="border-top mt-1">
+                                <span class="fw-bold">Notes<br /></span>
+                                {{ $component->notes }}
+                            </div>
+                        @endif
+                    </div>
                 @endif
             </div>
         </div>
