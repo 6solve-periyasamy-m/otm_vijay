@@ -10,5 +10,6 @@ enum AddressParent: string
     case AIRPORT = 'airport';
     case TRANSPORT = 'transport';
     case BRAND = 'brand';
+    case ORGANIZATION = 'organization';
     case OTHER = 'other';
 }
