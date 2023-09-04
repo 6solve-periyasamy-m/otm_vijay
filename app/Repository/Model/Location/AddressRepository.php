@@ -2,6 +2,7 @@
 
 namespace App\Repository\Model\Location;
 
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
 use App\Repository\Abstracts\ModelRepository;
 use Illuminate\Http\Request;
@@ -15,11 +16,11 @@ class AddressRepository extends ModelRepository
         $this->address = $address;
     }
 
-    public static function getArrayFromGenericRequest(Request $request, string $name, int $addressParent, string $prefix = ''): array
+    public static function getArrayFromGenericRequest(Request $request, string $name, AddressParent|int|string $addressParent, string $prefix = ''): array
     {
         return [
             'name' => $name,
-            'address_parent_id' => $addressParent,
+            'parent' => $addressParent,
             'location_type_id' => $request->input($prefix . 'location_type_id'),
             'address_line_1' => $request->input($prefix . 'address_line_1'),
             'address_line_2' => $request->input($prefix . 'address_line_2'),
@@ -31,16 +32,16 @@ class AddressRepository extends ModelRepository
         ];
     }
 
-    public function cloneToNew(int $parent, ?Address $to = null): Address
+    public function cloneToNew(AddressParent|int|string $parent, ?Address $to = null): Address
     {
         if (isset($toAddress)) {
             $data = $this->address->toArray();
             unset($data['id']);
-            $data['address_parent_id'] = $parent;
+            $data['parent'] = $parent;
             $to->update($data);
         } else {
             $to = $this->address->replicate();
-            $to->address_parent_id = $parent;
+            $to->parent = $parent;
         }
         $to->save();
         return $to;
@@ -90,7 +91,7 @@ class AddressRepository extends ModelRepository
     {
         $this->update([
             "name" => "Forgotten Address",
-            "address_parent_id" => 1,
+            "parent" => AddressParent::CUSTOMER->value,
             "location_type_id" => null,
             "address_line_1" => null,
             "address_line_2" => null,

@@ -4,8 +4,8 @@ namespace App\Imports;
 
 use App\Models\Activity\Activity;
 use App\Models\Activity\ActivityType;
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
-use App\Models\Location\AddressParent;
 use App\Models\Location\Country;
 use App\Models\Location\Currency;
 use App\Models\Location\LocationType;
@@ -31,7 +31,7 @@ class ActivityImport implements ToCollection, WithHeadingRow, WithValidation
             $currency = Currency::where('code', '=', trim($row['currency']))->first();
             $address = Address::create([
                 'name' => $row['name'],
-                'address_parent_id' => AddressParent::getParentId('Activity'),
+                'parent' => AddressParent::ACTIVITY,
                 'location_type_id' => LocationType::findOrCreate(trim($row['location_type']))->id,
                 'address_line_1' => trim($row['address_line_1']),
                 'address_line_2' => trim($row['address_line_2']),

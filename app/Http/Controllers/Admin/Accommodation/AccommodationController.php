@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin\Accommodation;
 
 use App\Http\Controllers\Controller;
 use App\Models\Accommodation\Accommodation;
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
-use App\Models\Location\AddressParent;
 use App\Repository\Model\Location\AddressRepository;
 use App\Repository\Reporting\Manifest\RoomingReportRepository;
 use Illuminate\Http\Request;
@@ -35,10 +35,10 @@ class AccommodationController extends Controller
             'internal_notes' => $request->input('notes'),
         ]);
         if ($request->input('use_existing') == 'on') {
-            $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('accommodation'));
+            $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::ACCOMMODATION);
         } else {
             $request->validate(Address::getValidationRules());
-            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::getParentId('accommodation')));
+            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::ACCOMMODATION));
             $address->repository->save();
         }
         if ($request->has('image') && $request->file('image') != null) {
@@ -83,10 +83,10 @@ class AccommodationController extends Controller
             'internal_notes' => $request->input('notes'),
         ]);
         if ($request->input('use_existing') == 'on') {
-            Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('accommodation'), $accommodation->address);
+            Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::ACCOMMODATION, $accommodation->address);
         } else {
             $request->validate(Address::getValidationRules());
-            $accommodation->address->repository->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::getParentId('accommodation')));
+            $accommodation->address->repository->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::ACCOMMODATION));
         }
         if ($request->has('image') && $request->file('image') != null) {
             if (isset($accommodation->image_url)) {
