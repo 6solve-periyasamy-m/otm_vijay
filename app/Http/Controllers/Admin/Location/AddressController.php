@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin\Location;
 
 use App\Http\Controllers\Controller;
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
-use App\Models\Location\AddressParent;
 use Illuminate\Http\Request;
 
 class AddressController extends Controller
@@ -12,21 +12,23 @@ class AddressController extends Controller
 
     public function index()
     {
-        return view('pages.models.addresses.table', ['addresses' => Address::where('address_parent_id', '!=', AddressParent::getParentId('customer'))->get(),]);
+        return view('pages.models.addresses.table', ['addresses' => Address::where('parent', '!=', AddressParent::CUSTOMER)->get(),]);
     }
 
     public function create(string $addressParent)
     {
+        if (AddressParent::tryFrom($addressParent) === null) return back()->withErrors(['msg' => 'An invalid parent has been provided',]);
         return view('pages.models.addresses.create', ['addressParent' => $addressParent,]);
     }
 
     public function store(Request $request, string $addressParent)
     {
+        if (AddressParent::tryFrom($addressParent) === null) return back()->withErrors(['msg' => 'An invalid parent has been provided',]);
         $request->validate(Address::getValidationRules());
         $address = Address::create([
             'name' => $request->input('name'),
             'location_type_id' => $request->input('location_type_id'),
-            'address_parent_id' => AddressParent::getParentId($addressParent),
+            'parent' => $addressParent,
             'address_line_1' => $request->input('address_line_1'),
             'address_line_2' => $request->input('address_line_2'),
             'town' => $request->input('town'),

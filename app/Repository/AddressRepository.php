@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
 use Illuminate\Support\Facades\Log;
 
@@ -37,8 +38,7 @@ class AddressRepository implements AddressRepositoryInterface
 
     public function create(Array $address, $type = 'home')
     {
-        $address['address_parent_id'] = 1;
-        $address['location_type_id'] = 1;
+        $address['parent'] = AddressParent::CUSTOMER;
         $address['name'] = ucfirst($type . ' address');
         foreach($this->fields as $field) {
             $typedField = $type . '_' . $field;

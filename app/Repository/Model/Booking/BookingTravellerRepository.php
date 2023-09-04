@@ -10,8 +10,8 @@ use App\Models\Booking\Component\BookingFlight;
 use App\Models\Booking\Component\BookingTransport;
 use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
-use App\Models\Location\AddressParent;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Voucher\Executors\FlatCostReductionExecutor;
@@ -220,13 +220,13 @@ class BookingTravellerRepository extends ModelRepository
         if (!isset($this->traveller->home_address_id)) {
             $this->traveller->home_address_id = Address::create([
                 'name' => "{$this->traveller->first_name} {$this->traveller->first_name} - Home Address",
-                'address_parent_id' => AddressParent::getParentId('customer'),
+                'parent' => AddressParent::CUSTOMER,
             ])->id;
         }
         if (!isset($this->traveller->billing_address_id)) {
             $this->traveller->billing_address_id = Address::create([
                 'name' => "{$this->traveller->first_name} {$this->traveller->first_name} - Billing Address",
-                'address_parent_id' => AddressParent::getParentId('customer'),
+                'parent' => AddressParent::CUSTOMER,
             ])->id;
         }
         $this->traveller->save();
@@ -287,7 +287,7 @@ class BookingTravellerRepository extends ModelRepository
         } else {
             $homeAddress = Address::create([
                 'name' => ($details['first_name'] ?? '') . ($details['last_name'] ?? '') . ' - Home Address',
-                'address_parent_id' => AddressParent::getParentId('customer'),
+                'parent' => AddressParent::CUSTOMER,
                 'address_line_1' => $details['home_address_line_1'] ?? null,
                 'address_line_2' => $details['home_address_line_2'] ?? null,
                 'town' => $details['home_town'] ?? null,
@@ -297,7 +297,7 @@ class BookingTravellerRepository extends ModelRepository
             ]);
             $billingAddress = Address::create([
                 'name' => ($details['first_name'] ?? '') . ($details['last_name'] ?? '') . ' - Billing Address',
-                'address_parent_id' => AddressParent::getParentId('customer'),
+                'parent' => AddressParent::CUSTOMER,
                 'address_line_1' => $details['billing_address_line_1'] ?? null,
                 'address_line_2' => $details['billing_address_line_2'] ?? null,
                 'town' => $details['billing_town'] ?? null,

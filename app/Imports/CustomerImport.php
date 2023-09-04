@@ -4,8 +4,8 @@ namespace App\Imports;
 
 use App\Models\Customer\Customer;
 use App\Models\Customer\Organization;
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
-use App\Models\Location\AddressParent;
 use App\Models\Location\Country;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -28,10 +28,10 @@ class CustomerImport implements ToCollection, WithHeadingRow, WithValidation
             $homeCountry = Country::where('name', 'like', trim($row['home_country']))->first();
             $billingCountry = Country::where('name', 'like', trim($row['billing_country']))->first();
             $addressName = "(" . trim($row['email']) . ")" . trim($row['first_name']) . " " . trim($row['last_name']);
-            $addressParent = AddressParent::getParentId('customer');
+            $addressParent = AddressParent::CUSTOMER;
             $homeAddress = Address::create([
                 'name' => $addressName,
-                'address_parent_id' => $addressParent,
+                'parent' => $addressParent,
                 'address_line_1' => trim($row['home_line_1']),
                 'address_line_2' => trim($row['home_line_2'] ?? ''),
                 'town' => trim($row['home_town'] ?? ''),
@@ -41,7 +41,7 @@ class CustomerImport implements ToCollection, WithHeadingRow, WithValidation
             ]);
             $billingAddress = Address::create([
                 'name' => $addressName,
-                'address_parent_id' => $addressParent,
+                'parent' => $addressParent,
                 'address_line_1' => trim($row['billing_line_1']),
                 'address_line_2' => trim($row['billing_line_2'] ?? ''),
                 'town' => trim($row['billing_town'] ?? ''),

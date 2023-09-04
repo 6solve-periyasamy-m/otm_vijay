@@ -6,9 +6,9 @@ use App\Exceptions\MailDisabledException;
 use App\Mail\Storage\Attachment;
 use App\Mail\Storage\SettingsMail;
 use App\Models\Customer\Customer;
+use App\Models\Helper\AddressParent;
 use App\Models\Helper\QuoteStatus;
 use App\Models\Location\Address;
-use App\Models\Location\AddressParent;
 use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;
 use App\Models\Quote\Component\QuoteActivity;
@@ -731,9 +731,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $homeAddress = Address::create([
             'name' => 'Generic Customer Address',
-            'address_parent_id' => AddressParent::getParentId('customer'),
+            'parent' => AddressParent::CUSTOMER,
         ]);
-        $billingAddress = $homeAddress->repository->cloneToNew(AddressParent::getParentId('customer'));
+        $billingAddress = $homeAddress->repository->cloneToNew(AddressParent::CUSTOMER);
         return Customer::create([
             'first_name' => "Unknown " . ($paying ? "Paying" : "Non-Paying") . " Traveller",
             'last_name' => $this->quote->reference,

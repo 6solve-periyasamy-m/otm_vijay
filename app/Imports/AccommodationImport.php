@@ -3,8 +3,8 @@
 namespace App\Imports;
 
 use App\Models\Accommodation\Accommodation;
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
-use App\Models\Location\AddressParent;
 use App\Models\Location\Country;
 use App\Models\Location\Currency;
 use App\Models\Location\LocationType;
@@ -33,7 +33,7 @@ class AccommodationImport implements ToCollection, WithHeadingRow, WithValidatio
             $currency = Currency::where('code', '=', trim($row['currency']))->first();
             $address = Address::create([
                 'name' => $row['name'],
-                'address_parent_id' => AddressParent::getParentId('Accommodation'),
+                'parent' => AddressParent::ACCOMMODATION,
                 'location_type_id' => LocationType::findOrCreate('Hotel')->id,
                 'address_line_1' => trim($row['address_line_1']),
                 'address_line_2' => trim($row['address_line_2']),
