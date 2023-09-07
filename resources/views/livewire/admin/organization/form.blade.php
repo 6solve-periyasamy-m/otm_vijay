@@ -20,7 +20,7 @@
                 <x-livewire.input wire:model="delivery.address_line_2" width="6" label="{{__('organization.form.fields.address.delivery.line_2')}}" />
                 <x-livewire.input wire:model="delivery.town" width="6" label="{{__('organization.form.fields.address.delivery.town')}}" />
                 <x-livewire.input wire:model="delivery.region" width="6" label="{{__('organization.form.fields.address.delivery.region')}}" />
-                <x-livewire.input.select2 name="delivery.country_id" route="countries" width="6" label="{{__('organization.form.fields.address.delivery.country')}}" />
+                <x-livewire.input.select2 name="delivery.country_id" value="{{ $delivery->country_id }}" route="countries" width="6" label="{{__('organization.form.fields.address.delivery.country')}}" />
                 <x-livewire.input wire:model="delivery.postcode" width="6" label="{{__('organization.form.fields.address.delivery.postcode')}}" />
             </div>
             @if(!$billingIsDelivery)
@@ -31,7 +31,7 @@
                 <x-livewire.input wire:model="billing.address_line_2" width="6" label="{{__('organization.form.fields.address.billing.line_2')}}" />
                 <x-livewire.input wire:model="billing.town" width="6" label="{{__('organization.form.fields.address.billing.town')}}" />
                 <x-livewire.input wire:model="billing.region" width="6" label="{{__('organization.form.fields.address.billing.region')}}" />
-                <x-livewire.input.select2 name="billing.country_id" route="countries" width="6" label="{{__('organization.form.fields.address.billing.country')}}" />
+                <x-livewire.input.select2 name="billing.country_id" value="{{ $billing->country_id }}" route="countries" width="6" label="{{__('organization.form.fields.address.billing.country')}}" />
                 <x-livewire.input wire:model="billing.postcode" width="6" label="{{__('organization.form.fields.address.billing.postcode')}}" />
             </div>
             @endif
