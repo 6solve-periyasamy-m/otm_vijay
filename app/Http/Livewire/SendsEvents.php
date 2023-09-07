@@ -26,4 +26,9 @@ trait SendsEvents
     {
         $this->emit('refreshLivewireDatatable');
     }
+
+    public function closeModal(): void
+    {
+        $this->emit('closeModal');
+    }
 }
