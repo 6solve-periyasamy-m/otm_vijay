@@ -52,6 +52,8 @@ class Table extends LivewireDatatable
                     'route' => 'organizations.view'
                 ]);
             })
+                ->label(__('custom.table.actions'))
+                ->unsortable(),
         ];
     }
 
