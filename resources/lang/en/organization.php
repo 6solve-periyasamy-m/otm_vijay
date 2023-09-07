@@ -39,5 +39,16 @@ return [
                 'clone' => 'Use as billing address?'
             ]
         ]
-    ]
+    ],
+    'table' => [
+        'title' => 'All Organizations',
+        'columns' => [
+            'name' => 'Name',
+            'email' => 'Contact Email',
+            'telephone' => 'Contact Number',
+            'customers' => 'Members',
+            'orders' => 'Orders',
+            'quotes' => 'Quotes',
+        ],
+    ],
 ];
