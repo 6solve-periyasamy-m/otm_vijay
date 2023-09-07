@@ -19,6 +19,7 @@ return [
             ],
             'address' => [
                 'delivery' => [
+                    'title' => 'Delivery Address',
                     'line_1' => 'Line 1',
                     'line_2' => 'Line 2',
                     'town' => 'Town',
@@ -27,6 +28,7 @@ return [
                     'postcode' => 'Postcode'
                 ],
                 'billing' => [
+                    'title' => 'Billing Address',
                     'line_1' => 'Line 1',
                     'line_2' => 'Line 2',
                     'town' => 'Town',
@@ -34,7 +36,7 @@ return [
                     'country' => 'Country',
                     'postcode' => 'Postcode'
                 ],
-                'clone' => 'Billing is Delivery?'
+                'clone' => 'Use as billing address?'
             ]
         ]
     ]

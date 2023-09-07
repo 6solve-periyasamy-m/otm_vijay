@@ -9,9 +9,9 @@ use App\Models\Location\Address;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Livewire\Component;
+use LivewireUI\Modal\ModalComponent;
 
-class Form extends Component
+class Form extends ModalComponent
 {
     use SendsEvents;
 
@@ -23,7 +23,7 @@ class Form extends Component
     public Address $billing;
     public bool $billingIsDelivery;
 
-    public function mount(Organization|int|null $organization): void
+    public function mount(Organization|int|null $organization = null): void
     {
         if (is_int($organization)) {
             $organization = Organization::find($organization);
