@@ -2,14 +2,6 @@
 
 @section('title', ($title . ' ' ?? '') . 'Report Result')
 
-@section('footer-script')
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.report-table').DataTable({fixedHeader: true});
-        });
-    </script>
-@endsection
-
 @section('content')
     @include('partials.orders.reminder.frequencies', ['route' => 'reports.reminders'])
     <div class="card">

@@ -2,14 +2,6 @@
 
 @section('title', 'All Activities')
 
-@section('footer-script')
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#activity').DataTable({fixedHeader: true});
-    });
-</script>
-@endsection
-
 @section('content')
 @can('create', \App\Models\Activity\Activity::class)
 <div class="card">
@@ -23,7 +15,7 @@
 @endcan
 <div class="card">
     <div class="card-body">
-        <table id="activity" style="width: 100%;" class="table table-striped">
+        <table style="width: 100%;" class="datatable table table-striped">
             <thead class="thead-dark">
             <tr>
                 <th scope="col">Name</th>

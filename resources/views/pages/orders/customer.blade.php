@@ -2,7 +2,7 @@
 
 @section('title', 'View Order Customer')
 
-@section('header-script')
+@push('footer-stack')
 <script type="text/javascript">
 @if ($orderCustomer->is_travelling)
 function addActivityAddon() {
@@ -111,18 +111,8 @@ function applyTransportUpgrade(selector, btn) {
     }
 }
 @endif
-$(document).ready( function () {
-    @if($orderCustomer->is_travelling)
-    $('#accommodation-table').DataTable({fixedHeader: true});
-    $('#activities-table').DataTable({fixedHeader: true});
-    $('#flights-table').DataTable({fixedHeader: true});
-    $('#transports-table').DataTable({fixedHeader: true});
-    $('#merchandise-table').DataTable({fixedHeader: true});
-    @endif
-    $('#customer-adjustment-table').DataTable({fixedHeader: true});
-});
 </script>
-@endsection
+@endpush
 @section('content')
 {{-- Header Details --}}
 <div class="otm-callout" id="header-details">
@@ -327,7 +317,7 @@ $(document).ready( function () {
                     <span class="fw-bold">Accommodation components are managed through the <a href="{{ route('orders.occupancy', ['order' => $orderCustomer->order,]) }}">Occupancy Manager</a>.</span>
                 </div>
                 <div id="accommodation-details">
-                    <table id="accommodation-table" class="table table-striped table-responsive-sm">
+                    <table id="accommodation-table" class="datatable table table-striped table-responsive-sm">
                             <thead>
                             <tr>
                                 <th scope="col">Date</th>
@@ -401,7 +391,7 @@ $(document).ready( function () {
                         'createRoute' => '#', 'onclick' => 'addActivityAddon()', 'target' => ''])
                 </div>
                 <div id="activities-details">
-                    <table id="activities-table" class="table table-striped table-responsive-sm">
+                    <table id="activities-table" class="datatable table table-striped table-responsive-sm">
                         <thead>
                         <tr>
                             <th scope="col">Date</th>
@@ -473,7 +463,7 @@ $(document).ready( function () {
                         'createRoute' => '#', 'onclick' => 'addFlightAddon()', 'target' => ''])
                 </div>
                 <div id="flights-details">
-                    <table id="flights-table" class="table table-striped table-responsive-sm">
+                    <table id="flights-table" class="datatable table table-striped table-responsive-sm">
                         <thead>
                         <tr>
                             <th scope="col">Date</th>
@@ -545,7 +535,7 @@ $(document).ready( function () {
                         'createRoute' => '#', 'onclick' => 'addTransportAddon()', 'target' => ''])
                 </div>
                 <div id="transports-details">
-                    <table id="transports-table" class="table table-striped table-responsive-sm">
+                    <table id="transports-table" class="datatable table table-striped table-responsive-sm">
                         <thead>
                         <tr>
                             <th scope="col">Date</th>
@@ -626,7 +616,7 @@ $(document).ready( function () {
                         'createRoute' => '#', 'onclick' => 'addMerchandiseAddon()', 'target' => ''])
         </div>
         <div id="merchandise-details">
-            <table id="merchandise-table" class="table table-striped table-responsive-sm">
+            <table id="merchandise-table" class="datatable table table-striped table-responsive-sm">
                 <thead>
                 <tr>
                     <th scope="col">Image</th>
@@ -685,7 +675,7 @@ $(document).ready( function () {
             @endcan
         </div>
         <div>
-            <table class="table table-striped" id="customer-adjustment-table">
+            <table class="datatable table table-striped" id="customer-adjustment-table">
                 <thead>
                 <tr>
                     <th scope="col">Amount</th>

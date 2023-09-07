@@ -12,7 +12,7 @@
            class="btn btn-info d-inline ms-1">{{ Icon::unknownCustomer() }}</a>
     </div>
 </div>
-@push('header-stack')
+@push('footer-stack')
     <script type="text/javascript">
         $(document).ready(function () {
             let {{ $sanitizedName }}Select = $('#{{$sanitizedName}}');

@@ -2,14 +2,6 @@
 
 @section('title', 'Small Model Manager')
 
-@section('footer-script')
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.datatable').DataTable({fixedHeader: true});
-        });
-    </script>
-@endsection
-
 @section('content')
     <div class="card">
         <div class="card-body" data-target="#accommodation" onclick="toggleAccordion(this)">

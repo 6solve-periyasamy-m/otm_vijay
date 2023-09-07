@@ -6,12 +6,6 @@
     /** @var \App\Models\Customer\Organization $organization */
 @endphp
 
-@section('footer-script')
-    <script>
-        $('.datatable').DataTable({fixedHeader: true});
-    </script>
-@endsection
-
 @section('content')
     <div class="otm-callout">
         <div class="row">

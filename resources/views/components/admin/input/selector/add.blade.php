@@ -8,7 +8,7 @@
         <a href="{{ $create ?? "" }}" target="{{ $create->attributes->get('target', '_blank') }}" class="btn btn-success d-inline ms-1" onclick="{{ $create->attributes->get('onclick', '') }}">+</a>
     </div>
 </div>
-@push('header-stack')
+@push('footer-stack')
 <script type="text/javascript">
     $(document).ready(function () {
         let {{ $sanitizedName }}Select = $('#{{$sanitizedName}}');

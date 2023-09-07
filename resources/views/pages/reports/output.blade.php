@@ -2,7 +2,7 @@
 
 @section('title', 'View Report')
 
-@push('header-stack')
+@push('footer-stack')
     <script type="text/javascript">
         function save() {
             $.post('{{ route('api.reports.bespoke.save') }}', {!! json_encode(array_merge($report->toArray(), ['__api_token' => Auth::user()->getCurrentToken()->token,])) !!})

@@ -4,7 +4,7 @@
         <label for="{{ $attributes->get('name', '') }}" style="padding-top: 10px;">{{ $slot }}</label>
     </div>
 </div>
-@push('header-stack')
+@push('footer-stack')
     <script type="text/javascript">
         $(document).ready(function () {
             let {{ $attributes->get('name', '') }}Select = $('.{{ $attributes->get('name', '') }}-input');
