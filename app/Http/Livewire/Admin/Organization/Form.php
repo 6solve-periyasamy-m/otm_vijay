@@ -21,7 +21,7 @@ class Form extends ModalComponent
     public $organization;
     public Address $delivery;
     public Address $billing;
-    public bool $billingIsDelivery;
+    public bool $billingIsDelivery = false;
 
     public function mount(Organization|int|null $organization = null): void
     {
