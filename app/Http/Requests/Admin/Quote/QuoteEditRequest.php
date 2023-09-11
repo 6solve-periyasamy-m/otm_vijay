@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * @property int $customer_id
  * @property int|null $brand_id
+ * @property int|null $organization_id
  * @property string $name
  * @property string|null $description
  * @property float $deposit
@@ -30,6 +31,7 @@ class QuoteEditRequest extends FormRequest
         return [
             'deposit' => $this->deposit,
             'single_occupancy_surcharge' => $this->single_occupancy_surcharge,
+            'organization_id' => $this->organization_id,
             'date_from' => $this->from,
             'date_to' => $this->to,
             'final_payment' => $this->final,
@@ -69,6 +71,7 @@ class QuoteEditRequest extends FormRequest
             'final' => 'required|date',
             'expires' => 'nullable|date',
             'name' => 'required',
+            'organization_id' => 'nullable|integer|exists:organizations,id',
         ];
     }
 }
