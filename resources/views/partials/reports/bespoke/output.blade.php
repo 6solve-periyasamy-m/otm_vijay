@@ -1,14 +1,6 @@
-@push('header-stack')
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#report').DataTable({fixedHeader: true,});
-        });
-    </script>
-@endpush
-
 <div class="card">
     <div class="card-body">
-        <table class="table table-striped" id="report">
+        <table class="datatable table table-striped" id="report">
             <thead>
             <tr>
                 @foreach($header as $item)

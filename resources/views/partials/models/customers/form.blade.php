@@ -1,4 +1,4 @@
-@push('header-stack')
+@push('footer-stack')
     <script type="text/javascript">
         function changeBillingForm() {
             let disable = $('#home_is_billing-input').is(':checked');
@@ -10,7 +10,7 @@
         }
     </script>
 @endpush
-@push('header-ready')
+@push('footer-ready')
     changeBillingForm();
 @endpush
 @include('partials.fields.text', ['name' => 'Title', 'field' => 'title', 'value' => $title ?? null, 'width' => 1,])

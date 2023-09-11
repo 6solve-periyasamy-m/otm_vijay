@@ -1,4 +1,4 @@
-<table class="table table-striped report-table">
+<table class="datatable table table-striped report-table">
     <thead>
     <tr>
         <th scope="col">Booking Reference</th>

@@ -2,7 +2,7 @@
 
 @section('title', 'Create Order')
 
-@push('header-stack')
+@push('footer-stack')
     <script type="text/javascript">
         class Customer { constructor(id, name) { this.id = id; this.name = name; }}
         function getCustomers(count = 1) {

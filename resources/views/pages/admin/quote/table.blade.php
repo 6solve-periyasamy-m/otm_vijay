@@ -8,14 +8,6 @@
 
 @section('title', 'All Quotes')
 
-@section('footer-script')
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#quote').DataTable({fixedHeader: true});
-        });
-    </script>
-@endsection
-
 @section('content')
     @can('create', \App\Models\Quote\Quote::class)
         <div class="card">
@@ -33,7 +25,7 @@
     @endcan
     <div class="card">
         <div class="card-body">
-            <table id="quote" style="width: 100%;" class="table table-striped">
+            <table style="width: 100%;" class="datatable table table-striped">
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">{{ __('quotes.table.reference') }}</th>

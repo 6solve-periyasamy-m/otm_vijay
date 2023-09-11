@@ -2,14 +2,6 @@
 
 @section('title', 'View Report')
 
-@push('header-stack')
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#report').DataTable({fixedHeader: true,});
-        });
-    </script>
-@endpush
-
 @section('content')
     <div class="card">
         <div class="card-body">
@@ -34,7 +26,7 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <table class="table table-striped" id="report">
+            <table class="datatable table table-striped" id="report">
                 <thead>
                 <tr>
                     <td>Order Date</td>

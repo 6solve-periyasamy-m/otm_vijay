@@ -4,7 +4,7 @@
 
 @section('title', 'View Merchandise')
 
-@push('header-stack')
+@push('footer-stack')
     <style>
         .image {
             background-image: url('{{ asset(setting('company.logo')) }}');
@@ -40,8 +40,6 @@
         }
     </script>
 @endpush
-
-@push('footer-ready', "$('#inventory').DataTable({fixedHeader: true,});")
 
 @section('content')
     <div class="otm-callout">

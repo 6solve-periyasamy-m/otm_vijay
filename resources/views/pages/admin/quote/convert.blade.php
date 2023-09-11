@@ -4,7 +4,7 @@
 
 @section('title', 'Conversion of Quote ' . $quote->reference)
 
-@push('header-stack')
+@push('footer-stack')
     <script>
         class Customer { constructor(id, name) { this.id = id; this.name = name; }}
         function getCustomers(paying = false, count = 1) {

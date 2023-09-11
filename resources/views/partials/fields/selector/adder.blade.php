@@ -1,4 +1,4 @@
-@push('header-ready')
+@push('footer-ready')
     @include('partials.fields.selector.script', ['field' => $field, 'id' => $value ?? 0, 'additionalParams' => $additionalParams ?? "",])
 @endpush
 <div class="form-group col-12 {{ isset($width) ? 'col-xl-' . $width : '' }} {{ $divClasses ?? "" }}">

@@ -1,11 +1,4 @@
 @php /** @var \App\Models\Flight\Flight $flight */ @endphp
-@section('footer-script')
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#flightInventory').DataTable({fixedHeader: true});
-        });
-    </script>
-@endsection
 @can('create', \App\Models\Flight\FlightInventory::class)
     <div class="card">
         <div class="card-body">
@@ -20,7 +13,7 @@
 @endcan
 <div class="card">
     <div class="card-body">
-        <table id="flightInventory" style="width: 100%;" class="table table-striped">
+        <table id="flightInventory" style="width: 100%;" class="datatable table table-striped">
             <thead class="thead-dark">
             <tr>
                 <th scope="col">Flight Number</th>

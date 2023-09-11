@@ -1,8 +1,9 @@
 <div style="height: {{$size??400}}px;">
     <canvas id="{{ str_replace(' ', '', $name) }}"></canvas>
 </div>
+@push('footer-stack')
 <script type="text/javascript" defer>
-    new Chart(document.getElementById('{{ str_replace(' ', '', $name) }}').getContext('2d'), {
+    new window.Chart(document.getElementById('{{ str_replace(' ', '', $name) }}').getContext('2d'), {
         type: 'doughnut',
         data: {
             labels: [@foreach ($labels as $label) '{{$label}}', @endforeach],
@@ -21,3 +22,4 @@
         }
     });
 </script>
+@endpush

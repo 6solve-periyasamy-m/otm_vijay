@@ -5,7 +5,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <table id="address" style="width: 100%;" class="table table-striped">
+            <table style="width: 100%;" class="datatable table table-striped">
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">Name</th>
@@ -34,12 +34,4 @@
             </table>
         </div>
     </div>
-@endsection
-
-@section('footer-script')
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#address').DataTable({fixedHeader: true});
-        });
-    </script>
 @endsection

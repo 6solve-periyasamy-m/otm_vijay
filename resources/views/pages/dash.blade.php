@@ -2,7 +2,7 @@
 
 @section('title', 'Dashboard')
 
-@push('header-stack')
+@push('footer-stack')
     <script type="text/javascript">
         let datatable;
         let rows = 0;
@@ -17,7 +17,6 @@
         $(document).ready(function () {
             initTable();
             initDates();
-            $('.report-table').DataTable({fixedHeader: true, autoWidth: false,});
         });
         function initDates() {
             rows++;
