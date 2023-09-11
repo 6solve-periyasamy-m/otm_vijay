@@ -8,7 +8,6 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Carbon;
 
 /**
@@ -47,6 +46,7 @@ class SentQuote extends Model
     protected $guarded = [];
 
     protected $casts = ['sent' => 'datetime'];
+    protected $with = ['quote',];
 
     private Quote $builtData;
 
@@ -55,9 +55,9 @@ class SentQuote extends Model
         return $this->belongsTo(Quote::class, 'quote_id');
     }
 
-    public function organization(): HasOneThrough
+    public function organization(): BelongsTo
     {
-        return $this->through('quote')->has('organization');
+        return $this->quote->organization();
     }
 
     public function getBuiltAttribute(): Quote
