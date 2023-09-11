@@ -2,11 +2,13 @@
 
 namespace App\Models\Quote;
 
+use App\Models\Customer\Organization;
 use App\Repository\Model\Quote\QuoteRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Carbon;
 
 /**
@@ -25,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @property-read Quote $built
  * @property-read int $free Calculated number of free travellers
  * @property-read int $paid Calculated number of paid travellers
+ * @property-read Organization|null $organization
  * @method static Builder|SentQuote newModelQuery()
  * @method static Builder|SentQuote newQuery()
  * @method static Builder|SentQuote query()
@@ -50,6 +53,11 @@ class SentQuote extends Model
     public function quote(): BelongsTo
     {
         return $this->belongsTo(Quote::class, 'quote_id');
+    }
+
+    public function organization(): HasOneThrough
+    {
+        return $this->through('quote')->has('organization');
     }
 
     public function getBuiltAttribute(): Quote
