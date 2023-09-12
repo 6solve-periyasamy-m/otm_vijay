@@ -14,7 +14,7 @@
         Quote Branding
     </x-admin.input.selector.standard>
     <x-admin.input.selector.standard name="organization_id" route="organizations">
-        Organization
+        Organization (Optional)
     </x-admin.input.selector.standard>
     <x-admin.input name="deposit" width="6" value="{{$quote->deposit}}">Deposit</x-admin.input>
     <x-admin.input name="single_occupancy_surcharge" width="6" value="{{$quote->single_occupancy_surcharge}}">Single Occupancy Surcharge</x-admin.input>
