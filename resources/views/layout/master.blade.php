@@ -119,6 +119,9 @@
                 jOverlay.addClass('hidden');
                 $('body').removeClass('overflow-hidden');
             }
+            function openModal(modal, options = {}) {
+                Livewire.emit('openModal', modal, options);
+            }
             function changeDate(invar, outvar) {
                 if (outvar.hasClass('autoset')) {
                     outvar.val(invar.val());

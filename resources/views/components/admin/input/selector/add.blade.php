@@ -1,4 +1,6 @@
 @php $sanitizedName = str_replace(']', 'cbr', str_replace('[', 'obr', $attributes->get('name', ''))); @endphp
+@props(['heading', 'footer',])
+
 <div class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }} {{ $divClasses ?? "" }}">
     <div class="d-flex">
         <div class="form-floating w-100">
