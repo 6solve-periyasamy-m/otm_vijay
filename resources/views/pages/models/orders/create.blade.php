@@ -120,6 +120,7 @@
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'width' => 6 ])
     @include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'width' => 6 ])
     @include('partials.fields.checkbox', ['name' => 'Send Booking Confirmation Email?', 'field' => 'should_invoice', 'value' => flag('order.manual.mail', false),])
+    @include('partials.fields.selector.adder', ['name' => 'Organization (Optional)', 'field' => 'organization_id', 'route' => 'organizations', 'createRoute' => route('organizations.create')])
     <hr class="splitter">
     <div class="customers-section row form-group">
         <div class="col-12 col-xl-9">
