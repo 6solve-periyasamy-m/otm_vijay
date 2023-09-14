@@ -20,7 +20,7 @@
         <!-- App (including Lodash, jQuery, Bootstrap via NPM) -->
         <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
         @livewireStyles
-        <script src="{{ asset('/js/bootstrap.js') }}"></script>
+        <script src="{{ asset('/js/app.js') }}"></script>
     </head>
     <body>
         @include('partials.navbar')
@@ -57,7 +57,6 @@
         </div>
     </body>
     <footer>
-        <script src="{{ asset('js/app.js') }}"></script>
         <script src="{{ asset('js/admin/functions.js')  }}"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.6.0/dt-1.11.2/fh-3.1.9/r-2.2.9/sl-1.3.3/datatables.min.js"></script>
         <script src="https://cdn.ckeditor.com/4.17.1/full/ckeditor.js"></script>

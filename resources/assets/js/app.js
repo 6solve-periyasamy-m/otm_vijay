@@ -1,3 +1,7 @@
+require('./bootstrap');
+require('select2');
+
+
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {
     faArrowRight,
