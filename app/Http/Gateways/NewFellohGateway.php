@@ -106,7 +106,7 @@ class NewFellohGateway extends Gateway
      */
     public function webhook(NewWebhookRequest $request): JsonResponse
     {
-        self::$log && Log::info($request);
+        self::$log && Log::info("Webhook Received: " . $request);
         try {
             Log::channel('webhook')->info(self::$GATEWAY . " Gateway Webhook: ($request->status) {$request->transaction['id']}");
         } catch(Exception $e) {
@@ -132,7 +132,7 @@ class NewFellohGateway extends Gateway
     {
         $response = Http::withHeaders(['Content-Type' => 'application/json'])
             ->post("{$this->url}/token", ['public_key' => config('app.gateways.felloh.public'), 'private_key' => config('app.gateways.felloh.private'),]);
-        self::$log && Log::info($response->body());
+        self::$log && Log::info("Get Token:" . $response->body());
         if ($response->status() !== 200) {
             throw new UnauthorizedGatewayException("Invalid Felloh Information Provided");
         }
@@ -149,7 +149,7 @@ class NewFellohGateway extends Gateway
     {
         $response = Http::withHeaders($this->headers())
             ->post("{$this->url}/agent/bookings", ['organisation' => config('app.gateways.felloh.organisation'), 'booking_reference' => $order->getReference(),]);
-        self::$log && Log::info($response->body());
+        self::$log && Log::info("Get Booking: " . $response->body());
         $this->verifyStatus($response);
         if (intval($response->json('meta.count')) < 1) {
             return $this->createFellohBooking($order);
@@ -171,7 +171,7 @@ class NewFellohGateway extends Gateway
                 'organisation' => config('app.gateways.felloh.organisation'),
                 ...$order->getFellohData(),
         ]);
-        self::$log && Log::info($response->body());
+        self::$log && Log::info("Create Booking: " . $response->body());
         $this->verifyStatus($response);
         return "" . $response->json('data.id');
     }
@@ -191,7 +191,7 @@ class NewFellohGateway extends Gateway
                 'organisation' => config('app.gateways.felloh.organisation'),
                 ...$order->getFellohData(),
             ]);
-        self::$log && Log::info($response->body());
+        self::$log && Log::info("Update Booking: " . $response->body());
         $this->verifyStatus($response);
         return $fellohId;
     }
@@ -206,7 +206,7 @@ class NewFellohGateway extends Gateway
     {
         $response = Http::withHeaders($this->headers())
             ->put("{$this->url}/agent/bookings/{$booking}/update-reference", ['booking_reference' => $order->booking_reference,]);
-        self::$log && Log::info($response->body());
+        self::$log && Log::info("Update Reference: " . $response->body());
         $this->verifyStatus($response);
     }
 
