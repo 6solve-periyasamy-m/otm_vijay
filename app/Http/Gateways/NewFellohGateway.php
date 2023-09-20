@@ -132,7 +132,7 @@ class NewFellohGateway extends Gateway
         if ($response->status() !== 200) {
             throw new UnauthorizedGatewayException("Invalid Felloh Information Provided");
         }
-        return ['token' => $response->json('data.token'), 'expiry' => $response->json('data.expiry')];
+        return ['token' => $response->json('data.token'), 'expiry' => $response->json('data.expiry_time')];
     }
 
     /**
