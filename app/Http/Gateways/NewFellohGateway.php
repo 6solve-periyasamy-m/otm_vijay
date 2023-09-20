@@ -187,7 +187,10 @@ class NewFellohGateway extends Gateway
     {
         $fellohId = $fellohId ?? $this->getFellohBooking($order);
         $response = Http::withHeaders($this->headers())
-            ->post("{$this->url}/agent/bookings/{$fellohId}", $order->getFellohData());
+            ->post("{$this->url}/agent/bookings/{$fellohId}", [
+                'organisation' => config('app.gateways.felloh.organisation'),
+                ...$order->getFellohData(),
+            ]);
         self::$log && Log::info($response->body());
         $this->verifyStatus($response);
         return $fellohId;
