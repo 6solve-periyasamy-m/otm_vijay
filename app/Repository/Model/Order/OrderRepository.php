@@ -17,6 +17,7 @@ use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Interfaces\GeneratesFellohData;
 use App\Repository\Mailing\Mailer\Order\OrderMailer;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
@@ -28,7 +29,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-class OrderRepository extends ModelRepository
+class OrderRepository extends ModelRepository implements GeneratesFellohData
 {
     private const STATUS_CACHE_TIME = 600;
     private Order $order;
@@ -670,5 +671,22 @@ class OrderRepository extends ModelRepository
             'billing_address_id' => $billingAddress->id,
             'date_of_birth' => now(),
         ]);
+    }
+
+    public function getFellohData(): array
+    {
+        return [
+            'customer_name' => $this->order->leadBooker->customer_name,
+            'email' => $this->order->leadBooker->customer->email_address,
+            'booking_reference' => $this->getReference(),
+            'departure_date' => $this->order->tour->date_from->format('Y-m-d'),
+            'return_date' => $this->order->tour->date_to->format('Y-m-d'),
+            'gross_amount' => $this->order->total,
+        ];
+    }
+
+    public function getReference(): string
+    {
+        return $this->order->booking_reference;
     }
 }

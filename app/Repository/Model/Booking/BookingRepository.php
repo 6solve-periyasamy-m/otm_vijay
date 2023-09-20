@@ -20,6 +20,7 @@ use App\Models\Voucher\Executors\PercentageCostReductionExecutor;
 use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Interfaces\GeneratesFellohData;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\Rooming\RemoteBookingGroup;
 use Carbon\Carbon;
@@ -28,7 +29,7 @@ use Gateway;
 use Log;
 use Throwable;
 
-class BookingRepository extends ModelRepository
+class BookingRepository extends ModelRepository implements GeneratesFellohData
 {
     private Booking $booking;
 
@@ -464,5 +465,22 @@ class BookingRepository extends ModelRepository
         foreach ($this->booking->travellers()->with('vouchers')->get() as $traveller) {
             $traveller->repository->validateVouchers();
         }
+    }
+
+    public function getFellohData(): array
+    {
+        return [
+            'customer_name' => $this->booking->leadTraveller->full_name,
+            'email' => $this->booking->leadTraveller->email_address,
+            'booking_reference' => $this->getReference(),
+            'departure_date' => $this->booking->tour->date_from->format('Y-m-d'),
+            'return_date' => $this->booking->tour->date_to->format('Y-m-d'),
+            'gross_amount' => $this->booking->total_cost,
+        ];
+    }
+
+    public function getReference(): string
+    {
+        return $this->booking->token;
     }
 }
