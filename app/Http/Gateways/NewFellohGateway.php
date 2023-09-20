@@ -70,6 +70,7 @@ class NewFellohGateway extends Gateway
                 'open_banking_enabled' => true,
                 'card_enabled' => true,
             ]);
+        self::$log && Log::info("Generate Link:" . $response->body());
         $this->verifyStatus($response);
         $link = $response->json('data.id');
         GatewayPaymentLink::create([
