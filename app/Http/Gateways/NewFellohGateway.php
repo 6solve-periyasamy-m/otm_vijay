@@ -26,6 +26,7 @@ class NewFellohGateway extends Gateway
     private string $token;
     private int $expiry;
     private static string $GATEWAY = 'Felloh';
+    private static bool $log = true;
 
     public function __construct()
     {
@@ -101,7 +102,7 @@ class NewFellohGateway extends Gateway
      */
     public function webhook(NewWebhookRequest $request): JsonResponse
     {
-        \Log::info($request);
+        self::$log && Log::info($request);
         try {
             Log::channel('webhook')->info(self::$GATEWAY . " Gateway Webhook: ($request->status) {$request->transaction['id']}");
         } catch(Exception $e) {
@@ -127,6 +128,7 @@ class NewFellohGateway extends Gateway
     {
         $response = Http::withHeaders(['Content-Type' => 'application/json'])
             ->post("{$this->url}/token", ['public_key' => config('app.gateways.felloh.public'), 'private_key' => config('app.gateways.felloh.private'),]);
+        self::$log && Log::info($response->body());
         if ($response->status() !== 200) {
             throw new UnauthorizedGatewayException("Invalid Felloh Information Provided");
         }
@@ -143,6 +145,7 @@ class NewFellohGateway extends Gateway
     {
         $response = Http::withHeaders($this->headers())
             ->post("{$this->url}/agent/bookings", ['organization' => config('app.gateways.felloh.organisation'), 'booking_reference' => $order->getReference(),]);
+        self::$log && Log::info($response->body());
         $this->verifyStatus($response);
         if (intval($response->json('meta.count')) < 1) {
             return $this->createFellohBooking($order);
@@ -164,6 +167,7 @@ class NewFellohGateway extends Gateway
                 'organisation' => config('app.gateways.felloh.organisation'),
                 ...$order->getFellohData(),
         ]);
+        self::$log && Log::info($response->body());
         $this->verifyStatus($response);
         return "" . $response->json('data.id');
     }
@@ -180,6 +184,7 @@ class NewFellohGateway extends Gateway
         $fellohId = $fellohId ?? $this->getFellohBooking($order);
         $response = Http::withHeaders($this->headers())
             ->post("{$this->url}/agent/bookings/{$fellohId}", $order->getFellohData());
+        self::$log && Log::info($response->body());
         $this->verifyStatus($response);
         return $fellohId;
     }
@@ -194,6 +199,7 @@ class NewFellohGateway extends Gateway
     {
         $response = Http::withHeaders($this->headers())
             ->put("{$this->url}/agent/bookings/{$booking}/update-reference", ['booking_reference' => $order->booking_reference,]);
+        self::$log && Log::info($response->body());
         $this->verifyStatus($response);
     }
 
