@@ -77,7 +77,11 @@ class NewFellohGateway extends Gateway
             'payment_reference' => $link,
             'payment_intention_id' => $intention->id,
         ]);
-        return "https://pay.felloh.com/{$link}";
+        if (config('app.gateways.felloh.env') !== 'api') {
+            return "https://pay.sandbox.felloh.com/{$link}";
+        } else {
+            return "https://pay.felloh.com/{$link}";
+        }
     }
 
     /**
