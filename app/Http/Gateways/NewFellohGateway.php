@@ -148,7 +148,7 @@ class NewFellohGateway extends Gateway
     private function getFellohBooking(GeneratesFellohData $order): string
     {
         $response = Http::withHeaders($this->headers())
-            ->post("{$this->url}/agent/bookings", ['organization' => config('app.gateways.felloh.organisation'), 'booking_reference' => $order->getReference(),]);
+            ->post("{$this->url}/agent/bookings", ['organisation' => config('app.gateways.felloh.organisation'), 'booking_reference' => $order->getReference(),]);
         self::$log && Log::info($response->body());
         $this->verifyStatus($response);
         if (intval($response->json('meta.count')) < 1) {
