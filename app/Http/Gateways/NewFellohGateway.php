@@ -2,6 +2,7 @@
 
 namespace App\Http\Gateways;
 
+use App\Exceptions\RemoteGatewayError;
 use App\Exceptions\UnauthorizedGatewayException;
 use App\Http\Requests\Gateway\Felloh\NewWebhookRequest;
 use App\Models\Booking\Booking;
@@ -42,6 +43,10 @@ class NewFellohGateway extends Gateway
         }
     }
 
+    /**
+     * @throws UnauthorizedGatewayException Thrown if a 4xx error is returned from the API
+     * @throws RemoteGatewayError Thrown if a 5xx error is returned from the API
+     */
     public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
     {
         $cost = 0;
@@ -86,7 +91,8 @@ class NewFellohGateway extends Gateway
     }
 
     /**
-     * @throws UnauthorizedGatewayException
+     * @throws UnauthorizedGatewayException Thrown if a 4xx error is returned from the API
+     * @throws RemoteGatewayError Thrown if a 5xx error is returned from the API
      */
     public function process(string $reference, float $amount, string $created = null): void
     {
@@ -103,7 +109,8 @@ class NewFellohGateway extends Gateway
     // Webhook Handler
 
     /**
-     * @throws UnauthorizedGatewayException
+     * @throws UnauthorizedGatewayException Thrown if a 4xx error is returned from the API
+     * @throws RemoteGatewayError Thrown if a 5xx error is returned from the API
      */
     public function webhook(NewWebhookRequest $request): JsonResponse
     {
@@ -127,7 +134,8 @@ class NewFellohGateway extends Gateway
     /**
      * Fetch an up-to-date API token for use in requests
      * @return array{token: string, expiry: int}
-     * @throws UnauthorizedGatewayException
+     * @throws UnauthorizedGatewayException Thrown if a 4xx error is returned from the API
+     * @throws RemoteGatewayError Thrown if a 5xx error is returned from the API
      */
     private function getToken(): array
     {
@@ -144,7 +152,8 @@ class NewFellohGateway extends Gateway
      * Fetch a booking from Felloh, or generate a new one if it doesn't exist
      * @param GeneratesFellohData $order
      * @return string
-     * @throws UnauthorizedGatewayException
+     * @throws UnauthorizedGatewayException Thrown if a 4xx error is returned from the API
+     * @throws RemoteGatewayError Thrown if a 5xx error is returned from the API
      */
     private function getFellohBooking(GeneratesFellohData $order): string
     {
@@ -163,7 +172,8 @@ class NewFellohGateway extends Gateway
      * Generate a new Booking on felloh's systems
      * @param GeneratesFellohData $order
      * @return string
-     * @throws UnauthorizedGatewayException
+     * @throws UnauthorizedGatewayException Thrown if a 4xx error is returned from the API
+     * @throws RemoteGatewayError Thrown if a 5xx error is returned from the API
      */
     private function createFellohBooking(GeneratesFellohData $order): string
     {
@@ -182,7 +192,8 @@ class NewFellohGateway extends Gateway
      * @param GeneratesFellohData $order
      * @param string|null $fellohId The known id of the order on felloh's system. Used if called in chain to prevent multiple accesses. If null, will fetch the ID first
      * @return string The felloh ID of the order
-     * @throws UnauthorizedGatewayException
+     * @throws UnauthorizedGatewayException Thrown if a 4xx error is returned from the API
+     * @throws RemoteGatewayError Thrown if a 5xx error is returned from the API
      */
     private function updateFellohBooking(GeneratesFellohData $order, string $fellohId = null): string
     {
@@ -201,7 +212,8 @@ class NewFellohGateway extends Gateway
      * Update the remote booking reference when converting from a booking to an order internally
      * @param string $booking Felloh booking id to be updated
      * @param Order $order The converted order
-     * @throws UnauthorizedGatewayException Thrown if an error occurs during the
+     * @throws UnauthorizedGatewayException Thrown if a 4xx error is returned from the API
+     * @throws RemoteGatewayError Thrown if a 5xx error is returned from the API
      */
     private function updateReference(string $booking, Order $order): void
     {
@@ -220,18 +232,26 @@ class NewFellohGateway extends Gateway
     /**
      * Verify the status code of the response
      * @throws UnauthorizedGatewayException
+     * @throws RemoteGatewayError
      */
     private function verifyStatus(PromiseInterface|Response $response): void
     {
-        if ($response->status() === 200) {
-            return;
-        }
-        if ($response->status() === 401) {
-            throw new UnauthorizedGatewayException("Invalid Felloh Information Provided");
+        if ($response->serverError()) {
+            Log::error($response->body());
+            throw new RemoteGatewayError("An issue occurred on the Felloh API Servers");
         }
         if ($response->status() === 401) {
             Log::error($response->body());
+            throw new UnauthorizedGatewayException("Invalid Felloh Information Provided");
+        }
+        if ($response->status() === 422) {
+            Log::error($response->body());
             throw new UnauthorizedGatewayException("Validation exception occurred in felloh gateway");
         }
+        if ($response->clientError()) {
+            Log::error($response->body());
+            throw new UnauthorizedGatewayException("An unknown issue was met from our implementation");
+        }
+        return;
     }
 }

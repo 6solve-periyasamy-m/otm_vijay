@@ -3,7 +3,9 @@
 namespace App\Repository\Model\Booking;
 
 use App\Exceptions\NotOnTourException;
+use App\Exceptions\RemoteGatewayError;
 use App\Exceptions\RoomingFailedException;
+use App\Exceptions\UnauthorizedGatewayException;
 use App\Http\Gateways\Storage\LineItem;
 use App\Models\Accommodation\RoomType;
 use App\Models\Activity\ActivityInventoryTour;
@@ -292,6 +294,10 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         return !isset($this->booking);
     }
 
+    /**
+     * @throws RemoteGatewayError
+     * @throws UnauthorizedGatewayException
+     */
     public function getGatewayUrl(float $amount)
     {
         $gateway = Gateway::getDefaultGateway();

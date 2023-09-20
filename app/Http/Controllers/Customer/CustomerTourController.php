@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Exceptions\RemoteGatewayError;
+use App\Exceptions\UnauthorizedGatewayException;
 use App\Http\Controllers\CustomerController;
 use App\Http\Gateways\Storage\LineItem;
 use App\Http\Requests\Customer\TourDetailsRequest;
@@ -114,7 +116,13 @@ class CustomerTourController extends CustomerController
             $item = new LineItem("{$tourComponent}", $tourComponent->get()->tour_sales_price);
             $intention = PaymentIntentionRepository::create($order, $orderCustomer->customer, 'Installment', [$data,]);
 
-            return redirect(Gateway::getDefaultGateway()->checkout([$item,], $intention, $this->user(), $redirect));
+            try {
+                return redirect(Gateway::getDefaultGateway()->checkout([$item,], $intention, $this->user(), $redirect));
+            } catch (UnauthorizedGatewayException $e) {
+                return back()->withErrors(['msg' => 'Something went wrong with our payment processing. Please try again later.']);
+            } catch (RemoteGatewayError $e) {
+                return back()->withErrors(['msg' => 'Something went wrong with our 3rd-party payment processing. Please try again later.']);
+            }
         } else {
             $tourComponent->grantToCustomer($orderCustomer);
             return redirect($redirect);

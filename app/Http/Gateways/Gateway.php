@@ -4,6 +4,7 @@ namespace App\Http\Gateways;
 
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\Payment\PaymentCreatedEvent;
+use App\Exceptions\RemoteGatewayError;
 use App\Exceptions\UnauthorizedGatewayException;
 use App\Http\Gateways\Storage\LineItem;
 use App\Models\Booking\Booking;
@@ -27,6 +28,7 @@ abstract class Gateway
      * @param string|null $success The redirect URL for
      * @return string The URL for the checkout gateway
      * @throws UnauthorizedGatewayException
+     * @throws RemoteGatewayError
      */
     public abstract function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string;
 
