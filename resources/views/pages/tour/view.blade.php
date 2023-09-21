@@ -327,7 +327,8 @@
                             <thead>
                             <tr>
                                 <th scope="col">Date</th>
-                                <th scope="col">Name</th>
+                                <th scope="col">Details</th>
+                                <th scope="col">Airline</th>
                                 <th scope="col">Travel Class</th>
                                 <th scope="col">Flight Type</th>
                                 <th scope="col">Component Type</th>
@@ -341,7 +342,8 @@
                                 <tr>
                                     <td style="min-width: 200px">{{ f_datetime($tourComponent->inventory->departs_at) }}
                                         to {{ f_datetime($tourComponent->inventory->arrives_at) }}</td>
-                                    <td>{{ $tourComponent->inventory->flight_number }}</td>
+                                    <td>{{ $tourComponent->inventory->flight->departureAirport->name }} to {{ $tourComponent->inventory->flight->arrivalAirport->name }} ({{ $tourComponent->inventory->flight_number }})</td>
+                                    <td>{{ $tourComponent->inventory->flight->airline->name }}</td>
                                     <td>{{ $tourComponent->inventory->travelClass->name }}</td>
                                     <td>{{ $tourComponent->flight_type }}</td>
                                     <td>
