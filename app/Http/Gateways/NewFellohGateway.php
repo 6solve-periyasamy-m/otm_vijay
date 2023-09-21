@@ -165,7 +165,7 @@ class NewFellohGateway extends Gateway
         if (intval($response->json('meta.count')) < 1) {
             return $this->createFellohBooking($order);
         } else {
-            return "" . $response->json("data[0].id");
+            return "" . $response->json("data")[0]['id'];
         }
     }
 
