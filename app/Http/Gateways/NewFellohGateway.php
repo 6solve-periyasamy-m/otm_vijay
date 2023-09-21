@@ -64,6 +64,7 @@ class NewFellohGateway extends Gateway
         }
         // Since we'd plan to fetch the booking, then update, using update we can just fetch and update in a single call
         $fellohId = $this->updateFellohBooking($order);
+        \Log::info($fellohId);
         $response = Http::withHeaders($this->headers())
             ->put("{$this->url}/agent/payment-links", [
                 'organisation' => config('app.gateways.felloh.organisation'),
