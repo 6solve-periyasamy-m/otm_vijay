@@ -481,7 +481,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             'booking_reference' => $this->getReference(),
             'departure_date' => $this->booking->tour->date_from->format('Y-m-d'),
             'return_date' => $this->booking->tour->date_to->format('Y-m-d'),
-            'gross_amount' => $this->booking->total_cost,
+            'gross_amount' => $this->getTotalCost(),
         ];
     }
 
