@@ -36,6 +36,8 @@ class TransportInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-21 12:42:53',
                 'updated_at' => '2022-01-21 12:42:53',
                 'deleted_at' => NULL,
+                'transport_number' => NULL,
+                'external_notes' => NULL,
             ),
             1 => 
             array (
@@ -54,6 +56,8 @@ class TransportInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-14 10:48:49',
                 'updated_at' => '2022-09-14 10:48:49',
                 'deleted_at' => NULL,
+                'transport_number' => NULL,
+                'external_notes' => NULL,
             ),
             2 => 
             array (
@@ -72,6 +76,8 @@ class TransportInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-20 19:06:35',
                 'updated_at' => '2022-09-20 19:06:35',
                 'deleted_at' => NULL,
+                'transport_number' => NULL,
+                'external_notes' => NULL,
             ),
             3 => 
             array (
@@ -90,6 +96,8 @@ class TransportInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-20 19:10:35',
                 'updated_at' => '2022-09-20 19:10:35',
                 'deleted_at' => NULL,
+                'transport_number' => NULL,
+                'external_notes' => NULL,
             ),
             4 => 
             array (
@@ -108,6 +116,8 @@ class TransportInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-21 09:03:07',
                 'updated_at' => '2022-09-21 09:03:07',
                 'deleted_at' => NULL,
+                'transport_number' => NULL,
+                'external_notes' => NULL,
             ),
             5 => 
             array (
@@ -126,6 +136,68 @@ class TransportInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-21 09:04:34',
                 'updated_at' => '2022-09-21 09:04:34',
                 'deleted_at' => NULL,
+                'transport_number' => NULL,
+                'external_notes' => NULL,
+            ),
+            6 => 
+            array (
+                'id' => 7,
+                'transport_id' => 8,
+                'travel_class_id' => 2,
+                'departs_at' => '2024-07-29 08:30:00',
+                'arrives_at' => '2024-07-29 10:30:00',
+                'fit_selectable' => 0,
+                'stock' => 50,
+                'purchase_price' => '45.00',
+                'sales_price' => '60.00',
+                'internal_notes' => NULL,
+                'arrival_time_confirmed' => 0,
+                'departure_time_confirmed' => 0,
+                'created_at' => '2023-09-22 12:54:46',
+                'updated_at' => '2023-09-22 12:54:46',
+                'deleted_at' => NULL,
+                'transport_number' => NULL,
+                'external_notes' => 'You will need to provide your address to our operations team at least 4 weeks before the departure of the tour in order to ensure this add-on can be honoured',
+            ),
+            7 => 
+            array (
+                'id' => 8,
+                'transport_id' => 9,
+                'travel_class_id' => 1,
+                'departs_at' => '2024-07-29 23:30:00',
+                'arrives_at' => '2024-07-30 01:30:00',
+                'fit_selectable' => 0,
+                'stock' => 60,
+                'purchase_price' => '15.00',
+                'sales_price' => '18.00',
+                'internal_notes' => NULL,
+                'arrival_time_confirmed' => 0,
+                'departure_time_confirmed' => 0,
+                'created_at' => '2023-09-22 13:08:52',
+                'updated_at' => '2023-09-22 13:08:52',
+                'deleted_at' => NULL,
+                'transport_number' => NULL,
+                'external_notes' => NULL,
+            ),
+            8 => 
+            array (
+                'id' => 9,
+                'transport_id' => 10,
+                'travel_class_id' => 2,
+                'departs_at' => '2024-07-29 23:30:00',
+                'arrives_at' => '2024-07-30 01:30:00',
+                'fit_selectable' => 0,
+                'stock' => 12,
+                'purchase_price' => '35.00',
+                'sales_price' => '55.00',
+                'internal_notes' => NULL,
+                'arrival_time_confirmed' => 0,
+                'departure_time_confirmed' => 0,
+                'created_at' => '2023-09-22 13:14:41',
+                'updated_at' => '2023-09-22 13:14:41',
+                'deleted_at' => NULL,
+                'transport_number' => NULL,
+                'external_notes' => NULL,
             ),
         ));
         

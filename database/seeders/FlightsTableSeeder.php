@@ -28,11 +28,12 @@ class FlightsTableSeeder extends Seeder
                 'is_domestic' => 0,
                 'image_url' => 'images/flight/flight_3.jpg',
                 'internal_notes' => NULL,
-                'currency_id' => 71,
+                'currency_id' => 83,
                 'available_from' => '2022-07-08',
                 'created_at' => '2022-01-21 11:19:45',
-                'updated_at' => '2022-01-21 11:19:45',
+                'updated_at' => '2023-09-21 15:25:37',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             1 => 
             array (
@@ -43,11 +44,12 @@ class FlightsTableSeeder extends Seeder
                 'is_domestic' => 0,
                 'image_url' => 'images/flight/flight_3.jpg',
                 'internal_notes' => NULL,
-                'currency_id' => 71,
+                'currency_id' => 83,
                 'available_from' => '2022-07-08',
                 'created_at' => '2022-01-21 11:21:53',
-                'updated_at' => '2022-01-21 11:21:53',
+                'updated_at' => '2023-09-21 15:25:51',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             2 => 
             array (
@@ -58,11 +60,12 @@ class FlightsTableSeeder extends Seeder
                 'is_domestic' => 1,
                 'image_url' => 'images/flight/flight_4.jpg',
                 'internal_notes' => NULL,
-                'currency_id' => 7,
+                'currency_id' => 30,
                 'available_from' => '2022-01-21',
                 'created_at' => '2022-01-21 12:32:53',
-                'updated_at' => '2022-01-21 12:32:53',
+                'updated_at' => '2023-09-21 15:26:02',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             3 => 
             array (
@@ -78,6 +81,7 @@ class FlightsTableSeeder extends Seeder
                 'created_at' => '2022-09-14 10:18:45',
                 'updated_at' => '2022-09-14 10:18:45',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             4 => 
             array (
@@ -93,6 +97,7 @@ class FlightsTableSeeder extends Seeder
                 'created_at' => '2022-09-14 10:20:00',
                 'updated_at' => '2022-09-14 10:20:00',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             5 => 
             array (
@@ -103,11 +108,12 @@ class FlightsTableSeeder extends Seeder
                 'is_domestic' => 0,
                 'image_url' => 'images/flight/flight_1.jpg',
                 'internal_notes' => NULL,
-                'currency_id' => 154,
+                'currency_id' => 83,
                 'available_from' => '2022-09-14',
                 'created_at' => '2022-09-14 12:12:41',
-                'updated_at' => '2022-09-14 12:12:41',
+                'updated_at' => '2023-09-21 15:26:27',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             6 => 
             array (
@@ -123,6 +129,7 @@ class FlightsTableSeeder extends Seeder
                 'created_at' => '2022-09-20 18:45:02',
                 'updated_at' => '2022-09-20 18:45:02',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             7 => 
             array (
@@ -138,6 +145,39 @@ class FlightsTableSeeder extends Seeder
                 'created_at' => '2022-09-20 18:47:14',
                 'updated_at' => '2022-09-20 18:47:14',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
+            ),
+            8 => 
+            array (
+                'id' => 9,
+                'airline_id' => 2,
+                'departure_airport_id' => 2,
+                'arrival_airport_id' => 6,
+                'is_domestic' => 0,
+                'image_url' => NULL,
+                'internal_notes' => NULL,
+                'currency_id' => 30,
+                'available_from' => '2023-09-22',
+                'created_at' => '2023-09-22 12:25:03',
+                'updated_at' => '2023-09-22 12:25:03',
+                'deleted_at' => NULL,
+                'external_notes' => NULL,
+            ),
+            9 => 
+            array (
+                'id' => 10,
+                'airline_id' => 2,
+                'departure_airport_id' => 6,
+                'arrival_airport_id' => 2,
+                'is_domestic' => 0,
+                'image_url' => NULL,
+                'internal_notes' => NULL,
+                'currency_id' => 30,
+                'available_from' => '2023-09-22',
+                'created_at' => '2023-09-22 12:29:39',
+                'updated_at' => '2023-09-22 12:29:39',
+                'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
         ));
         

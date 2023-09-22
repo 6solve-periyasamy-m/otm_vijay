@@ -38,18 +38,18 @@ class ActivityTypesTableSeeder extends Seeder
             2 => 
             array (
                 'id' => 3,
-                'name' => 'Excursion',
-                'created_at' => '2022-09-20 10:54:04',
-                'updated_at' => '2022-09-20 10:54:04',
+                'name' => 'Fine Dining Experience',
+                'created_at' => '2023-09-21 14:46:11',
+                'updated_at' => '2023-09-21 14:46:20',
                 'deleted_at' => NULL,
             ),
             3 => 
             array (
                 'id' => 4,
-                'name' => 'Royal Ascot',
-                'created_at' => '2022-09-21 08:49:00',
-                'updated_at' => '2022-09-23 09:54:55',
-                'deleted_at' => '2022-09-23 09:54:55',
+                'name' => 'Excursion',
+                'created_at' => '2022-09-20 10:54:04',
+                'updated_at' => '2022-09-20 10:54:04',
+                'deleted_at' => NULL,
             ),
             4 => 
             array (

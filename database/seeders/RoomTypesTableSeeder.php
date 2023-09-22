@@ -67,11 +67,20 @@ class RoomTypesTableSeeder extends Seeder
             5 => 
             array (
                 'id' => 6,
-                'name' => 'Sea View Double',
-                'maximum_occupancy' => 2,
-                'created_at' => '2022-06-29 10:09:05',
-                'updated_at' => '2022-09-23 09:49:02',
-                'deleted_at' => '2022-09-23 09:49:02',
+                'name' => 'Family Suite',
+                'maximum_occupancy' => 4,
+                'created_at' => '2022-07-05 10:58:41',
+                'updated_at' => '2022-07-05 10:58:41',
+                'deleted_at' => NULL,
+            ),
+            6 => 
+            array (
+                'id' => 7,
+                'name' => '20 Bed Dorm',
+                'maximum_occupancy' => 20,
+                'created_at' => '2022-08-09 10:36:44',
+                'updated_at' => '2022-08-09 10:36:44',
+                'deleted_at' => NULL,
             ),
         ));
         
