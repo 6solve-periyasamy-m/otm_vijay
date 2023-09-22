@@ -90,10 +90,6 @@ class FellohGateway extends Gateway
         }
     }
 
-    /**
-     * @throws UnauthorizedGatewayException Thrown if a 4xx error is returned from the API
-     * @throws RemoteGatewayError Thrown if a 5xx error is returned from the API
-     */
     public function process(string $reference, float $amount, string $created = null): void
     {
         $intention = GatewayPaymentLink::get(self::$GATEWAY, $reference)?->intention;
@@ -101,7 +97,12 @@ class FellohGateway extends Gateway
         $booking = Booking::where('token', '=', $intention->reference)->first();
         $order = $this->processIntention($intention, $amount * 100, self::$GATEWAY, $created);
         if (isset($booking)) {
-            $this->updateReference($reference, $order);
+            try {
+                $this->updateReference($reference, $order);
+            } catch (RemoteGatewayError|UnauthorizedGatewayException $e) {
+                Log::error("An error occurred whilst updating the reference. " . $e->getMessage());
+            }
+
         }
     }
 
@@ -219,7 +220,7 @@ class FellohGateway extends Gateway
     {
         $response = Http::withHeaders($this->headers())
             ->post("{$this->url}/agent/bookings/{$booking}/update-reference", ['booking_reference' => $order->booking_reference,]);
-        self::$log && Log::info("Update Reference: " . $response->body());
+       ( self::$log || true) && Log::info("Update Reference: " . $response->body());
         $this->verifyStatus($response);
     }
 
