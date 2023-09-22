@@ -43,6 +43,7 @@
             let upgrade_id = $('#' + selector).find(':selected').val();
             let component_id = $(btn).closest('tr').attr('component');
             if (upgrade_id != null && component_id != null) {
+                loader(true);
                 $.post('{{ route('api.order.customer.upgrade.purchase') }}',
                     { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
                         '_token': '{{ csrf_token() }}',
@@ -52,11 +53,22 @@
                     })
                     .done(function (xhr, textStatus, errorThrown) {
                         if (xhr.success) window.location = xhr.location;
-                        else alert(xhr.message);
+                        else {
+                            alert(xhr.message);
+                            loader(false);
+                        }
                     })
-                    .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
+                    .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); loader(false); });
             }
         }
+        function loader(toggle = true) {
+            if (toggle) {
+                $('.waiter').show();
+            } else {
+                $('.waiter').hide();
+            }
+        }
+        loader(false);
     </script>
 @endpush
 
@@ -506,6 +518,10 @@
         </div>
     </div>
 </div>
+<div class="waiter">
+    <x-loading-spinner center></x-loading-spinner>
+</div>
+
 @endsection
 
 @section('footer-script')
