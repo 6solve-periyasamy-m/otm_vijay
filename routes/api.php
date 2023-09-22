@@ -20,7 +20,6 @@ use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\TourComponentController;
 use App\Http\Controllers\Api\TransportController;
 use App\Http\Gateways\FellohGateway;
-use App\Http\Gateways\NewFellohGateway;
 use Illuminate\Support\Facades\Route;
 
 
@@ -39,7 +38,6 @@ Route::prefix('/orders')->group(function () {
 
 Route::stripeWebhooks('/stripe/webhooks');
 Route::post('/felloh/webhook', [FellohGateway::class, 'webhook'])->name('api.felloh.webhook');
-Route::post('/new/felloh/webhook', [NewFellohGateway::class, 'webhook'])->name('api.new.felloh.webhook');
 
 Route::post('/dual/select/countries', [SelectController::class, 'getCountries'])->name('api.countries.select');
 
