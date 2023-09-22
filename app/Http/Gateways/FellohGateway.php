@@ -27,7 +27,7 @@ class FellohGateway extends Gateway
     private string $token;
     private int $expiry;
     private static string $GATEWAY = 'Felloh';
-    private static bool $log = true;
+    private static bool $log = false;
 
     public function __construct()
     {
