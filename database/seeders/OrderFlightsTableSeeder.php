@@ -589,6 +589,86 @@ class OrderFlightsTableSeeder extends Seeder
                 'updated_at' => '2022-09-21 12:44:00',
                 'deleted_at' => NULL,
             ),
+            57 => 
+            array (
+                'id' => 58,
+                'order_customer_id' => 28,
+                'flight_inventory_tour_id' => 21,
+                'cost' => '1100.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
+            58 => 
+            array (
+                'id' => 59,
+                'order_customer_id' => 28,
+                'flight_inventory_tour_id' => 22,
+                'cost' => '1200.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
+            59 => 
+            array (
+                'id' => 60,
+                'order_customer_id' => 29,
+                'flight_inventory_tour_id' => 21,
+                'cost' => '1100.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
+            60 => 
+            array (
+                'id' => 61,
+                'order_customer_id' => 29,
+                'flight_inventory_tour_id' => 22,
+                'cost' => '1200.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
+            61 => 
+            array (
+                'id' => 62,
+                'order_customer_id' => 30,
+                'flight_inventory_tour_id' => 21,
+                'cost' => '1100.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
+            62 => 
+            array (
+                'id' => 63,
+                'order_customer_id' => 30,
+                'flight_inventory_tour_id' => 22,
+                'cost' => '1200.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
+            63 => 
+            array (
+                'id' => 64,
+                'order_customer_id' => 31,
+                'flight_inventory_tour_id' => 21,
+                'cost' => '1100.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
+            64 => 
+            array (
+                'id' => 65,
+                'order_customer_id' => 31,
+                'flight_inventory_tour_id' => 22,
+                'cost' => '1200.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
         ));
         
         

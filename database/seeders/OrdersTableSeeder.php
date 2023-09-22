@@ -33,9 +33,11 @@ class OrdersTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'invoice_footer' => 'This is a demo tour, and will not be fulfilled',
                 'created_at' => '2022-01-23 13:02:34',
-                'updated_at' => '2022-07-19 12:06:49',
+                'updated_at' => '2023-09-21 13:09:39',
                 'deleted_at' => NULL,
                 'token' => NULL,
+                'booking_fee' => '0.00',
+                'organization_id' => NULL,
             ),
             1 => 
             array (
@@ -50,9 +52,11 @@ class OrdersTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'invoice_footer' => 'This is a demo tour, and will not be fulfilled',
                 'created_at' => '2022-01-23 13:21:17',
-                'updated_at' => '2022-06-27 17:24:15',
+                'updated_at' => '2023-09-21 13:09:39',
                 'deleted_at' => NULL,
                 'token' => NULL,
+                'booking_fee' => '0.00',
+                'organization_id' => NULL,
             ),
             2 => 
             array (
@@ -67,9 +71,11 @@ class OrdersTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'invoice_footer' => 'This is a demo tour, and will not be fulfilled',
                 'created_at' => '2022-01-23 13:25:11',
-                'updated_at' => '2022-07-19 12:45:03',
+                'updated_at' => '2023-09-21 13:09:39',
                 'deleted_at' => NULL,
                 'token' => NULL,
+                'booking_fee' => '0.00',
+                'organization_id' => NULL,
             ),
             3 => 
             array (
@@ -84,9 +90,11 @@ class OrdersTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'invoice_footer' => 'This is a demo tour, and will not be fulfilled',
                 'created_at' => '2022-01-23 13:47:50',
-                'updated_at' => '2022-06-27 17:24:15',
+                'updated_at' => '2023-09-21 13:09:39',
                 'deleted_at' => NULL,
                 'token' => NULL,
+                'booking_fee' => '0.00',
+                'organization_id' => NULL,
             ),
             4 => 
             array (
@@ -101,9 +109,11 @@ class OrdersTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'invoice_footer' => 'This is a demo tour, and will not be fulfilled',
                 'created_at' => '2022-06-29 07:59:19',
-                'updated_at' => '2022-06-29 07:59:19',
+                'updated_at' => '2023-09-21 13:09:39',
                 'deleted_at' => NULL,
                 'token' => NULL,
+                'booking_fee' => '0.00',
+                'organization_id' => NULL,
             ),
             5 => 
             array (
@@ -118,9 +128,11 @@ class OrdersTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'invoice_footer' => 'This is a demo tour, and will not be fulfilled',
                 'created_at' => '2022-06-29 08:21:03',
-                'updated_at' => '2022-06-29 08:21:03',
+                'updated_at' => '2023-09-21 13:09:39',
                 'deleted_at' => NULL,
                 'token' => NULL,
+                'booking_fee' => '0.00',
+                'organization_id' => NULL,
             ),
             6 => 
             array (
@@ -135,9 +147,11 @@ class OrdersTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'invoice_footer' => '<p>This is a demo tour, and will not be fulfilled</p>',
                 'created_at' => '2022-09-14 11:22:23',
-                'updated_at' => '2022-09-14 11:22:24',
+                'updated_at' => '2023-09-21 13:09:39',
                 'deleted_at' => NULL,
                 'token' => 'XOiHwpgVMqahAFnBK2HD9fxJ4o5P8bQImwD6ekzyBG9vfIEZ30jsnW3CSlk0eguL',
+                'booking_fee' => '0.00',
+                'organization_id' => NULL,
             ),
             7 => 
             array (
@@ -152,9 +166,11 @@ class OrdersTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'invoice_footer' => '<p>The Tour Company will not be held responsible for any cancellation of this tour deemed to be resulting from an act of god</p>',
                 'created_at' => '2022-09-20 10:39:17',
-                'updated_at' => '2022-09-20 10:39:17',
+                'updated_at' => '2023-09-21 13:09:39',
                 'deleted_at' => NULL,
                 'token' => NULL,
+                'booking_fee' => '0.00',
+                'organization_id' => NULL,
             ),
             8 => 
             array (
@@ -169,9 +185,11 @@ class OrdersTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'invoice_footer' => '<p>The Gambia is commonly known as the &quot;smiling coast&quot; of Africa. It is recognised for its beautiful white sandy beaches and for being home to Jufureh. The reputed ancestral village of Kunte Kinte, the main legend in Alex Haley well known novel &quot;Roots&quot;. This small West African country, surrounded by Senegal and the narrow Atlantic coastline. &nbsp;The diverse ecosystems is around the central Gambia River. The abundance of wildlife in its Kiang West National Park and Bao Bolong Wetland Reserve includes monkeys, leopards, hippos, hyenas and rare birds. The capital, Banjul, and nearby Serrekunda offer access to beaches.</p>',
                 'created_at' => '2022-09-20 19:33:03',
-                'updated_at' => '2022-09-20 19:33:03',
+                'updated_at' => '2023-09-21 13:09:39',
                 'deleted_at' => NULL,
                 'token' => '0d8ONlQWIprehRXImuljW2jp1X6xAEYfVotQBSmtowrRD1EcM0CYqwc68g7A5FMy',
+                'booking_fee' => '0.00',
+                'organization_id' => NULL,
             ),
             9 => 
             array (
@@ -186,9 +204,11 @@ class OrdersTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'invoice_footer' => NULL,
                 'created_at' => '2022-09-21 09:24:11',
-                'updated_at' => '2022-09-21 09:24:11',
+                'updated_at' => '2023-09-21 13:09:39',
                 'deleted_at' => NULL,
                 'token' => NULL,
+                'booking_fee' => '0.00',
+                'organization_id' => NULL,
             ),
             10 => 
             array (
@@ -203,9 +223,11 @@ class OrdersTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'invoice_footer' => NULL,
                 'created_at' => '2022-09-21 09:27:53',
-                'updated_at' => '2022-09-21 09:27:53',
+                'updated_at' => '2023-09-21 13:09:39',
                 'deleted_at' => NULL,
                 'token' => NULL,
+                'booking_fee' => '0.00',
+                'organization_id' => NULL,
             ),
             11 => 
             array (
@@ -220,9 +242,11 @@ class OrdersTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'invoice_footer' => NULL,
                 'created_at' => '2022-09-21 09:30:33',
-                'updated_at' => '2022-09-21 09:30:33',
+                'updated_at' => '2023-09-21 13:09:39',
                 'deleted_at' => NULL,
                 'token' => NULL,
+                'booking_fee' => '0.00',
+                'organization_id' => NULL,
             ),
             12 => 
             array (
@@ -237,9 +261,11 @@ class OrdersTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'invoice_footer' => NULL,
                 'created_at' => '2022-09-21 09:31:56',
-                'updated_at' => '2022-09-21 09:31:56',
+                'updated_at' => '2023-09-21 13:09:39',
                 'deleted_at' => NULL,
                 'token' => NULL,
+                'booking_fee' => '0.00',
+                'organization_id' => NULL,
             ),
             13 => 
             array (
@@ -254,9 +280,11 @@ class OrdersTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'invoice_footer' => '<p>The Gambia is commonly known as the &quot;smiling coast&quot; of Africa. It is recognised for its beautiful white sandy beaches and for being home to Jufureh. The reputed ancestral village of Kunte Kinte, the main legend in Alex Haley well known novel &quot;Roots&quot;. This small West African country, surrounded by Senegal and the narrow Atlantic coastline. &nbsp;The diverse ecosystems is around the central Gambia River. The abundance of wildlife in its Kiang West National Park and Bao Bolong Wetland Reserve includes monkeys, leopards, hippos, hyenas and rare birds. The capital, Banjul, and nearby Serrekunda offer access to beaches.</p>',
                 'created_at' => '2022-09-21 11:45:17',
-                'updated_at' => '2022-09-21 11:45:18',
+                'updated_at' => '2023-09-21 13:09:39',
                 'deleted_at' => NULL,
                 'token' => 'zjgZyBQvhlcM74W9m6P2Jwb2RtKxuRWbErkiXfVxPBGJ5zvS8tAG1pYD5KLcFOQ4',
+                'booking_fee' => '0.00',
+                'organization_id' => NULL,
             ),
             14 => 
             array (
@@ -271,9 +299,30 @@ class OrdersTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'invoice_footer' => '<p>The Gambia is commonly known as the &quot;smiling coast&quot; of Africa. It is recognised for its beautiful white sandy beaches and for being home to Jufureh. The reputed ancestral village of Kunte Kinte, the main legend in Alex Haley well known novel &quot;Roots&quot;. This small West African country, surrounded by Senegal and the narrow Atlantic coastline. &nbsp;The diverse ecosystems is around the central Gambia River. The abundance of wildlife in its Kiang West National Park and Bao Bolong Wetland Reserve includes monkeys, leopards, hippos, hyenas and rare birds. The capital, Banjul, and nearby Serrekunda offer access to beaches.</p>',
                 'created_at' => '2022-09-21 12:44:00',
-                'updated_at' => '2022-09-21 12:44:00',
+                'updated_at' => '2023-09-21 13:09:39',
                 'deleted_at' => NULL,
                 'token' => NULL,
+                'booking_fee' => '0.00',
+                'organization_id' => NULL,
+            ),
+            15 => 
+            array (
+                'id' => 16,
+                'tour_id' => 7,
+                'lead_booker_id' => null,
+                'booking_reference' => 'OTM000700160028LTMP',
+                'deposit' => '300.00',
+                'ordered_on' => '2023-09-22 14:20:00',
+                'cancelled' => 0,
+                'internal_notes' => NULL,
+                'external_notes' => NULL,
+                'invoice_footer' => '<p>This is a demo tour, and will not be fulfilled</p>',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+                'token' => NULL,
+                'booking_fee' => '0.00',
+                'organization_id' => NULL,
             ),
         ));
         
@@ -293,6 +342,7 @@ class OrdersTableSeeder extends Seeder
         $this->updateLeadBooker(13, 24);
         $this->updateLeadBooker(14, 26);
         $this->updateLeadBooker(15, 27);
+        $this->updateLeadBooker(16, 28);
     }
 
     private function updateLeadBooker(int $orderId, int $leadBookerId)
