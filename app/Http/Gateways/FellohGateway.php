@@ -98,7 +98,7 @@ class FellohGateway extends Gateway
         $order = $this->processIntention($intention, $amount * 100, self::$GATEWAY, $created);
         if (isset($booking)) {
             try {
-                $this->updateReference($reference, $order);
+                $this->updateReference($booking, $order);
             } catch (RemoteGatewayError|UnauthorizedGatewayException $e) {
                 Log::error("An error occurred whilst updating the reference. " . $e->getMessage());
             }
@@ -211,16 +211,17 @@ class FellohGateway extends Gateway
 
     /**
      * Update the remote booking reference when converting from a booking to an order internally
-     * @param string $booking Felloh booking id to be updated
+     * @param Booking $booking Felloh booking id to be updated
      * @param Order $order The converted order
      * @throws UnauthorizedGatewayException Thrown if a 4xx error is returned from the API
      * @throws RemoteGatewayError Thrown if a 5xx error is returned from the API
      */
-    private function updateReference(string $booking, Order $order): void
+    private function updateReference(Booking $booking, Order $order): void
     {
+        $ref = $this->getFellohBooking($booking->repository);
         $response = Http::withHeaders($this->headers())
-            ->post("{$this->url}/agent/bookings/{$booking}/update-reference", ['booking_reference' => $order->booking_reference,]);
-       ( self::$log || true) && Log::info("Update Reference: " . $response->body());
+            ->post("{$this->url}/agent/bookings/{$ref}/update-reference", ['booking_reference' => $order->booking_reference,]);
+       (self::$log || true) && Log::info("Update Reference: " . $response->body());
         $this->verifyStatus($response);
     }
 
