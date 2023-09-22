@@ -59,6 +59,30 @@ class TicketTypesTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 15:53:16',
                 'deleted_at' => NULL,
             ),
+            5 => 
+            array (
+                'id' => 6,
+                'name' => 'Full Access - Lunch Included',
+                'created_at' => '2022-07-05 11:17:41',
+                'updated_at' => '2022-07-05 11:17:41',
+                'deleted_at' => NULL,
+            ),
+            6 => 
+            array (
+                'id' => 7,
+                'name' => 'Full Tasting Menu - Food Only',
+                'created_at' => '2022-07-05 11:33:28',
+                'updated_at' => '2022-07-05 11:33:28',
+                'deleted_at' => NULL,
+            ),
+            7 => 
+            array (
+                'id' => 8,
+                'name' => 'Full Tasting Menu - Including Wine Pairings',
+                'created_at' => '2022-07-05 11:34:26',
+                'updated_at' => '2022-07-05 11:34:26',
+                'deleted_at' => NULL,
+            ),
         ));
         
         

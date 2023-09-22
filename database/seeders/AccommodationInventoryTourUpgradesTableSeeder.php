@@ -579,6 +579,26 @@ class AccommodationInventoryTourUpgradesTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 10:10:41',
                 'deleted_at' => NULL,
             ),
+            56 => 
+            array (
+                'id' => 57,
+                'base_id' => 116,
+                'upgrade_id' => 118,
+                'description' => 'Upgrade to Fully Catered Deluxe',
+                'created_at' => '2023-09-21 13:58:20',
+                'updated_at' => '2023-09-21 13:58:20',
+                'deleted_at' => NULL,
+            ),
+            57 => 
+            array (
+                'id' => 58,
+                'base_id' => 117,
+                'upgrade_id' => 119,
+                'description' => 'Upgrade to Fully Catered Deluxe',
+                'created_at' => '2023-09-21 13:58:42',
+                'updated_at' => '2023-09-21 13:58:42',
+                'deleted_at' => NULL,
+            ),
         ));
         
         

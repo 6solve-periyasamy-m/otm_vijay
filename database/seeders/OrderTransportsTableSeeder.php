@@ -389,6 +389,46 @@ class OrderTransportsTableSeeder extends Seeder
                 'updated_at' => '2022-09-21 13:55:02',
                 'deleted_at' => NULL,
             ),
+            37 => 
+            array (
+                'id' => 38,
+                'order_customer_id' => 28,
+                'transport_inventory_tour_id' => 9,
+                'cost' => '18.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
+            38 => 
+            array (
+                'id' => 39,
+                'order_customer_id' => 29,
+                'transport_inventory_tour_id' => 9,
+                'cost' => '18.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
+            39 => 
+            array (
+                'id' => 40,
+                'order_customer_id' => 30,
+                'transport_inventory_tour_id' => 9,
+                'cost' => '18.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
+            40 => 
+            array (
+                'id' => 41,
+                'order_customer_id' => 31,
+                'transport_inventory_tour_id' => 9,
+                'cost' => '18.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
         ));
         
         
