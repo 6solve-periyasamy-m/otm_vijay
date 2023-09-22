@@ -19,10 +19,6 @@
 
 @push('footer-stack')
     <script type="text/javascript">
-        const route = "{{ route('customer.extras') }}"
-        function onOrderChange(selector) {
-            window.location = route + '/' + $(selector).val();
-        }
         @if(!flag('payment.required', true))
             function applyUpgrade(selector, btn, model) {
                 let upgrade_id = $('#' + selector).find(':selected').val();
@@ -514,13 +510,16 @@
 
 @section('footer-script')
 <script>
-    let route = "{{ route('customer.invoice', ['reference' => 'reference']) }}"
-    function onOrderChange() {
+    function onOrderChange(selector) {
+        let route = "{{ route('customer.invoice', ['reference' => 'reference']) }}";
         let newBooking = $('.order-select').val()
         $('.order').hide();
         $('.order-' + newBooking).show();
         $('#form-booking-reference').val(newBooking);
         $('.invoice').prop('href', route.replace('reference', newBooking));
+        if ($(selector).val() !== undefined) {
+            window.location = "{{ route('customer.extras') }}" + '/' + $(selector).val();
+        }
     }
     onOrderChange();
 </script>
