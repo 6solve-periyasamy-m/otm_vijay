@@ -219,7 +219,7 @@ class FellohGateway extends Gateway
     private function updateReference(string $booking, Order $order): void
     {
         $response = Http::withHeaders($this->headers())
-            ->put("{$this->url}/agent/bookings/{$booking}/update-reference", ['booking_reference' => $order->booking_reference,]);
+            ->post("{$this->url}/agent/bookings/{$booking}/update-reference", ['booking_reference' => $order->booking_reference,]);
         self::$log && Log::info("Update Reference: " . $response->body());
         $this->verifyStatus($response);
     }
