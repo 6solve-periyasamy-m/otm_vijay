@@ -143,7 +143,7 @@ class FellohGateway extends Gateway
     {
         if (!$force) {
             $cached = Cache::get('felloh.token');
-            if ($cached !== null && isset($cached['token']) && ($cached['expiry'] ?? 0) > now()) {
+            if ($cached !== null && isset($cached['token']) && ($cached['expiry'] ?? 0) > now()->unix()) {
                 return $cached;
             }
         }
@@ -167,6 +167,10 @@ class FellohGateway extends Gateway
      */
     private function getFellohBooking(GeneratesFellohData $order): string
     {
+        $local = $order->getFellohId();
+        if ($local !== null) {
+            return $local;
+        }
         $response = Http::withHeaders($this->headers())
             ->post("{$this->url}/agent/bookings", ['organisation' => config('app.gateways.felloh.organisation'), 'booking_reference' => $order->getReference(),]);
         self::$log && Log::info("Get Booking: " . $response->body());
@@ -198,7 +202,7 @@ class FellohGateway extends Gateway
     }
 
     /**
-     * Update the details of a booking on felloh's systems with up-to-date details from our end
+     * Update the details of a booking on felloh's systems with up-to-date details from our end. Updates async
      * @param GeneratesFellohData $order
      * @param string|null $fellohId The known id of the order on felloh's system. Used if called in chain to prevent multiple accesses. If null, will fetch the ID first
      * @return string The felloh ID of the order
@@ -208,13 +212,14 @@ class FellohGateway extends Gateway
     private function updateFellohBooking(GeneratesFellohData $order, string $fellohId = null): string
     {
         $fellohId = $fellohId ?? $this->getFellohBooking($order);
-        $response = Http::withHeaders($this->headers())
+        Http::async()->withHeaders($this->headers())
             ->post("{$this->url}/agent/bookings/{$fellohId}", [
                 'organisation' => config('app.gateways.felloh.organisation'),
                 ...$order->getFellohData(),
-            ]);
-        self::$log && Log::info("Update Booking: " . $response->body());
-        $this->verifyStatus($response);
+        ])->then(function ($response) {
+            self::$log && Log::info("Update Booking: " . $response->body());
+            $this->verifyStatus($response);
+        });
         return $fellohId;
     }
 

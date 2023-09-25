@@ -16,6 +16,7 @@ use App\Models\Customer\Group;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
+use App\Models\System\FellohLink;
 use App\Models\Tour\Tour;
 use App\Models\Voucher\Executors\FlatCostReductionExecutor;
 use App\Models\Voucher\Executors\PercentageCostReductionExecutor;
@@ -488,5 +489,22 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     public function getReference(): string
     {
         return $this->booking->token;
+    }
+
+    public function getFellohId(): string|null
+    {
+        return $this->booking->felloh?->felloh_id;
+    }
+
+    public function setFellohId(string $id): void
+    {
+        $current = $this->getFellohId();
+        if ($current === $id) { return; }
+        if ($current !== null) {
+            $this->booking->felloh->felloh_id = $id;
+            $this->booking->felloh->save();
+        } else {
+            $this->booking->felloh()->save(new FellohLink(['felloh_id' => $id]));
+        }
     }
 }

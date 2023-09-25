@@ -15,6 +15,7 @@ use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
 use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
+use App\Models\System\FellohLink;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Interfaces\GeneratesFellohData;
@@ -688,5 +689,22 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public function getReference(): string
     {
         return $this->order->booking_reference;
+    }
+
+    public function getFellohId(): string|null
+    {
+        return $this->order->felloh?->felloh_id;
+    }
+
+    public function setFellohId(string $id): void
+    {
+        $current = $this->getFellohId();
+        if ($current === $id) { return; }
+        if ($current !== null) {
+            $this->order->felloh->felloh_id = $id;
+            $this->order->felloh->save();
+        } else {
+            $this->order->felloh()->save(new FellohLink(['felloh_id' => $id]));
+        }
     }
 }
