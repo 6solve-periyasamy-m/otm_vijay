@@ -235,8 +235,9 @@ class FellohGateway extends Gateway
         $ref = $this->getFellohBooking($booking->repository);
         $response = Http::withHeaders($this->headers())
             ->post("{$this->url}/agent/bookings/{$ref}/update-reference", ['booking_reference' => $order->booking_reference,]);
-       self::$log && Log::info("Update Reference: " . $response->body());
+        self::$log && Log::info("Update Reference: " . $response->body());
         $this->verifyStatus($response);
+        $order->repository->setFellohId($ref);
     }
 
     private function headers(): array
