@@ -14,6 +14,7 @@ use App\Models\System\GatewayPaymentLink;
 use App\Repository\Interfaces\GeneratesFellohData;
 use App\Repository\Model\Booking\BookingRepository;
 use App\Repository\Model\Order\OrderRepository;
+use Cache;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -138,15 +139,23 @@ class FellohGateway extends Gateway
      * @throws UnauthorizedGatewayException Thrown if a 4xx error is returned from the API
      * @throws RemoteGatewayError Thrown if a 5xx error is returned from the API
      */
-    private function getToken(): array
+    private function getToken(bool $force = false): array
     {
+        if (!$force) {
+            $cached = Cache::get('felloh.token');
+            if ($cached !== null && isset($cached['token']) && ($cached['expiry'] ?? 0) > now()) {
+                return $cached;
+            }
+        }
         $response = Http::withHeaders(['Content-Type' => 'application/json'])
             ->post("{$this->url}/token", ['public_key' => config('app.gateways.felloh.public'), 'private_key' => config('app.gateways.felloh.private'),]);
         self::$log && Log::info("Get Token:" . $response->body());
         if ($response->status() !== 200) {
             throw new UnauthorizedGatewayException("Invalid Felloh Information Provided");
         }
-        return ['token' => $response->json('data.token'), 'expiry' => $response->json('data.expiry_time')];
+        $details = ['token' => $response->json('data.token'), 'expiry' => $response->json('data.expiry_time')];
+        Cache::put('felloh.token', $details);
+        return $details;
     }
 
     /**
