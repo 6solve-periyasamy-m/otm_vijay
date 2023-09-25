@@ -135,9 +135,9 @@ class FellohGateway extends Gateway
 
     /**
      * Fetch an up-to-date API token for use in requests
+     * @param bool $force Should caching be skipped
      * @return array{token: string, expiry: int}
      * @throws UnauthorizedGatewayException Thrown if a 4xx error is returned from the API
-     * @throws RemoteGatewayError Thrown if a 5xx error is returned from the API
      */
     private function getToken(bool $force = false): array
     {
