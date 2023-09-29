@@ -3,7 +3,9 @@
 namespace App\Repository\Model\Booking;
 
 use App\Exceptions\NotOnTourException;
+use App\Exceptions\RemoteGatewayError;
 use App\Exceptions\RoomingFailedException;
+use App\Exceptions\UnauthorizedGatewayException;
 use App\Http\Gateways\Storage\LineItem;
 use App\Models\Accommodation\RoomType;
 use App\Models\Activity\ActivityInventoryTour;
@@ -14,12 +16,14 @@ use App\Models\Customer\Group;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
+use App\Models\System\FellohLink;
 use App\Models\Tour\Tour;
 use App\Models\Voucher\Executors\FlatCostReductionExecutor;
 use App\Models\Voucher\Executors\PercentageCostReductionExecutor;
 use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Interfaces\GeneratesFellohData;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\Rooming\RemoteBookingGroup;
 use Carbon\Carbon;
@@ -28,7 +32,7 @@ use Gateway;
 use Log;
 use Throwable;
 
-class BookingRepository extends ModelRepository
+class BookingRepository extends ModelRepository implements GeneratesFellohData
 {
     private Booking $booking;
 
@@ -291,6 +295,10 @@ class BookingRepository extends ModelRepository
         return !isset($this->booking);
     }
 
+    /**
+     * @throws RemoteGatewayError
+     * @throws UnauthorizedGatewayException
+     */
     public function getGatewayUrl(float $amount)
     {
         $gateway = Gateway::getDefaultGateway();
@@ -463,6 +471,40 @@ class BookingRepository extends ModelRepository
     {
         foreach ($this->booking->travellers()->with('vouchers')->get() as $traveller) {
             $traveller->repository->validateVouchers();
+        }
+    }
+
+    public function getFellohData(): array
+    {
+        return [
+            'customer_name' => $this->booking->leadTraveller->full_name,
+            'email' => $this->booking->leadTraveller->email_address,
+            'booking_reference' => $this->getReference(),
+            'departure_date' => $this->booking->tour->date_from->format('Y-m-d'),
+            'return_date' => $this->booking->tour->date_to->format('Y-m-d'),
+            'gross_amount' => $this->getTotalCost(),
+        ];
+    }
+
+    public function getReference(): string
+    {
+        return $this->booking->token;
+    }
+
+    public function getFellohId(): string|null
+    {
+        return $this->booking->felloh?->felloh_id;
+    }
+
+    public function setFellohId(string $id): void
+    {
+        $current = $this->getFellohId();
+        if ($current === $id) { return; }
+        if ($current !== null) {
+            $this->booking->felloh->felloh_id = $id;
+            $this->booking->felloh->save();
+        } else {
+            $this->booking->felloh()->save(new FellohLink(['felloh_id' => $id]));
         }
     }
 }

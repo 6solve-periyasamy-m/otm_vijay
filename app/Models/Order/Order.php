@@ -12,6 +12,7 @@ use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Quote\Quote;
+use App\Models\System\FellohLink;
 use App\Models\Tour\Tour;
 use App\Models\Voucher\OrderVoucher;
 use App\Repository\Model\Order\OrderRepository;
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -91,6 +93,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Collection|PaymentReminder[] $reminders The reminders that have been sent for the order
  * @property-read int|null $reminders_count The amount of reminders that have been sent for the order
  * @property-read Tour $tour The tour that the order was made in relation to
+ * @property-read FellohLink|null $felloh
  * @method static OrderFactory factory(...$parameters)
  * @method static Builder|Order newModelQuery()
  * @method static Builder|Order newQuery()
@@ -206,6 +209,11 @@ class Order extends Model
     public function groups(): HasManyDeep
     {
         return $this->hasManyDeep(Group::class, [OrderCustomer::class, OrderCustomerGroup::class,])->groupBy('groups.id');
+    }
+
+    public function felloh(): MorphOne
+    {
+        return $this->morphOne(FellohLink::class, 'order');
     }
 
     /**

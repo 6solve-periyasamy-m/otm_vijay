@@ -97,7 +97,10 @@ class CustomerComponentController extends Controller
 
         $item = new LineItem($upgrade->description, $upgrade->upgrade->tour_sales_price);
         $intention = PaymentIntentionRepository::create($orderCustomer->order, $orderCustomer->customer, 'Installment', [$uIntention,]);
-
-        return response()->json(['success' => true, 'location' => Gateway::getDefaultGateway()->checkout([$item,], $intention, $orderCustomer->customer, $redirect)]);
+        try {
+            return response()->json(['success' => true, 'location' => Gateway::getDefaultGateway()->checkout([$item,], $intention, $orderCustomer->customer, $redirect)]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Something went wrong with our payment processing. Please try again later.']);
+        }
     }
 }
