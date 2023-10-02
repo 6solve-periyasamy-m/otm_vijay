@@ -53,7 +53,7 @@ class FellohGateway extends Gateway
         $cost = 0;
         $description = "";
         foreach ($items as $item) {
-            $cost += $item->cost;
+            $cost += sigfig($item->cost);
             $description .= $item->name . ", ";
         }
         $description = preg_replace('/[^a-zA-Z0-9]/', '', substr($description, 0, -2)); // Anyone wondering: Remove the final comma, remove any non-alphanumeric characters
@@ -71,7 +71,7 @@ class FellohGateway extends Gateway
                 'customer_name' => "$customer->first_name $customer->last_name",
                 'email' => $customer->email_address,
                 'booking_id' => $fellohId,
-                'amount' => $cost * 100,
+                'amount' => (int)(sigfig($cost*100, 0)),
                 'description' => substr($description, 0, 99),
                 'open_banking_enabled' => true,
                 'card_enabled' => true,
