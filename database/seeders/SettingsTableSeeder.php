@@ -292,18 +292,18 @@ class SettingsTableSeeder extends Seeder
             ),
             41 => 
             array (
-                'key' => 'system.mail.enabled',
-                'value' => '1',
+                'key' => 'system.historic',
+                'value' => '6',
             ),
             42 => 
             array (
+                'key' => 'system.mail.enabled',
+                'value' => '1',
+            ),
+            43 => 
+            array (
                 'key' => 'system.year.start',
                 'value' => '2022-04-01',
-            ),
-            43 =>
-            array (
-                'key' => 'system.historic',
-                'value' => '6',
             ),
         ));
         

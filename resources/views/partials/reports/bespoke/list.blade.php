@@ -5,7 +5,7 @@
     <button id="submit" type="submit" class="form-control btn btn-primary">Submit</button>
 </div>
 
-<table class="table table-striped">
+<table class="datatable table table-striped">
     <thead class="thead-dark">
     <tr >
         <th scope="col">Model</th>

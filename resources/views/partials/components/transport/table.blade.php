@@ -1,13 +1,5 @@
 @php /** @var \App\Models\Transport\Transport $transport */ @endphp
-@section('footer-script')
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#transportInventory').DataTable({
-                fixedHeader: true
-            });
-        });
-    </script>
-@endsection
+
 @can('create', \App\Models\Transport\TransportInventory::class)
     <div class="card">
         <div class="card-body">
@@ -22,7 +14,7 @@
 @endcan
 <div class="card">
     <div class="card-body">
-        <table id="transportInventory" style="width: 100%;" class="table table-striped">
+        <table id="transportInventory" style="width: 100%;" class="datatable table table-striped">
             <thead class="thead-dark">
             <tr>
                 <th scope="col">Travel Class</th>

@@ -2,12 +2,6 @@
 
 @section('title', ($title . ' ' ?? '') . 'Report Result')
 
-@section('footer-script')
-    <script type="text/javascript">
-        $(document).ready(function () { $('.report-table').DataTable({fixedHeader: true}); });
-    </script>
-@endsection
-
 @section('content')
     <div class="card">
         <div class="card-body">

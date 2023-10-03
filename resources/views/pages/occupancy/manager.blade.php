@@ -2,7 +2,7 @@
 
 @section('title', 'Occupancy Manager')
 
-@push('header-stack')
+@push('footer-stack')
     <!--suppress HtmlUnknownTarget -->
     <link href="{{ asset('css/admin/occupancy.css') }}" type="text/css" rel="stylesheet" />
     <script src="{{ asset('js/admin/functions.js') }}" type="text/javascript"></script>

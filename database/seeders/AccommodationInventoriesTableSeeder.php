@@ -37,6 +37,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:49',
                 'updated_at' => '2022-01-20 11:58:49',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             1 => 
             array (
@@ -56,6 +57,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:55',
                 'updated_at' => '2022-01-20 12:00:38',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             2 => 
             array (
@@ -75,6 +77,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:59:14',
                 'updated_at' => '2022-01-20 11:59:40',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             3 => 
             array (
@@ -94,6 +97,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:00:15',
                 'updated_at' => '2022-01-20 12:00:25',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             4 => 
             array (
@@ -113,6 +117,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:49',
                 'updated_at' => '2022-01-20 11:58:49',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             5 => 
             array (
@@ -132,6 +137,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:55',
                 'updated_at' => '2022-01-20 12:00:38',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             6 => 
             array (
@@ -151,6 +157,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:59:14',
                 'updated_at' => '2022-01-20 11:59:40',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             7 => 
             array (
@@ -170,6 +177,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:00:15',
                 'updated_at' => '2022-01-20 12:00:25',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             8 => 
             array (
@@ -189,6 +197,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:49',
                 'updated_at' => '2022-01-20 11:58:49',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             9 => 
             array (
@@ -208,6 +217,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:55',
                 'updated_at' => '2022-01-20 12:00:38',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             10 => 
             array (
@@ -227,6 +237,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:59:14',
                 'updated_at' => '2022-01-20 11:59:40',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             11 => 
             array (
@@ -246,6 +257,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:00:15',
                 'updated_at' => '2022-01-20 12:00:25',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             12 => 
             array (
@@ -265,6 +277,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:49',
                 'updated_at' => '2022-01-20 11:58:49',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             13 => 
             array (
@@ -284,6 +297,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:55',
                 'updated_at' => '2022-01-20 12:00:38',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             14 => 
             array (
@@ -303,6 +317,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:59:14',
                 'updated_at' => '2022-01-20 11:59:40',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             15 => 
             array (
@@ -322,6 +337,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:00:15',
                 'updated_at' => '2022-01-20 12:00:25',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             16 => 
             array (
@@ -341,6 +357,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:49',
                 'updated_at' => '2022-01-20 11:58:49',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             17 => 
             array (
@@ -360,6 +377,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:55',
                 'updated_at' => '2022-01-20 12:00:38',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             18 => 
             array (
@@ -379,6 +397,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:59:14',
                 'updated_at' => '2022-01-20 11:59:40',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             19 => 
             array (
@@ -398,6 +417,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:00:15',
                 'updated_at' => '2022-01-20 12:00:25',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             20 => 
             array (
@@ -417,6 +437,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:49',
                 'updated_at' => '2022-01-20 11:58:49',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             21 => 
             array (
@@ -436,6 +457,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:55',
                 'updated_at' => '2022-01-20 12:00:38',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             22 => 
             array (
@@ -455,6 +477,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:59:14',
                 'updated_at' => '2022-01-20 11:59:40',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             23 => 
             array (
@@ -474,6 +497,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:00:15',
                 'updated_at' => '2022-01-20 12:00:25',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             24 => 
             array (
@@ -493,6 +517,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:49',
                 'updated_at' => '2022-01-20 11:58:49',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             25 => 
             array (
@@ -512,6 +537,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:55',
                 'updated_at' => '2022-01-20 12:00:38',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             26 => 
             array (
@@ -531,6 +557,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:59:14',
                 'updated_at' => '2022-01-20 11:59:40',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             27 => 
             array (
@@ -550,6 +577,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:00:15',
                 'updated_at' => '2022-01-20 12:00:25',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             28 => 
             array (
@@ -569,6 +597,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:49',
                 'updated_at' => '2022-01-20 11:58:49',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             29 => 
             array (
@@ -588,6 +617,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:55',
                 'updated_at' => '2022-01-20 12:00:38',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             30 => 
             array (
@@ -607,6 +637,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:59:14',
                 'updated_at' => '2022-01-20 11:59:40',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             31 => 
             array (
@@ -626,6 +657,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:00:15',
                 'updated_at' => '2022-01-20 12:00:25',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             32 => 
             array (
@@ -645,6 +677,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:49',
                 'updated_at' => '2022-01-20 11:58:49',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             33 => 
             array (
@@ -664,6 +697,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:58:55',
                 'updated_at' => '2022-01-20 12:00:38',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             34 => 
             array (
@@ -683,6 +717,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:59:14',
                 'updated_at' => '2022-01-20 11:59:40',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             35 => 
             array (
@@ -702,6 +737,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:00:15',
                 'updated_at' => '2022-01-20 12:00:25',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             36 => 
             array (
@@ -721,6 +757,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:32:06',
                 'updated_at' => '2022-02-09 09:32:06',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             37 => 
             array (
@@ -740,6 +777,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:32:10',
                 'updated_at' => '2022-02-09 09:32:18',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             38 => 
             array (
@@ -759,6 +797,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:32:31',
                 'updated_at' => '2022-02-09 09:32:37',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             39 => 
             array (
@@ -778,6 +817,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:32:40',
                 'updated_at' => '2022-02-09 09:32:46',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             40 => 
             array (
@@ -797,6 +837,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:32:51',
                 'updated_at' => '2022-02-09 09:32:55',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             41 => 
             array (
@@ -816,6 +857,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:32:58',
                 'updated_at' => '2022-02-09 09:33:03',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             42 => 
             array (
@@ -835,6 +877,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:33:19',
                 'updated_at' => '2022-02-09 09:33:34',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             43 => 
             array (
@@ -854,6 +897,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:33:44',
                 'updated_at' => '2022-02-09 09:33:48',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             44 => 
             array (
@@ -873,6 +917,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-02-09 09:33:53',
                 'updated_at' => '2022-02-09 09:33:57',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             45 => 
             array (
@@ -892,6 +937,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-06-29 10:09:57',
                 'updated_at' => '2022-06-29 10:10:04',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             46 => 
             array (
@@ -911,6 +957,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-14 10:02:14',
                 'updated_at' => '2022-09-14 10:06:18',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             47 => 
             array (
@@ -930,6 +977,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-14 10:02:57',
                 'updated_at' => '2022-09-14 10:03:16',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             48 => 
             array (
@@ -949,6 +997,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-14 10:04:31',
                 'updated_at' => '2022-09-14 10:06:40',
                 'deleted_at' => '2022-09-14 10:06:40',
+                'external_notes' => NULL,
             ),
             49 => 
             array (
@@ -968,6 +1017,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-14 10:05:34',
                 'updated_at' => '2022-09-14 10:05:34',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             50 => 
             array (
@@ -987,6 +1037,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-14 10:05:53',
                 'updated_at' => '2022-09-14 10:05:57',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             51 => 
             array (
@@ -1006,6 +1057,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-14 10:08:14',
                 'updated_at' => '2022-09-14 10:08:14',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             52 => 
             array (
@@ -1025,6 +1077,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-14 10:08:20',
                 'updated_at' => '2022-09-14 10:08:34',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             53 => 
             array (
@@ -1044,6 +1097,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-14 10:08:39',
                 'updated_at' => '2022-09-14 10:08:44',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             54 => 
             array (
@@ -1063,6 +1117,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-14 10:08:51',
                 'updated_at' => '2022-09-14 10:08:54',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             55 => 
             array (
@@ -1082,6 +1137,167 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-20 19:00:01',
                 'updated_at' => '2022-09-20 19:00:01',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
+            ),
+            56 => 
+            array (
+                'id' => 64,
+                'accommodation_id' => 3,
+                'room_type_id' => 3,
+                'board_type_id' => 1,
+                'check_in' => '2024-08-04 14:00:00',
+                'check_in_time_confirmed' => 1,
+                'check_out' => '2024-08-08 11:00:00',
+                'check_out_time_confirmed' => 1,
+                'fit_selectable' => 1,
+                'stock' => 10,
+                'purchase_price' => '20.00',
+                'sales_price' => '25.00',
+                'internal_notes' => NULL,
+                'created_at' => '2023-07-26 11:36:43',
+                'updated_at' => '2023-08-01 15:31:57',
+                'deleted_at' => NULL,
+                'external_notes' => NULL,
+            ),
+            57 => 
+            array (
+                'id' => 65,
+                'accommodation_id' => 3,
+                'room_type_id' => 5,
+                'board_type_id' => 1,
+                'check_in' => '2024-08-04 14:00:00',
+                'check_in_time_confirmed' => 1,
+                'check_out' => '2024-08-08 11:00:00',
+                'check_out_time_confirmed' => 1,
+                'fit_selectable' => 1,
+                'stock' => 10,
+                'purchase_price' => '25.00',
+                'sales_price' => '30.00',
+                'internal_notes' => NULL,
+                'created_at' => '2023-08-01 15:13:28',
+                'updated_at' => '2023-08-01 15:31:49',
+                'deleted_at' => NULL,
+                'external_notes' => NULL,
+            ),
+            58 => 
+            array (
+                'id' => 66,
+                'accommodation_id' => 3,
+                'room_type_id' => 4,
+                'board_type_id' => 1,
+                'check_in' => '2024-08-04 14:00:00',
+                'check_in_time_confirmed' => 1,
+                'check_out' => '2024-08-08 11:00:00',
+                'check_out_time_confirmed' => 1,
+                'fit_selectable' => 1,
+                'stock' => 10,
+                'purchase_price' => '17.00',
+                'sales_price' => '20.00',
+                'internal_notes' => NULL,
+                'created_at' => '2023-08-01 15:13:52',
+                'updated_at' => '2023-08-01 15:31:39',
+                'deleted_at' => NULL,
+                'external_notes' => NULL,
+            ),
+            59 => 
+            array (
+                'id' => 67,
+                'accommodation_id' => 1,
+                'room_type_id' => 2,
+                'board_type_id' => 2,
+                'check_in' => '2024-07-29 14:00:00',
+                'check_in_time_confirmed' => 1,
+                'check_out' => '2024-08-04 11:00:00',
+                'check_out_time_confirmed' => 1,
+                'fit_selectable' => 1,
+                'stock' => 50,
+                'purchase_price' => '55.00',
+                'sales_price' => '75.00',
+                'internal_notes' => NULL,
+                'created_at' => '2023-08-01 15:29:11',
+                'updated_at' => '2023-08-01 15:29:38',
+                'deleted_at' => NULL,
+                'external_notes' => NULL,
+            ),
+            60 => 
+            array (
+                'id' => 68,
+                'accommodation_id' => 1,
+                'room_type_id' => 1,
+                'board_type_id' => 2,
+                'check_in' => '2024-07-29 14:00:00',
+                'check_in_time_confirmed' => 1,
+                'check_out' => '2024-08-04 11:00:00',
+                'check_out_time_confirmed' => 1,
+                'fit_selectable' => 1,
+                'stock' => 50,
+                'purchase_price' => '55.00',
+                'sales_price' => '75.00',
+                'internal_notes' => NULL,
+                'created_at' => '2023-08-01 15:29:46',
+                'updated_at' => '2023-08-01 15:29:48',
+                'deleted_at' => NULL,
+                'external_notes' => NULL,
+            ),
+            61 => 
+            array (
+                'id' => 69,
+                'accommodation_id' => 1,
+                'room_type_id' => 2,
+                'board_type_id' => 3,
+                'check_in' => '2024-07-29 14:00:00',
+                'check_in_time_confirmed' => 1,
+                'check_out' => '2024-08-04 11:00:00',
+                'check_out_time_confirmed' => 1,
+                'fit_selectable' => 1,
+                'stock' => 50,
+                'purchase_price' => '95.00',
+                'sales_price' => '130.00',
+                'internal_notes' => NULL,
+                'created_at' => '2023-08-01 15:29:57',
+                'updated_at' => '2023-08-01 15:30:25',
+                'deleted_at' => NULL,
+                'external_notes' => NULL,
+            ),
+            62 => 
+            array (
+                'id' => 70,
+                'accommodation_id' => 1,
+                'room_type_id' => 1,
+                'board_type_id' => 3,
+                'check_in' => '2024-07-29 14:00:00',
+                'check_in_time_confirmed' => 1,
+                'check_out' => '2024-08-04 11:00:00',
+                'check_out_time_confirmed' => 1,
+                'fit_selectable' => 1,
+                'stock' => 50,
+                'purchase_price' => '95.00',
+                'sales_price' => '130.00',
+                'internal_notes' => NULL,
+                'created_at' => '2023-08-01 15:30:09',
+                'updated_at' => '2023-08-01 15:30:38',
+                'deleted_at' => NULL,
+                'external_notes' => NULL,
+            ),
+            63 => 
+            array (
+                'id' => 71,
+                'accommodation_id' => 5,
+                'room_type_id' => 2,
+                'board_type_id' => 1,
+                'check_in' => '2024-07-30 14:30:00',
+                'check_in_time_confirmed' => 1,
+                'check_out' => '2024-07-31 09:00:00',
+                'check_out_time_confirmed' => 1,
+                'fit_selectable' => 0,
+                'stock' => 50,
+                'purchase_price' => '187.00',
+                'sales_price' => '250.00',
+                'internal_notes' => NULL,
+                'created_at' => '2023-09-22 13:18:54',
+                'updated_at' => '2023-09-22 13:18:54',
+                'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
         ));
         

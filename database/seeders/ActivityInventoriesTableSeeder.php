@@ -34,6 +34,7 @@ class ActivityInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:35:31',
                 'updated_at' => '2022-01-20 13:35:31',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             1 => 
             array (
@@ -50,6 +51,7 @@ class ActivityInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:35:34',
                 'updated_at' => '2022-01-20 13:38:08',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             2 => 
             array (
@@ -66,6 +68,7 @@ class ActivityInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:36:08',
                 'updated_at' => '2022-01-20 13:37:55',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             3 => 
             array (
@@ -82,6 +85,7 @@ class ActivityInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 15:35:37',
                 'updated_at' => '2022-01-20 15:35:37',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             4 => 
             array (
@@ -98,6 +102,7 @@ class ActivityInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 15:35:40',
                 'updated_at' => '2022-01-20 15:36:36',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             5 => 
             array (
@@ -114,6 +119,7 @@ class ActivityInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 15:37:08',
                 'updated_at' => '2022-01-20 15:53:24',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             6 => 
             array (
@@ -130,6 +136,7 @@ class ActivityInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-21 10:51:09',
                 'updated_at' => '2022-01-21 10:51:09',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             7 => 
             array (
@@ -146,6 +153,7 @@ class ActivityInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-01-21 11:03:28',
                 'updated_at' => '2022-01-21 11:03:28',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             8 => 
             array (
@@ -162,6 +170,7 @@ class ActivityInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-14 10:14:04',
                 'updated_at' => '2022-09-14 10:16:46',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             9 => 
             array (
@@ -178,6 +187,7 @@ class ActivityInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-14 10:17:11',
                 'updated_at' => '2022-09-14 10:17:11',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             10 => 
             array (
@@ -194,6 +204,7 @@ class ActivityInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-14 12:18:10',
                 'updated_at' => '2022-09-14 12:18:24',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             11 => 
             array (
@@ -210,6 +221,7 @@ class ActivityInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-20 19:16:07',
                 'updated_at' => '2022-09-20 19:16:07',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             12 => 
             array (
@@ -226,6 +238,75 @@ class ActivityInventoriesTableSeeder extends Seeder
                 'created_at' => '2022-09-21 08:57:14',
                 'updated_at' => '2022-09-21 08:57:14',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
+            ),
+            13 => 
+            array (
+                'id' => 14,
+                'activity_id' => 1,
+                'starts_at' => '2024-08-02 18:00:00',
+                'ends_at' => '2024-08-02 23:00:00',
+                'fit_selectable' => 1,
+                'ticket_type_id' => 1,
+                'stock' => 50,
+                'purchase_price' => '10.00',
+                'sales_price' => '25.00',
+                'internal_notes' => NULL,
+                'created_at' => '2023-09-21 13:59:52',
+                'updated_at' => '2023-09-21 13:59:52',
+                'deleted_at' => NULL,
+                'external_notes' => NULL,
+            ),
+            14 => 
+            array (
+                'id' => 15,
+                'activity_id' => 1,
+                'starts_at' => '2024-08-02 23:00:00',
+                'ends_at' => '2024-08-03 02:00:00',
+                'fit_selectable' => 1,
+                'ticket_type_id' => 2,
+                'stock' => 50,
+                'purchase_price' => '25.00',
+                'sales_price' => '50.00',
+                'internal_notes' => NULL,
+                'created_at' => '2023-09-21 14:00:07',
+                'updated_at' => '2023-09-21 14:00:22',
+                'deleted_at' => NULL,
+                'external_notes' => NULL,
+            ),
+            15 => 
+            array (
+                'id' => 16,
+                'activity_id' => 9,
+                'starts_at' => '2024-08-01 10:00:00',
+                'ends_at' => '2024-08-01 15:00:00',
+                'fit_selectable' => 0,
+                'ticket_type_id' => 4,
+                'stock' => 15,
+                'purchase_price' => '350.00',
+                'sales_price' => '450.00',
+                'internal_notes' => NULL,
+                'created_at' => '2023-09-21 14:05:56',
+                'updated_at' => '2023-09-21 14:05:56',
+                'deleted_at' => NULL,
+                'external_notes' => NULL,
+            ),
+            16 => 
+            array (
+                'id' => 17,
+                'activity_id' => 10,
+                'starts_at' => '2024-07-30 15:00:00',
+                'ends_at' => '2024-07-30 20:00:00',
+                'fit_selectable' => 0,
+                'ticket_type_id' => 1,
+                'stock' => 25,
+                'purchase_price' => '25.00',
+                'sales_price' => '30.00',
+                'internal_notes' => NULL,
+                'created_at' => '2023-09-21 14:07:39',
+                'updated_at' => '2023-09-21 14:07:39',
+                'deleted_at' => NULL,
+                'external_notes' => 'This afternoon/evening tour includes a stop for dinner which you will enjoy with the rest of the tour party. At the meal you will get the chance to sample local delicacies and wines',
             ),
         ));
         

@@ -369,6 +369,36 @@ class OrderInstallmentsTableSeeder extends Seeder
                 'updated_at' => '2022-09-21 12:44:00',
                 'deleted_at' => NULL,
             ),
+            35 => 
+            array (
+                'id' => 36,
+                'order_id' => 16,
+                'amount' => '874.50',
+                'due_on' => '2023-12-01',
+                'created_at' => '2023-09-22 13:22:32',
+                'updated_at' => '2023-09-22 13:22:32',
+                'deleted_at' => NULL,
+            ),
+            36 => 
+            array (
+                'id' => 37,
+                'order_id' => 16,
+                'amount' => '1049.40',
+                'due_on' => '2024-01-10',
+                'created_at' => '2023-09-22 13:22:32',
+                'updated_at' => '2023-09-22 13:22:32',
+                'deleted_at' => NULL,
+            ),
+            37 => 
+            array (
+                'id' => 38,
+                'order_id' => 16,
+                'amount' => '874.50',
+                'due_on' => '2024-03-01',
+                'created_at' => '2023-09-22 13:22:32',
+                'updated_at' => '2023-09-22 13:22:32',
+                'deleted_at' => NULL,
+            ),
         ));
         
         

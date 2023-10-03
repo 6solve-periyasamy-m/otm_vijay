@@ -75,14 +75,15 @@ $brand = $sent->quote->brand;
                 </div>
                 <div class="flex-container">
                     <div class="flex-items billing-info-wrapper">
-                        <div class="billing-info">{{ $quote->leadTraveller->name }}</div>
-                        <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->address_line_1 }}{!! isset($quote->leadTraveller->customer->billingAddress->address_line_1) ? "<br />" : "" !!}</div>
-                        <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->address_line_2 }}{!! isset($quote->leadTraveller->customer->billingAddress->address_line_2) ? "<br />" : "" !!}</div>
-                        <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->address_line_3 }}{!! isset($quote->leadTraveller->customer->billingAddress->address_line_3) ? "<br />" : "" !!}</div>
-                        <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->town }}{!! isset($quote->leadTraveller->customer->billingAddress->town) ? "<br />" : "" !!}</div>
-                        <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->region }}{!! isset($quote->leadTraveller->customer->billingAddress->region) ? "<br />" : "" !!}</div>
-                        <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->country }}{!! isset($quote->leadTraveller->customer->billingAddress->country) ? "<br />" : "" !!}</div>
-                        <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->postcode }}{!! isset($quote->leadTraveller->customer->billingAddress->postcode) ? "<br />" : "" !!}</div>
+                        @php /** @var \App\Models\Location\Address $billing */ $billing = $sent->organization?->billingAddress ?? $quote->leadTraveller->customer->billingAddress; @endphp
+                        <div class="billing-info">{{ $quote->organization?->name ?? $order->leadTraveller->customer_name }}</div>
+                        <div class="billing-info">{{ $billing->address_line_1 }}{!! isset($billing->address_line_1) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $billing->address_line_2 }}{!! isset($billing->address_line_2) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $billing->address_line_3 }}{!! isset($billing->address_line_3) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $billing->town }}{!! isset($billing->town) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $billing->region }}{!! isset($billing->region) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $billing->country }}{!! isset($billing->country) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $billing->postcode }}{!! isset($billing->postcode) ? "<br />" : "" !!}</div>
                     </div>
                     <div class="flex-items billing-info-wrapper">
                         <div class="billing-info">{{ $brand->active_address->address_line_1 }}</div>

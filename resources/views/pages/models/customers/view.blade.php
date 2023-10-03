@@ -2,12 +2,6 @@
 
 @section('title', 'View Customer')
 
-@section('footer-script')
-    <script>
-        $('.order-table').DataTable({fixedHeader: true});
-    </script>
-@endsection
-
 @section('content')
     <div class="otm-callout">
         <div class="row">
@@ -105,7 +99,7 @@
     <hr class="splitter"/>
     <div class="card">
         <div class="card-body">
-            <table class="table table-striped order-table">
+            <table class="datatable table table-striped order-table">
                 <thead>
                     <tr>
                         <th scope="col">Booking Reference</th>
@@ -129,7 +123,7 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <table class="table table-striped order-table">
+            <table class="datatable table table-striped order-table">
                 <thead>
                     <tr>
                         <th scope="col">Quote Reference</th>

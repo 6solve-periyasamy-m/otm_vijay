@@ -78,14 +78,38 @@ class LocationTypesTableSeeder extends Seeder
             7 => 
             array (
                 'id' => 8,
-                'name' => 'Cricket Ground',
-                'created_at' => '2022-09-14 10:12:27',
-                'updated_at' => '2022-09-14 10:12:27',
+                'name' => 'Train Station',
+                'created_at' => '2022-07-05 10:52:41',
+                'updated_at' => '2022-07-05 10:52:41',
                 'deleted_at' => NULL,
             ),
             8 => 
             array (
                 'id' => 9,
+                'name' => 'Museum',
+                'created_at' => '2022-07-05 10:59:50',
+                'updated_at' => '2022-07-05 10:59:50',
+                'deleted_at' => NULL,
+            ),
+            9 => 
+            array (
+                'id' => 10,
+                'name' => 'Point of Interest',
+                'created_at' => '2023-08-01 15:55:23',
+                'updated_at' => '2023-08-01 15:55:23',
+                'deleted_at' => NULL,
+            ),
+            10 => 
+            array (
+                'id' => 11,
+                'name' => 'Cricket Ground',
+                'created_at' => '2022-09-14 10:12:27',
+                'updated_at' => '2022-09-14 10:12:27',
+                'deleted_at' => NULL,
+            ),
+            11 => 
+            array (
+                'id' => 12,
                 'name' => 'Racecourse',
                 'created_at' => '2022-09-21 08:53:35',
                 'updated_at' => '2022-09-21 08:53:35',

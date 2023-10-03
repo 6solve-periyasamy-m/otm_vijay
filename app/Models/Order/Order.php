@@ -5,12 +5,14 @@ namespace App\Models\Order;
 use App\Models\Customer\Customer;
 use App\Models\Customer\Group;
 use App\Models\Customer\OrderCustomerGroup;
+use App\Models\Customer\Organization;
 use App\Models\Helper\OrderStatus;
 use App\Models\Helper\Traits\HasPermissions;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Quote\Quote;
+use App\Models\System\FellohLink;
 use App\Models\Tour\Tour;
 use App\Models\Voucher\OrderVoucher;
 use App\Repository\Model\Order\OrderRepository;
@@ -25,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -37,6 +40,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int $id
  * @property int $tour_id
  * @property int|null $lead_booker_id
+ * @property int|null $organization_id
  * @property string|null $booking_reference Unique reference for the booking
  * @property float|null $deposit The expected deposit amount
  * @property float|null $booking_fee The fee paid at time of booking
@@ -51,6 +55,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property string|null $token The token used during the booking process
  * @property-read Collection|ManualAdjustment[] $adjustments The manual adjustments on the order
  * @property-read Collection|OrderVoucher[] $vouchers
+ * @property-read Organization|null $organization
  * @property-read int|null $adjustments_count The amount of manual adjustments on the order
  * @property-read int|null $days_until_next_payment The number of days until the next payment is due, or null if all installments are paid
  * @property-read Collection|Customer[] $customers The customers associated with this order
@@ -88,6 +93,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Collection|PaymentReminder[] $reminders The reminders that have been sent for the order
  * @property-read int|null $reminders_count The amount of reminders that have been sent for the order
  * @property-read Tour $tour The tour that the order was made in relation to
+ * @property-read FellohLink|null $felloh
  * @method static OrderFactory factory(...$parameters)
  * @method static Builder|Order newModelQuery()
  * @method static Builder|Order newQuery()
@@ -115,7 +121,7 @@ class Order extends Model
 {
     use SoftDeletes, CascadeSoftDeletes, HasFactory, HasRelationships, HasPermissions;
 
-    protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes', 'deposit', 'invoice_footer', 'booking_fee'];
+    protected $guarded = [];
     protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double',];
 
     protected array $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments', 'installments', 'invoices'];
@@ -143,6 +149,11 @@ class Order extends Model
     public function tour(): BelongsTo
     {
         return $this->belongsTo(Tour::class, 'tour_id');
+    }
+
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class, 'organization_id');
     }
 
     public function vouchers(): HasMany
@@ -198,6 +209,11 @@ class Order extends Model
     public function groups(): HasManyDeep
     {
         return $this->hasManyDeep(Group::class, [OrderCustomer::class, OrderCustomerGroup::class,])->groupBy('groups.id');
+    }
+
+    public function felloh(): MorphOne
+    {
+        return $this->morphOne(FellohLink::class, 'order');
     }
 
     /**

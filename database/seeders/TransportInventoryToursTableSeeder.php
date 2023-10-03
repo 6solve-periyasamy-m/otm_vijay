@@ -30,6 +30,7 @@ class TransportInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-21 12:44:34',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             1 => 
             array (
@@ -42,6 +43,7 @@ class TransportInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:52:15',
                 'deleted_at' => '2022-09-14 09:52:15',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             2 => 
             array (
@@ -54,6 +56,7 @@ class TransportInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 10:49:00',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             3 => 
             array (
@@ -66,6 +69,7 @@ class TransportInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-20 10:39:17',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             4 => 
             array (
@@ -78,6 +82,7 @@ class TransportInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-20 19:10:55',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             5 => 
             array (
@@ -90,6 +95,7 @@ class TransportInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-20 19:10:55',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             6 => 
             array (
@@ -102,6 +108,7 @@ class TransportInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-21 09:03:24',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             7 => 
             array (
@@ -114,6 +121,46 @@ class TransportInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-21 09:04:43',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
+            ),
+            8 => 
+            array (
+                'id' => 9,
+                'tour_id' => 7,
+                'transport_inventory_id' => 8,
+                'tour_component_type' => 'Included',
+                'tour_sales_price' => '18.00',
+                'created_at' => '2023-09-22 13:09:29',
+                'updated_at' => '2023-09-22 13:09:29',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+                'stock_control_active' => 0,
+            ),
+            9 => 
+            array (
+                'id' => 10,
+                'tour_id' => 7,
+                'transport_inventory_id' => 7,
+                'tour_component_type' => 'Add-on',
+                'tour_sales_price' => '60.00',
+                'created_at' => '2023-09-22 13:09:36',
+                'updated_at' => '2023-09-22 13:09:36',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+                'stock_control_active' => 0,
+            ),
+            10 => 
+            array (
+                'id' => 11,
+                'tour_id' => 7,
+                'transport_inventory_id' => 9,
+                'tour_component_type' => 'Upgrade',
+                'tour_sales_price' => '50.00',
+                'created_at' => '2023-09-22 13:15:43',
+                'updated_at' => '2023-09-22 13:16:10',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
         ));
         

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Exceptions\RemoteGatewayError;
+use App\Exceptions\UnauthorizedGatewayException;
 use App\Http\Controllers\CustomerController;
 use App\Http\Gateways\Storage\LineItem;
 use App\Http\Requests\Customer\FinancesRequest;
@@ -36,7 +38,13 @@ class CustomerFinancesController extends CustomerController
         $item = new LineItem("Installment Payment ({$order->booking_reference})", $request->amount);
         $intention = PaymentIntention::build($this->user(), $order->booking_reference, 'Installment');
 
-        return redirect($gateway->checkout([$item,], $intention, $this->user(), $redirect));
+        try {
+            return redirect($gateway->checkout([$item,], $intention, $this->user(), $redirect));
+        } catch (UnauthorizedGatewayException $e) {
+            return back()->withErrors(['msg' => 'Something went wrong with our payment processing. Please try again later.']);
+        } catch (RemoteGatewayError $e) {
+            return back()->withErrors(['msg' => 'Something went wrong with our 3rd-party payment processing. Please try again later.']);
+        }
     }
 
     public function showInvoice(Order|string $reference)

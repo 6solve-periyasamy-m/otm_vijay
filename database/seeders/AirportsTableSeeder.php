@@ -69,6 +69,16 @@ class AirportsTableSeeder extends Seeder
                 'updated_at' => '2022-09-20 18:44:05',
                 'deleted_at' => NULL,
             ),
+            5 => 
+            array (
+                'id' => 6,
+                'name' => 'Saint Helena Airport',
+                'address_id' => 132,
+                'iata_code' => 'HLE',
+                'created_at' => '2023-09-22 12:24:41',
+                'updated_at' => '2023-09-22 12:24:41',
+                'deleted_at' => NULL,
+            ),
         ));
         
         

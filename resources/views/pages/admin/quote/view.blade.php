@@ -7,14 +7,6 @@
 @section('footer-script')
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#schedule-table').DataTable({fixedHeader: true,});
-            $('#pricepoint-table').DataTable({fixedHeader: true,});
-            $('.summary').DataTable({fixedHeader: true, autoWidth: false,});
-            $('.accommodation').DataTable({fixedHeader: true, autoWidth: false,});
-            $('.activities').DataTable({fixedHeader: true, autoWidth: false,});
-            $('.flights').DataTable({fixedHeader: true, autoWidth: false,});
-            $('.transport').DataTable({fixedHeader: true, autoWidth: false,});
-            $('.extras').DataTable({fixedHeader: true, autoWidth: false,});
             $('.sent-quotes').DataTable({fixedHeader: true, order: [[0, 'desc'],]});
             $('.sections').DataTable({fixedHeader: true, order: [[0, 'asc'],]});
             update(getPayingAmount(), getTravellingAmount());
@@ -357,7 +349,7 @@
         </ul>
         <div id="tables" class="tab-content otm-tab-content">
             <div id="summary" role="tabpanel" class="tab-pane fade show active">
-                <table class="table table-striped summary">
+                <table class="datatable autowidth-off table table-striped summary">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.type') }}</th>
@@ -420,7 +412,7 @@
                 </table>
             </div>
             <div id="accommodation" role="tabpanel" class="tab-pane fade">
-                <table class="table table-striped summary">
+                <table class="datatable autowidth-off table table-striped summary">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
@@ -475,7 +467,7 @@
                 </table>
             </div>
             <div id="activities" role="tabpanel" class="tab-pane fade">
-                <table class="table table-striped summary">
+                <table class="datatable autowidth-off table table-striped summary">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
@@ -530,7 +522,7 @@
                 </table>
             </div>
             <div id="flights" role="tabpanel" class="tab-pane fade">
-                <table class="table table-striped summary">
+                <table class="datatable autowidth-off table table-striped summary">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
@@ -584,7 +576,7 @@
                 </table>
             </div>
             <div id="transport" role="tabpanel" class="tab-pane fade">
-                <table class="table table-striped summary">
+                <table class="datatable autowidth-off table table-striped summary">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
@@ -638,7 +630,7 @@
                 </table>
             </div>
             <div id="extras" role="tabpanel" class="tab-pane fade">
-                <table class="table table-striped summary">
+                <table class="datatable autowidth-off table table-striped summary">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
@@ -706,7 +698,7 @@
                         <span>{{ __('quotes.view.cards.installments.form.create') }}</span>
                     </x-admin.button>
                 </form>
-                <table class="table table-striped" id="schedule-table">
+                <table class="datatable table table-striped" id="schedule-table">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.installments.table.type') }}</th>
@@ -789,7 +781,7 @@
                         <span>{{ __('quotes.view.cards.price-points.form.create') }}</span>
                     </x-admin.button>
                 </form>
-                <table class="table table-striped" id="pricepoint-table">
+                <table class="datatable table table-striped" id="pricepoint-table">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.price-points.table.quantity') }}</th>
