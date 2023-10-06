@@ -95,6 +95,9 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
     <script type="text/javascript">
+        $(document).ready(function () {
+            @stack('footer-ready')
+        });
         function showToast(title, body, color = 'primary', autohide = false, delay = 5000) {
             let now = Date.now();
             $('.toast-container').append(render(template('toast'), {id: now, title: title, body: body, color: color}));
