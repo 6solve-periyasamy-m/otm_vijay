@@ -369,4 +369,15 @@ class SelectController extends ApiController
     {
         return TourTransforms::getSelectedBrand($id);
     }
+
+    public function getAvailableFilterCountries(Request $request)
+    {
+        $filter = $request->has('filter') ? $request->filter : "";
+        return LocationsTransforms::getFilterCountries($filter);
+    }
+
+    public function getSelectedFilterCountries($id)
+    {
+        return LocationsTransforms::getSelectedFilterCountry($id);
+    }
 }

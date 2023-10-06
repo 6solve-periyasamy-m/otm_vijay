@@ -386,7 +386,7 @@ class ReportRepository
         $filter = Settings::atolFilter();
         foreach ($orders as $order) {
             if (!$order->has_atol) continue;
-            if ($filter !== 0 && $order->leadBooker->customer->homeAddress->country_id !== $filter) continue;
+            if ($filter !== -1 && $order->leadBooker->customer->homeAddress->country_id !== $filter) continue;
             if (!$order->cancelled) {
                 $passengers += $order->customer_count;
             }
