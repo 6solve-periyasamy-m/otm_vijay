@@ -1,0 +1,79 @@
+@use "sass:math";
+
+$card-border: #333333;
+$card-margin: 1rem;
+
+* {
+  box-sizing: border-box;
+}
+
+.card {
+  margin: $card-margin $card-margin 0 $card-margin; // Padding on all sides except bottom
+  display: block;
+  border: 1px solid $card-border;
+}
+
+.component-header {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 20px;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.component-text {
+  min-height: 10rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.width-100 {
+  width: 100%;
+}
+
+@for $denominator from 1 to 11 {
+  @for $numerator from 1 to $denominator {
+    .width-#{$numerator}-#{$denominator} {
+      width: math.percentage(math.div($numerator, $denominator) - 0.005);
+    }
+  }
+}
+
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.mx-2 {
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.border-left {
+  border-left: 1px solid #dee2e6;
+}
+
+.border-right {
+  border-right: 1px solid #dee2e6;
+}
+
+.fw-bold {
+  font-weight: bold;
+}
+
+.fs-14 {
+  font-size: 14px;
+}
+
+.text-center {
+  text-align: center;
+}
