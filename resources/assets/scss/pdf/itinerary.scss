@@ -2,15 +2,34 @@
 
 $card-border: #333333;
 $card-margin: 1rem;
+$border: 1px solid #dee2e6;
+$text-color: #455a64;
 
 * {
   box-sizing: border-box;
+  color: $text-color;
+}
+
+body {
+  background-color: #f5f7fb;
+}
+
+.label-card {
+  margin: 1rem auto;
+  width: 100%;
+  text-align: center;
 }
 
 .card {
   margin: $card-margin $card-margin 0 $card-margin; // Padding on all sides except bottom
   display: block;
-  border: 1px solid $card-border;
+  border: $border;
+  background-color: white;
+}
+
+.item-name {
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .booking-image {
@@ -22,15 +41,11 @@ $card-margin: 1rem;
   font-size: 18px;
   font-weight: 400;
   line-height: 20px;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.75rem;
   border-bottom: 1px solid #dee2e6;
 }
 
 .component-text {
   min-height: 10rem;
-  padding-bottom: 0.75rem;
-  margin-bottom: 0.75rem;
 }
 
 .width-100 {
@@ -45,30 +60,43 @@ $card-margin: 1rem;
   }
 }
 
-.my-auto {
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
-.mx-2 {
-  margin-right: 0.5rem;
-  margin-left: 0.5rem;
-}
-
-.mb-0 {
-  margin-bottom: 0;
-}
-
-.mt-1 {
-  margin-top: 0.25rem;
+@for $x from -1 to 5 {
+  $size: auto;
+  $label: auto;
+  @if ($x != -1) {
+    $size: #{(0.25*$x)}rem;
+    $label: $x;
+    .p-#{$label} { padding: $size; }
+    .px-#{$label} { padding-left: $size; padding-right: $size; }
+    .py-#{$label} { padding-top: $size; padding-bottom: $size; }
+    .pt-#{$label} { padding-top: $size; }
+    .pl-#{$label} { padding-left: $size; }
+    .pr-#{$label} { padding-right: $size; }
+    .pb-#{$label} { padding-bottom: $size; }
+  }
+  .m-#{$label} { margin: $size; }
+  .mx-#{$label} { margin-left: $size; margin-right: $size; }
+  .my-#{$label} { margin-top: $size; margin-bottom: $size; }
+  .mt-#{$label} { margin-top: $size; }
+  .ml-#{$label} { margin-left: $size; }
+  .mr-#{$label} { margin-right: $size; }
+  .mb-#{$label} { margin-bottom: $size; }
 }
 
 .border-left {
-  border-left: 1px solid #dee2e6;
+  border-left: $border;
 }
 
 .border-right {
-  border-right: 1px solid #dee2e6;
+  border-right: $border;
+}
+
+.border-top {
+  border-top: $border;
+}
+
+.border-bottom {
+  border-bottom: $border;
 }
 
 .fw-bold {
@@ -81,4 +109,17 @@ $card-margin: 1rem;
 
 .text-center {
   text-align: center;
+}
+
+.block {
+  display: block;
+}
+
+.inline {
+  display: inline;
+}
+
+.inline-block {
+  display: inline-block;
+  vertical-align: top;
 }
