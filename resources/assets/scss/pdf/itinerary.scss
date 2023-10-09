@@ -120,3 +120,9 @@ $text-color: #455a64;
   display: inline-block;
   vertical-align: top;
 }
+
+@media print {
+  div {
+    break-inside: avoid;
+  }
+}
