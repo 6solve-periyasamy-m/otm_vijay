@@ -12,7 +12,7 @@
     </div>
     <div class="component-text">
         <div class="mx-2 row">
-            @include('partials.customer.booking.component.attributes', ['attributes' => $component->attributes])
+            @include('partials.pdf.customer.attributes', ['attributes' => $component->attributes])
             @if($component->image !== null)
                 <div class="width-1-4 border-right">
                     <img src="{{ asset($component->image) }}" class="booking-image"/>

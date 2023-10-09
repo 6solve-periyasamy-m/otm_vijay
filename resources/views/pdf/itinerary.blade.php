@@ -20,7 +20,7 @@
         <h2 class="mb-0" style="width: 100%; text-align: center;">{{ \Carbon\Carbon::createFromTimestamp($day)->format('l jS F Y') }}</h2>
     </div>
     @foreach($components as $component)
-        @include('partials.customer.itinerary', ['orderComponent' => $component,])
+        @include('partials.pdf.customer.itinerary', ['orderComponent' => $component,])
     @endforeach
 @endforeach
 </body>
