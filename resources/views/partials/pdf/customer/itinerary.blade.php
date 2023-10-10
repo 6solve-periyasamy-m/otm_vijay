@@ -15,10 +15,10 @@
             @include('partials.pdf.customer.attributes', ['attributes' => $component->attributes])
             <div class="py-2">
                 @if($component->image !== null)
-                    <div class="width-1-3 inline-block border-right">
+                    <div class="width-1-4 inline-block border-right">
                         <img src="{{ asset($component->image) }}" class="booking-image"/>
                     </div>
-                    <div class="inline-block width-2-3 ml-1">
+                    <div class="inline-block width-3-4 ml-1">
                         <div>
                             <span class="fw-bold">Description<br /></span>
                             {{ $component->description }}
