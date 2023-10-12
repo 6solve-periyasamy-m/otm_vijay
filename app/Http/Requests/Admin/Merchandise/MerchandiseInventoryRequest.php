@@ -12,7 +12,8 @@ use Illuminate\Http\UploadedFile;
  * @property float $sales_price
  * @property int $variant
  * @property int|null $size
- * @property string $notes
+ * @property string $internal_notes
+ * @property string $external_notes
  * @property UploadedFile|null $image
  */
 class MerchandiseInventoryRequest extends FormRequest
@@ -26,7 +27,8 @@ class MerchandiseInventoryRequest extends FormRequest
             'stock' => $this->stock,
             'purchase_price' => $this->purchase_price,
             'sales_price' => $this->sales_price,
-            'notes' => $this->notes,
+            'internal_notes' => $this->internal_notes,
+            'external_notes' => $this->external_notes,
         ];
     }
 

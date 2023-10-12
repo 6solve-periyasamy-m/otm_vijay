@@ -17,12 +17,8 @@
     $addons = $orderCustomer->repository->getAvailableToAdd();
 @endphp
 
-@push('header-stack')
+@push('footer-stack')
     <script type="text/javascript">
-        const route = "{{ route('customer.extras') }}"
-        function onOrderChange(selector) {
-            window.location = route + '/' + $(selector).val();
-        }
         @if(!flag('payment.required', true))
             function applyUpgrade(selector, btn, model) {
                 let upgrade_id = $('#' + selector).find(':selected').val();
@@ -47,6 +43,7 @@
             let upgrade_id = $('#' + selector).find(':selected').val();
             let component_id = $(btn).closest('tr').attr('component');
             if (upgrade_id != null && component_id != null) {
+                loader(true);
                 $.post('{{ route('api.order.customer.upgrade.purchase') }}',
                     { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
                         '_token': '{{ csrf_token() }}',
@@ -56,11 +53,22 @@
                     })
                     .done(function (xhr, textStatus, errorThrown) {
                         if (xhr.success) window.location = xhr.location;
-                        else alert(xhr.message);
+                        else {
+                            alert(xhr.message);
+                            loader(false);
+                        }
                     })
-                    .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
+                    .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); loader(false); });
             }
         }
+        function loader(toggle = true) {
+            if (toggle) {
+                $('.waiter').show();
+            } else {
+                $('.waiter').hide();
+            }
+        }
+        loader(false);
     </script>
 @endpush
 
@@ -375,7 +383,7 @@
                                             <th scope="col">Date</th>
                                             <th scope="col">Name</th>
                                             <th scope="col">Transport Type</th>
-                                            <th scope="col">Ticket Number</th>
+                                            <th scope="col">Transport Number</th>
                                             <th scope="col">Transport Information</th>
                                             <th scope="col">Travel Class</th>
                                             <th scope="col">Component Type</th>
@@ -388,7 +396,7 @@
                                                 <td style="min-width: 200px" data-content="Date">{{ f_datetime($orderComponent->transport_inventory->departs_at) }} to {{ f_datetime($orderComponent->transport_inventory->arrives_at) }}</td>
                                                 <td data-content="Name">{{ $orderComponent->transport->name }}</td>
                                                 <td data-content="Transport Type">{{ $orderComponent->transport->transportType->name }}</td>
-                                                <td data-content="Ticket Number">{{ $orderComponent->tourComponent->inventory->ticket_number ?? 'Not Set'}}</td>
+                                                <td data-content="Transport Number">{{ $orderComponent->tourComponent->inventory->transport_number ?? 'Not Set'}}</td>
                                                 <td data-content="Transport Information">{{ $orderComponent->transport->departureAddress->name }} to {{ $orderComponent->transport->arrivalAddress->name }}</td>
                                                 <td data-content="Travel Class">{{ $orderComponent->transport_inventory->travelClass->name }}</td>
                                                 @if($orderComponent->tourComponent->tour_component_type === 'Included')
@@ -510,17 +518,24 @@
         </div>
     </div>
 </div>
+<div class="waiter">
+    <x-loading-spinner center></x-loading-spinner>
+</div>
+
 @endsection
 
 @section('footer-script')
 <script>
-    let route = "{{ route('customer.invoice', ['reference' => 'reference']) }}"
-    function onOrderChange() {
+    function onOrderChange(selector) {
+        let route = "{{ route('customer.invoice', ['reference' => 'reference']) }}";
         let newBooking = $('.order-select').val()
         $('.order').hide();
         $('.order-' + newBooking).show();
         $('#form-booking-reference').val(newBooking);
         $('.invoice').prop('href', route.replace('reference', newBooking));
+        if ($(selector).val() !== undefined) {
+            window.location = "{{ route('customer.extras') }}" + '/' + $(selector).val();
+        }
     }
     onOrderChange();
 </script>

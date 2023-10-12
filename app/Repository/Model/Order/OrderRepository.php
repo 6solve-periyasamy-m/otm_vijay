@@ -6,27 +6,31 @@ use App\Events\Order\OrderCreatedEvent;
 use App\Exceptions\MailDisabledException;
 use App\Mail\Storage\OrderMail;
 use App\Models\Customer\Customer;
+use App\Models\Helper\AddressParent;
 use App\Models\Helper\OrderStatus;
 use App\Models\Location\Address;
-use App\Models\Location\AddressParent;
+use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
 use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
+use App\Models\System\FellohLink;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Interfaces\GeneratesFellohData;
 use App\Repository\Mailing\Mailer\Order\OrderMailer;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
 use App\Repository\Storage\Rooming\RemoteGroup;
 use Cache;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-class OrderRepository extends ModelRepository
+class OrderRepository extends ModelRepository implements GeneratesFellohData
 {
     private const STATUS_CACHE_TIME = 600;
     private Order $order;
@@ -42,6 +46,11 @@ class OrderRepository extends ModelRepository
     public function mailer(): OrderMailer
     {
         return new OrderMailer($this->order);
+    }
+
+    public function getTravellerBaseCosts(): float|int
+    {
+        return $this->order->orderCustomers()->where('is_charged', true)->sum('tour_cost');
     }
 
     public static function getOrdersOverview(bool $historic = false): array
@@ -191,9 +200,14 @@ class OrderRepository extends ModelRepository
         return $installment;
     }
 
-    public function addAdjustment(float $amount, string $reason, Carbon $when)
+    public function addAdjustment(float $amount, string $reason, Carbon|null $when = null): Model|bool
     {
-        
+        if ($when === null) {
+            $when = now();
+        }
+        $adjustment = $this->order->adjustments()->save(ManualAdjustment::make(['amount' => sigfig($amount), 'reason' => $reason, 'date' => $when,]));
+        $this->refresh();
+        return $adjustment;
     }
 
     /**
@@ -464,6 +478,7 @@ class OrderRepository extends ModelRepository
     public function refresh()
     {
         $this->getOrderStatus(true);
+        $this->getCost(true);
     }
 
     public function getAdditionalComponentTotal():float
@@ -647,9 +662,9 @@ class OrderRepository extends ModelRepository
     {
         $homeAddress = Address::create([
             'name' => 'Generic Customer Address',
-            'address_parent_id' => AddressParent::getParentId('customer'),
+            'parent' => AddressParent::CUSTOMER,
         ]);
-        $billingAddress = $homeAddress->repository->cloneToNew(AddressParent::getParentId('customer'));
+        $billingAddress = $homeAddress->repository->cloneToNew(AddressParent::CUSTOMER);
         return Customer::create([
             'first_name' => $first,
             'last_name' => $last,
@@ -657,5 +672,39 @@ class OrderRepository extends ModelRepository
             'billing_address_id' => $billingAddress->id,
             'date_of_birth' => now(),
         ]);
+    }
+
+    public function getFellohData(): array
+    {
+        return [
+            'customer_name' => $this->order->leadBooker->customer_name,
+            'email' => $this->order->leadBooker->customer->email_address,
+            'booking_reference' => $this->getReference(),
+            'departure_date' => $this->order->tour->date_from->format('Y-m-d'),
+            'return_date' => $this->order->tour->date_to->format('Y-m-d'),
+            'gross_amount' => $this->order->total,
+        ];
+    }
+
+    public function getReference(): string
+    {
+        return $this->order->booking_reference;
+    }
+
+    public function getFellohId(): string|null
+    {
+        return $this->order->felloh?->felloh_id;
+    }
+
+    public function setFellohId(string $id): void
+    {
+        $current = $this->getFellohId();
+        if ($current === $id) { return; }
+        if ($current !== null) {
+            $this->order->felloh->felloh_id = $id;
+            $this->order->felloh->save();
+        } else {
+            $this->order->felloh()->save(new FellohLink(['felloh_id' => $id]));
+        }
     }
 }

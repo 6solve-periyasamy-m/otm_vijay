@@ -1,5 +1,5 @@
 @php $transportInventory = $transportInventory ?? null; @endphp
-@include('partials.fields.text', ['name' => 'Ticket Number', 'field' => 'ticket_number', 'value' => $transportInventory?->ticket_number, 'width' => 6,])
+@include('partials.fields.text', ['name' => 'Transport Number', 'field' => 'transport_number', 'value' => $transportInventory?->transport_number, 'width' => 6,])
 @can('create', \App\Models\TravelClass::class)
     @include('partials.fields.selector.adder',
                 ['name' => 'Travel Class', 'field' => 'travel_class_id', 'value' => $travel_class_id ?? 0,
@@ -26,5 +26,4 @@
                 ['name' => 'Arrival Confirmed', 'field' => 'arrival_time_confirmed', 'value' => $arrival_time_confirmed ?? null, ])
 </div>
 @include('partials.fields.prefab.inventory_footer')
-@include('partials.fields.prefab.notes')
 @include('partials.fields.submit')

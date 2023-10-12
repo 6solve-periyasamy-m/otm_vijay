@@ -7,6 +7,7 @@ use App\Exports\ActivitiesReportExport;
 use App\Exports\FinalPaymentReportExport;
 use App\Exports\FlightManifestReportExport;
 use App\Exports\InstallmentRevenueReportExport;
+use App\Exports\OrderMerchandiseExport;
 use App\Exports\OrderReminderReportExport;
 use App\Exports\OrderReportExport;
 use App\Exports\PaymentReportExport;
@@ -125,7 +126,7 @@ class ReportController extends Controller
 
     public function exportOrderMerchandiseReport(string $extension = 'xlsx')
     {
-        return Excel::download(new OrderReminderReportExport(), 'reminders.' . $extension);
+        return Excel::download(new OrderMerchandiseExport(), 'order-merchandise.' . $extension);
     }
 
     public function getRoomingReport(Request $request)

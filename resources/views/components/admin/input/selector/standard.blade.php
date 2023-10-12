@@ -1,10 +1,10 @@
-<div class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }} {{ $divClasses ?? "" }}">
+<div class="form-group px-1 col-12 col-xl-{{ $attributes->get('width', 12) }} {{ $divClasses ?? "" }}">
     <div class="form-floating w-100">
         <select class="form-select {{ $attributes->get('name', '') }}-input" id="{{ $attributes->get('name', '') }}" name="{{ $attributes->get('name', '') }}"></select>
         <label for="{{ $attributes->get('name', '') }}" style="padding-top: 10px;">{{ $slot }}</label>
     </div>
 </div>
-@push('header-stack')
+@push('footer-stack')
     <script type="text/javascript">
         $(document).ready(function () {
             let {{ $attributes->get('name', '') }}Select = $('.{{ $attributes->get('name', '') }}-input');

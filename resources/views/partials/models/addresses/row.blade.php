@@ -1,7 +1,7 @@
 <tr>
     <td>{{ $address->name ?? 'Not Set' }}</td>
     <td>{{ $address->locationType ?? 'Not Set' }}</td>
-    <td>{{ $address->addressParent ?? 'Not Set' }}</td>
+    <td>{{ ucwords($address->parent) ?? 'Not Set' }}</td>
     <td>{{ $address->address_line_1 ?? 'Not Set' }}</td>
     <td>{{ $address->address_line_2 ?? '' }}</td>
     <td>{{ $address->town ?? '' }}</td>

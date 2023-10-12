@@ -8,6 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * @property int $customer_id
  * @property int|null $brand_id
+ * @property int|null $organization_id
  * @property string $name
  * @property string|null $description
  * @property string $from
@@ -33,6 +34,7 @@ class CreateBespokeQuoteRequest extends FormRequest
         return [
             'date_from' => $this->from,
             'date_to' => $this->to,
+            'organization_id' => $this->organization_id,
             'final_payment' => $this->final,
             'invoice_footer' => $this->footer ?? "",
             'terms' => $this->terms ?? "",
@@ -80,6 +82,7 @@ class CreateBespokeQuoteRequest extends FormRequest
             'deposit' => 'required|numeric|min:0',
             'single_occupancy_surcharge' => 'nullable|numeric|min:0',
             'name' => 'required',
+            'organization_id' => 'nullable|integer|exists:organizations,id',
         ];
     }
 }

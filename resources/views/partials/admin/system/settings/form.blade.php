@@ -123,6 +123,7 @@
                 </div>
                 <div class="row">
                     @include('partials.fields.checkbox', ['name' => 'Require Immediate Payment For Upgrades/Add-ons', 'field' => 'payment_required', 'value' => flag('payment.required', true),])
+                    @include('partials.fields.checkbox', ['name' => 'Require Overdue Installments Up Front', 'field' => 'force_installments', 'value' => flag('installments.force', false),])
                     @include('partials.fields.checkbox', ['name' => 'Default to Sending Booking Confirmation on Manual Order Creation', 'field' => 'mail_enabled', 'value' => flag('order.manual.mail', false),])
                     @include('partials.fields.checkbox', ['name' => 'Enable Automatically Sending Emails', 'field' => 'mail_enabled', 'value' => flag('system.mail.enabled', true),])
                     @include('partials.fields.checkbox', ['name' => 'Enable ATOL Certificate Generation', 'field' => 'atol_enabled', 'value' => flag('atol.enabled', true),])
@@ -158,6 +159,7 @@
                 <div class="row">
                     @include('partials.admin.system.settings.lock', ['name' => 'Purchasing Components', 'field' => 'components', 'unlock' => false])
                     @include('partials.admin.system.settings.lock', ['name' => 'Passport Details', 'field' => 'passport'])
+                    @include('partials.admin.system.settings.lock', ['name' => 'Order Notes', 'field' => 'order_notes'])
                     @include('partials.admin.system.settings.lock', ['name' => 'Accommodation Notes', 'field' => 'accommodation'])
                     @include('partials.admin.system.settings.lock', ['name' => 'Activity Notes', 'field' => 'activity'])
                     @include('partials.admin.system.settings.lock', ['name' => 'Flight Notes', 'field' => 'flight'])

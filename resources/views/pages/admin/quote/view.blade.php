@@ -7,14 +7,6 @@
 @section('footer-script')
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#schedule-table').DataTable({fixedHeader: true,});
-            $('#pricepoint-table').DataTable({fixedHeader: true,});
-            $('.summary').DataTable({fixedHeader: true, autoWidth: false,});
-            $('.accommodation').DataTable({fixedHeader: true, autoWidth: false,});
-            $('.activities').DataTable({fixedHeader: true, autoWidth: false,});
-            $('.flights').DataTable({fixedHeader: true, autoWidth: false,});
-            $('.transport').DataTable({fixedHeader: true, autoWidth: false,});
-            $('.extras').DataTable({fixedHeader: true, autoWidth: false,});
             $('.sent-quotes').DataTable({fixedHeader: true, order: [[0, 'desc'],]});
             $('.sections').DataTable({fixedHeader: true, order: [[0, 'asc'],]});
             update(getPayingAmount(), getTravellingAmount());
@@ -56,6 +48,37 @@
             $('.paying-input').val(paying);
             $('.travelling-input').val(travelling);
             performRequest(paying, travelling);
+        }
+
+        function markSent() {
+            $.get('{{ route('api.quote.sent', ['quote' => $quote,]) }}', {
+                '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
+                '_token': '{{ csrf_token() }}',
+                'paying': getPayingAmount(),
+                'travelling': getTravellingAmount(),
+            }).done(function (xhr, textStatus, errorThrown) {
+                if (xhr.success) {
+                    location.reload();
+                } else {
+                    alert(xhr.message);
+                }
+            }).fail(function (xhr, textStatus, errorThrown) {
+                switch (xhr.status) {
+                    case 429:
+                        alert("You're doing this too quickly! Please wait a second before trying again!")
+                        break;
+                    case 422:
+                        alert("Looks like that isn't a number, please try again!")
+                        break;
+                    case 403:
+                        alert("Looks like that failed, we'll refresh the page for you to try again!")
+                        location.reload();
+                        break;
+                    default:
+                        console.log(xhr);
+                        alert('Something went wrong, please try again');
+                }
+            });
         }
 
         function performRequest(paying, travelling) {
@@ -126,10 +149,10 @@
                     {{ __('quotes.view.buttons.change') }}
                 </a>
             @else
-                <a href="{{ route('quotes.status.sent', ['quote' => $quote,]) }}" class="btn btn-info">
+                <button onclick="markSent()" class="btn btn-info">
                     {{ Icon::email() }}
                     {{ __('quotes.view.buttons.sent') }}
-                </a>
+                </button>
             @endif
             <a href="{{ route('quotes.status.close', ['quote' => $quote,]) }}" class="btn btn-danger">
                 {{ Icon::close() }}
@@ -326,7 +349,7 @@
         </ul>
         <div id="tables" class="tab-content otm-tab-content">
             <div id="summary" role="tabpanel" class="tab-pane fade show active">
-                <table class="table table-striped summary">
+                <table class="datatable autowidth-off table table-striped summary">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.type') }}</th>
@@ -389,7 +412,7 @@
                 </table>
             </div>
             <div id="accommodation" role="tabpanel" class="tab-pane fade">
-                <table class="table table-striped summary">
+                <table class="datatable autowidth-off table table-striped summary">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
@@ -444,7 +467,7 @@
                 </table>
             </div>
             <div id="activities" role="tabpanel" class="tab-pane fade">
-                <table class="table table-striped summary">
+                <table class="datatable autowidth-off table table-striped summary">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
@@ -499,7 +522,7 @@
                 </table>
             </div>
             <div id="flights" role="tabpanel" class="tab-pane fade">
-                <table class="table table-striped summary">
+                <table class="datatable autowidth-off table table-striped summary">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
@@ -553,7 +576,7 @@
                 </table>
             </div>
             <div id="transport" role="tabpanel" class="tab-pane fade">
-                <table class="table table-striped summary">
+                <table class="datatable autowidth-off table table-striped summary">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
@@ -607,7 +630,7 @@
                 </table>
             </div>
             <div id="extras" role="tabpanel" class="tab-pane fade">
-                <table class="table table-striped summary">
+                <table class="datatable autowidth-off table table-striped summary">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
@@ -675,7 +698,7 @@
                         <span>{{ __('quotes.view.cards.installments.form.create') }}</span>
                     </x-admin.button>
                 </form>
-                <table class="table table-striped" id="schedule-table">
+                <table class="datatable table table-striped" id="schedule-table">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.installments.table.type') }}</th>
@@ -758,7 +781,7 @@
                         <span>{{ __('quotes.view.cards.price-points.form.create') }}</span>
                     </x-admin.button>
                 </form>
-                <table class="table table-striped" id="pricepoint-table">
+                <table class="datatable table table-striped" id="pricepoint-table">
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.price-points.table.quantity') }}</th>

@@ -18,8 +18,19 @@ trait TestsOrder
 
     function generateOrder(bool $withLead = true, bool $withIncluded = true, float $tour_cost = 300, float $surcharge = 50, float $deposit = 0): Order
     {
-        $tour = Tour::find(1) ?? $this->generateTour($withIncluded, ['base_price_per_person' => $tour_cost, 'single_occupancy_surcharge' => $surcharge, 'deposit' => $deposit]);
+        if ($withIncluded) {
+            $tour = $this->generateTour(false, ['base_price_per_person' => $tour_cost,]);
+            for ($x = 0; $x < 5; $x++) {
+                $this->generateAccommodationInventoryTour($tour, 'Included', 100, $this->generateAccommodationInventory(null, $this->generateRoomType(2), null, ['check_in' => now()->addDays($x), 'check_out' => now()->addDays($x)]));
+                $this->generateActivityInventoryTour($tour);
+                $this->generateFlightInventoryTour($tour);
+                $this->generateTransportInventoryTour($tour);
+            }
+            $order = Order::factory()->create(['deposit' => $deposit, 'tour_id' => $tour->id,]);
+        } else {
+            $tour = Tour::find(1) ?? $this->generateTour($withIncluded, ['base_price_per_person' => $tour_cost, 'single_occupancy_surcharge' => $surcharge, 'deposit' => $deposit]);
         $order = Order::factory()->create(['tour_id' => $tour->id, 'deposit' => $deposit,]);
+        }
         if ($withLead) $order->lead_booker_id = $this->generateOrderCustomer($withIncluded, $order, $tour_cost, $surcharge)->id;
         $order->save();
         return $order;

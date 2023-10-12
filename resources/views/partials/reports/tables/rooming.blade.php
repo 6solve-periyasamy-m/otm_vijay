@@ -1,5 +1,5 @@
 @php $notes = $notes ?? true; @endphp
-<table class="table table-striped report-table">
+<table class="datatable table table-striped report-table">
     <thead>
         <tr>
             <th scope="col">#</th>

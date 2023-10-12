@@ -2,12 +2,6 @@
 
 @section('title', 'View Customer')
 
-@section('footer-script')
-    <script>
-        $('.order-table').DataTable({fixedHeader: true});
-    </script>
-@endsection
-
 @section('content')
     <div class="otm-callout">
         <div class="row">
@@ -90,6 +84,13 @@
                             {{ Icon::customer() }}
                             Login as Customer
                         </a>
+                        <form class="d-none forget" method="post" action="{{ route('customers.forget', ['customer' => $customer->id]) }}">
+                            @csrf
+                        </form>
+                        <a href="javascript:confirm('This will permanently wipe this customers personal details from the system, and cannot be reversed, continue?') && $('.forget').submit()" class="btn btn-danger">
+                            {{ Icon::forget() }}
+                            Forget Customer
+                        </a>
                     </div>
                 </div>
             </div>
@@ -98,7 +99,7 @@
     <hr class="splitter"/>
     <div class="card">
         <div class="card-body">
-            <table class="table table-striped order-table">
+            <table class="datatable table table-striped order-table">
                 <thead>
                     <tr>
                         <th scope="col">Booking Reference</th>
@@ -122,7 +123,7 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <table class="table table-striped order-table">
+            <table class="datatable table table-striped order-table">
                 <thead>
                     <tr>
                         <th scope="col">Quote Reference</th>

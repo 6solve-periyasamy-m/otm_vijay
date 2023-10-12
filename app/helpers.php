@@ -233,3 +233,19 @@ if (!function_exists('svg_to_b64')) {
         return img_to_b64($file, "data:image/svg+xml;base64,");
     }
 }
+if (!function_exists('stack_dump')) {
+    /**
+     * Dump the current stack trace to the log file, optionally with a message.
+     * Used for debugging
+     * @param string|null $message
+     * @return void
+     */
+    function stack_dump(string|null $message = null): void
+    {
+        try {
+            throw new \Exception($message);
+        } catch (\Exception) {
+            \Log::info($message);
+        }
+    }
+}

@@ -2,6 +2,7 @@
 
 namespace App\Models\Quote;
 
+use App\Models\Customer\Organization;
 use App\Models\Helper\QuoteStatus;
 use App\Models\Helper\Traits\HasAdditionalCosts;
 use App\Models\Order\Order;
@@ -33,6 +34,7 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int|null $tour_id
  * @property int|null $order_id
+ * @property int|null $organization_id
  * @property int|null $lead_traveller_id
  * @property int|null $event_id
  * @property int|null $brand_id
@@ -59,6 +61,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|QuoteSection[] $sections
  * @property-read Brand|null $linkedBrand
  * @property-read Brand $brand
+ * @property-read Organization|null $organization
  * @property-read int|null $accommodation_count
  * @property-read Collection|QuoteActivity[] $activities
  * @property-read int|null $activities_count
@@ -143,6 +146,11 @@ class Quote extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');
+    }
+
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class, 'organization_id');
     }
 
     public function leadTraveller(): BelongsTo

@@ -34,7 +34,8 @@ use Illuminate\Support\Carbon;
  * @property int|null $stock
  * @property float|null $purchase_price
  * @property float|null $sales_price
- * @property string|null $notes
+ * @property string|null $internal_notes
+ * @property string|null $external_notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -81,7 +82,7 @@ class FlightInventory extends Model
     use SoftDeletes, CascadeSoftDeletes, HasFactory;
 
     protected array $cascadeDeletes = ['flightInventoryTour'];
-    protected $fillable = ['flight_id', 'travel_class_id', 'flight_number', 'check_in', 'departs_at', 'arrives_at', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes',];
+    protected $guarded = [];
     protected $casts = [
         'check_in' => 'datetime',
         'departs_at' => 'datetime',

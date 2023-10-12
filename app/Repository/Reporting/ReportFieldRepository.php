@@ -335,9 +335,9 @@ class ReportFieldRepository
                         'name' => 'Travel Class',
                         'method' => 'travelClass',
                     ],
-                    'ticket_number' => [
-                        'name' => 'Ticket Number',
-                        'method' => 'ticket_number',
+                    'transport_number' => [
+                        'name' => 'Transport Number',
+                        'method' => 'transport_number',
                     ],
                     'departs_at' => [
                         'name' => 'Departs At',
@@ -741,9 +741,13 @@ class ReportFieldRepository
                 'method' => 'sales_price',
                 'format' => 'currency',
             ],
-            'notes' => [
-                'name' => 'Notes',
-                'method' => 'notes',
+            'internal_notes' => [
+                'name' => 'Internal Notes',
+                'method' => 'internal_notes',
+            ],
+            'external_notes' => [
+                'name' => 'External Notes',
+                'method' => 'external_notes',
             ],
             'tour_count' => [
                 'name' => 'Used on Tours',

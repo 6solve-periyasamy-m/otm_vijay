@@ -11,9 +11,9 @@ use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Component\OrderTransport;
+use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Order\OrderCustomerRepository;
-use App\Repository\RoomingRepository;
 use Carbon\Carbon;
 use Database\Factories\Order\OrderCustomerFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -130,6 +130,11 @@ class OrderCustomer extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function vouchers(): BelongsToMany
+    {
+        return $this->belongsToMany(VoucherCode::class, 'order_vouchers');
     }
 
     public function customer(): BelongsTo

@@ -3,9 +3,8 @@
 namespace Database\Factories\Customer;
 
 use App\Models\Customer\Customer;
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
-use App\Models\Location\AddressParent;
-use App\Repository\LocationsRepository;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use function now;
 
@@ -26,14 +25,14 @@ class CustomerFactory extends Factory
     {
         $homeAddress = Address::create([
             'name' => 'Pregenerated Customer Name',
-            'address_parent_id' => AddressParent::getParentId('customer'),
+            'parent' => AddressParent::CUSTOMER,
             'address_line_1' => $this->faker->streetAddress,
             'town' => $this->faker->city,
             'region' => $this->faker->state,
             'country_id' => 1,
             'postcode' => $this->faker->postcode
         ]);
-        $billingAddress = $homeAddress->repository->cloneToNew(AddressParent::getParentId('customer'));
+        $billingAddress = $homeAddress->repository->cloneToNew(AddressParent::CUSTOMER);
         return [
             'title' => $this->faker->title,
             'first_name' => $this->faker->firstName,

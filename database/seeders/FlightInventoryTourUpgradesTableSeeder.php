@@ -59,6 +59,26 @@ class FlightInventoryTourUpgradesTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:51:51',
                 'deleted_at' => '2022-09-14 09:51:51',
             ),
+            4 => 
+            array (
+                'id' => 5,
+                'base_id' => 22,
+                'upgrade_id' => 23,
+                'description' => 'Upgrade to First Class',
+                'created_at' => '2023-09-22 12:09:55',
+                'updated_at' => '2023-09-22 12:09:55',
+                'deleted_at' => NULL,
+            ),
+            5 => 
+            array (
+                'id' => 6,
+                'base_id' => 21,
+                'upgrade_id' => 24,
+                'description' => 'Upgrade to First Class',
+                'created_at' => '2023-09-22 12:11:02',
+                'updated_at' => '2023-09-22 12:11:02',
+                'deleted_at' => NULL,
+            ),
         ));
         
         

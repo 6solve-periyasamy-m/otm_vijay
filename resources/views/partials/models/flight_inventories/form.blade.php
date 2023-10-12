@@ -16,5 +16,4 @@
             ['name' => 'Arrives At', 'field' => 'arrives_at', 'value' => $arrives_at ?? null,
              'onChange' => 'removeAutoset($(\'#departs_at-input\'), $(\'#arrives_at-input\'));', 'classes' => 'autoset', 'width' => 6,])
 @include('partials.fields.prefab.inventory_footer')
-@include('partials.fields.prefab.notes')
 @include('partials.fields.submit')

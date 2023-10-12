@@ -14,12 +14,15 @@
         content="Octopus Travel Matrix Customer End Portal">
     <meta name="robots" content="noindex,nofollow">    
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title') - OTM Customer End Portal</title>    
+    <title>@yield('title') - OTM Customer End Portal</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <!-- Custom CSS -->
     <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
     <link href="{{ asset('/css/customer.css?v=').time() }}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="{{ asset('js/app.js') . '?' . date('U')  }}"></script>
+    <script src="{{ asset('js/admin/functions.js') . '?' . date('U')  }}"></script>
     <style>
         .select2-container--default .select2-selection--single {
             border: none !important;
@@ -73,6 +76,14 @@
         @yield('footer')
 
     </div>
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            {{-- Toasts get added here in JS --}}
+        </div>
+    </div>
+    <script type="text/template" data-template="toast">
+    @include('partials.toast')
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script type="text/javascript" defer>$(".preloader").fadeOut();</script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
@@ -83,4 +94,22 @@
     @livewire('livewire-ui-modal')
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            @stack('footer-ready')
+        });
+        function showToast(title, body, color = 'primary', autohide = false, delay = 5000) {
+            let now = Date.now();
+            $('.toast-container').append(render(template('toast'), {id: now, title: title, body: body, color: color}));
+            bootstrap.Toast.getOrCreateInstance(document.getElementById(now.toString()), {'animation': true, 'autohide': autohide, 'delay': delay}).show();
+        }
+        Livewire.on('showToast', (data) => {
+            const title = data.title;
+            const body = data.body;
+            const color = data.color ?? 'primary';
+            const autoHide = data.autoHide ?? false;
+            const delay = data.delay ?? 5000;
+            showToast(title, body, color, autoHide, delay);
+        })
+    </script>
 </body>

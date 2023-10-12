@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Exceptions\NotOnTourException;
+use App\Exceptions\RemoteGatewayError;
+use App\Exceptions\UnauthorizedGatewayException;
 use App\Http\Controllers\Controller;
 use App\Http\Gateways\Storage\LineItem;
 use App\Http\Requests\Booking\BookingCustomerRequest;
@@ -101,6 +103,7 @@ class CustomerBookingController extends Controller
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
         if (!$tour->repository->hasEnoughStock($booking->travellers()->count())) abort(404, 'That tour is out of stock');
+        $booking->repository->validateVouchers();
         return view('pages.customer.booking.summary', ['booking' => $booking, 'tour' => $tour,]);
     }
 
@@ -153,7 +156,13 @@ class CustomerBookingController extends Controller
         $intention = PaymentIntention::build($booking->leadTraveller->customer, $booking->token, 'Deposit');
 
         $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
-        return redirect($gateway->checkout([$item,], $intention, $booking->leadTraveller, $redirect));
+        try {
+            return redirect($gateway->checkout([$item,], $intention, $booking->leadTraveller, $redirect));
+        } catch (UnauthorizedGatewayException $e) {
+            return back()->withErrors(['msg' => 'Something went wrong with our payment processing. Please try again later.']);
+        } catch (RemoteGatewayError $e) {
+            return back()->withErrors(['msg' => 'Something went wrong with our 3rd-party payment processing. Please try again later.']);
+        }
     }
 
     public function rooming(string $bookingUrl, string $token)

@@ -34,8 +34,9 @@ class TransportInventoryController extends Controller
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price') ?? 0,
             'sales_price' => $request->input('sales_price') ?? 0,
-            'ticket_number' => $request->input('ticket_number'),
-            'notes' => $request->input('notes'),
+            'transport_number' => $request->input('transport_number'),
+            'internal_notes' => $request->input('internal_notes'),
+            'external_notes' => $request->input('external_notes'),
         ]);
         $transport->transportInventory()->save($transportInventory);
         return redirect()->route('transports.view', ['transport' => $transport,]);
@@ -74,8 +75,9 @@ class TransportInventoryController extends Controller
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price') ?? 0,
             'sales_price' => $request->input('sales_price') ?? 0,
-            'ticket_number' => $request->input('ticket_number'),
-            'notes' => $request->input('notes'),
+            'transport_number' => $request->input('transport_number'),
+            'internal_notes' => $request->input('internal_notes'),
+            'external_notes' => $request->input('external_notes'),
         ]);
         return redirect()->route('transports.view', ['transport' => $transport,]);
     }

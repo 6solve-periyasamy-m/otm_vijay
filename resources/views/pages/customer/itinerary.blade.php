@@ -3,6 +3,7 @@
 @section('title', 'View Itinerary')
 
 @php
+$orderNotesLock = $order->tour->repository->isOrderNotesLocked();
 $accommodationLock = $order->tour->repository->isAccommodationLocked();
 $activityLock = $order->tour->repository->isActivityLocked();
 $flightLock = $order->tour->repository->isFlightLocked();
@@ -86,49 +87,24 @@ $transportLock = $order->tour->repository->isTransportLocked();
             <div class="col-sm-12 {{ sizeof($editable ?? []) > 1 ? 'col-md-9' : 'col-md-12' }}">
                 <div class="card">
                     <div class="card-body">
-                        <p class="heading">Your Itinerary for {{ $order->tour->name }} ({{ $order->booking_reference }})</p>
-                        <div class="col-12">
-                            <table class="table">
-                                <thead>
-                                    <tr class="font-bold font-16">
-                                        <td class="w-10">Start Time</td>
-                                        <td class="w-20">Item</td>
-                                        <td class="w-70">Description</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php $day = 1 @endphp
-                                    @php $previousSlot = null @endphp
-                                    @foreach($itinerary as $timeslot)
-                                        @php $currentSlot = $timeslot['start']->copy()->setTime(0, 0, 0) @endphp
-                                        @if (!isset($previousSlot))
-                                            <tr class="text-center font-bold bg-light-blue pagebreak-inside">
-                                                <td colspan="3">Day {{ $day }}: {{ f_date($currentSlot) }}</td>
-                                            </tr>
-                                        @elseif ($previousSlot->diffInDays($currentSlot) >= 1)
-                                            @php $day += $previousSlot->diffInDays($currentSlot) @endphp
-                                            <tr class="text-center font-bold bg-light-blue pagebreak-inside">
-                                                <td colspan="3">Day {{ $day }}: {{ f_date($currentSlot) }}</td>
-                                            </tr>
-                                        @endif
-                                        <tr class="bg-white">
-                                            <td data-content="Start Time">{{ f_datetime($timeslot['start']) }}
-                                                @if(array_key_exists('end', $timeslot))
-                                                to {{ f_datetime($timeslot['end']) }}
-                                                @endif
-                                            </td>
-                                            <td data-content="Item">
-                                                {{ $timeslot['activity'] }}
-                                            </td>
-                                            <td data-content="Description">{{ $timeslot['description'] }}</td>
-                                        </tr>
-                                        @php $previousSlot = $currentSlot @endphp
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                        <p class="heading d-inline">Your Itinerary for {{ $order->tour->name }} ({{ $order->booking_reference }})</p>
+
+                        <a href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id]) }}"
+                           target="_blank" class="float-end invoice btn btn-primary">Download Itinerary</a>
                     </div>
                 </div>
+                @foreach($orderCustomer->repository->getComponentsForItinerary() as $day => $components)
+                    <div class="mx-2">
+                        <x-customer.accordion id="day-{{$day}}" nobg nocontainer>
+                            <x-slot:header class="card-body">
+                                <h2 class="mb-0" style="width: 100%; text-align: center;">{{ \Carbon\Carbon::createFromTimestamp($day)->format('l jS F Y') }}</h2>
+                            </x-slot:header>
+                            @foreach($components as $component)
+                                @include('partials.customer.itinerary', ['orderComponent' => $component,])
+                            @endforeach
+                        </x-customer.accordion>
+                    </div>
+                @endforeach
                 <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference, 'orderCustomer' => $orderCustomer,]) }}" method="post" class="form-horizontal form-material">
                     @csrf
                     @php $isLead = $order->repository->isLeadBooker(\App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()) @endphp
@@ -154,19 +130,19 @@ $transportLock = $order->tour->repository->isTransportLocked();
                     </div>
                     <div class="card">
                         <div class="card-body row">
-                            @if($isLead)
-                            <x-customer.input.text-area name="order_notes" value="{{ $order->external_notes }}" width="6">
-                                Order Notes
-                            </x-customer.input.text-area>
-                            @endif
-                            <x-customer.input.text-area name="order_customer_notes" value="{{ $orderCustomer->external_notes }}" width="{{ $isLead ? 6 : 12 }}">
-                                Customer Specific Order Notes
-                            </x-customer.input.text-area>
-                            @if($accommodationLock || $activityLock || $flightLock || $transportLock)
+                            @if($orderNotesLock || $accommodationLock || $activityLock || $flightLock || $transportLock)
                                 <span class="fw-bold col-xl-12">
                                     Some or all of the below sections may be locked due to the tour starting soon. Changes made may not be reflected, therefore if any urgent changes are required, please contact us.
                                 </span>
                             @endif
+                            @if($isLead)
+                            <x-customer.input.text-area disabled="{{$orderNotesLock}}" name="order_notes" value="{{ $order->external_notes }}" width="6">
+                                Order Notes
+                            </x-customer.input.text-area>
+                            @endif
+                            <x-customer.input.text-area disabled="{{$orderNotesLock}}" name="order_customer_notes" value="{{ $orderCustomer->external_notes }}" width="{{ $isLead ? 6 : 12 }}">
+                                Customer Specific Order Notes
+                            </x-customer.input.text-area>
                             <x-customer.input.text-area disabled="{{$accommodationLock}}" name="accommodation_notes" value="{{ $orderCustomer->accommodation_notes }}" width="3">
                                 Accommodation Notes
                             </x-customer.input.text-area>

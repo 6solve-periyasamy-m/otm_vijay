@@ -31,13 +31,13 @@
 
 <x-admin.section.header.detail width="6">
     <x-slot:title>{{ __('quotes.view.lead.name') }}</x-slot:title>
-    {{ $quote->leadTraveller->name }}
+    {{ $quote->leadTraveller?->name ?? 'Lead Traveller Not Set' }}
 </x-admin.section.header.detail>
 
 <x-admin.section.header.detail width="6">
     <x-slot:title>{{ __('quotes.view.lead.contact') }}</x-slot:title>
-    <a href="mailto:{{ $quote->leadTraveller->email }}">{{ $quote->leadTraveller->email }}</a>
-    (<a href="tel:{{ $quote->leadTraveller->phone }}">{{ $quote->leadTraveller->phone }}</a>)
+    <a href="mailto:{{ $quote->leadTraveller?->email ?? 'Lead Traveller Not Set' }}">{{ $quote->leadTraveller?->email }}</a>
+    (<a href="tel:{{ $quote->leadTraveller?->phone ?? 'Lead Traveller Not Set' }}">{{ $quote->leadTraveller?->phone ?? 'Lead Traveller Not Set' }}</a>)
 </x-admin.section.header.detail>
 
 <x-admin.section.header.detail width="6">

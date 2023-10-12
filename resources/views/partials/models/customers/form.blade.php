@@ -1,4 +1,4 @@
-@push('header-stack')
+@push('footer-stack')
     <script type="text/javascript">
         function changeBillingForm() {
             let disable = $('#home_is_billing-input').is(':checked');
@@ -10,7 +10,7 @@
         }
     </script>
 @endpush
-@push('header-ready')
+@push('footer-ready')
     changeBillingForm();
 @endpush
 @include('partials.fields.text', ['name' => 'Title', 'field' => 'title', 'value' => $title ?? null, 'width' => 1,])
@@ -59,7 +59,7 @@
 'route' => 't-shirt-size', 'createRoute' => route('t-shirt-sizes.create'), 'width' => 3])
 @include('partials.fields.selector.adder', ['name' => 'Hat Size', 'field' => 'hat_size_id', 'value' => $hat_size_id ?? 0,
 'route' => 'hat-size', 'createRoute' => route('hat-sizes.create'), 'width' => 3])
-@include('partials.fields.selector.adder', ['name' => 'Organization', 'field' => 'organization_id', 'value' => $customer?->organization_id ?? 0,
+@include('partials.fields.selector.adder', ['name' => 'Organization (Optional)', 'field' => 'organization_id', 'value' => $customer?->organization_id ?? 0,
 'route' => 'organizations', 'createRoute' => route('organizations.create'), 'width' => 3])
 @include('partials.fields.text', ['name' => 'Loyalty Number', 'field' => 'loyalty_number', 'value' => $loyalty_number ?? null, 'width' => 3])
 <hr class="splitter"/>

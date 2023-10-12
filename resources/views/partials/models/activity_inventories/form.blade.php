@@ -13,5 +13,4 @@
             ['name' => 'Ends At', 'field' => 'ends_at', 'value' => $ends_at ?? null,
              'onChange' => 'removeAutoset($(\'#starts_at-input\'), $(\'#ends_at-input\'));', 'classes' => 'autoset', 'width' => 6,])
 @include('partials.fields.prefab.inventory_footer')
-@include('partials.fields.prefab.notes')
 @include('partials.fields.submit')

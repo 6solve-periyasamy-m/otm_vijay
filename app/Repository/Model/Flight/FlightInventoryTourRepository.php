@@ -260,12 +260,14 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
             $inventory->departs_at,
             $inventory->arrives_at,
             Icon::flight(),
+            $inventory->external_notes,
             $upgradeName,
             [
                 'Airline' => $component->airline->name,
                 'Check In' => f_datetime($inventory->check_in),
                 'Departure' => f_datetime($inventory->departs_at),
                 'Arrival' => f_datetime($inventory->arrives_at),
+                'Flight Number' => $inventory->flight_number,
                 'Travel Class' => $inventory->travelClass->__toString(),
             ]
         );

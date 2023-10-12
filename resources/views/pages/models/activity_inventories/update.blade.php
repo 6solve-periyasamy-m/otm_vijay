@@ -13,6 +13,7 @@
       'purchase_price' => $activityInventory->purchase_price,
       'sales_price' => $activityInventory->sales_price,
       'currency' => $activityInventory->currency,
-      'notes' => $activityInventory->notes,
+      'notes' => $activityInventory->internal_notes,
+      'external_notes' => $activityInventory->external_notes,
     ])
 @endsection

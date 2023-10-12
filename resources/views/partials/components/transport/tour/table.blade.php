@@ -35,6 +35,7 @@
     <thead class="thead-dark">
     <tr>
         <th scope="col">Name</th>
+        <th scope="col">Transport Number</th>
         <th scope="col">Transport Type</th>
         <th scope="col">Travel Class</th>
         <th scope="col">Operator</th>
@@ -51,9 +52,11 @@
     </tr>
     </thead>
     <tbody>
+    @php /** @var \App\Models\Transport\TransportInventory $inventory */ @endphp
     @foreach(\App\Repository\Model\Transport\TransportInventoryRepository::getBetweenDates($tour->date_from, $tour->date_to, $tour->repository) as $inventory)
         <tr inventory_id="{{ $inventory->id }}">
             <td>{{ $inventory->component->name }}</td>
+            <td>{{ $inventory->transport_number }}</td>
             <td>{{ $inventory->component->transportType }}</td>
             <td>{{ $inventory->travelClass }}</td>
             <td>{{ $inventory->component->operator }}</td>

@@ -26,12 +26,13 @@ class ActivitiesTableSeeder extends Seeder
                 'description' => 'A braai down by the beach',
                 'image_url' => 'images/activity/activity_2.jpg',
                 'address_id' => 3,
-                'currency_id' => 7,
+                'currency_id' => 30,
                 'name' => 'False Bay Braai',
                 'internal_notes' => NULL,
                 'created_at' => '2022-01-20 13:34:06',
-                'updated_at' => '2022-01-20 13:34:06',
+                'updated_at' => '2023-09-21 15:31:20',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             1 => 
             array (
@@ -46,6 +47,7 @@ class ActivitiesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 15:32:09',
                 'updated_at' => '2022-01-20 15:32:09',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             2 => 
             array (
@@ -54,12 +56,13 @@ class ActivitiesTableSeeder extends Seeder
                 'description' => 'African 14-course menu with live drumming and Mali puppets.',
                 'image_url' => 'images/activity/activity_4.jpg',
                 'address_id' => 67,
-                'currency_id' => 7,
+                'currency_id' => 30,
                 'name' => 'Gold Restaurant',
                 'internal_notes' => NULL,
                 'created_at' => '2022-01-21 10:45:10',
-                'updated_at' => '2022-01-21 10:45:10',
+                'updated_at' => '2023-09-21 15:33:26',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             3 => 
             array (
@@ -68,12 +71,13 @@ class ActivitiesTableSeeder extends Seeder
                 'description' => 'A tour around the town of Soweto',
                 'image_url' => 'images/activity/activity_5.webp',
                 'address_id' => 68,
-                'currency_id' => 7,
+                'currency_id' => 30,
                 'name' => 'Soweto Tour',
                 'internal_notes' => NULL,
                 'created_at' => '2022-01-21 11:01:07',
-                'updated_at' => '2022-01-21 11:01:07',
+                'updated_at' => '2023-09-21 15:34:14',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             4 => 
             array (
@@ -88,6 +92,7 @@ class ActivitiesTableSeeder extends Seeder
                 'created_at' => '2022-09-14 10:13:11',
                 'updated_at' => '2022-09-14 10:13:11',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             5 => 
             array (
@@ -102,6 +107,7 @@ class ActivitiesTableSeeder extends Seeder
                 'created_at' => '2022-09-14 10:16:01',
                 'updated_at' => '2022-09-14 10:16:01',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             6 => 
             array (
@@ -116,6 +122,7 @@ class ActivitiesTableSeeder extends Seeder
                 'created_at' => '2022-09-20 19:14:58',
                 'updated_at' => '2022-09-20 19:14:58',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
             7 => 
             array (
@@ -130,6 +137,37 @@ class ActivitiesTableSeeder extends Seeder
                 'created_at' => '2022-09-21 08:54:04',
                 'updated_at' => '2022-09-21 08:54:04',
                 'deleted_at' => NULL,
+                'external_notes' => NULL,
+            ),
+            8 => 
+            array (
+                'id' => 9,
+                'activity_type_id' => 4,
+                'description' => 'Take a ride in a hot air balloon above Cape town and out into the countryside',
+                'image_url' => 'images/activity/activity_8.jpg',
+                'address_id' => 128,
+                'currency_id' => 30,
+                'name' => 'Hot Air Balloon Ride',
+                'internal_notes' => NULL,
+                'created_at' => '2023-09-21 14:03:54',
+                'updated_at' => '2023-09-21 14:03:54',
+                'deleted_at' => NULL,
+                'external_notes' => NULL,
+            ),
+            9 => 
+            array (
+                'id' => 10,
+                'activity_type_id' => 4,
+                'description' => 'Guided walks tailored for you. Become engrossed by the landscapes, the heritage, the people and the culture whilst on foot. Come walk with me, come see MY St Helena.',
+                'image_url' => NULL,
+                'address_id' => 129,
+                'currency_id' => 30,
+                'name' => 'Historic Walking Tour of Jamestown St Helena',
+                'internal_notes' => NULL,
+                'created_at' => '2023-09-21 14:06:52',
+                'updated_at' => '2023-09-21 14:06:52',
+                'deleted_at' => NULL,
+                'external_notes' => NULL,
             ),
         ));
         

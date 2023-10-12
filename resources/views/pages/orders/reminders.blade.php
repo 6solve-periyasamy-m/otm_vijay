@@ -2,7 +2,7 @@
 
 @section('title', 'Due Reminders')
 
-@push('header-stack')
+@push('footer-stack')
     <style>
         .scroll-list {
             overflow: hidden;

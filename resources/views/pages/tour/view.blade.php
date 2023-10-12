@@ -15,21 +15,6 @@
 
 @section('title', 'View Tour')
 
-@section('header-script')
-    <script>
-        $(document).ready(function () {
-            $('#accommodation-table').DataTable({fixedHeader: true});
-            $('#activities-table').DataTable({fixedHeader: true});
-            $('#flights-table').DataTable({fixedHeader: true});
-            $('#transports-table').DataTable({fixedHeader: true});
-            $('#templates-table').DataTable({fixedHeader: true});
-            $('#installments-table').DataTable({fixedHeader: true});
-            $('#merchandise-table').DataTable({fixedHeader: true});
-            $('#orders-table').DataTable({fixedHeader: true});
-        });
-    </script>
-@endsection
-
 @section('content')
     @include('pages.tour.popup')
     <div class="otm-callout">
@@ -148,7 +133,7 @@
                 {{-- Accommodation Table --}}
                 <div id="accommodation" role="tabpanel" class="tab-pane fade show active">
                     <div id="accommodation-details">
-                        <table id="accommodation-table" class="table table-striped table-responsive-sm">
+                        <table id="accommodation-table" class="datatable table table-striped table-responsive-sm">
                             <thead>
                             <tr>
                                 <th scope="col">Date</th>
@@ -249,7 +234,7 @@
                 {{-- Activities Table --}}
                 <div id="activities" role="tabpanel" class="tab-pane fade">
                     <div id="activities-details">
-                        <table id="activities-table" class="table table-striped table-responsive-sm">
+                        <table id="activities-table" class="datatable table table-striped table-responsive-sm">
                             <thead>
                             <tr>
                                 <th scope="col">Date</th>
@@ -338,11 +323,12 @@
                 {{-- Flights Table --}}
                 <div id="flights" role="tabpanel" class="tab-pane fade">
                     <div id="flights-details">
-                        <table id="flights-table" class="table table-striped table-responsive-sm">
+                        <table id="flights-table" class="datatable table table-striped table-responsive-sm">
                             <thead>
                             <tr>
                                 <th scope="col">Date</th>
-                                <th scope="col">Name</th>
+                                <th scope="col">Details</th>
+                                <th scope="col">Airline</th>
                                 <th scope="col">Travel Class</th>
                                 <th scope="col">Flight Type</th>
                                 <th scope="col">Component Type</th>
@@ -356,7 +342,8 @@
                                 <tr>
                                     <td style="min-width: 200px">{{ f_datetime($tourComponent->inventory->departs_at) }}
                                         to {{ f_datetime($tourComponent->inventory->arrives_at) }}</td>
-                                    <td>{{ $tourComponent->inventory->flight_number }}</td>
+                                    <td>{{ $tourComponent->inventory->flight->departureAirport->name }} to {{ $tourComponent->inventory->flight->arrivalAirport->name }} ({{ $tourComponent->inventory->flight_number }})</td>
+                                    <td>{{ $tourComponent->inventory->flight->airline->name }}</td>
                                     <td>{{ $tourComponent->inventory->travelClass->name }}</td>
                                     <td>{{ $tourComponent->flight_type }}</td>
                                     <td>
@@ -427,11 +414,12 @@
                 {{-- Transports Table --}}
                 <div id="transports" role="tabpanel" class="tab-pane fade">
                     <div id="transports-details">
-                        <table id="transports-table" class="table table-striped table-responsive-sm">
+                        <table id="transports-table" class="datatable table table-striped table-responsive-sm">
                             <thead>
                             <tr>
                                 <th scope="col">Date</th>
                                 <th scope="col">Name</th>
+                                <th scope="col">Transport Number</th>
                                 <th scope="col">Travel Class</th>
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Stock</th>
@@ -445,6 +433,7 @@
                                     <td style="min-width: 200px">{{ f_datetime($tourComponent->inventory->departs_at) }}
                                         to {{ f_datetime($tourComponent->inventory->arrives_at) }}</td>
                                     <td>{{ $tourComponent->inventory->component->name }}</td>
+                                    <td>{{ $tourComponent->inventory->transport_number }}</td>
                                     <td>{{ $tourComponent->inventory->travelClass->name }}</td>
                                     <td>
                                         @if($tourComponent->tour_component_type == 'Upgrade')
@@ -521,7 +510,7 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <table id="templates-table" class="table table-striped">
+            <table id="templates-table" class="datatable table table-striped">
                 <thead>
                 <tr>
                     <th scope="col">Date</th>
@@ -554,7 +543,7 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <table id="installments-table" class="table table-striped">
+            <table id="installments-table" class="datatable table table-striped">
                 <thead>
                 <tr>
                     <th scope="col">Type</th>
@@ -616,7 +605,7 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <table id="merchandise-table" class="table table-striped table-responsive-sm">
+            <table id="merchandise-table" class="datatable table table-striped table-responsive-sm">
                 <thead>
                 <tr>
                     <th scope="col">Icon</th>
@@ -680,7 +669,7 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <table id="orders-table" class="table table-striped">
+            <table id="orders-table" class="datatable table table-striped">
                 <thead>
                 <tr>
                     <th scope="col">Booking Reference</th>

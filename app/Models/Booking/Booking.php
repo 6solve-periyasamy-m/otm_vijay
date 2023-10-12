@@ -7,7 +7,9 @@ use App\Models\Booking\Component\BookingActivity;
 use App\Models\Booking\Component\BookingFlight;
 use App\Models\Booking\Component\BookingMerchandise;
 use App\Models\Booking\Component\BookingTransport;
+use App\Models\System\FellohLink;
 use App\Models\Tour\Tour;
+use App\Models\Voucher\VoucherCode;
 use App\Repository\Model\Booking\BookingRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,7 +18,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Carbon;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelations;
 
 /**
  * App\Models\Booking\Booking
@@ -32,6 +37,7 @@ use Illuminate\Support\Carbon;
  * @property-read BookingTraveller|null $leadTraveller
  * @property-read Tour $tour
  * @property-read Collection|BookingGroup[] $groups
+ * @property-read Collection|VoucherCode[] $vouchers
  * @property-read int|null $groups_count
  * @property-read Collection|BookingTraveller[] $travellers
  * @property-read Collection|BookingTraveller[] $additionalTravellers Travellers excluding lead traveller
@@ -46,6 +52,7 @@ use Illuminate\Support\Carbon;
  * @property-read float $deposit
  * @property-read float $due_today
  * @property-read BookingRepository $repository
+ * @property-read FellohLink|null $felloh
  * @method static Builder|Booking newModelQuery()
  * @method static Builder|Booking newQuery()
  * @method static Builder|Booking query()
@@ -61,12 +68,19 @@ use Illuminate\Support\Carbon;
  */
 class Booking extends Model
 {
+    use HasDeepRelations;
+
     protected $guarded = [];
     private BookingRepository $internal_repository;
 
     public function tour(): BelongsTo
     {
         return $this->belongsTo(Tour::class);
+    }
+
+    public function vouchers(): HasManyDeep
+    {
+        return $this->hasManyDeep(VoucherCode::class, [BookingTraveller::class, 'voucher_bookings']);
     }
 
     public function leadTraveller(): BelongsTo
@@ -102,6 +116,11 @@ class Booking extends Model
     public function merchandise(): HasManyThrough
     {
         return $this->hasManyThrough(BookingMerchandise::class, BookingTraveller::class, 'booking_id', 'booking_traveller_id');
+    }
+
+    public function felloh(): MorphOne
+    {
+        return $this->morphOne(FellohLink::class, 'order');
     }
 
     public function getRepositoryAttribute(): BookingRepository

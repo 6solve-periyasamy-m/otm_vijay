@@ -3,7 +3,9 @@
 namespace App\Repository\Model\Booking;
 
 use App\Exceptions\NotOnTourException;
+use App\Exceptions\RemoteGatewayError;
 use App\Exceptions\RoomingFailedException;
+use App\Exceptions\UnauthorizedGatewayException;
 use App\Http\Gateways\Storage\LineItem;
 use App\Models\Accommodation\RoomType;
 use App\Models\Activity\ActivityInventoryTour;
@@ -14,9 +16,14 @@ use App\Models\Customer\Group;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
+use App\Models\System\FellohLink;
 use App\Models\Tour\Tour;
+use App\Models\Voucher\Executors\FlatCostReductionExecutor;
+use App\Models\Voucher\Executors\PercentageCostReductionExecutor;
+use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Interfaces\GeneratesFellohData;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\Rooming\RemoteBookingGroup;
 use Carbon\Carbon;
@@ -25,7 +32,7 @@ use Gateway;
 use Log;
 use Throwable;
 
-class BookingRepository extends ModelRepository
+class BookingRepository extends ModelRepository implements GeneratesFellohData
 {
     private Booking $booking;
 
@@ -72,6 +79,11 @@ class BookingRepository extends ModelRepository
         }
     }
 
+    public function applyVoucher(VoucherCode $voucher): bool
+    {
+        return $this->booking->leadTraveller->repository->applyVoucher($voucher);
+    }
+
     public function removeComponentFromAll(InventoryTourRepository $repository): void
     {
         foreach ($this->booking->travellers as $traveller) {
@@ -101,12 +113,36 @@ class BookingRepository extends ModelRepository
         foreach ($this->booking->travellers as $traveller) {
             $cost += $traveller->total_cost;
         }
+        /** @var VoucherCode $voucher */
+        foreach ($this->booking->vouchers()->get() as $voucher) {
+            foreach ($voucher->results as $result) {
+                $executor = $result->executor();
+                if ($executor instanceof FlatCostReductionExecutor) {
+                    $cost += $executor->getAmount();
+                }
+                if ($executor instanceof PercentageCostReductionExecutor) {
+                    $cost -= $executor->getAmount($this->booking->tour->base_price_per_person);
+                }
+            }
+        }
         return $cost;
     }
 
     public function getDueTodayAmount(): float
     {
-        return ($this->booking->tour->booking_fee ?? 0) + (($this->booking->tour->deposit ?? 0) * $this->booking->travellers()->count());
+        $travellers = $this->booking->travellers()->count();
+        $upfront = ($this->booking->tour->booking_fee ?? 0) + (($this->booking->tour->deposit ?? 0) * $travellers);
+        if (flag('installments.force', false)) {
+            if ($this->booking->tour->final_payment->isBefore(now())) {
+                return $this->getTotalCost();
+            }
+            foreach ($this->booking->tour->paymentInstallments as $installment) {
+                if ($installment->due_on->isBefore(now())) {
+                    $upfront += $installment->amount * $travellers;
+                }
+            }
+        }
+        return $upfront;
     }
 
     public function getSingleOccupancyCount(): int
@@ -259,6 +295,10 @@ class BookingRepository extends ModelRepository
         return !isset($this->booking);
     }
 
+    /**
+     * @throws RemoteGatewayError
+     * @throws UnauthorizedGatewayException
+     */
     public function getGatewayUrl(float $amount)
     {
         $gateway = Gateway::getDefaultGateway();
@@ -327,6 +367,17 @@ class BookingRepository extends ModelRepository
             $base += $this->booking->tour->remaining_installment;
             $base += $traveller->surcharge_amount;
             $base += $traveller->additional_cost;
+            foreach ($traveller->vouchers()->get() as $voucher) {
+                foreach ($voucher->results as $result) {
+                    $executor = $result->executor();
+                    if ($executor instanceof FlatCostReductionExecutor) {
+                        $base += $executor->getAmount();
+                    }
+                    if ($executor instanceof PercentageCostReductionExecutor) {
+                        $base += $executor->getAmount($traveller->base_cost);
+                    }
+                }
+            }
         }
         return $base;
     }
@@ -398,8 +449,62 @@ class BookingRepository extends ModelRepository
         }
     }
 
+    public function getBreakdown(): array
+    {
+        $data = [];
+        foreach ($this->booking->travellers as $traveller) {
+            $data[$traveller->id] = [
+                'name' => $traveller->full_name,
+                'cost' => $traveller->repository->getBaseCost(),
+                'extras' => $traveller->repository->getExtrasBreakdown(),
+            ];
+        }
+        return $data;
+    }
+
     public function hasRooming(): bool
     {
         return $this->booking->tour->templates->count() > 0;
+    }
+
+    public function validateVouchers(): void
+    {
+        foreach ($this->booking->travellers()->with('vouchers')->get() as $traveller) {
+            $traveller->repository->validateVouchers();
+        }
+    }
+
+    public function getFellohData(): array
+    {
+        return [
+            'customer_name' => $this->booking->leadTraveller->full_name,
+            'email' => $this->booking->leadTraveller->email_address,
+            'booking_reference' => $this->getReference(),
+            'departure_date' => $this->booking->tour->date_from->format('Y-m-d'),
+            'return_date' => $this->booking->tour->date_to->format('Y-m-d'),
+            'gross_amount' => $this->getTotalCost(),
+        ];
+    }
+
+    public function getReference(): string
+    {
+        return $this->booking->token;
+    }
+
+    public function getFellohId(): string|null
+    {
+        return $this->booking->felloh?->felloh_id;
+    }
+
+    public function setFellohId(string $id): void
+    {
+        $current = $this->getFellohId();
+        if ($current === $id) { return; }
+        if ($current !== null) {
+            $this->booking->felloh->felloh_id = $id;
+            $this->booking->felloh->save();
+        } else {
+            $this->booking->felloh()->save(new FellohLink(['felloh_id' => $id]));
+        }
     }
 }

@@ -31,7 +31,7 @@ class TransportInventoryFactory extends Factory
             'stock' => $this->faker->numberBetween(1, 10),
             'purchase_price' => $this->faker->numberBetween(10, 50),
             'sales_price' => $this->faker->numberBetween(50, 100),
-            'notes' => $this->faker->sentence,
+            'internal_notes' => $this->faker->sentence,
         ];
     }
 }
