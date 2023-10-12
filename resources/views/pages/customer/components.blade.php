@@ -528,7 +528,7 @@
 <script>
     function onOrderChange(selector) {
         let invoiceRoute = "{{ route('customer.invoice', ['reference' => 'reference']) }}";
-        let atolRoute = "{{ route('customer.invoice', ['reference' => 'reference']) }}";
+        let atolRoute = "{{ route('customer.atol', ['reference' => 'reference']) }}";
         let newBooking = $('.order-select').val()
         $('.order').hide();
         $('.order-' + newBooking).show();
