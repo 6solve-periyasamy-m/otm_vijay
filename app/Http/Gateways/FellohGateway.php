@@ -125,7 +125,7 @@ class FellohGateway extends Gateway
         if ($request->status === "COMPLETE") {
             if ($request->amount === null) return response()->json(['success' => true,]);
             $amount = sigfig($request->amount / 100);
-            $this->process($request->payment_link['id'], $amount, Carbon::createFromTimestamp($request->completed_at));
+            $this->process($request->payment_link['id'], $amount, Carbon::parse($request->completed_at));
         }
         return response()->json(['success' => true,]);
     }
