@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Settings;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
@@ -348,7 +349,10 @@ class Order extends Model
      */
     public function getHasAtolAttribute(): bool
     {
-        return $this->tour->protected && $this->repository->hasFlight();
+        $protected = $this->tour->protected && $this->repository->hasFlight();
+        $filter = Settings::atolFilter();
+        $leadFiltered = $filter === -1 || $this->leadBooker->customer->homeAddress->country_id === $filter;
+        return $protected && $leadFiltered;
     }
 
     /**

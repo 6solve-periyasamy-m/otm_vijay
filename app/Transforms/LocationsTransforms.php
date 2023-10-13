@@ -108,4 +108,32 @@ class LocationsTransforms implements LocationsTransformsInterface
         $data['text'] = $currency->name . ' - ' . $currency->code;
         return $data;
     }
+
+    public static function getFilterCountries($filter)
+    {
+        $data = [];
+        $subData = [];
+        $subData['id'] = -1;
+        $subData['text'] = "No Filtering";
+        if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        foreach (Country::orderBy('name')->get() as $country) {
+            $subData = [];
+            $subData['id'] = $country->id;
+            $subData['text'] = $country?->name . ' - ' . $country->alpha_code;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        }
+        return $data;
+    }
+
+    public static function getSelectedFilterCountry($id) {
+        if ($id == 0) return null;
+        if ($id == -1) {
+            return ['id' => -1, 'text' => 'No Filtering'];
+        }
+        $country = Country::findOrFail($id);
+        $data = [];
+        $data['id'] = $country->id;
+        $data['text'] = $country?->name . ' - ' . $country->alpha_code;
+        return $data;
+    }
 }
