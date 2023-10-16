@@ -38,7 +38,7 @@ $transportLock = $order->tour->repository->isTransportLocked();
                        target="_blank" class=" invoice btn btn-primary">Invoice</a>
                     @if ($order->has_atol)
                         <a href="{{ route('customer.atol', ['reference' => $order->booking_reference]) }}"
-                           target="_blank" class=" invoice btn btn-secondary">ATOL Certificate</a>
+                           target="_blank" class=" atol btn btn-secondary">ATOL Certificate</a>
                     @endif
                 </div>
             </form>

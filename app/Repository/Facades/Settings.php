@@ -2,6 +2,7 @@
 
 namespace App\Repository\Facades;
 
+use App\Models\Location\Country;
 use App\Repository\SettingsRepository;
 use Carbon\Carbon;
 
@@ -47,5 +48,21 @@ class Settings
     public function isLocked(string $key, Carbon $from, Carbon $to): bool
     {
         return $from->subDays(setting("{$key}.lock", 30))->lte(now()) && $to->addDays(setting("{$key}.unlock", 0))->gte(now());
+    }
+
+    /**
+     * @return int The country id of the filter, or 0 if the filter is disabled
+     */
+    public function atolFilter(): int
+    {
+        $filter = $this->get('atol.filter');
+        if ($filter === null) {
+            $filter = Country::where('name', 'LIKE', 'United Kingdom')->first()?->id;
+            if ($filter !== null) {
+                $this->set('atol.filter', $filter);
+            }
+
+        }
+        return $filter ?? 0;
     }
 }

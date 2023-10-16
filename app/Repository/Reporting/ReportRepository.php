@@ -13,6 +13,7 @@ use App\Models\Order\Order;
 use App\Models\Tour\Tour;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Settings;
 
 class ReportRepository
 {
@@ -382,8 +383,10 @@ class ReportRepository
         $paid = 0;
         $remaining = 0;
         $orderList = [];
+        $filter = Settings::atolFilter();
         foreach ($orders as $order) {
             if (!$order->has_atol) continue;
+            if ($filter !== -1 && $order->leadBooker->customer->homeAddress->country_id !== $filter) continue;
             if (!$order->cancelled) {
                 $passengers += $order->customer_count;
             }
