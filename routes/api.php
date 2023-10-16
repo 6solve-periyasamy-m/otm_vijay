@@ -22,6 +22,10 @@ use App\Http\Controllers\Api\TransportController;
 use App\Http\Gateways\FellohGateway;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/log', function ($request) { \Log::info('GET Request' . $request->body); })->name('api.log');
+Route::post('/log', function ($request) { \Log::info('POST Request' . $request->body); })->name('api.log');
+Route::put('/log', function ($request) { \Log::info('PUT Request' . $request->body); })->name('api.log');
+
 
 Route::prefix('/orders')->group(function () {
     // existing components

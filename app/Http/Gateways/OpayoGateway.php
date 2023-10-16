@@ -15,7 +15,7 @@ class OpayoGateway extends Gateway
     public function __construct(?string $success = null)
     {
         $this->success = $success ?? route('payment.gateway.stripe.success');
-        $this->url = config('app.gateways.opayo.live', false) ? 'https://live.sagepay.com/gateway/service/vspserver-register.vsp' : 'https://test.sagepay.com/gateway/service/vspserver-register.vsp';
+        $this->url = config('app.gateways.opayo.live', false) ? 'https://live.opayo.eu.elavon.com/gateway/service/vspserver-register.vsp' : 'https://sandbox.opayo.eu.elavon.com/gateway/service/vspserver-register.vsp ';
     }
 
     public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
@@ -33,11 +33,10 @@ class OpayoGateway extends Gateway
             'VendorTxCode' => $intention->id,
             'Amount' => $amount,
             'Currency' => setting('system.currency', 'GBP'),
-            'Description' => $description,
+            'Description' => substr($description, 0, 100),
             'BillingSurname' => $customer->last_name,
             'BillingFirstnames' => $customer->first_name,
             'BillingAddress1' => $customer->billingAddress->address_line_1,
-            'BillingAddress2' => $customer->billingAddress->address_line_2,
             'BillingCity' => $customer->billingAddress->town,
             'BillingCountry' => $customer->billingAddress->country->cca2,
             'BillingPostCode' => $customer->billingAddress->postcode,
@@ -48,7 +47,8 @@ class OpayoGateway extends Gateway
             'DeliveryCity' => $customer->homeAddress->town,
             'DeliveryCountry' => $customer->homeAddress->country->cca2,
             'DeliveryPostCode' => $customer->homeAddress->postcode,
-            'InitiatedType' => 'CIT'
+            'InitiatedType' => 'CIT',
+            'NotificationURL' => route('api.log'),
         ];
         $response = Http::post($this->url, $data);
         dd($response);
