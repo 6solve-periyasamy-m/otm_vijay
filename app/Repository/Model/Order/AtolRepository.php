@@ -6,6 +6,7 @@ use App\Models\Order\Order;
 use Exception;
 use Illuminate\Support\Collection;
 use mikehaertl\pdftk\Pdf;
+use Settings;
 use Storage;
 use ZipArchive;
 
@@ -26,6 +27,7 @@ class AtolRepository
     public static function generateAllAtolCertificates(Collection $orders, string $name): ?string
     {
         Storage::makeDirectory('uploads/atol');
+        $filter = Settings::atolFilter();
         while (true) {
             try {
                 $filename = str_replace(' ', '_', strtolower($name)) . '-' . now()->unix();
@@ -40,6 +42,7 @@ class AtolRepository
         foreach ($orders as $order) {
             if ($order->cancelled) continue;
             if (!$order->has_atol) continue;
+            if ($filter !== -1 && $order->leadBooker->customer->homeAddress->country_id !== $filter) continue;
             $atol = $order->repository->getAtolRepository()->generateAtolCertificate();
             $saved = $atol->saveAs(Storage::path($directory) . '/' . $order->booking_reference . '.pdf');
             if (!$saved) {

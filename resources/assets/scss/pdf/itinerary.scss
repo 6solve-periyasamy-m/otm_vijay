@@ -1,0 +1,131 @@
+@use "sass:math";
+
+$card-border: #333333;
+$card-margin: 1rem;
+$border: 1px solid #dee2e6;
+$text-color: #455a64;
+
+* {
+  box-sizing: border-box;
+  color: $text-color;
+  font-family: "Nunito", sans-serif;
+  font-size: 14px;
+}
+
+.label-card {
+  margin: 1rem auto;
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+}
+
+.card {
+  margin: $card-margin $card-margin 0 $card-margin; // Padding on all sides except bottom
+  display: block;
+  border: 1px solid #d7dfe3;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.item-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.booking-image {
+  width: 10rem;
+  height: 10rem;
+}
+
+.component-header {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 20px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.component-text {
+  min-height: 10rem;
+}
+
+.width-100 {
+  width: 100%;
+}
+
+@for $denominator from 1 to 11 {
+  @for $numerator from 1 to $denominator {
+    .width-#{$numerator}-#{$denominator} {
+      width: math.percentage(math.div($numerator, $denominator) - 0.01);
+    }
+  }
+}
+
+@for $x from -1 to 5 {
+  $size: auto;
+  $label: auto;
+  @if ($x != -1) {
+    $size: #{(0.25*$x)}rem;
+    $label: $x;
+    .p-#{$label} { padding: $size; }
+    .px-#{$label} { padding-left: $size; padding-right: $size; }
+    .py-#{$label} { padding-top: $size; padding-bottom: $size; }
+    .pt-#{$label} { padding-top: $size; }
+    .pl-#{$label} { padding-left: $size; }
+    .pr-#{$label} { padding-right: $size; }
+    .pb-#{$label} { padding-bottom: $size; }
+  }
+  .m-#{$label} { margin: $size; }
+  .mx-#{$label} { margin-left: $size; margin-right: $size; }
+  .my-#{$label} { margin-top: $size; margin-bottom: $size; }
+  .mt-#{$label} { margin-top: $size; }
+  .ml-#{$label} { margin-left: $size; }
+  .mr-#{$label} { margin-right: $size; }
+  .mb-#{$label} { margin-bottom: $size; }
+}
+
+.border-left {
+  border-left: $border;
+}
+
+.border-right {
+  border-right: $border;
+}
+
+.border-top {
+  border-top: $border;
+}
+
+.border-bottom {
+  border-bottom: $border;
+}
+
+.fw-bold {
+  font-weight: bold;
+}
+
+.fs-14 {
+  font-size: 14px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.block {
+  display: block;
+}
+
+.inline {
+  display: inline;
+}
+
+.inline-block {
+  display: inline-block;
+  vertical-align: top;
+}
+
+@media print {
+  div {
+    break-inside: avoid;
+  }
+}

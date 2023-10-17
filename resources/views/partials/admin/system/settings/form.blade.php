@@ -94,7 +94,7 @@
                             'F jS Y' => 'January 31st 2021 (Time)'
                         ],
                         'selected' => setting('system.format.date', 'd/m/Y'),
-                        'width' => 6,
+                        'width' => 4,
                     ])
                     @include('partials.fields.dropdown', [
                         'name' => 'Time Format',
@@ -106,8 +106,9 @@
                             'h:i:s A'=> '02:30:45 PM'
                         ],
                         'selected' => setting('system.format.date', 'H:i'),
-                        'width' => 6,
+                        'width' => 4,
                     ])
+                    @include('partials.fields.selector.default', ['name' => 'ATOL Filter Country', 'field' => 'atol_filter', 'value' => \Settings::atolFilter(), 'route' => 'countries.filter', 'width' => 4])
                     @include('partials.fields.date', ['name' => 'Financial Year Start', 'field' => 'year_start', 'value' => setting('system.year.start', '2022-04-01'), 'width' => 4])
                     @include('partials.fields.date', ['name' => 'ATOL Year Start', 'field' => 'atol_start', 'value' => setting('atol.year.start', '2022-04-01'), 'width' => 4])
                     @include('partials.fields.text', ['name' => 'Historic After X Months', 'field' => 'historic', 'value' => setting('system.historic', 6), 'width' => 4])

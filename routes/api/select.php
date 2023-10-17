@@ -7,6 +7,7 @@ Route::post('addresses', [SelectController::class, 'getAddresses'])->name('addre
 Route::post('currencies', [SelectController::class, 'getCurrencies'])->name('currencies.select');
 Route::post('addresses', [SelectController::class, 'getAddresses'])->name('addresses.select');
 Route::post('currencies', [SelectController::class, 'getCurrencies'])->name('currencies.select');
+Route::post('filter/countries', [SelectController::class, 'getAvailableFilterCountries'])->name('countries.filter.select');
 Route::post('regions', [SelectController::class, 'getRegions'])->name('regions.select');
 Route::post('location-types', [SelectController::class, 'getLocationTypes'])->name('location-types.select');
 Route::post('room-types', [SelectController::class, 'getRoomTypes'])->name('room-types.select');
@@ -43,6 +44,7 @@ Route::prefix('inventory')->group(function () {
     });
 });
 Route::prefix('selected')->group(function () {
+    Route::post('filter/countries/{id}', [SelectController::class, 'getSelectedFilterCountries'])->name('countries.filter.selected');
     Route::post('location/{id}', [SelectController::class, 'getSelectedLocation'])->name('locations.selected');
     Route::post('address/{id}', [SelectController::class, 'getSelectedAddress'])->name('addresses.selected');
     Route::post('currency/{id}', [SelectController::class, 'getSelectedCurrency'])->name('currencies.selected');
