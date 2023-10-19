@@ -15,7 +15,7 @@ class OpayoGateway extends Gateway
     public function __construct(?string $success = null)
     {
         $this->success = $success ?? route('payment.gateway.stripe.success');
-        $this->url = config('app.gateways.opayo.live', false) ? 'https://live.opayo.eu.elavon.com/gateway/service/vspserver-register.vsp' : 'https://sandbox.opayo.eu.elavon.com/gateway/service/vspserver-register.vsp ';
+        $this->url = config('app.gateways.opayo.live', false) ? 'https://live.opayo.eu.elavon.com/gateway/service/vspserver-register.vsp' : 'https://sandbox.opayo.eu.elavon.com/gateway/service/vspserver-register.vsp';
     }
 
     public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
