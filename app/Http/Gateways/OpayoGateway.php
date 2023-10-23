@@ -48,6 +48,7 @@ class OpayoGateway extends Gateway
             'DeliveryCountry' => $customer->homeAddress->country->cca2,
             'DeliveryPostCode' => $customer->homeAddress->postcode,
             'InitiatedType' => 'CIT',
+            'COFUsage' => 'FIRST',
             'NotificationURL' => route('api.log'),
         ];
         $response = Http::asForm()->post($this->url, $data);
