@@ -50,8 +50,8 @@ class OpayoGateway extends Gateway
             'InitiatedType' => 'CIT',
             'NotificationURL' => route('api.log'),
         ];
-        $response = Http::withHeaders(['Content-Type' => 'application/json', 'Accept' => 'application/json'])->post($this->url, $data);
-        dd($response, $response->body());
+        $response = Http::asForm()->post($this->url, $data);
+        dd(json_encode($data), $response, $response->body());
         return $success ?? $this->success;
     }
 
