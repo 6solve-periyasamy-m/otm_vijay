@@ -20,12 +20,11 @@ use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\TourComponentController;
 use App\Http\Controllers\Api\TransportController;
 use App\Http\Gateways\FellohGateway;
+use App\Http\Gateways\OpayoGateway;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/log', function ($request) { \Log::info('GET Request' . $request->body); })->name('api.log');
-Route::post('/log', function ($request) { \Log::info('POST Request' . $request->body); })->name('api.log');
-Route::put('/log', function ($request) { \Log::info('PUT Request' . $request->body); })->name('api.log');
-
+Route::any('/log', function (Request $request) { Log::info($request->method() . ' Request' . $request->body); })->name('api.log');
 
 Route::prefix('/orders')->group(function () {
     // existing components
@@ -42,6 +41,7 @@ Route::prefix('/orders')->group(function () {
 
 Route::stripeWebhooks('/stripe/webhooks');
 Route::post('/felloh/webhook', [FellohGateway::class, 'webhook'])->name('api.felloh.webhook');
+Route::post('/opayo/webhook', [OpayoGateway::class, 'webhook'])->name('api.opayo.webhook');
 
 Route::post('/dual/select/countries', [SelectController::class, 'getCountries'])->name('api.countries.select');
 

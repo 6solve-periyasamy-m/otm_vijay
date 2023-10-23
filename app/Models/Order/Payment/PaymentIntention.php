@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $type Payment type
  * @property string $reference Order reference or Booking token
  * @property array|null $data Data to be processed once the intention is confirmed
+ * @property float|null $amount
  * @property bool $processed Has the intention been processed
  * @property-read PaymentIntentionRepository $repository
  * @method static Builder|PaymentIntention newModelQuery()
@@ -36,7 +37,7 @@ class PaymentIntention extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'string';
     protected $fillable = ['id', 'customer_id', 'reference', 'data', 'type'];
-    protected $casts = ['data' => 'array',];
+    protected $casts = ['data' => 'array', 'amount' => 'float'];
 
     private PaymentIntentionRepository $repo;
 
