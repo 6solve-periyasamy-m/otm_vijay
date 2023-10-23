@@ -2,6 +2,8 @@
 
 namespace App\Http\Gateways;
 
+use App\Exceptions\UnauthorizedGatewayException;
+use App\Http\Requests\Gateway\Opayo\WebhookRequest;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Order\Payment\PaymentIntention;
@@ -26,6 +28,8 @@ class OpayoGateway extends Gateway
             $amount += $item->cost;
             $description .= "$item->name <br />";
         }
+        $intention->amount = $amount;
+        $intention->save();
         $data = [
             'VPSProtocol' => '4.00',
             'TxType' => 'PAYMENT',
@@ -49,17 +53,39 @@ class OpayoGateway extends Gateway
             'DeliveryPostCode' => $customer->homeAddress->postcode,
             'InitiatedType' => 'CIT',
             'COFUsage' => 'FIRST',
-            'NotificationURL' => route('api.log'),
+            'NotificationURL' => route('api.opayo.webhook'),
         ];
         $response = Http::asForm()->post($this->url, $data);
-        dd(json_encode($data), $response, $response->body());
-        return $success ?? $this->success;
+        if ($response->json('Status') === 'OK' || $response->json('Status') === 'OK REPEATED') {
+            \Log::info($response->body());
+            return $response->json('NextURL');
+        } else {
+            \Log::error($response->body());
+            throw new UnauthorizedGatewayException('Failed to communicate with Opayo gateway');
+        }
+    }
+
+    public function webhook(WebhookRequest $request)
+    {
+        \Log::info($request->json());
+        if ($request->Status === 'OK') {
+            // Opayo doesn't return an amount on success, so we'll need to pull from the payment intention
+            $this->process($request->VendorTxCode, 0, now());
+            return response("Status=OK\rRedirectURL=" . ($this->success), 200, ['Content-Type', 'text/plain']);
+        }
+        return response("Status=OK\rRedirectURL=" . (route('payment.gateway.opayo.failed')), 200, ['Content-Type', 'text/plain']);
+    }
+
+    public function failed()
+    {
+        // TODO: Implement actual page for failed payments
+        return view('pages.payments.felloh.failed');
     }
 
     public function process(string $reference, float $amount, string $created = null): void
     {
         $intention = PaymentIntention::fetch($reference);
         if (!isset($intention)) return;
-        $this->processIntention($intention, $amount, 'Demo Gateway', $created);
+        $this->processIntention($intention, $intention->amount ?? 0, 'Opayo Gateway', $created);
     }
 }

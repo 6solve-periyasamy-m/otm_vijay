@@ -3,6 +3,7 @@
 use App\Http\Controllers\Customer\CustomerBookingController;
 use App\Http\Controllers\StripeController;
 use App\Http\Gateways\FellohGateway;
+use App\Http\Gateways\OpayoGateway;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,6 +33,9 @@ Route::prefix('payment')->name('payment.')->group(function () {
         });
         Route::prefix('felloh')->name('felloh.')->group(function () {
             Route::get('failed', [FellohGateway::class, 'failed'])->name('failed');
+        });
+        Route::prefix('opayo')->name('opayo.')->group(function () {
+            Route::get('failed', [OpayoGateway::class, 'failed'])->name('failed');
         });
     });
 });
