@@ -8,7 +8,6 @@ use App\Models\Flight\FlightInventory;
 use App\Models\Merchandise\MerchandiseInventory;
 use App\Models\Transport\TransportInventory;
 use App\Repository\Abstracts\InventoryRepository;
-use Database\Factories\Supplier\SupplierContractComponentFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
