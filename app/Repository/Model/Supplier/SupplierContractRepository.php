@@ -57,6 +57,6 @@ class SupplierContractRepository extends ModelRepository implements LinksToCompo
         $contractComponent->componentRelation()->associate($component->get());
         $contractComponent->cost_per_unit = $component->getPurchasePrice() ?? 0;
         $contractComponent->quantity = 1;
-        return $this->contract->components()->save($contractComponent);
+        return $this->contract->components()->save($contractComponent) !== false;
     }
 }
