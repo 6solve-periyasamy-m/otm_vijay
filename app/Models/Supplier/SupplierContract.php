@@ -2,6 +2,7 @@
 
 namespace App\Models\Supplier;
 
+use App\Models\Traits\HasRepository;
 use Database\Factories\Supplier\SupplierContractFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -48,6 +49,7 @@ use Illuminate\Support\Carbon;
  */
 class SupplierContract extends Model
 {
+    use HasRepository;
     use HasFactory;
 
     protected $casts = ['agreed_exchange' => 'float', 'total_cost' => 'float', 'price_per_item' => 'float', 'confirmed' => 'boolean'];
