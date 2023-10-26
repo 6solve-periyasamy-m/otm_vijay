@@ -130,16 +130,5 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-xl-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">Accommodation</h4>
-                    </div>
-                    <livewire:admin.accommodation.inventory.standalone-table />
-                </div>
-            </div>
-        </div>
     </div>
 @endsection
