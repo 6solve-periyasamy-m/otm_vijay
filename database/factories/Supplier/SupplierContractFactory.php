@@ -20,7 +20,7 @@ class SupplierContractFactory extends Factory
     {
         $currency = Currency::all()->first() ?? Currency::create(['name' => 'Test Currency', 'code' => 'TCS', 'symbol' => '$']);
         return [
-            'purchase_order_number' => 'SUP' . fake()->randomNumber(12, true),
+            'purchase_order_number' => 'SUP' . fake()->randomNumber(6, true),
             'currency_id' => $currency->id,
             'agreed_exchange' =>(fake()->numberBetween(500, 1500) / 100),
             'total_cost' => fake()->randomNumber(8),
