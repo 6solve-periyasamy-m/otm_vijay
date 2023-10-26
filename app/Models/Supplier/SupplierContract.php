@@ -3,6 +3,7 @@
 namespace App\Models\Supplier;
 
 use App\Models\Traits\HasRepository;
+use App\Repository\Model\Supplier\SupplierContractRepository;
 use Database\Factories\Supplier\SupplierContractFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -28,6 +29,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Supplier $supplier
+ * @property-read SupplierContractRepository $repository
  * @property-read Collection<int, SupplierContractComponent> $components
  * @property-read int|null $components_count
  * @method static SupplierContractFactory factory($count = null, $state = [])
