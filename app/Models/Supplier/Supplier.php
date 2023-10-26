@@ -7,9 +7,11 @@ use App\Models\Location\Currency;
 use Database\Factories\Supplier\SupplierFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -28,6 +30,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Currency|null $currency Which currency does the supplier trade in
  * @property-read Address|null $address What is the address of the supplier
+ * @property-read Collection<int, SupplierContract> $contracts
+ * @property-read int|null $contracts_count
  * @method static SupplierFactory factory($count = null, $state = [])
  * @method static Builder|Supplier newModelQuery()
  * @method static Builder|Supplier newQuery()
@@ -59,5 +63,10 @@ class Supplier extends Model
     public function address(): BelongsTo
     {
         return $this->belongsTo(Address::class, 'address_id');
+    }
+
+    public function contracts(): HasMany
+    {
+        return $this->hasMany(SupplierContract::class, 'supplier_id');
     }
 }
