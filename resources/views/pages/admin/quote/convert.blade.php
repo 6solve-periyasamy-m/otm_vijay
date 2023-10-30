@@ -85,5 +85,6 @@
         </x-admin.input.selector.quote-conversion>
     @endfor
     <hr class="splitter">
+    <x-admin.input.checkbox name="should_invoice" value="{{ $email ?? true }}"/>
     <input type="submit" class="btn btn-primary text-white" name="Submit">
 @endsection

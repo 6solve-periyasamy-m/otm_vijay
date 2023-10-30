@@ -12,6 +12,23 @@
             update(getPayingAmount(), getTravellingAmount());
         });
 
+        function toggleEmail() {
+            let input = $('.should-invoice');
+            let button = $('.toggle-email');
+            let text = $('.toggle-email-text');
+            if (input.val() == 'on') {
+                input.val('off');
+                button.removeClass('btn-success')
+                button.addClass('btn-danger');
+                text.text("Will Not Email");
+            } else {
+                input.val('on');
+                button.removeClass('btn-danger')
+                button.addClass('btn-success');
+                text.text("Will Email");
+            }
+        }
+
         function getPayingAmount() {
             let amount = parseInt($('.paying-input').val());
             return isNaN(amount) || amount < 0 ? 0 : amount;
@@ -284,7 +301,12 @@
                         @csrf
                         <input type="hidden" name="paying" class="paying-input" value="0">
                         <input type="hidden" name="travelling" class="travelling-input" value="0">
+                        <input type="hidden" name="should_invoice" class="should-invoice" value="on">
                     </form>
+                    <a href="javascript:toggleEmail()" class="btn btn-success toggle-email">
+                        {{ Icon::email() }}
+                        <span class="toggle-email-text">Will Email</span>
+                    </a>
                     <a href="javascript:$('.send-form').submit()" class="btn btn-success">
                         {{ Icon::email() }}
                         {{ __('quotes.view.cards.quick.calculator.send') }}

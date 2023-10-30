@@ -57,10 +57,10 @@ class QuoteController extends Controller
             return back()->withErrors(['msg' => "No price points exist for {$paying} paying travellers",]);
         }
         if ($request->travelling == 0 && $request->paying == 0) {
-            $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->paying, $quote->leadTraveller->travelling));
+            $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->paying, $quote->leadTraveller->travelling), [], $request->doEmail());
             return redirect()->route('orders.view', ['order' => $order,]);
         }
-        return view('pages.admin.quote.convert', ['quote' => $quote, 'travelling' => $request->travelling, 'paying' => $request->paying,]);
+        return view('pages.admin.quote.convert', ['quote' => $quote, 'travelling' => $request->travelling, 'paying' => $request->paying, 'email' => $request->doEmail()]);
     }
 
     public function document(Quote $quote, SentQuote $sent)
@@ -80,8 +80,8 @@ class QuoteController extends Controller
 
     public function convert(ConversionRequest $request, Quote $quote)
     {
-        $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->paying, $quote->leadTraveller->travelling), $request->getCustomers());
-        return redirect()->route('orders.view', ['order' => $order,]);
+        $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->paying, $quote->leadTraveller->travelling), $request->getCustomers(), $request->doEmail());
+        return redirect()->route('orders.view', ['order' => $order]);
     }
 
     public function send(StartConversionRequest $request, Quote $quote)
