@@ -51,9 +51,11 @@ class QuoteController extends Controller
 
     public function conversion(StartConversionRequest $request, Quote $quote)
     {
+        \Log::info('Going through');
         $paying = $request->paying + ($quote->leadTraveller->paying ? 1 : 0);
         $pricePoint = $quote->repository->getPricePerPerson($request->paying + ($quote->leadTraveller->paying ? 1 : 0));
         if (!isset($pricePoint)) {
+            \Log::info('Failed');
             return back()->withErrors(['msg' => "No price points exist for {$paying} paying travellers",]);
         }
         if ($request->travelling == 0 && $request->paying == 0) {

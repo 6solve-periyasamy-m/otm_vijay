@@ -301,12 +301,7 @@
                         @csrf
                         <input type="hidden" name="paying" class="paying-input" value="0">
                         <input type="hidden" name="travelling" class="travelling-input" value="0">
-                        <input type="hidden" name="should_invoice" class="should-invoice" value="on">
                     </form>
-                    <a href="javascript:toggleEmail()" class="btn btn-success toggle-email">
-                        {{ Icon::email() }}
-                        <span class="toggle-email-text">Will Email</span>
-                    </a>
                     <a href="javascript:$('.send-form').submit()" class="btn btn-success">
                         {{ Icon::email() }}
                         {{ __('quotes.view.cards.quick.calculator.send') }}
@@ -315,7 +310,12 @@
                         @csrf
                         <input type="hidden" name="paying" class="paying-input" value="0">
                         <input type="hidden" name="travelling" class="travelling-input" value="0">
+                        <input type="hidden" name="should_invoice" class="should-invoice" value="on">
                     </form>
+                    <a href="javascript:toggleEmail()" class="btn btn-success toggle-email">
+                        {{ Icon::email() }}
+                        <span class="toggle-email-text">Will Email</span>
+                    </a>
                     <a href="javascript:$('.convert-form').submit()" class="btn btn-warning">
                         {{ Icon::convert() }}
                         {{ __('quotes.view.cards.quick.calculator.convert') }}
