@@ -68,7 +68,7 @@ class OpayoGateway extends Gateway
 
     public function webhook(WebhookRequest $request)
     {
-        Log::info($request->getContent());
+        Log::info($request);
         $body = str_to_map($request->getContent());
         if ($body['Status'] === 'OK') {
             // Opayo doesn't return an amount on success, so we'll need to pull from the payment intention
