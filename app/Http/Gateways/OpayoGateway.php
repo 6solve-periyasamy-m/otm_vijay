@@ -8,6 +8,7 @@ use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Order\Payment\PaymentIntention;
 use Http;
+use Log;
 
 class OpayoGateway extends Gateway
 {
@@ -56,18 +57,18 @@ class OpayoGateway extends Gateway
             'NotificationURL' => route('api.opayo.webhook'),
         ];
         $response = Http::asForm()->post($this->url, $data);
-        if ($response->json('Status') === 'OK' || $response->json('Status') === 'OK REPEATED') {
-            \Log::info($response->body());
-            return $response->json('NextURL');
+        $body = str_to_map($response->body());
+        if ($body['Status'] === 'OK' || $body['Status'] === 'OK REPEATED') {
+            return $body['NextURL'];
         } else {
-            \Log::error($response->body());
+            Log::error("Failed to communicate with Opayo. Response:\n", $response->body());
             throw new UnauthorizedGatewayException('Failed to communicate with Opayo gateway');
         }
     }
 
     public function webhook(WebhookRequest $request)
     {
-        \Log::info($request->json());
+        Log::info($request->json());
         if ($request->Status === 'OK') {
             // Opayo doesn't return an amount on success, so we'll need to pull from the payment intention
             $this->process($request->VendorTxCode, 0, now());
