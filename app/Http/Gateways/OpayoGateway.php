@@ -68,10 +68,11 @@ class OpayoGateway extends Gateway
 
     public function webhook(WebhookRequest $request)
     {
-        Log::info($request->json());
-        if ($request->Status === 'OK') {
+        Log::info($request->getContent());
+        $body = str_to_map($request->getContent());
+        if ($body['Status'] === 'OK') {
             // Opayo doesn't return an amount on success, so we'll need to pull from the payment intention
-            $this->process($request->VendorTxCode, 0, now());
+            $this->process($body['VendorTxCode'], 0, now());
             return response("Status=OK\rRedirectURL=" . ($this->success), 200, ['Content-Type', 'text/plain']);
         }
         return response("Status=OK\rRedirectURL=" . (route('payment.gateway.opayo.failed')), 200, ['Content-Type', 'text/plain']);
