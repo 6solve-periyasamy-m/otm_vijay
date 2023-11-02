@@ -2,6 +2,7 @@
 
 namespace App\Repository\Model\Order;
 
+use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Order\Adjustment\OrderCustomerAdjustment;
 use App\Models\Order\Order;
@@ -304,6 +305,10 @@ class OrderCustomerRepository extends ModelRepository
 
     public function forceDelete(): void
     {
+        // Delete any related bookings
+        foreach (BookingTraveller::where('order_customer_id', '=', $this->orderCustomer->id)->get() as $traveller) {
+            $traveller->booking->repository->forceDelete();
+        }
         foreach ($this->orderCustomer->groups as $group) {
             $group->repository->removeCustomerFromGroup($this->orderCustomer);
         }
