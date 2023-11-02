@@ -61,7 +61,7 @@ class OpayoGateway extends Gateway
         if ($body['Status'] === 'OK' || $body['Status'] === 'OK REPEATED') {
             return $body['NextURL'];
         } else {
-            Log::error("Failed to communicate with Opayo. Response:\n", $response->body());
+            Log::error("Failed to communicate with Opayo. Response:\n{$response->body()}");
             throw new UnauthorizedGatewayException('Failed to communicate with Opayo gateway');
         }
     }
