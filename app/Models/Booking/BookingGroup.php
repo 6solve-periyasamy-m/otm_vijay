@@ -26,6 +26,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|BookingAccommodation[] $accommodation
  * @property-read int|null $accommodation_count
  * @property-read Collection|BookingTraveller[] $travellers
+ * @property-read Collection|BookingTravellerGroup[] $pivot
  * @property-read int|null $travellers_count
  * @property-read BookingGroupRepository $repository
  * @method static Builder|BookingGroup newModelQuery()
@@ -53,6 +54,11 @@ class BookingGroup extends Model
     public function accommodation(): HasMany
     {
         return $this->hasMany(BookingAccommodation::class);
+    }
+
+    public function pivot(): HasMany
+    {
+        return $this->hasMany(BookingTravellerGroup::class, 'booking_group_id');
     }
 
     public function booking(): BelongsTo

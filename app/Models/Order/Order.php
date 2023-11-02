@@ -2,6 +2,7 @@
 
 namespace App\Models\Order;
 
+use App\Models\Booking\Booking;
 use App\Models\Customer\Customer;
 use App\Models\Customer\Group;
 use App\Models\Customer\OrderCustomerGroup;
@@ -60,6 +61,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read int|null $adjustments_count The amount of manual adjustments on the order
  * @property-read int|null $days_until_next_payment The number of days until the next payment is due, or null if all installments are paid
  * @property-read Collection|Customer[] $customers The customers associated with this order
+ * @property-read Booking|null $booking
  * @property-read int|null $customers_count The amount of customers associated with this order
  * @property-read OrderRepository $repository The repository used for calculations
  * @property-read float $calculated_deposit The calculated deposit based on customer count
@@ -215,6 +217,11 @@ class Order extends Model
     public function felloh(): MorphOne
     {
         return $this->morphOne(FellohLink::class, 'order');
+    }
+
+    public function booking(): HasOne
+    {
+        return $this->hasOne(Booking::class, 'order_id');
     }
 
     /**
