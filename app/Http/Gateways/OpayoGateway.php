@@ -68,7 +68,7 @@ class OpayoGateway extends Gateway
 
     public function webhook(WebhookRequest $request)
     {
-        Log::channel('webhook')->info("Opayo Gateway Webhook ({$request->Status}): {$request->Token}\n{$request}");
+        Log::channel('webhook')->info("Opayo Gateway Webhook ({$request->Status}): Intention {$request->VendorTxCode}");
         if ($request->Status === 'OK') {
             // Opayo doesn't return an amount on success, so we'll need to pull from the payment intention
             $this->process($request->VendorTxCode, 0, now());
