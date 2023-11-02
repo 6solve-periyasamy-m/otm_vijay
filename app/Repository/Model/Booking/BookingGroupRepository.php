@@ -100,4 +100,11 @@ class BookingGroupRepository extends ModelRepository
         }
         return substr($customers, 0, -1 * strlen($delimiter));
     }
+
+    public function forceDelete()
+    {
+        $this->group->accommodation()->forceDelete();
+        $this->group->pivot()->forceDelete();
+        $this->group->forceDelete();
+    }
 }
