@@ -10,6 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $VendorTxCode Payment Intention ID
  * @property string $Status Valid good responses: OK
  * @property string $StatusDetail Details of the status, should be logged if not Okay
+ * @property string $Token Opayo Token
  */
 class WebhookRequest extends FormRequest
 {
