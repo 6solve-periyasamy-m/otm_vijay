@@ -21,10 +21,7 @@ use App\Http\Controllers\Api\TourComponentController;
 use App\Http\Controllers\Api\TransportController;
 use App\Http\Gateways\FellohGateway;
 use App\Http\Gateways\OpayoGateway;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-Route::any('/log', function (Request $request) { Log::info($request->method() . ' Request' . $request->body); })->name('api.log');
 
 Route::prefix('/orders')->group(function () {
     // existing components
