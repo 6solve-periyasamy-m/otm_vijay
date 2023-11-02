@@ -247,6 +247,8 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         }
         $order->booking_reference = Order::generateBookingReference($order);
         $order->repository->save();
+        $this->booking->order_id = $order->id;
+        $this->booking->save();
         foreach ($this->booking->groups as $bookingGroup) {
             $group = Group::create();
             foreach ($bookingGroup->travellers as $traveller) {
