@@ -27,7 +27,7 @@ class OpayoGateway extends Gateway
         $description = "";
         foreach ($items as $item) {
             $amount += $item->cost;
-            $description .= "$item->name\n";
+            $description .= "$item->name<br>";
         }
         $intention->amount = $amount;
         $intention->save();
