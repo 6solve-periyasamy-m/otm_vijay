@@ -86,6 +86,6 @@ class OpayoGateway extends Gateway
     {
         $intention = PaymentIntention::fetch($reference);
         if (!isset($intention)) return;
-        $this->processIntention($intention, $intention->amount ?? 0, 'Opayo Gateway', $created);
+        $this->processIntention($intention, $intention->amount * 100 ?? 0, 'Opayo Gateway', $created);
     }
 }
