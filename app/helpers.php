@@ -255,15 +255,16 @@ if (!function_exists('str_to_map')) {
      * @param string $message
      * @param string $separator The marker for equivalence (default =)
      * @param string $linefeed The marker for line change (default CR/LF/CRLF)
+     * @param string $merge Character to put back into merge (default =)
      * @return array
      */
-    function str_to_map(string $message, string $separator = '/[=]/', string $linefeed = "/[\r\n]+/"): array
+    function str_to_map(string $message, string $separator = '/[=]/', string $linefeed = "/[\r\n]+/", string $merge = '='): array
     {
         $data = [];
         $lines = preg_split($linefeed, $message);
         foreach ($lines as $line) {
             $split = preg_split($separator, $line);
-            $data[$split[0]] = implode('', array_slice($split, 1));
+            $data[$split[0]] = implode($merge, array_slice($split, 1));
         }
         return $data;
     }
