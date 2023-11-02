@@ -56,11 +56,6 @@ class BookingGroup extends Model
         return $this->hasMany(BookingAccommodation::class);
     }
 
-    public function pivot(): HasMany
-    {
-        return $this->hasMany(BookingTravellerGroup::class, 'booking_group_id');
-    }
-
     public function booking(): BelongsTo
     {
         return $this->belongsTo(Booking::class);

@@ -645,7 +645,6 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
     public function forceDelete(): void
     {
-        $this->order->booking?->repository->forceDelete();
         foreach ($this->order->groups as $group) {
             $group->repository->forceDelete();
         }

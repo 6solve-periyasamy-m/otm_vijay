@@ -307,7 +307,6 @@ class OrderCustomerRepository extends ModelRepository
         foreach ($this->orderCustomer->groups as $group) {
             $group->repository->removeCustomerFromGroup($this->orderCustomer);
         }
-        $this->orderCustomer->bookingTraveller?->repository->forceDelete();
         $this->orderCustomer->adjustments()->forceDelete();
         $this->orderCustomer->orderActivities()->forceDelete();
         $this->orderCustomer->orderFlights()->forceDelete();
