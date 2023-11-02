@@ -2,7 +2,6 @@
 
 namespace App\Models\Order;
 
-use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Customer\Group;
 use App\Models\Customer\OrderCustomerGroup;
@@ -26,7 +25,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon as SupportCarbon;
@@ -65,7 +63,6 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read bool $is_lead_booker Whether the customer is the lead booker
  * @property-read bool $cancelled Whether the customer is cancelled
  * @property-read bool $registered Is the traveller a registered user
- * @property-read BookingTraveller|null $bookingTraveller
  * @property-read string $lead_booker_name The full name of the lead booker
  * @property-read Carbon $ordered_on When the order was placed
  * @property-read float $adjustment_total The sum of all adjustments for the OrderCustomer
@@ -176,11 +173,6 @@ class OrderCustomer extends Model
             [OrderCustomerGroup::class, Group::class],
             ['order_customer_id', 'id', 'group_id']
         );
-    }
-
-    public function bookingTraveller(): HasOne
-    {
-        return $this->hasOne(BookingTraveller::class, 'order_customer_id');
     }
 
     public function getCancelledAttribute(): bool

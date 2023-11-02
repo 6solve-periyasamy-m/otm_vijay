@@ -485,14 +485,4 @@ class BookingTravellerRepository extends ModelRepository
         }
         return $data;
     }
-
-    public function forceDelete(): void
-    {
-        $this->traveller->activities()->delete();
-        $this->traveller->flights()->delete();
-        $this->traveller->transport()->delete();
-        $this->traveller->merchandise()->delete();
-        $this->traveller->vouchers()->delete();
-        $this->traveller->delete();
-    }
 }

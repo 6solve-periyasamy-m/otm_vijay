@@ -5,7 +5,6 @@ namespace Database\Factories\Customer;
 use App\Models\Customer\Customer;
 use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
-use App\Models\Location\Country;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use function now;
 
@@ -24,14 +23,13 @@ class CustomerFactory extends Factory
      */
     public function definition()
     {
-        $country = Country::where('name', '=', 'United Kingdom')->first()->id;
         $homeAddress = Address::create([
             'name' => 'Pregenerated Customer Name',
             'parent' => AddressParent::CUSTOMER,
             'address_line_1' => $this->faker->streetAddress,
             'town' => $this->faker->city,
             'region' => $this->faker->state,
-            'country_id' => $country,
+            'country_id' => 1,
             'postcode' => $this->faker->postcode
         ]);
         $billingAddress = $homeAddress->repository->cloneToNew(AddressParent::CUSTOMER);
