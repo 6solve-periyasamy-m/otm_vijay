@@ -26,7 +26,6 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|BookingAccommodation[] $accommodation
  * @property-read int|null $accommodation_count
  * @property-read Collection|BookingTraveller[] $travellers
- * @property-read Collection|BookingTravellerGroup[] $pivot
  * @property-read int|null $travellers_count
  * @property-read BookingGroupRepository $repository
  * @method static Builder|BookingGroup newModelQuery()
