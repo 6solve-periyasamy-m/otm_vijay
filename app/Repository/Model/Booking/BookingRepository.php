@@ -507,4 +507,16 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             $this->booking->felloh()->save(new FellohLink(['felloh_id' => $id]));
         }
     }
+
+    public function forceDelete()
+    {
+        foreach ($this->booking->groups as $group) {
+            $group->repository->forceDelete();
+        }
+        foreach ($this->booking->travellers as $traveller) {
+            $traveller->repository->forceDelete();
+        }
+        $this->booking->felloh()->delete();
+        $this->booking->delete();
+    }
 }
