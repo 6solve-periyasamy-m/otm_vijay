@@ -21,7 +21,7 @@
             Last Name
         </x-customer.input>
 
-        <x-customer.input type="date" wire:model="traveller.date_of_birth" width="3" autocomplete="bday" required>
+        <x-customer.input type="date" wire:model="date_of_birth" width="3" autocomplete="bday" required>
             Date of Birth
         </x-customer.input>
 
