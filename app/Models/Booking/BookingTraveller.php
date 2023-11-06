@@ -41,8 +41,8 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
  * @property string|null $email_address
  * @property int|null $home_address_id
  * @property int|null $billing_address_id
- * @property int $room_type_id
- * @property int $group_id
+ * @property int|null $room_type_id
+ * @property int|null $group_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Address|null $billingAddress Relation to local address (DO NOT USE)
