@@ -55,6 +55,7 @@ class SupplierContract extends Model
     use HasFactory;
 
     protected $casts = ['agreed_exchange' => 'float', 'total_cost' => 'float', 'price_per_item' => 'float', 'confirmed' => 'boolean'];
+    protected $guarded = [];
 
     public function supplier(): BelongsTo
     {

@@ -73,5 +73,23 @@ return [
             'alternative_phone' => 'Alternative Number',
             'notes' => 'Notes'
         ]
-    ]
+    ],
+    'contract' => [
+        'title' => 'Contracts',
+        'create' => 'Create Contract',
+        'form' => [
+            'title' => [
+                'create' => 'Create Contract',
+                'update' => 'Update Contract',
+            ],
+            'fields' => [
+                'order_number' => 'Purchase Order Number',
+                'currency' => 'Currency',
+                'exchange' => 'Agreed Exchange',
+                'total_cost' => 'Total Cost',
+                'price_per_item' => 'Per Item Cost',
+                'confirmed' => 'Confirmed'
+            ],
+        ],
+    ],
 ];

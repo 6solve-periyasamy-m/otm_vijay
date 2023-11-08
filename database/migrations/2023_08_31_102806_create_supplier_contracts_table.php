@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('supplier_id')->constrained()->cascadeOnDelete();
             $table->string('purchase_order_number')->nullable();
             $table->foreignId('currency_id')->constrained();
-            $table->decimal('agreed_exchange', 8, 8);
+            $table->decimal('agreed_exchange', 16, 8);
             $table->decimal('total_cost', 12);
             $table->decimal('price_per_item')->nullable();
             $table->boolean('confirmed')->default(true);
