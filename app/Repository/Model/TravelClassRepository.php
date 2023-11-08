@@ -58,4 +58,9 @@ class TravelClassRepository extends AttributeRepository
     {
         return $this->model->transportInventories()->count() + $this->model->flightInventories()->count();
     }
+
+    public static function find($id): TravelClass|null
+    {
+        return TravelClass::find($id);
+    }
 }

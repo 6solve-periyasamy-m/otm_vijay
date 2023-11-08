@@ -123,4 +123,9 @@ class QuoteTransportRepository extends QuoteComponentRepository
     {
         return $this->quoteComponent->tour_sales_price ?? 0;
     }
+
+    public static function find($id): QuoteTransport|null
+    {
+        return QuoteTransport::find($id);
+    }
 }

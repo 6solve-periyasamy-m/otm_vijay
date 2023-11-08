@@ -707,4 +707,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $this->order->felloh()->save(new FellohLink(['felloh_id' => $id]));
         }
     }
+
+    public static function find($id): Order|null
+    {
+        return Order::find($id);
+    }
 }

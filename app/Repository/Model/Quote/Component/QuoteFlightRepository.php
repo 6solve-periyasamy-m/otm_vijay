@@ -126,4 +126,9 @@ class QuoteFlightRepository extends QuoteComponentRepository
             'quote_id' => $this->quoteComponent->quote_id,
         ]);
     }
+
+    public static function find($id): QuoteFlight|null
+    {
+        return QuoteFlight::find($id);
+    }
 }

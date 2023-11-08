@@ -58,4 +58,9 @@ class ActivityTypeRepository extends AttributeRepository
     {
         return $this->model->activities()->count();
     }
+
+    public static function find($id): ActivityType|null
+    {
+        return ActivityType::find($id);
+    }
 }

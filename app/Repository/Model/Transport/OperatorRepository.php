@@ -58,4 +58,9 @@ class OperatorRepository extends AttributeRepository
     {
         return $this->model->transports()->count();
     }
+
+    public static function find($id): Operator|null
+    {
+        return Operator::find($id);
+    }
 }

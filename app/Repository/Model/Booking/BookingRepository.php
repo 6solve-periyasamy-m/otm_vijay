@@ -507,4 +507,9 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             $this->booking->felloh()->save(new FellohLink(['felloh_id' => $id]));
         }
     }
+
+    public static function find($id): Booking|null
+    {
+        return Booking::find($id);
+    }
 }

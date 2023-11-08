@@ -70,4 +70,9 @@ class OrderMerchandiseRepository extends OrderComponentRepository
     {
         return [];
     }
+
+    public static function find($id): OrderMerchandise|null
+    {
+        return OrderMerchandise::find($id);
+    }
 }

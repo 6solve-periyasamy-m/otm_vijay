@@ -295,4 +295,9 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
     {
         return $this->tourComponent->tour_component_type === 'Included' ? 0 : $this->tourComponent->tour_sales_price;
     }
+
+    public static function find($id): ActivityInventoryTour|null
+    {
+        return ActivityInventoryTour::find($id);
+    }
 }

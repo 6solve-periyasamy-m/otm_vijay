@@ -129,4 +129,9 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
             'quote_id' => $this->quoteComponent->quote_id,
         ]);
     }
+
+    public static function find($id): QuoteMerchandise|null
+    {
+        return QuoteMerchandise::find($id);
+    }
 }

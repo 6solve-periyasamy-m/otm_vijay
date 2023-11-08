@@ -114,4 +114,9 @@ class MerchandiseRepository extends ModelRepository
     {
         return $this->component->name;
     }
+
+    public static function find($id): Merchandise|null
+    {
+        return Merchandise::find($id);
+    }
 }

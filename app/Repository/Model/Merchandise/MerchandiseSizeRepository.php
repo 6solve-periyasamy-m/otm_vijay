@@ -4,7 +4,7 @@ namespace App\Repository\Model\Merchandise;
 
 use App\Models\Merchandise\MerchandiseSize;
 use App\Repository\Abstracts\AttributeRepository;
-use App\Repository\Authentication\PermissionsRepository;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**
@@ -51,5 +51,10 @@ class MerchandiseSizeRepository extends AttributeRepository
     public function getRelatedCount(): int
     {
         return $this->model->inventories()->count();
+    }
+
+    public static function find($id): Model|null
+    {
+        return MerchandiseSize::find($id);
     }
 }

@@ -102,4 +102,9 @@ class AddressRepository extends ModelRepository
             "postcode" => null,
         ]);
     }
+
+    public static function find($id): Address|null
+    {
+        return Address::find($id);
+    }
 }

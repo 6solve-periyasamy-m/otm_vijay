@@ -79,4 +79,9 @@ class OrderFlightRepository extends OrderComponentRepository
             'description' => "{$component->departureAirport->name} to {$component->arrivalAirport->name} (Arrival) ({$inventory->flight_number}) ({$inventory->travelClass})"];
         return $data;
     }
+
+    public static function find($id): OrderFlight|null
+    {
+        return OrderFlight::find($id);
+    }
 }

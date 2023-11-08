@@ -188,4 +188,9 @@ class MerchandiseInventoryRepository extends InventoryRepository
     {
         return $this->inventory->sales_price;
     }
+
+    public static function find($id): MerchandiseInventory|null
+    {
+        return MerchandiseInventory::find($id);
+    }
 }

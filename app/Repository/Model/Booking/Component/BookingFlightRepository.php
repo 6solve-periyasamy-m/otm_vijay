@@ -64,4 +64,9 @@ class BookingFlightRepository extends BookingComponentRepository
     {
         return $this->bookingComponent->tourComponent->repository;
     }
+
+    public static function find($id): BookingFlight|null
+    {
+        return BookingFlight::find($id);
+    }
 }

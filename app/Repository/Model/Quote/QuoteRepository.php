@@ -785,4 +785,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $this->quote->costs()->forceDelete();
         $this->quote->forceDelete();
     }
+
+    public static function find($id): Quote|null
+    {
+        return Quote::find($id);
+    }
 }

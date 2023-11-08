@@ -100,4 +100,9 @@ class BookingGroupRepository extends ModelRepository
         }
         return substr($customers, 0, -1 * strlen($delimiter));
     }
+
+    public static function find($id): BookingGroup|null
+    {
+        return BookingGroup::find($id);
+    }
 }

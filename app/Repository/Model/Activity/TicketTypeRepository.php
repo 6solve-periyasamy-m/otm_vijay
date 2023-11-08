@@ -58,4 +58,9 @@ class TicketTypeRepository extends AttributeRepository
     {
         return $this->model->inventories()->count();
     }
+
+    public static function find($id): TicketType|null
+    {
+        return TicketType::find($id);
+    }
 }

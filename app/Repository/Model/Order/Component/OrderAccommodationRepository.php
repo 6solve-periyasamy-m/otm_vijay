@@ -78,4 +78,9 @@ class OrderAccommodationRepository extends OrderComponentRepository
             'description' => "{$component->name} ({$inventory->roomType->name}) ({$inventory->boardType})"];
         return $data;
     }
+
+    public static function find($id): OrderAccommodation|null
+    {
+        return OrderAccommodation::find($id);
+    }
 }

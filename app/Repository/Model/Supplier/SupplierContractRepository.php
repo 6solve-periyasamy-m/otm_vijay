@@ -59,4 +59,9 @@ class SupplierContractRepository extends ModelRepository implements LinksToCompo
         $contractComponent->quantity = 1;
         return $this->contract->components()->save($contractComponent) !== false;
     }
+
+    public static function find($id): SupplierContract|null
+    {
+        return SupplierContract::find($id);
+    }
 }

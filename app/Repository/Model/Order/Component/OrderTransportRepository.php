@@ -77,4 +77,9 @@ class OrderTransportRepository extends OrderComponentRepository
             'description' => "{$component->name} ({$component->departureAddress->name} to {$component->arrivalAddress->name}) ({$inventory->travelClass})" . (isset($inventory->transport_number) ? " ($inventory->transport_number)" : ""),];
         return $data;
     }
+
+    public static function find($id): OrderTransport|null
+    {
+        return OrderTransport::find($id);
+    }
 }
