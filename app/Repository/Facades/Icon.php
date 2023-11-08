@@ -32,6 +32,16 @@ class Icon
         return $this->new($name, Icon::BRAND);
     }
 
+    public function signature(): View|string|Closure
+    {
+        return $this->solid('signature');
+    }
+
+    public function supplier(): View|string|Closure
+    {
+        return $this->signature();
+    }
+
     public function eraser(): View|string|Closure
     {
         return $this->solid('eraser');
