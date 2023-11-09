@@ -43,4 +43,13 @@ enum OrderStatus: int
     {
         return $this->getStatusArray()['color'];
     }
+
+    public static function asArray()
+    {
+        $array = [];
+        foreach (OrderStatus::cases() as $case) {
+            $array[$case->value] = $case->description();
+        }
+        return $array;
+    }
 }
