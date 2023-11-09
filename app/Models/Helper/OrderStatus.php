@@ -5,6 +5,7 @@ namespace App\Models\Helper;
 enum OrderStatus: int
 {
 
+    case CANCELLED_NO_REFUND = -5;
     case CANCELLED_OVER_REFUNDED = -4;
     case CANCELLED_FULL_REFUND = -3;
     case CANCELLED_DEPOSIT_HELD = -2;
@@ -34,6 +35,7 @@ enum OrderStatus: int
             self::OVERPAID => ['status' => trans('custom.order.status.overpaid'), 'color' => 'info'],
             self::OCCUPANCY_NOT_SET => ['status' => trans('custom.order.status.occupancy'), 'color' => 'dark'],
             self::UNKNOWN => ['status' => 'Status Unknown', 'color' => 'dark'],
+            self::CANCELLED_NO_REFUND => ['status' => trans('custom.order.status.cancelled.none'), 'color' => 'secondary',],
         };
     }
 

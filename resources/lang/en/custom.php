@@ -15,6 +15,7 @@ return [
                 'full' => 'Cancelled: Fully Refunded',
                 'over' => 'Cancelled: Over-Refunded',
                 'required' => 'Cancelled: Requires Refund',
+                'none' => 'Cancelled: No Refund Required'
             ]
         ]
     ],
