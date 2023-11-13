@@ -65,7 +65,7 @@ class UpdateCountryDefinitions extends Command
                     }
                 }
             }
-            LocationsRepository::updateCountry($data['ccn3'], $data['cca3'], $data['name']['common'], $prefix, $data['currencies'] ?? []);
+            LocationsRepository::updateCountry($data['ccn3'], $data['cca3'], $data['name']['common'], $prefix, $data['currencies'] ?? [], $data['cca2']);
         }
         return 0;
     }

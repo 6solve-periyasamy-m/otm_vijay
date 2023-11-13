@@ -257,7 +257,7 @@ class BookingTravellerRepository extends ModelRepository
         return $traveller;
     }
 
-    public function formSave(int $roomType, int $group)
+    public function formSave(int|null $roomType, int|null $group)
     {
         $this->traveller->room_type_id = $roomType;
         $this->traveller->group_id = $group;

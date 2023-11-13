@@ -9,6 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property int|float|null $deposit
  * @property int|float|null $booking_fee
  * @property int|null $organization_id
+ * @property int|null $status_override
  * @property string $invoice_footer
  * @property string $internal_notes
  * @property string $external_notes
@@ -22,6 +23,7 @@ class UpdateOrderRequest extends FormRequest
             'deposit' => $this->deposit ?? 0,
             'booking_fee' => $this->booking_fee ?? 0,
             'organization_id' => $this->organization_id,
+            'status_override' => $this->status_override,
             'internal_notes' => $this->internal_notes,
             'external_notes' => $this->external_notes,
             'invoice_footer' => $this->invoice_footer,

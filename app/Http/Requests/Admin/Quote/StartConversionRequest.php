@@ -7,9 +7,14 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * @property int $travelling
  * @property int $paying
+ * @property string|null $should_invoice
  */
 class StartConversionRequest extends FormRequest
 {
+    public function doEmail(): bool
+    {
+        return $this->should_invoice == 'on';
+    }
 
     /**
      * Get the validation rules that apply to the request.

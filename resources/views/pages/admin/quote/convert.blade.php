@@ -52,6 +52,7 @@
 @endpush
 
 @section('form-body')
+    @if($travelling > 0)
     <hr class="splitter">
     <div class="row form-group">
         <div class="col-12 col-xl-11">
@@ -68,6 +69,8 @@
             Non-paying Traveller {{ $x }}
         </x-admin.input.selector.quote-conversion>
     @endfor
+    @endif
+    @if($paying > 0)
     <hr class="splitter">
     <div class="row form-group">
         <div class="col-12 col-xl-11">
@@ -84,6 +87,8 @@
             Paying Traveller {{ $x }}
         </x-admin.input.selector.quote-conversion>
     @endfor
+    @endif
     <hr class="splitter">
+    <x-admin.input.checkbox name="should_invoice" value="{{ $email ?? true }}">Should the client be emailed?</x-admin.input.checkbox>
     <input type="submit" class="btn btn-primary text-white" name="Submit">
 @endsection

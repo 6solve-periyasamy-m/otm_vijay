@@ -6,6 +6,7 @@ use App\Models\Accommodation\RoomType;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Repository\RoomingRepository;
+use Carbon\Carbon;
 use LivewireUI\Modal\ModalComponent;
 
 class AdditionalTraveller extends ModalComponent
@@ -14,6 +15,7 @@ class AdditionalTraveller extends ModalComponent
     public BookingTraveller|int|null $traveller;
     public $room_type;
     public $group;
+    public $date_of_birth;
 
     public function mount(Booking|int $booking, BookingTraveller|int|null $traveller = null)
     {
@@ -33,6 +35,12 @@ class AdditionalTraveller extends ModalComponent
 
     public function save()
     {
+        try {
+            $date = Carbon::createFromFormat('Y-m-d', $this->date_of_birth);
+        } catch (\Exception $e) {
+            $date = null;
+        }
+        $this->traveller->date_of_birth = $date;
         $this->traveller->booking_id = $this->booking->id;
         $this->traveller->repository->formSave($this->room_type, $this->group);
         $this->emit('travellerAdded', $this->traveller);
@@ -65,7 +73,7 @@ class AdditionalTraveller extends ModalComponent
             'traveller.first_name' => 'required',
             'traveller.middle_names' => 'nullable',
             'traveller.last_name' => 'required',
-            'traveller.date_of_birth' => 'nullable|date',
+            'date_of_birth' => 'nullable|date|date_format:Y-m-d',
             'traveller.email_address' => 'nullable',
             'traveller.mobile_number' => 'nullable',
         ];

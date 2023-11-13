@@ -63,7 +63,7 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    <table id="tours" class="table table-striped datatable">
+                    <table id="tours" class="table table-striped">
                         <thead>
                         <tr>
                             <th scope="col">Name</th>
@@ -105,7 +105,7 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    <table id="orders" class="table table-striped datatable">
+                    <table id="orders" class="table table-striped">
                         <thead>
                         <tr>
                             <th scope="col">Ordered On</th>

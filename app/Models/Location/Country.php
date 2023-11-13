@@ -18,7 +18,8 @@ use function collect;
  *
  * @property int $id
  * @property string $numeric_code
- * @property string $alpha_code
+ * @property string $alpha_code 3 Character Code
+ * @property string $cca2 2 Character code (used by oPayO/SagePay)
  * @property string $name
  * @property string|null $dialing_code
  * @property Carbon|null $created_at

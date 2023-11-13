@@ -2,6 +2,7 @@
 
 namespace App\Models\Order;
 
+use App\Models\Booking\Booking;
 use App\Models\Customer\Customer;
 use App\Models\Customer\Group;
 use App\Models\Customer\OrderCustomerGroup;
@@ -45,6 +46,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property string|null $booking_reference Unique reference for the booking
  * @property float|null $deposit The expected deposit amount
  * @property float|null $booking_fee The fee paid at time of booking
+ * @property OrderStatus|null $status_override Manually assigned order status
  * @property Carbon $ordered_on When the order was placed
  * @property bool $cancelled Is the order cancelled?
  * @property string|null $internal_notes The notes shown only to the operator
@@ -60,6 +62,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read int|null $adjustments_count The amount of manual adjustments on the order
  * @property-read int|null $days_until_next_payment The number of days until the next payment is due, or null if all installments are paid
  * @property-read Collection|Customer[] $customers The customers associated with this order
+ * @property-read Booking|null $booking
  * @property-read int|null $customers_count The amount of customers associated with this order
  * @property-read OrderRepository $repository The repository used for calculations
  * @property-read float $calculated_deposit The calculated deposit based on customer count
@@ -94,6 +97,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Collection|PaymentReminder[] $reminders The reminders that have been sent for the order
  * @property-read int|null $reminders_count The amount of reminders that have been sent for the order
  * @property-read Tour $tour The tour that the order was made in relation to
+ * @property-read Booking|null $booking
  * @property-read FellohLink|null $felloh
  * @method static OrderFactory factory(...$parameters)
  * @method static Builder|Order newModelQuery()
@@ -123,7 +127,7 @@ class Order extends Model
     use SoftDeletes, CascadeSoftDeletes, HasFactory, HasRelationships, HasPermissions;
 
     protected $guarded = [];
-    protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double',];
+    protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double', 'status_override' => OrderStatus::class,];
 
     protected array $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments', 'installments', 'invoices'];
 
@@ -215,6 +219,11 @@ class Order extends Model
     public function felloh(): MorphOne
     {
         return $this->morphOne(FellohLink::class, 'order');
+    }
+
+    public function booking(): HasOne
+    {
+        return $this->hasOne(Booking::class, 'order_id');
     }
 
     /**

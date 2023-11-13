@@ -247,6 +247,8 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         }
         $order->booking_reference = Order::generateBookingReference($order);
         $order->repository->save();
+        $this->booking->order_id = $order->id;
+        $this->booking->save();
         foreach ($this->booking->groups as $bookingGroup) {
             $group = Group::create();
             foreach ($bookingGroup->travellers as $traveller) {
@@ -506,6 +508,24 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         } else {
             $this->booking->felloh()->save(new FellohLink(['felloh_id' => $id]));
         }
+    }
+
+    public function forceDelete(): void
+    {
+        foreach ($this->booking->groups as $group) {
+            $group->accommodation()->delete();
+            DB::table('booking_traveller_groups')->where('booking_group_id', '=', $group->id)->delete();
+            $group->delete();
+        }
+        foreach ($this->booking->travellers as $traveller) {
+            $traveller->activities()->delete();
+            $traveller->flights()->delete();
+            $traveller->transport()->delete();
+            $traveller->merchandise()->delete();
+            $traveller->vouchers()->delete();
+            $traveller->delete();
+        }
+        $this->booking->delete();
     }
 
     public static function find($id): Booking|null

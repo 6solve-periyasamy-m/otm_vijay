@@ -9,6 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * @property int[]|null $travelling
  * @property int[]|null $paying
+ * @property string|null $should_invoice
  */
 class ConversionRequest extends FormRequest
 {
@@ -25,6 +26,11 @@ class ConversionRequest extends FormRequest
             $customers[] = new ConvertedCustomer(Customer::find($id), true, true);
         }
         return $customers;
+    }
+
+    public function doEmail(): bool
+    {
+        return $this->should_invoice == 'on';
     }
 
     public function rules(): array { return []; }

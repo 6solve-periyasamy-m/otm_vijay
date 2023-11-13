@@ -89,7 +89,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
      * @param ConvertedCustomer[] $travellers
      * @return Order
      */
-    public function convertToOrder(ConvertedCustomer $lead, array $travellers = []): Order
+    public function convertToOrder(ConvertedCustomer $lead, array $travellers = [], bool $email = true): Order
     {
         $paying = $lead->paying ? 1 : 0;
         foreach ($travellers as $traveller) { $paying += $traveller->paying ? 1 : 0; }
@@ -109,7 +109,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'external_notes' => $this->quote->external_notes,
             'invoice_footer' => $this->quote->invoice_footer,
         ];
-        $order = OrderRepository::create($tour, $data, $lead, $travellers);
+        $order = OrderRepository::create($tour, $data, $lead, $travellers, $email);
         $this->update(['quote_status' => QuoteStatus::CONVERTED->value, 'order_id' => $order->id]);
         return $order;
     }

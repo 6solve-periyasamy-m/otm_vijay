@@ -45,13 +45,13 @@ $profit = $remaining - $costOfTour;
             <div class="col-12 col-xl-2">
                 <p>Paying Travellers</p>
                 <h6 class="fw-bold">
-                    {{ f_currency($paying) }}
+                    {{ $paying }}
                 </h6>
             </div>
             <div class="col-12 col-xl-2">
                 <p>Free Travellers</p>
                 <h6 class="fw-bold">
-                    {{ f_currency($travelling) }}
+                    {{ $travelling }}
                 </h6>
             </div>
             <div class="col-12 col-xl-2">
