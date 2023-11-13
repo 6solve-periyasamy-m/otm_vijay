@@ -46,6 +46,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property string|null $booking_reference Unique reference for the booking
  * @property float|null $deposit The expected deposit amount
  * @property float|null $booking_fee The fee paid at time of booking
+ * @property OrderStatus|null $status_override Manually assigned order status
  * @property Carbon $ordered_on When the order was placed
  * @property bool $cancelled Is the order cancelled?
  * @property string|null $internal_notes The notes shown only to the operator
@@ -126,7 +127,7 @@ class Order extends Model
     use SoftDeletes, CascadeSoftDeletes, HasFactory, HasRelationships, HasPermissions;
 
     protected $guarded = [];
-    protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double',];
+    protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double', 'status_override' => OrderStatus::class,];
 
     protected array $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments', 'installments', 'invoices'];
 

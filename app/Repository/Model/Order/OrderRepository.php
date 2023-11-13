@@ -331,8 +331,11 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
      */
     public function getOrderStatus(bool $forceCache = false): OrderStatus
     {
+        if ($this->order->status_override !== null) {
+            $status = $this->order->status_override;
+        }
         /** @var OrderStatus $status */
-        if (!$forceCache) {
+        if (!isset($status) && !$forceCache) {
             $status = Cache::get("orders.{$this->order->id}.status");
         }
         if (!isset($status)) {
