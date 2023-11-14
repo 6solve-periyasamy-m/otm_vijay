@@ -77,6 +77,15 @@ return [
     'contract' => [
         'title' => 'Contracts',
         'create' => 'Create Contract',
+        'details' => [
+            'buttons' => [
+                'edit' => 'Edit Contract'
+            ],
+            'number' => 'Purchase Order Number',
+            'currency' => 'Currency',
+            'total' => 'Total Cost',
+            'per_item' => 'Per Item',
+        ],
         'form' => [
             'title' => [
                 'create' => 'Create Contract',

@@ -23,7 +23,10 @@ class Table extends LivewireDatatable
     public function columns()
     {
         return [
-            Column::name('purchase_order_number')
+            Column::callback(['purchase_order_number', 'id', 'supplier_id'], function ($name, $id, $supplier) {
+                $route = route('supplier.contract', ['supplier' => $supplier, 'contract' => $id]);
+                return "<a href=\"{$route}\">$name</a>";
+            })
                 ->label('Purchase Order Number')
                 ->sortable()
                 ->searchable(),

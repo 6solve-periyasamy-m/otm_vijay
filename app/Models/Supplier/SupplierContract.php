@@ -2,6 +2,7 @@
 
 namespace App\Models\Supplier;
 
+use App\Models\Location\Currency;
 use App\Models\Traits\HasRepository;
 use App\Repository\Model\Supplier\SupplierContractRepository;
 use Database\Factories\Supplier\SupplierContractFactory;
@@ -30,6 +31,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Supplier $supplier
  * @property-read SupplierContractRepository $repository
+ * @property-read Currency $currency
  * @property-read Collection<int, SupplierContractComponent> $components
  * @property-read int|null $components_count
  * @method static SupplierContractFactory factory($count = null, $state = [])
@@ -65,5 +67,10 @@ class SupplierContract extends Model
     public function components(): HasMany
     {
         return $this->hasMany(SupplierContractComponent::class, 'supplier_contract_id');
+    }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
 }
