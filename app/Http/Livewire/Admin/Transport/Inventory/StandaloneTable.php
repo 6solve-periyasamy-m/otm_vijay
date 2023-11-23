@@ -29,7 +29,7 @@ class StandaloneTable extends StandaloneDatatable
         return [
             Column::checkbox()
                 ->width('10rem'),
-            Column::name()
+            Column::name('name')
                 ->label('Name')
                 ->sortable()
                 ->searchable(),
