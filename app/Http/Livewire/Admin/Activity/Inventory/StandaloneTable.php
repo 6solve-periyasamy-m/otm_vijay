@@ -2,14 +2,14 @@
 
 namespace App\Http\Livewire\Admin\Activity\Inventory;
 
+use App\Http\Livewire\Abstract\StandaloneDatatable;
 use App\Models\Activity\ActivityInventory;
 use Carbon\Carbon;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
-use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 use Mediconesystems\LivewireDatatables\NumberColumn;
 
-class StandaloneTable extends LivewireDatatable
+class StandaloneTable extends StandaloneDatatable
 {
     public Carbon|string|null $from = null;
     public Carbon|string|null $to = null;
@@ -20,13 +20,7 @@ class StandaloneTable extends LivewireDatatable
             ->join('activities', 'activities.id', '=', 'activity_inventories.activity_id')
             ->join('ticket_types', 'ticket_types.id', '=', 'activity_inventories.ticket_type_id')
             ->join('activity_types', 'activity_types.id', '=', 'activities.activity_type_id');
-        if (!empty($this->from)) {
-            $query->where('starts_at', '>', is_string($this->from) ? Carbon::parse($this->from) : $this->from);
-        }
-        if (!empty($this->to)) {
-            $query->where('ends_at', '<', is_string($this->to) ? Carbon::parse($this->to) : $this->to);
-        }
-        return $query;
+        return $this->filter($query, $this->from, $this->to, 'starts_at', 'ends_at');
     }
 
     public function columns()
@@ -63,5 +57,10 @@ class StandaloneTable extends LivewireDatatable
                 ->sortable()
                 ->filterable(),
         ];
+    }
+
+    public function getClass(): string
+    {
+        return ActivityInventory::class;
     }
 }
