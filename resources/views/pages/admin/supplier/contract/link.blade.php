@@ -1,0 +1,63 @@
+@php/** @var \App\Models\Supplier\SupplierContract $contract */@endphp
+
+@extends('layout.master')
+
+@section('title', 'View Contract')
+
+@section('content')
+    <livewire:admin.supplier.contract.details :contract="$contract" />
+
+    <div class="card">
+        <div class="card-body">
+            <div class="mb-3">
+                <a href="{{ route('supplier.contract', ['supplier' => $contract->supplier, 'contract' => $contract, ])}}" class="btn btn-primary text-white">
+                    {{ Icon::back() }}
+                    Back to Contract
+                </a>
+            </div>
+            <ul class="nav nav-pills otm-tab">
+                <li class="nav-item col-6 col-md-3">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#accommodation">
+                        {{ Icon::accommodation() }} Accommodation
+                    </button>
+                </li>
+                <li class="nav-item col-6 col-md-3">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities">
+                        {{ Icon::activity() }} Activities
+                    </button>
+                </li>
+                <li class="nav-item col-6 col-md-3">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#flights">
+                        {{ Icon::flight() }}
+                        Flights
+                    </button>
+                </li>
+                <li class="nav-item col-6 col-md-3">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transports">
+                        {{ Icon::transport() }}
+                        Transport
+                    </button>
+                </li>
+            </ul>
+            {{-- Tables Definition --}}
+            <div id="tables" class="tab-content otm-tab-content">
+                {{-- Accommodation Table --}}
+                <div id="accommodation" role="tabpanel" class="tab-pane fade show active">
+                    <livewire:admin.accommodation.inventory.standalone-table :link="$contract" />
+                </div>
+                {{-- Activities Table --}}
+                <div id="activities" role="tabpanel" class="tab-pane fade">
+                    <livewire:admin.activity.inventory.standalone-table :link="$contract" />
+                </div>
+                {{-- Flights Table --}}
+                <div id="flights" role="tabpanel" class="tab-pane fade">
+                    <livewire:admin.flight.inventory.standalone-table :link="$contract" />
+                </div>
+                {{-- Transports Table --}}
+                <div id="transports" role="tabpanel" class="tab-pane fade">
+                    <livewire:admin.transport.inventory.standalone-table :link="$contract" />
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection

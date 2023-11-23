@@ -22,4 +22,9 @@ class SupplierController extends Controller
     {
         return view('pages.admin.supplier.contract.view', ['contract' => $contract,]);
     }
+
+    public function link(Supplier $supplier, SupplierContract $contract)
+    {
+        return view('pages.admin.supplier.contract.link', ['contract' => $contract,]);
+    }
 }
