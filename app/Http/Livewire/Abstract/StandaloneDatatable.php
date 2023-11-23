@@ -3,14 +3,13 @@
 namespace App\Http\Livewire\Abstract;
 
 use Carbon\Carbon;
-use Illuminate\Database\Query\Builder;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 abstract class StandaloneDatatable extends LivewireDatatable
 {
     public abstract function getClass(): string;
 
-    public function filter(Builder $query, Carbon|string|null $from, Carbon|string|null $to, $startColumn = 'starts_at', $endColumn = 'ends_at'): Builder
+    public function filter($query, Carbon|string|null $from, Carbon|string|null $to, $startColumn = 'starts_at', $endColumn = 'ends_at')
     {
         if (!empty($from)) {
             $query->where('departs_at', '>', is_string($from) ? Carbon::parse($from) : $from);
