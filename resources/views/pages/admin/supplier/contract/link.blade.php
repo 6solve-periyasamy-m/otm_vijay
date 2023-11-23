@@ -43,19 +43,19 @@
             <div id="tables" class="tab-content otm-tab-content">
                 {{-- Accommodation Table --}}
                 <div id="accommodation" role="tabpanel" class="tab-pane fade show active">
-                    <livewire:admin.accommodation.inventory.standalone-table :link="$contract" />
+                    <livewire:admin.accommodation.inventory.standalone-table :linker="$contract->repository" />
                 </div>
                 {{-- Activities Table --}}
                 <div id="activities" role="tabpanel" class="tab-pane fade">
-                    <livewire:admin.activity.inventory.standalone-table :link="$contract" />
+                    <livewire:admin.activity.inventory.standalone-table :linker="$contract->repository" />
                 </div>
                 {{-- Flights Table --}}
                 <div id="flights" role="tabpanel" class="tab-pane fade">
-                    <livewire:admin.flight.inventory.standalone-table :link="$contract" />
+                    <livewire:admin.flight.inventory.standalone-table :linker="$contract->repository" />
                 </div>
                 {{-- Transports Table --}}
                 <div id="transports" role="tabpanel" class="tab-pane fade">
-                    <livewire:admin.transport.inventory.standalone-table :link="$contract" />
+                    <livewire:admin.transport.inventory.standalone-table :linker="$contract->repository" />
                 </div>
             </div>
         </div>

@@ -20,6 +20,7 @@ class StandaloneTable extends StandaloneDatatable
             ->join('activities', 'activities.id', '=', 'activity_inventories.activity_id')
             ->join('ticket_types', 'ticket_types.id', '=', 'activity_inventories.ticket_type_id')
             ->join('activity_types', 'activity_types.id', '=', 'activities.activity_type_id');
+        $query = $this->hideLinked($query, 'activity_inventories.id');
         return $this->filter($query, $this->from, $this->to, 'starts_at', 'ends_at');
     }
 

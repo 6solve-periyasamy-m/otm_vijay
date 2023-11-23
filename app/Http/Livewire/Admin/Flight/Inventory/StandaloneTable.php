@@ -22,6 +22,7 @@ class StandaloneTable extends StandaloneDatatable
             ->join('airports as departure', 'departure.id', '=', 'flights.departure_airport_id')
             ->join('airports as arrival', 'arrival.id', '=', 'flights.departure_airport_id')
             ->join('travel_classes', 'travel_classes.id', '=', 'flight_inventories.travel_class_id');
+        $query = $this->hideLinked($query, 'flight_inventories.id');
         return $this->filter($query, $this->from, $this->to, 'departs_at', 'arrives_at');
     }
 

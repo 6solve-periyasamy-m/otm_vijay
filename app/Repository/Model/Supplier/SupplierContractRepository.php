@@ -5,11 +5,10 @@ namespace App\Repository\Model\Supplier;
 use App\Models\Supplier\SupplierContract;
 use App\Models\Supplier\SupplierContractComponent;
 use App\Repository\Abstracts\InventoryRepository;
-use App\Repository\Abstracts\ModelRepository;
-use App\Repository\Interfaces\LinksToComponents;
+use App\Repository\Interfaces\InventoryContainerRepository;
 use Illuminate\Database\Eloquent\Model;
 
-class SupplierContractRepository extends ModelRepository implements LinksToComponents
+class SupplierContractRepository extends InventoryContainerRepository
 {
     private SupplierContract $contract;
 
@@ -63,5 +62,22 @@ class SupplierContractRepository extends ModelRepository implements LinksToCompo
     public static function find($id): SupplierContract|null
     {
         return SupplierContract::find($id);
+    }
+
+    public function massAssociate(string $class, array $items, array $attributes = [])
+    {
+        foreach ($items as $id) {
+            SupplierContractComponent::create([
+                'supplier_contract_id' => $this->contract->id,
+                'component_type' => $class,
+                'component_id' => $id,
+                ...$attributes,
+            ]);
+        }
+    }
+
+    public function getId()
+    {
+        return $this->contract->id;
     }
 }

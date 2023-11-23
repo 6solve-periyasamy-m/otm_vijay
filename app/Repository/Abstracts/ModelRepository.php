@@ -22,6 +22,6 @@ abstract class ModelRepository implements Wireable
 
     public static function fromLivewire($value): static
     {
-        return new static($value['class']::find($value['id']));
+        return $value['class']::find($value['id'])?->repository;
     }
 }

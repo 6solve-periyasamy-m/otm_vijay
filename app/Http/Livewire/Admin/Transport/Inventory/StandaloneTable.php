@@ -21,6 +21,7 @@ class StandaloneTable extends StandaloneDatatable
             ->join('transport_types', 'transports.transport_type_id', '=', 'transport_types.id')
             ->join('operators', 'transports.operator_id', '=', 'operators.id')
             ->join('travel_classes', 'travel_classes.id', '=', 'transport_inventories.travel_class_id');
+        $query = $this->hideLinked($query, 'transport_inventories.id');
         return $this->filter($query, $this->from, $this->to, 'departs_at', 'arrives_at');
     }
 

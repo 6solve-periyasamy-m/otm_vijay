@@ -20,6 +20,7 @@ class StandaloneTable extends StandaloneDatatable
             ->join('accommodations', 'accommodations.id', '=', 'accommodation_inventories.accommodation_id')
             ->join('room_types', 'room_types.id', '=', 'accommodation_inventories.room_type_id')
             ->join('board_types', 'board_types.id', '=', 'accommodation_inventories.board_type_id');
+        $query = $this->hideLinked($query, 'accommodation_inventories.id');
         return $this->filter($query, $this->from, $this->to, 'check_in', 'check_out');
     }
 
