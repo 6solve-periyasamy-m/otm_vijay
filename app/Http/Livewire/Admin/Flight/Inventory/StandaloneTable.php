@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Admin\Flight\Inventory;
 use App\Http\Livewire\Abstract\StandaloneDatatable;
 use App\Models\Flight\FlightInventory;
 use Carbon\Carbon;
-use DB;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\NumberColumn;
@@ -22,8 +21,7 @@ class StandaloneTable extends StandaloneDatatable
             ->join('airlines', 'airlines.id', '=', 'flights.airline_id')
             ->join('airports as departure', 'departure.id', '=', 'flights.departure_airport_id')
             ->join('airports as arrival', 'arrival.id', '=', 'flights.departure_airport_id')
-            ->join('travel_classes', 'travel_classes.id', '=', 'flight_inventories.travel_class_id')
-        ->select(['*', DB::raw("CONCAT(`departure.name`, ' to ', `arrival.name`) as name")]);
+            ->join('travel_classes', 'travel_classes.id', '=', 'flight_inventories.travel_class_id');
         return $this->filter($query, $this->from, $this->to, 'departs_at', 'arrives_at');
     }
 
@@ -32,7 +30,9 @@ class StandaloneTable extends StandaloneDatatable
         return [
             Column::checkbox()
                 ->width('10rem'),
-            Column::name('name')
+            Column::callback(['departure.name', 'arrival.name'], function ($departure, $arrival) {
+                return "$departure to $arrival";
+            })
                 ->label('Flight Details')
                 ->sortable()
                 ->searchable(),
