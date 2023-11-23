@@ -2,15 +2,15 @@
 
 namespace App\Http\Livewire\Admin\Flight\Inventory;
 
+use App\Http\Livewire\Abstract\StandaloneDatatable;
 use App\Models\Flight\FlightInventory;
 use Carbon\Carbon;
 use DB;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
-use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 use Mediconesystems\LivewireDatatables\NumberColumn;
 
-class StandaloneTable extends LivewireDatatable
+class StandaloneTable extends StandaloneDatatable
 {
     public Carbon|string|null $from = null;
     public Carbon|string|null $to = null;
@@ -24,13 +24,7 @@ class StandaloneTable extends LivewireDatatable
             ->join('airports as arrival', 'arrival.id', '=', 'flights.departure_airport_id')
             ->join('travel_classes', 'travel_classes.id', '=', 'flight_inventories.travel_class_id')
         ->select(['*', DB::raw("CONCAT(`departure.name`, ' to ', `arrival.name`) as name")]);
-        if (!empty($this->from)) {
-            $query->where('departs_at', '>', is_string($this->from) ? Carbon::parse($this->from) : $this->from);
-        }
-        if (!empty($this->to)) {
-            $query->where('arrives_at', '<', is_string($this->to) ? Carbon::parse($this->to) : $this->to);
-        }
-        return $query;
+        return $this->filter($query, $this->from, $this->to, 'departs_at', 'arrives_at');
     }
 
     public function columns()
@@ -71,5 +65,10 @@ class StandaloneTable extends LivewireDatatable
                 ->sortable()
                 ->filterable(),
         ];
+    }
+
+    public function getClass(): string
+    {
+        return FlightInventory::class;
     }
 }
