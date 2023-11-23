@@ -38,7 +38,7 @@ class StandaloneTable extends LivewireDatatable
         return [
             Column::checkbox()
                 ->width('10rem'),
-            Column::callback(['departure.name', 'arrival.name'], function ($departure, $arrival) { return "$departure to $arrival"; })
+            Column::name('name')
                 ->label('Flight Details')
                 ->sortable()
                 ->searchable(),
