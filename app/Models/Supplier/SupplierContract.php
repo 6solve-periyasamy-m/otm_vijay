@@ -33,6 +33,8 @@ use Illuminate\Support\Carbon;
  * @property-read SupplierContractRepository $repository
  * @property-read Currency $currency
  * @property-read Collection<int, SupplierContractComponent> $components
+ * @property-read int $component_quantity
+ * @property-read float $component_cost
  * @property-read int|null $components_count
  * @method static SupplierContractFactory factory($count = null, $state = [])
  * @method static Builder|SupplierContract newModelQuery()
@@ -67,6 +69,16 @@ class SupplierContract extends Model
     public function components(): HasMany
     {
         return $this->hasMany(SupplierContractComponent::class, 'supplier_contract_id');
+    }
+
+    public function getComponentQuantityAttribute(): int
+    {
+        return $this->components()->sum('quantity');
+    }
+
+    public function getComponentCostAttribute(): float
+    {
+        return $this->components()->sum(\DB::raw('`quantity` * `cost_per_unit`'));
     }
 
     public function currency(): BelongsTo

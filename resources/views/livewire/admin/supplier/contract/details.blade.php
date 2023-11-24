@@ -9,7 +9,7 @@
             <h6 class="fw-bold">{{ $contract->purchase_order_number }}</h6>
         </div>
 
-        <div class="col-xl-3 col-lg-3 col-6">
+        <div class="col-xl-2 col-lg-2 col-6">
             <p>{{ __('supplier.contract.details.currency') }}</p>
             <h6 class="fw-bold">
                 @isset($contract->currency)
@@ -19,17 +19,25 @@
                 @endisset
             </h6>
         </div>
-        <div class="col-xl-3 col-lg-3 col-6">
+        <div class="col-xl-2 col-lg-2 col-6">
             <p>{{ __('supplier.details.exchange.name') }}</p>
             <h6 class="fw-bold">{{ ($contract->agreed_exchange ?? 0) > 0 ? $contract->agreed_exchange : __('supplier.details.exchange.none') }}</h6>
         </div>
-        <div class="col-xl-3 col-lg-3 col-6">
+        <div class="col-xl-2 col-lg-2 col-6">
             <p>{{ __('supplier.contract.details.total') }}</p>
             <h6 class="fw-bold">{{ f_currency($contract->total_cost) }}</h6>
         </div>
-        <div class="col-xl-3 col-lg-3 col-6">
+        <div class="col-xl-2 col-lg-2 col-6">
             <p>{{ __('supplier.contract.details.per_item') }}</p>
             <h6 class="fw-bold">{{ f_currency($contract->price_per_item) }}</h6>
+        </div>
+        <div class="col-xl-2 col-lg-2 col-6">
+            <p>Quantity of Components</p>
+            <h6 class="fw-bold">{{ f_currency($contract->component_quantity) }}</h6>
+        </div>
+        <div class="col-xl-2 col-lg-2 col-6">
+            <p>Total Cost of Components</p>
+            <h6 class="fw-bold">{{ f_currency($contract->component_cost) }}</h6>
         </div>
         <div class="col-12">
             <button class="btn btn-success" wire:click="$emit('openModal', 'admin.supplier.contract.form', {'supplier': {{$contract->supplier_id}}, 'contract': {{$contract->id}})">
