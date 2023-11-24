@@ -7,10 +7,9 @@ use App\Models\Supplier\SupplierContract;
 use App\Models\Supplier\SupplierContractComponent;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
-use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 use Mediconesystems\LivewireDatatables\NumberColumn;
 
-class ActivityTable extends LivewireDatatable
+class ActivityTable extends ComponentTable
 {
     public SupplierContract $contract;
 
@@ -58,6 +57,18 @@ class ActivityTable extends LivewireDatatable
                 ->label('Quantity')
                 ->sortable()
                 ->filterable(),
+            NumberColumn::callback(['cost_per_unit', 'quantity'], function ($cost, $quantity) { return f_currency($cost * $quantity); })
+                ->label('Total Cost')
+                ->sortable()
+                ->filterable(),
+            Column::callback(['id'],  function ($id) {
+                return view('partials.admin.livewire.table.actions', [
+                    'modal' => 'admin.supplier.contract.component.form',
+                    'field' => 'component',
+                    'id' => $id,
+                ]);
+            })
+                ->label(__('custom.table.actions')),
         ];
     }
 }
