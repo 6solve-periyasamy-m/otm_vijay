@@ -32,7 +32,7 @@ class TransportTable extends ComponentTable
                 ->label('Name')
                 ->sortable()
                 ->searchable(),
-            Column::name('transport_number')
+            Column::name('transport_inventories.transport_number')
                 ->label('Transport Number')
                 ->sortable()
                 ->searchable(),
@@ -44,11 +44,11 @@ class TransportTable extends ComponentTable
                 ->label('Travel Class')
                 ->sortable()
                 ->searchable(),
-            DateColumn::name('departs_at')
+            DateColumn::name('transport_inventories.departs_at')
                 ->label('Departure')
                 ->sortable()
                 ->filterable(),
-            DateColumn::name('arrives_at')
+            DateColumn::name('transport_inventories.arrives_at')
                 ->label('Arrival')
                 ->sortable()
                 ->filterable(),
