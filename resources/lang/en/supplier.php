@@ -79,7 +79,9 @@ return [
         'create' => 'Create Contract',
         'details' => [
             'buttons' => [
-                'edit' => 'Edit Contract'
+                'edit' => 'Edit Contract',
+                'link' => 'Link Components',
+                'delete' => 'Delete Contract',
             ],
             'number' => 'Purchase Order Number',
             'currency' => 'Currency',

@@ -42,6 +42,11 @@ class Icon
         return $this->signature();
     }
 
+    public function link(): View|string|Closure
+    {
+        return $this->solid('link');
+    }
+
     public function eraser(): View|string|Closure
     {
         return $this->solid('eraser');
