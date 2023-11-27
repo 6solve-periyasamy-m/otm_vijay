@@ -9,11 +9,21 @@
 
     <div class="card">
         <div class="card-body">
-            <div class="mb-3">
-                <a href="{{ route('supplier.contract', ['supplier' => $contract->supplier, 'contract' => $contract, ])}}" class="btn btn-primary text-white">
-                    {{ Icon::back() }}
-                    Back to Contract
-                </a>
+            <div class="mb-3 d-flex flex-row content-between justify-between">
+                <div class="my-auto">
+                    <a href="{{ route('supplier.contract', ['supplier' => $contract->supplier, 'contract' => $contract, ])}}" class="btn btn-primary text-white">
+                        {{ Icon::back() }}
+                        Back to Contract
+                    </a>
+                </div>
+                <div class="d-flex">
+                    <div>
+                        <x-livewire.input name="quantity" onchange="Livewire.emit('quantityChanged', this.value)" value="1" label="Quantity" />
+                    </div>
+                    <div>
+                        <x-livewire.input name="cost" onchange="Livewire.emit('costChanged', this.value)" value="1" label="Cost Per Item" />
+                    </div>
+                </div>
             </div>
             <ul class="nav nav-pills otm-tab">
                 <li class="nav-item col-6 col-md-3">

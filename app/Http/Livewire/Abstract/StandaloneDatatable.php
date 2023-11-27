@@ -16,10 +16,11 @@ abstract class StandaloneDatatable extends LivewireDatatable
     use SendsEvents;
 
     public int $quantity = 0;
+    public int $cost = 0;
 
     public InventoryContainerRepository|null $linker = null;
 
-    protected $listeners = ['quantityChange' => 'updateQuantity'];
+    protected $listeners = ['quantityChanged' => 'updateQuantity', 'costChanged' => 'updateCost'];
 
     public abstract function getClass(): string;
 
@@ -61,8 +62,15 @@ abstract class StandaloneDatatable extends LivewireDatatable
 
     public function updateQuantity($quantity): void
     {
-        if (is_int($quantity)) {
-            $this->quantity = $quantity;
+        if (is_numeric($quantity)) {
+            $this->quantity = intval($quantity);
+        }
+    }
+
+    public function updateCost($cost): void
+    {
+        if (is_numeric($cost)) {
+            $this->cost = floatval($cost);
         }
     }
 
@@ -73,7 +81,7 @@ abstract class StandaloneDatatable extends LivewireDatatable
         }
         return [
             Action::value('link')->label('Link')->callback(function ($mode, $items) {
-                $this->linker->massAssociate($this->getClass(), $items, ['quantity' => $this->quantity,]);
+                $this->linker->massAssociate($this->getClass(), $items, ['quantity' => $this->quantity, 'cost_per_item' => $this->cost,]);
             })
         ];
     }
