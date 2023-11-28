@@ -102,5 +102,20 @@ return [
                 'confirmed' => 'Confirmed'
             ],
         ],
+        'payment' => [
+            'create' => 'Create Payment',
+            'form' => [
+                'title' => [
+                    'create' => 'Create Contract Payment',
+                    'update' => 'Update Contract Payment',
+                ],
+                'fields' => [
+                    'amount' => 'Amount',
+                    'paid' => 'Paid On',
+                    'exchange_rate' => 'Exchange Rate',
+                    'notes' => 'Notes',
+                ],
+            ],
+        ],
     ],
 ];

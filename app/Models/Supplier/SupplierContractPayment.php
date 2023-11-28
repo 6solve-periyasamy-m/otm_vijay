@@ -35,6 +35,7 @@ use Illuminate\Support\Carbon;
 class SupplierContractPayment extends Model
 {
     protected $casts = ['amount' => 'float', 'exchange_rate' => 'float', 'paid' => 'datetime'];
+    protected $guarded = [];
 
     public function contract(): BelongsTo
     {
