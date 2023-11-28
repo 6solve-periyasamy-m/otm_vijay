@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('supplier_contract_id')->constrained()->cascadeOnDelete();
             $table->decimal('amount', 12);
-            $table->decimal('exchange_rate', 8, 8)->nullable();
+            $table->decimal('exchange_rate', 16, 8)->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
         });
