@@ -30,7 +30,7 @@ class Table extends LivewireDatatable
                 ->label('Amount')
                 ->sortable()
                 ->searchable(),
-            NumberColumn::name('exchange_rate')
+            NumberColumn::callback('exchange_rate', function ($ex) { return rtrim($ex, '.0'); })
                 ->label('Exchange Rate')
                 ->sortable()
                 ->searchable(),
