@@ -13,8 +13,9 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int $supplier_contract_id
- * @property string $amount
- * @property string|null $exchange_rate
+ * @property float $amount
+ * @property float|null $exchange_rate
+ * @property Carbon|null $paid
  * @property string|null $notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -33,6 +34,8 @@ use Illuminate\Support\Carbon;
  */
 class SupplierContractPayment extends Model
 {
+    protected $casts = ['amount' => 'float', 'exchange_rate' => 'float', 'paid' => 'datetime'];
+
     public function contract(): BelongsTo
     {
         return $this->belongsTo(SupplierContract::class, 'supplier_contract_id');
