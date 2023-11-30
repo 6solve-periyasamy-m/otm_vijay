@@ -664,7 +664,7 @@ class ReportFieldRepository
         return [
             'class' => 'Order\Order',
             'type' => 'order',
-            'eager' => ['leadBooker'],
+            'eager' => ['leadBooker', 'tour'],
             'fields' => [
                 'booking_reference' => [
                     'name' => 'Booking Reference',
@@ -710,7 +710,21 @@ class ReportFieldRepository
                 'external_notes' => [
                     'name' => 'External Notes',
                     'method' => 'external_notes',
-                ]
+                ],
+                'tour_name' => [
+                    'name' => 'Tour Name',
+                    'method' => 'tour_name',
+                ],
+                'start_date' => [
+                    'name' => 'Starts At',
+                    'method' => 'start_date',
+                    'format' => 'date',
+                ],
+                'end_date' => [
+                    'name' => 'Ends At',
+                    'method' => 'end_date',
+                    'format' => 'date',
+                ],
             ],
         ];
     }
