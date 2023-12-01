@@ -97,7 +97,6 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Collection|PaymentReminder[] $reminders The reminders that have been sent for the order
  * @property-read int|null $reminders_count The amount of reminders that have been sent for the order
  * @property-read Tour $tour The tour that the order was made in relation to
- * @property-read Booking|null $booking
  * @property-read FellohLink|null $felloh
  * @method static OrderFactory factory(...$parameters)
  * @method static Builder|Order newModelQuery()
@@ -128,6 +127,7 @@ class Order extends Model
 
     protected $guarded = [];
     protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double', 'status_override' => OrderStatus::class,];
+    protected $with = ['tour',];
 
     protected array $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments', 'installments', 'invoices'];
 
@@ -381,6 +381,21 @@ class Order extends Model
     public function getOrderAdjustmentTotalAttribute(): float
     {
         return $this->adjustments()->sum('amount');
+    }
+
+    public function getStartDateAttribute(): Carbon
+    {
+        return $this->tour->date_from;
+    }
+
+    public function getEndDateAttribute(): Carbon
+    {
+        return $this->tour->date_to;
+    }
+
+    public function getTourNameAttribute(): string
+    {
+        return $this->tour->name;
     }
 
     public function adjustments(): HasMany
