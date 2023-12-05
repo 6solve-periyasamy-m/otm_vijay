@@ -8,6 +8,7 @@
                 <th>Variant</th>
                 <th>Size</th>
                 <th>FIT Selectable</th>
+                <th>Contracted Stock</th>
                 <th>Purchase Price</th>
                 <th>Sales Price</th>
                 <th>Notes</th>
@@ -21,6 +22,7 @@
                     <td>{{ $inventory->variant->name }}</td>
                     <td>{{ $inventory->size?->name ?? 'No Size' }}</td>
                     <td>{{ f_bool($inventory->fit_selectable) }}</td>
+                    <td>{{ $inventory->contracted }}</td>
                     <td>{{ f_currency($inventory->purchase_price) }}</td>
                     <td>{{ f_currency($inventory->sales_price) }}</td>
                     <td>{{ $inventory->internal_notes }}</td>
