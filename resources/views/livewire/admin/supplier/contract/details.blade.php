@@ -40,10 +40,10 @@
             <h6 class="fw-bold">{{ f_currency($contract->component_cost) }}</h6>
         </div>
         <div class="col-12">
-            <button class="btn btn-info" wire:click="window.location = '{{ route('supplier.link', ['supplier' => $contract->supplier, 'contract' => $contract,]) }}'">
+            <a class="btn btn-info" href="{{ route('supplier.link', ['supplier' => $contract->supplier, 'contract' => $contract,]) }}">
                 {{ Icon::link() }}
                 <span>{{ __('supplier.contract.details.buttons.link') }}</span>
-            </button>
+            </a>
             <button class="btn btn-success" wire:click="$emit('openModal', 'admin.supplier.contract.form', {'supplier': {{$contract->supplier_id}}, 'contract': {{$contract->id}})">
                 {{ Icon::edit() }}
                 <span>{{ __('supplier.contract.details.buttons.edit') }}</span>
