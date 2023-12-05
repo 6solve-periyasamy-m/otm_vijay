@@ -52,10 +52,10 @@ abstract class StandaloneDatatable extends LivewireDatatable
     {
 
         if (!empty($from)) {
-            $query->where('departs_at', '>', is_string($from) ? Carbon::parse($from) : $from);
+            $query->where($startColumn, '>', is_string($from) ? Carbon::parse($from) : $from);
         }
         if (!empty($end)) {
-            $query->where('arrives_at', '<', is_string($to) ? Carbon::parse($to) : $to);
+            $query->where($endColumn, '<', is_string($to) ? Carbon::parse($to) : $to);
         }
         return $query;
     }
@@ -81,7 +81,7 @@ abstract class StandaloneDatatable extends LivewireDatatable
         }
         return [
             Action::value('link')->label('Link')->callback(function ($mode, $items) {
-                $this->linker->massAssociate($this->getClass(), $items, ['quantity' => $this->quantity, 'cost_per_item' => $this->cost,]);
+                $this->linker->massAssociate($this->getClass(), $items, ['quantity' => $this->quantity, 'cost_per_unit' => $this->cost,]);
             })
         ];
     }
