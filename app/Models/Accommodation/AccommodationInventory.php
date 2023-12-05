@@ -3,6 +3,8 @@
 namespace App\Models\Accommodation;
 
 use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Supplier\SupplierContractComponent;
+use App\Models\Supplier\SupplierContractInstallment;
 use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
 use Database\Factories\Accommodation\AccommodationInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -14,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -39,6 +42,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read int $contracted Amount of contracted stock
  * @property-read Accommodation $accommodation
  * @property-read BoardType $boardType
  * @property-read Accommodation $component
@@ -48,6 +52,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read int $used_stock The amount of stock that has been sold
  * @property-read int $available_stock The amount of stock that is available to be sold
  * @property-read RoomType $roomType
+ * @property-read Collection|SupplierContractComponent[] $contractComponents
  * @property-read Collection|AccommodationInventoryTour[] $tourComponents
  * @property-read Collection|OrderAccommodation[] $orderComponents
  * @property-read int|null $tour_components_count
@@ -124,6 +129,11 @@ class AccommodationInventory extends Model
         return $this->belongsTo(Accommodation::class, 'accommodation_id');
     }
 
+    public function contractComponents(): MorphMany
+    {
+        return $this->morphMany(SupplierContractInstallment::class, 'component');
+    }
+
     public function boardType(): BelongsTo
     {
         return $this->belongsTo(BoardType::class);
@@ -165,6 +175,11 @@ class AccommodationInventory extends Model
     public function orderComponents(): HasManyThrough
     {
         return $this->hasManyThrough(OrderAccommodation::class, AccommodationInventoryTour::class, 'accommodation_inventory_id', 'accommodation_inventory_tour_id');
+    }
+
+    public function getContractedAttribute(): int
+    {
+        return $this->contractComponents()->sum('quantity');
     }
 
     public function __toString(): string

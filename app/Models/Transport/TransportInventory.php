@@ -3,6 +3,8 @@
 namespace App\Models\Transport;
 
 use App\Models\Order\Component\OrderTransport;
+use App\Models\Supplier\SupplierContractComponent;
+use App\Models\Supplier\SupplierContractInstallment;
 use App\Models\Tour\Tour;
 use App\Models\TravelClass;
 use App\Repository\Model\Transport\TransportInventoryRepository;
@@ -17,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -41,9 +44,11 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read int $contracted Amount of contracted stock
  * @property-read Transport $component
  * @property-read string $transport_for_tour
  * @property-read int $used_on_tour_count
+ * @property-read Collection|SupplierContractComponent[] $contractComponents
  * @property-read int $used_stock How much stock has been sold
  * @property-read Collection|Tour[] $tour
  * @property-read int|null $tour_count
@@ -121,6 +126,11 @@ class TransportInventory extends Model
         return $this->belongsTo(Transport::class, 'transport_id');
     }
 
+    public function contractComponents(): MorphMany
+    {
+        return $this->morphMany(SupplierContractInstallment::class, 'component');
+    }
+
     public function tour(): BelongsToMany
     {
         return $this->belongsToMany(Tour::class, 'transport_inventory_tour')->withPivot('sales_price');
@@ -153,6 +163,11 @@ class TransportInventory extends Model
     public function getUsedStockAttribute(): int
     {
         return $this->repository->getUsedStock();
+    }
+
+    public function getContractedAttribute(): int
+    {
+        return $this->contractComponents()->sum('quantity');
     }
 
     public function getUsedOnTourCountAttribute(): int
