@@ -4,7 +4,6 @@ namespace App\Models\Flight;
 
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Supplier\SupplierContractComponent;
-use App\Models\Supplier\SupplierContractInstallment;
 use App\Models\TravelClass;
 use App\Repository\Model\Flight\FlightInventoryRepository;
 use Database\Factories\Flight\FlightInventoryFactory;
@@ -132,7 +131,7 @@ class FlightInventory extends Model
 
     public function contractComponents(): MorphMany
     {
-        return $this->morphMany(SupplierContractInstallment::class, 'component');
+        return $this->morphMany(SupplierContractComponent::class, 'component');
     }
 
     public function travelClass(): BelongsTo

@@ -3,7 +3,6 @@
 namespace App\Models\Merchandise;
 
 use App\Models\Supplier\SupplierContractComponent;
-use App\Models\Supplier\SupplierContractInstallment;
 use App\Repository\Model\Merchandise\MerchandiseInventoryRepository;
 use Database\Factories\Merchandise\MerchandiseInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -92,7 +91,7 @@ class MerchandiseInventory extends Model
 
     public function contractComponents(): MorphMany
     {
-        return $this->morphMany(SupplierContractInstallment::class, 'component');
+        return $this->morphMany(SupplierContractComponent::class, 'component');
     }
 
     public function tourComponents(): HasMany

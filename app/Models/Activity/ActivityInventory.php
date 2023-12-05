@@ -4,7 +4,6 @@ namespace App\Models\Activity;
 
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Supplier\SupplierContractComponent;
-use App\Models\Supplier\SupplierContractInstallment;
 use App\Repository\Model\Activity\ActivityInventoryRepository;
 use Database\Factories\Activity\ActivityInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -119,7 +118,7 @@ class ActivityInventory extends Model
 
     public function contractComponents(): MorphMany
     {
-        return $this->morphMany(SupplierContractInstallment::class, 'component');
+        return $this->morphMany(SupplierContractComponent::class, 'component');
     }
 
     public function orders(): HasManyThrough

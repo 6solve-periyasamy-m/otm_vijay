@@ -4,7 +4,6 @@ namespace App\Models\Transport;
 
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Supplier\SupplierContractComponent;
-use App\Models\Supplier\SupplierContractInstallment;
 use App\Models\Tour\Tour;
 use App\Models\TravelClass;
 use App\Repository\Model\Transport\TransportInventoryRepository;
@@ -128,7 +127,7 @@ class TransportInventory extends Model
 
     public function contractComponents(): MorphMany
     {
-        return $this->morphMany(SupplierContractInstallment::class, 'component');
+        return $this->morphMany(SupplierContractComponent::class, 'component');
     }
 
     public function tour(): BelongsToMany

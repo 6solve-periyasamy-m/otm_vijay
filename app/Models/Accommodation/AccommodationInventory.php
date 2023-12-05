@@ -4,7 +4,6 @@ namespace App\Models\Accommodation;
 
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Supplier\SupplierContractComponent;
-use App\Models\Supplier\SupplierContractInstallment;
 use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
 use Database\Factories\Accommodation\AccommodationInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -131,7 +130,7 @@ class AccommodationInventory extends Model
 
     public function contractComponents(): MorphMany
     {
-        return $this->morphMany(SupplierContractInstallment::class, 'component');
+        return $this->morphMany(SupplierContractComponent::class, 'component');
     }
 
     public function boardType(): BelongsTo
