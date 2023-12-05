@@ -16,27 +16,33 @@
                             Contracted Components
                         </h4>
                     </div>
-                    <ul class="nav nav-pills otm-tab">
-                        <li class="nav-item col-6 col-md-3">
+                    <ul class="nav nav-pills otm-tab flex">
+                        <li class="nav-item flex-fill">
                             <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#accommodation">
                                 {{ Icon::accommodation() }} Accommodation
                             </button>
                         </li>
-                        <li class="nav-item col-6 col-md-3">
+                        <li class="nav-item flex-fill">
                             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities">
                                 {{ Icon::activity() }} Activities
                             </button>
                         </li>
-                        <li class="nav-item col-6 col-md-3">
+                        <li class="nav-item flex-fill">
                             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#flights">
                                 {{ Icon::flight() }}
                                 Flights
                             </button>
                         </li>
-                        <li class="nav-item col-6 col-md-3">
+                        <li class="nav-item flex-fill">
                             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transports">
                                 {{ Icon::transport() }}
                                 Transport
+                            </button>
+                        </li>
+                        <li class="nav-item flex-fill">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#merchandise">
+                                {{ Icon::merchandise() }}
+                                Merchandise
                             </button>
                         </li>
                     </ul>
@@ -57,6 +63,10 @@
                         {{-- Transports Table --}}
                         <div id="transports" role="tabpanel" class="tab-pane fade">
                             <livewire:admin.supplier.contract.component.transport-table :contract="$contract" />
+                        </div>
+                        {{-- Merchandise Table --}}
+                        <div id="merchandise" role="tabpanel" class="tab-pane fade">
+                            <livewire:admin.supplier.contract.component.merchandise-table :contract="$contract" />
                         </div>
                     </div>
                 </div>
