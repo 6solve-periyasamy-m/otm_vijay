@@ -79,6 +79,23 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4 class="fw-bold">
+                            Payment Instalments
+                        </h4>
+                        <div class="float-end">
+                            <a class="btn btn-success" onclick="openModal('admin.supplier.contract.installment.form', {'contract': {{$contract->id}},})">
+                                {{ Icon::create() }} {{ __('supplier.contract.installment.create') }}
+                            </a>
+                        </div>
+                    </div>
+                    <livewire:admin.supplier.contract.installment.table :contract="$contract" />
+                </div>
+            </div>
+        </div>
     </div>
 
 

@@ -117,5 +117,18 @@ return [
                 ],
             ],
         ],
+        'installment' => [
+            'create' => 'Create Instalment',
+            'form' => [
+                'title' => [
+                    'create' => 'Create Contract Instalment',
+                    'update' => 'Update Contract Instalment',
+                ],
+                'fields' => [
+                    'amount' => 'Amount',
+                    'due' => 'Due On',
+                ],
+            ],
+        ],
     ],
 ];

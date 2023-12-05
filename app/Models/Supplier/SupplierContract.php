@@ -71,6 +71,16 @@ class SupplierContract extends Model
         return $this->hasMany(SupplierContractComponent::class, 'supplier_contract_id');
     }
 
+    public function installments(): HasMany
+    {
+        return $this->hasMany(SupplierContractInstallment::class, 'supplier_contract_id');
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(SupplierContractPayment::class, 'supplier_contract_id');
+    }
+
     public function getComponentQuantityAttribute(): int
     {
         return $this->components()->sum('quantity');

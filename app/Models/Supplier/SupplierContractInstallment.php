@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Models\Supplier\Contract;
+namespace App\Models\Supplier;
 
-use App\Models\Supplier\SupplierContract;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -32,7 +31,8 @@ use Illuminate\Support\Carbon;
  */
 class SupplierContractInstallment extends Model
 {
-    protected $casts = ['amount' => 'float', 'due' => 'date',];
+    protected $casts = ['amount' => 'float', 'due' => 'date:Y-m-d',];
+    protected $guarded = [];
 
     public function contract(): BelongsTo
     {
