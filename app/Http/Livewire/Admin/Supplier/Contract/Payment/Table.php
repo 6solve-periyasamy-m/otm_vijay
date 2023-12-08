@@ -34,6 +34,10 @@ class Table extends LivewireDatatable
                 ->label('Exchange Rate')
                 ->sortable()
                 ->searchable(),
+            NumberColumn::callback(['amount', 'exchange_rate'], function ($amount, $ex) { return f_currency($amount * $ex, $this->contract->currency->code); })
+                ->label('Exchanged Amount')
+                ->sortable()
+                ->searchable(),
             Column::name('notes')
                 ->label('Notes')
                 ->sortable()
