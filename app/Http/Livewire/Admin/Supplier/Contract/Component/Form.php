@@ -21,6 +21,12 @@ class Form extends ModalComponent
         if (is_int($component)) {
             $component = SupplierContractComponent::find($component);
         }
+        if ($component === null) {
+            $this->closeModal();
+            $this->refreshTables();
+            $this->toast('Component Not Found', 'That component does not exist. Please refresh the page.', 'error');
+            return;
+        }
         $this->component = $component;
     }
 
