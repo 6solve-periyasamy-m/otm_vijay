@@ -26,6 +26,13 @@ return [
     'table' => [
         'actions' => 'Actions',
     ],
+    'bank' => [
+        'name' => 'Bank Name',
+        'form' => [
+            'create' => 'Create Bank',
+            'udpate' => 'Update Bank',
+        ]
+    ],
     'address' => [
         'line-1' => 'Address Line 1',
         'line-2' => 'Address Line 2',
