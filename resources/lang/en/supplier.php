@@ -85,7 +85,7 @@ return [
             ],
             'number' => 'Purchase Order Number',
             'currency' => 'Currency',
-            'total' => 'Total Cost',
+            'total' => 'Total Contract Value',
             'per_item' => 'Per Item',
         ],
         'form' => [
