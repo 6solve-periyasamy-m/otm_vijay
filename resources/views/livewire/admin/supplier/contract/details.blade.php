@@ -44,7 +44,7 @@
                 {{ Icon::link() }}
                 <span>{{ __('supplier.contract.details.buttons.link') }}</span>
             </a>
-            <button class="btn btn-success" wire:click="$emit('openModal', 'admin.supplier.contract.form', {'supplier': {{$contract->supplier_id}}, 'contract': {{$contract->id}})">
+            <button class="btn btn-success" wire:click="$emit('openModal', 'admin.supplier.contract.form', {'supplier': {{$contract->supplier_id}}, 'contract': {{$contract->id}}})">
                 {{ Icon::edit() }}
                 <span>{{ __('supplier.contract.details.buttons.edit') }}</span>
             </button>
