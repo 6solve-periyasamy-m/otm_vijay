@@ -28,6 +28,10 @@
             <h6 class="fw-bold">{{ ($contract->agreed_exchange ?? 0) > 0 ? $contract->agreed_exchange : __('supplier.details.exchange.none') }}</h6>
         </div>
         <div class="col-xl-2 col-lg-2 col-6">
+            <p>{{ __('supplier.contract.details.tax') }}</p>
+            <h6 class="fw-bold">{{ $contract->tax_rate }}%</h6>
+        </div>
+        <div class="col-xl-2 col-lg-2 col-6">
             <p>{{ __('supplier.contract.details.total') }}</p>
             <h6 class="fw-bold">{{ f_currency($contract->total_cost, $contract->currency->code) }} ({{ f_currency($contract->local_cost) }})</h6>
         </div>
@@ -38,6 +42,10 @@
         <div class="col-xl-2 col-lg-2 col-6">
             <p>Total Cost of Components</p>
             <h6 class="fw-bold">{{ f_currency($contract->component_cost, $contract->currency->code) }}</h6>
+        </div>
+        <div class="col-xl-12">
+            <p>{{ __('supplier.contract.details.notes') }}</p>
+            <h6 class="fw-bold">{{ $contract->notes }}</h6>
         </div>
         <div class="col-12">
             <a class="btn btn-info" href="{{ route('supplier.link', ['supplier' => $contract->supplier, 'contract' => $contract,]) }}">

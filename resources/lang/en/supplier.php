@@ -87,7 +87,8 @@ return [
             'supplier_reference' => 'Supplier Reference Number',
             'currency' => 'Currency',
             'total' => 'Total Contract Value',
-            'per_item' => 'Per Item',
+            'tax' => 'Tax Rate',
+            'notes' => 'Notes',
         ],
         'form' => [
             'title' => [
