@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">
-            <h4 class="fw-bold">{{ __($contract?->id !== null ? 'supplier.form.title.update' : 'supplier.form.title.create') }}</h4>
+            <h4 class="fw-bold">{{ __($contract?->id !== null ? 'supplier.contract.form.title.update' : 'supplier.contract.form.title.create') }}</h4>
         </div>
         <div class="row">
             <x-livewire.input wire:model="contract.purchase_order_number" required width="10" label="{{__('supplier.contract.form.fields.order_number')}}" />
