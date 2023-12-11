@@ -22,6 +22,7 @@ class Form extends ModalComponent
             $component = SupplierContractComponent::find($component);
         }
         if ($component === null) {
+            $this->forceClose();
             $this->closeModal();
             $this->refreshTables();
             $this->toast('Component Not Found', 'That component does not exist. Please refresh the page.', 'error');
