@@ -21,10 +21,11 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $supplier_id
  * @property string|null $purchase_order_number
+ * @property string|null $reference_number
  * @property int $currency_id
  * @property float $agreed_exchange
+ * @property float $tax_rate
  * @property float $total_cost
- * @property float|null $price_per_item
  * @property bool $confirmed
  * @property string|null $notes
  * @property Carbon|null $created_at
@@ -35,6 +36,8 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, SupplierContractComponent> $components
  * @property-read int $component_quantity
  * @property-read float $component_cost
+ * @property-read float $local_cost
+ * @property-read float $before_tax
  * @property-read int|null $components_count
  * @method static SupplierContractFactory factory($count = null, $state = [])
  * @method static Builder|SupplierContract newModelQuery()
@@ -79,6 +82,16 @@ class SupplierContract extends Model
     public function payments(): HasMany
     {
         return $this->hasMany(SupplierContractPayment::class, 'supplier_contract_id');
+    }
+
+    public function getBeforeTaxAttribute(): float
+    {
+        return $this->total_cost - sigfig($this->total_cost * ($this->tax_rate / 100));
+    }
+
+    public function getLocalCostAttribute(): float
+    {
+        return sigfig($this->total_cost / $this->agreed_exchange);
     }
 
     public function getComponentQuantityAttribute(): int
