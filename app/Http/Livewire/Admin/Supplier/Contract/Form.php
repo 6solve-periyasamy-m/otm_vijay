@@ -58,7 +58,7 @@ class Form extends ModalComponent
     public function changeLocal(): void
     {
         if (isset($this->contract->agreed_exchange)) {
-            $this->contract->total_cost = $this->local_cost * $this->contract->agreed_exchange;
+            $this->contract->total_cost = sigfig($this->local_cost * $this->contract->agreed_exchange);
             $this->changeTax();
         }
     }
@@ -76,7 +76,7 @@ class Form extends ModalComponent
         if (isset($this->contract->total_cost)) {
             $this->local_cost = $this->contract->local_cost;
         } elseif (isset($this->local_cost)) {
-            $this->contract->total_cost = $this->local_cost * $this->contract->agreed_exchange;
+            $this->contract->total_cost = sigfig($this->local_cost * $this->contract->agreed_exchange);
             $this->changeTax();
         }
     }
@@ -94,15 +94,14 @@ class Form extends ModalComponent
     public function rules(): array
     {
         return [
-            'net_cost' => 'nullable|numeric|gt:0',
             'contract.purchase_order_number' => 'required',
             'contract.reference_number' => 'nullable',
             'contract.currency_id' => 'required|integer|exists:currencies,id',
             'contract.agreed_exchange' => 'required|numeric|gt:0',
             'contract.tax_rate' => 'required|numeric|gte:0',
             'contract.total_cost' => 'required|numeric',
-            'contract.price_per_item' => 'nullable|numeric',
-            'contract.confirmed' => 'nullable|boolean'
+            'contract.confirmed' => 'nullable|boolean',
+            'contract.notes' => 'nullable',
         ];
     }
 }

@@ -104,6 +104,7 @@ return [
                 'confirmed' => 'Confirmed',
                 'tax_rate' => 'Tax Rate (%)',
                 'before_tax' => 'Cost Before Tax',
+                'notes' => 'Notes',
             ],
         ],
         'payment' => [

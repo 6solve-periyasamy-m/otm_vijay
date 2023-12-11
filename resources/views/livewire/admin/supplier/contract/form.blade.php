@@ -15,6 +15,7 @@
             <x-livewire.input wire:model="contract.tax_rate" wire:change="changeTax" required width="6" label="{{__('supplier.contract.form.fields.tax_rate')}}" />
             <x-livewire.input wire:model="before_tax" disabled width="6" label="{{__('supplier.contract.form.fields.before_tax')}}" />
             <x-livewire.input.select2 name="contract.currency_id" required width="12" label="{{__('supplier.contract.form.fields.currency')}}" route="currencies" value="{{ $supplier->currency_id }}" />
+            <x-livewire.input.text-area wire:model="contract.notes" label="{{__('supplier.contract.form.fields.notes')}}" />
             <button class="btn btn-primary" wire:click="save">Submit</button>
         </div>
     </div>
