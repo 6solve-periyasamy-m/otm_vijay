@@ -17,6 +17,7 @@ class Table extends LivewireDatatable
     public function builder()
     {
         return SupplierContractInstallment::query()
+                ->join('supplier_contracts', 'supplier_contracts.id', '=', 'supplier_contract_installments.supplier_contract_id')
                 ->where('supplier_contract_id', '=', $this->contract->id)
                 ->orderBy('due');
     }
@@ -25,13 +26,15 @@ class Table extends LivewireDatatable
     {
         $totalColumn = NumberColumn::raw("SUM(`amount`) OVER(ORDER BY `due`) AS total")
             ->label('Total Owed');
-        $totalColumn->callback = function ($amount) { return f_currency($amount); };
+        $totalColumn->callback = function ($amount) { return f_currency($amount, $this->contract->currency->code); };
         $paidColumn = BooleanColumn::raw("SUM(`amount`) OVER(ORDER BY `due`) AS paid_total")
             ->label('Paid');
         $paidColumn->callback = function ($amount) { return f_bool($amount <= $this->contract->payments()->sum('amount')); };
         return [
             DateColumn::name('due'),
-            NumberColumn::callback('amount', function ($amount) { return f_currency($amount); })
+            NumberColumn::callback(['amount', 'supplier_contracts.agreed_exchange'], function ($amount, $ex) { return f_currency(sigfig($amount / $ex)); })
+                ->label('Local Amount Owed'),
+            NumberColumn::callback('amount', function ($amount) { return f_currency($amount, $this->contract->currency->code); })
                 ->label('Amount Owed'),
             $totalColumn,
             $paidColumn,
