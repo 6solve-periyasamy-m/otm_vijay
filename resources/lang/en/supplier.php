@@ -95,11 +95,14 @@ return [
             ],
             'fields' => [
                 'order_number' => 'Purchase Order Number',
+                'reference_number' => 'Supplier Reference Number',
                 'currency' => 'Currency',
+                'net_cost' => 'Local Cost (Not Saved)',
                 'exchange' => 'Agreed Exchange',
                 'total_cost' => 'Total Cost',
-                'price_per_item' => 'Per Item Cost',
-                'confirmed' => 'Confirmed'
+                'confirmed' => 'Confirmed',
+                'tax_rate' => 'Tax Rate (%)',
+                'before_tax' => 'Cost Before Tax',
             ],
         ],
         'payment' => [
