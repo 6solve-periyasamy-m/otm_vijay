@@ -33,7 +33,7 @@
         </div>
         <div class="col-xl-2 col-lg-2 col-6">
             <p>Quantity of Components</p>
-            <h6 class="fw-bold">{{ f_currency($contract->component_quantity) }}</h6>
+            <h6 class="fw-bold">{{ $contract->component_quantity }}</h6>
         </div>
         <div class="col-xl-2 col-lg-2 col-6">
             <p>Total Cost of Components</p>
