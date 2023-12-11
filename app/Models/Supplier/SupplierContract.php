@@ -63,6 +63,7 @@ class SupplierContract extends Model
 
     protected $casts = ['agreed_exchange' => 'float', 'total_cost' => 'float', 'price_per_item' => 'float', 'confirmed' => 'boolean'];
     protected $guarded = [];
+    protected $with = ['currency',];
 
     public function supplier(): BelongsTo
     {

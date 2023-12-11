@@ -84,6 +84,7 @@ return [
                 'delete' => 'Delete Contract',
             ],
             'number' => 'Purchase Order Number',
+            'supplier_reference' => 'Supplier Reference Number',
             'currency' => 'Currency',
             'total' => 'Total Contract Value',
             'per_item' => 'Per Item',

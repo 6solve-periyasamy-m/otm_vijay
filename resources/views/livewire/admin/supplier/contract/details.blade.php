@@ -1,12 +1,16 @@
 <div class="otm-callout">
     <div class="row">
-        <div class="col-6">
+        <div class="col-4">
             <p>{{ __('supplier.details.name') }}</p>
             <h6 class="fw-bold">{{ $contract->supplier->name }}</h6>
         </div>
-        <div class="col-6">
+        <div class="col-4">
             <p>{{ __('supplier.contract.details.number') }}</p>
             <h6 class="fw-bold">{{ $contract->purchase_order_number }}</h6>
+        </div>
+        <div class="col-4">
+            <p>{{ __('supplier.contract.details.supplier_reference') }}</p>
+            <h6 class="fw-bold">{{ $contract->reference_number }}</h6>
         </div>
 
         <div class="col-xl-2 col-lg-2 col-6">
@@ -25,11 +29,7 @@
         </div>
         <div class="col-xl-2 col-lg-2 col-6">
             <p>{{ __('supplier.contract.details.total') }}</p>
-            <h6 class="fw-bold">{{ f_currency($contract->total_cost) }}</h6>
-        </div>
-        <div class="col-xl-2 col-lg-2 col-6">
-            <p>{{ __('supplier.contract.details.per_item') }}</p>
-            <h6 class="fw-bold">{{ f_currency($contract->price_per_item) }}</h6>
+            <h6 class="fw-bold">{{ f_currency($contract->total_cost, $contract->currency->code) }} ({{ f_currency($contract->local_cost) }})</h6>
         </div>
         <div class="col-xl-2 col-lg-2 col-6">
             <p>Quantity of Components</p>
@@ -37,7 +37,7 @@
         </div>
         <div class="col-xl-2 col-lg-2 col-6">
             <p>Total Cost of Components</p>
-            <h6 class="fw-bold">{{ f_currency($contract->component_cost) }}</h6>
+            <h6 class="fw-bold">{{ f_currency($contract->component_cost, $contract->currency->code) }}</h6>
         </div>
         <div class="col-12">
             <a class="btn btn-info" href="{{ route('supplier.link', ['supplier' => $contract->supplier, 'contract' => $contract,]) }}">
