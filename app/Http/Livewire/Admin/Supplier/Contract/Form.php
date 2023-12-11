@@ -57,7 +57,7 @@ class Form extends ModalComponent
             'contract.agreed_exchange' => 'required|numeric|gt:0',
             'contract.total_cost' => 'required|numeric',
             'contract.price_per_item' => 'nullable|numeric',
-            'contract.confirmed' => 'required|boolean'
+            'contract.confirmed' => 'nullable|boolean'
         ];
     }
 }
