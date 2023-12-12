@@ -41,6 +41,7 @@ return [
             'name' => 'Agreed Exchange',
             'none' => 'No rate agreed'
         ],
+        'notes' => 'Notes',
         'buttons' => [
             'edit' => 'Edit Supplier',
             'delete' => 'Delete Supplier',

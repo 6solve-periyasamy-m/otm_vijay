@@ -56,6 +56,7 @@ class Form extends ModalComponent
             'supplier.telephone' => 'nullable',
             'supplier.currency_id' => 'nullable|integer|exists:currencies,id',
             'supplier.agreed_exchange' => 'nullable|numeric|gt:0',
+            'supplier.notes' => 'nullable',
             'address.address_line_1' => 'required',
             'address.address_line_2' => 'nullable',
             'address.town' => 'nullable',

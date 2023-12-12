@@ -17,6 +17,8 @@
             <x-livewire.input wire:model="address.region" width="6" label="{{__('supplier.form.fields.address.region')}}" />
             <x-livewire.input.select2 name="address.country_id" required width="6" label="{{__('supplier.form.fields.address.country')}}" route="countries" value="{{ $address->country_id }}" />
             <x-livewire.input wire:model="address.postcode" width="6" label="{{__('supplier.form.fields.address.postcode')}}" />
+            <hr class="splitter" />
+            <x-livewire.input.text-area wire:model="supplier.notes" label="{{__('supplier.form.fields.notes')}}" />
             <button class="btn btn-primary" wire:click="save">Submit</button>
         </div>
     </div>

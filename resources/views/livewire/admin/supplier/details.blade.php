@@ -34,6 +34,10 @@
             <p>{{ __('supplier.details.exchange.name') }}</p>
             <h6 class="fw-bold">{{ ($supplier->agreed_exchange ?? 0) > 0 ? $supplier->agreed_exchange : __('supplier.details.exchange.none') }}</h6>
         </div>
+        <div class="col-2">
+            <p>{{ __('supplier.details.notes') }}</p>
+            <h6 class="fw-bold">{{ $supplier->notes }}</h6>
+        </div>
         <div class="col-12">
             <button class="btn btn-success" wire:click="$emit('openModal', 'admin.supplier.form', {'supplier': {{$supplier->id}}})">
                 {{ Icon::edit() }}
