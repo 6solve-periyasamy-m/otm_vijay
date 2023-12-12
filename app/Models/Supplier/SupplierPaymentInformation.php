@@ -21,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $sort_code
  * @property string|null $bic_swift_code
  * @property string|null $iban
+ * @property string|null $notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Bank $bank
