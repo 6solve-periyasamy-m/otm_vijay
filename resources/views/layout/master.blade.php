@@ -83,64 +83,61 @@
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
 @stack('footer-stack')
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('.datatable:not(.multiselect):not(.autowidth-off)').DataTable({fixedHeader: true,});
-                $('.datatable.multi-select').DataTable({fixedHeader: true, select: { style: "multi+shift" },});
-                $('.datatable.autowidth-off').DataTable({fixedHeader: true, autoWidth: false,});@stack('footer-ready')
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.datatable:not(.multiselect):not(.autowidth-off)').DataTable({fixedHeader: true,});
+        $('.datatable.multi-select').DataTable({fixedHeader: true, select: { style: "multi+shift" },});
+        $('.datatable.autowidth-off').DataTable({fixedHeader: true, autoWidth: false,});@stack('footer-ready')
     });
     function openModal(modal, options = {}) {
         Livewire.emit('openModal', modal, options);
-            }
-            function sysFormatDate(date) {
-                return formatDate(date, '{{ setting('system.format.date') }}');
-            }
-            function sysFormatDateTime(date) {
-                return formatDate(date, '{{ setting('system.format.date', 'd/m/Y') . ' ' . setting('system.format.time', 'H:i') }}');
-            }
-            function toggleAccordion(accordion) {
-                let body = $($(accordion).attr('data-target'));
-                if (body.hasClass('show')) {
-                    body.removeClass('show');
-                    $(accordion).find("i").first().removeClass("fa-arrow-up")
-                    $(accordion).find("i").first().addClass("fa-arrow-down")
-                } else {
-                    body.addClass('show');
-                    $(accordion).find("i").first().removeClass("fa-arrow-down")
-                    $(accordion).find("i").first().addClass("fa-arrow-up")
-                }
-            }
-            function showOverlay(overlay) {
-                let jOverlay = $(overlay);
-                jOverlay.removeClass('hidden');
-                $('body').addClass('overflow-hidden');
-            }
-            function hideOverlay(overlay) {
-                let jOverlay = $(overlay);
-                jOverlay.addClass('hidden');
-                $('body').removeClass('overflow-hidden');
-            }
-            function openModal(modal, options = {}) {
-                Livewire.emit('openModal', modal, options);
-            }
-            function changeDate(invar, outvar) {
-                if (outvar.hasClass('autoset')) {
-                    outvar.val(invar.val());
-                }
-            }
-            function removeAutoset(invar, outvar) {
-                if (outvar.hasClass('autoset') && outvar.val() !== invar.val()) {
-                    outvar.removeClass('autoset')
-                }
-            }
-            Livewire.on('showToast', (data) => {
-                const title = data.title;
-                const body = data.body;
-                const color = data.color ?? 'primary';
-                const autoHide = data.autoHide ?? false;
-                const delay = data.delay ?? 5000;
-                showToast(title, body, color, autoHide, delay);
-            })
-        </script>
+    }
+    function sysFormatDate(date) {
+        return formatDate(date, '{{ setting('system.format.date') }}');
+    }
+    function sysFormatDateTime(date) {
+        return formatDate(date, '{{ setting('system.format.date', 'd/m/Y') . ' ' . setting('system.format.time', 'H:i') }}');
+    }
+    function toggleAccordion(accordion) {
+        let body = $($(accordion).attr('data-target'));
+        if (body.hasClass('show')) {
+            body.removeClass('show');
+            $(accordion).find("i").first().removeClass("fa-arrow-up")
+            $(accordion).find("i").first().addClass("fa-arrow-down")
+        } else {
+            body.addClass('show');
+            $(accordion).find("i").first().removeClass("fa-arrow-down")
+            $(accordion).find("i").first().addClass("fa-arrow-up")
+        }
+    }
+    function showOverlay(overlay) {
+        let jOverlay = $(overlay);
+        jOverlay.removeClass('hidden');
+        $('body').addClass('overflow-hidden');
+    }
+    function hideOverlay(overlay) {
+        let jOverlay = $(overlay);
+        jOverlay.addClass('hidden');
+        $('body').removeClass('overflow-hidden');
+    }
+    function changeDate(invar, outvar) {
+        if (outvar.hasClass('autoset')) {
+            outvar.val(invar.val());
+        }
+    }
+    function removeAutoset(invar, outvar) {
+        if (outvar.hasClass('autoset') && outvar.val() !== invar.val()) {
+            outvar.removeClass('autoset')
+        }
+    }
+    Livewire.on('showToast', (data) => {
+        const title = data.title;
+        const body = data.body;
+        const color = data.color ?? 'primary';
+        const autoHide = data.autoHide ?? false;
+        const delay = data.delay ?? 5000;
+        showToast(title, body, color, autoHide, delay);
+    })
+</script>
     </footer>
 </html>
