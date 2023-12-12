@@ -38,4 +38,18 @@
             <livewire:admin.supplier.contract.table :supplier="$supplier" />
         </div>
     </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title flex justify-content-between">
+                <h4 class="fw-bold">{{ __('supplier.payment.title') }}</h4>
+                <div class="float-end">
+                    <a class="btn btn-success" onclick="openModal('admin.supplier.payment.form', {'supplier': {{$supplier->id}},})">
+                        {{ Icon::create() }} {{ __('supplier.payment.create') }}
+                    </a>
+                </div>
+            </div>
+            <livewire:admin.supplier.payment.table :supplier="$supplier" />
+        </div>
+    </div>
 @endsection

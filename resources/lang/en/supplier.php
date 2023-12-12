@@ -47,6 +47,22 @@ return [
             'delete' => 'Delete Supplier',
         ]
     ],
+    'payment' => [
+        'form' => [
+            'create' => 'Create Payment Information',
+            'update' => 'Update Payment Information',
+            'fields' => [
+                'bank' => 'Bank',
+                'account_number' => 'Account Number',
+                'sort_code' => 'Sort Code',
+                'iban' => 'IBAN',
+                'bic_swift_code' => 'Swift Code',
+                'notes' => 'Notes',
+            ],
+        ],
+        'create' => 'Create Payment Information',
+        'title' => 'Payment Information'
+    ],
     'associate' => [
         'title' => 'Associates',
         'buttons' => [

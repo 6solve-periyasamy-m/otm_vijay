@@ -388,7 +388,8 @@ class SelectController extends ApiController
         $data = [];
         /** @var Bank $bank */
         foreach (Bank::where('name', 'like', "%$filter%")->get() as $bank) {
-            $data['results'][] = ['id' => $bank->id, 'text' => $bank->name,];
+            $name = "{$bank->name} - {$bank->address_line_1}, {$bank->country}";
+            $data['results'][] = ['id' => $bank->id, 'text' => "$name",];
         }
         return $data;
     }
