@@ -6,7 +6,7 @@ use App\Http\Livewire\Abstract\StandaloneDatatable;
 use App\Models\Activity\ActivityInventory;
 use Carbon\Carbon;
 use Mediconesystems\LivewireDatatables\Column;
-use Mediconesystems\LivewireDatatables\DateColumn;
+use Mediconesystems\LivewireDatatables\DatetimeColumn;
 use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class StandaloneTable extends StandaloneDatatable
@@ -41,11 +41,11 @@ class StandaloneTable extends StandaloneDatatable
                 ->label('Ticket Type')
                 ->sortable()
                 ->searchable(),
-            DateColumn::name('starts_at')
+            DatetimeColumn::name('starts_at')
                 ->label('Starts At')
                 ->sortable()
                 ->filterable(),
-            DateColumn::name('ends_at')
+            DatetimeColumn::name('ends_at')
                 ->label('Ends At')
                 ->sortable()
                 ->filterable(),

@@ -6,7 +6,7 @@ use App\Models\Supplier\SupplierContract;
 use App\Models\Supplier\SupplierContractComponent;
 use App\Models\Transport\TransportInventory;
 use Mediconesystems\LivewireDatatables\Column;
-use Mediconesystems\LivewireDatatables\DateColumn;
+use Mediconesystems\LivewireDatatables\DatetimeColumn;
 
 class TransportTable extends ComponentTable
 {
@@ -43,11 +43,11 @@ class TransportTable extends ComponentTable
                 ->label('Travel Class')
                 ->sortable()
                 ->searchable(),
-            DateColumn::name('transport_inventories.departs_at')
+            DatetimeColumn::name('transport_inventories.departs_at')
                 ->label('Departure')
                 ->sortable()
                 ->filterable(),
-            DateColumn::name('transport_inventories.arrives_at')
+            DatetimeColumn::name('transport_inventories.arrives_at')
                 ->label('Arrival')
                 ->sortable()
                 ->filterable(),

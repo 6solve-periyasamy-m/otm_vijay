@@ -6,7 +6,7 @@ use App\Models\Flight\FlightInventory;
 use App\Models\Supplier\SupplierContract;
 use App\Models\Supplier\SupplierContractComponent;
 use Mediconesystems\LivewireDatatables\Column;
-use Mediconesystems\LivewireDatatables\DateColumn;
+use Mediconesystems\LivewireDatatables\DatetimeColumn;
 
 class FlightTable extends ComponentTable
 {
@@ -46,11 +46,11 @@ class FlightTable extends ComponentTable
                 ->label('Travel Class')
                 ->sortable()
                 ->searchable(),
-            DateColumn::name('flight_inventories.departs_at')
+            DatetimeColumn::name('flight_inventories.departs_at')
                 ->label('Departure')
                 ->sortable()
                 ->filterable(),
-            DateColumn::name('flight_inventories.arrives_at')
+            DatetimeColumn::name('flight_inventories.arrives_at')
                 ->label('Arrival')
                 ->sortable()
                 ->filterable(),

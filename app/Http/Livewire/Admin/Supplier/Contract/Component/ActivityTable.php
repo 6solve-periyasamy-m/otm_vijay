@@ -6,7 +6,7 @@ use App\Models\Activity\ActivityInventory;
 use App\Models\Supplier\SupplierContract;
 use App\Models\Supplier\SupplierContractComponent;
 use Mediconesystems\LivewireDatatables\Column;
-use Mediconesystems\LivewireDatatables\DateColumn;
+use Mediconesystems\LivewireDatatables\DatetimeColumn;
 
 class ActivityTable extends ComponentTable
 {
@@ -38,11 +38,11 @@ class ActivityTable extends ComponentTable
                 ->label('Ticket Type')
                 ->sortable()
                 ->searchable(),
-            DateColumn::name('activity_inventories.starts_at')
+            DatetimeColumn::name('activity_inventories.starts_at')
                 ->label('Starts At')
                 ->sortable()
                 ->filterable(),
-            DateColumn::name('activity_inventories.ends_at')
+            DatetimeColumn::name('activity_inventories.ends_at')
                 ->label('Ends At')
                 ->sortable()
                 ->filterable(),

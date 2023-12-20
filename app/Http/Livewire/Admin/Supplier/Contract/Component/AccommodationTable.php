@@ -6,7 +6,7 @@ use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Supplier\SupplierContract;
 use App\Models\Supplier\SupplierContractComponent;
 use Mediconesystems\LivewireDatatables\Column;
-use Mediconesystems\LivewireDatatables\DateColumn;
+use Mediconesystems\LivewireDatatables\DatetimeColumn;
 
 class AccommodationTable extends ComponentTable
 {
@@ -38,11 +38,11 @@ class AccommodationTable extends ComponentTable
                 ->label('Board Type')
                 ->sortable()
                 ->searchable(),
-            DateColumn::name('accommodation_inventories.check_in')
+            DatetimeColumn::name('accommodation_inventories.check_in')
                 ->label('Check In')
                 ->sortable()
                 ->filterable(),
-            DateColumn::name('accommodation_inventories.check_out')
+            DatetimeColumn::name('accommodation_inventories.check_out')
                 ->label('Check Out')
                 ->sortable()
                 ->filterable(),

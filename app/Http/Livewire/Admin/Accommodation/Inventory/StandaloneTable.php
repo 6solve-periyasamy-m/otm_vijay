@@ -6,7 +6,7 @@ use App\Http\Livewire\Abstract\StandaloneDatatable;
 use App\Models\Accommodation\AccommodationInventory;
 use Carbon\Carbon;
 use Mediconesystems\LivewireDatatables\Column;
-use Mediconesystems\LivewireDatatables\DateColumn;
+use Mediconesystems\LivewireDatatables\DatetimeColumn;
 use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class StandaloneTable extends StandaloneDatatable
@@ -41,11 +41,11 @@ class StandaloneTable extends StandaloneDatatable
                 ->label('Board Type')
                 ->sortable()
                 ->searchable(),
-            DateColumn::name('check_in')
+            DatetimeColumn::name('check_in')
                 ->label('Check In')
                 ->sortable()
                 ->filterable(),
-            DateColumn::name('check_out')
+            DatetimeColumn::name('check_out')
                 ->label('Check Out')
                 ->sortable()
                 ->filterable(),

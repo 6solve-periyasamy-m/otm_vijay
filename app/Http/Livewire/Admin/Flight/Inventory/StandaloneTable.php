@@ -6,7 +6,7 @@ use App\Http\Livewire\Abstract\StandaloneDatatable;
 use App\Models\Flight\FlightInventory;
 use Carbon\Carbon;
 use Mediconesystems\LivewireDatatables\Column;
-use Mediconesystems\LivewireDatatables\DateColumn;
+use Mediconesystems\LivewireDatatables\DatetimeColumn;
 use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class StandaloneTable extends StandaloneDatatable
@@ -49,11 +49,11 @@ class StandaloneTable extends StandaloneDatatable
                 ->label('Travel Class')
                 ->sortable()
                 ->searchable(),
-            DateColumn::name('departs_at')
+            DatetimeColumn::name('departs_at')
                 ->label('Departure')
                 ->sortable()
                 ->filterable(),
-            DateColumn::name('arrives_at')
+            DatetimeColumn::name('arrives_at')
                 ->label('Arrival')
                 ->sortable()
                 ->filterable(),
