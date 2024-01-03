@@ -58,4 +58,9 @@ class LocationTypeRepository extends AttributeRepository
     {
         return $this->model->addresses()->count();
     }
+
+    public static function find($id): LocationType|null
+    {
+        return LocationType::find($id);
+    }
 }

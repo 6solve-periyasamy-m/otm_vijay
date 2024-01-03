@@ -14,7 +14,7 @@ class VoucherCodeRepository extends ModelRepository implements HasStockControl
 {
     public function __construct(private VoucherCode $voucher) { }
 
-    public static function find(string $code): VoucherCode|null
+    public static function findCode(string $code): VoucherCode|null
     {
         return VoucherCode::where('code', '=', Str::upper($code))->first();
     }
@@ -112,5 +112,10 @@ class VoucherCodeRepository extends ModelRepository implements HasStockControl
     public function hasEnoughStock(int $amount = 1): bool
     {
         return $this->getAvailableStock() > $amount;
+    }
+
+    public static function find($id): VoucherCode|null
+    {
+        return VoucherCode::find($id);
     }
 }

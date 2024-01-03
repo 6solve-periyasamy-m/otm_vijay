@@ -5,6 +5,7 @@ namespace App\Repository\Model\Customer;
 use App\Models\Customer\TShirtSize;
 use App\Repository\Abstracts\AttributeRepository;
 use App\Repository\Authentication\PermissionsRepository;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**
@@ -57,5 +58,10 @@ class TShirtSizeRepository extends AttributeRepository
     public function getRelatedCount(): int
     {
         return $this->model->customers()->count();
+    }
+
+    public static function find($id): Model|null
+    {
+        return TShirtSize::find($id);
     }
 }

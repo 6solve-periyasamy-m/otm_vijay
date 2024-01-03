@@ -158,4 +158,9 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
     {
         return true;
     }
+
+    public static function find($id): AccommodationInventory|null
+    {
+        return AccommodationInventory::find($id);
+    }
 }

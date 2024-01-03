@@ -3,6 +3,7 @@
 namespace App\Models\Flight;
 
 use App\Models\Order\Component\OrderFlight;
+use App\Models\Supplier\SupplierContractComponent;
 use App\Models\TravelClass;
 use App\Repository\Model\Flight\FlightInventoryRepository;
 use Database\Factories\Flight\FlightInventoryFactory;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -39,10 +41,12 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read int $contracted Amount of contracted stock
  * @property-read Airport|null $arrivalAirport
  * @property-read Flight $component
  * @property-read Airport|null $departureAirport
  * @property-read Flight $flight
+ * @property-read Collection|SupplierContractComponent[] $contractComponents
  * @property-read Collection|FlightInventoryTour[] $flightInventoryTour
  * @property-read Collection|OrderFlight[] $orders
  * @property-read int|null $flight_inventory_tour_count
@@ -125,6 +129,11 @@ class FlightInventory extends Model
         return $this->belongsTo(Flight::class, 'flight_id');
     }
 
+    public function contractComponents(): MorphMany
+    {
+        return $this->morphMany(SupplierContractComponent::class, 'component');
+    }
+
     public function travelClass(): BelongsTo
     {
         return $this->belongsTo(TravelClass::class, 'travel_class_id');
@@ -166,6 +175,11 @@ class FlightInventory extends Model
     public function getUsedOnTourCountAttribute(): int
     {
         return $this->tourComponents()->count();
+    }
+
+    public function getContractedAttribute(): int
+    {
+        return $this->contractComponents()->sum('quantity');
     }
 
     public function tourComponents(): HasMany

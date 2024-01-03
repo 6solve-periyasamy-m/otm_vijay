@@ -560,4 +560,9 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
     {
         return $this->tour->date_from->subDays(setting("components.lock", 30))->lte(now());
     }
+
+    public static function find($id): Tour|null
+    {
+        return Tour::find($id);
+    }
 }

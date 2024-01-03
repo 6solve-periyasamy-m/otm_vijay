@@ -4,7 +4,7 @@
             {{ Icon::eye() }}
         </a>
     @endisset
-    <button wire:click="$emit('openModal', '{{ $modal }}', {'{{$field}}': {{$id}}})" class="btn btn-outline-success btn-sm mb-1">
+    <button wire:click="$emit('openModal', '{{ $modal }}', {'{{$field}}': {{$id}}, {{$parent ?? ''}}})" class="btn btn-outline-success btn-sm mb-1">
         {{ Icon::edit() }}
     </button>
     <button wire:click="delete({{ $id }})" class="btn btn-outline-danger btn-sm mb-1">

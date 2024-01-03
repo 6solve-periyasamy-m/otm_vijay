@@ -5,6 +5,7 @@ namespace App\Repository\Model\System;
 use App\Models\Location\Address;
 use App\Models\System\Brand;
 use App\Repository\Abstracts\ModelRepository;
+use Illuminate\Database\Eloquent\Model;
 
 class BrandRepository extends ModelRepository
 {
@@ -80,5 +81,10 @@ class BrandRepository extends ModelRepository
     public function __toString(): string
     {
         return $this->brand->name;
+    }
+
+    public static function find($id): Model|null
+    {
+        return Brand::find($id);
     }
 }

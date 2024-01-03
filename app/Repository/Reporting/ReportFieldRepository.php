@@ -745,6 +745,10 @@ class ReportFieldRepository
                 'name' => 'Used Stock',
                 'method' => 'used_stock',
             ],
+            'contracted_stock' => [
+                'name' => 'Contracted Stock',
+                'method' => 'contracted',
+            ],
             'purchase_price' => [
                 'name' => 'Purchase Price',
                 'method' => 'purchase_price',

@@ -321,7 +321,7 @@ class BookingTravellerRepository extends ModelRepository
             'group_id' => $details['group_id'] ?? null,
         ]);
     }
-    
+
     public function cloneComponents(): BookingComponentStorage
     {
         $storage = new BookingComponentStorage();
@@ -484,5 +484,10 @@ class BookingTravellerRepository extends ModelRepository
             }
         }
         return $data;
+    }
+
+    public static function find($id): BookingTraveller|null
+    {
+        return BookingTraveller::find($id);
     }
 }

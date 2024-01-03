@@ -527,4 +527,9 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         }
         $this->booking->delete();
     }
+
+    public static function find($id): Booking|null
+    {
+        return Booking::find($id);
+    }
 }

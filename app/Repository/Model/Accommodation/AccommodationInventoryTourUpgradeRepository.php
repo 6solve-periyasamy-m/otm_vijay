@@ -48,4 +48,9 @@ class AccommodationInventoryTourUpgradeRepository extends ComponentUpgradeReposi
     {
         return "{$this->upgrade->description} - " . f_currency($this->upgrade->upgrade->tour_sales_price);
     }
+
+    public static function find($id): AccommodationInventoryTourUpgrade|null
+    {
+        return AccommodationInventoryTourUpgrade::find($id);
+    }
 }

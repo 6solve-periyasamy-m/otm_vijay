@@ -153,4 +153,9 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
     {
         return $this->inventory->orders()->with(ActivityManifestRepository::getRelations())->get();
     }
+
+    public static function find($id): ActivityInventory|null
+    {
+        return ActivityInventory::find($id);
+    }
 }

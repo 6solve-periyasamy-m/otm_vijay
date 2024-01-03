@@ -153,4 +153,9 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
     {
         return $this->inventory->orders()->with(TransportManifestRepository::getRelations())->get();
     }
+
+    public static function find($id): TransportInventory|null
+    {
+        return TransportInventory::find($id);
+    }
 }

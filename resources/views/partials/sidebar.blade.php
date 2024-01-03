@@ -1,6 +1,6 @@
 <div class="otm-sidebar d-block p-0 pt-3 col-12 col-md-3 col-xl-2 p-0">
     <div class="d-flex flex-column flex-shrink-0 h-100">
-        <div class="nav flex-column mb-auto">
+        <div class="nav flex-column mb-auto overflow-y-auto flex-nowrap">
             @foreach(\App\View\Components\Admin\SidebarLink::getSidebarLinks() as $sidebarLink)
                 {{ $sidebarLink->render() }}
             @endforeach

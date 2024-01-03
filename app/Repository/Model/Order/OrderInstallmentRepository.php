@@ -63,4 +63,9 @@ class OrderInstallmentRepository extends ModelRepository
     {
         return f_date($this->installment->due_on) . ' - ' . f_currency($this->installment->calculated_amount);
     }
+
+    public static function find($id): OrderInstallment|null
+    {
+        return OrderInstallment::find($id);
+    }
 }

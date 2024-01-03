@@ -3,6 +3,7 @@
 namespace App\Models\Activity;
 
 use App\Models\Order\Component\OrderActivity;
+use App\Models\Supplier\SupplierContractComponent;
 use App\Repository\Model\Activity\ActivityInventoryRepository;
 use Database\Factories\Activity\ActivityInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -36,12 +38,14 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read int $contracted Amount of contracted stock
  * @property-read Activity $activity
  * @property-read Activity $component
  * @property-read string $activity_for_tour
  * @property-read int $used_on_tour_count
  * @property-read int $used_stock How much stock is sold
  * @property-read TicketType $ticketType
+ * @property-read Collection|SupplierContractComponent[] $contractComponents
  * @property-read Collection|ActivityInventoryTour[] $tourComponents
  * @property-read Collection|OrderActivity[] $orders
  * @property-read int|null $tour_components_count
@@ -112,6 +116,11 @@ class ActivityInventory extends Model
         return $this->belongsTo(Activity::class, 'activity_id');
     }
 
+    public function contractComponents(): MorphMany
+    {
+        return $this->morphMany(SupplierContractComponent::class, 'component');
+    }
+
     public function orders(): HasManyThrough
     {
         return $this->hasManyThrough(OrderActivity::class, ActivityInventoryTour::class, 'activity_inventory_id', 'activity_inventory_tour_id');
@@ -128,6 +137,11 @@ class ActivityInventory extends Model
         $ends_at = $this->ends_at->format('d/m/Y H:i');
 
         return "{$this->activity->name}｜Activity Start: {$starts_at}｜Activity End: {$ends_at}｜Ticket Type: {$this->ticketType->name}";
+    }
+
+    public function getContractedAttribute(): int
+    {
+        return $this->contractComponents()->sum('quantity');
     }
 
     public function getUsedStockAttribute(): int

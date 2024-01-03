@@ -51,4 +51,9 @@ class MerchandiseTypeRepository extends AttributeRepository
     {
         return $this->model->merchandise()->count();
     }
+
+    public static function find($id): MerchandiseType|null
+    {
+        return MerchandiseType::find($id);
+    }
 }

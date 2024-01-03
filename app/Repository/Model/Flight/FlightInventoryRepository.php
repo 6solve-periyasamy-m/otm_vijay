@@ -153,4 +153,9 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
     {
         return true;
     }
+
+    public static function find($id): FlightInventory|null
+    {
+        return FlightInventory::find($id);
+    }
 }

@@ -12,4 +12,5 @@ enum AddressParent: string
     case BRAND = 'brand';
     case ORGANIZATION = 'organization';
     case OTHER = 'other';
+    case SUPPLIER = 'supplier';
 }

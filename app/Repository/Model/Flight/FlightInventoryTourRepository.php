@@ -282,4 +282,9 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
     {
         return $this->tourComponent->tour_component_type === 'Included' ? 0 : $this->tourComponent->tour_sales_price;
     }
+
+    public static function find($id): FlightInventoryTour|null
+    {
+        return FlightInventoryTour::find($id);
+    }
 }

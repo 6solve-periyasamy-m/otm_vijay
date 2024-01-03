@@ -14,10 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //foreach (AddressParent::ID_MAP as $key => $value) {
-        //    AddressParent::create(['id' => $key, 'name' => $value]);
-        //}
-
         $this->call(UserSeeder::class);
         $this->call(PaymentMethodsTableSeeder::class);
         $this->call(SettingsTableSeeder::class);
@@ -92,6 +88,9 @@ class DatabaseSeeder extends Seeder
             $this->call(QuoteMerchandisesTableSeeder::class);
             $this->call(QuotePricePointsTableSeeder::class);
             $this->call(QuoteTransportsTableSeeder::class);
+
+            $this->call(SuppliersTableSeeder::class);
+            $this->call(SupplierAssociatesTableSeeder::class);
         } else {
             Artisan::call('countries:update');
         }

@@ -223,4 +223,9 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
     {
         return $this->tourComponent->tour_component_type === 'Included' ? 0 : $this->tourComponent->tour_sales_price;
     }
+
+    public static function find($id): MerchandiseInventoryTour|null
+    {
+        return MerchandiseInventoryTour::find($id);
+    }
 }

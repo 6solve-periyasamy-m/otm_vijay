@@ -63,4 +63,9 @@ class RoomTypeRepository extends AttributeRepository
     {
         return $this->model->inventories()->count();
     }
+
+    public static function find($id): RoomType|null
+    {
+        return RoomType::find($id);
+    }
 }

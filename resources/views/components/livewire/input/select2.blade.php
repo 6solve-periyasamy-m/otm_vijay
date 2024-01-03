@@ -8,10 +8,20 @@
     if ($value !== null) {
         $updateRoute = route("api.{$route}.selected", ['id' => $value, ]);
     }
+
+    if (isset($createRoute)) {
+        $create = "window.location = '$createRoute';";
+    }
+    $create = $create ?? $attributes->get('create');
 @endphp
 <div wire:ignore class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}" style="padding-left: 5px">
     <label for="{{ $id }}">{{ $attributes->get('label') }} @if($attributes->has('required')) <x-admin.required /> @endif</label>
-    <select style="width: 100%" class="form-control" id="{{ $id }}"></select>
+    <div class="d-flex">
+        <select style="width: 100%" class="form-control" id="{{ $id }}"></select>
+        @if(isset($create))
+            <button class="btn btn-success d-inline ms-1" onclick="{{$create}}">+</button>
+        @endif
+    </div>
     <script type="text/javascript">
         $(function () {
             let selector = $('#{{ $id }}').select2({

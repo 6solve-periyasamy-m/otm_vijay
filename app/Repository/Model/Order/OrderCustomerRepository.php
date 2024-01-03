@@ -5,7 +5,6 @@ namespace App\Repository\Model\Order;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Order\Adjustment\OrderCustomerAdjustment;
-use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\InventoryTourRepository;
@@ -23,9 +22,9 @@ class OrderCustomerRepository extends ModelRepository
         $this->orderCustomer = $orderCustomer;
     }
 
-    public static function find(Order $order, Customer $customer): ?OrderCustomer
+    public static function find($id): OrderCustomer|null
     {
-        return OrderCustomer::where('order_id', $order->id)->where('customer_id', $customer->id)->first();
+        return OrderCustomer::find($id);
     }
 
     public function getAvailableToAdd(): array

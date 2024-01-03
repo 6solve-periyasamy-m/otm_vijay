@@ -134,4 +134,9 @@ class CustomerRepository extends ModelRepository
         $this->customer->homeAddress->repository->forget();
         $this->customer->billingAddress->repository->forget();
     }
+
+    public static function find($id): Customer|null
+    {
+        return Customer::find($id);
+    }
 }

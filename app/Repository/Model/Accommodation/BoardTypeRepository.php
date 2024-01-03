@@ -58,4 +58,9 @@ class BoardTypeRepository extends AttributeRepository
     {
         return $this->model->inventories()->count();
     }
+
+    public static function find($id): BoardType|null
+    {
+        return BoardType::find($id);
+    }
 }

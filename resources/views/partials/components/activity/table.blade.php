@@ -21,6 +21,7 @@
                 <th scope="col">End Time</th>
                 <th scope="col">FIT Selectable</th>
                 <th scope="col">Stock</th>
+                <th scope="col">Contracted Stock</th>
                 <th scope="col">Purchase Price</th>
                 <th scope="col">Sales Price</th>
                 <th scope="col">Internal Notes</th>
@@ -41,6 +42,7 @@
                         <br/>
                         ({{$inventory->used_stock}} Sold)
                     </td>
+                    <td>{{ $inventory->contracted }}</td>
                     <td>{{ f_currency($inventory->purchase_price) }}</td>
                     <td>{{ f_currency($inventory->sales_price) }}</td>
                     <td>{{ $inventory->internal_notes }}</td>

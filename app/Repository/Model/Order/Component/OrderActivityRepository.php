@@ -76,4 +76,9 @@ class OrderActivityRepository extends OrderComponentRepository
             'description' => "{$component->name} ({$component->address}) ({$inventory->ticketType})"],
             ];
     }
+
+    public static function find($id): OrderActivity|null
+    {
+        return OrderActivity::find($id);
+    }
 }

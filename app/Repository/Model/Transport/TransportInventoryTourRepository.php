@@ -270,4 +270,9 @@ class TransportInventoryTourRepository extends InventoryTourRepository
     {
         return $this->tourComponent->tour_component_type === 'Included' ? 0 : $this->tourComponent->tour_sales_price;
     }
+
+    public static function find($id): TransportInventoryTour|null
+    {
+        return TransportInventoryTour::find($id);
+    }
 }

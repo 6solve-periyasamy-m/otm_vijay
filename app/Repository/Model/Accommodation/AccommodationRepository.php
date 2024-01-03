@@ -64,4 +64,9 @@ class AccommodationRepository extends ModelRepository implements HasRoomingList
     {
         return "{$this->accommodation->name} ({$this->accommodation->address->region}, {$this->accommodation->address->country})";
     }
+
+    public static function find($id): Accommodation|null
+    {
+        return Accommodation::find($id);
+    }
 }
