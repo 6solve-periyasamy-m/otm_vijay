@@ -10,15 +10,9 @@ use Illuminate\Http\Request;
 
 class FlightInventoryController extends Controller
 {
-
-    public function index()
-    {
-        return view('pages.models.flight_inventories.table', ['flightInventories' => FlightInventory::all(),]);
-    }
-
     public function create(Flight $flight)
     {
-        return view('pages.models.flight_inventories.create', ['flight' => $flight,]);
+        return view('pages.admin.flight.inventory.form', ['flight' => $flight,]);
     }
 
     public function store(Request $request, Flight $flight)
@@ -41,11 +35,6 @@ class FlightInventoryController extends Controller
         return redirect()->route('flights.view', ['flight' => $flight, 'flightInventory' => $flightInventory,]);
     }
 
-    public function view(Flight $flight, FlightInventory $flightInventory)
-    {
-        return view('pages.models.flight_inventories.view', ['flight' => $flight, 'flightInventory' => $flightInventory,]);
-    }
-
     public function manifest(Flight $flight, FlightInventory $flightInventory)
     {
         return FlightManifestRepository::viewReport($flightInventory->repository, 'flight-inventories.manifest.export', ['flight' => $flight, 'flightInventory' => $flightInventory]);
@@ -58,7 +47,7 @@ class FlightInventoryController extends Controller
 
     public function edit(Flight $flight, FlightInventory $flightInventory)
     {
-        return view('pages.models.flight_inventories.update', ['flight' => $flight, 'flightInventory' => $flightInventory,]);
+        return view('pages.admin.flight.inventory.form', ['flight' => $flight, 'inventory' => $flightInventory,]);
     }
 
     public function update(Request $request, Flight $flight, FlightInventory $flightInventory)
