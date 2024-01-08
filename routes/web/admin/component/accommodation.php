@@ -21,7 +21,7 @@ Route::prefix('{accommodation}')->group(function () {
     Route::prefix('inventory')->group(function () {
         Route::get('/create', [AccommodationInventoryController::class, 'create'])->name('accommodation-inventories.create')->middleware('bouncer:Accommodation\AccommodationInventory,create');
         Route::post('/create', [AccommodationInventoryController::class, 'store'])->name('accommodation-inventories.store')->middleware('bouncer:Accommodation\AccommodationInventory,create');
-        Route::prefix('{accommodationInventory}')->group(function () {
+        Route::prefix('{inventory}')->group(function () {
             Route::get('/update', [AccommodationInventoryController::class, 'edit'])->name('accommodation-inventories.edit')->middleware('bouncer:Accommodation\AccommodationInventory,update');
             Route::post('/update', [AccommodationInventoryController::class, 'update'])->name('accommodation-inventories.update')->middleware('bouncer:Accommodation\AccommodationInventory,update');
             Route::post('/delete', [AccommodationInventoryController::class, 'destroy'])->name('accommodation-inventories.delete')->middleware('bouncer:Accommodation\AccommodationInventory,delete');
