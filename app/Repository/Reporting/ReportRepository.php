@@ -2,7 +2,6 @@
 
 namespace App\Repository\Reporting;
 
-use App\Helpers\QuarterHelper;
 use App\Helpers\RevenueHelper;
 use App\Models\Booking\Booking;
 use App\Models\Location\Address;
@@ -371,11 +370,6 @@ class ReportRepository
         return $data;
     }
 
-    public static function getOrdersPlacedInQuarterReport(int $year, int $quarter): Collection
-    {
-        return self::generateAtolReport(QuarterHelper::getOrdersPlacedInQuarter($year, $quarter));
-    }
-
     public static function generateAtolReport(Collection $orders): Collection
     {
         $passengers = 0;
@@ -402,16 +396,6 @@ class ReportRepository
         $collection->remaining = $remaining;
         $collection->orders = $orderList;
         return $collection;
-    }
-
-    public static function getOrdersDepartingInQuarterReport(int $year, int $quarter): Collection
-    {
-        return self::generateAtolReport(QuarterHelper::getOrdersFromToursInQuarter($year, $quarter));
-    }
-
-    public static function getOrdersDepartingAfterQuarterReport(int $year, int $quarter): Collection
-    {
-        return self::generateAtolReport(QuarterHelper::getOrdersFromToursAfterQuarter($year, $quarter));
     }
 
     public static function getInstallmentRevenueReport(): array
