@@ -9,15 +9,9 @@ use Illuminate\Http\Request;
 
 class TransportInventoryTourController extends Controller
 {
-
-    public function index(Tour $tour)
-    {
-        return view('pages.models.transport_inventory_tours.table', ['tour' => $tour, 'transportInventoryTours' => TransportInventoryTour::all(),]);
-    }
-
     public function create(Tour $tour)
     {
-        return view('pages.models.transport_inventory_tours.create', ['tour' => $tour,]);
+        return view('pages.admin.transport.inventory.tour.form', ['tour' => $tour,]);
     }
 
     public function store(Request $request, Tour $tour)
@@ -33,14 +27,9 @@ class TransportInventoryTourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
-    public function view(Tour $tour, TransportInventoryTour $transportInventoryTour)
-    {
-        return view('pages.models.transport_inventory_tours.view', ['tour' => $tour, 'transportInventoryTour' => $transportInventoryTour,]);
-    }
-
     public function edit(Tour $tour, TransportInventoryTour $transportInventoryTour)
     {
-        return view('pages.models.transport_inventory_tours.update', ['tour' => $tour, 'transportInventoryTour' => $transportInventoryTour,]);
+        return view('pages.admin.transport.inventory.tour.form', ['tour' => $tour, 'inventoryTour' => $transportInventoryTour,]);
     }
 
     public function update(Request $request, Tour $tour, TransportInventoryTour $transportInventoryTour)
