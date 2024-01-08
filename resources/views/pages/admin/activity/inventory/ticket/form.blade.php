@@ -3,7 +3,7 @@
      * @var \App\Models\Activity\TicketType|null $ticketType
      */
     $ticketType = $ticketType ?? null;
-    $title = __('accommodation.inventory.board-type.form.title.' . ($ticketType === null ? 'create' : 'update'));
+    $title = __('activity.inventory.ticket-type.form.title.' . ($ticketType === null ? 'create' : 'update'));
     $route = $ticketType === null ?
         route('ticket-types.store') :
         route('ticket-types.update', ['ticketType' => $ticketType,]);

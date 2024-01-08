@@ -3,7 +3,7 @@
      * @var \App\Models\Activity\ActivityType|null $activityType
      */
     $activityType = $activityType ?? null;
-    $title = __('accommodation.inventory.board-type.form.title.' . ($activityType === null ? 'create' : 'update'));
+    $title = __('activity.activity-type.form.title.' . ($activityType === null ? 'create' : 'update'));
     $route = $activityType === null ?
         route('activity-types.store') :
         route('activity-types.update', ['activityType' => $activityType,]);

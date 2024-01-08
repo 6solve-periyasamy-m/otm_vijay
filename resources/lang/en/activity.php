@@ -10,6 +10,14 @@ return [
 
         ],
     ],
+    'activity-type' => [
+        'form' => [
+            'title' => [
+                'create' => 'Create Activity Type',
+                'update' => 'Update Activity Type'
+            ],
+        ],
+    ],
     'inventory' => [
         'form' => [
             'title' => [
@@ -18,6 +26,14 @@ return [
             ],
             'fields' => [
 
+            ],
+        ],
+        'ticket-type' => [
+            'form' => [
+                'title' => [
+                    'create' => 'Create Ticket Type',
+                    'update' => 'Update Ticket Type'
+                ],
             ],
         ],
         'tour' => [
