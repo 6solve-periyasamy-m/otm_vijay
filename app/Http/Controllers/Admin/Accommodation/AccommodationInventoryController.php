@@ -10,12 +10,6 @@ use Illuminate\Http\Request;
 
 class AccommodationInventoryController extends Controller
 {
-
-    public function index()
-    {
-        return view('pages.models.accommodation_inventories.table', ['accommodationInventories' => AccommodationInventory::all(),]);
-    }
-
     public function create(Accommodation $accommodation)
     {
         return view('pages.models.accommodation_inventories.create', ['accommodation' => $accommodation,]);
@@ -40,11 +34,6 @@ class AccommodationInventoryController extends Controller
         ]);
         $accommodation->inventory()->save($accommodationInventory);
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
-    }
-
-    public function view(Accommodation $accommodation, AccommodationInventory $accommodationInventory)
-    {
-        return view('pages.models.accommodation_inventories.view', ['accommodationInventory' => $accommodationInventory,]);
     }
 
     public function rooming(Request $request, Accommodation $accommodation, AccommodationInventory $accommodationInventory)
