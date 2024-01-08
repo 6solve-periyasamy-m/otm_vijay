@@ -22,5 +22,4 @@
     @include('partials.fields.text', ['name' => 'Tour Sales Price', 'field' => 'tour_sales_price', 'value' => $inventoryTour?->tour_sales_price ?? null, 'width' => 4])
     @include('partials.fields.checkbox', ['name' => 'Stock Control Active', 'field' => 'stock_control_active', 'divClasses' => 'my-auto', 'value' => $inventoryTour?->stock_control_active ?? false, 'width' => 4])
     @include('partials.fields.submit')
-
 @endsection
