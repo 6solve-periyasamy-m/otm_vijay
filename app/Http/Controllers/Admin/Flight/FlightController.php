@@ -13,12 +13,12 @@ class FlightController extends Controller
 
     public function index()
     {
-        return view('pages.models.flights.table', ['flights' => Flight::all(),]);
+        return view('pages.admin.flight.table', ['flights' => Flight::all(),]);
     }
 
     public function create()
     {
-        return view('pages.models.flights.create');
+        return view('pages.admin.flight.form');
     }
 
     public function store(Request $request)
@@ -57,7 +57,7 @@ class FlightController extends Controller
 
     public function edit(Flight $flight)
     {
-        return view('pages.models.flights.update', ['flight' => $flight,]);
+        return view('pages.admin.flight.form', ['flight' => $flight,]);
     }
 
     public function update(Request $request, Flight $flight)
