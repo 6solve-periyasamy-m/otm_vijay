@@ -62,6 +62,7 @@ class SettingsController extends Controller
             'atol.number' => $request->input('atol_number'),
             'atol.filter' => $request->input('atol_filter'),
             'atol.enabled' => $request->input('atol_enabled') == 'on' ? 1 : 0,
+            'atol.year.start' => $request->input('atol_start'),
             'system.mail.enabled' => $request->input('mail_enabled') == 'on' ? 1 : 0,
             'billing.stripe.key' => $request->input('stripe_key'),
             'system.format.date' => $request->input('date_format'),
