@@ -30,16 +30,16 @@ class AtolController extends Controller
     private function getDepartingOrders(int $year, int $quarter): Collection|RedirectResponse
     {
         $orders = $this->getQuarter($year, $quarter)?->getPlacedOrders();
-        if ($orders === null) { return back()->withErrors(['msg' => "Cannot calculate orders for Quarter $quarter $year"]); }
-        if ($orders->count() === 0) { return back()->withErrors(['msg' => "No orders are departing in Quarter $quarter $year"]); }
+        if ($orders === null) { return back()->withErrors(['msg' => "Cannot calculate orders for Quarter $quarter, $year"]); }
+        if ($orders->count() === 0) { return back()->withErrors(['msg' => "No orders are departing in Quarter $quarter, $year"]); }
         return $orders;
     }
 
     private function getDepartingAfterOrders(int $year, int $quarter): Collection|RedirectResponse
     {
         $orders = $this->getQuarter($year, $quarter)?->getPlacedOrders();
-        if ($orders === null) { return back()->withErrors(['msg' => "Cannot calculate orders for Quarter $quarter $year"]); }
-        if ($orders->count() === 0) { return back()->withErrors(['msg' => "No orders are departing after Quarter $quarter $year"]); }
+        if ($orders === null) { return back()->withErrors(['msg' => "Cannot calculate orders for Quarter $quarter, $year"]); }
+        if ($orders->count() === 0) { return back()->withErrors(['msg' => "No orders are departing after Quarter $quarter, $year"]); }
         return $orders;
     }
 
