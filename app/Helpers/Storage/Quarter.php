@@ -37,7 +37,7 @@ class Quarter
      */
     public function getDepartingOrders(): Collection
     {
-        return Order::with('tour', function ($query) {
+        return Order::whereHas('tour', function ($query) {
             /** @var Builder $query */
             return $query->whereBetween('date_from', [$this->start, $this->end]);
         })->get();
@@ -45,7 +45,7 @@ class Quarter
 
     public function getDepartingAfterOrders(): Collection
     {
-        return Order::with('tour', function ($query) {
+        return Order::whereHas('tour', function ($query) {
             /** @var Builder $query */
             return $query->whereDate('date_from', '>', $this->end);
         })->get();
