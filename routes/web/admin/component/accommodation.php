@@ -33,22 +33,18 @@ Route::prefix('{accommodation}')->group(function () {
     });
 });
 Route::prefix('room-types')->group(function () {
-    Route::get('/', [RoomTypeController::class, 'index'])->name('room-types.all')->middleware('bouncer:Accommodation\RoomType,read');
     Route::get('/create', [RoomTypeController::class, 'create'])->name('room-types.create')->middleware('bouncer:Accommodation\RoomType,create');
     Route::post('/create', [RoomTypeController::class, 'store'])->name('room-types.store')->middleware('bouncer:Accommodation\RoomType,create');
     Route::prefix('{roomType}')->group(function () {
-        Route::get('/', [RoomTypeController::class, 'view'])->name('room-types.view')->middleware('bouncer:Accommodation\RoomType,read');
         Route::get('/update', [RoomTypeController::class, 'edit'])->name('room-types.edit')->middleware('bouncer:Accommodation\RoomType,update');
         Route::post('/update', [RoomTypeController::class, 'update'])->name('room-types.update')->middleware('bouncer:Accommodation\RoomType,update');
         Route::post('/delete', [RoomTypeController::class, 'destroy'])->name('room-types.delete')->middleware('bouncer:Accommodation\RoomType,delete');
     });
 });
 Route::prefix('board-types')->group(function () {
-    Route::get('/', [BoardTypeController::class, 'index'])->name('board-types.all')->middleware('bouncer:Accommodation\BoardType,read');
     Route::get('/create', [BoardTypeController::class, 'create'])->name('board-types.create')->middleware('bouncer:Accommodation\BoardType,create');
     Route::post('/create', [BoardTypeController::class, 'store'])->name('board-types.store')->middleware('bouncer:Accommodation\BoardType,create');
     Route::prefix('{boardType}')->group(function () {
-        Route::get('/', [BoardTypeController::class, 'view'])->name('board-types.view')->middleware('bouncer:Accommodation\BoardType,read');
         Route::get('/update', [BoardTypeController::class, 'edit'])->name('board-types.edit')->middleware('bouncer:Accommodation\BoardType,update');
         Route::post('/update', [BoardTypeController::class, 'update'])->name('board-types.update')->middleware('bouncer:Accommodation\BoardType,update');
         Route::post('/delete', [BoardTypeController::class, 'destroy'])->name('board-types.delete')->middleware('bouncer:Accommodation\BoardType,delete');

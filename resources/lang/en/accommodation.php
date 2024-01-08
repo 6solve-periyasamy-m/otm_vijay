@@ -20,6 +20,22 @@ return [
 
             ],
         ],
+        'room-type' => [
+            'form' => [
+                'title' => [
+                    'create' => 'Create Room Type',
+                    'update' => 'Update Room Type'
+                ],
+            ],
+        ],
+        'board-type' => [
+            'form' => [
+                'title' => [
+                    'create' => 'Create Board Type',
+                    'update' => 'Update Board Type'
+                ],
+            ],
+        ],
         'tour' => [
             'form' => [
                 'title' => [
