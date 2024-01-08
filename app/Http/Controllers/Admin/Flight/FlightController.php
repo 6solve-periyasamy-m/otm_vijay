@@ -42,7 +42,7 @@ class FlightController extends Controller
 
     public function view(Flight $flight)
     {
-        return view('pages.components.flight', ['flight' => $flight,]);
+        return view('pages.admin.flight.view', ['flight' => $flight,]);
     }
 
     public function manifest(Flight $flight)

@@ -52,7 +52,7 @@ class AccommodationController extends Controller
 
     public function view(Accommodation $accommodation)
     {
-        return view('pages.components.accommodation', ['accommodation' => $accommodation,]);
+        return view('pages.admin.accommodation.view', ['accommodation' => $accommodation,]);
     }
 
     public function rooming(Request $request, Accommodation $accommodation)

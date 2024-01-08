@@ -51,7 +51,7 @@ class ActivityController extends Controller
 
     public function view(Activity $activity)
     {
-        return view('pages.components.activity', ['activity' => $activity,]);
+        return view('pages.admin.activity.view', ['activity' => $activity,]);
     }
 
     public function manifest(Activity $activity)
