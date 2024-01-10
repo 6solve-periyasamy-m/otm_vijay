@@ -30,7 +30,7 @@
 </script>
 @endsection
 @section('content')
-@include('pages.orders.popup')
+@include('partials.admin.order.popup')
 {{-- Header Details --}}
 <div class="otm-callout" id="header-details">
     <div class="row">
