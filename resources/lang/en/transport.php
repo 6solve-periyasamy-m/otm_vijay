@@ -10,6 +10,28 @@ return [
 
         ],
     ],
+    'operator' => [
+        'form' => [
+            'title' => [
+                'create' => 'Create Transport',
+                'update' => 'Update Transport'
+            ],
+            'fields' => [
+
+            ],
+        ],
+    ],
+    'transport-type' => [
+        'form' => [
+            'title' => [
+                'create' => 'Create Transport',
+                'update' => 'Update Transport'
+            ],
+            'fields' => [
+
+            ],
+        ],
+    ],
     'inventory' => [
         'form' => [
             'title' => [
