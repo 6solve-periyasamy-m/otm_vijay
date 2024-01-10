@@ -11,14 +11,14 @@
                     url: '{{ route("api.order.unknown-traveller") }}',
                     type: 'post', data: {__api_token: '{{ Auth::user()->getCurrentToken()->token }}', 'count': count,}
                 })
-                .then(data => {
-                    resolve(data.data.map(customer => new Customer(customer.id, customer.text)));
-                })
-                .catch(data => {
-                    console.error(data);
-                    alert('An error occurred. Please check the console for more information.')
-                    resolve([]);
-                });
+                    .then(data => {
+                        resolve(data.data.map(customer => new Customer(customer.id, customer.text)));
+                    })
+                    .catch(data => {
+                        console.error(data);
+                        alert('An error occurred. Please check the console for more information.')
+                        resolve([]);
+                    });
             });
         }
         function addCustomer(customer = null) {
