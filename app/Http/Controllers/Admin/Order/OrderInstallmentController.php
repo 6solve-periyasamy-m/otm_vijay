@@ -11,7 +11,7 @@ class OrderInstallmentController extends Controller
 {
     public function create(Order $order)
     {
-        return view('pages.models.order_installments.create', ['order' => $order,]);
+        return view('pages.admin.order.installment.form', ['order' => $order,]);
     }
 
     public function store(Request $request, Order $order)
@@ -27,7 +27,7 @@ class OrderInstallmentController extends Controller
 
     public function edit(Order $order, OrderInstallment $orderInstallment)
     {
-        return view('pages.models.order_installments.update', ['order' => $order, 'orderInstallment' => $orderInstallment,]);
+        return view('pages.admin.order.installment.form', ['order' => $order, 'orderInstallment' => $orderInstallment,]);
     }
 
     public function update(Request $request, Order $order, OrderInstallment $orderInstallment)
