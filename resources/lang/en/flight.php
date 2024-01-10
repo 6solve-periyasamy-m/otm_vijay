@@ -10,6 +10,22 @@ return [
 
         ],
     ],
+    'airport' => [
+        'form' => [
+            'title' => [
+                'create' => 'Create Airport',
+                'update' => 'Update Airport'
+            ],
+        ],
+    ],
+    'airline' => [
+        'form' => [
+            'title' => [
+                'create' => 'Create Airline',
+                'update' => 'Update Airline'
+            ],
+        ],
+    ],
     'inventory' => [
         'form' => [
             'title' => [

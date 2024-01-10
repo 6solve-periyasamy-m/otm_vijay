@@ -11,15 +11,9 @@ use Illuminate\Http\Request;
 
 class AirportController extends Controller
 {
-
-    public function index()
-    {
-        return view('pages.models.airports.table', ['airports' => Airport::all(),]);
-    }
-
     public function create()
     {
-        return view('pages.models.airports.create');
+        return view('pages.admin.flight.airport.form');
     }
 
     public function store(Request $request)
@@ -41,14 +35,9 @@ class AirportController extends Controller
         return view('pages.close');
     }
 
-    public function view(Airport $airport)
-    {
-        return view('pages.models.airports.view', ['airport' => $airport,]);
-    }
-
     public function edit(Airport $airport)
     {
-        return view('pages.models.airports.update', ['airport' => $airport,]);
+        return view('pages.admin.flight.airport.form', ['airport' => $airport,]);
     }
 
     public function update(Request $request, Airport $airport)
