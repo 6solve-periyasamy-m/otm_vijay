@@ -12,15 +12,9 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-
-    public function index(Order $order)
-    {
-        return view('pages.models.payments.table', ['order' => $order, 'payments' => Payment::all(),]);
-    }
-
     public function create(Order $order)
     {
-        return view('pages.models.payments.create', ['order' => $order,]);
+        return view('pages.admin.order.payment.form', ['order' => $order,]);
     }
 
     public function store(Request $request, Order $order)
@@ -38,14 +32,9 @@ class PaymentController extends Controller
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
-    public function view(Order $order, Payment $payment)
-    {
-        return view('pages.models.payments.view', ['order' => $order, 'payment' => $payment,]);
-    }
-
     public function edit(Order $order, Payment $payment)
     {
-        return view('pages.models.payments.update', ['order' => $order, 'payment' => $payment,]);
+        return view('pages.admin.order.payment.form', ['order' => $order, 'payment' => $payment,]);
     }
 
     public function update(Request $request, Order $order, Payment $payment)

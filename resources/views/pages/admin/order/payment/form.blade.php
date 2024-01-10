@@ -1,7 +1,7 @@
 @php
     /**
      * @var \App\Models\Order\Order $order
-     * @var \App\Models\Order\Payment\|null $payment
+     * @var \App\Models\Order\Payment\Payment|null $payment
      */
     $payment = $payment ?? null;
     $title = __('order.payment.form.title.' . ($payment === null ? 'create' : 'update'));
