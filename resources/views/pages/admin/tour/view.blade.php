@@ -16,7 +16,7 @@
 @section('title', 'View Tour')
 
 @section('content')
-    @include('pages.tour.popup')
+    @include('partials.admin.tour.popup')
     <div class="otm-callout">
         <div class="row">
             <div class="col-12">
