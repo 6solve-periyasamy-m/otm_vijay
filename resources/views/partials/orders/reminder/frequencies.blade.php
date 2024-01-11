@@ -1,5 +1,5 @@
-<div class="card">
-    <div class="card-body row">
+<x-admin.section.card>
+    <div class="row">
         <div class="form-group col-12 col-xl-2">
             <a class="form-control mx-auto btn btn-block btn-primary text-white" href="{{ route($route, ['max' => 30, 'min' => 7]) }}">30 Days</a>
         </div>
@@ -19,9 +19,9 @@
             <a class="form-control mx-auto btn btn-block btn-primary text-white" href="{{ route($route, ['max' => -14, 'min' => -1000]) }}">14 Days Overdue</a>
         </div>
     </div>
-</div>
-<div class="card">
-    <div class="card-body row">
+</x-admin.section.card>
+<x-admin.section.card>
+    <div class="row">
         @include('partials.fields.text', ['name' => 'Maximum Days', 'field' => 'max', 'value' => $max, 'width' => 5])
         @include('partials.fields.text', ['name' => 'Minimum Days', 'field' => 'min', 'value' => $min, 'width' => 5])
         <div class="form-group col-12 col-xl-2">
@@ -29,7 +29,7 @@
             <a class="form-control mx-auto btn btn-block btn-primary" onclick="event.preventDefault();showNewRange()">Show Range</a>
         </div>
     </div>
-</div>
+</x-admin.section.card>
 @push('footer-stack')
     <script type="text/javascript">
         function showNewRange() {

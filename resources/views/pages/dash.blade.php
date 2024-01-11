@@ -84,51 +84,45 @@
 @section('content')
     <div class="row">
         <div class="col-xl-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">Expected Revenue</h4>
-                    </div>
-                    <x-loading-spinner></x-loading-spinner>
-                    <div class="revenue-container" style="display: none;">
-                        <table class="revenue-table table table-striped">
-                            <thead>
-                            <tr>
-                                <td style="width: 30%">Dates</td>
-                                <td>Expected Total Revenue</td>
-                                <td>Received Revenue</td>
-                                <td>Remaining Revenue</td>
-                                <td>Percentage Paid</td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
+            <x-admin.section.card>
+                <div class="card-title">
+                    <h4 class="fw-bold">Expected Revenue</h4>
                 </div>
-            </div>
+                <x-loading-spinner></x-loading-spinner>
+                <div class="revenue-container" style="display: none;">
+                    <table class="revenue-table table table-striped">
+                        <thead>
+                        <tr>
+                            <td style="width: 30%">Dates</td>
+                            <td>Expected Total Revenue</td>
+                            <td>Received Revenue</td>
+                            <td>Remaining Revenue</td>
+                            <td>Percentage Paid</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </x-admin.section.card>
         </div>
 
         <div class="col-xl-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">Revenue over 7 days</h4>
-                    </div>
-                    {{ \App\Repository\ChartRepository::getRevenueChart(now()->subDays(7)) }}
+            <x-admin.section.card>
+                <div class="card-title">
+                    <h4 class="fw-bold">Revenue over 7 days</h4>
                 </div>
-            </div>
+                {{ \App\Repository\ChartRepository::getRevenueChart(now()->subDays(7)) }}
+            </x-admin.section.card>
         </div>
 
         <div class="col-xl-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">Abandoned Bookings</h4>
-                    </div>
-                    @include('partials.reports.tables.abandoned-bookings', ['data' => \App\Repository\Reporting\ReportRepository::getAbandonedBookingsReport(7)])
+            <x-admin.section.card>
+                <div class="card-title">
+                    <h4 class="fw-bold">Abandoned Bookings</h4>
                 </div>
-            </div>
+                @include('partials.reports.tables.abandoned-bookings', ['data' => \App\Repository\Reporting\ReportRepository::getAbandonedBookingsReport(7)])
+            </x-admin.section.card>
         </div>
     </div>
 @endsection

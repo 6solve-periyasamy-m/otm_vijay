@@ -10,24 +10,22 @@
 @endpush
 
 @section('content')
-    <div class="card">
-        <div class="card-body col-12">
-            <div class="date-switcher">
-                <button class="btn border-dark bg-white" onclick="changeDay(-1)">&lt;</button>
-                <button class="btn border-dark bg-white active-date">Waiting for Data</button>
-                <button class="btn border-dark bg-white" onclick="changeDay(1)">&gt;</button>
-            </div>
-            <div class="customers section-box drop-shadow col-12 droppable"></div>
-            <div class="col-12" style="margin: 10px;">
-                <select class="room-types"></select>
-                <a href="#" class="btn btn-danger round" onclick="reset()">Reset</a>
-                <a href="#" class="btn btn-warning round" onclick="addGroup()">Add Room</a>
-                <a href="#" class="btn btn-success round" onclick="submit()">Save</a>
-                <a href="{{ route('orders.view', ['order' => $order,]) }}" class="btn btn-info round">Return to Order</a>
-            </div>
-            <div class="manager section-box drop-shadow"></div>
+    <x-admin.section.card>
+        <div class="date-switcher">
+            <button class="btn border-dark bg-white" onclick="changeDay(-1)">&lt;</button>
+            <button class="btn border-dark bg-white active-date">Waiting for Data</button>
+            <button class="btn border-dark bg-white" onclick="changeDay(1)">&gt;</button>
         </div>
-    </div>
+        <div class="customers section-box drop-shadow col-12 droppable"></div>
+        <div class="col-12" style="margin: 10px;">
+            <select class="room-types"></select>
+            <a href="#" class="btn btn-danger round" onclick="reset()">Reset</a>
+            <a href="#" class="btn btn-warning round" onclick="addGroup()">Add Room</a>
+            <a href="#" class="btn btn-success round" onclick="submit()">Save</a>
+            <a href="{{ route('orders.view', ['order' => $order,]) }}" class="btn btn-info round">Return to Order</a>
+        </div>
+        <div class="manager section-box drop-shadow"></div>
+    </x-admin.section.card>
 @endsection
 
 {{-- Templates --}}

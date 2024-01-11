@@ -3,35 +3,33 @@
 @section('title', 'All Addresses')
 
 @section('content')
-    <div class="card">
-        <div class="card-body">
-            <table style="width: 100%;" class="datatable table table-striped">
-                <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Location Type</th>
-                    <th scope="col">Parent</th>
-                    <th scope="col">Address Line 1</th>
-                    <th scope="col">Address Line 2</th>
-                    <th scope="col">Town</th>
-                    <th scope="col">Region</th>
-                    <th scope="col">Country</th>
-                    <th scope="col">Postcode</th>
-                    <th scope="col">Actions</th>
-                </tr>
-                </thead>
-                @foreach($addresses as $address)
-                    @include('partials.models.addresses.row', [
-                      'address' => $address,
-                      'address_line_1' => $address->address_line_1,
-                      'address_line_2' => $address->address_line_2,
-                      'town' => $address->town,
-                      'region' => $address->region,
-                      'country' => $address->country,
-                      'postcode' => $address->postcode,
-                    ])
-                @endforeach
-            </table>
-        </div>
-    </div>
+    <x-admin.section.card>
+        <table style="width: 100%;" class="datatable table table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Location Type</th>
+                <th scope="col">Parent</th>
+                <th scope="col">Address Line 1</th>
+                <th scope="col">Address Line 2</th>
+                <th scope="col">Town</th>
+                <th scope="col">Region</th>
+                <th scope="col">Country</th>
+                <th scope="col">Postcode</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            @foreach($addresses as $address)
+                @include('partials.models.addresses.row', [
+                  'address' => $address,
+                  'address_line_1' => $address->address_line_1,
+                  'address_line_2' => $address->address_line_2,
+                  'town' => $address->town,
+                  'region' => $address->region,
+                  'country' => $address->country,
+                  'postcode' => $address->postcode,
+                ])
+            @endforeach
+        </table>
+    </x-admin.section.card>
 @endsection

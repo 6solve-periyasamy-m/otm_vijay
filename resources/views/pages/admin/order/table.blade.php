@@ -58,50 +58,46 @@
 @endsection
 
 @section('content')
-    <div class="card">
-        <div class="card-body">
-            <a class="btn btn-success float-end" href="{{ route('orders.create') }}">
-                {{ Icon::create() }}
-                <span>Create New</span>
-            </a>
-            <a class="btn btn-primary float-end" style="margin-right: 5px;" href="{{ route('orders.all', ['historic' => !($historic ?? true),]) }}">
-                <i class="icon-eye"></i>
-                <span>{{ !($historic ?? true) ? "Show" : "Hide" }} Historic (Older than {{ setting('system.historic', 6) }} month(s))</span>
-            </a>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body">
-            <table class="table table-striped" id="orders" style="width: 100%;">
-                <thead class="thead-dark">
+    <x-admin.section.card>
+        <a class="btn btn-success float-end" href="{{ route('orders.create') }}">
+            {{ Icon::create() }}
+            <span>Create New</span>
+        </a>
+        <a class="btn btn-primary float-end" style="margin-right: 5px;" href="{{ route('orders.all', ['historic' => !($historic ?? true),]) }}">
+            <i class="icon-eye"></i>
+            <span>{{ !($historic ?? true) ? "Show" : "Hide" }} Historic (Older than {{ setting('system.historic', 6) }} month(s))</span>
+        </a>
+    </x-admin.section.card>
+    <x-admin.section.card>
+        <table class="table table-striped" id="orders" style="width: 100%;">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Customers</th>
+                <th scope="col">Order Date</th>
+                <th scope="col">Lead Booker</th>
+                <th scope="col">Booking Reference</th>
+                <th scope="col">Tour</th>
+                <th scope="col">Passengers</th>
+                <th scope="col">Order Status</th>
+            </tr>
+            </thead>
+            {{--}}
+            @foreach($orders as $order)
                 <tr>
-                    <th scope="col">Customers</th>
-                    <th scope="col">Order Date</th>
-                    <th scope="col">Lead Booker</th>
-                    <th scope="col">Booking Reference</th>
-                    <th scope="col">Tour</th>
-                    <th scope="col">Passengers</th>
-                    <th scope="col">Order Status</th>
+                    <td>
+                        @foreach($order->orderCustomers as $oCustomer)
+                            {{ $oCustomer->customer->first_name . ' ' . $oCustomer->customer->last_name . ', '}}
+                        @endforeach
+                    </td>
+                    <td>{{ f_datetime($order->ordered_on) }}</td>
+                    <td>{{ $order->leadBooker->customer->first_name . ' ' . $order->leadBooker->customer->last_name }}</td>
+                    <td><a href="{{ route('orders.view', ['order' => $order->id]) }}" class="link-info"><u>{{ $order->booking_reference }}</u></a></td>
+                    <td>{{ $order->tour->name }}</td>
+                    <td>{{ $order->customer_count }}</td>
+                    <td><h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6></td>
                 </tr>
-                </thead>
-                {{--}}
-                @foreach($orders as $order)
-                    <tr>
-                        <td>
-                            @foreach($order->orderCustomers as $oCustomer)
-                                {{ $oCustomer->customer->first_name . ' ' . $oCustomer->customer->last_name . ', '}}
-                            @endforeach
-                        </td>
-                        <td>{{ f_datetime($order->ordered_on) }}</td>
-                        <td>{{ $order->leadBooker->customer->first_name . ' ' . $order->leadBooker->customer->last_name }}</td>
-                        <td><a href="{{ route('orders.view', ['order' => $order->id]) }}" class="link-info"><u>{{ $order->booking_reference }}</u></a></td>
-                        <td>{{ $order->tour->name }}</td>
-                        <td>{{ $order->customer_count }}</td>
-                        <td><h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6></td>
-                    </tr>
-                @endforeach
-                {{--}}
-            </table>
-        </div>
-    </div>
+            @endforeach
+            {{--}}
+        </table>
+    </x-admin.section.card>
 @endsection

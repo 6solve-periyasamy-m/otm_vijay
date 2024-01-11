@@ -10,18 +10,14 @@
 
 @section('content')
     @can('create', \App\Models\Quote\Quote::class)
-        <div class="card">
-            <div class="card-body">
-                <button class="btn btn-primary float-end" onclick="openModal('admin.organization.form')">
-                    {{ Icon::create() }}
-                    <span>Create New</span>
-                </button>
-            </div>
-        </div>
+        <x-admin.section.card>
+            <button class="btn btn-primary float-end" onclick="openModal('admin.organization.form')">
+                {{ Icon::create() }}
+                <span>Create New</span>
+            </button>
+        </x-admin.section.card>
     @endcan
-    <div class="card">
-        <div class="card-body">
-            <livewire:admin.organization.table />
-        </div>
-    </div>
+    <x-admin.section.card>
+        <livewire:admin.organization.table />
+    </x-admin.section.card>
 @endsection
