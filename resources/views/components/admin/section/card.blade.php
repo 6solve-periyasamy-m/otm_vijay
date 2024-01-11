@@ -1,8 +1,12 @@
 <div class="card">
     <div class="card-body">
-        @if(isset($header))
+        @if(isset($header) ?? isset($title))
             <div class="card-title">
-                <h4 class="fw-bold">{{ $header }}</h4>
+                @if(isset($title))
+                    <h4 class="fw-bold">{{ $title }}</h4>
+                @else
+                    {{ $header }}
+                @endif
             </div>
         @endif
         {{ $slot }}
