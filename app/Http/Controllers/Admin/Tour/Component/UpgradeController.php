@@ -33,7 +33,7 @@ class UpgradeController extends Controller
     }
     // Accommodation
     public function createAccommodationUpgrade(Tour $tour, AccommodationInventoryTour $inventoryTour) {
-        return view('pages.upgrades.create', ['action' => route('accommodation-upgrade.store', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]),
+        return view('pages.admin.tour.component.upgrade.create', ['action' => route('accommodation-upgrade.store', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]),
             'name' => 'Accommodation Inventory', 'model' => 'accommodation', 'inventoryTour' => $inventoryTour,]);
     }
 
@@ -54,11 +54,11 @@ class UpgradeController extends Controller
     }
 
     public function viewAccommodationUpgrade(Tour $tour, AccommodationInventoryTour $inventoryTour) {
-        return view('pages.upgrades.view.accommodation', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
+        return view('pages.admin.tour.component.upgrade.view.accommodation', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
     }
     
     public function editAccommodationUpgrade(Tour $tour, AccommodationInventoryTour $inventoryTour, AccommodationInventoryTourUpgrade $upgrade) {
-        return view('pages.upgrades.update', ['action' => route('accommodation-upgrade.update', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade,]),
+        return view('pages.admin.tour.component.upgrade.update', ['action' => route('accommodation-upgrade.update', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade,]),
             'name' => 'Accommodation Inventory', 'tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade'=>$upgrade,]);
     }
     
@@ -82,7 +82,7 @@ class UpgradeController extends Controller
 
     // Activity
     public function createActivityUpgrade(Tour $tour, ActivityInventoryTour $inventoryTour) {
-        return view('pages.upgrades.create', ['action' => route('activity-upgrade.store', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]),
+        return view('pages.admin.tour.component.upgrade.create', ['action' => route('activity-upgrade.store', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]),
             'name' => 'Activity Inventory', 'model' => 'activity', 'inventoryTour' => $inventoryTour,]);
     }
 
@@ -103,11 +103,11 @@ class UpgradeController extends Controller
     }
 
     public function viewActivityUpgrade(Tour $tour, ActivityInventoryTour $inventoryTour) {
-        return view('pages.upgrades.view.activity', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
+        return view('pages.admin.tour.component.upgrade.view.activity', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
     }
 
     public function editActivityUpgrade(Tour $tour, ActivityInventoryTour $inventoryTour, ActivityInventoryTourUpgrade $upgrade) {
-        return view('pages.upgrades.update', ['action' => route('activity-upgrade.update', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade,]),
+        return view('pages.admin.tour.component.upgrade.update', ['action' => route('activity-upgrade.update', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade,]),
             'name' => 'Activity Inventory', 'tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade'=>$upgrade,]);
     }
 
@@ -131,7 +131,7 @@ class UpgradeController extends Controller
 
     // Flight
     public function createFlightUpgrade(Tour $tour, FlightInventoryTour $inventoryTour) {
-        return view('pages.upgrades.create', ['action' => route('flight-upgrade.store', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]),
+        return view('pages.admin.tour.component.upgrade.create', ['action' => route('flight-upgrade.store', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]),
             'name' => 'Flight Inventory', 'model' => 'flight', 'inventoryTour' => $inventoryTour,]);
     }
 
@@ -153,11 +153,11 @@ class UpgradeController extends Controller
     }
 
     public function viewFlightUpgrade(Tour $tour, FlightInventoryTour $inventoryTour) {
-        return view('pages.upgrades.view.flight', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
+        return view('pages.admin.tour.component.upgrade.view.flight', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
     }
 
     public function editFlightUpgrade(Tour $tour, FlightInventoryTour $inventoryTour, FlightInventoryTourUpgrade $upgrade) {
-        return view('pages.upgrades.update', ['action' => route('flight-upgrade.update', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade,]),
+        return view('pages.admin.tour.component.upgrade.update', ['action' => route('flight-upgrade.update', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade,]),
             'name' => 'Flight Inventory', 'tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade'=>$upgrade,]);
     }
 
@@ -181,7 +181,7 @@ class UpgradeController extends Controller
 
     // Transport
     public function createTransportUpgrade(Tour $tour, TransportInventoryTour $inventoryTour) {
-        return view('pages.upgrades.create', ['action' => route('transport-upgrade.store', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]),
+        return view('pages.admin.tour.component.upgrade.create', ['action' => route('transport-upgrade.store', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]),
             'name' => 'Transport Inventory', 'model' => 'transport', 'inventoryTour' => $inventoryTour,]);
     }
 
@@ -202,11 +202,11 @@ class UpgradeController extends Controller
     }
 
     public function viewTransportUpgrade(Tour $tour, TransportInventoryTour $inventoryTour) {
-        return view('pages.upgrades.view.transport', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
+        return view('pages.admin.tour.component.upgrade.view.transport', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
     }
 
     public function editTransportUpgrade(Tour $tour, TransportInventoryTour $inventoryTour, TransportInventoryTourUpgrade $upgrade) {
-        return view('pages.upgrades.update', ['action' => route('transport-upgrade.update', ['tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade'=>$upgrade,]),
+        return view('pages.admin.tour.component.upgrade.update', ['action' => route('transport-upgrade.update', ['tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade'=>$upgrade,]),
             'name' => 'Transport Inventory', 'tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade'=>$upgrade,]);
     }
 
