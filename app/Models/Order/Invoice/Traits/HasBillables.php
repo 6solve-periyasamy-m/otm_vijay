@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait HasBillables
 {
+    protected $with = ['billables',];
+
     public function billables(): MorphMany
     {
         return $this->morphMany(InvoiceBillable::class, 'billed');
