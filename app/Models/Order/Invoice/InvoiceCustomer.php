@@ -52,4 +52,5 @@ class InvoiceCustomer extends Model
 
     protected $guarded = [];
     protected $casts = ['total_cost' => 'float', 'lead' => 'boolean'];
+    protected $with = ['billables',];
 }

@@ -39,4 +39,5 @@ class InvoiceGroup extends Model
 
     protected $guarded = [];
     protected $casts = ['total_cost' => 'float',];
+    protected $with = ['billables',];
 }

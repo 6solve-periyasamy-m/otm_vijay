@@ -26,6 +26,8 @@ class InvoiceGenerator
     {
         $invoice = new Invoice([
             'order_id' => $this->order->id,
+            'name' => $this->order->tour->name,
+            'cancelled' => $this->order->cancelled,
             'invoice_number' => $this->order->invoices()->count() + 1,
             'booking_reference' => $this->order->booking_reference,
             'generated' => now(),
@@ -53,9 +55,13 @@ class InvoiceGenerator
 
     private function generateTemporary(Invoice $invoice): Invoice
     {
+        $customers = $this->generateCustomers();
+        $lead = null;
+        foreach ($customers as $customer) { if ($customer->lead) { $lead = $customer; break; }}
         $invoice->setRelations([
             'brand' => $this->generateBrand(),
             'customers' => $this->generateCustomers(),
+            'lead' => $lead,
             'groups' => $this->generateGroups(),
             'adjustments' => $this->generateAdjustments(),
             'installments' => $this->generateInstallments(),
@@ -80,7 +86,7 @@ class InvoiceGenerator
             'country' => $brand->address->country->name,
             'postcode' => $brand->address->postcode,
             'vat_code' => setting('company.vat'),
-            'logo' => img_to_b64($brand->logo),
+            'logo' => $brand->image_path,
             'header_image' => null, // Will be implemented in future
             'footer_image' => null, // Will be implemented in future
         ]);

@@ -194,7 +194,7 @@ class Order extends Model
 
     public function invoices(): HasMany
     {
-        return $this->hasMany(Invoice::class, 'order_id');
+        return $this->hasMany(\App\Models\Order\Invoice\Invoice::class, 'order_id');
     }
 
     public function installments(): HasMany

@@ -26,9 +26,9 @@ return new class extends Migration
             $table->string('country');
             $table->string('postcode');
             $table->string('vat_code');
-            $table->text('logo');
-            $table->text('header_image')->nullable();
-            $table->text('footer_image')->nullable();
+            $table->string('logo');
+            $table->string('header_image')->nullable();
+            $table->string('footer_image')->nullable();
             $table->timestamps();
         });
     }

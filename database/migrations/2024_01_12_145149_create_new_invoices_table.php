@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id');
             $table->string('booking_reference');
+            $table->string('name');
+            $table->boolean('cancelled')->default(false);
             $table->integer('invoice_number');
             $table->dateTime('generated');
             $table->text('invoice_footer')->nullable();

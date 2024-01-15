@@ -3,6 +3,7 @@
 namespace App\Models\Order\Invoice;
 
 use App\Models\Order\Order;
+use App\Repository\Model\Order\InvoiceRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -19,6 +20,8 @@ use Illuminate\Support\Carbon;
  * @property int $order_id
  * @property string $booking_reference
  * @property int $invoice_number
+ * @property string $name
+ * @property bool $cancelled
  * @property Carbon $generated
  * @property string|null $invoice_footer
  * @property string|null $order_notes
@@ -30,6 +33,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, InvoiceAdjustment> $adjustments
  * @property-read int|null $adjustments_count
  * @property-read InvoiceBrand $brand
+ * @property-read InvoiceRepository $repository
  * @property-read Collection<int, InvoiceCustomer> $customers
  * @property-read int|null $customers_count
  * @property-read Collection<int, InvoiceGroup> $groups
@@ -61,7 +65,9 @@ class Invoice extends Model
 {
     protected $guarded = [];
     protected $with = ['brand', 'customers', 'lead', 'groups', 'adjustments', 'payments', 'installments',];
-    protected $casts = ['generated' => 'datetime:Y-m-d H:i:s', 'total_cost' => 'float', 'total_paid' => 'float'];
+    protected $casts = ['generated' => 'datetime:Y-m-d H:i:s', 'total_cost' => 'float', 'total_paid' => 'float', 'cancelled' => 'boolean'];
+
+    private InvoiceRepository $internal_repository;
 
     public function order(): BelongsTo
     {
@@ -101,5 +107,11 @@ class Invoice extends Model
     public function adjustments(): HasMany
     {
         return $this->hasMany(InvoiceAdjustment::class, 'invoice_id');
+    }
+
+    public function getRepositoryAttribute(): InvoiceRepository
+    {
+        $this->internal_repository = $this->internal_repository ?? new InvoiceRepository($this);
+        return $this->internal_repository;
     }
 }
