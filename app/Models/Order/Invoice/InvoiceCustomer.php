@@ -22,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $region
  * @property string|null $country
  * @property string|null $postcode
+ * @property bool $lead
  * @property float $total_cost
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -50,5 +51,5 @@ class InvoiceCustomer extends Model
     use Invoiced, HasBillables;
 
     protected $guarded = [];
-    protected $casts = ['total_cost' => 'float',];
+    protected $casts = ['total_cost' => 'float', 'lead' => 'boolean'];
 }

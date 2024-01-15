@@ -14,8 +14,9 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $invoice_id
  * @property Carbon $due
+ * @property string $description
  * @property float $amount
- * @property int $paid
+ * @property bool $paid
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Invoice $invoice
@@ -35,6 +36,6 @@ class InvoiceInstallment extends Model
 {
     use Invoiced;
 
-    protected $casts = ['amount' => 'float', 'due' => 'datetime:Y-m-d H:i:s'];
+    protected $casts = ['amount' => 'float', 'due' => 'datetime:Y-m-d H:i:s', 'paid' => 'boolean'];
     protected $guarded = [];
 }

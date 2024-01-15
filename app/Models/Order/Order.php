@@ -63,6 +63,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read int|null $days_until_next_payment The number of days until the next payment is due, or null if all installments are paid
  * @property-read Collection|Customer[] $customers The customers associated with this order
  * @property-read Booking|null $booking
+ * @property-read bool $deposit_paid
  * @property-read int|null $customers_count The amount of customers associated with this order
  * @property-read OrderRepository $repository The repository used for calculations
  * @property-read float $calculated_deposit The calculated deposit based on customer count
@@ -381,6 +382,12 @@ class Order extends Model
     public function getOrderAdjustmentTotalAttribute(): float
     {
         return $this->adjustments()->sum('amount');
+    }
+
+    public function getDepositPaidAttribute(): bool
+    {
+        return ($this->calculated_deposit + ($this->booking_fee ?? 0)) < $this->paid;
+
     }
 
     public function getStartDateAttribute(): Carbon

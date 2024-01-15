@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('invoice_id')->constrained();
             $table->dateTime('due');
+            $table->string('description');
             $table->decimal('amount', 12);
             $table->boolean('paid');
             $table->timestamps();
