@@ -20,7 +20,7 @@ class InvoiceRepository
 
     public function getResponseStream(): StreamedResponse
     {
-        $invoice = Browsershot::html(view('pdf.invoices.new', ['invoice' => $this->invoice,])->render())->noSandbox();
+        $invoice = Browsershot::html(view('pdf.invoices.columns', ['invoice' => $this->invoice,])->render())->noSandbox();
         $invoice->showBackground()->margins(10, 2, 10, 2);
         return response()->stream(function () use ($invoice) { echo $invoice->pdf(); }, 200, ['Content-Type' => 'application/pdf']);
     }
