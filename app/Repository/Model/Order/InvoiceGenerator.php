@@ -60,7 +60,7 @@ class InvoiceGenerator
         foreach ($customers as $customer) { if ($customer->lead) { $lead = $customer; break; }}
         $invoice->setRelations([
             'brand' => $this->generateBrand(),
-            'customers' => $this->generateCustomers(),
+            'customers' => $customers,
             'lead' => $lead,
             'groups' => $this->generateGroups(),
             'adjustments' => $this->generateAdjustments(),
@@ -138,7 +138,7 @@ class InvoiceGenerator
                 'due' => $this->order->tour->final_payment,
                 'description' => __('invoice.installment.remaining', ['amount' => f_currency($this->order->remaining_installment),]),
                 'amount' => $this->order->remaining_installment,
-                'paid' => $this->order->total >= $this->order->paid,
+                'paid' => $this->order->paid >= $this->order->total,
             ]);
         }
         return $data;
@@ -197,6 +197,7 @@ class InvoiceGenerator
                 'country' => $orderCustomer->customer->billingAddress->country->name,
                 'postcode' => $orderCustomer->customer->billingAddress->postcode,
             ]);
+            $total = $orderCustomer->tour_cost;
             $billables = [
                 new InvoiceBillable([
                     'description' => __('invoice.customer.billable.base'),
@@ -210,9 +211,13 @@ class InvoiceGenerator
                     'amount' => $orderCustomer->single_occupancy_surcharge,
                     'shared_key' => "surcharge"
                 ]);
+                $total += $orderCustomer->single_occupancy_surcharge;
             }
             foreach ($orderCustomer->repository->getComponents(false, true, true, true, true, ['Add-on', 'Upgrade']) as $component) {
-                $billables[] = $component->getInvoiceBillable();
+                $billable = $component->getInvoiceBillable();
+                $total += $billable->amount;
+                $billables[] = $billable;
+
             }
             foreach ($orderCustomer->adjustments as $adjustment) {
                 $billables[] = new InvoiceBillable([
@@ -220,7 +225,9 @@ class InvoiceGenerator
                     'amount' => $adjustment->amount,
                     'shared_key' => "adjustment-{$adjustment->id}"
                 ]);
+                $total += $adjustment->amount;
             }
+            $customer->total_cost = $total;
             if ($invoice !== null) {
                 $customer->save();
                 $customer->billables()->saveMany($billables);
@@ -244,12 +251,16 @@ class InvoiceGenerator
                 'name' => __('invoice.group.name', ['members' => $group->getMembers(),]),
             ]);
             $billables = [];
+            $total = 0;
             /** @var OrderAccommodation $room */
             foreach ($group->rooms()->whereHas('tourComponent', function ($query) {
                 return $query->where('tour_component_type', '=', 'Upgrade')->orWhere('tour_component_type', '=', 'Add-on');
             })->get() as $room) {
-                $billables[] = $room->repository->getInvoiceBillable();
+                $billable = $room->repository->getInvoiceBillable();
+                $total += $room->tour_sales_price;
+                $billables[] = $billable;
             }
+            $iGroup->total_cost = $total;
             if (sizeof($billables) > 0) {
                 if ($invoice !== null) {
                     $iGroup->save();

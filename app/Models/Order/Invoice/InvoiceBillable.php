@@ -16,7 +16,7 @@ use Illuminate\Support\Carbon;
  * @property int $billed_id
  * @property string $description
  * @property string $shared_key
- * @property string $amount
+ * @property float $amount
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read InvoiceCustomer|InvoiceGroup $billed
@@ -36,6 +36,7 @@ use Illuminate\Support\Carbon;
 class InvoiceBillable extends Model
 {
     protected $guarded = [];
+    protected $casts = ['amount' => 'float'];
 
     public function billed(): MorphTo
     {

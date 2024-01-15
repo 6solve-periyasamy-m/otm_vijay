@@ -97,7 +97,7 @@
                     </thead>
                     <tbody>
                         @foreach($invoice->customers as $customer)
-                            @if ($customer->billables()->count() === 0) @continue @endif
+                            @if (sizeof($customer->billables) === 0) @continue @endif
                             <tr>
                                 <td colspan="3" class="metadata center-text">{{ $customer->full_name }}</td>
                             </tr>
@@ -113,7 +113,7 @@
                             </tr>
                         @endforeach
                         @foreach($invoice->groups as $group)
-                            @if ($group->billables()->count() === 0) @continue @endif
+                            @if (sizeof($group->billables) === 0) @continue @endif
                             <tr>
                                 <td colspan="3" class="metadata center-text">{{ $group->name }}</td>
                             </tr>
@@ -125,7 +125,7 @@
                                 </tr>
                             @endforeach
                             <tr>
-                                <td colspan="3" class="metadata right-text">Total: {{ f_currency($group->billables()->sum('amount')) }}</td>
+                                <td colspan="3" class="metadata right-text">Total: {{ f_currency($group->total_cost) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -145,12 +145,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($invoice->adjustments()->count() === 0)
+                        @if (sizeof($invoice->adjustments) === 0)
                             <tr>
                                 <td colspan="3" class="center-text">No Order Adjustments recorded.</td>
                             </tr>
                         @else
+                            @php $adjSum = 0; @endphp
                             @foreach($invoice->adjustments as $adjustment)
+                                @php $adjSum += $adjustment->amount; @endphp
                                 <tr>
                                     <td class="date">{{ f_datetime($adjustment->date) }}</td>
                                     <td class="date-description">{!! nl2br($adjustment->description) !!} </td>
@@ -158,7 +160,7 @@
                                 </tr>
                             @endforeach
                             <tr>
-                                <td colspan="3" class="metadata right-text">Total: {{ f_currency($invoice->adjustments()->sum('amount')) }}</td>
+                                <td colspan="3" class="metadata right-text">Total: {{ f_currency($adjSum) }}</td>
                             </tr>
                         @endif
                     </tbody>
@@ -181,7 +183,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($invoice->payments()->count() === 0)
+                        @if (sizeof($invoice->payments) === 0)
                             <tr>
                                 <td colspan="3" class="center-text">No Payments recorded.</td>
                             </tr>
@@ -217,7 +219,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($invoice->installments()->count() === 0)
+                        @if (sizeof($invoice->installments) === 0)
                             <tr>
                                 <td colspan="3" class="center-text">No Installments recorded.</td>
                             </tr>
@@ -233,18 +235,18 @@
                     </tbody>
                 </table>
             </div>
-            <!-- Footer Section -->
-            <div class="section pagebreak-inside">
-                <h2 class="section-title header-title">Notes</h2>
-                <div class="notes">
-                    <div style="margin-top: 0">{!! $invoice->invoice_footer !!}</div>
-                </div>
-            </div>
             <!-- Notes Section -->
             <div class="section pagebreak-inside">
-                <h2 class="section-title header-title">Notes</h2>
+                <h2 class="section-title header-title">Order Notes</h2>
                 <div class="notes">
-                    <div style="margin-top: 0">{!! $invoice->order_notes !!}</div>
+                    <div style="margin-top: 0">{{ $invoice->order_notes }}</div>
+                </div>
+            </div>
+            <!-- Footer Section -->
+            <div class="section pagebreak-inside">
+                <h2 class="section-title header-title">Invoice Footer</h2>
+                <div class="notes">
+                    <div style="margin-top: 0">{!! $invoice->invoice_footer !!}</div>
                 </div>
             </div>
         </div>

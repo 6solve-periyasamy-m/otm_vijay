@@ -172,7 +172,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
      */
     public function getInvoiceRepository(int $number = 0): InvoiceRepository
     {
-        return (new InvoiceGenerator($this->order))->generate(true)->repository;
+        return (new InvoiceGenerator($this->order))->generate()->repository;
     }
 
     /**
