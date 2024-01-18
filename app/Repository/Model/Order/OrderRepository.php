@@ -686,7 +686,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             'booking_reference' => $this->getReference(),
             'departure_date' => $this->order->tour->date_from->format('Y-m-d'),
             'return_date' => $this->order->tour->date_to->format('Y-m-d'),
-            'gross_amount' => $this->order->total,
+            'gross_amount' => (int)($this->order->total*100),
         ];
     }
 
