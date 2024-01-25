@@ -388,6 +388,16 @@
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>
+                            @if (($order->commission_amount ?? 0) > 0)
+                                <tr>
+                                    <td>{{ f_currency($order->commission_amount) }}</td>
+                                    <td>Commission: {{ $order->commission }}%</td>
+                                    <td class="actions">
+                                        <a href="{{ route('orders.edit', ['order' => $order,]) }}"
+                                           class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
+                                    </td>
+                                </tr>
+                            @endif
                             @foreach($order->adjustments as $adjustment)
                                 <tr>
                                     <td>{{ f_currency($adjustment->amount) }}</td>
