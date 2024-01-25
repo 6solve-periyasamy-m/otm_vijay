@@ -56,7 +56,10 @@
                 @if($order->cancelled)
                     {{ f_currency($order->total) }} ({{ f_currency($order->cost) }} before cancellation)
                 @else
-                    {{ f_currency($order->cost + $order->total_adjustments) }} ({{ f_currency($order->cost) }} before adjustments)
+                    {{ f_currency($order->total) }}
+                    @if ($order->repository->getBeforeString() !== null)
+                        ({{ $order->repository->getBeforeString() }})
+                    @endif
                 @endif
             </h6>
         </div>

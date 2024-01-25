@@ -646,6 +646,21 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         }
     }
 
+    public function getBeforeString(): string|null
+    {
+        if ($this->order->total_adjustments > 0 || $this->order->commission_amount > 0) {
+            $string = f_currency($this->order->cost) . " before ";
+            if ($this->order->total_adjustments > 0 && $this->order->commission_amount > 0) {
+                $string .= "adjustments and commission";
+            } elseif ($this->order->total_adjustments > 0) {
+                $string .= "adjustments";
+            } elseif ($this->order->commission_amount > 0) {
+                $string .= "commission";
+            }
+        }
+        return $string ?? null;
+    }
+
     public function forceDelete(): void
     {
         $this->order->booking?->repository->forceDelete();
