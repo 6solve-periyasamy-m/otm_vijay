@@ -8,15 +8,9 @@ use Illuminate\Http\Request;
 
 class RoomTypeController extends Controller
 {
-
-    public function index()
+        public function create()
     {
-        return view('pages.models.room_types.table', ['roomTypes' => RoomType::all(),]);
-    }
-
-    public function create()
-    {
-        return view('pages.models.room_types.create');
+        return view('pages.admin.accommodation.inventory.room.form');
     }
 
     public function store(Request $request)
@@ -29,14 +23,9 @@ class RoomTypeController extends Controller
         return view('pages.close');
     }
 
-    public function view(RoomType $roomType)
-    {
-        return view('pages.models.room_types.view', ['roomType' => $roomType,]);
-    }
-
     public function edit(RoomType $roomType)
     {
-        return view('pages.models.room_types.update', ['roomType' => $roomType,]);
+        return view('pages.admin.accommodation.inventory.room.form', ['roomType' => $roomType,]);
     }
 
     public function update(Request $request, RoomType $roomType)

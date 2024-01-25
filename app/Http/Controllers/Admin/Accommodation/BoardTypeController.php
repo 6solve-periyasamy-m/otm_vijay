@@ -8,15 +8,9 @@ use Illuminate\Http\Request;
 
 class BoardTypeController extends Controller
 {
-
-    public function index()
-    {
-        return view('pages.models.board_types.table', ['boardTypes' => BoardType::all(),]);
-    }
-
     public function create()
     {
-        return view('pages.models.board_types.create');
+        return view('pages.admin.accommodation.inventory.board.form');
     }
 
     public function store(Request $request)
@@ -28,14 +22,9 @@ class BoardTypeController extends Controller
         return view('pages.close');
     }
 
-    public function view(BoardType $boardType)
-    {
-        return view('pages.models.board_types.view', ['boardType' => $boardType,]);
-    }
-
     public function edit(BoardType $boardType)
     {
-        return view('pages.models.board_types.update', ['boardType' => $boardType,]);
+        return view('pages.admin.accommodation.inventory.board.form', ['boardType' => $boardType,]);
     }
 
     public function update(Request $request, BoardType $boardType)

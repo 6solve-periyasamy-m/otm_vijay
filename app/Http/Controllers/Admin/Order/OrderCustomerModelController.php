@@ -14,20 +14,14 @@ use Illuminate\Http\Request;
 
 class OrderCustomerModelController extends Controller
 {
-
-    public function index(Order $order)
-    {
-        return view('pages.models.order_customers.table', ['order' => $order, 'orderCustomers' => OrderCustomer::all(),]);
-    }
-
     public function create(Order $order)
     {
-        return view('pages.models.order_customers.create', ['order' => $order,]);
+        return view('pages.admin.order.customer.form', ['order' => $order,]);
     }
 
     public function show(Order $order, OrderCustomer $orderCustomer) {
         $order->repository->refresh();
-        return view('pages.orders.customer', ['orderCustomer' => $orderCustomer,]);
+        return view('pages.admin.order.customer.view', ['orderCustomer' => $orderCustomer,]);
     }
 
     public function store(Request $request, Order $order)
@@ -61,7 +55,7 @@ class OrderCustomerModelController extends Controller
 
     public function edit(Order $order, OrderCustomer $orderCustomer)
     {
-        return view('pages.models.order_customers.update', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
+        return view('pages.admin.order.customer.form', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
     }
 
     public function update(Request $request, Order $order, OrderCustomer $orderCustomer)

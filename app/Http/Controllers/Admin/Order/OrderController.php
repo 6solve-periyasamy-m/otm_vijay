@@ -8,8 +8,8 @@ use App\Events\Order\OrderRestoredEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Order\CreateOrderRequest;
 use App\Http\Requests\Admin\Order\MigrateRequest;
-use App\Http\Requests\Admin\TableRequest;
 use App\Http\Requests\Admin\Order\UpdateOrderRequest;
+use App\Http\Requests\Admin\TableRequest;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\OrderRepository;
@@ -20,17 +20,17 @@ class OrderController extends Controller
 
     public function index(TableRequest $request)
     {
-        return view('pages.orders.search2', ['orders' => Order::all(), 'historic' => $request->historic ?? false]);
+        return view('pages.admin.order.table', ['orders' => Order::all(), 'historic' => $request->historic ?? false]);
     }
 
     public function reminders(int $max = 7, int $min = -1000)
     {
-        return view('pages.orders.reminders', ['max' => $max, 'min' => $min, 'orders' => ReportRepository::getRemindersReport($max, $min),]);
+        return view('pages.admin.order.reminders', ['max' => $max, 'min' => $min, 'orders' => ReportRepository::getRemindersReport($max, $min),]);
     }
 
     public function create()
     {
-        return view('pages.models.orders.create');
+        return view('pages.admin.order.create');
     }
 
     public function store(CreateOrderRequest $request)
@@ -42,12 +42,12 @@ class OrderController extends Controller
     public function view(Order $order)
     {
         $order->repository->refresh();
-        return view('pages.orders.view', ['order' => $order,]);
+        return view('pages.admin.order.view', ['order' => $order,]);
     }
 
     public function switchTour(Order $order)
     {
-        return view('pages.orders.migrate', ['order' => $order,]);
+        return view('pages.admin.order.migrate', ['order' => $order,]);
     }
 
     public function migrate(MigrateRequest $request, Order $order)
@@ -70,12 +70,12 @@ class OrderController extends Controller
 
     public function occupancy(Order $order)
     {
-        return view('pages.occupancy.manager', ['order' => $order,]);
+        return view('pages.admin.order.occupancy', ['order' => $order,]);
     }
 
     public function edit(Order $order)
     {
-        return view('pages.models.orders.update', ['order' => $order,]);
+        return view('pages.admin.order.update', ['order' => $order,]);
     }
 
     public function update(UpdateOrderRequest $request, Order $order)
