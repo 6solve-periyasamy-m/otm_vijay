@@ -90,6 +90,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public static function create(Tour $tour, array $data, ConvertedCustomer $lead, array $customers = [], bool $shouldInvoice = true): Order
     {
         $order = Order::make($data);
+        $order->commission = $lead->customer->organization?->commission;
         $tour->orders()->save($order);
         $leadBooker = $order->repository->addCustomer($lead);
         $order->repository->update(['lead_booker_id' => $leadBooker->id,]);
