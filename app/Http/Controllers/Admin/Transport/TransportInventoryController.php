@@ -11,14 +11,9 @@ use Illuminate\Http\Request;
 class TransportInventoryController extends Controller
 {
 
-    public function index()
-    {
-        return view('pages.models.transport_inventories.table', ['transportInventories' => TransportInventory::all(),]);
-    }
-
     public function create(Transport $transport)
     {
-        return view('pages.models.transport_inventories.create', ['transport' => $transport,]);
+        return view('pages.admin.transport.inventory.form', ['transport' => $transport,]);
     }
 
     public function store(Request $request, Transport $transport)
@@ -42,11 +37,6 @@ class TransportInventoryController extends Controller
         return redirect()->route('transports.view', ['transport' => $transport,]);
     }
 
-    public function view(TransportInventory $transportInventory)
-    {
-        return view('pages.models.transport_inventories.view', ['transportInventory' => $transportInventory,]);
-    }
-
     public function manifest(Transport $transport, TransportInventory $transportInventory)
     {
         return TransportManifestRepository::viewReport($transportInventory->repository, 'transport-inventories.manifest.export', ['transport' => $transport, 'transportInventory' => $transportInventory]);
@@ -59,7 +49,7 @@ class TransportInventoryController extends Controller
 
     public function edit(Transport $transport, TransportInventory $transportInventory)
     {
-        return view('pages.models.transport_inventories.update', ['transport' => $transport, 'transportInventory' => $transportInventory,]);
+        return view('pages.admin.transport.inventory.form', ['transport' => $transport, 'inventory' => $transportInventory,]);
     }
 
     public function update(Request $request, Transport $transport, TransportInventory $transportInventory)

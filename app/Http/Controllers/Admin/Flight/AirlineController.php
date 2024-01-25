@@ -8,15 +8,9 @@ use Illuminate\Http\Request;
 
 class AirlineController extends Controller
 {
-
-    public function index()
-    {
-        return view('pages.models.airlines.table', ['airlines' => Airline::all(),]);
-    }
-
     public function create()
     {
-        return view('pages.models.airlines.create');
+        return view('pages.admin.flight.airline.form');
     }
 
     public function store(Request $request)
@@ -28,14 +22,9 @@ class AirlineController extends Controller
         return view('pages.close');
     }
 
-    public function view(Airline $airline)
-    {
-        return view('pages.models.airlines.view', ['airline' => $airline,]);
-    }
-
     public function edit(Airline $airline)
     {
-        return view('pages.models.airlines.update', ['airline' => $airline,]);
+        return view('pages.admin.flight.airline.form', ['airline' => $airline,]);
     }
 
     public function update(Request $request, Airline $airline)

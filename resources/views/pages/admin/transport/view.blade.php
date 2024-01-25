@@ -1,0 +1,175 @@
+@php
+    /** @var \App\Models\Transport\Transport $transport */
+@endphp
+
+@extends('layout.component')
+
+@section('title', 'View transport')
+
+@section('info')
+    <div class="otm-callout">
+        <div class="row">
+            @if(isset($transport->image_url))
+                <div class="col-2">
+                    <img src="{{ asset($transport->image_url) }}" class="img-thumbnail image large">
+                </div>
+            @endif
+            <div class="col-{{ isset($transport->image_url) ? 10 : 12 }} row">
+                <div class="col-12 text-capitalize">
+                    <h4 class="fw-bold">{{ $transport->name }}</h4>
+                </div>
+                <div class="col-12 col-xl-6">
+                    <p>Transport Type</p>
+                    <h6 class="fw-bold">{{ $transport->transportType->name }}</h6>
+                </div>
+                <div class="col-12 col-xl-6">
+                    <p>Operator</p>
+                    <h6 class="fw-bold">{{ $transport->operator->name }}</h6>
+                </div>
+                <div class="col-12 col-xl-6">
+                    <p>Departure Location</p>
+                    <h6 class="fw-bold">{{ $transport->departureAddress}}</h6>
+                </div>
+                <div class="col-12 col-xl-6">
+                    <p>Arrival Location</p>
+                    <h6 class="fw-bold">{{ $transport->arrivalAddress }}</h6>
+                </div>
+                <div class="col-12 col-xl-6">
+                    <p>Currency</p>
+                    <h6 class="fw-bold">{{ $transport->currency }}</h6>
+                </div>
+                <div class="col-12 col-xl-6">
+                    <p>Description</p>
+                    <h6 class="fw-bold">{{ $transport->description }}</h6>
+                </div>
+                <div class="col-12 col-xl-6">
+                    <p>Internal Notes</p>
+                    <h6 class="fw-bold">{{ $transport->internal_notes }}</h6>
+                </div>
+                <div class="col-12">
+                    @can('update', \App\Models\Transport\Transport::class)
+                        <a class="btn btn-success" href="{{route('transports.edit', ['transport' => $transport,])}}">
+                            {{ Icon::edit() }}
+                            <span>Edit Transport</span>
+                        </a>
+                    @endcan
+                    <a class="btn btn-secondary" href="{{route('transports.manifest.view', ['transport' => $transport,])}}">
+                        {{ Icon::list() }}
+                        <span>View Manifest</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('inventory')
+
+    @can('create', \App\Models\Transport\TransportInventory::class)
+        <div class="card">
+            <div class="card-body">
+                <a href="{{ route('transport-inventories.create', ['transport' => $transport, ]) }}"
+                   class="btn btn-primary float-end me-1">
+                    {{ Icon::create() }}
+                    <span>Add Inventory</span>
+                </a>
+            </div>
+        </div>
+    @endcan
+    <div class="card">
+        <div class="card-body">
+            <table id="transportInventory" style="width: 100%;" class="datatable table table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Travel Class</th>
+                    <th scope="col">Transport Number</th>
+                    <th scope="col">Departure Date Time</th>
+                    <th scope="col">Arrival Date Time</th>
+                    <th scope="col">FIT Selectable</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Contracted Stock</th>
+                    <th scope="col">Purchase Price</th>
+                    <th scope="col">Sales Price</th>
+                    <th scope="col">Internal Notes</th>
+                    <th scope="col">External Notes</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                @foreach($transport->transportInventory as $inventory)
+                    <tr>
+                        <td>{{ $inventory->travelClass->name }}</td>
+                        <td>{{ $inventory->transport_number ?? 'Not Set' }}</td>
+                        <td data-sort="{{$inventory->departs_at->unix()}}">
+                            {{ f_datetime($inventory->departs_at) }}&nbsp
+                            <input type="checkbox" disabled
+                                   @if($inventory->departure_time_confirmed == 1) checked @endif>
+                        </td>
+                        <td data-sort="{{$inventory->arrives_at->unix()}}">
+                            {{ f_datetime($inventory->arrives_at) }}
+                            <input type="checkbox" disabled
+                                   @if($inventory->arrival_time_confirmed == 1) checked @endif>
+                        </td>
+                        <td>
+                            <input type="checkbox" disabled @if($inventory->fit_selectable == 1) checked @endif>
+                        </td>
+                        <td>
+                            {{$inventory->stock - $inventory->used_stock}}
+                            /{{ $inventory->stock }}<br/>
+                            ({{$inventory->used_stock}} Sold)
+                        </td>
+                        <td>{{ $inventory->contracted }}</td>
+                        <td>{{ f_currency($inventory->purchase_price) }}</td>
+                        <td>{{ f_currency($inventory->sales_price) }}</td>
+                        <td>{{ $inventory->internal_notes }}</td>
+                        <td>{{ $inventory->external_notes }}</td>
+                        <td class="actions-4">
+                            @can('read', \App\Models\Transport\TransportInventory::class)
+                                <a href="{{route('transport-inventories.manifest.view', ['transport' => $transport, 'transportInventory' => $inventory,])}}"
+                                   class="btn btn-outline-secondary btn-sm mb-1">
+                                    {{ Icon::list() }}
+                                </a>
+                            @else
+                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                {{ Icon::list() }}
+                            </span>
+                            @endcan
+                            @can('create', \App\Models\Transport\TransportInventory::class)
+                                <a href="{{route('transport-inventories.duplicate', ['transport' => $transport, 'transportInventory' => $inventory,])}}"
+                                   class="btn btn-outline-blue btn-sm mb-1">
+                                    {{ Icon::copy() }}
+                                </a>
+                            @else
+                                <span class="btn btn-outline-dark btn-sm mb-1">
+                            {{ Icon::copy() }}
+                        </span>
+                            @endcan
+                            @can('update', \App\Models\Transport\TransportInventory::class)
+                                <a href="{{route('transport-inventories.edit', ['transport' => $transport, 'transportInventory' => $inventory,])}}"
+                                   class="btn btn-sm btn-outline-success mb-1">
+                                    {{ Icon::edit() }}
+                                </a>
+                            @else
+                                <span class="btn btn-outline-dark btn-sm mb-1">
+                            {{ Icon::edit() }}
+                        </span>
+                            @endcan
+                            @can('delete', \App\Models\Transport\TransportInventory::class)
+                                <a href="#" class="btn btn-sm btn-outline-danger mb-1"
+                                   onclick="event.preventDefault();document.getElementById('transportInventory-{{ $inventory->id }}-delete').submit();">
+                                    {{ Icon::delete() }}
+                                </a>
+                                <form id="transportInventory-{{ $inventory->id }}-delete"
+                                      action="{{ route('transport-inventories.delete', ['transport' => $transport, 'transportInventory' => $inventory,]) }}"
+                                      method="POST" style="display: none;">{{ csrf_field() }}</form>
+                            @else
+                                <span class="btn btn-outline-dark btn-sm mb-1">
+                            {{ Icon::delete() }}
+                        </span>
+                            @endcan
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+    </div>
+@endsection

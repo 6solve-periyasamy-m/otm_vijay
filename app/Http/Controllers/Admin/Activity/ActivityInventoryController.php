@@ -10,15 +10,9 @@ use Illuminate\Http\Request;
 
 class ActivityInventoryController extends Controller
 {
-
-    public function index()
-    {
-        return view('pages.models.activity_inventories.table', ['activityInventories' => ActivityInventory::all(),]);
-    }
-
     public function create(Activity $activity)
     {
-        return view('pages.models.activity_inventories.create', ['activity' => $activity,]);
+        return view('pages.admin.activity.inventory.form', ['activity' => $activity,]);
     }
 
     public function store(Request $request, Activity $activity)
@@ -39,11 +33,6 @@ class ActivityInventoryController extends Controller
         return redirect()->route('activities.view', ['activity' => $activity,]);
     }
 
-    public function view(Activity $activity, ActivityInventory $activityInventory)
-    {
-        return view('pages.models.activity_inventories.view', ['activity' => $activity, 'activityInventory' => $activityInventory,]);
-    }
-
     public function manifest(Activity $activity, ActivityInventory $activityInventory)
     {
         return ActivityManifestRepository::viewReport($activityInventory->repository, 'activity-inventories.manifest.export', ['activity' => $activity, 'activityInventory' => $activityInventory]);
@@ -56,7 +45,7 @@ class ActivityInventoryController extends Controller
 
     public function edit(Activity $activity, ActivityInventory $activityInventory)
     {
-        return view('pages.models.activity_inventories.update', ['activity' => $activity, 'activityInventory' => $activityInventory,]);
+        return view('pages.admin.activity.inventory.form', ['activity' => $activity, 'inventory' => $activityInventory,]);
     }
 
     public function update(Request $request, Activity $activity, ActivityInventory $activityInventory)
