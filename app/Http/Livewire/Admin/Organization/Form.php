@@ -63,6 +63,7 @@ class Form extends ModalComponent
     {
         return [
             'organization.name' => 'required',
+            'organization.commission' => 'nullable|numeric|gte:0',
             'organization.contact_number' => 'nullable',
             'organization.contact_email' => 'nullable',
             'organization.internal_notes' => 'nullable',
