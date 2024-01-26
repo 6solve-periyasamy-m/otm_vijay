@@ -131,7 +131,7 @@ class Order extends Model
 
     protected $guarded = [];
     protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double', 'status_override' => OrderStatus::class,];
-    protected $with = ['tour',];
+    protected $with = ['tour', 'cache'];
 
     protected array $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments', 'installments', 'invoices'];
 

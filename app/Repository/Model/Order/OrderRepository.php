@@ -12,6 +12,7 @@ use App\Models\Helper\OrderStatus;
 use App\Models\Location\Address;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Order;
+use App\Models\Order\OrderCache;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
 use App\Models\Order\Payment\Payment;
@@ -23,7 +24,6 @@ use App\Repository\Interfaces\GeneratesFellohData;
 use App\Repository\Mailing\Mailer\Order\OrderMailer;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
-use Cache;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
@@ -32,15 +32,15 @@ use Illuminate\Support\Facades\DB;
 
 class OrderRepository extends ModelRepository implements GeneratesFellohData
 {
-    private const STATUS_CACHE_TIME = 600;
     private Order $order;
     private AtolRepository $atolRepository;
-    private float|null $cost = null;
+    private float|null $cost;
 
     public function __construct(Order $order)
     {
         $this->order = $order;
         $this->atolRepository = new AtolRepository($order);
+        $this->cost = $this->order->cache?->cost;
     }
 
     public function get(): Order
@@ -391,13 +391,11 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
      */
     public function getOrderStatus(bool $forceCache = false): OrderStatus
     {
-        if ($this->order->status_override !== null) {
-            $status = $this->order->status_override;
-        }
+        if ($this->order->status_override !== null) { $status = $this->order->status_override; }
+
         /** @var OrderStatus $status */
-        if (!isset($status) && !$forceCache) {
-            $status = Cache::get("orders.{$this->order->id}.status");
-        }
+        if (!isset($status) && !$forceCache) { $status = $this->order->cache?->status; }
+
         if (!isset($status)) {
             $paidAmount = $this->order->paid;
             $cost = $this->order->cost;
@@ -425,7 +423,6 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
                     $status = OrderStatus::PAID_IN_FULL;
                 }
             }
-            Cache::put("orders.{$this->order->id}.status", $status, self::STATUS_CACHE_TIME);
         }
         return $status;
     }
@@ -513,8 +510,18 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
     public function refresh(): void
     {
-        $this->getOrderStatus(true);
-        $this->getCost(true);
+        $cache = $this->order->cache ?? new OrderCache(['order_id' => $this->order->id,]);
+        $nextPayment = $this->getNextPaymentDetails();
+        $cache->update([
+            'status' => $this->getOrderStatus(true),
+            'cost' => $this->getCost(true),
+            'total_owed' => $this->order->total,
+            'next_payment_date' => $nextPayment?->due_on,
+            'next_payment_amount' => $nextPayment?->amount,
+            'next_payment_remaining' => $nextPayment?->remaining,
+            'cached' => now(),
+        ]);
+        $cache->save();
     }
 
     public function getAdditionalComponentTotal():float
