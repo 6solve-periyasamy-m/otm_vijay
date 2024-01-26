@@ -12,7 +12,6 @@ use App\Models\Tour\Tour;
 use App\Repository\AccommodationRepository;
 use App\Repository\BookingRepository;
 use App\Repository\BookingTravellerRepository;
-use App\Repository\RoomingRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -171,7 +170,7 @@ class AccommodationController extends ApiController
     }
 
     public function saveRoomingData(RoomingRequest $request, Order $order) {
-        $order->repository->importRoomingData($request->getData());
+        $order->rooming->importRoomingData($request->getData());
         return response()->json(['success' => true, 'msg' => 'Building Saved']);
     }
 }
