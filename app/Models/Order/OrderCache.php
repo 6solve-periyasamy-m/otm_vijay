@@ -53,6 +53,8 @@ class OrderCache extends Model
         'cached' => 'datetime',
     ];
 
+    protected $guarded = [];
+
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class, 'order_id');

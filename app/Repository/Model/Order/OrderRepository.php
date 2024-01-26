@@ -306,7 +306,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
      */
     public function getCost(bool $recache = false): float
     {
-        if ($this->cost !== null && !$recache) {
+        if (isset($this->cost) && !$recache) {
             return $this->cost;
         }
         $total = $this->order->booking_fee ?? 0;
@@ -398,7 +398,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
         if (!isset($status)) {
             $paidAmount = $this->order->paid;
-            $cost = $this->order->cost;
+            $cost = $this->cost ?? $this->order->cost;
             $adjustments = $this->order->total_adjustments;
             $total = $cost + $adjustments;
             if ($this->order->trashed() || $this->order->cancelled) {
@@ -513,8 +513,8 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         $cache = $this->order->cache ?? new OrderCache(['order_id' => $this->order->id,]);
         $nextPayment = $this->getNextPaymentDetails();
         $cache->update([
-            'status' => $this->getOrderStatus(true),
             'cost' => $this->getCost(true),
+            'status' => $this->getOrderStatus(true),
             'total_owed' => $this->order->total,
             'next_payment_date' => $nextPayment?->due_on,
             'next_payment_amount' => $nextPayment?->amount,
