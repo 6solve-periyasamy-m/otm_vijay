@@ -2,6 +2,7 @@
 
 namespace App\Repository\Model\Order;
 
+use App\Events\Order\Customer\OrderCustomerCreatedEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Exceptions\MailDisabledException;
 use App\Mail\Storage\OrderMail;
@@ -166,7 +167,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     {
         $order = Order::make($data);
         $tour->orders()->save($order);
-        $leadBooker = $order->repository->addCustomer($lead);
+        $leadBooker = $order->repository->addCustomer($lead, false, false);
         $order->repository->update(['lead_booker_id' => $leadBooker->id,]);
         $order->repository->update(['booking_reference' => Order::generateBookingReference($order),]); // Merging will lead to lead booker id not being set at generation
         $included = $tour->repository->getComponentSetForSaving();
@@ -177,7 +178,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         }
         $order->repository->resetInstallments();
         foreach ($customers as $customer) {
-            $orderCustomer = $order->repository->addCustomer($customer, false);
+            $orderCustomer = $order->repository->addCustomer($customer, false, false);
             if ($customer->travelling) {
                 $orderCustomer->repository->bulkSaveStandard($included->clone());
                 RoomingRepository::createGroupFromRoomList($orderCustomer, $defaultRooms);
@@ -191,10 +192,11 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     /**
      * Add a new traveller to an order
      * @param ConvertedCustomer $customer The customer to be added to the Order
-     * @param bool $refresh Should the cache be refreshed (default: true)
+     * @param bool $refresh Should the cache be refreshed and invoice generated (default: true)
+     * @param bool $components Should the components be added (default: true)
      * @return OrderCustomer
      */
-    public function addCustomer(ConvertedCustomer $customer, bool $refresh = true): OrderCustomer
+    public function addCustomer(ConvertedCustomer $customer, bool $refresh = true, bool $components = true): OrderCustomer
     {
         $orderCustomer = OrderCustomer::make([
             'is_travelling' => $customer->travelling,
@@ -205,7 +207,12 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             ...$customer->data,
         ]);
         $this->order->orderCustomers()->save($orderCustomer);
+        if ($components) {
+            $orderCustomer->repository->addAllIncluded();
+            RoomingRepository::assignDefaultRooming($orderCustomer);
+        }
         $refresh && $this->refresh();
+        event(new OrderCustomerCreatedEvent($orderCustomer, $refresh));
         return $orderCustomer;
     }
 

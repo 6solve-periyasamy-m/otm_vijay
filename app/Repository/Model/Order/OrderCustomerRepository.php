@@ -2,8 +2,9 @@
 
 namespace App\Repository\Model\Order;
 
+use App\Events\Order\Customer\OrderCustomerEditedEvent;
+use App\Events\Order\Customer\OrderCustomerRemovedEvent;
 use App\Models\Booking\BookingTraveller;
-use App\Models\Customer\Customer;
 use App\Models\Order\Adjustment\OrderCustomerAdjustment;
 use App\Models\Order\OrderCustomer;
 use App\Models\Voucher\VoucherCode;
@@ -273,12 +274,21 @@ class OrderCustomerRepository extends ModelRepository
 
     public function save(): bool
     {
+        $this->orderCustomer->order->repository->refresh();
+        event(new OrderCustomerEditedEvent($this->orderCustomer));
         return $this->orderCustomer->save();
     }
 
     public function delete(): bool
     {
-        return $this->orderCustomer->delete();
+        foreach ($this->orderCustomer->groups as $group) {
+            if ($group->orderCustomers->count() == 1) { $group->delete(); }
+        }
+        $deleted = $this->orderCustomer->delete();
+        if ($deleted) {
+            event(new OrderCustomerRemovedEvent($this->orderCustomer));
+        }
+        return $deleted;
     }
 
     public function isDeleted(): bool
@@ -286,7 +296,7 @@ class OrderCustomerRepository extends ModelRepository
         return $this->orderCustomer->trashed();
     }
 
-    public function removeAllComponents(bool $accommodation = false)
+    public function removeAllComponents(bool $accommodation = false): void
     {
         foreach ($this->getComponents($accommodation) as $component) {
             $component->delete();

@@ -258,7 +258,7 @@ class Order extends Model
      */
     public function getTotalAdjustmentsAttribute(): float
     {
-        return $this->order->customerAdjustments()->sum('amount') + $this->order->adjustments()->sum('amount');
+        return $this->customerAdjustments()->sum('amount') + $this->adjustments()->sum('amount');
     }
 
     /**
