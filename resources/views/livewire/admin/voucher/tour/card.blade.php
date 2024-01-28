@@ -1,7 +1,7 @@
 <x-admin.section.card>
-    <div class="card-title">
-        <h4 class="fw-bold">{{ __('voucher.tour.card.title') }}</h4>
-    </div>
+    <x-slot:title>
+        {{ __('voucher.tour.card.title') }}
+    </x-slot:title>
     <div class="row mb-2">
         <div class="col-8">
             <x-livewire.input.select2 name="tour" label="Tour" route="tours" />

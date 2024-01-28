@@ -72,7 +72,7 @@
         </div>
         <div class="col-md-6 col-12">
             <x-admin.section.card>
-                <div class="card-title">
+                <x-slot:header>
                     <h4 class="fw-bold">
                         Supplier Payments
                     </h4>
@@ -81,13 +81,13 @@
                             {{ Icon::create() }} {{ __('supplier.contract.payment.create') }}
                         </a>
                     </div>
-                </div>
+                </x-slot:header>
                 <livewire:admin.supplier.contract.payment.table :contract="$contract" />
             </x-admin.section.card>
         </div>
         <div class="col-md-6 col-12">
             <x-admin.section.card>
-                <div class="card-title">
+                <x-slot:header>
                     <h4 class="fw-bold">
                         Payment Instalments
                     </h4>
@@ -96,7 +96,7 @@
                             {{ Icon::create() }} {{ __('supplier.contract.installment.create') }}
                         </a>
                     </div>
-                </div>
+                </x-slot:header>
                 <livewire:admin.supplier.contract.installment.table :contract="$contract" />
             </x-admin.section.card>
         </div>

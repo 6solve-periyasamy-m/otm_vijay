@@ -1,7 +1,7 @@
 <x-admin.section.card>
-    <div class="card-title">
-        <h4 class="fw-bold">{{ __($organization?->id !== null ? 'organization.form.title.update' : 'organization.form.title.create') }}</h4>
-    </div>
+    <x-slot:title>
+        {{ __($organization?->id !== null ? 'organization.form.title.update' : 'organization.form.title.create') }}
+    </x-slot:title>
     <div class="row">
         <x-livewire.input wire:model="organization.name" required width="4" label="{{__('organization.form.fields.name')}}" />
         <x-livewire.input wire:model="organization.contact_email"  width="4" label="{{__('organization.form.fields.contact.email')}}" />

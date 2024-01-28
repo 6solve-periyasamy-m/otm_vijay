@@ -1,7 +1,7 @@
 <x-admin.section.card>
-    <div class="card-title">
-        <h4 class="fw-bold">{{ __($payment?->id !== null ? 'supplier.contract.payment.form.title.update' : 'supplier.contract.payment.form.title.create') }}</h4>
-    </div>
+    <x-slot:title>
+        {{ __($payment?->id !== null ? 'supplier.contract.payment.form.title.update' : 'supplier.contract.payment.form.title.create') }}
+    </x-slot:title>
     <div class="row">
         <x-livewire.input wire:model.defer.500ms="payment.amount" required width="3" label="{{__('supplier.contract.payment.form.fields.amount')}}" />
         <x-livewire.input type="datetime-local" wire:model.defer.500ms="payment.paid" required width="3" label="{{__('supplier.contract.payment.form.fields.paid')}}" />

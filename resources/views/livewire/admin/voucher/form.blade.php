@@ -1,7 +1,7 @@
 <x-admin.section.card>
-    <div class="card-title">
-        <h4 class="fw-bold">{{ __($voucher?->id !== null ? 'voucher.form.edit' : 'voucher.form.create') }}</h4>
-    </div>
+    <x-slot:title>
+        {{ __($voucher?->id !== null ? 'voucher.form.edit' : 'voucher.form.create') }}
+    </x-slot:title>
     <div class="row">
         <x-livewire.input wire:model="voucher.code" required width="2" label="{{__('voucher.form.fields.code')}}" />
         <x-livewire.input wire:model="voucher.name" required width="8" label="{{__('voucher.form.fields.name')}}" />

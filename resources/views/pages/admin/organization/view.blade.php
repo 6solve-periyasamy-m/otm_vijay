@@ -12,9 +12,9 @@
     <div class="row">
         <div class="col-xl-6">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Organization Orders</h4>
-                </div>
+                <x-slot:title>
+                    Organization Orders
+                </x-slot:title>
                 <table class="table datatable table-striped order-table">
                     <thead>
                     <tr>
@@ -41,9 +41,9 @@
         </div>
         <div class="col-xl-6">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Organization Quotes</h4>
-                </div>
+                <x-slot:title>
+                    Organization Quotes
+                </x-slot:title>
                 <table class="table datatable table-striped order-table">
                     <thead>
                     <tr>
@@ -69,9 +69,9 @@
         <hr class="splitter" />
         <div class="col-xl-12">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Organization Members</h4>
-                </div>
+                <x-slot:title>
+                    Organization Members
+                </x-slot:title>
                 <table class="table datatable table-striped order-table">
                     <thead>
                     <tr>
@@ -94,9 +94,9 @@
         </div>
         <div class="col-xl-6">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Member Orders</h4>
-                </div>
+                <x-slot:title>
+                    Member Orders
+                </x-slot:title>
                 <table class="table datatable table-striped order-table">
                     <thead>
                     <tr>
@@ -123,9 +123,9 @@
         </div>
         <div class="col-xl-6">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Member Quotes</h4>
-                </div>
+                <x-slot:title>
+                    Member Quotes
+                </x-slot:title>
                 <table class="table datatable table-striped order-table">
                     <thead>
                     <tr>

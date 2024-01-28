@@ -2,9 +2,9 @@
     @csrf
     <div class="col-xl-6">
         <x-admin.section.card>
-            <div class="card-title">
-                <h4 class="fw-bold">Company Information</h4>
-            </div>
+            <x-slot:title>
+                Company Information
+            </x-slot:title>
             <div class="row">
                 @include('partials.fields.text', ['name' => 'Company Name', 'field' => 'company_name', 'value' => setting('company.name', ''), 'width' => 6])
                 @include('partials.fields.text', ['name' => 'Company Email', 'field' => 'company_email', 'value' => setting('company.contact.email', ''), 'width' => 6])
@@ -19,9 +19,9 @@
     </div>
     <div class="col-xl-6">
         <x-admin.section.card>
-            <div class="card-title">
-                <h4 class="fw-bold">Company Address</h4>
-            </div>
+            <x-slot:title>
+                Company Address
+            </x-slot:title>
             <div class="row">
                 @include('partials.fields.text', ['name' => 'Company Address Line 1', 'field' => 'address_line_1', 'value' => setting('company.address.line_1', ''), 'width' => 6])
                 @include('partials.fields.text', ['name' => 'Company Address Line 2', 'field' => 'address_line_2', 'value' => setting('company.address.line_2', ''), 'width' => 6])
@@ -35,9 +35,9 @@
     <div class="col-xl-6">
         <x-admin.section.card>
             <div class="card-body">
-                <div class="card-title">
-                    <h4 class="fw-bold">Order and Booking Information</h4>
-                </div>
+                <x-slot:title>
+                    Order and Booking Information
+                </x-slot:title>
                 <div class="row">
                     @include('partials.fields.text', ['name' => 'Order Prefix ', 'field' => 'booking_prefix', 'value' => setting('booking.prefix', 'OTM'), 'width' => 4])
                     @include('partials.fields.text', ['name' => 'Quote Prefix', 'field' => 'quote_prefix', 'value' => setting('quote.prefix', 'OTMQ'), 'width' => 4])
@@ -50,9 +50,9 @@
     </div>
     <div class="col-xl-6">
         <x-admin.section.card>
-            <div class="card-title">
-                <h4 class="fw-bold">Payment Success Redirects</h4>
-            </div>
+            <x-slot:title>
+                Payment Success Redirects
+            </x-slot:title>
             <div class="row">
                 @include('partials.fields.text', ['name' => 'Booking Success Page', 'field' => 'booking_redirect', 'value' => setting('booking.success.redirect', ''), 'width' => 6,])
                 @include('partials.fields.text', ['name' => 'Installment Payment Success Page', 'field' => 'payment_redirect', 'value' => setting('payment.success.redirect', ''), 'width' => 6,])
@@ -63,9 +63,9 @@
     </div>
     <div class="col-xl-4">
         <x-admin.section.card>
-            <div class="card-title">
-                <h4 class="fw-bold">Dates and Times</h4>
-            </div>
+            <x-slot:title>
+                Dates and Times
+            </x-slot:title>
             <div class="row">
                 @include('partials.fields.dropdown', [
                     'name' => 'Date Format',
@@ -110,9 +110,9 @@
     </div>
     <div class="col-xl-4">
         <x-admin.section.card>
-            <div class="card-title">
-                <h4 class="fw-bold">System Toggles</h4>
-            </div>
+            <x-slot:title>
+                System Toggles
+            </x-slot:title>
             <div class="row">
                 @include('partials.fields.checkbox', ['name' => 'Require Immediate Payment For Upgrades/Add-ons', 'field' => 'payment_required', 'value' => flag('payment.required', true),])
                 @include('partials.fields.checkbox', ['name' => 'Require Overdue Installments Up Front', 'field' => 'force_installments', 'value' => flag('installments.force', false),])
@@ -124,9 +124,9 @@
     </div>
     <div class="col-xl-4">
         <x-admin.section.card>
-            <div class="card-title">
-                <h4 class="fw-bold">System Images</h4>
-            </div>
+            <x-slot:title>
+                System Images
+            </x-slot:title>
             <div class="row">
                 @include('partials.fields.file', ['name' => 'Company Logo', 'field' => 'company_logo', 'width' => 6])
                 <div class="col-12 col-xl-6">
@@ -141,9 +141,9 @@
     </div>
     <div class="col-xl-12">
         <x-admin.section.card>
-            <div class="card-title">
-                <h4 class="fw-bold">Customer Data Locking</h4>
-            </div>
+            <x-slot:title>
+                Customer Data Locking
+            </x-slot:title>
             <div class="row">
                 @include('partials.admin.system.settings.lock', ['name' => 'Purchasing Components', 'field' => 'components', 'unlock' => false])
                 @include('partials.admin.system.settings.lock', ['name' => 'Passport Details', 'field' => 'passport'])

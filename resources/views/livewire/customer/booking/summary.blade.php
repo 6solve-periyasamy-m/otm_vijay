@@ -1,11 +1,11 @@
 <div>
     <x-admin.section.card>
-        <div class="card-title">
+        <x-slot:header>
             Edit Travellers
             <a href="{{ route('customer-booking.index', ['bookingUrl' => $this->booking->tour->booking_form_url, 'token' => $this->booking->token]) }}" class="btn btn-warning text-dark float-end">
                 Back to Start
             </a>
-        </div>
+        </x-slot:header>
         If you return to the start, any changes made to the itinerary will be reset.
         <br/>
         If you want to edit a specific customers itineraries, please click on their details below.
@@ -27,12 +27,12 @@
     </div>
 
     <x-admin.section.card>
-        <div class="card-title">
+        <x-slot:header>
             Rooming Manager
             <a href="{{ route('customer-booking.rooming', ['bookingUrl' => $this->booking->tour->booking_form_url, 'token' => $this->booking->token]) }}" class="btn btn-success float-end">
                 Edit Rooming
             </a>
-        </div>
+        </x-slot:header>
         Please make sure all travellers are added before editing rooming, as adding additional travellers will reset room assignments. Deleting/editing travellers will <span class="fw-bold">not</span> reset the rooming.
     </x-admin.section.card>
 

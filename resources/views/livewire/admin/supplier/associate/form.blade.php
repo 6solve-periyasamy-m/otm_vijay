@@ -1,7 +1,7 @@
 <x-admin.section.card>
-    <div class="card-title">
+    <x-slot:title>
         <h4 class="fw-bold">{{ __($associate?->id !== null ? 'supplier.associate.form.title.update' : 'supplier.associate.form.title.create') }}</h4>
-    </div>
+    </x-slot:title>
     <div class="row">
         <x-livewire.input wire:model="associate.name" required width="6" label="{{__('supplier.associate.form.fields.name')}}" />
         <x-livewire.input wire:model="associate.job_title" width="6" label="{{__('supplier.associate.form.fields.job')}}" />

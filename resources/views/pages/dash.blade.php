@@ -85,9 +85,9 @@
     <div class="row">
         <div class="col-xl-6">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Expected Revenue</h4>
-                </div>
+                <x-slot:title>
+                    Expected Revenue
+                </x-slot:title>
                 <x-loading-spinner></x-loading-spinner>
                 <div class="revenue-container" style="display: none;">
                     <table class="revenue-table table table-striped">
@@ -109,18 +109,18 @@
 
         <div class="col-xl-6">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Revenue over 7 days</h4>
-                </div>
+                <x-slot:title>
+                    Revenue over 7 days
+                </x-slot:title>
                 {{ \App\Repository\ChartRepository::getRevenueChart(now()->subDays(7)) }}
             </x-admin.section.card>
         </div>
 
         <div class="col-xl-12">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Abandoned Bookings</h4>
-                </div>
+                <x-slot:title>
+                    Abandoned Bookings
+                </x-slot:title>
                 @include('partials.reports.tables.abandoned-bookings', ['data' => \App\Repository\Reporting\ReportRepository::getAbandonedBookingsReport(7)])
             </x-admin.section.card>
         </div>

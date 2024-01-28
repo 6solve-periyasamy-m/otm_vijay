@@ -129,9 +129,9 @@ $profit = $revenue - $costOfTour;
         </div>
         <div class="col-xl-4">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Per-Customer Costs</h4>
-                </div>
+                <x-slot:title>
+                    Per-Customer Costs
+                </x-slot:title>
                 <form class="form-group row per_customer-create" action="{{ route('additional-cost.store', ['model' => 'tour', 'id' => $tour->id]) }}" method="post">
                     @csrf
                     <x-admin.input name="name" width="5">Name</x-admin.input>
@@ -179,9 +179,9 @@ $profit = $revenue - $costOfTour;
         </div>
         <div class="col-xl-4">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Key Financials</h4>
-                </div>
+                <x-slot:title>
+                    Key Financials
+                </x-slot:title>
                 <div class="row">
                     <x-admin.section.otm-text width="6">
                         <x-slot:header>
@@ -216,9 +216,9 @@ $profit = $revenue - $costOfTour;
         </div>
         <div class="col-xl-4">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Whole Package Costs</h4>
-                </div>
+                <x-slot:title>
+                    Whole Package Costs
+                </x-slot:title>
                 <form class="form-group row whole-tour-create" action="{{ route('additional-cost.store', ['model' => 'tour', 'id' => $tour->id]) }}" method="post">
                     @csrf
                     <x-admin.input name="name" width="5">Name</x-admin.input>
@@ -592,9 +592,9 @@ $profit = $revenue - $costOfTour;
     <div class="row">
         <div class="col-xl-6">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Expected Installment Revenue</h4>
-                </div>
+                <x-slot:title>
+                    Expected Installment Revenue
+                </x-slot:title>
                 <table class="table table-striped datatable">
                     <thead>
                     <tr>
@@ -621,17 +621,17 @@ $profit = $revenue - $costOfTour;
         </div>
         <div class="col-xl-6">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Potential Revenue</h4>
-                </div>
+                <x-slot:title>
+                    Potential Revenue
+                </x-slot:title>
             {{ $tour->repository->getCosting()->getTourRevenueDonut() }}
             </x-admin.section.card>
         </div>
         <div class="col-xl-6">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Orders</h4>
-                </div>
+                <x-slot:title>
+                    Orders
+                </x-slot:title>
                 <table class="table table-striped datatable">
                     <thead>
                     <tr>
@@ -658,9 +658,9 @@ $profit = $revenue - $costOfTour;
         </div>
         <div class="col-xl-6">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Orders Over Time</h4>
-                </div>
+                <x-slot:title>
+                    Orders Over Time
+                </x-slot:title>
             {{ $tour->repository->getCosting()->getOrdersOverTime() ?? "No orders have been placed" }}
         </x-admin.section.card>
         </div>

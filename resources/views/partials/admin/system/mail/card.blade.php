@@ -19,9 +19,9 @@
 </x-admin.section.card>
 <div class="collapse" id="mail-template-{{ $template->getCode()}}">
     <x-admin.section.card>
-        <div class="card-title">
-            <h4 class="fw-bold">{{ $template->getSubject() }}</h4>
-        </div>
+        <x-slot:title>
+            {{ $template->getSubject() }}
+        </x-slot:title>
         {!! $template->getBody() !!}
     </x-admin.section.card>
 </div>

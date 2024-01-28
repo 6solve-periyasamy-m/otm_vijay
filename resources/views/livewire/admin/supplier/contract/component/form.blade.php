@@ -1,7 +1,7 @@
 <x-admin.section.card>
-    <div class="card-title">
-        <h4 class="fw-bold">Update Component</h4>
-    </div>
+    <x-slot:title>
+        Update Component
+    </x-slot:title>
     <div class="row">
         <x-livewire.input wire:model="component.quantity" required width="5" label="Quantity" />
         <x-livewire.input wire:model="component.cost_per_unit" required width="5" label="Cost Per Unit" />

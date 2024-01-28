@@ -1,7 +1,7 @@
 <x-admin.section.card>
-    <div class="card-title">
-        <h4 class="fw-bold">Create Brand</h4>
-    </div>
+    <x-slot:title>
+        Create Brand
+    </x-slot:title>
     <div class="row">
         <div class="form-group col-12 col-xl-3" style="padding-left: 5px;">
             <label>Brand Name</label>

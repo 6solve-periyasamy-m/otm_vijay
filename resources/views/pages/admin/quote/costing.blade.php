@@ -114,9 +114,9 @@ $profit = $remaining - $costOfTour;
         </div>
         <div class="col-xl-4">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Per-Customer Costs</h4>
-                </div>
+                <x-slot:title>
+                    Per-Customer Costs
+                </x-slot:title>
                 <form class="form-group row per_customer-create" action="{{ route('additional-cost.store', ['model' => 'quote', 'id' => $quote->id]) }}" method="post">
                     @csrf
                     <x-admin.input name="name" width="5">Name</x-admin.input>
@@ -164,9 +164,9 @@ $profit = $remaining - $costOfTour;
         </div>
         <div class="col-xl-4">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Key Financials</h4>
-                </div>
+                <x-slot:title>
+                    Key Financials
+                </x-slot:title>
                 <div class="row">
                     <x-admin.section.otm-text width="4">
                         <x-slot:header>
@@ -195,9 +195,9 @@ $profit = $remaining - $costOfTour;
         </div>
         <div class="col-xl-4">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Whole Package Costs</h4>
-                </div>
+                <x-slot:title>
+                    Whole Package Costs
+                </x-slot:title>
                 <form class="form-group row whole-tour-create" action="{{ route('additional-cost.store', ['model' => 'quote', 'id' => $quote->id]) }}" method="post">
                     @csrf
                     <x-admin.input name="name" width="5">Name</x-admin.input>

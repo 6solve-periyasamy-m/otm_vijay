@@ -603,9 +603,9 @@
         </x-admin.section.card>
         {{-- Merchandise Section --}}
         <x-admin.section.card>
-            <div class="card-title">
-                <h4 class="fw-bold">Merchandise</h4>
-            </div>
+            <x-slot:title>
+                Merchandise
+            </x-slot:title>
             <div id="merchandise-new" class="d-flex justify-content-between mb-3 flex-wrap">
                 @include('partials.fields.selector.adder',
                             ['field' => 'merchandise_id', 'preselect' => false,
@@ -658,7 +658,7 @@
     @endif
     {{-- Adjustments Section --}}
     <x-admin.section.card>
-        <div class="card-title">
+        <x-slot:header>
             <h4 class="fw-bold">Customer Adjustments</h4>
             @can('create', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
                 <div class="pb-3 text-end">
@@ -668,7 +668,7 @@
                     </a>
                 </div>
             @endcan
-        </div>
+        </x-slot:header>
         <div>
             <table class="datatable table table-striped" id="customer-adjustment-table">
                 <thead>

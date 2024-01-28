@@ -143,9 +143,9 @@
     <div class="row">
         <div class="col-xl-6" id="payments-section">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Payments</h4>
-                </div>
+                <x-slot:title>
+                    Payments
+                </x-slot:title>
                 <div class="pb-3 text-end">
                     @can('create', \App\Models\Order\Payment\Payment::class)
                         <a href="{{ route('payments.create', ['order' => $order, ]) }}" class="btn btn-success text-white mb-1">
@@ -204,9 +204,9 @@
                 </div>
             </x-admin.section.card>
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Costs</h4>
-                </div>
+                <x-slot:title>
+                    Costs
+                </x-slot:title>
                 <div>
                     <table class="datatable table table-striped" id="cost-table">
                         <thead>
@@ -243,9 +243,9 @@
                 </div>
             </x-admin.section.card>
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Schedule</h4>
-                </div>
+                <x-slot:title>
+                    Schedule
+                </x-slot:title>
                 <div class="pb-3 text-end">
                     @can('update', \App\Models\Order\Order::class)
                         <a href="{{ route('order-installments.create', ['order' => $order, ]) }}" class="btn btn-success text-white mb-1">
@@ -358,9 +358,9 @@
         </div>
         <div class="col-xl-6">
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Order Adjustments</h4>
-                </div>
+                <x-slot:title>
+                    Order Adjustments
+                </x-slot:title>
                 @can('create', \App\Models\Order\Adjustment\ManualAdjustment::class)
                     <div class="pb-3 text-end">
                         <a href="{{ route('manual-adjustments.create', ['order' => $order, ]) }}" class="btn btn-success text-white">
@@ -410,9 +410,9 @@
                 </div>
             </x-admin.section.card>
             <x-admin.section.card>
-                <div class="card-title">
-                    <h4 class="fw-bold">Customer Adjustments</h4>
-                </div>
+                <x-slot:title>
+                    Customer Adjustments
+                </x-slot:title>
                 <div>
                     <table class="datatable table table-striped" id="customer-adjustment-table">
                         <thead>
