@@ -2,6 +2,7 @@
 
 namespace App\Models\Order;
 
+use App\Models\Helper\OrderStatus;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -44,6 +45,7 @@ use Illuminate\Support\Carbon;
 class OrderCache extends Model
 {
     protected $casts = [
+        'status' => OrderStatus::class,
         'commission_amount' => 'float',
         'cost' => 'float',
         'total_owed' => 'float',
