@@ -24,7 +24,6 @@ class SupplierContractFactory extends Factory
             'currency_id' => $currency->id,
             'agreed_exchange' =>(fake()->numberBetween(500, 1500) / 100),
             'total_cost' => fake()->randomNumber(8),
-            'price_per_item' => fake()->randomNumber(6),
             'confirmed' => fake()->boolean,
             'notes' => fake()->text,
         ];
