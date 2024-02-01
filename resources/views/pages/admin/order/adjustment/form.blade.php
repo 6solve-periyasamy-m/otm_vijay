@@ -3,7 +3,7 @@
      * @var \App\Models\Order\Order $order
      * @var \App\Models\Order\Adjustment\ManualAdjustment|null $manualAdjustment
      */
-    $orderCustomer = $manualAdjustment ?? null;
+    $manualAdjustment = $manualAdjustment ?? null;
     $title = __('order.adjustment.form.title.' . ($manualAdjustment === null ? 'create' : 'update'));
     $route = $manualAdjustment === null ?
         route('manual-adjustments.store', ['order' => $order,]) :
