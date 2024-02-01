@@ -18,12 +18,12 @@ class TourController extends Controller
         } else {
             $tours = Tour::whereDate('date_to', '>', now()->subMonths(setting('system.historic', 6)))->get();
         }
-        return view('pages.models.tours.table', ['tours' => $tours, 'historic' => ($request->historic ?? false)]);
+        return view('pages.admin.tour.table', ['tours' => $tours, 'historic' => ($request->historic ?? false)]);
     }
 
     public function create()
     {
-        return view('pages.models.tours.create');
+        return view('pages.admin.tour.form');
     }
 
     public function store(Request $request)
@@ -77,12 +77,12 @@ class TourController extends Controller
             'paymentInstallments', 'orders', 'orders.leadBooker'
         )->find($tour);
         if (!isset($tour)) abort(404);
-        return view('pages.tour.view', ['tour' => $tour,]);
+        return view('pages.admin.tour.view', ['tour' => $tour,]);
     }
 
     public function costing(Tour $tour)
     {
-        return view('pages.tour.costing', ['tour' => $tour,]);
+        return view('pages.admin.tour.costing', ['tour' => $tour,]);
     }
 
     public function duplicate(Tour $tour)
@@ -101,7 +101,7 @@ class TourController extends Controller
 
     public function edit(Tour $tour)
     {
-        return view('pages.models.tours.update', ['tour' => $tour,]);
+        return view('pages.admin.tour.form', ['tour' => $tour,]);
     }
 
     public function update(Request $request, Tour $tour)

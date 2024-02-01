@@ -16,12 +16,12 @@ class AccommodationController extends Controller
 
     public function index()
     {
-        return view('pages.models.accommodations.table', ['accommodations' => Accommodation::all(),]);
+        return view('pages.admin.accommodation.table', ['accommodations' => Accommodation::all(),]);
     }
 
     public function create()
     {
-        return view('pages.models.accommodations.create');
+        return view('pages.admin.accommodation.form');
     }
 
     public function store(Request $request)
@@ -52,7 +52,7 @@ class AccommodationController extends Controller
 
     public function view(Accommodation $accommodation)
     {
-        return view('pages.components.accommodation', ['accommodation' => $accommodation,]);
+        return view('pages.admin.accommodation.view', ['accommodation' => $accommodation,]);
     }
 
     public function rooming(Request $request, Accommodation $accommodation)
@@ -69,7 +69,7 @@ class AccommodationController extends Controller
 
     public function edit(Accommodation $accommodation)
     {
-        return view('pages.models.accommodations.update', ['accommodation' => $accommodation,]);
+        return view('pages.admin.accommodation.form', ['accommodation' => $accommodation,]);
     }
 
     public function update(Request $request, Accommodation $accommodation)

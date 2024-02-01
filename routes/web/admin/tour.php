@@ -24,9 +24,7 @@ Route::prefix('{tour}')->group(function () {
     Route::post('/delete', [TourController::class, 'destroy'])->name('tours.delete')->middleware('bouncer:Tour\Tour,delete');
     Route::post('/restore', [TourController::class, 'restore'])->name('tours.restore')->middleware('bouncer:Tour\Tour,delete');
     Route::get('/atol', [TourController::class, 'exportAtol'])->name('tours.atol')->middleware('bouncer:Tour\Tour,read');
-    Route::get('/add', function (Tour $tour) {
-        return view('pages.tour.components.add', ['tour' => $tour,]);
-    })->name('tours.add')->middleware('bouncer:Tour\Tour,update');
+    Route::get('/add', function (Tour $tour) {  return view('pages.admin.tour.component.add', ['tour' => $tour,]);  })->name('tours.add')->middleware('bouncer:Tour\Tour,update');
     Route::get('/fulfil', [TourController::class, 'fulfil'])->name('tours.fulfil')->middleware('bouncer:Merchandise\Merchandise,update');
     Route::get('/rooming', [TourManifestController::class, 'rooming'])->name('tours.rooming')->middleware('bouncer:Tour\Tour,read');
     Route::get('/rooming/{extension}', [TourManifestController::class, 'exportRooming'])->name('tours.rooming.export')->middleware('bouncer:Tour\Tour,read');

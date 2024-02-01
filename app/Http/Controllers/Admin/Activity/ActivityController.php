@@ -16,12 +16,12 @@ class ActivityController extends Controller
 
     public function index()
     {
-        return view('pages.models.activities.table', ['activities' => Activity::all(),]);
+        return view('pages.admin.activity.table', ['activities' => Activity::all(),]);
     }
 
     public function create()
     {
-        return view('pages.models.activities.create');
+        return view('pages.admin.activity.form');
     }
 
     public function store(Request $request)
@@ -51,7 +51,7 @@ class ActivityController extends Controller
 
     public function view(Activity $activity)
     {
-        return view('pages.components.activity', ['activity' => $activity,]);
+        return view('pages.admin.activity.view', ['activity' => $activity,]);
     }
 
     public function manifest(Activity $activity)
@@ -66,7 +66,7 @@ class ActivityController extends Controller
 
     public function edit(Activity $activity)
     {
-        return view('pages.models.activities.update', ['activity' => $activity,]);
+        return view('pages.admin.activity.form', ['activity' => $activity,]);
     }
 
     public function update(Request $request, Activity $activity)

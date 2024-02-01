@@ -3,95 +3,117 @@
 namespace App\Http\Controllers\Admin\Reporting;
 
 use App\Exports\AtolReportExport;
-use App\Helpers\QuarterHelper;
+use App\Helpers\QuarterCalculator;
+use App\Helpers\Storage\Quarter;
 use App\Http\Controllers\Controller;
 use App\Repository\Model\Order\AtolRepository;
 use App\Repository\Reporting\ReportRepository;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\RedirectResponse;
 use Maatwebsite\Excel\Facades\Excel;
 
 class AtolController extends Controller
 {
-    private function getBoundaries(): array
+    private function getQuarter(int $year, int $quarter): Quarter|null
     {
-        $earliest = QuarterHelper::getEarliestQuarter();
-        $latest = QuarterHelper::getLatestQuarter();
-        return ['earliest' => $earliest, 'latest' => $latest];
+        return (new QuarterCalculator(setting('atol.year.start', '2022-04-01')))->getQuarter($year, $quarter);
     }
 
-    private function verifyBoundaries(int $year, int $quarter): bool
+    private function getPlacedOrders(int $year, int $quarter): Collection|RedirectResponse
     {
-        $boundaries = $this->getBoundaries();
-        if ($quarter < 1 || $quarter > 4) return false;
-        if (($year < $boundaries['earliest']['year'] && $quarter < $boundaries['earliest']['quarter'])
-            || ($year > $boundaries['latest']['year'] && $quarter > $boundaries['latest']['quarter'])) return false;
-        return true;
+        $orders = $this->getQuarter($year, $quarter)?->getPlacedOrders();
+        if ($orders === null) { return back()->withErrors(['msg' => "Cannot calculate orders for Quarter $quarter, $year"]); }
+        if ($orders->count() === 0) { return back()->withErrors(['msg' => "No orders were placed in Quarter $quarter, $year"]); }
+        return $orders;
+    }
+
+    private function getDepartingOrders(int $year, int $quarter): Collection|RedirectResponse
+    {
+        $orders = $this->getQuarter($year, $quarter)?->getDepartingOrders();
+        if ($orders === null) { return back()->withErrors(['msg' => "Cannot calculate orders for Quarter $quarter, $year"]); }
+        if ($orders->count() === 0) { return back()->withErrors(['msg' => "No orders are departing in Quarter $quarter, $year"]); }
+        return $orders;
+    }
+
+    private function getDepartingAfterOrders(int $year, int $quarter): Collection|RedirectResponse
+    {
+        $orders = $this->getQuarter($year, $quarter)?->getDepartingAfterOrders();
+        if ($orders === null) { return back()->withErrors(['msg' => "Cannot calculate orders for Quarter $quarter, $year"]); }
+        if ($orders->count() === 0) { return back()->withErrors(['msg' => "No orders are departing after Quarter $quarter, $year"]); }
+        return $orders;
     }
 
     public function getOrderedInQuarterReport(int $year, int $quarter)
     {
-        if (!$this->verifyBoundaries($year, $quarter)) abort(404);
+        $orders = $this->getPlacedOrders($year, $quarter);
+        if ($orders instanceof RedirectResponse) return $orders;
         return view('pages.reports.atol',
-            ['data' => ReportRepository::getOrdersPlacedInQuarterReport($year, $quarter),
+            ['data' => ReportRepository::generateAtolReport($orders),
                 'csv' => route('reports.atol.export.ordered', ['year' => $year, 'quarter' => $quarter, 'extension' => 'csv',]),
                 'xlsx' => route('reports.atol.export.ordered', ['year' => $year, 'quarter' => $quarter, 'extension' => 'xlsx',]),]);
     }
 
     public function getDepartingInQuarterReport(int $year, int $quarter)
     {
-        if (!$this->verifyBoundaries($year, $quarter)) abort(404);
+        $orders = $this->getDepartingOrders($year, $quarter);
+        if ($orders instanceof RedirectResponse) return $orders;
         return view('pages.reports.atol',
-            ['data' => ReportRepository::getOrdersDepartingInQuarterReport($year, $quarter),
+            ['data' => ReportRepository::generateAtolReport($orders),
              'csv' => route('reports.atol.export.departed-in', ['year' => $year, 'quarter' => $quarter, 'extension' => 'csv',]),
              'xlsx' => route('reports.atol.export.departed-in', ['year' => $year, 'quarter' => $quarter, 'extension' => 'xlsx',]),]);
     }
 
     public function getDepartingAfterQuarterReport(int $year, int $quarter)
     {
-        if (!$this->verifyBoundaries($year, $quarter)) abort(404);
+        $orders = $this->getDepartingAfterOrders($year, $quarter);
+        if ($orders instanceof RedirectResponse) return $orders;
         return view('pages.reports.atol',
-            ['data' => ReportRepository::getOrdersDepartingAfterQuarterReport($year, $quarter),
+            ['data' => ReportRepository::generateAtolReport($orders),
                 'csv' => route('reports.atol.export.departs-after', ['year' => $year, 'quarter' => $quarter, 'extension' => 'csv',]),
                 'xlsx' => route('reports.atol.export.departs-after', ['year' => $year, 'quarter' => $quarter, 'extension' => 'xlsx',]),]);
     }
 
     public function exportOrderedInQuarterReport(int $year, int $quarter, string $extension = 'csv')
     {
-        if (!$this->verifyBoundaries($year, $quarter)) abort(404);
-        return Excel::download(new AtolReportExport(ReportRepository::getOrdersPlacedInQuarterReport($year, $quarter)->orders), "{$year}-Q{$quarter}-ordered-in.{$extension}");
+        $orders = $this->getPlacedOrders($year, $quarter);
+        if ($orders instanceof RedirectResponse) return $orders;
+        return Excel::download(new AtolReportExport($orders), "{$year}-Q{$quarter}-ordered-in.{$extension}");
     }
 
     public function exportDepartingInQuarterReport(int $year, int $quarter, string $extension = 'csv')
     {
-        if (!$this->verifyBoundaries($year, $quarter)) abort(404);
-        return Excel::download(new AtolReportExport(ReportRepository::getOrdersDepartingInQuarterReport($year, $quarter)->orders), "{$year}-Q{$quarter}-departing-in.{$extension}");
+        $orders = $this->getDepartingOrders($year, $quarter);
+        if ($orders instanceof RedirectResponse) return $orders;
+        return Excel::download(new AtolReportExport($orders), "{$year}-Q{$quarter}-departing-in.{$extension}");
     }
 
     public function exportDepartingAfterQuarterReport(int $year, int $quarter, string $extension = 'csv')
     {
-        if (!$this->verifyBoundaries($year, $quarter)) abort(404);
-        return Excel::download(new AtolReportExport(ReportRepository::getOrdersDepartingAfterQuarterReport($year, $quarter)->orders), "{$year}-Q{$quarter}-departing-after.{$extension}");
+        $orders = $this->getDepartingAfterOrders($year, $quarter);
+        if ($orders instanceof RedirectResponse) return $orders;
+        return Excel::download(new AtolReportExport($orders), "{$year}-Q{$quarter}-departing-after.{$extension}");
     }
 
     public function exportOrderedInQuarterCertificates($year, $quarter)
     {
-        if (!$this->verifyBoundaries($year, $quarter)) abort(404);
-        $orders = QuarterHelper::getOrdersPlacedInQuarter($year, $quarter);
+        $orders = $this->getPlacedOrders($year, $quarter);
+        if ($orders instanceof RedirectResponse) return $orders;
         $path = AtolRepository::generateAllAtolCertificates($orders, "{$year}-Q{$quarter}");
         return redirect($path);
     }
 
     public function exportDepartsInQuarterCertificates($year, $quarter)
     {
-        if (!$this->verifyBoundaries($year, $quarter)) abort(404);
-        $orders = QuarterHelper::getOrdersFromToursInQuarter($year, $quarter);
+        $orders = $this->getDepartingOrders($year, $quarter);
+        if ($orders instanceof RedirectResponse) return $orders;
         $path = AtolRepository::generateAllAtolCertificates($orders, "{$year}-Q{$quarter}");
         return redirect($path);
     }
 
     public function exportDepartsAfterQuarterCertificates($year, $quarter)
     {
-        if (!$this->verifyBoundaries($year, $quarter)) abort(404);
-        $orders = QuarterHelper::getOrdersFromToursAfterQuarter($year, $quarter);
+        $orders = $this->getDepartingAfterOrders($year, $quarter);
+        if ($orders instanceof RedirectResponse) return $orders;
         $path = AtolRepository::generateAllAtolCertificates($orders, "{$year}-Q{$quarter}");
         return redirect($path);
     }

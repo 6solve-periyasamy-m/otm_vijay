@@ -9,15 +9,9 @@ use Illuminate\Http\Request;
 
 class AccommodationInventoryTourController extends Controller
 {
-
-    public function index(Tour $tour)
-    {
-        return view('pages.models.accommodation_inventory_tours.table', ['tour' => $tour, 'accommodationInventoryTours' => AccommodationInventoryTour::all(),]);
-    }
-
     public function create(Tour $tour)
     {
-        return view('pages.models.accommodation_inventory_tours.create', ['tour' => $tour,]);
+        return view('pages.admin.accommodation.inventory.tour.form', ['tour' => $tour,]);
     }
 
     public function store(Request $request, Tour $tour)
@@ -34,14 +28,9 @@ class AccommodationInventoryTourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
-    public function view(Tour $tour, AccommodationInventoryTour $accommodationInventoryTour)
-    {
-        return view('pages.models.accommodation_inventory_tours.view', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationInventoryTour,]);
-    }
-
     public function edit(Tour $tour, AccommodationInventoryTour $accommodationInventoryTour)
     {
-        return view('pages.models.accommodation_inventory_tours.update', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationInventoryTour,]);
+        return view('pages.admin.accommodation.inventory.tour.form', ['tour' => $tour, 'inventoryTour' => $accommodationInventoryTour,]);
     }
 
     public function update(Request $request, Tour $tour, AccommodationInventoryTour $accommodationInventoryTour)
