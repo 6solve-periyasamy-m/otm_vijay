@@ -3,7 +3,7 @@
      * @var \App\Models\Order\Order $order
      * @var \App\Models\Order\OrderInstallment|null $orderInstallment
      */
-    $orderCustomer = $orderInstallment ?? null;
+    $orderInstallment = $orderInstallment ?? null;
     $title = __('order.adjustment.form.title.' . ($orderInstallment === null ? 'create' : 'update'));
     $route = $orderInstallment === null ?
         route('order-installments.store', ['order' => $order,]) :
