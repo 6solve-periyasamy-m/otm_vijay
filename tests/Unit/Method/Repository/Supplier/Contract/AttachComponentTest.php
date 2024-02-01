@@ -44,11 +44,9 @@ class AttachComponentTest extends DatabaseTestCase
     private function runAttachTest(Model $inventory, SupplierContract|null $contract = null)
     {
         $contract = $contract ?? $this->generateContract();
-        \Log::info($inventory);
         $attached = $contract->repository->linkToComponent($inventory->repository);
         $this->assertTrue($attached, 'Attachment Failed');
         $class = $inventory::class;
-        \Log::info($contract->components);
         foreach ($contract->components as $component) {
             \Log::info($component->toJson());
             if ($component->component_id === $inventory->id && $component->component_type === $class) {
