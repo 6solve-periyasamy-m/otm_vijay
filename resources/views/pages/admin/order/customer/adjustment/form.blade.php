@@ -6,7 +6,7 @@
      */
     $orderCustomerAdjustment = $orderCustomerAdjustment ?? null;
     $title = __('order.customer.adjustment.form.title.' . ($orderCustomerAdjustment === null ? 'create' : 'update'));
-    $route = $manualAdjustment === null ?
+    $route = $orderCustomerAdjustment === null ?
         route('order-customer-adjustments.store', ['order' => $order, 'orderCustomer' => $orderCustomer,]) :
         route('order-customer-adjustments.update', ['order' => $order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $orderCustomerAdjustment,]);
 @endphp
