@@ -25,7 +25,6 @@ Artisan::command('order:recache', function () {
     $bar->start();
     foreach ($orders as $order) {
         $order->repository->refresh();
-        Log::debug("Recached Order {$order->id}: {$order->booking_reference}");
         $bar->advance();
     }
     $bar->finish();

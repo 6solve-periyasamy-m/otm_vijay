@@ -511,6 +511,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public function refresh(): void
     {
         $cache = $this->order->cache ?? new OrderCache(['order_id' => $this->order->id,]);
+        $cache->save(); // If the cache isn't saved in the database, then it doesn't write properly for some reason
         $nextPayment = $this->getNextPaymentDetails();
         $cache->update([
             'cost' => $this->getCost(true),
