@@ -97,50 +97,46 @@
         </div>
     </div>        
     <hr class="splitter"/>
-    <div class="card">
-        <div class="card-body">
-            <table class="datatable table table-striped order-table">
-                <thead>
-                    <tr>
-                        <th scope="col">Booking Reference</th>
-                        <th scope="col">Tour Name</th>
-                        <th scope="col">Ordered On</th>
-                        <th scope="col">Tour Cost</th>
-                        <th scope="col">Order Status</th>
-                    </tr>
-                </thead>
-                @foreach($customer->orderCustomers as $orderCustomer)
-                    <tr>
-                        <th scope="row"><a href="{{ route('orders.view', ['order' => $orderCustomer->order,]) }}">{{ $orderCustomer->order->booking_reference }}</a></th>
-                        <td>{{ $orderCustomer->order->tour->name }}</td>
-                        <td>{{ f_datetime($orderCustomer->order->ordered_on) }}</td>
-                        <td>{{ f_currency($orderCustomer->tour_cost) }}</td>
-                        <td><h6 class="badge badge-{{ $orderCustomer->order->status->color() }} fw-bold">{{ $orderCustomer->order->status->description() }}</h6></td>
-                    </tr>
-                @endforeach
-            </table>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body">
-            <table class="datatable table table-striped order-table">
-                <thead>
-                    <tr>
-                        <th scope="col">Quote Reference</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Expiry Date</th>
-                        <th scope="col">Quote Status</th>
-                    </tr>
-                </thead>
-                @foreach($customer->quoteProspects as $prospect)
-                    <tr>
-                        <th scope="row"><a href="{{ route('quotes.view', ['quote' => $prospect->quote,]) }}">{{ $prospect->quote->ref }}</a></th>
-                        <td>{{ $prospect->quote->name }}</td>
-                        <td>{{ f_date($prospect->quote->expires) }}</td>
-                        <td>{{ $prospect->quote->status->badge() }}</td>
-                    </tr>
-                @endforeach
-            </table>
-        </div>
-    </div>
+    <x-admin.section.card>
+        <table class="datatable table table-striped order-table">
+            <thead>
+            <tr>
+                <th scope="col">Booking Reference</th>
+                <th scope="col">Tour Name</th>
+                <th scope="col">Ordered On</th>
+                <th scope="col">Tour Cost</th>
+                <th scope="col">Order Status</th>
+            </tr>
+            </thead>
+            @foreach($customer->orderCustomers as $orderCustomer)
+                <tr>
+                    <th scope="row"><a href="{{ route('orders.view', ['order' => $orderCustomer->order,]) }}">{{ $orderCustomer->order->booking_reference }}</a></th>
+                    <td>{{ $orderCustomer->order->tour->name }}</td>
+                    <td>{{ f_datetime($orderCustomer->order->ordered_on) }}</td>
+                    <td>{{ f_currency($orderCustomer->tour_cost) }}</td>
+                    <td><h6 class="badge badge-{{ $orderCustomer->order->status->color() }} fw-bold">{{ $orderCustomer->order->status->description() }}</h6></td>
+                </tr>
+            @endforeach
+        </table>
+    </x-admin.section.card>
+    <x-admin.section.card>
+        <table class="datatable table table-striped order-table">
+            <thead>
+            <tr>
+                <th scope="col">Quote Reference</th>
+                <th scope="col">Name</th>
+                <th scope="col">Expiry Date</th>
+                <th scope="col">Quote Status</th>
+            </tr>
+            </thead>
+            @foreach($customer->quoteProspects as $prospect)
+                <tr>
+                    <th scope="row"><a href="{{ route('quotes.view', ['quote' => $prospect->quote,]) }}">{{ $prospect->quote->ref }}</a></th>
+                    <td>{{ $prospect->quote->name }}</td>
+                    <td>{{ f_date($prospect->quote->expires) }}</td>
+                    <td>{{ $prospect->quote->status->badge() }}</td>
+                </tr>
+            @endforeach
+        </table>
+    </x-admin.section.card>
 @endsection

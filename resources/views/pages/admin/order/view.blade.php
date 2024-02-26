@@ -142,83 +142,80 @@
     {{-- Payments Table--}}
     <div class="row">
         <div class="col-xl-6" id="payments-section">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">Payments</h4>
-                    </div>
-                    <div class="pb-3 text-end">
-                        @can('create', \App\Models\Order\Payment\Payment::class)
+            <x-admin.section.card>
+                <x-slot:title>
+                    Payments
+                </x-slot:title>
+                <div class="pb-3 text-end">
+                    @can('create', \App\Models\Order\Payment\Payment::class)
                         <a href="{{ route('payments.create', ['order' => $order, ]) }}" class="btn btn-success text-white mb-1">
                             {{ Icon::create() }}
                             New Payment
                         </a>
-                        @endcan
-                        <a href="{{ route('orders.invoice.latest', ['order' => $order,]) }}" target="_blank" class="btn btn-primary text-white mb-1">View Invoice</a>
-                        {{-- TODO: Implement <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">Email Invoice</button>--}}
-                        {{-- TODO: Implement <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">View Previous Invoices</button>--}}
-                    </div>
-                    <div class="pt-1">
-                        <table class="datatable table table-striped" id="payment-table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Type</th>
-                                    <th scope="col">Method</th>
-                                    <th scope="col">Customer</th>
-                                    <th scope="col">Value</th>
-                                    <th scope="col">Paid</th>
-                                    <th scope="col">Actions</th>
-                                </tr>
-                            </thead>
-                            @foreach($order->payments as $payment)
-                                <tr>
-                                    <td>{{ $payment->payment_type }}</td>
-                                    <td>{{ $payment->paymentMethod->name }}</td>
-                                    <td>{{ $payment->customer->full_name }}</td>
-                                    <td>{{ f_currency($payment->amount) }}</td>
-                                    <td>{{ f_datetime($payment->paid_on) }}</td>
-                                    <td class="actions">
-                                        @can('update', \App\Models\Order\Payment\Payment::class)
-                                            <a href="{{ route('payments.edit', ['order' => $order, 'payment' => $payment,]) }}"
-                                               class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
-                                        @else
-                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                    @endcan
+                    <a href="{{ route('orders.invoice.latest', ['order' => $order,]) }}" target="_blank" class="btn btn-primary text-white mb-1">View Invoice</a>
+                    {{-- TODO: Implement <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">Email Invoice</button>--}}
+                    {{-- TODO: Implement <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">View Previous Invoices</button>--}}
+                </div>
+                <div class="pt-1">
+                    <table class="datatable table table-striped" id="payment-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Type</th>
+                            <th scope="col">Method</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Value</th>
+                            <th scope="col">Paid</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        @foreach($order->payments as $payment)
+                            <tr>
+                                <td>{{ $payment->payment_type }}</td>
+                                <td>{{ $payment->paymentMethod->name }}</td>
+                                <td>{{ $payment->customer->full_name }}</td>
+                                <td>{{ f_currency($payment->amount) }}</td>
+                                <td>{{ f_datetime($payment->paid_on) }}</td>
+                                <td class="actions">
+                                    @can('update', \App\Models\Order\Payment\Payment::class)
+                                        <a href="{{ route('payments.edit', ['order' => $order, 'payment' => $payment,]) }}"
+                                           class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
+                                    @else
+                                        <span class="btn btn-outline-dark btn-sm mb-1">
                                                 {{ Icon::edit() }}
                                             </span>
-                                        @endcan
-                                        @can('delete', \App\Models\Order\Payment\Payment::class)
-                                            <a href="#" onclick="$('#payment-{{$payment->id}}-delete').submit()"
-                                               class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
-                                            <form action="{{ route('payments.delete', ['order' => $order, 'payment' => $payment,]) }}"
-                                                  method="post" id="payment-{{$payment->id}}-delete">
-                                                @csrf
-                                            </form>
-                                        @else
-                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                    @endcan
+                                    @can('delete', \App\Models\Order\Payment\Payment::class)
+                                        <a href="#" onclick="$('#payment-{{$payment->id}}-delete').submit()"
+                                           class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
+                                        <form action="{{ route('payments.delete', ['order' => $order, 'payment' => $payment,]) }}"
+                                              method="post" id="payment-{{$payment->id}}-delete">
+                                            @csrf
+                                        </form>
+                                    @else
+                                        <span class="btn btn-outline-dark btn-sm mb-1">
                                                 {{ Icon::delete() }}
                                             </span>
-                                        @endcan
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">Costs</h4>
-                    </div>
-                    <div>
-                        <table class="datatable table table-striped" id="cost-table">
-                            <thead>
-                            <tr>
-                                <th scope="col">Type</th>
-                                <th scope="col">Value</th>
+                                    @endcan
+                                </td>
                             </tr>
-                            </thead>
-                            @foreach($order->orderCustomers()->where('is_charged', '=', 1)->get() as $ordersCustomer)
+                        @endforeach
+                    </table>
+                </div>
+            </x-admin.section.card>
+            <x-admin.section.card>
+                <x-slot:title>
+                    Costs
+                </x-slot:title>
+                <div>
+                    <table class="datatable table table-striped" id="cost-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Type</th>
+                            <th scope="col">Value</th>
+                        </tr>
+                        </thead>
+                        @foreach($order->orderCustomers()->where('is_charged', '=', 1)->get() as $ordersCustomer)
                             <tr>
                                 <td>Base: {{ $ordersCustomer->customer->first_name . ' ' . $ordersCustomer->customer->last_name }}</td>
                                 <td>{{ f_currency($ordersCustomer->tour_cost) }}</td>
@@ -229,52 +226,50 @@
                                     <td>{{ f_currency($ordersCustomer->single_occupancy_surcharge) }}</td>
                                 </tr>
                             @endif
-                            @endforeach
-                            @foreach($order->getAdditionalCosts()['upgrades'] as $upgrade)
-                                <tr>
-                                    <td>Upgrade: {{ $upgrade['description'] }}</td>
-                                    <td>{{ f_currency($upgrade['upgrade']->cost) }}</td>
-                                </tr>
-                            @endforeach
-                            @foreach($order->getAdditionalCosts()['addons'] as $addon)
-                                <tr>
-                                    <td>Add-on: {{ $addon['description'] }}</td>
-                                    <td>{{ f_currency($addon['addon']->cost) }}</td>
-                                </tr>
-                            @endforeach
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">Schedule</h4>
-                    </div>
-                    <div class="pb-3 text-end">
-                        @can('update', \App\Models\Order\Order::class)
-                            <a href="{{ route('order-installments.create', ['order' => $order, ]) }}" class="btn btn-success text-white mb-1">
-                                {{ Icon::create() }}
-                                New Installment
-                            </a>
-                            <a href="{{ route('order-installments.resync', ['order' => $order, ]) }}" class="btn btn-warning mb-1">
-                                {{ Icon::refresh() }}
-                                Refresh from Tour
-                            </a>
-                        @endcan
-                    </div>
-                    <div>
-                        <table class="datatable table table-striped" id="schedule-table">
-                            <thead>
+                        @endforeach
+                        @foreach($order->getAdditionalCosts()['upgrades'] as $upgrade)
                             <tr>
-                                <th scope="col">Type</th>
-                                <th scope="col">Due</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Outstanding</th>
-                                <th scope="col" class="actions">Actions</th>
+                                <td>Upgrade: {{ $upgrade['description'] }}</td>
+                                <td>{{ f_currency($upgrade['upgrade']->cost) }}</td>
                             </tr>
-                            </thead>
-                            @if(($order->booking_fee ?? 0) > 0)
+                        @endforeach
+                        @foreach($order->getAdditionalCosts()['addons'] as $addon)
+                            <tr>
+                                <td>Add-on: {{ $addon['description'] }}</td>
+                                <td>{{ f_currency($addon['addon']->cost) }}</td>
+                            </tr>
+                        @endforeach
+                    </table>
+                </div>
+            </x-admin.section.card>
+            <x-admin.section.card>
+                <x-slot:title>
+                    Schedule
+                </x-slot:title>
+                <div class="pb-3 text-end">
+                    @can('update', \App\Models\Order\Order::class)
+                        <a href="{{ route('order-installments.create', ['order' => $order, ]) }}" class="btn btn-success text-white mb-1">
+                            {{ Icon::create() }}
+                            New Installment
+                        </a>
+                        <a href="{{ route('order-installments.resync', ['order' => $order, ]) }}" class="btn btn-warning mb-1">
+                            {{ Icon::refresh() }}
+                            Refresh from Tour
+                        </a>
+                    @endcan
+                </div>
+                <div>
+                    <table class="datatable table table-striped" id="schedule-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Type</th>
+                            <th scope="col">Due</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Outstanding</th>
+                            <th scope="col" class="actions">Actions</th>
+                        </tr>
+                        </thead>
+                        @if(($order->booking_fee ?? 0) > 0)
                             <tr>
                                 <th scope="row">Booking Fee</th>
                                 <td>With Order</td>
@@ -292,8 +287,8 @@
                                     </a>
                                 </td>
                             </tr>
-                            @endif
-                            @if(($order->calculated_deposit ?? 0) > 0)
+                        @endif
+                        @if(($order->calculated_deposit ?? 0) > 0)
                             <tr>
                                 <th scope="row">Deposit</th>
                                 <td>With Order</td>
@@ -312,97 +307,143 @@
                                     </a>
                                 </td>
                             </tr>
-                            @endif
-                            @foreach($order->installments as $installment)
-                                @php $paid = $installment->repository->getAmountPaid(); @endphp
-                                <tr>
-                                    <th scope="row">Installment</th>
-                                    <td>{{ f_date($installment->due_on) }}</td>
-                                    <td>{{ f_currency($installment->calculated_amount) }} ({{ $installment->percentage }}%)</td>
-                                    <td>                                    @php $amount = $installment->calculated_amount - $installment->repository->getAmountPaid(); @endphp
-                                        @if($amount <= 0)
-                                            Paid
-                                        @else
-                                            {{ f_currency($amount) }}
-                                        @endif</td>
-                                    <td class="actions">
-                                        <a href="{{route('order-installments.edit', ['order' => $order, 'orderInstallment' => $installment,])}}" class="btn btn-outline-success btn-sm mb-1">
-                                            {{ Icon::edit() }}
-                                        </a>
-                                        <a href="#" class="btn btn-outline-danger btn-sm mb-1"
-                                           onclick="event.preventDefault();document.getElementById('orderInstallment-{{ $installment->id }}-delete').submit();">
-                                            {{ Icon::delete() }}
-                                        </a>
-                                        <form id="orderInstallment-{{ $installment->id }}-delete"
-                                              action="{{ route('order-installments.delete', ['order' => $order, 'orderInstallment' => $installment,]) }}"
-                                              method="POST" style="display: none;">{{ csrf_field() }}</form>
-                                    </td>
-                                </tr>
-                            @endforeach
+                        @endif
+                        @foreach($order->installments as $installment)
+                            @php $paid = $installment->repository->getAmountPaid(); @endphp
                             <tr>
-                                <th scope="row">Remaining Balance</th>
-                                <td>{{ f_date($order->tour->final_payment) }}</td>
-                                <td>{{ f_currency($order->remaining_installment) }} ({{ $order->remaining_percentage }}%)</td>
-                                <td>
-                                    @php $amount = min($order->remaining, $order->remaining_installment); @endphp
+                                <th scope="row">Installment</th>
+                                <td>{{ f_date($installment->due_on) }}</td>
+                                <td>{{ f_currency($installment->calculated_amount) }} ({{ $installment->percentage }}%)</td>
+                                <td>                                    @php $amount = $installment->calculated_amount - $installment->repository->getAmountPaid(); @endphp
                                     @if($amount <= 0)
                                         Paid
                                     @else
                                         {{ f_currency($amount) }}
-                                    @endif
-                                </td>
+                                    @endif</td>
                                 <td class="actions">
-                                    <a href="{{route('tours.edit', ['tour' => $order->tour,])}}" class="btn btn-outline-success btn-sm mb-1">
+                                    <a href="{{route('order-installments.edit', ['order' => $order, 'orderInstallment' => $installment,])}}" class="btn btn-outline-success btn-sm mb-1">
                                         {{ Icon::edit() }}
                                     </a>
+                                    <a href="#" class="btn btn-outline-danger btn-sm mb-1"
+                                       onclick="event.preventDefault();document.getElementById('orderInstallment-{{ $installment->id }}-delete').submit();">
+                                        {{ Icon::delete() }}
+                                    </a>
+                                    <form id="orderInstallment-{{ $installment->id }}-delete"
+                                          action="{{ route('order-installments.delete', ['order' => $order, 'orderInstallment' => $installment,]) }}"
+                                          method="POST" style="display: none;">{{ csrf_field() }}</form>
                                 </td>
                             </tr>
-                        </table>
-                    </div>
+                        @endforeach
+                        <tr>
+                            <th scope="row">Remaining Balance</th>
+                            <td>{{ f_date($order->tour->final_payment) }}</td>
+                            <td>{{ f_currency($order->remaining_installment) }} ({{ $order->remaining_percentage }}%)</td>
+                            <td>
+                                @php $amount = min($order->remaining, $order->remaining_installment); @endphp
+                                @if($amount <= 0)
+                                    Paid
+                                @else
+                                    {{ f_currency($amount) }}
+                                @endif
+                            </td>
+                            <td class="actions">
+                                <a href="{{route('tours.edit', ['tour' => $order->tour,])}}" class="btn btn-outline-success btn-sm mb-1">
+                                    {{ Icon::edit() }}
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
-            </div>
+            </x-admin.section.card>
         </div>
         <div class="col-xl-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">Order Adjustments</h4>
-                    </div>
-                    @can('create', \App\Models\Order\Adjustment\ManualAdjustment::class)
+            <x-admin.section.card>
+                <x-slot:title>
+                    Order Adjustments
+                </x-slot:title>
+                @can('create', \App\Models\Order\Adjustment\ManualAdjustment::class)
                     <div class="pb-3 text-end">
                         <a href="{{ route('manual-adjustments.create', ['order' => $order, ]) }}" class="btn btn-success text-white">
                             {{ Icon::create() }}
                             Add Adjustment
                         </a>
                     </div>
-                    @endcan
-                    <div class="pt-2">
-                        <table class="datatable table table-striped" id="order-adjustment-table">
-                            <thead>
+                @endcan
+                <div class="pt-2">
+                    <table class="datatable table table-striped" id="order-adjustment-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Reason</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        @foreach($order->adjustments as $adjustment)
                             <tr>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Reason</th>
-                                <th scope="col">Actions</th>
+                                <td>{{ f_currency($adjustment->amount) }}</td>
+                                <td>{{ $adjustment->reason }}</td>
+                                <td class="actions">
+                                    @can('update', \App\Models\Order\Adjustment\ManualAdjustment::class)
+                                        <a href="{{ route('manual-adjustments.edit', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}"
+                                           class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
+                                    @else
+                                        <span class="btn btn-outline-dark btn-sm mb-1">
+                                                {{ Icon::edit() }}
+                                            </span>
+                                    @endcan
+                                    @can('delete', \App\Models\Order\Adjustment\ManualAdjustment::class)
+                                        <a href="#" onclick="$('#madjustment-{{$adjustment->id}}-delete').submit()"
+                                           class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
+                                        <form action="{{ route('manual-adjustments.delete', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}"
+                                              method="post" id="madjustment-{{$adjustment->id}}-delete">
+                                            @csrf
+                                        </form>
+                                    @else
+                                        <span class="btn btn-outline-dark btn-sm mb-1">
+                                                {{ Icon::delete() }}
+                                            </span>
+                                    @endcan
+                                </td>
                             </tr>
-                            </thead>
-                            @foreach($order->adjustments as $adjustment)
+                        @endforeach
+                    </table>
+                </div>
+            </x-admin.section.card>
+            <x-admin.section.card>
+                <x-slot:title>
+                    Customer Adjustments
+                </x-slot:title>
+                <div>
+                    <table class="datatable table table-striped" id="customer-adjustment-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Reason</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        @foreach($order->orderCustomers as $ordersCustomer)
+                            @foreach($ordersCustomer->adjustments as $adjustment)
                                 <tr>
+                                    <td>{{ $ordersCustomer->customer->first_name .  " " . $ordersCustomer->customer->last_name }}</td>
                                     <td>{{ f_currency($adjustment->amount) }}</td>
                                     <td>{{ $adjustment->reason }}</td>
                                     <td class="actions">
-                                        @can('update', \App\Models\Order\Adjustment\ManualAdjustment::class)
-                                            <a href="{{ route('manual-adjustments.edit', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}"
+                                        @can('update', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
+                                            <a href="{{ route('order-customer-adjustments.edit', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}"
                                                class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
                                                 {{ Icon::edit() }}
                                             </span>
                                         @endcan
-                                        @can('delete', \App\Models\Order\Adjustment\ManualAdjustment::class)
-                                            <a href="#" onclick="$('#madjustment-{{$adjustment->id}}-delete').submit()"
+                                        @can('delete', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
+                                            <a href="#"
+                                               onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()"
                                                class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
-                                            <form action="{{ route('manual-adjustments.delete', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}"
-                                                  method="post" id="madjustment-{{$adjustment->id}}-delete">
+                                            <form action="{{ route('order-customer-adjustments.delete', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}"
+                                                  method="post" id="oadjustment-{{$adjustment->id}}-delete">
                                                 @csrf
                                             </form>
                                         @else
@@ -413,61 +454,10 @@
                                     </td>
                                 </tr>
                             @endforeach
-                        </table>
-                    </div>
+                        @endforeach
+                    </table>
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">Customer Adjustments</h4>
-                    </div>
-                    <div>
-                        <table class="datatable table table-striped" id="customer-adjustment-table">
-                            <thead>
-                            <tr>
-                                <th scope="col">Customer</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Reason</th>
-                                <th scope="col">Actions</th>
-                            </tr>
-                            </thead>
-                            @foreach($order->orderCustomers as $ordersCustomer)
-                                @foreach($ordersCustomer->adjustments as $adjustment)
-                                    <tr>
-                                        <td>{{ $ordersCustomer->customer->first_name .  " " . $ordersCustomer->customer->last_name }}</td>
-                                        <td>{{ f_currency($adjustment->amount) }}</td>
-                                        <td>{{ $adjustment->reason }}</td>
-                                        <td class="actions">
-                                            @can('update', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
-                                                <a href="{{ route('order-customer-adjustments.edit', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}"
-                                                   class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
-                                            @else
-                                                <span class="btn btn-outline-dark btn-sm mb-1">
-                                                {{ Icon::edit() }}
-                                            </span>
-                                            @endcan
-                                            @can('delete', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
-                                                <a href="#"
-                                                   onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()"
-                                                   class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
-                                                <form action="{{ route('order-customer-adjustments.delete', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}"
-                                                      method="post" id="oadjustment-{{$adjustment->id}}-delete">
-                                                    @csrf
-                                                </form>
-                                            @else
-                                                <span class="btn btn-outline-dark btn-sm mb-1">
-                                                {{ Icon::delete() }}
-                                            </span>
-                                            @endcan
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endforeach
-                        </table>
-                    </div>
-                </div>
-            </div>
+            </x-admin.section.card>
         </div>
     </div>
 </div>

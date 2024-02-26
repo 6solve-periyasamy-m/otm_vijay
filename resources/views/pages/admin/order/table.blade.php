@@ -3,17 +3,13 @@
 @section('title', 'All Orders')
 
 @section('content')
-    <div class="card">
-        <div class="card-body">
-            <a class="btn btn-success float-end" href="{{ route('orders.create') }}">
+    <x-admin.section.card>
+        <a class="btn btn-success float-end" href="{{ route('orders.create') }}">
                 {{ Icon::create() }}
                 <span>Create New</span>
             </a>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body">
-            <livewire:admin.order.table />
-        </div>
-    </div>
+        </x-admin.section.card>
+    <x-admin.section.card>
+        <livewire:admin.order.table />
+    </x-admin.section.card>
 @endsection

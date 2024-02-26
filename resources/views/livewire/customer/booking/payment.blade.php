@@ -9,14 +9,12 @@
             <button wire:click="accept" class="btn btn-success">Accept the Terms and Conditions</button>
         </x-customer.accordion>
     @else
-        <div class="card">
-            <div class="card-body">
-                <h2 class="mb-0" style="width: 100%; text-align: center;">Make Payment</h2>
-            </div>
-        </div>
+        <x-admin.section.card>
+            <h2 class="mb-0" style="width: 100%; text-align: center;">Make Payment</h2>
+        </x-admin.section.card>
         @if(\Gateway::getDefaultGateway() !== null)
-            <div class="card hidden">
-                <div class="card-body">
+            <div class="hidden">
+                <x-admin.section.card>
                     <div class="form-material">
                         <div class="form-material row">
                             <x-customer.input wire:model="amount" width="10" required>
@@ -27,13 +25,13 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </x-admin.section.card>
             </div>
         @else
-            <div class="card hidden">
-                <div class="card-body">
+            <div class="hidden">
+                <x-admin.section.card>
                     <h2 class="col-md-12 mb-0">The operator has not enabled online payments</h2>
-                </div>
+                </x-admin.section.card>
             </div>
         @endif
     @endif
