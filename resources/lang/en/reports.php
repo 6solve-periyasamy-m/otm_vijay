@@ -60,6 +60,34 @@ return [
                 'name' => 'Tour Booking Fee',
                 'description' => 'Default booking fee for the tour'
             ],
+            'total_stock' => [
+                'name' => 'Tour Total Stock',
+                'description' => 'The total amount of stock that can be used for this tour',
+            ],
+            'used_stock' => [
+                'name' => 'Tour Used Stock',
+                'description' => 'The total number of uncancelled orders placed for this tour',
+            ],
+            'category' => [
+                'name' => 'Tour Category',
+                'description' => 'The category assigned to the tour',
+            ],
+            'active' => [
+                'name' => 'Active?',
+                'description' => 'Is the tour currently active?'
+            ],
+            'from' => [
+                'name' => 'Tour Start Date',
+                'description' => 'Start date for the tour',
+            ],
+            'to' => [
+                'name' => 'Tour End Date',
+                'description' => 'End date for the tour',
+            ],
+            'final_payment' => [
+                'name' => 'Tour Final Payment Date',
+                'description' => 'When is the final payment due for the tour',
+            ],
         ],
     ],
     'order' => [

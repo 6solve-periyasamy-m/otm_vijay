@@ -3,7 +3,7 @@
 @section('title', 'Create Bespoke Report')
 
 @section('content')
-    <form action="{{ route('dash') }}" method="post">
+    <form action="{{ url('/dd') }}" method="post">
         @csrf
         <x-admin.section.card>
             <div class="row">
@@ -22,9 +22,9 @@
              $parent = null;
         @endphp
         <div class="row">
-            @foreach((new \App\Report\Tour\EventReport([]))->allColumns() as $key => $column)
-                @if($parent !== strtok($key, '.'))
-                    @php $parent = strtok($key, '.'); @endphp
+            @foreach((new \App\Report\Tour\TourReport([]))->allColumns() as $key => $column)
+                @if($parent !== strtok($key, '_'))
+                    @php $parent = strtok($key, '_');  @endphp
                     <div class="col-12">
                         <x-admin.section.card>
                             <h1>{{ ucwords($parent) }}</h1>
@@ -41,7 +41,7 @@
                                 </div>
                                 <div class="col-1">
                                     <div class="mx-auto my-auto">
-                                        <input type="checkbox" name="keys.{{ $key }}">
+                                        <input type="checkbox" name="keys[{{ $key }}]">
                                     </div>
                                 </div>
                             </div>
