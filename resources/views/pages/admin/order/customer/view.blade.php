@@ -282,440 +282,434 @@
         </div>
 
         {{-- Components Section --}}
-        <div class="card">
-            <div class="card-body">
-                <ul class="nav nav-pills otm-tab">
-                    <li class="nav-item col-6 col-md-3">
-                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#accommodation">
-                            {{ Icon::accommodation() }} Accommodation
-                        </button>
-                    </li>
-                    <li class="nav-item col-6 col-md-3">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities">
-                            {{ Icon::activity() }} Activities
-                        </button>
-                    </li>
-                    <li class="nav-item col-6 col-md-3">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#flights">
-                            {{ Icon::flight() }}
-                            Flights
-                        </button>
-                    </li>
-                    <li class="nav-item col-6 col-md-3">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transports">
-                            {{ Icon::transport() }}
-                            Transport
-                        </button>
-                    </li>
-                </ul>
+        <x-admin.section.card>
+            <ul class="nav nav-pills otm-tab">
+                <li class="nav-item col-6 col-md-3">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#accommodation">
+                        {{ Icon::accommodation() }} Accommodation
+                    </button>
+                </li>
+                <li class="nav-item col-6 col-md-3">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities">
+                        {{ Icon::activity() }} Activities
+                    </button>
+                </li>
+                <li class="nav-item col-6 col-md-3">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#flights">
+                        {{ Icon::flight() }}
+                        Flights
+                    </button>
+                </li>
+                <li class="nav-item col-6 col-md-3">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transports">
+                        {{ Icon::transport() }}
+                        Transport
+                    </button>
+                </li>
+            </ul>
 
-                {{-- Tables Definition --}}
-                <div id="tables" class="tab-content otm-tab-content">
-                    {{-- Accommodation Table --}}
-                    <div id="accommodation" role="tabpanel" class="tab-pane fade show active">
-                        <div id="accommodation-new" class="d-flex justify-content-between mb-3 flex-wrap">
-                            <span class="fw-bold">Accommodation components are managed through the <a href="{{ route('orders.occupancy', ['order' => $orderCustomer->order,]) }}">Occupancy Manager</a>.</span>
-                        </div>
-                        <div id="accommodation-details">
-                            <table id="accommodation-table" class="datatable table table-striped table-responsive-sm">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Room Type</th>
-                                    <th scope="col">Board Type</th>
-                                    <th scope="col">Shared With</th>
-                                    <th scope="col">Component Type</th>
-                                    <th scope="col">Cost</th>
-                                    <th scope="col">Upgrades</th>
-                                    <th scope="col">Actions</th>
-                                </tr>
-                                </thead>
-                                @foreach($orderCustomer->orderAccommodation as $orderAccommodation)
-                                    <tr component="{{ $orderAccommodation->id }}">
-                                        <td style="min-width: 200px">{{ f_datetime($orderAccommodation->tourComponent->inventory->check_in) }} to {{ f_datetime($orderAccommodation->tourComponent->inventory->check_out) }}</td>
-                                        <td>{{ $orderAccommodation->tourComponent->inventory->accommodation->name }}</td>
-                                        <td>{{ $orderAccommodation->tourComponent->inventory->roomType->name }}</td>
-                                        <td>{{ $orderAccommodation->tourComponent->inventory->boardType->name }}</td>
-                                        <td>{{ empty($orderAccommodation->group->getMembers($orderCustomer)) ? 'Not Shared' : $orderAccommodation->group->getMembers($orderCustomer) }}</td>
-                                        <td>{{ $orderAccommodation->tourComponent->tour_component_type }}</td>
-                                        <td>
-                                            @if($orderAccommodation->tourComponent->tour_component_type == 'Included')
-                                                {{ f_currency(0) }}
-                                            @else
-                                                {{ f_currency($orderAccommodation->cost) }}
-                                            @endif
-                                        </td>
-                                        <td style="width: 20%">
-                                            @if($orderAccommodation->tourComponent->tour_component_type == 'Add-on')
-                                                Not Available
-                                            @else
-                                                @if(count($orderAccommodation->tourComponent->repository->getUpgradeKeyMap()) < 2)
-                                                    No Upgrades Available
-                                                @else
-                                                    @include('partials.fields.selector.adder-preset',
-                                                        ['field' => 'accommodation_' . $orderAccommodation->id . '_upgrade', 'preselect' => false,
-                                                        'createRoute' => '#', 'onclick' => 'applyAccommodationUpgrade("accommodation_' . $orderAccommodation->id . '_upgrade-input", this)', 'target' => '',
-                                                        'selected' => $orderAccommodation->tourComponent->repository->getUpgradeId(), 'options' => $orderAccommodation->tourComponent->repository->getUpgradeKeyMap(0, true),])
-                                                @endif
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <form action="{{ route('orderAccommodationDelete', ['id' => $orderAccommodation->id,]) }}"
-                                                  method="post">
-                                                @csrf
-                                                <input type="hidden" name="redirect"
-                                                       value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}"/>
-                                                <a href="#" onclick="this.parentNode.submit()"
-                                                   class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </table>
-                        </div>
-                        @if(!empty($orderCustomer->accommodation_notes))
-                            <hr class="splitter">
-                            <div class="col-12 mb-3">
-                                <h6 class="fw-bold">Accommodation Notes</h6>
-                                <p>{{ $orderCustomer->accommodation_notes }}</p>
-                            </div>
-                        @endif
+            {{-- Tables Definition --}}
+            <div id="tables" class="tab-content otm-tab-content">
+                {{-- Accommodation Table --}}
+                <div id="accommodation" role="tabpanel" class="tab-pane fade show active">
+                    <div id="accommodation-new" class="d-flex justify-content-between mb-3 flex-wrap">
+                        <span class="fw-bold">Accommodation components are managed through the <a href="{{ route('orders.occupancy', ['order' => $orderCustomer->order,]) }}">Occupancy Manager</a>.</span>
                     </div>
-                    {{-- Activities Table --}}
-                    <div id="activities" role="tabpanel" class="tab-pane fade">
-                        <div id="activities-new" class="d-flex justify-content-between mb-3 flex-wrap">
-                            @include('partials.fields.selector.adder',
-                                ['field' => 'activity_id', 'preselect' => false,
-                                'fullRoute' => route('api.available-activities.select', ['orderCustomer' => $orderCustomer,]),
-                                'createRoute' => '#', 'onclick' => 'addActivityAddon()', 'target' => ''])
-                        </div>
-                        <div id="activities-details">
-                            <table id="activities-table" class="datatable table table-striped table-responsive-sm">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Activity Type</th>
-                                    <th scope="col">Ticket Type</th>
-                                    <th scope="col">Component Type</th>
-                                    <th scope="col">Cost</th>
-                                    <th scope="col">Upgrades</th>
-                                    <th scope="col">Actions</th>
-                                </tr>
-                                </thead>
-                                @foreach($orderCustomer->orderActivities as $orderActivity)
-                                    <tr component="{{ $orderActivity->id }}">
-                                        <td style="min-width: 200px">{{ f_datetime($orderActivity->activity_inventory->starts_at) }} to {{ f_datetime($orderActivity->activity_inventory->ends_at) }}</td>
-                                        <td>{{ $orderActivity->activity->name }}</td>
-                                        <td>{{ $orderActivity->activity->activityType->name }}</td>
-                                        <td>{{ $orderActivity->activity_inventory->ticketType->name }}</td>
-                                        <td>{{ $orderActivity->tourComponent->tour_component_type }}</td>
-                                        <td>
-                                            @if($orderActivity->tourComponent->tour_component_type == 'Included')
-                                                {{ f_currency(0) }}
-                                            @else
-                                                {{ f_currency($orderActivity->cost) }}
-                                            @endif
-                                        </td>
-                                        <td style="width: 20%">
-                                            @if($orderActivity->tourComponent->tour_component_type == 'Add-on')
-                                                Not Available
-                                            @else
-                                                @if(count($orderActivity->tourComponent->repository->getUpgradeKeyMap(0, true)) < 2)
-                                                    No Upgrades Available
-                                                @else
-                                                    @include('partials.fields.selector.adder-preset',
-                                                        ['field' => 'activity_' . $orderActivity->id . '_upgrade', 'preselect' => false,
-                                                        'createRoute' => '#', 'onclick' => 'applyActivityUpgrade("activity_' . $orderActivity->id . '_upgrade-input", this)', 'target' => '',
-                                                        'selected' => $orderActivity->tourComponent->repository->getUpgradeId(), 'options' => $orderActivity->tourComponent->repository->getUpgradeKeyMap(0, true),])
-                                                @endif
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <form action="{{ route('orderActivityDelete', ['id' => $orderActivity->id,]) }}"
-                                                  method="post">
-                                                @csrf
-                                                <input type="hidden" name="redirect"
-                                                       value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}"/>
-                                                <a href="#" onclick="this.parentNode.submit()"
-                                                   class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </table>
-                        </div>
-                        @if(!empty($orderCustomer->activity_notes))
-                            <hr class="splitter">
-                            <div class="col-12 mb-3">
-                                <h6 class="fw-bold">Activity Notes</h6>
-                                <p>{{ $orderCustomer->activity_notes }}</p>
-                            </div>
-                        @endif
-                    </div>
-                    {{-- Flights Table --}}
-                    <div id="flights" role="tabpanel" class="tab-pane fade">
-                        <div id="flights-new" class="d-flex justify-content-between mb-3 flex-wrap">
-                            @include('partials.fields.selector.adder',
-                                ['field' => 'flight_id', 'preselect' => false,
-                                'fullRoute' => route('api.available-flights.select', ['orderCustomer' => $orderCustomer,]),
-                                'createRoute' => '#', 'onclick' => 'addFlightAddon()', 'target' => ''])
-                        </div>
-                        <div id="flights-details">
-                            <table id="flights-table" class="datatable table table-striped table-responsive-sm">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Flight Details</th>
-                                    <th scope="col">Travel Class</th>
-                                    <th scope="col">Component Type</th>
-                                    <th scope="col">Cost</th>
-                                    <th scope="col">Upgrades</th>
-                                    <th scope="col">Actions</th>
-                                </tr>
-                                </thead>
-                                @foreach($orderCustomer->orderFlights as $orderFlight)
-                                    <tr component="{{ $orderFlight->id }}">
-                                        <td style="min-width: 200px">{{ f_datetime($orderFlight->flight_inventory->departs_at) }} to {{ f_datetime($orderFlight->flight_inventory->arrives_at) }}</td>
-                                        <td>{{ $orderFlight->flight_inventory->flight_number }}</td>
-                                        <td>{{ $orderFlight->flight->departureAirport->name }} to {{ $orderFlight->flight->arrivalAirport->name }}</td>
-                                        <td>{{ $orderFlight->flight_inventory->travelClass->name }}</td>
-                                        <td>{{ $orderFlight->flightInventoryTour->tour_component_type }}</td>
-                                        <td>
-                                            @if($orderFlight->tourComponent->tour_component_type == 'Included')
-                                                {{ f_currency(0) }}
-                                            @else
-                                                {{ f_currency($orderFlight->cost) }}
-                                            @endif
-                                        </td>
-                                        <td style="width: 20%">
-                                            @if($orderFlight->tourComponent->tour_component_type == 'Add-on')
-                                                Not Available
-                                            @else
-                                                @if(count($orderFlight->tourComponent->repository->getUpgradeKeyMap(0, true)) < 2)
-                                                    No Upgrades Available
-                                                @else
-                                                    @include('partials.fields.selector.adder-preset',
-                                                        ['field' => 'flight_' . $orderFlight->id . '_upgrade', 'preselect' => false,
-                                                        'createRoute' => '#', 'onclick' => 'applyFlightUpgrade("flight_' . $orderFlight->id . '_upgrade-input", this)', 'target' => '',
-                                                        'selected' => $orderFlight->tourComponent->repository->getUpgradeId(), 'options' => $orderFlight->tourComponent->repository->getUpgradeKeyMap(0, true),])
-                                                @endif
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <form action="{{ route('orderFlightDelete', ['id' => $orderFlight->id,]) }}"
-                                                  method="post">
-                                                @csrf
-                                                <input type="hidden" name="redirect"
-                                                       value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}"/>
-                                                <a href="#" onclick="this.parentNode.submit()"
-                                                   class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </table>
-                        </div>
-                        @if(!empty($orderCustomer->flight_notes))
-                            <hr class="splitter">
-                            <div class="col-12 mb-3">
-                                <h6 class="fw-bold">Flight Notes</h6>
-                                <p>{{ $orderCustomer->flight_notes }}</p>
-                            </div>
-                        @endif
-                    </div>
-                    {{-- Transports Table --}}
-                    <div id="transports" role="tabpanel" class="tab-pane fade">
-                        <div id="transports-new" class="d-flex justify-content-between mb-3 flex-wrap">
-                            @include('partials.fields.selector.adder',
-                                ['field' => 'transport_id', 'preselect' => false,
-                                'fullRoute' => route('api.available-transports.select', ['orderCustomer' => $orderCustomer,]),
-                                'createRoute' => '#', 'onclick' => 'addTransportAddon()', 'target' => ''])
-                        </div>
-                        <div id="transports-details">
-                            <table id="transports-table" class="datatable table table-striped table-responsive-sm">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Transport Type</th>
-                                    <th scope="col">Transport Information</th>
-                                    <th scope="col">Travel Class</th>
-                                    <th scope="col">Component Type</th>
-                                    <th scope="col">Cost</th>
-                                    <th scope="col">Upgrades</th>
-                                    <th scope="col">Actions</th>
-                                </tr>
-                                </thead>
-                                @foreach($orderCustomer->orderTransports as $orderTransport)
-                                    <tr component="{{ $orderTransport->id }}">
-                                        <td style="min-width: 200px">{{ f_datetime($orderTransport->transport_inventory->departs_at) }} to {{ f_datetime($orderTransport->transport_inventory->arrives_at) }}</td>
-                                        <td>{{ $orderTransport->transport->name }}</td>
-                                        <td>{{ $orderTransport->transport->transportType->name }}</td>
-                                        <td>{{ $orderTransport->transport->departureAddress->name }} to {{ $orderTransport->transport->arrivalAddress->name }}</td>
-                                        <td>{{ $orderTransport->transport_inventory->travelClass->name }}</td>
-                                        <td>{{ $orderTransport->transportInventoryTour->tour_component_type }}</td>
-                                        <td>
-                                            @if($orderTransport->tourComponent->tour_component_type == 'Included')
-                                                {{ f_currency(0) }}
-                                            @else
-                                                {{ f_currency($orderTransport->cost) }}
-                                            @endif
-                                        </td>
-                                        <td style="width: 20%">
-                                            @if($orderTransport->tourComponent->tour_component_type == 'Add-on')
-                                                Not Available
-                                            @else
-                                                @if(count($orderTransport->tourComponent->repository->getUpgradeKeyMap(0, true)) < 2)
-                                                    No Upgrades Available
-                                                @else
-                                                    @include('partials.fields.selector.adder-preset',
-                                                        ['field' => 'transport_' . $orderTransport->id . '_upgrade', 'preselect' => false,
-                                                        'createRoute' => '#', 'onclick' => 'applyTransportUpgrade("transport_' . $orderTransport->id . '_upgrade-input", this)', 'target' => '',
-                                                        'selected' => $orderTransport->tourComponent->repository->getUpgradeId(), 'options' => $orderTransport->tourComponent->repository->getUpgradeKeyMap(0, true),])
-                                                @endif
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <form action="{{ route('orderTransportDelete', ['id' => $orderTransport->id,]) }}"
-                                                  method="post">
-                                                @csrf
-                                                <input type="hidden" name="redirect"
-                                                       value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}"/>
-                                                <a href="#" onclick="this.parentNode.submit()"
-                                                   class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </table>
-                        </div>
-                        @if(!empty($orderCustomer->transport_notes))
-                            <hr class="splitter">
-                            <div class="col-12 mb-3">
-                                <h6 class="fw-bold">Transport Notes</h6>
-                                <p>{{ $orderCustomer->transport_notes }}</p>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-        {{-- Merchandise Section --}}
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title">
-                    <h4 class="fw-bold">Merchandise</h4>
-                </div>
-                <div id="merchandise-new" class="d-flex justify-content-between mb-3 flex-wrap">
-                    @include('partials.fields.selector.adder',
-                                ['field' => 'merchandise_id', 'preselect' => false,
-                                'fullRoute' => route('api.available-merchandise.select', ['orderCustomer' => $orderCustomer,]),
-                                'createRoute' => '#', 'onclick' => 'addMerchandiseAddon()', 'target' => ''])
-                </div>
-                <div id="merchandise-details">
-                    <table id="merchandise-table" class="datatable table table-striped table-responsive-sm">
-                        <thead>
-                        <tr>
-                            <th scope="col">Image</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Cost</th>
-                            <th scope="col">Component Type</th>
-                            <th scope="col">Fulfilled</th>
-                            <th scope="col" class="actions">Actions</th>
-                        </tr>
-                        </thead>
-                        @foreach($orderCustomer->orderMerchandise()->with('tourComponent', 'tourComponent.inventory', 'tourComponent.inventory.component')->get() as $orderMerchandise)
+                    <div id="accommodation-details">
+                        <table id="accommodation-table" class="datatable table table-striped table-responsive-sm">
+                            <thead>
                             <tr>
-                                <td><img src="{{ $orderMerchandise->tourComponent->inventory->asset }}" class="image tiny"/>
-                                </td>
-                                <td>{{ $orderMerchandise->tourComponent->inventory->component->name }}
-                                    ({{ $orderMerchandise->tourComponent->inventory->variant->name }})
-                                    ({{ $orderMerchandise->tourComponent->inventory->size?->name ?? 'No Size'  }})
-                                </td>
-                                <td>{{ f_currency($orderMerchandise->tourComponent->tour_sales_price) }}</td>
-                                <td>{{ $orderMerchandise->tourComponent->tour_component_type }}</td>
-                                <td>{{ f_bool($orderMerchandise->fulfilled) }}</td>
-                                <td class="actions">
-                                    <a href="{{ route('merchandise.inventory.tour.order.fulfil', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderMerchandise' => $orderMerchandise]) }}"
-                                       class="btn btn-outline-primary btn-sm">
-                                        {{ Icon::fulfil() }}
-                                    </a>
-                                    <a href="javascript:$('#m-{{$orderMerchandise->id}}-delete').submit()"
-                                       class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
-                                    <form action="{{ route('orderMerchandiseDelete', ['id' => $orderMerchandise->id,]) }}"
-                                          method="post" id="m-{{$orderMerchandise->id}}-delete" class="d-none">
-                                        @csrf
-                                        <input type="hidden" name="redirect"
-                                               value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}"/>
-
-                                    </form>
-                                </td>
+                                <th scope="col">Date</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Room Type</th>
+                                <th scope="col">Board Type</th>
+                                <th scope="col">Shared With</th>
+                                <th scope="col">Component Type</th>
+                                <th scope="col">Cost</th>
+                                <th scope="col">Upgrades</th>
+                                <th scope="col">Actions</th>
                             </tr>
-                        @endforeach
-                    </table>
+                            </thead>
+                            @foreach($orderCustomer->orderAccommodation as $orderAccommodation)
+                                <tr component="{{ $orderAccommodation->id }}">
+                                    <td style="min-width: 200px">{{ f_datetime($orderAccommodation->tourComponent->inventory->check_in) }} to {{ f_datetime($orderAccommodation->tourComponent->inventory->check_out) }}</td>
+                                    <td>{{ $orderAccommodation->tourComponent->inventory->accommodation->name }}</td>
+                                    <td>{{ $orderAccommodation->tourComponent->inventory->roomType->name }}</td>
+                                    <td>{{ $orderAccommodation->tourComponent->inventory->boardType->name }}</td>
+                                    <td>{{ empty($orderAccommodation->group->getMembers($orderCustomer)) ? 'Not Shared' : $orderAccommodation->group->getMembers($orderCustomer) }}</td>
+                                    <td>{{ $orderAccommodation->tourComponent->tour_component_type }}</td>
+                                    <td>
+                                        @if($orderAccommodation->tourComponent->tour_component_type == 'Included')
+                                            {{ f_currency(0) }}
+                                        @else
+                                            {{ f_currency($orderAccommodation->cost) }}
+                                        @endif
+                                    </td>
+                                    <td style="width: 20%">
+                                        @if($orderAccommodation->tourComponent->tour_component_type == 'Add-on')
+                                            Not Available
+                                        @else
+                                            @if(count($orderAccommodation->tourComponent->repository->getUpgradeKeyMap()) < 2)
+                                                No Upgrades Available
+                                            @else
+                                                @include('partials.fields.selector.adder-preset',
+                                                    ['field' => 'accommodation_' . $orderAccommodation->id . '_upgrade', 'preselect' => false,
+                                                    'createRoute' => '#', 'onclick' => 'applyAccommodationUpgrade("accommodation_' . $orderAccommodation->id . '_upgrade-input", this)', 'target' => '',
+                                                    'selected' => $orderAccommodation->tourComponent->repository->getUpgradeId(), 'options' => $orderAccommodation->tourComponent->repository->getUpgradeKeyMap(0, true),])
+                                            @endif
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('orderAccommodationDelete', ['id' => $orderAccommodation->id,]) }}"
+                                              method="post">
+                                            @csrf
+                                            <input type="hidden" name="redirect"
+                                                   value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}"/>
+                                            <a href="#" onclick="this.parentNode.submit()"
+                                               class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                    @if(!empty($orderCustomer->accommodation_notes))
+                        <hr class="splitter">
+                        <div class="col-12 mb-3">
+                            <h6 class="fw-bold">Accommodation Notes</h6>
+                            <p>{{ $orderCustomer->accommodation_notes }}</p>
+                        </div>
+                    @endif
+                </div>
+                {{-- Activities Table --}}
+                <div id="activities" role="tabpanel" class="tab-pane fade">
+                    <div id="activities-new" class="d-flex justify-content-between mb-3 flex-wrap">
+                        @include('partials.fields.selector.adder',
+                            ['field' => 'activity_id', 'preselect' => false,
+                            'fullRoute' => route('api.available-activities.select', ['orderCustomer' => $orderCustomer,]),
+                            'createRoute' => '#', 'onclick' => 'addActivityAddon()', 'target' => ''])
+                    </div>
+                    <div id="activities-details">
+                        <table id="activities-table" class="datatable table table-striped table-responsive-sm">
+                            <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Activity Type</th>
+                                <th scope="col">Ticket Type</th>
+                                <th scope="col">Component Type</th>
+                                <th scope="col">Cost</th>
+                                <th scope="col">Upgrades</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                            </thead>
+                            @foreach($orderCustomer->orderActivities as $orderActivity)
+                                <tr component="{{ $orderActivity->id }}">
+                                    <td style="min-width: 200px">{{ f_datetime($orderActivity->activity_inventory->starts_at) }} to {{ f_datetime($orderActivity->activity_inventory->ends_at) }}</td>
+                                    <td>{{ $orderActivity->activity->name }}</td>
+                                    <td>{{ $orderActivity->activity->activityType->name }}</td>
+                                    <td>{{ $orderActivity->activity_inventory->ticketType->name }}</td>
+                                    <td>{{ $orderActivity->tourComponent->tour_component_type }}</td>
+                                    <td>
+                                        @if($orderActivity->tourComponent->tour_component_type == 'Included')
+                                            {{ f_currency(0) }}
+                                        @else
+                                            {{ f_currency($orderActivity->cost) }}
+                                        @endif
+                                    </td>
+                                    <td style="width: 20%">
+                                        @if($orderActivity->tourComponent->tour_component_type == 'Add-on')
+                                            Not Available
+                                        @else
+                                            @if(count($orderActivity->tourComponent->repository->getUpgradeKeyMap(0, true)) < 2)
+                                                No Upgrades Available
+                                            @else
+                                                @include('partials.fields.selector.adder-preset',
+                                                    ['field' => 'activity_' . $orderActivity->id . '_upgrade', 'preselect' => false,
+                                                    'createRoute' => '#', 'onclick' => 'applyActivityUpgrade("activity_' . $orderActivity->id . '_upgrade-input", this)', 'target' => '',
+                                                    'selected' => $orderActivity->tourComponent->repository->getUpgradeId(), 'options' => $orderActivity->tourComponent->repository->getUpgradeKeyMap(0, true),])
+                                            @endif
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('orderActivityDelete', ['id' => $orderActivity->id,]) }}"
+                                              method="post">
+                                            @csrf
+                                            <input type="hidden" name="redirect"
+                                                   value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}"/>
+                                            <a href="#" onclick="this.parentNode.submit()"
+                                               class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                    @if(!empty($orderCustomer->activity_notes))
+                        <hr class="splitter">
+                        <div class="col-12 mb-3">
+                            <h6 class="fw-bold">Activity Notes</h6>
+                            <p>{{ $orderCustomer->activity_notes }}</p>
+                        </div>
+                    @endif
+                </div>
+                {{-- Flights Table --}}
+                <div id="flights" role="tabpanel" class="tab-pane fade">
+                    <div id="flights-new" class="d-flex justify-content-between mb-3 flex-wrap">
+                        @include('partials.fields.selector.adder',
+                            ['field' => 'flight_id', 'preselect' => false,
+                            'fullRoute' => route('api.available-flights.select', ['orderCustomer' => $orderCustomer,]),
+                            'createRoute' => '#', 'onclick' => 'addFlightAddon()', 'target' => ''])
+                    </div>
+                    <div id="flights-details">
+                        <table id="flights-table" class="datatable table table-striped table-responsive-sm">
+                            <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Flight Details</th>
+                                <th scope="col">Travel Class</th>
+                                <th scope="col">Component Type</th>
+                                <th scope="col">Cost</th>
+                                <th scope="col">Upgrades</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                            </thead>
+                            @foreach($orderCustomer->orderFlights as $orderFlight)
+                                <tr component="{{ $orderFlight->id }}">
+                                    <td style="min-width: 200px">{{ f_datetime($orderFlight->flight_inventory->departs_at) }} to {{ f_datetime($orderFlight->flight_inventory->arrives_at) }}</td>
+                                    <td>{{ $orderFlight->flight_inventory->flight_number }}</td>
+                                    <td>{{ $orderFlight->flight->departureAirport->name }} to {{ $orderFlight->flight->arrivalAirport->name }}</td>
+                                    <td>{{ $orderFlight->flight_inventory->travelClass->name }}</td>
+                                    <td>{{ $orderFlight->flightInventoryTour->tour_component_type }}</td>
+                                    <td>
+                                        @if($orderFlight->tourComponent->tour_component_type == 'Included')
+                                            {{ f_currency(0) }}
+                                        @else
+                                            {{ f_currency($orderFlight->cost) }}
+                                        @endif
+                                    </td>
+                                    <td style="width: 20%">
+                                        @if($orderFlight->tourComponent->tour_component_type == 'Add-on')
+                                            Not Available
+                                        @else
+                                            @if(count($orderFlight->tourComponent->repository->getUpgradeKeyMap(0, true)) < 2)
+                                                No Upgrades Available
+                                            @else
+                                                @include('partials.fields.selector.adder-preset',
+                                                    ['field' => 'flight_' . $orderFlight->id . '_upgrade', 'preselect' => false,
+                                                    'createRoute' => '#', 'onclick' => 'applyFlightUpgrade("flight_' . $orderFlight->id . '_upgrade-input", this)', 'target' => '',
+                                                    'selected' => $orderFlight->tourComponent->repository->getUpgradeId(), 'options' => $orderFlight->tourComponent->repository->getUpgradeKeyMap(0, true),])
+                                            @endif
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('orderFlightDelete', ['id' => $orderFlight->id,]) }}"
+                                              method="post">
+                                            @csrf
+                                            <input type="hidden" name="redirect"
+                                                   value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}"/>
+                                            <a href="#" onclick="this.parentNode.submit()"
+                                               class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                    @if(!empty($orderCustomer->flight_notes))
+                        <hr class="splitter">
+                        <div class="col-12 mb-3">
+                            <h6 class="fw-bold">Flight Notes</h6>
+                            <p>{{ $orderCustomer->flight_notes }}</p>
+                        </div>
+                    @endif
+                </div>
+                {{-- Transports Table --}}
+                <div id="transports" role="tabpanel" class="tab-pane fade">
+                    <div id="transports-new" class="d-flex justify-content-between mb-3 flex-wrap">
+                        @include('partials.fields.selector.adder',
+                            ['field' => 'transport_id', 'preselect' => false,
+                            'fullRoute' => route('api.available-transports.select', ['orderCustomer' => $orderCustomer,]),
+                            'createRoute' => '#', 'onclick' => 'addTransportAddon()', 'target' => ''])
+                    </div>
+                    <div id="transports-details">
+                        <table id="transports-table" class="datatable table table-striped table-responsive-sm">
+                            <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Transport Type</th>
+                                <th scope="col">Transport Information</th>
+                                <th scope="col">Travel Class</th>
+                                <th scope="col">Component Type</th>
+                                <th scope="col">Cost</th>
+                                <th scope="col">Upgrades</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                            </thead>
+                            @foreach($orderCustomer->orderTransports as $orderTransport)
+                                <tr component="{{ $orderTransport->id }}">
+                                    <td style="min-width: 200px">{{ f_datetime($orderTransport->transport_inventory->departs_at) }} to {{ f_datetime($orderTransport->transport_inventory->arrives_at) }}</td>
+                                    <td>{{ $orderTransport->transport->name }}</td>
+                                    <td>{{ $orderTransport->transport->transportType->name }}</td>
+                                    <td>{{ $orderTransport->transport->departureAddress->name }} to {{ $orderTransport->transport->arrivalAddress->name }}</td>
+                                    <td>{{ $orderTransport->transport_inventory->travelClass->name }}</td>
+                                    <td>{{ $orderTransport->transportInventoryTour->tour_component_type }}</td>
+                                    <td>
+                                        @if($orderTransport->tourComponent->tour_component_type == 'Included')
+                                            {{ f_currency(0) }}
+                                        @else
+                                            {{ f_currency($orderTransport->cost) }}
+                                        @endif
+                                    </td>
+                                    <td style="width: 20%">
+                                        @if($orderTransport->tourComponent->tour_component_type == 'Add-on')
+                                            Not Available
+                                        @else
+                                            @if(count($orderTransport->tourComponent->repository->getUpgradeKeyMap(0, true)) < 2)
+                                                No Upgrades Available
+                                            @else
+                                                @include('partials.fields.selector.adder-preset',
+                                                    ['field' => 'transport_' . $orderTransport->id . '_upgrade', 'preselect' => false,
+                                                    'createRoute' => '#', 'onclick' => 'applyTransportUpgrade("transport_' . $orderTransport->id . '_upgrade-input", this)', 'target' => '',
+                                                    'selected' => $orderTransport->tourComponent->repository->getUpgradeId(), 'options' => $orderTransport->tourComponent->repository->getUpgradeKeyMap(0, true),])
+                                            @endif
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('orderTransportDelete', ['id' => $orderTransport->id,]) }}"
+                                              method="post">
+                                            @csrf
+                                            <input type="hidden" name="redirect"
+                                                   value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}"/>
+                                            <a href="#" onclick="this.parentNode.submit()"
+                                               class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                    @if(!empty($orderCustomer->transport_notes))
+                        <hr class="splitter">
+                        <div class="col-12 mb-3">
+                            <h6 class="fw-bold">Transport Notes</h6>
+                            <p>{{ $orderCustomer->transport_notes }}</p>
+                        </div>
+                    @endif
                 </div>
             </div>
-        </div>
-    @endif
-    {{-- Adjustments Section --}}
-    <div class="card">
-        <div class="card-body">
-            <div class="card-title">
-                <h4 class="fw-bold">Customer Adjustments</h4>
-                @can('create', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
-                    <div class="pb-3 text-end">
-                        <a href="{{ route('order-customer-adjustments.create', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer]) }}" class="btn btn-success text-white">
-                            {{ Icon::create() }}
-                            Add Adjustment
-                        </a>
-                    </div>
-                @endcan
+        </x-admin.section.card>
+        {{-- Merchandise Section --}}
+        <x-admin.section.card>
+            <x-slot:title>
+                Merchandise
+            </x-slot:title>
+            <div id="merchandise-new" class="d-flex justify-content-between mb-3 flex-wrap">
+                @include('partials.fields.selector.adder',
+                            ['field' => 'merchandise_id', 'preselect' => false,
+                            'fullRoute' => route('api.available-merchandise.select', ['orderCustomer' => $orderCustomer,]),
+                            'createRoute' => '#', 'onclick' => 'addMerchandiseAddon()', 'target' => ''])
             </div>
-            <div>
-                <table class="datatable table table-striped" id="customer-adjustment-table">
+            <div id="merchandise-details">
+                <table id="merchandise-table" class="datatable table table-striped table-responsive-sm">
                     <thead>
                     <tr>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Reason</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Actions</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Cost</th>
+                        <th scope="col">Component Type</th>
+                        <th scope="col">Fulfilled</th>
+                        <th scope="col" class="actions">Actions</th>
                     </tr>
                     </thead>
-                    @foreach($orderCustomer->adjustments as $adjustment)
+                    @foreach($orderCustomer->orderMerchandise()->with('tourComponent', 'tourComponent.inventory', 'tourComponent.inventory.component')->get() as $orderMerchandise)
                         <tr>
-                            <td>{{ f_currency($adjustment->amount) }}</td>
-                            <td>{{ $adjustment->reason }}</td>
-                            <td>{{ f_date($adjustment->date) }}</td>
+                            <td><img src="{{ $orderMerchandise->tourComponent->inventory->asset }}" class="image tiny"/>
+                            </td>
+                            <td>{{ $orderMerchandise->tourComponent->inventory->component->name }}
+                                ({{ $orderMerchandise->tourComponent->inventory->variant->name }})
+                                ({{ $orderMerchandise->tourComponent->inventory->size?->name ?? 'No Size'  }})
+                            </td>
+                            <td>{{ f_currency($orderMerchandise->tourComponent->tour_sales_price) }}</td>
+                            <td>{{ $orderMerchandise->tourComponent->tour_component_type }}</td>
+                            <td>{{ f_bool($orderMerchandise->fulfilled) }}</td>
                             <td class="actions">
-                                @can('update', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
-                                    <a href="{{ route('order-customer-adjustments.edit', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}"
-                                       class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
-                                @else
-                                    <span class="btn btn-outline-dark btn-sm mb-1">
-                                                {{ Icon::edit() }}
-                                            </span>
-                                @endcan
-                                @can('delete', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
-                                    <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()"
-                                       class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
-                                    <form action="{{ route('order-customer-adjustments.delete', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}"
-                                          method="post" id="oadjustment-{{$adjustment->id}}-delete">
-                                        @csrf
-                                    </form>
-                                @else
-                                    <span class="btn btn-outline-dark btn-sm mb-1">
-                                                {{ Icon::delete() }}
-                                            </span>
-                                @endcan
+                                <a href="{{ route('merchandise.inventory.tour.order.fulfil', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderMerchandise' => $orderMerchandise]) }}"
+                                   class="btn btn-outline-primary btn-sm">
+                                    {{ Icon::fulfil() }}
+                                </a>
+                                <a href="javascript:$('#m-{{$orderMerchandise->id}}-delete').submit()"
+                                   class="btn btn-outline-danger btn-sm">{{ Icon::delete() }}</a>
+                                <form action="{{ route('orderMerchandiseDelete', ['id' => $orderMerchandise->id,]) }}"
+                                      method="post" id="m-{{$orderMerchandise->id}}-delete" class="d-none">
+                                    @csrf
+                                    <input type="hidden" name="redirect"
+                                           value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}"/>
+
+                                </form>
                             </td>
                         </tr>
                     @endforeach
                 </table>
             </div>
+        </x-admin.section.card>
+    @endif
+    {{-- Adjustments Section --}}
+    <x-admin.section.card>
+        <x-slot:header>
+            <h4 class="fw-bold">Customer Adjustments</h4>
+            @can('create', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
+                <div class="pb-3 text-end">
+                    <a href="{{ route('order-customer-adjustments.create', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer]) }}" class="btn btn-success text-white">
+                        {{ Icon::create() }}
+                        Add Adjustment
+                    </a>
+                </div>
+            @endcan
+        </x-slot:header>
+        <div>
+            <table class="datatable table table-striped" id="customer-adjustment-table">
+                <thead>
+                <tr>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Reason</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                @foreach($orderCustomer->adjustments as $adjustment)
+                    <tr>
+                        <td>{{ f_currency($adjustment->amount) }}</td>
+                        <td>{{ $adjustment->reason }}</td>
+                        <td>{{ f_date($adjustment->date) }}</td>
+                        <td class="actions">
+                            @can('update', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
+                                <a href="{{ route('order-customer-adjustments.edit', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}"
+                                   class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
+                            @else
+                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                {{ Icon::edit() }}
+                                            </span>
+                            @endcan
+                            @can('delete', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
+                                <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()"
+                                   class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
+                                <form action="{{ route('order-customer-adjustments.delete', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}"
+                                      method="post" id="oadjustment-{{$adjustment->id}}-delete">
+                                    @csrf
+                                </form>
+                            @else
+                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                {{ Icon::delete() }}
+                                            </span>
+                            @endcan
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
         </div>
-    </div>
+    </x-admin.section.card>
     {{-- Closing Container---}}
 @endsection
