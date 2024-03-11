@@ -92,7 +92,104 @@ return [
     ],
     'order' => [
         'column' => [
-            
+            'reference' => [
+                'name' => 'Booking Reference',
+                'description' => 'The booking reference for the order',
+            ],
+            'deposit' => [
+                'name' => 'Order Deposit',
+                'description' => 'The amount of deposit paid on the order',
+            ],
+            'booking_fee' => [
+                'name' => 'Order Booking Fee',
+                'description' => 'The amount of deposit paid on the order',
+            ],
+            'status' => [
+                'name' => 'Status',
+                'description' => 'The current status of the order'
+            ],
+            'commission' => [
+                'percentage' => [
+                    'name' => 'Commission (%)',
+                    'description' => 'The percentage of the order value to be taken as commission'
+                ],
+                'amount' => [
+                    'name' => 'Commission Amount',
+                    'description' => 'The amount of commission to be taken'
+                ],
+            ],
+            'ordered' => [
+                'name' => 'Ordered',
+                'description' => 'When the order was placed'
+            ],
+            'cancelled' => [
+                'name' => 'Cancelled',
+                'description' => 'Is the order currently cancelled'
+            ],
+            'internal_notes' => [
+                'name' => 'Internal Notes',
+                'description' => 'Any internal notes visible only to staff'
+            ],
+            'external_notes' => [
+                'name' => 'External Notes',
+                'description' => 'Any external notes visible to staff and customers'
+            ],
+            'invoice_footer' => [
+                'name' => 'Invoice Footer',
+                'description' => 'The footer message for the order invoice'
+            ],
+            'paid' => [
+                'name' => 'Amount Paid',
+                'description' => 'The total amount paid so far on the order'
+            ],
+            'cost' => [
+                'name' => 'Total Cost',
+                'description' => 'The total cost of the order before adjustments and commission'
+            ],
+            'total_owed' => [
+                'name' => 'Total Owed',
+                'description' => 'The total amount owed by the customer after adjustments and commission'
+            ],
+            'remaining' => [
+                'name' => 'Remaining',
+                'description' => 'The amount remaining to be paid on the order'
+            ],
+            'next_payment' => [
+                'date' => [
+                    'name' => 'Next Installment Due',
+                    'description' => 'When is the next installment due'
+                ],
+                'amount' => [
+                    'name' => 'Next Installment Amount',
+                    'description' => 'The total due for the next installment'
+                ],
+                'remaining' => [
+                    'name' => 'Next Installment Remaining',
+                    'description' => 'The total amount remaining on the next installment'
+                ],
+            ],
+            'lead_booker' => [
+                'first_name' => [
+                    'name' => 'Lead Booker First Name',
+                    'description' => 'First name of the lead booker'
+                ],
+                'middle_names' => [
+                    'name' => 'Lead Booker Middle Names',
+                    'description' => 'Middle names of the lead booker'
+                ],
+                'last_name' => [
+                    'name' => 'Lead Booker Last Name',
+                    'description' => 'Last name of the lead booker'
+                ],
+                'home_address' => [
+                    'name' => 'Lead Booker Home Address',
+                    'description' => 'Home address of the lead booker'
+                ],
+                'billing_address' => [
+                    'name' => 'Lead Booker Billing Address',
+                    'description' => 'Billing address of the lead booker'
+                ],
+            ],
         ],
     ],
 ];

@@ -6,6 +6,7 @@ use App\Http\Livewire\Abstract\CurrencyColumn;
 use App\Models\Tour\Tour;
 use App\Models\Tour\TourCategory;
 use App\Report\ColumnDefinition;
+use App\Report\HasPriority;
 use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
@@ -13,6 +14,8 @@ use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class TourReport extends EventReport
 {
+    use HasPriority;
+
     public function getQuery()
     {
         return Tour::query()
@@ -36,9 +39,9 @@ class TourReport extends EventReport
             'tours_used_stock' => new ColumnDefinition("$base.used_stock", NumberColumn::raw('(SELECT COUNT(*) FROM orders WHERE tour_id = tours.id AND cancelled = FALSE;)')),
             'tours_category' => new ColumnDefinition("$base.category", Column::name('tour_categories.category')->filterable(TourCategory::pluck('name'))),
             'tours_active' => new ColumnDefinition("$base.active", BooleanColumn::name('tours.is_active')),
-            'tours_from' => new ColumnDefinition("$base.from", DateColumn::name('tours.date_from')),
-            'tours_to' => new ColumnDefinition("$base.to", DateColumn::name('tours.date_to')),
-            'tours_final_payment' => new ColumnDefinition("$base.final_payment", DateColumn::name('tours.final_payment')),
+            'tours_from' => new ColumnDefinition("$base.from", DateColumn::name('tours.date_from')->filterable()),
+            'tours_to' => new ColumnDefinition("$base.to", DateColumn::name('tours.date_to')->filterable()),
+            'tours_final_payment' => new ColumnDefinition("$base.final_payment", DateColumn::name('tours.final_payment')->filterable()),
         ];
     }
 }

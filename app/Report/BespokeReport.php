@@ -36,6 +36,11 @@ abstract class BespokeReport implements Wireable
         return $columns;
     }
 
+    public function getPriority(): int
+    {
+        return 1;
+    }
+
     /**
      * @return ColumnDefinition[]
      */
@@ -49,5 +54,10 @@ abstract class BespokeReport implements Wireable
     public static function fromLivewire($value): static
     {
         return new static($value);
+    }
+
+    public function compare(BespokeReport $report): int
+    {
+        return $this->getPriority() <=> $report->getPriority();
     }
 }

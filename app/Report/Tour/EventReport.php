@@ -5,12 +5,14 @@ namespace App\Report\Tour;
 use App\Models\Tour\Event;
 use App\Report\BespokeReport;
 use App\Report\ColumnDefinition;
+use App\Report\HasPriority;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class EventReport extends BespokeReport
 {
+    use HasPriority;
 
     public function getQuery()
     {

@@ -22,7 +22,7 @@
              $parent = null;
         @endphp
         <div class="row">
-            @foreach((new \App\Report\Tour\TourReport([]))->allColumns() as $key => $column)
+            @foreach((new \App\Report\Order\OrderReport([]))->allColumns() as $key => $column)
                 @if($parent !== strtok($key, '_'))
                     @php $parent = strtok($key, '_');  @endphp
                     <div class="col-12">

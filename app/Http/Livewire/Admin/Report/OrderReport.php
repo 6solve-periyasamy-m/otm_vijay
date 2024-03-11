@@ -45,7 +45,7 @@ class OrderReport extends ExportableDatatable
                 ->label('Lead Booker last Name')
                 ->searchable()
                 ->sortable(),
-            NumberColumn::raw('(SELECT COUNT(*) FROM order_customers WHERE order_id = orders.id)')
+            NumberColumn::raw('(SELECT COUNT(*) FROM order_customers WHERE order_id = orders.id AND order_customers.deleted_at = NULL)')
                 ->label('Passengers')
                 ->sortable()
                 ->filterable(),
