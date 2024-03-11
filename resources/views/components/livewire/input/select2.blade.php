@@ -9,17 +9,23 @@
         $updateRoute = route("api.{$route}.selected", ['id' => $value, ]);
     }
 
+    $createRoute = $attributes->get('createRoute');
+    $createForm = $attributes->get('createForm');
+
     if (isset($createRoute)) {
         $create = "window.location = '$createRoute';";
+    }
+    if (isset($createForm)) {
+        $create = "openModal('$createForm');";
     }
     $create = $create ?? $attributes->get('create');
 @endphp
 <div wire:ignore class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}" style="padding-left: 5px">
     <label for="{{ $id }}">{{ $attributes->get('label') }} @if($attributes->has('required')) <x-admin.required /> @endif</label>
     <div class="d-flex">
-        <select style="width: 100%" class="form-control" id="{{ $id }}"></select>
+        <select name="{{ $attributes->get('name') }}" style="width: 100%" class="form-control" id="{{ $id }}"></select>
         @if(isset($create))
-            <button class="btn btn-success d-inline ms-1" onclick="{{$create}}">+</button>
+            <a class="btn btn-success d-inline ms-1 text-dark" onclick="{{$create}}">+</a>
         @endif
     </div>
     <script type="text/javascript">
@@ -37,10 +43,12 @@
                     type: 'post',
                 }
             });
+            @isset($_instance)
             selector.on('change', function (e) {
                 let data = $('#{{ $id }}').select2("val");
                 @this.set('{{ $attributes->get('name') }}', data);
             });
+            @endisset
             @if($value !== null)
             $.ajax({
                 url: '{{ $updateRoute }}',
