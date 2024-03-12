@@ -13,9 +13,7 @@
     <x-admin.input.selector.standard name="brand_id" route="brands" width="4">
         Quote Branding
     </x-admin.input.selector.standard>
-    <x-admin.input.selector.standard name="organization_id" route="organizations">
-        Organization (Optional)
-    </x-admin.input.selector.standard>
+    <x-livewire.input.select.organization name="organization_id" label="Organization (Optional)" />
     <x-admin.input name="deposit" width="6">Deposit</x-admin.input>
     <x-admin.input name="single_occupancy_surcharge" width="6">Single Occupancy Surcharge</x-admin.input>
     <x-admin.input.text-area name="description">Description</x-admin.input.text-area>
