@@ -29,6 +29,16 @@ use App\Listeners\Email\SendOrderCancelledEmail;
 use App\Listeners\Email\SendOrderChangedEmail;
 use App\Listeners\Email\SendPaymentMadeEmail;
 use App\Listeners\InvoiceUpdateListener;
+use App\Models\Order\Adjustment\ManualAdjustment;
+use App\Models\Order\Adjustment\OrderCustomerAdjustment;
+use App\Models\Order\Order;
+use App\Models\Order\OrderCustomer;
+use App\Models\Order\Payment\Payment;
+use App\Observers\Order\Adjustment\ManualAdjustmentObserver;
+use App\Observers\Order\Adjustment\OrderCustomerAdjustmentObserver;
+use App\Observers\Order\OrderCustomerObserver;
+use App\Observers\Order\OrderObserver;
+use App\Observers\Order\Payment\PaymentObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -124,6 +134,14 @@ class EventServiceProvider extends ServiceProvider
         'stripe-webhooks::charge.succeeded' => [
             CheckoutSuccessfulListener::class,
         ]
+    ];
+
+    protected $observers = [
+        Order::class => [OrderObserver::class,],
+        OrderCustomer::class => [OrderCustomerObserver::class,],
+        ManualAdjustment::class => [ManualAdjustmentObserver::class,],
+        OrderCustomerAdjustment::class => [OrderCustomerAdjustmentObserver::class,],
+        Payment::class => [PaymentObserver::class,],
     ];
 
     /**
