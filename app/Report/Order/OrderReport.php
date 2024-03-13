@@ -32,7 +32,7 @@ class OrderReport extends TourReport
             ->join('countries as lead_billing_country', 'lead_billing.country_id', '=', 'lead_billing_country.id')
             ->join('tours', 'tours.id', '=', 'orders.tour_id')
             ->join('tour_categories', 'tours.tour_category_id', '=', 'tour_categories.id')
-            ->join('events', 'events.id', '=', 'tour.event_id');
+            ->join('events', 'events.id', '=', 'tours.event_id');
     }
 
     /**
