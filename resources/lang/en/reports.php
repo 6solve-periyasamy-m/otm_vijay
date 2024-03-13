@@ -96,6 +96,10 @@ return [
                 'name' => 'Booking Reference',
                 'description' => 'The booking reference for the order',
             ],
+            'travellers' => [
+                'name' => 'Travellers',
+                'description' => 'The number of travellers on the order',
+            ],
             'deposit' => [
                 'name' => 'Order Deposit',
                 'description' => 'The amount of deposit paid on the order',

@@ -12,6 +12,7 @@ use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\DatetimeColumn;
+use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class OrderReport extends TourReport
 {
@@ -43,7 +44,8 @@ class OrderReport extends TourReport
         return [
             ...parent::allColumns(),
             'order_reference' => new ColumnDefinition('reports.order.column.reference', Column::name('orders.booking_reference')),
-            'order_deposit' => new ColumnDefinition('reports.order.column.deposit', CurrencyColumn::raw('(orders.deposit * (SELECT COUNT(*) FROM order_customers WHERE order_customers.order_id = orders.id AND order_customers.deleted_at = NULL);')),
+            'order_travellers' => new ColumnDefinition('reports.order.column.travellers', NumberColumn::raw('(SELECT COUNT(*) FROM order_customers WHERE order_customers.order_id = orders.id AND order_customers.deleted_at IS NULL)')),
+            'order_deposit' => new ColumnDefinition('reports.order.column.deposit', CurrencyColumn::raw('(orders.deposit * (SELECT COUNT(*) FROM order_customers WHERE order_customers.order_id = orders.id AND order_customers.deleted_at IS NULL))')),
             'order_booking_fee' => new ColumnDefinition('reports.order.column.booking_fee', CurrencyColumn::name('orders.booking_fee')),
             'order_status' => new ColumnDefinition('reports.order.column.status', OrderBadgeColumn::name('order_caches.status')),
             'order_ordered' => new ColumnDefinition('reports.order.column.ordered', DatetimeColumn::name('orders.ordered_on')),
@@ -54,7 +56,7 @@ class OrderReport extends TourReport
             'order_paid' => new ColumnDefinition('reports.order.column.paid', CurrencyColumn::raw('(SELECT SUM(payments.amount) FROM payments WHERE payments.order_id = orders.id AND payments.deleted_at = NULL)')),
             'order_cost' => new ColumnDefinition('reports.order.column.cost', CurrencyColumn::name('order_caches.cost')),
             'order_total' => new ColumnDefinition('reports.order.column.total_owed', CurrencyColumn::name('order_caches.total_owed')),
-            'order_remaining' => new ColumnDefinition('reports.order.column.remaining', CurrencyColumn::raw('order_caches.cost - (SELECT SUM(payments.amount) FROM payments WHERE payments.order_id = orders.id AND payments.deleted_at = NULL)')),
+            'order_remaining' => new ColumnDefinition('reports.order.column.remaining', CurrencyColumn::raw('order_caches.cost - (SELECT SUM(payments.amount) FROM payments WHERE payments.order_id = orders.id AND payments.deleted_at IS NULL)')),
             'order_next_amount' => new ColumnDefinition('reports.order.column.next_payment.amount', CurrencyColumn::name('order_caches.next_payment_amount')),
             'order_next_remaining' => new ColumnDefinition('reports.order.column.next_payment.remaining', CurrencyColumn::name('order_caches.next_payment_remaining')),
             'order_next_due' => new ColumnDefinition('reports.order.column.next_payment.remaining', DateColumn::name('order_caches.next_payment_due')),
