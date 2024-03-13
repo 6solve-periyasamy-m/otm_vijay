@@ -4,7 +4,6 @@ use App\Http\Controllers\Customer\CustomerBookingController;
 use App\Http\Controllers\StripeController;
 use App\Http\Gateways\FellohGateway;
 use App\Http\Gateways\OpayoGateway;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,6 +49,3 @@ Route::prefix('/booking/{bookingUrl}')->group(function () {
     Route::get('/{token}/addon/purchase/{id}/{type}', [CustomerBookingController::class, 'purchaseAddon'])->name('customer-booking.purchase-addon');
     Route::get('/{token}/addon/remove/{id}/{type}', [CustomerBookingController::class, 'removeAddon'])->name('customer-booking.remove-addon');
 });
-
-Route::get('new-report', function () { return view('pages.admin.report.new.form'); });
-Route::post('dd', function (Request $request) { return dd($request->all()); });

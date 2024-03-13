@@ -1,14 +1,24 @@
 @extends('layout.master')
 
-@section('title', 'Create Bespoke Report')
+@php
+/**
+ * @var \App\Report\BespokeReport $report
+ * @var \App\Models\System\BespokeReport|null $update
+ */
+$title = isset($update) ? 'Update Bespoke Report' : 'Create Bespoke Report';
+$route = isset($update) ? route('reports.advanced.update', ['report' => $update, ]) : route('reports.advanced.store');
+$fields = $update?->fields ?? [];
+@endphp
+
+@section('title', $title)
 
 @section('content')
-    <form action="{{ url('/dd') }}" method="post">
+    <form action="{{ $route }}" method="post">
         @csrf
         <x-admin.section.card>
             <div class="row">
-                <x-admin.input name="name" width="5">Name</x-admin.input>
-                <x-admin.input name="description" width="5">Description</x-admin.input>
+                <x-admin.input name="name" width="5" value="{{ $update?->name }}">Name</x-admin.input>
+                <x-admin.input name="description" width="5" value="{{ $update?->description }}">Description</x-admin.input>
                 <div class="col-xl-2">
                     <button class="btn btn-primary">Submit</button>
                 </div>
@@ -22,7 +32,7 @@
              $parent = null;
         @endphp
         <div class="row">
-            @foreach((new \App\Report\Order\OrderReport([]))->allColumns() as $key => $column)
+            @foreach($report->allColumns() as $key => $column)
                 @if($parent !== strtok($key, '_'))
                     @php $parent = strtok($key, '_');  @endphp
                     <div class="col-12">
@@ -41,7 +51,7 @@
                                 </div>
                                 <div class="col-1">
                                     <div class="mx-auto my-auto">
-                                        <input type="checkbox" name="keys[{{ $key }}]">
+                                        <input type="checkbox" name="keys[{{ $key }}]" @checked(old('keys[{{ $key }}]', in_array($key, $fields))) />
                                     </div>
                                 </div>
                             </div>

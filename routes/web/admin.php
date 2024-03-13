@@ -132,6 +132,7 @@ Route::middleware('auth:web')->group(function () {
     Route::prefix('reports')->group(function () {
         Route::get('/', [BespokeReportController::class, 'index'])->name('reports.all');
         Route::prefix('bespoke')->group(__DIR__ . '/admin/report/bespoke.php');
+        Route::prefix('advanced')->group(__DIR__ . '/admin/report/advanced.php');
         Route::prefix('/')->group(__DIR__ . '/admin/report/system.php');
     });
 });
