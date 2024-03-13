@@ -10,9 +10,18 @@ abstract class BespokeReport implements Wireable
 {
     protected readonly array $columns;
 
-    public function __construct(array $columns)
+    public function __construct(array $columns = [])
     {
         $this->columns = $columns;
+    }
+
+    /**
+     * Return the list of keys used to generate the report
+     * @return string[]
+     */
+    public function getKeys(): array
+    {
+        return $this->columns;
     }
 
     /**
