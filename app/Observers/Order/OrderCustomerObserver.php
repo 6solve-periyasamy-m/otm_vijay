@@ -2,65 +2,19 @@
 
 namespace App\Observers\Order;
 
+use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
-use App\Observers\UpdatesOrder;
+use App\Observers\OrderUpdateObserver;
+use Illuminate\Database\Eloquent\Model;
 
-class OrderCustomerObserver
+class OrderCustomerObserver extends OrderUpdateObserver
 {
-    use UpdatesOrder;
-    
-    /**
-     * Handle the OrderCustomer "created" event.
-     *
-     * @param OrderCustomer $orderCustomer
-     * @return void
-     */
-    public function created(OrderCustomer $orderCustomer)
-    {
-        $this->updateOrder($orderCustomer->order);
-    }
 
-    /**
-     * Handle the OrderCustomer "updated" event.
-     *
-     * @param OrderCustomer $orderCustomer
-     * @return void
-     */
-    public function updated(OrderCustomer $orderCustomer)
+    protected function getOrder(Model $model): Order|null
     {
-        $this->updateOrder($orderCustomer->order);
-    }
-
-    /**
-     * Handle the OrderCustomer "deleted" event.
-     *
-     * @param OrderCustomer $orderCustomer
-     * @return void
-     */
-    public function deleted(OrderCustomer $orderCustomer)
-    {
-        $this->updateOrder($orderCustomer->order);
-    }
-
-    /**
-     * Handle the OrderCustomer "restored" event.
-     *
-     * @param OrderCustomer $orderCustomer
-     * @return void
-     */
-    public function restored(OrderCustomer $orderCustomer)
-    {
-        $this->updateOrder($orderCustomer->order);
-    }
-
-    /**
-     * Handle the OrderCustomer "force deleted" event.
-     *
-     * @param OrderCustomer $orderCustomer
-     * @return void
-     */
-    public function forceDeleted(OrderCustomer $orderCustomer)
-    {
-        $this->updateOrder($orderCustomer->order);
+        /**
+         * @var OrderCustomer $model
+         */
+        return $model->order;
     }
 }

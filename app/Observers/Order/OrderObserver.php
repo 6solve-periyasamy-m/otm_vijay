@@ -3,64 +3,17 @@
 namespace App\Observers\Order;
 
 use App\Models\Order\Order;
-use App\Observers\UpdatesOrder;
+use App\Observers\OrderUpdateObserver;
+use Illuminate\Database\Eloquent\Model;
 
-class OrderObserver
+class OrderObserver extends OrderUpdateObserver
 {
-    use UpdatesOrder;
 
-    /**
-     * Handle the Order "created" event.
-     *
-     * @param Order $order
-     * @return void
-     */
-    public function created(Order $order)
+    protected function getOrder(Model $model): Order|null
     {
-        $this->updateOrder($order);
-    }
-
-    /**
-     * Handle the Order "updated" event.
-     *
-     * @param Order $order
-     * @return void
-     */
-    public function updated(Order $order)
-    {
-        $this->updateOrder($order);
-    }
-
-    /**
-     * Handle the Order "deleted" event.
-     *
-     * @param Order $order
-     * @return void
-     */
-    public function deleted(Order $order)
-    {
-        $this->updateOrder($order);
-    }
-
-    /**
-     * Handle the Order "restored" event.
-     *
-     * @param Order $order
-     * @return void
-     */
-    public function restored(Order $order)
-    {
-        $this->updateOrder($order);
-    }
-
-    /**
-     * Handle the Order "force deleted" event.
-     *
-     * @param Order $order
-     * @return void
-     */
-    public function forceDeleted(Order $order)
-    {
-        $this->updateOrder($order);
+        /**
+         * @var Order $model
+         */
+        return $model;
     }
 }

@@ -2,65 +2,19 @@
 
 namespace App\Observers\Order\Payment;
 
+use App\Models\Order\Order;
 use App\Models\Order\Payment\Payment;
-use App\Observers\UpdatesOrder;
+use App\Observers\OrderUpdateObserver;
+use Illuminate\Database\Eloquent\Model;
 
-class PaymentObserver
+class PaymentObserver extends OrderUpdateObserver
 {
-    use UpdatesOrder;
 
-    /**
-     * Handle the Payment "created" event.
-     *
-     * @param Payment $payment
-     * @return void
-     */
-    public function created(Payment $payment)
+    protected function getOrder(Model $model): Order|null
     {
-        $this->updateOrder($payment->order);
-    }
-
-    /**
-     * Handle the Payment "updated" event.
-     *
-     * @param Payment $payment
-     * @return void
-     */
-    public function updated(Payment $payment)
-    {
-        $this->updateOrder($payment->order);
-    }
-
-    /**
-     * Handle the Payment "deleted" event.
-     *
-     * @param Payment $payment
-     * @return void
-     */
-    public function deleted(Payment $payment)
-    {
-        $this->updateOrder($payment->order);
-    }
-
-    /**
-     * Handle the Payment "restored" event.
-     *
-     * @param Payment $payment
-     * @return void
-     */
-    public function restored(Payment $payment)
-    {
-        $this->updateOrder($payment->order);
-    }
-
-    /**
-     * Handle the Payment "force deleted" event.
-     *
-     * @param Payment $payment
-     * @return void
-     */
-    public function forceDeleted(Payment $payment)
-    {
-        $this->updateOrder($payment->order);
+        /**
+         * @var Payment $model
+         */
+        return $model->order;
     }
 }
