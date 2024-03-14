@@ -31,11 +31,21 @@ use App\Listeners\Email\SendPaymentMadeEmail;
 use App\Listeners\InvoiceUpdateListener;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Adjustment\OrderCustomerAdjustment;
+use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderMerchandise;
+use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\Payment\Payment;
 use App\Observers\Order\Adjustment\ManualAdjustmentObserver;
 use App\Observers\Order\Adjustment\OrderCustomerAdjustmentObserver;
+use App\Observers\Order\Component\OrderAccommodationObserver;
+use App\Observers\Order\Component\OrderActivityObserver;
+use App\Observers\Order\Component\OrderFlightObserver;
+use App\Observers\Order\Component\OrderMerchandiseObserver;
+use App\Observers\Order\Component\OrderTransportObserver;
 use App\Observers\Order\OrderCustomerObserver;
 use App\Observers\Order\OrderObserver;
 use App\Observers\Order\Payment\PaymentObserver;
@@ -142,6 +152,11 @@ class EventServiceProvider extends ServiceProvider
         ManualAdjustment::class => [ManualAdjustmentObserver::class,],
         OrderCustomerAdjustment::class => [OrderCustomerAdjustmentObserver::class,],
         Payment::class => [PaymentObserver::class,],
+        OrderAccommodation::class => [OrderAccommodationObserver::class,],
+        OrderActivity::class => [OrderActivityObserver::class,],
+        OrderFlight::class => [OrderFlightObserver::class,],
+        OrderMerchandise::class => [OrderMerchandiseObserver::class,],
+        OrderTransport::class => [OrderTransportObserver::class,],
     ];
 
     /**
