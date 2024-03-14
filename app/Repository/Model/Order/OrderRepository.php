@@ -11,6 +11,7 @@ use App\Models\Helper\AddressParent;
 use App\Models\Helper\OrderStatus;
 use App\Models\Location\Address;
 use App\Models\Order\Adjustment\ManualAdjustment;
+use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCache;
 use App\Models\Order\OrderCustomer;
@@ -166,26 +167,32 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public static function create(Tour $tour, array $data, ConvertedCustomer $lead, array $customers = [], bool $shouldInvoice = true): Order
     {
         $order = Order::make($data);
-        $tour->orders()->save($order);
-        $leadBooker = $order->repository->addCustomer($lead, false, false);
-        $order->repository->update(['lead_booker_id' => $leadBooker->id,]);
-        $order->repository->update(['booking_reference' => Order::generateBookingReference($order),]); // Merging will lead to lead booker id not being set at generation
+        $tour->orders()->saveQuietly($order);
+        $leadBooker = $order->repository->addCustomer($lead, false, false, true);
+        $order->updateQuietly(['lead_booker_id' => $leadBooker->id,]);
+        $order->saveQuietly();
+        $order->updateQuietly(['booking_reference' => Order::generateBookingReference($order)]); // To Future Me: Must be done seperately because Lead Booker ID is *required*
+        $order->saveQuietly();
         $included = $tour->repository->getComponentSetForSaving();
         $defaultRooms = RoomingRepository::getDefaultRoomList($tour);
         if ($lead->travelling) {
             $leadBooker->repository->bulkSaveStandard($included->clone());
-            RoomingRepository::createGroupFromRoomList($leadBooker, $defaultRooms);
+            OrderAccommodation::withoutEvents(function () use ($leadBooker, $defaultRooms) {
+                RoomingRepository::createGroupFromRoomList($leadBooker, $defaultRooms);
+            });
         }
         $order->repository->resetInstallments();
         foreach ($customers as $customer) {
-            $orderCustomer = $order->repository->addCustomer($customer, false, false);
+            $orderCustomer = $order->repository->addCustomer($customer, false, false, true);
             if ($customer->travelling) {
                 $orderCustomer->repository->bulkSaveStandard($included->clone());
-                RoomingRepository::createGroupFromRoomList($orderCustomer, $defaultRooms);
+                OrderAccommodation::withoutEvents(function () use ($orderCustomer, $defaultRooms)  {
+                    RoomingRepository::createGroupFromRoomList($orderCustomer, $defaultRooms);
+                });
             }
         }
         event(new OrderCreatedEvent($order, $shouldInvoice));
-        $order->refresh();
+        $order->repository->refresh();
         return $order;
     }
 
@@ -196,7 +203,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
      * @param bool $components Should the components be added (default: true)
      * @return OrderCustomer
      */
-    public function addCustomer(ConvertedCustomer $customer, bool $refresh = true, bool $components = true): OrderCustomer
+    public function addCustomer(ConvertedCustomer $customer, bool $refresh = true, bool $components = true, bool $silent = false): OrderCustomer
     {
         $orderCustomer = OrderCustomer::make([
             'is_travelling' => $customer->travelling,
@@ -206,7 +213,11 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             'single_occupancy_surcharge' => $this->order->tour->single_occupancy_surcharge,
             ...$customer->data,
         ]);
-        $this->order->orderCustomers()->save($orderCustomer);
+        if ($silent) {
+            $this->order->orderCustomers()->saveQuietly($orderCustomer);
+        } else {
+            $this->order->orderCustomers()->save($orderCustomer);
+        }
         if ($components) {
             $orderCustomer->repository->addAllIncluded();
             RoomingRepository::assignDefaultRooming($orderCustomer);

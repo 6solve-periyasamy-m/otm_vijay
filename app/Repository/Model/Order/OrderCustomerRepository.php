@@ -154,10 +154,10 @@ class OrderCustomerRepository extends ModelRepository
      */
     public function bulkSaveStandard(OrderComponentStorage $components): void
     {
-        $this->orderCustomer->orderActivities()->saveMany($components->activities);
-        $this->orderCustomer->orderFlights()->saveMany($components->flights);
-        $this->orderCustomer->orderTransports()->saveMany($components->transport);
-        $this->orderCustomer->orderMerchandise()->saveMany($components->merchandise);
+        $this->orderCustomer->orderActivities()->saveManyQuietly($components->activities);
+        $this->orderCustomer->orderFlights()->saveManyQuietly($components->flights);
+        $this->orderCustomer->orderTransports()->saveManyQuietly($components->transport);
+        $this->orderCustomer->orderMerchandise()->saveManyQuietly($components->merchandise);
     }
 
     /**

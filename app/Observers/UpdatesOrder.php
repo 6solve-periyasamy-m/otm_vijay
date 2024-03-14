@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Order\Order;
+use Exception;
 use Log;
 
 trait UpdatesOrder
@@ -11,7 +12,7 @@ trait UpdatesOrder
     {
         try {
             $order->repository->refresh();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error($e);
         }
     }
