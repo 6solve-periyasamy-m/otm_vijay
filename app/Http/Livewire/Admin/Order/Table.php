@@ -18,7 +18,8 @@ class Table extends LivewireDatatable
             ->join('order_customers as lead', 'lead.id', '=', 'orders.lead_booker_id')
             ->join('customers as lead_customer', 'lead.customer_id', '=', 'lead_customer.id')
             ->join('order_caches', 'order_caches.order_id', '=', 'orders.id')
-            ->join('tours', 'tours.id', '=', 'orders.tour_id');
+            ->join('tours', 'tours.id', '=', 'orders.tour_id')
+            ->groupBy('orders.id');
     }
 
     public function columns()

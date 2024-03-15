@@ -57,13 +57,14 @@ class TransportInventoryTourRepository extends InventoryTourRepository
         return $components;
     }
 
-    public function grantToCustomer(OrderCustomer $orderCustomer): ?OrderTransportRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderTransportRepository
     {
-        $orderComponent = OrderTransport::create([
+        $orderComponent = OrderTransport::make([
             'order_customer_id' => $orderCustomer->id,
             'transport_inventory_tour_id' => $this->tourComponent->id,
             'cost' => $this->tourComponent->tour_sales_price ?? 0
         ]);
+        $silent ? $orderComponent->saveQuietly() : $orderComponent->save();
         event(new OrderCustomerComponentAddedEvent($orderComponent));
         return $orderComponent->repository;
     }

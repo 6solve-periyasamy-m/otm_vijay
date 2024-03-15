@@ -202,9 +202,9 @@ class BookingTravellerRepository extends ModelRepository
             'tour_cost' => $this->traveller->booking->tour->base_price_per_person,
             'single_occupancy_surcharge' => $this->traveller->booking->tour->single_occupancy_surcharge,
         ]);
-        $order->orderCustomers()->save($orderCustomer);
+        $order->orderCustomers()->saveQuietly($orderCustomer);
         foreach ($this->getComponents(false) as $componentRepository) {
-            $componentRepository->getTourComponent()->grantToCustomer($orderCustomer);
+            $componentRepository->getTourComponent()->grantToCustomer($orderCustomer, true);
         }
         foreach ($this->traveller->vouchers as $voucher) {
             $orderCustomer->repository->applyVoucher($voucher);
