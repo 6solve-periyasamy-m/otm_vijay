@@ -5,6 +5,7 @@
  * @var \App\Report\BespokeReport $report
  * @var \App\Models\System\BespokeReport|null $update
  */
+$update = $update ?? null;
 $title = isset($update) ? 'Update Bespoke Report' : 'Create Bespoke Report';
 $route = isset($update) ? route('reports.advanced.update', ['report' => $update, ]) : route('reports.advanced.store');
 $fields = $update?->fields ?? [];
