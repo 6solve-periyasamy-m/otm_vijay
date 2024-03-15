@@ -24,16 +24,16 @@ class OrderReport extends TourReport
     public function getQuery()
     {
         return Order::query()
-            ->join('order_caches', 'order_caches.order_id', '=', 'orders.id')
-            ->join('order_customers as lead_booker', 'lead_booker.id', '=', 'orders.lead_booker_id')
-            ->join('customers as lead', 'lead_booker.customer_id', '=', 'lead.id')
-            ->join('addresses as lead_home', 'lead.home_address_id', '=', 'lead_home.id')
-            ->join('countries as lead_home_country', 'lead_home.country_id', '=', 'lead_home_country.id')
-            ->join('addresses as lead_billing', 'lead.billing_address_id', '=', 'lead_billing.id')
-            ->join('countries as lead_billing_country', 'lead_billing.country_id', '=', 'lead_billing_country.id')
-            ->join('tours', 'tours.id', '=', 'orders.tour_id')
-            ->join('tour_categories', 'tours.tour_category_id', '=', 'tour_categories.id')
-            ->join('events', 'events.id', '=', 'tours.event_id');
+            ->leftJoin('order_caches', 'order_caches.order_id', '=', 'orders.id')
+            ->leftJoin('order_customers as lead_booker', 'lead_booker.id', '=', 'orders.lead_booker_id')
+            ->leftJoin('customers as lead', 'lead_booker.customer_id', '=', 'lead.id')
+            ->leftJoin('addresses as lead_home', 'lead.home_address_id', '=', 'lead_home.id')
+            ->leftJoin('countries as lead_home_country', 'lead_home.country_id', '=', 'lead_home_country.id')
+            ->leftJoin('addresses as lead_billing', 'lead.billing_address_id', '=', 'lead_billing.id')
+            ->leftJoin('countries as lead_billing_country', 'lead_billing.country_id', '=', 'lead_billing_country.id')
+            ->leftJoin('tours', 'tours.id', '=', 'orders.tour_id')
+            ->leftJoin('tour_categories', 'tours.tour_category_id', '=', 'tour_categories.id')
+            ->leftJoin('events', 'events.id', '=', 'tours.event_id');
     }
 
     /**

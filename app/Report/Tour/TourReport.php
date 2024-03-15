@@ -19,8 +19,8 @@ class TourReport extends EventReport
     public function getQuery()
     {
         return Tour::query()
-            ->join('events', 'events.id', '=', 'tours.event_id')
-            ->join('tour_categories', 'tour_categories.id', '=', 'tours.tour_category_id');
+            ->leftJoin('events', 'events.id', '=', 'tours.event_id')
+            ->leftJoin('tour_categories', 'tour_categories.id', '=', 'tours.tour_category_id');
     }
 
     public function allColumns(): array

@@ -10,6 +10,7 @@ class BespokeReport extends ExportableDatatable
 
     public function builder()
     {
+        \Log::info($this->report->getReport()->getQuery()->toSql());
         return $this->report->getReport()->getQuery();
     }
 
