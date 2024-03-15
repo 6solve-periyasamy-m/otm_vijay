@@ -18,7 +18,7 @@ class OrderAccommodationObserver
     public function created(OrderAccommodation $orderAccommodation)
     {
         foreach ($orderAccommodation->group->orderCustomers as $orderCustomer) {
-            $this->updateOrder($orderCustomer);
+            $this->updateOrder($orderCustomer->order);
         }
     }
 
@@ -31,7 +31,7 @@ class OrderAccommodationObserver
     public function updated(OrderAccommodation $orderAccommodation)
     {
         foreach ($orderAccommodation->group->orderCustomers as $orderCustomer) {
-            $this->updateOrder($orderCustomer);
+            $this->updateOrder($orderCustomer->order);
         }
     }
 
@@ -44,7 +44,7 @@ class OrderAccommodationObserver
     public function deleted(OrderAccommodation $orderAccommodation)
     {
         foreach ($orderAccommodation->group->orderCustomers as $orderCustomer) {
-            $this->updateOrder($orderCustomer);
+            $this->updateOrder($orderCustomer->order);
         }
     }
 
@@ -57,7 +57,7 @@ class OrderAccommodationObserver
     public function restored(OrderAccommodation $orderAccommodation)
     {
         foreach ($orderAccommodation->group->orderCustomers as $orderCustomer) {
-            $this->updateOrder($orderCustomer);
+            $this->updateOrder($orderCustomer->order);
         }
     }
 
@@ -70,7 +70,7 @@ class OrderAccommodationObserver
     public function forceDeleted(OrderAccommodation $orderAccommodation)
     {
         foreach ($orderAccommodation->group->orderCustomers as $orderCustomer) {
-            $this->updateOrder($orderCustomer);
+            $this->updateOrder($orderCustomer->order);
         }
     }
 }
