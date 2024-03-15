@@ -173,7 +173,7 @@
                             <tr>
                                 <td>{{ $payment->payment_type }}</td>
                                 <td>{{ $payment->paymentMethod->name }}</td>
-                                <td>{{ $payment->customer->full_name }}</td>
+                                <td>{{ $payment->customer?->full_name ?? "No Customer Found" }}</td>
                                 <td>{{ f_currency($payment->amount) }}</td>
                                 <td>{{ f_datetime($payment->paid_on) }}</td>
                                 <td class="actions">
