@@ -8,10 +8,10 @@ use Log;
 
 trait UpdatesOrder
 {
-    protected function updateOrder(Order $order): void
+    protected function updateOrder(Order|null $order): void
     {
         try {
-            $order->repository->refresh();
+            $order?->repository->refresh();
         } catch (Exception $e) {
             Log::error($e);
         }
