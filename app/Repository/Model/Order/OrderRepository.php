@@ -255,8 +255,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         return $collection;
     }
 
-    public function generateRemainingOrderInstallment(): OrderInstallment
+    public function generateRemainingOrderInstallment(): ?OrderInstallment
     {
+        if ($this->order->orderCustomers()->count() < 1) return null;
         return new OrderInstallment([
             'id' => 0,
             'order_id' => $this->order->id,
