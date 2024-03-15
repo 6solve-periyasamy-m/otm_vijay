@@ -279,7 +279,9 @@ class BookingTravellerRepository extends ModelRepository
 
     public static function make(array $details): BookingTraveller
     {
-        $details['email_address'] = trim($details['email_address']);
+        if (array_key_exists('email_address', $details)) {
+            $details['email_address'] = trim($details['email_address']);
+        }
         $customer = array_key_exists('email_address', $details) && !empty($details['email_address'])
             ? Customer::whereEmailAddress($details['email_address'])->first() : null;
         if (isset($customer)) {
