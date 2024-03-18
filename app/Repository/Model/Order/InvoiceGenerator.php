@@ -209,7 +209,7 @@ class InvoiceGenerator
             if ($this->order->lead_booker_id === $orderCustomer->id) {
                 if ($this->order->commission_amount !== null) {
                     $billables[] = new InvoiceBillable([
-                        'description' => "'Commission: {$this->order->commission}%",
+                        'description' => "Commission: {$this->order->commission}%",
                         'shared_key' => 'commission',
                         'amount' => $this->order->commission_amount,
                     ]);
