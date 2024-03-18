@@ -28,7 +28,6 @@ use App\Listeners\Email\SendBookingConfirmedEmail;
 use App\Listeners\Email\SendOrderCancelledEmail;
 use App\Listeners\Email\SendOrderChangedEmail;
 use App\Listeners\Email\SendPaymentMadeEmail;
-use App\Listeners\InvoiceUpdateListener;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Adjustment\OrderCustomerAdjustment;
 use App\Models\Order\Component\OrderAccommodation;
@@ -66,79 +65,79 @@ class EventServiceProvider extends ServiceProvider
         ],
         OrderCreatedEvent::class => [
             SendBookingConfirmedEmail::class,
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
         ],
         PaymentCreatedEvent::class => [
             SendPaymentMadeEmail::class,
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
         ],
         OrderCancelledEvent::class => [
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
             SendOrderCancelledEmail::class,
         ],
         OrderRestoredEvent::class => [
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
         ],
         OrderEditedEvent::class => [
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
             //SendOrderChangedEmail::class,
         ],
         PaymentEditedEvent::class => [
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
             //SendOrderChangedEmail::class,
         ],
         PaymentRemovedEvent::class => [
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
             //SendOrderChangedEmail::class,
         ],
         AdjustmentCreatedEvent::class => [
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
             SendOrderChangedEmail::class,
         ],
         AdjustmentEditedEvent::class => [
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
             SendOrderChangedEmail::class,
         ],
         AdjustmentRemovedEvent::class => [
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
             SendOrderChangedEmail::class,
         ],
         OrderCustomerCreatedEvent::class => [
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
             SendOrderChangedEmail::class,
             SendAdditionalTravellerAddedEmail::class,
         ],
         OrderCustomerEditedEvent::class => [
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
             //SendOrderChangedEmail::class,
         ],
         OrderCustomerRemovedEvent::class => [
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
             SendAdditionalTravellerRemovedEmail::class,
             SendOrderChangedEmail::class,
         ],
         OrderCustomerComponentAddedEvent::class => [
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
             //SendOrderChangedEmail::class,
         ],
         OrderCustomerComponentEditedEvent::class => [
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
             //SendOrderChangedEmail::class,
         ],
         OrderCustomerComponentRemovedEvent::class => [
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
             //SendOrderChangedEmail::class,
         ],
         CustomerAdjustmentCreatedEvent::class => [
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
             SendOrderChangedEmail::class,
         ],
         CustomerAdjustmentEditedEvent::class => [
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
             SendOrderChangedEmail::class,
         ],
         CustomerAdjustmentRemovedEvent::class => [
-            InvoiceUpdateListener::class,
+            //InvoiceUpdateListener::class,
             SendOrderChangedEmail::class,
         ],
         'stripe-webhooks::charge.succeeded' => [
