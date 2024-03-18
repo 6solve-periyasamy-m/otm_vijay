@@ -202,9 +202,9 @@ class BookingTravellerRepository extends ModelRepository
             'tour_cost' => $this->traveller->booking->tour->base_price_per_person,
             'single_occupancy_surcharge' => $this->traveller->booking->tour->single_occupancy_surcharge,
         ]);
-        $order->orderCustomers()->save($orderCustomer);
+        $order->orderCustomers()->saveQuietly($orderCustomer);
         foreach ($this->getComponents(false) as $componentRepository) {
-            $componentRepository->getTourComponent()->grantToCustomer($orderCustomer);
+            $componentRepository->getTourComponent()->grantToCustomer($orderCustomer, true);
         }
         foreach ($this->traveller->vouchers as $voucher) {
             $orderCustomer->repository->applyVoucher($voucher);
@@ -279,6 +279,9 @@ class BookingTravellerRepository extends ModelRepository
 
     public static function make(array $details): BookingTraveller
     {
+        if (array_key_exists('email_address', $details)) {
+            $details['email_address'] = trim($details['email_address']);
+        }
         $customer = array_key_exists('email_address', $details) && !empty($details['email_address'])
             ? Customer::whereEmailAddress($details['email_address'])->first() : null;
         if (isset($customer)) {

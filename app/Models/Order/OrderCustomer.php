@@ -121,15 +121,6 @@ class OrderCustomer extends Model
     protected $casts = ['tour_cost' => 'double', 'single_occupancy_surcharge' => 'double', 'is_charged' => 'boolean', 'is_travelling' => 'boolean'];
     private OrderCustomerRepository $internal_repository;
 
-    public static function getValidationRules(): array
-    {
-        return [
-            'customer_id' => 'exists:customers,id',
-            'tour_cost' => 'numeric',
-            'single_occupancy_surcharge' => 'numeric',
-        ];
-    }
-
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);

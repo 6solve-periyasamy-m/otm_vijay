@@ -12,7 +12,7 @@
     @include('partials.fields.dropdown', ['name' => 'Status Override', 'field' => 'status_override', 'width' => 4, 'null' => true, 'values' => \App\Models\Helper\OrderStatus::asArray(), 'selected' => $order?->status_override?->value])
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'value' => $order?->internal_notes, 'width' => 6 ])
     @include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'value' => $order?->external_notes, 'width' => 6 ])
-    @include('partials.fields.selector.adder', ['name' => 'Organization (Optional)', 'field' => 'organization_id', 'value' => $order?->organization_id ?? 0, 'route' => 'organizations', 'createRoute' => route('organizations.create')])
+    <x-livewire.input.select.organization name="organization_id" value="{{ $order?->organization_id }}" label="Organization (Optional)" width="3" />
     @include('partials.fields.ckeditor', ['name' => 'Invoice Footer', 'field' => 'invoice_footer', 'value' => $order->invoice_footer, ])
     @include('partials.fields.submit')
 @endsection

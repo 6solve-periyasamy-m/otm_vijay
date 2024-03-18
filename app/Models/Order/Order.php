@@ -10,6 +10,7 @@ use App\Models\Customer\Organization;
 use App\Models\Helper\OrderStatus;
 use App\Models\Helper\Traits\HasPermissions;
 use App\Models\Order\Adjustment\ManualAdjustment;
+use App\Models\Order\Adjustment\OrderCustomerAdjustment;
 use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Quote\Quote;
@@ -17,6 +18,7 @@ use App\Models\System\FellohLink;
 use App\Models\Tour\Tour;
 use App\Models\Voucher\OrderVoucher;
 use App\Repository\Model\Order\OrderRepository;
+use App\Repository\Model\Order\OrderRoomingRepository;
 use Database\Factories\Order\OrderFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -60,12 +62,14 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Collection|ManualAdjustment[] $adjustments The manual adjustments on the order
  * @property-read Collection|OrderVoucher[] $vouchers
  * @property-read Organization|null $organization
+ * @property-read OrderCache|null $cache
  * @property-read int|null $adjustments_count The amount of manual adjustments on the order
  * @property-read int|null $days_until_next_payment The number of days until the next payment is due, or null if all installments are paid
  * @property-read Collection|Customer[] $customers The customers associated with this order
  * @property-read Booking|null $booking
  * @property-read int|null $customers_count The amount of customers associated with this order
  * @property-read OrderRepository $repository The repository used for calculations
+ * @property-read OrderRoomingRepository $rooming The repository used for rooming
  * @property-read float $calculated_deposit The calculated deposit based on customer count
  * @property-read float $cost The cost of the order before adjustments
  * @property-read float|null $commission_amount The total amount of the commission
@@ -129,11 +133,12 @@ class Order extends Model
 
     protected $guarded = [];
     protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double', 'status_override' => OrderStatus::class,];
-    protected $with = ['tour',];
+    protected $with = ['tour', 'cache'];
 
     protected array $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments', 'installments', 'invoices'];
 
     private OrderRepository $internal_repository;
+    private OrderRoomingRepository $internal_rooming;
 
     public static function getValidationRules(): array
     {
@@ -152,6 +157,11 @@ class Order extends Model
     }
 
     // Relationships
+
+    public function cache(): HasOne
+    {
+        return $this->hasOne(OrderCache::class, 'order_id');
+    }
 
     public function tour(): BelongsTo
     {
@@ -213,6 +223,11 @@ class Order extends Model
         return $this->hasOne(Quote::class, 'order_id');
     }
 
+    public function booking(): HasOne
+    {
+        return $this->hasOne(Booking::class, 'order_id');
+    }
+
     public function groups(): HasManyDeep
     {
         return $this->hasManyDeep(Group::class, [OrderCustomer::class, OrderCustomerGroup::class,])->groupBy('groups.id');
@@ -223,17 +238,29 @@ class Order extends Model
         return $this->morphOne(FellohLink::class, 'order');
     }
 
-    public function booking(): HasOne
+    public function payments(): HasMany
     {
-        return $this->hasOne(Booking::class, 'order_id');
+        return $this->hasMany(Payment::class, 'order_id');
     }
+
+    public function adjustments(): HasMany
+    {
+        return $this->hasMany(ManualAdjustment::class, 'order_id');
+    }
+
+    public function customerAdjustments(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderCustomerAdjustment::class, OrderCustomer::class, 'order_id', 'order_customer_id');
+    }
+
+    // Attributes
 
     /**
      * @return float The sum of all adjustments on the order and customers
      */
     public function getTotalAdjustmentsAttribute(): float
     {
-        return $this->repository->getTotalAdjustedValue();
+        return $this->customerAdjustments()->sum('amount') + $this->adjustments()->sum('amount');
     }
 
     /**
@@ -243,8 +270,6 @@ class Order extends Model
     {
         return $this->repository->getNextPaymentDetails();
     }
-
-    // Attributes
 
     /**
      * @return string The full name of the lead booker
@@ -268,11 +293,6 @@ class Order extends Model
     public function getPaidAttribute(): float
     {
         return $this->payments()->sum('amount');
-    }
-
-    public function payments(): HasMany
-    {
-        return $this->hasMany(Payment::class, 'order_id');
     }
 
     /**
@@ -406,15 +426,16 @@ class Order extends Model
         return $this->tour->name;
     }
 
-    public function adjustments(): HasMany
-    {
-        return $this->hasMany(ManualAdjustment::class, 'order_id');
-    }
-
     public function getRepositoryAttribute(): OrderRepository
     {
         if (!isset ($this->internal_repository)) $this->internal_repository = new OrderRepository($this);
         return $this->internal_repository;
+    }
+    
+    public function getRoomingAttribute(): OrderRoomingRepository
+    {
+        if (!isset ($this->internal_rooming)) $this->internal_rooming = new OrderRoomingRepository($this);
+        return $this->internal_rooming;
     }
 
     public function getPayingCustomersAttribute(): int

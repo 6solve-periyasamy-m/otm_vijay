@@ -3,8 +3,8 @@
     $authDate = $authorization >= 0 ? Carbon\Carbon::createFromTimestamp($authorization) : null;
     $authorized = \Settings::authorized('authorization.reminders')
 @endphp
-<div class="card">
-    <div class="card-body row">
+<x-admin.section.card>
+    <div class="row">
         <div class="form-group col-12 col-xl-2">
             <a class="form-control mx-auto btn btn-block btn-primary text-white" href="{{ route('orders.reminders.authorize', ['days' => 3,]) }}">Authorize for 3 Days</a>
         </div>
@@ -33,4 +33,4 @@
         </div>
 
     </div>
-</div>
+</x-admin.section.card>

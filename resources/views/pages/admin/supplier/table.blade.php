@@ -11,17 +11,15 @@
 @endpush
 
 @section('content')
-    <div class="card">
-        <div class="card-body text-end">
+    <x-admin.section.card>
+        <div class="text-end">
             <button class="btn btn-primary text-white" onclick="showForm()">
                 {{ Icon::create() }}
                 Create New
             </button>
         </div>
-    </div>
-    <div class="card">
-        <div class="card-body">
-            <livewire:admin.supplier.table />
-        </div>
-    </div>
+    </x-admin.section.card>
+    <x-admin.section.card>
+        <livewire:admin.supplier.table />
+    </x-admin.section.card>
 @endsection
