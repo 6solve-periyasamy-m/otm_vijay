@@ -12,6 +12,7 @@ use App\Http\Requests\Admin\Order\UpdateOrderRequest;
 use App\Http\Requests\Admin\TableRequest;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
+use App\Repository\Model\Order\InvoiceRepository;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Reporting\ReportRepository;
 
@@ -58,9 +59,17 @@ class OrderController extends Controller
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
-    public function invoice(Order $order)
+    public function latestInvoice(Order $order)
     {
         return $order->repository->getInvoiceRepository()->getResponseStream();
+    }
+
+    public function invoice(Order $order, string $version = 'latest')
+    {
+        $invoice =
+            $order->invoices()->where('invoice_number', '=', $version)->first()
+            ?? $order->repository->getInvoiceRepository()->invoice;
+        return (new InvoiceRepository($invoice))->getResponseStream();
     }
 
     public function atol(Order $order)
