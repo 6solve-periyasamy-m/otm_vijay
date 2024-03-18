@@ -53,7 +53,7 @@ class OrderReport extends TourReport
             'order_internal_notes' => new ColumnDefinition('reports.order.column.internal_notes', Column::name('orders.internal_notes')),
             'order_external_notes' => new ColumnDefinition('reports.order.column.external_notes', Column::name('orders.external_notes')),
             'order_invoice_footer' => new ColumnDefinition('reports.order.column.invoice_footer', Column::name('orders.invoice_footer')),
-            'order_paid' => new ColumnDefinition('reports.order.column.paid', CurrencyColumn::raw('(SELECT SUM(payments.amount) FROM payments WHERE payments.order_id = orders.id AND payments.deleted_at = NULL)')),
+            'order_paid' => new ColumnDefinition('reports.order.column.paid', CurrencyColumn::raw('(SELECT SUM(payments.amount) FROM payments WHERE payments.order_id = orders.id AND payments.deleted_at IS NULL)')),
             'order_cost' => new ColumnDefinition('reports.order.column.cost', CurrencyColumn::name('order_caches.cost')),
             'order_total' => new ColumnDefinition('reports.order.column.total_owed', CurrencyColumn::name('order_caches.total_owed')),
             'order_remaining' => new ColumnDefinition('reports.order.column.remaining', CurrencyColumn::raw('order_caches.cost - (SELECT SUM(payments.amount) FROM payments WHERE payments.order_id = orders.id AND payments.deleted_at IS NULL)')),
