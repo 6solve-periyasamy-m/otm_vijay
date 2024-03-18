@@ -205,6 +205,16 @@ class InvoiceGenerator
                     'shared_key' => 'base-components'
                 ]),
             ];
+
+            if ($this->order->lead_booker_id === $orderCustomer->id) {
+                if ($this->order->commission_amount !== null) {
+                    $billables[] = new InvoiceBillable([
+                        'description' => "'Commission: {$this->order->commission}%",
+                        'shared_key' => 'commission',
+                        'amount' => $this->order->commission_amount,
+                    ]);
+                }
+            }
             if ($orderCustomer->has_surcharge) {
                 $billables[] = new InvoiceBillable([
                     'description' => __('invoice.customer.billable.surcharge'),
