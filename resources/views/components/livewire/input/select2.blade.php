@@ -4,6 +4,7 @@
     $allRoute = route('api.' . $route . '.select');
     $value = $attributes->get('value');
     $value = empty($value) ? null : $value;
+    $clear = $attributes->get('clear', false);
     $updateRoute = null;
     if ($value !== null) {
         $updateRoute = route("api.{$route}.selected", ['id' => $value, ]);
@@ -32,6 +33,7 @@
         $(function () {
             let selector = $('#{{ $id }}').select2({
                 placeholder: "Please Select a Value",
+                allowClear: {{ $clear }},
                 ajax: {
                     url: '{{ $allRoute }}',
                     data: function (params) {
