@@ -2,8 +2,9 @@
 
 namespace App\Repository\Model\Order;
 
+use App\Events\Order\Customer\OrderCustomerEditedEvent;
+use App\Events\Order\Customer\OrderCustomerRemovedEvent;
 use App\Models\Booking\BookingTraveller;
-use App\Models\Customer\Customer;
 use App\Models\Order\Adjustment\OrderCustomerAdjustment;
 use App\Models\Order\OrderCustomer;
 use App\Models\Voucher\VoucherCode;
@@ -139,11 +140,11 @@ class OrderCustomerRepository extends ModelRepository
         return "{$this->orderCustomer->customer_name} ({$this->orderCustomer->order->booking_reference})";
     }
 
-    public function addAllIncluded()
+    public function addAllIncluded(bool $silent = false)
     {
         foreach ($this->orderCustomer->order->tour->repository->getComponents(false, true, true, true, false, ['Included',]) as $inventoryTourRepository) {
             if (!$inventoryTourRepository->isBookable()) continue;
-            $inventoryTourRepository->grantToCustomer($this->orderCustomer);
+            $inventoryTourRepository->grantToCustomer($this->orderCustomer, $silent);
         }
     }
 
@@ -153,10 +154,10 @@ class OrderCustomerRepository extends ModelRepository
      */
     public function bulkSaveStandard(OrderComponentStorage $components): void
     {
-        $this->orderCustomer->orderActivities()->saveMany($components->activities);
-        $this->orderCustomer->orderFlights()->saveMany($components->flights);
-        $this->orderCustomer->orderTransports()->saveMany($components->transport);
-        $this->orderCustomer->orderMerchandise()->saveMany($components->merchandise);
+        $this->orderCustomer->orderActivities()->saveManyQuietly($components->activities);
+        $this->orderCustomer->orderFlights()->saveManyQuietly($components->flights);
+        $this->orderCustomer->orderTransports()->saveManyQuietly($components->transport);
+        $this->orderCustomer->orderMerchandise()->saveManyQuietly($components->merchandise);
     }
 
     /**
@@ -273,12 +274,21 @@ class OrderCustomerRepository extends ModelRepository
 
     public function save(): bool
     {
+        $this->orderCustomer->order->repository->refresh();
+        event(new OrderCustomerEditedEvent($this->orderCustomer));
         return $this->orderCustomer->save();
     }
 
     public function delete(): bool
     {
-        return $this->orderCustomer->delete();
+        foreach ($this->orderCustomer->groups as $group) {
+            if ($group->orderCustomers->count() == 1) { $group->delete(); }
+        }
+        $deleted = $this->orderCustomer->delete();
+        if ($deleted) {
+            event(new OrderCustomerRemovedEvent($this->orderCustomer));
+        }
+        return $deleted;
     }
 
     public function isDeleted(): bool
@@ -286,7 +296,7 @@ class OrderCustomerRepository extends ModelRepository
         return $this->orderCustomer->trashed();
     }
 
-    public function removeAllComponents(bool $accommodation = false)
+    public function removeAllComponents(bool $accommodation = false): void
     {
         foreach ($this->getComponents($accommodation) as $component) {
             $component->delete();

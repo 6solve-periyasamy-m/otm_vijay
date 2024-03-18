@@ -9,13 +9,11 @@
 
     <div class="row">
         <div class="col-12">
-            <div class="card">
+            <x-admin.section.card>
                 <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">
-                            Contracted Components
-                        </h4>
-                    </div>
+                    <h4 class="fw-bold">
+                        Contracted Components
+                    </h4>
                     <ul class="nav nav-pills otm-tab flex">
                         <li class="nav-item flex-fill">
                             <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#accommodation">
@@ -70,41 +68,37 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </x-admin.section.card>
         </div>
         <div class="col-md-6 col-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">
-                            Supplier Payments
-                        </h4>
-                        <div class="float-end">
-                            <a class="btn btn-success" onclick="openModal('admin.supplier.contract.payment.form', {'contract': {{$contract->id}},})">
-                                {{ Icon::create() }} {{ __('supplier.contract.payment.create') }}
-                            </a>
-                        </div>
+            <x-admin.section.card>
+                <x-slot:header>
+                    <h4 class="fw-bold">
+                        Supplier Payments
+                    </h4>
+                    <div class="float-end">
+                        <a class="btn btn-success" onclick="openModal('admin.supplier.contract.payment.form', {'contract': {{$contract->id}},})">
+                            {{ Icon::create() }} {{ __('supplier.contract.payment.create') }}
+                        </a>
                     </div>
-                    <livewire:admin.supplier.contract.payment.table :contract="$contract" />
-                </div>
-            </div>
+                </x-slot:header>
+                <livewire:admin.supplier.contract.payment.table :contract="$contract" />
+            </x-admin.section.card>
         </div>
         <div class="col-md-6 col-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">
-                            Payment Instalments
-                        </h4>
-                        <div class="float-end">
-                            <a class="btn btn-success" onclick="openModal('admin.supplier.contract.installment.form', {'contract': {{$contract->id}},})">
-                                {{ Icon::create() }} {{ __('supplier.contract.installment.create') }}
-                            </a>
-                        </div>
+            <x-admin.section.card>
+                <x-slot:header>
+                    <h4 class="fw-bold">
+                        Payment Instalments
+                    </h4>
+                    <div class="float-end">
+                        <a class="btn btn-success" onclick="openModal('admin.supplier.contract.installment.form', {'contract': {{$contract->id}},})">
+                            {{ Icon::create() }} {{ __('supplier.contract.installment.create') }}
+                        </a>
                     </div>
-                    <livewire:admin.supplier.contract.installment.table :contract="$contract" />
-                </div>
-            </div>
+                </x-slot:header>
+                <livewire:admin.supplier.contract.installment.table :contract="$contract" />
+            </x-admin.section.card>
         </div>
     </div>
 
