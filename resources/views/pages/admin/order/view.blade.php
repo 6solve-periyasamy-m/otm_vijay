@@ -395,7 +395,7 @@
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
-                        @if (($order->commission_amount ?? 0) > 0)
+                            @if($order->commission !== null)
                                 <tr>
                                     <td>{{ f_currency($order->commission_amount) }}</td>
                                     <td>Commission: {{ $order->commission }}%</td>
