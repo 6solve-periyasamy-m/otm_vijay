@@ -538,6 +538,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             'next_payment_date' => $nextPayment?->due_on,
             'next_payment_amount' => $nextPayment?->amount,
             'next_payment_remaining' => $nextPayment?->remaining,
+            'commission_amount' => $this->order->commission_amount,
             'cached' => now(),
         ]);
         $cache->save();
