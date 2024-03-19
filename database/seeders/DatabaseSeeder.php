@@ -91,7 +91,8 @@ class DatabaseSeeder extends Seeder
 
             $this->call(SuppliersTableSeeder::class);
             $this->call(SupplierAssociatesTableSeeder::class);
-        } else {
+            $this->call(OrderCachesTableSeeder::class);
+    } else {
             Artisan::call('countries:update');
         }
     }

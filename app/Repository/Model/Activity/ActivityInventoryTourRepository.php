@@ -60,13 +60,14 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
         return $components;
     }
 
-    public function grantToCustomer(OrderCustomer $orderCustomer): ?OrderActivityRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderActivityRepository
     {
-        $orderComponent = OrderActivity::create([
+        $orderComponent = OrderActivity::make([
             'order_customer_id' => $orderCustomer->id,
             'activity_inventory_tour_id' => $this->tourComponent->id,
             'cost' => $this->tourComponent->tour_sales_price ?? 0,
         ]);
+        $silent ? $orderComponent->saveQuietly() : $orderComponent->save();
         event(new OrderCustomerComponentAddedEvent($orderComponent));
         return $orderComponent->repository;
     }

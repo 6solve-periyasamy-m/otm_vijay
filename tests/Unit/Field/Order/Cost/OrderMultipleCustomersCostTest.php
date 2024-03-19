@@ -32,6 +32,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $orderCustomer2 = $this->generateOrderCustomer(false, $orderCustomer1->order);
         $orderCustomer2->groups()->delete();
         $orderCustomer1->primary_group->repository->addCustomerToGroup($orderCustomer2);
+        $orderCustomer1->order->repository->refresh();
         self::assertEquals($this->getDefaultCost($orderCustomer1->order), $orderCustomer1->order->cost);
     }
 
@@ -45,6 +46,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $upgradeRoom = $tourComponent->addToOrder($orderCustomer->primary_group);
         $upgradeRoom->update(['cost' => 100,]);
         $upgradeRoom->save();
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($this->getDefaultCost($orderCustomer->order) + 100, $orderCustomer->order->cost);
     }
 
@@ -62,6 +64,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $tourRoom->save();
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -80,6 +83,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $upgradeRoom->save();
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -98,6 +102,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
                 $cost += 100;
             }
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -111,6 +116,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $upgradeRoom = $tourComponent->addToOrder($orderCustomer);
         $upgradeRoom->update(['cost' => 100,]);
         $upgradeRoom->save();
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($this->getDefaultCost($orderCustomer->order) + 100, $orderCustomer->order->cost);
     }
 
@@ -128,6 +134,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $tourRoom->save();
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -145,6 +152,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $orderComponent->save();
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -163,6 +171,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
                 $cost += 100;
             }
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -176,6 +185,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $upgradeRoom = $tourComponent->addToOrder($orderCustomer);
         $upgradeRoom->update(['cost' => 100,]);
         $upgradeRoom->save();
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($this->getDefaultCost($orderCustomer->order) + 100, $orderCustomer->order->cost);
     }
 
@@ -193,6 +203,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $tourRoom->save();
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -210,6 +221,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $orderComponent->save();
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -228,6 +240,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
                 $cost += 100;
             }
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -241,6 +254,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $upgradeRoom = $tourComponent->addToOrder($orderCustomer);
         $upgradeRoom->update(['cost' => 100,]);
         $upgradeRoom->save();
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($this->getDefaultCost($orderCustomer->order) + 100, $orderCustomer->order->cost);
     }
 
@@ -258,6 +272,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $tourRoom->save();
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -275,6 +290,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $orderComponent->save();
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -293,6 +309,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
                 $cost += 100;
             }
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -306,6 +323,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $upgradeRoom = $tourComponent->addToOrder($orderCustomer->primary_group);
         $upgradeRoom->update(['cost' => 100,]);
         $upgradeRoom->save();
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($this->getDefaultCost($orderCustomer->order) + 100, $orderCustomer->order->cost);
     }
 
@@ -323,6 +341,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $tourRoom->save();
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -341,6 +360,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $upgradeRoom->save();
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -359,6 +379,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
                 $cost += 100;
             }
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -372,6 +393,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $upgradeRoom = $tourComponent->addToOrder($orderCustomer);
         $upgradeRoom->update(['cost' => 100,]);
         $upgradeRoom->save();
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($this->getDefaultCost($orderCustomer->order) + 100, $orderCustomer->order->cost);
     }
 
@@ -389,6 +411,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $tourRoom->save();
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -406,6 +429,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $orderComponent->save();
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -424,6 +448,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
                 $cost += 100;
             }
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -437,6 +462,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $upgradeRoom = $tourComponent->addToOrder($orderCustomer);
         $upgradeRoom->update(['cost' => 100,]);
         $upgradeRoom->save();
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($this->getDefaultCost($orderCustomer->order) + 100, $orderCustomer->order->cost);
     }
 
@@ -454,6 +480,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $tourRoom->save();
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -471,6 +498,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $orderComponent->save();
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -489,6 +517,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
                 $cost += 100;
             }
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -502,6 +531,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $upgradeRoom = $tourComponent->addToOrder($orderCustomer);
         $upgradeRoom->update(['cost' => 100,]);
         $upgradeRoom->save();
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($this->getDefaultCost($orderCustomer->order) + 100, $orderCustomer->order->cost);
     }
 
@@ -519,6 +549,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $tourRoom->save();
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -536,6 +567,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $orderComponent->save();
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -554,6 +586,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
                 $cost += 100;
             }
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -562,6 +595,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $orderCustomer = $this->generateOrderCustomer(true);
         $this->generateOrderCustomer(true, $orderCustomer->order);
         $this->generateMerchandiseInventoryTour($orderCustomer->order->tour, 'Add-on', 100)->repository->grantToCustomer($orderCustomer);
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($this->getDefaultCost($orderCustomer->order) + 100, $orderCustomer->order->cost);
     }
 
@@ -574,6 +608,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $this->generateMerchandiseInventoryTour($oCustomer->order->tour, 'Add-on', 100)->repository->grantToCustomer($oCustomer);
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -586,6 +621,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
             $this->generateMerchandiseInventoryTour($orderCustomer->order->tour, 'Add-on', 100)->repository->grantToCustomer($orderCustomer);
             $cost += 100;
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
@@ -600,6 +636,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
                 $cost += 100;
             }
         }
+        $orderCustomer->order->repository->refresh();
         self::assertEquals($cost, $orderCustomer->order->cost);
     }
 
