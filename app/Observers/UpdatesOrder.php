@@ -12,6 +12,7 @@ trait UpdatesOrder
     {
         try {
             $order?->repository->refresh();
+            $order?->repository->generateInvoice();
         } catch (Exception $e) {
             Log::error($e);
         }
