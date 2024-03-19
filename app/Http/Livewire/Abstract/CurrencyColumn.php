@@ -8,6 +8,7 @@ class CurrencyColumn extends NumberColumn
 {
     public function __construct()
     {
+        parent::__construct();
         $this->callback = function ($value) {  return f_currency($value); };
         $this->exportCallback = function ($value) { return $value; };
     }

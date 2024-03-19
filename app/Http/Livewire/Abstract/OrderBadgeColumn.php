@@ -10,6 +10,7 @@ class OrderBadgeColumn extends Column
 {
     public function __construct()
     {
+        parent::__construct();
         $this->callback = function ($value) {  return (new OrderBadge(OrderStatus::from($value)))->render(); };
         $this->exportCallback = function ($value) { return OrderStatus::from($value)->description(); };
     }
