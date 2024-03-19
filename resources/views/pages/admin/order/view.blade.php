@@ -80,6 +80,20 @@
             <h6 class="fw-bold">{{ $order->next_installment !== null ? f_date($order->next_installment->due_on) . ' - ' . f_currency($order->next_installment->remaining) : 'All installments paid' }}</h6>
         </div>
         <div class="col-12 col-xl-6">
+            <p>Lead Booker</p>
+            <h6 class="fw-bold">{{ $order->leadBooker->customer_name }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Consultant</p>
+            <h6 class="fw-bold">
+                @if ($order->consultant !== null)
+                    {{ $order->consultant->name }} ({{ $order->consultant->email }})
+                @else
+                    No Consultant Set
+                @endif
+            </h6>
+        </div>
+        <div class="col-12 col-xl-6">
             <p>Internal Notes</p>
             <h6 class="fw-bold">{!! nl2br($order->internal_notes) !!}</h6>
         </div>

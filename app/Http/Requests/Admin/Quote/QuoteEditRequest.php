@@ -8,6 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property int $customer_id
  * @property int|null $brand_id
  * @property int|null $organization_id
+ * @property int|null $consultant_id
  * @property string $name
  * @property string|null $description
  * @property float $deposit
@@ -42,7 +43,8 @@ class QuoteEditRequest extends FormRequest
             'external_notes' => $this->external_notes,
             'name' => $this->name,
             'description' => $this->description,
-            'brand_id' => $this->brand_id > 0 ? $this->brand_id : null
+            'brand_id' => $this->brand_id > 0 ? $this->brand_id : null,
+            'consultant_id' => $this->consultant_id
         ];
     }
 

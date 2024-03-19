@@ -14,6 +14,7 @@ use App\Models\Quote\Component\QuoteTransport;
 use App\Models\System\Brand;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
+use App\Models\User;
 use App\Repository\Model\Quote\QuoteRepository;
 use Database\Factories\Quote\QuoteFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -36,6 +37,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $order_id
  * @property int|null $organization_id
  * @property int|null $lead_traveller_id
+ * @property int|null $consultant_id
  * @property int|null $event_id
  * @property int|null $brand_id
  * @property int $revision
@@ -60,6 +62,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|QuoteAccommodation[] $accommodation
  * @property-read Collection|QuoteSection[] $sections
  * @property-read Brand|null $linkedBrand
+ * @property-read User|null $consultant
  * @property-read Brand $brand
  * @property-read Organization|null $organization
  * @property-read int|null $accommodation_count
@@ -141,6 +144,11 @@ class Quote extends Model
     public function sections(): HasMany
     {
         return $this->hasMany(QuoteSection::class, 'quote_id')->orderBy('order');
+    }
+
+    public function consultant(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'consultant_id');
     }
 
     public function event(): BelongsTo

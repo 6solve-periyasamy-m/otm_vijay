@@ -16,6 +16,7 @@ use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Quote\Quote;
 use App\Models\System\FellohLink;
 use App\Models\Tour\Tour;
+use App\Models\User;
 use App\Models\Voucher\OrderVoucher;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Model\Order\OrderRoomingRepository;
@@ -45,6 +46,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int $tour_id
  * @property int|null $lead_booker_id
  * @property int|null $organization_id
+ * @property int|null $consultant_id
  * @property string|null $booking_reference Unique reference for the booking
  * @property float|null $deposit The expected deposit amount
  * @property float|null $booking_fee The fee paid at time of booking
@@ -90,6 +92,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Quote|null $quote The quote the order was built from
  * @property-read Collection|Group[] $groups List of groups
  * @property-read float $total The total cost of the order
+ * @property-read User|null $consultant The consultant who made the order
  * @property-read OrderInstallment|null $next_installment A temporary installment with details of the next payment, or null if all installments are paid
  * @property-read Collection|OrderInstallment[] $installments The installments for the order
  * @property-read int|null $installments_count The amount of installments for the order
@@ -172,6 +175,11 @@ class Order extends Model
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class, 'organization_id');
+    }
+
+    public function consultant(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'consultant_id');
     }
 
     public function vouchers(): HasMany

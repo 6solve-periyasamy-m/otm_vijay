@@ -45,6 +45,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public static function createFromTour(Tour $tour, ?Customer $customer = null, array $data = [], array $leadData = []): Quote
     {
         $quote = Quote::create([
+            'consultant_id' => get_current_admin()?->id,
             'event_id' => $tour->event_id,
             'deposit' => $tour->deposit,
             'final_payment' => $tour->final_payment,
@@ -70,7 +71,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public static function createBespoke(?Customer $customer = null, float $pricePerPerson = 0, array $data = [], array $leadData = []): Quote
     {
-        $quote = Quote::create($data);
+        $quote = Quote::create(['consultant_id' => get_current_admin()?->id, ...$data]);
         $lead = $quote->repository->createProspect($customer, $leadData);
         $quote->lead_traveller_id = $lead->id;
         $quote->reference = $quote->repository->generateReference();
@@ -87,6 +88,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     /**
      * @param ConvertedCustomer $lead
      * @param ConvertedCustomer[] $travellers
+     * @param bool $email
      * @return Order
      */
     public function convertToOrder(ConvertedCustomer $lead, array $travellers = [], bool $email = true): Order
@@ -105,6 +107,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'deposit' => $this->quote->deposit,
             'ordered_on' => now(),
             'organization_id' => $this->quote->organization_id,
+            'consultant_id' => $this->quote->consultant_id,
             'internal_notes' => $this->quote->internal_notes,
             'external_notes' => $this->quote->external_notes,
             'invoice_footer' => $this->quote->invoice_footer,
