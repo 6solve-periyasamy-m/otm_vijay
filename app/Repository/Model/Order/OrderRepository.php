@@ -25,7 +25,6 @@ use App\Repository\Interfaces\GeneratesFellohData;
 use App\Repository\Mailing\Mailer\Order\OrderMailer;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
-use App\Repository\Storage\Rooming\RemoteGroup;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
@@ -630,60 +629,6 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $cost += $orderCustomer->repository->getCostToCompany();
         }
         return $cost;
-    }
-
-    public function getRoomingData(): array
-    {
-        $rooms = [];
-        foreach ($this->order->tour->accommodationInventoryTours()->with('inventory', 'inventory.component')->get() as $inventoryTour) {
-            $rooms[$inventoryTour->id] = [
-                'name' => $inventoryTour->repository->formatAdminOccupancy(),
-                'size' => $inventoryTour->inventory->roomType->maximum_occupancy,
-                'price' => $inventoryTour->tour_component_type === 'Included' ? 0 : $inventoryTour->tour_sales_price,
-                'start' => $inventoryTour->inventory->check_in->unix(),
-                'end' => $inventoryTour->inventory->check_out->unix(),
-            ];
-        }
-        $customers = [];
-        foreach ($this->order->orderCustomers()->with('customer')->get() as $orderCustomer) {
-            if (!$orderCustomer->is_travelling) continue;
-            $customers[$orderCustomer->id] = ['name' => $orderCustomer->customer_name, 'avatar' => $orderCustomer->customer->avatar_url,];
-        }
-        $groups = [];
-        foreach ($this->order->groups as $group) {
-            $groupCustomers = [];
-            foreach ($group->orderCustomers as $orderCustomer) {
-                if (!$orderCustomer->is_travelling) continue;
-                $groupCustomers[] = $orderCustomer->id;
-            }
-            $groupRooms = [];
-            foreach ($group->rooms as $room) {
-                $groupRooms[] = $room->accommodation_inventory_tour_id;
-            }
-            $groups[$group->id] = ['rooms' => $groupRooms, 'customers' => $groupCustomers,];
-        }
-        return ['rooms' => $rooms, 'customers' => $customers, 'groups' => $groups,];
-    }
-
-    private function wipeGroups(): void
-    {
-        foreach ($this->order->groups as $group) {
-            $group->rooms()->delete();
-            $group->pivot()->delete();
-            $group->delete();
-        }
-    }
-
-    /**
-     * @param RemoteGroup[] $remoteGroups
-     * @return void
-     */
-    public function importRoomingData(array $remoteGroups): void
-    {
-        $this->wipeGroups();
-        foreach ($remoteGroups as $remoteGroup) {
-            $remoteGroup->convertToGroup();
-        }
     }
 
     public function getBeforeString(): string|null
