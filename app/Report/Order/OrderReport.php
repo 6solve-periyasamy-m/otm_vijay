@@ -2,6 +2,7 @@
 
 namespace App\Report\Order;
 
+use App\Http\Livewire\Abstract\AddressColumn;
 use App\Http\Livewire\Abstract\CurrencyColumn;
 use App\Http\Livewire\Abstract\OrderBadgeColumn;
 use App\Models\Order\Order;
@@ -63,12 +64,8 @@ class OrderReport extends TourReport
             'order_lead_first_name' => new ColumnDefinition('reports.order.column.lead_booker.first_name', Column::name('lead.first_name')),
             'order_lead_middle_names' => new ColumnDefinition('reports.order.column.lead_booker.middle_names', Column::name('lead.middle_names')),
             'order_lead_last_name' => new ColumnDefinition('reports.order.column.lead_booker.last_name', Column::name('lead.last_name')),
-            'order_lead_home_address' => new ColumnDefinition('reports.order.column.lead_booker.home_address', 
-                Column::callback(['lead_home.address_line_1','lead_home.address_line_2','lead_home.town','lead_home.region','lead_home_country.name', 'lead_home.postcode',], function (...$str) {return implode(', ', $str); }),
-            ),
-            'order_lead_billing_address' => new ColumnDefinition('reports.order.column.lead_booker.billing_address',
-                Column::callback(['lead_billing.address_line_1','lead_billing.address_line_2','lead_billing.town','lead_billing.region','lead_billing_country.name', 'lead_billing.postcode',], function (...$str) {return implode(', ', $str); }),
-            ),
+            'order_lead_home_address' => new ColumnDefinition('reports.order.column.lead_booker.home_address', AddressColumn::table('lead_home')),
+            'order_lead_billing_address' => new ColumnDefinition('reports.order.column.lead_booker.billing_address', AddressColumn::table('lead_billing')),
         ];
     }
 }
