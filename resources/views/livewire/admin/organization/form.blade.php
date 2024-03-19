@@ -3,9 +3,10 @@
         {{ __($organization?->id !== null ? 'organization.form.title.update' : 'organization.form.title.create') }}
     </x-slot:title>
     <div class="row">
-        <x-livewire.input wire:model="organization.name" required width="4" label="{{__('organization.form.fields.name')}}" />
-        <x-livewire.input wire:model="organization.contact_email"  width="4" label="{{__('organization.form.fields.contact.email')}}" />
-        <x-livewire.input wire:model="organization.contact_number"  width="4" label="{{__('organization.form.fields.contact.number')}}" />
+        <x-livewire.input wire:model="organization.name" required width="3" label="{{__('organization.form.fields.name')}}" />
+        <x-livewire.input wire:model="organization.contact_email"  width="3" label="{{__('organization.form.fields.contact.email')}}" />
+        <x-livewire.input wire:model="organization.contact_number"  width="3" label="{{__('organization.form.fields.contact.number')}}" />
+        <x-livewire.input wire:model="organization.commission"  width="3" label="{{__('organization.form.fields.commission')}}" />
         <x-livewire.input wire:model="organization.internal_notes" width="6" label="{{__('organization.form.fields.notes.internal')}}" />
         <x-livewire.input wire:model="organization.external_notes" width="6" label="{{__('organization.form.fields.notes.external')}}" />
     </div>

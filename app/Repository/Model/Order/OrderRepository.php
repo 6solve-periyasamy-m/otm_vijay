@@ -167,6 +167,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public static function create(Tour $tour, array $data, ConvertedCustomer $lead, array $customers = [], bool $shouldInvoice = true): Order
     {
         $order = Order::make($data);
+        $order->commission = $lead->customer->organization?->commission;
         $tour->orders()->saveQuietly($order);
         $leadBooker = $order->repository->addCustomer($lead, false, false, true);
         $order->updateQuietly(['lead_booker_id' => $leadBooker->id,]);
@@ -537,6 +538,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             'next_payment_date' => $nextPayment?->due_on,
             'next_payment_amount' => $nextPayment?->amount,
             'next_payment_remaining' => $nextPayment?->remaining,
+            'commission_amount' => $this->order->commission_amount,
             'cached' => now(),
         ]);
         $cache->save();
@@ -627,6 +629,21 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $cost += $orderCustomer->repository->getCostToCompany();
         }
         return $cost;
+    }
+
+    public function getBeforeString(): string|null
+    {
+        if ($this->order->total_adjustments > 0 || $this->order->commission_amount > 0) {
+            $string = f_currency($this->order->cost) . " before ";
+            if ($this->order->total_adjustments > 0 && $this->order->commission_amount > 0) {
+                $string .= "adjustments and commission";
+            } elseif ($this->order->total_adjustments > 0) {
+                $string .= "adjustments";
+            } elseif ($this->order->commission_amount > 0) {
+                $string .= "commission";
+            }
+        }
+        return $string ?? null;
     }
 
     public function forceDelete(): void

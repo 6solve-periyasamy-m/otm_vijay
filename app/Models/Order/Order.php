@@ -49,6 +49,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property float|null $deposit The expected deposit amount
  * @property float|null $booking_fee The fee paid at time of booking
  * @property OrderStatus|null $status_override Manually assigned order status
+ * @property float|null $commission What percentage of the order is a commission (null if no commission)
  * @property Carbon $ordered_on When the order was placed
  * @property bool $cancelled Is the order cancelled?
  * @property string|null $internal_notes The notes shown only to the operator
@@ -72,6 +73,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read OrderRoomingRepository $rooming The repository used for rooming
  * @property-read float $calculated_deposit The calculated deposit based on customer count
  * @property-read float $cost The cost of the order before adjustments
+ * @property-read float|null $commission_amount The total amount of the commission
  * @property-read int $customer_count The amount of customers on the order
  * @property-read int $paying_customers The amount of customers on the order that are paying
  * @property-read string $customer_names String list of all customer full names
@@ -299,7 +301,7 @@ class Order extends Model
      */
     public function getTotalAttribute(): float
     {
-        return $this->cancelled ? $this->paid : ($this->cost + $this->total_adjustments);
+        return $this->cancelled ? $this->paid : (($this->cost + $this->total_adjustments) - ($this->commission_amount));
     }
 
     /**
@@ -323,7 +325,7 @@ class Order extends Model
      */
     public function getRemainingInstallmentAttribute(): float
     {
-        $cost = $this->cost - $this->calculated_deposit + $this->total_adjustments;
+        $cost = $this->total - $this->calculated_deposit;
         foreach ($this->installments as $installment) {
             $cost -= $installment->calculated_amount;
         }
@@ -394,6 +396,12 @@ class Order extends Model
         if (!isset($next)) return null;
         $next = Carbon::parse($next);
         return days_until($next);
+    }
+
+    public function getCommissionAmountAttribute(): float|null
+    {
+        if ($this->commission === null) return null;
+        return sigfig(($this->cost + $this->total_adjustments) * ($this->commission/100));
     }
 
     /**

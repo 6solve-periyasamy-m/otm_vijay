@@ -60,7 +60,10 @@
                 @if($order->cancelled)
                     {{ f_currency($order->total) }} ({{ f_currency($order->cost) }} before cancellation)
                 @else
-                    {{ f_currency($order->cost + $order->total_adjustments) }} ({{ f_currency($order->cost) }} before adjustments)
+                    {{ f_currency($order->total) }}
+                    @if ($order->repository->getBeforeString() !== null)
+                        ({{ $order->repository->getBeforeString() }})
+                    @endif
                 @endif
             </h6>
         </div>
@@ -392,7 +395,17 @@
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
-                        @foreach($order->adjustments as $adjustment)
+                            @if($order->commission !== null)
+                                <tr>
+                                    <td>{{ f_currency($order->commission_amount) }}</td>
+                                    <td>Commission: {{ $order->commission }}%</td>
+                                    <td class="actions">
+                                        <a href="{{ route('orders.edit', ['order' => $order,]) }}"
+                                           class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
+                                    </td>
+                                </tr>
+                            @endif
+                            @foreach($order->adjustments as $adjustment)
                             <tr>
                                 <td>{{ f_currency($adjustment->amount) }}</td>
                                 <td>{{ $adjustment->reason }}</td>
