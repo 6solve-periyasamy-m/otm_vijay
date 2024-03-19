@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Observers;
+
+use App\Models\Order\Order;
+use Exception;
+use Log;
+
+trait UpdatesOrder
+{
+    protected function updateOrder(Order|null $order): void
+    {
+        try {
+            $order?->repository->refresh();
+            $order?->repository->generateInvoice();
+        } catch (Exception $e) {
+            Log::error($e);
+        }
+    }
+}

@@ -1,3 +1,3 @@
-<div class="form-group col-12 {{ isset($width) ? 'col-xl-' . $width : '' }} {{ $divClasses ?? "" }}">
+<div class="form-group col-12 my-auto {{ isset($width) ? 'col-xl-' . $width : '' }} {{ $divClasses ?? "" }}">
     @include('partials.fields.raw.checkbox')
 </div>

@@ -61,15 +61,17 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
 
     /**
      * @param OrderCustomer $orderCustomer
+     * @param bool $silent
      * @return OrderFlightRepository|null
      */
-    public function grantToCustomer(OrderCustomer $orderCustomer): ?OrderFlightRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderFlightRepository
     {
-        $orderComponent = OrderFlight::create([
+        $orderComponent = OrderFlight::make([
             'order_customer_id' => $orderCustomer->id,
             'flight_inventory_tour_id' => $this->tourComponent->id,
             'cost' => $this->tourComponent->tour_sales_price ?? 0,
         ]);
+        $silent ? $orderComponent->saveQuietly() : $orderComponent->save();
         event(new OrderCustomerComponentAddedEvent($orderComponent));
         return $orderComponent->repository;
     }

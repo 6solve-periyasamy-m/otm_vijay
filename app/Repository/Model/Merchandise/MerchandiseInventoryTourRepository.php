@@ -50,13 +50,15 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
         return $components;
     }
 
-    public function grantToCustomer(OrderCustomer $orderCustomer): ?OrderComponentRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderComponentRepository
     {
-        return OrderMerchandise::create([
+        $orderComponent = OrderMerchandise::make([
             'order_customer_id' => $orderCustomer->id,
             'merchandise_inventory_tour_id' => $this->tourComponent->id,
             'cost' => $this->tourComponent->tour_sales_price ?? 0,
-        ])->repository;
+        ]);
+        $silent ? $orderComponent->saveQuietly() : $orderComponent->save();
+        return $orderComponent->repository;
     }
 
     public function getUpgradeParent(): MerchandiseInventoryTour

@@ -269,6 +269,21 @@ if (!function_exists('str_to_map')) {
         return $data;
     }
 }
+if (!function_exists('debug_stack')) {
+    /**
+     * Print the current stack trace to the Log file under debug
+     * @param string $message Message to be printed with the stack trace
+     * @return void
+     */
+    function debug_stack(string $message = "Stack Dumped"): void
+    {
+        try {
+            throw new \Exception($message);
+        } catch (\Exception $e) {
+            \Log::debug($e);
+        }
+    }
+}
 if (!function_exists('get_current_admin')) {
     /**
      * Get the currently logged in admin user, or null

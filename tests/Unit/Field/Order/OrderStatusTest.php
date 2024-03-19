@@ -41,6 +41,7 @@ class OrderStatusTest extends DatabaseTestCase
     public function testPaymentOverdueWithNoPaidInstallments()
     {
         $order = $this->generateOrderInstallment(now()->subDays(2), 100)->order;
+        $order->repository->refresh();
         $this->assertEquals(OrderStatus::PAYMENT_OVERDUE, $order->status);
     }
 
@@ -49,6 +50,7 @@ class OrderStatusTest extends DatabaseTestCase
         $order = $this->generateOrderInstallment(now()->subDays(2), 100)->order;
         $this->generateOrderInstallment(now()->subDays(4), 100, $order);
         $this->generatePayment($order, 100);
+        $order->repository->refresh();
         $this->assertEquals(OrderStatus::PAYMENT_OVERDUE, $order->status);
     }
 
@@ -56,6 +58,7 @@ class OrderStatusTest extends DatabaseTestCase
     {
         $order = $this->generateOrder();
         $this->generatePayment($order, $this->getDefaultCost($order));
+        $order->repository->refresh();
         $this->assertEquals(OrderStatus::PAID_IN_FULL, $order->status);
     }
 
@@ -65,6 +68,7 @@ class OrderStatusTest extends DatabaseTestCase
         $this->generatePayment($order, $this->getDefaultCost($order));
         $this->generateOrderInstallment(now()->subDays(10), 100, $order);
         $this->generateOrderInstallment(now()->addDays(10), 100, $order);
+        $order->repository->refresh();
         $this->assertEquals(OrderStatus::PAID_IN_FULL, $order->status);
     }
 
@@ -128,6 +132,7 @@ class OrderStatusTest extends DatabaseTestCase
     {
         $order = $this->generateOrder();
         $this->generatepayment($order, 5000);
+        $order->repository->refresh();
         $this->assertEquals(OrderStatus::OVERPAID, $order->status);
     }
 }

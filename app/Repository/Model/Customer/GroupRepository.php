@@ -46,12 +46,12 @@ class GroupRepository
         return true;
     }
 
-    public function addRoomToGroup(AccommodationInventoryTour $tourComponent): OrderAccommodation
+    public function addRoomToGroup(AccommodationInventoryTour $tourComponent, bool $silent = false): OrderAccommodation
     {
         $exists = OrderAccommodation::where('group_id', '=', $this->group->id)->where('accommodation_inventory_tour_id', '=', $tourComponent->id)->first();
         if ($exists) return $exists;
         $orderAccommodation = OrderAccommodation::make(['accommodation_inventory_tour_id' => $tourComponent->id, 'cost' => $tourComponent->tour_sales_price,]);
-        $this->group->rooms()->save($orderAccommodation);
+        $silent ? $this->group->rooms()->saveQuietly($orderAccommodation) : $this->group->rooms()->save($orderAccommodation);
         return $orderAccommodation;
     }
 

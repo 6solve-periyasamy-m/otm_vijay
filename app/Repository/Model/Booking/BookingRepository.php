@@ -229,7 +229,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     public function convertToOrder(?Carbon $orderedOn = null): Order
     {
         $tour = $this->booking->tour;
-        $order = Order::create([
+        $order = Order::make([
             'tour_id' => $this->booking->tour_id,
             'token' => $this->booking->token,
             'deposit' => $tour->deposit,
@@ -237,6 +237,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             'ordered_on' => $orderedOn ?? now(),
             'booking_fee' => $tour->booking_fee,
         ]);
+        $order->saveQuietly();
         foreach ($this->booking->travellers as $traveller) {
             $orderCustomer = $traveller->repository->convertToOrderCustomer($order);
 
@@ -246,7 +247,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             }
         }
         $order->booking_reference = Order::generateBookingReference($order);
-        $order->repository->save();
+        $order->saveQuietly();
         $this->booking->order_id = $order->id;
         $this->booking->save();
         foreach ($this->booking->groups as $bookingGroup) {
@@ -255,7 +256,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
                 $group->repository->addCustomerToGroup($traveller->orderCustomer);
             }
             foreach ($bookingGroup->accommodation as $room) {
-                $group->repository->addRoomToGroup($room->tourComponent);
+                $group->repository->addRoomToGroup($room->tourComponent, true);
             }
         }
         $order->repository->resetInstallments();

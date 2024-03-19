@@ -64,7 +64,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         return $this->tourComponent;
     }
 
-    public function grantToCustomer(OrderCustomer $orderCustomer): ?OrderComponentRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderComponentRepository
     {
         $orderComponent = $this->getOrderComponent($orderCustomer);
         if ($orderComponent !== null) return $orderComponent;
@@ -73,7 +73,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             $group = Group::create();
             $group->repository->addCustomerToGroup($orderCustomer);
         }
-        $component = $group->repository->addRoomToGroup($this->tourComponent);
+        $component = $group->repository->addRoomToGroup($this->tourComponent, $silent);
         //event(new OrderCustomerAccommodationAddedEvent($orderComponent));
         return $component->repository;
     }

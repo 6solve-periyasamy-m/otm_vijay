@@ -8,6 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $ordered_on
  * @property int|float|null $deposit
  * @property int|float|null $booking_fee
+ * @property int|float|null $commission
  * @property int|null $organization_id
  * @property int|null $consultant_id
  * @property int|null $status_override
@@ -23,6 +24,7 @@ class UpdateOrderRequest extends FormRequest
             'ordered_on' => $this->ordered_on,
             'deposit' => $this->deposit ?? 0,
             'booking_fee' => $this->booking_fee ?? 0,
+            'commission' => $this->commission,
             'organization_id' => $this->organization_id,
             'status_override' => $this->status_override,
             'internal_notes' => $this->internal_notes,
@@ -43,6 +45,7 @@ class UpdateOrderRequest extends FormRequest
             'ordered_on' => 'required|date',
             'deposit' => 'nullable|numeric',
             'booking_fee' => 'nullable|numeric',
+            'commission' => 'nullable|numeric',
             'organization_id' => 'nullable|integer|exists:organizations,id'
         ];
     }

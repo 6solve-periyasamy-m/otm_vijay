@@ -27,6 +27,10 @@
             showToast('Resend Failed', xhr.responseText, 'danger');
         });
     }
+    function updateInvoice(selector) {
+        let url = "{{ route('orders.invoice.view', ['order' => $order, 'version' => '#replace#']) }}"
+        $('.invoice-button').prop('href', url.replace('#replace#', $(selector).val()))
+    }
 </script>
 @endsection
 @section('content')
@@ -56,7 +60,10 @@
                 @if($order->cancelled)
                     {{ f_currency($order->total) }} ({{ f_currency($order->cost) }} before cancellation)
                 @else
-                    {{ f_currency($order->cost + $order->total_adjustments) }} ({{ f_currency($order->cost) }} before adjustments)
+                    {{ f_currency($order->total) }}
+                    @if ($order->repository->getBeforeString() !== null)
+                        ({{ $order->repository->getBeforeString() }})
+                    @endif
                 @endif
             </h6>
         </div>
@@ -160,16 +167,26 @@
                 <x-slot:title>
                     Payments
                 </x-slot:title>
-                <div class="pb-3 text-end">
+                <div class="pb-3 row">
+                    <div class="col-7">
+                        <select class="form-select" onchange="updateInvoice(this)">
+                            <option value="latest" selected>Latest</option>
+                            @foreach($order->invoices as $invoice)
+                                <option value="{{ $invoice->invoice_number }}">Invoice #{{$invoice->invoice_number}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <a href="{{ route('orders.invoice.latest', ['order' => $order,]) }}" target="_blank" class="invoice-button btn btn-primary text-white mb-1">View Invoice</a>
+                    </div>
                     @can('create', \App\Models\Order\Payment\Payment::class)
-                        <a href="{{ route('payments.create', ['order' => $order, ]) }}" class="btn btn-success text-white mb-1">
-                            {{ Icon::create() }}
-                            New Payment
-                        </a>
+                        <div class="col-3">
+                            <a href="{{ route('payments.create', ['order' => $order, ]) }}" class="btn btn-success text-white mb-1">
+                                {{ Icon::create() }}
+                                New Payment
+                            </a>
+                        </div>
                     @endcan
-                    <a href="{{ route('orders.invoice.latest', ['order' => $order,]) }}" target="_blank" class="btn btn-primary text-white mb-1">View Invoice</a>
-                    {{-- TODO: Implement <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">Email Invoice</button>--}}
-                    {{-- TODO: Implement <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">View Previous Invoices</button>--}}
                 </div>
                 <div class="pt-1">
                     <table class="datatable table table-striped" id="payment-table">
@@ -187,7 +204,7 @@
                             <tr>
                                 <td>{{ $payment->payment_type }}</td>
                                 <td>{{ $payment->paymentMethod->name }}</td>
-                                <td>{{ $payment->customer->full_name }}</td>
+                                <td>{{ $payment->customer?->full_name ?? "No Customer Found" }}</td>
                                 <td>{{ f_currency($payment->amount) }}</td>
                                 <td>{{ f_datetime($payment->paid_on) }}</td>
                                 <td class="actions">
@@ -392,7 +409,17 @@
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
-                        @foreach($order->adjustments as $adjustment)
+                            @if($order->commission !== null)
+                                <tr>
+                                    <td>{{ f_currency($order->commission_amount) }}</td>
+                                    <td>Commission: {{ $order->commission }}%</td>
+                                    <td class="actions">
+                                        <a href="{{ route('orders.edit', ['order' => $order,]) }}"
+                                           class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
+                                    </td>
+                                </tr>
+                            @endif
+                            @foreach($order->adjustments as $adjustment)
                             <tr>
                                 <td>{{ f_currency($adjustment->amount) }}</td>
                                 <td>{{ $adjustment->reason }}</td>
