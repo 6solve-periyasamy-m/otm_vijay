@@ -12,6 +12,8 @@ class Tiles extends Component
     use SendsEvents;
     public TaxBracket $nullBracket;
 
+    public $listeners = ['refreshLivewireDatatable' => 'render',];
+
     public function mount()
     {
         $this->nullBracket = $this->getNullBracket();
@@ -35,11 +37,12 @@ class Tiles extends Component
             'name'=> __('custom.tax.null.name'),
             'description'=> __('custom.tax.null.description'),
             'rate' => null,
-            ]);
+        ]);
     }
 
     public function render()
     {
+        $this->nullBracket = $this->getNullBracket();
         return view('livewire.admin.system.tax-bracket.tiles');
     }
 }
