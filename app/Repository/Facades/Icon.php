@@ -32,6 +32,16 @@ class Icon
         return $this->new($name, Icon::BRAND);
     }
 
+    public function check(): View|string|Closure
+    {
+        return $this->solid('check');
+    }
+
+    public function cross(): View|string|Closure
+    {
+        return $this->solid('xmark');
+    }
+
     public function signature(): View|string|Closure
     {
         return $this->solid('signature');

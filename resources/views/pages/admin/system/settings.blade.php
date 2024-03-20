@@ -67,6 +67,16 @@
         @endforeach
     </div>
     <div class="card">
+        <div class="card-body" data-target="#taxes" onclick="toggleAccordion(this)">
+            <h4 class="fw-bold">
+                {{ Icon::maximize() }} Tax Brackets
+            </h4>
+        </div>
+    </div>
+    <div class="collapse row mx-1" id="taxes">
+        <livewire:admin.system.tax-bracket.tiles />
+    </div>
+    <div class="card">
         <div class="card-body" data-target="#brands" onclick="toggleAccordion(this)">
             <div class="d-flex justify-content-between">
                 <div>
