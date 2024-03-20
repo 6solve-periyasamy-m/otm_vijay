@@ -1,4 +1,4 @@
-<div wire:click="updateTaxBracket({{ $bracket->id }})">
+<div class="clickable" wire:click="updateTaxBracket({{ $bracket->id }})">
     <x-admin.section.card>
         <div class="row">
             <div class="col-8">
