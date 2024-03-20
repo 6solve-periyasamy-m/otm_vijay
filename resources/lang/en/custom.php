@@ -43,6 +43,17 @@ return [
         'postcode' => 'Postcode',
     ],
     'tax' => [
+        'form' => [
+            'title' => [
+                'create' => 'Create Tax Bracket',
+                'update' => 'Update Tax Bracket',
+            ],
+            'fields' => [
+                'name' => 'Name',
+                'description' => 'Description',
+                'rate' => 'Tax Rate (%)',
+            ],
+        ],
         'null' => [
             'name' => 'No Taxes',
             'description' => 'System Default. No taxes will be calculated or used.'
