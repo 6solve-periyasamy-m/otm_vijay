@@ -4,7 +4,7 @@ use App\Http\Controllers\Admin\Order\Adjustment\ManualAdjustmentController;
 use App\Http\Controllers\Admin\Order\Adjustment\OrderCustomerAdjustmentController;
 use App\Http\Controllers\Admin\Order\OrderComponentController;
 use App\Http\Controllers\Admin\Order\OrderController;
-use App\Http\Controllers\Admin\Order\OrderCustomerModelController;
+use App\Http\Controllers\Admin\Order\OrderCustomerController;
 use App\Http\Controllers\Admin\Order\OrderInstallmentController;
 use App\Http\Controllers\Admin\Order\Payment\PaymentController;
 use App\Http\Controllers\Admin\Order\Payment\PaymentMethodController;
@@ -22,7 +22,8 @@ Route::prefix('{order}')->group(function () {
     Route::post('/delete/', [OrderController::class, 'destroy'])->name('orders.delete')->middleware('bouncer:Order\Order,delete');
     Route::post('/delete/force', [OrderController::class, 'forceDelete'])->name('orders.delete.force')->middleware(['bouncer:Order\Order,delete', 'auth.otm']);
     Route::post('/restore/', [OrderController::class, 'restore'])->name('orders.restore')->middleware('bouncer:Order\Order,delete');
-    Route::get('/invoice', [OrderController::class, 'invoice'])->name('orders.invoice.latest')->middleware('bouncer:Order\Order,read');
+    Route::get('/invoice', [OrderController::class, 'latestInvoice'])->name('orders.invoice.latest')->middleware('bouncer:Order\Order,read');
+    Route::get('/invoice/{version}', [OrderController::class, 'invoice'])->name('orders.invoice.view')->middleware('bouncer:Order\Order,read');
     Route::get('/atol', [OrderController::class, 'atol'])->name('orders.atol')->middleware('bouncer:Order\Order,read');
     Route::get('/occupancy', [OrderController::class, 'occupancy'])->name('orders.occupancy')->middleware('bouncer:Order\Order,update');
     Route::get('/migrate', [OrderController::class, 'switchTour'])->name('orders.switch')->middleware('bouncer:Order\Order,update');
@@ -52,16 +53,16 @@ Route::prefix('{order}')->group(function () {
     });
 
     Route::prefix('customer')->group(function () {
-        Route::get('/', [OrderCustomerModelController::class, 'index'])->name('order-customers.all')->middleware('bouncer:Order\OrderCustomer,read');
-        Route::get('/create', [OrderCustomerModelController::class, 'create'])->name('order-customers.create')->middleware('bouncer:Order\OrderCustomer,create');
-        Route::post('/create', [OrderCustomerModelController::class, 'store'])->name('order-customers.store')->middleware('bouncer:Order\OrderCustomer,create');
+        Route::get('/', [OrderCustomerController::class, 'index'])->name('order-customers.all')->middleware('bouncer:Order\OrderCustomer,read');
+        Route::get('/create', [OrderCustomerController::class, 'create'])->name('order-customers.create')->middleware('bouncer:Order\OrderCustomer,create');
+        Route::post('/create', [OrderCustomerController::class, 'store'])->name('order-customers.store')->middleware('bouncer:Order\OrderCustomer,create');
 
         Route::prefix('{orderCustomer}')->group(function () {
-            Route::get('/', [OrderCustomerModelController::class, 'show'])->name("order-customers.view")->middleware('bouncer:Order\OrderCustomer,read');
-            Route::get('/update', [OrderCustomerModelController::class, 'edit'])->name('order-customers.edit')->middleware('bouncer:Order\OrderCustomer,update');
-            Route::post('/update', [OrderCustomerModelController::class, 'update'])->name('order-customers.update')->middleware('bouncer:Order\OrderCustomer,update');
-            Route::post('/delete', [OrderCustomerModelController::class, 'destroy'])->name('order-customers.delete')->middleware('bouncer:Order\OrderCustomer,delete');
-            Route::get('/merchandise/{orderMerchandise}/fulfil', [OrderCustomerModelController::class, 'fulfil'])->name('merchandise.inventory.tour.order.fulfil')->middleware('bouncer:Order\OrderCustomer,update');
+            Route::get('/', [OrderCustomerController::class, 'show'])->name("order-customers.view")->middleware('bouncer:Order\OrderCustomer,read');
+            Route::get('/update', [OrderCustomerController::class, 'edit'])->name('order-customers.edit')->middleware('bouncer:Order\OrderCustomer,update');
+            Route::post('/update', [OrderCustomerController::class, 'update'])->name('order-customers.update')->middleware('bouncer:Order\OrderCustomer,update');
+            Route::post('/delete', [OrderCustomerController::class, 'destroy'])->name('order-customers.delete')->middleware('bouncer:Order\OrderCustomer,delete');
+            Route::get('/merchandise/{orderMerchandise}/fulfil', [OrderCustomerController::class, 'fulfil'])->name('merchandise.inventory.tour.order.fulfil')->middleware('bouncer:Order\OrderCustomer,update');
             Route::prefix('adjustment')->group(function () {
                 Route::get('/', [OrderCustomerAdjustmentController::class, 'index'])->name('order-customer-adjustments.all')->middleware('bouncer:Order\Adjustment\OrderCustomerAdjustment,read');
                 Route::get('/create', [OrderCustomerAdjustmentController::class, 'create'])->name('order-customer-adjustments.create')->middleware('bouncer:Order\Adjustment\OrderCustomerAdjustment,create');

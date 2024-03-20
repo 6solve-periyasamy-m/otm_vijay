@@ -21,7 +21,7 @@ class OrderController extends ApiController
 
     public function getRoomingInformation(Order $order)
     {
-        return $order->repository->getRoomingData();
+        return $order->rooming->getRoomingData();
     }
 
     public function generateUnknown(UnknownTravellerRequest $request, ?Order $order)

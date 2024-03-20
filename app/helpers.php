@@ -178,7 +178,7 @@ if (!function_exists('nbsp')) {
 if (!function_exists('is_otm')) {
     function is_otm(): bool
     {
-        $user = Auth::user();
+        $user = get_current_admin();
         if (empty($user) || !($user instanceof User)) return false;
         return $user->getHighestRoleLevel() >= 999;
     }
@@ -267,5 +267,32 @@ if (!function_exists('str_to_map')) {
             $data[$split[0]] = implode($merge, array_slice($split, 1));
         }
         return $data;
+    }
+}
+if (!function_exists('debug_stack')) {
+    /**
+     * Print the current stack trace to the Log file under debug
+     * @param string $message Message to be printed with the stack trace
+     * @return void
+     */
+    function debug_stack(string $message = "Stack Dumped"): void
+    {
+        try {
+            throw new \Exception($message);
+        } catch (\Exception $e) {
+            \Log::debug($e);
+        }
+    }
+}
+if (!function_exists('get_current_admin')) {
+    /**
+     * Get the currently logged in admin user, or null
+     * @return User|null
+     */
+    function get_current_admin(): User|null
+    {
+        $user = Auth::guard('web')->user();
+        if ($user instanceof User) return $user;
+        return null;
     }
 }

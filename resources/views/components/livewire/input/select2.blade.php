@@ -4,6 +4,7 @@
     $allRoute = route('api.' . $route . '.select');
     $value = $attributes->get('value');
     $value = empty($value) ? null : $value;
+    $clear = $attributes->get('clear', false);
     $updateRoute = null;
     if ($value !== null) {
         $updateRoute = route("api.{$route}.selected", ['id' => $value, ]);
@@ -20,7 +21,7 @@
     }
     $create = $create ?? $attributes->get('create');
 @endphp
-<div wire:ignore class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}" style="padding-left: 5px">
+<div wire:ignore class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}">
     <label for="{{ $id }}">{{ $attributes->get('label') }} @if($attributes->has('required')) <x-admin.required /> @endif</label>
     <div class="d-flex">
         <select name="{{ $attributes->get('name') }}" style="width: 100%" class="form-control" id="{{ $id }}"></select>
@@ -32,6 +33,7 @@
         $(function () {
             let selector = $('#{{ $id }}').select2({
                 placeholder: "Please Select a Value",
+                allowClear: {{ $clear ? 1 : 0 }},
                 ajax: {
                     url: '{{ $allRoute }}',
                     data: function (params) {

@@ -24,6 +24,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property string $name
  * @property int $delivery_address_id
  * @property int $billing_address_id
+ * @property float|null $commission
  * @property string|null $contact_number
  * @property string|null $contact_email
  * @property string|null $internal_notes

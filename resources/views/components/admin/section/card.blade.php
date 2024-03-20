@@ -1,6 +1,7 @@
+@props(['header' => null, 'title' => null])
 <div class="card">
     <div class="card-body">
-        @if(isset($header) ?? isset($title))
+        @if(isset($header) || isset($title))
             <div class="card-title">
                 @if(isset($title))
                     <h4 class="fw-bold">{{ $title }}</h4>

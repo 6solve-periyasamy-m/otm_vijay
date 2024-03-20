@@ -25,10 +25,7 @@ class ReportController extends Controller
     }
 
     public function getOrderReport() {
-        return view('pages.reports.view', ['tableView' => 'partials.reports.tables.orders',
-            'data' => ReportRepository::getOrderReport(),'title' => 'Orders',
-            'xlsxExport' => route('reports.order.export', ['extension' => 'xlsx']),
-            'csvExport' => route('reports.order.export', ['extension' => 'csv']),]);
+        return view('pages.admin.report.order');
     }
 
     public function exportOrderReport(string $extension = 'xlsx') {

@@ -9,6 +9,7 @@ return [
         ],
         'fields' => [
             'name' => 'Name',
+            'commission' => 'Default Commission (%)',
             'contact' => [
                 'email' => 'Contact Email',
                 'number' => 'Contact Phone Number'
