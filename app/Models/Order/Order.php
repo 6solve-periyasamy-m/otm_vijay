@@ -423,4 +423,9 @@ class Order extends Model
     {
         return $this->repository->getAdditionalCosts();
     }
+
+    public function getTaxes(): float|null
+    {
+        return Settings::getTaxBracket()->calculate($this->total);
+    }
 }

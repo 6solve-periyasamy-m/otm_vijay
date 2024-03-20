@@ -25,19 +25,9 @@ class Tiles extends Component
         $this->refreshTables();
     }
 
-    private function getNullBracket(): TaxBracket
-    {
-        return new TaxBracket([
-            'id' => null,
-            'name'=> __('custom.tax.null.name'),
-            'description'=> __('custom.tax.null.description'),
-            'rate' => null,
-        ]);
-    }
-
     public function render()
     {
-        $this->nullBracket = $this->getNullBracket();
+        $this->nullBracket = Settings::getNullTaxBracket();
         return view('livewire.admin.system.tax-bracket.tiles');
     }
 }
