@@ -25,6 +25,12 @@ class Tiles extends Component
         $this->refreshTables();
     }
 
+    public function delete($id)
+    {
+        TaxBracket::find($id)?->delete();
+        $this->refreshTables();
+    }
+
     public function render()
     {
         $this->nullBracket = Settings::getNullTaxBracket();
