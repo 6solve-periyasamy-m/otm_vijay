@@ -14,18 +14,13 @@ class Tiles extends Component
 
     public $listeners = ['refreshLivewireDatatable' => 'render',];
 
-    public function mount()
-    {
-        $this->nullBracket = $this->getNullBracket();
-    }
-
     public function updateTaxBracket(int|null $id = null): void
     {
         if ($id === null || TaxBracket::find($id) !== null) {
             Settings::set('system.tax.bracket', $id);
-            $this->toastFromLang('custom.tax.toast.success', 'success');
+            $this->toastFromLang('custom.tax.toast.success', 'success', true);
         } else {
-            $this->toastFromLang('custom.tax.toast.invalid', 'danger');
+            $this->toastFromLang('custom.tax.toast.invalid', 'danger', true);
         }
         $this->refreshTables();
     }
