@@ -31,6 +31,7 @@ class TourController extends Controller
         $request->validate(Tour::getValidationRules());
         $tour = Tour::create([
             'event_id' => $request->input('event_id'),
+            'tax_bracket_id' => $request->input('tax_bracket_id'),
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'date_from' => $request->input('date_from'),
@@ -109,6 +110,7 @@ class TourController extends Controller
         $request->validate(Tour::getValidationRules());
         $tour->update([
             'event_id' => $request->input('event_id'),
+            'tax_bracket_id' => $request->input('tax_bracket_id'),
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'date_from' => $request->input('date_from'),

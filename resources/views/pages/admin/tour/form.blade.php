@@ -3,7 +3,7 @@
      * @var \App\Models\Tour\Tour|null $tour
      */
     $tour = $tour ?? null;
-    $title = __('tour.form.title.' . ($tour === null ? 'create' : 'update'));
+    $title = __('tours.form.title.' . ($tour === null ? 'create' : 'update'));
     $route = $tour === null ?
         route('tours.store') :
         route('tours.update', ['tour' => $tour,]);
@@ -17,7 +17,8 @@
     @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $tour?->name, 'width' => 8])
     @include('partials.fields.selector.default',
             ['name' => 'Branding', 'field' => 'brand_id', 'value' => $tour?->brand_id ?? null,
-             'route' => 'brands', 'width' => 4,])
+             'route' => 'brands', 'width' => 2,])
+    <x-livewire.input.select.tax-bracket name="tax_bracket_id" label="Tax Bracket" value="{{ $tour?->tax_bracket_id }}" width="2" />
     @include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $tour?->description,])
     @can('create', \App\Models\Tour\Event::class)
         @include('partials.fields.selector.adder',
