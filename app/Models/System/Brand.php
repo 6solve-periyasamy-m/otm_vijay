@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Settings;
 
 /**
  * App\Models\System\Brand
@@ -25,6 +26,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $twitter
  * @property string|null $instagram
  * @property int|null $address_id
+ * @property int|null $tax_bracket_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Address|null $address
@@ -57,6 +59,16 @@ class Brand extends Model
     public function address(): BelongsTo
     {
         return $this->belongsTo(Address::class, 'address_id');
+    }
+
+    public function bracket(): BelongsTo
+    {
+        return $this->belongsTo(TaxBracket::class, 'tax_bracket_id');
+    }
+
+    public function taxBracket(): TaxBracket
+    {
+        return $this->bracket ?? Settings::getTaxBracket();
     }
 
     public function getActiveAddressAttribute(): Address

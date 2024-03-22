@@ -35,6 +35,7 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int|null $tour_id
  * @property int|null $order_id
+ * @property int|null $tax_bracket_id
  * @property int|null $organization_id
  * @property int|null $lead_traveller_id
  * @property int|null $consultant_id
