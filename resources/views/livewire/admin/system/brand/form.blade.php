@@ -16,7 +16,7 @@
             <input type="text" class="form-control" wire:model="brand.phone">
         </div>
         <div class="form-group col-12 col-xl-3" style="padding-left: 5px;">
-            <label>Brand Phone</label>
+            <label>Brand Logo</label>
             <input type="file" class="form-control" wire:model="logo">
         </div>
         <div class="form-group col-12 col-xl-3" style="padding-left: 5px;">
