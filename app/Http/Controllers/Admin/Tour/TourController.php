@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Tour;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TableRequest;
+use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\AtolRepository;
 use App\Repository\Reporting\RoomingReportRepository;
@@ -29,9 +30,10 @@ class TourController extends Controller
     public function store(Request $request)
     {
         $request->validate(Tour::getValidationRules());
+        $event = Event::find($request->event_id);
         $tour = Tour::create([
             'event_id' => $request->input('event_id'),
-            'tax_bracket_id' => $request->input('tax_bracket_id'),
+            'tax_bracket_id' => $request->input('tax_bracket_id') ?? $event?->tax_bracket_id,
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'date_from' => $request->input('date_from'),
