@@ -25,6 +25,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon $generated
  * @property string|null $invoice_footer
  * @property string|null $order_notes
+ * @property string|null $tax_name
+ * @property float|null $tax_amount
  * @property int $invoice_brand_id
  * @property float $total_cost
  * @property float $total_paid
