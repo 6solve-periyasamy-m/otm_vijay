@@ -10,6 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property int|float|null $booking_fee
  * @property int|float|null $commission
  * @property int|null $organization_id
+ * @property int|null $tax_bracket_id
  * @property int|null $consultant_id
  * @property int|null $status_override
  * @property string $invoice_footer
@@ -31,6 +32,7 @@ class UpdateOrderRequest extends FormRequest
             'external_notes' => $this->external_notes,
             'invoice_footer' => $this->invoice_footer,
             'consultant_id' => $this->consultant_id,
+            'tax_bracket_id' => $this->tax_bracket_id,
         ];
     }
 
