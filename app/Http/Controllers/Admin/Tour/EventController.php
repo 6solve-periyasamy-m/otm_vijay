@@ -28,6 +28,7 @@ class EventController extends Controller
             'starts_at' => $request->input('starts_at'),
             'ends_at' => $request->input('ends_at'),
             'booking_url' => $request->input('booking_url'),
+            'tax_bracket_id' => $request->input('tax_bracket_id'),
             'notes' => $request->input('notes'),
         ]);
         return redirect()->route('events.view', ['event' => $event,]);
@@ -52,6 +53,7 @@ class EventController extends Controller
             'starts_at' => $request->input('starts_at'),
             'ends_at' => $request->input('ends_at'),
             'booking_url' => $request->input('booking_url'),
+            'tax_bracket_id' => $request->input('tax_bracket_id'),
             'notes' => $request->input('notes'),
         ]);
         return redirect()->route('events.view', ['event' => $event,]);

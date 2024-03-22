@@ -57,7 +57,7 @@ class Event extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'description', 'starts_at', 'ends_at', 'booking_url', 'notes',];
+    protected $guarded = [];
     protected $casts = ['starts_at' => 'date', 'ends_at' => 'date'];
 
     public static function getValidationRules(): array
