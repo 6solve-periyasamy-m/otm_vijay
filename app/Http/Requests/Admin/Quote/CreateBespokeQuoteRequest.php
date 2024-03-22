@@ -24,6 +24,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $internal_notes
  * @property string $external_notes
  * @property float $cost
+ * @property int|null $tax_bracket_id
  */
 class CreateBespokeQuoteRequest extends FormRequest
 {
@@ -46,6 +47,7 @@ class CreateBespokeQuoteRequest extends FormRequest
             'description' => $this->description,
             'deposit' => $this->deposit,
             'brand_id' => $this->brand_id == 0 ? null : $this->brand_id,
+            'tax_bracket_id' => $this->tax_bracket_id
         ];
     }
 
