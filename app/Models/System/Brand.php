@@ -110,6 +110,7 @@ class Brand extends Model
             'facebook' => setting('social.facebook', ''),
             'twitter' => setting('social.twitter', ''),
             'instagram' => setting('social.instagram', ''),
+            'tax_bracket_id' => setting('system.tax.bracket', null),
         ]);
         $brand->setRelation('address', self::getSystemAddress());
         return $brand;
