@@ -3,8 +3,8 @@
         <div class="col-xl-12 d-flex justify-content-center">
             <img src="{{ $brand->image }}" alt="company logo" width="200" />
         </div>
-        <div class="col-6">
-            <div>
+        <div class="col-6 row">
+            <div class="col-12">
                 <span>Brand Name</span>
                 <h6 class="fw-bold">{{ $brand->name }}</h6>
             </div>
@@ -12,9 +12,13 @@
                 <span>Brand Email</span>
                 <h6 class="fw-bold">{{ $brand->email }}</h6>
             </div>
-            <div class="col-12">
+            <div class="col-6">
                 <span>Brand Phone</span>
                 <h6 class="fw-bold">{{ $brand->phone }}</h6>
+            </div>
+            <div class="col-6">
+                <span>Tax Bracket</span>
+                <h6 class="fw-bold">{{ $brand?->bracket?->name ?? 'System Default' }}</h6>
             </div>
             <div>
                 <span>Brand Links</span>

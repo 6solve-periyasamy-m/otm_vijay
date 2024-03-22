@@ -23,18 +23,19 @@
             <label>Brand URL</label>
             <input type="text" class="form-control" wire:model="brand.url">
         </div>
-        <div class="form-group col-12 col-xl-3" style="padding-left: 5px;">
+        <div class="form-group col-12 col-xl-2" style="padding-left: 5px;">
             <label>Brand Facebook</label>
             <input type="text" class="form-control" wire:model="brand.facebook">
         </div>
-        <div class="form-group col-12 col-xl-3" style="padding-left: 5px;">
+        <div class="form-group col-12 col-xl-2" style="padding-left: 5px;">
             <label>Brand Twitter</label>
             <input type="text" class="form-control" wire:model="brand.twitter">
         </div>
-        <div class="form-group col-12 col-xl-3" style="padding-left: 5px;">
+        <div class="form-group col-12 col-xl-2" style="padding-left: 5px;">
             <label>Brand Instagram</label>
             <input type="text" class="form-control" wire:model="brand.instagram">
         </div>
+        <x-livewire.input.select.tax-bracket name="brand.tax_bracket_id" label="Tax Bracket" width="3" />
         <hr class="splitter"/>
         <div class="form-group col-12" style="padding-left: 5px;">
             <input type="checkbox" class="form-check-input" wire:model="useSystemAddress">

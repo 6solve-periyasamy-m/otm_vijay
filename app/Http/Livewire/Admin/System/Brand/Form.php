@@ -72,6 +72,7 @@ class Form extends ModalComponent
             'brand.facebook' => 'nullable',
             'brand.twitter' => 'nullable',
             'brand.instagram' => 'nullable',
+            'brand.tax_bracket_id' => 'nullable',
             'logo' => 'nullable|image',
             'address.address_line_1' => 'nullable',
             'address.address_line_2' => 'nullable',
