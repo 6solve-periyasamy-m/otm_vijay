@@ -87,3 +87,7 @@ a {
   width: 80%;
   margin: auto;
 }
+
+.clickable:hover {
+  filter: brightness(80%);
+}

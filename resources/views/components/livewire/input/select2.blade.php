@@ -32,7 +32,7 @@
     <script type="text/javascript">
         $(function () {
             let selector = $('#{{ $id }}').select2({
-                placeholder: "Please Select a Value",
+                placeholder: "{{ $attributes->get('placeholder', 'Please Select a Value') }}",
                 allowClear: {{ $clear ? 1 : 0 }},
                 ajax: {
                     url: '{{ $allRoute }}',

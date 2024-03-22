@@ -23,6 +23,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $terms
  * @property string $internal_notes
  * @property string $external_notes
+ * @property int|null $tax_bracket_id
  */
 class QuoteEditRequest extends FormRequest
 {
@@ -44,7 +45,8 @@ class QuoteEditRequest extends FormRequest
             'name' => $this->name,
             'description' => $this->description,
             'brand_id' => $this->brand_id > 0 ? $this->brand_id : null,
-            'consultant_id' => $this->consultant_id
+            'consultant_id' => $this->consultant_id,
+            'tax_bracket_id' => $this->tax_bracket_id,
         ];
     }
 

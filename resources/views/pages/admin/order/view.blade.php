@@ -76,6 +76,11 @@
             <h6 class="fw-bold">{{ f_currency($order->remaining) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
+            <p>Tax Amount</p>
+            <h6 class="fw-bold">{{ $order->getTaxes() !== null ? f_currency($order->getTaxes()) : 'No Taxes Due' }}</h6>
+        </div>
+
+        <div class="col-12 col-xl-6">
             <p>Next Payment Due</p>
             <h6 class="fw-bold">{{ $order->next_installment !== null ? f_date($order->next_installment->due_on) . ' - ' . f_currency($order->next_installment->remaining) : 'All installments paid' }}</h6>
         </div>

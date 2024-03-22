@@ -15,6 +15,7 @@ use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Quote\Quote;
 use App\Models\System\FellohLink;
+use App\Models\System\TaxBracket;
 use App\Models\Tour\Tour;
 use App\Models\User;
 use App\Models\Voucher\OrderVoucher;
@@ -47,6 +48,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int|null $lead_booker_id
  * @property int|null $organization_id
  * @property int|null $consultant_id
+ * @property int|null $tax_bracket_id
  * @property string|null $booking_reference Unique reference for the booking
  * @property float|null $deposit The expected deposit amount
  * @property float|null $booking_fee The fee paid at time of booking
@@ -170,6 +172,16 @@ class Order extends Model
     public function tour(): BelongsTo
     {
         return $this->belongsTo(Tour::class, 'tour_id');
+    }
+
+    public function bracket(): BelongsTo
+    {
+        return $this->belongsTo(TaxBracket::class, 'tax_bracket_id');
+    }
+
+    public function taxBracket(): TaxBracket
+    {
+        return $this->bracket ?? $this->tour->taxBracket();
     }
 
     public function organization(): BelongsTo
@@ -446,7 +458,7 @@ class Order extends Model
         if (!isset ($this->internal_repository)) $this->internal_repository = new OrderRepository($this);
         return $this->internal_repository;
     }
-    
+
     public function getRoomingAttribute(): OrderRoomingRepository
     {
         if (!isset ($this->internal_rooming)) $this->internal_rooming = new OrderRoomingRepository($this);
@@ -466,5 +478,10 @@ class Order extends Model
     public function getAdditionalCosts(): array
     {
         return $this->repository->getAdditionalCosts();
+    }
+
+    public function getTaxes(): float|null
+    {
+        return $this->taxBracket()->calculate($this->total);
     }
 }

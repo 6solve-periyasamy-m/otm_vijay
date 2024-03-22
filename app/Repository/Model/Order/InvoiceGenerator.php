@@ -35,6 +35,8 @@ class InvoiceGenerator
             'order_notes' => $this->order->external_notes,
             'total_paid' => $this->order->paid,
             'total_cost' => $this->order->total,
+            'tax_name' => $this->order->taxBracket()?->name,
+            'tax_amount' => $this->order->getTaxes(),
         ]);
         return $save ? $this->generateSaved($invoice) : $this->generateTemporary($invoice);
     }
