@@ -34,7 +34,7 @@
                             <img src="{{ img_to_b64($invoice->brand->logo) }}" class="header-logo" alt="{{ $invoice->brand->name }}" />
                         </div>
                         <div class="flex-items vert-align">
-                            <h2 class="header-title tour-name">{{ $invoice->order->tour->name }}</h2>
+                            <h2 class="header-title tour-name">{{ $invoice->name }}</h2>
                         </div>
                         <div class="flex-items vert-align">
                             <h1 class="header-title">Invoice</h1>
