@@ -12,20 +12,20 @@ use Illuminate\Support\Carbon;
  * App\Models\Order\Invoice\InvoiceBrand
  *
  * @property int $id
- * @property string $name
- * @property string $website
- * @property string $email
- * @property string $telephone
- * @property string $address_line_1
- * @property string $address_line_2
- * @property string $town
- * @property string $region
- * @property string $country
- * @property string $postcode
- * @property string $vat_code
- * @property string $logo
- * @property string|null $header_image
- * @property string|null $footer_image
+ * @property string $name Name of the brand
+ * @property string $website The website for the brand
+ * @property string $email Contact email for the brand
+ * @property string $telephone Contact number for the brand
+ * @property string $address_line_1 The first line of the brands billing address
+ * @property string $address_line_2 The second line of the brands billing address
+ * @property string $town The town of the brands billing address
+ * @property string $region The region of the brands billing address
+ * @property string $country The country of the brands billing address
+ * @property string $postcode The postcode of the brands billing address
+ * @property string $vat_code The VAT Code of the Brand
+ * @property string $logo The asset reference for the logo. Access with asset().
+ * @property string|null $header_image The asset reference for the header image. Access with asset().
+ * @property string|null $footer_image The asset reference for the footer image. Access with asset().
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Invoice|null $invoice

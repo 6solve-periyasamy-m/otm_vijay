@@ -15,18 +15,18 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int $invoice_id
- * @property string $full_name
- * @property string|null $address_line_1
- * @property string|null $address_line_2
- * @property string|null $town
- * @property string|null $region
- * @property string|null $country
- * @property string|null $postcode
- * @property bool $lead
- * @property float $total_cost
+ * @property string $full_name Full name of the customer
+ * @property string|null $address_line_1 First line of customer billing address
+ * @property string|null $address_line_2 Second line of customer billing address
+ * @property string|null $town Town of customer billing address
+ * @property string|null $region Region of customer billing address
+ * @property string|null $country Country of customer billing address
+ * @property string|null $postcode Postcode of customer billing address
+ * @property bool $lead Are they the lead booker
+ * @property float $total_cost Total cost for the customer
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection<int, InvoiceBillable> $billables
+ * @property-read Collection<int, InvoiceBillable> $billables List of all billing items for the customer
  * @property-read int|null $billables_count
  * @property-read Invoice $invoice
  * @method static Builder|InvoiceCustomer newModelQuery()

@@ -15,11 +15,11 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int $invoice_id
- * @property string $name
- * @property float $total_cost
+ * @property string $name Name of the group
+ * @property float $total_cost Total cost of the group
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection<int, InvoiceBillable> $billables
+ * @property-read Collection<int, InvoiceBillable> $billables Any additional billables for the group
  * @property-read int|null $billables_count
  * @property-read Invoice $invoice
  * @method static Builder|InvoiceGroup newModelQuery()

@@ -13,10 +13,10 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int $invoice_id
- * @property Carbon $due
- * @property string $description
- * @property float $amount
- * @property bool $paid
+ * @property Carbon $due When the installment is due
+ * @property string $description Description of the installment
+ * @property float $amount The amount for the installment
+ * @property bool $paid Is the invoice fully paid
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Invoice $invoice

@@ -13,9 +13,9 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int $invoice_id
- * @property string $description
- * @property float $amount
- * @property Carbon $date
+ * @property string $description Why the adjustment was made
+ * @property float $amount Amount adjusted
+ * @property Carbon $date When the adjustment was made
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Invoice $invoice

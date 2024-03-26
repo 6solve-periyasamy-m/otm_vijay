@@ -18,33 +18,33 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int $order_id
- * @property string $booking_reference
- * @property int $invoice_number
- * @property string $name
- * @property bool $cancelled
- * @property Carbon $generated
- * @property string|null $invoice_footer
- * @property string|null $order_notes
- * @property string|null $tax_name
- * @property float|null $tax_amount
- * @property float|null $commission_amount
- * @property float|null $commission_percentage
+ * @property string $booking_reference The booking reference for the order
+ * @property int $invoice_number Current version number for the invoice
+ * @property string $name The name of the tour that the order is placed for
+ * @property bool $cancelled Whether the order is cancelled
+ * @property Carbon $generated Date that the invoice was generated
+ * @property string|null $invoice_footer The footer section for the invoice
+ * @property string|null $order_notes External notes for the order
+ * @property string|null $tax_name Name of the tax bracket used on the order
+ * @property float|null $tax_amount Amount of tax for the order
+ * @property float|null $commission_amount The amount of the commission on the order
+ * @property float|null $commission_percentage The percentage of the order that is commission
  * @property int $invoice_brand_id
- * @property float $total_cost
- * @property float $total_paid
+ * @property float $total_cost Total cost of the order
+ * @property float $total_paid Total amount paid to date
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection<int, InvoiceAdjustment> $adjustments
+ * @property-read Collection<int, InvoiceAdjustment> $adjustments Any Order Adjustments
  * @property-read int|null $adjustments_count
- * @property-read InvoiceBrand $brand
+ * @property-read InvoiceBrand $brand The brand details for the invoice
  * @property-read InvoiceRepository $repository
- * @property-read Collection<int, InvoiceCustomer> $customers
+ * @property-read Collection<int, InvoiceCustomer> $customers All customers on the order
  * @property-read int|null $customers_count
- * @property-read Collection<int, InvoiceGroup> $groups
+ * @property-read Collection<int, InvoiceGroup> $groups Groups on the order with extra
  * @property-read int|null $groups_count
  * @property-read Collection<int, InvoiceInstallment> $installments
  * @property-read int|null $installments_count
- * @property-read InvoiceCustomer|null $lead
+ * @property-read InvoiceCustomer|null $lead The lead booker
  * @property-read Order $order
  * @property-read Collection<int, InvoicePayment> $payments
  * @property-read int|null $payments_count

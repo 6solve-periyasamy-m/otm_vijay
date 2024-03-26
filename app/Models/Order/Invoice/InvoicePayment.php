@@ -13,10 +13,10 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int $invoice_id
- * @property string|null $payee
- * @property float $amount
- * @property Carbon $date
- * @property string $method
+ * @property string|null $payee Who made the payment
+ * @property float $amount How much was paid
+ * @property Carbon $date When the payment was made
+ * @property string $method What method was used to pay
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Invoice $invoice
