@@ -127,6 +127,19 @@
                                 <td colspan="3" class="metadata right-text">Total: {{ f_currency($group->total_cost) }}</td>
                             </tr>
                         @endforeach
+                    @if ($invoice->commission_percentage !== null)
+                        <tr>
+                            <td colspan="3" class="metadata center-text">Commission</td>
+                        </tr>
+                        <tr>
+                            <td class="description"><div class="order-table-description">Commission ({{ $invoice->commission_percentage }}%)</div></td>
+                            <td class="quantity">1</td>
+                            <td class="total color green">{{ f_currency($invoice->commission_amount * -1) }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="metadata right-text">Total: {{ f_currency($invoice->commission_amount * -1) }}</td>
+                        </tr>
+                    @endif
                     </tbody>
                 </table>
             </div>
