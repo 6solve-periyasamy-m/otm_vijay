@@ -220,7 +220,7 @@ class Tour extends Model
 
     public function taxBracket(): TaxBracket
     {
-        return $this->bracket ?? $this->event->taxBracket() ?? $this->brand->taxBracket();
+        return $this->bracket ?? $this->event?->taxBracket() ?? $this->brand?->taxBracket();
     }
 
     public function linkedBrand(): BelongsTo

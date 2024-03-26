@@ -27,6 +27,8 @@ use Illuminate\Support\Carbon;
  * @property string|null $order_notes
  * @property string|null $tax_name
  * @property float|null $tax_amount
+ * @property float|null $commission_amount
+ * @property float|null $commission_percentage
  * @property int $invoice_brand_id
  * @property float $total_cost
  * @property float $total_paid
@@ -67,7 +69,14 @@ class Invoice extends Model
 {
     protected $guarded = [];
     protected $with = ['brand', 'customers', 'lead', 'groups', 'adjustments', 'payments', 'installments',];
-    protected $casts = ['generated' => 'datetime:Y-m-d H:i:s', 'total_cost' => 'float', 'total_paid' => 'float', 'cancelled' => 'boolean'];
+    protected $casts = [
+        'generated' => 'datetime:Y-m-d H:i:s',
+        'total_cost' => 'float',
+        'total_paid' => 'float',
+        'cancelled' => 'boolean',
+        'commission_amount' => 'float',
+        'commission_percentage' => 'float',
+    ];
 
     private InvoiceRepository $internal_repository;
 
