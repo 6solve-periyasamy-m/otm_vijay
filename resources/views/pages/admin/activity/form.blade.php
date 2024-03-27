@@ -25,7 +25,7 @@
     @endcan
     @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $activity?->name,'width' => 10,])
     @include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'width' => 2, 'value' => $activity?->image_url,])
-    @include('partials.fields.ckeditor', ['name' => 'Description', 'field' => 'description', 'value' => $activity?->description,])
+    @include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $activity?->description,])
     @include('partials.fields.prefab.addresses.switcher', [
         'name' => $activity?->address->name,
         'location_type_id' => $activity?->address->location_type_id,
