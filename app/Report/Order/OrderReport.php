@@ -62,7 +62,7 @@ class OrderReport extends TourReport
             'order_commission_amount' => new ColumnDefinition('reports.order.column.commission.amount', CurrencyColumn::name('order_caches.commission_amount')),
             'order_next_amount' => new ColumnDefinition('reports.order.column.next_payment.amount', CurrencyColumn::name('order_caches.next_payment_amount')),
             'order_next_remaining' => new ColumnDefinition('reports.order.column.next_payment.remaining', CurrencyColumn::name('order_caches.next_payment_remaining')),
-            'order_next_due' => new ColumnDefinition('reports.order.column.next_payment.remaining', DateColumn::name('order_caches.next_payment_due')),
+            'order_next_due' => new ColumnDefinition('reports.order.column.next_payment.due', DateColumn::name('order_caches.next_payment_date')),
             'order_lead_first_name' => new ColumnDefinition('reports.order.column.lead_booker.first_name', Column::name('lead.first_name')),
             'order_lead_middle_names' => new ColumnDefinition('reports.order.column.lead_booker.middle_names', Column::name('lead.middle_names')),
             'order_lead_last_name' => new ColumnDefinition('reports.order.column.lead_booker.last_name', Column::name('lead.last_name')),
