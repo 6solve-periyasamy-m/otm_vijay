@@ -2,10 +2,22 @@
 
 use App\Http\Controllers\Api\SelectController;
 use App\View\Components\Livewire\Input\Select\Organization;
+use App\View\Components\Livewire\Input\Select\TaxBracket;
+use App\View\Components\Livewire\Input\Select\User;
 
 Route::prefix('organizations')->name('organizations.')->group(function () {
     Route::post('/', [Organization::class, 'getAll'])->name('select');
     Route::post('/{id}', [Organization::class, 'getOne'])->name('selected');
+});
+
+Route::prefix('users')->name('users.')->group(function () {
+    Route::post('/', [User::class, 'getAll'])->name('select');
+    Route::post('/{id}', [User::class, 'getOne'])->name('selected');
+});
+
+Route::prefix('tax-brackets')->name('tax-brackets.')->group(function () {
+    Route::post('/', [TaxBracket::class, 'getAll'])->name('select');
+    Route::post('/{id}', [TaxBracket::class, 'getOne'])->name('selected');
 });
 
 Route::post('locations', [SelectController::class, 'getLocations'])->name('locations.select');

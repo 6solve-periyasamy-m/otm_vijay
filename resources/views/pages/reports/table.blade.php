@@ -88,6 +88,10 @@
                 {{ Icon::create() }}
                 <span>Payment Report</span>
             </a>
+            <a class="btn btn-primary float-end" style="margin-right: 5px" href="{{ route('reports.advanced.create', ['type' => 'order',]) }}">
+                {{ Icon::create() }}
+                <span>Order Report</span>
+            </a>
         </x-admin.section.card>
     @endcan
     <x-admin.section.card>
@@ -149,6 +153,42 @@
                             </a>
                             <form id="report-{{ $report->id }}-delete"
                                   action="{{ route('reports.bespoke.delete', ['report' => $report,]) }}" method="POST"
+                                  style="display: none;">{{ csrf_field() }}</form>
+                        @else
+                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                    {{ Icon::delete() }}
+                                </span>
+                        @endcan
+                    </td>
+                </tr>
+            @endforeach
+            @foreach(\App\Models\System\BespokeReport::all() as $report)
+                <tr>
+                    <th scope="row">
+                        <a href="{{ route('reports.advanced.view', ['report' => $report,]) }}">{{ $report->name }}</a>
+                    </th>
+                    <td>{{ $report->description }}</td>
+                    <td>Advanced</td>
+                    <td>
+                        <span class="btn btn-outline-dark btn-sm mb-1" title="Export as CSV">{{ Icon::csv() }}</span>
+                        <span class="btn btn-outline-dark btn-sm mb-1" title="Export as XLSX">{{ Icon::excel() }}</span>
+                        @can('update', \App\Models\System\Report::class)
+                            <a href="{{route('reports.advanced.edit', ['report' => $report,])}}"
+                               class="btn btn-outline-success btn-sm mb-1">
+                                {{ Icon::edit() }}
+                            </a>
+                        @else
+                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                    {{ Icon::edit() }}
+                                </span>
+                        @endcan
+                        @can('delete', \App\Models\System\Report::class)
+                            <a href="#" class="btn btn-outline-danger btn-sm mb-1"
+                               onclick="event.preventDefault();document.getElementById('advanced-{{ $report->id }}-delete').submit();">
+                                {{ Icon::delete() }}
+                            </a>
+                            <form id="advanced-{{ $report->id }}-delete"
+                                  action="{{ route('reports.advanced.delete', ['report' => $report,]) }}" method="POST"
                                   style="display: none;">{{ csrf_field() }}</form>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">

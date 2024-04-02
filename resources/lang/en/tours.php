@@ -2,6 +2,12 @@
 
 
 return [
+    'form' => [
+        'title' => [
+            'create' => 'Create Tour',
+            'update' => 'Update Tour',
+        ],
+    ],
     'costing' => [
         'view' => [
             'cards' => [

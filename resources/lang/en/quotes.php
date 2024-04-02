@@ -15,12 +15,16 @@ return [
         'title' => 'View Quote',
         'reference' => 'Quote Reference',
         'status' => 'Quote Status',
+        'consultant' => 'Consultant',
         'name' => 'Quote Name',
         'expires' => 'Expires At',
         'starts' => 'Starts Date',
         'ends' => 'Ends Date',
         'description' => 'Description',
-        'notes' => 'Internal Notes',
+        'notes' => [
+            'internal' => 'Internal Note',
+            'external' => 'External Note',
+        ],
         'lead' => [
             'name' => 'Lead Traveller Name',
             'contact' => 'Lead Contact Information'

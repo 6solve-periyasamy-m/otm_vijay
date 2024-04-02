@@ -3,6 +3,7 @@
 namespace App\Repository\Facades;
 
 use App\Models\Location\Country;
+use App\Models\System\TaxBracket;
 use App\Repository\SettingsRepository;
 use Carbon\Carbon;
 
@@ -64,5 +65,20 @@ class Settings
 
         }
         return $filter ?? 0;
+    }
+
+    public function getTaxBracket(): TaxBracket
+    {
+        return TaxBracket::find(static::get('system.tax.bracket')) ?? static::getNullTaxBracket();
+    }
+
+    public function getNullTaxBracket(): TaxBracket
+    {
+        return new TaxBracket([
+            'id' => null,
+            'name'=> __('custom.tax.null.name'),
+            'description'=> __('custom.tax.null.description'),
+            'rate' => null,
+        ]);
     }
 }

@@ -12,6 +12,7 @@ use App\Http\Requests\Admin\Order\UpdateOrderRequest;
 use App\Http\Requests\Admin\TableRequest;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
+use App\Repository\Model\Order\InvoiceRepository;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Reporting\ReportRepository;
 
@@ -53,14 +54,22 @@ class OrderController extends Controller
     public function migrate(MigrateRequest $request, Order $order)
     {
         $tour = Tour::find($request->tour_id);
-        if (!isset($tour)) abort(404);
+        if (!isset($tour)) return back()->withErrors(['msg' => 'A Tour with that ID does not exist']);
         $order->repository->migrate($tour, $request->resetPrices(), $request->resetAdjustments());
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
-    public function invoice(Order $order)
+    public function latestInvoice(Order $order)
     {
         return $order->repository->getInvoiceRepository()->getResponseStream();
+    }
+
+    public function invoice(Order $order, string $version = 'latest')
+    {
+        $invoice =
+            $order->invoices()->where('invoice_number', '=', $version)->first()
+            ?? $order->repository->getInvoiceRepository()->invoice;
+        return (new InvoiceRepository($invoice))->getResponseStream();
     }
 
     public function atol(Order $order)
@@ -81,16 +90,22 @@ class OrderController extends Controller
     public function update(UpdateOrderRequest $request, Order $order)
     {
         $shouldInvoice = $order->deposit != $request->deposit;
-        $order->update($request->getData());
+        $order->repository->update($request->getData());
         event(new OrderEditedEvent($order, $shouldInvoice));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
     public function destroy(Order $order)
     {
-        $order->cancelled = true;
-        $order->save();
+        $order->repository->update(['cancelled' => true,]);
         event(new OrderCancelledEvent($order));
+        return redirect()->route('orders.view', ['order' => $order,]);
+    }
+
+    public function restore(Order $order)
+    {
+        $order->repository->update(['cancelled' => false,]);
+        event(new OrderRestoredEvent($order));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
@@ -101,11 +116,4 @@ class OrderController extends Controller
         return redirect()->route('orders.all');
     }
 
-    public function restore(Order $order)
-    {
-        $order->cancelled = false;
-        $order->save();
-        event(new OrderRestoredEvent($order));
-        return redirect()->route('orders.view', ['order' => $order,]);
-    }
 }

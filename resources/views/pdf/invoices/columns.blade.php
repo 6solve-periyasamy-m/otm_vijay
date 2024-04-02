@@ -1,11 +1,7 @@
 @php
 /**
- * @var \App\Models\Order\Invoice $invoice
- * @var \App\Models\Order\Order $order
+ * @var \App\Models\Order\Invoice\Invoice $invoice
  */
-$order = $invoice->order;
-$brand = $order->tour->brand;
-//dd($invoice);
 @endphp
 
 <!DOCTYPE html>
@@ -29,16 +25,16 @@ $brand = $order->tour->brand;
         </style>
     </head>
     <body>
-        <div class="background center-screen @if($order->cancelled) cancelled @endif">
+        <div class="background center-screen @if($invoice->cancelled) cancelled @endif">
             <!-- Header Section -->
             <div class="section">
                 <div class="header">
                     <div class="flex-container titles">
                         <div class="flex-items site-info vert-align">
-                            <img src="{{ img_to_b64($brand->image_path) }}" class="header-logo" alt="{{ $brand->name }}" />
+                            <img src="{{ img_to_b64($invoice->brand->logo) }}" class="header-logo" alt="{{ $invoice->brand->name }}" />
                         </div>
                         <div class="flex-items vert-align">
-                            <h2 class="header-title tour-name">{{ $order->tour->name }}</h2>
+                            <h2 class="header-title tour-name">{{ $invoice->name }}</h2>
                         </div>
                         <div class="flex-items vert-align">
                             <h1 class="header-title">Invoice</h1>
@@ -46,22 +42,22 @@ $brand = $order->tour->brand;
                     </div>
                     <div class="flex-container">
                         <div class="flex-items">
-                            <span class="metadata">Website:</span> <a class="site-info-padding" href="{{ $brand->url ?? setting('company.url', URL::to('/')) }}">{{ $brand->url ?? setting('company.url', URL::to('/')) }}</a>
-                            <br /><span class="metadata">Email:</span> <a class="site-info-padding" href="mailto:{{ $brand->email ?? setting('company.contact.email', 'Email not set') }}">{{ $brand->email ??  setting('company.contact.email', 'Email not set') }}</a>
-                            <br /><span class="metadata">Telephone:</span> <a class="site-info-padding" href="tel:{{ $brand->phone ?? setting('company.contact.phone', 'Phone number not set') }}">{{ $brand->phone ?? setting('company.contact.phone', 'Phone number not set') }}</a>
+                            <span class="metadata">Website:</span> <a class="site-info-padding" href="{{ $invoice->brand->website ?? setting('company.url', URL::to('/')) }}">{{ $invoice->brand->website ?? setting('company.url', URL::to('/')) }}</a>
+                            <br /><span class="metadata">Email:</span> <a class="site-info-padding" href="mailto:{{ $invoice->brand->email ?? setting('company.contact.email', 'Email not set') }}">{{ $invoice->brand->email ??  setting('company.contact.email', 'Email not set') }}</a>
+                            <br /><span class="metadata">Telephone:</span> <a class="site-info-padding" href="tel:{{ $invoice->brand->telephone ?? setting('company.contact.phone', 'Phone number not set') }}">{{ $invoice->brand->telephone ?? setting('company.contact.phone', 'Phone number not set') }}</a>
                         </div>
                         <div class="flex-items metadata-wrapper">
                             <div class="metadata divider">Date<br /><span class="metadata-text">{{ f_date($invoice->generated) }}</span></div>
-                            <div class="metadata divider">Invoice No.<br /><span class="metadata-text">{{ $invoice->number }}</span></div>
-                            <div class="metadata divider">Booking Ref.<br /><span class="metadata-text">{{ $order->booking_reference }}</span></div>
+                            <div class="metadata divider">Invoice No.<br /><span class="metadata-text">{{ $invoice->invoice_number }}</span></div>
+                            <div class="metadata divider">Booking Ref.<br /><span class="metadata-text">{{ $invoice->booking_reference }}</span></div>
                         </div>
                     </div>
-                </div>   
+                </div>
             </div>
             <!-- Billing Section -->
             <div class="section">
                 <div class="flex-container">
-                <div class="flex-items billing-info-wrapper">
+                    <div class="flex-items billing-info-wrapper">
                         <div class="metadata divider"><span class="metadata-title">Billing Address</span></div>
                     </div>
                     <div class="flex-items billing-info-wrapper">
@@ -70,23 +66,21 @@ $brand = $order->tour->brand;
                 </div>
                 <div class="flex-container">
                     <div class="flex-items billing-info-wrapper">
-                        @php /** @var \App\Models\Location\Address $billing */ $billing = $order->organization?->billingAddress ?? $order->leadBooker->customer->billingAddress; @endphp
-                        <div class="billing-info">{{ $order->organization?->name ?? $order->leadBooker->customer_name }}</div>
-                        <div class="billing-info">{{ $billing->address_line_1 }}{!! isset($billing->address_line_1) ? "<br />" : "" !!}</div>
-                        <div class="billing-info">{{ $billing->address_line_2 }}{!! isset($billing->address_line_2) ? "<br />" : "" !!}</div>
-                        <div class="billing-info">{{ $billing->address_line_3 }}{!! isset($billing->address_line_3) ? "<br />" : "" !!}</div>
-                        <div class="billing-info">{{ $billing->town }}{!! isset($billing->town) ? "<br />" : "" !!}</div>
-                        <div class="billing-info">{{ $billing->region }}{!! isset($billing->region) ? "<br />" : "" !!}</div>
-                        <div class="billing-info">{{ $billing->country }}{!! isset($billing->country) ? "<br />" : "" !!}</div>
-                        <div class="billing-info">{{ $billing->postcode }}{!! isset($billing->postcode) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $invoice->lead->full_name }}</div>
+                        <div class="billing-info">{{ $invoice->lead->address_line_1 }}{!! isset($invoice->lead->address_line_1) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $invoice->lead->address_line_2 }}{!! isset($invoice->lead->address_line_2) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $invoice->lead->town }}{!! isset($invoice->lead->town) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $invoice->lead->region }}{!! isset($invoice->lead->region) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $invoice->lead->country }}{!! isset($invoice->lead->country) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $invoice->lead->postcode }}{!! isset($invoice->lead->postcode) ? "<br />" : "" !!}</div>
                     </div>
                     <div class="flex-items billing-info-wrapper">
-                        <div class="billing-info">{{ $brand->active_address->address_line_1 }}</div>
-                        <div class="billing-info">{{ $brand->active_address->address_line_2 }}</div>
-                        <div class="billing-info">{{ $brand->active_address->town  }}</div>
-                        <div class="billing-info">{{ $brand->active_address->region  }}</div>
-                        <div class="billing-info">{{ $brand->active_address->country?->name  }}</div>
-                        <div class="billing-info">{{ $brand->active_address->postcode  }}</div>
+                        <div class="billing-info">{{ $invoice->brand->address_line_1 }}</div>
+                        <div class="billing-info">{{ $invoice->brand->address_line_2 }}</div>
+                        <div class="billing-info">{{ $invoice->brand->town  }}</div>
+                        <div class="billing-info">{{ $invoice->brand->region  }}</div>
+                        <div class="billing-info">{{ $invoice->brand->country  }}</div>
+                        <div class="billing-info">{{ $invoice->brand->postcode  }}</div>
                     </div>
                 </div>
             </div>
@@ -101,38 +95,51 @@ $brand = $order->tour->brand;
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($invoice->customers as $name => $data)
-                            @if (empty($data['billables'])) @continue @endif
+                        @foreach($invoice->customers as $customer)
+                            @if (sizeof($customer->billables) === 0) @continue @endif
                             <tr>
-                                <td colspan="3" class="metadata center-text">{{ $data['name'] }}</td>
+                                <td colspan="3" class="metadata center-text">{{ $customer->full_name }}</td>
                             </tr>
-                            @foreach($data['billables'] as $billable)
+                            @foreach($customer->billables as $billable)
                                 <tr>
-                                    <td class="description"><div class="order-table-description">{!! nl2br($billable['description']) !!}</div></td>
+                                    <td class="description"><div class="order-table-description">{!! nl2br($billable->description) !!}</div></td>
                                     <td class="quantity">1</td>
-                                    <td class="total {{ $billable['cost'] > 0  ? 'color red' : 'color green' }}">{{ f_currency($billable['cost']) }}</td>
+                                    <td class="total {{ $billable->amount > 0  ? 'color red' : 'color green' }}">{{ f_currency($billable->amount) }}</td>
                                 </tr>
                             @endforeach
                             <tr>
-                                <td colspan="3" class="metadata right-text">Total: {{ \f_currency($data['total_cost']) }}</td>
+                                <td colspan="3" class="metadata right-text">Total: {{ f_currency($customer->total_cost) }}</td>
                             </tr>
                         @endforeach
-                        @foreach($invoice->groups as $name => $data)
-                            @if (empty($data['billables'])) @continue @endif
+                        @foreach($invoice->groups as $group)
+                            @if (sizeof($group->billables) === 0) @continue @endif
                             <tr>
-                                <td colspan="3" class="metadata center-text">(Rooming Group) {{ $data['name'] }}</td>
+                                <td colspan="3" class="metadata center-text">{{ $group->name }}</td>
                             </tr>
-                            @foreach($data['billables'] as $billable)
+                            @foreach($group->billables as $billable)
                                 <tr>
-                                    <td class="description">{!! nl2br($billable['description']) !!} </td>
+                                    <td class="description"><div class="order-table-description">{!! nl2br($billable->description) !!}</div></td>
                                     <td class="quantity">1</td>
-                                    <td class="total {{ $billable['cost'] > 0  ? 'color red' : 'color green' }}">{{ f_currency($billable['cost']) }}</td>
+                                    <td class="total {{ $billable->amount > 0  ? 'color red' : 'color green' }}">{{ f_currency($billable->amount) }}</td>
                                 </tr>
                             @endforeach
                             <tr>
-                                <td colspan="3" class="metadata right-text">Total: {{ \f_currency($data['total_cost']) }}</td>
+                                <td colspan="3" class="metadata right-text">Total: {{ f_currency($group->total_cost) }}</td>
                             </tr>
                         @endforeach
+                    @if ($invoice->commission_percentage !== null)
+                        <tr>
+                            <td colspan="3" class="metadata center-text">Commission</td>
+                        </tr>
+                        <tr>
+                            <td class="description"><div class="order-table-description">Commission ({{ $invoice->commission_percentage }}%)</div></td>
+                            <td class="quantity">1</td>
+                            <td class="total color green">{{ f_currency($invoice->commission_amount * -1) }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="metadata right-text">Total: {{ f_currency($invoice->commission_amount * -1) }}</td>
+                        </tr>
+                    @endif
                     </tbody>
                 </table>
             </div>
@@ -150,27 +157,29 @@ $brand = $order->tour->brand;
                         </tr>
                     </thead>
                     <tbody>
-                        @if (empty($invoice->adjustments['billables']))
+                        @if (sizeof($invoice->adjustments) === 0)
                             <tr>
                                 <td colspan="3" class="center-text">No Order Adjustments recorded.</td>
                             </tr>
                         @else
-                            @foreach($invoice->adjustments['billables'] as $billable)
+                            @php $adjSum = 0; @endphp
+                            @foreach($invoice->adjustments as $adjustment)
+                                @php $adjSum += $adjustment->amount; @endphp
                                 <tr>
-                                    <td class="date"></td>
-                                    <td class="date-description">{!! nl2br($billable['description']) !!} </td>
-                                    <td class="total {{ $billable['cost'] > 0  ? 'color red' : 'color green' }}">{{ f_currency( $billable['cost']) }}</td>
+                                    <td class="date">{{ f_datetime($adjustment->date) }}</td>
+                                    <td class="date-description">{!! nl2br($adjustment->description) !!} </td>
+                                    <td class="total {{ $adjustment->amount > 0  ? 'color red' : 'color green' }}">{{ f_currency($adjustment->amount) }}</td>
                                 </tr>
                             @endforeach
                             <tr>
-                                <td colspan="3" class="metadata right-text">Total: {{ f_currency($invoice->adjustments['total_cost']) }}</td>
+                                <td colspan="3" class="metadata right-text">Total: {{ f_currency($adjSum) }}</td>
                             </tr>
                         @endif
                     </tbody>
                 </table>
                 <div class="flex-container-reverse title">
                     <div class="flex-items">
-                        <h1 class="header-title" style="margin-top:5px">Total Amount Owed: {{ f_currency($order->cancelled ? 0 : $invoice->total_cost) }}</h1>
+                        <h1 class="header-title" style="margin-top:5px">Total Amount Owed: {{ f_currency($invoice->cancelled ? 0 : $invoice->total_cost) }}</h1>
                     </div>
                 </div>
             </div>
@@ -186,27 +195,27 @@ $brand = $order->tour->brand;
                         </tr>
                     </thead>
                     <tbody>
-                        @if (empty($invoice->payments['billables']))
+                        @if (sizeof($invoice->payments) === 0)
                             <tr>
                                 <td colspan="3" class="center-text">No Payments recorded.</td>
                             </tr>
                         @else
-                            @foreach($invoice->payments['billables'] as $billable)
+                            @foreach($invoice->payments as $payment)
                                 <tr>
-                                    <td class="date">{{ f_datetime($billable['date']) }}</td>
-                                    <td class="date-description">{!! nl2br($billable['description']) !!} </td>
-                                    <td class="total">{{ f_currency( $billable['cost']) }}</td>
+                                    <td class="date">{{ f_datetime($payment->date) }}</td>
+                                    <td class="date-description">{{ $payment->payee ?? "Not Recorded" }}</td>
+                                    <td class="total">{{ f_currency($payment->amount) }}</td>
                                 </tr>
                             @endforeach
                             <tr>
-                                <td class="metadata right-text" colspan="3">Total Paid: {{ f_currency($invoice->payments['total_cost']) }}</td>
+                                <td class="metadata right-text" colspan="3">Total Paid: {{ f_currency($invoice->total_paid) }}</td>
                             </tr>
                         @endif
                     </tbody>
                 </table>
                 <div class="flex-container-reverse title">
                     <div class="flex-items">
-                        <h1 class="header-title" style="margin-top:5px">Remaining Amount: {{ f_currency($order->cancelled ? 0 : ($invoice->total_cost - $invoice->payments['total_cost'])) }}</h1>
+                        <h1 class="header-title" style="margin-top:5px">Remaining Amount: {{ f_currency($invoice->cancelled ? 0 : ($invoice->total_cost - $invoice->total_paid)) }}</h1>
                     </div>
                 </div>
             </div>
@@ -222,16 +231,16 @@ $brand = $order->tour->brand;
                         </tr>
                     </thead>
                     <tbody>
-                        @if (empty($invoice->installments))
-                                <tr>
-                                    <td colspan="3" class="center-text">No Installments recorded.</td>
-                                </tr>
-                            @else
+                        @if (sizeof($invoice->installments) === 0)
+                            <tr>
+                                <td colspan="3" class="center-text">No Installments recorded.</td>
+                            </tr>
+                        @else
                             @foreach($invoice->installments as $installment)
                                 <tr>
-                                    <td class="date">{{ f_date($installment['due']) }}</td>
-                                    <td class="amount">{!! array_key_exists('description',$installment) ? nl2br($installment['description']) : nl2br(f_currency($installment['amount'])) !!} </td>
-                                    <td class="paid">{{ f_bool($installment['paid']) }}</td>
+                                    <td class="date">{{ f_date($installment->due) }}</td>
+                                    <td class="amount">{{ $installment->description }}</td>
+                                    <td class="paid">{{ f_bool($installment->paid) }}</td>
                                 </tr>
                             @endforeach
                         @endif
@@ -240,14 +249,18 @@ $brand = $order->tour->brand;
             </div>
             <!-- Notes Section -->
             <div class="section pagebreak-inside">
-                <h2 class="section-title header-title">Notes</h2>
+                <h2 class="section-title header-title">Order Notes</h2>
                 <div class="notes">
-                    <div style="margin-top: 0">{!! $invoice->footer !!}</div> 
+                    <div style="margin-top: 0">{{ $invoice->order_notes }}</div>
+                </div>
+            </div>
+            <!-- Footer Section -->
+            <div class="section pagebreak-inside">
+                <h2 class="section-title header-title">Invoice Footer</h2>
+                <div class="notes">
+                    <div style="margin-top: 0">{!! $invoice->invoice_footer !!}</div>
                 </div>
             </div>
         </div>
-
-
-
-    </body>
+        </body>
 </html>

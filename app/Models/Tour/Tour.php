@@ -18,6 +18,7 @@ use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
 use App\Models\System\Brand;
+use App\Models\System\TaxBracket;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Voucher\VoucherCode;
@@ -44,6 +45,7 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int|null $event_id
+ * @property int|null $tax_bracket_id
  * @property string $name
  * @property string|null $description
  * @property string|null $notes
@@ -209,6 +211,16 @@ class Tour extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');
+    }
+
+    public function bracket(): BelongsTo
+    {
+        return $this->belongsTo(TaxBracket::class, 'tax_bracket_id');
+    }
+
+    public function taxBracket(): TaxBracket
+    {
+        return $this->bracket ?? $this->event?->taxBracket() ?? $this->brand?->taxBracket();
     }
 
     public function linkedBrand(): BelongsTo

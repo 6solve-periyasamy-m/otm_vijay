@@ -14,7 +14,8 @@
 @section('title', $title)
 
 @section('form-body')
-    @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $event?->name ?? null,])
+    @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $event?->name ?? null, 'width' => 8,])
+    <x-livewire.input.select.tax-bracket name="tax_bracket_id" label="Tax Bracket" value="{{ $event?->tax_bracket_id }}" width="4" />
     @include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $event?->description ?? null,])
     @include('partials.fields.date',
                 ['name' => 'Start Date', 'field' => 'starts_at', 'value' => $event?->starts_at ?? null,

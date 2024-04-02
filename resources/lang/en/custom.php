@@ -41,5 +41,32 @@ return [
         'region' => 'Region',
         'country' => 'Country',
         'postcode' => 'Postcode',
-    ]
+    ],
+    'tax' => [
+        'form' => [
+            'title' => [
+                'create' => 'Create Tax Bracket',
+                'update' => 'Update Tax Bracket',
+            ],
+            'fields' => [
+                'name' => 'Name',
+                'description' => 'Description',
+                'rate' => 'Tax Rate (%)',
+            ],
+        ],
+        'null' => [
+            'name' => 'No Taxes',
+            'description' => 'System Default. No taxes will be calculated or used.'
+        ],
+        'toast' => [
+            'success' => [
+                'title' => 'Success',
+                'body' => 'Successfully updated the tax bracket!'
+            ],
+            'invalid' => [
+                'title' => 'Invalid Tax Bracket Selected',
+                'body' => 'The tax bracket you selected does not exist. Please refresh the page to make sure the list is up-to-date',
+            ],
+        ],
+    ],
 ];
