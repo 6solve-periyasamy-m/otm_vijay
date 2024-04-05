@@ -87,7 +87,7 @@ class InvoiceGenerator
             'address_line_2' => $brand->address->address_line_2,
             'town' => $brand->address->town,
             'region' => $brand->address->region,
-            'country' => $brand->address->country->name,
+            'country' => $brand->address->country?->name,
             'postcode' => $brand->address->postcode,
             'vat_code' => setting('company.vat'),
             'logo' => $brand->image_path,
@@ -194,11 +194,12 @@ class InvoiceGenerator
                 'invoice_id' => $invoice,
                 'lead' => $this->order->lead_booker_id === $orderCustomer->id,
                 'full_name' => $orderCustomer->customer_name,
+                'email' => $orderCustomer->customer->email_address,
                 'address_line_1' => $orderCustomer->customer->billingAddress->address_line_1,
                 'address_line_2' => $orderCustomer->customer->billingAddress->address_line_2,
                 'town' => $orderCustomer->customer->billingAddress->town,
                 'region' => $orderCustomer->customer->billingAddress->region,
-                'country' => $orderCustomer->customer->billingAddress->country->name,
+                'country' => $orderCustomer->customer->billingAddress->country?->name,
                 'postcode' => $orderCustomer->customer->billingAddress->postcode,
             ]);
             $total = $orderCustomer->tour_cost;
@@ -206,18 +207,20 @@ class InvoiceGenerator
                 new InvoiceBillable([
                     'description' => __('invoice.customer.billable.base'),
                     'amount' => $orderCustomer->tour_cost,
-                    'shared_key' => 'base-components'
+                    'shared_key' => 'base-components',
+                    'is_base' => false,
                 ]),
             ];
             if ($orderCustomer->has_surcharge) {
                 $billables[] = new InvoiceBillable([
                     'description' => __('invoice.customer.billable.surcharge'),
                     'amount' => $orderCustomer->single_occupancy_surcharge,
-                    'shared_key' => "surcharge"
+                    'shared_key' => "surcharge",
+                    'is_base' => false,
                 ]);
                 $total += $orderCustomer->single_occupancy_surcharge;
             }
-            foreach ($orderCustomer->repository->getComponents(false, true, true, true, true, ['Add-on', 'Upgrade']) as $component) {
+            foreach ($orderCustomer->repository->getComponents(false, true, true, true, true) as $component) {
                 $billable = $component->getInvoiceBillable();
                 $total += $billable->amount;
                 $billables[] = $billable;
@@ -227,7 +230,8 @@ class InvoiceGenerator
                 $billables[] = new InvoiceBillable([
                     'description' => $adjustment->reason,
                     'amount' => $adjustment->amount,
-                    'shared_key' => "adjustment-{$adjustment->id}"
+                    'shared_key' => "adjustment-{$adjustment->id}",
+                    'is_base' => false,
                 ]);
                 $total += $adjustment->amount;
             }
@@ -257,9 +261,7 @@ class InvoiceGenerator
             $billables = [];
             $total = 0;
             /** @var OrderAccommodation $room */
-            foreach ($group->rooms()->whereHas('tourComponent', function ($query) {
-                return $query->where('tour_component_type', '=', 'Upgrade')->orWhere('tour_component_type', '=', 'Add-on');
-            })->get() as $room) {
+            foreach ($group->rooms as $room) {
                 $billable = $room->repository->getInvoiceBillable();
                 $total += $room->tour_sales_price;
                 $billables[] = $billable;
