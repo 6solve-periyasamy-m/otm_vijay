@@ -87,7 +87,7 @@ class InvoiceGenerator
             'address_line_2' => $brand->address->address_line_2,
             'town' => $brand->address->town,
             'region' => $brand->address->region,
-            'country' => $brand->address->country->name,
+            'country' => $brand->address->country?->name,
             'postcode' => $brand->address->postcode,
             'vat_code' => setting('company.vat'),
             'logo' => $brand->image_path,
@@ -199,7 +199,7 @@ class InvoiceGenerator
                 'address_line_2' => $orderCustomer->customer->billingAddress->address_line_2,
                 'town' => $orderCustomer->customer->billingAddress->town,
                 'region' => $orderCustomer->customer->billingAddress->region,
-                'country' => $orderCustomer->customer->billingAddress->country->name,
+                'country' => $orderCustomer->customer->billingAddress->country?->name,
                 'postcode' => $orderCustomer->customer->billingAddress->postcode,
             ]);
             $total = $orderCustomer->tour_cost;
