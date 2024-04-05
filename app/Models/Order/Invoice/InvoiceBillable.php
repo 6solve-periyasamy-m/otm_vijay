@@ -16,7 +16,8 @@ use Illuminate\Support\Carbon;
  * @property int $billed_id
  * @property string $description Description of what is being billed
  * @property string $shared_key Shared key to be used if merging customer billing records for quantity
- * @property float $amount Amount of the billable item
+ * @property float $amount Cost of the billable item
+ * @property boolean $is_base Is it an included component (part of the base package)
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read InvoiceCustomer|InvoiceGroup $billed

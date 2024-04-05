@@ -89,6 +89,7 @@ class OrderActivityRepository extends OrderComponentRepository
             'description' => $this->__toString(),
             'shared_key' => "activity_" . $this->orderComponent->tourComponent->id,
             'amount' => $this->orderComponent->tourComponent->tour_component_type === 'Included' ? 0 : $this->orderComponent->cost,
+            'is_base' => $this->orderComponent->tourComponent->tour_component_type === 'Included',
         ]);
     }
 }
