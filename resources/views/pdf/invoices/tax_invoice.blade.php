@@ -242,7 +242,7 @@
                                                                 <td align="left" valign="top" style="padding: 2px 15px;"
                                                                     class="oc_f12 oc_lblack">
                                                                     <a href="mailto:{{ $invoice->lead->email ?? 'N/A' }}">
-                                                                    {{ $invoice->lead->email ?? 'N/A' }} 
+                                                                    {{ $invoice->lead->email}} 
                                                                     </a>
                                                                 </td>
                                                             </tr>
@@ -350,25 +350,23 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr>
-                                                                <td align="left" valign="top" style="padding: 2px 15px;"
-                                                                    class="oc_f12 oc_lblack">The Victoria Hotel - 1 Twin
-                                                                </td>
-                                                                <td width="180" align="left" valign="top"
-                                                                    style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                                                    1 Room x 3 Nights
-                                                                </td>
-                                                            </tr>
-                                                            <tr style="background-color: #f5f5f5;">
-                                                                <td align="left" valign="top"
-                                                                    style="padding: 2px 15px; "
-                                                                    class="oc_f12 oc_lblack">Waite Grandstand - 4 Day
-                                                                    Pass </td>
-                                                                <td width="180" align="left" valign="top"
-                                                                    style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                                                    2 Person
-                                                                </td>
-                                                            </tr>
+                                                            @php
+                                                                $billables = $invoice->repository->getItemsByQuantity(); 
+                                                                $counter = 0;
+                                                            @endphp
+
+                                                            @foreach($billables as $b_index => $billable)
+                                                                <tr style="background-color: {{ $counter % 2 == 0 ? '#f5f5f5' : '#ffffff' }};"> 
+                                                                    <td align="left" valign="top" style="padding: 2px 15px;"
+                                                                        class="oc_f12 oc_lblack">{{$billable->description}}
+                                                                    </td>
+                                                                    <td width="180" align="left" valign="top"
+                                                                        style="padding: 2px 15px;" class="oc_f12 oc_lblack">
+                                                                        {{$billable->getQuantity()}}
+                                                                    </td>
+                                                                </tr>
+                                                                @php $counter++; @endphp
+                                                            @endforeach
                                                             <tr>
                                                                 <td align="left" valign="top" style="padding: 2px 15px;"
                                                                     class="oc_f14 oc_lblack">&nbsp;
