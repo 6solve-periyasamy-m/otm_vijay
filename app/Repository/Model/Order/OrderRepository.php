@@ -354,8 +354,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
     private function getPaymentCoveringAmount(int|float $amount): Payment|null
     {
-        $paidTotal = 0;
+        $paidTotal = $this->order->payments()->where('amount', '<', 0)->sum('amount');
         foreach ($this->order->payments as $payment) {
+            if ($payment->amount < 0) continue;
             $paidTotal += $payment->amount;
             if ($amount <= $paidTotal) return $payment;
         }
