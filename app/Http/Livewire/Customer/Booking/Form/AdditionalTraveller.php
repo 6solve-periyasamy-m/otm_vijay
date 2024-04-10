@@ -40,7 +40,6 @@ class AdditionalTraveller extends ModalComponent
         } catch (\Exception $e) {
             $date = null;
         }
-        $this->traveller->email_address = trim($this->traveller->email_address);
         $this->traveller->date_of_birth = $date;
         $this->traveller->booking_id = $this->booking->id;
         $this->traveller->repository->formSave($this->room_type, $this->group);
@@ -75,7 +74,6 @@ class AdditionalTraveller extends ModalComponent
             'traveller.middle_names' => 'nullable',
             'traveller.last_name' => 'required',
             'date_of_birth' => 'nullable|date|date_format:Y-m-d',
-            'traveller.email_address' => 'nullable',
             'traveller.mobile_number' => 'nullable',
         ];
     }
