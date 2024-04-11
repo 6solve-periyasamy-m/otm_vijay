@@ -195,10 +195,19 @@ class BookingTravellerRepository extends ModelRepository
     public function convertToOrderCustomer(Order $order): OrderCustomer
     {
         if (!isset($this->traveller->customer_id)) {
-            $this->convertToCustomer();
+            try {
+                $customer = $this->convertToCustomer();
+            } catch (\Exception $e) {
+                // Likely failed due to non-unique email address. Wipe address and try again.
+                Log::error($e);
+                $this->traveller->email_address === null;
+                $customer = $this->convertToCustomer();
+            }
+        } else {
+            $customer = $this->traveller->customer;
         }
         $orderCustomer = OrderCustomer::make([
-            'customer_id' => $this->traveller->customer_id,
+            'customer_id' => $customer->id,
             'tour_cost' => $this->traveller->booking->tour->base_price_per_person,
             'single_occupancy_surcharge' => $this->traveller->booking->tour->single_occupancy_surcharge,
         ]);
@@ -217,6 +226,27 @@ class BookingTravellerRepository extends ModelRepository
     public function convertToCustomer(): Customer
     {
         if (isset($this->traveller->customer_id)) return $this->traveller->customer;
+        // Ensure that it's not just an empty string and is actually null
+        if (empty($this->traveller->email_address)) {
+            $this->traveller->email_address = null;
+            $this->traveller->save();
+        }
+        // If the traveller has an email address, and it already exists as a customer
+        // Then check if the first and last name match between the two, and assume they are the same if so
+        if (!empty($this->traveller->email_address)) {
+            $lookup = Customer::where('email_address', '=', $this->traveller->email_address)->first();
+            if ($lookup !== null) {
+                if (strtolower($this->traveller->first_name) === strtolower($lookup)
+                    && strtolower($this->traveller->last_name) === strtolower($lookup->last_name)) {
+                    $this->traveller->customer_id === $lookup->id;
+                    $this->traveller->save();
+                    return $lookup;
+                } else {
+                    $this->traveller->email_address === null;
+                    $this->traveller->save();
+                }
+            }
+        }
         if (!isset($this->traveller->home_address_id)) {
             $this->traveller->home_address_id = Address::create([
                 'name' => "{$this->traveller->first_name} {$this->traveller->first_name} - Home Address",
