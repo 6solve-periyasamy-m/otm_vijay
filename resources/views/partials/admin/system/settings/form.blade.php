@@ -14,6 +14,7 @@
                 @include('partials.fields.text', ['name' => 'Facebook Link', 'field' => 'social_facebook', 'value' => setting('social.facebook', ''), 'width' => 3])
                 @include('partials.fields.text', ['name' => 'Twitter Link', 'field' => 'social_twitter', 'value' => setting('social.twitter', ''), 'width' => 3])
                 @include('partials.fields.text', ['name' => 'Instagram Link', 'field' => 'social_instagram', 'value' => setting('social.instagram', ''), 'width' => 3])
+                @include('partials.fields.ckeditor', ['name' => 'Bank Transfer', 'field' => 'bank_transfer', 'value' => setting('company.bank_transfer', ''), 'width' => 12])
             </div>
         </x-admin.section.card>
     </div>

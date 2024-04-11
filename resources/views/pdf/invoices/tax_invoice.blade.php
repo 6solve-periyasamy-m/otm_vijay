@@ -248,7 +248,7 @@
                                                                 </td>
                                                                 <td align="left" valign="top" style="padding: 2px 15px;"
                                                                     class="oc_f12 oc_lblack">
-                                                                    <a href="mailto:{{ $invoice->lead->email ?? 'N/A' }}">
+                                                                    <a href="@if($invoice->lead->email) mailto:{{ $invoice->lead->email}} @endif">
                                                                     {{ $invoice->lead->email}} 
                                                                     </a>
                                                                 </td>
@@ -336,6 +336,8 @@
                                         </table>
                                     </td>
                                 </tr>
+                            </table>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td align="left" valign="top" style="">
                                         <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
@@ -491,7 +493,7 @@
                                                                         <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">{{ date('d M Y', strtotime($installment->due)) }}</td>
                                                                         <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">{{ $installment->description }}</td>
                                                                         <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">{{ f_bool($installment->paid) }}</td>
-                                                                        <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">N/A</td>
+                                                                        <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">@if($installment->paid) {{date('d M Y', strtotime($installment->due))}} @else Pending  @endif</td>
                                                                     </tr>
                                                                 @endforeach
                                                             @endif
@@ -522,6 +524,8 @@
                                         </table>
                                     </td>
                                 </tr>
+                            </table>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="">
                                 <tr>
                                     <td align="left" valign="top">
                                         <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
@@ -548,14 +552,7 @@
                                                     </td>
                                                     <td width="180" align="left" valign="top" style="padding: 2px 15px;"
                                                         class="oc_f12 oc_lblack">
-                                                        Keith Prowse Travel PTY LTD <br />
-                                                        ABN: 31 003 276 775 <br />
-                                                        BSB: 032-298 <br />
-                                                        ACC: 540726 <br />
-                                                        SWIFT: WPACAU2S <br />
-                                                        BANK: Westpac <br />
-                                                        BRANCH: Crows Nest <br />
-                                                        Reference Number: KPAD106102
+                                                        {!! setting('company.bank_transfer', '-')  !!}
                                                     </td>
                                                 </tr>
                                                 <tr>
