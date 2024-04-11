@@ -32,7 +32,7 @@
                 <td>{{ $activity->internal_notes }}</td>
                 <td class="actions">
                     @can('update', \App\Models\Activity\Activity::class)
-                        <a href="{{route('activities.edit', ['activity' => $activity,])}}" class="btn btn-sm btn-outline-success mb-1">
+                        <a href="{{route('activities.edit', ['activity' => $activity,])}}" title="Edit" class="btn btn-sm btn-outline-success mb-1">
                             {{ Icon::edit() }}
                         </a>
                     @else
@@ -41,7 +41,7 @@
                             </span>
                     @endcan
                     @can('delete', \App\Models\Activity\Activity::class)
-                        <a href="#" class="btn btn-sm btn-outline-danger mb-1"
+                        <a href="#" class="btn btn-sm btn-outline-danger mb-1"  title="Delete"
                            onclick="event.preventDefault();document.getElementById('activity-{{ $activity->id }}-delete').submit();">
                             {{ Icon::delete() }}
                         </a>

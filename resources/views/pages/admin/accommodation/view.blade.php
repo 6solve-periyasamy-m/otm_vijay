@@ -40,16 +40,16 @@
                 </div>
                 <div class="col-12">
                     @can('update', \App\Models\Accommodation\Accommodation::class)
-                        <a class="btn btn-success" href="{{route('accommodations.edit', ['accommodation' => $accommodation,])}}">
+                        <a class="btn btn-success" title="Edit Accommodation" href="{{route('accommodations.edit', ['accommodation' => $accommodation,])}}">
                             {{ Icon::edit() }}
                             <span>Edit Accommodation</span>
                         </a>
                     @endcan
-                    <a class="btn btn-secondary" href="{{route('accommodations.rooming', ['accommodation' => $accommodation,])}}">
+                    <a class="btn btn-secondary" title="View Rooming List" href="{{route('accommodations.rooming', ['accommodation' => $accommodation,])}}">
                         {{ Icon::list() }}
                         <span>View Rooming List</span>
                     </a>
-                    <a class="btn btn-secondary" href="{{route('accommodations.rooming', ['accommodation' => $accommodation, 'notes' => false,])}}">
+                    <a class="btn btn-secondary" title="View Rooming List (No Notes)" href="{{route('accommodations.rooming', ['accommodation' => $accommodation, 'notes' => false,])}}">
                         {{ Icon::list() }}
                         <span>View Rooming List (No Notes)</span>
                     </a>

@@ -99,7 +99,7 @@
                     <td class="actions-4">
                         @can('read', \App\Models\Activity\ActivityInventory::class)
                             <a href="{{route('activity-inventories.manifest.view', ['activity' => $activity, 'activityInventory' => $inventory,])}}"
-                               class="btn btn-outline-secondary btn-sm mb-1">
+                               class="btn btn-outline-secondary btn-sm mb-1"  title="List">
                                 {{ Icon::list() }}
                             </a>
                         @else
@@ -109,7 +109,7 @@
                         @endcan
                         @can('create', \App\Models\Activity\ActivityInventory::class)
                             <a href="{{route('activity-inventories.duplicate', ['activity' => $activity, 'activityInventory' => $inventory,])}}"
-                               class="btn btn-outline-blue btn-sm mb-1">
+                               class="btn btn-outline-blue btn-sm mb-1"  title="Copy">
                                 {{ Icon::copy() }}
                             </a>
                         @else
@@ -119,7 +119,7 @@
                         @endcan
                         @can('update', \App\Models\Activity\ActivityInventory::class)
                             <a href="{{route('activity-inventories.edit', ['activity' => $activity, 'activityInventory' => $inventory,])}}"
-                               class="btn btn-outline-success btn-sm mb-1">
+                               class="btn btn-outline-success btn-sm mb-1"  title="Edit">
                                 {{ Icon::edit() }}
                             </a>
                         @else
@@ -128,7 +128,7 @@
                             </span>
                         @endcan
                         @can('delete', \App\Models\Activity\ActivityInventory::class)
-                            <a href="#" class="btn btn-sm btn-outline-danger mb-1"
+                            <a href="#" class="btn btn-sm btn-outline-danger mb-1"  title="Delete"
                                onclick="event.preventDefault();document.getElementById('activityInventory-{{ $inventory->id }}-delete').submit();">
                                 {{ Icon::delete() }}
                             </a>

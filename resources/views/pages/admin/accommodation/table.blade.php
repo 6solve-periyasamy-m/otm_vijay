@@ -32,7 +32,7 @@
                     <td>{{ $accommodation->currency }}</td>
                     <td class="actions">
                         @can('update', \App\Models\Accommodation\Accommodation::class)
-                            <a href="{{route('accommodations.edit', ['accommodation' => $accommodation,])}}" class="btn btn-outline-success btn-sm mb-1">
+                            <a href="{{route('accommodations.edit', ['accommodation' => $accommodation,])}}" title="Edit" class="btn btn-outline-success btn-sm mb-1">
                                 {{ Icon::edit() }}
                             </a>
                         @else
@@ -41,7 +41,7 @@
                                 </span>
                         @endcan
                         @can('delete', \App\Models\Accommodation\Accommodation::class)
-                            <a href="#" class="btn btn-outline-danger btn-sm mb-1"
+                            <a href="#" class="btn btn-outline-danger btn-sm mb-1" title="Delete"
                                onclick="event.preventDefault();document.getElementById('accommodation-{{ $accommodation->id }}-delete').submit();">
                                 {{ Icon::delete() }}
                             </a>

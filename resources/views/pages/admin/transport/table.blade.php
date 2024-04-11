@@ -44,7 +44,7 @@
                     <td>{{ $transport->internal_notes }}</td>
                     <td class="actions-3">
                         @can('create', \App\Models\Transport\Transport::class)
-                            <a href="{{route('transports.return', ['transport' => $transport,])}}" class="btn btn-outline-blue btn-sm mb-1">
+                            <a href="{{route('transports.return', ['transport' => $transport,])}}" title="Return Trip" class="btn btn-outline-blue btn-sm mb-1">
                                 {{ Icon::returnTrip() }}
                             </a>
                         @else
@@ -53,7 +53,7 @@
                                 </span>
                         @endcan
                         @can('update', \App\Models\Transport\Transport::class)
-                            <a href="{{route('transports.edit', ['transport' => $transport,])}}" class="btn btn-sm btn-outline-success mb-1">
+                            <a href="{{route('transports.edit', ['transport' => $transport,])}}" title="Edit" class="btn btn-sm btn-outline-success mb-1">
                                 {{ Icon::edit() }}
                             </a>
                         @else
@@ -62,7 +62,7 @@
                                 </span>
                         @endcan
                         @can('delete', \App\Models\Transport\Transport::class)
-                            <a href="#" class="btn btn-sm btn-outline-danger mb-1"
+                            <a href="#" class="btn btn-sm btn-outline-danger mb-1" title="Delete"
                                onclick="event.preventDefault();document.getElementById('transport-{{ $transport->id }}-delete').submit();">
                                 {{ Icon::delete() }}
                             </a>

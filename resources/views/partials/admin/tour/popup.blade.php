@@ -2,10 +2,10 @@
     /** @var App\Models\Tour\Tour $tour */
 @endphp
 <div class="panel-overlay tour-options hidden">
-    <a href="#" class="panel-close plain-anchor" onclick="hideOverlay('.panel-overlay')">
-        X
-    </a>
-    <div class="panel-grid panel-grid-3-5">
+    <div class="panel-grid panel-grid-3-5 relative">
+        <a href="#" class="panel-close plain-anchor" title="Close" onclick="hideOverlay('.panel-overlay')">
+        {{ Icon::xmark() }}
+        </a>
         @can('update', \App\Models\Merchandise\Merchandise::class)
         <x-admin.popup-button href="{{ route('tours.fulfil', ['tour' => $tour,]) }}" class="color-danger row-1">
             <x-slot:icon>{{ Icon::redo() }}</x-slot:icon>
