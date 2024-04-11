@@ -9,10 +9,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet" />
 
     <style type="text/css">
-         @page {
-            margin: 0px;
+        /* Define margin-top for all pages */
+        @page {
+            margin: 20px 0px 0px 0px; /* Adjust the value as needed */
             padding: 0px;
         }
+        /* Override margin-top for the first page */
+        @page :first {
+            margin-top: 0;
+        }
+
         table {
             border-collapse: collapse;
             mso-table-lspace: 0px;
@@ -138,6 +144,7 @@
         .oc_right {
             text-align: right;
         }
+        
     </style>
 </head>
 
@@ -176,7 +183,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td align="right" valign="top" class="oc_f12 oc_lblack"
-                                                                style="padding-bottom: 0; font-weight: 700;">ABN: {{$invoice->brand->vat_code}}</td>
+                                                                style="padding-bottom: 0; font-weight: 700;">VAT / IBN: {{$invoice->brand->vat_code}}</td>
                                                         </tr>
                                                         <tr>
                                                             <td align="right" valign="top" class="oc_f12 oc_lblack"
@@ -210,7 +217,7 @@
                                                     <th align="center" valign="top"
                                                         style="border-bottom: 2px solid #CAA974; padding: 5px 15px; color: #CAA974; "
                                                         class="oc_f18">
-                                                        T A X &nbsp; &nbsp; I N V O I C E</th>
+                                                        T A X &nbsp; &nbsp; I N V O I C E @if($invoice->cancelled) (Cancelled) @endif</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -290,7 +297,7 @@
                                                                 </td>
                                                                 <td align="right" valign="top"
                                                                     style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                                                    {{ f_date($invoice->generated) }}</td>
+                                                                    {{ date('d M Y', strtotime($invoice->generated)) }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td width="180" align="left" valign="top"
@@ -481,10 +488,10 @@
                                                             @else
                                                                 @foreach($invoice->installments as $index => $installment)
                                                                     <tr style="background-color: {{ $index % 2 == 0 ? '#f5f5f5' : '#ffffff' }};"> 
-                                                                        <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">{{ f_date($installment->due) }}</td>
+                                                                        <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">{{ date('d M Y', strtotime($installment->due)) }}</td>
                                                                         <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">{{ $installment->description }}</td>
                                                                         <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">{{ f_bool($installment->paid) }}</td>
-                                                                        <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">03/04/2024</td>
+                                                                        <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">N/A</td>
                                                                     </tr>
                                                                 @endforeach
                                                             @endif
@@ -587,7 +594,7 @@
                                                     <td align="left" valign="top" style="padding: 2px 15px;"
                                                         class="oc_f12 oc_lblack">
                                                         Terms and conditions apply. Please see our website for a copy or
-                                                        <a href="http://https://www.kpt.com.au/terms-and-conditions"
+                                                        <a href="https://www.kpt.com.au/terms-and-conditions"
                                                             target="_blank"
                                                             style="color: #CAA974; text-decoration: underline;">view
                                                             them here</a>

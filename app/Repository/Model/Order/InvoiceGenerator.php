@@ -82,7 +82,7 @@ class InvoiceGenerator
             'name' => $brand->name,
             'website' => $brand->url,
             'email' => $brand->name,
-            'telephone' => $brand->name,
+            'telephone' => $brand->phone,
             'address_line_1' => $brand->address->address_line_1,
             'address_line_2' => $brand->address->address_line_2,
             'town' => $brand->address->town,
