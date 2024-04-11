@@ -183,7 +183,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td align="right" valign="top" class="oc_f12 oc_lblack"
-                                                                style="padding-bottom: 0; font-weight: 700;">VAT / IBN: {{$invoice->brand->vat_code}}</td>
+                                                                style="padding-bottom: 0; font-weight: 700;">VAT / ABN: {{$invoice->brand->vat_code}}</td>
                                                         </tr>
                                                         <tr>
                                                             <td align="right" valign="top" class="oc_f12 oc_lblack"

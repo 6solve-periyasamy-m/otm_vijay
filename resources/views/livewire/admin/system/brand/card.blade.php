@@ -21,7 +21,7 @@
                 <h6 class="fw-bold">{{ $brand?->bracket?->name ?? 'System Default' }}</h6>
             </div>
             <div class="col-6">
-                <span>VAT / IBN</span>
+                <span>VAT / ABN</span>
                 <h6 class="fw-bold">{{ $brand?->vat_code ?? 'System Default' }}</h6>
             </div>
             <div>
