@@ -32,6 +32,7 @@ use Illuminate\Support\Carbon;
  * @property int $invoice_brand_id
  * @property float $total_cost Total cost of the order
  * @property float $total_paid Total amount paid to date
+ * @property int $generator_version Version of the generator that was used
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, InvoiceAdjustment> $adjustments Any Order Adjustments
