@@ -337,6 +337,32 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         return $total;
     }
 
+    public function getDepositPayment(): Payment|null
+    {
+        return $this->getPaymentCoveringAmount($this->order->calculated_deposit + ($this->order->booking_fee ?? 0));
+    }
+
+    public function getBookingFeePayment(): Payment|null
+    {
+        return $this->getPaymentCoveringAmount($this->order->booking_fee ?? 0);
+    }
+
+    public function getRemainingPayment(): Payment|null
+    {
+        return $this->getPaymentCoveringAmount($this->order->total);
+    }
+
+    private function getPaymentCoveringAmount(int|float $amount): Payment|null
+    {
+        $paidTotal = $this->order->payments()->where('amount', '<', 0)->sum('amount');
+        foreach ($this->order->payments as $payment) {
+            if ($payment->amount < 0) continue;
+            $paidTotal += $payment->amount;
+            if ($amount <= $paidTotal) return $payment;
+        }
+        return null;
+    }
+
     /**
      * Get all addons and upgrades for an order
      * @return array{addons:array, upgrades:array, additionalValue:float} List of all addons, upgrades, and how much they come to total
