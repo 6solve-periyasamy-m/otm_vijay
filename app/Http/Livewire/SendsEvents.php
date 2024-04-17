@@ -31,4 +31,9 @@ trait SendsEvents
     {
         $this->emit('closeModal');
     }
+
+    public function openInNewTab(string $url): void
+    {
+        $this->emit('openInNewTab', ['url' => $url,]);
+    }
 }

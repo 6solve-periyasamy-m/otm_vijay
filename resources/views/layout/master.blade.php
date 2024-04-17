@@ -137,7 +137,8 @@
         const autoHide = data.autoHide ?? false;
         const delay = data.delay ?? 5000;
         showToast(title, body, color, autoHide, delay);
-    })
+    });
+    Livewire.on('openInNewTab', (data) => { window.open(data.url); });
 </script>
     </footer>
 </html>
