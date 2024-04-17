@@ -36,4 +36,9 @@ trait SendsEvents
     {
         $this->emit('openInNewTab', ['url' => $url,]);
     }
+
+    public function refreshPage(): void
+    {
+        $this->emit('refreshPage');
+    }
 }

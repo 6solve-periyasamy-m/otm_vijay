@@ -139,6 +139,7 @@
         showToast(title, body, color, autoHide, delay);
     });
     Livewire.on('openInNewTab', (data) => { window.open(data.url); });
+    Livewire.on('refreshPage', (data) => { window.location.reload(); });
 </script>
     </footer>
 </html>
