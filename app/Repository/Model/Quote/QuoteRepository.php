@@ -209,7 +209,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getTotalCost(int $paying): float
     {
-        return $this->getPricePerPerson($paying)->price_per_person * $paying;
+        return $this->getPricePerPerson($paying)?->price_per_person * $paying;
     }
 
     /**
