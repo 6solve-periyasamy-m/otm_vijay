@@ -190,6 +190,13 @@
                     <x-slot:header>{{ __('quotes.view.cards.quick.calculator.header') }}</x-slot:header>
                     {{ __('quotes.view.cards.quick.calculator.description') }}
                 </x-admin.section.otm-text>
+                @php
+                $string = "Lead is ";
+                if ($quote->leadTraveller->travelling) { $string .= "Travelling"; } else { $string .= "Not Travelling"; }
+                $string .= " and ";
+                if ($quote->leadTraveller->paying) { $string .= "Paying"; } else { $string .= "Not Paying"; }
+                @endphp
+                <h4 class="fw-bold">{{ $string }}</h4>
                 <x-admin.section.otm-text class="row">
                     <x-slot:header>{{ __('quotes.view.cards.quick.calculator.count') }}</x-slot:header>
                     <div class="col-12 col-xl-5 gx-2 row">
