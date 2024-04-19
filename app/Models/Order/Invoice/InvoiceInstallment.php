@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
  * @property string $description Description of the installment
  * @property float $amount The amount for the installment
  * @property bool $paid Is the invoice fully paid
+ * @property Carbon|null $paid_on When the invoice was fully paid
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Invoice $invoice

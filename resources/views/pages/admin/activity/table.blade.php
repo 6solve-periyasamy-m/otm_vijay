@@ -28,7 +28,7 @@
                 <td><a href="{{ route('activities.view', ['activity' => $activity,]) }}">{{ $activity->name }}</a></td>
                 <td>{{ $activity->activityType->name }}</td>
                 <td>{{ $activity->address }}</td>
-                <td>{{ $activity->description }}</td>
+                <td>{!! $activity->description !!}</td>
                 <td>{{ $activity->internal_notes }}</td>
                 <td class="actions">
                     @can('update', \App\Models\Activity\Activity::class)

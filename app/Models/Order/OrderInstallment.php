@@ -23,6 +23,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read float $calculated_amount Calculated installment amount based on customer count
+ * @property-read Carbon|null $paid_on
  * @property-read bool $cancelled Is the order cancelled?
  * @property-read bool $paid Is the installment paid?
  * @property-read float $percentage Percentage of the order amount
@@ -70,6 +71,11 @@ class OrderInstallment extends Model
     public function getPaidAttribute(): bool
     {
         return $this->repository->isInstallmentPaid();
+    }
+
+    public function getPaidOnAttribute(): Carbon|null
+    {
+        return $this->repository->getCoveringPayment()?->paid_on;
     }
 
     public function getPercentageAttribute(): float

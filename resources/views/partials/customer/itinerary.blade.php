@@ -24,7 +24,7 @@
                     <div class="col-xl-10 col-lg-9 col-md-8 col-6">
                         <div>
                             <span class="fw-bold">Description<br /></span>
-                            {{ $component->description }}
+                            {!! $component->description !!}
                         </div>
                         @if($component->notes)
                         <div class="border-top mt-1">
@@ -37,7 +37,7 @@
                     <div>
                         <div>
                             <span class="fw-bold">Description<br /></span>
-                            {{ $component->description }}
+                            {!! $component->description !!}
                         </div>
                         @if($component->notes)
                             <div class="border-top mt-1">

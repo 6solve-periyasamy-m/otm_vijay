@@ -24,7 +24,7 @@
                 </div>
                 <div class="col-12 col-xl-6">
                     <p>Description</p>
-                    <h6 class="fw-bold">{{ $activity->description }}</h6>
+                    <h6 class="fw-bold">{!! $activity->description !!}</h6>
                 </div>
                 <div class="col-12 col-xl-6">
                     <p>Currency</p>
