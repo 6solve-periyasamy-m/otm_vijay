@@ -45,6 +45,10 @@ class Table extends LivewireDatatable
                 ->sortable()
                 ->searchable()
                 ->filterable(Tour::pluck('name')),
+            Column::raw('CONCAT(COALESCE(lead_customer.first_name, ""), " ", COALESCE(lead_customer.last_name, ""))')
+                ->label("Lead Traveller Name")
+                ->sortable()
+                ->searchable(),
             NumberColumn::raw("(SELECT COUNT(*) FROM order_customers WHERE order_customers.order_id = orders.id)")
                 ->label("Passengers")
                 ->sortable()
