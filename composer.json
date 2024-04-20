@@ -15,13 +15,12 @@
         "ext-zip": "*",
         "creativeorange/gravatar": "~1.0",
         "dyrynda/laravel-cascade-soft-deletes": "^4.1",
-        "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/cashier": "^13.6",
-        "laravel/framework": "^9.0",
-        "laravel/sanctum": "^2.9",
+        "laravel/framework": "^10.0",
+        "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.0",
-        "laravel/ui": "^3.3",
+        "laravel/ui": "^4.0",
         "livewire/livewire": "^2.12",
         "maatwebsite/excel": "^3.1",
         "mediconesystems/livewire-datatables": "^0.10.1",
@@ -38,13 +37,13 @@
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.12",
-        "brianium/paratest": "^6.10",
-        "fzaninotto/faker": "^1.9.1",
+        "brianium/paratest": "^7.0",
+        "fakerphp/faker": "^1.23",
         "mockery/mockery": "^1.3.1",
-        "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^9.3",
+        "nunomaduro/collision": "^7.0",
+        "phpunit/phpunit": "^10.0",
         "psy/psysh": "0.11.2",
-        "spatie/laravel-ignition": "^1.0"
+        "spatie/laravel-ignition": "^2.0"
     },
     "config": {
         "optimize-autoloader": true,
@@ -72,7 +71,7 @@
             "Tests\\": "tests/"
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "scripts": {
         "post-autoload-dump": [
