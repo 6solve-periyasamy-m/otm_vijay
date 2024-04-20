@@ -76,7 +76,7 @@
                                 <td class="actions">
                                     @can('update', \App\Models\Flight\FlightInventoryTour::class)
                                         <a href="{{ route('flight-upgrade.edit', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade]) }}"
-                                           class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
+                                           class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
                                     @else
                                         <span class="btn btn-outline-dark btn-sm mb-1">
                                                     {{ Icon::edit() }}
@@ -84,7 +84,7 @@
                                     @endcan
                                     @can('delete', \App\Models\Flight\FlightInventoryTour::class)
                                         <a href="#" onclick="$('#flight-{{$upgrade->upgrade->id}}-delete').submit()"
-                                           class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
+                                           class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete() }}</a>
                                         <form action="{{ route('flight-upgrade.delete', ['tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade' => $upgrade]) }}"
                                               method="post" id="flight-{{$upgrade->upgrade->id}}-delete">
                                             @csrf
