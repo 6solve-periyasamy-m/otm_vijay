@@ -130,7 +130,7 @@
                 </x-admin.section.otm-text>
             </div>
             <div class="col-6">
-
+                <button class="btn btn-info" wire:click="calculate">Refresh</button>
             </div>
             <div class="col-6">
                 <x-admin.section.otm-text class="profit-updater">
@@ -147,8 +147,16 @@
                     {{ f_currency($total) }}
                 </x-admin.section.otm-text>
             </div>
-            <div class="col-6">
-                <x-livewire.input wire:model="marked_up_price" label="Expected Price per Person" />
+            <div class="col-6 row">
+                <x-livewire.input wire:model.debounce.300ms="marked_up_price" label="Price per Person" width="4" />
+                <div class="col-4">
+                    <label></label>
+                    <button class="btn-warning" wire:click="updatePricePoint()">Update Single Price Point</button>
+                </div>
+                <div class="col-4">
+                    <label></label>
+                    <button class="btn-danger" wire:click="updatePricePoint(true)">Update All Price Points</button>
+                </div>
             </div>
         </div>
     </x-admin.section.card>

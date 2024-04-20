@@ -11,6 +11,8 @@ class Calculator extends Component
 {
     use SendsEvents;
 
+    public $listeners = ['refreshLivewireDatatable' => 'calculate',];
+
     public int $paying = 0;
     public int $travelling = 0;
     public float $costToCompany = 0;
@@ -55,12 +57,38 @@ class Calculator extends Component
     public function refresh()
     {
         $this->calculate();
+        $this->refreshTables();
         $this->render();
     }
 
     public function render()
     {
         return view('livewire.admin.quote.calculator');
+    }
+
+    public function updatePricePoint(bool $all = false)
+    {
+        $point = $this->quote->repository->getPricePerPerson(1);
+        $oldPrice = $point->price_per_person;
+        $point->price_per_person = $this->marked_up_price;
+        $point->save();
+        if ($all) {
+            foreach ($this->quote->pricePoints as $point) {
+                if ($point->quantity === 1) continue;
+                $diff = $oldPrice - $point->price_per_person;
+                // Calculate the percentage difference (i.e 10% reduction = 0.9) then multiply by marked up price
+                if ($diff == 0) {
+                    continue;
+                } elseif ($diff > 0) {
+                    $diffPercent = 1 - ($diff / $oldPrice);
+                } else  {
+                    $diffPercent = 1 + (($diff * -1) / $oldPrice);
+                }
+                $point->price_per_person = ($this->marked_up_price * $diffPercent);
+                $point->save();
+            }
+        }
+        $this->refresh();
     }
 
     public function preview()

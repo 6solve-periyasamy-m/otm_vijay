@@ -518,59 +518,8 @@
         <div class="col-xl-6">
             <x-admin.section.card>
                 <x-slot:header>{{ __('quotes.view.cards.price-points.header') }}</x-slot:header>
-                <form class="form-group row pricepoint-create"
-                      action="{{ route('quotes.price-points.store', ['quote' => $quote]) }}" method="post">
-                    @csrf
-                    <x-admin.input name="quantity"
-                                   width="5">{{ __('quotes.view.cards.price-points.form.quantity') }}</x-admin.input>
-                    <x-admin.input name="cost"
-                                   width="5">{{ __('quotes.view.cards.price-points.form.cost') }}</x-admin.input>
-                    <x-admin.button href="javascript:$('.pricepoint-create').submit()" width="2" color="primary">
-                        {{ Icon::create() }}
-                        <span>{{ __('quotes.view.cards.price-points.form.create') }}</span>
-                    </x-admin.button>
-                </form>
-                <table class="datatable table table-striped" id="pricepoint-table">
-                    <thead>
-                    <tr>
-                        <th scope="col">{{ __('quotes.view.cards.price-points.table.quantity') }}</th>
-                        <th scope="col">{{ __('quotes.view.cards.price-points.table.cost') }}</th>
-                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($quote->pricePoints as $pricePoint)
-                        <tr>
-                            <form class="pricepoint-{{$pricePoint->id}}"
-                                  action="{{ route('quotes.price-points.update', ['quote' => $quote, 'pricePoint' => $pricePoint,]) }}"
-                                  method="post">
-                                @csrf
-                                <td data-search="{{$pricePoint->quantity}}" data-order="{{$pricePoint->quantity}}">
-                                    <x-admin.input name="quantity" value="{{ $pricePoint->quantity }}"
-                                                   nofloat></x-admin.input>
-                                </td>
-                                <td data-search="{{$pricePoint->price_per_person}}"
-                                    data-order="{{$pricePoint->price_per_person}}">
-                                    <x-admin.input name="cost" value="{{ $pricePoint->price_per_person }}"
-                                                   nofloat></x-admin.input>
-                                </td>
-                                <td>
-                                    <a href="javascript:$('.pricepoint-{{$pricePoint->id}}').submit()"
-                                       class="btn btn-outline-success btn-sm mb-1">
-                                        {{ Icon::edit() }}
-                                    </a>
-                                    <a href="javascript:$('#pricepoint-{{ $pricePoint->id }}-delete').submit()"
-                                       class="btn btn-outline-danger btn-sm mb-1">
-                                        {{ Icon::delete() }}
-                                    </a>
-                                </td>
-                            </form>
-                            <form id="pricepoint-{{ $pricePoint->id }}-delete" class="d-none" method="post"
-                                  action="{{ route('quotes.price-points.delete', ['quote' => $quote, 'pricePoint' => $pricePoint,]) }}">@csrf</form>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                <livewire:admin.quote.price-point.form :quote="$quote" />
+                <livewire:admin.quote.price-point.table :quote="$quote->id" />
             </x-admin.section.card>
         </div>
         <div class="col-xl-12">
