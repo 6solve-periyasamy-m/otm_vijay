@@ -32,11 +32,12 @@ class Calculator extends Component
     public function calculate(): void
     {
         $this->costToCompany = $this->quote->repository->getTotalCostToCompany($this->paying + $this->travelling + 1);
+        $costPerPerson = sigfig($this->costToCompany / ($this->paying + $this->travelling + 1));
         $this->total = $this->quote->repository->getTotalCost($this->paying + ($this->quote->leadTraveller->paying ? 1 : 0));
         $this->profit = sigfig($this->total - $this->costToCompany);
         $this->margin = sigfig(($this->total / $this->costToCompany) * 100);
         $this->markup = sigfig($this->markup ?? $this->margin - 100);
-        $this->marked_up_price = sigfig($this->costToCompany + ($this->costToCompany * ($this->markup / 100)));
+        $this->marked_up_price = sigfig($costPerPerson + ($costPerPerson * ($this->markup / 100)));
     }
 
     public function incrementPaying(int $value): void
