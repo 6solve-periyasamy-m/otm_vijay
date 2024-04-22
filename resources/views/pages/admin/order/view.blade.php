@@ -302,6 +302,7 @@
                             <th scope="col">Due</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Outstanding</th>
+                            <th scope="col">Paid On</th>
                             <th scope="col" class="actions">Actions</th>
                         </tr>
                         </thead>
@@ -316,6 +317,10 @@
                                     @else
                                         {{ f_currency($order->booking_fee - min($order->booking_fee, $order->paid)) }}
                                     @endif
+                                </td>
+                                <td>
+                                    @php $covering = $order->repository->getBookingFeePayment(); @endphp
+                                    {{ $covering !== null ? f_datetime($covering->paid_on) : "Not Paid" }}
                                 </td>
                                 <td class="actions">
                                     <a href="{{route('orders.edit', ['order' => $order,])}}" class="btn btn-outline-success btn-sm mb-1">
@@ -337,6 +342,10 @@
                                         {{ f_currency($amount) }}
                                     @endif
                                 </td>
+                                <td>
+                                    @php $covering = $order->repository->getDepositPayment(); @endphp
+                                    {{ $covering !== null ? f_datetime($covering->paid_on) : "Not Paid" }}
+                                </td>
                                 <td class="actions">
                                     <a href="{{route('orders.edit', ['order' => $order,])}}" class="btn btn-outline-success btn-sm mb-1">
                                         {{ Icon::edit() }}
@@ -350,12 +359,18 @@
                                 <th scope="row">Installment</th>
                                 <td>{{ f_date($installment->due_on) }}</td>
                                 <td>{{ f_currency($installment->calculated_amount) }} ({{ $installment->percentage }}%)</td>
-                                <td>                                    @php $amount = $installment->calculated_amount - $installment->repository->getAmountPaid(); @endphp
+                                <td>
+                                    @php $amount = $installment->calculated_amount - $installment->repository->getAmountPaid(); @endphp
                                     @if($amount <= 0)
                                         Paid
                                     @else
                                         {{ f_currency($amount) }}
-                                    @endif</td>
+                                    @endif
+                                </td>
+                                <td>
+                                    @php $paidOn = $installment->paid_on @endphp
+                                    {{ $paidOn === null ? 'Not Paid' : f_datetime($paidOn) }}
+                                </td>
                                 <td class="actions">
                                     <a href="{{route('order-installments.edit', ['order' => $order, 'orderInstallment' => $installment,])}}" class="btn btn-outline-success btn-sm mb-1">
                                         {{ Icon::edit() }}
@@ -381,6 +396,10 @@
                                 @else
                                     {{ f_currency($amount) }}
                                 @endif
+                            </td>
+                            <td>
+                                @php $covering = $order->repository->getRemainingPayment(); @endphp
+                                {{ $covering !== null ? f_datetime($covering->paid_on) : "Not Paid" }}
                             </td>
                             <td class="actions">
                                 <a href="{{route('tours.edit', ['tour' => $order->tour,])}}" class="btn btn-outline-success btn-sm mb-1">

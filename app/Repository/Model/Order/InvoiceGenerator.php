@@ -39,6 +39,7 @@ class InvoiceGenerator
             'tax_amount' => $this->order->getTaxes(),
             'commission_percentage' => $this->order->commission,
             'commission_amount' => $this->order->commission_amount,
+            'generator_version' => InvoiceUpgrader::LATEST_VERSION,
         ]);
         return $save ? $this->generateSaved($invoice) : $this->generateTemporary($invoice);
     }
@@ -109,6 +110,7 @@ class InvoiceGenerator
                 'description' => __('invoice.installment.booking-fee', ['amount' => f_currency($this->order->booking_fee)]),
                 'amount' => $this->order->booking_fee,
                 'paid' => $this->order->booking_fee < $this->order->paid,
+                'paid_on' => $this->order->repository->getBookingFeePayment()?->paid_on,
             ]);
         }
         if ($this->order->deposit > 0) {
@@ -122,6 +124,7 @@ class InvoiceGenerator
                     ]),
                 'amount' => $this->order->calculated_deposit,
                 'paid' => $this->order->deposit_paid,
+                'paid_on' => $this->order->repository->getDepositPayment()?->paid_on,
             ]);
         }
         foreach ($this->order->repository->getInstallments() as $installment) {
@@ -135,6 +138,7 @@ class InvoiceGenerator
                     ]),
                 'amount' => $installment->calculated_amount,
                 'paid' => $installment->repository->getRemainingAmount() <= 0,
+                'paid_on' => $installment->repository->getCoveringPayment()?->paid_on,
             ]);
         }
         if ($this->order->remaining_installment > 0) {
@@ -143,6 +147,7 @@ class InvoiceGenerator
                 'description' => __('invoice.installment.remaining', ['amount' => f_currency($this->order->remaining_installment),]),
                 'amount' => $this->order->remaining_installment,
                 'paid' => $this->order->paid >= $this->order->total,
+                'paid_on' => $this->order->repository->getRemainingPayment()?->paid_on,
             ]);
         }
         return $data;
