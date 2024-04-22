@@ -13,6 +13,7 @@ use App\Http\Requests\Admin\TableRequest;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\InvoiceRepository;
+use App\Repository\Model\Order\ItinearyRepository;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Reporting\ReportRepository;
 
@@ -114,6 +115,12 @@ class OrderController extends Controller
         if (!is_otm()) abort(403);
         $order->repository->forceDelete();
         return redirect()->route('orders.all');
+    }
+
+    public function itinearyInvoice(Order $order)
+    {
+        $invoice = $order->repository->getInvoiceRepository()->invoice;
+        return (new ItinearyRepository($invoice))->getResponseStream();
     }
 
 }
