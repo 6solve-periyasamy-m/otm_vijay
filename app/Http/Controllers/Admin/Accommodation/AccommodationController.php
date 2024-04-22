@@ -44,6 +44,12 @@ class AccommodationController extends Controller
         if ($request->has('image') && $request->file('image') != null) {
             $accommodation->image_url = $request->file('image')->storePublicly('uploads/images');
         }
+        if($request->input('location_type_id') == 1 && $request->input('check_in') && $request->input('check_in') !=''){
+            $accommodation->check_in = date('Y-m-d H:i:s', strtotime($request->input('check_in')));
+        }
+        if($request->input('location_type_id') == 1 && $request->input('check_out') && $request->input('check_out') !=''){
+            $accommodation->check_out = date('Y-m-d H:i:s', strtotime($request->input('check_out')));
+        }
 
         $accommodation->address_id = $address->id;
         $accommodation->save();
