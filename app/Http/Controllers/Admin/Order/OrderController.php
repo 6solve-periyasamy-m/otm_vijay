@@ -62,7 +62,10 @@ class OrderController extends Controller
 
     public function latestInvoice(Order $order)
     {
-        return $order->repository->getInvoiceRepository()->getResponseStream();
+        // return $order->repository->getInvoiceRepository()->getResponseStream();
+        
+        $invoice = $order->repository->getInvoiceRepository()->invoice;
+        return (new InvoiceRepository($invoice))->getResponseStream();
     }
 
     public function invoice(Order $order, string $version = 'latest')

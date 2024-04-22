@@ -9,11 +9,12 @@
                 @include('partials.fields.text', ['name' => 'Company Name', 'field' => 'company_name', 'value' => setting('company.name', ''), 'width' => 6])
                 @include('partials.fields.text', ['name' => 'Company Email', 'field' => 'company_email', 'value' => setting('company.contact.email', ''), 'width' => 6])
                 @include('partials.fields.text', ['name' => 'Company Phone Number', 'field' => 'company_phone', 'value' => setting('company.contact.phone', ''), 'width' => 6])
-                @include('partials.fields.text', ['name' => 'Company VAT', 'field' => 'company_vat', 'value' => setting('company.vat', ''), 'width' => 6])
+                @include('partials.fields.text', ['name' => 'Company VAT / ABN', 'field' => 'company_vat', 'value' => setting('company.vat', ''), 'width' => 6])
                 @include('partials.fields.text', ['name' => 'Company Link', 'field' => 'company_url', 'value' => setting('company.url', ''), 'width' => 3])
                 @include('partials.fields.text', ['name' => 'Facebook Link', 'field' => 'social_facebook', 'value' => setting('social.facebook', ''), 'width' => 3])
                 @include('partials.fields.text', ['name' => 'Twitter Link', 'field' => 'social_twitter', 'value' => setting('social.twitter', ''), 'width' => 3])
                 @include('partials.fields.text', ['name' => 'Instagram Link', 'field' => 'social_instagram', 'value' => setting('social.instagram', ''), 'width' => 3])
+                @include('partials.fields.ckeditor', ['name' => 'Bank Transfer', 'field' => 'bank_transfer', 'value' => setting('company.bank_transfer', ''), 'width' => 12])
             </div>
         </x-admin.section.card>
     </div>

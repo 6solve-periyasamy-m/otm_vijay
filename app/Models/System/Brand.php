@@ -27,6 +27,7 @@ use Settings;
  * @property string|null $instagram
  * @property int|null $address_id
  * @property int|null $tax_bracket_id
+ * @property string|null $vat_code
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Address|null $address
@@ -111,6 +112,7 @@ class Brand extends Model
             'twitter' => setting('social.twitter', ''),
             'instagram' => setting('social.instagram', ''),
             'tax_bracket_id' => setting('system.tax.bracket', null),
+            'vat_code' => setting('company.vat'),
         ]);
         $brand->setRelation('address', self::getSystemAddress());
         return $brand;
