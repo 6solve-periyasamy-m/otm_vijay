@@ -49,12 +49,12 @@ $colors: (
 
 .panel-close {
   position: absolute;
-  top: 64px; // Size of top bar
+  // top: 64px; // Size of top bar
   right: 0;
   margin: $closeMargin;
-  width: 2rem;
-  height: 2rem;
-  font-size: 24px;
+  // width: 2rem;
+  // height: 2rem;
+  // font-size: 24px;
 }
 
 %panel-grid {

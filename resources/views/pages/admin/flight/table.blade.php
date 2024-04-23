@@ -34,7 +34,7 @@
                 <td>{{ $flight->internal_notes }}</td>
                 <td class="actions-3">
                     @can('create', \App\Models\Flight\Flight::class)
-                        <a href="{{route('flights.return', ['flight' => $flight,])}}" class="btn btn-outline-blue btn-sm mb-1">
+                        <a href="{{route('flights.return', ['flight' => $flight,])}}" title="Return Trip" class="btn btn-outline-blue btn-sm mb-1">
                             {{ Icon::returnTrip() }}
                         </a>
                     @else
@@ -43,7 +43,7 @@
                             </span>
                     @endcan
                     @can('update', \App\Models\Flight\Flight::class)
-                        <a href="{{route('flights.edit', ['flight' => $flight,])}}" class="btn btn-outline-success btn-sm mb-1">
+                        <a href="{{route('flights.edit', ['flight' => $flight,])}}" title="Edit" class="btn btn-outline-success btn-sm mb-1">
                             {{ Icon::edit() }}
                         </a>
                     @else
@@ -52,7 +52,7 @@
                             </span>
                     @endcan
                     @can('delete', \App\Models\Flight\Flight::class)
-                        <a href="#" class="btn btn-outline-danger btn-sm mb-1"
+                        <a href="#" class="btn btn-outline-danger btn-sm mb-1" title="Delete"
                            onclick="event.preventDefault();document.getElementById('flight-{{ $flight->id }}-delete').submit();">
                             {{ Icon::delete() }}
                         </a>
