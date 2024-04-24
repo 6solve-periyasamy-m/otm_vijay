@@ -115,10 +115,10 @@
                            class="btn btn-outline-primary btn-sm mb-1" title="Export as CSV">{{ Icon::csv() }}</a>
                         <a href="{{ route($report['export'], ['extension' => 'xlsx', ...($report['params'] ?? [])]) }}"
                            class="btn btn-outline-info btn-sm mb-1" title="Export as XLSX">{{ Icon::excel() }}</a>
-                        <span class="btn btn-outline-dark btn-sm mb-1">
+                        <span class="btn btn-outline-dark btn-sm mb-1" title="Edit">
                                 {{ Icon::edit() }}
                             </span>
-                        <span class="btn btn-outline-dark btn-sm mb-1">
+                        <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
                                 {{ Icon::delete() }}
                             </span>
                     </td>
