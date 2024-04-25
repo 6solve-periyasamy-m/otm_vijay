@@ -20,7 +20,6 @@ class CreateEventsTable extends Migration
             $table->string('description')->nullable();
             $table->date('starts_at');
             $table->date('ends_at');
-            $table->string('image_url')->nullable();
             $table->string('booking_url')->nullable();
             $table->string('notes')->nullable();
             $table->timestamps();
