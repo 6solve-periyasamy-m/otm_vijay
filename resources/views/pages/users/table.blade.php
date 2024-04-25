@@ -43,28 +43,28 @@
                         @if(Auth::user()->getHighestRoleLevel() > $user->getHighestRoleLevel() || Auth::user()->id == $user->id)
                             <td>
                                 @if($user->trashed())
-                                    <span class="btn btn-outline-dark btn-sm mb-1">
+                                    <span class="btn btn-outline-dark btn-sm mb-1" title="Edit">
                                         {{ Icon::edit() }}
                                     </span>
                                 @else
                                     <a href="{{route('users.edit', ['user' => $user,])}}"
-                                       class="btn btn-outline-success btn-sm mb-1">
+                                       class="btn btn-outline-success btn-sm mb-1" title="Edit">
                                         {{ Icon::edit() }}
                                     </a>
                                 @endif
                                 @can('delete', \App\Models\User::class)
                                     @if(Auth::user()->id == $user->id)
-                                        <span class="btn btn-outline-dark btn-sm mb-1">
+                                        <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
                                             {{ Icon::delete() }}
                                         </span>
                                     @else
                                         @if($user->trashed())
                                             @if(\App\Repository\Authentication\UserRepository::getRemainingUserCount() <= 0)
-                                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <span class="btn btn-outline-dark btn-sm mb-1" title="Restore">
                                                     {{ Icon::enable() }}
                                                 </span>
                                             @else
-                                                <a href="#" class="btn btn-outline-warning btn-sm mb-1"
+                                                <a href="#" class="btn btn-outline-warning btn-sm mb-1" title="Restore"
                                                    onclick="event.preventDefault();document.getElementById('user-{{ $user->id }}-restore').submit();">
                                                     {{ Icon::enable() }}
                                                 </a>
@@ -74,7 +74,7 @@
                                                       style="display: none;">{{ csrf_field() }}</form>
                                             @endif
                                         @else
-                                            <a href="#" class="btn btn-outline-danger btn-sm mb-1"
+                                            <a href="#" class="btn btn-outline-danger btn-sm mb-1" title="Delete"
                                                onclick="event.preventDefault();document.getElementById('user-{{ $user->id }}-delete').submit();">
                                                 {{ Icon::delete() }}
                                             </a>

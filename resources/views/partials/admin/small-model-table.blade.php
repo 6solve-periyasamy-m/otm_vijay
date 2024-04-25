@@ -27,21 +27,21 @@
                 <td>{{ $model->repository->getRelatedCount() }}</td>
                 <td class="actions">
                     @if($model->repository->getEditUrl() !== null)
-                        <a href="{{$model->repository->getEditUrl()}}" target="_blank" class="btn btn-sm btn-outline-success mb-1">
+                        <a href="{{$model->repository->getEditUrl()}}" target="_blank" class="btn btn-sm btn-outline-success mb-1" title="Edit">
                             {{ Icon::edit() }}
                         </a>
                     @else
-                        <span class="btn btn-outline-dark btn-sm mb-1">
+                        <span class="btn btn-outline-dark btn-sm mb-1" title="Edit">
                                     {{ Icon::edit() }}
                                 </span>
                     @endif
                     @if($model->repository->getDeleteUrl() !== null)
-                        <a href="javascript:$('#{{$repository::getSafeName()}}-{{ $model->id }}-delete').submit();" class="btn btn-sm btn-outline-danger mb-1">
+                        <a href="javascript:$('#{{$repository::getSafeName()}}-{{ $model->id }}-delete').submit();" title="Delete" class="btn btn-sm btn-outline-danger mb-1">
                             {{ Icon::delete() }}
                         </a>
                         <form id="{{$repository::getSafeName()}}-{{ $model->id }}-delete" action="{{$model->repository->getDeleteUrl()}}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                     @else
-                        <span class="btn btn-outline-dark btn-sm mb-1">
+                        <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
                                     {{ Icon::delete() }}
                                 </span>
                     @endif
