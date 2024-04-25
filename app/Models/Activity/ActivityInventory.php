@@ -91,8 +91,8 @@ class ActivityInventory extends Model
     {
         return [
             'ticket_type_id' => 'required|exists:ticket_types,id',
-            'starts_at' => 'date',
-            'ends_at' => 'date',
+            /*'starts_at' => 'date',
+            'ends_at' => 'date',*/
             'stock' => 'required|numeric|integer',
             'purchase_price' => 'nullable|numeric',
             'sales_price' => 'nullable|numeric',
