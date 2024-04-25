@@ -39,7 +39,7 @@
                 <td>{{ $event->notes }}</td>
                 <td>
                     @can('update', \App\Models\Tour\Event::class)
-                        <a href="{{route('events.edit', ['event' => $event,])}}" class="btn btn-sm btn-outline-success mb-1">
+                        <a href="{{route('events.edit', ['event' => $event,])}}" title="Edit" class="btn btn-sm btn-outline-success mb-1">
                             {{ Icon::edit() }}
                         </a>
                     @else
@@ -48,7 +48,7 @@
                             </span>
                     @endcan
                     @can('delete', \App\Models\Tour\Event::class)
-                        <a href="javascript:$('#events-{{ $event->id }}-delete').submit()" class="btn btn-sm btn-outline-danger mb-1">
+                        <a href="javascript:$('#events-{{ $event->id }}-delete').submit()"  title="Delete" class="btn btn-sm btn-outline-danger mb-1">
                             {{ Icon::delete() }}
                         </a>
                         <form id="events-{{ $event->id }}-delete"

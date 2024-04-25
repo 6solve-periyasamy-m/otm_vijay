@@ -64,7 +64,8 @@
 @media only screen and (min-width: 1500px) {
   .otm-sidebar:not(.shown) {
     transition-duration: 0.5s;
-    width: 2.5%;
+    // width: 2.5%;
+    width: 40px;
 
     .sidebar-hide {
       display: none;
