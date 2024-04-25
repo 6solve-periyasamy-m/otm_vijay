@@ -107,7 +107,7 @@
                     <td class="actions-4">
                         @can('read', \App\Models\Flight\FlightInventory::class)
                             <a href="{{route('flight-inventories.manifest.view', ['flight' => $flight, 'flightInventory' => $inventory,])}}"
-                               class="btn btn-outline-secondary btn-sm mb-1">
+                               class="btn btn-outline-secondary btn-sm mb-1" title="List">
                                 {{ Icon::list() }}
                             </a>
                         @else
@@ -117,7 +117,7 @@
                         @endcan
                         @can('create', \App\Models\Flight\FlightInventory::class)
                             <a href="{{route('flight-inventories.duplicate', ['flight' => $flight, 'flightInventory' => $inventory,])}}"
-                               class="btn btn-outline-blue btn-sm mb-1">
+                               class="btn btn-outline-blue btn-sm mb-1" title="Copy">
                                 {{ Icon::copy() }}
                             </a>
                         @else
@@ -127,7 +127,7 @@
                         @endcan
                         @can('update', \App\Models\Flight\FlightInventory::class)
                             <a href="{{route('flight-inventories.edit', ['flight' => $flight, 'flightInventory' => $inventory,])}}"
-                               class="btn btn-outline-success btn-sm mb-1">
+                               class="btn btn-outline-success btn-sm mb-1" title="Edit">
                                 {{ Icon::edit() }}
                             </a>
                         @else
@@ -136,7 +136,7 @@
                             </span>
                         @endcan
                         @can('delete', \App\Models\Flight\FlightInventory::class)
-                            <a href="#" class="btn btn-outline-danger btn-sm mb-1"
+                            <a href="#" title="Delete" class="btn btn-outline-danger btn-sm mb-1"
                                onclick="event.preventDefault();document.getElementById('flightInventory-{{ $inventory->id }}-delete').submit();">
                                 {{ Icon::delete() }}
                             </a>

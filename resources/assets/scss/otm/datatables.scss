@@ -30,6 +30,13 @@
   }
 }
 
+// backgroud of selected row
+.dataTables_wrapper .table.dataTable tbody > tr.selected td,
+.dataTables_wrapper table.dataTable tbody > tr > .selected td{
+  background: $sideBarColor;
+}
+// backgroud of selected row
+
 table.dataTable tbody > tr.selected,
 table.dataTable tbody > tr > .selected {
   background: $sideBarColor;
