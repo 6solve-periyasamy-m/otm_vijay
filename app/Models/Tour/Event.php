@@ -26,6 +26,7 @@ use Settings;
  * @property string|null $description
  * @property Carbon $starts_at
  * @property Carbon $ends_at
+ * @property string|null $image_url Asset link for image
  * @property string|null $booking_url
  * @property string|null $notes
  * @property Carbon|null $created_at
@@ -64,6 +65,7 @@ class Event extends Model
     {
         return [
             'name' => 'required',
+            'image' => 'nullable|image',
             'starts_at' => 'required|date',
             'ends_at' => 'required|date',
         ];
