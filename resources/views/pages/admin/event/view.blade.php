@@ -20,38 +20,45 @@
 @section('content')
     <div class="otm-callout">
         <div class="row">
-            <div class="col-12">
-                <h4 class="fw-bold">{{ $event->name }}</h4>
-            </div>
-            <div class="col-12 col-xl-4">
-                <p>Booking URL</p>
-                <h6 class="fw-bold">
-                    {{ $event->booking_url ?? 'No Booking URL Set' }}
-                </h6>
-            </div>
-            <div class="col-12 col-xl-4">
-                <p>From</p>
-                <h6 class="fw-bold">{{ f_date($event->starts_at) }}</h6>
-            </div>
-            <div class="col-12 col-xl-4">
-                <p>To</p>
-                <h6 class="fw-bold">{{ f_date($event->ends_at) }}</h6>
-            </div>
-            <div class="col-12 col-xl-6">
-                <p>Description</p>
-                <h6 class="fw-bold">{{ $event->description }}</h6>
-            </div>
-            <div class="col-12 col-xl-6">
-                <p>Notes</p>
-                <h6 class="fw-bold">{{ $event->notes }}</h6>
-            </div>
-            <div class="col-12">
-                @can('update', \App\Models\Tour\Event::class)
-                    <a class="btn btn-success" href="{{route('events.edit', ['event' => $event,])}}">
-                        {{ Icon::edit() }}
-                        <span>Edit Event</span>
-                    </a>
-                @endcan
+            @if(isset($event->image_url))
+                <div class="col-2">
+                    <img src="{{ asset($event->image_url) }}" class="img-thumbnail image large">
+                </div>
+            @endif
+            <div class="col-{{ isset($event->image_url) ? 10 : 12 }} row">
+                <div class="col-12">
+                    <h4 class="fw-bold">{{ $event->name }}</h4>
+                </div>
+                <div class="col-12 col-xl-4">
+                    <p>Booking URL</p>
+                    <h6 class="fw-bold">
+                        {{ $event->booking_url ?? 'No Booking URL Set' }}
+                    </h6>
+                </div>
+                <div class="col-12 col-xl-4">
+                    <p>From</p>
+                    <h6 class="fw-bold">{{ f_date($event->starts_at) }}</h6>
+                </div>
+                <div class="col-12 col-xl-4">
+                    <p>To</p>
+                    <h6 class="fw-bold">{{ f_date($event->ends_at) }}</h6>
+                </div>
+                <div class="col-12 col-xl-6">
+                    <p>Description</p>
+                    <h6 class="fw-bold">{{ $event->description }}</h6>
+                </div>
+                <div class="col-12 col-xl-6">
+                    <p>Notes</p>
+                    <h6 class="fw-bold">{{ $event->notes }}</h6>
+                </div>
+                <div class="col-12">
+                    @can('update', \App\Models\Tour\Event::class)
+                        <a class="btn btn-success" href="{{route('events.edit', ['event' => $event,])}}">
+                            {{ Icon::edit() }}
+                            <span>Edit Event</span>
+                        </a>
+                    @endcan
+                </div>
             </div>
         </div>
     </div>
