@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('accommodations', function (Blueprint $table) {
-            $table->string('check_in')->nullable();
-            $table->string('check_out')->nullable();
+            $table->dateTime('check_in')->nullable();
+            $table->dateTime('check_out')->nullable();
         });
     }
 

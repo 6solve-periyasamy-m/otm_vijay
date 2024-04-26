@@ -17,6 +17,8 @@
                 $('.check_in_out_add').show();
             } else {
                 $('.check_in_out_add').hide();
+                $('#check_in-input').val('');
+                $('#check_out-input').val('');
             }
         }
 
@@ -58,13 +60,13 @@
     
     <div class="form-group col-xl-6 check_in_out_add" style="display:none">
         @include('partials.fields.raw.datetime',
-                    ['name' => 'Check In', 'field' => 'check_in', 
+                    ['name' => 'Check In', 'field' => 'check_in', 'value' => $check_in ?? null,
                      'onChange' => 'changeDate($(\'#check_in-input\'), $(\'#check_out-input\'))', ])
        </div>
 
     <div class="form-group col-xl-6 check_in_out_add" style="display:none">
         @include('partials.fields.raw.datetime',
-                    ['name' => 'Check Out', 'field' => 'check_out', 
+                    ['name' => 'Check Out', 'field' => 'check_out', 'value' => $check_out ?? null,
                      'onChange' => 'removeAutoset($(\'#check_in-input\'), $(\'#check_out-input\'))', 'classes' => 'autoset', ])
         </div>
 

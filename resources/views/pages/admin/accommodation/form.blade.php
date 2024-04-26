@@ -26,6 +26,8 @@
                         'region' => $accommodation?->address->region,
                         'country_id' => $accommodation?->address->country_id,
                         'postcode' => $accommodation?->address->postcode,
+                        'check_in' => $accommodation?->check_in,
+                        'check_out' => $accommodation?->check_out,
                     ])
     @include('partials.fields.selector.default',
         ['name' => 'Currency', 'field' => 'currency_id', 'value' => $accommodation?->currency, 'route' => 'currencies',])
