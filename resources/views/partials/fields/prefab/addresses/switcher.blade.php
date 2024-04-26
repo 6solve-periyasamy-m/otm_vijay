@@ -28,12 +28,14 @@
     @can('create', \App\Models\Location\LocationType::class)
     @include('partials.fields.selector.adder',
                 ['name' => 'Location Type', 'field' => ($prefix ?? '') . 'location_type_id', 'value' => $location_type_id ?? null,
-                 'route' => 'location-types', 'createRoute' => route('location-types.create')])
+                 'route' => 'location-types', 'createRoute' => route('location-types.create'), ])
     @else
         @include('partials.fields.selector.default',
                 ['name' => 'Location Type', 'field' => ($prefix ?? '') . 'location_type_id', 'value' => $location_type_id ?? null,
-                 'route' => 'location-types', ])
+                 'route' => 'location-types', 'onchange' => 'getLocationType($(this).val())'])
     @endcan
+
+  
     <hr class="splitter"/>
     @include('partials.fields.text', ['name' => 'Address Name', 'field' => ($prefix ?? "") . 'address_name', 'value' => $name ?? null,])
     @include('partials.fields.text', ['name' => 'Address Line 1', 'field' => ($prefix ?? "") . 'address_line_1', 'value' => $address_line_1 ?? null, 'width' => 6])
