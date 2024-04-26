@@ -1,6 +1,6 @@
 @php /** @var \App\Mail\Storage\TemplatedMail $template */ @endphp
 <x-admin.section.card>
-    <div class="d-flex justify-content-between">
+    <div data-target="#mail-template-{{ $template->getCode()}}" onclick="toggleAccordion(this)" class="d-flex justify-content-between">
         <div>
             <h4 class="fw-bold">
                 {{ Icon::minimize() }} {{ $template->getName() }}
