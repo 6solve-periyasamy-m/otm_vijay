@@ -81,8 +81,8 @@
             @foreach($activity->activityInventory as $inventory)
                 <tr>
                     <td>{{ $inventory->ticketType->name }}</td>
-                    <td data-sort="{{$inventory->starts_at->unix()}}">{{ f_datetime($inventory->starts_at) }}</td>
-                    <td data-sort="{{$inventory->ends_at->unix()}}">{{ f_datetime($inventory->ends_at) }}</td>
+                    <td data-sort="{{$inventory->starts_at?->unix()}}">{{ f_datetime($inventory->starts_at) }}</td>
+                    <td data-sort="{{$inventory->ends_at?->unix()}}">{{ f_datetime($inventory->ends_at) }}</td>
                     <td>
                         <input type="checkbox" disabled @if($inventory->fit_selectable == 1) checked @endif>
                     </td>

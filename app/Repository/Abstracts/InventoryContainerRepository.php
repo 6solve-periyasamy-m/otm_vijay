@@ -38,12 +38,12 @@ abstract class InventoryContainerRepository extends ModelRepository implements H
         return sigfig((($s-$p)/$p)*100);
     }
 
-    public function getStartTime(): Carbon
+    public function getStartTime(): Carbon|null
     {
         return $this->getInventory()->getStartTime();
     }
 
-    public function getEndTime(): Carbon
+    public function getEndTime(): Carbon|null
     {
         return $this->getInventory()->getEndTime();
     }

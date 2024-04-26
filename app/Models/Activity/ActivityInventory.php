@@ -135,8 +135,8 @@ class ActivityInventory extends Model
 
     public function getActivityForTourAttribute(): string
     {
-        $starts_at = $this->starts_at->format('d/m/Y H:i');
-        $ends_at = $this->ends_at->format('d/m/Y H:i');
+        $starts_at = $this->starts_at?->format('d/m/Y H:i');
+        $ends_at = $this->ends_at?->format('d/m/Y H:i');
 
         return "{$this->activity->name}｜Activity Start: {$starts_at}｜Activity End: {$ends_at}｜Ticket Type: {$this->ticketType->name}";
     }
@@ -163,7 +163,11 @@ class ActivityInventory extends Model
 
     public function __toString(): string
     {
-        return "{$this->component} - {$this->ticketType} (" . f_datetime($this->starts_at) . " to " . f_datetime($this->ends_at) . ")";
+        $dateString = "";
+        if ($this->starts_at !== null && $this->ends_at !== null) {
+            $dateString = "(" . f_datetime($this->starts_at) . " to " . f_datetime($this->ends_at) . ")";
+        }
+        return "{$this->component} - {$this->ticketType} {$dateString}";
     }
 
     public function getRepositoryAttribute(): ActivityInventoryRepository
