@@ -17,8 +17,7 @@
                 $('.check_in_out_add').show();
             } else {
                 $('.check_in_out_add').hide();
-                $('#check_in-input').val('');
-                $('#check_out-input').val('');
+               
             }
         }
 
