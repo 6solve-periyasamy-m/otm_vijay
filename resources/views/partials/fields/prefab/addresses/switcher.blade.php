@@ -10,17 +10,7 @@
                 $('.{{ $prefix ?? "" }}switcher-existing').hide();
             }
         }
-        $(document).ready(function () { {{ $prefix ?? "" }}getLocationType(); });
-        
-        function getLocationType(thisVal) {
-            if(thisVal == 1){
-                $('.check_in_out_add').show();
-            } else {
-                $('.check_in_out_add').hide();
-               
-            }
-        }
-
+        $(document).ready(function () { {{ $prefix ?? "" }}switchView(); });
     </script>
 @endpush
 <hr class="splitter"/>
@@ -38,7 +28,7 @@
     @can('create', \App\Models\Location\LocationType::class)
     @include('partials.fields.selector.adder',
                 ['name' => 'Location Type', 'field' => ($prefix ?? '') . 'location_type_id', 'value' => $location_type_id ?? null,
-                 'route' => 'location-types', 'createRoute' => route('location-types.create'), 'onchange' => 'getLocationType($(this).val())'])
+                 'route' => 'location-types', 'createRoute' => route('location-types.create'), ])
     @else
         @include('partials.fields.selector.default',
                 ['name' => 'Location Type', 'field' => ($prefix ?? '') . 'location_type_id', 'value' => $location_type_id ?? null,
@@ -56,18 +46,5 @@
                 ['name' => 'Country', 'field' => ($prefix ?? '') . 'country_id', 'value' => $country_id ?? null,
                  'route' => 'countries', 'width' => 6])
     @include('partials.fields.text', ['name' => 'Postcode', 'field' => ($prefix ?? "") . 'postcode', 'value' => $postcode ?? null, 'width' => 6])
-    
-    <div class="form-group col-xl-6 check_in_out_add" style="display:none">
-        @include('partials.fields.raw.datetime',
-                    ['name' => 'Check In', 'field' => 'check_in', 'value' => $check_in ?? null,
-                     'onChange' => 'changeDate($(\'#check_in-input\'), $(\'#check_out-input\'))', ])
-       </div>
-
-    <div class="form-group col-xl-6 check_in_out_add" style="display:none">
-        @include('partials.fields.raw.datetime',
-                    ['name' => 'Check Out', 'field' => 'check_out', 'value' => $check_out ?? null,
-                     'onChange' => 'removeAutoset($(\'#check_in-input\'), $(\'#check_out-input\'))', 'classes' => 'autoset', ])
-        </div>
-
 </div>
 <hr class="splitter"/>

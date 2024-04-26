@@ -33,8 +33,8 @@ class AccommodationController extends Controller
             'audit_date' => $request->input('audit_date'),
             'currency_id' => $request->input('currency_id'),
             'internal_notes' => $request->input('notes'),
-            'check_in' => ($request->input('location_type_id') == 1) ? $request->input('check_in') : '',
-            'check_out' => ($request->input('location_type_id') == 1) ? $request->input('check_out') : '',
+            'check_in' => $request->input('check_in'),
+            'check_out' => $request->input('check_out'),
         ]);
         if ($request->input('use_existing') == 'on') {
             $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::ACCOMMODATION);
@@ -83,8 +83,8 @@ class AccommodationController extends Controller
             'audit_date' => $request->input('audit_date'),
             'currency_id' => $request->input('currency_id'),
             'internal_notes' => $request->input('notes'),
-            'check_in' => ($request->input('location_type_id') == 1) ? $request->input('check_in') : '',
-            'check_out' => ($request->input('location_type_id') == 1) ? $request->input('check_out') : '',
+            'check_in' => $request->input('check_in'),
+            'check_out' => $request->input('check_out'),
         ]);
         if ($request->input('use_existing') == 'on') {
             Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::ACCOMMODATION, $accommodation->address);
