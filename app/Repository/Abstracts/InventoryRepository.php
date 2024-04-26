@@ -16,9 +16,9 @@ use Illuminate\Support\Collection;
 
 abstract class InventoryRepository extends ModelRepository implements HasStockControl, HasComponentType
 {
-    public abstract function getStartTime(): Carbon;
+    public abstract function getStartTime(): Carbon|null;
 
-    public abstract function getEndTime(): Carbon;
+    public abstract function getEndTime(): Carbon|null;
 
     public static abstract function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection;
 
