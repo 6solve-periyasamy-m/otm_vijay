@@ -35,11 +35,11 @@
                     @can('update', \App\Models\User::class)
                         @if(Auth::user()->getHighestRoleLevel() > $role->level)
                             <td>
-                                <a href="{{route('roles.edit', ['role' => $role,])}}" class="btn btn-outline-success btn-sm mb-1">
+                                <a href="{{route('roles.edit', ['role' => $role,])}}" title="Edit" class="btn btn-outline-success btn-sm mb-1">
                                     {{ Icon::edit() }}
                                 </a>
                                 @can('delete', \App\Models\User::class)
-                                    <a href="#" class="btn btn-outline-danger btn-sm mb-1"
+                                    <a href="#" class="btn btn-outline-danger btn-sm mb-1" title="Delete"
                                        onclick="event.preventDefault();document.getElementById('role-{{ $role->id }}-delete').submit();">
                                         {{ Icon::delete() }}
                                     </a>
@@ -50,11 +50,11 @@
                             </td>
                         @else
                             <td>
-                                    <span class="btn btn-outline-dark btn-sm mb-1">
+                                    <span class="btn btn-outline-dark btn-sm mb-1" title="Edit">
                                         {{ Icon::edit() }}
                                     </span>
                                 @can('delete', \App\Models\User::class)
-                                    <span class="btn btn-outline-dark btn-sm mb-1">
+                                    <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
                                             {{ Icon::delete() }}
                                         </span>
                                 @endcan
