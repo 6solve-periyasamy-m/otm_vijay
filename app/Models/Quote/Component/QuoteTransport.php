@@ -22,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property string $tour_component_type
  * @property float $tour_sales_price
  * @property bool $price_shown
+ * @property int|null $quantity
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
