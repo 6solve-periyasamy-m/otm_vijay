@@ -47,7 +47,7 @@
                     <td>{{ $quote->status->badge() }}</td>
                     <td class="actions">
                         @can('update', \App\Models\Quote\Quote::class)
-                            <a href="{{route('quotes.edit', ['quote' => $quote,])}}" class="btn btn-sm btn-outline-success mb-1">
+                            <a href="{{route('quotes.edit', ['quote' => $quote,])}}" title="Edit" class="btn btn-sm btn-outline-success mb-1">
                                 {{ Icon::edit() }}
                             </a>
                         @else
@@ -56,7 +56,7 @@
                                 </span>
                         @endcan
                         @can('delete', \App\Models\Quote\Quote::class)
-                            <a href="#" class="btn btn-sm btn-outline-danger mb-1"
+                            <a href="#" class="btn btn-sm btn-outline-danger mb-1" title="Delete"
                                onclick="event.preventDefault();document.getElementById('quote-{{ $quote->id }}-delete').submit();">
                                 {{ Icon::delete() }}
                             </a>

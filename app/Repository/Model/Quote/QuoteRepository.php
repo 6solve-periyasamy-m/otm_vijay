@@ -446,7 +446,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $data = [];
         foreach ($this->getTemplates(false) as $template) {
-            $time = $template->repository->getInventory()->getStartTime()->unix();
+            $time = $template->repository->getInventory()->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -464,7 +464,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $data = [];
         foreach ($this->quote->activities as $template) {
-            $time = $template->repository->getInventory()->getStartTime()->unix();
+            $time = $template->repository->getInventory()->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -482,7 +482,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $data = [];
         foreach ($this->quote->flights as $template) {
-            $time = $template->repository->getInventory()->getStartTime()->unix();
+            $time = $template->repository->getInventory()->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -500,7 +500,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $data = [];
         foreach ($this->quote->transport as $template) {
-            $time = $template->repository->getInventory()->getStartTime()->unix();
+            $time = $template->repository->getInventory()->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -518,7 +518,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $data = [];
         foreach ($this->getAccommodationForInvoice(false) as $component) {
-            $time = $component->getInventory()->getStartTime()->unix();
+            $time = $component->getInventory()->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -526,7 +526,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $data[$time] = $component;
         }
         foreach ($this->getActivitiesForInvoice(false) as $component) {
-            $time = $component->getInventory()->getStartTime()->unix();
+            $time = $component->getInventory()->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -534,7 +534,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $data[$time] = $component;
         }
         foreach ($this->getFlightsForInvoice(false) as $component) {
-            $time = $component->getInventory()->getStartTime()->unix();
+            $time = $component->getInventory()->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -542,7 +542,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $data[$time] = $component;
         }
         foreach ($this->getTransportForInvoice(false) as $component) {
-            $time = $component->getInventory()->getStartTime()->unix();
+            $time = $component->getInventory()->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;

@@ -2,10 +2,10 @@
     /** @var App\Models\Order\Order $order */
 @endphp
 <div class="panel-overlay order-options hidden">
-    <a href="#" class="panel-close plain-anchor" onclick="hideOverlay('.panel-overlay')">
-        X
-    </a>
-    <div class="panel-grid panel-grid-3-3">
+    <div class="panel-grid panel-grid-3-3 relative">
+        <a href="#" class="panel-close plain-anchor" title="Close" onclick="hideOverlay('.panel-overlay')">
+        {{ Icon::xmark() }}
+        </a>
         <x-admin.popup-button href="{{ route('tours.view', ['tour' => $order->tour,]) }}" class="color-info row-1">
             <x-slot:icon>{{ Icon::tour() }}</x-slot:icon>
             View Tour
@@ -42,7 +42,7 @@
                     <x-slot:icon>{{ Icon::delete() }}</x-slot:icon>
                     Cancel Order
                 </x-admin.popup-button>
-                <form class="d-none" action="{{ route('orders.delete', ['order' => $order,]) }}" method="post" id="order-delete">
+                <form class="d-none" onsubmit="return confirm('Are you sure you wish to cancel this order?')" action="{{ route('orders.delete', ['order' => $order,]) }}" method="post" id="order-delete">
                     @csrf
                 </form>
             @endif

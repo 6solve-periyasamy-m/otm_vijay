@@ -16,7 +16,7 @@
 @section('title', 'View Tour')
 
 @section('content')
-    @include('partials.admin.tour.popup')
+    @include('partials.admin.tour.popup')   
     <div class="otm-callout">
         <div class="row">
             <div class="col-12">
@@ -86,6 +86,12 @@
                     {{ Icon::options() }}
                     <span>Options</span>
                 </a>
+                <!-- class="bg-purple-500 text-white rounded-md px-8 py-2 text-base font-medium hover:bg-blue-600
+                focus:outline-none focus:ring-2 focus:ring-green-300" -->
+                <!-- <button class="btn btn-success"  id="open-btn">
+                {{ Icon::options() }}
+                    <span>Options</span>
+                </button>            -->
             </div>
         </div>
     </div>
@@ -108,7 +114,7 @@
                     Accommodation
                 </button>
             </li>
-            <li class="nav-item col-6 col-md-3">
+            <li class="nav-item col-6 col-md-3">    
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities">
                     {{ Icon::activity() }}
                     Activities
@@ -182,14 +188,14 @@
                                     @can('update', AccommodationInventoryTour::class)
                                         @if($tourComponent->tour_component_type !== 'Add-on')
                                             <a href="{{ route('accommodation-upgrade.view', ['tour' => $tour, 'inventoryTour' => $tourComponent->tour_component_type == 'Upgrade' ? $tourComponent->parent() : $tourComponent,]) }}"
-                                               class="btn btn-outline-success btn-sm mb-1">{{ Icon::upgrade() }}</a>
+                                               class="btn btn-outline-success btn-sm mb-1" title="Upgrade">{{ Icon::upgrade() }}</a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
                                                     {{ Icon::upgrade() }}
                                                 </span>
                                         @endif
                                         <a href="{{ route('accommodation-inventory-tours.edit', ['tour' => $tour, 'accommodationInventoryTour' => $tourComponent,]) }}"
-                                           class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
+                                           class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
                                     @else
                                         <span class="btn btn-outline-dark btn-sm mb-1">
                                                 {{ Icon::upgrade() }}
@@ -202,7 +208,7 @@
                                         @if($tourComponent->is_bookable)
                                             <a href="#"
                                                onclick="$('#accommodation-{{$tourComponent->id}}-delete').submit()"
-                                               class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
+                                               class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete() }}</a>
                                             <form action="{{ route('accommodation-inventory-tours.delete', ['tour' => $tour, 'accommodationInventoryTour' => $tourComponent,]) }}"
                                                   method="post"
                                                   id="accommodation-{{$tourComponent->id}}-delete">
@@ -274,19 +280,19 @@
                                     @can('update', ActivityInventoryTour::class)
                                         @if($tourComponent->tour_component_type !== 'Add-on')
                                             <a href="{{ route('activity-upgrade.view', ['tour' => $tour, 'inventoryTour' => $tourComponent->tour_component_type == 'Upgrade' ? $tourComponent->parent() : $tourComponent,]) }}"
-                                               class="btn btn-outline-success btn-sm mb-1">{{ Icon::upgrade() }}</a>
+                                               class="btn btn-outline-success btn-sm mb-1" title="Upgrade">{{ Icon::upgrade() }}</a>
                                         @else
-                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                            <span class="btn btn-outline-dark btn-sm mb-1" title="Upgrade">
                                                     {{ Icon::upgrade() }}
                                                 </span>
                                         @endif
                                         <a href="{{ route('activity-inventory-tours.edit', ['tour' => $tour, 'activityInventoryTour' => $tourComponent,]) }}"
-                                           class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
+                                           class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
                                     @else
-                                        <span class="btn btn-outline-dark btn-sm mb-1">
+                                        <span class="btn btn-outline-dark btn-sm mb-1" title="Upgrade">
                                                     {{ Icon::upgrade() }}
                                                 </span>
-                                        <span class="btn btn-outline-dark btn-sm mb-1">
+                                        <span class="btn btn-outline-dark btn-sm mb-1" title="Edit">
                                                 {{ Icon::edit() }}
                                             </span>
                                     @endcan
@@ -294,7 +300,7 @@
                                         @if($tourComponent->is_bookable)
                                             <a href="#"
                                                onclick="$('#activity-{{$tourComponent->id}}-delete').submit()"
-                                               class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
+                                               class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete() }}</a>
                                             <form action="{{ route('activity-inventory-tours.delete', ['tour' => $tour, 'activityInventoryTour' => $tourComponent,]) }}"
                                                   method="post" id="activity-{{$tourComponent->id}}-delete">
                                                 @csrf
@@ -309,7 +315,7 @@
                                             </form>
                                         @endif
                                     @else
-                                        <span class="btn btn-outline-dark btn-sm mb-1">
+                                        <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
                                                 {{ Icon::delete() }}
                                             </span>
                                     @endcan
@@ -365,14 +371,14 @@
                                     @can('update', FlightInventoryTour::class)
                                         @if($tourComponent->tour_component_type !== 'Add-on')
                                             <a href="{{ route('flight-upgrade.view', ['tour' => $tour, 'inventoryTour' => $tourComponent->tour_component_type == 'Upgrade' ? $tourComponent->parent() : $tourComponent,]) }}"
-                                               class="btn btn-outline-success btn-sm mb-1">{{ Icon::upgrade() }}</a>
+                                               class="btn btn-outline-success btn-sm mb-1" title="Upgrade">{{ Icon::upgrade() }}</a>
                                         @else
-                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                            <span class="btn btn-outline-dark btn-sm mb-1" title="Upgrade">
                                                     {{ Icon::upgrade() }}
                                                 </span>
                                         @endif
                                         <a href="{{ route('flight-inventory-tours.edit', ['tour' => $tour, 'flightInventoryTour' => $tourComponent,]) }}"
-                                           class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
+                                           class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
                                     @else
                                         <span class="btn btn-outline-dark btn-sm mb-1">
                                                     {{ Icon::upgrade() }}
@@ -385,7 +391,7 @@
                                         @if($tourComponent->is_bookable)
                                             <a href="#"
                                                onclick="$('#flight-{{$tourComponent->id}}-delete').submit()"
-                                               class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
+                                               class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete() }}</a>
                                             <form action="{{ route('flight-inventory-tours.delete', ['tour' => $tour, 'flightInventoryTour' => $tourComponent,]) }}"
                                                   method="post" id="flight-{{$tourComponent->id}}-delete">
                                                 @csrf
@@ -454,14 +460,14 @@
                                     @can('update', TransportInventoryTour::class)
                                         @if($tourComponent->tour_component_type !== 'Add-on')
                                             <a href="{{ route('transport-upgrade.view', ['tour' => $tour, 'inventoryTour' => $tourComponent->tour_component_type == 'Upgrade' ? $tourComponent->parent() : $tourComponent,]) }}"
-                                               class="btn btn-outline-success btn-sm mb-1">{{ Icon::upgrade() }}</a>
+                                               class="btn btn-outline-success btn-sm mb-1" title="Upgrade">{{ Icon::upgrade() }}</a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
                                                     {{ Icon::upgrade() }}
                                                 </span>
                                         @endif
                                         <a href="{{ route('transport-inventory-tours.edit', ['tour' => $tour, 'transportInventoryTour' => $tourComponent,]) }}"
-                                           class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
+                                           class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
                                     @else
                                         <span class="btn btn-outline-dark btn-sm mb-1">
                                                     {{ Icon::upgrade() }}
@@ -474,7 +480,7 @@
                                         @if($tourComponent->is_bookable)
                                             <a href="#"
                                                onclick="$('#transport-{{$tourComponent->id}}-delete').submit()"
-                                               class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
+                                               class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete() }}</a>
                                             <form action="{{ route('transport-inventory-tours.delete', ['tour' => $tour, 'transportInventoryTour' => $tourComponent,]) }}"
                                                   method="post" id="transport-{{$tourComponent->id}}-delete">
                                                 @csrf
@@ -696,4 +702,24 @@
     <x-admin.section.card>
         {!! $tour->terms !!}
     </x-admin.section.card>
+
+    <script >
+        let modal = document.getElementById('modal');
+        let btn = document.getElementById('open-btn');
+        let button = document.getElementById('ok-btn');
+
+        btn.onclick = function () {
+            modal.style.display = 'flex';
+        };
+
+        button.onclick = function () {
+            modal.style.display = 'none';
+        };
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+            modal.style.display = "none";
+            }
+        }
+    </script>
 @endsection

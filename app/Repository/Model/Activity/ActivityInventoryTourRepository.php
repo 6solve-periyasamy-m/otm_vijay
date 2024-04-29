@@ -121,7 +121,11 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
     {
         $inventory = $this->tourComponent->activityInventory;
         $component = $inventory->activity;
-        return $component->name . ' (' . f_datetime($inventory->starts_at) . ' to ' . f_datetime($inventory->ends_at) . ') (' . $inventory->ticketType->name . ')';
+        $dateString = "";
+        if ($inventory->starts_at !== null && $inventory->ends_at !== null) {
+            $dateString = " (" . f_datetime($inventory->starts_at) . " to " . f_datetime($inventory->ends_at) . ")";
+        }
+        return $component->name . $dateString . '(' . $inventory->ticketType->name . ')';
     }
 
     public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
