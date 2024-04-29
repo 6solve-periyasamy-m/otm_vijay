@@ -104,6 +104,7 @@
                         <th scope="col">{{ __('quotes.view.cards.components.common.type') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                        <th scope="col">Quantity</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
                         <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
@@ -126,6 +127,9 @@
                             </td>
                             <td>
                                 {{ $componentRepository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                             </td>
                             <td>
                                 {{ $componentRepository->getPurchasePrice() !== null ? f_currency($componentRepository->getPurchasePrice()) : 'Not Set' }}
@@ -166,6 +170,7 @@
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                        <th scope="col">Quantity</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
                         <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
@@ -181,6 +186,9 @@
                             </td>
                             <td>
                                 {{ $component->repository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                             </td>
                             <td>
                                 {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
@@ -221,6 +229,7 @@
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                        <th scope="col">Quantity</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
                         <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
@@ -236,6 +245,9 @@
                             </td>
                             <td>
                                 {{ $component->repository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                             </td>
                             <td>
                                 {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
@@ -276,8 +288,10 @@
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                        <th scope="col">Quantity</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
-<th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
+                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -290,6 +304,9 @@
                             </td>
                             <td>
                                 {{ $component->repository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                             </td>
                             <td>
                                 {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
@@ -330,8 +347,10 @@
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                        <th scope="col">Quantity</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
-<th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
+                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -344,6 +363,9 @@
                             </td>
                             <td>
                                 {{ $component->repository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                             </td>
                             <td>
                                 {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
@@ -383,6 +405,7 @@
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                        <th scope="col">Quantity</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
                         <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
@@ -393,6 +416,9 @@
                         <tr>
                             <td>
                                 {{ $component->repository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                             </td>
                             <td>
                                 {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}

@@ -13,6 +13,7 @@ use App\Models\Tour\Tour;
 abstract class QuoteComponentRepository extends InventoryContainerRepository
 {
     public abstract function getShortDescription(): string;
+    public abstract function getQuantity(): int|null;
     public abstract function getItineraryTitle(): string;
     public abstract function getItineraryDescription(): string;
     public abstract function getItineraryAsset(): string;
