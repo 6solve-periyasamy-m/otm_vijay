@@ -88,11 +88,11 @@
                             </td>
                         @else
                             <td>
-                                    <span class="btn btn-outline-dark btn-sm mb-1">
+                                    <span class="btn btn-outline-dark btn-sm mb-1" title="Edit">
                                         {{ Icon::edit() }}
                                     </span>
                                 @can('delete', \App\Models\User::class)
-                                    <span class="btn btn-outline-dark btn-sm mb-1">
+                                    <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
                                             {{ Icon::delete() }}
                                         </span>
                                 @endcan
