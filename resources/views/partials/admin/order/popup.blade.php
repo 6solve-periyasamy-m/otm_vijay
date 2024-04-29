@@ -1,6 +1,7 @@
 @php
     /** @var App\Models\Order\Order $order */
 @endphp
+
 <div class="modal fade common-modal-custom" id="optionOrder" data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-auto-width modal-dialog-centered">
         <div class="modal-content">
@@ -12,6 +13,7 @@
                 <x-admin.popup-button href="{{ route('tours.view', ['tour' => $order->tour,]) }}" class="color-info row-1">
                     <x-slot:icon>{{ Icon::tour() }}</x-slot:icon>
                     View Tour
+
                 </x-admin.popup-button>
                 <x-admin.popup-button href="{{ route('orders.migrate', ['order' => $order,]) }}" class="color-warning row-1">
                     <x-slot:icon>{{ Icon::edit() }}</x-slot:icon>

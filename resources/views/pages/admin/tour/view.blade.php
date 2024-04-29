@@ -696,4 +696,5 @@
     <x-admin.section.card>
         {!! $tour->terms !!}
     </x-admin.section.card>
+
 @endsection

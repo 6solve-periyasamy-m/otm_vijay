@@ -31,6 +31,11 @@ class EventController extends Controller
             'tax_bracket_id' => $request->input('tax_bracket_id'),
             'notes' => $request->input('notes'),
         ]);
+
+        if ($request->has('image') && $request->file('image') != null) {
+            $event->image_url = $request->file('image')->storePublicly('uploads/images');
+        }
+        $event->save();
         return redirect()->route('events.view', ['event' => $event,]);
     }
 
@@ -56,6 +61,14 @@ class EventController extends Controller
             'tax_bracket_id' => $request->input('tax_bracket_id'),
             'notes' => $request->input('notes'),
         ]);
+
+        if ($request->has('image') && $request->file('image') != null) {
+            if (isset($event->image_url)) {
+                File::delete(public_path($event->image_url));
+            }
+            $event->image_url = $request->file('image')->storePublicly('uploads/images');
+        }
+        $event->save();
         return redirect()->route('events.view', ['event' => $event,]);
     }
 

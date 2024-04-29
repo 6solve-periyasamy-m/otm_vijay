@@ -54,7 +54,7 @@
             <p>Order Status</p>
             <h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6>
         </div>                
-        <div class="col-12 col-xl-6">
+        <div class="col-12 col-xl-3">
             <p>Order Value</p>
             <h6 class="fw-bold">
                 @if($order->cancelled)
@@ -67,22 +67,21 @@
                 @endif
             </h6>
         </div>
-        <div class="col-12 col-xl-6">
-            <p>Balance Paid</p>
+        <div class="col-12 col-xl-3">
+            <p>Total Paid</p>
             <h6 class="fw-bold">{{ f_currency($order->paid) }}</h6>
         </div>
-        <div class="col-12 col-xl-6">
+        <div class="col-12 col-xl-3">
             <p>Balance Outstanding</p>
             <h6 class="fw-bold">{{ f_currency($order->remaining) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
-            <p>Tax Amount</p>
-            <h6 class="fw-bold">{{ $order->getTaxes() !== null ? f_currency($order->getTaxes()) : 'No Taxes Due' }}</h6>
-        </div>
-
-        <div class="col-12 col-xl-6">
             <p>Next Payment Due</p>
             <h6 class="fw-bold">{{ $order->next_installment !== null ? f_date($order->next_installment->due_on) . ' - ' . f_currency($order->next_installment->remaining) : 'All installments paid' }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Tax Amount</p>
+            <h6 class="fw-bold">{{ $order->getTaxes() !== null ? f_currency($order->getTaxes()) : 'No Taxes Due' }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Lead Booker</p>

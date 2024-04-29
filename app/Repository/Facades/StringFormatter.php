@@ -17,6 +17,7 @@ class StringFormatter
     }
 
     public function formatDate($date) : string {
+        if (empty($date)) return "";
         $format = setting('system.format.date', 'd/m/Y');
         try {
             return Carbon::parse($date)->format($format);
@@ -26,6 +27,7 @@ class StringFormatter
     }
 
     public function formatTime($date): string {
+        if (empty($date)) return "";
         $format = setting('system.format.time', 'H:i');
         try {
             return Carbon::parse($date)->format($format);
@@ -35,6 +37,7 @@ class StringFormatter
     }
 
     public function formatDateTime($date) : string {
+        if (empty($date)) return "";
         return $this->formatDate($date) . ' ' . $this->formatTime($date);
     }
 

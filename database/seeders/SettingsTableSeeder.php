@@ -305,6 +305,18 @@ class SettingsTableSeeder extends Seeder
                 'key' => 'system.year.start',
                 'value' => '2022-04-01',
             ),
+            44 => 
+            array (
+                'key' => 'company.bank_transfer',
+                'value' => 'Keith Prowse Travel PTY LTD <br />
+                ABN: 31 003 276 775 <br />
+                BSB: 032-298 <br />
+                ACC: 540726 <br />
+                SWIFT: WPACAU2S <br />
+                BANK: Westpac <br />
+                BRANCH: Crows Nest <br />
+                Reference Number: KPAD106102',
+            ),
         ));
         
         

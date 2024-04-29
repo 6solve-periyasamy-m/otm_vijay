@@ -83,14 +83,14 @@ class InvoiceGenerator
             'name' => $brand->name,
             'website' => $brand->url,
             'email' => $brand->name,
-            'telephone' => $brand->name,
+            'telephone' => $brand->phone,
             'address_line_1' => $brand->address->address_line_1,
             'address_line_2' => $brand->address->address_line_2,
             'town' => $brand->address->town,
             'region' => $brand->address->region,
             'country' => $brand->address->country?->name,
             'postcode' => $brand->address->postcode,
-            'vat_code' => setting('company.vat'),
+            'vat_code' => $brand->vat_code, //before it was: setting('company.vat'),
             'logo' => $brand->image_path,
             'header_image' => null, // Will be implemented in future
             'footer_image' => null, // Will be implemented in future

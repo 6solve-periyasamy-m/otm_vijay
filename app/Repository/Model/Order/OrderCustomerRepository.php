@@ -57,7 +57,7 @@ class OrderCustomerRepository extends ModelRepository
                 if (in_array($tourComponent->id, $owned['activities'])) continue; // Owned components will be shown elsewhere
                 if (!$tourComponent->repository->hasEnoughStock()) continue;
                 $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'activity', 'type' => $tourComponent->tour_component_type,
-                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->starts_at->unix(), 'owned' => false,];
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->starts_at?->unix(), 'owned' => false,];
             }
         }
         foreach ($order->tour->flightInventoryTours as $tourComponent) {
