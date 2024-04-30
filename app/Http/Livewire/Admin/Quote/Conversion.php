@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Http\Livewire\Admin\Quote;
+
+use App\Models\Quote\Quote;
+use Livewire\Component;
+
+class Conversion extends Component
+{
+    public array $travellers = [];
+    public Quote $quote;
+    public int $paying;
+    public int $travelling;
+
+    public function mount(Quote $quote, int $paying, int $travelling)
+    {
+        $this->quote = $quote;
+        $this->paying = $paying;
+        $this->travelling = $travelling;
+        $this->travellers[] = ['id' => -1, 'name' => $quote->leadTraveller->name, 'paying' => $quote->leadTraveller->paying,  'travelling' => $quote->leadTraveller->travelling, 'items' => []];
+        for ($x = 0; $x < $paying; $x++) {
+            $this->travellers[] = ['id' => null, 'name' => null, 'paying' => true, 'travelling' => true, 'items' => []];
+        }
+        for ($x = 0; $x < $travelling; $x++) {
+            $this->travellers[] = ['id' => null, 'name' => null, 'paying' => false, 'travelling' => true, 'items' => []];
+        }
+    }
+
+    public function getQuantity(string $type, int $id): int
+    {
+        $quantity = 0;
+        foreach ($this->travellers as $key => $traveller) {
+            $quantity += $this->hasComponent($key, $type, $id) ? 1 : 0;
+        }
+        return $quantity;
+    }
+
+    public function hasComponent(int $traveller, string $type, int $id): bool
+    {
+        if (array_key_exists($traveller, $this->travellers)) {
+            foreach ($this->travellers[$traveller]['items'] as $key => $item) {
+                if ($item['type'] === $type && $item['id'] === $id) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public function toggleComponent(int $traveller, string $type, int $id): void
+    {
+        if (array_key_exists($traveller, $this->travellers)) {
+            foreach ($this->travellers[$traveller]['items'] as $key => $item) {
+                if ($item['type'] === $type && $item['id'] === $id) {
+                    unset($this->travellers[$traveller]['items'][$key]);
+                    return;
+                }
+            }
+            $this->travellers[$traveller]['items'][] = ['type' => $type, 'id' => $id,];
+        }
+    }
+
+    public function render()
+    {
+        return view('livewire.admin.quote.conversion');
+    }
+}
