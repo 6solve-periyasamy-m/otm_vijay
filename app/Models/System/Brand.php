@@ -107,6 +107,7 @@ class Brand extends Model
             'phone' => setting('company.contact.phone', ''),
             'logo' => setting('company.logo'),
             'url' => setting('company.url', ''),
+            'created_at' => setting('company.created_at', ''),
             'facebook' => setting('social.facebook', ''),
             'twitter' => setting('social.twitter', ''),
             'instagram' => setting('social.instagram', ''),
