@@ -773,6 +773,42 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         return $cost;
     }
 
+    /**
+     * @param int $travellers
+     * @return Collection<QuoteActivity>|QuoteActivity[]
+     */
+    public function getActivityBelowQuantity(int $travellers): Collection|array
+    {
+        return $this->quote->activities()->whereNotNull('quantity')->where('quantity', '<', $travellers)->get();
+    }
+
+    /**
+     * @param int $travellers
+     * @return Collection<QuoteFlight>|QuoteFlight[]
+     */
+    public function getFlightBelowQuantity(int $travellers): Collection|array
+    {
+        return $this->quote->flights()->whereNotNull('quantity')->where('quantity', '<', $travellers)->get();
+    }
+
+    /**
+     * @param int $travellers
+     * @return Collection<QuoteTransport>|QuoteTransport[]
+     */
+    public function getTransportBelowQuantity(int $travellers): Collection|array
+    {
+        return $this->quote->transport()->whereNotNull('quantity')->where('quantity', '<', $travellers)->get();
+    }
+
+    /**
+     * @param int $travellers
+     * @return Collection<QuoteMerchandise>|QuoteMerchandise[]
+     */
+    public function getMerchandiseBelowQuantity(int $travellers): Collection|array
+    {
+        return $this->quote->merchandise()->whereNotNull('quantity')->where('quantity', '<', $travellers)->get();
+    }
+
     public function forceDelete()
     {
         $this->quote->leadTraveller()->forceDelete();
