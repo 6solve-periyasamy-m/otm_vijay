@@ -1,5 +1,7 @@
 .otm-sidebar {
   background-color: $sideBarColor;
+  transition-duration: 0.5s;
+
 
   .nav-item {
     width: 100%;
@@ -14,6 +16,8 @@
     line-height: 1;
     font-weight: 400;
     display: flex;
+    align-items: center;
+    justify-content: center;
     white-space: nowrap;
     transition-duration: 0.5s;
 
@@ -22,28 +26,61 @@
       color: black;
     }
 
-    i {
-      margin-left: 1px;
-      margin-right: 10px;
+    &.active {
+      background-color: $primaryColor;
+      color: white;
+
+      span {
+        &.selected {
+          display: block;
+          float: right;
+          position: absolute;
+          right: 0;
+          top: 0.5rem;
+          background: 0 0;
+          width: 0;
+          height: 0;
+          border-top: 12px solid transparent;
+          border-bottom: 12px solid transparent;
+          border-right: 12px solid #f8fafc;
+        }
+      }
+    }
+
+    // i {
+    //   margin-left: 1px;
+    //   margin-right: 10px;
+    // }
+
+    &.sidebar-toggle {
+      background-color: #161c33;
+
+      i {
+        // color: black;
+        color: white;
+      }
+
+      .iconLogo {
+        &.hide {
+          display: none;
+
+          &.showLogo {
+            display: block;
+          }
+        }
+      }
     }
   }
 
-  .nav-link.active {
-    background-color: $primaryColor;
-    color: white;
+  &.shown {
+    width: 13%;
 
-    span.selected {
-      display: block;
-      float: right;
-      position: absolute;
-      right: 0;
-      top: 0.5rem;
-      background: 0 0;
-      width: 0;
-      height: 0;
-      border-top: 12px solid transparent;
-      border-bottom: 12px solid transparent;
-      border-right: 12px solid #f8fafc;
+    .nav-link {
+      justify-content: flex-start;
+
+      &.sidebar-toggle {
+        justify-content: space-between;
+      }
     }
   }
 }
@@ -63,7 +100,6 @@
 
 @media only screen and (min-width: 1500px) {
   .otm-sidebar:not(.shown) {
-    transition-duration: 0.5s;
     // width: 2.5%;
     width: 60px;
 
@@ -71,23 +107,17 @@
       display: none;
     }
 
-    &:hover {
-      width: 13%;
+    // &:hover {
+    //   width: 13%;
 
-      .sidebar-hide {
-        display: inherit;
-      }
-    }
-  }
-
-  .otm-sidebar {
-    &.shown {
-      width: 13%;
-    }
+    //   .sidebar-hide {
+    //     display: inherit;
+    //   }
+    // }
   }
 }
 
-.sidebar-toggle {
-  justify-content: end;
-  padding-left: 2.5rem !important;
-}
+// .sidebar-toggle {
+//   justify-content: end;
+//   padding-left: 2.5rem !important;
+// }
