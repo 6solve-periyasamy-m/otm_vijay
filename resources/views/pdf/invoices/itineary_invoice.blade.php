@@ -1,3 +1,17 @@
+@php use App\Models\Quote\Quote; @endphp
+@php use App\Models\Tour\Tour; @endphp
+@php use App\Models\Accommodation\AccommodationInventoryTour; @endphp
+@php use App\Models\Activity\ActivityInventoryTour; @endphp
+@php use App\Models\Flight\FlightInventoryTour; @endphp
+@php use App\Models\Transport\TransportInventoryTour; @endphp
+@php use App\Models\Merchandise\Merchandise; @endphp
+@php use App\Models\Customer\Customer; @endphp
+@php
+    /**
+     * @var Tour $tour
+     */
+@endphp
+
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
@@ -9,11 +23,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet" />
 
     <style type="text/css">
-        @page {
+         @page {
             margin: 0px;
             padding: 0px;
         }
-
         table {
             border-collapse: collapse;
             mso-table-lspace: 0px;
@@ -88,27 +101,27 @@
 
         .oc_f20 {
             font-family: 'Lato', sans-serif;
-            font-size: 15pt;
+            font-size: 20px;
             line-height: 30px;
         }
 
         .oc_f18 {
-            font-size: 14pt;
+            font-size: 18px;
             line-height: 28px;
         }
 
         .oc_f16 {
-            font-size: 12pt;
+            font-size: 16px;
             line-height: 24px;
         }
 
         .oc_f14 {
-            font-size: 11pt;
+            font-size: 14px;
             line-height: 22px;
         }
 
         .oc_f12 {
-            font-size: 9pt;
+            font-size: 12px;
             line-height: 18px;
         }
 
@@ -139,8 +152,7 @@
         .oc_right {
             text-align: right;
         }
-
-        .paymentTable {
+         .paymentTable {
             border: 2px solid #353535;
             border-collapse: collapse;
         }
@@ -159,1272 +171,745 @@
 
 <body class="body"
     style="padding:0; margin:0 auto !important; display:block !important; min-width:100% !important; width:100% !important; background:#ffffff; -webkit-text-size-adjust:none">
-    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="background-color:#ffffff;"
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="background-color:#ffffff; padding: 35px 0;"
         class="full-wrap">
-        <tr>
-            <td align="center" valign="top">
-                <table align="center" border="0" cellpadding="0" cellspacing="0" width="670"
-                    style="width: 794px; background-color: #fff">
+            <tr>
+                <td align="left" valign="top" style="padding-bottom: 10px;">
+                    <table width="100%" border="0" cellspacing="0">
+                        <tr>
+                            <td align="left" valign="top">
+                                <table align="left" width="100%" border="0" cellspacing="0">
+                                    <tr>
+                                      
+                                        <td align="left" valign="top">
+                                            <img src="{{img_to_b64($invoice->brand->logo)}}" alt="logo" width="300"
+                                                style="display: block;">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="310" align="center" valign="top">
+                                <table width="100%" align="center" border="0" cellspacing="0" style="margin: 10px auto; text-align: center;"
+                                    cellpadding="0">
+                                    <tr>
+                                        <td align="center" valign="center" class="oc_black" 
+                                            style="border-radius: 30px; padding: 20px 10px; font-weight: normal; background-color: #ffffff; 
+                                                            color: #E95B15; margin: 0 auto; outline: 2px solid #E95B15; font-size: 15pt; max-width: 220px; display: inline-block;">
+                                            TRAVEL ITINERARY
+                                        </td>
+                                    </tr>
+                                    
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top">
+                    <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
+                        <tr>
+                            <td width="50%" align="left" valign="top" style="background-color: #E95B15;">
+                                <table align="left" border="0" cellspacing="0" cellpadding="0">
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="2" class="oc_f16" style="padding: 10px 15px 0 25px; color: #ffffff; ">
+                                            {{ strtoupper($tour->name) }} 
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                        <td align="left" valign="top" >
+                                                &nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="oc_f12" style="padding: 10px 15px 0px 25px; color: #353535; ">
+                                            CUSTOMER DETAILS 
+                                            </td>
+                                        </tr>
+                                        @foreach($order->orderCustomers as $ordersCustomer)
+                                        <tr>
+                                            <td width="120" align="left" valign="top"
+                                                style="padding: 10px 15px 0px 25px; font-weight: 700; color: #ffffff; "
+                                                class="oc_f12">
+                                                {{ ($order->lead_booker_id == $ordersCustomer->id) ? 'LEAD GUEST:' : ' OTHER GUESTS:'}}
+                                                
+                                            </td>
+                                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px; color: #ffffff; "
+                                                class="oc_f12">
+                                                {{$ordersCustomer->customer->title}} {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                      
+                                        <tr>
+                                            <td width="120" align="left" valign="top"
+                                                style="padding: 10px 15px 0px 25px; font-weight: 700; color: #ffffff; "
+                                                class="oc_f12">
+                                                BOOKING REFERENCE:
+                                            </td>
+                                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px; color: #ffffff; "
+                                                class="oc_f12">
+                                                {{$order->booking_reference}}</td>
+                                        </tr>
+                                        
+                                       
+                                        <tr>
+                                            <td width="120" align="left" valign="top"
+                                                style="padding: 10px 15px 0px 25px; font-weight: 700;"
+                                                class="oc_f12">
+                                                &nbsp;
+                                            </td>
+                                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px;">
+                                                &nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                        @foreach($order->orderCustomers as $ordersCustomer)
+                                        @if($order->lead_booker_id == $ordersCustomer->id)
+                                      
+                                        <tr>
+                                            <td colspan="2" class="oc_f12" style="padding: 10px 15px 0px 25px; color: #353535; ">
+                                            ONSITE AGENT DETAILS  
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td  colspan="2" align="left" valign="top"
+                                                style="padding: 10px 15px 0px 25px; font-weight: 700; color: #ffffff; "
+                                                class="oc_f12">
+                                                NAME: {{$ordersCustomer->customer->title}} {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td  colspan="2" align="left" valign="top"
+                                                style="padding: 10px 15px 0px 25px; font-weight: 700; color: #ffffff; "
+                                                class="oc_f12">
+                                                PHONE: {{$ordersCustomer->customer->mobile_number}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td  colspan="2" align="left" valign="top"
+                                                style="padding: 10px 15px 0px 25px; font-weight: 700; color: #ffffff; "
+                                                class="oc_f12">
+                                                EMAIL: <a href="mailto:{{$ordersCustomer->customer->email_address}}">
+                                                {{$ordersCustomer->customer->email_address}}
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @endif
+                                        @endforeach
+                                        <tr>
+                                            <td width="120" align="left" valign="top" style="padding: 10px 15px 0px 25px; ">
+                                                &nbsp;
+                                            </td>
+                                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px;">
+                                                &nbsp;</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                           @php
+                               $imageUrl = 'uploads/images/events.jpg';
+                              
+                            @endphp
+                            <td width="50%" align="right" valign="top">
+                                <table align="left" width="100%" border="0" cellspacing="0">
+                                    <tr>
+                                        <td align="left" valign="top">
+                                            <img src="{{ img_to_b64($imageUrl) }}" alt="logo" width="300"
+                                                style="display: block;">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="right" valign="top">
+                    <table align="left" width="100%" cellspacing="0" cellpadding="0">
+                        <thead>
+                            <tr
+                                style=" background-color: #353535; padding: 2px 15px;">
+                                <th align="left" valign="top"
+                                    style="padding: 10px 15px; color: #ffffff; font-weight: 700;"
+                                    class="oc_f16 ">TRIP ITINERARY AND INCLUSIONS</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </td>
+            </tr>
+        
+            @php
+                // Start and end dates
+                $date_from = date('Y-m-d', strtotime($tour->date_from));
+                $date_to = date('Y-m-d', strtotime($tour->date_to));
+                $start_date = \Carbon\Carbon::createFromFormat('Y-m-d', $date_from);
+                $end_date = \Carbon\Carbon::createFromFormat('Y-m-d', $date_to);
+            @endphp
+
+            @foreach ($start_date->daysUntil($end_date) as $date)
+
+            <tr>
+                <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; ">
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top">
+                    <table align="left" width="60%" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;"
+                                class="oc_f12 oc_lblack">DAY {{ $loop->iteration }} - {{ $date->format('d M Y') }}</td>
+                            <td  align="right" valign="top"
+                                style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
+                        </tr>
+                    </table>
+                    <table align="right" width="40%" cellspacing="0" cellpadding="0">
+                        <tbody>
+                            <tr>
+                                <td align="left" valign="top" style="padding: 2px 15px;"
+                                    class="oc_f14 oc_lblack">&nbsp;
+                                </td>
+                                <td width="180" align="center" valign="top"
+                                    style="padding: 2px 15px;" class="oc_f14 oc_lblack">
+                                    &nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            
+
+            @foreach($tour->flightInventoryTours as $tourComponent)
+            
+                @php
+                    $departs_at = new DateTime($tourComponent->inventory->departs_at);
+                    $arrives_at = new DateTime($tourComponent->inventory->arrives_at);
+                @endphp
+                @if($date->format('Y-m-d') >= $arrives_at->format('Y-m-d') && $date->format('Y-m-d') <= $departs_at->format('Y-m-d'))
+               <?php //echo "<pre>"; print_r($tourComponent); die; ?>
+               <tr>
+                    <td align="left" valign="top">
+                        <table align="left" width="60%" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td align="left" width="150" style="padding: 0px 40px; font-weight: bold; font-size: 11pt;"
+                                    class="oc_f12 oc_lblack">Arrival from {{ $tourComponent->inventory->flight->departureAirport->name }} to {{ $tourComponent->inventory->flight->arrivalAirport->name }}  </td>
+                                <td  align="right" valign="top"
+                                    style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
+                            </tr>
+                        </table>
+                        <table align="right" width="40%" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr>
+                                    <td align="left" valign="top" style="padding: 0 15px;"
+                                        >&nbsp;
+                                    </td>
+                                    <td width="180" align="center" valign="top"
+                                        style="padding: 0 15px;" >
+                                        &nbsp;</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                    
+                @endif
+            @endforeach
+
+
+            @foreach($tour->accommodationInventoryTours as $tourComponent)
+                @if($date->format('Y-m-d') >= date('Y-m-d', strtotime($tourComponent->inventory->check_in)) && $date->format('Y-m-d') <= date('Y-m-d', strtotime($tourComponent->inventory->check_out)))
                     <tr>
-                        <td align="center" valign="top">
-                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <td align="left" valign="top">
+                            <table align="left" width="60%" cellspacing="0" cellpadding="0">
                                 <tr>
-                                    <td align="left" valign="top" style="padding-bottom: 10px;">
-                                        <table width="100%" border="0" cellspacing="0">
-                                            <tr>
-                                                <td width="40%" align="center" valign="top">
-                                                    <table align="center" width="100%" border="0" cellspacing="0">
-                                                        <tr>
-                                                            <td align="center" valign="top">
-                                                                &nbsp;
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="center" valign="top">
-                                                                <img src="KPTnewLogo.png" alt="logo" width="160"
-                                                                    style="display: block;">
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="center" valign="top">
-                                                                &nbsp;
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                                <td width="60%" align="center" valign="middle">
-                                                    <table width="80%" align="center" border="0" cellspacing="0"
-                                                        cellpadding="0">
-                                                        <tr>
-                                                            <td align="center" valign="top">
-                                                                &nbsp;
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="center" valign="center" class="oc_black"
-                                                                style="border-radius: 30px; padding: 20px 10px; font-weight: normal; background-color: #ffffff; 
-                                                                color: #E95B15; margin: 0 auto; outline: 2px solid #E95B15; font-size: 15pt; width: 290px; display: block;">
-                                                                TRAVEL ITINERARY</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="center" valign="top">
-                                                                &nbsp;
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
+                                    <td align="left" width="150" style="padding: 0px 40px; color: #E95B15; font-size: 11pt;"
+                                        class="oc_f16 ">ACCOMMODATION 
+                                        </td>
+                                    <td  align="right" valign="top"
+                                        style="padding: 2px 15px;">&nbsp;</td>
                                 </tr>
-                                <tr>
-                                    <td align="left" valign="top">
-                                        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%"
-                                            style="background-color: #E95B15;">
-                                            <tr>
-                                                <td width="45%" align="left" valign="middle">
-                                                    <table align="left" border="0" cellspacing="0" cellpadding="0"
-                                                        width="100%">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="100%" align="left" valign="top"
-                                                                    style="padding: 10px 15px 10px 25px; color: #ffffff; line-height: 20px;"
-                                                                    class="oc_f16">
-                                                                    AUSTRALIAN OPEN 2024
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="100%" align="left" valign="top"
-                                                                    style="padding: 0 0 5px 25px; line-height: 19px; color: #353535;"
-                                                                    class="oc_f12">
-                                                                    CUSTOMER DETAILS
-                                                                </td>
-                                                            </tr>
-
-                                                            <tr>
-                                                                <td align="left" valign="left">
-
-                                                                    <table width="100%" align="right" border="0"
-                                                                        cellspacing="0" cellpadding="0">
-                                                                        <tr>
-                                                                            <td width="45%" align="left" valign="top"
-                                                                                style="padding: 0 0 1px 25px; line-height: 19px; color: #ffffff;"
-                                                                                class="oc_f12">
-                                                                                LEAD GUEST:
-                                                                            </td>
-                                                                            <td width="55%" align="left" valign="top"
-                                                                                style="padding: 0 0 1px 20px; line-height: 19px; color: #ffffff;"
-                                                                                class="oc_f12">
-                                                                                Mr Test
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td width="45%" align="left" valign="top"
-                                                                                style="padding: 0 0 1px 25px; line-height: 19px; color: #ffffff;"
-                                                                                class="oc_f12">
-                                                                                OTHER GUESTS:
-                                                                            </td>
-                                                                            <td width="55%" align="left" valign="top"
-                                                                                style="padding: 0 0 1px 20px; line-height: 19px; color: #ffffff;"
-                                                                                class="oc_f12">
-                                                                                Mrs Test
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td width="45%" align="left" valign="top"
-                                                                                style="padding: 0 0 1px 25px; line-height: 19px; color: #ffffff;"
-                                                                                class="oc_f12">
-                                                                                BOOKING REFERENCE:
-                                                                            </td>
-                                                                            <td width="55%" align="left" valign="top"
-                                                                                style="padding: 0 0 1px 10px; line-height: 19px; color: #ffffff;"
-                                                                                class="oc_f12">
-                                                                                KPAD106032
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="100%" align="left" valign="top"
-                                                                    style="padding: 0 0 5px 25px; line-height: 19px; color: #353535;"
-                                                                    class="oc_f12">
-                                                                    ONSITE AGENT DETAILS
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="100%" align="left" valign="top"
-                                                                    style="padding: 0 0 1px 25px; line-height: 19px; color: #ffffff;"
-                                                                    class="oc_f12">
-                                                                    NAME: Keisha Reynolds/Michaela Oakley
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="100%" align="left" valign="top"
-                                                                    style="padding: 0 0 1px 25px; line-height: 19px; color: #ffffff;"
-                                                                    class="oc_f12">
-                                                                    PHONE: +61 434 580 834
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="100%" align="left" valign="top"
-                                                                    style="padding: 0 0 1px 25px; line-height: 19px; color: #ffffff;"
-                                                                    class="oc_f12">
-                                                                    EMAIL: <a href="mailto:tennis@kpt.com.au">
-                                                                        tennis@kpt.com.au
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                                <td width="55%" align="left" valign="top">
-                                                    <table align="left" border="0" cellspacing="0" cellpadding="0"
-                                                        width="100%" height="100%">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    <img src="AusOpen.jpg" alt="EVENT" width="436"
-                                                                        style="display: block; width: 100%;
-                                                                        height: 100%; object-fit: cover;" />
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td align="left" valign="top">
-                                        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                            <thead>
-                                                <tr style="background-color: #353535;">
-                                                    <th align="left" valign="top"
-                                                        style="padding: 10px 25px; color: #ffffff; " class="oc_f16">
-                                                        TRIP ITINERARY AND INCLUSIONS
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td align="left" valign="top">
-                                        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                            <tr>
-                                                <td width="20%" align="left" valign="middle"
-                                                    style="padding: 0 0 0 25px;">
-                                                    <table align="left" border="0" cellspacing="0" cellpadding="0">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td align="left" valign="middle" class="oc_black"
-                                                                    style=" font-weight: normal; background-color: #ffffff; 
-                                                                    color: #E95B15; margin: 0 auto; font-size: 11pt; width: 80px; display: block;">
-                                                                    DAY 1
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td align="left" valign="middle" class="oc_black"
-                                                                    style="padding: 5px 0 0 0 ; color: #E95B15; font-weight: normal; background-color: #ffffff; 
-                                                                     margin: 0 auto; font-size: 10pt; width: 80px; display: block;">
-                                                                    18 Jan 2024
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                                <td width="80%" align="left" valign="top" style="padding: 0 0 0 25px;">
-                                                    <table align="left" border="0" cellspacing="0" cellpadding="0"
-                                                        width="100%">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-
-                                                                <td width="100%" align="right" valign="top">
-                                                                    <table width="100%" align="right" border="0"
-                                                                        cellspacing="0" cellpadding="0"
-                                                                        style="border-left: 2px solid #E95B15;">
-
-                                                                        <tr>
-                                                                            <td align="left" valign="left"
-                                                                                class="oc_black"
-                                                                                style=" font-weight: bold; font-size: 11pt; padding: 0 0 10px 40px;">
-                                                                                Arrival into Melbourne
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                &nbsp;
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="left" valign="left"
-                                                                                style=" font-weight: bold; color: #E95B15; font-size: 10pt; padding: 0 0 5px 40px;">
-                                                                                ACCOMMODATION
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="left" valign="left">
-
-                                                                                <table width="100%" align="right"
-                                                                                    border="0" cellspacing="0"
-                                                                                    cellpadding="0">
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Hotel:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            Holiday Inn Express
-                                                                                            Melbourne Southbank
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Address:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            35/47 City Road Southbank
-                                                                                            VIC
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Check In Date:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            18 Jan 24
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Check Out Date:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            22 Jan 24
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Room Type:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            1 Single. Standard Room -
-                                                                                            Includes Express Breakfast
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>
-                                                                                            &nbsp;
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Hotel Description:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            Holiday Inn Express
-                                                                                            Melbourne Southbank is close
-                                                                                            to many of the city’s
-                                                                                            renowned restaurants and
-                                                                                            bars, within walking
-                                                                                            distance to the Crown Casino
-                                                                                            complex and Melbourne
-                                                                                            Convention and
-                                                                                            Exhibition Centre. The
-                                                                                            hotel’s location also allows
-                                                                                            for easy access to
-                                                                                            Melbourne’s sporting and
-                                                                                            entertainment precinct which
-                                                                                            hosts the Melbourne Cricket
-                                                                                            Ground, Rod Laver Arena,
-                                                                                            Melbourne
-                                                                                            Arena and AAMI Park.
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                </table>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td width="20%" align="left" valign="middle"
-                                                    style="padding: 0 0 0 25px;">
-                                                    <table align="left" border="0" cellspacing="0" cellpadding="0">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td align="left" valign="middle" class="oc_black"
-                                                                    style=" font-weight: normal; background-color: #ffffff; 
-                                                                    color: #E95B15; margin: 0 auto; font-size: 11pt; width: 80px; display: block;">
-                                                                    DAY 2
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td align="left" valign="middle" class="oc_black"
-                                                                    style="padding: 5px 0 0 0 ; color: #E95B15; font-weight: normal; background-color: #ffffff; 
-                                                                     margin: 0 auto; font-size: 10pt; width: 80px; display: block;">
-                                                                    19 Jan 2024
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                                <td width="80%" align="left" valign="top" style="padding: 0 0 0 25px;">
-                                                    <table align="left" border="0" cellspacing="0" cellpadding="0"
-                                                        width="100%">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-
-                                                                <td width="100%" align="right" valign="top">
-                                                                    <table width="100%" align="right" border="0"
-                                                                        cellspacing="0" cellpadding="0"
-                                                                        style="border-left: 2px solid #E95B15;">
-                                                                        <tr>
-                                                                            <td align="left" valign="left"
-                                                                                style=" font-weight: bold; color: #E95B15; font-size: 10pt; padding: 0 0 5px 40px;">
-                                                                                EVENT
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="left" valign="left">
-
-                                                                                <table width="100%" align="right"
-                                                                                    border="0" cellspacing="0"
-                                                                                    cellpadding="0">
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Event:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            Australian Open
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Venue:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            Melbourne Park
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Ticket Type/s:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            1x Rod Laver Arena - Night
-                                                                                            Session - Upper Baseline
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Date:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            19 Jan 2024
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>
-                                                                                            &nbsp;
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Description:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            Rod Laver Arena is a
-                                                                                            multipurpose arena located
-                                                                                            within Melbourne Park. The
-                                                                                            arena is the main venue for
-                                                                                            the Australian Open, the
-                                                                                            first Grand Slam tennis of
-                                                                                            the calendar year. The
-                                                                                            bearer of a Rod Laver Arena
-                                                                                            ticket has a reserved seat
-                                                                                            on
-                                                                                            Rod Laver for their
-                                                                                            designated session as well
-                                                                                            as access to all of the
-                                                                                            outside
-                                                                                            courts.
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>
-                                                                                            &nbsp;
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                </table>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="left" valign="left"
-                                                                                style=" font-weight: bold; color: #E95B15; font-size: 10pt; padding: 0 0 5px 40px;">
-                                                                                ACCOMMODATION
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="left" valign="left">
-
-                                                                                <table width="100%" align="right"
-                                                                                    border="0" cellspacing="0"
-                                                                                    cellpadding="0">
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Hotel:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            Holiday Inn Express
-                                                                                            Melbourne Southbank
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                </table>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td width="20%" align="left" valign="middle"
-                                                    style="padding: 0 0 0 25px;">
-                                                    <table align="left" border="0" cellspacing="0" cellpadding="0">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td align="left" valign="middle" class="oc_black"
-                                                                    style=" font-weight: normal; background-color: #ffffff; 
-                                                                    color: #E95B15; margin: 0 auto; font-size: 11pt; width: 80px; display: block;">
-                                                                    DAY 3
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td align="left" valign="middle" class="oc_black"
-                                                                    style="padding: 5px 0 0 0 ; color: #E95B15; font-weight: normal; background-color: #ffffff; 
-                                                                     margin: 0 auto; font-size: 10pt; width: 80px; display: block;">
-                                                                    20 Jan 2024
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                                <td width="80%" align="left" valign="top" style="padding: 0 0 0 25px;">
-                                                    <table align="left" border="0" cellspacing="0" cellpadding="0"
-                                                        width="100%">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-
-                                                                <td width="100%" align="right" valign="top">
-                                                                    <table width="100%" align="right" border="0"
-                                                                        cellspacing="0" cellpadding="0"
-                                                                        style="border-left: 2px solid #E95B15;">
-                                                                        <tr>
-                                                                            <td align="left" valign="left"
-                                                                                style=" font-weight: bold; color: #E95B15; font-size: 10pt; padding: 0 0 5px 40px;">
-                                                                                INCLUSION
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="left" valign="left">
-
-                                                                                <table width="100%" align="right"
-                                                                                    border="0" cellspacing="0"
-                                                                                    cellpadding="0">
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Event:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            Keith Prowse Travel AO
-                                                                                            Middle Weekend Function
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Venue:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            Northern Point Room, Eureka
-                                                                                            89
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Address:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            Eureka Tower, Level 89/7
-                                                                                            Riverside Quay, Southbank
-                                                                                            3000
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Date:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            20 Jan 2024
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>
-                                                                                            &nbsp;
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Description:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            You’re invited to Keith
-                                                                                            Prowse Travel’s exclusive
-                                                                                            Australian Open breakfast!
-                                                                                            Seize
-                                                                                            the chance to hear from a
-                                                                                            tennis lened and connect
-                                                                                            with fellow sports
-                                                                                            enthusiasts. This is your
-                                                                                            opportunity to indulge in a
-                                                                                            morning of excitement,
-                                                                                            camaraderie and tennis
-                                                                                            brilliance
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>
-                                                                                            &nbsp;
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            &nbsp;
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            Time: 8:30am - 10:30am
-                                                                                            <br />
-                                                                                            Dress Code: Smart Casual
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>
-                                                                                            &nbsp;
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                </table>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="left" valign="left"
-                                                                                style=" font-weight: bold; color: #E95B15; font-size: 10pt; padding: 0 0 5px 40px;">
-                                                                                EVENT
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="left" valign="left">
-
-                                                                                <table width="100%" align="right"
-                                                                                    border="0" cellspacing="0"
-                                                                                    cellpadding="0">
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Hotel:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            Australian Open
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Venue:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            Melbourne Park
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Ticket Type/s:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            1x Rod Laver Arena - Day
-                                                                                            Session - Upper Baseline
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Date:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            20 Jan 2024
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>
-                                                                                            &nbsp;
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Description:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            Rod Laver Arena is a
-                                                                                            multipurpose arena located
-                                                                                            within Melbourne Park. The
-                                                                                            arena is the main venue for
-                                                                                            the Australian Open, the
-                                                                                            first Grand Slam tennis of
-                                                                                            the calendar year. The
-                                                                                            bearer of a Rod Laver Arena
-                                                                                            ticket has a reserved seat
-                                                                                            on
-                                                                                            Rod Laver for their
-                                                                                            designated session as well
-                                                                                            as access to all of the
-                                                                                            outside
-                                                                                            courts.
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                </table>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="left" valign="left"
-                                                                                style=" font-weight: bold; color: #E95B15; font-size: 10pt; padding: 0 0 5px 40px;">
-                                                                                ACCOMMODATION
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="left" valign="left">
-                                                                                <table width="100%" align="right"
-                                                                                    border="0" cellspacing="0"
-                                                                                    cellpadding="0">
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Hotel:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            Holiday Inn Express
-                                                                                            Melbourne Southbank
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                </table>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td width="20%" align="left" valign="middle"
-                                                    style="padding: 0 0 0 25px;">
-                                                    <table align="left" border="0" cellspacing="0" cellpadding="0">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td align="left" valign="middle" class="oc_black"
-                                                                    style=" font-weight: normal; background-color: #ffffff; 
-                                                                    color: #E95B15; margin: 0 auto; font-size: 11pt; width: 80px; display: block;">
-                                                                    DAY 4
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td align="left" valign="middle" class="oc_black"
-                                                                    style="padding: 5px 0 0 0 ; color: #E95B15; font-weight: normal; background-color: #ffffff; 
-                                                                     margin: 0 auto; font-size: 10pt; width: 80px; display: block;">
-                                                                    21 Jan 2024
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                                <td width="80%" align="left" valign="top" style="padding: 0 0 0 25px;">
-                                                    <table align="left" border="0" cellspacing="0" cellpadding="0"
-                                                        width="100%">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-
-                                                                <td width="100%" align="right" valign="top">
-                                                                    <table width="100%" align="right" border="0"
-                                                                        cellspacing="0" cellpadding="0"
-                                                                        style="border-left: 2px solid #E95B15;">
-                                                                        <tr>
-                                                                            <td align="left" valign="left"
-                                                                                style=" font-weight: bold; color: #E95B15; font-size: 10pt; padding: 0 0 5px 40px;">
-                                                                                EVENT
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="left" valign="left">
-
-                                                                                <table width="100%" align="right"
-                                                                                    border="0" cellspacing="0"
-                                                                                    cellpadding="0">
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Event:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            Australian Open
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Venue:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            Melbourne Park
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Ticket Type/s:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            1x Rod Laver Arena - Night
-                                                                                            Session - Upper Baseline
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Date:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            21 Jan 2024
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>
-                                                                                            &nbsp;
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td width="30%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 40px;">
-                                                                                            Description:
-                                                                                        </td>
-                                                                                        <td width="70%" align="left"
-                                                                                            valign="top"
-                                                                                            class="oc_black oc_f12"
-                                                                                            style="padding: 0 0 3px 10px;">
-                                                                                            Rod Laver Arena is a
-                                                                                            multipurpose arena located
-                                                                                            within Melbourne Park. The
-                                                                                            arena is the main venue for
-                                                                                            the Australian Open, the
-                                                                                            first Grand Slam tennis of
-                                                                                            the calendar year. The
-                                                                                            bearer of a Rod Laver Arena
-                                                                                            ticket has a reserved seat
-                                                                                            on
-                                                                                            Rod Laver for their
-                                                                                            designated session as well
-                                                                                            as access to all of the
-                                                                                            outside
-                                                                                            courts.
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td align="left" valign="left"
-                                                                                            class="oc_black"
-                                                                                            style=" font-weight: bold; font-size: 11pt; padding: 0 0 10px 40px;">
-                                                                                            End of experience
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                </table>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    &nbsp;
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>
-                                                    &nbsp;
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td align="left" valign="top">
-                                        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                            <thead>
-                                                <tr style="background-color: #353535;">
-                                                    <th align="left" valign="top"
-                                                        style="padding: 10px 25px; color: #ffffff; " class="oc_f16">
-                                                        EVENT INFORMATION
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        &nbsp;
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td align="left" valign="left">
-
-                                        <table width="100%" align="right" border="0" cellspacing="0" cellpadding="0">
-                                            <tr>
-                                                <td width="25%" align="left" valign="top" class="oc_black oc_f12"
-                                                    style="padding: 0 0 3px 25px; font-weight: bold; ">
-                                                    Event Tickets:
-                                                </td>
-                                                <td width="75%" align="left" valign="top" class="oc_black oc_f12"
-                                                    style="padding: 0 0 3px 34px;">
-                                                    Please present your tickets at the gate for admission – be sure to
-                                                    bring the correct ticket for each
-                                                    day! Please note that these tickets are like cash, if you lose them,
-                                                    we cannot replace them.
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    &nbsp;
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td width="25%" align="left" valign="top" class="oc_black oc_f12"
-                                                    style="padding: 0 0 3px 25px; font-weight: bold; ">
-                                                    Event Guide:
-                                                </td>
-                                                <td width="75%" align="left" valign="top" class="oc_black oc_f12"
-                                                    style="padding: 0 0 3px 34px;">
-                                                    Dive into our comprehensive Event Guide here, a treasure trove of
-                                                    information on the Australian
-                                                    Open and an insider's guide to the best things to do in vibrant
-                                                    Melbourne. Your key to unlocking an
-                                                    unforgettable experience awaits!
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    &nbsp;
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td width="25%" align="left" valign="top" class="oc_black oc_f12"
-                                                    style="padding: 0 0 3px 25px; font-weight: bold; ">
-                                                    Match Schedule:
-                                                </td>
-                                                <td width="75%" align="left" valign="top" class="oc_black oc_f12"
-                                                    style="padding: 0 0 3px 34px;">
-                                                    Match schedules are released at approximately 6:00 PM AEDT on the
-                                                    day prior to play. We
-                                                    recommend keeping up to date via the official Australian Open app.
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    &nbsp;
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td width="25%" align="left" valign="top" class="oc_black oc_f12"
-                                                    style="padding: 0 0 3px 25px; font-weight: bold; ">
-                                                    AO24 Official App:
-                                                </td>
-                                                <td width="75%" align="left" valign="top" class="oc_black oc_f12"
-                                                    style="padding: 0 0 3px 34px;">
-                                                    Download the Official Australian Open App to follow the action
-                                                    happening in Melbourne Park. It’s
-                                                    your one-stop-shop to view the latest scores, draws and schedules.
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    &nbsp;
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td width="25%" align="left" valign="top" class="oc_black oc_f12"
-                                                    style="padding: 0 0 3px 25px;">
-                                                    &nbsp;
-                                                </td>
-                                                <td width="75%" align="left" valign="top" class="oc_black oc_f12"
-                                                    style="padding: 0 0 3px 34px;">
-                                                    <b>Apple App Store:</b> Click here to download the iOS app.
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td width="25%" align="left" valign="top" class="oc_black oc_f12"
-                                                    style="padding: 0 0 3px 40px;">
-                                                    &nbsp;
-                                                </td>
-                                                <td width="75%" align="left" valign="top" class="oc_black oc_f12"
-                                                    style="padding: 0 0 3px 34px;">
-                                                    <b>Google Play Store:</b> Click here to download the Android app.
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        &nbsp;
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="left" valign="top">
-                                        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                            <thead>
-                                                <tr style="background-color: #353535;">
-                                                    <th align="left" valign="top"
-                                                        style="padding: 10px 25px; color: #ffffff; " class="oc_f16">
-                                                        TERMS AND CONDITIONS
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        &nbsp;
-                                    </td>
-                                </tr>
-
+                            </table>
+                            <table align="right" width="40%" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <td align="left" valign="top" style="padding: 0 15px;"
+                                            >&nbsp;
+                                        </td>
+                                        <td width="180" align="center" valign="top"
+                                            style="padding: 0 15px;" >
+                                            &nbsp;</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </td>
                     </tr>
-                </table>
-            </td>
-        </tr>
+                    <tr>
+                        <td align="left" valign="top" style="">
+                            <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
+                                <tr>
+                                    <td align="left" valign="top">
+                                        <table align="left" border="0" cellspacing="0" cellpadding="0"
+                                            width="100%">
+                                            <tbody>
+                                                <tr>
+                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;"
+                                                        class="oc_f12 oc_lblack">Hotel:
+                                                    </td>
+                                                    <td align="left" valign="top"
+                                                        style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                        {{ $tourComponent->inventory->component->name }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;"
+                                                        class="oc_f12 oc_lblack">Address:
+                                                    </td>
+                                                    <td align="left" valign="top"
+                                                        style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                        {{$tourComponent->inventory->component->address}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;"
+                                                        class="oc_f12 oc_lblack">Check In Date:
+                                                    </td>
+                                                    <td align="left" valign="top"
+                                                        style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                        {{ date('d M y', strtotime($tourComponent->inventory->check_in)) }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;"
+                                                        class="oc_f12 oc_lblack">Check Out Date:
+                                                    </td>
+                                                    <td align="left" valign="top"
+                                                        style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                        {{ date('d M y', strtotime($tourComponent->inventory->check_out)) }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;">&nbsp;
+                                                    </td>
+                                                    <td align="left" valign="top" style="padding: 0px 40px;">
+                                                        &nbsp;
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;"
+                                                        class="oc_f12 oc_lblack">Hotel Description:	
+                                                    </td>
+                                                    <td align="left" valign="top"
+                                                        style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                        {!! $tourComponent->inventory->component->description !!}    
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                @endif
+            @endforeach
+
+            @foreach($tour->activityInventoryTours as $tourComponent)
+                @php
+                    $startDateTime = new DateTime($tourComponent->inventory->starts_at);
+                    $endDateTime = new DateTime($tourComponent->inventory->ends_at);
+                @endphp
+                @if($date->format('Y-m-d') >= $startDateTime->format('Y-m-d') && $date->format('Y-m-d') <= $endDateTime->format('Y-m-d'))
+                    <tr>
+                        <td align="left" valign="top">
+                            <table align="left" width="60%" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td align="left" width="150" style="padding: 0px 40px; color: #E95B15; font-size: 11pt;"
+                                        class="oc_f16 ">EVENT 
+                                        </td>
+                                    <td  align="right" valign="top"
+                                        style="padding: 2px 15px;">&nbsp;</td>
+                                </tr>
+                            </table>
+                            <table align="right" width="40%" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <td align="left" valign="top" style="padding: 0 15px;"
+                                            >&nbsp;
+                                        </td>
+                                        <td width="180" align="center" valign="top"
+                                            style="padding: 0 15px;" >
+                                            &nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" valign="top" style="">
+                            <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
+                                <tr>
+                                    <td align="left" valign="top">
+                                        <table align="left" border="0" cellspacing="0" cellpadding="0"
+                                            width="100%">
+                                            <tbody>
+                                                <tr>
+                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;"
+                                                        class="oc_f12 oc_lblack">Event:
+                                                    </td>
+                                                    <td align="left" valign="top"
+                                                        style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                        {{ $tourComponent->inventory->component->name }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;"
+                                                        class="oc_f12 oc_lblack">Venue:
+                                                    </td>
+                                                    <td align="left" valign="top"
+                                                        style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                        {{$tourComponent->inventory->component->address}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;"
+                                                        class="oc_f12 oc_lblack">Ticket Type/s: 
+                                                    </td>
+                                                    <td align="left" valign="top"
+                                                        style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                        {{$tourComponent->inventory->ticketType->name}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;"
+                                                        class="oc_f12 oc_lblack">Date:
+                                                    </td>
+                                                    <td align="left" valign="top"
+                                                        style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                        {{ f_datetime($tourComponent->inventory->starts_at) }}
+                                                        to {{ f_datetime($tourComponent->inventory->ends_at) }}
+                                                    </td>
+                                                </tr>
+                                                
+                                                <tr>
+                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;">&nbsp;
+                                                    </td>
+                                                    <td align="left" valign="top" style="padding: 0px 40px;">
+                                                        &nbsp;
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;"
+                                                        class="oc_f12 oc_lblack">Description:	
+                                                    </td>
+                                                    <td align="left" valign="top"
+                                                        style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                        {!! $tourComponent->inventory->component->description !!}    
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                @endif
+            @endforeach
+
+            @endforeach
+            
+            <tr>
+                <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; ">
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td align="right" valign="top">
+                    <table align="left" width="100%" cellspacing="0" cellpadding="0">
+                        <thead>
+                            <tr
+                                style=" background-color: #353535; padding: 2px 15px;">
+                                <th align="left" valign="top"
+                                    style="padding: 10px 15px; color: #ffffff; font-weight: 700;"
+                                    class="oc_f16 ">EVENT INFORMATION</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; ">
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top">
+                    <table align="left" border="0" cellspacing="0" cellpadding="0"
+                        width="100%">
+                        <tbody>
+                            <tr>
+                                
+                                <td align="left" valign="top"
+                                    style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
+                                    {!! $tour->description !!}
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td align="left" valign="top" style="padding: 10px 15px 0px 25px;"
+                                >&nbsp;
+                                </td>
+                               
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="right" valign="top">
+                    <table align="left" width="100%" cellspacing="0" cellpadding="0">
+                        <thead>
+                            <tr
+                                style=" background-color: #353535; padding: 2px 15px;">
+                                <th align="left" valign="top"
+                                    style="padding: 10px 15px; color: #ffffff; font-weight: 700;"
+                                    class="oc_f16 ">PAYMENT SUMMARY</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; ">
+                    &nbsp;
+                </td>
+            </tr>
+            <?php //echo "<pre>"; print_r($tour); die; ?>
+            <tr>
+                <td align="left" valign="top">
+                    <table align="left" border="0" cellspacing="0" cellpadding="0"
+                        width="100%">
+                        <tbody>
+                            <tr>
+                                <td align="left" width="120" valign="top" style="padding: 10px 15px 0px 25px;"
+                                    class="oc_f12 oc_lblack">BOOKING TOTAL	
+                                </td>
+                                <td align="left" valign="top"
+                                    style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
+                                    {{ f_currency($tour->base_price_per_person) }} 
+                                </td>
+                            </tr>
+                           
+                            <tr>
+                                <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" width="120"
+                                >&nbsp;
+                                </td>
+                                <td align="center" valign="top"
+                                    style="padding: 10px 15px 0px 25px;">
+                                    &nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="left" width="120" valign="top" style="padding: 10px 15px 0px 25px;"
+                                    class="oc_f12 oc_lblack">FINAL BOOKING AMOUNT	
+                                </td>
+                                <td align="left" valign="top"
+                                    style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
+                                    {{ f_currency($tour->base_price_per_person) }} 
+                                </td>
+                            </tr>
+
+                            
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; ">
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top" class="oc_f16" style="background-color: #FBDED0; color: #000000; font-weight: bold; padding: 10px 15px 0px 25px;">
+                PAYMENT SCHEDULE
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top" style="background-color: #FBDED0; padding: 10px 30px; ">
+                    <table align="left" border="0" cellspacing="0" cellpadding="0" class="paymentTable"
+                        width="100%">
+                        <thead>
+                            <tr style="background-color: #353535;">
+                                <th width="25%" align="left" valign="top"
+                                    style="padding: 2px 15px; font-weight: bold; color: #ffffff;"
+                                    class="oc_f16">
+                                    TYPE</th>
+                                <th width="25%" align="left" valign="top"
+                                    style="padding: 2px 15px; font-weight: bold; color: #ffffff;"
+                                    class="oc_f16">AMOUNT
+                                </th>
+                                <th width="25%" align="left" valign="top"
+                                    style="padding: 2px 15px; font-weight: bold; color: #ffffff;"
+                                    class="oc_f16">
+                                    DATE DUE</th>
+                                <th width="25%" align="left" valign="top"
+                                    style="padding: 2px 15px; font-weight: bold; color: #ffffff;"
+                                    class="oc_f16">RECEIVED
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td width="25%" align="left" valign="top"
+                                    style="padding: 2px 15px;" class="oc_f12 oc_lblack">
+                                    Deposit
+                                </td>
+                                <td width="25%" align="left" valign="top"
+                                    style="padding: 2px 15px;" class="oc_f12 oc_lblack">
+                                    {{ f_currency($tour->deposit) }} ({{ $tour->deposit_percentage }}%)
+                                </td>
+                                <td width="25%" align="left" valign="top"
+                                    style="padding: 2px 15px;" class="oc_f12 oc_lblack">
+                                    With Order
+                                </td>
+                               
+                                <td width="25%" align="left" valign="top"
+                                    style="padding: 2px 15px;" class="oc_f12 oc_lblack">
+                                    
+                                </td>
+                            </tr>
+                            @foreach($tour->paymentInstallments as $installment)
+                            <?php //echo "<pre>"; print_r($installment); die; ?>
+                                <tr>
+                                    <td width="25%" align="left" valign="top"
+                                        style="padding: 2px 15px;" class="oc_f12 oc_lblack">
+                                        Installment
+                                    </td>
+                                    
+                                    <td width="25%" align="left" valign="top"
+                                        style="padding: 2px 15px;" class="oc_f12 oc_lblack">
+                                        {{ f_currency($installment->cost) }} ({{ $installment->percentage }}%)
+                                    </td>
+                                    <td width="25%" align="left" valign="top"
+                                        style="padding: 2px 15px;" class="oc_f12 oc_lblack">
+                                        {{ f_date($installment->due_on) }}
+                                    </td>
+                                    <td width="25%" align="left" valign="top"
+                                        style="padding: 2px 15px;" class="oc_f12 oc_lblack">
+                                       
+                                    </td>
+                                </tr>
+                            @endforeach
+                            <tr>
+                                <td width="25%" align="left" valign="top"
+                                    style="padding: 2px 15px;" class="oc_f12 oc_lblack">
+                                    Remaining Balance
+                                </td>
+                               
+                                <td width="25%" align="left" valign="top"
+                                    style="padding: 2px 15px;" class="oc_f12 oc_lblack">
+                                    {{ f_currency($tour->remaining_installment) }} ({{ $tour->remaining_percentage }}%)
+                                </td>
+                                <td width="25%" align="left" valign="top"
+                                    style="padding: 2px 15px;" class="oc_f12 oc_lblack">
+                                    {{ f_date($tour->final_payment) }}
+                                </td>
+                                <td width="25%" align="left" valign="top"
+                                    style="padding: 2px 15px;" class="oc_f12 oc_lblack">
+                                    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; ">
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top">
+                    <table align="left" width="60%" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;"
+                                class="oc_f12 oc_lblack">PAYMENT METHOD</td>
+                            <td  align="right" valign="top"
+                                style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
+                        </tr>
+                    </table>
+                    <table align="right" width="40%" cellspacing="0" cellpadding="0">
+                        <tbody>
+                            <tr>
+                                <td align="left" valign="top" style="padding: 2px 15px;"
+                                    class="oc_f14 oc_lblack">&nbsp;
+                                </td>
+                                <td width="180" align="center" valign="top"
+                                    style="padding: 2px 15px;" class="oc_f14 oc_lblack">
+                                    &nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top">
+                    <table align="left" width="60%" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td align="left" width="150" style="padding: 0px 40px; font-weight: bold;"
+                                class="oc_f12 ">BANK TRANSFER</td>
+                            <td  align="right" valign="top"
+                                style="padding: 2px 15px;">&nbsp;</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top" style="">
+                {!! setting('company.bank_transfer', '-')  !!}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; ">
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td align="right" valign="top">
+                    <table align="left" width="100%" cellspacing="0" cellpadding="0">
+                        <thead>
+                            <tr
+                                style=" background-color: #353535; padding: 2px 15px;">
+                                <th align="left" valign="top"
+                                    style="padding: 10px 15px; color: #ffffff; font-weight: 700;"
+                                    class="oc_f16 ">TERMS & CONDITIONS</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; ">
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="left" valign="top" class="oc_f12 oc_lblack" style="padding: 10px 15px 0px 25px;"> 
+                {!! $tour->terms !!}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; ">
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="left" valign="top" class="oc_f12 oc_lblack" style="padding: 10px 15px 0px 25px;"> 
+                {!! $tour->invoice_footer !!}
+                </td>
+            </tr>
+           
     </table>
 </body>
 

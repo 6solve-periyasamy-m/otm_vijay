@@ -9,7 +9,7 @@ use App\Http\Controllers\Admin\Order\OrderInstallmentController;
 use App\Http\Controllers\Admin\Order\Payment\PaymentController;
 use App\Http\Controllers\Admin\Order\Payment\PaymentMethodController;
 use App\Http\Controllers\Admin\System\SettingsController;
-
+ 
 Route::get('/', [OrderController::class, 'index'])->name("orders.all")->middleware('bouncer:Order\Order,read');
 Route::get('/create', [OrderController::class, 'create'])->name('orders.create')->middleware('bouncer:Order\Order,create');
 Route::post('/create', [OrderController::class, 'store'])->name('orders.store')->middleware('bouncer:Order\Order,create');

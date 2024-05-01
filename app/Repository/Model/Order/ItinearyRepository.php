@@ -34,6 +34,7 @@ class ItinearyRepository
     public function getResponseStream()
     {
         $invoice = $this->invoice;
+        dd($invoice);
         $html = view('pdf.invoices.itineary_invoice', compact('invoice'))->render();
 
         // Create options for Dompdf
