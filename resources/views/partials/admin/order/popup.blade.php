@@ -47,7 +47,7 @@
                             <x-slot:icon>{{ Icon::delete() }}</x-slot:icon>
                             Cancel Order
                         </x-admin.popup-button>
-                        <form class="d-none" action="{{ route('orders.delete', ['order' => $order,]) }}" method="post" id="order-delete">
+                        <form class="d-none" onsubmit="return confirm('Are you sure you wish to Cancel this order?')" action="{{ route('orders.delete', ['order' => $order,]) }}" method="post" id="order-delete">
                             @csrf
                         </form>
                     @endif
