@@ -94,23 +94,23 @@
                 {{ __('quotes.view.cards.quick.calculator.components.accommodation') }}
                 <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span>
             </x-slot:header>
-            {{ f_currency($quote->repository->getAccommodationCost()) }}
+            {{ f_currency($quote->repository->getAccommodationCost(1 + $paying + $travelling)) }}
         </x-admin.section.otm-text>
         <x-admin.section.otm-text width="6">
             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.activities') }}</x-slot:header>
-            {{ f_currency($quote->repository->getActivityCost()) }}
+            {{ f_currency($quote->repository->getActivityCost(1 + $paying + $travelling)) }}
         </x-admin.section.otm-text>
         <x-admin.section.otm-text width="6">
             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.flights') }}</x-slot:header>
-            {{ f_currency($quote->repository->getFlightCost()) }}
+            {{ f_currency($quote->repository->getFlightCost(1 + $paying + $travelling)) }}
         </x-admin.section.otm-text>
         <x-admin.section.otm-text width="6">
             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.transport') }}</x-slot:header>
-            {{ f_currency($quote->repository->getTransportCost()) }}
+            {{ f_currency($quote->repository->getTransportCost(1 + $paying + $travelling)) }}
         </x-admin.section.otm-text>
         <x-admin.section.otm-text width="6">
             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.merchandise') }}</x-slot:header>
-            {{ f_currency($quote->repository->getMerchandiseCost()) }}
+            {{ f_currency($quote->repository->getMerchandiseCost(1 + $paying + $travelling)) }}
         </x-admin.section.otm-text>
         <x-admin.section.otm-text width="6">
             <x-slot:header>

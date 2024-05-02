@@ -373,51 +373,51 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         }
     }
     
-    public function getAccommodationCost(): float
+    public function getAccommodationCost(int $travellers = 1): float
     {
         $cost = 0;
-        foreach ($this->getTemplates() as $template) {
-            $cost += $template->purchase_price ?? 0;
+        foreach ($this->quote->accommodation()->with('inventory')->get() as $component) {
+            $cost += ($component->inventory->purchase_price ?? 0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
     
-    public function getActivityCost(): float
+    public function getActivityCost(int $travellers = 1): float
     {
         $cost = 0;
         /** @var QuoteActivity $component */
         foreach ($this->quote->activities()->with('inventory')->get() as $component) {
-            $cost += $component->inventory->purchase_price ?? 0;
+            $cost += ($component->inventory->purchase_price ?? 0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
     
-    public function getFlightCost(): float
+    public function getFlightCost(int $travellers = 1): float
     {
         $cost = 0;
         /** @var QuoteFlight $component */
         foreach ($this->quote->flights()->with('inventory')->get() as $component) {
-            $cost += $component->inventory->purchase_price ?? 0;
+            $cost += ($component->inventory->purchase_price ?? 0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
     
-    public function getTransportCost(): float
+    public function getTransportCost(int $travellers = 1): float
     {
         $cost = 0;
         /** @var QuoteTransport $component */
         foreach ($this->quote->transport()->with('inventory')->get() as $component) {
-            $cost += $component->inventory->purchase_price ?? 0;
+            $cost += ($component->inventory->purchase_price ?? 0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
     
-    public function getMerchandiseCost(): float
+    public function getMerchandiseCost(int $travellers = 1): float
     {
         $cost = 0;
         /** @var QuoteMerchandise $component */
         foreach ($this->quote->merchandise()->with('inventory')->get() as $component) {
-            $cost += $component->inventory->purchase_price ?? 0;
+            $cost += ($component->inventory->purchase_price ?? 0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
@@ -771,7 +771,11 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getTotalCostToCompany(int $travellers = 1): float
     {
-        $cost = $this->getCustomerCostToCompany() * $travellers;
+        $cost = $this->getAccommodationCost($travellers)
+                + $this->getActivityCost($travellers)
+                + $this->getFlightCost($travellers)
+                + $this->getTransportCost($travellers)
+                + $this->getMerchandiseCost($travellers);
         foreach ($this->quote->costs()->where('per_customer', false)->get() as $additional) {
             $cost += $additional->amount;
         }
