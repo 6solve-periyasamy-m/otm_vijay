@@ -14,7 +14,7 @@
                     </div>
                 @else
                     <div class="col-6 row">
-                        <x-livewire.input label="Traveller {{ $key }}" wire:model="travellers.{{$key}}.name" width="10" />
+                        <x-livewire.input.select.customer clear="true" placeholder="Unknown Traveller" label="Traveller {{ $key }}" name="travellers.{{$key}}.id" inlineJs="@this.refreshCustomers()" width="10" />
                         <div class="col-2 my-auto">
                             <div class="btn btn-{{ $traveller['paying'] ? 'success' : 'danger' }}">
                                 {{ $traveller['paying'] ? 'Paying' : 'Not Paying' }}
@@ -37,4 +37,18 @@
     @foreach($quote->repository->getMerchandiseBelowQuantity($paying + $travelling) as $quoteComponent)
         @include('partials.admin.quote.conversion.component', ['type' => 'merchandise',])
     @endforeach
+    <x-admin.section.card>
+        <div class="row">
+            <div class="col-10 fw-bold" style="color: red;">
+                @if($verifyComponents)
+                    Some components may have incorrect quantity values. You should double check before continuing.`
+                @endif
+            </div>
+            <div class="col-2">
+                <button class="btn btn-{{$verifyComponents?'danger':'success'}}" wire:click="convert">
+                    Convert to Order
+                </button>
+            </div>
+        </div>
+    </x-admin.section.card>
 </div>

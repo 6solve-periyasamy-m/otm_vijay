@@ -18,7 +18,7 @@ class Customer extends AbstractSelectComponent
      */
     public function render()
     {
-        return view('components.livewire.input.select.customer');
+        return view('components.livewire.input.select.customer.default');
     }
 
     protected function getModels(?int $id = null): Collection

@@ -28,6 +28,7 @@ use App\Repository\Interfaces\SerializesToJson;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Model\Tour\TourRepository;
 use App\Repository\Storage\ConvertedCustomer;
+use App\Repository\Storage\Quote\CustomerForConversion;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Spatie\Browsershot\Browsershot;
@@ -828,5 +829,16 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public static function find($id): Quote|null
     {
         return Quote::find($id);
+    }
+
+    /**
+     * @param CustomerForConversion $lead
+     * @param CustomerForConversion[] $customers
+     * @return void
+     */
+    public function convert(CustomerForConversion $lead, array $customers): Order
+    {
+        $travellers = 1 + sizeof($customers);
+        $tour = $this->convertToTour($travellers);
     }
 }
