@@ -137,7 +137,6 @@ class OrderController extends Controller
             'merchandise', 'merchandise.inventory', 'merchandise.inventory.size', 'merchandise.inventory.variant', 'merchandise.inventory.component', 'merchandise.inventory.component.type',
             'paymentInstallments', 'orders', 'orders.leadBooker'
         )->find($order->tour_id);
-        // return view('pdf.invoices.itineary_invoice', ['tour' => $tour,'order' => $order,]);
         $html = view('pdf.invoices.itineary_invoice', compact('tour','order','invoice'))->render();
 
         // Create options for Dompdf
