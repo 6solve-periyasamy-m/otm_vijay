@@ -35,7 +35,7 @@
     @endcan
     <div class="form-group col-xl-6">
         @include('partials.fields.raw.datetime',
-                    ['name' => 'Check In', 'field' => 'check_in', 'value' => $inventory?->check_in,
+                    ['name' => 'Check In', 'field' => 'check_in', 'value' => $inventory?->check_in ?? $accommodation?->check_in,
                      'onChange' => 'changeDate($(\'#check_in-input\'), $(\'#check_out-input\'))', ])
         <p></p>
         @include('partials.fields.raw.checkbox',
@@ -43,7 +43,7 @@
     </div>
     <div class="form-group col-xl-6">
         @include('partials.fields.raw.datetime',
-                    ['name' => 'Check Out', 'field' => 'check_out', 'value' => $inventory?->check_out,
+                    ['name' => 'Check Out', 'field' => 'check_out', 'value' => $inventory?->check_out ?? $accommodation?->check_out,
                      'onChange' => 'removeAutoset($(\'#check_in-input\'), $(\'#check_out-input\'))', 'classes' => 'autoset', ])
         <p></p>
         @include('partials.fields.raw.checkbox',

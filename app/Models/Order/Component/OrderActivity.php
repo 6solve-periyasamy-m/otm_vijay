@@ -71,8 +71,8 @@ class OrderActivity extends Model
     {
         $aStart = $a->tourComponent->inventory->starts_at;
         $bStart = $b->tourComponent->inventory->starts_at;
-        if ($aStart->gt($bStart)) return 1;
-        if ($aStart->lt($bStart)) return -1;
+        if ($aStart?->gt($bStart)) return 1;
+        if ($aStart?->lt($bStart)) return -1;
         return 0;
     }
 

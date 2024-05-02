@@ -70,6 +70,7 @@ class SettingsController extends Controller
             'social.facebook' => $request->input('social_facebook'),
             'social.twitter' => $request->input('social_twitter'),
             'social.instagram' => $request->input('social_instagram'),
+            'company.bank_transfer' => $request->input('bank_transfer'), //for invoice: Bank Transfer
             'system.year.start' => $request->input('year_start'),
             'system.historic' => $request->input('historic'),
             'payment.required' => $request->input('payment_required') == 'on' ? 1 : 0,

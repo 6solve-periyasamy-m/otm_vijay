@@ -10,7 +10,11 @@ module.exports = {
     "./vendor/mediconesystems/livewire-datatables/resources/**/*.blade.php",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'modal-overlay-bg': 'rgba(128, 128, 128, 0.4)',
+      },
+    },
   },
   plugins: [],
 }

@@ -54,7 +54,7 @@
             <p>Order Status</p>
             <h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6>
         </div>                
-        <div class="col-12 col-xl-6">
+        <div class="col-12 col-xl-3">
             <p>Order Value</p>
             <h6 class="fw-bold">
                 @if($order->cancelled)
@@ -67,22 +67,21 @@
                 @endif
             </h6>
         </div>
-        <div class="col-12 col-xl-6">
-            <p>Balance Paid</p>
+        <div class="col-12 col-xl-3">
+            <p>Total Paid</p>
             <h6 class="fw-bold">{{ f_currency($order->paid) }}</h6>
         </div>
-        <div class="col-12 col-xl-6">
+        <div class="col-12 col-xl-3">
             <p>Balance Outstanding</p>
             <h6 class="fw-bold">{{ f_currency($order->remaining) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
-            <p>Tax Amount</p>
-            <h6 class="fw-bold">{{ $order->getTaxes() !== null ? f_currency($order->getTaxes()) : 'No Taxes Due' }}</h6>
-        </div>
-
-        <div class="col-12 col-xl-6">
             <p>Next Payment Due</p>
             <h6 class="fw-bold">{{ $order->next_installment !== null ? f_date($order->next_installment->due_on) . ' - ' . f_currency($order->next_installment->remaining) : 'All installments paid' }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Tax Amount</p>
+            <h6 class="fw-bold">{{ $order->getTaxes() !== null ? f_currency($order->getTaxes()) : 'No Taxes Due' }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Lead Booker</p>
@@ -111,10 +110,10 @@
                 {{ Icon::edit() }}
                 Edit Order
             </a>
-            <a class="btn btn-secondary" href="#" onclick="showOverlay('.order-options')">
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#optionOrder">
                 {{ Icon::options() }}
                 <span>Options</span>
-            </a>
+            </button>
         </div>
     </div>
 </div>
@@ -215,21 +214,21 @@
                                 <td class="actions">
                                     @can('update', \App\Models\Order\Payment\Payment::class)
                                         <a href="{{ route('payments.edit', ['order' => $order, 'payment' => $payment,]) }}"
-                                           class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
+                                           class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
                                     @else
-                                        <span class="btn btn-outline-dark btn-sm mb-1">
+                                        <span class="btn btn-outline-dark btn-sm mb-1" title="Edit">
                                                 {{ Icon::edit() }}
                                             </span>
                                     @endcan
                                     @can('delete', \App\Models\Order\Payment\Payment::class)
                                         <a href="#" onclick="$('#payment-{{$payment->id}}-delete').submit()"
-                                           class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
+                                           class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete() }}</a>
                                         <form action="{{ route('payments.delete', ['order' => $order, 'payment' => $payment,]) }}"
                                               method="post" id="payment-{{$payment->id}}-delete">
                                             @csrf
                                         </form>
                                     @else
-                                        <span class="btn btn-outline-dark btn-sm mb-1">
+                                        <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
                                                 {{ Icon::delete() }}
                                             </span>
                                     @endcan
@@ -323,7 +322,7 @@
                                     {{ $covering !== null ? f_datetime($covering->paid_on) : "Not Paid" }}
                                 </td>
                                 <td class="actions">
-                                    <a href="{{route('orders.edit', ['order' => $order,])}}" class="btn btn-outline-success btn-sm mb-1">
+                                    <a href="{{route('orders.edit', ['order' => $order,])}}" title="Edit" class="btn btn-outline-success btn-sm mb-1">
                                         {{ Icon::edit() }}
                                     </a>
                                 </td>
@@ -347,7 +346,7 @@
                                     {{ $covering !== null ? f_datetime($covering->paid_on) : "Not Paid" }}
                                 </td>
                                 <td class="actions">
-                                    <a href="{{route('orders.edit', ['order' => $order,])}}" class="btn btn-outline-success btn-sm mb-1">
+                                    <a href="{{route('orders.edit', ['order' => $order,])}}" title="Edit" class="btn btn-outline-success btn-sm mb-1">
                                         {{ Icon::edit() }}
                                     </a>
                                 </td>
@@ -372,10 +371,10 @@
                                     {{ $paidOn === null ? 'Not Paid' : f_datetime($paidOn) }}
                                 </td>
                                 <td class="actions">
-                                    <a href="{{route('order-installments.edit', ['order' => $order, 'orderInstallment' => $installment,])}}" class="btn btn-outline-success btn-sm mb-1">
+                                    <a href="{{route('order-installments.edit', ['order' => $order, 'orderInstallment' => $installment,])}}" title="Edit" class="btn btn-outline-success btn-sm mb-1">
                                         {{ Icon::edit() }}
                                     </a>
-                                    <a href="#" class="btn btn-outline-danger btn-sm mb-1"
+                                    <a href="#" class="btn btn-outline-danger btn-sm mb-1" title="Delete"
                                        onclick="event.preventDefault();document.getElementById('orderInstallment-{{ $installment->id }}-delete').submit();">
                                         {{ Icon::delete() }}
                                     </a>
@@ -402,7 +401,7 @@
                                 {{ $covering !== null ? f_datetime($covering->paid_on) : "Not Paid" }}
                             </td>
                             <td class="actions">
-                                <a href="{{route('tours.edit', ['tour' => $order->tour,])}}" class="btn btn-outline-success btn-sm mb-1">
+                                <a href="{{route('tours.edit', ['tour' => $order->tour,])}}" title="Edit" class="btn btn-outline-success btn-sm mb-1">
                                     {{ Icon::edit() }}
                                 </a>
                             </td>
@@ -439,7 +438,7 @@
                                     <td>Commission: {{ $order->commission }}%</td>
                                     <td class="actions">
                                         <a href="{{ route('orders.edit', ['order' => $order,]) }}"
-                                           class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
+                                           class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
                                     </td>
                                 </tr>
                             @endif
@@ -450,15 +449,15 @@
                                 <td class="actions">
                                     @can('update', \App\Models\Order\Adjustment\ManualAdjustment::class)
                                         <a href="{{ route('manual-adjustments.edit', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}"
-                                           class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
+                                           class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
                                     @else
-                                        <span class="btn btn-outline-dark btn-sm mb-1">
+                                        <span class="btn btn-outline-dark btn-sm mb-1" title="Edit">
                                                 {{ Icon::edit() }}
                                             </span>
                                     @endcan
                                     @can('delete', \App\Models\Order\Adjustment\ManualAdjustment::class)
                                         <a href="#" onclick="$('#madjustment-{{$adjustment->id}}-delete').submit()"
-                                           class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
+                                           class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete() }}</a>
                                         <form action="{{ route('manual-adjustments.delete', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}"
                                               method="post" id="madjustment-{{$adjustment->id}}-delete">
                                             @csrf
@@ -497,22 +496,22 @@
                                     <td class="actions">
                                         @can('update', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
                                             <a href="{{ route('order-customer-adjustments.edit', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}"
-                                               class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
+                                               class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
                                         @else
-                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                            <span class="btn btn-outline-dark btn-sm mb-1" title="Edit">
                                                 {{ Icon::edit() }}
                                             </span>
                                         @endcan
                                         @can('delete', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
                                             <a href="#"
                                                onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()"
-                                               class="btn btn-outline-danger btn-sm mb-1">{{ Icon::delete() }}</a>
+                                               class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete() }}</a>
                                             <form action="{{ route('order-customer-adjustments.delete', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}"
                                                   method="post" id="oadjustment-{{$adjustment->id}}-delete">
                                                 @csrf
                                             </form>
                                         @else
-                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                            <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
                                                 {{ Icon::delete() }}
                                             </span>
                                         @endcan
