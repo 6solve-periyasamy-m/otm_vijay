@@ -460,7 +460,7 @@
     <div class="row">
         <div class="col-xl-6">
             <x-admin.section.card>
-                <x-slot:header>{{ __('quotes.view.cards.installments.header') }}</x-slot:header>
+                <x-slot:title>{{ __('quotes.view.cards.installments.header') }}</x-slot:title>
                 <form class="form-group row installment-create"
                       action="{{ route('quotes.installments.store', ['quote' => $quote]) }}" method="post">
                     @csrf
@@ -543,14 +543,14 @@
         </div>
         <div class="col-xl-6">
             <x-admin.section.card>
-                <x-slot:header>{{ __('quotes.view.cards.price-points.header') }}</x-slot:header>
+                <x-slot:title>{{ __('quotes.view.cards.price-points.header') }}</x-slot:title>
                 <livewire:admin.quote.price-point.form :quote="$quote" />
                 <livewire:admin.quote.price-point.table :quote="$quote->id" />
             </x-admin.section.card>
         </div>
         <div class="col-xl-12">
             <x-admin.section.card>
-                <x-slot:header>{{ __('quotes.view.cards.sections.header') }}</x-slot:header>
+                <x-slot:title>{{ __('quotes.view.cards.sections.header') }}</x-slot:title>
                 <div class="pb-3 text-end">
                     <a href="{{ route('quotes.section.show', ['quote' => $quote, ]) }}" class="btn btn-primary text-white mb-1">
                         {{ Icon::show() }}
@@ -604,7 +604,7 @@
         </div>
         <div class="col-xl-12">
             <x-admin.section.card>
-                <x-slot:header>{{ __('quotes.view.cards.sent.header') }}</x-slot:header>
+                <x-slot:title>{{ __('quotes.view.cards.sent.header') }}</x-slot:title>
                 <table class="table table-striped sent-quotes" id="sent-quotes-table">
                     <thead>
                     <tr>
