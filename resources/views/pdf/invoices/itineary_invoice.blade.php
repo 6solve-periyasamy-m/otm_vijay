@@ -23,6 +23,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet" />
 
     <style type="text/css">
+        .page-break {
+            page-break-before: always;
+        }
          @page {
             margin: 0px;
             padding: 0px;
@@ -387,7 +390,6 @@
                     $arrives_at = new DateTime($tourComponent->inventory->arrives_at);
                 @endphp
                 @if($date->format('Y-m-d') >= $arrives_at->format('Y-m-d') && $date->format('Y-m-d') <= $departs_at->format('Y-m-d'))
-               <?php //echo "<pre>"; print_r($tourComponent); die; ?>
                <tr>
                     <td align="left" valign="top">
                         <table align="left" width="60%" cellspacing="0" cellpadding="0">
@@ -479,7 +481,7 @@
                                                         {{ date('d M y', strtotime($tourComponent->inventory->check_in)) }}
                                                     </td>
                                                 </tr>
-                                                <tr>
+                                                <tr >
                                                     <td align="left" width="80" valign="top" style="padding: 0px 40px;"
                                                         class="oc_f12 oc_lblack">Check Out Date:
                                                     </td>
@@ -488,7 +490,7 @@
                                                         {{ date('d M y', strtotime($tourComponent->inventory->check_out)) }}
                                                     </td>
                                                 </tr>
-                                                <tr>
+                                                <tr >
                                                     <td align="left" width="80" valign="top" style="padding: 0px 40px;">&nbsp;
                                                     </td>
                                                     <td align="left" valign="top" style="padding: 0px 40px;">
@@ -525,7 +527,7 @@
                             <table align="left" width="60%" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td align="left" width="150" style="padding: 0px 40px; color: #E95B15; font-size: 11pt;"
-                                        class="oc_f16 ">EVENT 
+                                        class="oc_f16 ">{{ ($tourComponent->inventory->component->activity_category == 0 ) ? 'INCLUSION' : 'EVENT';  }}  
                                         </td>
                                     <td  align="right" valign="top"
                                         style="padding: 2px 15px;">&nbsp;</td>
