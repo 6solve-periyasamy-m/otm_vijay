@@ -224,7 +224,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             RoomingRepository::assignDefaultRooming($orderCustomer);
         }
         $refresh && $this->refresh();
-        event(new OrderCustomerCreatedEvent($orderCustomer, $refresh));
+        !$silent && event(new OrderCustomerCreatedEvent($orderCustomer, $refresh));
         return $orderCustomer;
     }
 

@@ -25,23 +25,23 @@
             @endforeach
         </div>
     </x-admin.section.card>
-    @foreach($quote->repository->getActivityBelowQuantity($paying + $travelling) as $quoteComponent)
+    @foreach($quote->repository->getActivityBelowQuantity($paying + $travelling + 1) as $quoteComponent)
         @include('partials.admin.quote.conversion.component', ['type' => 'activity',])
     @endforeach
-    @foreach($quote->repository->getFlightBelowQuantity($paying + $travelling) as $quoteComponent)
+    @foreach($quote->repository->getFlightBelowQuantity($paying + $travelling + 1) as $quoteComponent)
         @include('partials.admin.quote.conversion.component', ['type' => 'flight',])
     @endforeach
-    @foreach($quote->repository->getTransportBelowQuantity($paying + $travelling) as $quoteComponent)
+    @foreach($quote->repository->getTransportBelowQuantity($paying + $travelling + 1) as $quoteComponent)
         @include('partials.admin.quote.conversion.component', ['type' => 'transport',])
     @endforeach
-    @foreach($quote->repository->getMerchandiseBelowQuantity($paying + $travelling) as $quoteComponent)
+    @foreach($quote->repository->getMerchandiseBelowQuantity($paying + $travelling + 1) as $quoteComponent)
         @include('partials.admin.quote.conversion.component', ['type' => 'merchandise',])
     @endforeach
     <x-admin.section.card>
         <div class="row">
             <div class="col-10 fw-bold" style="color: red;">
                 @if($verifyComponents)
-                    Some components may have incorrect quantity values. You should double check before continuing.`
+                    Some components may have incorrect quantity values. You should double-check before continuing.
                 @endif
             </div>
             <div class="col-2">

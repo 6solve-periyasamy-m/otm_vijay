@@ -2,13 +2,19 @@
 
 namespace App\Repository\Storage\Quote;
 
+use App\Models\Customer\Customer;
+use App\Models\Order\OrderCustomer;
+use App\Models\Quote\Quote;
+use App\Repository\Storage\ConvertedCustomer;
 use JetBrains\PhpStorm\ArrayShape;
 use Livewire\Wireable;
 
 class CustomerForConversion implements Wireable
 {
     private array $components = [];
+    private Customer|null $customerModel;
     public int|string|null $customer;
+    public OrderCustomer|null $orderCustomer;
 
     public function __construct(public readonly bool $paying, public readonly bool $travelling) {
         $this->customer = null;
@@ -25,10 +31,23 @@ class CustomerForConversion implements Wireable
         ];
     }
 
+    public function getConvertedCustomer(Quote $quote): ConvertedCustomer
+    {
+        $customer = $this->getCustomer() ?? $quote->repository->generateGenericCustomer($this->paying);
+        return new ConvertedCustomer($customer, $this->paying, $this->travelling);
+    }
+
     public function setCustomer(string|int|null $customer): static
     {
         $this->customer = $customer;
+        $this->customerModel = Customer::find($customer);
         return $this;
+    }
+
+    public function getCustomer(): Customer|null
+    {
+        $this->customerModel = $this->customerModel ?? Customer::find($this->customer);
+        return $this->customerModel;
     }
 
     public function setComponents(array $components): static

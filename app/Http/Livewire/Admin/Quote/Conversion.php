@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Quote;
 
 use App\Models\Customer\Customer;
 use App\Models\Quote\Quote;
+use App\Repository\Storage\Quote\CustomerForConversion;
 use Livewire\Component;
 
 class Conversion extends Component
@@ -26,6 +27,7 @@ class Conversion extends Component
         for ($x = 0; $x < $travelling; $x++) {
             $this->travellers[] = ['id' => null, 'name' => null, 'paying' => false, 'travelling' => true, 'items' => []];
         }
+        $this->verifyAllComponents();
     }
 
     public function selectorChanged(string|null $key = null): void
@@ -81,34 +83,47 @@ class Conversion extends Component
     public function verifyAllComponents(): void
     {
         $belowAbove = false;
-        foreach ($this->quote->repository->getActivityBelowQuantity($this->paying + $this->travelling) as $component) {
+        foreach ($this->quote->repository->getActivityBelowQuantity($this->paying + $this->travelling + 1) as $component) {
             if ($this->getQuantity('activity', $component->id) !== $component->quantity) {
                 $belowAbove = true;
                 break;
             }
         }
         if ($belowAbove) { $this->verifyComponents = true; return; }
-        foreach ($this->quote->repository->getFlightBelowQuantity($this->paying + $this->travelling) as $component) {
+        foreach ($this->quote->repository->getFlightBelowQuantity($this->paying + $this->travelling + 1) as $component) {
             if ($this->getQuantity('flight', $component->id) !== $component->quantity) {
                 $belowAbove = true;
                 break;
             }
         }
         if ($belowAbove) { $this->verifyComponents = true; return; }
-        foreach ($this->quote->repository->getTransportBelowQuantity($this->paying + $this->travelling) as $component) {
+        foreach ($this->quote->repository->getTransportBelowQuantity($this->paying + $this->travelling + 1) as $component) {
             if ($this->getQuantity('transport', $component->id) !== $component->quantity) {
                 $belowAbove = true;
                 break;
             }
         }
         if ($belowAbove) { $this->verifyComponents = true; return; }
-        foreach ($this->quote->repository->getMerchandiseBelowQuantity($this->paying + $this->travelling) as $component) {
+        foreach ($this->quote->repository->getMerchandiseBelowQuantity($this->paying + $this->travelling + 1) as $component) {
             if ($this->getQuantity('merchandise', $component->id) !== $component->quantity) {
                 $belowAbove = true;
                 break;
             }
         }
         $this->verifyComponents = $belowAbove;
+    }
+
+    public function convert()
+    {
+        $customers = [];
+        foreach ($this->travellers as $traveller) {
+            if ($traveller['id'] === -1) {
+                $lead = (new CustomerForConversion($traveller['paying'], $traveller['travelling']))->setCustomer($this->quote->leadTraveller->customer_id)->setComponents($traveller['items']);
+                continue;
+            }
+            $customers[] = (new CustomerForConversion($traveller['paying'], $traveller['travelling']))->setCustomer($traveller['id'])->setComponents($traveller['items']);
+        }
+        return redirect()->route('orders.view', ['order' => $this->quote->repository->convert($lead, $customers),]);
     }
 
     public function render()
