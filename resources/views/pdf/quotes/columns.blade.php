@@ -176,7 +176,7 @@ $default_event_img = '/images/sportEvent.png';
                             <table align="left" width="100%" border="0" cellspacing="0">
                                 <tr>
                                     <td align="left" valign="top">
-                                        <img src="{{ img_to_b64($quote->event->image_url) }}" alt="logo" onerror="this.src='{{ img_to_b64($default_event_img) }}';" width="100%" style="display: block;">
+                                        
                                     </td>
                                 </tr>
                             </table>
@@ -288,7 +288,75 @@ $default_event_img = '/images/sportEvent.png';
                 <table align="left" width="60%" cellspacing="0" cellpadding="0">
                     <tr>
                         <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f12 oc_lblack">
-                            ARRIVAL TRANSFER
+                        ARRIVAL TRANSFER
+                        </td>
+                        <td align="right" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
+                    </tr>
+                </table>
+                <table align="right" width="40%" cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr>
+                            <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f14 oc_lblack">&nbsp;</td>
+                            <td width="180" align="center" valign="top" style="padding: 2px 15px;" class="oc_f14 oc_lblack">&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td align="left" valign="top" style="">
+                <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
+                    <tr>
+                        <td align="left" valign="top">
+                            <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
+                                <tbody>
+                                    @foreach($quote->repository->getFlightsForInvoice() as $component)
+                                    @if($component->get()->flight_type == 'Outbound')
+                                    <tr>
+                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                                            DATE: 
+                                        </td>
+                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                      
+                                        {{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                                        DESCRIPTION:
+                                        </td>
+                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                        {{ $component->getShortDescription() }} ({{ $component->priceShown() ? f_currency($component->getSalesPrice()) : 'Included'}})
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                                        QUANTITY:
+                                        </td>
+                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                        {{ $paying + $travelling }}
+                                        </td>
+                                    </tr>
+                                    @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td align="left" valign="top">
+                <table align="left" width="60%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f12 oc_lblack">
+                            TRANSFER
                         </td>
                         <td align="right" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
                     </tr>
@@ -313,27 +381,26 @@ $default_event_img = '/images/sportEvent.png';
                                     @foreach($quote->repository->getTransportForInvoice() as $component)
                                     <tr>
                                         <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            TRANSFER DATE:
+                                            DATE:
                                         </td>
                                         <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            {{ \Carbon\Carbon::parse($component->getInventory()->getStartTime())->format('d F Y | g:i:s A') }}
+                                        {{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            PICK UP POINT:
+                                        DESCRIPTION:
                                         </td>
                                         <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            Melbourne Airport
-                                            {{ $component->getShortDescription() }}
+                                        {{ $component->getShortDescription() }} ({{ $component->priceShown() ? f_currency($component->getSalesPrice()) : 'Included'}})
                                         </td>
                                     </tr>
                                     <tr>
                                         <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            DROP OFF POINT:
+                                        QUANTITY:
                                         </td>
                                         <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            Park Hyatt Melbourne
+                                        {{ $paying + $travelling }}
                                         </td>
                                     </tr>
                                     @endforeach
@@ -369,65 +436,70 @@ $default_event_img = '/images/sportEvent.png';
                 </table>
             </td>
         </tr>
-        <tr>
-            <td align="left" valign="top" style="">
-                <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                    <tr>
-                        <td align="left" valign="top">
-                            <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                <tbody>
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            CHECK IN:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            23 Jan 24 | 3pm
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            CHECK OUT:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            30 Jan 24 | 11am
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            HOTEL NAME:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            Park Hyatt Melbourne
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            ADDRESS:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            1 Parliament Square Off, Parliament Pl, Melbourne VIC 3002
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            ROOM TYPE:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            King Room Deluxe
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
-                &nbsp;
-            </td>
-        </tr>
+        @if(sizeof($quote->accommodation))
+            @foreach($quote->repository->getAccommodationForInvoice() as $component)
+                <tr>
+                    <td align="left" valign="top" style="">
+                        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
+                            <tr>
+                                <td align="left" valign="top">
+                                    <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                                                    CHECK IN:
+                                                </td>
+                                                <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                    23 Jan 24 | 3pm
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                                                    CHECK OUT:
+                                                </td>
+                                                <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                    30 Jan 24 | 11am
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                                                    HOTEL NAME:
+                                                </td>
+                                                <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                    Park Hyatt Melbourne
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                                                    ADDRESS:
+                                                </td>
+                                                <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                    1 Parliament Square Off, Parliament Pl, Melbourne VIC 3002
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                                                    ROOM TYPE:
+                                                </td>
+                                                <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                    King Room Deluxe
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
+                        &nbsp;
+                    </td>
+                </tr>
+            @endforeach
+        @endif
         <tr>
             <td align="left" valign="top">
                 <table align="left" width="60%" cellspacing="0" cellpadding="0">
@@ -448,49 +520,53 @@ $default_event_img = '/images/sportEvent.png';
                 </table>
             </td>
         </tr>
-        <tr>
-            <td align="left" valign="top">
-                <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                    <tr>
-                        <td align="left" valign="top">
-                            <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                <tbody>
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            DATE:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            {{ \Carbon\Carbon::parse($quote->event->starts_at)->format('d F Y') }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            EVENT:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            {{ $quote->event->name }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            DESCRIPTION:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            {{ $quote->event->description }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
-                &nbsp;
-            </td>
-        </tr>
+        @if(sizeof($quote->activities))
+            @foreach($quote->repository->getActivitiesForInvoice() as $component)
+                <tr>
+                    <td align="left" valign="top">
+                        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
+                            <tr>
+                                <td align="left" valign="top">
+                                    <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                                                    DATE:
+                                                </td>
+                                                <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                    {{ \Carbon\Carbon::parse($quote->event->starts_at)->format('d F Y') }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                                                    EVENT:
+                                                </td>
+                                                <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                    {{ $quote->event->name }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                                                    DESCRIPTION:
+                                                </td>
+                                                <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                    {{ $quote->event->description }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
+                        &nbsp;
+                    </td>
+                </tr>
+            @endforeach
+        @endif
         <tr>
             <td align="left" valign="top">
                 <table align="left" width="60%" cellspacing="0" cellpadding="0">
@@ -611,36 +687,41 @@ $default_event_img = '/images/sportEvent.png';
             </td>
         </tr>
         <tr>
-            <td align="left" valign="top">
+            <td align="left" valign="top" style="">
                 <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
                     <tr>
                         <td align="left" valign="top">
                             <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tbody>
+                                    @foreach($quote->repository->getFlightsForInvoice() as $component)
+                                    @if($component->get()->flight_type == 'Inbound')
                                     <tr>
                                         <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            TRANSFER DATE:
+                                            DATE: 
                                         </td>
                                         <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            27 Jan 24 | 3pm
+                                    
+                                        {{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            PICK UP POINT:
+                                        DESCRIPTION:
                                         </td>
                                         <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            Park Hyatt Melbourne
+                                        {{ $component->getShortDescription() }} ({{ $component->priceShown() ? f_currency($component->getSalesPrice()) : 'Included'}})
                                         </td>
                                     </tr>
                                     <tr>
                                         <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            DROP OFF POINT:
+                                        QUANTITY:
                                         </td>
                                         <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            Melbourne Airport
+                                        {{ $paying + $travelling }}
                                         </td>
                                     </tr>
+                                    @endif
+                                    @endforeach
                                 </tbody>
                             </table>
                         </td>

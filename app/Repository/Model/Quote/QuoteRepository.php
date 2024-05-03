@@ -32,7 +32,9 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Spatie\Browsershot\Browsershot;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use PDF;
 class QuoteRepository extends ComponentPackageRepository implements SerializesToJson
 {
     private Quote $quote;
@@ -417,16 +419,60 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         return $cost;
     }
 
-    public function getResponseStream(SentQuote $sent): StreamedResponse
+    public function getResponseStream(SentQuote $sent)
     {
-        return response()->stream(function () use ($sent) { echo $this->getStream($sent); }, 200, ['Content-Type' => 'application/pdf']);
+
+        $html = view('pdf.quotes.columns', compact('sent'))->render();
+
+        // Create options for Dompdf
+        $options = new Options();
+        $options->set('dpi', 96);
+        $options->set('isHtml5ParserEnabled', true);
+        $dompdf = new Dompdf($options);
+        $dompdf->setPaper('A4', 'portrait');
+        
+        $dompdf->loadHtml($html);
+
+        // Render the PDF
+        $dompdf->render();
+
+        // Output PDF content as base64 encoded string
+        $pdfContent = base64_encode($dompdf->output());
+
+        // Pass the PDF content to the view
+        return view('pdf.dom_pdf_preview', compact('pdfContent'));
+
+        
+        // return response()->stream(function () use ($sent) { echo $this->getStream($sent); }, 200, ['Content-Type' => 'application/pdf']);
     }
 
     public function getStream(SentQuote $sent): string
     {
-        $invoice = Browsershot::html(view('pdf.quotes.columns', ['sent' => $sent,])->render());
-        $invoice->showBackground()->margins(10, 2, 10, 2);
-        return $invoice->pdf();
+
+        $html = view('pdf.quotes.columns', compact('sent'))->render();
+
+        // Create options for Dompdf
+        $options = new Options();
+        $options->set('dpi', 96);
+        $options->set('isHtml5ParserEnabled', true);
+        $dompdf = new Dompdf($options);
+        $dompdf->setPaper('A4', 'portrait');
+        
+        $dompdf->loadHtml($html);
+
+        // Render the PDF
+        $dompdf->render();
+
+        // Output PDF content as base64 encoded string
+        $pdfContent = base64_encode($dompdf->output());
+
+        // Pass the PDF content to the view
+        return view('pdf.dom_pdf_preview', compact('pdfContent'));
+
+
+        // $invoice = Browsershot::html(view('pdf.quotes.columns', ['sent' => $sent,])->render());
+        // $invoice->showBackground()->margins(10, 2, 10, 2);
+        // return $invoice->pdf();
     }
 
     public function getRemaining(int $paying = 1): float
@@ -446,7 +492,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $data = [];
         foreach ($this->getTemplates(false) as $template) {
-            $time = $template->repository->getInventory()->getStartTime()?->unix();
+            $time = $template->repository->getInventory()->getStartTime()->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -464,7 +510,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $data = [];
         foreach ($this->quote->activities as $template) {
-            $time = $template->repository->getInventory()->getStartTime()?->unix();
+            $time = $template->repository->getInventory()->getStartTime()->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -482,7 +528,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $data = [];
         foreach ($this->quote->flights as $template) {
-            $time = $template->repository->getInventory()->getStartTime()?->unix();
+            $time = $template->repository->getInventory()->getStartTime()->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -500,7 +546,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $data = [];
         foreach ($this->quote->transport as $template) {
-            $time = $template->repository->getInventory()->getStartTime()?->unix();
+            $time = $template->repository->getInventory()->getStartTime()->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -518,7 +564,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $data = [];
         foreach ($this->getAccommodationForInvoice(false) as $component) {
-            $time = $component->getInventory()->getStartTime()?->unix();
+            $time = $component->getInventory()->getStartTime()->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -526,7 +572,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $data[$time] = $component;
         }
         foreach ($this->getActivitiesForInvoice(false) as $component) {
-            $time = $component->getInventory()->getStartTime()?->unix();
+            $time = $component->getInventory()->getStartTime()->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -534,7 +580,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $data[$time] = $component;
         }
         foreach ($this->getFlightsForInvoice(false) as $component) {
-            $time = $component->getInventory()->getStartTime()?->unix();
+            $time = $component->getInventory()->getStartTime()->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -542,7 +588,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $data[$time] = $component;
         }
         foreach ($this->getTransportForInvoice(false) as $component) {
-            $time = $component->getInventory()->getStartTime()?->unix();
+            $time = $component->getInventory()->getStartTime()->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
