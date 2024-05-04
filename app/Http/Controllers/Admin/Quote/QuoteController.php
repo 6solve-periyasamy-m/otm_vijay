@@ -68,23 +68,12 @@ class QuoteController extends Controller
 
     public function document(Quote $quote, SentQuote $sent)
     {
-        return $quote->repository->getResponseStream($sent);
+        return $quote->repository->getResponseStream($sent,$quote);
     }
 
     public function preview(StartConversionRequest $request, Quote $quote)
     {
-        // return $quote->repository->getResponseStream();
-
-
-        // return $quote->repository->getQuoteRepository()->getResponseStream();
-
-
-        // $paying = $request->paying + ($quote->leadTraveller->paying ? 1 : 0);
-        // $pricePoint = $quote->repository->getPricePerPerson($request->paying + ($quote->leadTraveller->paying ? 1 : 0));
-        // if (!isset($pricePoint)) {
-        //     return back()->withErrors(['msg' => "No price points exist for {$paying} paying travellers",]);
-        // }
-        return $quote->repository->getResponseStream($quote->repository->makeSent($quote->leadTraveller->email, $request->paying, $request->travelling));
+        return $quote->repository->getResponseStream($quote->repository->makeSent($quote->leadTraveller->email, $request->paying, $request->travelling),$quote);
     }
 
     public function convert(ConversionRequest $request, Quote $quote)

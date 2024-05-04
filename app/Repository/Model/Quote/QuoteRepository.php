@@ -419,7 +419,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         return $cost;
     }
 
-    public function getResponseStream(SentQuote $sent)
+    public function getResponseStream(SentQuote $sent, Quote $quote)
     {
 
         $html = view('pdf.quotes.columns', compact('sent'))->render();
@@ -448,31 +448,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getStream(SentQuote $sent): string
     {
-
-        $html = view('pdf.quotes.columns', compact('sent'))->render();
-
-        // Create options for Dompdf
-        $options = new Options();
-        $options->set('dpi', 96);
-        $options->set('isHtml5ParserEnabled', true);
-        $dompdf = new Dompdf($options);
-        $dompdf->setPaper('A4', 'portrait');
-        
-        $dompdf->loadHtml($html);
-
-        // Render the PDF
-        $dompdf->render();
-
-        // Output PDF content as base64 encoded string
-        $pdfContent = base64_encode($dompdf->output());
-
-        // Pass the PDF content to the view
-        return view('pdf.dom_pdf_preview', compact('pdfContent'));
-
-
-        // $invoice = Browsershot::html(view('pdf.quotes.columns', ['sent' => $sent,])->render());
-        // $invoice->showBackground()->margins(10, 2, 10, 2);
-        // return $invoice->pdf();
+        $invoice = Browsershot::html(view('pdf.quotes.columns', ['sent' => $sent,])->render());
+        $invoice->showBackground()->margins(10, 2, 10, 2);
+        return $invoice->pdf();
     }
 
     public function getRemaining(int $paying = 1): float
