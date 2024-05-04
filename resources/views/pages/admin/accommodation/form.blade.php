@@ -21,8 +21,7 @@
     @include('partials.fields.datetime', ['name' => 'Default Check In', 'field' => 'check_in', 'value' => $accommodation?->check_in, 'width' => 6 ])
     @include('partials.fields.datetime', ['name' => 'Default Check In', 'field' => 'check_out', 'value' => $accommodation?->check_out, 'width' => 6 ])
     @include('partials.fields.prefab.addresses.switcher', ['address' => $accommodation?->address,])
-    @include('partials.fields.selector.default',
-        ['name' => 'Currency', 'field' => 'currency_id', 'value' => $accommodation?->currency, 'route' => 'currencies',])
+    <x-livewire.input.select.currency name="currency_id" label="Currency" value="{{$accommodation?->currency_id}}" />
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'notes', 'value' => $accommodation?->internal_notes])
     @include('partials.fields.submit')
 @endsection

@@ -27,8 +27,7 @@
     @include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'width' => 2, 'value' => $activity?->image_url,])
     @include('partials.fields.ckeditor', ['name' => 'Description', 'field' => 'description', 'value' => $activity?->description,])
     @include('partials.fields.prefab.addresses.switcher', ['address' => $activity?->address,])
-    @include('partials.fields.selector.default',
-        ['name' => 'Currency', 'field' => 'currency_id', 'value' => $activity?->currency, 'route' => 'currencies',])
+    <x-livewire.input.select.currency name="currency_id" label="Currency" value="{{$activity?->currency_id}}" />
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'notes', 'value' => $activity?->internal_notes])
     @include('partials.fields.submit')
 @endsection
