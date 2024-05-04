@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\SelectController;
+use App\View\Components\Livewire\Input\Select\Country;
+use App\View\Components\Livewire\Input\Select\Currency;
 use App\View\Components\Livewire\Input\Select\Organization;
 use App\View\Components\Livewire\Input\Select\TaxBracket;
 use App\View\Components\Livewire\Input\Select\User;
@@ -20,11 +22,13 @@ Route::prefix('tax-brackets')->name('tax-brackets.')->group(function () {
     Route::post('/{id}', [TaxBracket::class, 'getOne'])->name('selected');
 });
 
+Route::prefix('currencies')->name('currencies.')->group(function () {
+    Route::post('/', [Currency::class, 'getAll'])->name('select');
+    Route::post('/{id}', [Country::class, 'getOne'])->name('selected');
+});
+
 Route::post('locations', [SelectController::class, 'getLocations'])->name('locations.select');
 Route::post('addresses', [SelectController::class, 'getAddresses'])->name('addresses.select');
-Route::post('currencies', [SelectController::class, 'getCurrencies'])->name('currencies.select');
-Route::post('addresses', [SelectController::class, 'getAddresses'])->name('addresses.select');
-Route::post('currencies', [SelectController::class, 'getCurrencies'])->name('currencies.select');
 Route::post('filter/countries', [SelectController::class, 'getAvailableFilterCountries'])->name('countries.filter.select');
 Route::post('regions', [SelectController::class, 'getRegions'])->name('regions.select');
 Route::post('location-types', [SelectController::class, 'getLocationTypes'])->name('location-types.select');
