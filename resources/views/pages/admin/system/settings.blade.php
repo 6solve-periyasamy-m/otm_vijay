@@ -115,7 +115,7 @@
     </div>
     <div class="card">
         <div class="card-body" data-target="#conversions" onclick="toggleAccordion(this)">
-            {{ Icon::maximize() }} Conversion Rates
+            <h4 class="fw-bold">{{ Icon::maximize() }} Conversion Rates</h4>
         </div>
     </div>
     <div class="collapse show mx-1" id="conversions">
