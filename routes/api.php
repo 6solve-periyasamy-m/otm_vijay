@@ -50,7 +50,7 @@ Route::prefix('/php/booking')->name('api.booking.')->group(function () {
 
 Route::post('/admin/orders/{order}/rooming/get', [OrderController::class, 'getRoomingInformation'])->name('api.orders.rooming.get');
 
-Route::prefix('countries')->name('countries.')->group(function () {
+Route::prefix('countries')->name('api.countries.')->group(function () {
     Route::post('/', [Country::class, 'getAll'])->name('select');
     Route::post('/{id}', [Country::class, 'getOne'])->name('selected');
 });
