@@ -41,8 +41,7 @@
     @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $transport?->name,'width'=>10,])
     @include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'width' => 2, 'value' => $transport?->image_url,])
     @include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $transport?->description,])
-    @include('partials.fields.selector.default',
-        ['name' => 'Currency', 'field' => 'currency_id', 'value' => $transport?->currency, 'route' => 'currencies',])
+    <x-livewire.input.select.currency name="currency_id" label="Currency" value="{{$transport?->currency_id}}" />
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'notes', 'value' => $transport?->internal_notes])
     @include('partials.fields.submit')
 @endsection
