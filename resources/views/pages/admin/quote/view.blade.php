@@ -489,7 +489,7 @@
                         <td>{{ f_currency($quote->deposit) }}</td>
                         <td>
                             <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}"
-                               class="btn btn-outline-success btn-sm mb-1">
+                               class="btn btn-outline-success btn-sm mb-1" title="Edit">
                                 {{ Icon::edit() }}
                             </a>
                         </td>
@@ -513,11 +513,11 @@
                                 </td>
                                 <td>
                                     <a href="javascript:$('.installment-{{$installment->id}}').submit()"
-                                       class="btn btn-outline-success btn-sm mb-1">
+                                       class="btn btn-outline-success btn-sm mb-1" title="Edit">
                                         {{ Icon::edit() }}
                                     </a>
                                     <a href="javascript:$('#installment-{{ $installment->id }}-delete').submit()"
-                                       class="btn btn-outline-danger btn-sm mb-1">
+                                       class="btn btn-outline-danger btn-sm mb-1" title="Delete">
                                         {{ Icon::delete() }}
                                     </a>
                                 </td>
@@ -532,7 +532,7 @@
                         <td>{{ f_currency($quote->remaining) }}</td>
                         <td>
                             <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}"
-                               class="btn btn-outline-success btn-sm mb-1">
+                               class="btn btn-outline-success btn-sm mb-1" title="Edit">
                                 {{ Icon::edit() }}
                             </a>
                         </td>
@@ -586,10 +586,10 @@
                             <td>{{ f_bool($section->hidden) }}</td>
                             <td class="actions">
                                 <a href="{{ route('quotes.section.edit', ['quote' => $quote, 'section' => $section,]) }}"
-                                   class="btn btn-outline-success btn-sm mb-1">
+                                   class="btn btn-outline-success btn-sm mb-1" title="Edit">
                                     {{ Icon::edit() }}
                                 </a>
-                                <a href="javascript:$('#section-{{$section->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
+                                <a href="javascript:$('#section-{{$section->id}}-delete').submit()" title="Delete" class="btn btn-outline-danger btn-sm mb-1">
                                     {{ Icon::delete() }}
                                 </a>
                                 <form id="section-{{$section->id}}-delete" class="d-none" method="post" action="{{ route('quotes.section.delete', ['quote' => $quote, 'section' => $section,]) }}">
@@ -626,15 +626,15 @@
                             <td>{{ $sent->free }}</td>
                             <td class="actions-3">
                                 <a href="{{ route('quotes.sent.view', ['quote' => $quote, 'sent' => $sent,]) }}"
-                                   class="btn btn-outline-info btn-sm mb-1">
+                                   class="btn btn-outline-info btn-sm mb-1" title="View">
                                     {{ Icon::view() }}
                                 </a>
                                 <a href="{{ route('quotes.sent.resend', ['quote' => $quote, 'sent' => $sent,]) }}"
-                                   class="btn btn-outline-success btn-sm mb-1">
+                                   class="btn btn-outline-success btn-sm mb-1" title="Resend">
                                     {{ Icon::email() }}
                                 </a>
                                 <a href="{{ route('quotes.sent.rebuild', ['quote' => $quote, 'sent' => $sent,]) }}"
-                                   class="btn btn-outline-danger btn-sm mb-1">
+                                   class="btn btn-outline-danger btn-sm mb-1" title="Rebuild">
                                     {{ Icon::rebuild() }}
                                 </a>
                             </td>

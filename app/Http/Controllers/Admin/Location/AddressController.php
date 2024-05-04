@@ -26,7 +26,7 @@ class AddressController extends Controller
         if (AddressParent::tryFrom($addressParent) === null) return back()->withErrors(['msg' => 'An invalid parent has been provided',]);
         $request->validate(Address::getValidationRules());
         $address = Address::create([
-            'name' => $request->input('name'),
+            'name' => $request->input('address_name'),
             'location_type_id' => $request->input('location_type_id'),
             'parent' => $addressParent,
             'address_line_1' => $request->input('address_line_1'),
@@ -53,7 +53,7 @@ class AddressController extends Controller
     {
         $request->validate(Address::getValidationRules());
         $address->update([
-            'name' => $request->input('name'),
+            'name' => $request->input('address_name'),
             'location_type_id' => $request->input('location_type_id'),
             'address_line_1' => $request->input('address_line_1'),
             'address_line_2' => $request->input('address_line_2'),
@@ -62,7 +62,7 @@ class AddressController extends Controller
             'country_id' => $request->input('country_id'),
             'postcode' => $request->input('postcode'),
         ]);
-        return redirect()->route('addresses.view', ['address' => $address,]);
+        return redirect()->route('addresses.all');
     }
 
     public function destroy(Address $address)

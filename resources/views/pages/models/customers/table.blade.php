@@ -35,10 +35,10 @@
                     <td>{{ $customer->mobile_number }}</td>
                     <td>{{ f_date($customer->passport_expiry_date) }}</td>
                     <td class="actions">
-                        <a href="{{route('customers.edit', ['customer' => $customer,])}}" class="btn btn-outline-success btn-sm mb-1">
+                        <a href="{{route('customers.edit', ['customer' => $customer,])}}" class="btn btn-outline-success btn-sm mb-1" title="Edit">
                             {{ Icon::edit() }}
                         </a>
-                        <a href="#" class="btn btn-outline-danger btn-sm mb-1"
+                        <a href="#" class="btn btn-outline-danger btn-sm mb-1" title="Delete"
                            onclick="event.preventDefault();document.getElementById('customer-{{ $customer->id }}-delete').submit();">
                             {{ Icon::delete() }}
                         </a>

@@ -82,19 +82,13 @@
                         <span>Create Quote</span>
                     </a>
                 @endcan
-                <a class="btn btn-success" href="#" onclick="showOverlay('.tour-options')">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#optionTour">
                     {{ Icon::options() }}
                     <span>Options</span>
-                </a>
-                <!-- class="bg-purple-500 text-white rounded-md px-8 py-2 text-base font-medium hover:bg-blue-600
-                focus:outline-none focus:ring-2 focus:ring-green-300" -->
-                <!-- <button class="btn btn-success"  id="open-btn">
-                {{ Icon::options() }}
-                    <span>Options</span>
-                </button>            -->
+                </button>
             </div>
         </div>
-    </div>
+    </div>    
     <hr class="splitter"/>
     <div class="heading pt-2 pb-md-3 pb-2">
         <h2 class="fw-bold">Components</h2>
@@ -591,7 +585,7 @@
                 <td>{{ f_currency($tour->remaining_installment) }} ({{ $tour->remaining_percentage }}%)</td>
                 <td>
                     <a href="{{route('tours.edit', ['tour' => $tour,])}}"
-                       class="btn btn-outline-success btn-sm mb-1">
+                       class="btn btn-outline-success btn-sm mb-1" title="Edit">
                         {{ Icon::edit() }}
                     </a>
                 </td>
@@ -636,14 +630,14 @@
                     <td class="actions">
                         @can('update', Merchandise::class)
                             <a href="{{ route('merchandise.inventory.tour.edit', ['tour' => $tour, 'inventoryTour' => $merchandise,]) }}"
-                               class="btn btn-outline-primary btn-sm mb-1">{{ Icon::edit() }}</a>
+                               class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
                         @else
-                            <span class="btn btn-outline-dark btn-sm mb-1">
+                            <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
                                             {{ Icon::delete() }}
                                         </span>
                         @endcan
                         @can('delete', Merchandise::class)
-                            <a href="#" onclick="$('#merchandise-{{$merchandise->id}}-delete').submit()"
+                            <a href="#" title="Delete" onclick="$('#merchandise-{{$merchandise->id}}-delete').submit()"
                                class="btn btn-outline-{{ $merchandise->is_bookable ? 'danger' : 'warning' }} btn-sm mb-1">
                                 {{ $merchandise->is_bookable ? Icon::delete() : Icon::enable() }}
                             </a>
@@ -652,7 +646,7 @@
                                 @csrf
                             </form>
                         @else
-                            <span class="btn btn-outline-dark btn-sm mb-1">
+                            <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
                                     {{ Icon::delete() }}
                                 </span>
                         @endcan
@@ -687,7 +681,7 @@
                     </td>
                     <td class="actions">
                         <a href="{{route('orders.edit', ['order' => $order,])}}"
-                           class="btn btn-outline-success btn-sm mb-1">
+                           class="btn btn-outline-success btn-sm mb-1" title="Edit">
                             {{ Icon::edit() }}
                         </a>
                     </td>
@@ -703,23 +697,4 @@
         {!! $tour->terms !!}
     </x-admin.section.card>
 
-    <script >
-        let modal = document.getElementById('modal');
-        let btn = document.getElementById('open-btn');
-        let button = document.getElementById('ok-btn');
-
-        btn.onclick = function () {
-            modal.style.display = 'flex';
-        };
-
-        button.onclick = function () {
-            modal.style.display = 'none';
-        };
-
-        window.onclick = function (event) {
-            if (event.target == modal) {
-            modal.style.display = "none";
-            }
-        }
-    </script>
 @endsection

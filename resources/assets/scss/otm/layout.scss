@@ -62,6 +62,40 @@ a {
   border-radius: 2px;
 }
 
+
+// modal width css custom
+html,
+body * {
+    scrollbar-color: $sideBarColor #fff !important;
+    scrollbar-width: thin;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #fff;
+    border-radius: 16px;
+}
+
+::-webkit-scrollbar {
+    width: 3px;
+    height: 6px;
+    background-color: #fff;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 16px;
+    background-color: $sideBarColor;
+}
+.common-modal-custom{
+  .modal-auto-width{
+    max-width: max-content;
+  }
+  .custom-panel{
+    height: auto;
+    border-radius: 0;
+  }
+}
+// modal width css custom
+
 @media screen and (min-width: 1500px) {
   .page-wrapper {
     width: 100%;
