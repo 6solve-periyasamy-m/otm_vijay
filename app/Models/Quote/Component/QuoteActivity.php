@@ -83,12 +83,12 @@ class QuoteActivity extends Model
         return $this->purchase_price == 0 ? 100 : ($this->tour_sales_price / $this->purchase_price) * 100;
     }
 
-    public function getStartAttribute(): Carbon
+    public function getStartAttribute(): Carbon|null
     {
         return $this->inventory->starts_at;
     }
 
-    public function getEndAttribute(): Carbon
+    public function getEndAttribute(): Carbon|null
     {
         return $this->inventory->ends_at;
     }

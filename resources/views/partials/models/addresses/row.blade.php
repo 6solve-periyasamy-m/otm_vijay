@@ -9,7 +9,7 @@
     <td>{{ $address->country ?? 'Not Set' }}</td>
     <td>{{ $address->postcode ?? 'Not Set' }}</td>
     <td class="actions">
-        <a href="{{route('addresses.edit', ['address' => $address,])}}" class="btn btn-outline-success btn-sm mb-1">
+        <a href="{{route('addresses.edit', ['address' => $address,])}}" class="btn btn-outline-success btn-sm mb-1" title="Edit">
             {{ Icon::edit() }}
         </a>
     </td>

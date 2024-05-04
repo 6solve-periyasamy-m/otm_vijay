@@ -56,23 +56,23 @@
                     <td>{{ $merch->internal_notes }}</td>
                     <td class="actions">
                         @can('update', \App\Models\Merchandise\Merchandise::class)
-                            <a href="{{route('merchandise.edit', ['merchandise' => $merch,])}}" class="btn btn-outline-success btn-sm mb-1">
+                            <a href="{{route('merchandise.edit', ['merchandise' => $merch,])}}" title="Edit" class="btn btn-outline-success btn-sm mb-1">
                                 {{ Icon::edit() }}
                             </a>
                         @else
-                            <span class="btn btn-outline-dark btn-sm mb-1">
+                            <span class="btn btn-outline-dark btn-sm mb-1" title="Edit">
                                     {{ Icon::edit() }}
                                 </span>
                         @endcan
                         @can('delete', \App\Models\Merchandise\Merchandise::class)
-                            <a href="javascript:$('#merchandise-{{ $merch->id }}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
+                            <a href="javascript:$('#merchandise-{{ $merch->id }}-delete').submit()" title="Delete" class="btn btn-outline-danger btn-sm mb-1">
                                 {{ Icon::delete() }}
                             </a>
                             <form id="merchandise-{{ $merch->id }}-delete"
                                   action="{{ route('merchandise.delete', ['merchandise' => $merch,]) }}" method="POST"
                                   style="display: none;">{{ csrf_field() }}</form>
                         @else
-                            <span class="btn btn-outline-dark btn-sm mb-1">
+                            <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
                                     {{ Icon::delete() }}
                                 </span>
                         @endcan

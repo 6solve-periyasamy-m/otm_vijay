@@ -46,12 +46,12 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
         return $this->inventory;
     }
 
-    public function getStartTime(): Carbon
+    public function getStartTime(): Carbon|null
     {
         return $this->inventory->starts_at;
     }
 
-    public function getEndTime(): Carbon
+    public function getEndTime(): Carbon|null
     {
         return $this->inventory->ends_at;
     }
@@ -103,7 +103,11 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
 
     public function __toString(): string
     {
-        return "{$this->inventory->component} - {$this->inventory->ticketType} (" . f_datetime($this->inventory->starts_at) . " to " . f_datetime($this->inventory->ends_at) . ")";
+        $dateString = "";
+        if ($this->inventory->starts_at !== null && $this->inventory->ends_at !== null) {
+            $dateString = " (" . f_datetime($this->inventory->starts_at) . " to " . f_datetime($this->inventory->ends_at) . ")";
+        }
+        return "{$this->inventory->component} - {$this->inventory->ticketType}" . $dateString;
     }
 
     public function addToTour(Tour $tour, string $tourComponentType, float $price = -1): ?ActivityInventoryTourRepository

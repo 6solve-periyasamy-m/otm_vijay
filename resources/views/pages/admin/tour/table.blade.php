@@ -60,14 +60,14 @@
                     </td>
                     <td>{{ $tour->is_active ? "Yes" : "No" }}</td>
                     <td class="actions-3">
-                        <a href="{{route('tours.duplicate', ['tour' => $tour,])}}" class="btn btn-outline-info btn-sm mb-1">
+                        <a href="{{route('tours.duplicate', ['tour' => $tour,])}}" title="Copy" class="btn btn-outline-info btn-sm mb-1">
                             {{ Icon::copy() }}
                         </a>
-                        <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
+                        <a href="{{route('tours.edit', ['tour' => $tour,])}}" title="Edit" class="btn btn-outline-success btn-sm mb-1">
                             {{ Icon::edit() }}
                         </a>
                         @if(!$tour->trashed())
-                            <a href="#" onclick="event.preventDefault();document.getElementById('tour-{{ $tour->id }}-delete').submit();" class="btn btn-outline-danger btn-sm mb-1">
+                            <a href="#" title="Delete" onclick="event.preventDefault();document.getElementById('tour-{{ $tour->id }}-delete').submit();" class="btn btn-outline-danger btn-sm mb-1">
                                 {{ Icon::delete() }}
                             </a>
                             <form id="tour-{{ $tour->id }}-delete" action="{{ route('tours.delete', ['tour' => $tour,]) }}" method="POST"

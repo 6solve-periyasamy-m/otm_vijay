@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('accommodations', function (Blueprint $table) {
-            $table->dateTime('check_in')->nullable();
-            $table->dateTime('check_out')->nullable();
+        Schema::table('events', function (Blueprint $table) {
+            $table->string('image_url')->nullable();
         });
     }
 
@@ -26,9 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('accommodations', function (Blueprint $table) {
-            $table->dropColumn('check_in');
-            $table->dropColumn('check_out');
+        Schema::table('events', function (Blueprint $table) {
+            $table->dropColumn('image_url');
         });
     }
 };
