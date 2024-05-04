@@ -3,6 +3,8 @@
 namespace App\Repository\Facades;
 
 use App\Models\Location\Country;
+use App\Models\Location\Currency;
+use App\Models\System\ConversionRate;
 use App\Models\System\TaxBracket;
 use App\Repository\SettingsRepository;
 use Carbon\Carbon;
@@ -70,6 +72,21 @@ class Settings
     public function getTaxBracket(): TaxBracket
     {
         return TaxBracket::find(static::get('system.tax.bracket')) ?? static::getNullTaxBracket();
+    }
+    
+    public function getConversionRate(Currency|string $from, Currency|string $to): float|null
+    {
+        if (is_string($from)) {
+            $from = Currency::where('code', '=', $from)->first();
+        }
+        if (is_string($to)) {
+            $to = Currency::where('code', '=', $to)->first();
+        }
+        if ($from === null || $to === null) return null;
+        if ($from->id === $to->id) return 1;
+        return ConversionRate::where('from_currency_id', '=', $from->id)
+            ->where('to_currency_id', '=', $to->id)
+            ->first()?->rate;
     }
 
     public function getNullTaxBracket(): TaxBracket
