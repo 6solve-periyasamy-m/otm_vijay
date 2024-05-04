@@ -113,4 +113,21 @@
     <div class="collapse row mx-1" id="import">
         @include('partials.admin.system.import')
     </div>
+    <div class="card">
+        <div class="card-body" data-target="#conversions" onclick="toggleAccordion(this)">
+            {{ Icon::maximize() }} Conversion Rates
+        </div>
+    </div>
+    <div class="collapse show mx-1" id="conversions">
+        <x-admin.section.card>
+            <div class="flex float-end">
+                <button class="btn btn-success" onclick="openModal('admin.system.conversion.form')">
+                    {{ Icon::create() }}Create New
+                </button>
+            </div>
+        </x-admin.section.card>
+        <x-admin.section.card>
+            <livewire:admin.system.conversion.table />
+        </x-admin.section.card>
+    </div>
 @endsection
