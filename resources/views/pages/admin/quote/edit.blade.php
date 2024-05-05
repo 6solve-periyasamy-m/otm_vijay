@@ -16,7 +16,8 @@
     <x-livewire.input.select.tax-bracket name="tax_bracket_id" label="Tax Bracket" width="3"/>
     <x-livewire.input.select.organization name="organization_id" value="{{ $quote?->organization_id }}" label="Organization (Optional)" width="6" />
     <x-livewire.input.select.user name="consultant_id" value="{{ $quote?->consultant_id }}" label="Consultant (Optional)" width="6" clear="true" />
-    <x-admin.input name="deposit" width="6" value="{{$quote->deposit}}">Deposit</x-admin.input>
+    <x-admin.input name="deposit" width="3" value="{{$quote?->deposit}}">Deposit</x-admin.input>
+    <x-admin.input.checkbox name="percentage" value="{{$quote?->is_deposit_percentage}}" width="3">Is Percentage</x-admin.input.checkbox>
     <x-admin.input name="single_occupancy_surcharge" width="6" value="{{$quote->single_occupancy_surcharge}}">Single Occupancy Surcharge</x-admin.input>
     <x-admin.input.text-area name="description" value="{{$quote->description}}">Description</x-admin.input.text-area>
     <hr class="splitter"/>
