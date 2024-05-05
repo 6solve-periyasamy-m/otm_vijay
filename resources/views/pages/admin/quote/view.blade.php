@@ -479,6 +479,7 @@
                         <th scope="col">{{ __('quotes.view.cards.installments.table.type') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.installments.table.due') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.installments.table.amount') }}</th>
+                        <th scope="col">{{ __('Percentage') }}</th>
                         <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                     </tr>
                     </thead>
@@ -487,6 +488,7 @@
                         <td>{{ __('quotes.view.cards.installments.types.deposit') }}</td>
                         <td data-order="0000-00-00">{{ __('quotes.view.cards.installments.with-order') }}</td>
                         <td>{{ f_currency($quote->deposit) }}</td>
+                        <td><x-admin.input.checkbox nofloat disabled /></td>
                         <td>
                             <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}"
                                class="btn btn-outline-success btn-sm mb-1" title="Edit">
@@ -503,13 +505,13 @@
                                 <td>{{ __('quotes.view.cards.installments.types.installment') }}</td>
                                 <td data-search="{{$installment->due_on->format('Y-m-d')}}"
                                     data-order="{{$installment->due_on->format('Y-m-d')}}">
-                                    <x-admin.input name="due" type="date"
-                                                   value="{{ $installment->due_on->format('Y-m-d') }}"
-                                                   nofloat></x-admin.input>
+                                    <x-admin.input name="due" type="date" value="{{ $installment->due_on->format('Y-m-d') }}" nofloat />
                                 </td>
                                 <td data-search="{{$installment->amount}}" data-order="{{$installment->amount}}">
-                                    <x-admin.input name="amount" value="{{ $installment->amount }}"
-                                                   nofloat></x-admin.input>
+                                    <x-admin.input name="amount" value="{{ $installment->amount }}" nofloat />
+                                </td>
+                                <td>
+                                    <x-admin.input.checkbox name="percentage" value="{{ $installment->percentage }}" nofloat />
                                 </td>
                                 <td>
                                     <a href="javascript:$('.installment-{{$installment->id}}').submit()"
@@ -530,6 +532,7 @@
                         <td>{{ __('quotes.view.cards.installments.types.remaining') }}</td>
                         <td data-order="{{$quote->final_payment->format('Y-m-d')}}">{{ f_date($quote->final_payment) }}</td>
                         <td>{{ f_currency($quote->remaining) }}</td>
+                        <td><x-admin.input.checkbox nofloat disabled /></td>
                         <td>
                             <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}"
                                class="btn btn-outline-success btn-sm mb-1" title="Edit">
