@@ -60,6 +60,7 @@ class TourController extends Controller
             'merchandise_stock_control' => $request->input('merchandise_stock_control') === 'on' ? 1 : 0,
             'terms' => $request->input('terms'),
         ]);
+        $tour->repository->cloneFromDefaultInstallments();
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 

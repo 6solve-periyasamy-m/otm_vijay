@@ -67,6 +67,22 @@ class Settings
         return $filter ?? 0;
     }
 
+    public function getDefaultInstallments(): array
+    {
+        return json_decode($this->get('system.installments.default', "{}"), true);
+    }
+
+    public function setDefaultInstallment(int $days, float|null $percentage): void
+    {
+        $items = $this->getDefaultInstallments();
+        if ($percentage === null) {
+            unset($items[$days]);
+        } else {
+            $items[$days] = $percentage;
+        }
+        $this->set('system.installments.default', json_encode($items));
+    }
+
     public function getTaxBracket(): TaxBracket
     {
         return TaxBracket::find(static::get('system.tax.bracket')) ?? static::getNullTaxBracket();
