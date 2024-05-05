@@ -37,6 +37,11 @@ class Icon
         return $this->solid('check');
     }
 
+    public function star(): View|string|Closure
+    {
+        return $this->regular('star');
+    }
+
     public function cross(): View|string|Closure
     {
         return $this->solid('xmark');
