@@ -179,7 +179,9 @@
                             <table align="left" width="100%" border="0" cellspacing="0">
                                 <tr>
                                     <td align="left" valign="top">
+                                        @if (!empty($order->tour->event->image_url))
                                         <img src="{{img_to_b64($order->tour->event->image_url)}}" alt="{{ $order->tour->event->name }}" width="100%" style="display: block;">
+                                        @endif
                                     </td>
                                 </tr>
                             </table>
@@ -219,7 +221,7 @@
                                             EVENT:
                                         </td>
                                         <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
-                                            {{ $order->tour->event->name }}
+                                            {{ $order->tour->event->name ?? 'Event name not available'}}
                                         </td>
                                     </tr>
                                     <tr>
@@ -533,7 +535,9 @@
                                             DATE:
                                         </td>
                                         <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            {{ \Carbon\Carbon::parse($order->tour->event->starts_at)->format('d F Y') }}
+                                            @if (!empty($order->tour->event->starts_at))
+                                                {{ \Carbon\Carbon::parse($order->tour->event->starts_at)->format('d F Y') }}
+                                            @endif
                                         </td>
                                     </tr>
                                     <tr>
@@ -541,7 +545,7 @@
                                             EVENT:
                                         </td>
                                         <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            {{ $order->tour->event->name }}
+                                            {{ $order->tour->event->name ?? 'Event name not available'}}
                                         </td>
                                     </tr>
                                     <tr>
@@ -549,7 +553,7 @@
                                             DESCRIPTION:
                                         </td>
                                         <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            {{ $order->tour->event->description }}
+                                            {{ $order->tour->event->description ?? 'Event description not available' }}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -701,6 +705,14 @@
                             </td>
                         </tr>
                         <tr>
+                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;;" class="oc_f12 oc_lblack">
+                                GST (included)
+                            </td>
+                            <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
+                                {{ f_currency($tour->tax_amount) }}
+                            </td>
+                        </tr>
+                        <tr>
                             <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" width="120">&nbsp;</td>
                             <td align="center" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
                         </tr>
@@ -824,71 +836,6 @@
             {!! setting('company.bank_transfer', '-')  !!}
             </td>
         </tr>
-        <!-- <tr>
-            <td align="left" valign="top" style="">
-                <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                    <tr>
-                        <td align="left" valign="top">
-                            <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                <tbody>
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            Keith Prowse Travel PTY LTD
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            SWIFT: WPACAU2S
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="150" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            ABN: 31 003 276 775
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            BANK: Westpac
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="150" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            BSB: 032 298
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            BRANCH: Crows Nest
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="150" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            ACC: 540726
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            REFERENCE NUMBER: KPAD106032
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="150" valign="top" style="padding: 0px 40px;">&nbsp;</td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="150" valign="top" style="padding: 0px 40px; font-weight: bold;" class="oc_f12 oc_lblack">PAYMENT GATE
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            CREDIT CARD
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="150" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            KPTVL   
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            If paying by credit card, follow this link
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr> -->
         <tr>
             <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
                 &nbsp;
