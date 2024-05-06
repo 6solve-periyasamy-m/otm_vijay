@@ -11,11 +11,13 @@
  * @var Tour $tour
  */
 @endphp
-<?php 
-//echo "<pre>";
-//print_r($order->tour->event);
-//print_r($tour->flightInventoryTours);
-?>
+@php
+if (!empty($order->tour->event->image_url)){
+    $evenImg = $order->tour->event->image_url;
+} else{
+    $evenImg = 'images/no_event.png';
+}
+@endphp
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -179,9 +181,7 @@
                             <table align="left" width="100%" border="0" cellspacing="0">
                                 <tr>
                                     <td align="left" valign="top">
-                                        @if (!empty($order->tour->event->image_url))
-                                        <img src="{{img_to_b64($order->tour->event->image_url)}}" alt="{{ $order->tour->event->name }}" width="100%" style="display: block;">
-                                        @endif
+                                        <img src="{{img_to_b64($evenImg)}}" alt="{{ $order->tour->event->name }}" width="100%" style="display: block;">
                                     </td>
                                 </tr>
                             </table>
