@@ -1,6 +1,8 @@
 @php if($attributes->has('disabled')) $classes = ['input-disabled']; @endphp
 <div class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}" style="padding-left: 5px;">
+    @if($attributes->get('label') !== null)
     <label>{{ $attributes->get('label', "") ?? $slot }} @if($attributes->has('required')) <x-admin.required /> @endif</label>
+    @endif
     <div class="input-group">
         @if($attributes->has('prepend'))
             <div class="input-group-prepend">
