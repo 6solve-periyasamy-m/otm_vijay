@@ -1,7 +1,10 @@
 .otm-sidebar {
   background-color: $sideBarColor;
   transition-duration: 0.5s;
-
+  position: sticky;
+  top: 4rem;
+  z-index: 9;
+  height: calc(100vh - 4rem);
 
   .nav-item {
     width: 100%;
@@ -56,21 +59,19 @@
       background-color: #161c33;
 
       i {
-        // color: black;
         color: white;
-      }
-
-      .iconLogo {
-        &.hide {
-          display: none;
-
-          &.showLogo {
-            display: block;
-          }
-        }
       }
     }
   }
+
+  &:not(.shown) {
+    width: 60px;
+
+    .sidebar-hide {
+      display: none;
+    }
+  }
+
 
   &.shown {
     width: 13%;
@@ -85,27 +86,27 @@
   }
 }
 
-@media screen and (min-width: 768px) {
-  .otm-sidebar {
-    position: sticky;
-    top: 4rem;
-    z-index: 9;
-    height: calc(100vh - 4rem);
-  }
+// @media screen and (min-width: 768px) {
+//   .otm-sidebar {
+//     position: sticky;
+//     top: 4rem;
+//     z-index: 9;
+//     height: calc(100vh - 4rem);
+//   }
 
-  .collapse.otm-sidebar:not(.show) {
-    display: block;
-  }
-}
+//   .collapse.otm-sidebar:not(.show) {
+//     display: block;
+//   }
+// }
 
 @media only screen and (min-width: 1500px) {
   .otm-sidebar:not(.shown) {
     // width: 2.5%;
-    width: 60px;
+    // width: 60px;
 
-    .sidebar-hide {
-      display: none;
-    }
+    // .sidebar-hide {
+    //   display: none;
+    // }
 
     // &:hover {
     //   width: 13%;

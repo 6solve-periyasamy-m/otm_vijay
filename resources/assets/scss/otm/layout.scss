@@ -66,45 +66,62 @@ a {
 // modal width css custom
 html,
 body * {
-    scrollbar-color: $sideBarColor #fff !important;
-    scrollbar-width: thin;
+  scrollbar-color: $sideBarColor #fff !important;
+  scrollbar-width: thin;
 }
 
 ::-webkit-scrollbar-track {
-    background-color: #fff;
-    border-radius: 16px;
+  background-color: #fff;
+  border-radius: 16px;
 }
 
 ::-webkit-scrollbar {
-    width: 3px;
-    height: 6px;
-    background-color: #fff;
+  width: 3px;
+  height: 6px;
+  background-color: #fff;
 }
 
 ::-webkit-scrollbar-thumb {
-    border-radius: 16px;
-    background-color: $sideBarColor;
+  border-radius: 16px;
+  background-color: $sideBarColor;
 }
-.common-modal-custom{
-  .modal-auto-width{
+
+.common-modal-custom {
+  .modal-auto-width {
     max-width: max-content;
   }
-  .custom-panel{
+
+  .custom-panel {
     height: auto;
     border-radius: 0;
   }
 }
+
 // modal width css custom
 
 @media screen and (min-width: 1500px) {
   .page-wrapper {
     width: 100%;
   }
+}
 
-  .otm-content {
+.otm-content {
+  display: flex;
+  flex: 1 1 auto;
+  width: calc(100% - 2.5%);
+
+  .heading {
     display: flex;
-    flex: 1 1 auto;
-    width: calc(100% - 2.5%);
+    justify-content: space-between;
+    align-items: center;
+
+    .iconLogo {
+      display: block;
+      filter: invert(1);
+      height: 45px;
+      width: 200px;
+      object-fit: contain;
+    }
   }
 }
 
