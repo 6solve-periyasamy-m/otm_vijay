@@ -88,6 +88,7 @@ class SettingsController extends Controller
             'flight.unlock' => $request->input('flight_unlock'),
             'transport.lock' => $request->input('transport_lock'),
             'transport.unlock' => $request->input('transport_unlock'),
+            'invoice.style' => $request->input('invoice_format')
         ]);
         if ($request->has('company_logo')  && $request->file('company_logo') != null) {
             Settings::set('company.logo', $this->saveImage($request->file('company_logo')));
