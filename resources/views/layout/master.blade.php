@@ -27,7 +27,7 @@
         <div class="container-fluid">
             <div class='row flex-xl-nowrap page-wrapper'>
                 @include('partials.sidebar')
-                <div id="container" class='col-12 col-md-9 col-xl-10 py-md-3 px-md-4 otm-content'>
+                <div id="container" class=' py-md-3 px-md-4 otm-content'>
                     <div id="content" class="w-100">
                         @if ($errors->any())
                             @foreach ($errors->all() as $error)
@@ -48,7 +48,8 @@
                             </div>
                         @endif
                         <div class="heading pt-md-4 pb-md-3 pt-3">
-                            <h2 class="fw-bold">@yield('title')</h2>
+                            <h2 class="fw-bold">@yield('title')</h2> 
+                            <img src="{{ asset(setting('company.logo')) }}" alt="{{ setting('company.name') }}" class="iconLogo hide" height="40px" width="100px" />
                         </div>
                         @yield('content')
                     </div>
