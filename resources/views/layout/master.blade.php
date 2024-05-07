@@ -49,7 +49,7 @@
                         @endif
                         <div class="heading pt-md-4 pb-md-3 pt-3">
                             <h2 class="fw-bold">@yield('title')</h2> 
-                            <img src="{{ asset('images/logokpt.png') }}" alt="Company Name" class="iconLogo hide" height="40px" width="100px" />
+                            <img src="{{ asset(setting('company.logo')) }}" alt="{{ setting('company.name') }}" class="hide" height="40px" width="100px" />
                         </div>
                         @yield('content')
                     </div>
