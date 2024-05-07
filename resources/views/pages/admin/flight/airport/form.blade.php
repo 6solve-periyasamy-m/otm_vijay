@@ -16,14 +16,6 @@
 @section('form-body')
     @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $airport?->name ?? null,])
     @include('partials.fields.text', ['name' => 'IATA Code', 'field' => 'iata_code', 'value' => $airport?->iata_code ?? null,])
-    @include('partials.fields.prefab.addresses.switcher', [
-                        'location_type_id' => $airport?->address->location_type_id,
-                        'address_line_1' => $airport?->address->address_line_1,
-                        'address_line_2' => $airport?->address->address_line_2,
-                        'town' => $airport?->address->town,
-                        'region' => $airport?->address->region,
-                        'country_id' => $airport?->address->country_id,
-                        'postcode' => $airport?->address->postcode,
-                    ])
+    @include('partials.fields.prefab.addresses.switcher', ['address' => $airport?->address])
     @include('partials.fields.submit')
 @endsection
