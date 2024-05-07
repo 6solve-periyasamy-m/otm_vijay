@@ -42,7 +42,8 @@
                 <div class="row">
                     @include('partials.fields.text', ['name' => 'Order Prefix ', 'field' => 'booking_prefix', 'value' => setting('booking.prefix', 'OTM'), 'width' => 4])
                     @include('partials.fields.text', ['name' => 'Quote Prefix', 'field' => 'quote_prefix', 'value' => setting('quote.prefix', 'OTMQ'), 'width' => 4])
-                    @include('partials.fields.selector.default', ['name' => 'System Currency', 'field' => 'currency_id', 'value' => \App\Repository\LocationsRepository::getCurrencyIdByCode(setting('system.currency', '')) ?? null, 'route' => 'currencies', 'width' => 4,])
+
+                    <x-livewire.input.select.currency name="currency_id" label="System Currency" value="{{\App\Repository\LocationsRepository::getCurrencyIdByCode(setting('system.currency', '')) ?? null}}" width="4" />
                     @include('partials.fields.text', ['name' => 'ATOL Issuer', 'field' => 'atol_issuer', 'value' => setting('atol.issuer', ''), 'width' => 6])
                     @include('partials.fields.text', ['name' => 'ATOL Number', 'field' => 'atol_number', 'value' => setting('atol.number', ''), 'width' => 6])
                 </div>

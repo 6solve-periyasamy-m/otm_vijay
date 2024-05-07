@@ -44,8 +44,7 @@
     @include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'value' => $flight?->image_url,])
     @include('partials.fields.checkbox', ['name' => 'Is Domestic', 'field' => 'is_domestic', 'value' => $flight?->is_domestic,])
     @include('partials.fields.date', ['name' => 'Available From', 'field' => 'available_from', 'value' => $flight?->available_from,])
-    @include('partials.fields.selector.default',
-        ['name' => 'Currency', 'field' => 'currency_id', 'value' => $flight?->currency, 'route' => 'currencies',])
+    <x-livewire.input.select.currency name="currency_id" label="Currency" value="{{$flight?->currency_id}}" />
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'notes', 'value' => $flight?->internal_notes])
     @include('partials.fields.submit')
 @endsection
