@@ -122,36 +122,36 @@
                     <td class="actions-4">
                         @can('read', \App\Models\Transport\TransportInventory::class)
                             <a href="{{route('transport-inventories.manifest.view', ['transport' => $transport, 'transportInventory' => $inventory,])}}"
-                               class="btn btn-outline-secondary btn-sm mb-1">
+                               class="btn btn-outline-secondary btn-sm mb-1" title="Manifest">
                                 {{ Icon::list() }}
                             </a>
                         @else
-                            <span class="btn btn-outline-dark btn-sm mb-1">
+                            <span class="btn btn-outline-dark btn-sm mb-1"  title="Manifest">
                                 {{ Icon::list() }}
                             </span>
                         @endcan
                         @can('create', \App\Models\Transport\TransportInventory::class)
                             <a href="{{route('transport-inventories.duplicate', ['transport' => $transport, 'transportInventory' => $inventory,])}}"
-                               class="btn btn-outline-blue btn-sm mb-1">
+                               class="btn btn-outline-blue btn-sm mb-1"  title="Copy">
                                 {{ Icon::copy() }}
                             </a>
                         @else
-                            <span class="btn btn-outline-dark btn-sm mb-1">
+                            <span class="btn btn-outline-dark btn-sm mb-1"  title="Copy">
                             {{ Icon::copy() }}
                         </span>
                         @endcan
                         @can('update', \App\Models\Transport\TransportInventory::class)
                             <a href="{{route('transport-inventories.edit', ['transport' => $transport, 'transportInventory' => $inventory,])}}"
-                               class="btn btn-sm btn-outline-success mb-1">
+                               class="btn btn-sm btn-outline-success mb-1"  title="Edit">
                                 {{ Icon::edit() }}
                             </a>
                         @else
-                            <span class="btn btn-outline-dark btn-sm mb-1">
+                            <span class="btn btn-outline-dark btn-sm mb-1"  title="Edit">
                             {{ Icon::edit() }}
                         </span>
                         @endcan
                         @can('delete', \App\Models\Transport\TransportInventory::class)
-                            <a href="#" class="btn btn-sm btn-outline-danger mb-1"
+                            <a href="#" class="btn btn-sm btn-outline-danger mb-1"  title="Delete"
                                onclick="event.preventDefault();document.getElementById('transportInventory-{{ $inventory->id }}-delete').submit();">
                                 {{ Icon::delete() }}
                             </a>
@@ -159,7 +159,7 @@
                                   action="{{ route('transport-inventories.delete', ['transport' => $transport, 'transportInventory' => $inventory,]) }}"
                                   method="POST" style="display: none;">{{ csrf_field() }}</form>
                         @else
-                            <span class="btn btn-outline-dark btn-sm mb-1">
+                            <span class="btn btn-outline-dark btn-sm mb-1"  title="Delete">
                             {{ Icon::delete() }}
                         </span>
                         @endcan

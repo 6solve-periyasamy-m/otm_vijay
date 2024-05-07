@@ -3,9 +3,11 @@
         function changeBillingForm() {
             let disable = $('#home_is_billing-input').is(':checked');
             if (disable) {
-                $('.billing-address').hide()
+                $('.billing-address').hide();
+                $('.home-address').removeClass('col-xl-6');
             } else {
-                $('.billing-address').show()
+                $('.billing-address').show();
+                $('.home-address').addClass('col-xl-6');
             }
         }
     </script>
@@ -24,21 +26,26 @@
 @include('partials.fields.text', ['name' => 'Email Address', 'field' => 'email_address', 'value' => $email_address ?? null, 'width' => 6,])
 @include('partials.fields.password', ['name' => 'Password', 'field' => 'password', 'width' => 6,])
 <hr class="splitter"/>
-@include('partials.fields.text', ['name' => 'Home Address Line 1', 'field' => 'home_address_line_1', 'value' => $home_address_line_1 ?? null, 'width' => 6,])
-@include('partials.fields.text', ['name' => 'Home Address Line 2', 'field' => 'home_address_line_2', 'value' => $home_address_line_2 ?? null, 'width' => 6,])
-@include('partials.fields.text', ['name' => 'Home Town', 'field' => 'home_town', 'value' => $home_town ?? null, 'width' => 6,])
-@include('partials.fields.text', ['name' => 'Home Region', 'field' => 'home_region', 'value' => $home_region ?? null, 'width' => 6,])
-@include('partials.fields.selector.default', ['name' => 'Home Country', 'field' => 'home_country', 'value' => $home_country ?? null, 'width' => 6, 'route' => 'countries',])
-@include('partials.fields.text', ['name' => 'Home Postcode', 'field' => 'home_postcode', 'value' => $home_postcode ?? null, 'width' => 6,])
 @include('partials.fields.checkbox', ['name' => 'Billing Address is Same As Home', 'field' => 'home_is_billing',
 'value' => (isset($home_address_id) && isset($billing_address_id) && $home_address_id == $billing_address_id) ? 1 : 0, 'onChange' => 'changeBillingForm();'])
-<hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;" class="billing-address"/>
-@include('partials.fields.text', ['name' => 'Billing Address Line 1', 'field' => 'billing_address_line_1', 'value' => $billing_address_line_1 ?? null, 'width' => 6, 'divClasses' => 'billing-address',])
-@include('partials.fields.text', ['name' => 'Billing Address Line 2', 'field' => 'billing_address_line_2', 'value' => $billing_address_line_2 ?? null, 'width' => 6, 'divClasses' => 'billing-address',])
-@include('partials.fields.text', ['name' => 'Billing Town', 'field' => 'billing_town', 'value' => $billing_town ?? null, 'width' => 6, 'divClasses' => 'billing-address',])
-@include('partials.fields.text', ['name' => 'Billing Region', 'field' => 'billing_region', 'value' => $billing_region ?? null, 'width' => 6, 'divClasses' => 'billing-address',])
-@include('partials.fields.selector.default', ['name' => 'Billing Country', 'field' => 'billing_country', 'value' => $billing_country ?? null, 'width' => 6, 'divClasses' => 'billing-address', 'route' => 'countries',])
-@include('partials.fields.text', ['name' => 'Billing Postcode', 'field' => 'billing_postcode', 'value' => $billing_postcode ?? null, 'width' => 6, 'divClasses' => 'billing-address',])
+<hr class="splitter"/>
+<div class="home-address col-xl-6 row">
+    @include('partials.fields.text', ['name' => 'Home Address Line 1', 'field' => 'home_address_line_1', 'value' => $home_address_line_1 ?? null, 'width' => 6,])
+    @include('partials.fields.text', ['name' => 'Home Address Line 2', 'field' => 'home_address_line_2', 'value' => $home_address_line_2 ?? null, 'width' => 6,])
+    @include('partials.fields.text', ['name' => 'Home Town', 'field' => 'home_town', 'value' => $home_town ?? null, 'width' => 6,])
+    @include('partials.fields.text', ['name' => 'Home Region', 'field' => 'home_region', 'value' => $home_region ?? null, 'width' => 6,])
+    <x-livewire.input.select.country name="home_country" value="{{ $customer?->homeAddress?->country_id }}" width="6" label="Home Country" />
+    @include('partials.fields.text', ['name' => 'Home Postcode', 'field' => 'home_postcode', 'value' => $home_postcode ?? null, 'width' => 6,])
+</div>
+<div class="vertical-divider billing-address"></div>
+<div class="row billing-address col-xl-6">
+    @include('partials.fields.text', ['name' => 'Billing Address Line 1', 'field' => 'billing_address_line_1', 'value' => $billing_address_line_1 ?? null, 'width' => 6, ])
+    @include('partials.fields.text', ['name' => 'Billing Address Line 2', 'field' => 'billing_address_line_2', 'value' => $billing_address_line_2 ?? null, 'width' => 6, ])
+    @include('partials.fields.text', ['name' => 'Billing Town', 'field' => 'billing_town', 'value' => $billing_town ?? null, 'width' => 6, ])
+    @include('partials.fields.text', ['name' => 'Billing Region', 'field' => 'billing_region', 'value' => $billing_region ?? null, 'width' => 6, ])
+    @include('partials.fields.selector.default', ['name' => 'Billing Country', 'field' => 'billing_country', 'value' => $billing_country ?? null, 'width' => 6,  'route' => 'countries',])
+    @include('partials.fields.text', ['name' => 'Billing Postcode', 'field' => 'billing_postcode', 'value' => $billing_postcode ?? null, 'width' => 6, ])
+</div>
 <hr class="splitter"/>
 @include('partials.fields.text', ['name' => 'Mobile Number', 'field' => 'mobile_number', 'value' => $mobile_number ?? null, 'width' => 6,])
 @include('partials.fields.text', ['name' => 'Other Phone Number', 'field' => 'other_phone_number', 'value' => $other_phone_number ?? null, 'width' => 6,])

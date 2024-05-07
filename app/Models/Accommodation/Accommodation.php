@@ -29,6 +29,8 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property string $name
  * @property string|null $description
  * @property Carbon|null $audit_date
+ * @property Carbon|null $check_in
+ * @property Carbon|null $check_out
  * @property string|null $image_url Asset link for image
  * @property int|null $currency_id
  * @property int $address_id
@@ -67,7 +69,7 @@ class Accommodation extends Model
 
     protected $guarded = [];
     protected array $cascadeDeletes = ['inventory'];
-    protected $casts = ['audit_date' => 'date',];
+    protected $casts = ['audit_date' => 'date','check_in' => 'datetime','check_out' => 'datetime',];
 
     private AccommodationRepository $internal_repository;
 
