@@ -314,7 +314,7 @@ $profit = $remaining - $costOfTour;
                                 {{ $componentRepository->getTourComponentType() }}
                             </td>
                             <td>
-                                {{ $componentRepository->getPurchasePrice() !== null ? f_currency($componentRepository->getPurchasePrice()) : 'Not Set' }}
+                                {{ $componentRepository->getPurchasePrice() !== null ? $componentRepository->getInventory()->getPurchasePriceString() : 'Not Set' }}
                             </td>
                             <td>
                                 {{ $componentRepository->getCost() !== null ? f_currency($componentRepository->getCost()) : 'Not Set' }}
@@ -354,7 +354,7 @@ $profit = $remaining - $costOfTour;
                                 {{ $component->repository->getTourComponentType() }}
                             </td>
                             <td>
-                                {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
+                                {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
                             </td>
                             <td>
                                 {{ $component->repository->getCost() !== null ? f_currency($component->repository->getCost()) : 'Not Set' }}
@@ -394,7 +394,7 @@ $profit = $remaining - $costOfTour;
                                 {{ $component->repository->getTourComponentType() }}
                             </td>
                             <td>
-                                {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
+                                {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
                             </td>
                             <td>
                                 {{ $component->repository->getCost() !== null ? f_currency($component->repository->getCost()) : 'Not Set' }}
@@ -434,7 +434,7 @@ $profit = $remaining - $costOfTour;
                                 {{ $component->repository->getTourComponentType() }}
                             </td>
                             <td>
-                                {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
+                                {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
                             </td>
                             <td>
                                 {{ $component->repository->getCost() !== null ? f_currency($component->repository->getCost()) : 'Not Set' }}
@@ -474,7 +474,7 @@ $profit = $remaining - $costOfTour;
                                 {{ $component->repository->getTourComponentType() }}
                             </td>
                             <td>
-                                {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
+                                {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
                             </td>
                             <td>
                                 {{ $component->repository->getCost() !== null ? f_currency($component->repository->getCost()) : 'Not Set' }}
@@ -508,7 +508,7 @@ $profit = $remaining - $costOfTour;
                                 {{ $component->repository->getTourComponentType() }}
                             </td>
                             <td>
-                                {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
+                                {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
                             </td>
                             <td>
                                 {{ $component->repository->getCost() !== null ? f_currency($component->repository->getCost()) : 'Not Set' }}
