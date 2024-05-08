@@ -71,10 +71,6 @@
                 {{ Icon::email() }}
                 {{ __('quotes.view.cards.quick.calculator.send') }}
             </button>
-            <button wire:click="toggleEmail" class="btn {{ $sendEmail ? 'btn-success' : 'btn-danger' }}">
-                {{ Icon::email() }}
-                <span class="toggle-email-text">{{ $sendEmail ? 'Will Email' : "Won't Email" }}</span>
-            </button>
             <button wire:click="convert" class="btn btn-warning">
                 {{ Icon::convert() }}
                 {{ __('quotes.view.cards.quick.calculator.convert') }}
