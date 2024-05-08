@@ -105,6 +105,30 @@ class Settings
             ->first()?->rate;
     }
 
+    /**
+     * Convert any amount from any currency to any other known in the system
+     * @param float $amount The amount you with to convert
+     * @param Currency|string $from The currency to convert from
+     * @param Currency|string|null $to The currency to convert to (leave null for system)
+     * @return float|null The converted amount, or null if conversion is unavailable due to missing rate or the same currency
+     */
+    public function convertCurrency(float $amount, Currency|string $from, Currency|string|null $to = null): ?float
+    {
+        $from = is_string($from) ? $from : $from->code;
+        $to = $to ?? setting('system.currency', 'GBP');
+        $to = is_string($to) ? $to : $to->code;
+        if ($from !== $to) {
+            $conversion = Settings::getConversionRate($from, $to);
+            if ($conversion !== null) {
+                return sigfig($amount * $conversion);
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
     public function getNullTaxBracket(): TaxBracket
     {
         return new TaxBracket([

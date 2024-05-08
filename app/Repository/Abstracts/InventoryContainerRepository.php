@@ -21,6 +21,11 @@ abstract class InventoryContainerRepository extends ModelRepository implements H
         return $this->getInventory()->getPurchasePrice();
     }
 
+    public function getLocalPurchasePrice(): ?float
+    {
+        return $this->getInventory()->getLocalPurchasePrice();
+    }
+
     public function getMargin(): ?float
     {
         if (method_exists($this, 'getUpgradeParent')) {

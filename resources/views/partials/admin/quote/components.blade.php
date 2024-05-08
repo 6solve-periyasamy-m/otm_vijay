@@ -68,7 +68,7 @@
                             {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                         </td>
                         <td>
-                            {{ $componentRepository->getPurchasePrice() !== null ? f_currency($componentRepository->getPurchasePrice()) : 'Not Set' }}
+                            {{ $componentRepository->getPurchasePrice() !== null ? $componentRepository->getInventory()->getPurchasePriceString() : 'Not Set' }}
                         </td>
                         <td>
                             {{ f_currency($componentRepository->getSalesPrice()) }} {{ $componentRepository->priceShown() ? '(Shown)' : '' }}
@@ -127,7 +127,7 @@
                             {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                         </td>
                         <td>
-                            {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
+                            {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
                         </td>
                         <td>
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
@@ -186,7 +186,7 @@
                             {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                         </td>
                         <td>
-                            {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
+                            {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
                         </td>
                         <td>
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
@@ -245,7 +245,7 @@
                             {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                         </td>
                         <td>
-                            {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
+                            {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
                         </td>
                         <td>
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
@@ -304,7 +304,7 @@
                             {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                         </td>
                         <td>
-                            {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
+                            {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
                         </td>
                         <td>
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
@@ -357,7 +357,7 @@
                             {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                         </td>
                         <td>
-                            {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
+                            {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
                         </td>
                         <td>
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
