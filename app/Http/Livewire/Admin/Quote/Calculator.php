@@ -21,7 +21,6 @@ class Calculator extends Component
     public float $margin = 0;
     public float|null $markup = null;
     public float $marked_up_price = 0;
-    public bool $sendEmail = true;
 
     public Quote $quote;
 
@@ -123,12 +122,6 @@ class Calculator extends Component
     public function costs()
     {
         return redirect()->route('quotes.costing', $this->getUrlArray());
-    }
-
-    public function toggleEmail(): void
-    {
-        $this->sendEmail = !$this->sendEmail;
-        $this->refresh();
     }
 
     private function getUrlArray(): array
