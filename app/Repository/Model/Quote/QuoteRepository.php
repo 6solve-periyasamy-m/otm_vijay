@@ -123,8 +123,10 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function getRemainingInstallment(int $paying = 1)
     {
         $price = $this->getPricePerPerson($paying)?->price_per_person ?? 0;
-        $total = $this->quote->installments()->sum('amount') + $this->quote->deposit;
-        return $price - $total;
+        foreach ($this->quote->installments as $installment) {
+            $price -= $installment->getAmount();
+        }
+        return $price - $this->quote->getDepositAmount();
     }
 
     public function convertToTour(int $customerCount = 1, bool $components = true): Tour
