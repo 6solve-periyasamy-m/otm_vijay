@@ -114,6 +114,16 @@
         @include('partials.admin.system.import')
     </div>
     <div class="card">
+        <div class="card-body" data-target="#default-installments" onclick="toggleAccordion(this)">
+            <h4 class="fw-bold">
+                {{ Icon::maximize() }} Default Installments
+            </h4>
+        </div>
+    </div>
+    <div class="row mx-1" id="default-installments">
+        <livewire:admin.system.installments.view />
+    </div>
+    <div class="card">
         <div class="card-body" data-target="#conversions" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">{{ Icon::maximize() }} Conversion Rates</h4>
         </div>

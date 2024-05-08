@@ -8,6 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * @property string $due
  * @property float $amount
+ * @property string $percentage
  */
 class QuoteInstallmentRequest extends FormRequest
 {
@@ -19,7 +20,7 @@ class QuoteInstallmentRequest extends FormRequest
 
     public function getData(): array
     {
-        return ['due_on' => $this->due, 'amount' => $this->amount,];
+        return ['due_on' => $this->due, 'amount' => $this->amount, 'percentage' => $this->percentage == 'on'];
     }
 
     /**

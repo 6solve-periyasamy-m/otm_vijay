@@ -3,6 +3,7 @@
 namespace App\Models\Quote;
 
 use App\Models\Customer\Organization;
+use App\Models\Helper\Model;
 use App\Models\Helper\QuoteStatus;
 use App\Models\Helper\Traits\HasAdditionalCosts;
 use App\Models\Order\Order;
@@ -22,7 +23,6 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -46,6 +46,7 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property string|null $description
  * @property float|null $deposit
+ * @property bool $is_deposit_percentage
  * @property float $single_occupancy_surcharge
  * @property Carbon $final_payment
  * @property Carbon $date_from
@@ -126,6 +127,7 @@ class Quote extends Model
     protected $guarded = [];
     protected $casts = [
         'deposit' => 'double',
+        'is_deposit_percentage' => 'bool',
         'single_occupancy_surcharge' => 'double',
         'expires' => 'datetime',
         'date_from' => 'date',
@@ -252,5 +254,23 @@ class Quote extends Model
     public function getRemainingAttribute(): float
     {
         return $this->repository->getRemainingInstallment();
+    }
+
+    public function getRemainingPercentage(): float
+    {
+        $price = $this->repository->getPricePerPerson(1)?->price_per_person;
+        return sigfig(($this->remaining / $price) * 100);
+    }
+
+    public function getDepositAmount(int $count = 1): float|null
+    {
+        $price = $this->repository->getPricePerPerson($count)?->price_per_person;
+        return $this->is_deposit_percentage ? sigfig($price * ($this->deposit/100)) : $this->deposit;
+    }
+
+    public function getDepositPercentage(int $count = 1): float|null
+    {
+        $price = $this->repository->getPricePerPerson($count)?->price_per_person;
+        return $this->is_deposit_percentage ? $this->deposit : sigfig(($this->deposit / $price) * 100);
     }
 }
