@@ -154,20 +154,6 @@
                 </div>
             </div>
             @endforeach
-            <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
-                <div class="otm-card">
-                    <h6 class="fw-bold">
-                        <a class="btn btn-info" href="{{ route('orders.reservation.preview', ['order' => $order,]) }}" target="_blank">
-                            {{ Icon::view() }}
-                            {{ __('quotes.view.cards.quick.calculator.preview') }}
-                        </a>
-                        <!-- <a href="javascript:$('.send-form').submit()" class="btn btn-success">
-                            {{ Icon::email() }}
-                            {{ __('quotes.view.cards.quick.calculator.send') }}
-                        </a> -->
-                    </h6>
-                </div>
-            </div>
         </div>        
     </div>
 </div>
