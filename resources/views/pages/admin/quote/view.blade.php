@@ -9,131 +9,7 @@
         $(document).ready(function () {
             $('.sent-quotes').DataTable({fixedHeader: true, order: [[0, 'desc'],]});
             $('.sections').DataTable({fixedHeader: true, order: [[0, 'asc'],]});
-            update(getPayingAmount(), getTravellingAmount());
         });
-
-        function toggleEmail() {
-            let input = $('.should-invoice');
-            let button = $('.toggle-email');
-            let text = $('.toggle-email-text');
-            if (input.val() == 'on') {
-                input.val('off');
-                button.removeClass('btn-success')
-                button.addClass('btn-danger');
-                text.text("Will Not Email");
-            } else {
-                input.val('on');
-                button.removeClass('btn-danger')
-                button.addClass('btn-success');
-                text.text("Will Email");
-            }
-        }
-
-        function getPayingAmount() {
-            let amount = parseInt($('.paying-input').val());
-            return isNaN(amount) || amount < 0 ? 0 : amount;
-        }
-
-        function getTravellingAmount() {
-            let amount = parseInt($('.travelling-input').val());
-            return isNaN(amount) || amount < 0 ? 0 : amount;
-        }
-
-        function plusPaying() {
-            update(getPayingAmount() + 1, getTravellingAmount());
-        }
-
-        function minusPaying() {
-            let amount = getPayingAmount();
-            update(amount <= 0 ? 0 : amount - 1, getTravellingAmount());
-        }
-
-        function plusTravelling() {
-            update(getPayingAmount(), getTravellingAmount() + 1);
-        }
-
-        function minusTravelling() {
-            let amount = getTravellingAmount();
-            update(getPayingAmount(), amount <= 0 ? 0 : amount - 1);
-        }
-
-        function textUpdate() {
-            update(getPayingAmount(), getTravellingAmount());
-        }
-
-        function update(paying, travelling) {
-            $('.paying-input').val(paying);
-            $('.travelling-input').val(travelling);
-            performRequest(paying, travelling);
-        }
-
-        function markSent() {
-            $.get('{{ route('api.quote.sent', ['quote' => $quote,]) }}', {
-                '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
-                '_token': '{{ csrf_token() }}',
-                'paying': getPayingAmount(),
-                'travelling': getTravellingAmount(),
-            }).done(function (xhr, textStatus, errorThrown) {
-                if (xhr.success) {
-                    location.reload();
-                } else {
-                    alert(xhr.message);
-                }
-            }).fail(function (xhr, textStatus, errorThrown) {
-                switch (xhr.status) {
-                    case 429:
-                        alert("You're doing this too quickly! Please wait a second before trying again!")
-                        break;
-                    case 422:
-                        alert("Looks like that isn't a number, please try again!")
-                        break;
-                    case 403:
-                        alert("Looks like that failed, we'll refresh the page for you to try again!")
-                        location.reload();
-                        break;
-                    default:
-                        console.log(xhr);
-                        alert('Something went wrong, please try again');
-                }
-            });
-        }
-
-        function performRequest(paying, travelling) {
-            $.get('{{ route('api.quote.cost', ['quote' => $quote,]) }}', {
-                '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
-                '_token': '{{ csrf_token() }}',
-                'paying': paying,
-                'travelling': travelling,
-            }).done(function (xhr, textStatus, errorThrown) {
-                if (xhr.success) {
-                    updateView(xhr.f_price, xhr.f_total, xhr.f_profit, xhr.f_profit_total, xhr.margin, xhr.f_ctc);
-                } else {
-                    alert(xhr.message);
-                }
-            }).fail(function (xhr, textStatus, errorThrown) {
-                switch (xhr.status) {
-                    case 429:
-                        alert("You're doing this too quickly! Please wait a second before trying again!")
-                        break;
-                    case 422:
-                        alert("Looks like that isn't a number, please try again!")
-                        break;
-                    case 403:
-                        alert("Looks like that failed, we'll refresh the page for you to try again!")
-                        location.reload();
-                        break;
-                    default:
-                        console.log(xhr);
-                        alert('Something went wrong, please try again');
-                }
-            });
-        }
-
-        function updateView(pricePerPerson, priceTotal, profitPerPerson, profitTotal, margin, costToCompany) {
-            $('.ctc-updater').text(costToCompany);
-            $('.cost-updater').text(priceTotal + " (" + pricePerPerson + ")");
-            $('.profit-updater').text(profitTotal + " (" + profitPerPerson + ") (" + margin + "%)");
-        }
     </script>
 @endsection
 
@@ -141,7 +17,6 @@
     <x-admin.section.header>
         @include('partials.admin.quote.details', ['quote' => $quote])
         <div class="col-12">
-
             @if(isset($quote->order))
                 <a href="{{ route('orders.view', ['order' => $quote->order,]) }}" class="btn btn-warning">
                     {{ Icon::wallet() }}
@@ -183,157 +58,9 @@
     </div>
 
     {{-- Calculator --}}
-    <x-admin.section.card>
-        <div class="row">
-            <x-admin.section.otm-card>
-                <x-admin.section.otm-text>
-                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.header') }}</x-slot:header>
-                    {{ __('quotes.view.cards.quick.calculator.description') }}
-                </x-admin.section.otm-text>
-                <x-admin.section.otm-text class="row">
-                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.count') }}</x-slot:header>
-                    <div class="col-12 col-xl-5 gx-2 row">
-                        <div class="col-12 text-center">
-                            <p>{{ __('quotes.view.cards.quick.calculator.paying') }}</p>
-                        </div>
-                        <div class="col-12 col-xl-3">
-                            <a href="javascript:minusPaying()" class="btn btn-outline-danger btn-sm mb-1">
-                                {{ Icon::minus() }}
-                            </a>
-                        </div>
-                        <div class="col-12 col-xl-5">
-                            <x-admin.input name="paying" value="{{ $quote->leadTraveller->paying ? 1 : 0 }}" onchange="textUpdate()" nofloat></x-admin.input>
-                        </div>
-                        <div class="col-12 col-xl-3">
-                            <a href="javascript:plusPaying()" class="btn btn-outline-success btn-sm mb-1">
-                                {{ Icon::plus() }}
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xl-6 row">
-                        <div class="col-12 text-center">
-                            <p>{{ __('quotes.view.cards.quick.calculator.travelling') }}</p>
-                        </div>
-                        <div class="col-12 col-xl-3">
-                            <a href="javascript:minusTravelling()" class="btn btn-outline-danger btn-sm mb-1">
-                                {{ Icon::minus() }}
-                            </a>
-                        </div>
-                        <div class="col-12 col-xl-6">
-                            <x-admin.input name="travelling" value="{{ $quote->leadTraveller->travelling && !$quote->leadTraveller->paying ? 1 : 0 }}" onchange="textUpdate()" nofloat></x-admin.input>
-                        </div>
-                        <div class="col-12 col-xl-3">
-                            <a href="javascript:plusTravelling()" class="btn btn-outline-success btn-sm mb-1">
-                                {{ Icon::plus() }}
-                            </a>
-                        </div>
-                    </div>
-                </x-admin.section.otm-text>
-            </x-admin.section.otm-card>
-            <x-admin.section.otm-card row>
-                <x-admin.section.otm-text width="6">
-                    <x-slot:header>
-                        {{ __('quotes.view.cards.quick.calculator.components.accommodation') }}
-                        <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span>
-                    </x-slot:header>
-                    {{ f_currency($quote->repository->getAccommodationCost()) }}
-                </x-admin.section.otm-text>
-                <x-admin.section.otm-text width="6">
-                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.activities') }}</x-slot:header>
-                    {{ f_currency($quote->repository->getActivityCost()) }}
-                </x-admin.section.otm-text>
-                <x-admin.section.otm-text width="6">
-                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.flights') }}</x-slot:header>
-                    {{ f_currency($quote->repository->getFlightCost()) }}
-                </x-admin.section.otm-text>
-                <x-admin.section.otm-text width="6">
-                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.transport') }}</x-slot:header>
-                    {{ f_currency($quote->repository->getTransportCost()) }}
-                </x-admin.section.otm-text>
-                <x-admin.section.otm-text width="6">
-                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.merchandise') }}</x-slot:header>
-                    {{ f_currency($quote->repository->getMerchandiseCost()) }}
-                </x-admin.section.otm-text>
-                <x-admin.section.otm-text width="6">
-                    <x-slot:header>
-                        {{ __('quotes.view.cards.quick.calculator.components.total') }}
-                        <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span>
-                    </x-slot:header>
-                    {{ f_currency($quote->repository->getPurchaseTotal()) }}
-                </x-admin.section.otm-text>
-            </x-admin.section.otm-card>
-            <x-admin.section.otm-card>
-                <x-admin.section.otm-text class="ctc-updater">
-                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.ctc') }} <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span></x-slot:header>
-                    Not Calculated Yet
-                </x-admin.section.otm-text>
-                <x-admin.section.otm-text class="profit-updater">
-                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.profit') }} <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span></x-slot:header>
-                    Not Calculated Yet
-                </x-admin.section.otm-text>
-                <x-admin.section.otm-text class="cost-updater">
-                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.cost') }}</x-slot:header>
-                    Not Calculated Yet
-                </x-admin.section.otm-text>
-            </x-admin.section.otm-card>
-            <x-admin.section.otm-card>
-                <x-admin.section.otm-text>
-                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.lead.header') }}</x-slot:header>
-                    @if(!$quote->leadTraveller->travelling)
-                        {{ __('quotes.view.cards.quick.calculator.lead.organizing') }}
-                    @elseif(!$quote->leadTraveller->paying)
-                        {{ __('quotes.view.cards.quick.calculator.lead.travelling') }}
-                    @else
-                        {{ __('quotes.view.cards.quick.calculator.lead.paying') }}
-                    @endif
-                </x-admin.section.otm-text>
-                <x-admin.section.otm-text>
-                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.convert') }}</x-slot:header>
-                    <form class="d-none preview-form" target="_blank" action="{{ route('quotes.preview', ['quote' => $quote,]) }}" method="get">
-                        <input type="hidden" name="paying" class="paying-input" value="0">
-                        <input type="hidden" name="travelling" class="travelling-input" value="0">
-                    </form>
-                    <a class="btn btn-info" onclick="event.preventDefault();$('.preview-form').submit();">
-                        {{ Icon::view() }}
-                        {{ __('quotes.view.cards.quick.calculator.preview') }}
-                    </a>
-                    <form class="d-none send-form" action="{{ route('quotes.send', ['quote' => $quote,]) }}" method="post">
-                        @csrf
-                        <input type="hidden" name="paying" class="paying-input" value="0">
-                        <input type="hidden" name="travelling" class="travelling-input" value="0">
-                    </form>
-                    <a href="javascript:$('.send-form').submit()" class="btn btn-success">
-                        {{ Icon::email() }}
-                        {{ __('quotes.view.cards.quick.calculator.send') }}
-                    </a>
-                    <form class="d-none convert-form" action="{{ route('quotes.conversion', ['quote' => $quote,]) }}" method="post">
-                        @csrf
-                        <input type="hidden" name="paying" class="paying-input" value="0">
-                        <input type="hidden" name="travelling" class="travelling-input" value="0">
-                        <input type="hidden" name="should_invoice" class="should-invoice" value="on">
-                    </form>
-                    <a href="javascript:toggleEmail()" class="btn btn-success toggle-email">
-                        {{ Icon::email() }}
-                        <span class="toggle-email-text">Will Email</span>
-                    </a>
-                    <a href="javascript:$('.convert-form').submit()" class="btn btn-warning">
-                        {{ Icon::convert() }}
-                        {{ __('quotes.view.cards.quick.calculator.convert') }}
-                    </a>
-                    @can('costing', \App\Models\Quote\Quote::class)
-                    <form class="d-none costing-form" action="{{ route('quotes.costing', ['quote' => $quote,]) }}" method="get">
-                        <input type="hidden" name="paying" class="paying-input" value="0">
-                        <input type="hidden" name="travelling" class="travelling-input" value="0">
-                    </form>
-                    <a href="javascript:$('.costing-form').submit()" class="btn btn-secondary">
-                        {{ Icon::wallet() }}
-                        {{ __('quotes.view.cards.quick.calculator.costing') }}
-                    </a>
-                    @endcan
-                </x-admin.section.otm-text>
-            </x-admin.section.otm-card>
-        </div>
-    </x-admin.section.card>
+    <livewire:admin.quote.calculator :quote="$quote" />
+
+    <hr class="splitter" />
 
     {{-- Components--}}
     <x-admin.section.card>
@@ -377,6 +104,7 @@
                         <th scope="col">{{ __('quotes.view.cards.components.common.type') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                        <th scope="col">Quantity</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
                         <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
@@ -399,6 +127,9 @@
                             </td>
                             <td>
                                 {{ $componentRepository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                             </td>
                             <td>
                                 {{ $componentRepository->getPurchasePrice() !== null ? f_currency($componentRepository->getPurchasePrice()) : 'Not Set' }}
@@ -439,6 +170,7 @@
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                        <th scope="col">Quantity</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
                         <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
@@ -454,6 +186,9 @@
                             </td>
                             <td>
                                 {{ $component->repository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                             </td>
                             <td>
                                 {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
@@ -494,6 +229,7 @@
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                        <th scope="col">Quantity</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
                         <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
@@ -509,6 +245,9 @@
                             </td>
                             <td>
                                 {{ $component->repository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                             </td>
                             <td>
                                 {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
@@ -549,8 +288,10 @@
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                        <th scope="col">Quantity</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
-<th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
+                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -563,6 +304,9 @@
                             </td>
                             <td>
                                 {{ $component->repository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                             </td>
                             <td>
                                 {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
@@ -603,8 +347,10 @@
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                        <th scope="col">Quantity</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
-<th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
+                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -617,6 +363,9 @@
                             </td>
                             <td>
                                 {{ $component->repository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                             </td>
                             <td>
                                 {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
@@ -656,6 +405,7 @@
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                        <th scope="col">Quantity</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
                         <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
@@ -666,6 +416,9 @@
                         <tr>
                             <td>
                                 {{ $component->repository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                             </td>
                             <td>
                                 {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
@@ -707,7 +460,7 @@
     <div class="row">
         <div class="col-xl-6">
             <x-admin.section.card>
-                <x-slot:header>{{ __('quotes.view.cards.installments.header') }}</x-slot:header>
+                <x-slot:title>{{ __('quotes.view.cards.installments.header') }}</x-slot:title>
                 <form class="form-group row installment-create"
                       action="{{ route('quotes.installments.store', ['quote' => $quote]) }}" method="post">
                     @csrf
@@ -790,65 +543,14 @@
         </div>
         <div class="col-xl-6">
             <x-admin.section.card>
-                <x-slot:header>{{ __('quotes.view.cards.price-points.header') }}</x-slot:header>
-                <form class="form-group row pricepoint-create"
-                      action="{{ route('quotes.price-points.store', ['quote' => $quote]) }}" method="post">
-                    @csrf
-                    <x-admin.input name="quantity"
-                                   width="5">{{ __('quotes.view.cards.price-points.form.quantity') }}</x-admin.input>
-                    <x-admin.input name="cost"
-                                   width="5">{{ __('quotes.view.cards.price-points.form.cost') }}</x-admin.input>
-                    <x-admin.button href="javascript:$('.pricepoint-create').submit()" width="2" color="primary">
-                        {{ Icon::create() }}
-                        <span>{{ __('quotes.view.cards.price-points.form.create') }}</span>
-                    </x-admin.button>
-                </form>
-                <table class="datatable table table-striped" id="pricepoint-table">
-                    <thead>
-                    <tr>
-                        <th scope="col">{{ __('quotes.view.cards.price-points.table.quantity') }}</th>
-                        <th scope="col">{{ __('quotes.view.cards.price-points.table.cost') }}</th>
-                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($quote->pricePoints as $pricePoint)
-                        <tr>
-                            <form class="pricepoint-{{$pricePoint->id}}"
-                                  action="{{ route('quotes.price-points.update', ['quote' => $quote, 'pricePoint' => $pricePoint,]) }}"
-                                  method="post">
-                                @csrf
-                                <td data-search="{{$pricePoint->quantity}}" data-order="{{$pricePoint->quantity}}">
-                                    <x-admin.input name="quantity" value="{{ $pricePoint->quantity }}"
-                                                   nofloat></x-admin.input>
-                                </td>
-                                <td data-search="{{$pricePoint->price_per_person}}"
-                                    data-order="{{$pricePoint->price_per_person}}">
-                                    <x-admin.input name="cost" value="{{ $pricePoint->price_per_person }}"
-                                                   nofloat></x-admin.input>
-                                </td>
-                                <td>
-                                    <a href="javascript:$('.pricepoint-{{$pricePoint->id}}').submit()"
-                                       class="btn btn-outline-success btn-sm mb-1" title="Edit">
-                                        {{ Icon::edit() }}
-                                    </a>
-                                    <a href="javascript:$('#pricepoint-{{ $pricePoint->id }}-delete').submit()"
-                                       class="btn btn-outline-danger btn-sm mb-1" title="Delete">
-                                        {{ Icon::delete() }}
-                                    </a>
-                                </td>
-                            </form>
-                            <form id="pricepoint-{{ $pricePoint->id }}-delete" class="d-none" method="post"
-                                  action="{{ route('quotes.price-points.delete', ['quote' => $quote, 'pricePoint' => $pricePoint,]) }}">@csrf</form>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                <x-slot:title>{{ __('quotes.view.cards.price-points.header') }}</x-slot:title>
+                <livewire:admin.quote.price-point.form :quote="$quote" />
+                <livewire:admin.quote.price-point.table :quote="$quote->id" />
             </x-admin.section.card>
         </div>
         <div class="col-xl-12">
             <x-admin.section.card>
-                <x-slot:header>{{ __('quotes.view.cards.sections.header') }}</x-slot:header>
+                <x-slot:title>{{ __('quotes.view.cards.sections.header') }}</x-slot:title>
                 <div class="pb-3 text-end">
                     <a href="{{ route('quotes.section.show', ['quote' => $quote, ]) }}" class="btn btn-primary text-white mb-1">
                         {{ Icon::show() }}
@@ -902,7 +604,7 @@
         </div>
         <div class="col-xl-12">
             <x-admin.section.card>
-                <x-slot:header>{{ __('quotes.view.cards.sent.header') }}</x-slot:header>
+                <x-slot:title>{{ __('quotes.view.cards.sent.header') }}</x-slot:title>
                 <table class="table table-striped sent-quotes" id="sent-quotes-table">
                     <thead>
                     <tr>

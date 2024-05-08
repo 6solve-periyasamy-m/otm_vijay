@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * @property string $sales_price
  * @property string $shown
+ * @property int|null $quantity
  */
 class EditComponentRequest extends FormRequest
 {
@@ -15,6 +16,7 @@ class EditComponentRequest extends FormRequest
         return [
             'tour_sales_price' => $this->sales_price,
             'price_shown' => $this->shown == 'on',
+            'quantity' => $this->quantity,
         ];
     }
 
@@ -27,6 +29,7 @@ class EditComponentRequest extends FormRequest
     {
         return [
             'sales_price' => 'required|numeric|min:0',
+            'quantity' => 'nullable|numeric|gte:0'
         ];
     }
 }
