@@ -16,6 +16,7 @@ use App\Repository\Traits\Component\IsActivity;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
+use Settings;
 
 class ActivityInventoryRepository extends InventoryRepository implements HasActivityManifest
 {
@@ -161,5 +162,15 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
     public static function find($id): ActivityInventory|null
     {
         return ActivityInventory::find($id);
+    }
+
+    public function getLocalPurchasePrice(): ?float
+    {
+        return Settings::convertCurrency($this->getPurchasePrice(), $this->inventory->component->currency) ?? $this->getPurchasePrice();
+    }
+
+    public function getPurchasePriceString(): string
+    {
+        return f_currency($this->getPurchasePrice(), $this->inventory->component->currency);
     }
 }
