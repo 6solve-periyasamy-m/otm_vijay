@@ -18,6 +18,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">Description</th>
                 <th scope="col">Audit Date</th>
+                <th scope="col">Country</th>
                 <th scope="col">Address</th>
                 <th scope="col">Currency</th>
                 <th scope="col">Actions</th>
@@ -28,6 +29,7 @@
                     <td><a href="{{ route('accommodations.view', ['accommodation' => $accommodation,]) }}">{{ $accommodation->name }}</a></td>
                     <td>{!! $accommodation->description !!}</td>
                     <td>{{ f_date($accommodation->audit_date) }}</td>
+                    <td>{{ $accommodation->address->country?->name }}</td>
                     <td>{{ $accommodation->address }}</td>
                     <td>{{ $accommodation->currency }}</td>
                     <td class="actions">
