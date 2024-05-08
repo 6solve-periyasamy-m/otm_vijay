@@ -42,7 +42,7 @@
                     <td data-sort="{{$tour->date_from->unix()}}">{{ f_date($tour->date_from) }}</td>
                     <td data-sort="{{$tour->date_to->unix()}}">{{ f_date($tour->date_to) }}</td>
                     <td>{{ f_currency($tour->base_price_per_person) }}</td>
-                    <td>{{ f_currency($tour->deposit) }}</td>
+                    <td>{{ f_currency($tour->deposit_amount) }} ({{$tour->deposit_percentage}}%)</td>
                     <td>
                         @if($tour->stock_control_active)
                             {{$tour->stock - $tour->getUsedStock()}}/{{ $tour->stock }}<br/>

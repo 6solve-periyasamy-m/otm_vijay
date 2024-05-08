@@ -232,7 +232,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         $order = Order::make([
             'tour_id' => $this->booking->tour_id,
             'token' => $this->booking->token,
-            'deposit' => $tour->deposit,
+            'deposit' => $tour->deposit_amount,
             'invoice_footer' => $tour->invoice_footer,
             'ordered_on' => $orderedOn ?? now(),
             'booking_fee' => $tour->booking_fee,
