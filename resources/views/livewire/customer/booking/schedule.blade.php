@@ -28,16 +28,16 @@
         <tbody>
         <tr>
             <td data-content="Description">Due with Order</td>
-            <td data-content="Cost">{{ f_currency($this->booking->tour->deposit) }}</td>
+            <td data-content="Cost">{{ f_currency($this->booking->tour->deposit_amount) }}</td>
             <td data-content="Quantity">{{ $travellerCount }}</td>
-            <td data-content="Instalment total">{{ f_currency($this->booking->tour->deposit * $travellerCount) }}</td>
-            <td data-content="Total Owed">{{ f_currency($this->booking->tour->deposit * $travellerCount) }}</td>
+            <td data-content="Instalment total">{{ f_currency($this->booking->tour->deposit_amount * $travellerCount) }}</td>
+            <td data-content="Total Owed">{{ f_currency($this->booking->tour->deposit_amount * $travellerCount) }}</td>
             @if(flag('installments.force', false))
                 <td data-content="Total Owed">Yes</td>
             @endif
         </tr>
         @php
-            $cumulative = $this->booking->tour->deposit * $travellerCount;
+            $cumulative = $this->booking->tour->deposit_amount * $travellerCount;
         @endphp
         @foreach($this->booking->tour->paymentInstallments as $installment)
             @php $cumulative += ($installment->cost * $travellerCount) @endphp

@@ -42,7 +42,7 @@ class CreateOrderRequest extends FormRequest
             'ordered_on' => $this->ordered_on,
             'internal_notes' => $this->internal_notes,
             'external_notes' => $this->external_notes,
-            'deposit' => $this->deposit ?? $this->getTour()->deposit,
+            'deposit' => $this->deposit ?? $this->getTour()->deposit_amount,
             'invoice_footer' => $this->getTour()->invoice_footer,
             'organization_id' => $this->organization_id,
         ];

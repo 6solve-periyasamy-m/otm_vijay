@@ -568,6 +568,11 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
 
     public function cloneFromDefaultInstallments(): void
     {
+        if ($this->tour->deposit === null) {
+            $this->tour->deposit = setting('system.installments.deposit');
+            $this->tour->is_deposit_percentage = true;
+            $this->tour->save();
+        }
         $installments = Settings::getDefaultInstallments();
         if (sizeof($installments) > 0) {
             foreach($installments as $days => $percentage) {

@@ -550,7 +550,7 @@
             <tr>
                 <th scope="row">Deposit</th>
                 <td>With Order</td>
-                <td>{{ f_currency($tour->deposit) }} ({{ $tour->deposit_percentage }}%)</td>
+                <td>{{ f_currency($tour->deposit_amount) }} ({{ $tour->deposit_percentage }}%)</td>
                 <td>
                     <a href="{{route('tours.edit', ['tour' => $tour,])}}"
                        class="btn btn-outline-success btn-sm mb-1">
