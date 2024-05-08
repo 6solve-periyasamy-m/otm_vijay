@@ -245,16 +245,31 @@ if (!empty($order->tour->event->image_url)){
                                             {{ $order->customer_count }} Adult(s)
                                         </td>
                                     </tr>
+                                    @php $counter = 0; $totalRecords = count($order->orderCustomers); @endphp
                                     @foreach($order->orderCustomers as $ordersCustomer)
-                                    <tr>
-                                        <td width="160" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                            {{ ($order->lead_booker_id == $ordersCustomer->id) ? 'LEAD GUEST:' : ' OTHER GUESTS:'}}
-                                        </td>
-                                        <td width="160" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                            {{$ordersCustomer->customer->title}} {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
-                                        </td>
-                                    </tr>
+                                        @if($counter < 4)
+                                            <tr>
+                                                <td width="160" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
+                                                    {{ ($order->lead_booker_id == $ordersCustomer->id) ? 'LEAD GUEST:' : ' OTHER GUESTS:'}}
+                                                </td>
+                                                <td width="160" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
+                                                    {{$ordersCustomer->customer->title}} {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
+                                                </td>
+                                            </tr>
+                                            @php $counter++; @endphp
+                                        @else
+                                            @break
+                                        @endif
                                     @endforeach
+
+                                    @if($totalRecords > 4)
+                                        <tr>
+                                            <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
+                                                Additional guests not shown
+                                            </td>
+                                        </tr>
+                                    @endif
+
                                     <tr>
                                         <td width="160" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
                                             BOOKING REFERENCE:

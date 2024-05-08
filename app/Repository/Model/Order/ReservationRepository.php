@@ -12,7 +12,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use PDF;
 
-class ItinearyRepository
+class ReservationRepository
 {
     public readonly Invoice $invoice;
 
