@@ -29,7 +29,7 @@
                     <td><a href="{{ route('accommodations.view', ['accommodation' => $accommodation,]) }}">{{ $accommodation->name }}</a></td>
                     <td>{!! $accommodation->description !!}</td>
                     <td>{{ f_date($accommodation->audit_date) }}</td>
-                    <td>{{ $accommodation->address->country->name }}</td>
+                    <td>{{ $accommodation->address->country?->name }}</td>
                     <td>{{ $accommodation->address }}</td>
                     <td>{{ $accommodation->currency }}</td>
                     <td class="actions">
