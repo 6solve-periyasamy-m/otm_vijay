@@ -21,6 +21,7 @@ class AccommodationInventoryController extends Controller
         $inventory = AccommodationInventory::make([
             'room_type_id' => $request->input('room_type_id'),
             'board_type_id' => $request->input('board_type_id'),
+            'stock_parent_id' => $request->input('stock_parent_id'),
             'check_in' => $request->input('check_in'),
             'check_in_time_confirmed' => $request->input('check_in_time_confirmed') == 'on' ? 1 : 0,
             'check_out' => $request->input('check_out'),
@@ -59,6 +60,7 @@ class AccommodationInventoryController extends Controller
         $inventory->update([
             'room_type_id' => $request->input('room_type_id'),
             'board_type_id' => $request->input('board_type_id'),
+            'stock_parent_id' => $request->input('stock_parent_id'),
             'check_in' => $request->input('check_in'),
             'check_in_time_confirmed' => $request->input('check_in_time_confirmed') == 'on' ? 1 : 0,
             'check_out' => $request->input('check_out'),
