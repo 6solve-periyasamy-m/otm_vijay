@@ -63,9 +63,9 @@ class EventController extends Controller
         ]);
 
         if ($request->has('image') && $request->file('image') != null) {
-            if (isset($event->image_url)) {
+            /*if (isset($event->image_url)) {
                 File::delete(public_path($event->image_url));
-            }
+            }*/
             $event->image_url = $request->file('image')->storePublicly('uploads/images');
         }
         $event->save();

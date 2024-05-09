@@ -181,7 +181,7 @@ if (!empty($order->tour->event->image_url)){
                             <table align="left" width="100%" border="0" cellspacing="0">
                                 <tr>
                                     <td align="left" valign="top">
-                                        <!-- <img src="{{img_to_b64($evenImg)}}" alt="{{ $order->tour->event?->name }}" width="100%" style="display: block;"> -->
+                                        <img src="{{img_to_b64($evenImg)}}" alt="{{ $order->tour->event?->name }}" width="100%" style="display: block;">
                                     </td>
                                 </tr>
                             </table>
@@ -203,7 +203,7 @@ if (!empty($order->tour->event->image_url)){
                                             BOOKING NAME:
                                         </td>
                                         <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
-                                            {{ $order->tour->name }}
+                                            {{ $order->tour->event->name ?? 'Event name not available'}} | {{ $order->leadBooker->customer_name }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -240,7 +240,7 @@ if (!empty($order->tour->event->image_url)){
                                     </tr>
                                     @php $counter = 0; $totalRecords = count($order->orderCustomers); @endphp
                                     @foreach($order->orderCustomers as $ordersCustomer)
-                                        @if($counter < 4)
+                                        @if($counter < 5)
                                             <tr>
                                                 <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
                                                     {{ ($order->lead_booker_id == $ordersCustomer->id) ? 'LEAD GUEST:' : ' OTHER GUESTS:'}}
@@ -255,10 +255,10 @@ if (!empty($order->tour->event->image_url)){
                                         @endif
                                     @endforeach
 
-                                    @if($totalRecords > 4)
+                                    @if($totalRecords > 5)
                                         <tr>
                                             <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                                Additional guests not shown
+                                                TBC
                                             </td>
                                         </tr>
                                     @endif
