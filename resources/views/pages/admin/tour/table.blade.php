@@ -67,7 +67,7 @@
                             {{ Icon::edit() }}
                         </a>
                         @if(!$tour->trashed())
-                            <a href="#" title="Delete" onclick="if(confirm('Are you sure you want to delete the tour permanently?')) { event.preventDefault();document.getElementById('tour-{{ $tour->id }}-delete').submit(); } else { return false; }" class="btn btn-outline-danger btn-sm mb-1">
+                            <a href="#" title="Delete" onclick="if(confirm('Are you sure you want to delete the Tour PERMANENTLY?')) { event.preventDefault();document.getElementById('tour-{{ $tour->id }}-delete').submit(); } else { return false; }" class="btn btn-outline-danger btn-sm mb-1">
                                 {{ Icon::delete() }}
                             </a>
                             <form id="tour-{{ $tour->id }}-delete" action="{{ route('tours.delete', ['tour' => $tour,]) }}" method="POST"
