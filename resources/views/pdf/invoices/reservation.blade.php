@@ -25,7 +25,7 @@ if (!empty($order->tour->event->image_url)){
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet" />
     <style type="text/css">
-        @page {margin: 0px; padding: 0px;}
+        @page {margin: 0px; padding: 0px; size: A4;}
         table {border-collapse: collapse; mso-table-lspace: 0px; mso-table-rspace: 0px;}
         td,
         a,
@@ -82,7 +82,7 @@ if (!empty($order->tour->event->image_url)){
                             <table align="left" width="100%" border="0" cellspacing="0">
                                 <tr>
                                     <td align="left" valign="top">
-                                        <img src="{{img_to_b64($invoice->brand->logo)}}" alt="{{ $invoice->brand->name }}" width="300" style="display: block;">
+                                        <img src="{{img_to_b64($invoice->brand->logo)}}" alt="{{ $invoice->brand->name }}" width="100%" style="display: block; max-width: 160px">
                                     </td>
                                 </tr>
                             </table>
