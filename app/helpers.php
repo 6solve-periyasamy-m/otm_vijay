@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Location\Currency;
 use App\Models\User;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
@@ -42,12 +43,14 @@ if (!function_exists('f_currency')) {
     /**
      * Alias for StringFormatter::formatCurrency
      * @param float|null $amount
-     * @param null $currency
+     * @param Currency|string|null $currency
+     * @param float|null $conversion
+     * @param string|null $toCurrency
      * @return string
      */
-    function f_currency(?float $amount, $currency = null): string
+    function f_currency(?float $amount, Currency|string|null $currency = null, ?float $conversion = null, Currency|string|null $toCurrency = null): string
     {
-        return StringFormatter::formatCurrency($amount, $currency);
+        return StringFormatter::formatCurrency($amount, $currency, $conversion, $toCurrency);
     }
 }
 

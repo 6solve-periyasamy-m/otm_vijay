@@ -627,7 +627,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         }
         $this->order->tour_id = $tour->id;
         if ($resetPrice) {
-            $this->order->deposit = $tour->deposit;
+            $this->order->deposit = $tour->deposit_amount;
         }
         $this->order->save();
         $this->order->groups()->delete();

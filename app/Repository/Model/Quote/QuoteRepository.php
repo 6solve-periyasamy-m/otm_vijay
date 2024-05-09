@@ -123,8 +123,10 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function getRemainingInstallment(int $paying = 1)
     {
         $price = $this->getPricePerPerson($paying)?->price_per_person ?? 0;
-        $total = $this->quote->installments()->sum('amount') + $this->quote->deposit;
-        return $price - $total;
+        foreach ($this->quote->installments as $installment) {
+            $price -= $installment->getAmount();
+        }
+        return $price - $this->quote->getDepositAmount();
     }
 
     public function convertToTour(int $customerCount = 1, bool $components = true): Tour
@@ -377,7 +379,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $cost = 0;
         foreach ($this->quote->accommodation()->with('inventory')->get() as $component) {
-            $cost += ($component->inventory->purchase_price ?? 0) * min($travellers, ($component->quantity ?? $travellers));
+            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
@@ -387,7 +389,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $cost = 0;
         /** @var QuoteActivity $component */
         foreach ($this->quote->activities()->with('inventory')->get() as $component) {
-            $cost += ($component->inventory->purchase_price ?? 0) * min($travellers, ($component->quantity ?? $travellers));
+            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
@@ -397,7 +399,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $cost = 0;
         /** @var QuoteFlight $component */
         foreach ($this->quote->flights()->with('inventory')->get() as $component) {
-            $cost += ($component->inventory->purchase_price ?? 0) * min($travellers, ($component->quantity ?? $travellers));
+            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
@@ -407,7 +409,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $cost = 0;
         /** @var QuoteTransport $component */
         foreach ($this->quote->transport()->with('inventory')->get() as $component) {
-            $cost += ($component->inventory->purchase_price ?? 0) * min($travellers, ($component->quantity ?? $travellers));
+            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
@@ -417,7 +419,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $cost = 0;
         /** @var QuoteMerchandise $component */
         foreach ($this->quote->merchandise()->with('inventory')->get() as $component) {
-            $cost += ($component->inventory->purchase_price ?? 0) * min($travellers, ($component->quantity ?? $travellers));
+            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }

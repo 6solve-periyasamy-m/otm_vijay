@@ -30,7 +30,7 @@ class OrderFormTest extends AuthenticatedFormTestCase
         $this->performWithEverything($route, $data)->assertRedirectToRoute('orders.view', ['order' => $id]);
         $order = Order::find($id);
         $this->assertEquals($tour->id, $order->tour_id); // Check it was created for the correct tour
-        $this->assertEquals($tour->deposit, $order->deposit); // No deposit was provided, so should clone from tour
+        $this->assertEquals($tour->deposit_amount, $order->deposit); // No deposit was provided, so should clone from tour
         $this->assertEquals($tour->booking_fee ?? 0, $order->booking_fee); // No booking fee was provided, so should clone from tour. Booking Fee is not nullable on order, so should be 0
         $this->assertTrue($order->ordered_on->eq($data['ordered_on'])); // Ordered on dates should match
         $this->assertEquals($customer->id, $order->leadBooker->customer_id); // Lead booker is as provided
