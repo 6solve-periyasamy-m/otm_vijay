@@ -2,8 +2,11 @@
     <x-admin.section.card>
         <div class="d-flex justify-content-between">
             <div class="d-flex justify-content-between">
-                <x-livewire.input wire:model="deposit" label="Deposit" />
                 <div>
+                    <x-livewire.input wire:model="deposit" label="Deposit (%)" />
+                </div>
+                <div class="my-auto">
+                    <label></label>
                     <button class="btn btn-primary" wire:click="setDeposit">Set Deposit</button>
                 </div>
             </div>
