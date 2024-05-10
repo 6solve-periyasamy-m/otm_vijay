@@ -82,6 +82,6 @@ class FlightInventoryController extends Controller
     {
         $inventory = $flightInventory->replicate();
         $inventory->save();
-        return redirect()->route('flight-inventories.edit', ['flight' => $flight, 'flightInventory' => $inventory,]);
+        return redirect()->route('flight-inventories.edit', ['flight' => $flight, 'inventory' => $inventory,]);
     }
 }
