@@ -49,7 +49,9 @@
             selector.on('change', function (e) {
                 let data = $('#{{ $id }}').select2("val");
                 @this.set('{{ $attributes->get('name') }}', data);
-                @this.selectorChanged('{{$attributes->get('name')}}');
+                @if($attributes->has('alert-changes'))
+                    @this.selectorChanged('{{$attributes->get('name')}}');
+                @endif
             });
             @endisset
             @if($value !== null)

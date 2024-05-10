@@ -85,6 +85,6 @@ class TransportInventoryController extends Controller
     {
         $inventory = $transportInventory->replicate();
         $inventory->save();
-        return redirect()->route('transport-inventories.edit', ['transport' => $transport, 'transportInventory' => $inventory,]);
+        return redirect()->route('transport-inventories.edit', ['transport' => $transport, 'inventory' => $inventory,]);
     }
 }

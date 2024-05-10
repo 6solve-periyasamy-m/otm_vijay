@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\SelectController;
+use App\View\Components\Livewire\Input\Select\AccommodationInventory;
 use App\View\Components\Livewire\Input\Select\Country;
 use App\View\Components\Livewire\Input\Select\Currency;
 use App\View\Components\Livewire\Input\Select\Customer;
@@ -26,6 +27,13 @@ Route::prefix('tax-brackets')->name('tax-brackets.')->group(function () {
 Route::prefix('currencies')->name('currencies.')->group(function () {
     Route::post('/', [Currency::class, 'getAll'])->name('select');
     Route::post('/{id}', [Country::class, 'getOne'])->name('selected');
+});
+
+Route::prefix('inventory')->name('inventory.')->group(function () {
+    Route::prefix('accommodation')->name('accommodation.')->group(function () {
+        Route::post('/', [AccommodationInventory::class, 'getAll'])->name('select');
+        Route::post('/{id}', [AccommodationInventory::class, 'getOne'])->name('selected');
+    });
 });
 
 Route::prefix('customers')->name('customers.')->group(function () {
@@ -59,7 +67,6 @@ Route::post('sizes', [SelectController::class, 'getAvailableSizes'])->name('size
 Route::post('brands', [SelectController::class, 'getAvailableBrands'])->name('brands.select');
 Route::post('banks', [SelectController::class, 'getAvailableBanks'])->name('banks.select');
 Route::prefix('inventory')->group(function () {
-    Route::post('accommodation', [SelectController::class, 'getAccommodationInventory'])->name('inventory.accommodation.select');
     Route::post('activity', [SelectController::class, 'getActivityInventory'])->name('inventory.activity.select');
     Route::post('flight', [SelectController::class, 'getFlightInventory'])->name('inventory.flight.select');
     Route::post('transport', [SelectController::class, 'getTransportInventory'])->name('inventory.transport.select');
@@ -97,7 +104,6 @@ Route::prefix('selected')->group(function () {
     Route::post('brands/{id}', [SelectController::class, 'getSelectedBrand'])->name('brands.selected');
     Route::post('banks/{id}', [SelectController::class, 'getSelectedBank'])->name('banks.selected');
     Route::prefix('inventory/{id}')->group(function () {
-        Route::post('accommodation', [SelectController::class, 'getSelectedAccommodationInventory'])->name('inventory.accommodation.selected');
         Route::post('activity', [SelectController::class, 'getSelectedActivityInventory'])->name('inventory.activity.selected');
         Route::post('flight', [SelectController::class, 'getSelectedFlightInventory'])->name('inventory.flight.selected');
         Route::post('transport', [SelectController::class, 'getSelectedTransportInventory'])->name('inventory.transport.selected');

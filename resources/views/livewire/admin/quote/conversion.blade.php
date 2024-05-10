@@ -5,7 +5,7 @@
             @foreach($travellers as $key => $traveller)
                 @if ($traveller['id'] === -1)
                     <div class="col-6 row">
-                        <x-livewire.input disabled label="Lead Traveller" width="10" value="{{$traveller['name']}}" />
+                        <x-livewire.input disabled label="Lead Traveller" alert-changes width="10" value="{{$traveller['name']}}" />
                         <div class="col-2 my-auto">
                             <div class="btn btn-{{ $traveller['paying'] ? 'success' : 'danger' }}">
                                 {{ $traveller['paying'] ? 'Paying' : 'Not Paying' }}
@@ -14,7 +14,7 @@
                     </div>
                 @else
                     <div class="col-6 row">
-                        <x-livewire.input.select.customer clear="true" placeholder="Unknown Traveller" label="Traveller {{ $key }}" name="travellers.{{$key}}.id" inlineJs="@this.refreshCustomers()" width="10" />
+                        <x-livewire.input.select.customer clear="true" placeholder="Unknown Traveller" label="Traveller {{ $key }}" alert-changes name="travellers.{{$key}}.id" inlineJs="@this.refreshCustomers()" width="10" />
                         <div class="col-2 my-auto">
                             <div class="btn btn-{{ $traveller['paying'] ? 'success' : 'danger' }}">
                                 {{ $traveller['paying'] ? 'Paying' : 'Not Paying' }}
