@@ -88,6 +88,6 @@ class AccommodationInventoryController extends Controller
     {
         $inventory = $inventory->replicate();
         $inventory->save();
-        return redirect()->route('accommodation-inventories.edit', ['accommodation' => $accommodation, 'accommodationInventory' => $inventory,]);
+        return redirect()->route('accommodation-inventories.edit', ['accommodation' => $accommodation, 'inventory' => $inventory,]);
     }
 }
