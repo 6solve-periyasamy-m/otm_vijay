@@ -6,7 +6,9 @@ use App\Http\Requests\Admin\User\ChangePasswordRequest;
 use App\Http\Requests\Admin\User\UpdateAvatarRequest;
 use App\Http\Requests\Admin\User\UpdateUserRequest;
 use App\Models\User;
+use App\Repository\Authentication\PermissionsRepository;
 use Hash;
+use Illuminate\Auth\Access\AuthorizationException;
 use Log;
 use Storage;
 use Throwable;
@@ -15,8 +17,7 @@ class UserProfileController
 {
     public function profile(User|null $user = null)
     {
-        $user = $this->validateUser($user);
-        return view('pages.admin.user.profile', ['user' => $user,]);
+        return view('pages.admin.user.profile', ['user' => $user ?? auth()->user(),]);
     }
 
     public function avatar(UpdateAvatarRequest $request, User|null $user = null)
@@ -38,6 +39,7 @@ class UserProfileController
 
     public function update(UpdateUserRequest $request, User|null $user = null)
     {
+        $current = auth()->user();
         $user = $this->validateUser($user);
         $user->update([
             'name' => $request->name,
@@ -45,6 +47,13 @@ class UserProfileController
             'phone' => $request->telephone,
         ]);
         $user->save();
+        if ($current->id != $user->id && $current->getHighestRoleLevel() > $user->getHighestRoleLevel()) {
+            try {
+                PermissionsRepository::assignRole($user, $request->role);
+            } catch (AuthorizationException $e) {
+                return back()->withErrors(['msg' => $e->getMessage()]);
+            }
+        }
         return redirect()->route('users.view', ['user' => $user]);
     }
 

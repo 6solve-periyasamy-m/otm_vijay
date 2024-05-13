@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
  * @property string $name
  * @property string $email
  * @property string|null $telephone
+ * @property string|null $role
  */
 class UpdateUserRequest extends FormRequest
 {
@@ -23,6 +24,7 @@ class UpdateUserRequest extends FormRequest
         return [
             'user_id' => 'required|integer|exists:users,id',
             'name' => 'required|string|max:255',
+            'role' => 'nullable|string|max:255',
             'email' => [
                 'required',
                 'email',
