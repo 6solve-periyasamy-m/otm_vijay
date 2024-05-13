@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\System\MailController;
 use App\Http\Controllers\Admin\System\PermissionsController;
 use App\Http\Controllers\Admin\System\SettingsController;
 use App\Http\Controllers\Admin\TravelClassController;
+use App\Http\Controllers\Admin\User\UserProfileController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\Voucher\VoucherCodeController;
 
@@ -129,6 +130,13 @@ Route::middleware('auth:web')->group(function () {
             Route::post('/delete', [UserController::class, 'destroy'])->name('users.delete')->middleware('bouncer:User,delete');
             Route::post('/restore', [UserController::class, 'restore'])->name('users.restore')->middleware('bouncer:User,delete');
         });
+    });
+
+    Route::prefix('user-profile')->name('users.')->group(function () {
+       Route::get('/profile/{user?}', [UserProfileController::class, 'profile'])->name('profile')->middleware('bouncer:User,read');
+       Route::post('/avatar/{user?}', [UserProfileController::class, 'avatar'])->name('avatar')->middleware('bouncer:User,update');
+       Route::post('/update/{user?}', [UserProfileController::class, 'update'])->name('update')->middleware('bouncer:User,update');
+       Route::post('/password/{user?}', [UserProfileController::class, 'password'])->name('password')->middleware('bouncer:User,update');
     });
 
     Route::prefix('roles')->group(function () {
