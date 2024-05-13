@@ -47,8 +47,7 @@
                     @if ($editable && !$self)
                         @include('partials.fields.dropdown', ['name' => 'Role', 'field' => 'role', 'values' => $roles, 'selected' => $user->getCurrentRole()?->name, 'width' => 6])
                     @else
-                        <x-livewire.input disabled label="Roles" value="{{ $user->roles->implode('title', ', ') }}"
-                                          width="6"/>
+                        <x-livewire.input disabled label="Role" value="{{ $user->roles->implode('title', ', ') }}" width="6"/>
                     @endif
                     <x-livewire.input disabled="{{!$editable}}" name="telephone" value="" label="Contact Number"
                                       width="{{ $editable ? 5 : 6 }}"/>
