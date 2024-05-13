@@ -1,8 +1,9 @@
 @php
-    /** @var \App\Models\User $user */
-    $self = $user->id === auth()->user()->id;
-    $editable = ($self || auth()->user()->getHighestRoleLevel() > $user->getHighestRoleLevel());
-    $roles = \App\Transforms\PermissionTransforms::getRolesForDropdown(\App\Repository\Authentication\PermissionsRepository::getAvailableRoles())
+/** @var \App\Models\User $user */
+$self = $user->id === auth()->user()->id;
+$editable = ($self || auth()->user()->getHighestRoleLevel() > $user->getHighestRoleLevel());
+$roles = \App\Transforms\PermissionTransforms::getRolesForDropdown(\App\Repository\Authentication\PermissionsRepository::getAvailableRoles());
+$canForce = is_otm() && !$user->isOtm();
 @endphp
 
 @extends('layout.master')
@@ -63,8 +64,9 @@
         </div>
     </div>
     @if($editable && $self)
-        <x-admin.section.accordion closed id="security">
+        <x-admin.section.accordion id="security">
             <x-slot:title>Account Security</x-slot:title>
+            {{-- Change Password Dialog --}}
             <x-admin.section.card>
                 <x-slot:title>Change Password</x-slot:title>
                 <form action="{{ route('users.password', ['user' => $user,]) }}" method="post" class="row">
@@ -77,6 +79,70 @@
                         <input type="submit" class="btn btn-success" value="Change Password">
                     </div>
                     <div class="col-xl-1"></div>
+                </form>
+            </x-admin.section.card>
+            {{-- Two Factor Auth Dialog --}}
+            @if(config('auth.google-2fa.enabled', false))
+                @php $secret = $user->otp_secret ?? \Google2FA::generateSecretKey();  @endphp
+                <x-admin.section.card>
+                    <x-slot:title>Two-Factor Authentication</x-slot:title>
+                    @if($user->otp_secret === null)
+                    <div class="row">
+                        <div class="col-2 flex justify-center my-auto">
+                            <img class="image large" src="{{ generate_qr($user->getTwoFactorUrl($secret)) }}" />
+                        </div>
+                        <div class="col-8">
+                            <div>
+                                To enable two-factor authentication, follow the steps below.
+                                <ol class="list-group list-group-numbered">
+                                    <li class="list-group-item">Download a Google 2FA compatible app, such as Google Authenticator
+                                        (<a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en_GB&gl=US">Android</a>/
+                                        <a href="https://apps.apple.com/us/app/google-authenticator/id388497605">iOS</a>) or Authy
+                                        (<a href="https://play.google.com/store/apps/details?id=com.authy.authy">Android</a>/
+                                        <a href="https://apps.apple.com/us/app/twilio-authy/id494168017">iOS</a>)
+                                    </li>
+                                    <li class="list-group-item">Add a new account to the app and scan the QR code on the left</li>
+                                    <li class="list-group-item">Enter the 2FA Code shown on the app, and click submit</li>
+                                </ol>
+                            </div>
+                            <form action="{{ route('users.2fa.enable', ['user' => $user]) }}" method="post" class="row">
+                                @csrf
+                                <input class="d-none" name="otp_secret" value="{{$secret}}">
+                                <x-livewire.input width="8" name="otp_code" label="Confirm One-Time Code" />
+                                <div class="col-xl-4 my-auto">
+                                    <input type="submit" class="btn btn-success" value="Enable Two Factor Authentication" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    @else
+                        @if(flag('2fa.enforce', false))
+                        <div class="fw-bold">
+                            Two factor is enabled on your account! Please contact a system administrator if you can no longer access your two-factor to reset.
+                        </div>
+                        @else
+                            <div>
+                                <h4 class="fw-bold">Two factor is enabled on your account! You may disable it below if you wish:</h4>
+                                <form class="row" method="post" action="{{ route('users.2fa.disable', ['user' => $user,]) }}">
+                                    @csrf
+                                    <x-livewire.input name="otp_code" width="8" label="Confirm One-Time Code" />
+                                    <div class="col-xl-4 my-auto">
+                                        <input type="submit" class="btn btn-warning" value="Disable Two Factor Authentication" />
+                                    </div>
+                                </form>
+                            </div>
+                        @endif
+                    @endif
+                </x-admin.section.card>
+            @endif
+        </x-admin.section.accordion>
+    @elseif($canForce && $user->otp_secret !== null)
+        <x-admin.section.accordion id="security">
+            <x-slot:title>Account Security</x-slot:title>
+            <x-admin.section.card>
+                <x-slot:title>Two Factor Authentication</x-slot:title>
+                <form action="{{ route('users.2fa.disable.force', ['user' => $user,]) }}" method="post" onsubmit="return confirm('Are you sure you wish to disable 2FA on this account?')">
+                    <input class="btn btn-danger`" type="submit" value="Force remove 2FA" />
                 </form>
             </x-admin.section.card>
         </x-admin.section.accordion>

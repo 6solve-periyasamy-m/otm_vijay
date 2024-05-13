@@ -133,10 +133,15 @@ Route::middleware('auth:web')->group(function () {
     });
 
     Route::prefix('user-profile')->name('users.')->group(function () {
-       Route::get('/profile/{user?}', [UserProfileController::class, 'profile'])->name('profile')->middleware('bouncer:User,read');
-       Route::post('/avatar/{user?}', [UserProfileController::class, 'avatar'])->name('avatar')->middleware('bouncer:User,update');
-       Route::post('/update/{user?}', [UserProfileController::class, 'update'])->name('update')->middleware('bouncer:User,update');
-       Route::post('/password/{user?}', [UserProfileController::class, 'password'])->name('password')->middleware('bouncer:User,update');
+       Route::get('/profile/{user?}', [UserProfileController::class, 'profile'])->name('profile');
+       Route::post('/avatar/{user?}', [UserProfileController::class, 'avatar'])->name('avatar');
+       Route::post('/update/{user?}', [UserProfileController::class, 'update'])->name('update');
+       Route::post('/password/{user?}', [UserProfileController::class, 'password'])->name('password');
+       Route::prefix('2fa')->name('2fa.')->group(function () {
+           Route::post('/enable/{user?}', [UserProfileController::class, 'enable2fa'])->name('enable');
+           Route::post('/disable/{user?}', [UserProfileController::class, 'disable2fa'])->name('disable');
+           Route::post('/disable/force/{user}', [UserProfileController::class, 'forceDisable2fa'])->name('disable.force');
+       });
     });
 
     Route::prefix('roles')->group(function () {

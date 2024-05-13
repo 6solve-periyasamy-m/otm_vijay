@@ -8,6 +8,8 @@ use App\Models\System\ApiToken;
 use App\Repository\Authentication\UserRepository;
 use Database\Factories\UserFactory;
 use Eloquent;
+use Exception;
+use Google2FA;
 use Gravatar;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -37,6 +39,7 @@ use Silber\Bouncer\Database\Role;
  * @property string|null $telephone
  * @property Carbon|null $email_verified_at
  * @property string $password
+ * @property string|null $otp_secret
  * @property string|null $remember_token
  * @property string|null $settings
  * @property Carbon|null $created_at
@@ -178,6 +181,25 @@ class User extends UserAuthenticatable implements MustVerifyEmail
             $highest = isset($highest) && $highest->level >= $role->level ? $highest : $role;
         }
         return $highest;
+    }
+
+    public function getTwoFactorUrl(string $secret): string
+    {
+        return Google2FA::getQRCodeUrl(config('auth.google-2fa.company'), $this->email, $secret);
+    }
+
+    public function verifyOneTimeCode(string $code): bool
+    {
+        try {
+            return Google2FA::verify($code, $this->otp_secret);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function isOtm(): bool
+    {
+        return $this->getHighestRoleLevel() >= 999;
     }
 
     public function getAvatarUrlAttribute(): string
