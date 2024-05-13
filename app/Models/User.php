@@ -9,13 +9,14 @@ use App\Repository\Authentication\UserRepository;
 use Database\Factories\UserFactory;
 use Eloquent;
 use Gravatar;
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\User as UserAuthenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
@@ -33,6 +34,7 @@ use Silber\Bouncer\Database\Role;
  * @property string $name
  * @property string $email
  * @property string|null $avatar
+ * @property string|null $telephone
  * @property Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $remember_token
@@ -70,40 +72,14 @@ use Silber\Bouncer\Database\Role;
  * @method static Builder|User whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class User extends Authenticatable implements MustVerifyEmail
+class User extends UserAuthenticatable implements MustVerifyEmail
 {
-    use \Illuminate\Auth\Authenticatable, HasFactory, Notifiable, HasRolesAndAbilities, SoftDeletes;
+    use Authenticatable, HasFactory, Notifiable, HasRolesAndAbilities, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = [];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
+    protected $hidden = ['password', 'remember_token', ];
+    protected $casts = ['email_verified_at' => 'datetime', 'password' => 'hashed',];
     protected string $guard = 'web';
     private UserRepository $internal_repository;
 
@@ -176,12 +152,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->repository->generateToken($expiresIn);
     }
 
-    public function invalidateAllTokens()
+    public function invalidateAllTokens(): void
     {
         $this->repository->invalidateAllUserTokens();
     }
 
-    public function purgeTokens(int $limit = ApiToken::DEFAULT_LIMIT)
+    public function purgeTokens(int $limit = ApiToken::DEFAULT_LIMIT): void
     {
         $this->repository->purgeUserTokens($limit);
     }

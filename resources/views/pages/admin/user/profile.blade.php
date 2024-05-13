@@ -49,7 +49,7 @@
                     @else
                         <x-livewire.input disabled label="Role" value="{{ $user->roles->implode('title', ', ') }}" width="6"/>
                     @endif
-                    <x-livewire.input disabled="{{!$editable}}" name="telephone" value="" label="Contact Number"
+                    <x-livewire.input disabled="{{!$editable}}" name="telephone" value="{{ $user->telephone }}" label="Contact Number"
                                       width="{{ $editable ? 5 : 6 }}"/>
                     <x-livewire.input disabled="{{!$editable}}" name="email" value="{{ $user->email }}" label="Email"
                                       width="{{ $editable ? 5 : 6 }}"/>

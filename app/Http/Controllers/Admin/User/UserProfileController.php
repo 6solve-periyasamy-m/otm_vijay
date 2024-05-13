@@ -44,7 +44,7 @@ class UserProfileController
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
-            'phone' => $request->telephone,
+            'telephone' => $request->telephone,
         ]);
         $user->save();
         if ($current->id != $user->id && $current->getHighestRoleLevel() > $user->getHighestRoleLevel()) {
