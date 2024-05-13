@@ -1,6 +1,10 @@
 <?php
 
 use App\Models\User;
+use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Http\UploadedFile;
@@ -231,5 +235,21 @@ if (!function_exists('svg_to_b64')) {
     function svg_to_b64(string $file): string
     {
         return img_to_b64($file, "data:image/svg+xml;base64,");
+    }
+}
+if (!function_exists('generate_qr')) {
+    /**
+     * Generate a Base64 QR code for a given content
+     * @param string $content
+     * @param string $prefix Prefix to use for the QR code (defaults to base64 PNG for img tags)
+     * @return string base64 representation of the QR code
+     */
+    function generate_qr(string $content, string $prefix = "data:image/png;base64,"): string
+    {
+        return $prefix . base64_encode((new Writer(
+            new ImageRenderer(
+                new RendererStyle(400),
+                new ImagickImageBackEnd(),
+            )))->writeString($content));
     }
 }
