@@ -350,7 +350,7 @@
                 $end_date = \Carbon\Carbon::createFromFormat('Y-m-d', $date_to);
             @endphp
 
-            @foreach ($start_date->daysUntil($end_date) as $date)
+            @foreach ($start_date->daysUntil($end_date) as $keyAcc => $date)
 
             <tr>
                 <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; ">
@@ -392,26 +392,13 @@
                 @if($date->format('Y-m-d') >= $arrives_at->format('Y-m-d') && $date->format('Y-m-d') <= $departs_at->format('Y-m-d'))
                <tr>
                     <td align="left" valign="top">
-                        <table align="left" width="60%" cellspacing="0" cellpadding="0">
                             <tr>
                                 <td align="left" width="150" style="padding: 0px 40px; font-weight: bold; font-size: 11pt;"
                                     class="oc_f12 oc_lblack">Arrival from {{ $tourComponent->inventory->flight->departureAirport->name }} to {{ $tourComponent->inventory->flight->arrivalAirport->name }}  </td>
                                 <td  align="right" valign="top"
                                     style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
                             </tr>
-                        </table>
-                        <table align="right" width="40%" cellspacing="0" cellpadding="0">
-                            <tbody>
-                                <tr>
-                                    <td align="left" valign="top" style="padding: 0 15px;"
-                                        >&nbsp;
-                                    </td>
-                                    <td width="180" align="center" valign="top"
-                                        style="padding: 0 15px;" >
-                                        &nbsp;</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        
                     </td>
                 </tr>
                     
@@ -421,6 +408,25 @@
 
             @foreach($tour->accommodationInventoryTours as $tourComponent)
                 @if($date->format('Y-m-d') >= date('Y-m-d', strtotime($tourComponent->inventory->check_in)) && $date->format('Y-m-d') <= date('Y-m-d', strtotime($tourComponent->inventory->check_out)))
+                
+                @php
+                $nights = 0;
+                    if($keyAcc == 0){
+                        $date1 = date('Y-m-d', strtotime($tourComponent->inventory->check_in));
+                        $date2 = date('Y-m-d', strtotime($tourComponent->inventory->check_out));
+
+                        // Convert the dates to DateTime objects
+                        $datetime1 = new DateTime($date1);
+                        $datetime2 = new DateTime($date2);
+
+                        // Calculate the difference between the two dates
+                        $interval = $datetime1->diff($datetime2);
+
+                        // Get the number of nights
+                        $nights = $interval->format('%a') - 1;
+                    }
+                    
+                @endphp
                     <tr>
                         <td align="left" valign="top">
                             <table align="left" width="60%" cellspacing="0" cellpadding="0">
@@ -463,49 +469,19 @@
                                                         {{ $tourComponent->inventory->component->name }}
                                                     </td>
                                                 </tr>
-                                                <tr>
+                                                @if($nights > 0)
+                                                    <tr>
                                                     <td align="left" width="80" valign="top" style="padding: 0px 40px;"
-                                                        class="oc_f12 oc_lblack">Address:
+                                                        class="oc_f12 oc_lblack">No Of Nights:
                                                     </td>
                                                     <td align="left" valign="top"
                                                         style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                        {{$tourComponent->inventory->component->address}}
+                                                        {{$nights}}
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;"
-                                                        class="oc_f12 oc_lblack">Check In Date:
-                                                    </td>
-                                                    <td align="left" valign="top"
-                                                        style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                        {{ date('d M y', strtotime($tourComponent->inventory->check_in)) }}
-                                                    </td>
-                                                </tr>
-                                                <tr >
-                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;"
-                                                        class="oc_f12 oc_lblack">Check Out Date:
-                                                    </td>
-                                                    <td align="left" valign="top"
-                                                        style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                        {{ date('d M y', strtotime($tourComponent->inventory->check_out)) }}
-                                                    </td>
-                                                </tr>
-                                                <tr >
-                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;">&nbsp;
-                                                    </td>
-                                                    <td align="left" valign="top" style="padding: 0px 40px;">
-                                                        &nbsp;
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;"
-                                                        class="oc_f12 oc_lblack">Hotel Description:	
-                                                    </td>
-                                                    <td align="left" valign="top"
-                                                        style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                        {!! $tourComponent->inventory->component->description !!}    
-                                                    </td>
-                                                </tr>
+                                                @endif
+                                                
+                                              
                                             </tbody>
                                         </table>
                                     </td>
