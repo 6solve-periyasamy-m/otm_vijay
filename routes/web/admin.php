@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\Voucher\VoucherCodeController;
 Route::name('admin.')->group(function () {
     Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('show-login');
     Route::post('/login', [AuthenticationController::class, 'login'])->name('login');
+    Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logout');
 
     Route::prefix('password')->name('password.')->group(function () {
         Route::get('/forgot', [AuthenticationController::class, 'forgot'])->name('forgot');
@@ -25,7 +26,7 @@ Route::name('admin.')->group(function () {
     });
 });
 
-Auth::routes(['verify' => true, 'register' => false]);
+//Auth::routes(['verify' => true, 'register' => false]);
 
 Route::middleware('auth:web')->group(function () {
 

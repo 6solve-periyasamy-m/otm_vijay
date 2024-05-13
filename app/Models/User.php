@@ -188,8 +188,10 @@ class User extends UserAuthenticatable implements MustVerifyEmail
         return Google2FA::getQRCodeUrl(config('auth.google-2fa.company'), $this->email, $secret);
     }
 
-    public function verifyOneTimeCode(string $code): bool
+    public function verifyOneTimeCode(string|null $code): bool
     {
+        if ($this->otp_secret === null) return true;
+        if ( $code === null) return false;
         try {
             return Google2FA::verify($code, $this->otp_secret);
         } catch (Exception $e) {

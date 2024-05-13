@@ -10,7 +10,7 @@
                 <div class="card-header">{{ __('Login') }}</div>
                 <p></p>
                 <div class="card-body">
-                    <form method="POST" action="{{ $action ?? route('login') }}">
+                    <form method="POST" action="{{ $action ?? route('admin.login') }}">
                         @csrf
 
                         <div class="form-group row">
@@ -35,6 +35,20 @@
 
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="email" class="col-md-4 col-form-label text-md-right">One Time Code</label>
+
+                            <div class="col-md-6">
+                                <input id="otp_code" class="form-control @error('email') is-invalid @enderror" name="otp_code" value="{{ old('otp_code') }}">
+
+                                @error('email')
+                                <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror

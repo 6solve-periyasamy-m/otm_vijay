@@ -9,6 +9,7 @@ use App\Http\Requests\Admin\Authentication\SendResetRequest;
 use App\Http\Requests\Admin\LoginRequest;
 use App\Models\User;
 use Auth;
+use Hash;
 use Illuminate\Auth\AuthenticationException;
 use Log;
 
@@ -24,14 +25,26 @@ class AuthenticationController extends Controller
 
     public function login(LoginRequest $request)
     {
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            try {
-                Auth::logoutOtherDevices($request->password);
-            } catch (AuthenticationException $e) {
-                Log::error($e);
+        $user = User::where('email', $request->email)->first();
+        if ($user !== null && Hash::check($request->password, $user->password)) {
+            if (($user->otp_secret === null || $user->verifyOneTimeCode($request->otp_code))) {
+                Auth::login($user);
+                if (!$user->isOtm()) {
+                    try {
+                        Auth::logoutOtherDevices($request->password);
+                    } catch (AuthenticationException $e) {
+                        Log::error($e);
+                    }
+                }
+                $request->session()->regenerate();
+                return redirect()->intended(route('dash'));
+            } else {
+                if ($request->otp_code === null) {
+                    return back()->withErrors(['msg' => 'One Time Code is required.']);
+                } else {
+                    return back()->withErrors(['msg' => 'The one time code you entered is invalid']);
+                }
             }
-            $request->session()->regenerate();
-            return redirect()->intended(route('dash'));
         }
         return back()->withErrors('Could not authenticate with those credentials')->withInput($request->only('email', 'remember'));
     }

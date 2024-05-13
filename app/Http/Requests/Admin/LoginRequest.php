@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * @property string $email
  * @property string $password
+ * @property string|null $otp_code
  */
 class LoginRequest extends FormRequest
 {
@@ -19,7 +20,8 @@ class LoginRequest extends FormRequest
     {
         return [
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
+            'otp_code' => 'nullable|numeric|digits:6',
         ];
     }
 }
