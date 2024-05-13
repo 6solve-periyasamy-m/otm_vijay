@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Order\Order;
+use App\Models\Quote\Quote;
 use App\Models\System\ApiToken;
 use App\Repository\Authentication\UserRepository;
 use Database\Factories\UserFactory;
@@ -45,6 +46,8 @@ use Silber\Bouncer\Database\Role;
  * @property-read Collection|Role[] $roles
  * @property-read int|null $roles_count
  * @property-read Collection|ApiToken[] $tokens
+ * @property-read Collection|Order[] $orders
+ * @property-read Collection|Quote[] $quotes
  * @property-read int|null $tokens_count
  * @property-read string $avatar_url The URL for the avatar
  * @property-read UserRepository $repository
@@ -156,6 +159,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class, 'consultant_id');
+    }
+
+    public function quotes(): HasMany
+    {
+        return $this->hasMany(Quote::class, 'consultant_id');
     }
 
     public function getCurrentToken(): ApiToken

@@ -63,7 +63,7 @@
         </div>
     </div>
     @if($editable && $self)
-        <x-admin.section.accordion id="security">
+        <x-admin.section.accordion closed id="security">
             <x-slot:title>Account Security</x-slot:title>
             <x-admin.section.card>
                 <x-slot:title>Change Password</x-slot:title>
@@ -81,4 +81,59 @@
             </x-admin.section.card>
         </x-admin.section.accordion>
     @endif
+    <x-admin.section.accordion id="consultancy">
+        <x-slot:title>Consultation Record</x-slot:title>
+        <div class="row">
+            <div class="col-md-6">
+                <x-admin.section.card>
+                    <x-slot:title>Orders</x-slot:title>
+                    <table class="datatable table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Reference</th>
+                            <th scope="col">Travellers</th>
+                            <th scope="col">Cost</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($user->orders as $order)
+                            <tr>
+                                <th scope="row"><a href="{{ route('orders.view', ['order' => $order]) }}">{{ $order->booking_reference }}</a></th>
+                                <td>{{ $order->orderCustomers()->count() }}</td>
+                                <td>{{ f_currency($order->cost) }}</td>
+                                <td>{{ $order->status->badge() }}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </x-admin.section.card>
+            </div>
+            <div class="col-md-6">
+                <x-admin.section.card>
+                    <x-slot:title>Quotes</x-slot:title>
+                    <table class="datatable table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Reference</th>
+                            <th scope="col">Lead Traveller</th>
+                            <th scope="col">Expiry</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($user->quotes as $quote)
+                            <tr>
+                                <th scope="row"><a href="{{ route('quotes.view', ['quote' => $quote]) }}">{{ $quote->reference }}</a></th>
+                                <td>{{ $quote->leadTraveller->name }}</td>
+                                <td>{{ f_date($quote->expires) }}</td>
+                                <td>{{ $quote->status->badge() }}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </x-admin.section.card>
+            </div>
+        </div>
+    </x-admin.section.accordion>
 @endsection

@@ -1,6 +1,6 @@
 @php
 $id = $attributes->get('id', \Str::uuid());
-$open = $attributes->get('open', true);
+$open = !$attributes->has('closed');
 @endphp
 <div>
     <div class="card">
