@@ -63,20 +63,22 @@
         </div>
     </div>
     @if($editable && $self)
-        <hr class="splitter"/>
-        <x-admin.section.card>
-            <x-slot:title>Change Password</x-slot:title>
-            <form action="{{ route('users.password', ['user' => $user,]) }}" method="post" class="row">
-                @csrf
-                <x-livewire.input type="password" name="current_password" label="Current Password" width="3"/>
-                <x-livewire.input type="password" name="new_password" label="New Password" width="3"/>
-                <x-livewire.input type="password" name="new_password_confirmation" label="Confirm New Password"
-                                  width="3"/>
-                <div class="col-xl-2 flex justify-center my-auto">
-                    <input type="submit" class="btn btn-success" value="Change Password">
-                </div>
-                <div class="col-xl-1"></div>
-            </form>
-        </x-admin.section.card>
+        <x-admin.section.accordion id="security">
+            <x-slot:title>Account Security</x-slot:title>
+            <x-admin.section.card>
+                <x-slot:title>Change Password</x-slot:title>
+                <form action="{{ route('users.password', ['user' => $user,]) }}" method="post" class="row">
+                    @csrf
+                    <x-livewire.input type="password" name="current_password" label="Current Password" width="3"/>
+                    <x-livewire.input type="password" name="new_password" label="New Password" width="3"/>
+                    <x-livewire.input type="password" name="new_password_confirmation" label="Confirm New Password"
+                                      width="3"/>
+                    <div class="col-xl-2 flex justify-center my-auto">
+                        <input type="submit" class="btn btn-success" value="Change Password">
+                    </div>
+                    <div class="col-xl-1"></div>
+                </form>
+            </x-admin.section.card>
+        </x-admin.section.accordion>
     @endif
 @endsection
