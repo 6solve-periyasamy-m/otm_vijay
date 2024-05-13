@@ -22,6 +22,7 @@ $inventory = $inventory ?? null;
         ['name' => 'Purchase Price', 'field' => 'purchase_price', 'value' => $inventory?->purchase_price ?? null, 'width' => 6, ])
     @include('partials.fields.text',
         ['name' => 'Sales Price', 'field' => 'sales_price', 'value' => $inventory?->sales_price ?? null, 'width' => 6, ])
-    @include('partials.fields.textarea', ['name' => 'Notes', 'field' => 'notes', 'value' => $inventory?->notes,])
+    @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'value' => $inventory?->internal_notes ?? null])
+    @include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'value' => $inventory?->external_notes ?? null])
     @include('partials.fields.submit')
 @endsection

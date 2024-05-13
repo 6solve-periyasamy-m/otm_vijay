@@ -4,7 +4,7 @@
 
 @section('title', 'View Merchandise')
 
-@push('header-stack')
+@push('footer-stack')
     <style>
         .image {
             background-image: url('{{ asset(setting('company.logo')) }}');
@@ -40,8 +40,6 @@
         }
     </script>
 @endpush
-
-@push('footer-ready', "$('#inventory').DataTable({fixedHeader: true,});")
 
 @section('content')
     <div class="otm-callout">
@@ -87,14 +85,12 @@
         </div>
     </div>
     <hr class="splitter">
-    <div class="card">
-        <div class="card-body">
-            <a class="btn btn-primary float-end" href="{{ route('merchandise.inventory.create', ['merchandise' => $merchandise,]) }}">
-                {{ Icon::create() }}
-                Create Inventory
-            </a>
-        </div>
-    </div>
+    <x-admin.section.card>
+        <a class="btn btn-primary float-end" href="{{ route('merchandise.inventory.create', ['merchandise' => $merchandise,]) }}">
+            {{ Icon::create() }}
+            Create Inventory
+        </a>
+    </x-admin.section.card>
     <hr class="splitter">
     @if(isset($detailed) && $detailed)
         @include('partials.admin.merchandise.view.table', ['merchandise' => $merchandise])

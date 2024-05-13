@@ -9,15 +9,9 @@ use Illuminate\Http\Request;
 
 class FlightInventoryTourController extends Controller
 {
-
-    public function index(Tour $tour)
-    {
-        return view('pages.models.flight_inventory_tours.table', ['tour' => $tour, 'flightInventoryTours' => FlightInventoryTour::all(),]);
-    }
-
     public function create(Tour $tour)
     {
-        return view('pages.models.flight_inventory_tours.create', ['tour' => $tour,]);
+        return view('pages.admin.flight.inventory.tour.form', ['tour' => $tour,]);
     }
 
     public function store(Request $request, Tour $tour)
@@ -34,14 +28,9 @@ class FlightInventoryTourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
-    public function view(Tour $tour, FlightInventoryTour $flightInventoryTour)
-    {
-        return view('pages.models.flight_inventory_tours.view', ['tour' => $tour, 'flightInventoryTour' => $flightInventoryTour,]);
-    }
-
     public function edit(Tour $tour, FlightInventoryTour $flightInventoryTour)
     {
-        return view('pages.models.flight_inventory_tours.update', ['tour' => $tour, 'flightInventoryTour' => $flightInventoryTour,]);
+        return view('pages.admin.flight.inventory.tour.form', ['tour' => $tour, 'inventoryTour' => $flightInventoryTour,]);
     }
 
     public function update(Request $request, Tour $tour, FlightInventoryTour $flightInventoryTour)

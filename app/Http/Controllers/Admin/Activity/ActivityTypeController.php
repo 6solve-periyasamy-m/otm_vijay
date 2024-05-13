@@ -8,15 +8,9 @@ use Illuminate\Http\Request;
 
 class ActivityTypeController extends Controller
 {
-
-    public function index()
-    {
-        return view('pages.models.activity_types.table', ['activityTypes' => ActivityType::all(),]);
-    }
-
     public function create()
     {
-        return view('pages.models.activity_types.create');
+        return view('pages.admin.activity.type.form');
     }
 
     public function store(Request $request)
@@ -28,14 +22,9 @@ class ActivityTypeController extends Controller
         return view('pages.close');
     }
 
-    public function view(ActivityType $activityType)
-    {
-        return view('pages.models.activity_types.view', ['activityType' => $activityType,]);
-    }
-
     public function edit(ActivityType $activityType)
     {
-        return view('pages.models.activity_types.update', ['activityType' => $activityType,]);
+        return view('pages.admin.activity.type.form', ['activityType' => $activityType,]);
     }
 
     public function update(Request $request, ActivityType $activityType)

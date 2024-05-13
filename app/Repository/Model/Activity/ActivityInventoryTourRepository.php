@@ -60,13 +60,14 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
         return $components;
     }
 
-    public function grantToCustomer(OrderCustomer $orderCustomer): ?OrderActivityRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderActivityRepository
     {
-        $orderComponent = OrderActivity::create([
+        $orderComponent = OrderActivity::make([
             'order_customer_id' => $orderCustomer->id,
             'activity_inventory_tour_id' => $this->tourComponent->id,
             'cost' => $this->tourComponent->tour_sales_price ?? 0,
         ]);
+        $silent ? $orderComponent->saveQuietly() : $orderComponent->save();
         event(new OrderCustomerComponentAddedEvent($orderComponent));
         return $orderComponent->repository;
     }
@@ -120,7 +121,11 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
     {
         $inventory = $this->tourComponent->activityInventory;
         $component = $inventory->activity;
-        return $component->name . ' (' . f_datetime($inventory->starts_at) . ' to ' . f_datetime($inventory->ends_at) . ') (' . $inventory->ticketType->name . ')';
+        $dateString = "";
+        if ($inventory->starts_at !== null && $inventory->ends_at !== null) {
+            $dateString = " (" . f_datetime($inventory->starts_at) . " to " . f_datetime($inventory->ends_at) . ")";
+        }
+        return $component->name . $dateString . '(' . $inventory->ticketType->name . ')';
     }
 
     public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
@@ -276,6 +281,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
             $inventory->starts_at,
             $inventory->ends_at,
             Icon::baseball(),
+            $inventory->external_notes,
             $upgradeName,
             [
                 'Starts At' => f_datetime($inventory->starts_at),
@@ -293,5 +299,10 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
     public function getCostToCustomer(): float
     {
         return $this->tourComponent->tour_component_type === 'Included' ? 0 : $this->tourComponent->tour_sales_price;
+    }
+
+    public static function find($id): ActivityInventoryTour|null
+    {
+        return ActivityInventoryTour::find($id);
     }
 }

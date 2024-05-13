@@ -184,6 +184,39 @@ class PaymentInstallmentsTableSeeder extends Seeder
                 'updated_at' => '2022-09-21 08:59:09',
                 'deleted_at' => '2022-09-21 08:59:09',
             ),
+            15 => 
+            array (
+                'id' => 16,
+                'tour_id' => 7,
+                'is_percentage' => 1,
+                'amount' => '25.00',
+                'due_on' => '2023-12-01',
+                'created_at' => '2023-09-22 13:21:52',
+                'updated_at' => '2023-09-22 13:21:52',
+                'deleted_at' => NULL,
+            ),
+            16 => 
+            array (
+                'id' => 17,
+                'tour_id' => 7,
+                'is_percentage' => 1,
+                'amount' => '30.00',
+                'due_on' => '2024-01-10',
+                'created_at' => '2023-09-22 13:22:04',
+                'updated_at' => '2023-09-22 13:22:04',
+                'deleted_at' => NULL,
+            ),
+            17 => 
+            array (
+                'id' => 18,
+                'tour_id' => 7,
+                'is_percentage' => 1,
+                'amount' => '25.00',
+                'due_on' => '2024-03-01',
+                'created_at' => '2023-09-22 13:22:21',
+                'updated_at' => '2023-09-22 13:22:21',
+                'deleted_at' => NULL,
+            ),
         ));
         
         

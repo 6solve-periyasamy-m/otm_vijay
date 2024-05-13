@@ -28,3 +28,4 @@ Archived
 /storage/debugbar
 .npm/
 .cache/
+*.exclude

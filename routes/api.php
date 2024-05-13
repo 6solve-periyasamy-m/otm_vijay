@@ -20,8 +20,9 @@ use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\TourComponentController;
 use App\Http\Controllers\Api\TransportController;
 use App\Http\Gateways\FellohGateway;
+use App\Http\Gateways\OpayoGateway;
+use App\View\Components\Livewire\Input\Select\Country;
 use Illuminate\Support\Facades\Route;
-
 
 Route::prefix('/orders')->group(function () {
     // existing components
@@ -38,8 +39,7 @@ Route::prefix('/orders')->group(function () {
 
 Route::stripeWebhooks('/stripe/webhooks');
 Route::post('/felloh/webhook', [FellohGateway::class, 'webhook'])->name('api.felloh.webhook');
-
-Route::post('/dual/select/countries', [SelectController::class, 'getCountries'])->name('api.countries.select');
+Route::post('/opayo/webhook', [OpayoGateway::class, 'webhook'])->name('api.opayo.webhook');
 
 Route::prefix('/php/booking')->name('api.booking.')->group(function () {
     Route::post('/upgrade/activity/{token}', [CustomerBookingController::class, 'upgradeActivity'])->name('upgrade-activity');
@@ -49,6 +49,11 @@ Route::prefix('/php/booking')->name('api.booking.')->group(function () {
 });
 
 Route::post('/admin/orders/{order}/rooming/get', [OrderController::class, 'getRoomingInformation'])->name('api.orders.rooming.get');
+
+Route::prefix('countries')->name('api.countries.')->group(function () {
+    Route::post('/', [Country::class, 'getAll'])->name('select');
+    Route::post('/{id}', [Country::class, 'getOne'])->name('selected');
+});
 
 Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(function () {
     Route::prefix('select')->group(function () {
@@ -60,7 +65,6 @@ Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(functio
         Route::post('available-flights/{orderCustomer}', [SelectController::class, 'getAvailableFlights'])->name('available-flights.select');
         Route::post('available-transports/{orderCustomer}', [SelectController::class, 'getAvailableTransport'])->name('available-transports.select');
         Route::prefix('selected')->group(function () {
-            Route::post('country/{id}', [SelectController::class, 'getSelectedCountry'])->name('countries.selected');
             Route::post('hat-size/{id}', [SelectController::class, 'getSelectedHatSize'])->name('hat-size.selected');
             Route::post('t-shirt-size/{id}', [SelectController::class, 'getSelectedTShirtSize'])->name('t-shirt-size.selected');
         });

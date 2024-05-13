@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Order\Component;
 
 use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Order\Invoice\InvoiceBillable;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Traits\Component\IsAccommodation;
@@ -77,5 +78,20 @@ class OrderAccommodationRepository extends OrderComponentRepository
         $data[] = ['start' => $inventory->check_out, 'activity' => 'Room Check Out',
             'description' => "{$component->name} ({$inventory->roomType->name}) ({$inventory->boardType})"];
         return $data;
+    }
+
+    public static function find($id): OrderAccommodation|null
+    {
+        return OrderAccommodation::find($id);
+    }
+
+    public function getInvoiceBillable(): InvoiceBillable
+    {
+        return InvoiceBillable::make([
+            'description' => $this->__toString(),
+            'shared_key' => "accommodation_" . $this->orderComponent->tourComponent->id,
+            'amount' => $this->orderComponent->tourComponent->tour_component_type === 'Included' ? 0 : $this->orderComponent->cost,
+            'is_base' => $this->orderComponent->tourComponent->tour_component_type === 'Included',
+        ]);
     }
 }

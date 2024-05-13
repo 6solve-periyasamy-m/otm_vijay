@@ -3,7 +3,9 @@
 namespace App\Repository\Model\Booking;
 
 use App\Exceptions\NotOnTourException;
+use App\Exceptions\RemoteGatewayError;
 use App\Exceptions\RoomingFailedException;
+use App\Exceptions\UnauthorizedGatewayException;
 use App\Http\Gateways\Storage\LineItem;
 use App\Models\Accommodation\RoomType;
 use App\Models\Activity\ActivityInventoryTour;
@@ -14,12 +16,14 @@ use App\Models\Customer\Group;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
+use App\Models\System\FellohLink;
 use App\Models\Tour\Tour;
 use App\Models\Voucher\Executors\FlatCostReductionExecutor;
 use App\Models\Voucher\Executors\PercentageCostReductionExecutor;
 use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Interfaces\GeneratesFellohData;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\Rooming\RemoteBookingGroup;
 use Carbon\Carbon;
@@ -28,7 +32,7 @@ use Gateway;
 use Log;
 use Throwable;
 
-class BookingRepository extends ModelRepository
+class BookingRepository extends ModelRepository implements GeneratesFellohData
 {
     private Booking $booking;
 
@@ -225,14 +229,15 @@ class BookingRepository extends ModelRepository
     public function convertToOrder(?Carbon $orderedOn = null): Order
     {
         $tour = $this->booking->tour;
-        $order = Order::create([
+        $order = Order::make([
             'tour_id' => $this->booking->tour_id,
             'token' => $this->booking->token,
-            'deposit' => $tour->deposit,
+            'deposit' => $tour->deposit_amount,
             'invoice_footer' => $tour->invoice_footer,
             'ordered_on' => $orderedOn ?? now(),
             'booking_fee' => $tour->booking_fee,
         ]);
+        $order->saveQuietly();
         foreach ($this->booking->travellers as $traveller) {
             $orderCustomer = $traveller->repository->convertToOrderCustomer($order);
 
@@ -242,14 +247,16 @@ class BookingRepository extends ModelRepository
             }
         }
         $order->booking_reference = Order::generateBookingReference($order);
-        $order->repository->save();
+        $order->saveQuietly();
+        $this->booking->order_id = $order->id;
+        $this->booking->save();
         foreach ($this->booking->groups as $bookingGroup) {
             $group = Group::create();
             foreach ($bookingGroup->travellers as $traveller) {
                 $group->repository->addCustomerToGroup($traveller->orderCustomer);
             }
             foreach ($bookingGroup->accommodation as $room) {
-                $group->repository->addRoomToGroup($room->tourComponent);
+                $group->repository->addRoomToGroup($room->tourComponent, true);
             }
         }
         $order->repository->resetInstallments();
@@ -291,6 +298,10 @@ class BookingRepository extends ModelRepository
         return !isset($this->booking);
     }
 
+    /**
+     * @throws RemoteGatewayError
+     * @throws UnauthorizedGatewayException
+     */
     public function getGatewayUrl(float $amount)
     {
         $gateway = Gateway::getDefaultGateway();
@@ -359,7 +370,7 @@ class BookingRepository extends ModelRepository
             $base += $this->booking->tour->remaining_installment;
             $base += $traveller->surcharge_amount;
             $base += $traveller->additional_cost;
-            foreach ($traveller->vouchers as $voucher) {
+            foreach ($traveller->vouchers()->get() as $voucher) {
                 foreach ($voucher->results as $result) {
                     $executor = $result->executor();
                     if ($executor instanceof FlatCostReductionExecutor) {
@@ -464,5 +475,62 @@ class BookingRepository extends ModelRepository
         foreach ($this->booking->travellers()->with('vouchers')->get() as $traveller) {
             $traveller->repository->validateVouchers();
         }
+    }
+
+    public function getFellohData(): array
+    {
+        return [
+            'customer_name' => $this->booking->leadTraveller->full_name,
+            'email' => $this->booking->leadTraveller->email_address,
+            'booking_reference' => $this->getReference(),
+            'departure_date' => $this->booking->tour->date_from->format('Y-m-d'),
+            'return_date' => $this->booking->tour->date_to->format('Y-m-d'),
+            'gross_amount' => (int)($this->getTotalCost()*100),
+        ];
+    }
+
+    public function getReference(): string
+    {
+        return $this->booking->token;
+    }
+
+    public function getFellohId(): string|null
+    {
+        return $this->booking->felloh?->felloh_id;
+    }
+
+    public function setFellohId(string $id): void
+    {
+        $current = $this->getFellohId();
+        if ($current === $id) { return; }
+        if ($current !== null) {
+            $this->booking->felloh->felloh_id = $id;
+            $this->booking->felloh->save();
+        } else {
+            $this->booking->felloh()->save(new FellohLink(['felloh_id' => $id]));
+        }
+    }
+
+    public function forceDelete(): void
+    {
+        foreach ($this->booking->groups as $group) {
+            $group->accommodation()->delete();
+            DB::table('booking_traveller_groups')->where('booking_group_id', '=', $group->id)->delete();
+            $group->delete();
+        }
+        foreach ($this->booking->travellers as $traveller) {
+            $traveller->activities()->delete();
+            $traveller->flights()->delete();
+            $traveller->transport()->delete();
+            $traveller->merchandise()->delete();
+            $traveller->vouchers()->delete();
+            $traveller->delete();
+        }
+        $this->booking->delete();
+    }
+
+    public static function find($id): Booking|null
+    {
+        return Booking::find($id);
     }
 }

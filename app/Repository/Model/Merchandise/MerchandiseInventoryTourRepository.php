@@ -50,13 +50,15 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
         return $components;
     }
 
-    public function grantToCustomer(OrderCustomer $orderCustomer): ?OrderComponentRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderComponentRepository
     {
-        return OrderMerchandise::create([
+        $orderComponent = OrderMerchandise::make([
             'order_customer_id' => $orderCustomer->id,
             'merchandise_inventory_tour_id' => $this->tourComponent->id,
             'cost' => $this->tourComponent->tour_sales_price ?? 0,
-        ])->repository;
+        ]);
+        $silent ? $orderComponent->saveQuietly() : $orderComponent->save();
+        return $orderComponent->repository;
     }
 
     public function getUpgradeParent(): MerchandiseInventoryTour
@@ -126,7 +128,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
 
     public function getCost(): float
     {
-        return $this->tourComponent->tour_sales_price;
+        return $this->tourComponent->tour_sales_price ?? 0;
     }
 
     public function getTourComponentType(): string
@@ -222,5 +224,10 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
     public function getCostToCustomer(): float
     {
         return $this->tourComponent->tour_component_type === 'Included' ? 0 : $this->tourComponent->tour_sales_price;
+    }
+
+    public static function find($id): MerchandiseInventoryTour|null
+    {
+        return MerchandiseInventoryTour::find($id);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Order;
 
 use App\Models\Order\OrderInstallment;
+use App\Models\Order\Payment\Payment;
 use App\Repository\Abstracts\ModelRepository;
 
 class OrderInstallmentRepository extends ModelRepository
@@ -30,6 +31,27 @@ class OrderInstallmentRepository extends ModelRepository
     public function isInstallmentPaid(): bool
     {
         return $this->getAmountPaid() == $this->installment->calculated_amount;
+    }
+
+    public function getCoveringPayment(): Payment|null
+    {
+        $order = $this->installment->order;
+        $totalOwed = $order->calculated_deposit + ($order->booking_fee ?? 0);
+        foreach ($order->installments as $installment) {
+            $totalOwed += $installment->calculated_amount;
+            if ($installment->id === $this->installment->id) break;
+        }
+        // Account for refunds before calculating
+        foreach ($order->payments as $payment) {
+            if ($payment->amount < 0) $totalOwed -= $payment->amount;
+        }
+
+        foreach ($order->payments as $payment) {
+            if ($payment->amount < 0) continue;
+            $totalOwed -= $payment->amount;
+            if ($totalOwed <= 0) return $payment;
+        }
+        return null;
     }
 
     public function get(): OrderInstallment
@@ -62,5 +84,10 @@ class OrderInstallmentRepository extends ModelRepository
     public function __toString(): string
     {
         return f_date($this->installment->due_on) . ' - ' . f_currency($this->installment->calculated_amount);
+    }
+
+    public static function find($id): OrderInstallment|null
+    {
+        return OrderInstallment::find($id);
     }
 }

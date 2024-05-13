@@ -1,4 +1,4 @@
-<table class="table table-striped" id="report">
+<table class="datatable table table-striped" id="report">
     <thead>
     <tr>
         <td>Order Date</td>
@@ -20,7 +20,7 @@
             <td>{{ $order->cancelled ? 'Cancelled' : $order->customer_count }}</td>
             <td>{{ $order->tour->name }}</td>
             <td>{{ !isset($format) || $format ? f_currency($order->total) : $order->total }}</td>
-            <td>{{ !isset($format) || $format ? f_currency($order->paid) : $order->remaining }}</td>
+            <td>{{ !isset($format) || $format ? f_currency($order->paid) : $order->paid }}</td>
             <td>{{ !isset($format) || $format ? f_currency($order->remaining) : $order->remaining}}</td>
         </tr>
     @endforeach

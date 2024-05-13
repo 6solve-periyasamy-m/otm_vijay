@@ -67,6 +67,24 @@
         @endforeach
     </div>
     <div class="card">
+        <div class="card-body" data-target="#taxes" onclick="toggleAccordion(this)">
+            <div class="flex justify-between">
+                <h4 class="fw-bold">
+                    {{ Icon::maximize() }} Tax Brackets
+                </h4>
+                <div>
+                    <a href="#" onclick="openModal('admin.system.tax-bracket.form')"
+                       class="btn btn-outline-success btn-sm mb-1">
+                        {{ Icon::save() }} Create Tax Bracket
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="collapse row mx-1" id="taxes">
+        <livewire:admin.system.tax-bracket.tiles />
+    </div>
+    <div class="card">
         <div class="card-body" data-target="#brands" onclick="toggleAccordion(this)">
             <div class="d-flex justify-content-between">
                 <div>
@@ -94,5 +112,32 @@
     </div>
     <div class="collapse row mx-1" id="import">
         @include('partials.admin.system.import')
+    </div>
+    <div class="card">
+        <div class="card-body" data-target="#default-installments" onclick="toggleAccordion(this)">
+            <h4 class="fw-bold">
+                {{ Icon::maximize() }} Default Installments
+            </h4>
+        </div>
+    </div>
+    <div class="row mx-1" id="default-installments">
+        <livewire:admin.system.installments.view />
+    </div>
+    <div class="card">
+        <div class="card-body" data-target="#conversions" onclick="toggleAccordion(this)">
+            <h4 class="fw-bold">{{ Icon::maximize() }} Conversion Rates</h4>
+        </div>
+    </div>
+    <div class="collapse show mx-1" id="conversions">
+        <x-admin.section.card>
+            <div class="flex float-end">
+                <button class="btn btn-success" onclick="openModal('admin.system.conversion.form')">
+                    {{ Icon::create() }}Create New
+                </button>
+            </div>
+        </x-admin.section.card>
+        <x-admin.section.card>
+            <livewire:admin.system.conversion.table />
+        </x-admin.section.card>
     </div>
 @endsection

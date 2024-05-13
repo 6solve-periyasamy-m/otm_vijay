@@ -14,7 +14,9 @@
         content="Octopus Travel Matrix Customer End Portal">
     <meta name="robots" content="noindex,nofollow">    
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title') - OTM Customer End Portal</title>    
+    <title>@yield('title') - OTM Customer End Portal</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <!-- Custom CSS -->
     <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
     <link href="{{ asset('/css/customer.css?v=').time() }}" rel="stylesheet">
@@ -93,6 +95,9 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
     <script type="text/javascript">
+        $(document).ready(function () {
+            @stack('footer-ready')
+        });
         function showToast(title, body, color = 'primary', autohide = false, delay = 5000) {
             let now = Date.now();
             $('.toast-container').append(render(template('toast'), {id: now, title: title, body: body, color: color}));

@@ -1,6 +1,7 @@
 <canvas id="{{ str_replace(' ', '', $name) }}"></canvas>
+@push('footer-stack')
 <script type="text/javascript" defer>
-    new Chart(document.getElementById('{{ str_replace(' ', '', $name) }}').getContext('2d'), {
+    new window.Chart(document.getElementById('{{ str_replace(' ', '', $name) }}').getContext('2d'), {
         type: 'line',
         data: {
             labels: [
@@ -23,3 +24,4 @@
         }
     });
 </script>
+@endpush

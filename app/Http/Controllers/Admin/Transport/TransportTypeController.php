@@ -8,15 +8,9 @@ use Illuminate\Http\Request;
 
 class TransportTypeController extends Controller
 {
-
-    public function index()
-    {
-        return view('pages.models.transport_types.table', ['transportTypes' => TransportType::all(),]);
-    }
-
     public function create()
     {
-        return view('pages.models.transport_types.create');
+        return view('pages.admin.transport.transport-type.form');
     }
 
     public function store(Request $request)
@@ -28,14 +22,9 @@ class TransportTypeController extends Controller
         return view('pages.close');
     }
 
-    public function view(TransportType $transportType)
-    {
-        return view('pages.models.transport_types.view', ['transportType' => $transportType,]);
-    }
-
     public function edit(TransportType $transportType)
     {
-        return view('pages.models.transport_types.update', ['transportType' => $transportType,]);
+        return view('pages.admin.transport.transport-type.form', ['transportType' => $transportType,]);
     }
 
     public function update(Request $request, TransportType $transportType)

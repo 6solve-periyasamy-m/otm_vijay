@@ -292,18 +292,30 @@ class SettingsTableSeeder extends Seeder
             ),
             41 => 
             array (
+                'key' => 'system.historic',
+                'value' => '6',
+            ),
+            42 => 
+            array (
                 'key' => 'system.mail.enabled',
                 'value' => '1',
             ),
-            42 => 
+            43 => 
             array (
                 'key' => 'system.year.start',
                 'value' => '2022-04-01',
             ),
-            43 =>
+            44 => 
             array (
-                'key' => 'system.historic',
-                'value' => '6',
+                'key' => 'company.bank_transfer',
+                'value' => 'Keith Prowse Travel PTY LTD <br />
+                ABN: 31 003 276 775 <br />
+                BSB: 032-298 <br />
+                ACC: 540726 <br />
+                SWIFT: WPACAU2S <br />
+                BANK: Westpac <br />
+                BRANCH: Crows Nest <br />
+                Reference Number: KPAD106102',
             ),
         ));
         

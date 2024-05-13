@@ -16,6 +16,7 @@ use App\Repository\Traits\Component\IsActivity;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
+use Settings;
 
 class ActivityInventoryRepository extends InventoryRepository implements HasActivityManifest
 {
@@ -46,12 +47,12 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
         return $this->inventory;
     }
 
-    public function getStartTime(): Carbon
+    public function getStartTime(): Carbon|null
     {
         return $this->inventory->starts_at;
     }
 
-    public function getEndTime(): Carbon
+    public function getEndTime(): Carbon|null
     {
         return $this->inventory->ends_at;
     }
@@ -103,7 +104,11 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
 
     public function __toString(): string
     {
-        return "{$this->inventory->component} - {$this->inventory->ticketType} (" . f_datetime($this->inventory->starts_at) . " to " . f_datetime($this->inventory->ends_at) . ")";
+        $dateString = "";
+        if ($this->inventory->starts_at !== null && $this->inventory->ends_at !== null) {
+            $dateString = " (" . f_datetime($this->inventory->starts_at) . " to " . f_datetime($this->inventory->ends_at) . ")";
+        }
+        return "{$this->inventory->component} - {$this->inventory->ticketType}" . $dateString;
     }
 
     public function addToTour(Tour $tour, string $tourComponentType, float $price = -1): ?ActivityInventoryTourRepository
@@ -152,5 +157,20 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
     public function getActivityManifest(): Collection|array
     {
         return $this->inventory->orders()->with(ActivityManifestRepository::getRelations())->get();
+    }
+
+    public static function find($id): ActivityInventory|null
+    {
+        return ActivityInventory::find($id);
+    }
+
+    public function getLocalPurchasePrice(): ?float
+    {
+        return Settings::convertCurrency($this->getPurchasePrice(), $this->inventory->component->currency) ?? $this->getPurchasePrice();
+    }
+
+    public function getPurchasePriceString(): string
+    {
+        return f_currency($this->getPurchasePrice(), $this->inventory->component->currency);
     }
 }

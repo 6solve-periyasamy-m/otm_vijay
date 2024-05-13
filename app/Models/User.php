@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Order\Order;
 use App\Models\System\ApiToken;
 use App\Repository\Authentication\UserRepository;
 use Database\Factories\UserFactory;
@@ -150,6 +151,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function tokens(): HasMany
     {
         return $this->hasMany(ApiToken::class, 'user_id');
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'consultant_id');
     }
 
     public function getCurrentToken(): ApiToken

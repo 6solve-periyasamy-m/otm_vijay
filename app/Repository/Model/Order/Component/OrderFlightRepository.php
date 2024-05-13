@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Order\Component;
 
 use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Invoice\InvoiceBillable;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Traits\Component\IsFlight;
@@ -78,5 +79,20 @@ class OrderFlightRepository extends OrderComponentRepository
         $data[] = ['start' => $inventory->arrives_at, 'activity' => 'Flight Arrival',
             'description' => "{$component->departureAirport->name} to {$component->arrivalAirport->name} (Arrival) ({$inventory->flight_number}) ({$inventory->travelClass})"];
         return $data;
+    }
+
+    public static function find($id): OrderFlight|null
+    {
+        return OrderFlight::find($id);
+    }
+
+    public function getInvoiceBillable(): InvoiceBillable
+    {
+        return InvoiceBillable::make([
+            'description' => $this->__toString(),
+            'shared_key' => "flight_" . $this->orderComponent->tourComponent->id,
+            'amount' => $this->orderComponent->tourComponent->tour_component_type === 'Included' ? 0 : $this->orderComponent->cost,
+            'is_base' => $this->orderComponent->tourComponent->tour_component_type === 'Included',
+        ]);
     }
 }

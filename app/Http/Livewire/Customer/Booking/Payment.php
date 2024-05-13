@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\Customer\Booking;
 
+use App\Exceptions\RemoteGatewayError;
+use App\Exceptions\UnauthorizedGatewayException;
 use App\Models\Booking\Booking;
 use Livewire\Component;
 
@@ -28,7 +30,12 @@ class Payment extends Component
         $this->amount = sigfig((float)preg_replace('/[^0-9.]/', '', $this->amount));
         $this->validate();
 
-        return redirect()->to($this->booking->repository->getGatewayUrl($this->amount));
+        try {
+            return redirect()->to($this->booking->repository->getGatewayUrl($this->amount));
+        } catch (RemoteGatewayError|UnauthorizedGatewayException $e) {
+            $this->dispatchBrowserEvent('livewireAlert', ['message' => 'Something went wrong with our payment processing. Please try again later.']);
+            return null;
+        }
     }
 
     public function accept()

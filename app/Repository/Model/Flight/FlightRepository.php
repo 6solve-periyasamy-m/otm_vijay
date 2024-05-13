@@ -53,4 +53,9 @@ class FlightRepository extends ModelRepository implements HasFlightManifest
     {
         return $this->flight->orders()->with(FlightManifestRepository::getRelations())->get();
     }
+
+    public static function find($id): Flight|null
+    {
+        return Flight::find($id);
+    }
 }

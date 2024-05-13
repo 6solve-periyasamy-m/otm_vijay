@@ -6,6 +6,7 @@ use App\Models\Order\Order;
 use Exception;
 use Illuminate\Support\Collection;
 use mikehaertl\pdftk\Pdf;
+use Settings;
 use Storage;
 use ZipArchive;
 
@@ -26,6 +27,7 @@ class AtolRepository
     public static function generateAllAtolCertificates(Collection $orders, string $name): ?string
     {
         Storage::makeDirectory('uploads/atol');
+        $filter = Settings::atolFilter();
         while (true) {
             try {
                 $filename = str_replace(' ', '_', strtolower($name)) . '-' . now()->unix();
@@ -40,6 +42,7 @@ class AtolRepository
         foreach ($orders as $order) {
             if ($order->cancelled) continue;
             if (!$order->has_atol) continue;
+            if ($filter !== -1 && $order->leadBooker->customer->homeAddress->country_id !== $filter) continue;
             $atol = $order->repository->getAtolRepository()->generateAtolCertificate();
             $saved = $atol->saveAs(Storage::path($directory) . '/' . $order->booking_reference . '.pdf');
             if (!$saved) {
@@ -88,6 +91,9 @@ class AtolRepository
 
     public function generateFlightList(): array
     {
+        // Available Lines for FL: 6
+        // 1 Taken up by package name
+        // 3 for inbound, 2 for outbound
         $inbound = [];
         $outbound = [];
         foreach ($this->order->orderCustomers as $orderCustomer) {
@@ -99,9 +105,13 @@ class AtolRepository
                 }
             }
         }
-        $string = '';
+        $string = "{$this->order->tour->name}\n";
         $excessString = '';
-        $excess = 3 + (count($outbound) < 3 ? 3 - count($outbound) : 0);
+        if (sizeof($inbound) < 3) {
+            $excess = 3;
+        } else {
+            $excess = 3 + (count($outbound) < 3 ? 3 - count($outbound) : 0);
+        }
         foreach ($inbound as $tourComponent) {
             if ($excess > 0) {
                 $string .= $tourComponent->atol_string . "\n";
@@ -110,7 +120,7 @@ class AtolRepository
                 $excessString .= $tourComponent->atol_string . "\n";
             }
         }
-        $excess += 3;
+        $excess += 2;
         foreach ($outbound as $tourComponent) {
             if ($excess > 0) {
                 $string .= $tourComponent->atol_string . "\n";

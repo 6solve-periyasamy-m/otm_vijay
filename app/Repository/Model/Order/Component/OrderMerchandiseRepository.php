@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Order\Component;
 
 use App\Models\Order\Component\OrderMerchandise;
+use App\Models\Order\Invoice\InvoiceBillable;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Traits\Component\IsMerchandise;
@@ -69,5 +70,20 @@ class OrderMerchandiseRepository extends OrderComponentRepository
     public function getItineraryItems(): array
     {
         return [];
+    }
+
+    public static function find($id): OrderMerchandise|null
+    {
+        return OrderMerchandise::find($id);
+    }
+
+    public function getInvoiceBillable(): InvoiceBillable
+    {
+        return InvoiceBillable::make([
+            'description' => $this->__toString(),
+            'shared_key' => "merchandise_" . $this->orderComponent->tourComponent->id,
+            'amount' => $this->orderComponent->tourComponent->tour_component_type === 'Included' ? 0 : $this->orderComponent->cost,
+            'is_base' => $this->orderComponent->tourComponent->tour_component_type === 'Included',
+        ]);
     }
 }

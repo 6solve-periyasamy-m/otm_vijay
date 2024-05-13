@@ -24,10 +24,10 @@ class TourCostingRepository extends CostingRepository
     {
         $cost = 0;
         foreach ($this->tour->repository->getComponents(false, true, true, true, $merchandise, $filter) as $component) {
-            $cost += $component->getPurchasePrice();
+            $cost += $component->getLocalPurchasePrice();
         }
         foreach ($this->tour->templates as $template) {
-            $cost += $template->inventory->purchase_price;
+            $cost += $template->inventory->repository->getLocalPurchasePrice();
         }
         foreach ($this->tour->costs()->where('per_customer', '=', '1')->get() as $tourCost) {
             $cost += $tourCost->amount;
@@ -45,7 +45,7 @@ class TourCostingRepository extends CostingRepository
                     $max = $upgrade->upgrade;
                 }
             }
-            $cost += $max?->repository?->getPurchasePrice() ?? $component->getPurchasePrice();
+            $cost += $max?->repository?->getLocalPurchasePrice() ?? $component->getLocalPurchasePrice();
         }
         foreach ($this->tour->templates as $template) {
             $max = null;
@@ -54,7 +54,7 @@ class TourCostingRepository extends CostingRepository
                     $max = $upgrade->upgrade;
                 }
             }
-            $cost += $max?->repository?->getPurchasePrice() ?? $template->inventory->purchase_price;
+            $cost += $max?->repository?->getLocalPurchasePrice() ?? $template->inventory->repository->getLocalPurchasePrice();
         }
         foreach ($this->tour->costs()->where('per_customer', '=', '1')->get() as $tourCost) {
             $cost += $tourCost->amount;

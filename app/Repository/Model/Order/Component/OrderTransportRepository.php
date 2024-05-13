@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Order\Component;
 
 use App\Models\Order\Component\OrderTransport;
+use App\Models\Order\Invoice\InvoiceBillable;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Traits\Component\IsTransport;
@@ -76,5 +77,20 @@ class OrderTransportRepository extends OrderComponentRepository
         $data[] = ['start' => $inventory->arrives_at, 'activity' => 'Transport Arrival',
             'description' => "{$component->name} ({$component->departureAddress->name} to {$component->arrivalAddress->name}) ({$inventory->travelClass})" . (isset($inventory->transport_number) ? " ($inventory->transport_number)" : ""),];
         return $data;
+    }
+
+    public static function find($id): OrderTransport|null
+    {
+        return OrderTransport::find($id);
+    }
+
+    public function getInvoiceBillable(): InvoiceBillable
+    {
+        return InvoiceBillable::make([
+            'description' => $this->__toString(),
+            'shared_key' => "transport_" . $this->orderComponent->tourComponent->id,
+            'amount' => $this->orderComponent->tourComponent->tour_component_type === 'Included' ? 0 : $this->orderComponent->cost,
+            'is_base' => $this->orderComponent->tourComponent->tour_component_type === 'Included',
+        ]);
     }
 }

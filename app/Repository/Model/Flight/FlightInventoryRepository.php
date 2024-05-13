@@ -16,6 +16,7 @@ use App\Repository\Traits\Component\IsFlight;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
+use Settings;
 
 class FlightInventoryRepository extends InventoryRepository implements HasFlightManifest
 {
@@ -152,5 +153,20 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
     public function hasEnoughStock(int $amount = 1): bool
     {
         return true;
+    }
+
+    public static function find($id): FlightInventory|null
+    {
+        return FlightInventory::find($id);
+    }
+
+    public function getLocalPurchasePrice(): ?float
+    {
+        return Settings::convertCurrency($this->getPurchasePrice(), $this->inventory->component->currency) ?? $this->getPurchasePrice();
+    }
+
+    public function getPurchasePriceString(): string
+    {
+        return f_currency($this->getPurchasePrice(), $this->inventory->component->currency);
     }
 }

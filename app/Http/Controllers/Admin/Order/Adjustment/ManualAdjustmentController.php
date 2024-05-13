@@ -12,15 +12,9 @@ use Illuminate\Http\Request;
 
 class ManualAdjustmentController extends Controller
 {
-
-    public function index(Order $order)
-    {
-        return view('pages.models.manual_adjustments.table', ['order' => $order, 'manualAdjustments' => ManualAdjustment::all(),]);
-    }
-
     public function create(Order $order)
     {
-        return view('pages.models.manual_adjustments.create', ['order' => $order,]);
+        return view('pages.admin.order.adjustment.form', ['order' => $order,]);
     }
 
     public function store(Request $request, Order $order)
@@ -36,14 +30,9 @@ class ManualAdjustmentController extends Controller
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
-    public function view(Order $order, ManualAdjustment $manualAdjustment)
-    {
-        return view('pages.models.manual_adjustments.view', ['order' => $order, 'manualAdjustment' => $manualAdjustment,]);
-    }
-
     public function edit(Order $order, ManualAdjustment $manualAdjustment)
     {
-        return view('pages.models.manual_adjustments.update', ['order' => $order, 'manualAdjustment' => $manualAdjustment,]);
+        return view('pages.admin.order.adjustment.form', ['order' => $order, 'manualAdjustment' => $manualAdjustment,]);
     }
 
     public function update(Request $request, Order $order, ManualAdjustment $manualAdjustment)

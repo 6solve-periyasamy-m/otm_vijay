@@ -2,6 +2,8 @@
 
 namespace App\Models\Quote;
 
+use App\Models\Customer\Organization;
+use App\Models\Helper\Model;
 use App\Models\Helper\QuoteStatus;
 use App\Models\Helper\Traits\HasAdditionalCosts;
 use App\Models\Order\Order;
@@ -13,6 +15,7 @@ use App\Models\Quote\Component\QuoteTransport;
 use App\Models\System\Brand;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
+use App\Models\User;
 use App\Repository\Model\Quote\QuoteRepository;
 use Database\Factories\Quote\QuoteFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -20,7 +23,6 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,7 +35,10 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int|null $tour_id
  * @property int|null $order_id
+ * @property int|null $tax_bracket_id
+ * @property int|null $organization_id
  * @property int|null $lead_traveller_id
+ * @property int|null $consultant_id
  * @property int|null $event_id
  * @property int|null $brand_id
  * @property int $revision
@@ -41,6 +46,7 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property string|null $description
  * @property float|null $deposit
+ * @property bool $is_deposit_percentage
  * @property float $single_occupancy_surcharge
  * @property Carbon $final_payment
  * @property Carbon $date_from
@@ -58,7 +64,9 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|QuoteAccommodation[] $accommodation
  * @property-read Collection|QuoteSection[] $sections
  * @property-read Brand|null $linkedBrand
+ * @property-read User|null $consultant
  * @property-read Brand $brand
+ * @property-read Organization|null $organization
  * @property-read int|null $accommodation_count
  * @property-read Collection|QuoteActivity[] $activities
  * @property-read int|null $activities_count
@@ -119,6 +127,7 @@ class Quote extends Model
     protected $guarded = [];
     protected $casts = [
         'deposit' => 'double',
+        'is_deposit_percentage' => 'bool',
         'single_occupancy_surcharge' => 'double',
         'expires' => 'datetime',
         'date_from' => 'date',
@@ -140,9 +149,19 @@ class Quote extends Model
         return $this->hasMany(QuoteSection::class, 'quote_id')->orderBy('order');
     }
 
+    public function consultant(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'consultant_id');
+    }
+
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');
+    }
+
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class, 'organization_id');
     }
 
     public function leadTraveller(): BelongsTo
@@ -235,5 +254,23 @@ class Quote extends Model
     public function getRemainingAttribute(): float
     {
         return $this->repository->getRemainingInstallment();
+    }
+
+    public function getRemainingPercentage(): float
+    {
+        $price = $this->repository->getPricePerPerson(1)?->price_per_person;
+        return sigfig(($this->remaining / $price) * 100);
+    }
+
+    public function getDepositAmount(int $count = 1): float|null
+    {
+        $price = $this->repository->getPricePerPerson($count)?->price_per_person;
+        return $this->is_deposit_percentage ? sigfig($price * ($this->deposit/100)) : $this->deposit;
+    }
+
+    public function getDepositPercentage(int $count = 1): float|null
+    {
+        $price = $this->repository->getPricePerPerson($count)?->price_per_person;
+        return $this->is_deposit_percentage ? $this->deposit : sigfig(($this->deposit / $price) * 100);
     }
 }

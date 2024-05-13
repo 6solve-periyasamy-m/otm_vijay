@@ -2,7 +2,6 @@
 
 namespace App\Repository\Reporting;
 
-use App\Helpers\QuarterHelper;
 use App\Helpers\RevenueHelper;
 use App\Models\Booking\Booking;
 use App\Models\Location\Address;
@@ -13,6 +12,7 @@ use App\Models\Order\Order;
 use App\Models\Tour\Tour;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Settings;
 
 class ReportRepository
 {
@@ -370,11 +370,6 @@ class ReportRepository
         return $data;
     }
 
-    public static function getOrdersPlacedInQuarterReport(int $year, int $quarter): Collection
-    {
-        return self::generateAtolReport(QuarterHelper::getOrdersPlacedInQuarter($year, $quarter));
-    }
-
     public static function generateAtolReport(Collection $orders): Collection
     {
         $passengers = 0;
@@ -382,8 +377,10 @@ class ReportRepository
         $paid = 0;
         $remaining = 0;
         $orderList = [];
+        $filter = Settings::atolFilter();
         foreach ($orders as $order) {
             if (!$order->has_atol) continue;
+            if ($filter !== -1 && $order->leadBooker->customer->homeAddress->country_id !== $filter) continue;
             if (!$order->cancelled) {
                 $passengers += $order->customer_count;
             }
@@ -399,16 +396,6 @@ class ReportRepository
         $collection->remaining = $remaining;
         $collection->orders = $orderList;
         return $collection;
-    }
-
-    public static function getOrdersDepartingInQuarterReport(int $year, int $quarter): Collection
-    {
-        return self::generateAtolReport(QuarterHelper::getOrdersFromToursInQuarter($year, $quarter));
-    }
-
-    public static function getOrdersDepartingAfterQuarterReport(int $year, int $quarter): Collection
-    {
-        return self::generateAtolReport(QuarterHelper::getOrdersFromToursAfterQuarter($year, $quarter));
     }
 
     public static function getInstallmentRevenueReport(): array

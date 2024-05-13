@@ -2,9 +2,10 @@
 
 namespace App\Repository\Model\Order;
 
-use App\Models\Customer\Customer;
+use App\Events\Order\Customer\OrderCustomerEditedEvent;
+use App\Events\Order\Customer\OrderCustomerRemovedEvent;
+use App\Models\Booking\BookingTraveller;
 use App\Models\Order\Adjustment\OrderCustomerAdjustment;
-use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Voucher\VoucherCode;
 use App\Repository\Abstracts\InventoryTourRepository;
@@ -22,9 +23,9 @@ class OrderCustomerRepository extends ModelRepository
         $this->orderCustomer = $orderCustomer;
     }
 
-    public static function find(Order $order, Customer $customer): ?OrderCustomer
+    public static function find($id): OrderCustomer|null
     {
-        return OrderCustomer::where('order_id', $order->id)->where('customer_id', $customer->id)->first();
+        return OrderCustomer::find($id);
     }
 
     public function getAvailableToAdd(): array
@@ -56,7 +57,7 @@ class OrderCustomerRepository extends ModelRepository
                 if (in_array($tourComponent->id, $owned['activities'])) continue; // Owned components will be shown elsewhere
                 if (!$tourComponent->repository->hasEnoughStock()) continue;
                 $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'activity', 'type' => $tourComponent->tour_component_type,
-                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->starts_at->unix(), 'owned' => false,];
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->starts_at?->unix(), 'owned' => false,];
             }
         }
         foreach ($order->tour->flightInventoryTours as $tourComponent) {
@@ -139,11 +140,11 @@ class OrderCustomerRepository extends ModelRepository
         return "{$this->orderCustomer->customer_name} ({$this->orderCustomer->order->booking_reference})";
     }
 
-    public function addAllIncluded()
+    public function addAllIncluded(bool $silent = false)
     {
         foreach ($this->orderCustomer->order->tour->repository->getComponents(false, true, true, true, false, ['Included',]) as $inventoryTourRepository) {
             if (!$inventoryTourRepository->isBookable()) continue;
-            $inventoryTourRepository->grantToCustomer($this->orderCustomer);
+            $inventoryTourRepository->grantToCustomer($this->orderCustomer, $silent);
         }
     }
 
@@ -153,10 +154,10 @@ class OrderCustomerRepository extends ModelRepository
      */
     public function bulkSaveStandard(OrderComponentStorage $components): void
     {
-        $this->orderCustomer->orderActivities()->saveMany($components->activities);
-        $this->orderCustomer->orderFlights()->saveMany($components->flights);
-        $this->orderCustomer->orderTransports()->saveMany($components->transport);
-        $this->orderCustomer->orderMerchandise()->saveMany($components->merchandise);
+        $this->orderCustomer->orderActivities()->saveManyQuietly($components->activities);
+        $this->orderCustomer->orderFlights()->saveManyQuietly($components->flights);
+        $this->orderCustomer->orderTransports()->saveManyQuietly($components->transport);
+        $this->orderCustomer->orderMerchandise()->saveManyQuietly($components->merchandise);
     }
 
     /**
@@ -219,6 +220,22 @@ class OrderCustomerRepository extends ModelRepository
         return $data;
     }
 
+    public function getComponentsForItinerary(bool $grouped = true): array
+    {
+        $components = $this->getComponents(true, true, true, true, false);
+        usort($components, function (OrderComponentRepository $a, OrderComponentRepository $b) { return $a->getTourComponent()->getStartTime()->unix() <=> $b->getTourComponent()->getStartTime()->unix();});
+        if ($grouped) {
+            $data = [];
+            foreach ($components as $component) {
+                $key = $component->getTourComponent()->getStartTime()->setTime(0,0)->unix();
+                if (!array_key_exists($key, $data)) $data[$key] = [];
+                $data[$key][] = $component;
+            }
+            return $data;
+        }
+        return $components;
+    }
+
     /**
      * Get the addons and upgrades for a specific customer
      * @return array{addons:array,upgrades:array,additionalValue:float} The list of upgrades, addons and the sum of their costs
@@ -257,12 +274,21 @@ class OrderCustomerRepository extends ModelRepository
 
     public function save(): bool
     {
+        $this->orderCustomer->order->repository->refresh();
+        event(new OrderCustomerEditedEvent($this->orderCustomer));
         return $this->orderCustomer->save();
     }
 
     public function delete(): bool
     {
-        return $this->orderCustomer->delete();
+        foreach ($this->orderCustomer->groups as $group) {
+            if ($group->orderCustomers->count() == 1) { $group->delete(); }
+        }
+        $deleted = $this->orderCustomer->delete();
+        if ($deleted) {
+            event(new OrderCustomerRemovedEvent($this->orderCustomer));
+        }
+        return $deleted;
     }
 
     public function isDeleted(): bool
@@ -270,7 +296,7 @@ class OrderCustomerRepository extends ModelRepository
         return $this->orderCustomer->trashed();
     }
 
-    public function removeAllComponents(bool $accommodation = false)
+    public function removeAllComponents(bool $accommodation = false): void
     {
         foreach ($this->getComponents($accommodation) as $component) {
             $component->delete();
@@ -288,6 +314,10 @@ class OrderCustomerRepository extends ModelRepository
 
     public function forceDelete(): void
     {
+        // Delete any related bookings
+        foreach (BookingTraveller::where('order_customer_id', '=', $this->orderCustomer->id)->get() as $traveller) {
+            $traveller->booking->repository->forceDelete();
+        }
         foreach ($this->orderCustomer->groups as $group) {
             $group->repository->removeCustomerFromGroup($this->orderCustomer);
         }

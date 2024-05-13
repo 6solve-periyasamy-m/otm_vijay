@@ -64,4 +64,9 @@ class BookingMerchandiseRepository extends BookingComponentRepository
     {
         return $this->bookingComponent->tourComponent->repository;
     }
+
+    public static function find($id): BookingMerchandise|null
+    {
+        return BookingMerchandise::find($id);
+    }
 }

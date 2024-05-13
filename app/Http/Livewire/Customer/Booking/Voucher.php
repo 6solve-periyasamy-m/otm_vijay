@@ -16,7 +16,7 @@ class Voucher extends Component
 
     public function apply()
     {
-        $voucher = VoucherCodeRepository::find($this->code);
+        $voucher = VoucherCodeRepository::findCode($this->code);
         if ($voucher?->repository->usable($this->traveller->booking->tour) ?? false) {
             $applied = $this->traveller->repository->applyVoucher($voucher);
             if (!$applied) {

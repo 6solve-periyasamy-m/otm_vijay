@@ -29,7 +29,7 @@ class QuoteController extends ApiController
         }
         $cost = $request->paying == 0 ? 0 : $cost->price_per_person;
         $purchasePrice = $quote->repository->getPurchaseTotal();
-        $costToCompany = $purchasePrice * ($request->paying + $request->travelling);
+        $costToCompany = $quote->repository->getTotalCostToCompany($request->paying + $request->travelling);
         $costToCustomer = $cost * $request->paying;
         $profit = $costToCustomer - $costToCompany;
         $data = [

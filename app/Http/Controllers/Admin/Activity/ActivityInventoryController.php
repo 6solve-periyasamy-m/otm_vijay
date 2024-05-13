@@ -10,15 +10,9 @@ use Illuminate\Http\Request;
 
 class ActivityInventoryController extends Controller
 {
-
-    public function index()
-    {
-        return view('pages.models.activity_inventories.table', ['activityInventories' => ActivityInventory::all(),]);
-    }
-
     public function create(Activity $activity)
     {
-        return view('pages.models.activity_inventories.create', ['activity' => $activity,]);
+        return view('pages.admin.activity.inventory.form', ['activity' => $activity,]);
     }
 
     public function store(Request $request, Activity $activity)
@@ -32,15 +26,11 @@ class ActivityInventoryController extends Controller
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price') ?? 0,
             'sales_price' => $request->input('sales_price') ?? 0,
-            'notes' => $request->input('notes'),
+            'internal_notes' => $request->input('internal_notes'),
+            'external_notes' => $request->input('external_notes'),
         ]);
         $activity->activityInventory()->save($activityInventory);
         return redirect()->route('activities.view', ['activity' => $activity,]);
-    }
-
-    public function view(Activity $activity, ActivityInventory $activityInventory)
-    {
-        return view('pages.models.activity_inventories.view', ['activity' => $activity, 'activityInventory' => $activityInventory,]);
     }
 
     public function manifest(Activity $activity, ActivityInventory $activityInventory)
@@ -55,7 +45,7 @@ class ActivityInventoryController extends Controller
 
     public function edit(Activity $activity, ActivityInventory $activityInventory)
     {
-        return view('pages.models.activity_inventories.update', ['activity' => $activity, 'activityInventory' => $activityInventory,]);
+        return view('pages.admin.activity.inventory.form', ['activity' => $activity, 'inventory' => $activityInventory,]);
     }
 
     public function update(Request $request, Activity $activity, ActivityInventory $activityInventory)
@@ -69,7 +59,8 @@ class ActivityInventoryController extends Controller
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price') ?? 0,
             'sales_price' => $request->input('sales_price') ?? 0,
-            'notes' => $request->input('notes'),
+            'internal_notes' => $request->input('internal_notes'),
+            'external_notes' => $request->input('external_notes'),
         ]);
         return redirect()->route('activities.view', ['activity' => $activity,]);
     }
@@ -87,6 +78,6 @@ class ActivityInventoryController extends Controller
     {
         $inventory = $activityInventory->replicate();
         $inventory->save();
-        return redirect()->route('activity-inventories.edit', ['activity' => $activity, 'activityInventory' => $inventory,]);
+        return redirect()->route('activity-inventories.edit', ['activity' => $activity, 'inventory' => $inventory,]);
     }
 }

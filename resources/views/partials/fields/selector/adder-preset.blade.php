@@ -1,4 +1,4 @@
-@push('header-ready')
+@push('footer-ready')
     let {{ $field }}Select = $('.{{ $field }}-input');
 @endpush
 <div class="form-group col-12 {{ isset($width) ? 'col-xl-' . $width : '' }} {{ $divClasses ?? "" }}">

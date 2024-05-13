@@ -2,7 +2,7 @@
 
 @section('title', 'View Report')
 
-@push('header-stack')
+@push('footer-stack')
     <script type="text/javascript">
         function save() {
             $.post('{{ route('api.reports.bespoke.save') }}', {!! json_encode(array_merge($report->toArray(), ['__api_token' => Auth::user()->getCurrentToken()->token,])) !!})
@@ -26,15 +26,14 @@
 @endpush
 
 @section('content')
-    <div class="card">
-        <div class="card-body">
-            @can('create', \App\Models\System\Report::class)
+    <x-admin.section.card>
+        @can('create', \App\Models\System\Report::class)
             <a class="btn btn-success float-end" href="#" onclick="save()">
                 {{ Icon::create() }}
                 <span>Save Report</span>
             </a>
-            @endcan
-            @if(false)
+        @endcan
+        @if(false)
             {{-- TODO: Fix temporary exporting --}}
             <a class="btn btn-primary float-end" href="#" onclick="exportCsv()" style="margin-right: 5px">
                 {{ Icon::csv() }}
@@ -44,8 +43,7 @@
                 {{ Icon::excel() }}
                 <span>Export to XLSX</span>
             </a>
-            @endif
-        </div>
-    </div>
+        @endif
+    </x-admin.section.card>
     @include('partials.reports.bespoke.output')
 @endsection

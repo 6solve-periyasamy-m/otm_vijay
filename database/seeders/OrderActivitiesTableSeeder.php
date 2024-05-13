@@ -709,6 +709,86 @@ class OrderActivitiesTableSeeder extends Seeder
                 'updated_at' => '2022-09-21 12:44:33',
                 'deleted_at' => NULL,
             ),
+            69 => 
+            array (
+                'id' => 70,
+                'order_customer_id' => 28,
+                'activity_inventory_tour_id' => 24,
+                'cost' => '25.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
+            70 => 
+            array (
+                'id' => 71,
+                'order_customer_id' => 28,
+                'activity_inventory_tour_id' => 25,
+                'cost' => '30.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
+            71 => 
+            array (
+                'id' => 72,
+                'order_customer_id' => 29,
+                'activity_inventory_tour_id' => 24,
+                'cost' => '25.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
+            72 => 
+            array (
+                'id' => 73,
+                'order_customer_id' => 29,
+                'activity_inventory_tour_id' => 25,
+                'cost' => '30.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
+            73 => 
+            array (
+                'id' => 74,
+                'order_customer_id' => 30,
+                'activity_inventory_tour_id' => 24,
+                'cost' => '25.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
+            74 => 
+            array (
+                'id' => 75,
+                'order_customer_id' => 30,
+                'activity_inventory_tour_id' => 25,
+                'cost' => '30.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
+            75 => 
+            array (
+                'id' => 76,
+                'order_customer_id' => 31,
+                'activity_inventory_tour_id' => 24,
+                'cost' => '25.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
+            76 => 
+            array (
+                'id' => 77,
+                'order_customer_id' => 31,
+                'activity_inventory_tour_id' => 25,
+                'cost' => '30.00',
+                'created_at' => '2023-09-22 13:20:35',
+                'updated_at' => '2023-09-22 13:20:35',
+                'deleted_at' => NULL,
+            ),
         ));
         
         

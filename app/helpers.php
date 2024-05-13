@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Location\Currency;
 use App\Models\User;
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
@@ -46,12 +47,14 @@ if (!function_exists('f_currency')) {
     /**
      * Alias for StringFormatter::formatCurrency
      * @param float|null $amount
-     * @param null $currency
+     * @param Currency|string|null $currency
+     * @param float|null $conversion
+     * @param string|null $toCurrency
      * @return string
      */
-    function f_currency(?float $amount, $currency = null): string
+    function f_currency(?float $amount, Currency|string|null $currency = null, ?float $conversion = null, Currency|string|null $toCurrency = null): string
     {
-        return StringFormatter::formatCurrency($amount, $currency);
+        return StringFormatter::formatCurrency($amount, $currency, $conversion, $toCurrency);
     }
 }
 
@@ -182,7 +185,7 @@ if (!function_exists('nbsp')) {
 if (!function_exists('is_otm')) {
     function is_otm(): bool
     {
-        $user = Auth::user();
+        $user = get_current_admin();
         if (empty($user) || !($user instanceof User)) return false;
         return $user->getHighestRoleLevel() >= 999;
     }
@@ -251,5 +254,68 @@ if (!function_exists('generate_qr')) {
                 new RendererStyle(400),
                 new ImagickImageBackEnd(),
             )))->writeString($content));
+    }
+}
+if (!function_exists('stack_dump')) {
+    /**
+     * Dump the current stack trace to the log file, optionally with a message.
+     * Used for debugging
+     * @param string|null $message
+     * @return void
+     */
+    function stack_dump(string|null $message = null): void
+    {
+        try {
+            throw new \Exception($message);
+        } catch (\Exception) {
+            \Log::info($message);
+        }
+    }
+}
+if (!function_exists('str_to_map')) {
+    /**
+     * Convert a plaintext map to keyed array
+     * @param string $message
+     * @param string $separator The marker for equivalence (default =)
+     * @param string $linefeed The marker for line change (default CR/LF/CRLF)
+     * @param string $merge Character to put back into merge (default =)
+     * @return array
+     */
+    function str_to_map(string $message, string $separator = '/[=]/', string $linefeed = "/[\r\n]+/", string $merge = '='): array
+    {
+        $data = [];
+        $lines = preg_split($linefeed, $message);
+        foreach ($lines as $line) {
+            $split = preg_split($separator, $line);
+            $data[$split[0]] = implode($merge, array_slice($split, 1));
+        }
+        return $data;
+    }
+}
+if (!function_exists('debug_stack')) {
+    /**
+     * Print the current stack trace to the Log file under debug
+     * @param string $message Message to be printed with the stack trace
+     * @return void
+     */
+    function debug_stack(string $message = "Stack Dumped"): void
+    {
+        try {
+            throw new \Exception($message);
+        } catch (\Exception $e) {
+            \Log::debug($e);
+        }
+    }
+}
+if (!function_exists('get_current_admin')) {
+    /**
+     * Get the currently logged in admin user, or null
+     * @return User|null
+     */
+    function get_current_admin(): User|null
+    {
+        $user = Auth::guard('web')->user();
+        if ($user instanceof User) return $user;
+        return null;
     }
 }

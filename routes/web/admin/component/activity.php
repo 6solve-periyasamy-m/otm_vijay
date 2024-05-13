@@ -19,7 +19,6 @@ Route::prefix('{activity}')->group(function () {
         Route::get('/create', [ActivityInventoryController::class, 'create'])->name('activity-inventories.create')->middleware('bouncer:Activity\ActivityInventory,create');
         Route::post('/create', [ActivityInventoryController::class, 'store'])->name('activity-inventories.store')->middleware('bouncer:Activity\ActivityInventory,create');
         Route::prefix('{activityInventory}')->group(function () {
-            Route::get('/', [ActivityInventoryController::class, 'view'])->name('activity-inventories.view')->middleware('bouncer:Activity\ActivityInventory,read');
             Route::get('/manifest', [ActivityInventoryController::class, 'manifest'])->name('activity-inventories.manifest.view')->middleware('bouncer:Activity\ActivityInventory,read');
             Route::get('/manifest/export/{extension?}', [ActivityInventoryController::class, 'export'])->name('activity-inventories.manifest.export')->middleware('bouncer:Activity\ActivityInventory,read');
             Route::get('/update', [ActivityInventoryController::class, 'edit'])->name('activity-inventories.edit')->middleware('bouncer:Activity\ActivityInventory,update');
@@ -30,22 +29,18 @@ Route::prefix('{activity}')->group(function () {
     });
 });
 Route::prefix('activity-types')->group(function () {
-    Route::get('/', [ActivityTypeController::class, 'index'])->name('activity-types.all')->middleware('bouncer:Activity\ActivityType,read');
     Route::get('/create', [ActivityTypeController::class, 'create'])->name('activity-types.create')->middleware('bouncer:Activity\ActivityType,create');
     Route::post('/create', [ActivityTypeController::class, 'store'])->name('activity-types.store')->middleware('bouncer:Activity\ActivityType,create');
     Route::prefix('{activityType}')->group(function () {
-        Route::get('/', [ActivityTypeController::class, 'view'])->name('activity-types.view')->middleware('bouncer:Activity\ActivityType,read');
         Route::get('/update', [ActivityTypeController::class, 'edit'])->name('activity-types.edit')->middleware('bouncer:Activity\ActivityType,update');
         Route::post('/update', [ActivityTypeController::class, 'update'])->name('activity-types.update')->middleware('bouncer:Activity\ActivityType,update');
         Route::post('/delete', [ActivityTypeController::class, 'destroy'])->name('activity-types.delete')->middleware('bouncer:Activity\ActivityType,delete');
     });
 });
 Route::prefix('ticket-types')->group(function () {
-    Route::get('/', [TicketTypeController::class, 'index'])->name('ticket-types.all')->middleware('bouncer:Activity\TicketType,read');
     Route::get('/create', [TicketTypeController::class, 'create'])->name('ticket-types.create')->middleware('bouncer:Activity\TicketType,create');
     Route::post('/create', [TicketTypeController::class, 'store'])->name('ticket-types.store')->middleware('bouncer:Activity\TicketType,create');
     Route::prefix('{ticketType}')->group(function () {
-        Route::get('/', [TicketTypeController::class, 'view'])->name('ticket-types.view')->middleware('bouncer:Activity\TicketType,read');
         Route::get('/update', [TicketTypeController::class, 'edit'])->name('ticket-types.edit')->middleware('bouncer:Activity\TicketType,update');
         Route::post('/update', [TicketTypeController::class, 'update'])->name('ticket-types.update')->middleware('bouncer:Activity\TicketType,update');
         Route::post('/delete', [TicketTypeController::class, 'destroy'])->name('ticket-types.delete')->middleware('bouncer:Activity\TicketType,delete');

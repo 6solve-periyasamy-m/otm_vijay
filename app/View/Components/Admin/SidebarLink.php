@@ -10,6 +10,7 @@ use App\Models\Location\Address;
 use App\Models\Merchandise\Merchandise;
 use App\Models\Order\Order;
 use App\Models\Quote\Quote;
+use App\Models\Supplier\Supplier;
 use App\Models\System\Report;
 use App\Models\System\Setting;
 use App\Models\Tour\Event;
@@ -73,6 +74,7 @@ class SidebarLink extends Component
             new SidebarLink('Vouchers', route('vouchers.index'), Icon::voucher(), 'vouchers'),
             new SidebarLink('Orders', route('orders.all'), Icon::order(), 'orders', Order::class, 'read'),
             new SidebarLink('Quotes', route('quotes.all'), Icon::quote(), 'quotes', Quote::class, 'read'),
+            new SidebarLink('Suppliers', route('supplier.index'), Icon::supplier(), 'supplier', Supplier::class, 'read'),
             new SidebarLink('Customers', route('customers.all'), Icon::customer(), 'customers', Customer::class, 'read'),
             new SidebarLink('Organizations', route('organizations.all'), Icon::organization(), 'organization', Customer::class, 'read'),
             new SidebarLink('Settings', route('settings.edit'), Icon::setting(), 'settings', Setting::class, 'update'),

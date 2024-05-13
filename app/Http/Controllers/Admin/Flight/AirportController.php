@@ -4,22 +4,16 @@ namespace App\Http\Controllers\Admin\Flight;
 
 use App\Http\Controllers\Controller;
 use App\Models\Flight\Airport;
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
-use App\Models\Location\AddressParent;
 use App\Repository\Model\Location\AddressRepository;
 use Illuminate\Http\Request;
 
 class AirportController extends Controller
 {
-
-    public function index()
-    {
-        return view('pages.models.airports.table', ['airports' => Airport::all(),]);
-    }
-
     public function create()
     {
-        return view('pages.models.airports.create');
+        return view('pages.admin.flight.airport.form');
     }
 
     public function store(Request $request)
@@ -30,10 +24,10 @@ class AirportController extends Controller
             'iata_code' => $request->input('iata_code'),
         ]);
         if ($request->input('use_existing') == 'on') {
-            $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('airport'));
+            $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::AIRPORT);
         } else {
             $request->validate(Address::getValidationRules());
-            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::getParentId('airport')));
+            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::AIRPORT));
             $address->repository->save();
         }
         $airport->address_id = $address->id;
@@ -41,14 +35,9 @@ class AirportController extends Controller
         return view('pages.close');
     }
 
-    public function view(Airport $airport)
-    {
-        return view('pages.models.airports.view', ['airport' => $airport,]);
-    }
-
     public function edit(Airport $airport)
     {
-        return view('pages.models.airports.update', ['airport' => $airport,]);
+        return view('pages.admin.flight.airport.form', ['airport' => $airport,]);
     }
 
     public function update(Request $request, Airport $airport)
@@ -59,10 +48,10 @@ class AirportController extends Controller
             'iata_code' => $request->input('iata_code'),
         ]);
         if ($request->input('use_existing') == 'on') {
-            Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('airport'), $airport->address);
+            Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::AIRPORT, $airport->address);
         } else {
             $request->validate(Address::getValidationRules());
-            $airport->address->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::getParentId('airport')));
+            $airport->address->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::AIRPORT));
         }
         return view('pages.close');
     }

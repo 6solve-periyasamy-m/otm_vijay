@@ -8,6 +8,7 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
+use App\Models\System\Bank;
 use App\Models\Transport\TransportInventoryTour;
 use App\Transforms\AccommodationTransforms;
 use App\Transforms\ActivityTransforms;
@@ -368,5 +369,34 @@ class SelectController extends ApiController
     public function getSelectedBrand($id)
     {
         return TourTransforms::getSelectedBrand($id);
+    }
+
+    public function getAvailableFilterCountries(Request $request)
+    {
+        $filter = $request->has('filter') ? $request->filter : "";
+        return LocationsTransforms::getFilterCountries($filter);
+    }
+
+    public function getSelectedFilterCountries($id)
+    {
+        return LocationsTransforms::getSelectedFilterCountry($id);
+    }
+
+    public function getAvailableBanks(Request $request)
+    {
+        $filter = $request->has('filter') ? $request->filter : "";
+        $data = [];
+        /** @var Bank $bank */
+        foreach (Bank::where('name', 'like', "%$filter%")->get() as $bank) {
+            $name = "{$bank->name} - {$bank->address_line_1}, {$bank->country}";
+            $data['results'][] = ['id' => $bank->id, 'text' => "$name",];
+        }
+        return $data;
+    }
+
+    public function getSelectedBank($id)
+    {
+        $bank = Bank::findOrFail($id);
+        return ['id' => $bank->id, 'text' => $bank->name];
     }
 }

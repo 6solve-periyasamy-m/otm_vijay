@@ -8,6 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @property int $customer_id
+ * @property int|null $organization_id
  * @property float $single_occupancy_surcharge
  * @property string $travelling
  * @property string $paying
@@ -15,6 +16,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $internal_notes
  * @property string $external_notes
  * @property int|null $brand_id
+ * @property int|null $tax_bracket_id
  */
 class CreateBasicQuoteRequest extends FormRequest
 {
@@ -27,10 +29,12 @@ class CreateBasicQuoteRequest extends FormRequest
     {
         return [
             'expires' => $this->expires,
+            'organization_id' => $this->organization_id,
             'single_occupancy_surcharge' => $this->single_occupancy_surcharge ?? 0,
             'internal_notes' => $this->internal_notes,
             'external_notes' => $this->external_notes,
             'brand_id' => $this->brand_id == 0 ? null : $this->brand_id,
+            'tax_bracket_id' => $this->tax_bracket_id,
         ];
     }
 
@@ -52,6 +56,7 @@ class CreateBasicQuoteRequest extends FormRequest
         return [
             'customer_id' => 'required|exists:customers,id',
             'expires' => 'required|date',
+            'organization_id' => 'nullable|integer|exists:organizations,id',
         ];
     }
 }

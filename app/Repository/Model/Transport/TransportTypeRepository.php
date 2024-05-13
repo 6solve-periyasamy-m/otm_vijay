@@ -58,4 +58,9 @@ class TransportTypeRepository extends AttributeRepository
     {
         return $this->model->transports()->count();
     }
+
+    public static function find($id): TransportType|null
+    {
+        return TransportType::find($id);
+    }
 }

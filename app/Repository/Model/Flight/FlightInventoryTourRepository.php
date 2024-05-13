@@ -61,15 +61,17 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
 
     /**
      * @param OrderCustomer $orderCustomer
+     * @param bool $silent
      * @return OrderFlightRepository|null
      */
-    public function grantToCustomer(OrderCustomer $orderCustomer): ?OrderFlightRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderFlightRepository
     {
-        $orderComponent = OrderFlight::create([
+        $orderComponent = OrderFlight::make([
             'order_customer_id' => $orderCustomer->id,
             'flight_inventory_tour_id' => $this->tourComponent->id,
             'cost' => $this->tourComponent->tour_sales_price ?? 0,
         ]);
+        $silent ? $orderComponent->saveQuietly() : $orderComponent->save();
         event(new OrderCustomerComponentAddedEvent($orderComponent));
         return $orderComponent->repository;
     }
@@ -260,12 +262,14 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
             $inventory->departs_at,
             $inventory->arrives_at,
             Icon::flight(),
+            $inventory->external_notes,
             $upgradeName,
             [
                 'Airline' => $component->airline->name,
                 'Check In' => f_datetime($inventory->check_in),
                 'Departure' => f_datetime($inventory->departs_at),
                 'Arrival' => f_datetime($inventory->arrives_at),
+                'Flight Number' => $inventory->flight_number,
                 'Travel Class' => $inventory->travelClass->__toString(),
             ]
         );
@@ -279,5 +283,10 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
     public function getCostToCustomer(): float
     {
         return $this->tourComponent->tour_component_type === 'Included' ? 0 : $this->tourComponent->tour_sales_price;
+    }
+
+    public static function find($id): FlightInventoryTour|null
+    {
+        return FlightInventoryTour::find($id);
     }
 }

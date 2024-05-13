@@ -16,7 +16,7 @@ class EventController extends Controller
 
     public function create()
     {
-        return view('pages.admin.event.create');
+        return view('pages.admin.event.form');
     }
 
     public function store(Request $request)
@@ -28,8 +28,14 @@ class EventController extends Controller
             'starts_at' => $request->input('starts_at'),
             'ends_at' => $request->input('ends_at'),
             'booking_url' => $request->input('booking_url'),
+            'tax_bracket_id' => $request->input('tax_bracket_id'),
             'notes' => $request->input('notes'),
         ]);
+
+        if ($request->has('image') && $request->file('image') != null) {
+            $event->image_url = $request->file('image')->storePublicly('uploads/images');
+        }
+        $event->save();
         return redirect()->route('events.view', ['event' => $event,]);
     }
 
@@ -40,7 +46,7 @@ class EventController extends Controller
 
     public function edit(Event $event)
     {
-        return view('pages.admin.event.update', ['event' => $event,]);
+        return view('pages.admin.event.form', ['event' => $event,]);
     }
 
     public function update(Request $request, Event $event)
@@ -52,8 +58,17 @@ class EventController extends Controller
             'starts_at' => $request->input('starts_at'),
             'ends_at' => $request->input('ends_at'),
             'booking_url' => $request->input('booking_url'),
+            'tax_bracket_id' => $request->input('tax_bracket_id'),
             'notes' => $request->input('notes'),
         ]);
+
+        if ($request->has('image') && $request->file('image') != null) {
+            /*if (isset($event->image_url)) {
+                File::delete(public_path($event->image_url));
+            }*/
+            $event->image_url = $request->file('image')->storePublicly('uploads/images');
+        }
+        $event->save();
         return redirect()->route('events.view', ['event' => $event,]);
     }
 

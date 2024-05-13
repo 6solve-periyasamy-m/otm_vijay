@@ -64,7 +64,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         return $this->tourComponent;
     }
 
-    public function grantToCustomer(OrderCustomer $orderCustomer): ?OrderComponentRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderComponentRepository
     {
         $orderComponent = $this->getOrderComponent($orderCustomer);
         if ($orderComponent !== null) return $orderComponent;
@@ -73,7 +73,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             $group = Group::create();
             $group->repository->addCustomerToGroup($orderCustomer);
         }
-        $component = $group->repository->addRoomToGroup($this->tourComponent);
+        $component = $group->repository->addRoomToGroup($this->tourComponent, $silent);
         //event(new OrderCustomerAccommodationAddedEvent($orderComponent));
         return $component->repository;
     }
@@ -267,6 +267,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             $inventory->check_in,
             $inventory->check_out,
             Icon::accommodation(),
+            $inventory->external_notes,
             $upgradeName,
             [
                 'Check In' => f_datetime($inventory->check_in),
@@ -302,5 +303,10 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     public function getCostToCustomer(): float
     {
         return $this->tourComponent->tour_component_type === 'Included' ? 0 : $this->tourComponent->tour_sales_price;
+    }
+
+    public static function find($id): AccommodationInventoryTour|null
+    {
+        return AccommodationInventoryTour::find($id);
     }
 }

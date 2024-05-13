@@ -63,4 +63,9 @@ class AirportRepository extends AttributeRepository
     {
         return "{$this->model->name} ({$this->model->iata_code}) - {$this->model->address->country}";
     }
+
+    public static function find($id): Airport|null
+    {
+        return Airport::find($id);
+    }
 }

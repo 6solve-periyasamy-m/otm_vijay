@@ -25,6 +25,7 @@ class SettingsController extends Controller
             'quote_prefix' => 'required',
             'company_logo' => 'nullable|image',
             'atol_stamp' => 'nullable|image',
+            'atol_filter' => 'required',
             'currency_id' => 'required|exists:currencies,id',
             'stripe_key' => 'nullable',
             'date_format' => 'required',
@@ -59,7 +60,9 @@ class SettingsController extends Controller
             'purchase.upgrade.success.redirect' => $request->input('upgrade_redirect'),
             'atol.issuer' => $request->input('atol_issuer'),
             'atol.number' => $request->input('atol_number'),
+            'atol.filter' => $request->input('atol_filter'),
             'atol.enabled' => $request->input('atol_enabled') == 'on' ? 1 : 0,
+            'atol.year.start' => $request->input('atol_start'),
             'system.mail.enabled' => $request->input('mail_enabled') == 'on' ? 1 : 0,
             'billing.stripe.key' => $request->input('stripe_key'),
             'system.format.date' => $request->input('date_format'),
@@ -67,6 +70,7 @@ class SettingsController extends Controller
             'social.facebook' => $request->input('social_facebook'),
             'social.twitter' => $request->input('social_twitter'),
             'social.instagram' => $request->input('social_instagram'),
+            'company.bank_transfer' => $request->input('bank_transfer'), //for invoice: Bank Transfer
             'system.year.start' => $request->input('year_start'),
             'system.historic' => $request->input('historic'),
             'payment.required' => $request->input('payment_required') == 'on' ? 1 : 0,
@@ -84,6 +88,7 @@ class SettingsController extends Controller
             'flight.unlock' => $request->input('flight_unlock'),
             'transport.lock' => $request->input('transport_lock'),
             'transport.unlock' => $request->input('transport_unlock'),
+            'invoice.style' => $request->input('invoice_format')
         ]);
         if ($request->has('company_logo')  && $request->file('company_logo') != null) {
             Settings::set('company.logo', $this->saveImage($request->file('company_logo')));

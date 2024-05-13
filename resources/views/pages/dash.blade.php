@@ -2,7 +2,7 @@
 
 @section('title', 'Dashboard')
 
-@push('header-stack')
+@push('footer-stack')
     <script type="text/javascript">
         let datatable;
         let rows = 0;
@@ -17,7 +17,6 @@
         $(document).ready(function () {
             initTable();
             initDates();
-            $('.report-table').DataTable({fixedHeader: true, autoWidth: false,});
         });
         function initDates() {
             rows++;
@@ -85,52 +84,45 @@
 @section('content')
     <div class="row">
         <div class="col-xl-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">Expected Revenue</h4>
-                    </div>
-                    <x-loading-spinner></x-loading-spinner>
-                    <div class="revenue-container" style="display: none;">
-                        <table class="revenue-table table table-striped">
-                            <thead>
-                            <tr>
-                                <td style="width: 30%">Dates</td>
-                                <td>Expected Total Revenue</td>
-                                <td>Received Revenue</td>
-                                <td>Remaining Revenue</td>
-                                <td>Percentage Paid</td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
+            <x-admin.section.card>
+                <x-slot:title>
+                    Expected Revenue
+                </x-slot:title>
+                <x-loading-spinner></x-loading-spinner>
+                <div class="revenue-container" style="display: none;">
+                    <table class="revenue-table table table-striped">
+                        <thead>
+                        <tr>
+                            <td style="width: 30%">Dates</td>
+                            <td>Expected Total Revenue</td>
+                            <td>Received Revenue</td>
+                            <td>Remaining Revenue</td>
+                            <td>Percentage Paid</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
+            </x-admin.section.card>
         </div>
 
         <div class="col-xl-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4 class="fw-bold">Revenue over 7 days</h4>
-                    </div>
-                    {{ \App\Repository\ChartRepository::getRevenueChart(now()->subDays(7)) }}
-                </div>
-            </div>
+            <x-admin.section.card>
+                <x-slot:title>
+                    Revenue over 7 days
+                </x-slot:title>
+                {{ \App\Repository\ChartRepository::getRevenueChart(now()->subDays(7)) }}
+            </x-admin.section.card>
         </div>
 
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">
-                            <h4 class="fw-bold">Abandoned Bookings</h4>
-                        </div>
-                        @include('partials.reports.tables.abandoned-bookings', ['data' => \App\Repository\Reporting\ReportRepository::getAbandonedBookingsReport(7)])
-                    </div>
-                </div>
-            </div>
+        <div class="col-xl-12">
+            <x-admin.section.card>
+                <x-slot:title>
+                    Abandoned Bookings
+                </x-slot:title>
+                @include('partials.reports.tables.abandoned-bookings', ['data' => \App\Repository\Reporting\ReportRepository::getAbandonedBookingsReport(7)])
+            </x-admin.section.card>
+        </div>
     </div>
 @endsection

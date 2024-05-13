@@ -10,15 +10,9 @@ use Illuminate\Http\Request;
 
 class FlightInventoryController extends Controller
 {
-
-    public function index()
-    {
-        return view('pages.models.flight_inventories.table', ['flightInventories' => FlightInventory::all(),]);
-    }
-
     public function create(Flight $flight)
     {
-        return view('pages.models.flight_inventories.create', ['flight' => $flight,]);
+        return view('pages.admin.flight.inventory.form', ['flight' => $flight,]);
     }
 
     public function store(Request $request, Flight $flight)
@@ -34,15 +28,11 @@ class FlightInventoryController extends Controller
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price') ?? 0,
             'sales_price' => $request->input('sales_price') ?? 0,
-            'notes' => $request->input('notes'),
+            'internal_notes' => $request->input('internal_notes'),
+            'external_notes' => $request->input('external_notes'),
         ]);
         $flight->flightInventory()->save($flightInventory);
         return redirect()->route('flights.view', ['flight' => $flight, 'flightInventory' => $flightInventory,]);
-    }
-
-    public function view(Flight $flight, FlightInventory $flightInventory)
-    {
-        return view('pages.models.flight_inventories.view', ['flight' => $flight, 'flightInventory' => $flightInventory,]);
     }
 
     public function manifest(Flight $flight, FlightInventory $flightInventory)
@@ -57,7 +47,7 @@ class FlightInventoryController extends Controller
 
     public function edit(Flight $flight, FlightInventory $flightInventory)
     {
-        return view('pages.models.flight_inventories.update', ['flight' => $flight, 'flightInventory' => $flightInventory,]);
+        return view('pages.admin.flight.inventory.form', ['flight' => $flight, 'inventory' => $flightInventory,]);
     }
 
     public function update(Request $request, Flight $flight, FlightInventory $flightInventory)
@@ -73,7 +63,8 @@ class FlightInventoryController extends Controller
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price') ?? 0,
             'sales_price' => $request->input('sales_price') ?? 0,
-            'notes' => $request->input('notes'),
+            'internal_notes' => $request->input('internal_notes'),
+            'external_notes' => $request->input('external_notes'),
         ]);
         return redirect()->route('flights.view', ['flight' => $flight,]);
     }
@@ -91,6 +82,6 @@ class FlightInventoryController extends Controller
     {
         $inventory = $flightInventory->replicate();
         $inventory->save();
-        return redirect()->route('flight-inventories.edit', ['flight' => $flight, 'flightInventory' => $inventory,]);
+        return redirect()->route('flight-inventories.edit', ['flight' => $flight, 'inventory' => $inventory,]);
     }
 }

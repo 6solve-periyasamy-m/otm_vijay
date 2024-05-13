@@ -58,4 +58,9 @@ class AirlineRepository extends AttributeRepository
     {
         return $this->model->flights()->count();
     }
+
+    public static function find($id): Airline|null
+    {
+        return Airline::find($id);
+    }
 }

@@ -48,4 +48,9 @@ class TransportInventoryTourUpgradeRepository extends ComponentUpgradeRepository
     {
         return "{$this->upgrade->description} - " . f_currency($this->upgrade->upgrade->tour_sales_price);
     }
+
+    public static function find($id): TransportInventoryTourUpgrade|null
+    {
+        return TransportInventoryTourUpgrade::find($id);
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Tour;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TableRequest;
+use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\AtolRepository;
 use App\Repository\Reporting\RoomingReportRepository;
@@ -18,19 +19,21 @@ class TourController extends Controller
         } else {
             $tours = Tour::whereDate('date_to', '>', now()->subMonths(setting('system.historic', 6)))->get();
         }
-        return view('pages.models.tours.table', ['tours' => $tours, 'historic' => ($request->historic ?? false)]);
+        return view('pages.admin.tour.table', ['tours' => $tours, 'historic' => ($request->historic ?? false)]);
     }
 
     public function create()
     {
-        return view('pages.models.tours.create');
+        return view('pages.admin.tour.form');
     }
 
     public function store(Request $request)
     {
         $request->validate(Tour::getValidationRules());
+        $event = Event::find($request->event_id);
         $tour = Tour::create([
             'event_id' => $request->input('event_id'),
+            'tax_bracket_id' => $request->input('tax_bracket_id') ?? $event?->tax_bracket_id,
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'date_from' => $request->input('date_from'),
@@ -45,6 +48,7 @@ class TourController extends Controller
             'booking_form_url' => $request->input('booking_form_url'),
             'tour_category_id' => $request->input('tour_category_id'),
             'deposit' => $request->input('deposit'),
+            'is_deposit_percentage' => $request->input('is_deposit_percentage') == 'on',
             'booking_fee' => $request->input('booking_fee') ?? 0,
             'is_active' => $request->input('is_active') === 'on' ? 1 : 0,
             'notes' => $request->input('notes'),
@@ -57,6 +61,7 @@ class TourController extends Controller
             'merchandise_stock_control' => $request->input('merchandise_stock_control') === 'on' ? 1 : 0,
             'terms' => $request->input('terms'),
         ]);
+        $tour->repository->cloneFromDefaultInstallments();
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
@@ -77,12 +82,12 @@ class TourController extends Controller
             'paymentInstallments', 'orders', 'orders.leadBooker'
         )->find($tour);
         if (!isset($tour)) abort(404);
-        return view('pages.tour.view', ['tour' => $tour,]);
+        return view('pages.admin.tour.view', ['tour' => $tour,]);
     }
 
     public function costing(Tour $tour)
     {
-        return view('pages.tour.costing', ['tour' => $tour,]);
+        return view('pages.admin.tour.costing', ['tour' => $tour,]);
     }
 
     public function duplicate(Tour $tour)
@@ -101,7 +106,7 @@ class TourController extends Controller
 
     public function edit(Tour $tour)
     {
-        return view('pages.models.tours.update', ['tour' => $tour,]);
+        return view('pages.admin.tour.form', ['tour' => $tour,]);
     }
 
     public function update(Request $request, Tour $tour)
@@ -109,6 +114,7 @@ class TourController extends Controller
         $request->validate(Tour::getValidationRules());
         $tour->update([
             'event_id' => $request->input('event_id'),
+            'tax_bracket_id' => $request->input('tax_bracket_id'),
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'date_from' => $request->input('date_from'),
@@ -117,6 +123,7 @@ class TourController extends Controller
             'base_price_per_person' => $request->input('base_price_per_person'),
             'margin' => $request->input('margin'),
             'deposit' => $request->input('deposit'),
+            'is_deposit_percentage' => $request->input('is_deposit_percentage') == 'on',
             'booking_fee' => $request->input('booking_fee') ?? 0,
             'single_occupancy_surcharge' => $request->input('single_occupancy_surcharge'),
             'stock_control_active' => $request->input('stock_control_active') === 'on' ? 1 : 0,

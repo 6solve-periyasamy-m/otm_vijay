@@ -2,6 +2,7 @@
 
 namespace App\Models\Merchandise;
 
+use App\Models\Supplier\SupplierContractComponent;
 use App\Repository\Model\Merchandise\MerchandiseInventoryRepository;
 use Database\Factories\Merchandise\MerchandiseInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -28,10 +30,12 @@ use Illuminate\Support\Carbon;
  * @property int $stock
  * @property float|null $purchase_price
  * @property float|null $sales_price
- * @property string|null $notes
+ * @property string|null $internal_notes
+ * @property string|null $external_notes
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read int $contracted Amount of contracted stock
  * @property-read Merchandise $component
  * @property-read string $asset
  * @property-read int $available_stock
@@ -39,6 +43,7 @@ use Illuminate\Support\Carbon;
  * @property-read int $used_stock
  * @property-read MerchandiseSize|null $size
  * @property-read Collection|MerchandiseInventoryTour[] $tourComponents
+ * @property-read Collection|SupplierContractComponent[] $contractComponents
  * @property-read int|null $tour_components_count
  * @property-read Variant $variant
  * @method static MerchandiseInventoryFactory factory(...$parameters)
@@ -84,6 +89,11 @@ class MerchandiseInventory extends Model
         return $this->belongsTo(Merchandise::class, 'merchandise_id');
     }
 
+    public function contractComponents(): MorphMany
+    {
+        return $this->morphMany(SupplierContractComponent::class, 'component');
+    }
+
     public function tourComponents(): HasMany
     {
         return $this->hasMany(MerchandiseInventoryTour::class, 'merchandise_inventory_id');
@@ -108,6 +118,11 @@ class MerchandiseInventory extends Model
     public function getUsedStockAttribute(): int
     {
         return $this->repository->getUsedStock();
+    }
+
+    public function getContractedAttribute(): int
+    {
+        return $this->contractComponents()->sum('quantity');
     }
 
     public function getAvailableStockAttribute(): int

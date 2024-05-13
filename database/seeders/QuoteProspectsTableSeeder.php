@@ -22,7 +22,7 @@ class QuoteProspectsTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'customer_id' => 3,
+                'customer_id' => 4,
                 'paying' => 1,
                 'travelling' => 1,
                 'deleted_at' => NULL,
@@ -32,7 +32,7 @@ class QuoteProspectsTableSeeder extends Seeder
             1 => 
             array (
                 'id' => 2,
-                'customer_id' => 13,
+                'customer_id' => 4,
                 'paying' => 1,
                 'travelling' => 1,
                 'deleted_at' => NULL,
@@ -42,7 +42,7 @@ class QuoteProspectsTableSeeder extends Seeder
             2 => 
             array (
                 'id' => 3,
-                'customer_id' => 16,
+                'customer_id' => 7,
                 'paying' => 1,
                 'travelling' => 1,
                 'deleted_at' => NULL,

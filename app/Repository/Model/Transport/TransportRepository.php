@@ -53,4 +53,9 @@ class TransportRepository extends ModelRepository implements HasTransportManifes
     {
         return $this->transport->orders()->with(TransportManifestRepository::getRelations())->get();
     }
+
+    public static function find($id): Transport|null
+    {
+        return Transport::find($id);
+    }
 }

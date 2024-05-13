@@ -52,15 +52,15 @@ class QuoteController extends Controller
     public function conversion(StartConversionRequest $request, Quote $quote)
     {
         $paying = $request->paying + ($quote->leadTraveller->paying ? 1 : 0);
-        $pricePoint = $quote->repository->getPricePerPerson($request->paying + ($quote->leadTraveller->paying ? 1 : 0));
+        $pricePoint = $quote->repository->getPricePerPerson($paying);
         if (!isset($pricePoint)) {
             return back()->withErrors(['msg' => "No price points exist for {$paying} paying travellers",]);
         }
         if ($request->travelling == 0 && $request->paying == 0) {
-            $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->paying, $quote->leadTraveller->travelling));
+            $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->paying, $quote->leadTraveller->travelling), [], $request->doEmail());
             return redirect()->route('orders.view', ['order' => $order,]);
         }
-        return view('pages.admin.quote.convert', ['quote' => $quote, 'travelling' => $request->travelling, 'paying' => $request->paying,]);
+        return view('pages.admin.quote.convert', ['quote' => $quote, 'travelling' => $request->travelling, 'paying' => $request->paying, 'email' => $request->doEmail()]);
     }
 
     public function document(Quote $quote, SentQuote $sent)
@@ -80,8 +80,8 @@ class QuoteController extends Controller
 
     public function convert(ConversionRequest $request, Quote $quote)
     {
-        $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->paying, $quote->leadTraveller->travelling), $request->getCustomers());
-        return redirect()->route('orders.view', ['order' => $order,]);
+        $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->paying, $quote->leadTraveller->travelling), $request->getCustomers(), $request->doEmail());
+        return redirect()->route('orders.view', ['order' => $order]);
     }
 
     public function send(StartConversionRequest $request, Quote $quote)
@@ -119,7 +119,9 @@ class QuoteController extends Controller
 
     public function costing(StartConversionRequest $request, Quote $quote)
     {
-        return view('pages.admin.quote.costing', ['quote' => $quote, 'paying' => $request->paying, 'travelling' => $request->travelling,]);
+        $paying = $quote->leadTraveller->paying ? 1 : 0;
+        $travelling = $paying > 0 ? 0 : 1;
+        return view('pages.admin.quote.costing', ['quote' => $quote, 'paying' => $request->paying + $paying, 'travelling' => $request->travelling + $travelling,]);
     }
 
     public function edit(Quote $quote)

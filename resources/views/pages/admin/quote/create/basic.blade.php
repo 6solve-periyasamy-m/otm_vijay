@@ -14,6 +14,8 @@
     </x-admin.input.selector.standard>
     <x-admin.input type="date" name="expires" width="3">Expiry Date</x-admin.input>
     <x-admin.input name="single_occupancy_surcharge" width="3">Single Occupancy Surcharge</x-admin.input>
+    <x-livewire.input.select.organization name="organization_id" label="Organization (Optional)" width="6"/>
+    <x-livewire.input.select.tax-bracket name="tax_bracket_id" label="Tax Bracket" width="6"/>
     <hr class="splitter">
     <x-admin.input.checkbox name="travelling" value="1" width="6" nofloat>Lead Travelling?</x-admin.input.checkbox >
     <x-admin.input.checkbox name="paying" value="1" width="6" nofloat>Lead Paying?</x-admin.input.checkbox >

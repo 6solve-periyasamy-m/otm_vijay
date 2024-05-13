@@ -53,4 +53,9 @@ class ActivityRepository extends ModelRepository implements HasActivityManifest
     {
         return $this->activity->orders()->with(ActivityManifestRepository::getRelations())->get();
     }
+
+    public static function find($id): Activity|null
+    {
+        return Activity::find($id);
+    }
 }

@@ -22,6 +22,11 @@ class QuoteFlightRepository extends QuoteComponentRepository
         $this->quoteComponent = $quoteComponent;
     }
 
+    public function getQuantity(): int|null
+    {
+        return $this->quoteComponent->quantity;
+    }
+
     public function getTourComponentType(): string
     {
         return $this->quoteComponent->tour_component_type;
@@ -125,5 +130,10 @@ class QuoteFlightRepository extends QuoteComponentRepository
             'image_url' => $this->quoteComponent->inventory->component->image_url,
             'quote_id' => $this->quoteComponent->quote_id,
         ]);
+    }
+
+    public static function find($id): QuoteFlight|null
+    {
+        return QuoteFlight::find($id);
     }
 }

@@ -5,15 +5,18 @@
 @section('title', 'Create Bespoke Quote')
 
 @section('form-body')
-    <x-admin.input name="name" width="4">Name</x-admin.input>
-    <x-admin.input.selector.add name="customer_id" route="customers" width="4">
+    <x-admin.input name="name" width="3">Name</x-admin.input>
+    <x-admin.input.selector.add name="customer_id" route="customers" width="3">
         <x-slot:create>{{ route('customers.create') }}</x-slot:create>
         Lead Traveller
     </x-admin.input.selector.add>
-    <x-admin.input.selector.standard name="brand_id" route="brands" width="4">
+    <x-admin.input.selector.standard name="brand_id" route="brands" width="3">
         Quote Branding
     </x-admin.input.selector.standard>
-    <x-admin.input name="deposit" width="6">Deposit</x-admin.input>
+    <x-livewire.input.select.tax-bracket name="tax_bracket_id" label="Tax Bracket" width="3"/>
+    <x-livewire.input.select.organization name="organization_id" label="Organization (Optional)" />
+    <x-admin.input name="deposit" width="3">Deposit</x-admin.input>
+    <x-admin.input.checkbox name="percentage" width="3">Is Percentage</x-admin.input.checkbox>
     <x-admin.input name="single_occupancy_surcharge" width="6">Single Occupancy Surcharge</x-admin.input>
     <x-admin.input.text-area name="description">Description</x-admin.input.text-area>
     <hr class="splitter"/>

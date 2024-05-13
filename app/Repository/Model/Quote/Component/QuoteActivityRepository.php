@@ -22,6 +22,11 @@ class QuoteActivityRepository extends QuoteComponentRepository
         $this->quoteComponent = $quoteComponent;
     }
 
+    public function getQuantity(): int|null
+    {
+        return $this->quoteComponent->quantity;
+    }
+
     public function getTourComponentType(): string
     {
         return $this->quoteComponent->tour_component_type;
@@ -122,5 +127,10 @@ class QuoteActivityRepository extends QuoteComponentRepository
     public function getSalesPrice(): float
     {
         return $this->quoteComponent->tour_sales_price ?? 0;
+    }
+
+    public static function find($id): QuoteActivity|null
+    {
+        return QuoteActivity::find($id);
     }
 }

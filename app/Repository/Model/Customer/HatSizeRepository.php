@@ -58,4 +58,9 @@ class HatSizeRepository extends AttributeRepository
     {
         return $this->model->customers()->count();
     }
+
+    public static function find($id): HatSize|null
+    {
+        return HatSize::find($id);
+    }
 }

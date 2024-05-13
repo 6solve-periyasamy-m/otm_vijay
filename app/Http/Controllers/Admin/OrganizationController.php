@@ -10,8 +10,7 @@ class OrganizationController extends Controller
 {
     public function index()
     {
-        $organizations = Organization::withCount(['orders', 'quotes', 'customers',])->get();
-        return view('pages.admin.organization.table', ['organizations' => $organizations,]);
+        return view('pages.admin.organization.table');
     }
 
     public function create()
@@ -27,7 +26,7 @@ class OrganizationController extends Controller
 
     public function view(Organization $organization)
     {
-        $organization->load('customers', 'quotes', 'orders');
+        $organization->load('customers', 'memberOrders', 'memberQuotes', 'quotes', 'orders');
         return view('pages.admin.organization.view', ['organization' => $organization,]);
     }
 

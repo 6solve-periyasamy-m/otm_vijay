@@ -57,13 +57,14 @@ class TransportInventoryTourRepository extends InventoryTourRepository
         return $components;
     }
 
-    public function grantToCustomer(OrderCustomer $orderCustomer): ?OrderTransportRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderTransportRepository
     {
-        $orderComponent = OrderTransport::create([
+        $orderComponent = OrderTransport::make([
             'order_customer_id' => $orderCustomer->id,
             'transport_inventory_tour_id' => $this->tourComponent->id,
             'cost' => $this->tourComponent->tour_sales_price ?? 0
         ]);
+        $silent ? $orderComponent->saveQuietly() : $orderComponent->save();
         event(new OrderCustomerComponentAddedEvent($orderComponent));
         return $orderComponent->repository;
     }
@@ -249,8 +250,10 @@ class TransportInventoryTourRepository extends InventoryTourRepository
             $inventory->departs_at,
             $inventory->arrives_at,
             Icon::transport(),
+            $inventory->external_notes,
             $upgradeName,
             [
+                'Transport Number' => $inventory->transport_number,
                 'Transport Type' => $component->transportType->name,
                 'Departure' => f_datetime($inventory->departs_at),
                 'Arrival' => f_datetime($inventory->arrives_at),
@@ -267,5 +270,10 @@ class TransportInventoryTourRepository extends InventoryTourRepository
     public function getCostToCustomer(): float
     {
         return $this->tourComponent->tour_component_type === 'Included' ? 0 : $this->tourComponent->tour_sales_price;
+    }
+
+    public static function find($id): TransportInventoryTour|null
+    {
+        return TransportInventoryTour::find($id);
     }
 }

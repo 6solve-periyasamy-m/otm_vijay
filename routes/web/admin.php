@@ -48,6 +48,8 @@ Route::middleware('auth:web')->group(function () {
 
     Route::prefix('merchandise')->name('merchandise.')->group(__DIR__ . '/admin/component/merchandise.php');
 
+    Route::prefix('supplier')->name('supplier.')->group(__DIR__ . '/admin/supplier.php');
+
     Route::prefix('travel-classes')->group(function () {
         Route::get('/', [TravelClassController::class, 'index'])->name('travel-classes.all')->middleware('bouncer:TravelClass,read');
         Route::get('/create', [TravelClassController::class, 'create'])->name('travel-classes.create')->middleware('bouncer:TravelClass,create');
@@ -143,6 +145,7 @@ Route::middleware('auth:web')->group(function () {
     Route::prefix('reports')->group(function () {
         Route::get('/', [BespokeReportController::class, 'index'])->name('reports.all');
         Route::prefix('bespoke')->group(__DIR__ . '/admin/report/bespoke.php');
+        Route::prefix('advanced')->group(__DIR__ . '/admin/report/advanced.php');
         Route::prefix('/')->group(__DIR__ . '/admin/report/system.php');
     });
 });

@@ -13,15 +13,9 @@ use Illuminate\Http\Request;
 
 class OrderCustomerAdjustmentController extends Controller
 {
-
-    public function index(Order $order, OrderCustomer $orderCustomer)
-    {
-        return view('pages.models.order_customer_adjustments.table', ['order' => $order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustments' => OrderCustomerAdjustment::all(),]);
-    }
-
     public function create(Order $order, OrderCustomer $orderCustomer)
     {
-        return view('pages.models.order_customer_adjustments.create', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
+        return view('pages.admin.order.customer.adjustment.form', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
     }
 
     public function store(Request $request, Order $order, OrderCustomer $orderCustomer)
@@ -37,14 +31,9 @@ class OrderCustomerAdjustmentController extends Controller
         return redirect()->route('order-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
     }
 
-    public function view(Order $order, OrderCustomer $orderCustomer, OrderCustomerAdjustment $orderCustomerAdjustment)
-    {
-        return view('pages.models.order_customer_adjustments.view', ['order' => $order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $orderCustomerAdjustment,]);
-    }
-
     public function edit(Order $order, OrderCustomer $orderCustomer, OrderCustomerAdjustment $orderCustomerAdjustment)
     {
-        return view('pages.models.order_customer_adjustments.update', ['order' => $order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $orderCustomerAdjustment,]);
+        return view('pages.admin.order.customer.adjustment.form', ['order' => $order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $orderCustomerAdjustment,]);
     }
 
     public function update(Request $request, Order $order, OrderCustomer $orderCustomer, OrderCustomerAdjustment $orderCustomerAdjustment)

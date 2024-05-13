@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire\Admin\System\Brand;
 
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
-use App\Models\Location\AddressParent;
 use App\Models\Location\Country;
 use App\Models\System\Brand;
 use Livewire\WithFileUploads;
@@ -40,7 +40,7 @@ class Form extends ModalComponent
             $this->brand->repository->updateAddress(null);
         } else {
             $this->address->name = $this->brand->name;
-            $this->address->address_parent_id = AddressParent::getParentId('other');
+            $this->address->parent = AddressParent::BRAND;
             $this->address->country_id = Country::where('name', 'like', $this->country)->first()?->id;
             $this->brand->repository->updateAddress($this->address);
         }
@@ -72,6 +72,8 @@ class Form extends ModalComponent
             'brand.facebook' => 'nullable',
             'brand.twitter' => 'nullable',
             'brand.instagram' => 'nullable',
+            'brand.tax_bracket_id' => 'nullable',
+            'brand.vat_code' => 'nullable',
             'logo' => 'nullable|image',
             'address.address_line_1' => 'nullable',
             'address.address_line_2' => 'nullable',

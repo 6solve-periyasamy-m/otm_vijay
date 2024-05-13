@@ -17,12 +17,8 @@
     $addons = $orderCustomer->repository->getAvailableToAdd();
 @endphp
 
-@push('header-stack')
+@push('footer-stack')
     <script type="text/javascript">
-        const route = "{{ route('customer.extras') }}"
-        function onOrderChange(selector) {
-            window.location = route + '/' + $(selector).val();
-        }
         @if(!flag('payment.required', true))
             function applyUpgrade(selector, btn, model) {
                 let upgrade_id = $('#' + selector).find(':selected').val();
@@ -47,6 +43,7 @@
             let upgrade_id = $('#' + selector).find(':selected').val();
             let component_id = $(btn).closest('tr').attr('component');
             if (upgrade_id != null && component_id != null) {
+                loader(true);
                 $.post('{{ route('api.order.customer.upgrade.purchase') }}',
                     { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
                         '_token': '{{ csrf_token() }}',
@@ -56,11 +53,22 @@
                     })
                     .done(function (xhr, textStatus, errorThrown) {
                         if (xhr.success) window.location = xhr.location;
-                        else alert(xhr.message);
+                        else {
+                            alert(xhr.message);
+                            loader(false);
+                        }
                     })
-                    .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
+                    .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); loader(false); });
             }
         }
+        function loader(toggle = true) {
+            if (toggle) {
+                $('.waiter').show();
+            } else {
+                $('.waiter').hide();
+            }
+        }
+        loader(false);
     </script>
 @endpush
 
@@ -77,7 +85,7 @@
                 </select>
                 <a href="{{ route('customer.invoice', ['reference' => $order->booking_reference]) }}" target="_blank" class="nvoice btn btn-primary">Invoice</a>
                 @if ($orderCustomer->order->has_atol)
-                    <a href="{{ route('customer.atol', ['reference' => $order->booking_reference]) }}" target="_blank" class="invoice btn btn-secondary">ATOL Certificate</a>
+                    <a href="{{ route('customer.atol', ['reference' => $order->booking_reference]) }}" target="_blank" class="atol btn btn-secondary">ATOL Certificate</a>
                 @endif
             </div>
         </form>
@@ -510,17 +518,26 @@
         </div>
     </div>
 </div>
+<div class="waiter">
+    <x-loading-spinner center></x-loading-spinner>
+</div>
+
 @endsection
 
 @section('footer-script')
 <script>
-    let route = "{{ route('customer.invoice', ['reference' => 'reference']) }}"
-    function onOrderChange() {
+    function onOrderChange(selector) {
+        let invoiceRoute = "{{ route('customer.invoice', ['reference' => 'reference']) }}";
+        let atolRoute = "{{ route('customer.atol', ['reference' => 'reference']) }}";
         let newBooking = $('.order-select').val()
         $('.order').hide();
         $('.order-' + newBooking).show();
         $('#form-booking-reference').val(newBooking);
-        $('.invoice').prop('href', route.replace('reference', newBooking));
+        $('.invoice').prop('href', invoiceRoute.replace('reference', newBooking));
+        $('.atol').prop('href', atolRoute.replace('reference', newBooking));
+        if ($(selector).val() !== undefined) {
+            window.location = "{{ route('customer.extras') }}" + '/' + $(selector).val();
+        }
     }
     onOrderChange();
 </script>

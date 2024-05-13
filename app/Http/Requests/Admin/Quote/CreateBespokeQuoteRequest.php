@@ -8,6 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * @property int $customer_id
  * @property int|null $brand_id
+ * @property int|null $organization_id
  * @property string $name
  * @property string|null $description
  * @property string $from
@@ -20,9 +21,11 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $paying
  * @property float|null $single_occupancy_surcharge
  * @property float $deposit
+ * @property string $percentage
  * @property string $internal_notes
  * @property string $external_notes
  * @property float $cost
+ * @property int|null $tax_bracket_id
  */
 class CreateBespokeQuoteRequest extends FormRequest
 {
@@ -33,6 +36,7 @@ class CreateBespokeQuoteRequest extends FormRequest
         return [
             'date_from' => $this->from,
             'date_to' => $this->to,
+            'organization_id' => $this->organization_id,
             'final_payment' => $this->final,
             'invoice_footer' => $this->footer ?? "",
             'terms' => $this->terms ?? "",
@@ -43,7 +47,9 @@ class CreateBespokeQuoteRequest extends FormRequest
             'name' => $this->name,
             'description' => $this->description,
             'deposit' => $this->deposit,
+            'is_deposit_percentage' => $this->percentage == 'on',
             'brand_id' => $this->brand_id == 0 ? null : $this->brand_id,
+            'tax_bracket_id' => $this->tax_bracket_id
         ];
     }
 
@@ -80,6 +86,7 @@ class CreateBespokeQuoteRequest extends FormRequest
             'deposit' => 'required|numeric|min:0',
             'single_occupancy_surcharge' => 'nullable|numeric|min:0',
             'name' => 'required',
+            'organization_id' => 'nullable|integer|exists:organizations,id',
         ];
     }
 }

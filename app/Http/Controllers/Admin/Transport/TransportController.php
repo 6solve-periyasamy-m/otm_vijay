@@ -13,12 +13,12 @@ class TransportController extends Controller
 
     public function index()
     {
-        return view('pages.models.transports.table', ['transports' => Transport::all(),]);
+        return view('pages.admin.transport.table', ['transports' => Transport::all(),]);
     }
 
     public function create()
     {
-        return view('pages.models.transports.create');
+        return view('pages.admin.transport.form');
     }
 
     public function store(Request $request)
@@ -44,7 +44,7 @@ class TransportController extends Controller
 
     public function view(Transport $transport)
     {
-        return view('pages.components.transport', ['transport' => $transport,]);
+        return view('pages.admin.transport.view', ['transport' => $transport,]);
     }
 
     public function manifest(Transport $transport)
@@ -59,7 +59,7 @@ class TransportController extends Controller
 
     public function edit(Transport $transport)
     {
-        return view('pages.models.transports.update', ['transport' => $transport,]);
+        return view('pages.admin.transport.form', ['transport' => $transport,]);
     }
 
     public function update(Request $request, Transport $transport)

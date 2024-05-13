@@ -32,6 +32,36 @@ class Icon
         return $this->new($name, Icon::BRAND);
     }
 
+    public function check(): View|string|Closure
+    {
+        return $this->solid('check');
+    }
+
+    public function star(): View|string|Closure
+    {
+        return $this->regular('star');
+    }
+
+    public function cross(): View|string|Closure
+    {
+        return $this->solid('xmark');
+    }
+
+    public function signature(): View|string|Closure
+    {
+        return $this->solid('signature');
+    }
+
+    public function supplier(): View|string|Closure
+    {
+        return $this->signature();
+    }
+
+    public function link(): View|string|Closure
+    {
+        return $this->solid('link');
+    }
+
     public function eraser(): View|string|Closure
     {
         return $this->solid('eraser');
@@ -485,5 +515,10 @@ class Icon
     public function forceDelete(): View|string|Closure
     {
         return $this->solid('triangle-exclamation');
+    }
+
+    public function __call(string $name, array $arguments): View|string|Closure
+    {
+        return $this->solid($name);
     }
 }

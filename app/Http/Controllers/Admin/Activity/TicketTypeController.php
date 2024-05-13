@@ -8,15 +8,9 @@ use Illuminate\Http\Request;
 
 class TicketTypeController extends Controller
 {
-
-    public function index()
-    {
-        return view('pages.models.ticket_types.table', ['ticketTypes' => TicketType::all(),]);
-    }
-
     public function create()
     {
-        return view('pages.models.ticket_types.create');
+        return view('pages.admin.activity.inventory.ticket.form');
     }
 
     public function store(Request $request)
@@ -28,14 +22,9 @@ class TicketTypeController extends Controller
         return view('pages.close');
     }
 
-    public function view(TicketType $ticketType)
-    {
-        return view('pages.models.ticket_types.view', ['ticketType' => $ticketType,]);
-    }
-
     public function edit(TicketType $ticketType)
     {
-        return view('pages.models.ticket_types.update', ['ticketType' => $ticketType,]);
+        return view('pages.admin.activity.inventory.ticket.form', ['ticketType' => $ticketType,]);
     }
 
     public function update(Request $request, TicketType $ticketType)

@@ -171,7 +171,7 @@ class MerchandiseInventoryRepository extends InventoryRepository
 
     public function getPurchasePrice(): float
     {
-        return $this->inventory->purchase_price;
+        return $this->inventory->purchase_price ?? 0;
     }
 
     public function isStockControlActive(): bool
@@ -187,5 +187,20 @@ class MerchandiseInventoryRepository extends InventoryRepository
     public function getSalesPrice(): ?float
     {
         return $this->inventory->sales_price;
+    }
+
+    public static function find($id): MerchandiseInventory|null
+    {
+        return MerchandiseInventory::find($id);
+    }
+
+    public function getLocalPurchasePrice(): ?float
+    {
+        return $this->getPurchasePrice();
+    }
+
+    public function getPurchasePriceString(): string
+    {
+        return f_currency($this->getPurchasePrice());
     }
 }

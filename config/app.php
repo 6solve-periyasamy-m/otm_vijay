@@ -259,8 +259,15 @@ return [
             'secret' => env('FELLOH_SECRET'),
             'account' => env('FELLOH_ACCOUNT'),
             'connected' => env('FELLOH_CONNECTED'),
-            'env' => env('FELLOH_ENVIRONMENT', 'api')
+            'env' => env('FELLOH_ENVIRONMENT', 'api'),
+            'public' => env('FELLOH_PUBLIC'),
+            'private' => env('FELLOH_PRIVATE'),
+            'organisation' => env('FELLOH_ORGANIZATION')
         ],
+        'opayo' => [
+            'vendor' => env('OPAYO_VENDOR'),
+            'live' => env('OPAYO_LIVE', false),
+        ]
     ],
 
     'user-limit' => env('USER_LIMIT', 0),

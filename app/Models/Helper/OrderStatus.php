@@ -5,6 +5,7 @@ namespace App\Models\Helper;
 enum OrderStatus: int
 {
 
+    case CANCELLED_NO_REFUND = -5;
     case CANCELLED_OVER_REFUNDED = -4;
     case CANCELLED_FULL_REFUND = -3;
     case CANCELLED_DEPOSIT_HELD = -2;
@@ -34,11 +35,30 @@ enum OrderStatus: int
             self::OVERPAID => ['status' => trans('custom.order.status.overpaid'), 'color' => 'info'],
             self::OCCUPANCY_NOT_SET => ['status' => trans('custom.order.status.occupancy'), 'color' => 'dark'],
             self::UNKNOWN => ['status' => 'Status Unknown', 'color' => 'dark'],
+            self::CANCELLED_NO_REFUND => ['status' => trans('custom.order.status.cancelled.none'), 'color' => 'secondary',],
         };
     }
 
     public function color(): string
     {
         return $this->getStatusArray()['color'];
+    }
+
+    public static function asArray(): array
+    {
+        $array = [];
+        foreach (OrderStatus::cases() as $case) {
+            $array[$case->value] = $case->description();
+        }
+        return $array;
+    }
+
+    public static function asFilter(): array
+    {
+        $data = [];
+        foreach (OrderStatus::cases() as $case) {
+            $data[] = ['id' => $case->value, 'name' => $case->description()];
+        }
+        return $data;
     }
 }

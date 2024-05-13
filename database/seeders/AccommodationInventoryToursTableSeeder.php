@@ -32,6 +32,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             1 => 
             array (
@@ -46,6 +47,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             2 => 
             array (
@@ -60,6 +62,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             3 => 
             array (
@@ -74,6 +77,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             4 => 
             array (
@@ -88,6 +92,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             5 => 
             array (
@@ -102,6 +107,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             6 => 
             array (
@@ -116,6 +122,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             7 => 
             array (
@@ -130,6 +137,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             8 => 
             array (
@@ -144,6 +152,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 12:51:19',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             9 => 
             array (
@@ -158,6 +167,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 12:56:34',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             10 => 
             array (
@@ -172,6 +182,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:08:43',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             11 => 
             array (
@@ -186,6 +197,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:09:17',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             12 => 
             array (
@@ -200,6 +212,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:12:50',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             13 => 
             array (
@@ -214,6 +227,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:13:03',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             14 => 
             array (
@@ -228,6 +242,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:13:16',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             15 => 
             array (
@@ -242,6 +257,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:13:55',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             16 => 
             array (
@@ -256,6 +272,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:14:07',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             17 => 
             array (
@@ -270,6 +287,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:14:21',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             18 => 
             array (
@@ -284,6 +302,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:14:57',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             19 => 
             array (
@@ -298,6 +317,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:15:19',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             20 => 
             array (
@@ -312,6 +332,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:15:28',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             21 => 
             array (
@@ -326,6 +347,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:16:30',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             22 => 
             array (
@@ -340,6 +362,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:16:44',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             23 => 
             array (
@@ -354,6 +377,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:17:51',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             24 => 
             array (
@@ -368,6 +392,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:18:20',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             25 => 
             array (
@@ -382,6 +407,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:18:34',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             26 => 
             array (
@@ -396,6 +422,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:18:47',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             27 => 
             array (
@@ -410,6 +437,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:19:12',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             28 => 
             array (
@@ -424,6 +452,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:19:23',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             29 => 
             array (
@@ -438,6 +467,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:19:33',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             30 => 
             array (
@@ -452,6 +482,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:22:35',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             31 => 
             array (
@@ -466,6 +497,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:22:46',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             32 => 
             array (
@@ -480,6 +512,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:22:57',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             33 => 
             array (
@@ -494,6 +527,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:23:35',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             34 => 
             array (
@@ -508,6 +542,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:23:47',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             35 => 
             array (
@@ -522,6 +557,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 13:24:00',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             36 => 
             array (
@@ -536,6 +572,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             37 => 
             array (
@@ -550,6 +587,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             38 => 
             array (
@@ -564,6 +602,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             39 => 
             array (
@@ -578,6 +617,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             40 => 
             array (
@@ -592,6 +632,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             41 => 
             array (
@@ -606,6 +647,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             42 => 
             array (
@@ -620,6 +662,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             43 => 
             array (
@@ -634,6 +677,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             44 => 
             array (
@@ -648,6 +692,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-02-09 09:34:21',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             45 => 
             array (
@@ -662,6 +707,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:49',
                 'deleted_at' => '2022-09-14 09:53:49',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             46 => 
             array (
@@ -676,6 +722,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:51',
                 'deleted_at' => '2022-09-14 09:53:51',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             47 => 
             array (
@@ -690,6 +737,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:54',
                 'deleted_at' => '2022-09-14 09:53:54',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             48 => 
             array (
@@ -704,6 +752,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:56',
                 'deleted_at' => '2022-09-14 09:53:56',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             49 => 
             array (
@@ -718,6 +767,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:54:00',
                 'deleted_at' => '2022-09-14 09:54:00',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             50 => 
             array (
@@ -732,6 +782,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:54:02',
                 'deleted_at' => '2022-09-14 09:54:02',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             51 => 
             array (
@@ -746,6 +797,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:54:04',
                 'deleted_at' => '2022-09-14 09:54:04',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             52 => 
             array (
@@ -760,6 +812,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:54:06',
                 'deleted_at' => '2022-09-14 09:54:06',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             53 => 
             array (
@@ -774,6 +827,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:51:21',
                 'deleted_at' => '2022-09-14 09:51:21',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             54 => 
             array (
@@ -788,6 +842,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:52:21',
                 'deleted_at' => '2022-09-14 09:52:21',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             55 => 
             array (
@@ -802,6 +857,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:52:24',
                 'deleted_at' => '2022-09-14 09:52:24',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             56 => 
             array (
@@ -816,6 +872,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:52:26',
                 'deleted_at' => '2022-09-14 09:52:26',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             57 => 
             array (
@@ -830,6 +887,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:52:31',
                 'deleted_at' => '2022-09-14 09:52:31',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             58 => 
             array (
@@ -844,6 +902,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:52:34',
                 'deleted_at' => '2022-09-14 09:52:34',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             59 => 
             array (
@@ -858,6 +917,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:52:36',
                 'deleted_at' => '2022-09-14 09:52:36',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             60 => 
             array (
@@ -872,6 +932,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:52:38',
                 'deleted_at' => '2022-09-14 09:52:38',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             61 => 
             array (
@@ -886,6 +947,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:52:52',
                 'deleted_at' => '2022-09-14 09:52:52',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             62 => 
             array (
@@ -900,6 +962,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:52:54',
                 'deleted_at' => '2022-09-14 09:52:54',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             63 => 
             array (
@@ -914,6 +977,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:52:57',
                 'deleted_at' => '2022-09-14 09:52:57',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             64 => 
             array (
@@ -928,6 +992,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:52:59',
                 'deleted_at' => '2022-09-14 09:52:59',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             65 => 
             array (
@@ -942,6 +1007,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:04',
                 'deleted_at' => '2022-09-14 09:53:04',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             66 => 
             array (
@@ -956,6 +1022,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:06',
                 'deleted_at' => '2022-09-14 09:53:06',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             67 => 
             array (
@@ -970,6 +1037,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:09',
                 'deleted_at' => '2022-09-14 09:53:09',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             68 => 
             array (
@@ -984,6 +1052,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:12',
                 'deleted_at' => '2022-09-14 09:53:12',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             69 => 
             array (
@@ -998,6 +1067,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:18',
                 'deleted_at' => '2022-09-14 09:53:18',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             70 => 
             array (
@@ -1012,6 +1082,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:21',
                 'deleted_at' => '2022-09-14 09:53:21',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             71 => 
             array (
@@ -1026,6 +1097,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:23',
                 'deleted_at' => '2022-09-14 09:53:23',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             72 => 
             array (
@@ -1040,6 +1112,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:25',
                 'deleted_at' => '2022-09-14 09:53:25',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             73 => 
             array (
@@ -1054,6 +1127,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:29',
                 'deleted_at' => '2022-09-14 09:53:29',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             74 => 
             array (
@@ -1068,6 +1142,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:31',
                 'deleted_at' => '2022-09-14 09:53:31',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             75 => 
             array (
@@ -1082,6 +1157,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:33',
                 'deleted_at' => '2022-09-14 09:53:33',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             76 => 
             array (
@@ -1096,6 +1172,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:35',
                 'deleted_at' => '2022-09-14 09:53:35',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             77 => 
             array (
@@ -1110,6 +1187,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:40',
                 'deleted_at' => '2022-09-14 09:53:40',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             78 => 
             array (
@@ -1124,6 +1202,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:41',
                 'deleted_at' => '2022-09-14 09:53:41',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             79 => 
             array (
@@ -1138,6 +1217,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:43',
                 'deleted_at' => '2022-09-14 09:53:43',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             80 => 
             array (
@@ -1152,6 +1232,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:45',
                 'deleted_at' => '2022-09-14 09:53:45',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             81 => 
             array (
@@ -1166,6 +1247,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:52:28',
                 'deleted_at' => '2022-09-14 09:52:28',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             82 => 
             array (
@@ -1180,6 +1262,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:54:08',
                 'deleted_at' => '2022-09-14 09:54:08',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             83 => 
             array (
@@ -1194,6 +1277,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:58',
                 'deleted_at' => '2022-09-14 09:53:58',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             84 => 
             array (
@@ -1208,6 +1292,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:47',
                 'deleted_at' => '2022-09-14 09:53:47',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             85 => 
             array (
@@ -1222,6 +1307,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:37',
                 'deleted_at' => '2022-09-14 09:53:37',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             86 => 
             array (
@@ -1236,6 +1322,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:27',
                 'deleted_at' => '2022-09-14 09:53:27',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             87 => 
             array (
@@ -1250,6 +1337,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:14',
                 'deleted_at' => '2022-09-14 09:53:14',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             88 => 
             array (
@@ -1264,6 +1352,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:53:02',
                 'deleted_at' => '2022-09-14 09:53:02',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             89 => 
             array (
@@ -1278,6 +1367,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:52:41',
                 'deleted_at' => '2022-09-14 09:52:41',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             90 => 
             array (
@@ -1292,6 +1382,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:50:02',
                 'deleted_at' => '2022-09-14 09:50:02',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             91 => 
             array (
@@ -1306,6 +1397,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:50:13',
                 'deleted_at' => '2022-09-14 09:50:13',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             92 => 
             array (
@@ -1320,6 +1412,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:52:44',
                 'deleted_at' => '2022-09-14 09:52:44',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             93 => 
             array (
@@ -1334,6 +1427,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:50:06',
                 'deleted_at' => '2022-09-14 09:50:06',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             94 => 
             array (
@@ -1348,6 +1442,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:50:16',
                 'deleted_at' => '2022-09-14 09:50:16',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             95 => 
             array (
@@ -1362,6 +1457,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:52:46',
                 'deleted_at' => '2022-09-14 09:52:46',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             96 => 
             array (
@@ -1376,6 +1472,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:50:09',
                 'deleted_at' => '2022-09-14 09:50:09',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             97 => 
             array (
@@ -1390,6 +1487,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:50:20',
                 'deleted_at' => '2022-09-14 09:50:20',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             98 => 
             array (
@@ -1404,6 +1502,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 09:52:49',
                 'deleted_at' => '2022-09-14 09:52:49',
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             99 => 
             array (
@@ -1418,6 +1517,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 10:07:11',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             100 => 
             array (
@@ -1432,6 +1532,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 10:07:11',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             101 => 
             array (
@@ -1446,6 +1547,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 10:09:16',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             102 => 
             array (
@@ -1460,6 +1562,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 10:09:16',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             103 => 
             array (
@@ -1474,6 +1577,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 10:10:08',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             104 => 
             array (
@@ -1488,6 +1592,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 10:10:41',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             105 => 
             array (
@@ -1502,6 +1607,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-14 12:31:06',
                 'deleted_at' => NULL,
                 'is_bookable' => 0,
+                'stock_control_active' => 0,
             ),
             106 => 
             array (
@@ -1516,6 +1622,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-20 10:39:17',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             107 => 
             array (
@@ -1530,6 +1637,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-20 10:39:17',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             108 => 
             array (
@@ -1544,6 +1652,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-20 10:39:17',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             109 => 
             array (
@@ -1558,6 +1667,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-20 10:39:17',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             110 => 
             array (
@@ -1572,6 +1682,7 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-20 10:39:17',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
             111 => 
             array (
@@ -1586,6 +1697,127 @@ class AccommodationInventoryToursTableSeeder extends Seeder
                 'updated_at' => '2022-09-20 19:00:58',
                 'deleted_at' => NULL,
                 'is_bookable' => 1,
+                'stock_control_active' => 0,
+            ),
+            112 => 
+            array (
+                'id' => 113,
+                'tour_id' => 7,
+                'accommodation_inventory_id' => 64,
+                'tour_sales_price' => '25.00',
+                'is_template' => 1,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2023-09-21 13:57:23',
+                'updated_at' => '2023-09-21 13:57:23',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+                'stock_control_active' => 0,
+            ),
+            113 => 
+            array (
+                'id' => 114,
+                'tour_id' => 7,
+                'accommodation_inventory_id' => 65,
+                'tour_sales_price' => '30.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2023-09-21 13:57:23',
+                'updated_at' => '2023-09-21 13:57:23',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+                'stock_control_active' => 0,
+            ),
+            114 => 
+            array (
+                'id' => 115,
+                'tour_id' => 7,
+                'accommodation_inventory_id' => 66,
+                'tour_sales_price' => '20.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2023-09-21 13:57:23',
+                'updated_at' => '2023-09-21 13:57:23',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+                'stock_control_active' => 0,
+            ),
+            115 => 
+            array (
+                'id' => 116,
+                'tour_id' => 7,
+                'accommodation_inventory_id' => 67,
+                'tour_sales_price' => '75.00',
+                'is_template' => 1,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2023-09-21 13:57:23',
+                'updated_at' => '2023-09-21 13:57:23',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+                'stock_control_active' => 0,
+            ),
+            116 => 
+            array (
+                'id' => 117,
+                'tour_id' => 7,
+                'accommodation_inventory_id' => 68,
+                'tour_sales_price' => '75.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Included',
+                'booking_policy' => 'overbook',
+                'created_at' => '2023-09-21 13:57:23',
+                'updated_at' => '2023-09-21 13:57:23',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+                'stock_control_active' => 0,
+            ),
+            117 => 
+            array (
+                'id' => 118,
+                'tour_id' => 7,
+                'accommodation_inventory_id' => 69,
+                'tour_sales_price' => '100.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2023-09-21 13:58:20',
+                'updated_at' => '2023-09-21 13:58:20',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+                'stock_control_active' => 0,
+            ),
+            118 => 
+            array (
+                'id' => 119,
+                'tour_id' => 7,
+                'accommodation_inventory_id' => 70,
+                'tour_sales_price' => '100.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Upgrade',
+                'booking_policy' => 'overbook',
+                'created_at' => '2023-09-21 13:58:42',
+                'updated_at' => '2023-09-21 13:58:42',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+                'stock_control_active' => 0,
+            ),
+            119 => 
+            array (
+                'id' => 120,
+                'tour_id' => 7,
+                'accommodation_inventory_id' => 71,
+                'tour_sales_price' => '250.00',
+                'is_template' => 0,
+                'tour_component_type' => 'Add-on',
+                'booking_policy' => 'overbook',
+                'created_at' => '2023-09-22 13:19:15',
+                'updated_at' => '2023-09-22 13:19:15',
+                'deleted_at' => NULL,
+                'is_bookable' => 1,
+                'stock_control_active' => 0,
             ),
         ));
         

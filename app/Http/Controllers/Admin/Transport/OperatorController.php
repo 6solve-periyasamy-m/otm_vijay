@@ -8,15 +8,9 @@ use Illuminate\Http\Request;
 
 class OperatorController extends Controller
 {
-
-    public function index()
-    {
-        return view('pages.models.operators.table', ['operators' => Operator::all(),]);
-    }
-
     public function create()
     {
-        return view('pages.models.operators.create');
+        return view('pages.admin.transport.operator.form');
     }
 
     public function store(Request $request)
@@ -29,14 +23,9 @@ class OperatorController extends Controller
         return view('pages.close');
     }
 
-    public function view(Operator $operator)
-    {
-        return view('pages.models.operators.view', ['operator' => $operator,]);
-    }
-
     public function edit(Operator $operator)
     {
-        return view('pages.models.operators.update', ['operator' => $operator,]);
+        return view('pages.admin.transport.operator.form', ['operator' => $operator,]);
     }
 
     public function update(Request $request, Operator $operator)

@@ -21,15 +21,11 @@
             Last Name
         </x-customer.input>
 
-        <x-customer.input type="date" wire:model="traveller.date_of_birth" width="3" autocomplete="bday" required>
+        <x-customer.input type="date" wire:model="date_of_birth" width="6" autocomplete="bday" required>
             Date of Birth
         </x-customer.input>
 
-        <x-customer.input wire:model="traveller.email_address" width="6" autocomplete="email">
-            Email Address
-        </x-customer.input>
-
-        <x-customer.input wire:model="traveller.mobile_number" value="{{ $traveller?->mobile_number ?? '' }}" width="3" autocomplete="tel">
+        <x-customer.input wire:model="traveller.mobile_number" value="{{ $traveller?->mobile_number ?? '' }}" width="6" autocomplete="tel">
             Mobile Number
         </x-customer.input>
         @if($this->booking->tour->templates->count() && empty($traveller?->id))

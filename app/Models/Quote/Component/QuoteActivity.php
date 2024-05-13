@@ -22,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property string $tour_component_type
  * @property float $tour_sales_price
  * @property bool $price_shown
+ * @property int|null $quantity
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -83,12 +84,12 @@ class QuoteActivity extends Model
         return $this->purchase_price == 0 ? 100 : ($this->tour_sales_price / $this->purchase_price) * 100;
     }
 
-    public function getStartAttribute(): Carbon
+    public function getStartAttribute(): Carbon|null
     {
         return $this->inventory->starts_at;
     }
 
-    public function getEndAttribute(): Carbon
+    public function getEndAttribute(): Carbon|null
     {
         return $this->inventory->ends_at;
     }

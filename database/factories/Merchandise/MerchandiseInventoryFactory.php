@@ -27,7 +27,7 @@ class MerchandiseInventoryFactory extends Factory
             'stock' => 50,
             'purchase_price' => 25,
             'sales_price' => 50,
-            'notes' => $this->faker->sentence
+            'internal_notes' => $this->faker->sentence
         ];
     }
 }

@@ -1,10 +1,16 @@
-@php /** @var \App\Models\Quote\Quote $quote */ @endphp
+@php
+/**
+ * @var \App\Models\Quote\Quote $quote
+ * @var int $paying
+ * @var int $travelling
+ */
+@endphp
 
-@extends('layout.form', ['action' => route('quotes.convert', ['quote' => $quote,])])
+@extends('layout.master')
 
 @section('title', 'Conversion of Quote ' . $quote->reference)
 
-@push('header-stack')
+@push('footer-stack')
     <script>
         class Customer { constructor(id, name) { this.id = id; this.name = name; }}
         function getCustomers(paying = false, count = 1) {
@@ -51,39 +57,6 @@
 
 @endpush
 
-@section('form-body')
-    <hr class="splitter">
-    <div class="row form-group">
-        <div class="col-12 col-xl-11">
-            <span class="font-bold fw-bold">Non-Paying Travellers</span>
-        </div>
-        <div class="col-12 col-xl-1">
-            <button class="btn btn-success" onclick="event.preventDefault();unknownAll($('.travelling'), false);">All Unknown</button>
-        </div>
-    </div>
-    <hr class="splitter">
-    @for($x = 1; $x <= $travelling; $x++)
-        <x-admin.input.selector.quote-conversion name="travelling[{{ $x }}]" route="customers" width="6" paying="0">
-            <x-slot:create>{{ route('customers.create') }}</x-slot:create>
-            Non-paying Traveller {{ $x }}
-        </x-admin.input.selector.quote-conversion>
-    @endfor
-    <hr class="splitter">
-    <div class="row form-group">
-        <div class="col-12 col-xl-11">
-            <span class="font-bold fw-bold">Paying Travellers</span>
-        </div>
-        <div class="col-12 col-xl-1">
-            <button class="btn btn-success" onclick="event.preventDefault();unknownAll($('.paying'), true);">All Unknown</button>
-        </div>
-    </div>
-    <hr class="splitter">
-    @for($x = 1; $x <= $paying; $x++)
-        <x-admin.input.selector.quote-conversion name="paying[{{ $x }}]" route="customers" width="6" paying="1">
-            <x-slot:create>{{ route('customers.create') }}</x-slot:create>
-            Paying Traveller {{ $x }}
-        </x-admin.input.selector.quote-conversion>
-    @endfor
-    <hr class="splitter">
-    <input type="submit" class="btn btn-primary text-white" name="Submit">
+@section('content')
+    <livewire:admin.quote.conversion :quote="$quote" :paying="$paying" :travelling="$travelling" />
 @endsection

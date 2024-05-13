@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Location\AddressParent;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 
@@ -15,10 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        foreach (AddressParent::ID_MAP as $key => $value) {
-            AddressParent::create(['id' => $key, 'name' => $value]);
-        }
-
         $this->call(UserSeeder::class);
         $this->call(PaymentMethodsTableSeeder::class);
         $this->call(SettingsTableSeeder::class);
@@ -93,7 +88,12 @@ class DatabaseSeeder extends Seeder
             $this->call(QuoteMerchandisesTableSeeder::class);
             $this->call(QuotePricePointsTableSeeder::class);
             $this->call(QuoteTransportsTableSeeder::class);
-        } else {
+
+            $this->call(SuppliersTableSeeder::class);
+            $this->call(SupplierAssociatesTableSeeder::class);
+            $this->call(OrderCachesTableSeeder::class);
+            $this->call(TaxBracketsTableSeeder::class);
+    } else {
             Artisan::call('countries:update');
         }
     }

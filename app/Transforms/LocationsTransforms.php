@@ -2,8 +2,8 @@
 
 namespace App\Transforms;
 
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
-use App\Models\Location\AddressParent;
 use App\Models\Location\Country;
 use App\Models\Location\Currency;
 use App\Models\Location\LocationType;
@@ -68,13 +68,13 @@ class LocationsTransforms implements LocationsTransformsInterface
         if ($includeCustomer) {
             $addresses = Address::all();
         } else {
-            $addresses = Address::where('address_parent_id', '!=', AddressParent::getParentId('customer'))->get();
+            $addresses = Address::where('parent', '!=', AddressParent::CUSTOMER)->get();
         }
         foreach ($addresses as $address) {
             if (!(isset($address->locationType) || $includeCustomer)) continue; // Skip customer addresses unless filtered/included
             $subData = [];
             $subData['id'] = $address->id;
-            $subData['text'] = $address->name . ' - ' . (isset($address->locationType) ?  $address->locationType->name : 'Customer Address') . ' - ' . $address->addressParent->name . " - {$address->__toString()}";
+            $subData['text'] = $address->name . ' - ' . (isset($address->locationType) ?  $address->locationType?->name : 'Customer Address') . ' - ' . ucwords($address->parent) . " - {$address->__toString()}";
             if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
@@ -85,7 +85,7 @@ class LocationsTransforms implements LocationsTransformsInterface
         $address = Address::findOrFail($id);
         $data = [];
         $data['id'] = $address->id;
-        $data['text'] = $address->name . ' - ' . (isset($address->locationType) ?  $address->locationType->name : 'Customer Address') . ' - ' . $address->addressParent->name . " - {$address->__toString()}";
+        $data['text'] = $address->name . ' - ' . (isset($address->locationType) ?  $address->locationType->name : 'Customer Address') . ' - ' . ucwords($address->parent) . " - {$address->__toString()}";
         return $data;
     }
 
@@ -106,6 +106,34 @@ class LocationsTransforms implements LocationsTransformsInterface
         $data = [];
         $data['id'] = $currency->id;
         $data['text'] = $currency->name . ' - ' . $currency->code;
+        return $data;
+    }
+
+    public static function getFilterCountries($filter)
+    {
+        $data = [];
+        $subData = [];
+        $subData['id'] = -1;
+        $subData['text'] = "No Filtering";
+        if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        foreach (Country::orderBy('name')->get() as $country) {
+            $subData = [];
+            $subData['id'] = $country->id;
+            $subData['text'] = $country?->name . ' - ' . $country->alpha_code;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        }
+        return $data;
+    }
+
+    public static function getSelectedFilterCountry($id) {
+        if ($id == 0) return null;
+        if ($id == -1) {
+            return ['id' => -1, 'text' => 'No Filtering'];
+        }
+        $country = Country::findOrFail($id);
+        $data = [];
+        $data['id'] = $country->id;
+        $data['text'] = $country?->name . ' - ' . $country->alpha_code;
         return $data;
     }
 }

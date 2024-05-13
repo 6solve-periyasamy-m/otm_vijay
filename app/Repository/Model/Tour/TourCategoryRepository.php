@@ -51,4 +51,9 @@ class TourCategoryRepository extends AttributeRepository
     {
         return $this->model->tours()->count();
     }
+
+    public static function find($id): TourCategory|null
+    {
+        return TourCategory::find($id);
+    }
 }

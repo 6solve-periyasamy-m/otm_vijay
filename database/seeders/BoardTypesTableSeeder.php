@@ -35,6 +35,14 @@ class BoardTypesTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 11:59:07',
                 'deleted_at' => NULL,
             ),
+            2 => 
+            array (
+                'id' => 3,
+                'name' => 'Fully Catered Deluxe',
+                'created_at' => '2022-07-05 11:07:26',
+                'updated_at' => '2022-07-05 11:07:26',
+                'deleted_at' => NULL,
+            ),
         ));
         
         

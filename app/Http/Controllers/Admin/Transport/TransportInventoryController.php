@@ -11,14 +11,9 @@ use Illuminate\Http\Request;
 class TransportInventoryController extends Controller
 {
 
-    public function index()
-    {
-        return view('pages.models.transport_inventories.table', ['transportInventories' => TransportInventory::all(),]);
-    }
-
     public function create(Transport $transport)
     {
-        return view('pages.models.transport_inventories.create', ['transport' => $transport,]);
+        return view('pages.admin.transport.inventory.form', ['transport' => $transport,]);
     }
 
     public function store(Request $request, Transport $transport)
@@ -35,15 +30,11 @@ class TransportInventoryController extends Controller
             'purchase_price' => $request->input('purchase_price') ?? 0,
             'sales_price' => $request->input('sales_price') ?? 0,
             'transport_number' => $request->input('transport_number'),
-            'notes' => $request->input('notes'),
+            'internal_notes' => $request->input('internal_notes'),
+            'external_notes' => $request->input('external_notes'),
         ]);
         $transport->transportInventory()->save($transportInventory);
         return redirect()->route('transports.view', ['transport' => $transport,]);
-    }
-
-    public function view(TransportInventory $transportInventory)
-    {
-        return view('pages.models.transport_inventories.view', ['transportInventory' => $transportInventory,]);
     }
 
     public function manifest(Transport $transport, TransportInventory $transportInventory)
@@ -58,7 +49,7 @@ class TransportInventoryController extends Controller
 
     public function edit(Transport $transport, TransportInventory $transportInventory)
     {
-        return view('pages.models.transport_inventories.update', ['transport' => $transport, 'transportInventory' => $transportInventory,]);
+        return view('pages.admin.transport.inventory.form', ['transport' => $transport, 'inventory' => $transportInventory,]);
     }
 
     public function update(Request $request, Transport $transport, TransportInventory $transportInventory)
@@ -75,7 +66,8 @@ class TransportInventoryController extends Controller
             'purchase_price' => $request->input('purchase_price') ?? 0,
             'sales_price' => $request->input('sales_price') ?? 0,
             'transport_number' => $request->input('transport_number'),
-            'notes' => $request->input('notes'),
+            'internal_notes' => $request->input('internal_notes'),
+            'external_notes' => $request->input('external_notes'),
         ]);
         return redirect()->route('transports.view', ['transport' => $transport,]);
     }
@@ -93,6 +85,6 @@ class TransportInventoryController extends Controller
     {
         $inventory = $transportInventory->replicate();
         $inventory->save();
-        return redirect()->route('transport-inventories.edit', ['transport' => $transport, 'transportInventory' => $inventory,]);
+        return redirect()->route('transport-inventories.edit', ['transport' => $transport, 'inventory' => $inventory,]);
     }
 }

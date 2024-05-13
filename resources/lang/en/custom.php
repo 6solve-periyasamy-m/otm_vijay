@@ -15,6 +15,7 @@ return [
                 'full' => 'Cancelled: Fully Refunded',
                 'over' => 'Cancelled: Over-Refunded',
                 'required' => 'Cancelled: Requires Refund',
+                'none' => 'Cancelled: No Refund Required'
             ]
         ]
     ],
@@ -24,5 +25,48 @@ return [
     ],
     'table' => [
         'actions' => 'Actions',
-    ]
+    ],
+    'bank' => [
+        'name' => 'Bank Name',
+        'form' => [
+            'create' => 'Create Bank',
+            'udpate' => 'Update Bank',
+        ]
+    ],
+    'address' => [
+        'line-1' => 'Address Line 1',
+        'line-2' => 'Address Line 2',
+        'line-3' => 'Address Line 3',
+        'town' => 'Town',
+        'region' => 'Region',
+        'country' => 'Country',
+        'postcode' => 'Postcode',
+    ],
+    'tax' => [
+        'form' => [
+            'title' => [
+                'create' => 'Create Tax Bracket',
+                'update' => 'Update Tax Bracket',
+            ],
+            'fields' => [
+                'name' => 'Name',
+                'description' => 'Description',
+                'rate' => 'Tax Rate (%)',
+            ],
+        ],
+        'null' => [
+            'name' => 'No Taxes',
+            'description' => 'System Default. No taxes will be calculated or used.'
+        ],
+        'toast' => [
+            'success' => [
+                'title' => 'Success',
+                'body' => 'Successfully updated the tax bracket!'
+            ],
+            'invalid' => [
+                'title' => 'Invalid Tax Bracket Selected',
+                'body' => 'The tax bracket you selected does not exist. Please refresh the page to make sure the list is up-to-date',
+            ],
+        ],
+    ],
 ];

@@ -6,7 +6,7 @@ use Tests\Bases\DatabaseTestCase;
 use Tests\Traits\Model\TestsOrder;
 
 /**
- * @covers \App\Models\Merchandise\Merchandise::getUsedStockAttribute
+ * @covers \App\Models\Merchandise\MerchandiseInventoryTour::getUsedStockAttribute
  * @covers \App\Repository\Model\Merchandise\MerchandiseInventoryTourRepository::getUsedStock
  */
 class MerchandiseUsedStockTest extends DatabaseTestCase

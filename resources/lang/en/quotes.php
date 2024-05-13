@@ -15,12 +15,16 @@ return [
         'title' => 'View Quote',
         'reference' => 'Quote Reference',
         'status' => 'Quote Status',
+        'consultant' => 'Consultant',
         'name' => 'Quote Name',
         'expires' => 'Expires At',
         'starts' => 'Starts Date',
         'ends' => 'Ends Date',
         'description' => 'Description',
-        'notes' => 'Internal Notes',
+        'notes' => [
+            'internal' => 'Internal Note',
+            'external' => 'External Note',
+        ],
         'lead' => [
             'name' => 'Lead Traveller Name',
             'contact' => 'Lead Contact Information'
@@ -60,7 +64,7 @@ return [
                     'description' => 'Calculate cost for X travellers',
                     'purchase' => 'Purchase Price of Components (Approximate)',
                     'ctc' => 'Cost to Company',
-                    'profit' => 'Profit (Per Person Profit) (Margin)',
+                    'profit' => 'Current Profit (Per Person Profit) (Margin)',
                     'cost' => 'Total (Price per Person)',
                     'count' => 'How many additional travellers?',
                     'paying' => 'Paying',

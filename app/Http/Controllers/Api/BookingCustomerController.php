@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiController;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
 use App\Repository\AddressRepository;
 use App\Repository\BookingRepository;
@@ -36,10 +37,10 @@ class BookingCustomerController extends ApiController
             $homeAddress = Address::where('id', $customer->home_address_id)->first();
             $billingAddress = Address::where('id', $customer->billing_address_id)->first();
             if ($homeAddress) {
-                $customer->homeAddress = $homeAddress;
+                $customer->home_address_id = $homeAddress->id;
             }
             if ($billingAddress) {
-                $customer->billingAddress = $billingAddress;
+                $customer->billing_address_id = $billingAddress->id;
             }
             $bookings = Booking::where('customer_id', $customer->id)->get();
 
@@ -171,7 +172,7 @@ class BookingCustomerController extends ApiController
         // MAR address record is default when no address supplied
         $address->address_line_1 = '(' .$customerData['email_address']. ') ' . $customerData['first_name'] . ' ' . $customerData['last_name'];
         $address->name = $type;
-        $address->address_parent_id = 1;
+        $address->parent = 1;
         $address->save();
 
         return $address->id;
@@ -207,7 +208,7 @@ class BookingCustomerController extends ApiController
                 'country_id' => $request->country_id,
                 'postcode' => $request->postcode,
                 'same_address' => $request->same_address,
-                'address_parent_id' => 1,
+                'parent' => AddressParent::CUSTOMER,
                 'name' => 'Home Address: ' . $customer->first_name . ' ' . $customer->last_name,
             ];
             $home_address = $addressRepo->update($newHomeAddress);
@@ -225,7 +226,7 @@ class BookingCustomerController extends ApiController
                 'region' => $request->region,
                 'country_id' => $request->country_id,
                 'postcode' => $request->postcode,
-                'address_parent_id' => 1,
+                'parent' => AddressParent::CUSTOMER,
                 'name' => 'Billing address: ' . $customer->first_name . ' ' . $customer->last_name,
             ];
         } else {
@@ -238,7 +239,7 @@ class BookingCustomerController extends ApiController
                 'region' => $request->billing_region,
                 'country_id' => $request->billing_country_id,
                 'postcode' => $request->billing_postcode,
-                'address_parent_id' => $customer->id,
+                'parent' => AddressParent::CUSTOMER,
                 'name' => 'Billing address: ' . $customer->first_name . ' ' . $customer->last_name,
             ];
         }

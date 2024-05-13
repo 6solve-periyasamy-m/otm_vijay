@@ -21,18 +21,20 @@ trait TestsOrder
         if ($withIncluded) {
             $tour = $this->generateTour(false, ['base_price_per_person' => $tour_cost,]);
             for ($x = 0; $x < 5; $x++) {
-                $this->generateAccommodationInventoryTour($tour);
+                $this->generateAccommodationInventoryTour($tour, 'Included', 100, $this->generateAccommodationInventory(null, $this->generateRoomType(2), null, ['check_in' => now()->addDays($x), 'check_out' => now()->addDays($x)]));
                 $this->generateActivityInventoryTour($tour);
                 $this->generateFlightInventoryTour($tour);
                 $this->generateTransportInventoryTour($tour);
             }
-            $order = Order::factory()->create(['deposit' => $deposit, 'tour_id' => $tour->id,]);
         } else {
             $tour = Tour::find(1) ?? $this->generateTour($withIncluded, ['base_price_per_person' => $tour_cost, 'single_occupancy_surcharge' => $surcharge, 'deposit' => $deposit]);
-        $order = Order::factory()->create(['tour_id' => $tour->id, 'deposit' => $deposit,]);
         }
+        $order = Order::factory()->make(['tour_id' => $tour->id, 'deposit' => $deposit,]);
+        $order->saveQuietly();
         if ($withLead) $order->lead_booker_id = $this->generateOrderCustomer($withIncluded, $order, $tour_cost, $surcharge)->id;
-        $order->save();
+        $order->saveQuietly();
+        $order->repository->refresh();
+        $order->repository->refresh();
         return $order;
     }
 
@@ -52,7 +54,9 @@ trait TestsOrder
         $order->orderCustomers()->save($orderCustomer);
 
         RoomingRepository::assignDefaultRooming($orderCustomer);
-        $withIncluded && $orderCustomer->repository->addAllIncluded();
+        $withIncluded && $orderCustomer->repository->addAllIncluded(true);
+
+        $order->repository->refresh();
 
         return $orderCustomer;
     }

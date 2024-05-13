@@ -18,6 +18,7 @@ use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
 use App\Models\System\Brand;
+use App\Models\System\TaxBracket;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Voucher\VoucherCode;
@@ -44,6 +45,7 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int|null $event_id
+ * @property int|null $tax_bracket_id
  * @property string $name
  * @property string|null $description
  * @property string|null $notes
@@ -51,6 +53,7 @@ use Illuminate\Support\Carbon;
  * @property float|null $margin
  * @property float|null $single_occupancy_surcharge
  * @property float|null $deposit
+ * @property bool $is_deposit_percentage
  * @property float|null $booking_fee
  * @property bool $stock_control_active
  * @property bool $accommodation_stock_control
@@ -88,6 +91,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|FlightInventoryTour[] $flightInventoryTours
  * @property-read int|null $flight_inventory_tours_count
  * @property-read float $deposit_percentage
+ * @property-read float $deposit_amount
  * @property-read bool $has_atol_certificate
  * @property-read bool $protected
  * @property-read float $remaining_installment
@@ -175,6 +179,7 @@ class Tour extends Model
         'date_to' => 'date',
         'final_payment' => 'date',
         'is_active' => 'boolean',
+        'is_deposit_percentage' => 'boolean',
         'base_price_per_person' => 'double',
         'deposit' => 'double',
         'margin' => 'double',
@@ -184,7 +189,7 @@ class Tour extends Model
         'flight_stock_control' => 'boolean',
         'transport_stock_control' => 'boolean',
         'merchandise_stock_control' => 'boolean',
-        ];
+    ];
     protected array $cascadeDeletes = ['accommodationInventoryTours', 'activityInventoryTours', 'flightInventoryTours', 'transportInventoryTours', 'merchandise', 'paymentInstallments', 'voucherPivot'];
 
     private TourRepository $internal_repository;
@@ -209,6 +214,16 @@ class Tour extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');
+    }
+
+    public function bracket(): BelongsTo
+    {
+        return $this->belongsTo(TaxBracket::class, 'tax_bracket_id');
+    }
+
+    public function taxBracket(): TaxBracket
+    {
+        return $this->bracket ?? $this->event?->taxBracket() ?? $this->brand?->taxBracket();
     }
 
     public function linkedBrand(): BelongsTo
@@ -318,7 +333,7 @@ class Tour extends Model
 
     public function getRemainingInstallmentAttribute(): float
     {
-        $cost = $this->base_price_per_person - $this->deposit;
+        $cost = $this->base_price_per_person - $this->deposit_amount;
         foreach ($this->paymentInstallments as $installment) {
             $cost -= $installment->cost;
         }
@@ -332,7 +347,8 @@ class Tour extends Model
 
     public function getDepositPercentageAttribute(): float
     {
-        return $this->base_price_per_person == 0 ? 0 : round(($this->deposit / $this->base_price_per_person) * 100, 2);
+        return $this->is_deposit_percentage ? $this->deposit
+            : ($this->base_price_per_person == 0 ? 0 : round(($this->deposit / $this->base_price_per_person) * 100, 2));
     }
 
     public function getRemainingPercentageAttribute(): float
@@ -385,5 +401,10 @@ class Tour extends Model
     {
         if (!isset($this->internal_repository)) $this->internal_repository = new TourRepository($this);
         return $this->internal_repository;
+    }
+
+    public function getDepositAmountAttribute(): ?float
+    {
+        return $this->is_deposit_percentage ? sigfig($this->base_price_per_person * ($this->deposit / 100)) : $this->deposit;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models\Accommodation;
 
 use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Supplier\SupplierContractComponent;
 use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
 use Database\Factories\Accommodation\AccommodationInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -26,6 +28,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int $accommodation_id
  * @property int $room_type_id
  * @property int $board_type_id
+ * @property int|null $stock_parent_id
  * @property Carbon|null $check_in
  * @property bool $check_in_time_confirmed
  * @property Carbon|null $check_out
@@ -34,19 +37,24 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int $stock The available stock for this inventory
  * @property float|null $purchase_price
  * @property float|null $sales_price
- * @property string|null $notes
+ * @property string|null $internal_notes
+ * @property string|null $external_notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read int $contracted Amount of contracted stock
  * @property-read Accommodation $accommodation
  * @property-read BoardType $boardType
  * @property-read Accommodation $component
+ * @property-read AccommodationInventory|null $stockParent
+ * @property-read AccommodationInventory[] $stockChildren
  * @property-read string $accommodation_for_tour
  * @property-read string $customer_display Display string to show to customers
  * @property-read int $used_on_tour_count How many tours this inventory is used on
  * @property-read int $used_stock The amount of stock that has been sold
  * @property-read int $available_stock The amount of stock that is available to be sold
  * @property-read RoomType $roomType
+ * @property-read Collection|SupplierContractComponent[] $contractComponents
  * @property-read Collection|AccommodationInventoryTour[] $tourComponents
  * @property-read Collection|OrderAccommodation[] $orderComponents
  * @property-read int|null $tour_components_count
@@ -80,7 +88,7 @@ class AccommodationInventory extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes, HasRelationships;
 
-    protected $fillable = ['accommodation_id', 'room_type_id', 'board_type_id', 'check_in', 'check_in_time_confirmed', 'check_out', 'check_out_time_confirmed', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'notes', 'currency_id'];
+    protected $guarded = [];
     protected array $cascadeDeletes = ['tourComponents'];
     protected $casts = [
         'check_in' => 'datetime',
@@ -118,9 +126,24 @@ class AccommodationInventory extends Model
         return $this->belongsTo(Accommodation::class, 'accommodation_id');
     }
 
+    public function stockParent(): BelongsTo
+    {
+        return $this->belongsTo(AccommodationInventory::class, 'stock_parent_id');
+    }
+
+    public function stockChildren(): HasMany
+    {
+        return $this->hasMany(AccommodationInventory::class, 'stock_parent_id');
+    }
+
     public function component(): BelongsTo
     {
         return $this->belongsTo(Accommodation::class, 'accommodation_id');
+    }
+
+    public function contractComponents(): MorphMany
+    {
+        return $this->morphMany(SupplierContractComponent::class, 'component');
     }
 
     public function boardType(): BelongsTo
@@ -164,6 +187,11 @@ class AccommodationInventory extends Model
     public function orderComponents(): HasManyThrough
     {
         return $this->hasManyThrough(OrderAccommodation::class, AccommodationInventoryTour::class, 'accommodation_inventory_id', 'accommodation_inventory_tour_id');
+    }
+
+    public function getContractedAttribute(): int
+    {
+        return $this->contractComponents()->sum('quantity');
     }
 
     public function __toString(): string

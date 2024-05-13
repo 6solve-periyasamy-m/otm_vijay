@@ -10,8 +10,8 @@ use App\Models\Booking\Component\BookingFlight;
 use App\Models\Booking\Component\BookingTransport;
 use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
-use App\Models\Location\AddressParent;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Voucher\Executors\FlatCostReductionExecutor;
@@ -195,16 +195,25 @@ class BookingTravellerRepository extends ModelRepository
     public function convertToOrderCustomer(Order $order): OrderCustomer
     {
         if (!isset($this->traveller->customer_id)) {
-            $this->convertToCustomer();
+            try {
+                $customer = $this->convertToCustomer();
+            } catch (\Exception $e) {
+                // Likely failed due to non-unique email address. Wipe address and try again.
+                Log::error($e);
+                $this->traveller->email_address === null;
+                $customer = $this->convertToCustomer();
+            }
+        } else {
+            $customer = $this->traveller->customer;
         }
         $orderCustomer = OrderCustomer::make([
-            'customer_id' => $this->traveller->customer_id,
+            'customer_id' => $customer->id,
             'tour_cost' => $this->traveller->booking->tour->base_price_per_person,
             'single_occupancy_surcharge' => $this->traveller->booking->tour->single_occupancy_surcharge,
         ]);
-        $order->orderCustomers()->save($orderCustomer);
+        $order->orderCustomers()->saveQuietly($orderCustomer);
         foreach ($this->getComponents(false) as $componentRepository) {
-            $componentRepository->getTourComponent()->grantToCustomer($orderCustomer);
+            $componentRepository->getTourComponent()->grantToCustomer($orderCustomer, true);
         }
         foreach ($this->traveller->vouchers as $voucher) {
             $orderCustomer->repository->applyVoucher($voucher);
@@ -217,16 +226,37 @@ class BookingTravellerRepository extends ModelRepository
     public function convertToCustomer(): Customer
     {
         if (isset($this->traveller->customer_id)) return $this->traveller->customer;
+        // Ensure that it's not just an empty string and is actually null
+        if (empty($this->traveller->email_address)) {
+            $this->traveller->email_address = null;
+            $this->traveller->save();
+        }
+        // If the traveller has an email address, and it already exists as a customer
+        // Then check if the first and last name match between the two, and assume they are the same if so
+        if (!empty($this->traveller->email_address)) {
+            $lookup = Customer::where('email_address', '=', $this->traveller->email_address)->first();
+            if ($lookup !== null) {
+                if (strtolower($this->traveller->first_name) === strtolower($lookup)
+                    && strtolower($this->traveller->last_name) === strtolower($lookup->last_name)) {
+                    $this->traveller->customer_id === $lookup->id;
+                    $this->traveller->save();
+                    return $lookup;
+                } else {
+                    $this->traveller->email_address === null;
+                    $this->traveller->save();
+                }
+            }
+        }
         if (!isset($this->traveller->home_address_id)) {
             $this->traveller->home_address_id = Address::create([
                 'name' => "{$this->traveller->first_name} {$this->traveller->first_name} - Home Address",
-                'address_parent_id' => AddressParent::getParentId('customer'),
+                'parent' => AddressParent::CUSTOMER,
             ])->id;
         }
         if (!isset($this->traveller->billing_address_id)) {
             $this->traveller->billing_address_id = Address::create([
                 'name' => "{$this->traveller->first_name} {$this->traveller->first_name} - Billing Address",
-                'address_parent_id' => AddressParent::getParentId('customer'),
+                'parent' => AddressParent::CUSTOMER,
             ])->id;
         }
         $this->traveller->save();
@@ -257,7 +287,7 @@ class BookingTravellerRepository extends ModelRepository
         return $traveller;
     }
 
-    public function formSave(int $roomType, int $group)
+    public function formSave(int|null $roomType, int|null $group)
     {
         $this->traveller->room_type_id = $roomType;
         $this->traveller->group_id = $group;
@@ -279,6 +309,9 @@ class BookingTravellerRepository extends ModelRepository
 
     public static function make(array $details): BookingTraveller
     {
+        if (array_key_exists('email_address', $details)) {
+            $details['email_address'] = trim($details['email_address']);
+        }
         $customer = array_key_exists('email_address', $details) && !empty($details['email_address'])
             ? Customer::whereEmailAddress($details['email_address'])->first() : null;
         if (isset($customer)) {
@@ -287,7 +320,7 @@ class BookingTravellerRepository extends ModelRepository
         } else {
             $homeAddress = Address::create([
                 'name' => ($details['first_name'] ?? '') . ($details['last_name'] ?? '') . ' - Home Address',
-                'address_parent_id' => AddressParent::getParentId('customer'),
+                'parent' => AddressParent::CUSTOMER,
                 'address_line_1' => $details['home_address_line_1'] ?? null,
                 'address_line_2' => $details['home_address_line_2'] ?? null,
                 'town' => $details['home_town'] ?? null,
@@ -297,7 +330,7 @@ class BookingTravellerRepository extends ModelRepository
             ]);
             $billingAddress = Address::create([
                 'name' => ($details['first_name'] ?? '') . ($details['last_name'] ?? '') . ' - Billing Address',
-                'address_parent_id' => AddressParent::getParentId('customer'),
+                'parent' => AddressParent::CUSTOMER,
                 'address_line_1' => $details['billing_address_line_1'] ?? null,
                 'address_line_2' => $details['billing_address_line_2'] ?? null,
                 'town' => $details['billing_town'] ?? null,
@@ -321,7 +354,7 @@ class BookingTravellerRepository extends ModelRepository
             'group_id' => $details['group_id'] ?? null,
         ]);
     }
-    
+
     public function cloneComponents(): BookingComponentStorage
     {
         $storage = new BookingComponentStorage();
@@ -484,5 +517,10 @@ class BookingTravellerRepository extends ModelRepository
             }
         }
         return $data;
+    }
+
+    public static function find($id): BookingTraveller|null
+    {
+        return BookingTraveller::find($id);
     }
 }

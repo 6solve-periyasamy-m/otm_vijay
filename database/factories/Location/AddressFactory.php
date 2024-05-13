@@ -2,6 +2,7 @@
 
 namespace Database\Factories\Location;
 
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,7 +24,7 @@ class AddressFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
-            'address_parent_id' => 1,
+            'parent' => AddressParent::CUSTOMER,
             'address_line_1' => $this->faker->streetAddress,
             'town' => $this->faker->city,
             'region' => $this->faker->state,

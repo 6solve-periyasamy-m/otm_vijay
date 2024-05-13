@@ -1,7 +1,16 @@
 @php /** @var \App\Models\Quote\Quote $quote */ @endphp
-<x-admin.section.header.detail width="6">
+<x-admin.section.header.detail width="3">
     <x-slot:title>{{ __('quotes.view.reference') }}</x-slot:title>
     {{ $quote->ref }}
+</x-admin.section.header.detail>
+
+<x-admin.section.header.detail width="3">
+    <x-slot:title>{{ __('quotes.view.consultant') }}</x-slot:title>
+    @if($quote->consultant !== null)
+        {{ $quote->consultant->name }} ({{ $quote->consultant->email }})
+    @else
+        No Consultant
+    @endif
 </x-admin.section.header.detail>
 
 <x-admin.section.header.detail width="6" raw>
@@ -36,16 +45,21 @@
 
 <x-admin.section.header.detail width="6">
     <x-slot:title>{{ __('quotes.view.lead.contact') }}</x-slot:title>
-    <a href="mailto:{{ $quote->leadTraveller?->email ?? 'Lead Traveller Not Set' }}">{{ $quote->leadTraveller?->email }}</a>
-    (<a href="tel:{{ $quote->leadTraveller?->phone ?? 'Lead Traveller Not Set' }}">{{ $quote->leadTraveller?->phone ?? 'Lead Traveller Not Set' }}</a>)
+    <a href="mailto:{{ $quote->leadTraveller?->email }}">{{ $quote->leadTraveller?->email ?? 'No Email Found' }}</a>
+    (<a href="tel:{{ $quote->leadTraveller?->phone ?? 'No Telephone Found' }}">{{ $quote->leadTraveller?->phone ?? 'No Telephone Found' }}</a>)
 </x-admin.section.header.detail>
 
 <x-admin.section.header.detail width="6">
+    <x-slot:title>{{ __('quotes.view.notes.internal') }}</x-slot:title>
+    {{ $quote->internal_notes }}
+</x-admin.section.header.detail>
+
+<x-admin.section.header.detail width="6">
+    <x-slot:title>{{ __('quotes.view.notes.external') }}</x-slot:title>
+    {{ $quote->external_notes }}
+</x-admin.section.header.detail>
+
+<x-admin.section.header.detail width="12">
     <x-slot:title>{{ __('quotes.view.description') }}</x-slot:title>
     {{ $quote->description }}
-</x-admin.section.header.detail>
-
-<x-admin.section.header.detail width="6">
-    <x-slot:title>{{ __('quotes.view.notes') }}</x-slot:title>
-    {{ $quote->internal_notes }}
 </x-admin.section.header.detail>

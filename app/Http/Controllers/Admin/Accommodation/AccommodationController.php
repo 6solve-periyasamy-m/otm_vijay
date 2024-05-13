@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin\Accommodation;
 
 use App\Http\Controllers\Controller;
 use App\Models\Accommodation\Accommodation;
+use App\Models\Helper\AddressParent;
 use App\Models\Location\Address;
-use App\Models\Location\AddressParent;
 use App\Repository\Model\Location\AddressRepository;
 use App\Repository\Reporting\Manifest\RoomingReportRepository;
 use Illuminate\Http\Request;
@@ -16,12 +16,12 @@ class AccommodationController extends Controller
 
     public function index()
     {
-        return view('pages.models.accommodations.table', ['accommodations' => Accommodation::all(),]);
+        return view('pages.admin.accommodation.table', ['accommodations' => Accommodation::all(),]);
     }
 
     public function create()
     {
-        return view('pages.models.accommodations.create');
+        return view('pages.admin.accommodation.form');
     }
 
     public function store(Request $request)
@@ -33,12 +33,14 @@ class AccommodationController extends Controller
             'audit_date' => $request->input('audit_date'),
             'currency_id' => $request->input('currency_id'),
             'internal_notes' => $request->input('notes'),
+            'check_in' => $request->input('check_in'),
+            'check_out' => $request->input('check_out'),
         ]);
         if ($request->input('use_existing') == 'on') {
-            $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('accommodation'));
+            $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::ACCOMMODATION);
         } else {
             $request->validate(Address::getValidationRules());
-            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::getParentId('accommodation')));
+            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::ACCOMMODATION));
             $address->repository->save();
         }
         if ($request->has('image') && $request->file('image') != null) {
@@ -52,7 +54,7 @@ class AccommodationController extends Controller
 
     public function view(Accommodation $accommodation)
     {
-        return view('pages.components.accommodation', ['accommodation' => $accommodation,]);
+        return view('pages.admin.accommodation.view', ['accommodation' => $accommodation,]);
     }
 
     public function rooming(Request $request, Accommodation $accommodation)
@@ -69,7 +71,7 @@ class AccommodationController extends Controller
 
     public function edit(Accommodation $accommodation)
     {
-        return view('pages.models.accommodations.update', ['accommodation' => $accommodation,]);
+        return view('pages.admin.accommodation.form', ['accommodation' => $accommodation,]);
     }
 
     public function update(Request $request, Accommodation $accommodation)
@@ -81,12 +83,14 @@ class AccommodationController extends Controller
             'audit_date' => $request->input('audit_date'),
             'currency_id' => $request->input('currency_id'),
             'internal_notes' => $request->input('notes'),
+            'check_in' => $request->input('check_in'),
+            'check_out' => $request->input('check_out'),
         ]);
         if ($request->input('use_existing') == 'on') {
-            Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('accommodation'), $accommodation->address);
+            Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::ACCOMMODATION, $accommodation->address);
         } else {
             $request->validate(Address::getValidationRules());
-            $accommodation->address->repository->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::getParentId('accommodation')));
+            $accommodation->address->repository->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('address_name'), AddressParent::ACCOMMODATION));
         }
         if ($request->has('image') && $request->file('image') != null) {
             if (isset($accommodation->image_url)) {

@@ -7,7 +7,9 @@ use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Component\OrderTransport;
+use App\Models\Order\Invoice\InvoiceBillable;
 use App\Repository\Interfaces\HasComponentType;
+use App\Repository\Storage\Customer\Component\OrderComponent;
 
 abstract class OrderComponentRepository extends ModelRepository implements HasComponentType
 {
@@ -15,6 +17,12 @@ abstract class OrderComponentRepository extends ModelRepository implements HasCo
     public abstract function getCost(): float;
     public abstract function getTourComponent(): ?InventoryTourRepository;
     public abstract function getItineraryItems(): array;
+    public abstract function getInvoiceBillable(): InvoiceBillable;
+
+    public function getAbstractOrderComponent(): OrderComponent
+    {
+        return new OrderComponent($this->getTourComponent());
+    }
 
     public static function getComponent(string $type, int $id): ?OrderComponentRepository
     {
