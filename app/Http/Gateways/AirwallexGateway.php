@@ -58,7 +58,7 @@ class AirwallexGateway extends Gateway
             'reusable' => false,
             'title' => $intention->getBrand()->name . ' Payment',
         ];
-        $data = $this->sendRequest("payment_links/create", $body);
+        $data = $this->sendRequest("pa/payment_links/create", $body);
         return $data['url'];
     }
 
@@ -75,6 +75,7 @@ class AirwallexGateway extends Gateway
         if ($request->successful()) {
             return json_decode($request->body(), true);
         } else {
+            Log::error("Failed to use Airwallex Gateway: " . $request->body());
             throw new UnauthorizedGatewayException('Could not authenticate with Airwallex Gateway');
         }
     }
@@ -93,7 +94,7 @@ class AirwallexGateway extends Gateway
             Log::error($e);
         }
         if ($request->json('name') === 'payment_link.paid') {
-            $this->process($request->json('data.metadata.intention_id'), $request->json('data.amount'));
+            $this->process($request->json('data.object.metadata.intention_id'), $request->json('data.object.amount'), $request->json('data.object.created_at'));
         }
     }
 
@@ -117,6 +118,7 @@ class AirwallexGateway extends Gateway
             'x-api-key' => config('app.gateways.airwallex.secret'),
         ])->post("{$this->url}/authentication/login",);
         if ($response->status() !== 201) {
+            Log::error("Failed to use Airwallex Gateway: " . $response->body());
             throw new UnauthorizedGatewayException("Invalid Airwallex Information Provided");
         }
         $details = ['token' => $response->json('token'), 'expiry' => Carbon::parse($response->json('expires_at'))->unix()];
