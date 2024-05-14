@@ -267,7 +267,12 @@ return [
         'opayo' => [
             'vendor' => env('OPAYO_VENDOR'),
             'live' => env('OPAYO_LIVE', false),
-        ]
+        ],
+        'airwallex' => [
+            'client' => env('AIRWALLEX_CLIENT'),
+            'secret' => env('AIRWALLEX_SECRET'),
+            'webhook' => env('AIRWALLEX_WEBHOOK'),
+        ],
     ],
 
     'user-limit' => env('USER_LIMIT', 0),
