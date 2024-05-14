@@ -39,13 +39,6 @@ class UserSeeder extends Seeder
            'level' => 0
         ]);
 
-        $charlotte = User::create([
-            'name' => 'Charlotte Redding',
-            'email' => 'clr@octopustravelmatrix.com',
-            'email_verified_at' => now(),
-            'password' => '$2a$10$1TEFiRVsIG3R9Aa9JiJ1cuDSVqLffb9J11HSmHO5oIDliHaunqd8C',
-        ]);
-
         $jon = User::create([
             'name' => 'Jon Redding',
             'email' => 'jsr@octopustravelmatrix.com',
@@ -53,32 +46,25 @@ class UserSeeder extends Seeder
             'password' => '$2y$10$9sAbr6xuyq.blFnbTk/iBeA1UURkdLbLy3las/sf18RUGRKgG8XcO',
         ]);
 
-        $charlotte->assign($otmStaff);
+        $celeste = User::create([
+            'name' => 'Celeste Gateley',
+            'email' => 'celeste@octopustravelmatrix.com',
+            'email_verified_at' => now(),
+            'password' => '$2a$10$9MlxA3x/35CcJgQvkEXMqeSLs/pzDup2F1LYwwyLoexJisg1rr.WG',
+        ]);
+
         $jon->assign($otmStaff);
+        $celeste->assign($otmStaff);
 
         if (config('app.debug')) {
-            $celeste = User::create([
-                'name' => 'Celeste Gateley',
-                'email' => 'celeste@octopustravelmatrix.com',
+            $nisha = User::create([
+                'name' => 'Nisha Bajaj',
+                'email' => 'nisha.bajaj@kpt.com.au',
                 'email_verified_at' => now(),
-                'password' => '$2a$10$aqDFZNjT0To9Vsrs.edpK.i6K4JVrrjRGfKjj7TQMrDyCoEf5FSRO',
-            ]);
-            $nicholas = User::create([
-                'name' => 'Nicholas Alexander',
-                'email' => 'work@sfsw.net',
-                'email_verified_at' => now(),
-                'password' => '$2y$10$NCq3PTzn.yxzLduk/J2GMevVw3qBj/K685xbtyQq7y.YTF5uvI3lO',
-            ]);
-            $steveEatherington = User::create([
-                'name' => 'Steve Eatherington',
-                'email' => 'sae@octopustravelmatrix.com',
-                'email_verified_at' => now(),
-                'password' => '$2a$12$t8H9Tx2lPdlQuJVbsFGEmelKuma6KAk4SfMJSo0S3L1HWZYKiENsS',
+                'password' => '$2y$10$BjbO0lpgLYrY3LNWCnrADOo4AXgOPjTXV1sW9F/2KgABZnRCBbAXO',
             ]);
 
-            $celeste->assign($otmStaff);
-            $nicholas->assign($otmStaff);
-            $steveEatherington->assign($otmStaff);
+            $nisha->assign($otmStaff);
         }
     }
 }
