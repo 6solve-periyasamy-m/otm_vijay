@@ -250,6 +250,7 @@ return [
     'currency' => env('CASHIER_CURRENCY', 'gbp'),
 
     'gateways' => [
+        'demo' => env('DEMO_GATEWAY', false),
         'stripe' => [
             'publishable' => env('STRIPE_KEY'),
             'secret' => env('STRIPE_SECRET'),
