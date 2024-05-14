@@ -17,12 +17,16 @@ class AirwallexGateway extends Gateway
 {
     private static string $GATEWAY = 'Airwallex';
     private string $token;
-    private Carbon $expiry;
+    private int $expiry;
     private string $url;
 
     public function __construct()
     {
-        $this->url = "https://api.airwallex.com/api/v1/";
+        if (config('app.gateways.airwallex.live', false)) {
+            $this->url = "https://api.airwallex.com/api/v1/";
+        } else {
+            $this->url = "https://api-demo.airwallex.com/api/v1/";
+        }
         $this->renew();
     }
 

@@ -270,6 +270,7 @@ return [
             'live' => env('OPAYO_LIVE', false),
         ],
         'airwallex' => [
+            'live' => env('AIRWALLEX_LIVE', false),
             'client' => env('AIRWALLEX_CLIENT'),
             'secret' => env('AIRWALLEX_SECRET'),
             'webhook' => env('AIRWALLEX_WEBHOOK'),
