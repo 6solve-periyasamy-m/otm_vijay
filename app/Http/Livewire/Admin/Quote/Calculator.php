@@ -36,7 +36,7 @@ class Calculator extends Component
         $costPerPerson = sigfig($this->costToCompany / ($this->paying + $this->travelling + 1));
         $this->total = $this->quote->repository->getTotalCost($this->paying + ($this->quote->leadTraveller->paying ? 1 : 0));
         $this->profit = sigfig($this->total - $this->costToCompany);
-        $this->margin = sigfig(($this->total / $this->costToCompany) * 100);
+        $this->margin = $this->costToCompany == 0 ? 100 : sigfig(($this->total / $this->costToCompany) * 100);
         $this->markup = sigfig($this->markup ?? $this->margin - 100);
         $this->marked_up_price = sigfig($costPerPerson + ($costPerPerson * ($this->markup / 100)));
     }

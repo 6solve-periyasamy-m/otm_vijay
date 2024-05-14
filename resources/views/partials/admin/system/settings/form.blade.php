@@ -50,7 +50,7 @@
                         'field' => 'invoice_format',
                         'values' => [
                             '1' => 'System Default',
-                            '2' => 'KPT Style',
+                            //'2' => 'Alternative Style (Under Development)',
                         ],
                         'selected' => setting('invoice.style', 1),
                         'width' => 4,
