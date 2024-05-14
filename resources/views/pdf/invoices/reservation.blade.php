@@ -238,14 +238,23 @@ if (!empty($order->tour->event->image_url)){
                                             {{ $order->customer_count }} Adult(s)
                                         </td>
                                     </tr>
-                                    @php $counter = 0; $totalRecords = count($order->orderCustomers); @endphp
+                                    @php 
+                                        $counter = 0; 
+                                        $totalRecords = count($order->orderCustomers); 
+                                        $otherGuestsShown = false; // Introduce a flag to track if "OTHER GUESTS" has been shown
+                                    @endphp
+
                                     @foreach($order->orderCustomers as $ordersCustomer)
                                         @if($counter < 5)
                                             <tr>
-                                                <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                                    {{ ($order->lead_booker_id == $ordersCustomer->id) ? 'LEAD GUEST:' : ' OTHER GUESTS:'}}
+                                                <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
+                                                    {{ ($order->lead_booker_id == $ordersCustomer->id) ? 'LEAD GUEST:' : ($otherGuestsShown ? '' : 'OTHER GUESTS:') }}
+                                                    {{-- Check if "OTHER GUESTS" has been shown --}}
+                                                    @if(!$otherGuestsShown && $order->lead_booker_id != $ordersCustomer->id)
+                                                        @php $otherGuestsShown = true; @endphp
+                                                    @endif
                                                 </td>
-                                                <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
+                                                <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
                                                     {{$ordersCustomer->customer->title}} {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
                                                 </td>
                                             </tr>
@@ -257,12 +266,14 @@ if (!empty($order->tour->event->image_url)){
 
                                     @if($totalRecords > 5)
                                         <tr>
-                                            <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
+                                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
+                                                &nbsp;
+                                            </td>
+                                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
                                                 TBC
                                             </td>
                                         </tr>
                                     @endif
-
                                     <tr>
                                         <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
                                             BOOKING REFERENCE:
