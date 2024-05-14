@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\TourComponentController;
 use App\Http\Controllers\Api\TransportController;
+use App\Http\Gateways\AirwallexGateway;
 use App\Http\Gateways\FellohGateway;
 use App\Http\Gateways\OpayoGateway;
 use App\View\Components\Livewire\Input\Select\Country;
@@ -40,6 +41,7 @@ Route::prefix('/orders')->group(function () {
 Route::stripeWebhooks('/stripe/webhooks');
 Route::post('/felloh/webhook', [FellohGateway::class, 'webhook'])->name('api.felloh.webhook');
 Route::post('/opayo/webhook', [OpayoGateway::class, 'webhook'])->name('api.opayo.webhook');
+Route::post('/airwallex/webhook', [AirwallexGateway::class, 'webhook'])->name('api.airwallex.webhook');
 
 Route::prefix('/php/booking')->name('api.booking.')->group(function () {
     Route::post('/upgrade/activity/{token}', [CustomerBookingController::class, 'upgradeActivity'])->name('upgrade-activity');
