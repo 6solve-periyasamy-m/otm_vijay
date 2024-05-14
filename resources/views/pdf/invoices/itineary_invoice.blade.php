@@ -479,6 +479,49 @@
                                                         {{$nights}}
                                                     </td>
                                                 </tr>
+                                                <tr>
+                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;"
+                                                        class="oc_f12 oc_lblack">Address:
+                                                    </td>
+                                                    <td align="left" valign="top"
+                                                        style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                        {{$tourComponent->inventory->component->address}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;"
+                                                        class="oc_f12 oc_lblack">Check In Date:
+                                                    </td>
+                                                    <td align="left" valign="top"
+                                                        style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                        {{ date('d M y', strtotime($tourComponent->inventory->check_in)) }}
+                                                    </td>
+                                                </tr>
+                                                <tr >
+                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;"
+                                                        class="oc_f12 oc_lblack">Check Out Date:
+                                                    </td>
+                                                    <td align="left" valign="top"
+                                                        style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                        {{ date('d M y', strtotime($tourComponent->inventory->check_out)) }}
+                                                    </td>
+                                                </tr>
+                                                <tr >
+                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;">&nbsp;
+                                                    </td>
+                                                    <td align="left" valign="top" style="padding: 0px 40px;">
+                                                        &nbsp;
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" width="80" valign="top" style="padding: 0px 40px;"
+                                                        class="oc_f12 oc_lblack">Hotel Description:	
+                                                    </td>
+                                                    <td align="left" valign="top"
+                                                        style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                                        {!! $tourComponent->inventory->component->description !!}    
+                                                    </td>
+                                                </tr>
                                                 @endif
                                                 
                                               
