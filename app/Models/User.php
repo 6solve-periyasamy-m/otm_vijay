@@ -82,7 +82,7 @@ class User extends UserAuthenticatable implements MustVerifyEmail
     protected $guarded = [];
 
     protected $hidden = ['password', 'remember_token', ];
-    protected $casts = ['email_verified_at' => 'datetime', 'password' => 'hashed',];
+    protected $casts = ['email_verified_at' => 'datetime',];
     protected string $guard = 'web';
     private UserRepository $internal_repository;
 
