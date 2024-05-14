@@ -13,18 +13,17 @@ use App\Http\Controllers\Admin\User\UserProfileController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\Voucher\VoucherCodeController;
 
-Route::name('admin.')->group(function () {
-    Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('show-login');
-    Route::post('/login', [AuthenticationController::class, 'login'])->name('login');
-    Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logout');
+Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('show-login');
+Route::post('/login', [AuthenticationController::class, 'login'])->name('login');
+Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logout');
 
-    Route::prefix('password')->name('password.')->group(function () {
-        Route::get('/forgot', [AuthenticationController::class, 'forgot'])->name('forgot');
-        Route::post('/forgot', [AuthenticationController::class, 'sendForgotEmail'])->name('send-reset');
-        Route::get('/reset', [AuthenticationController::class, 'getNewPassword'])->name('get-new');
-        Route::post('/reset', [AuthenticationController::class, 'resetPassword'])->name('reset');
-    });
+Route::prefix('password')->name('password.')->group(function () {
+    Route::get('/forgot', [AuthenticationController::class, 'forgot'])->name('forgot');
+    Route::post('/forgot', [AuthenticationController::class, 'sendForgotEmail'])->name('send-reset');
+    Route::get('/reset', [AuthenticationController::class, 'getNewPassword'])->name('get-new');
+    Route::post('/reset', [AuthenticationController::class, 'resetPassword'])->name('reset');
 });
+
 
 //Auth::routes(['verify' => true, 'register' => false]);
 

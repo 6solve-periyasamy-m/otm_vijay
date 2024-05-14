@@ -25,10 +25,10 @@ class AuthenticationController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', '=', $request->email)->first();
         if ($user !== null && Hash::check($request->password, $user->password)) {
-            if (($user->otp_secret === null || $user->verifyOneTimeCode($request->otp_code))) {
-                Auth::login($user);
+            if (($user->otp_secret === null) || $user->verifyOneTimeCode($request->otp_code)) {
+                Auth::login($user, true);
                 if (!$user->isOtm()) {
                     try {
                         Auth::logoutOtherDevices($request->password);
@@ -81,7 +81,7 @@ class AuthenticationController extends Controller
         if (!$user->repository->resetPassword($request->token, $request->password)) {
             return back()->withErrors(['msg' => 'The provided reset token is invalid']);
         }
-        return redirect()->route('admin.login')->with(['success' => 'Your password has been reset successfully!']);
+        return redirect()->route('login')->with(['success' => 'Your password has been reset successfully!']);
     }
 
     public function logout()

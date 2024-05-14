@@ -27,7 +27,7 @@
             </div>
         @else
             <div class="nav-item">
-                <a class="nav-item nav-link" href="{{ route('admin.login') }}">
+                <a class="nav-item nav-link" href="{{ route('login') }}">
                     <span class='text-light'>Login</span>
                 </a>
             </div>
@@ -38,7 +38,7 @@
 @push('footer-stack')
     <script type="text/javascript">
         function logout() {
-            $.post('{{ route('admin.logout') }}', {'_token': '{{ csrf_token() }}',}).always(function () { window.location = '{{ route('homepage') }}'; });
+            $.post('{{ route('logout') }}', {'_token': '{{ csrf_token() }}',}).always(function () { window.location = '{{ route('homepage') }}'; });
         }
     </script>
 @endpush
