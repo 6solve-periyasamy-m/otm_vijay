@@ -119,22 +119,22 @@ if (!empty($order->tour->event->image_url)){
                                         <td align="left" valign="top">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" class="oc_f12" style="padding: 10px 15px 0px 25px; color: #353535;">
+                                        <td colspan="2" class="oc_f14" style="padding: 10px 15px 0px 25px; color: #353535; font-weight: 700;">
                                             CUSTOMER DETAILS
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; color: #ffffff;" class="oc_f12">
+                                        <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; color: #ffffff; line-height:10px;" class="oc_f14">
                                             NAME: {{ $order->leadBooker->customer_name }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td  colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; color: #ffffff;" class="oc_f12">
+                                        <td  colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; color: #ffffff; line-height:10px;" class="oc_f14">
                                             PHONE: {{ $order->leadBooker->customer->mobile_number }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td  colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; color: #ffffff;" class="oc_f12">
+                                        <td  colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; color: #ffffff; line-height:10px;" class="oc_f14">
                                             EMAIL: 
                                             <a href="mailto:{{ $order->leadBooker->customer->email_address }}">
                                                 {{ $order->leadBooker->customer->email_address }}
@@ -148,17 +148,17 @@ if (!empty($order->tour->event->image_url)){
                                         <td align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" class="oc_f12" style="padding: 10px 15px 0px 25px; color: #353535;">
+                                        <td colspan="2" class="oc_f14" style="padding: 10px 15px 0px 25px; color: #353535; font-weight: 700;">
                                             AGENT DETAILS
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; color: #ffffff;" class="oc_f12">
+                                        <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px; color: #ffffff;" class="oc_f14">
                                             NAME: {{ $invoice->brand->name }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td  colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; color: #ffffff;" class="oc_f12">
+                                        <td  colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px; color: #ffffff;" class="oc_f14">
                                             EMAIL: 
                                             <a href="mailto:{{ $invoice->brand->email ?? setting('company.contact.email', 'Email not set') }}">
                                                 {{ $invoice->brand->email ??  setting('company.contact.email', 'Email not set') }}
@@ -166,7 +166,7 @@ if (!empty($order->tour->event->image_url)){
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td  colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; color: #ffffff;" class="oc_f12">
+                                        <td  colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px; color: #ffffff;" class="oc_f14">
                                             DATE CREATED: {{ \Carbon\Carbon::parse($invoice->brand->created_at)->format('d F Y') }}
                                         </td>
                                     </tr>
@@ -181,7 +181,7 @@ if (!empty($order->tour->event->image_url)){
                             <table align="left" width="100%" border="0" cellspacing="0">
                                 <tr>
                                     <td align="left" valign="top">
-                                        <img src="{{img_to_b64($evenImg)}}" alt="{{ $order->tour->event?->name }}" width="100%" style="display: block;">
+                                        <img src="{{img_to_b64($evenImg)}}" alt="{{ $order->tour->event?->name }}" width="100%" style="display: block; height: 100%; max-height: 350px; object-fit: cover">
                                     </td>
                                 </tr>
                             </table>
@@ -284,7 +284,7 @@ if (!empty($order->tour->event->image_url)){
                 <table align="left" width="100%" cellspacing="0" cellpadding="0">
                     <thead>
                         <tr style=" background-color: #353535; padding: 2px 15px;">
-                            <th align="left" valign="top" style="padding: 10px 15px; color: #ffffff; font-weight: 700;" class="oc_f16">
+                            <th align="left" valign="top" style="padding: 10px 25px; color: #ffffff; font-weight: 700;" class="oc_f16">
                                 TRIP ITINERARY AND INCLUSIONS
                             </th>
                         </tr>
@@ -296,7 +296,7 @@ if (!empty($order->tour->event->image_url)){
             <td align="left" valign="top" style="padding: 10px 0;">
                 <table align="left" width="60%" cellspacing="0" cellpadding="0">
                     <tr>
-                        <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f12 oc_lblack">
+                        <td align="left" width="150" style="padding: 10px 25px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f16 oc_lblack">
                         ARRIVAL TRANSFER
                         </td>
                         <td align="right" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
@@ -314,26 +314,26 @@ if (!empty($order->tour->event->image_url)){
                                     @foreach($tour->flightInventoryTours as $tourComponent)
                                     @if($tourComponent->flight_type != 'Inbound')
                                     <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                                        <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                                             DATE: 
                                         </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                        <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                                             {{ f_datetime($tourComponent->inventory->departs_at) }} to {{ f_datetime($tourComponent->inventory->arrives_at) }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                                        <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                                         DESCRIPTION:
                                         </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                        <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                                             {{ $tourComponent->inventory->flight->departureAirport->name }} to {{ $tourComponent->inventory->flight->arrivalAirport->name }} ({{ $tourComponent->inventory->flight_number }})
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                                        <td align="left" width="100" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                                         QUANTITY:
                                         </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                                        <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                                             {{ $order->customer_count }}
                                         </td>
                                     </tr>
@@ -350,7 +350,7 @@ if (!empty($order->tour->event->image_url)){
             <td align="left" valign="top" style="padding: 10px 0;">
                 <table align="left" width="60%" cellspacing="0" cellpadding="0">
                     <tr>
-                        <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f12 oc_lblack">
+                        <td align="left" width="150" style="padding: 10px 25px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f16 oc_lblack">
                             TRANSFER
                         </td>
                         <td align="right" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
@@ -364,26 +364,26 @@ if (!empty($order->tour->event->image_url)){
                     <tbody>
                         @foreach($tour->transportInventoryTours as $tourComponent)
                         <tr>
-                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                                 DATE:
                             </td>
-                            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                                 {{ f_datetime($tourComponent->inventory->departs_at) }} to {{ f_datetime($tourComponent->inventory->arrives_at) }}
                             </td>
                         </tr>
                         <tr>
-                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                             DESCRIPTION:
                             </td>
-                            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                                 {{ $tourComponent->inventory->component->name }} {{ $tourComponent->inventory->transport_number }} 
                             </td>
                         </tr>
                         <tr>
-                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                             QUANTITY:
                             </td>
-                            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                                 {{ $order->customer_count }}
                             </td>
                         </tr>
@@ -396,7 +396,7 @@ if (!empty($order->tour->event->image_url)){
             <td align="left" valign="top" style="padding: 10px 0;">
                 <table align="left" width="60%" cellspacing="0" cellpadding="0">
                     <tr>
-                        <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f12 oc_lblack">
+                    <td align="left" width="150" style="padding: 10px 25px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f16 oc_lblack">
                             ACCOMMODATION
                         </td>
                         <td align="right" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
@@ -411,48 +411,47 @@ if (!empty($order->tour->event->image_url)){
                     <tbody>
                         @foreach($tour->accommodationInventoryTours as $tourComponent)
                         <tr>
-                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                                 CHECK IN:
                             </td>
-                            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                                 {{ \Carbon\Carbon::parse($tourComponent->inventory->check_in)->format('d F Y | h:i A') }}
                             </td>
                         </tr>
                         <tr>
-                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                                 CHECK OUT:
                             </td>
-                            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                                 {{ \Carbon\Carbon::parse($tourComponent->inventory->check_out)->format('d F Y | h:i A') }}
                             </td>
                         </tr>
                         <tr>
-                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                                 HOTEL NAME:
                             </td>
-                            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                                 {{ $tourComponent->inventory->component->name }}
                             </td>
                         </tr>
                         <tr>
-                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                                 ADDRESS:
                             </td>
-                            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                                 {{ $tourComponent->inventory->component->address }}
                             </td>
                         </tr>
                         <tr>
-                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                            <td align="left" width="100" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                                 ROOM TYPE:
                             </td>
-                            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                                 {{ $tourComponent->inventory->roomType->name }}
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
-                          
                 </table>
             </td>
         </tr>
@@ -460,7 +459,7 @@ if (!empty($order->tour->event->image_url)){
             <td align="left" valign="top" style="padding: 10px 0;">
                 <table align="left" width="60%" cellspacing="0" cellpadding="0">
                     <tr>
-                        <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f12 oc_lblack">
+                    <td align="left" width="150" style="padding: 10px 25px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f16 oc_lblack">
                             EVENT/S
                         </td>
                         <td align="right" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
@@ -473,28 +472,28 @@ if (!empty($order->tour->event->image_url)){
                 <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
                     <tbody>
                         <tr>
-                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                                 DATE:
                             </td>
-                            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                                 @if (!empty($order->tour->event->starts_at))
                                     {{ \Carbon\Carbon::parse($order->tour->event->starts_at)->format('d F Y') }}
                                 @endif
                             </td>
                         </tr>
                         <tr>
-                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                                 EVENT:
                             </td>
-                            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                                 {{ $order->tour->event->name ?? 'Event name not available'}}
                             </td>
                         </tr>
                         <tr>
-                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                                 DESCRIPTION:
                             </td>
-                            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                                 {{ $order->tour->event->description ?? 'Event description not available' }}
                             </td>
                         </tr>
@@ -506,7 +505,7 @@ if (!empty($order->tour->event->image_url)){
             <td align="left" valign="top" style="padding: 10px 0;">
                 <table align="left" width="60%" cellspacing="0" cellpadding="0">
                     <tr>
-                        <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f12 oc_lblack">
+                    <td align="left" width="150" style="padding: 10px 25px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f16 oc_lblack">
                             DEPARTURE TRANSFER
                         </td>
                         <td  align="right" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
@@ -521,26 +520,26 @@ if (!empty($order->tour->event->image_url)){
                         @foreach($tour->flightInventoryTours as $tourComponent)
                         @if($tourComponent->flight_type == 'Inbound')
                         <tr>
-                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                                 DATE: 
                             </td>
-                            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                                 {{ f_datetime($tourComponent->inventory->departs_at) }} to {{ f_datetime($tourComponent->inventory->arrives_at) }}
                             </td>
                         </tr>
                         <tr>
-                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                             DESCRIPTION:
                             </td>
-                            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                                 {{ $tourComponent->inventory->flight->departureAirport->name }} to {{ $tourComponent->inventory->flight->arrivalAirport->name }} ({{ $tourComponent->inventory->flight_number }})
                             </td>
                         </tr>
                         <tr>
-                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                             QUANTITY:
                             </td>
-                            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                                 {{ $order->customer_count }}
                             </td>
                         </tr>
@@ -602,7 +601,7 @@ if (!empty($order->tour->event->image_url)){
                 <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
                     <tbody>
                         <tr>
-                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;;" class="oc_f12 oc_lblack">
+                            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;;" class="oc_f12 oc_lblack">
                                 BOOKING TOTAL
                             </td>
                             <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
@@ -610,7 +609,7 @@ if (!empty($order->tour->event->image_url)){
                             </td>
                         </tr>
                         <tr>
-                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;;" class="oc_f12 oc_lblack">
+                            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;;" class="oc_f12 oc_lblack">
                                 GST (included)
                             </td>
                             <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
@@ -622,7 +621,7 @@ if (!empty($order->tour->event->image_url)){
                             <td align="center" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
                         </tr>
                         <tr>
-                            <td align="left" width="170" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                            <td align="left" width="140" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
                                 FINAL BOOKING AMOUNT    
                             </td>
                             <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
@@ -698,7 +697,7 @@ if (!empty($order->tour->event->image_url)){
             <td align="left" valign="top" style="padding: 10px 0;">
                 <table align="left" width="60%" cellspacing="0" cellpadding="0">
                     <tr>
-                        <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f12 oc_lblack">
+                        <td align="left" width="150" style="padding: 10px 25px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f16 oc_lblack">
                             PAYMENT METHOD
                         </td>
                         <td align="right" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
