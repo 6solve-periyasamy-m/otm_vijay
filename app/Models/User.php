@@ -199,6 +199,30 @@ class User extends UserAuthenticatable implements MustVerifyEmail
         }
     }
 
+    public function isEditable(User|null $user = null): bool
+    {
+        return $this->isActionable($user, 'update');
+    }
+
+    public function isDeletable(User|null $user = null): bool
+    {
+        return $this->isActionable($user, 'delete', false);
+    }
+
+    public function isRecoverable(User|null $user = null): bool
+    {
+        return $this->isActionable($user, 'delete', false) && UserRepository::getRemainingUserCount();
+    }
+
+    private function isActionable(User|null $user, string $action, bool $self = true): bool
+    {
+        if ($user === null) return false;
+        if ($user->id === $this->id) return $self;
+        if ($user->can($action, static::class) &&
+            $user->getHighestRoleLevel() > $this->getHighestRoleLevel()) return true;
+        return false;
+    }
+
     public function isOtm(): bool
     {
         return $this->getHighestRoleLevel() >= 999;

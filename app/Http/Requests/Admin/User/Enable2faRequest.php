@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Admin\User;
 
-use App\Http\Requests\Admin\Auth\OneTimeCodeRequest;
+use App\Http\Requests\Admin\Authentication\OneTimeCodeRequest;
 use Illuminate\Contracts\Validation\ValidationRule;
 
 /**

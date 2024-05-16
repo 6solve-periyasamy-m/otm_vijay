@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\User;
 
-use App\Http\Requests\Admin\Auth\OneTimeCodeRequest;
+use App\Http\Requests\Admin\Authentication\OneTimeCodeRequest;
 use App\Http\Requests\Admin\User\ChangePasswordRequest;
 use App\Http\Requests\Admin\User\Enable2faRequest;
 use App\Http\Requests\Admin\User\UpdateAvatarRequest;

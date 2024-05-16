@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Authentication\ConfirmPasswordRequest;
 use App\Http\Requests\Admin\Authentication\PasswordResetRequest;
 use App\Http\Requests\Admin\Authentication\ReceivedResetRequest;
 use App\Http\Requests\Admin\Authentication\SendResetRequest;
@@ -52,6 +53,21 @@ class AuthenticationController extends Controller
     public function forgot()
     {
         return view('pages.auth.passwords.email');
+    }
+
+    public function viewConfirmDialog()
+    {
+        return view('pages.auth.passwords.confirm');
+    }
+
+    public function confirmPassword(ConfirmPasswordRequest $request)
+    {
+        $user = Auth::user();
+        if (Hash::check($request->password, $user->password) && $user->verifyOneTimeCode($request->otp_code)) {
+            $request->session()->passwordConfirmed();
+            return redirect()->intended();
+        }
+        return back()->withErrors(['msg' => 'Could not authenticate with those credentials.']);
     }
 
     public function sendForgotEmail(SendResetRequest $request)
