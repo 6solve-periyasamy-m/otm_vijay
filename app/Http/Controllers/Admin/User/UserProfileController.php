@@ -7,9 +7,12 @@ use App\Http\Requests\Admin\User\ChangePasswordRequest;
 use App\Http\Requests\Admin\User\Enable2faRequest;
 use App\Http\Requests\Admin\User\UpdateAvatarRequest;
 use App\Http\Requests\Admin\User\UpdateUserRequest;
+use App\Models\Helper\ModelEventType;
 use App\Models\User;
 use App\Repository\Authentication\PermissionsRepository;
+use EventLogger;
 use Exception;
+use Google2FA;
 use Hash;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
@@ -42,6 +45,7 @@ class UserProfileController
             $user->avatar = $request->file('avatar')->storePublicly('uploads/images/users');
             $user->save();
         }
+        EventLogger::simple($user, ModelEventType::UPDATED);
         return redirect()->route('users.view', ['user' => $user]);
     }
 
@@ -62,6 +66,7 @@ class UserProfileController
                 return back()->withErrors(['msg' => $e->getMessage()]);
             }
         }
+        EventLogger::simple($user, ModelEventType::UPDATED);
         return redirect()->route('users.view', ['user' => $user]);
     }
 
@@ -74,6 +79,7 @@ class UserProfileController
         if (Hash::check($request->current_password, $user->password)) {
             $user->update(['password' => Hash::make($request->new_password)]);
             $user->save();
+            EventLogger::simple($user, ModelEventType::PASSWORD_CHANGED);
             return redirect()->route('users.view', ['user' => $user]);
         } else {
             return back()->withErrors(['msg' => 'The current password is incorrect']);
@@ -85,14 +91,15 @@ class UserProfileController
         $user = $user ?? auth()->user();
         if ($user->id !== auth()->user()->id) { abort(403, 'Cannot edit security features of accounts other than your own'); }
         try {
-            $valid = \Google2FA::verify($request->otp_code, $request->otp_secret);
+            $valid = Google2FA::verify($request->otp_code, $request->otp_secret);
         } catch (Exception $e) {
-            \Log::error($e);
+            Log::error($e);
             $valid = false;
         }
         if ($valid) {
             $user->update(['otp_secret' => $request->otp_secret,]);
             $user->save();
+            EventLogger::simple($user, ModelEventType::OTP_ENABLED);
             return redirect()->route('users.view', ['user' => $user]);
         } else {
             return back()->withErrors(['msg' => 'Could not confirm OTP, please try again.']);
@@ -110,6 +117,7 @@ class UserProfileController
         if ($valid) {
             $user->update(['otp_secret' => null,]);
             $user->save();
+            EventLogger::simple($user, ModelEventType::OTP_DISABLED);
             return redirect()->route('users.view', ['user' => $user]);
         } else {
             return back()->withErrors(['msg' => 'Could not confirm OTP, please try again.']);
@@ -121,6 +129,7 @@ class UserProfileController
         if (!is_otm() || $user->isOtm()) abort(403);
         $user->update(['otp_secret' => null]);
         $user->save();
+        EventLogger::simple($user, ModelEventType::OTP_DISABLED);
         return redirect()->route('users.view', ['user' => $user]);
     }
 
