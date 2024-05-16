@@ -52,6 +52,7 @@ class EventLogger
     private function getLocationString(): string|null
     {
         try { $location = Location::get(); } catch (\Exception $exception) { Log::error($exception); return null; }
-        return "{$location->cityName}, {$location->countryName}, {$location->areaCode}";
+        if (is_bool($location)) { return null; }
+        return "{$location->cityName}, {$location->countryName}, {$location->zipCode}";
     }
 }
