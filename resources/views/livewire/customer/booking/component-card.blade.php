@@ -22,10 +22,10 @@
                         <img src="{{ asset($this->component->image) }}" class="booking-image"/>
                     </div>
                     <div class="col-xl-10 col-lg-9 col-md-8 col-6">
-                        {{ $this->component->description }}
+                        {!! $this->component->description !!}
                     </div>
                 @else
-                    {{ $this->component->description }}
+                    {!! $this->component->description !!}
                 @endif
             </div>
         </div>
