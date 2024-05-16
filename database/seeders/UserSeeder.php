@@ -39,32 +39,46 @@ class UserSeeder extends Seeder
            'level' => 0
         ]);
 
-        $jon = User::create([
-            'name' => 'Jon Redding',
-            'email' => 'jsr@octopustravelmatrix.com',
-            'email_verified_at' => now(),
-            'password' => '$2y$10$9sAbr6xuyq.blFnbTk/iBeA1UURkdLbLy3las/sf18RUGRKgG8XcO',
-        ]);
-
-        $celeste = User::create([
-            'name' => 'Celeste Gateley',
-            'email' => 'celeste@octopustravelmatrix.com',
-            'email_verified_at' => now(),
-            'password' => '$2a$10$9MlxA3x/35CcJgQvkEXMqeSLs/pzDup2F1LYwwyLoexJisg1rr.WG',
-        ]);
-
-        $jon->assign($otmStaff);
-        $celeste->assign($otmStaff);
+        foreach ($this->defaultUsers() as $defaultUser) {
+            $defaultUser->save();
+            $defaultUser->assign($otmStaff);
+        }
 
         if (config('app.debug')) {
-            $nisha = User::create([
+            foreach ($this->demoUsers() as $demoUser) {
+                $demoUser->save();
+                $demoUser->assign($otmStaff);
+            }
+        }
+    }
+
+    public function defaultUsers(): array
+    {
+        return [
+            'jsr@octopustravelmatrix.com' => new User([
+                'name' => 'Jon Redding',
+                'email' => 'jsr@octopustravelmatrix.com',
+                'email_verified_at' => now(),
+                'password' => '$2y$10$9sAbr6xuyq.blFnbTk/iBeA1UURkdLbLy3las/sf18RUGRKgG8XcO',
+            ]),
+            'celeste@octopustravelmatrix.com' => new User([
+                'name' => 'Celeste Gateley',
+                'email' => 'celeste@octopustravelmatrix.com',
+                'email_verified_at' => now(),
+                'password' => '$2a$10$9MlxA3x/35CcJgQvkEXMqeSLs/pzDup2F1LYwwyLoexJisg1rr.WG',
+            ])
+        ];
+    }
+
+    public function demoUsers(): array
+    {
+        return [
+            'nisha.bajaj@kpt.com.au' => new User([
                 'name' => 'Nisha Bajaj',
                 'email' => 'nisha.bajaj@kpt.com.au',
                 'email_verified_at' => now(),
                 'password' => '$2y$10$BjbO0lpgLYrY3LNWCnrADOo4AXgOPjTXV1sW9F/2KgABZnRCBbAXO',
-            ]);
-
-            $nisha->assign($otmStaff);
-        }
+            ]),
+        ];
     }
 }

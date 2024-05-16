@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Order\Order;
+use App\Repository\Authentication\UserUpgrader;
 use App\Repository\Model\Order\InvoiceUpgrader;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -38,10 +39,17 @@ Artisan::command('update:all', function () {
     echo PHP_EOL;
     $this->runCommand('update:invoices', [], $this->output);
     echo PHP_EOL;
+    $this->runCommand('update:users', [], $this->output);
+    echo PHP_EOL;
 
 });
 
 Artisan::command('update:invoices', function () {
     $this->info("Updating outdated invoices");
     InvoiceUpgrader::upgradeAll($this->output);
+});
+
+Artisan::command('update:users', function () {
+    $this->info("Updating Default Users");
+    (new UserUpgrader())->run_upgrades();
 });
