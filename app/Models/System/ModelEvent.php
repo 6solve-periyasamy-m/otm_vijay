@@ -3,6 +3,7 @@
 namespace App\Models\System;
 
 use App\Models\Helper\ModelEventType;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -12,8 +13,8 @@ use Illuminate\Support\Carbon;
  * \App\Models\System\ModelEvent
  *
  * @property int $id
- * @property string $actor_type
- * @property int $actor_id
+ * @property string|null $actor_type
+ * @property int|null $actor_id
  * @property string $target_type
  * @property int $target_id
  * @property string $action
@@ -25,6 +26,8 @@ use Illuminate\Support\Carbon;
  * @property string|null $agent
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Model|Eloquent|null $actor
+ * @property-read Model|Eloquent $target
  * @method static Builder|ModelEvent newModelQuery()
  * @method static Builder|ModelEvent newQuery()
  * @method static Builder|ModelEvent query()
@@ -42,7 +45,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|ModelEvent whereTargetType($value)
  * @method static Builder|ModelEvent whereTo($value)
  * @method static Builder|ModelEvent whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class ModelEvent extends Model
 {

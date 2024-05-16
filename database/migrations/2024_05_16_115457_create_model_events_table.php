@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('model_events', function (Blueprint $table) {
             $table->id();
-            $table->morphs('actor');
+            $table->nullableMorphs('actor'); // Could be null for authentication events
             $table->morphs('target');
             $table->string('action');
             $table->dateTime('occurred');
