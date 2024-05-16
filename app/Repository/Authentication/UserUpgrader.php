@@ -12,7 +12,7 @@ class UserUpgrader
         $this->upgrade_1_to_2();
     }
 
-    public function upgrade_1_to_2()
+    public function upgrade_1_to_2(): void
     {
         // Remove Charlotte Redding
         $this->removeUser('clr@octopustravelmatrix.com');
