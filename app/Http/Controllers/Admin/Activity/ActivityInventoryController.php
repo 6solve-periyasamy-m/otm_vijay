@@ -78,6 +78,6 @@ class ActivityInventoryController extends Controller
     {
         $inventory = $activityInventory->replicate();
         $inventory->save();
-        return redirect()->route('activity-inventories.edit', ['activity' => $activity, 'activityInventory' => $inventory,]);
+        return redirect()->route('activity-inventories.edit', ['activity' => $activity, 'inventory' => $inventory,]);
     }
 }
