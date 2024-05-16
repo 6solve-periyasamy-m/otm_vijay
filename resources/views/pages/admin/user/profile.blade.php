@@ -202,4 +202,12 @@ $canForce = is_otm() && !$user->isOtm();
             </div>
         </div>
     </x-admin.section.accordion>
+    <x-admin.section.accordion id="security-audit">
+        <x-slot:title>Security Audit</x-slot:title>
+        <x-admin.section.card>
+            <x-slot:title>Events</x-slot:title>
+            <livewire:admin.user.event-log :user="$user"/>
+        </x-admin.section.card>
+
+    </x-admin.section.accordion>
 @endsection

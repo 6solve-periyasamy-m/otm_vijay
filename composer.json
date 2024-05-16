@@ -18,6 +18,7 @@
         "creativeorange/gravatar": "~1.0",
         "dyrynda/laravel-cascade-soft-deletes": "^4.1",
         "guzzlehttp/guzzle": "^7.0.1",
+        "jenssegers/agent": "^2.6",
         "laravel/cashier": "^13.6",
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",

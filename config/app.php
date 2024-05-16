@@ -164,6 +164,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Creativeorange\Gravatar\GravatarServiceProvider::class,
+        Jenssegers\Agent\AgentServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -235,6 +236,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Gravatar' => Creativeorange\Gravatar\Facades\Gravatar::class,
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
         'StringFormatter' => StringFormatterFacade::class,
         'Settings' => \App\Facades\SettingsFacade::class,

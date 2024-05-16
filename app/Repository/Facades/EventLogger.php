@@ -40,8 +40,8 @@ class EventLogger
         $actor = Auth::user();
 
         return [
-            'actor_id' => $actor->id,
-            'actor_type' => $actor::class,
+            'actor_id' => $actor?->id,
+            'actor_type' => $actor === null ? null : $actor::class,
             'occurred' => now(),
             'ip' => request()->ip(),
             'agent' => request()->userAgent(),
