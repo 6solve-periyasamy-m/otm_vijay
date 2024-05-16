@@ -2,9 +2,9 @@
 
 namespace App\Repository\Facades;
 
-use App\Models\Helper\Model;
 use App\Models\Helper\ModelEventType;
 use App\Models\System\ModelEvent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Location;
 use Log;
@@ -40,6 +40,7 @@ class EventLogger
         $event->update([
             'actor_id' => $actor->id,
             'actor_type' => $actor::class,
+            'occurred' => now(),
             'ip' => request()->ip(),
             'agent' => request()->userAgent(),
             'location' => $location ?? null,
