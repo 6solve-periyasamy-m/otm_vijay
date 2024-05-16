@@ -42,10 +42,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">One Time Code</label>
+                            <label for="email" class="col-md-4 col-form-label text-md-right" title="Required if two-factor authentication is enabled">One Time Code</label>
 
                             <div class="col-md-6">
-                                <input id="otp_code" class="form-control @error('email') is-invalid @enderror" name="otp_code" value="{{ old('otp_code') }}">
+                                <input id="otp_code" class="form-control @error('otp_code') is-invalid @enderror" name="otp_code" value="{{ old('otp_code') }}">
 
                                 @error('email')
                                 <span class="invalid-feedback" role="alert">
