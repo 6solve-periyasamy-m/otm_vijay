@@ -3,9 +3,11 @@
 namespace App\Repository\Authentication;
 
 use App\Mail\PasswordResetMailable;
+use App\Models\Helper\ModelEventType;
 use App\Models\System\ApiToken;
 use App\Models\User;
 use Bouncer;
+use EventLogger;
 use Exception;
 use Hash;
 use Illuminate\Database\QueryException;
@@ -37,6 +39,7 @@ class UserRepository
     public function resetPassword(string $token, string $password): bool
     {
         if (PasswordResetRepository::getResetEmail($token) === $this->user->email) {
+            EventLogger::simple($this->user, ModelEventType::PASSWORD_RESET);
             $this->user->password = Hash::make($password);
             $this->user->save();
             return true;

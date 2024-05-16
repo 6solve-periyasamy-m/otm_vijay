@@ -8,8 +8,10 @@ use App\Http\Requests\Admin\Authentication\PasswordResetRequest;
 use App\Http\Requests\Admin\Authentication\ReceivedResetRequest;
 use App\Http\Requests\Admin\Authentication\SendResetRequest;
 use App\Http\Requests\Admin\LoginRequest;
+use App\Models\Helper\ModelEventType;
 use App\Models\User;
 use Auth;
+use EventLogger;
 use Hash;
 use Illuminate\Auth\AuthenticationException;
 use Log;
@@ -37,16 +39,20 @@ class AuthenticationController extends Controller
                         Log::error($e);
                     }
                 }
+                EventLogger::simple($user, ModelEventType::LOGIN_SUCCESS);
                 $request->session()->regenerate();
                 return redirect()->intended(route('dash'));
             } else {
                 if ($request->otp_code === null) {
+                    EventLogger::simple($user, ModelEventType::LOGIN_FAILED_OTP_MISSING);
                     return back()->withErrors(['msg' => 'One Time Code is required.']);
                 } else {
+                    EventLogger::simple($user, ModelEventType::LOGIN_FAILED_OTP_FAILED);
                     return back()->withErrors(['msg' => 'The one time code you entered is invalid']);
                 }
             }
         }
+        if ($user !== null) { EventLogger::simple($user, ModelEventType::LOGIN_FAILED_PASSWORD); }
         return back()->withErrors('Could not authenticate with those credentials')->withInput($request->only('email', 'remember'));
     }
 
@@ -102,6 +108,7 @@ class AuthenticationController extends Controller
 
     public function logout()
     {
+        EventLogger::simple(Auth::user(), ModelEventType::LOGOUT);
         Auth::logout();
         return redirect()->route('login');
     }
