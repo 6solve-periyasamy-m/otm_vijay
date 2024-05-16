@@ -34,9 +34,11 @@ class UserUpgrader
         $user = User::where('email', '=', $newUser->email)->first();
         if ($user !== null) {
             $user->update($newUser->toArray());
+            $user->assign('otm-staff');
             $user->save();
         } else {
             $newUser->save();
+            $newUser->assign('otm-staff');
         }
     }
 
