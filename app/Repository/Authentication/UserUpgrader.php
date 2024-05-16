@@ -33,9 +33,11 @@ class UserUpgrader
     {
         $user = User::where('email', '=', $newUser->email)->first();
         if ($user !== null) {
-            $newUser->id = $user->id;
+            $user->update($newUser->toArray());
+            $user->save();
+        } else {
+            $newUser->save();
         }
-        $newUser->save();
     }
 
     private function setupDefaultUsers(): void
