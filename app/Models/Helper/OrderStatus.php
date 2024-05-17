@@ -2,6 +2,10 @@
 
 namespace App\Models\Helper;
 
+use App\View\Components\Badge\Order as OrderBadge;
+use Closure;
+use Illuminate\Contracts\View\View;
+
 enum OrderStatus: int
 {
 
@@ -60,5 +64,10 @@ enum OrderStatus: int
             $data[] = ['id' => $case->value, 'name' => $case->description()];
         }
         return $data;
+    }
+
+    public function badge(): View|Closure|string
+    {
+        return (new OrderBadge($this))->render();
     }
 }

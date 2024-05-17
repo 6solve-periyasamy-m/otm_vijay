@@ -330,7 +330,7 @@ class PermissionsRepository
         return null;
     }
 
-    public static function getRoleFromName(string $role): Role
+    public static function getRoleFromName(string $role): Role|null
     {
         return Role::where('name', '=', $role)->first();
     }
