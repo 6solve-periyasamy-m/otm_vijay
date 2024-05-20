@@ -14,6 +14,7 @@
 @section('title', $title)
 
 @section('form-body')
+<div class="form-group col-xl-6">
     @can('create', \App\Models\Activity\ActivityType::class)
         @include('partials.fields.selector.adder',
                     ['name' => 'Activity Type', 'field' => 'activity_type_id', 'value' => $activity?->activity_type_id,
@@ -23,6 +24,10 @@
                 ['name' => 'Activity Type', 'field' => 'activity_type_id', 'value' => $activity?->activity_type_id,
                  'route' => 'activity-types',])
     @endcan
+</div>
+<div class="form-group col-xl-6">
+    @include('partials.fields.dropdown', ['name' => 'Activity Category', 'field' => 'activity_category','selected' => $activity?->activity_category, 'values' => ["0" => "Normal Activity", "1" => "Main Activity"]])
+</div>
     @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $activity?->name,'width' => 10,])
     @include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'width' => 2, 'value' => $activity?->image_url,])
     @include('partials.fields.ckeditor', ['name' => 'Description', 'field' => 'description', 'value' => $activity?->description,])
