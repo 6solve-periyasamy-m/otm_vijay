@@ -28,6 +28,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int $accommodation_id
  * @property int $room_type_id
  * @property int $board_type_id
+ * @property int|null $stock_parent_id
  * @property Carbon|null $check_in
  * @property bool $check_in_time_confirmed
  * @property Carbon|null $check_out
@@ -45,6 +46,8 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Accommodation $accommodation
  * @property-read BoardType $boardType
  * @property-read Accommodation $component
+ * @property-read AccommodationInventory|null $stockParent
+ * @property-read AccommodationInventory[] $stockChildren
  * @property-read string $accommodation_for_tour
  * @property-read string $customer_display Display string to show to customers
  * @property-read int $used_on_tour_count How many tours this inventory is used on
@@ -121,6 +124,16 @@ class AccommodationInventory extends Model
     public function accommodation(): BelongsTo
     {
         return $this->belongsTo(Accommodation::class, 'accommodation_id');
+    }
+
+    public function stockParent(): BelongsTo
+    {
+        return $this->belongsTo(AccommodationInventory::class, 'stock_parent_id');
+    }
+
+    public function stockChildren(): HasMany
+    {
+        return $this->hasMany(AccommodationInventory::class, 'stock_parent_id');
     }
 
     public function component(): BelongsTo

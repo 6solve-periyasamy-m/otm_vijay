@@ -21,6 +21,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $paying
  * @property float|null $single_occupancy_surcharge
  * @property float $deposit
+ * @property string $percentage
  * @property string $internal_notes
  * @property string $external_notes
  * @property float $cost
@@ -46,6 +47,7 @@ class CreateBespokeQuoteRequest extends FormRequest
             'name' => $this->name,
             'description' => $this->description,
             'deposit' => $this->deposit,
+            'is_deposit_percentage' => $this->percentage == 'on',
             'brand_id' => $this->brand_id == 0 ? null : $this->brand_id,
             'tax_bracket_id' => $this->tax_bracket_id
         ];

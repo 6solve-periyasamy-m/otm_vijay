@@ -164,6 +164,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Creativeorange\Gravatar\GravatarServiceProvider::class,
+        Jenssegers\Agent\AgentServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -181,6 +182,7 @@ return [
         App\Providers\SettingsProvider::class,
         App\Providers\GatewayProvider::class,
         App\Providers\IconProvider::class,
+        App\Providers\EventLoggerProvider::class,
 
     ],
 
@@ -234,11 +236,13 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Gravatar' => Creativeorange\Gravatar\Facades\Gravatar::class,
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
         'StringFormatter' => StringFormatterFacade::class,
         'Settings' => \App\Facades\SettingsFacade::class,
         'Gateway' => \App\Facades\GatewayFacade::class,
         'Icon' => \App\Facades\IconFacade::class,
+        'EventLogger' => \App\Facades\EventLoggerFacade::class,
 
     ],
     // this apps settings

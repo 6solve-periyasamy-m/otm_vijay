@@ -21,7 +21,6 @@ use Dompdf\Options;
 use PDF;
 use App\Models\Order\Invoice\Invoice;
 
-
 class OrderController extends Controller
 {
 
@@ -123,6 +122,7 @@ class OrderController extends Controller
     }
 
     public function itinearyInvoice(Order $order,Invoice $invoice)
+
     {
         $invoice = $order->repository->getInvoiceRepository()->invoice;
 
@@ -135,6 +135,8 @@ class OrderController extends Controller
             'paymentInstallments', 'orders', 'orders.leadBooker'
         )->find($order->tour_id);
         $html = view('pdf.invoices.itineary_invoice', compact('tour','order','invoice'))->render();
+        
+        //$html = view('pdf.invoices.reservation', compact('tour','order','invoice'))->render();
 
         // Create options for Dompdf
         $options = new Options();

@@ -30,6 +30,8 @@ abstract class InventoryRepository extends ModelRepository implements HasStockCo
 
     public abstract function getSalesPrice(): ?float;
 
+    public abstract function getPurchasePriceString(): string;
+
     public static function getComponent(string $type, int $id): ?InventoryRepository
     {
         return match ($type) {
@@ -41,4 +43,6 @@ abstract class InventoryRepository extends ModelRepository implements HasStockCo
             default => null,
         };
     }
+
+    public abstract function getLocalPurchasePrice(): ?float;
 }

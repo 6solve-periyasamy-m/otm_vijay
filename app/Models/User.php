@@ -3,18 +3,22 @@
 namespace App\Models;
 
 use App\Models\Order\Order;
+use App\Models\Quote\Quote;
 use App\Models\System\ApiToken;
 use App\Repository\Authentication\UserRepository;
 use Database\Factories\UserFactory;
 use Eloquent;
+use Exception;
+use Google2FA;
 use Gravatar;
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\User as UserAuthenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
@@ -32,8 +36,10 @@ use Silber\Bouncer\Database\Role;
  * @property string $name
  * @property string $email
  * @property string|null $avatar
+ * @property string|null $telephone
  * @property Carbon|null $email_verified_at
  * @property string $password
+ * @property string|null $otp_secret
  * @property string|null $remember_token
  * @property string|null $settings
  * @property Carbon|null $created_at
@@ -45,8 +51,11 @@ use Silber\Bouncer\Database\Role;
  * @property-read Collection|Role[] $roles
  * @property-read int|null $roles_count
  * @property-read Collection|ApiToken[] $tokens
+ * @property-read Collection|Order[] $orders
+ * @property-read Collection|Quote[] $quotes
  * @property-read int|null $tokens_count
  * @property-read string $avatar_url The URL for the avatar
+ * @property-read UserRepository $repository
  * @method static UserFactory factory(...$parameters)
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
@@ -66,41 +75,16 @@ use Silber\Bouncer\Database\Role;
  * @method static Builder|User whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class User extends Authenticatable implements MustVerifyEmail
+class User extends UserAuthenticatable implements MustVerifyEmail
 {
-    use \Illuminate\Auth\Authenticatable, HasFactory, Notifiable, HasRolesAndAbilities, SoftDeletes;
+    use Authenticatable, HasFactory, Notifiable, HasRolesAndAbilities, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = [];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
+    protected $hidden = ['password', 'remember_token', ];
+    protected $casts = ['email_verified_at' => 'datetime',];
     protected string $guard = 'web';
+    private UserRepository $internal_repository;
 
     public static function getCreateValidationRules(): array
     {
@@ -156,24 +140,29 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Order::class, 'consultant_id');
     }
 
+    public function quotes(): HasMany
+    {
+        return $this->hasMany(Quote::class, 'consultant_id');
+    }
+
     public function getCurrentToken(): ApiToken
     {
-        return UserRepository::getLatestToken($this);
+        return $this->repository->getLatestToken();
     }
 
     public function generateToken(int $expiresIn = ApiToken::DEFAULT_EXPIRY): ApiToken
     {
-        return UserRepository::generateUserToken($this, $expiresIn);
+        return $this->repository->generateToken($expiresIn);
     }
 
-    public function invalidateAllTokens()
+    public function invalidateAllTokens(): void
     {
-        UserRepository::invalidateAllUserTokens($this);
+        $this->repository->invalidateAllUserTokens();
     }
 
-    public function purgeTokens(int $limit = ApiToken::DEFAULT_LIMIT)
+    public function purgeTokens(int $limit = ApiToken::DEFAULT_LIMIT): void
     {
-        UserRepository::purgeUserTokens($this, $limit);
+        $this->repository->purgeUserTokens($limit);
     }
 
     public function getHighestRoleLevel(): int
@@ -194,9 +183,60 @@ class User extends Authenticatable implements MustVerifyEmail
         return $highest;
     }
 
+    public function getTwoFactorUrl(string $secret): string
+    {
+        return Google2FA::getQRCodeUrl(config('auth.google-2fa.company'), $this->email, $secret);
+    }
+
+    public function verifyOneTimeCode(string|null $code): bool
+    {
+        if ($this->otp_secret === null) return true;
+        if ( $code === null) return false;
+        try {
+            return Google2FA::verify($code, $this->otp_secret);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function isEditable(User|null $user = null): bool
+    {
+        return $this->isActionable($user, 'update');
+    }
+
+    public function isDeletable(User|null $user = null): bool
+    {
+        return $this->isActionable($user, 'delete', false);
+    }
+
+    public function isRecoverable(User|null $user = null): bool
+    {
+        return $this->isActionable($user, 'delete', false) && UserRepository::getRemainingUserCount();
+    }
+
+    private function isActionable(User|null $user, string $action, bool $self = true): bool
+    {
+        if ($user === null) return false;
+        if ($user->id === $this->id) return $self;
+        if ($user->can($action, static::class) &&
+            $user->getHighestRoleLevel() > $this->getHighestRoleLevel()) return true;
+        return false;
+    }
+
+    public function isOtm(): bool
+    {
+        return $this->getHighestRoleLevel() >= 999;
+    }
+
     public function getAvatarUrlAttribute(): string
     {
         if (isset($this->avatar)) return asset($this->avatar);
         return isset($this->email) ? Gravatar::get($this->email) : ('https://secure.gravatar.com/avatar/?d=mp&s=300');
+    }
+
+    public function getRepositoryAttribute(): UserRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new UserRepository($this);
+        return $this->internal_repository;
     }
 }
