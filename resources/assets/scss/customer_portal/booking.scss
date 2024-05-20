@@ -50,6 +50,7 @@ $border: 1px solid #dee2e6 !default;
 .booking-image {
   width: 10rem;
   height: 10rem;
+  object-fit: contain;
 }
 
 .buy-button {

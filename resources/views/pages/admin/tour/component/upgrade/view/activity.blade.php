@@ -3,7 +3,7 @@
 @section('title', 'View Activity Inventory Upgrades')
 
 @section('content')
-    @include('pages.upgrades.view.header')
+    @include('pages.admin.tour.component.upgrade.view.header')
     {{-- Upgrades Section --}}
     <div class="heading pt-2 pb-md-3 pb-2">
         <h2 class="fw-bold">Included</h2>
