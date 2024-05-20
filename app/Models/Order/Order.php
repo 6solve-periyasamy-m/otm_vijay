@@ -156,10 +156,9 @@ class Order extends Model
     public static function generateBookingReference(Order $order): string
     {
         return setting('booking.prefix')
-            . str_pad($order->tour->id, 4, '0', STR_PAD_LEFT)
-            . str_pad($order->id, 4, '0', STR_PAD_LEFT)
-            . str_pad($order->leadBooker->id, 4, '0', STR_PAD_LEFT)
-            . substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(4 / strlen($x)))), 1, 4);
+            . str_pad(strtoupper(dechex($order->tour->id)), 3, '0', STR_PAD_LEFT)
+            . str_pad(strtoupper(dechex($order->id)), 3, '0', STR_PAD_LEFT)
+            . substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(1 / strlen($x)))), 1, 1);
     }
 
     // Relationships
