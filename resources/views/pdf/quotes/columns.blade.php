@@ -440,6 +440,10 @@ $default_event_img = '/images/sportEvent.png';
         </tr>
         @if(sizeof($quote->accommodation))
             @foreach($quote->repository->getAccommodationForInvoice() as $component)
+                @php
+                    $checIn = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
+                    $checkOut = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
+                @endphp
                 <tr>
                     <td align="left" valign="top" style="">
                         <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
@@ -452,7 +456,7 @@ $default_event_img = '/images/sportEvent.png';
                                                     CHECK IN:
                                                 </td>
                                                 <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                    23 Jan 24 | 3pm
+                                                    {{ $checIn }}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -460,7 +464,7 @@ $default_event_img = '/images/sportEvent.png';
                                                     CHECK OUT:
                                                 </td>
                                                 <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                    30 Jan 24 | 11am
+                                                    {{ $checkOut }}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -468,7 +472,7 @@ $default_event_img = '/images/sportEvent.png';
                                                     HOTEL NAME:
                                                 </td>
                                                 <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                    Park Hyatt Melbourne
+                                                    {{ $component->getHotelName() }}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -476,7 +480,7 @@ $default_event_img = '/images/sportEvent.png';
                                                     ADDRESS:
                                                 </td>
                                                 <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                    1 Parliament Square Off, Parliament Pl, Melbourne VIC 3002
+                                                    {{$component->getHotelAddress()}}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -484,7 +488,7 @@ $default_event_img = '/images/sportEvent.png';
                                                     ROOM TYPE:
                                                 </td>
                                                 <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                    King Room Deluxe
+                                                {{$component->getRoomType()}}
                                                 </td>
                                             </tr>
                                         </tbody>
