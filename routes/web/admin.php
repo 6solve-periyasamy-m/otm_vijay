@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdditionalCostController;
+use App\Http\Controllers\Admin\AuthenticationController;
 use App\Http\Controllers\Admin\OrganizationController;
 use App\Http\Controllers\Admin\Reporting\BespokeReportController;
 use App\Http\Controllers\Admin\System\ImportController;
@@ -8,10 +9,25 @@ use App\Http\Controllers\Admin\System\MailController;
 use App\Http\Controllers\Admin\System\PermissionsController;
 use App\Http\Controllers\Admin\System\SettingsController;
 use App\Http\Controllers\Admin\TravelClassController;
+use App\Http\Controllers\Admin\User\UserProfileController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\Voucher\VoucherCodeController;
 
-Auth::routes(['verify' => true, 'register' => false]);
+Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('show-login');
+Route::post('/login', [AuthenticationController::class, 'login'])->name('login');
+Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logout');
+
+Route::prefix('password')->name('password.')->group(function () {
+    Route::get('/confirm', [AuthenticationController::class, 'viewConfirmDialog'])->name('confirm');
+    Route::post('/confirm', [AuthenticationController::class, 'confirmPassword'])->name('confirm-password');
+    Route::get('/forgot', [AuthenticationController::class, 'forgot'])->name('forgot');
+    Route::post('/forgot', [AuthenticationController::class, 'sendForgotEmail'])->name('send-reset');
+    Route::get('/reset', [AuthenticationController::class, 'getNewPassword'])->name('get-new');
+    Route::post('/reset', [AuthenticationController::class, 'resetPassword'])->name('reset');
+});
+
+
+//Auth::routes(['verify' => true, 'register' => false]);
 
 Route::middleware('auth:web')->group(function () {
 
@@ -106,16 +122,27 @@ Route::middleware('auth:web')->group(function () {
     });
 
     Route::prefix('users')->group(function () {
-        Route::get('/', [UserController::class, 'index'])->name('users.all')->middleware('bouncer:User,read');
         Route::get('/create', [UserController::class, 'create'])->name('users.create')->middleware('bouncer:User,create');
         Route::post('/create', [UserController::class, 'store'])->name('users.store')->middleware('bouncer:User,create');
-        Route::prefix('{user}')->group(function () {
-            Route::get('/', [UserController::class, 'view'])->name('users.view')->middleware('bouncer:User,read');
-            Route::get('/update', [UserController::class, 'edit'])->name('users.edit')->middleware('bouncer:User,update');
-            Route::post('/update', [UserController::class, 'update'])->name('users.update')->middleware('bouncer:User,update');
-            Route::post('/delete', [UserController::class, 'destroy'])->name('users.delete')->middleware('bouncer:User,delete');
-            Route::post('/restore', [UserController::class, 'restore'])->name('users.restore')->middleware('bouncer:User,delete');
-        });
+    });
+
+    Route::prefix('users')->name('users.')->group(function () {
+       Route::get('/', [UserController::class, 'index'])->name('all')->middleware('bouncer:User,read');
+       Route::middleware('password.confirm')->group(function () {
+           Route::get('/{user?}', [UserProfileController::class, 'profile'])->name('profile');
+           Route::post('/avatar/{user?}', [UserProfileController::class, 'avatar'])->name('avatar');
+           Route::post('/update/{user?}', [UserProfileController::class, 'update'])->name('update');
+           Route::post('/password/{user?}', [UserProfileController::class, 'password'])->name('password');
+           Route::prefix('2fa')->name('2fa.')->group(function () {
+               Route::post('/enable/{user?}', [UserProfileController::class, 'enable2fa'])->name('enable');
+               Route::post('/disable/{user?}', [UserProfileController::class, 'disable2fa'])->name('disable');
+               Route::post('/disable/force/{user}', [UserProfileController::class, 'forceDisable2fa'])->name('disable.force');
+           });
+           Route::prefix('{user}')->group(function () {
+               Route::post('/delete', [UserController::class, 'destroy'])->name('delete')->middleware('bouncer:User,delete');
+               Route::post('/restore', [UserController::class, 'restore'])->name('restore')->middleware('bouncer:User,delete');
+           });
+       });
     });
 
     Route::prefix('roles')->group(function () {

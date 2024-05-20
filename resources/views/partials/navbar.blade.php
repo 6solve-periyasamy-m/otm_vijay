@@ -20,8 +20,7 @@
                     <img src="{{ asset(Auth::user()->avatar_url) }}" class="img-thumbnail inline">
                 </a>
                 <div class="dp-content">
-                    <a href="{{ route('users.edit', ['user' => Auth::user(),]) }}">{{ Icon::edit() }}&nbsp;Edit
-                        Account</a>
+                    <a href="{{ route('users.profile') }}">{{ Icon::view() }}&nbsp;View Profile</a>
                     <a href="#" onclick="event.preventDefault();logout();">{{ Icon::logout() }}&nbsp;Logout</a>
                 </div>
             </div>

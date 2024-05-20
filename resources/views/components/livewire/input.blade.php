@@ -1,4 +1,9 @@
-@php if($attributes->has('disabled')) $classes = ['input-disabled']; @endphp
+@php
+    if($attributes->has('disabled') && $attributes->get('disabled', true)){
+        $disabled = true;
+        $classes = ['input-disabled'];
+    }
+@endphp
 <div class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}" style="padding-left: 5px;">
     @if($attributes->get('label') !== null)
     <label>{{ $attributes->get('label', "") ?? $slot }} @if($attributes->has('required')) <x-admin.required /> @endif</label>
@@ -9,7 +14,7 @@
                 <span class="input-group-text">{{ $attributes->get('prepend') }}</span>
             </div>
         @endif
-        <input {{ $attributes->class(['form-control', ...($classes ?? [])])->except(['width', 'label', 'prepend', 'append']) }} />
+        <input {{ ($disabled ?? false) ? 'disabled' : '' }} {{ $attributes->class(['form-control', ...($classes ?? [])])->except(['width', 'label', 'prepend', 'append','disabled']) }} />
         @if($attributes->has('append'))
             <div class="input-group-append">
                 <span class="input-group-text">{{ $attributes->get('append') }}</span>
