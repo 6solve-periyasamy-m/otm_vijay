@@ -14,6 +14,7 @@ use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
 use App\Repository\Traits\Component\IsAccommodation;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Settings;
 
 class AccommodationInventoryRepository extends InventoryRepository implements HasRoomingList
 {
@@ -168,5 +169,15 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
     public static function find($id): AccommodationInventory|null
     {
         return AccommodationInventory::find($id);
+    }
+
+    public function getLocalPurchasePrice(): ?float
+    {
+        return Settings::convertCurrency($this->getPurchasePrice(), $this->inventory->component->currency) ?? $this->getPurchasePrice();
+    }
+
+    public function getPurchasePriceString(): string
+    {
+        return f_currency($this->getPurchasePrice(), $this->inventory->component->currency);
     }
 }

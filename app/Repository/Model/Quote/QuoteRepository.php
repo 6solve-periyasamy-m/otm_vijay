@@ -23,11 +23,14 @@ use App\Models\Quote\QuoteSection;
 use App\Models\Quote\SentQuote;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ComponentPackageRepository;
+use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Interfaces\SerializesToJson;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Model\Tour\TourRepository;
+use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
+use App\Repository\Storage\Quote\CustomerForConversion;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Spatie\Browsershot\Browsershot;
@@ -120,11 +123,13 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function getRemainingInstallment(int $paying = 1)
     {
         $price = $this->getPricePerPerson($paying)?->price_per_person ?? 0;
-        $total = $this->quote->installments()->sum('amount') + $this->quote->deposit;
-        return $price - $total;
+        foreach ($this->quote->installments as $installment) {
+            $price -= $installment->getAmount();
+        }
+        return $price - $this->quote->getDepositAmount();
     }
 
-    public function convertToTour(int $customerCount = 1): Tour
+    public function convertToTour(int $customerCount = 1, bool $components = true): Tour
     {
         $tour = TourRepository::create([
             'is_active' => false,
@@ -136,17 +141,19 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'terms' => $this->quote->terms,
             'final_payment' => $this->quote->final_payment,
             'stock_control_active' => false,
-            'base_price_per_person' => $this->getPricePerPerson($customerCount),
+            'base_price_per_person' => $this->getPricePerPerson($customerCount)->price_per_person,
             'single_occupancy_surcharge' => $this->quote->single_occupancy_surcharge,
         ]);
-        foreach ($this->getComponents() as $repository) {
-            $repository->convertToTourComponent($tour);
+        if ($components) {
+            foreach ($this->getComponents() as $repository) {
+                $repository->convertToTourComponent($tour);
+            }
+            $tour->repository->autoAssignTemplating();
         }
         foreach ($this->quote->installments as $installment) {
             $tour->repository->addInstallment($installment->due_on, $installment->amount, $installment->percentage);
         }
         $this->save();
-        $tour->repository->autoAssignTemplating();
         return $tour;
     }
 
@@ -209,7 +216,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getTotalCost(int $paying): float
     {
-        return $this->getPricePerPerson($paying)->price_per_person * $paying;
+        return $this->getPricePerPerson($paying)?->price_per_person * $paying;
     }
 
     /**
@@ -368,51 +375,51 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         }
     }
     
-    public function getAccommodationCost(): float
+    public function getAccommodationCost(int $travellers = 1): float
     {
         $cost = 0;
-        foreach ($this->getTemplates() as $template) {
-            $cost += $template->purchase_price ?? 0;
+        foreach ($this->quote->accommodation()->with('inventory')->get() as $component) {
+            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
     
-    public function getActivityCost(): float
+    public function getActivityCost(int $travellers = 1): float
     {
         $cost = 0;
         /** @var QuoteActivity $component */
         foreach ($this->quote->activities()->with('inventory')->get() as $component) {
-            $cost += $component->inventory->purchase_price ?? 0;
+            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
     
-    public function getFlightCost(): float
+    public function getFlightCost(int $travellers = 1): float
     {
         $cost = 0;
         /** @var QuoteFlight $component */
         foreach ($this->quote->flights()->with('inventory')->get() as $component) {
-            $cost += $component->inventory->purchase_price ?? 0;
+            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
     
-    public function getTransportCost(): float
+    public function getTransportCost(int $travellers = 1): float
     {
         $cost = 0;
         /** @var QuoteTransport $component */
         foreach ($this->quote->transport()->with('inventory')->get() as $component) {
-            $cost += $component->inventory->purchase_price ?? 0;
+            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
     
-    public function getMerchandiseCost(): float
+    public function getMerchandiseCost(int $travellers = 1): float
     {
         $cost = 0;
         /** @var QuoteMerchandise $component */
         foreach ($this->quote->merchandise()->with('inventory')->get() as $component) {
-            $cost += $component->inventory->purchase_price ?? 0;
+            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
@@ -766,11 +773,51 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getTotalCostToCompany(int $travellers = 1): float
     {
-        $cost = $this->getCustomerCostToCompany() * $travellers;
+        $cost = $this->getAccommodationCost($travellers)
+                + $this->getActivityCost($travellers)
+                + $this->getFlightCost($travellers)
+                + $this->getTransportCost($travellers)
+                + $this->getMerchandiseCost($travellers);
         foreach ($this->quote->costs()->where('per_customer', false)->get() as $additional) {
             $cost += $additional->amount;
         }
         return $cost;
+    }
+
+    /**
+     * @param int $travellers
+     * @return Collection<QuoteActivity>|QuoteActivity[]
+     */
+    public function getActivityBelowQuantity(int $travellers): Collection|array
+    {
+        return $this->quote->activities()->whereNotNull('quantity')->where('quantity', '<', $travellers)->get();
+    }
+
+    /**
+     * @param int $travellers
+     * @return Collection<QuoteFlight>|QuoteFlight[]
+     */
+    public function getFlightBelowQuantity(int $travellers): Collection|array
+    {
+        return $this->quote->flights()->whereNotNull('quantity')->where('quantity', '<', $travellers)->get();
+    }
+
+    /**
+     * @param int $travellers
+     * @return Collection<QuoteTransport>|QuoteTransport[]
+     */
+    public function getTransportBelowQuantity(int $travellers): Collection|array
+    {
+        return $this->quote->transport()->whereNotNull('quantity')->where('quantity', '<', $travellers)->get();
+    }
+
+    /**
+     * @param int $travellers
+     * @return Collection<QuoteMerchandise>|QuoteMerchandise[]
+     */
+    public function getMerchandiseBelowQuantity(int $travellers): Collection|array
+    {
+        return $this->quote->merchandise()->whereNotNull('quantity')->where('quantity', '<', $travellers)->get();
     }
 
     public function forceDelete()
@@ -792,5 +839,87 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public static function find($id): Quote|null
     {
         return Quote::find($id);
+    }
+
+    /**
+     * @param CustomerForConversion $lead
+     * @param CustomerForConversion[] $customers
+     * @return Order
+     */
+    public function convert(CustomerForConversion $lead, array $customers): Order
+    {
+        $travellers = 1 + sizeof($customers);
+        $tour = $this->convertToTour($travellers, false);
+        $order = Order::forceCreateQuietly([
+            'tour_id' => $tour->id,
+            'organization_id' => $lead->getCustomer()->organization_id,
+            'consultant_id' => $this->quote->consultant_id,
+            'tax_bracket_id' => $this->quote->tax_bracket_id,
+            'deposit' => $this->quote->deposit,
+            'commission' => $lead->getCustomer()->organization?->commission,
+            'ordered_on' => now(),
+        ]);
+        $leadTraveller = $order->repository->addCustomer($lead->getConvertedCustomer($this->quote), true, false, true);
+        $lead->orderCustomer = $leadTraveller;
+        $order->updateQuietly(['lead_booker_id' => $leadTraveller->id,]);
+        $order->saveQuietly();
+        $order->updateQuietly(['booking_reference' => Order::generateBookingReference($order)]);
+        $order->saveQuietly();
+        foreach ($customers as $key => $customer) {
+            $traveller = $order->repository->addCustomer($customer->getConvertedCustomer($this->quote), true, false, true);
+            $customer->orderCustomer = $traveller;
+            $customers[$key] = $customer;
+        }
+        foreach ($this->quote->accommodation as $component) {
+            $component->repository->convertToTourComponent($tour);
+        }
+        $tour->repository->autoAssignTemplating();
+        // Activities
+        foreach ($this->quote->activities as $component) {
+            $tourComponent = $component->repository->convertToTourComponent($tour);
+            $this->addComponent($lead, $travellers, 'activity', $component, $tourComponent);
+            foreach ($customers as $customer) {
+                $this->addComponent($customer, $travellers, 'activity', $component, $tourComponent);
+            }
+        }
+        // Flights
+        foreach ($this->quote->flights as $component) {
+            $tourComponent = $component->repository->convertToTourComponent($tour);
+            $this->addComponent($lead, $travellers, 'flight', $component, $tourComponent);
+            foreach ($customers as $customer) {
+                $this->addComponent($customer, $travellers, 'flight', $component, $tourComponent);
+            }
+        }
+        // Transport
+        foreach ($this->quote->transport as $component) {
+            $tourComponent = $component->repository->convertToTourComponent($tour);
+            $this->addComponent($lead, $travellers, 'transport', $component, $tourComponent);
+            foreach ($customers as $customer) {
+                $this->addComponent($customer, $travellers, 'transport', $component, $tourComponent);
+            }
+        }
+        // Merchandise
+        foreach ($this->quote->transport as $component) {
+            $tourComponent = $component->repository->convertToTourComponent($tour);
+            $this->addComponent($lead, $travellers, 'merchandise', $component, $tourComponent);
+            foreach ($customers as $customer) {
+                $this->addComponent($customer, $travellers, 'merchandise', $component, $tourComponent);
+            }
+        }
+        RoomingRepository::assignDefaultRooming($lead->orderCustomer);
+        foreach ($customers as $customer) {
+            RoomingRepository::assignDefaultRooming($customer->orderCustomer);
+        }
+        $order->repository->resetInstallments();
+        return $order;
+    }
+
+    private function addComponent(CustomerForConversion $customer, int $travellers, string $type, $component, InventoryTourRepository $tourComponent): void
+    {
+        if ($component->quantity === null
+            || $component->quantity >= $travellers
+            || $customer->hasComponent($type, $component->id)) {
+            $tourComponent->grantToCustomer($customer->orderCustomer, true);
+        }
     }
 }

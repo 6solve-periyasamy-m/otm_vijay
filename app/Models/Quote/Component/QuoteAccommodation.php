@@ -21,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property int $accommodation_inventory_id
  * @property bool $is_template
  * @property bool $price_shown
+ * @property int|null $quantity
  * @property string $tour_component_type
  * @property float $tour_sales_price
  * @property Carbon|null $deleted_at

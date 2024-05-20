@@ -82,7 +82,7 @@ class InvoiceGenerator
         return InvoiceBrand::make([
             'name' => $brand->name,
             'website' => $brand->url,
-            'email' => $brand->name,
+            'email' => $brand->email,
             'telephone' => $brand->phone,
             'address_line_1' => $brand->address->address_line_1,
             'address_line_2' => $brand->address->address_line_2,

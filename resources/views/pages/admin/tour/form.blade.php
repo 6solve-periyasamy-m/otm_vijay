@@ -7,6 +7,7 @@
     $route = $tour === null ?
         route('tours.store') :
         route('tours.update', ['tour' => $tour,]);
+    $defaultPercentage = $tour !== null ? null : setting('system.installments.deposit', null);
 @endphp
 
 @extends('layout.form', ['action' => $route,])
@@ -60,9 +61,10 @@
     <hr class="splitter"/>
     @include('partials.fields.text', ['name' => 'Base Price Per Person', 'field' => 'base_price_per_person', 'value' => $tour?->base_price_per_person, 'width' => 6,])
     @include('partials.fields.text', ['name' => 'Margin', 'field' => 'margin', 'value' => $tour?->margin, 'width' => 6,])
-    @include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'value' => $tour?->deposit, 'width' => 3,])
+    @include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'value' => $tour?->deposit ?? $defaultPercentage, 'width' => 3,])
+    @include('partials.fields.checkbox', ['name' => 'Is Deposit Percentage', 'field' => 'is_deposit_percentage', 'value' => $tour?->is_deposit_percentage ?? $defaultPercentage !== null, 'width' => 3,])
     @include('partials.fields.text', ['name' => 'Booking Fee', 'field' => 'booking_fee', 'value' => $tour?->booking_fee ?? null, 'width' => 3,])
-    @include('partials.fields.text', ['name' => 'Single Occupancy Surcharge', 'field' => 'single_occupancy_surcharge', 'value' => $tour?->single_occupancy_surcharge, 'width' => 6,])
+    @include('partials.fields.text', ['name' => 'Single Occupancy Surcharge', 'field' => 'single_occupancy_surcharge', 'value' => $tour?->single_occupancy_surcharge, 'width' => 3,])
     <hr class="splitter"/>
     <h6 class="fw-bold">Warning: Updating this does not update existing components</h6>
     @include('partials.fields.checkbox', ['name' => 'Tour Stock Control', 'field' => 'stock_control_active', 'value' => $tour?->stock_control_active, 'width' => 2,])

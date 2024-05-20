@@ -100,7 +100,7 @@
                         ({{$inventory->used_stock}} Sold)
                     </td>
                     <td>{{ $inventory->contracted }}</td>
-                    <td>{{ f_currency($inventory->purchase_price) }}</td>
+                    <td>{{ f_currency($inventory->purchase_price, $flight->currency) }}</td>
                     <td>{{ f_currency($inventory->sales_price) }}</td>
                     <td>{{ $inventory->internal_notes }}</td>
                     <td>{{ $inventory->external_notes }}</td>

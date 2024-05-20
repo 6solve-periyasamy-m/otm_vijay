@@ -46,6 +46,12 @@ class Currency extends Model
     protected $guarded = [];
     protected $casts = ['priority' => 'boolean'];
 
+    public static function code(string|null $code): Currency|null
+    {
+        if ($code === null) return null;
+        return Currency::where('code', '=', $code)->first();
+    }
+
     public function countries(): BelongsToMany
     {
         return $this->belongsToMany(Country::class, 'country_currencies');
