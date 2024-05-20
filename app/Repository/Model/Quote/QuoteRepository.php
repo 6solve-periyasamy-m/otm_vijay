@@ -470,7 +470,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $data = [];
         foreach ($this->getTemplates(false) as $template) {
-            $time = $template->repository->getInventory()->getStartTime()->unix();
+            $time = $template->repository->getInventory()->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -488,7 +488,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $data = [];
         foreach ($this->quote->activities as $template) {
-            $time = $template->repository->getInventory()->getStartTime()->unix();
+            $time = $template->repository->getInventory()->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -506,7 +506,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $data = [];
         foreach ($this->quote->flights as $template) {
-            $time = $template->repository->getInventory()->getStartTime()->unix();
+            $time = $template->repository->getInventory()->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
