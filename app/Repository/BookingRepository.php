@@ -115,7 +115,7 @@ class BookingRepository implements BookingRepositoryInterface
         $order = Order::create([
             'tour_id' => $booking->tour_id,
             'ordered_on' => now(),
-            'deposit' => $tour->deposit,
+            'deposit' => $tour->deposit_amount,
             'invoice_footer' => $tour->invoice_footer
         ]);
         $leadBooker = OrderCustomer::make([

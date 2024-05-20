@@ -1,3 +1,7 @@
+@php
+    $viewable = auth()->user()->can('read', \App\Models\User::class);
+@endphp
+
 @extends('layout.master')
 
 @section('title', 'View Users')
@@ -11,9 +15,9 @@
             </a>
         @else
             <span class="btn btn-dark float-end" href="{{ route('users.create') }}">
-                    {{ Icon::create() }}
-                    <span>User limit reached</span>
-                </span>
+                {{ Icon::create() }}
+                <span>User limit reached</span>
+            </span>
         @endif
     </x-admin.section.card>
     <x-admin.section.card>
@@ -39,66 +43,20 @@
                     <td>{{ $user->roles->implode('title', ', ') }}</td>
                     <td>{{ f_datetime($user->created_at) }}</td>
                     <td>{{ f_bool(!$user->trashed()) }}</td>
-                    @can('update', \App\Models\User::class)
-                        @if(Auth::user()->getHighestRoleLevel() > $user->getHighestRoleLevel() || Auth::user()->id == $user->id)
-                            <td>
-                                @if($user->trashed())
-                                    <span class="btn btn-outline-dark btn-sm mb-1" title="Edit">
-                                        {{ Icon::edit() }}
-                                    </span>
-                                @else
-                                    <a href="{{route('users.edit', ['user' => $user,])}}"
-                                       class="btn btn-outline-success btn-sm mb-1" title="Edit">
-                                        {{ Icon::edit() }}
-                                    </a>
-                                @endif
-                                @can('delete', \App\Models\User::class)
-                                    @if(Auth::user()->id == $user->id)
-                                        <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
-                                            {{ Icon::delete() }}
-                                        </span>
-                                    @else
-                                        @if($user->trashed())
-                                            @if(\App\Repository\Authentication\UserRepository::getRemainingUserCount() <= 0)
-                                                <span class="btn btn-outline-dark btn-sm mb-1" title="Restore">
-                                                    {{ Icon::enable() }}
-                                                </span>
-                                            @else
-                                                <a href="#" class="btn btn-outline-warning btn-sm mb-1" title="Restore"
-                                                   onclick="event.preventDefault();document.getElementById('user-{{ $user->id }}-restore').submit();">
-                                                    {{ Icon::enable() }}
-                                                </a>
-                                                <form id="user-{{ $user->id }}-restore"
-                                                      action="{{ route('users.restore', ['user' => $user->id,]) }}"
-                                                      method="POST"
-                                                      style="display: none;">{{ csrf_field() }}</form>
-                                            @endif
-                                        @else
-                                            <a href="#" class="btn btn-outline-danger btn-sm mb-1" title="Delete"
-                                               onclick="event.preventDefault();document.getElementById('user-{{ $user->id }}-delete').submit();">
-                                                {{ Icon::delete() }}
-                                            </a>
-                                            <form id="user-{{ $user->id }}-delete"
-                                                  action="{{ route('users.delete', ['user' => $user,]) }}"
-                                                  method="POST"
-                                                  style="display: none;">{{ csrf_field() }}</form>
-                                        @endif
-                                    @endif
-                                @endcan
-                            </td>
+                    <td class="actions">
+                        <x-admin.table.button class="btn-outline-blue" href="{{ route('users.profile', ['user' => $user->id,]) }}" active="{{ $viewable ? 1 : 0 }}">
+                            {{ Icon::view() }}
+                        </x-admin.table.button>
+                        @if($user->trashed())
+                            <x-admin.table.button.form class="btn-outline-warning" href="{{ route('users.restore', ['user' => $user->id,]) }}" active="{{ $user->isRecoverable(auth()->user()) ? 1 : 0 }}">
+                                {{ Icon::enable() }}
+                            </x-admin.table.button.form>
                         @else
-                            <td>
-                                    <span class="btn btn-outline-dark btn-sm mb-1" title="Edit">
-                                        {{ Icon::edit() }}
-                                    </span>
-                                @can('delete', \App\Models\User::class)
-                                    <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
-                                            {{ Icon::delete() }}
-                                        </span>
-                                @endcan
-                            </td>
+                            <x-admin.table.button.form class="btn-outline-warning" href="{{ route('users.delete', ['user' => $user->id,]) }}" active="{{ $user->isDeletable(auth()->user()) ? 1 : 0 }}">
+                                {{ Icon::delete() }}
+                            </x-admin.table.button.form>
                         @endif
-                    @endcan
+                    </td>
                 </tr>
             @endforeach
         </table>

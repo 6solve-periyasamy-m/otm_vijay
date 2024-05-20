@@ -25,6 +25,7 @@ Route::prefix('{order}')->group(function () {
     Route::get('/invoice', [OrderController::class, 'latestInvoice'])->name('orders.invoice.latest')->middleware('bouncer:Order\Order,read');
     Route::get('/invoice/itineary', [OrderController::class, 'itinearyInvoice'])->name('orders.itineary.latest')->middleware('bouncer:Order\Order,read');
     Route::get('/invoice/{version}', [OrderController::class, 'invoice'])->name('orders.invoice.view')->middleware('bouncer:Order\Order,read');
+    Route::get('/preview', [OrderController::class, 'reservarionPreview'])->name('orders.reservation.preview')->middleware('bouncer:Order\Order,read');
     Route::get('/atol', [OrderController::class, 'atol'])->name('orders.atol')->middleware('bouncer:Order\Order,read');
     Route::get('/occupancy', [OrderController::class, 'occupancy'])->name('orders.occupancy')->middleware('bouncer:Order\Order,update');
     Route::get('/migrate', [OrderController::class, 'switchTour'])->name('orders.switch')->middleware('bouncer:Order\Order,update');

@@ -79,6 +79,7 @@
                 <th scope="col">Check Out Time</th>
                 <th scope="col">FIT Selectable</th>
                 <th scope="col">Stock</th>
+                <th scope="col">Stock Linking</th>
                 <th scope="col">Contracted Stock</th>
                 <th scope="col">Purchase Price</th>
                 <th scope="col">Sales Price</th>
@@ -110,8 +111,17 @@
                         /{{ $inventory->stock }}<br/>
                         ({{$inventory->used_stock}} Sold)
                     </td>
+                    <td>
+                        @if($inventory->stock_parent_id !== null)
+                            <span title="{{ $inventory->stockParent }}">Has Parent</span>
+                        @else
+                            <span>Uses Own Stock</span>
+                        @endif
+                        <br/>
+                        <span>{{ $inventory->stockChildren()->count() === 1 ? '1 Child' : $inventory->stockChildren()->count() . ' Children' }}</span>
+                    </td>
                     <td>{{ $inventory->contracted }}</td>
-                    <td>{{ f_currency($inventory->purchase_price) }}</td>
+                    <td>{{ f_currency($inventory->purchase_price, $accommodation->currency) }}</td>
                     <td>{{ f_currency($inventory->sales_price) }}</td>
                     <td>{{ $inventory->internal_notes }}</td>
                     <td>{{ $inventory->external_notes }}</td>

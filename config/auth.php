@@ -127,4 +127,8 @@ return [
 
     'password_timeout' => 10800,
 
+    'google-2fa' => [
+        'enabled' => env('OTP_ENABLED', false),
+        'company' => env('OTP_COMPANY', 'OctopusTravelMatrix'),
+    ]
 ];

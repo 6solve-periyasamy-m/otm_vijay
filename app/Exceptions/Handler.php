@@ -43,6 +43,8 @@ class Handler extends ExceptionHandler
                 ? response()->json(['message' => $exception->getMessage()], 401)
                 : redirect()->guest(route('customer.login'));
         }
-        return parent::unauthenticated($request, $exception);
+        return $this->shouldReturnJson($request, $exception)
+            ? response()->json(['message' => $exception->getMessage()], 401)
+            : redirect()->guest($exception->redirectTo() ?? route('login'));
     }
 }

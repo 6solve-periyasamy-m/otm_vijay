@@ -42,7 +42,7 @@
                     <td data-sort="{{$tour->date_from->unix()}}">{{ f_date($tour->date_from) }}</td>
                     <td data-sort="{{$tour->date_to->unix()}}">{{ f_date($tour->date_to) }}</td>
                     <td>{{ f_currency($tour->base_price_per_person) }}</td>
-                    <td>{{ f_currency($tour->deposit) }}</td>
+                    <td>{{ f_currency($tour->deposit_amount) }} ({{$tour->deposit_percentage}}%)</td>
                     <td>
                         @if($tour->stock_control_active)
                             {{$tour->stock - $tour->getUsedStock()}}/{{ $tour->stock }}<br/>
@@ -67,7 +67,7 @@
                             {{ Icon::edit() }}
                         </a>
                         @if(!$tour->trashed())
-                            <a href="#" title="Delete" onclick="event.preventDefault();document.getElementById('tour-{{ $tour->id }}-delete').submit();" class="btn btn-outline-danger btn-sm mb-1">
+                            <a href="#" title="Delete" onclick="if(confirm('Are you sure you want to delete the Tour PERMANENTLY?')) { event.preventDefault();document.getElementById('tour-{{ $tour->id }}-delete').submit(); } else { return false; }" class="btn btn-outline-danger btn-sm mb-1">
                                 {{ Icon::delete() }}
                             </a>
                             <form id="tour-{{ $tour->id }}-delete" action="{{ route('tours.delete', ['tour' => $tour,]) }}" method="POST"

@@ -26,7 +26,7 @@
     @endcan
 </div>
 <div class="form-group col-xl-6">
-    @include('partials.fields.raw.dropdown', ['name' => 'Activity Category', 'field' => 'activity_category','selected' => $activity?->activity_category, 'values' => ["0" => "Normal Activity", "1" => "Main Activity"]])
+    @include('partials.fields.dropdown', ['name' => 'Activity Category', 'field' => 'activity_category','selected' => $activity?->activity_category, 'values' => ["0" => "Normal Activity", "1" => "Main Activity"]])
 </div>
     @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $activity?->name,'width' => 10,])
     @include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'width' => 2, 'value' => $activity?->image_url,])

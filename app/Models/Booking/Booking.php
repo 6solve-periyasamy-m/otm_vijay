@@ -151,7 +151,7 @@ class Booking extends Model
 
     public function getDepositAttribute(): float
     {
-        return $this->tour->deposit;
+        return $this->tour->deposit_amount;
     }
 
     public function getDueTodayAttribute(): float
