@@ -8,8 +8,15 @@ $travelling = $sent->free;
 $paying = $sent->paid;
 $brand = $sent->quote->brand;
 
-$default_event_img = '/images/sportEvent.png';
 @endphp
+
+@php
+if (!empty($quote->event->image_url)){
+    $evenImg = $quote->event->image_url;
+} else{
+    $evenImg = 'images/default_image.png';
+}
+@endphpa
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -176,7 +183,7 @@ $default_event_img = '/images/sportEvent.png';
                             <table align="left" width="100%" border="0" cellspacing="0">
                                 <tr>
                                     <td align="left" valign="top">
-                                        
+                                        <img src="{{img_to_b64($evenImg)}}" alt="{{ $quote->event->name }}" width="100%" style="display: block; height: 100%; max-height: 350px; object-fit: cover">
                                     </td>
                                 </tr>
                             </table>
@@ -196,7 +203,7 @@ $default_event_img = '/images/sportEvent.png';
                                         <td align="left" valign="top">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td width="160" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
+                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
                                             QUOTE NAME:
                                         </td>
                                         <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
@@ -204,7 +211,7 @@ $default_event_img = '/images/sportEvent.png';
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td width="160" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
+                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
                                             TRAVEL DATES:
                                         </td>
                                         <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
@@ -212,7 +219,7 @@ $default_event_img = '/images/sportEvent.png';
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td width="160" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
+                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
                                             EVENT:
                                         </td>
                                         <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
@@ -233,7 +240,7 @@ $default_event_img = '/images/sportEvent.png';
                                         <td align="left" valign="top">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td width="160" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
+                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
                                             TOTAL NUMBER OF PERSONS:
                                         </td>
                                         <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
@@ -241,7 +248,7 @@ $default_event_img = '/images/sportEvent.png';
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td width="160" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
+                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
                                             LEAD GUEST:
                                         </td>
                                         <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
@@ -249,7 +256,7 @@ $default_event_img = '/images/sportEvent.png';
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td width="160" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
+                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
                                             OTHER GUESTS:
                                         </td>
                                         <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
@@ -257,7 +264,7 @@ $default_event_img = '/images/sportEvent.png';
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td width="120" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12">&nbsp;</td>
+                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12">&nbsp;</td>
                                         <td align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
                                     </tr>
                                 </tbody>
