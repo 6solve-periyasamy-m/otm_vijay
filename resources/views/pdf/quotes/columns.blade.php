@@ -183,7 +183,7 @@ if (!empty($quote->event->image_url)){
                             <table align="left" width="100%" border="0" cellspacing="0">
                                 <tr>
                                     <td align="left" valign="top">
-                                        <img src="{{img_to_b64($evenImg)}}" alt="{{ $quote->event->name }}" width="100%" style="display: block; height: 100%; max-height: 350px; object-fit: cover">
+                                        <img src="{{img_to_b64($evenImg)}}" alt="{{ isset($quote->event->name) ? $quote->event->name : '' }}" width="100%" style="display: block; height: 100%; max-height: 350px; object-fit: cover">
                                     </td>
                                 </tr>
                             </table>
@@ -223,7 +223,7 @@ if (!empty($quote->event->image_url)){
                                             EVENT:
                                         </td>
                                         <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
-                                            {{ $quote->event->name }}
+                                            {{ isset($quote->event->name) ? $quote->event->name : '' }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -252,17 +252,17 @@ if (!empty($quote->event->image_url)){
                                             LEAD GUEST:
                                         </td>
                                         <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
-                                            {{ $quote->leadTraveller?->name ?? 'Lead Traveller Not Set' }}
+                                        {{ $quote->leadTraveller->customer->first_name }} {{ $quote->leadTraveller->customer->last_name }}
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
                                             OTHER GUESTS:
                                         </td>
                                         <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
                                             Test
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                     <tr>
                                         <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12">&nbsp;</td>
                                         <td align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
@@ -360,6 +360,7 @@ if (!empty($quote->event->image_url)){
             </td>
         </tr>
         @endif
+        @if(sizeof($quote->repository->getTransportForInvoice()))
         <tr>
             <td align="left" valign="top">
                 <table align="left" width="60%" cellspacing="0" cellpadding="0">
@@ -420,6 +421,8 @@ if (!empty($quote->event->image_url)){
                 </table>
             </td>
         </tr>
+        @endif
+        @if(sizeof($quote->accommodation))
         <tr>
             <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
                 &nbsp;
@@ -445,7 +448,7 @@ if (!empty($quote->event->image_url)){
                 </table>
             </td>
         </tr>
-        @if(sizeof($quote->accommodation))
+        
             @foreach($quote->repository->getAccommodationForInvoice() as $component)
                 @php
                     $checIn = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
@@ -513,6 +516,7 @@ if (!empty($quote->event->image_url)){
                 </tr>
             @endforeach
         @endif
+        @if(sizeof($quote->activities))
         <tr>
             <td align="left" valign="top">
                 <table align="left" width="60%" cellspacing="0" cellpadding="0">
@@ -533,7 +537,7 @@ if (!empty($quote->event->image_url)){
                 </table>
             </td>
         </tr>
-        @if(sizeof($quote->activities))
+        
             @foreach($quote->repository->getActivitiesForInvoice() as $component)
                 <tr>
                     <td align="left" valign="top">
