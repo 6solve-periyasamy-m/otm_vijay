@@ -78,13 +78,13 @@ if (!empty($order->tour->event->image_url)){
 <body class="body" style="padding:0; margin:0 auto !important; display:block !important; min-width:100% !important; width:100% !important; background:#ffffff; -webkit-text-size-adjust:none">
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="background-color:#ffffff; padding: 35px 0;" class="full-wrap">
         <tr>
-            <td align="left" valign="top" style="padding-bottom: 10px;">
+            <td align="left" valign="top" style="padding-bottom: 10px;" colspan="2">
                 <table width="100%" border="0" cellspacing="0">
                     <tr>
                         <td align="left" valign="top">
                             <table align="left" width="100%" border="0" cellspacing="0">
                                 <tr>
-                                    <td align="left" valign="top">
+                                    <td align="left" valign="top" style="padding: 0 20px;">
                                         <img src="{{img_to_b64($invoice->brand->logo)}}" alt="{{ $invoice->brand->name }}" width="100%" style="display: block; max-width: 160px">
                                     </td>
                                 </tr>
@@ -104,7 +104,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" valign="top">
+            <td align="left" valign="top" colspan="2">
                 <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
                     <tr>
                         <td width="50%" align="left" valign="top" style="background-color: #E95B15;">
@@ -194,107 +194,98 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" valign="top">
+            <td width="50%" align="left" valign="top" style="background-color: #FBDED0; padding: 20px 0">
                 <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                    <tr>
-                        <td width="50%" align="left" valign="top" style="background-color: #FBDED0; padding: 20px 0">
-                            <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                <tbody>
-                                    
-                                    <tr>
-                                        <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                            BOOKING NAME:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
-                                            {{ $order->tour->event->name ?? 'Event name not available'}} | {{ $order->leadBooker->customer_name }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                            TRAVEL DATES:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
-                                            {{ \Carbon\Carbon::parse($order->tour->date_from)->format('d F Y') }} - {{ \Carbon\Carbon::parse($order->tour->date_to)->format('d F Y') }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                            EVENT:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
-                                            {{ $order->tour->event->name ?? 'Event name not available'}}
-                                        </td>
-                                    </tr>
-                                   
-                                </tbody>
-                            </table>
-                        </td>
-                        <td width="50%" align="right" valign="top" style="background-color: #FBDED0; padding: 20px 0">
-                            <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                <tbody>
-                                   
-                                    <tr>
-                                        <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                            TOTAL NUMBER OF PERSONS:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
-                                            {{ $order->customer_count }} Adult(s)
-                                        </td>
-                                    </tr>
-                                    @php 
-                                        $counter = 0; 
-                                        $totalRecords = count($order->orderCustomers); 
-                                        $otherGuestsShown = false; // Introduce a flag to track if "OTHER GUESTS" has been shown
-                                    @endphp
-
-                                    @foreach($order->orderCustomers as $ordersCustomer)
-                                        @if($counter < 5)
-                                            <tr>
-                                                <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                                    {{ ($order->lead_booker_id == $ordersCustomer->id) ? 'LEAD GUEST:' : ($otherGuestsShown ? '' : 'OTHER GUESTS:') }}
-                                                    {{-- Check if "OTHER GUESTS" has been shown --}}
-                                                    @if(!$otherGuestsShown && $order->lead_booker_id != $ordersCustomer->id)
-                                                        @php $otherGuestsShown = true; @endphp
-                                                    @endif
-                                                </td>
-                                                <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                                    {{$ordersCustomer->customer->title}} {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
-                                                </td>
-                                            </tr>
-                                            @php $counter++; @endphp
-                                        @else
-                                            @break
-                                        @endif
-                                    @endforeach
-
-                                    @if($totalRecords > 5)
-                                        <tr>
-                                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
-                                                &nbsp;
-                                            </td>
-                                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                                TBC
-                                            </td>
-                                        </tr>
-                                    @endif
-                                    <tr>
-                                        <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                            BOOKING REFERENCE:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
-                                            {{$order->booking_reference}}
-                                        </td>
-                                    </tr>
-                                    
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
+                                BOOKING NAME:
+                            </td>
+                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12 oc_lblack">
+                                {{ $order->tour->event->name ?? 'Event name not available'}} | {{ $order->leadBooker->customer_name }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
+                                TRAVEL DATES:
+                            </td>
+                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12 oc_lblack">
+                                {{ \Carbon\Carbon::parse($order->tour->date_from)->format('d F Y') }} - {{ \Carbon\Carbon::parse($order->tour->date_to)->format('d F Y') }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
+                                EVENT:
+                            </td>
+                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12 oc_lblack">
+                                {{ $order->tour->event->name ?? 'Event name not available'}}
+                            </td>
+                        </tr>                        
+                    </tbody>
                 </table>
             </td>
-        </tr>
+            <td width="50%" align="right" valign="top" style="background-color: #FBDED0; padding: 20px 0">
+                <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
+                    <tbody>
+                        
+                        <tr>
+                            <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:15px;" class="oc_f12 oc_lblack">
+                                TOTAL NUMBER OF PERSONS:
+                            </td>
+                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12 oc_lblack">
+                                {{ $order->customer_count }} Adult(s)
+                            </td>
+                        </tr>
+                        @php 
+                            $counter = 0; 
+                            $totalRecords = count($order->orderCustomers); 
+                            $otherGuestsShown = false; // Introduce a flag to track if "OTHER GUESTS" has been shown
+                        @endphp
+
+                        @foreach($order->orderCustomers as $ordersCustomer)
+                            @if($counter < 5)
+                                <tr>
+                                    <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
+                                        {{ ($order->lead_booker_id == $ordersCustomer->id) ? 'LEAD GUEST:' : ($otherGuestsShown ? '' : 'OTHER GUESTS:') }}
+                                        {{-- Check if "OTHER GUESTS" has been shown --}}
+                                        @if(!$otherGuestsShown && $order->lead_booker_id != $ordersCustomer->id)
+                                            @php $otherGuestsShown = true; @endphp
+                                        @endif
+                                    </td>
+                                    <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
+                                        {{$ordersCustomer->customer->title}} {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
+                                    </td>
+                                </tr>
+                                @php $counter++; @endphp
+                            @else
+                                @break
+                            @endif
+                        @endforeach
+
+                        @if($totalRecords > 5)
+                            <tr>
+                                <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12 oc_lblack">
+                                    &nbsp;
+                                </td>
+                                <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
+                                    TBC
+                                </td>
+                            </tr>
+                        @endif
+                        <tr>
+                            <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
+                                BOOKING REFERENCE:
+                            </td>
+                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12 oc_lblack">
+                                {{$order->booking_reference}}
+                            </td>
+                        </tr>                        
+                    </tbody>
+                </table>
+            </td>
+        </tr>    
         <tr>
-            <td align="right" valign="top">
+            <td align="right" valign="top" colspan="2">
                 <table align="left" width="100%" cellspacing="0" cellpadding="0">
                     <thead>
                         <tr style=" background-color: #353535; padding: 2px 15px;">
