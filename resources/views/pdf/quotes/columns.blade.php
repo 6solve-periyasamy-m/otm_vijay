@@ -815,67 +815,7 @@ if (!empty($quote->event->image_url)){
         </tr>
         <tr>
             <td align="left" valign="top" style="">
-                <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                    <tr>
-                        <td align="left" valign="top">
-                            <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                <tbody>
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            Keith Prowse Travel PTY LTD
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            SWIFT: WPACAU2S
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="150" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            ABN: 31 003 276 775
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            BANK: Westpac
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="150" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            BSB: 032 298
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            BRANCH: Crows Nest
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="150" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            ACC: 540726
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            REFERENCE NUMBER: KPAD106032
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="150" valign="top" style="padding: 0px 40px;">&nbsp;</td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="150" valign="top" style="padding: 0px 40px; font-weight: bold;" class="oc_f12 oc_lblack">PAYMENT GATE
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            CREDIT CARD
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="150" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            KPTVL   
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                            If paying by credit card, follow this link
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
+                {!! setting('company.bank_transfer', '-')  !!}
             </td>
         </tr>
         <tr>
