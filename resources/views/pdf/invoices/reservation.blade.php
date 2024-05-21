@@ -253,7 +253,7 @@ if (!empty($order->tour->event->image_url)){
                                         @endif
                                     </td>
                                     <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
-                                        {{$ordersCustomer->customer->title}} {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
+                                        {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
                                     </td>
                                 </tr>
                                 @php $counter++; @endphp
@@ -271,15 +271,7 @@ if (!empty($order->tour->event->image_url)){
                                     TBC
                                 </td>
                             </tr>
-                        @endif
-                        <tr>
-                            <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
-                                BOOKING REFERENCE:
-                            </td>
-                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12 oc_lblack">
-                                {{$order->booking_reference}}
-                            </td>
-                        </tr>                        
+                        @endif                     
                     </tbody>
                 </table>
             </td>
