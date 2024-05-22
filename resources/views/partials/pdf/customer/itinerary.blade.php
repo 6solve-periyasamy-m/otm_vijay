@@ -21,7 +21,7 @@
                     <div class="inline-block width-3-4 ml-1">
                         <div>
                             <span class="fw-bold">Description<br /></span>
-                            {{ $component->description }}
+                            {!! $component->description !!}
                         </div>
                         @if($component->notes)
                         <div class="border-top mt-1">
@@ -34,7 +34,7 @@
                     <div class="inline-block w-100 ml-1">
                         <div>
                             <span class="fw-bold">Description<br /></span>
-                            {{ $component->description }}
+                            {!! $component->description !!}
                         </div>
                         @if($component->notes)
                             <div class="border-top mt-1">

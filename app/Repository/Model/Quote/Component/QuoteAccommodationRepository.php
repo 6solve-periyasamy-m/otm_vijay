@@ -22,6 +22,11 @@ class QuoteAccommodationRepository extends QuoteComponentRepository
         $this->quoteComponent = $quoteComponent;
     }
 
+    public function getQuantity(): int|null
+    {
+        return $this->quoteComponent->quantity;
+    }
+
     public function getTourComponentType(): string
     {
         return $this->quoteComponent->tour_component_type;

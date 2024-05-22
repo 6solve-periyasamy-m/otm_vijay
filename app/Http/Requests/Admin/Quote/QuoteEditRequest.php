@@ -21,6 +21,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $expires
  * @property string $footer
  * @property string $terms
+ * @property string $percentage
  * @property string $internal_notes
  * @property string $external_notes
  * @property int|null $tax_bracket_id
@@ -45,6 +46,7 @@ class QuoteEditRequest extends FormRequest
             'name' => $this->name,
             'description' => $this->description,
             'brand_id' => $this->brand_id > 0 ? $this->brand_id : null,
+            'is_deposit_percentage' => $this->percentage == 'on',
             'consultant_id' => $this->consultant_id,
             'tax_bracket_id' => $this->tax_bracket_id,
         ];

@@ -4,7 +4,7 @@
      * @var \App\Models\Accommodation\AccommodationInventory|null $inventory
      */
     $inventory = $inventory ?? null;
-    $title = __('accommodation.inventory.form.title.' . ($inventory === null ? 'create' : 'update'));
+    $title = __('accommodation.inventory.form.title.' . ($inventory === null ? 'create' : 'update')) . ' - ' . $accommodation->name;
     $route = $inventory === null ?
         route('accommodation-inventories.store', ['accommodation' => $accommodation, ]) :
         route('accommodation-inventories.update', ['accommodation' => $accommodation, 'inventory' => $inventory,]);
@@ -18,21 +18,22 @@
     @can('create', \App\Models\Accommodation\RoomType::class)
         @include('partials.fields.selector.adder',
                     ['name' => 'Room Type', 'field' => 'room_type_id', 'value' => $inventory?->room_type_id,
-                     'route' => 'room-types', 'createRoute' => route('room-types.create'), 'width' => 6,])
+                     'route' => 'room-types', 'createRoute' => route('room-types.create'), 'width' => 3,])
     @else
         @include('partials.fields.selector.default',
                 ['name' => 'Room Type', 'field' => 'room_type_id', 'value' => $inventory?->room_type_id,
-                 'route' => 'room-types', 'width' => 6,])
+                 'route' => 'room-types', 'width' => 3,])
     @endcan
     @can('create', \App\Models\Accommodation\BoardType::class)
         @include('partials.fields.selector.adder',
                     ['name' => 'Board Type', 'field' => 'board_type_id', 'value' => $inventory?->board_type_id,
-                     'route' => 'board-types', 'createRoute' => route('board-types.create'), 'width' => 6,])
+                     'route' => 'board-types', 'createRoute' => route('board-types.create'), 'width' => 3,])
     @else
         @include('partials.fields.selector.default',
                     ['name' => 'Board Type', 'field' => 'board_type_id', 'value' => $inventory?->board_type_id,
-                     'route' => 'board-types', 'width' => 6,])
+                     'route' => 'board-types', 'width' => 3,])
     @endcan
+    <x-livewire.input.select.accommodation-inventory width="6" label="Stock Parent" name="stock_parent_id" value="{{ $inventory?->stock_parent_id }}" clear />
     <div class="form-group col-xl-6">
         @include('partials.fields.raw.datetime',
                     ['name' => 'Check In', 'field' => 'check_in', 'value' => $inventory?->check_in ?? $accommodation?->check_in,

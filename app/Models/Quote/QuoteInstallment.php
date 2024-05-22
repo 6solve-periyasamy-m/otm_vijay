@@ -2,11 +2,11 @@
 
 namespace App\Models\Quote;
 
+use App\Models\Helper\Model;
 use Database\Factories\Quote\QuoteInstallmentFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -47,7 +47,7 @@ class QuoteInstallment extends Model
 
     protected $guarded = [];
     protected $casts = [
-        'due_on' => 'date',
+        'due_on' => 'date:Y-m-d',
         'amount' => 'double',
         'percentage' => 'boolean'
     ];
@@ -55,5 +55,17 @@ class QuoteInstallment extends Model
     public function quote(): BelongsTo
     {
         return $this->belongsTo(Quote::class);
+    }
+
+    public function getAmount(int $count = 1): float|null
+    {
+        $price = $this->quote->repository->getPricePerPerson($count)?->price_per_person;
+        return $this->percentage ? sigfig($price * ($this->amount/100)) : $this->amount;
+    }
+
+    public function getPercentage(int $count = 1): float|null
+    {
+        $price = $this->quote->repository->getPricePerPerson($count)?->price_per_person;
+        return $this->percentage ? $this->amount : sigfig(($this->amount / $price) * 100);
     }
 }

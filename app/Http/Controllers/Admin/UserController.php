@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\User\UpdateAvatarRequest;
 use App\Models\User;
 use App\Repository\Authentication\PermissionsRepository;
 use App\Repository\Authentication\UserRepository;
@@ -52,7 +53,7 @@ class UserController extends Controller
 
     public function view(User $user)
     {
-        return view('pages.users.view', ['user' => $user,]);
+        return view('pages.admin.user.profile', ['user' => $user,]);
     }
 
     public function edit(User $user)
@@ -102,6 +103,13 @@ class UserController extends Controller
         return redirect()->route('users.all');
     }
 
+    public function saveAvatar(UpdateAvatarRequest $request, User $user)
+    {
+        if (!$this->verifyUser($user, true)) abort(403);
+        $this->updateAvatar($request, $user);
+        return redirect()->route('users.view', ['user' => $user,]);
+    }
+
     public function destroy(User $user)
     {
         if (!$this->verifyUser($user, false)) abort(403);
@@ -133,6 +141,7 @@ class UserController extends Controller
                 }
             }
             $user->avatar = $request->file('avatar')->storePublicly('uploads/images/users');
+            $user->save();
         }
     }
 }

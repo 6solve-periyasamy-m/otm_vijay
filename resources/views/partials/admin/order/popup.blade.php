@@ -13,7 +13,10 @@
                 <x-admin.popup-button href="{{ route('tours.view', ['tour' => $order->tour,]) }}" class="color-info row-1">
                     <x-slot:icon>{{ Icon::tour() }}</x-slot:icon>
                     View Tour
-
+                </x-admin.popup-button>
+                <x-admin.popup-button href="{{ route('orders.reservation.preview', ['order' => $order,]) }}" class="color-info row-1">
+                    <x-slot:icon>{{ Icon::view() }}</x-slot:icon>
+                    View Reservation Document
                 </x-admin.popup-button>
                 <x-admin.popup-button href="{{ route('orders.migrate', ['order' => $order,]) }}" class="color-warning row-1">
                     <x-slot:icon>{{ Icon::edit() }}</x-slot:icon>

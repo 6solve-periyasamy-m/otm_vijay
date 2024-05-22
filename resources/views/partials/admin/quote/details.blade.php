@@ -45,8 +45,8 @@
 
 <x-admin.section.header.detail width="6">
     <x-slot:title>{{ __('quotes.view.lead.contact') }}</x-slot:title>
-    <a href="mailto:{{ $quote->leadTraveller?->email ?? 'Lead Traveller Not Set' }}">{{ $quote->leadTraveller?->email }}</a>
-    (<a href="tel:{{ $quote->leadTraveller?->phone ?? 'Lead Traveller Not Set' }}">{{ $quote->leadTraveller?->phone ?? 'Lead Traveller Not Set' }}</a>)
+    <a href="mailto:{{ $quote->leadTraveller?->email }}">{{ $quote->leadTraveller?->email ?? 'No Email Found' }}</a>
+    (<a href="tel:{{ $quote->leadTraveller?->phone ?? 'No Telephone Found' }}">{{ $quote->leadTraveller?->phone ?? 'No Telephone Found' }}</a>)
 </x-admin.section.header.detail>
 
 <x-admin.section.header.detail width="6">
