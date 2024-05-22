@@ -29,12 +29,11 @@ use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Model\Tour\TourRepository;
 use App\Repository\Storage\ConvertedCustomer;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
-use Spatie\Browsershot\Browsershot;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use PDF;
+use Illuminate\Database\Eloquent\Collection;
+use Spatie\Browsershot\Browsershot;
+
 class QuoteRepository extends ComponentPackageRepository implements SerializesToJson
 {
     private Quote $quote;
@@ -422,7 +421,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function getResponseStream(SentQuote $sent, Quote $quote)
     {
 
-        $html = view('pdf.quotes.columns', compact('sent'))->render();
+        $html = view('pdf.quotes.kpt', compact('sent'))->render();
 
         // Create options for Dompdf
         $options = new Options();
