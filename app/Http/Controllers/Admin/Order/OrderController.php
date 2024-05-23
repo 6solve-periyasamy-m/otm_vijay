@@ -13,6 +13,7 @@ use App\Http\Requests\Admin\TableRequest;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\InvoiceRepository;
+use App\Repository\Model\Order\ItinearyRepository;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Reporting\ReportRepository;
 use Dompdf\Dompdf;
@@ -120,7 +121,8 @@ class OrderController extends Controller
         return redirect()->route('orders.all');
     }
 
-    public function reservarionPreview(Order $order,Invoice $invoice)
+    public function itinearyInvoice(Order $order,Invoice $invoice)
+
     {
         $invoice = $order->repository->getInvoiceRepository()->invoice;
 
@@ -132,8 +134,9 @@ class OrderController extends Controller
             'merchandise', 'merchandise.inventory', 'merchandise.inventory.size', 'merchandise.inventory.variant', 'merchandise.inventory.component', 'merchandise.inventory.component.type',
             'paymentInstallments', 'orders', 'orders.leadBooker'
         )->find($order->tour_id);
+        $html = view('pdf.invoices.itineary_invoice', compact('tour','order','invoice'))->render();
         
-        $html = view('pdf.invoices.reservation', compact('tour','order','invoice'))->render();
+        //$html = view('pdf.invoices.reservation', compact('tour','order','invoice'))->render();
 
         // Create options for Dompdf
         $options = new Options();

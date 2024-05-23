@@ -35,6 +35,7 @@ $text-color: #455a64;
 .booking-image {
   width: 10rem;
   height: 10rem;
+  object-fit: contain;
 }
 
 .component-header {

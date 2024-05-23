@@ -9,7 +9,7 @@ use App\Http\Controllers\Admin\Order\OrderInstallmentController;
 use App\Http\Controllers\Admin\Order\Payment\PaymentController;
 use App\Http\Controllers\Admin\Order\Payment\PaymentMethodController;
 use App\Http\Controllers\Admin\System\SettingsController;
-
+ 
 Route::get('/', [OrderController::class, 'index'])->name("orders.all")->middleware('bouncer:Order\Order,read');
 Route::get('/create', [OrderController::class, 'create'])->name('orders.create')->middleware('bouncer:Order\Order,create');
 Route::post('/create', [OrderController::class, 'store'])->name('orders.store')->middleware('bouncer:Order\Order,create');
@@ -23,6 +23,7 @@ Route::prefix('{order}')->group(function () {
     Route::post('/delete/force', [OrderController::class, 'forceDelete'])->name('orders.delete.force')->middleware(['bouncer:Order\Order,delete', 'auth.otm']);
     Route::post('/restore/', [OrderController::class, 'restore'])->name('orders.restore')->middleware('bouncer:Order\Order,delete');
     Route::get('/invoice', [OrderController::class, 'latestInvoice'])->name('orders.invoice.latest')->middleware('bouncer:Order\Order,read');
+    Route::get('/invoice/itineary', [OrderController::class, 'itinearyInvoice'])->name('orders.itineary.latest')->middleware('bouncer:Order\Order,read');
     Route::get('/invoice/{version}', [OrderController::class, 'invoice'])->name('orders.invoice.view')->middleware('bouncer:Order\Order,read');
     Route::get('/preview', [OrderController::class, 'reservarionPreview'])->name('orders.reservation.preview')->middleware('bouncer:Order\Order,read');
     Route::get('/atol', [OrderController::class, 'atol'])->name('orders.atol')->middleware('bouncer:Order\Order,read');
