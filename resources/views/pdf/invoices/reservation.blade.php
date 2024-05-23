@@ -252,7 +252,7 @@ if (!empty($order->tour->event->image_url)){
                                             @php $otherGuestsShown = true; @endphp
                                         @endif
                                     </td>
-                                    <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
+                                    <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12 oc_lblack">
                                         {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
                                     </td>
                                 </tr>
@@ -307,7 +307,7 @@ if (!empty($order->tour->event->image_url)){
                 DATE: 
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
-                {{ f_datetime($tourComponent->inventory->departs_at) }} to {{ f_datetime($tourComponent->inventory->arrives_at) }}
+                {{ \Carbon\Carbon::parse($tourComponent->inventory->departs_at)->format('d F Y H:i a') }} to {{ \Carbon\Carbon::parse($tourComponent->inventory->arrives_at)->format('d F Y H:i a') }}
             </td>
         </tr>
         <tr>
@@ -345,7 +345,7 @@ if (!empty($order->tour->event->image_url)){
                 DATE:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
-                {{ f_datetime($tourComponent->inventory->departs_at) }} to {{ f_datetime($tourComponent->inventory->arrives_at) }}
+                {{ \Carbon\Carbon::parse($tourComponent->inventory->departs_at)->format('d F Y H:i a') }} to {{ \Carbon\Carbon::parse($tourComponent->inventory->arrives_at)->format('d F Y H:i a') }}
             </td>
         </tr>
         <tr>
@@ -473,7 +473,7 @@ if (!empty($order->tour->event->image_url)){
                 DATE: 
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
-                {{ f_datetime($tourComponent->inventory->departs_at) }} to {{ f_datetime($tourComponent->inventory->arrives_at) }}
+                {{ \Carbon\Carbon::parse($tourComponent->inventory->departs_at)->format('d F Y H:i a') }} to {{ \Carbon\Carbon::parse($tourComponent->inventory->arrives_at)->format('d F Y H:i a') }}
             </td>
         </tr>
         <tr>
