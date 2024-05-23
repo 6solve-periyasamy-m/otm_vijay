@@ -110,6 +110,11 @@ class SelectController extends ApiController
         return TourTransforms::getSelectEvents($filter);
     }
 
+    public function getActivityEvents(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return ActivityTransforms::getActivityEvents($filter);
+    }
+
     public function getTours(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
         return TourTransforms::getSelectTours($filter);
@@ -117,6 +122,10 @@ class SelectController extends ApiController
 
     public function getSelectedEvent($id) {
         return TourTransforms::getSelectedEvent($id);
+    }
+
+    public function getSelectedActivityEvent($id) {
+        return ActivityTransforms::getSelectedActivityEvent($id);
     }
 
     public function getSelectedTour($id) {

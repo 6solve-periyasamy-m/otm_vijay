@@ -14,7 +14,7 @@
 @section('title', $title)
 
 @section('form-body')
-<div class="form-group col-xl-6">
+<div class="form-group col-xl-4">
     @can('create', \App\Models\Activity\ActivityType::class)
         @include('partials.fields.selector.adder',
                     ['name' => 'Activity Type', 'field' => 'activity_type_id', 'value' => $activity?->activity_type_id,
@@ -25,7 +25,18 @@
                  'route' => 'activity-types',])
     @endcan
 </div>
-<div class="form-group col-xl-6">
+<div class="form-group col-xl-4">
+    @can('create', \App\Models\Tour\Event::class)
+        @include('partials.fields.selector.adder',
+                    ['name' => 'Event', 'field' => 'event_id', 'value' => $activity?->event_id ?? 0,
+                     'route' => 'activity-events', 'createRoute' => route('events.create'),])
+    @else
+        @include('partials.fields.selector.default',
+                    ['name' => 'Event', 'field' => 'event_id', 'value' => $activity?->event_id ?? 0,
+                     'route' => 'activity-events',])
+    @endcan
+</div>
+<div class="form-group col-xl-4">
     @include('partials.fields.dropdown', ['name' => 'Activity Category', 'field' => 'activity_category','selected' => $activity?->activity_category, 'values' => ["0" => "Normal Activity", "1" => "Main Activity"]])
 </div>
     @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $activity?->name,'width' => 10,])
@@ -35,4 +46,4 @@
     <x-livewire.input.select.currency name="currency_id" label="Currency" value="{{$activity?->currency_id}}" />
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'notes', 'value' => $activity?->internal_notes])
     @include('partials.fields.submit')
-@endsection
+@endsection 
