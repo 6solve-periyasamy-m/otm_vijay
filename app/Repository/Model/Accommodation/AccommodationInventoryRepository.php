@@ -27,6 +27,25 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         $this->inventory = $inventory;
     }
 
+    public static function validateStockParent(int|null $parent, AccommodationInventory|null $inventory): bool
+    {
+        if ($parent === null || $inventory === null) { return true; }
+        $parent = AccommodationInventory::find($parent);
+        if ($parent === null || $inventory->id === $parent->id) { return false; }
+        $parents = [];
+        do {
+            if (in_array($parent->id, $parents)) { return false; }
+            $parents[] = $parent->id;
+            $parent = $parent->stockParent;
+        } while ($parent !== null);
+        return true;
+    }
+
+    public function validateParent(int|null $parent): bool
+    {
+        return static::validateStockParent($parent, $this->inventory);
+    }
+
     public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
     {
         $from->setTime(0, 0);

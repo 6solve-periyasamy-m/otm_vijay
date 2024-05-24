@@ -41,6 +41,9 @@ class AccommodationInventoryController extends Controller
 
     public function update(AccommodationInventoryRequest $request, Accommodation $accommodation, AccommodationInventory $inventory)
     {
+        if (!$inventory->repository->validateParent($request->stock_parent_id)) {
+            return back()->withErrors(['msg' => "You cannot use this stock parent, as it is a child of this inventory"]);
+        }
         $inventory->update($request->getData());
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
