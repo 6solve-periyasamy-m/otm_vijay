@@ -101,19 +101,6 @@ class AccommodationInventory extends Model
     ];
     private AccommodationInventoryRepository $internal_repository;
 
-    public static function getValidationRules(): array
-    {
-        return [
-            'room_type_id' => 'required|exists:room_types,id',
-            'board_type_id' => 'required|exists:board_types,id',
-            'check_in' => 'date',
-            'check_out' => 'date',
-            'stock' => 'required|numeric|integer',
-            'purchase_price' => 'nullable|numeric',
-            'sales_price' => 'nullable|numeric',
-        ];
-    }
-
     public static function findByTour($tour_id): Collection|array
     {
         return AccommodationInventory::with(['tour' => function ($q) use ($tour_id) {
