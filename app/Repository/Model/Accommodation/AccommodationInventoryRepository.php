@@ -65,7 +65,7 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
 
     public function getTotalStock(): int
     {
-        return $this->inventory->stock;
+        return $this->inventory->stock_parent_id !== null ? $this->inventory->stockParent->repository->getTotalStock() : $this->inventory->stock;
     }
 
     public function getUsedStock(): int
