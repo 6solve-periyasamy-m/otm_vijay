@@ -307,7 +307,7 @@ if (!empty($order->tour->event->image_url)){
                 DATE: 
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
-                {{ \Carbon\Carbon::parse($tourComponent->inventory->departs_at)->format('d F Y H:i a') }} to {{ \Carbon\Carbon::parse($tourComponent->inventory->arrives_at)->format('d F Y H:i a') }}
+                {{ \Carbon\Carbon::parse($tourComponent->inventory->departs_at)->format('d F Y | Ha') }} to {{ \Carbon\Carbon::parse($tourComponent->inventory->arrives_at)->format('d F Y | Ha') }}
             </td>
         </tr>
         <tr>
@@ -345,7 +345,7 @@ if (!empty($order->tour->event->image_url)){
                 DATE:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
-                {{ \Carbon\Carbon::parse($tourComponent->inventory->departs_at)->format('d F Y H:i a') }} to {{ \Carbon\Carbon::parse($tourComponent->inventory->arrives_at)->format('d F Y H:i a') }}
+                {{ \Carbon\Carbon::parse($tourComponent->inventory->departs_at)->format('d F Y | Ha') }} to {{ \Carbon\Carbon::parse($tourComponent->inventory->arrives_at)->format('d F Y | Ha') }}
             </td>
         </tr>
         <tr>
@@ -382,7 +382,7 @@ if (!empty($order->tour->event->image_url)){
                 CHECK IN:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
-                {{ \Carbon\Carbon::parse($tourComponent->inventory->check_in)->format('d F Y | h:i A') }}
+                {{ \Carbon\Carbon::parse($tourComponent->inventory->check_in)->format('d F Y | ha') }}
             </td>
         </tr>
         <tr>
@@ -390,7 +390,7 @@ if (!empty($order->tour->event->image_url)){
                 CHECK OUT:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
-                {{ \Carbon\Carbon::parse($tourComponent->inventory->check_out)->format('d F Y | h:i A') }}
+                {{ \Carbon\Carbon::parse($tourComponent->inventory->check_out)->format('d F Y | ha') }}
             </td>
         </tr>
         <tr>
@@ -473,7 +473,7 @@ if (!empty($order->tour->event->image_url)){
                 DATE: 
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
-                {{ \Carbon\Carbon::parse($tourComponent->inventory->departs_at)->format('d F Y H:i a') }} to {{ \Carbon\Carbon::parse($tourComponent->inventory->arrives_at)->format('d F Y H:i a') }}
+                {{ \Carbon\Carbon::parse($tourComponent->inventory->departs_at)->format('d F Y | Ha') }} to {{ \Carbon\Carbon::parse($tourComponent->inventory->arrives_at)->format('d F Y | Ha') }}
             </td>
         </tr>
         <tr>
@@ -527,7 +527,10 @@ if (!empty($order->tour->event->image_url)){
                 BOOKING TOTAL
             </td>
             <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                {{ f_currency($tour->base_price_per_person) }}
+                {{ f_currency($order->total) }}
+                    @if ($order->repository->getBeforeString() !== null)
+                        ({{ $order->repository->getBeforeString() }})
+                    @endif
             </td>
         </tr>
         <tr>
@@ -535,9 +538,19 @@ if (!empty($order->tour->event->image_url)){
                 GST (included)
             </td>
             <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                {{ f_currency($tour->tax_amount) }}
+                {{ $order->getTaxes() !== null ? f_currency($order->getTaxes()) : 'No Taxes Due' }}
             </td>
         </tr>
+        @if(!empty($order->commission_amount)) 
+        <tr>
+            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;;" class="oc_f12 oc_lblack">
+                COMMISSION
+            </td>
+            <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
+                {{ f_currency($order->commission_amount) }} ({{ $order->commission }}%)
+            </td>
+        </tr>
+        @endif
         <tr>
             <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" width="120">&nbsp;</td>
             <td align="center" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
@@ -547,7 +560,7 @@ if (!empty($order->tour->event->image_url)){
                 FINAL BOOKING AMOUNT    
             </td>
             <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                {{ f_currency($tour->base_price_per_person) }}
+                {{ f_currency($order->paid) }}
             </td>
         </tr>
     </table>
@@ -579,22 +592,22 @@ if (!empty($order->tour->event->image_url)){
                                 Deposit
                             </td>
                             <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                               {{ f_currency($tour->deposit) }} ({{ $tour->deposit_percentage }}%)
+                               {{ f_currency($order->calculated_deposit) }} ({{ $order->deposit_percentage }}%)
                             </td>
                             <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
                                 With Order
                             </td>
                         </tr>
-                        @foreach($tour->paymentInstallments as $installment)
+                        @foreach($order->installments as $installment)
                         <tr>
                             <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
                                 Instalment
                             </td>
                             <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                {{ f_currency($installment->cost) }} ({{ $installment->percentage }}%)
+                                {{ f_currency($installment->calculated_amount) }} ({{ $installment->percentage }}%)
                             </td>
                             <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                {{ f_date($installment->due_on) }}
+                                {{ \Carbon\Carbon::parse($installment->due_on)->format('d F Y') }}
                             </td>
                         </tr>
                         @endforeach
@@ -603,10 +616,10 @@ if (!empty($order->tour->event->image_url)){
                                 Remaining
                             </td>
                             <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                {{ f_currency($tour->remaining_installment) }} ({{ $tour->remaining_percentage }}%)
+                                {{ f_currency($order->remaining_installment) }} ({{ $order->remaining_percentage }}%)
                             </td>
                             <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                {{ f_date($tour->final_payment) }}
+                                {{ \Carbon\Carbon::parse($order->tour->final_payment)->format('d F Y') }}
                             </td>
                         </tr>
                     </tbody>
