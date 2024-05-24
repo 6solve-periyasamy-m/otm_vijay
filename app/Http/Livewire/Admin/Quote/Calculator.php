@@ -11,7 +11,7 @@ class Calculator extends Component
 {
     use SendsEvents;
 
-    public $listeners = ['refreshLivewireDatatable' => 'calculate',];
+    public $listeners = ['refreshLivewireDatatable' => 'calculate','sendEmail' => 'send'];
 
     public int $paying = 0;
     public int $travelling = 0;

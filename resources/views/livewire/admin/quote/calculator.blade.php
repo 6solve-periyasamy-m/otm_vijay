@@ -67,7 +67,7 @@
                 {{ Icon::view() }}
                 {{ __('quotes.view.cards.quick.calculator.preview') }}
             </button>
-            <button wire:click="send" class="btn btn-success">
+            <button onclick="confirmAndSend()" class="btn btn-success">
                 {{ Icon::email() }}
                 {{ __('quotes.view.cards.quick.calculator.send') }}
             </button>
@@ -157,3 +157,10 @@
         </div>
     </x-admin.section.card>
 </div>
+<script type="text/javascript">
+    function confirmAndSend() {
+        if (confirm('Are you sure you want to resend email?')) {
+            Livewire.emit('sendEmail');
+        }
+    }
+</script>
