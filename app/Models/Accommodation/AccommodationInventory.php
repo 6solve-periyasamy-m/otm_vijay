@@ -53,6 +53,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read int $used_on_tour_count How many tours this inventory is used on
  * @property-read int $used_stock The amount of stock that has been sold
  * @property-read int $available_stock The amount of stock that is available to be sold
+ * @property-read int $total_stock The total stock available to sell (either for component or parent)
  * @property-read RoomType $roomType
  * @property-read Collection|SupplierContractComponent[] $contractComponents
  * @property-read Collection|AccommodationInventoryTour[] $tourComponents
@@ -100,19 +101,6 @@ class AccommodationInventory extends Model
         'sales_price' => 'double',
     ];
     private AccommodationInventoryRepository $internal_repository;
-
-    public static function getValidationRules(): array
-    {
-        return [
-            'room_type_id' => 'required|exists:room_types,id',
-            'board_type_id' => 'required|exists:board_types,id',
-            'check_in' => 'date',
-            'check_out' => 'date',
-            'stock' => 'required|numeric|integer',
-            'purchase_price' => 'nullable|numeric',
-            'sales_price' => 'nullable|numeric',
-        ];
-    }
 
     public static function findByTour($tour_id): Collection|array
     {
@@ -162,6 +150,11 @@ class AccommodationInventory extends Model
         $check_out = !is_null($this->check_out) ? $this->check_out->format('d/m/Y H:i') : "Unconfirmed";
 
         return "{$this->accommodation->name} - {$this->accommodation->region->name}｜Check in: {$check_in} - Check out: {$check_out}｜Room Type: {$this->roomType->name} - Board Type: {$this->boardType->name}";
+    }
+
+    public function getTotalStockAttribute(): int
+    {
+        return $this->repository->getTotalStock();
     }
 
     public function getUsedStockAttribute(): int

@@ -107,8 +107,7 @@
                                @if($inventory->fit_selectable == 1) checked @endif>
                     </td>
                     <td>
-                        {{$inventory->stock - $inventory->used_stock}}
-                        /{{ $inventory->stock }}<br/>
+                        {{$inventory->available_stock}}/{{$inventory->total_stock}}<br/>
                         ({{$inventory->used_stock}} Sold)
                     </td>
                     <td>

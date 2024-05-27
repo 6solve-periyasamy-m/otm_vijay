@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Accommodation;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Accommodation\AccommodationInventoryRequest;
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Repository\Reporting\Manifest\RoomingReportRepository;
@@ -15,25 +16,9 @@ class AccommodationInventoryController extends Controller
         return view('pages.admin.accommodation.inventory.form', ['accommodation' => $accommodation,]);
     }
 
-    public function store(Request $request, Accommodation $accommodation)
+    public function store(AccommodationInventoryRequest $request, Accommodation $accommodation)
     {
-        $request->validate(AccommodationInventory::getValidationRules());
-        $inventory = AccommodationInventory::make([
-            'room_type_id' => $request->input('room_type_id'),
-            'board_type_id' => $request->input('board_type_id'),
-            'stock_parent_id' => $request->input('stock_parent_id'),
-            'check_in' => $request->input('check_in'),
-            'check_in_time_confirmed' => $request->input('check_in_time_confirmed') == 'on' ? 1 : 0,
-            'check_out' => $request->input('check_out'),
-            'check_out_time_confirmed' => $request->input('check_out_time_confirmed') == 'on' ? 1 : 0,
-            'fit_selectable' => $request->input('fit_selectable') == 'on' ? 1 : 0,
-            'stock' => $request->input('stock'),
-            'purchase_price' => $request->input('purchase_price') ?? 0,
-            'sales_price' => $request->input('sales_price') ?? 0,
-            'internal_notes' => $request->input('internal_notes'),
-            'external_notes' => $request->input('external_notes'),
-        ]);
-        $accommodation->inventory()->save($inventory);
+        $accommodation->inventory()->save(AccommodationInventory::make($request->getData()));
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 
@@ -54,24 +39,12 @@ class AccommodationInventoryController extends Controller
         return view('pages.admin.accommodation.inventory.form', ['accommodation' => $accommodation, 'inventory' => $inventory,]);
     }
 
-    public function update(Request $request, Accommodation $accommodation, AccommodationInventory $inventory)
+    public function update(AccommodationInventoryRequest $request, Accommodation $accommodation, AccommodationInventory $inventory)
     {
-        $request->validate(AccommodationInventory::getValidationRules());
-        $inventory->update([
-            'room_type_id' => $request->input('room_type_id'),
-            'board_type_id' => $request->input('board_type_id'),
-            'stock_parent_id' => $request->input('stock_parent_id'),
-            'check_in' => $request->input('check_in'),
-            'check_in_time_confirmed' => $request->input('check_in_time_confirmed') == 'on' ? 1 : 0,
-            'check_out' => $request->input('check_out'),
-            'check_out_time_confirmed' => $request->input('check_out_time_confirmed') == 'on' ? 1 : 0,
-            'fit_selectable' => $request->input('fit_selectable') == 'on' ? 1 : 0,
-            'stock' => $request->input('stock'),
-            'purchase_price' => $request->input('purchase_price') ?? 0,
-            'sales_price' => $request->input('sales_price') ?? 0,
-            'internal_notes' => $request->input('internal_notes'),
-            'external_notes' => $request->input('external_notes'),
-        ]);
+        if (!$inventory->repository->validateParent($request->stock_parent_id)) {
+            return back()->withErrors(['msg' => "You cannot use this stock parent, as it is a child of this inventory"]);
+        }
+        $inventory->update($request->getData());
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 
