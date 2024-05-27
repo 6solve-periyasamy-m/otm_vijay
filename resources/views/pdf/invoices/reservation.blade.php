@@ -528,9 +528,6 @@ if (!empty($order->tour->event->image_url)){
             </td>
             <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
                 {{ f_currency($order->total) }}
-                    @if ($order->repository->getBeforeString() !== null)
-                        ({{ $order->repository->getBeforeString() }})
-                    @endif
             </td>
         </tr>
         <tr>
@@ -660,15 +657,11 @@ if (!empty($order->tour->event->image_url)){
             </tr>
         </thead>
     </table>
-    <div style="padding: 10px 15px 10px 25px;">
-        <p class="oc_f12 oc_lblack" >
-               {!! $tour->terms !!}
-        </p>
+    <div style="padding: 10px 15px 10px 25px; color: #21314B;">
+        {!! $tour->terms !!}
     </div>
-    <div style="padding: 10px 15px 10px 25px;">
-        <p class="oc_f12 oc_lblack" >
-            {!! $tour->invoice_footer !!}
-        </p>
+    <div style="padding: 10px 15px 10px 25px; color: #21314B; font-size: 12px; line-height: 18px">
+        {!! $tour->invoice_footer !!}
     </div>
 </body>
 </html>
