@@ -296,7 +296,7 @@ if (!empty($quote->event->image_url)){
                 <table align="left" width="60%" cellspacing="0" cellpadding="0">
                     <tr>
                         <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f12 oc_lblack">
-                        ARRIVAL TRANSFER
+                        AIRPORT TRANSFER
                         </td>
                         <td align="right" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
                     </tr>
@@ -320,13 +320,18 @@ if (!empty($quote->event->image_url)){
                                 <tbody>
                                     @foreach($quote->repository->getFlightsForInvoice() as $component)
                                     @if($component->get()->flight_type != 'Inbound')
+
+                                    @php
+                                        $dateFrom = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
+                                        $dateTo = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
+                                    @endphp
                                     <tr>
                                         <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
                                             DATE: 
                                         </td>
                                         <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
                                       
-                                        {{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}
+                                        {{ $dateFrom }} to {{ $dateTo }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -389,12 +394,17 @@ if (!empty($quote->event->image_url)){
                             <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tbody>
                                     @foreach($quote->repository->getTransportForInvoice() as $component)
+
+                                    @php
+                                        $dateFrom = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
+                                        $dateTo = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
+                                    @endphp
                                     <tr>
                                         <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
                                             DATE:
                                         </td>
                                         <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                        {{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}
+                                        {{ $dateFrom }} to {{ $dateTo }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -539,6 +549,11 @@ if (!empty($quote->event->image_url)){
         </tr>
         
             @foreach($quote->repository->getActivitiesForInvoice() as $component)
+                @php
+               
+                    $startDate = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
+                    $endDate = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
+                @endphp
                 <tr>
                     <td align="left" valign="top">
                         <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
@@ -551,7 +566,7 @@ if (!empty($quote->event->image_url)){
                                                     DATE:
                                                 </td>
                                                 <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                    {{ \Carbon\Carbon::parse($quote->event->starts_at)->format('d F Y') }}
+                                                {{ $startDate }} to {{ $endDate }}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -615,13 +630,17 @@ if (!empty($quote->event->image_url)){
                                 <tbody>
                                     @foreach($quote->repository->getFlightsForInvoice() as $component)
                                     @if($component->get()->flight_type == 'Inbound')
+                                    @php
+                                        $dateFrom = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
+                                        $dateTo = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
+                                    @endphp
                                     <tr>
                                         <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
                                             DATE: 
                                         </td>
                                         <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
                                     
-                                        {{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}
+                                        {{ $dateFrom }} to {{ $dateTo }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -694,6 +713,7 @@ if (!empty($quote->event->image_url)){
                 &nbsp;
             </td>
         </tr>
+
         <tr>
             <td align="right" valign="top">
                 <table align="left" width="100%" cellspacing="0" cellpadding="0">
@@ -703,6 +723,35 @@ if (!empty($quote->event->image_url)){
                                 PAYMENT SUMMARY
                             </th>
                         </tr>
+
+                     
+                    
+                    </thead>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="top">
+                <table align="left" width="100%" cellspacing="0" cellpadding="0">
+                    <thead>
+                     
+
+                        <tr>
+                            <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+                            Total (Price per Person)
+                            </td>
+                            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                        
+                            {{f_currency($price_per_person)}}
+                            </td>
+                        </tr>
+
+                    
                     </thead>
                 </table>
             </td>
@@ -713,6 +762,7 @@ if (!empty($quote->event->image_url)){
             </td>
         </tr>
         <!-- Installments Section -->
+      
         @if($quote->deposit > 0 || sizeof($quote->installments))
         <tr>
             <td align="left" valign="top" class="oc_f16" style="background-color: #FBDED0; color: #000000; font-weight: bold; padding: 10px 15px 0px 25px;">
@@ -748,6 +798,9 @@ if (!empty($quote->event->image_url)){
                             </td>
                         </tr>
                         @foreach($quote->installments as $installment)
+                        @php
+                            $datePayment = DateTime::createFromFormat('d/m/Y', f_date($installment->due_on))->format('d M Y');
+                        @endphp
                         <tr>
                             <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
                                 Instalment
@@ -756,7 +809,7 @@ if (!empty($quote->event->image_url)){
                                 {{ f_currency($installment->amount * $paying) }}
                             </td>
                             <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                {{ f_date($installment->due_on) }}
+                                {{ $datePayment }}
                             </td>
                         </tr>
                         @endforeach
@@ -768,7 +821,7 @@ if (!empty($quote->event->image_url)){
                                 {{ f_currency($quote->repository->getRemaining($paying)) }}
                             </td>
                             <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                {{ f_date($quote->final_payment) }}
+                                {{ DateTime::createFromFormat('d/m/Y', f_date($quote->final_payment))->format('d M Y') }}
                             </td>
                         </tr>
                     </tbody>
@@ -814,7 +867,7 @@ if (!empty($quote->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" valign="top" style="">
+            <td align="left" style="padding: 0px 40px;" valign="top" >
                 {!! setting('company.bank_transfer', '-')  !!}
             </td>
         </tr>
@@ -847,5 +900,6 @@ if (!empty($quote->event->image_url)){
             </td>
         </tr>
     </table>
+
 </body>
 </html>

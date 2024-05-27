@@ -427,7 +427,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function getResponseStream(SentQuote $sent, Quote $quote)
     {
 
-        $html = view('pdf.quotes.kpt', compact('sent'))->render();
+        $price_per_person = QuotePricePoint::where('quote_id',$quote->id)->first()->price_per_person;
+
+        $html = view('pdf.quotes.kpt', compact('sent','price_per_person'))->render();
 
         // Create options for Dompdf
         $options = new Options();

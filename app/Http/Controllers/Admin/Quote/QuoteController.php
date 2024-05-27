@@ -68,7 +68,7 @@ class QuoteController extends Controller
     {
         return $quote->repository->getResponseStream($sent,$quote);
     }
-
+ 
     public function preview(StartConversionRequest $request, Quote $quote)
     {
         return $quote->repository->getResponseStream($quote->repository->makeSent($quote->leadTraveller->email, $request->paying, $request->travelling),$quote);
