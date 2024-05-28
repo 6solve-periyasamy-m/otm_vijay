@@ -236,7 +236,12 @@ if (!function_exists('generify_date')) {
 if (!function_exists('img_to_b64')) {
     function img_to_b64(string $file, string $prefix = "data:image/png;base64,"): string
     {
-        return $prefix.base64_encode(file_get_contents(public_path($file)));
+        $path = public_path($file);
+        if (file_exists($path)) {
+            return $prefix.base64_encode(file_get_contents(public_path($file)));
+        } else {
+            return "";
+        }
     }
 }
 if (!function_exists('svg_to_b64')) {
