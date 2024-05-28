@@ -539,7 +539,7 @@
         @endforeach
 
         <tr>
-            <td align="left" colspan="2" width="200" valign="top" style="padding: 0px 40px; font-size:15px" class="oc_f12 oc_lblack">
+        <td align="left" colspan="2" width="100%" style="padding: 0px 40px; font-weight: bold; font-size: 11pt;" class="oc_f12 oc_lblack">
             End of experience
             </td>
            
