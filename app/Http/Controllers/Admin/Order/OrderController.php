@@ -10,16 +10,12 @@ use App\Http\Requests\Admin\Order\CreateOrderRequest;
 use App\Http\Requests\Admin\Order\MigrateRequest;
 use App\Http\Requests\Admin\Order\UpdateOrderRequest;
 use App\Http\Requests\Admin\TableRequest;
+use App\Models\Order\Invoice\Invoice;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\InvoiceRepository;
-use App\Repository\Model\Order\ItinearyRepository;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Reporting\ReportRepository;
-use Dompdf\Dompdf;
-use Dompdf\Options;
-use PDF;
-use App\Models\Order\Invoice\Invoice;
 
 class OrderController extends Controller
 {
@@ -121,40 +117,29 @@ class OrderController extends Controller
         return redirect()->route('orders.all');
     }
 
-    public function itinearyInvoice(Order $order,Invoice $invoice)
+    public function itineraryInvoice(Order $order, Invoice|null $invoice = null)
 
     {
-        $invoice = $order->repository->getInvoiceRepository()->invoice;
+        $invoice = $invoice ?? $order->repository->getInvoiceRepository()->invoice;
 
         $tour = Tour::with(
-            'accommodationInventoryTours', 'accommodationInventoryTours.inventory','accommodationInventoryTours.inventory.roomType','accommodationInventoryTours.inventory.boardType', 'accommodationInventoryTours.inventory.component',
-            'activityInventoryTours', 'activityInventoryTours.inventory','activityInventoryTours.inventory.ticketType', 'activityInventoryTours.inventory.component', 'activityInventoryTours.inventory.component.activityType',
+            'accommodationInventoryTours',
+            'accommodationInventoryTours.inventory',
+            'accommodationInventoryTours.inventory.roomType',
+            'accommodationInventoryTours.inventory.boardType',
+            'accommodationInventoryTours.inventory.component',
+            'activityInventoryTours',
+            'activityInventoryTours.inventory',
+            'activityInventoryTours.inventory.ticketType',
+            'activityInventoryTours.inventory.component',
+            'activityInventoryTours.inventory.component.activityType',
             'flightInventoryTours', 'flightInventoryTours.inventory', 'flightInventoryTours.inventory.component', 'flightInventoryTours.inventory.component.airline', 'flightInventoryTours.inventory.component.departureAirport', 'transportInventoryTours.inventory.component.arrivalAddress',
             'transportInventoryTours', 'transportInventoryTours.inventory', 'transportInventoryTours.inventory.travelClass', 'transportInventoryTours.inventory.component', 'transportInventoryTours.inventory.component.operator', 'transportInventoryTours.inventory.component.departureAddress', 'transportInventoryTours.inventory.component.arrivalAddress',
             'merchandise', 'merchandise.inventory', 'merchandise.inventory.size', 'merchandise.inventory.variant', 'merchandise.inventory.component', 'merchandise.inventory.component.type',
             'paymentInstallments', 'orders', 'orders.leadBooker'
         )->find($order->tour_id);
-        $html = view('pdf.invoices.itineary_invoice', compact('tour','order','invoice'))->render();
-        
-        //$html = view('pdf.invoices.reservation', compact('tour','order','invoice'))->render();
 
-        // Create options for Dompdf
-        $options = new Options();
-        $options->set('dpi', 96);
-        $options->set('isHtml5ParserEnabled', true);
-        $dompdf = new Dompdf($options);
-        $dompdf->setPaper('A4', 'portrait');
-        
-        $dompdf->loadHtml($html);
-
-        // Render the PDF
-        $dompdf->render();
-
-        // Output PDF content as base64 encoded string
-        $pdfContent = base64_encode($dompdf->output());
-
-        // Pass the PDF content to the view
-        return view('pdf.dom_pdf_preview', compact('pdfContent'));
+        return dompdf(view('pdf.invoices.itinerary', ['tour' => $tour, 'order' => $order, 'invoice' => $invoice,]));
     }
 
 }
