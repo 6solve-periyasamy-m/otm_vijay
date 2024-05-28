@@ -92,6 +92,7 @@ abstract class TemplatedMail
             throw new MailDisabledException('Sending Emails is disabled on this system');
         }
         try {
+            if (empty(config('mail.from.address'))) return false;
             $mail = Mail::to($email);
             if (config('mail.bcc') !== null) {
                 $mail->bcc(config('mail.bcc'));
