@@ -33,6 +33,7 @@ use App\Repository\Storage\ConvertedCustomer;
 use App\Repository\Storage\Quote\CustomerForConversion;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Settings;
 use Spatie\Browsershot\Browsershot;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -81,7 +82,24 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $quote->reference = $quote->repository->generateReference();
         $quote->repository->save();
         $quote->repository->addPricePoint(1, $pricePerPerson);
+        $quote->repository->cloneFromDefaultInstallments();
         return $quote;
+    }
+
+    public function cloneFromDefaultInstallments(): void
+    {
+        $this->quote->installments()->delete();
+        if ($this->quote->deposit === null) {
+            $this->quote->deposit = setting('system.installments.deposit');
+            $this->quote->is_deposit_percentage = true;
+            $this->quote->save();
+        }
+        $installments = Settings::getDefaultInstallments();
+        if (sizeof($installments) > 0) {
+            foreach($installments as $days => $percentage) {
+                $this->quote->installments()->save(new QuoteInstallment(['due_on' => $this->quote->date_from->subDays($days), 'amount' => $percentage, 'is_percentage' => true,]));
+            }
+        }
     }
 
     public static function getFromReference(string $reference): ?Quote
