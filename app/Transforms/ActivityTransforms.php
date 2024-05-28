@@ -16,37 +16,10 @@ interface ActivityTransformsInterface {
     public static function getSelectedTicketType($id);
     public static function getSelectInventory($filter);
     public static function getSelectedInventory($filter);
-    public static function getActivityEvents($filter);
-    public static function getSelectedActivityEvent($id);
 }
 
 class ActivityTransforms implements ActivityTransformsInterface
 {
-    public static function getActivityEvents($filter)
-    {
-        $data = [];
-        foreach (Event::all() as $event) {
-            // Only include events that match the event_category filter
-            if ($event->event_category == 1) {
-                $subData = [];
-                $subData['id'] = $event->id;
-                $subData['text'] = $event->name;
-                if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
-            }
-        }
-        return $data;
-    }
-
-    public static function getSelectedActivityEvent($id)
-    {
-        if ($id == 0) return null;
-        $event = Event::findOrFail($id);
-        $data = [];
-        $data['id'] = $event->id;
-        $data['text'] = $event->name;
-        return $data;
-    }
-
     public static function getSelectActivityTypes($filter)
     {
         $data = [];
