@@ -2,6 +2,7 @@
 
 namespace App\Models\Tour;
 
+use App\Models\Helper\EventType;
 use App\Models\Order\Order;
 use App\Models\System\TaxBracket;
 use Eloquent;
@@ -26,6 +27,7 @@ use Settings;
  * @property string|null $description
  * @property Carbon $starts_at
  * @property Carbon $ends_at
+ * @property EventType $event_category
  * @property string|null $image_url Asset link for image
  * @property string|null $booking_url
  * @property string|null $notes
@@ -59,7 +61,7 @@ class Event extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
-    protected $casts = ['starts_at' => 'date', 'ends_at' => 'date'];
+    protected $casts = ['starts_at' => 'date', 'ends_at' => 'date', 'event_category' => EventType::class,];
 
     public static function getValidationRules(): array
     {
