@@ -26,6 +26,7 @@ use Settings;
  * @property string|null $description
  * @property Carbon $starts_at
  * @property Carbon $ends_at
+ * @property int $event_category
  * @property string|null $image_url Asset link for image
  * @property string|null $booking_url
  * @property string|null $notes

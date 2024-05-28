@@ -32,6 +32,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property string|null $image_url Asset url for the activity image
  * @property int $address_id
  * @property int|null $currency_id
+ * @property int|null $event_id
  * @property string|null $name
  * @property string|null $internal_notes
  * @property string|null $external_notes
