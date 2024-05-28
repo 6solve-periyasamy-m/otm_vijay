@@ -32,6 +32,6 @@ class All extends AbstractSelectComponent
 
     protected function format(DataModel|Model $model): string
     {
-        return "{$model->name}";
+        return "{$model->name} - " . $model->event_category->label();
     }
 }

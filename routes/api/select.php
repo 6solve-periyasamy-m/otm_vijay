@@ -7,6 +7,7 @@ use App\View\Components\Livewire\Input\Select\Currency;
 use App\View\Components\Livewire\Input\Select\Customer;
 use App\View\Components\Livewire\Input\Select\Event\All as AllEvents;
 use App\View\Components\Livewire\Input\Select\Event\Main as MainEvent;
+use App\View\Components\Livewire\Input\Select\Event\Normal as NormalEvent;
 use App\View\Components\Livewire\Input\Select\Organization;
 use App\View\Components\Livewire\Input\Select\TaxBracket;
 use App\View\Components\Livewire\Input\Select\User;
@@ -47,6 +48,10 @@ Route::prefix('events')->name('events.')->group(function () {
     Route::prefix('main')->name('main.')->group(function () {
         Route::post('/', [MainEvent::class, 'getAll'])->name('select');
         Route::post('/{id}', [MainEvent::class, 'getOne'])->name('selected');
+    });
+    Route::prefix('normal')->name('main.')->group(function () {
+        Route::post('/', [NormalEvent::class, 'getAll'])->name('select');
+        Route::post('/{id}', [NormalEvent::class, 'getOne'])->name('selected');
     });
     Route::post('/', [AllEvents::class, 'getAll'])->name('select');
     Route::post('/{id}', [AllEvents::class, 'getOne'])->name('selected');

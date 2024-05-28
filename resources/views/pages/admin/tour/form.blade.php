@@ -21,15 +21,7 @@
              'route' => 'brands', 'width' => 2,])
     <x-livewire.input.select.tax-bracket name="tax_bracket_id" label="Tax Bracket" value="{{ $tour?->tax_bracket_id }}" width="2" />
     @include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $tour?->description,])
-    @can('create', \App\Models\Tour\Event::class)
-        @include('partials.fields.selector.adder',
-                    ['name' => 'Event', 'field' => 'event_id', 'value' => $tour?->event_id ?? 0,
-                     'route' => 'events', 'createRoute' => route('events.create'), 'width' => 4,])
-    @else
-        @include('partials.fields.selector.default',
-                    ['name' => 'Event', 'field' => 'event_id', 'value' => $tour?->event_id ?? 0,
-                     'route' => 'events', 'width' => 4,])
-    @endcan
+    <x-livewire.input.select.event.main name="event_id" value="{{ $tour?->event_id }}" label="Event" width="4" />
     @include('partials.fields.dropdown', [
                  'name' => 'ATOL Protected',
                  'field' => 'atol_protected',

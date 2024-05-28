@@ -37,7 +37,7 @@
                 <td>{{ $event->description }}</td>
                 <td>{{ f_date($event->starts_at) }}</td>
                 <td>{{ f_date($event->ends_at) }}</td>
-                <td>{{ $event->event_category === 1 ? "Main Event" : "Normal Event" }}</td>
+                <td>{{ $event->event_category->label() }}</td>
                 <td>{{ $event->notes }}</td>
                 <td>
                     @can('update', \App\Models\Tour\Event::class)

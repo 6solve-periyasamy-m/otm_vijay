@@ -11,7 +11,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
-class Main extends AbstractSelectComponent
+class Normal extends AbstractSelectComponent
 {
     /**
      * Get the view / contents that represent the component.
@@ -20,7 +20,7 @@ class Main extends AbstractSelectComponent
      */
     public function render()
     {
-        return view('components.livewire.input.select.event', ['route' => 'events.main']);
+        return view('components.livewire.input.select.event', ['route' => 'events.normal']);
     }
 
     protected function getModels(?int $id = null): Collection
@@ -28,7 +28,7 @@ class Main extends AbstractSelectComponent
         if ($id !== null) {
             return DataModel::where('id', '=', $id)->get();
         }
-        return DataModel::where('event_category', '=', EventType::MAIN)->get();
+        return DataModel::where('event_category', '=', EventType::NORMAL)->get();
     }
 
     protected function format(DataModel|Model $model): string
