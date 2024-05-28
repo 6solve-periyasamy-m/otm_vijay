@@ -49,7 +49,7 @@ Route::prefix('events')->name('events.')->group(function () {
         Route::post('/', [MainEvent::class, 'getAll'])->name('select');
         Route::post('/{id}', [MainEvent::class, 'getOne'])->name('selected');
     });
-    Route::prefix('normal')->name('main.')->group(function () {
+    Route::prefix('normal')->name('normal.')->group(function () {
         Route::post('/', [NormalEvent::class, 'getAll'])->name('select');
         Route::post('/{id}', [NormalEvent::class, 'getOne'])->name('selected');
     });

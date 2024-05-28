@@ -21,7 +21,7 @@
              'route' => 'brands', 'width' => 2,])
     <x-livewire.input.select.tax-bracket name="tax_bracket_id" label="Tax Bracket" value="{{ $tour?->tax_bracket_id }}" width="2" />
     @include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $tour?->description,])
-    <x-livewire.input.select.event.main name="event_id" value="{{ $tour?->event_id }}" label="Event" width="4" />
+    <x-livewire.input.select.event.normal name="event_id" value="{{ $tour?->event_id }}" label="Event" width="4" />
     @include('partials.fields.dropdown', [
                  'name' => 'ATOL Protected',
                  'field' => 'atol_protected',
