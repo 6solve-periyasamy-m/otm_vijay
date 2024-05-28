@@ -179,8 +179,8 @@
                         <td align="left" valign="top">
                             <table align="left" width="100%" border="0" cellspacing="0">
                                 <tr>
-                                    <td align="left" valign="top">
-                                        <img src="{{img_to_b64($invoice->brand->logo)}}" alt="{{ $invoice->brand->name }}" width="100%" style="display: block; max-width: 160px">
+                                    <td align="left" valign="top" style="padding: 0 20px;">
+                                        <img src="{{img_to_b64($invoice->brand->logo)}}" alt="{{ $invoice->brand->name }}" width="100%" style="display: block; max-width: 190px">
                                     </td>
                                 </tr>
                             </table>
@@ -233,10 +233,10 @@
                                     </tr>
                                     @endforeach
                                     <tr>
-                                        <td  class="oc_f14" style="padding: 10px 15px 0px 25px; color: #353535; font-weight: 700;">
+                                        <td  class="oc_f14" style="padding: 10px 15px 0px 25px; color: #ffffff; line-height:20px;">
                                             BOOKING REFERENCE:
                                         </td>
-                                        <td  class="oc_f14" style="padding: 10px 15px 0px 25px; color: #353535; font-weight: 700;">
+                                        <td  class="oc_f14" style="padding: 10px 15px 0px 25px; color: #ffffff; line-height:10px;">
                                             {{$order->booking_reference}}
                                         </td>
                                     </tr>                                   
@@ -335,8 +335,11 @@
         @php
         $nights = 0;
         if($keyAcc == 0){
-        $date1 = date('Y-m-d', strtotime($tourComponent->inventory->check_in));
-        $date2 = date('Y-m-d', strtotime($tourComponent->inventory->check_out));
+
+          
+            
+        $date1 = date('d M Y', strtotime($tourComponent->inventory->check_in));
+        $date2 = date('d M Y', strtotime($tourComponent->inventory->check_out));
 
         // Convert the dates to DateTime objects
         $datetime1 = new DateTime($date1);
@@ -420,6 +423,11 @@
         @php
         $startDateTime = new DateTime($tourComponent->inventory->starts_at);
         $endDateTime = new DateTime($tourComponent->inventory->ends_at);
+
+        $starts_at = DateTime::createFromFormat('d/m/Y H:i', f_datetime($tourComponent->inventory->starts_at))->format('d M Y | h:i A');
+            $ends_at = DateTime::createFromFormat('d/m/Y H:i', f_datetime($tourComponent->inventory->ends_at))->format('d M Y | h:i A');
+
+
         @endphp
         @if($date->format('Y-m-d') >= $startDateTime->format('Y-m-d') && $date->format('Y-m-d') <= $endDateTime->format('Y-m-d'))
         <tr>
@@ -455,8 +463,8 @@
             <td align="left" width="40" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">Date:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                {{ f_datetime($tourComponent->inventory->starts_at) }}
-                to {{ f_datetime($tourComponent->inventory->ends_at) }}
+                {{ $starts_at }}
+                to {{ $ends_at }}
             </td>
         </tr>
         <tr>
