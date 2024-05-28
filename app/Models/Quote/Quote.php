@@ -259,7 +259,7 @@ class Quote extends Model
     public function getRemainingPercentage(): float
     {
         $price = $this->repository->getPricePerPerson(1)?->price_per_person;
-        return sigfig(($this->remaining / $price) * 100);
+        return empty($price) ? 0 : sigfig(($this->remaining / $price) * 100);
     }
 
     public function getDepositAmount(int $count = 1): float|null
