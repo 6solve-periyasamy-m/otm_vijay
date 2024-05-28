@@ -29,6 +29,7 @@
                             </div>
                         </div>
 
+                        @if(config('auth.google-2fa.enabled'))
                         <div class="form-group row">
                             <label for="otp_code" class="col-md-4 col-form-label text-md-right">One-Time Passcode</label>
 
@@ -42,6 +43,7 @@
                                 @enderror
                             </div>
                         </div>
+                        @endif
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">

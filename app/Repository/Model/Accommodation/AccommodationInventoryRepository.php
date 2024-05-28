@@ -27,6 +27,25 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         $this->inventory = $inventory;
     }
 
+    public static function validateStockParent(int|null $parent, AccommodationInventory|null $inventory): bool
+    {
+        if ($parent === null || $inventory === null) { return true; }
+        $parent = AccommodationInventory::find($parent);
+        if ($parent === null || $inventory->id === $parent->id) { return false; }
+        $parents = [];
+        do {
+            if (in_array($parent->id, $parents)) { return false; }
+            $parents[] = $parent->id;
+            $parent = $parent->stockParent;
+        } while ($parent !== null);
+        return true;
+    }
+
+    public function validateParent(int|null $parent): bool
+    {
+        return static::validateStockParent($parent, $this->inventory);
+    }
+
     public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
     {
         $from->setTime(0, 0);
@@ -60,12 +79,21 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         if ($this->inventory->stock_parent_id !== null && $this->inventory->stock_parent_id !== $this->inventory->id) {
             return $this->inventory->stockParent->repository->getAvailableStock();
         }
-        return $this->getTotalStock() - $this->getUsedStock();
+        return $this->getTotalStock() - $this->getTotalUsedStock();
     }
 
     public function getTotalStock(): int
     {
-        return $this->inventory->stock;
+        return $this->inventory->stock_parent_id !== null ? $this->inventory->stockParent->repository->getTotalStock() : $this->inventory->stock;
+    }
+
+    public function getTotalUsedStock(): int
+    {
+        $used = $this->getUsedStock();
+        foreach ($this->inventory->stockChildren as $children) {
+            $used += $children->used_stock;
+        }
+        return $used;
     }
 
     public function getUsedStock(): int
@@ -75,9 +103,6 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
             foreach ($component->orders as $orderComponent) {
                 if (!$orderComponent->cancelled) $used++;
             }
-        }
-        foreach ($this->inventory->stockChildren as $children) {
-            $used += $children->used_stock;
         }
         return $used;
     }
