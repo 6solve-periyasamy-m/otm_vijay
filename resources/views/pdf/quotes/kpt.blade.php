@@ -76,14 +76,14 @@ if (!empty($quote->event->image_url)){
 <body class="body" style="padding:0; margin:0 auto !important; display:block !important; min-width:100% !important; width:100% !important; background:#ffffff; -webkit-text-size-adjust:none">
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="background-color:#ffffff; padding: 35px 0;" class="full-wrap">
         <tr>
-            <td align="left" valign="top" style="padding-bottom: 10px;">
+            <td valign="top" style="padding-bottom: 10px;" colspan="2">
                 <table width="100%" border="0" cellspacing="0">
                     <tr>
                         <td align="left" valign="top">
                             <table align="left" width="100%" border="0" cellspacing="0">
                                 <tr>
-                                    <td align="left" valign="top">
-                                        <img src="{{ img_to_b64($brand->image_path) }}" alt="{{ $brand->name }}" width="300" style="display: block;">
+                                <td align="left" valign="top" style="padding: 0 20px;">
+                                        <img src="{{ img_to_b64($brand->image_path) }}" alt="{{ $brand->name }}" width="100%" style="display: block; max-width: 160px">
                                     </td>
                                 </tr>
                             </table>
@@ -102,7 +102,7 @@ if (!empty($quote->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" valign="top">
+            <td align="left" valign="top" colspan="2">
                 <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
                     <tr>
                         <td width="50%" align="left" valign="top" style="background-color: #E95B15;">
@@ -120,22 +120,22 @@ if (!empty($quote->event->image_url)){
                                         <td align="left" valign="top">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" class="oc_f12" style="padding: 10px 15px 0px 25px; color: #353535;">
+                                        <td colspan="2" class="oc_f12" style="padding: 10px 15px 0px 25px; color: #353535; font-weight: 700; ">
                                             CUSTOMER DETAILS
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; color: #ffffff;" class="oc_f12">
+                                        <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px; color: #ffffff;" class="oc_f12">
                                             NAME: {{ $quote->leadTraveller->customer->first_name }} {{ $quote->leadTraveller->customer->last_name }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td  colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; color: #ffffff;" class="oc_f12">
+                                        <td  colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px; color: #ffffff;" class="oc_f12">
                                             PHONE: {{ $quote->leadTraveller->customer->mobile_number }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td  colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; color: #ffffff;" class="oc_f12">
+                                        <td  colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px; color: #ffffff;" class="oc_f12">
                                             EMAIL: 
                                             <a href="mailto:{{ $quote->leadTraveller->customer->email_address }}">
                                                 {{ $quote->leadTraveller->customer->email_address }}
@@ -143,24 +143,24 @@ if (!empty($quote->event->image_url)){
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td width="120" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12">
+                                        <td width="120" align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12">
                                             &nbsp;
                                         </td>
                                         <td align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
                                     </tr>
+                                  
                                     <tr>
-                                    <tr>
-                                        <td colspan="2" class="oc_f12" style="padding: 10px 15px 0px 25px; color: #353535;">
+                                        <td colspan="2" class="oc_f12" style="padding: 10px 15px 0px 25px; color: #353535; font-weight: 700; ">
                                             AGENT DETAILS
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; color: #ffffff;" class="oc_f12">
+                                        <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;color: #ffffff;" class="oc_f12">
                                             NAME: {{ $brand->name }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td  colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; color: #ffffff;" class="oc_f12">
+                                        <td  colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;color: #ffffff;" class="oc_f12">
                                             EMAIL: 
                                             <a href="mailto:{{ $brand->email ?? setting('company.contact.email', 'Email not set') }}">
                                                 {{ $brand->email ??  setting('company.contact.email', 'Email not set') }}
@@ -168,7 +168,7 @@ if (!empty($quote->event->image_url)){
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td  colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; color: #ffffff;" class="oc_f12">
+                                        <td  colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;color: #ffffff;" class="oc_f12">
                                             DATE CREATED: {{ \Carbon\Carbon::parse($brand->created_at)->format('d F Y') }}
                                         </td>
                                     </tr>
@@ -193,93 +193,73 @@ if (!empty($quote->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" valign="top">
-                <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                    <tr>
-                        <td width="50%" align="left" valign="top" style="background-color: #FBDED0;">
-                            <table align="left" border="0" cellspacing="0" cellpadding="0">
-                                <tbody>
-                                    <tr>
-                                        <td align="left" valign="top">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                            QUOTE NAME:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
-                                            {{ $quote->name }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                            TRAVEL DATES:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
-                                            {{ \Carbon\Carbon::parse($quote->date_from)->format('d F Y') }} - {{ \Carbon\Carbon::parse($quote->date_to)->format('d F Y') }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                            EVENT:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
-                                            {{ isset($quote->event->name) ? $quote->event->name : '' }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td width="120" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12">&nbsp;</td>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                        <td width="50%" align="right" valign="top" style="background-color: #FBDED0;">
-                            <table align="left" border="0" cellspacing="0" cellpadding="0">
-                                <tbody>
-                                    <tr>
-                                        <td align="left" valign="top">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                            TOTAL NUMBER OF PERSONS:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
-                                            {{ $paying }} Adult(s)
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                            LEAD GUEST:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
-                                        {{ $quote->leadTraveller->customer->first_name }} {{ $quote->leadTraveller->customer->last_name }}
-                                        </td>
-                                    </tr>
-                                    <!-- <tr>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12 oc_lblack">
-                                            OTHER GUESTS:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" class="oc_f12 oc_lblack">
-                                            Test
-                                        </td>
-                                    </tr> -->
-                                    <tr>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700;" class="oc_f12">&nbsp;</td>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
+            <td width="50%" align="left" valign="top" style="background-color: #FBDED0; padding: 20px 0;">
+                <table align="left" border="0" cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr>
+                            <td align="left" width="75" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:15px;" class="oc_f12 oc_lblack">
+                                QUOTE NAME:
+                            </td>
+                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:15px;" class="oc_f12 oc_lblack">
+                                {{ $quote->name }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" width="75" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
+                                TRAVEL DATES:
+                            </td>
+                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12 oc_lblack">
+                                {{ \Carbon\Carbon::parse($quote->date_from)->format('d F Y') }} - {{ \Carbon\Carbon::parse($quote->date_to)->format('d F Y') }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" width="75" valign="top" style="padding: 10px 15px 10px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
+                                EVENT:
+                            </td>
+                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12 oc_lblack">
+                                {{ isset($quote->event->name) ? $quote->event->name : '' }}
+                            </td>
+                        </tr>                       
+                    </tbody>
+                </table>
+            </td>
+            <td width="50%" align="right" valign="top" style="background-color: #FBDED0; padding: 20px 0;">
+                <table align="left" border="0" cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr>
+                            <td align="left" width="50%" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
+                                TOTAL NUMBER OF PERSONS:
+                            </td>
+                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12 oc_lblack">
+                                {{ $paying }} Adult(s)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" valign="top" width="50%" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
+                                LEAD GUEST:
+                            </td>
+                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12 oc_lblack">
+                            {{ $quote->leadTraveller->customer->first_name }} {{ $quote->leadTraveller->customer->last_name }}
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
+                                OTHER GUESTS:
+                            </td>
+                            <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12 oc_lblack">
+                                Test
+                            </td>
+                        </tr> -->
+                    </tbody>
                 </table>
             </td>
         </tr>
         <tr>
-            <td align="right" valign="top">
+            <td align="right" valign="top" colspan="2">
                 <table align="left" width="100%" cellspacing="0" cellpadding="0">
                     <thead>
                         <tr style=" background-color: #353535; padding: 2px 15px;">
-                            <th align="left" valign="top" style="padding: 10px 15px; color: #ffffff; font-weight: 700;" class="oc_f16">
+                            <th align="left" valign="top" style="padding: 10px 25px; color: #ffffff; font-weight: 700;" class="oc_f16">
                                 TRIP ITINERARY AND INCLUSIONS
                             </th>
                         </tr>
@@ -287,389 +267,245 @@ if (!empty($quote->event->image_url)){
                 </table>
             </td>
         </tr>
+    </table>
+    @if(sizeof($quote->flights))
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
         <tr>
-            <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
+            <td colspan="2" align="left" >
+                <div style="background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px; padding: 10px 25px; margin: 10px 0; color: #ffffff; display: block;" class="oc_f16 oc_lblack">
+                AIRPORT TRANSFER
+                </div>
+            </td>
         </tr>
-        @if(sizeof($quote->flights))
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
+        @foreach($quote->repository->getFlightsForInvoice() as $component)
+        @if($component->get()->flight_type != 'Inbound')
+        @php
+            $dateFrom = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
+            $dateTo = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
+        @endphp
         <tr>
-            <td align="left" valign="top">
-                <table align="left" width="60%" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f12 oc_lblack">
-                        AIRPORT TRANSFER
-                        </td>
-                        <td align="right" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
-                    </tr>
-                </table>
-                <table align="right" width="40%" cellspacing="0" cellpadding="0">
-                    <tbody>
-                        <tr>
-                            <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f14 oc_lblack">&nbsp;</td>
-                            <td width="180" align="center" valign="top" style="padding: 2px 15px;" class="oc_f14 oc_lblack">&nbsp;</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                DATE: 
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+            
+            {{ $dateFrom }} to {{ $dateTo }}
             </td>
         </tr>
         <tr>
-            <td align="left" valign="top" style="">
-                <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                    <tr>
-                        <td align="left" valign="top">
-                            <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                <tbody>
-                                    @foreach($quote->repository->getFlightsForInvoice() as $component)
-                                    @if($component->get()->flight_type != 'Inbound')
-
-                                    @php
-                                        $dateFrom = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
-                                        $dateTo = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
-                                    @endphp
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            DATE: 
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                      
-                                        {{ $dateFrom }} to {{ $dateTo }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                        DESCRIPTION:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                        {{ $component->getShortDescription() }} ({{ $component->priceShown() ? f_currency($component->getSalesPrice()) : 'Included'}})
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                        QUANTITY:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                        {{ $paying + $travelling }}
-                                        </td>
-                                    </tr>
-                                    @endif
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            DESCRIPTION:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+            {{ $component->getShortDescription() }} ({{ $component->priceShown() ? f_currency($component->getSalesPrice()) : 'Included'}})
             </td>
         </tr>
         <tr>
-            <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
-                &nbsp;
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            QUANTITY:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+            {{ $paying + $travelling }}
             </td>
         </tr>
+        @endif
+        @endforeach
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
         @endif
         @if(sizeof($quote->repository->getTransportForInvoice()))
         <tr>
-            <td align="left" valign="top">
-                <table align="left" width="60%" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f12 oc_lblack">
-                            TRANSFER
-                        </td>
-                        <td align="right" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
-                    </tr>
-                </table>
-                <table align="right" width="40%" cellspacing="0" cellpadding="0">
-                    <tbody>
-                        <tr>
-                            <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f14 oc_lblack">&nbsp;</td>
-                            <td width="180" align="center" valign="top" style="padding: 2px 15px;" class="oc_f14 oc_lblack">&nbsp;</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <td colspan="2" align="left" >
+                <div style="background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px; padding: 10px 25px; margin: 10px 0; color: #ffffff; display: block;" class="oc_f16 oc_lblack">
+                TRANSFER
+                </div>
+            </td>
+        </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
+        @foreach($quote->repository->getTransportForInvoice() as $component)
+        @php
+            $dateFrom = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
+            $dateTo = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
+        @endphp
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                DATE:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+            {{ $dateFrom }} to {{ $dateTo }}
             </td>
         </tr>
         <tr>
-            <td align="left" valign="top" style="">
-                <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                    <tr>
-                        <td align="left" valign="top">
-                            <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                <tbody>
-                                    @foreach($quote->repository->getTransportForInvoice() as $component)
-
-                                    @php
-                                        $dateFrom = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
-                                        $dateTo = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
-                                    @endphp
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            DATE:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                        {{ $dateFrom }} to {{ $dateTo }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                        DESCRIPTION:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                        {{ $component->getShortDescription() }} ({{ $component->priceShown() ? f_currency($component->getSalesPrice()) : 'Included'}})
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                        QUANTITY:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                        {{ $paying + $travelling }}
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            DESCRIPTION:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+            {{ $component->getShortDescription() }} ({{ $component->priceShown() ? f_currency($component->getSalesPrice()) : 'Included'}})
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            QUANTITY:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+            {{ $paying + $travelling }}
+            </td>
+        </tr>
+        @endforeach
+    </table>
+    @endif
+    @if(sizeof($quote->accommodation))
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
+        <tr>
+            <td colspan="2" align="left" >
+                <div style="background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px; padding: 10px 25px; margin: 10px 0; color: #ffffff; display: block;" class="oc_f16 oc_lblack">
+                ACCOMMODATION
+                </div>
+            </td>
+        </tr>
+    </table>    
+    @foreach($quote->repository->getAccommodationForInvoice() as $component)
+    @php
+        $checIn = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
+        $checkOut = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
+    @endphp
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                CHECK IN:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{ $checIn }}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                CHECK OUT:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{ $checkOut }}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                HOTEL NAME:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{ $component->getHotelName() }}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                ADDRESS:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{$component->getHotelAddress()}}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                ROOM TYPE:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+            {{$component->getRoomType()}}
+            </td>
+        </tr>
+    </table>
+    @endforeach
+    @endif
+    @if(sizeof($quote->activities))
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
+        <tr>
+            <td colspan="2" align="left" >
+                <div style="background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px; padding: 10px 25px; margin: 10px 0; color: #ffffff; display: block;" class="oc_f16 oc_lblack">
+                EVENT/S
+                </div>
+            </td>
+        </tr>
+    </table>
+    @foreach($quote->repository->getActivitiesForInvoice() as $component)
+    @php
+            $dateFrom = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
+            $dateTo = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
+        @endphp
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                DATE:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+            {{ $dateFrom }} to {{ $dateTo }}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                EVENT:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{ $quote->event->name }}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                DESCRIPTION:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{ $quote->event->description }}
+            </td>
+        </tr>
+    </table>
+    @endforeach
+    @endif
+    @if(sizeof($quote->flights))
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
+        <tr>
+            <td colspan="2" align="left" >
+                <div style="background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px; padding: 10px 25px; margin: 10px 0; color: #ffffff; display: block;" class="oc_f16 oc_lblack">
+                DEPARTURE TRANSFER
+                </div>
+            </td>
+        </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
+        @foreach($quote->repository->getFlightsForInvoice() as $component)
+        @if($component->get()->flight_type == 'Inbound')
+        @php
+            $dateFrom = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
+            $dateTo = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
+        @endphp
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                DATE: 
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">        
+            {{ $dateFrom }} to {{ $dateTo }}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            DESCRIPTION:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+            {{ $component->getShortDescription() }} ({{ $component->priceShown() ? f_currency($component->getSalesPrice()) : 'Included'}})
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            QUANTITY:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+            {{ $paying + $travelling }}
             </td>
         </tr>
         @endif
-        @if(sizeof($quote->accommodation))
-        <tr>
-            <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
-                &nbsp;
-            </td>
-        </tr>
-        <tr>
-            <td align="left" valign="top">
-                <table align="left" width="60%" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f12 oc_lblack">
-                            ACCOMMODATION
-                        </td>
-                        <td align="right" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
-                    </tr>
-                </table>
-                <table align="right" width="40%" cellspacing="0" cellpadding="0">
-                    <tbody>
-                        <tr>
-                            <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f14 oc_lblack">&nbsp;</td>
-                            <td width="180" align="center" valign="top" style="padding: 2px 15px;" class="oc_f14 oc_lblack">&nbsp;</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-        
-            @foreach($quote->repository->getAccommodationForInvoice() as $component)
-                @php
-                    $checIn = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
-                    $checkOut = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
-                @endphp
-                <tr>
-                    <td align="left" valign="top" style="">
-                        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                            <tr>
-                                <td align="left" valign="top">
-                                    <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                        <tbody>
-                                            <tr>
-                                                <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                                    CHECK IN:
-                                                </td>
-                                                <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                    {{ $checIn }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                                    CHECK OUT:
-                                                </td>
-                                                <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                    {{ $checkOut }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                                    HOTEL NAME:
-                                                </td>
-                                                <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                    {{ $component->getHotelName() }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                                    ADDRESS:
-                                                </td>
-                                                <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                    {{$component->getHotelAddress()}}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                                    ROOM TYPE:
-                                                </td>
-                                                <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                {{$component->getRoomType()}}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            
-                <tr>
-                    <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
-                        &nbsp;
-                    </td>
-                </tr>
-            @endforeach
-        @endif
-        @if(sizeof($quote->activities))
-        <tr>
-            <td align="left" valign="top">
-                <table align="left" width="60%" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f12 oc_lblack">
-                            EVENT/S
-                        </td>
-                        <td align="right" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
-                    </tr>
-                </table>
-                <table align="right" width="40%" cellspacing="0" cellpadding="0">
-                    <tbody>
-                        <tr>
-                            <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f14 oc_lblack">&nbsp;</td>
-                            <td width="180" align="center" valign="top" style="padding: 2px 15px;" class="oc_f14 oc_lblack">&nbsp;</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-        
-            @foreach($quote->repository->getActivitiesForInvoice() as $component)
-                @php
-               
-                    $startDate = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
-                    $endDate = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
-                @endphp
-                <tr>
-                    <td align="left" valign="top">
-                        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                            <tr>
-                                <td align="left" valign="top">
-                                    <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                        <tbody>
-                                            <tr>
-                                                <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                                    DATE:
-                                                </td>
-                                                <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                {{ $startDate }} to {{ $endDate }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                                    EVENT:
-                                                </td>
-                                                <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                    {{ $quote->event->name }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                                    DESCRIPTION:
-                                                </td>
-                                                <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                                    {{ $quote->event->description }}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
-                        &nbsp;
-                    </td>
-                </tr>
-            @endforeach
-        @endif
-       
-        @if(sizeof($quote->flights))
-        <tr>
-            <td align="left" valign="top">
-                <table align="left" width="60%" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f12 oc_lblack">
-                            DEPARTURE TRANSFER
-                        </td>
-                        <td  align="right" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
-                    </tr>
-                </table>
-                <table align="right" width="40%" cellspacing="0" cellpadding="0">
-                    <tbody>
-                        <tr>
-                            <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f14 oc_lblack">&nbsp;</td>
-                            <td width="180" align="center" valign="top" style="padding: 2px 15px;" class="oc_f14 oc_lblack">&nbsp;</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" valign="top" style="">
-                <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                    <tr>
-                        <td align="left" valign="top">
-                            <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                <tbody>
-                                    @foreach($quote->repository->getFlightsForInvoice() as $component)
-                                    @if($component->get()->flight_type == 'Inbound')
-                                    @php
-                                        $dateFrom = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
-                                        $dateTo = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
-                                    @endphp
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                            DATE: 
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                    
-                                        {{ $dateFrom }} to {{ $dateTo }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                        DESCRIPTION:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                        {{ $component->getShortDescription() }} ({{ $component->priceShown() ? f_currency($component->getSalesPrice()) : 'Included'}})
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" width="120" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
-                                        QUANTITY:
-                                        </td>
-                                        <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
-                                        {{ $paying + $travelling }}
-                                        </td>
-                                    </tr>
-                                    @endif
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        @endif
-        <!-- Notes Section -->
+        @endforeach
+    </table>
+    @endif
+    <!-- Notes Section -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
         @if(!empty($quote->external_notes))
         <tr>
             <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
@@ -708,29 +544,19 @@ if (!empty($quote->event->image_url)){
             </td>
         </tr>
         @endif
-        <tr>
-            <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
-                &nbsp;
-            </td>
-        </tr>
-
-        <tr>
-            <td align="right" valign="top">
-                <table align="left" width="100%" cellspacing="0" cellpadding="0">
-                    <thead>
-                        <tr style=" background-color: #353535; padding: 2px 15px;">
-                            <th align="left" valign="top" style="padding: 10px 15px; color: #ffffff; font-weight: 700;" class="oc_f16">
-                                PAYMENT SUMMARY
-                            </th>
-                        </tr>
-
-                     
-                    
-                    </thead>
-                </table>
-            </td>
-        </tr>
-        <tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
+        <thead>
+            <tr style=" background-color: #353535; padding: 2px 15px;">
+                <th align="left" valign="top" style="padding: 10px 15px; color: #ffffff; font-weight: 700;" class="oc_f16">
+                PAYMENT SUMMARY
+                </th>
+            </tr>
+        </thead>
+    </table>
+    <!-- Installments Section -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
+    <tr>
             <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
                 &nbsp;
             </td>
@@ -761,8 +587,6 @@ if (!empty($quote->event->image_url)){
                 &nbsp;
             </td>
         </tr>
-        <!-- Installments Section -->
-      
         @if($quote->deposit > 0 || sizeof($quote->installments))
         <tr>
             <td align="left" valign="top" class="oc_f16" style="background-color: #FBDED0; color: #000000; font-weight: bold; padding: 10px 15px 0px 25px;">
@@ -829,77 +653,44 @@ if (!empty($quote->event->image_url)){
             </td>
         </tr>
         @endif
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
         <tr>
-            <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
-                &nbsp;
-            </td>
-        </tr>
-        <tr>
-            <td align="left" valign="top">
-                <table align="left" width="60%" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f12 oc_lblack">
-                            PAYMENT METHOD
-                        </td>
-                        <td align="right" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
-                    </tr>
-                </table>
-                <table align="right" width="40%" cellspacing="0" cellpadding="0">
-                    <tbody>
-                        <tr>
-                            <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f14 oc_lblack">&nbsp;</td>
-                            <td width="180" align="center" valign="top" style="padding: 2px 15px;" class="oc_f14 oc_lblack">&nbsp;</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" valign="top">
-                <table align="left" width="60%" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td align="left" width="150" style="padding: 0px 40px; font-weight: bold;" class="oc_f12">
-                            BANK TRANSFER
-                        </td>
-                        <td align="right" valign="top" style="padding: 2px 15px;">&nbsp;</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" style="padding: 0px 40px;" valign="top" >
-                {!! setting('company.bank_transfer', '-')  !!}
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
-                &nbsp;
-            </td>
-        </tr>
-        <tr>
-            <td align="right" valign="top">
-                <table align="left" width="100%" cellspacing="0" cellpadding="0">
-                    <thead>
-                        <tr style=" background-color: #353535; padding: 2px 15px;">
-                            <th align="left" valign="top" style="padding: 10px 15px; color: #ffffff; font-weight: 700;" class="oc_f16">
-                                TERMS & CONDITIONS
-                            </th>
-                        </tr>
-                    </thead>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
-                &nbsp;
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="left" valign="top" class="oc_f12 oc_lblack" style="padding: 10px 15px 0px 25px;"> 
-                {!! $quote->terms !!}
+            <td colspan="2" align="left">
+                <div style="background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 190px; padding: 10px 25px; margin: 10px 0; color: #ffffff; display: block;" class="oc_f16 oc_lblack">
+                    PAYMENT METHOD
+                </div>
             </td>
         </tr>
     </table>
-
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
+        <tr>
+            <td align="left" width="150" style="padding: 5px 25px; font-weight: bold;" class="oc_f12">
+                BANK TRANSFER
+            </td>
+            <td align="right" valign="top" style="padding: 0 15px;">&nbsp;</td>
+        </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
+        <tr >
+            <td style=" padding: 10px 15px 10px 25px;" class="oc_f12">
+                {!! setting('company.bank_transfer', '-')  !!}
+            </td>
+        </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
+        <thead>
+            <tr style=" background-color: #353535; padding: 2px 15px;">
+                <th align="left" valign="top" style="padding: 10px 15px; color: #ffffff; font-weight: 700;" class="oc_f16">
+                TERMS & CONDITIONS
+                </th>
+            </tr>
+        </thead>
+    </table>
+    <div style="padding: 10px 15px 10px 25px;">
+        <p class="oc_f12 oc_lblack" >
+        {!! $quote->terms !!}
+        </p>
+    </div>
 </body>
 </html>
