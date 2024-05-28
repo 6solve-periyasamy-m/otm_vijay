@@ -8,7 +8,12 @@ use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\UploadedFile;
+use Spatie\Browsershot\Browsershot;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 if (!function_exists('sigfig')) {
     function sigfig($number, $figures = 2): float
@@ -317,5 +322,25 @@ if (!function_exists('get_current_admin')) {
         $user = Auth::guard('web')->user();
         if ($user instanceof User) return $user;
         return null;
+    }
+}
+if(!function_exists('puppeteer')) {
+    function puppeteer(\Illuminate\Contracts\View\View|Factory $view): StreamedResponse
+    {
+        $invoice = Browsershot::html($view->render())->noSandbox();
+        $invoice->showBackground()->margins(10, 2, 10, 2);
+        return response()->stream(function () use ($invoice) { echo $invoice->pdf(); }, 200, ['Content-Type' => 'application/pdf']);
+    }
+}
+if(!function_exists('dompdf')) {
+    function dompdf(\Illuminate\Contracts\View\View|Factory $view): StreamedResponse
+    {
+        $dompdf = new Dompdf((new Options())->set('dpi', 96)->set('isHtml5ParserEnabled', true));
+        $dompdf->setPaper('A4', 'portrait');
+
+        $dompdf->loadHtml($view->render());
+        $dompdf->render();
+
+        return response()->stream(function () use ($dompdf) { echo $dompdf->output(); }, 200, ['Content-Type' => 'application/pdf']);
     }
 }
