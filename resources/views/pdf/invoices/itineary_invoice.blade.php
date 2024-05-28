@@ -486,6 +486,13 @@
         @endforeach
 
         @endforeach
+
+        <tr>
+            <td align="left" colspan="2" width="200" valign="top" style="padding: 0px 40px; font-size:15px" class="oc_f12 oc_lblack">
+            End of experience
+            </td>
+           
+        </tr>
     </table>
     <table align="left" width="100%" cellspacing="0" cellpadding="0">
         <thead>
