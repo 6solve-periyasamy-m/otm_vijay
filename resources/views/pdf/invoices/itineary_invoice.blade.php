@@ -419,6 +419,57 @@
 
         @endif
         @endforeach
+        @if(isset($order->tour->event))
+        @if($date->format('Y-m-d') >= date('Y-m-d', strtotime($order->tour->event->starts_at)) && $date->format('Y-m-d') <= date('Y-m-d', strtotime($order->tour->event->ends_at)))
+        <tr>
+            <td align="left" width="" style="padding: 0px 40px; color: #E95B15; font-size: 11pt;" class="oc_f16 ">
+                EVENT
+            </td>
+            <td width="" align="center" valign="top" style="padding: 0 15px;">
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="40" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">Event:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                {{ $order->tour->event->name }}
+            </td>
+        </tr>
+      
+        <tr>
+            <td align="left" width="40" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">Date:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+            {{ date('d M Y', strtotime($order->tour->event->starts_at)) }}
+                to  {{ date('d M Y', strtotime($order->tour->event->ends_at)) }}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="40" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">&nbsp;
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px;">
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="40" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">Description:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                {!! $order->tour->event->name !!}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="40" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">&nbsp;
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px;">
+                &nbsp;
+            </td>
+        </tr>
+        @endif
+        @endif
+
+
         @foreach($tour->activityInventoryTours as $tourComponent)
         @php
         $startDateTime = new DateTime($tourComponent->inventory->starts_at);
