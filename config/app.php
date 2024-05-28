@@ -254,6 +254,7 @@ return [
     'currency' => env('CASHIER_CURRENCY', 'gbp'),
 
     'gateways' => [
+        'demo' => env('DEMO_GATEWAY', false),
         'stripe' => [
             'publishable' => env('STRIPE_KEY'),
             'secret' => env('STRIPE_SECRET'),
@@ -271,7 +272,13 @@ return [
         'opayo' => [
             'vendor' => env('OPAYO_VENDOR'),
             'live' => env('OPAYO_LIVE', false),
-        ]
+        ],
+        'airwallex' => [
+            'live' => env('AIRWALLEX_LIVE', false),
+            'client' => env('AIRWALLEX_CLIENT'),
+            'secret' => env('AIRWALLEX_SECRET'),
+            'webhook' => env('AIRWALLEX_WEBHOOK'),
+        ],
     ],
 
     'user-limit' => env('USER_LIMIT', 0),
