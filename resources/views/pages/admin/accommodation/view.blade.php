@@ -107,8 +107,7 @@
                                @if($inventory->fit_selectable == 1) checked @endif>
                     </td>
                     <td>
-                        {{$inventory->stock - $inventory->used_stock}}
-                        /{{ $inventory->stock }}<br/>
+                        {{$inventory->available_stock}}/{{$inventory->total_stock}}<br/>
                         ({{$inventory->used_stock}} Sold)
                     </td>
                     <td>
@@ -121,7 +120,7 @@
                         <span>{{ $inventory->stockChildren()->count() === 1 ? '1 Child' : $inventory->stockChildren()->count() . ' Children' }}</span>
                     </td>
                     <td>{{ $inventory->contracted }}</td>
-                    <td>{{ f_currency($inventory->purchase_price) }}</td>
+                    <td>{{ f_currency($inventory->purchase_price, $accommodation->currency) }}</td>
                     <td>{{ f_currency($inventory->sales_price) }}</td>
                     <td>{{ $inventory->internal_notes }}</td>
                     <td>{{ $inventory->external_notes }}</td>

@@ -150,7 +150,7 @@ $brand = $sent->quote->brand;
                             <tr>
                                 <td class="date-double"><div class="order-table-description">{{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}</div></td>
                                 <td class="short-description"><div class="order-table-description">{{ $component->getShortDescription() }} ({{ $component->priceShown() ? f_currency($component->getSalesPrice()) : 'Included'}})</div></td>
-                                <td class="quantity">{{ $paying + $travelling }}</td>
+                                <td class="quantity">{{ $component->getQuantity() ?? ($paying + $travelling) }}</td>
                             </tr>
                         @endforeach
                         @endif
@@ -162,7 +162,7 @@ $brand = $sent->quote->brand;
                             <tr>
                                 <td class="date-double"><div class="order-table-description">{{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}</div></td>
                                 <td class="short-description"><div class="order-table-description">{{ $component->getShortDescription() }} ({{ $component->priceShown() ? f_currency($component->getSalesPrice()) : 'Included'}})</div></td>
-                                <td class="quantity">{{ $paying + $travelling }}</td>
+                                <td class="quantity">{{ $component->getQuantity() ?? ($paying + $travelling) }}</td>
                             </tr>
                         @endforeach
                         @endif
@@ -174,7 +174,7 @@ $brand = $sent->quote->brand;
                             <tr>
                                 <td class="date-double"><div class="order-table-description">{{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}</div></td>
                                 <td class="short-description"><div class="order-table-description">{{ $component->getShortDescription() }} ({{ $component->priceShown() ? f_currency($component->getSalesPrice()) : 'Included'}})</div></td>
-                                <td class="quantity">{{ $paying + $travelling }}</td>
+                                <td class="quantity">{{ $component->getQuantity() ?? ($paying + $travelling) }}</td>
                             </tr>
                         @endforeach
                         @endif
@@ -186,7 +186,7 @@ $brand = $sent->quote->brand;
                             <tr>
                                 <td class="date-double"><div class="order-table-description">{{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}</div></td>
                                 <td class="short-description"><div class="order-table-description">{{ $component->getShortDescription() }} ({{ $component->priceShown() ? f_currency($component->getSalesPrice()) : 'Included'}})</div></td>
-                                <td class="quantity">{{ $paying + $travelling }}</td>
+                                <td class="quantity">{{ $component->getQuantity() ?? ($paying + $travelling) }}</td>
                             </tr>
                         @endforeach
                         @endif

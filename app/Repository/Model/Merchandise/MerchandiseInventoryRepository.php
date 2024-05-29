@@ -193,4 +193,14 @@ class MerchandiseInventoryRepository extends InventoryRepository
     {
         return MerchandiseInventory::find($id);
     }
+
+    public function getLocalPurchasePrice(): ?float
+    {
+        return $this->getPurchasePrice();
+    }
+
+    public function getPurchasePriceString(): string
+    {
+        return f_currency($this->getPurchasePrice());
+    }
 }

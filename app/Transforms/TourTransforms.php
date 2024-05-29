@@ -45,10 +45,13 @@ class TourTransforms implements TourTransformsInterface
     {
         $data = [];
         foreach (Event::all() as $event) {
-            $subData = [];
-            $subData['id'] = $event->id;
-            $subData['text'] = $event->name;
-            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+            // Only include events that match the event_category filter
+            if ($event->event_category == 0) {
+                $subData = [];
+                $subData['id'] = $event->id;
+                $subData['text'] = $event->name;
+                if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+            }
         }
         return $data;
     }

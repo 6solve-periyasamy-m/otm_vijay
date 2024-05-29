@@ -164,6 +164,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Creativeorange\Gravatar\GravatarServiceProvider::class,
+        Jenssegers\Agent\AgentServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -181,6 +182,7 @@ return [
         App\Providers\SettingsProvider::class,
         App\Providers\GatewayProvider::class,
         App\Providers\IconProvider::class,
+        App\Providers\EventLoggerProvider::class,
 
     ],
 
@@ -234,11 +236,13 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Gravatar' => Creativeorange\Gravatar\Facades\Gravatar::class,
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
         'StringFormatter' => StringFormatterFacade::class,
         'Settings' => \App\Facades\SettingsFacade::class,
         'Gateway' => \App\Facades\GatewayFacade::class,
         'Icon' => \App\Facades\IconFacade::class,
+        'EventLogger' => \App\Facades\EventLoggerFacade::class,
 
     ],
     // this apps settings
@@ -250,6 +254,7 @@ return [
     'currency' => env('CASHIER_CURRENCY', 'gbp'),
 
     'gateways' => [
+        'demo' => env('DEMO_GATEWAY', false),
         'stripe' => [
             'publishable' => env('STRIPE_KEY'),
             'secret' => env('STRIPE_SECRET'),
@@ -267,7 +272,17 @@ return [
         'opayo' => [
             'vendor' => env('OPAYO_VENDOR'),
             'live' => env('OPAYO_LIVE', false),
-        ]
+        ],
+        'airwallex' => [
+            'live' => env('AIRWALLEX_LIVE', false),
+            'client' => env('AIRWALLEX_CLIENT'),
+            'secret' => env('AIRWALLEX_SECRET'),
+            'webhook' => env('AIRWALLEX_WEBHOOK'),
+        ],
+    ],
+    'features' => [
+        'bleeding-edge' => env('BLEEDING_EDGE', false),
+        'kpt' => env('IS_KPT', false),
     ],
 
     'user-limit' => env('USER_LIMIT', 0),

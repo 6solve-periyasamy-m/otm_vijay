@@ -16,6 +16,7 @@ use App\Repository\Traits\Component\IsTransport;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
+use Settings;
 
 class TransportInventoryRepository extends InventoryRepository implements HasTransportManifest
 {
@@ -157,5 +158,15 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
     public static function find($id): TransportInventory|null
     {
         return TransportInventory::find($id);
+    }
+
+    public function getLocalPurchasePrice(): ?float
+    {
+        return Settings::convertCurrency($this->getPurchasePrice(), $this->inventory->component->currency) ?? $this->getPurchasePrice();
+    }
+
+    public function getPurchasePriceString(): string
+    {
+        return f_currency($this->getPurchasePrice(), $this->inventory->component->currency);
     }
 }

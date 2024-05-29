@@ -2,20 +2,49 @@
 
 namespace App\Repository\Authentication;
 
+use App\Mail\PasswordResetMailable;
+use App\Models\Helper\ModelEventType;
 use App\Models\System\ApiToken;
 use App\Models\User;
 use Bouncer;
+use EventLogger;
+use Exception;
+use Hash;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
+use Log;
+use Mail;
 
 class UserRepository
 {
+    private User $user;
 
-    public static function getLatestToken(User $user): ApiToken
+    public function __construct(User $user)
     {
-        $token = $user->tokens()->latest()->first();
-        if (!(isset($token) && !$token->hasExpired())) $token = $user->generateToken();
-        return $token;
+        $this->user = $user;
+    }
+
+    public function requestReset(): bool
+    {
+        $token = PasswordResetRepository::createResetRequest($this->user->email);
+        try {
+            Mail::to($this->user->email)->send(new PasswordResetMailable($this->user->email, $token));
+            return true;
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return false;
+        }
+    }
+
+    public function resetPassword(string $token, string $password): bool
+    {
+        if (PasswordResetRepository::getResetEmail($token) === $this->user->email) {
+            EventLogger::simple($this->user, ModelEventType::PASSWORD_RESET);
+            $this->user->password = Hash::make($password);
+            $this->user->save();
+            return true;
+        }
+        return false;
     }
 
     public static function getUserFromToken(string $token): User
@@ -24,16 +53,22 @@ class UserRepository
         return $apiToken->user;
     }
 
-    public static function generateUserToken(User $user, int $expiresIn = ApiToken::DEFAULT_EXPIRY): ApiToken
+    public function getLatestToken(): ApiToken
     {
-        // This will attempt to create an API key, and re-attempt if a collision occurs. Should be rare, but may bite us in future
+        $token = $this->user->tokens()->latest()->first();
+        if (!(isset($token) && !$token->hasExpired())) $token = $this->user->generateToken();
+        return $token;
+    }
+
+    public function generateToken(int $expiry = ApiToken::DEFAULT_EXPIRY): ApiToken
+    {
         while (true) {
             try {
                 $apiToken = ApiToken::make([
                     'token' => Str::random(32),
-                    'expiry' => now()->addMinutes($expiresIn),
+                    'expiry' => now()->addMinutes($expiry),
                 ]);
-                $user->tokens()->save($apiToken);
+                $this->user->tokens()->save($apiToken);
                 return $apiToken;
             } catch (QueryException $ignored) {
                 continue;
@@ -41,18 +76,18 @@ class UserRepository
         }
     }
 
-    public static function purgeUserTokens(User $user, int $limit = ApiToken::DEFAULT_LIMIT): void
+    public function purgeUserTokens(int $limit = ApiToken::DEFAULT_LIMIT): void
     {
-        foreach ($user->tokens as $token) {
+        foreach ($this->user->tokens as $token) {
             if (now()->addHours($limit * -1)->isAfter($token->expiry)) {
                 $token->forceDelete();
             }
         }
     }
 
-    public static function invalidateAllUserTokens(User $user): void
+    public function invalidateAllUserTokens(): void
     {
-        foreach ($user->tokens as $token) {
+        foreach ($this->user->tokens as $token) {
             if (!$token->hasExpired()) {
                 $token->invalidate();
             }

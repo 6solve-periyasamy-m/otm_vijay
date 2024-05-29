@@ -22,6 +22,11 @@ class QuoteActivityRepository extends QuoteComponentRepository
         $this->quoteComponent = $quoteComponent;
     }
 
+    public function getQuantity(): int|null
+    {
+        return $this->quoteComponent->quantity;
+    }
+
     public function getTourComponentType(): string
     {
         return $this->quoteComponent->tour_component_type;
@@ -76,6 +81,14 @@ class QuoteActivityRepository extends QuoteComponentRepository
         $inventory = $this->getInventory()->get();
         $component = $inventory->component;
         return "{$component->name} ({$component->activityType}) ({$inventory->ticketType})";
+    }
+
+    public function getActivityData()
+    {
+        $inventory = $this->getInventory()->get();
+        return $component = $inventory->component;
+        // return "{$component->name} ({$component->activityType}) ({$inventory->ticketType})";
+        
     }
 
     public function getItineraryTitle(): string

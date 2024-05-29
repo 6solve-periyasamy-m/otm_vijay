@@ -22,6 +22,11 @@ class QuoteAccommodationRepository extends QuoteComponentRepository
         $this->quoteComponent = $quoteComponent;
     }
 
+    public function getQuantity(): int|null
+    {
+        return $this->quoteComponent->quantity;
+    }
+
     public function getTourComponentType(): string
     {
         return $this->quoteComponent->tour_component_type;
@@ -70,7 +75,24 @@ class QuoteAccommodationRepository extends QuoteComponentRepository
         $component = $inventory->component;
         return "{$component->name} ({$component->address->region}, {$component->address->country}) - {$inventory->roomType} {$inventory->boardType}";
     }
-
+    public function getHotelAddress(): string
+    {
+        $inventory = $this->getInventory()->get();
+        $component = $inventory->component;
+        return $component->address;
+    }
+    public function getRoomType(): string
+    {
+        $inventory = $this->getInventory()->get();
+       
+        return $inventory->boardType;
+    }
+    public function getHotelName(): string
+    {
+        $inventory = $this->getInventory()->get();
+        $component = $inventory->component;
+        return "{$component->name}";
+    }
     public function getShortDescription(): string
     {
         $inventory = $this->getInventory()->get();

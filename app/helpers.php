@@ -1,9 +1,19 @@
 <?php
 
+use App\Models\Location\Currency;
 use App\Models\User;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\UploadedFile;
+use Spatie\Browsershot\Browsershot;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 if (!function_exists('sigfig')) {
     function sigfig($number, $figures = 2): float
@@ -42,12 +52,14 @@ if (!function_exists('f_currency')) {
     /**
      * Alias for StringFormatter::formatCurrency
      * @param float|null $amount
-     * @param null $currency
+     * @param Currency|string|null $currency
+     * @param float|null $conversion
+     * @param string|null $toCurrency
      * @return string
      */
-    function f_currency(?float $amount, $currency = null): string
+    function f_currency(?float $amount, Currency|string|null $currency = null, ?float $conversion = null, Currency|string|null $toCurrency = null): string
     {
-        return StringFormatter::formatCurrency($amount, $currency);
+        return StringFormatter::formatCurrency($amount, $currency, $conversion, $toCurrency);
     }
 }
 
@@ -224,13 +236,34 @@ if (!function_exists('generify_date')) {
 if (!function_exists('img_to_b64')) {
     function img_to_b64(string $file, string $prefix = "data:image/png;base64,"): string
     {
-        return $prefix.base64_encode(file_get_contents(public_path($file)));
+        $path = public_path($file);
+        if (file_exists($path)) {
+            return $prefix.base64_encode(file_get_contents(public_path($file)));
+        } else {
+            return "";
+        }
     }
 }
 if (!function_exists('svg_to_b64')) {
     function svg_to_b64(string $file): string
     {
         return img_to_b64($file, "data:image/svg+xml;base64,");
+    }
+}
+if (!function_exists('generate_qr')) {
+    /**
+     * Generate a Base64 QR code for a given content
+     * @param string $content
+     * @param string $prefix Prefix to use for the QR code (defaults to base64 SVG for img tags)
+     * @return string base64 representation of the QR code
+     */
+    function generate_qr(string $content, string $prefix = "data:image/svg+xml;base64,"): string
+    {
+        return $prefix . base64_encode((new Writer(
+            new ImageRenderer(
+                new RendererStyle(400),
+                new SvgImageBackEnd(),
+            )))->writeString($content));
     }
 }
 if (!function_exists('stack_dump')) {
@@ -294,5 +327,38 @@ if (!function_exists('get_current_admin')) {
         $user = Auth::guard('web')->user();
         if ($user instanceof User) return $user;
         return null;
+    }
+}
+if(!function_exists('puppeteer')) {
+    /**
+     * @param \Illuminate\Contracts\View\View|Factory $view
+     * @param bool $response Should it be a streamed response, or just formatted for other uses
+     * @return StreamedResponse|string
+     */
+    function puppeteer(\Illuminate\Contracts\View\View|Factory $view, bool $response = true): StreamedResponse|string
+    {
+        $invoice = Browsershot::html($view->render())->noSandbox();
+        $invoice->showBackground()->margins(10, 2, 10, 2);
+        if (!$response) return $invoice->pdf();
+        return response()->stream(function () use ($invoice) { echo $invoice->pdf(); }, 200, ['Content-Type' => 'application/pdf']);
+    }
+}
+if(!function_exists('dompdf')) {
+    /**
+     * @param \Illuminate\Contracts\View\View|Factory $view
+     * @param bool $response Should it be a streamed response, or just formatted for other uses
+     * @return StreamedResponse|string
+     */
+    function dompdf(\Illuminate\Contracts\View\View|Factory $view, bool $response = true): StreamedResponse|string
+    {
+        $dompdf = new Dompdf((new Options())->set('dpi', 96)->set('isHtml5ParserEnabled', true));
+        $dompdf->setPaper('A4', 'portrait');
+
+        $dompdf->loadHtml($view->render());
+        $dompdf->render();
+
+        if (!$response) return $dompdf->output();
+
+        return response()->stream(function () use ($dompdf) { echo $dompdf->output(); }, 200, ['Content-Type' => 'application/pdf']);
     }
 }

@@ -48,6 +48,7 @@ class TourController extends Controller
             'booking_form_url' => $request->input('booking_form_url'),
             'tour_category_id' => $request->input('tour_category_id'),
             'deposit' => $request->input('deposit'),
+            'is_deposit_percentage' => $request->input('is_deposit_percentage') == 'on',
             'booking_fee' => $request->input('booking_fee') ?? 0,
             'is_active' => $request->input('is_active') === 'on' ? 1 : 0,
             'notes' => $request->input('notes'),
@@ -60,6 +61,7 @@ class TourController extends Controller
             'merchandise_stock_control' => $request->input('merchandise_stock_control') === 'on' ? 1 : 0,
             'terms' => $request->input('terms'),
         ]);
+        $tour->repository->cloneFromDefaultInstallments();
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
@@ -121,6 +123,7 @@ class TourController extends Controller
             'base_price_per_person' => $request->input('base_price_per_person'),
             'margin' => $request->input('margin'),
             'deposit' => $request->input('deposit'),
+            'is_deposit_percentage' => $request->input('is_deposit_percentage') == 'on',
             'booking_fee' => $request->input('booking_fee') ?? 0,
             'single_occupancy_surcharge' => $request->input('single_occupancy_surcharge'),
             'stock_control_active' => $request->input('stock_control_active') === 'on' ? 1 : 0,

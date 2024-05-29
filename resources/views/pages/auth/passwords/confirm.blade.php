@@ -12,7 +12,7 @@
                 <div class="card-body">
                     {{ __('Please confirm your password before continuing.') }}
 
-                    <form method="POST" action="{{ $action ?? route('password.confirm') }}">
+                    <form method="POST" action="{{ $action ?? route('password.confirm-password') }}">
                         @csrf
 
                         <div class="form-group row">
@@ -28,6 +28,22 @@
                                 @enderror
                             </div>
                         </div>
+
+                        @if(config('auth.google-2fa.enabled'))
+                        <div class="form-group row">
+                            <label for="otp_code" class="col-md-4 col-form-label text-md-right">One-Time Passcode</label>
+
+                            <div class="col-md-6">
+                                <input id="otp_code" class="form-control @error('otp_code') is-invalid @enderror" name="otp_code" >
+
+                                @error('otp_code')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        @endif
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">

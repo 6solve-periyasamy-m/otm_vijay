@@ -36,3 +36,32 @@ function flipButton(btn, state) {
         btn.addClass('cross-out');
     }
 }
+
+// Function to toggle sidebar and initialize state
+function toggleSidebar() {
+    let sidebar = $(".otm-sidebar");
+    let arrow = $(".sidebar-arrow");
+
+    // Toggle the 'shown' class on the sidebar
+    sidebar.toggleClass('shown');
+
+    // Toggle the classes on the arrow
+    arrow.toggleClass('fa-solid fa-bars fa-solid fa-xmark');
+
+    // Store the state of the sidebar in localStorage
+    localStorage.setItem('isSidebarShown', sidebar.hasClass('shown'));
+}
+
+// Initialize sidebar state on page load
+$(document).ready(function() {
+    let sidebar = $(".otm-sidebar");
+    let arrow = $(".sidebar-arrow");
+
+    // Retrieve the state of the sidebar from localStorage
+    let isSidebarShown = localStorage.getItem('isSidebarShown') === 'true';
+
+    // Update the sidebar, arrow, and icon based on the stored state
+    sidebar.toggleClass('shown', isSidebarShown);
+    arrow.toggleClass('fa-solid fa-bars', !isSidebarShown);
+    arrow.toggleClass('fa-solid fa-xmark', isSidebarShown);
+});

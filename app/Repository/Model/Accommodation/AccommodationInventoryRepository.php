@@ -14,6 +14,7 @@ use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
 use App\Repository\Traits\Component\IsAccommodation;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Settings;
 
 class AccommodationInventoryRepository extends InventoryRepository implements HasRoomingList
 {
@@ -24,6 +25,25 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
     public function __construct(AccommodationInventory $inventory)
     {
         $this->inventory = $inventory;
+    }
+
+    public static function validateStockParent(int|null $parent, AccommodationInventory|null $inventory): bool
+    {
+        if ($parent === null || $inventory === null) { return true; }
+        $parent = AccommodationInventory::find($parent);
+        if ($parent === null || $inventory->id === $parent->id) { return false; }
+        $parents = [];
+        do {
+            if (in_array($parent->id, $parents)) { return false; }
+            $parents[] = $parent->id;
+            $parent = $parent->stockParent;
+        } while ($parent !== null);
+        return true;
+    }
+
+    public function validateParent(int|null $parent): bool
+    {
+        return static::validateStockParent($parent, $this->inventory);
     }
 
     public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
@@ -54,17 +74,31 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         return $this->inventory->check_out;
     }
 
+    public function getHotelName()
+    {
+        return $this->inventory;
+    }
+
     public function getAvailableStock(): int
     {
         if ($this->inventory->stock_parent_id !== null && $this->inventory->stock_parent_id !== $this->inventory->id) {
             return $this->inventory->stockParent->repository->getAvailableStock();
         }
-        return $this->getTotalStock() - $this->getUsedStock();
+        return $this->getTotalStock() - $this->getTotalUsedStock();
     }
 
     public function getTotalStock(): int
     {
-        return $this->inventory->stock;
+        return $this->inventory->stock_parent_id !== null ? $this->inventory->stockParent->repository->getTotalStock() : $this->inventory->stock;
+    }
+
+    public function getTotalUsedStock(): int
+    {
+        $used = $this->getUsedStock();
+        foreach ($this->inventory->stockChildren as $children) {
+            $used += $children->used_stock;
+        }
+        return $used;
     }
 
     public function getUsedStock(): int
@@ -74,9 +108,6 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
             foreach ($component->orders as $orderComponent) {
                 if (!$orderComponent->cancelled) $used++;
             }
-        }
-        foreach ($this->inventory->stockChildren as $children) {
-            $used += $children->used_stock;
         }
         return $used;
     }
@@ -150,6 +181,10 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         )->get();
     }
 
+    public function getRoomingListt(): Collection|array
+    {
+        return $this->inventory->orderComponents()->get();
+    }
     public function getSalesPrice(): ?float
     {
         return $this->inventory->sales_price;
@@ -168,5 +203,15 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
     public static function find($id): AccommodationInventory|null
     {
         return AccommodationInventory::find($id);
+    }
+
+    public function getLocalPurchasePrice(): ?float
+    {
+        return Settings::convertCurrency($this->getPurchasePrice(), $this->inventory->component->currency) ?? $this->getPurchasePrice();
+    }
+
+    public function getPurchasePriceString(): string
+    {
+        return f_currency($this->getPurchasePrice(), $this->inventory->component->currency);
     }
 }

@@ -25,6 +25,7 @@
             <th scope="col">Description</th>
             <th scope="col">Start Date</th>
             <th scope="col">End Date</th>
+            <th scope="col">Event Category</th>
             <th scope="col">Notes</th>
             <th scope="col">Actions</th>
         </tr>
@@ -36,6 +37,7 @@
                 <td>{{ $event->description }}</td>
                 <td>{{ f_date($event->starts_at) }}</td>
                 <td>{{ f_date($event->ends_at) }}</td>
+                <td>{{ $event->event_category->label() }}</td>
                 <td>{{ $event->notes }}</td>
                 <td>
                     @can('update', \App\Models\Tour\Event::class)

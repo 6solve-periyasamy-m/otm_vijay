@@ -4,6 +4,10 @@ use App\Http\Controllers\Api\SelectController;
 use App\View\Components\Livewire\Input\Select\AccommodationInventory;
 use App\View\Components\Livewire\Input\Select\Country;
 use App\View\Components\Livewire\Input\Select\Currency;
+use App\View\Components\Livewire\Input\Select\Customer;
+use App\View\Components\Livewire\Input\Select\Event\All as AllEvents;
+use App\View\Components\Livewire\Input\Select\Event\Main as MainEvent;
+use App\View\Components\Livewire\Input\Select\Event\Normal as NormalEvent;
 use App\View\Components\Livewire\Input\Select\Organization;
 use App\View\Components\Livewire\Input\Select\TaxBracket;
 use App\View\Components\Livewire\Input\Select\User;
@@ -35,6 +39,24 @@ Route::prefix('inventory')->name('inventory.')->group(function () {
     });
 });
 
+Route::prefix('customers')->name('customers.')->group(function () {
+    Route::post('/', [Customer::class, 'getAll'])->name('select');
+    Route::post('/{id}', [Customer::class, 'getOne'])->name('selected');
+});
+
+Route::prefix('events')->name('events.')->group(function () {
+    Route::prefix('main')->name('main.')->group(function () {
+        Route::post('/', [MainEvent::class, 'getAll'])->name('select');
+        Route::post('/{id}', [MainEvent::class, 'getOne'])->name('selected');
+    });
+    Route::prefix('normal')->name('normal.')->group(function () {
+        Route::post('/', [NormalEvent::class, 'getAll'])->name('select');
+        Route::post('/{id}', [NormalEvent::class, 'getOne'])->name('selected');
+    });
+    Route::post('/', [AllEvents::class, 'getAll'])->name('select');
+    Route::post('/{id}', [AllEvents::class, 'getOne'])->name('selected');
+});
+
 Route::post('locations', [SelectController::class, 'getLocations'])->name('locations.select');
 Route::post('addresses', [SelectController::class, 'getAddresses'])->name('addresses.select');
 Route::post('filter/countries', [SelectController::class, 'getAvailableFilterCountries'])->name('countries.filter.select');
@@ -47,12 +69,10 @@ Route::post('operators', [SelectController::class, 'getOperators'])->name('opera
 Route::post('travel-classes', [SelectController::class, 'getTravelClasses'])->name('travel-classes.select');
 Route::post('activity-types', [SelectController::class, 'getActivityTypes'])->name('activity-types.select');
 Route::post('ticket-types', [SelectController::class, 'getTicketTypes'])->name('ticket-types.select');
-Route::post('events', [SelectController::class, 'getEvents'])->name('events.select');
 Route::post('tours', [SelectController::class, 'getTours'])->name('tours.select');
 Route::post('airports', [SelectController::class, 'getAirports'])->name('airports.select');
 Route::post('airlines', [SelectController::class, 'getAirlines'])->name('airlines.select');
 Route::post('quotes', [SelectController::class, 'getQuotes'])->name('quotes.select');
-Route::post('customer', [SelectController::class, 'getCustomers'])->name('customers.select');
 Route::post('customer/{order}', [SelectController::class, 'getAvailableCustomers'])->name('available-customers.select');
 Route::post('payment-method', [SelectController::class, 'getPaymentMethods'])->name('payment-method.select');
 Route::post('tour-category', [SelectController::class, 'getTourCategories'])->name('tour-categories.select');
@@ -86,12 +106,10 @@ Route::prefix('selected')->group(function () {
     Route::post('travel-class/{id}', [SelectController::class, 'getSelectedTravelClass'])->name('travel-classes.selected');
     Route::post('activity-type/{id}', [SelectController::class, 'getSelectedActivityType'])->name('activity-types.selected');
     Route::post('ticket-type/{id}', [SelectController::class, 'getSelectedTicketTypes'])->name('ticket-types.selected');
-    Route::post('event/{id}', [SelectController::class, 'getSelectedEvent'])->name('events.selected');
     Route::post('tour/{id}', [SelectController::class, 'getSelectedTour'])->name('tours.selected');
     Route::post('airports/{id}', [SelectController::class, 'getSelectedAirport'])->name('airports.selected');
     Route::post('airlines/{id}', [SelectController::class, 'getSelectedAirline'])->name('airlines.selected');
     Route::post('quotes/{id}', [SelectController::class, 'getSelectedQuote'])->name('quotes.selected');
-    Route::post('customers/{id}', [SelectController::class, 'getSelectedCustomer'])->name('customers.selected');
     Route::post('payment-method/{id}', [SelectController::class, 'getSelectedPaymentMethod'])->name('payment-method.selected');
     Route::post('tour-category/{id}', [SelectController::class, 'getSelectedTourCategory'])->name('tour-categories.selected');
     Route::post('merchandise-types/{id}', [SelectController::class, 'getSelectedMerchandiseType'])->name('merchandise-types.selected');

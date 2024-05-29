@@ -2,6 +2,7 @@
 
 namespace App\Repository\Facades;
 
+use App\Models\Location\Currency;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Support\Facades\App;
@@ -9,10 +10,24 @@ use NumberFormatter;
 
 class StringFormatter
 {
-    public function formatCurrency($value, $currency = null) : string {
-        if (!isset($currency)) {
-            $currency = setting('system.currency', 'GBP');
+    public function formatCurrency($value, $currentCurrency = null, $conversion = null, $toCurrency = null) : string {
+        $systemCurrency = Currency::code(setting('system.currency', 'GBP'));
+        if (is_string($currentCurrency)) { $currentCurrency = Currency::code($currentCurrency); }
+        if (is_string($toCurrency)) { $toCurrency = Currency::code($toCurrency); }
+        $currentCurrency = $currentCurrency ?? $systemCurrency;
+        $toCurrency = $toCurrency ?? $systemCurrency;
+        if ($currentCurrency !== $toCurrency) {
+            $rate = $conversion ?? \Settings::getConversionRate($currentCurrency, $toCurrency);
+            if ($rate !== null && $rate != 1) {
+                return $this->currency(sigfig($value * $rate), $toCurrency) . " (" . $this->currency($value, $currentCurrency) . ")";
+            }
         }
+        return $this->currency($value, $currentCurrency);
+    }
+
+    private function currency($value, $currency): string
+    {
+        if (!is_string($currency)) $currency = $currency->code;
         return (new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($value ?? 0, $currency);
     }
 

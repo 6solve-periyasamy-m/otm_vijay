@@ -30,6 +30,7 @@ class EventController extends Controller
             'booking_url' => $request->input('booking_url'),
             'tax_bracket_id' => $request->input('tax_bracket_id'),
             'notes' => $request->input('notes'),
+            'event_category' => $request->input('event_category'),
         ]);
 
         if ($request->has('image') && $request->file('image') != null) {
@@ -60,12 +61,13 @@ class EventController extends Controller
             'booking_url' => $request->input('booking_url'),
             'tax_bracket_id' => $request->input('tax_bracket_id'),
             'notes' => $request->input('notes'),
+            'event_category' => $request->input('event_category'),
         ]);
 
         if ($request->has('image') && $request->file('image') != null) {
-            if (isset($event->image_url)) {
+            /*if (isset($event->image_url)) {
                 File::delete(public_path($event->image_url));
-            }
+            }*/
             $event->image_url = $request->file('image')->storePublicly('uploads/images');
         }
         $event->save();

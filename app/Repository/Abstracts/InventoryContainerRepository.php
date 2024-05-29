@@ -21,21 +21,26 @@ abstract class InventoryContainerRepository extends ModelRepository implements H
         return $this->getInventory()->getPurchasePrice();
     }
 
+    public function getLocalPurchasePrice(): ?float
+    {
+        return $this->getInventory()->getLocalPurchasePrice();
+    }
+
     public function getMargin(): ?float
     {
         if (method_exists($this, 'getUpgradeParent')) {
             $upgrade = $this->getUpgradeParent();
             if ($upgrade->id === $this->get()->id) {
-                $p = $this->getPurchasePrice();
+                $purchase = $this->getLocalPurchasePrice();
             } else {
-                $p = ($this->getPurchasePrice() - $this->getUpgradeParent()->repository->getPurchasePrice());
+                $purchase = ($this->getLocalPurchasePrice() - $this->getUpgradeParent()->repository->getLocalPurchasePrice());
             }
         } else {
-            $p = $this->getPurchasePrice();
+            $purchase = $this->getLocalPurchasePrice();
         }
-        $s = $this->getCost();
-        if (empty($p)) return null;
-        return sigfig((($s-$p)/$p)*100);
+        $sales = $this->getCost();
+        if (empty($purchase)) return null;
+        return sigfig((($sales-$purchase)/$purchase)*100);
     }
 
     public function getStartTime(): Carbon|null

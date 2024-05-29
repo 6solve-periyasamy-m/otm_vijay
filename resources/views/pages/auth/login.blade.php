@@ -41,6 +41,22 @@
                             </div>
                         </div>
 
+                        @if(config('auth.google-2fa.enabled'))
+                            <div class="form-group row">
+                                <label for="email" class="col-md-4 col-form-label text-md-right" title="Required if two-factor authentication is enabled">One Time Code</label>
+
+                                <div class="col-md-6">
+                                    <input id="otp_code" class="form-control @error('otp_code') is-invalid @enderror" name="otp_code" value="{{ old('otp_code') }}">
+
+                                    @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                       @endif
+
                         <div class="form-group row">
                             <div class="col-md-6 offset-md-4">
                                 <div class="form-check">
