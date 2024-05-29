@@ -20,7 +20,7 @@ class QuotePdfGenerator
         return (int)setting('quote.style', 1);
     }
 
-    private function isPuppeteer()
+    private function isPuppeteer(): bool
     {
         return $this->getStyle() === 1;
     }
@@ -28,7 +28,7 @@ class QuotePdfGenerator
     public function getView(): View
     {
         return match ($this->getStyle()) {
-            2 =>  view('pdf.quotes.columns', ['sent' => $this->quote,]),
+            2 =>  view('pdf.quotes.kpt', ['sent' => $this->quote,]),
             default => view('pdf.quotes.columns', ['sent' => $this->quote,]),
         };
     }
