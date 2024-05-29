@@ -12,7 +12,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use PDF;
 
-class ItinearyRepository
+class ItineraryRepository
 {
     public readonly Invoice $invoice;
 
@@ -35,7 +35,7 @@ class ItinearyRepository
     {
         $invoice = $this->invoice;
         dd($invoice);
-        $html = view('pdf.invoices.itineary_invoice', compact('invoice'))->render();
+        $html = view('pdf.invoices.itinerary_invoice', compact('invoice'))->render();
 
         // Create options for Dompdf
         $options = new Options();

@@ -185,7 +185,7 @@
                     </div>
 
                     <div class="col-2">
-                        <a href="{{ route('orders.itineary.latest', ['order' => $order,]) }}" target="_blank" class="invoice-button btn btn-primary text-white mb-1">View Final Itineary</a>
+                        <a href="{{ route('orders.itinerary.latest', ['order' => $order,]) }}" target="_blank" class="invoice-button btn btn-primary text-white mb-1">View Final Itinerary</a>
                     </div>
 
                     @can('create', \App\Models\Order\Payment\Payment::class)
