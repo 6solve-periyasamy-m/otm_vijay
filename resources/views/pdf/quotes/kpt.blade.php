@@ -416,7 +416,7 @@ if (!empty($quote->event->image_url)){
     </table>
     @endforeach
     @endif
-    @if(sizeof($quote->activities))
+   
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
         <tr>
             <td colspan="2" align="left" >
@@ -426,18 +426,19 @@ if (!empty($quote->event->image_url)){
             </td>
         </tr>
     </table>
-    @foreach($quote->repository->getActivitiesForInvoice() as $component)
-    @php
-            $dateFrom = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
-            $dateTo = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
-        @endphp
+
+    
+    
+    @if(isset($quote->event->name) && $quote->event->name!='')
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
+
         <tr>
             <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 DATE:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
-            {{ $dateFrom }} to {{ $dateTo }}
+            {{ date('d M Y', strtotime($quote->event->starts_at)) }}
+                to  {{ date('d M Y', strtotime($quote->event->ends_at)) }}
             </td>
         </tr>
         <tr>
@@ -456,9 +457,117 @@ if (!empty($quote->event->image_url)){
                 {{ $quote->event->description }}
             </td>
         </tr>
-    </table>
-    @endforeach
+        </table>
     @endif
+
+    @if(sizeof($quote->activities))
+    @foreach($quote->repository->getActivitiesForInvoice() as $component)
+    @if($component->getActivityData()->activity_category == 1 )
+    
+    @php
+           
+            $dateFrom = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
+            $dateTo = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
+        @endphp
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
+
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                DATE:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+            {{ $dateFrom }} to {{ $dateTo }}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                EVENT:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{ $component->getActivityData()->name }}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                DESCRIPTION:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {!! $component->getActivityData()->description !!}
+            </td>
+        </tr>
+        </table>
+        @endif
+        @endforeach
+      
+    @endif
+   
+    @if(sizeof($quote->repository->getActivitiesForInvoice()))
+
+    @foreach($quote->repository->getActivitiesForInvoice() as $component)
+    @if($component->getActivityData()->activity_category == 0 )
+
+    @php
+        $activeInclusion = false; 
+    @endphp
+
+    @foreach($quote->repository->getActivitiesForInvoice() as $component)
+    @if($component->getActivityData()->activity_category == 0 )
+    @php
+        $activeInclusion = true; 
+    @endphp
+     @endif
+        @endforeach
+    
+    @if($activeInclusion == true)
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
+        <tr>
+            <td colspan="2" align="left" >
+                <div style="background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px; padding: 10px 25px; margin: 10px 0; color: #ffffff; display: block;" class="oc_f16 oc_lblack">
+                INCLUSION
+                </div>
+            </td>
+        </tr>
+    </table>
+    @endif
+   
+   
+    @php
+     
+            $dateFrom = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getStartTime()))->format('d M Y | h:i A');
+            $dateTo = DateTime::createFromFormat('d/m/Y H:i', f_datetime($component->getInventory()->getEndTime()))->format('d M Y | h:i A');
+        @endphp
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
+
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                DATE:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+            {{ $dateFrom }} to {{ $dateTo }}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                EVENT:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{ $component->getActivityData()->name }}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                DESCRIPTION:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {!! $component->getActivityData()->description !!}
+            </td>
+        </tr>
+        </table>
+        @endif
+        @endforeach
+      
+    @endif
+   
     @if(sizeof($quote->flights))
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
         <tr>
