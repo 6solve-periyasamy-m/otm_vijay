@@ -229,7 +229,7 @@ if (!empty($order->tour->event->image_url)){
                     <tbody>
                         
                         <tr>
-                            <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:15px;" class="oc_f12 oc_lblack">
+                            <td width="140" align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
                                 TOTAL NUMBER OF PERSONS:
                             </td>
                             <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12 oc_lblack">
@@ -239,28 +239,43 @@ if (!empty($order->tour->event->image_url)){
                         @php 
                             $counter = 0; 
                             $totalRecords = count($order->orderCustomers); 
-                            $otherGuestsShown = false; // Introduce a flag to track if "OTHER GUESTS" has been shown
+                            $leadGuest = null;
+                            $otherGuests = [];
                         @endphp
 
                         @foreach($order->orderCustomers as $ordersCustomer)
-                            @if($counter < 5)
-                                <tr>
-                                    <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
-                                        {{ ($order->lead_booker_id == $ordersCustomer->id) ? 'LEAD GUEST:' : ($otherGuestsShown ? '' : 'OTHER GUESTS:') }}
-                                        {{-- Check if "OTHER GUESTS" has been shown --}}
-                                        @if(!$otherGuestsShown && $order->lead_booker_id != $ordersCustomer->id)
-                                            @php $otherGuestsShown = true; @endphp
-                                        @endif
-                                    </td>
-                                    <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12 oc_lblack">
-                                        {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
-                                    </td>
-                                </tr>
-                                @php $counter++; @endphp
+                            @if($order->lead_booker_id == $ordersCustomer->id)
+                                @php
+                                    $leadGuest = $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name;
+                                @endphp
                             @else
-                                @break
+                                @php
+                                    $otherGuests[] = $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name;
+                                @endphp
                             @endif
                         @endforeach
+
+                        @if($leadGuest)
+                            <tr>
+                                <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
+                                    LEAD GUEST:
+                                </td>
+                                <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12 oc_lblack">
+                                    {{ $leadGuest }}
+                                </td>
+                            </tr>
+                        @endif
+
+                        @if(count($otherGuests) > 0)
+                            <tr>
+                                <td align="left" valign="top" style="padding: 10px 15px 0px 25px; font-weight: 700; line-height:10px;" class="oc_f12 oc_lblack">
+                                    OTHER GUESTS:
+                                </td>
+                                <td align="left" valign="top" style="padding: 10px 15px 0px 25px; line-height:10px;" class="oc_f12 oc_lblack">
+                                    {{ implode(', ', $otherGuests) }}
+                                </td>
+                            </tr>
+                        @endif
 
                         @if($totalRecords > 5)
                             <tr>
@@ -271,7 +286,8 @@ if (!empty($order->tour->event->image_url)){
                                     TBC
                                 </td>
                             </tr>
-                        @endif                     
+                        @endif
+                 
                     </tbody>
                 </table>
             </td>
@@ -455,6 +471,106 @@ if (!empty($order->tour->event->image_url)){
                 {{ $order->tour->event->description ?? 'Event description not available' }}
             </td>
         </tr>
+        @foreach($tour->activityInventoryTours as $tourComponent)
+        @if($tourComponent->inventory->component->activity_category == 1)
+        <tr>
+            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                DATE:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{ \Carbon\Carbon::parse($tourComponent->inventory->starts_at)->format('d F Y | ha') }}
+                to
+                {{ \Carbon\Carbon::parse($tourComponent->inventory->ends_at)->format('d F Y | ha') }}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                EVENT:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{ $tourComponent->inventory->component->name }}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                VENUE:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{$tourComponent->inventory->component->address}}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                TICKET TYPE(S):
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{$tourComponent->inventory->ticketType->name}}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                DESCRIPTION:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {!! $tourComponent->inventory->component->description !!}
+            </td>
+        </tr>
+        @endif
+        @endforeach
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
+        <tr>
+            <td colspan="2" align="left" >
+                <div style="background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 190px; padding: 10px 25px; margin: 10px 0; color: #ffffff; display: block;" class="oc_f16 oc_lblack">
+                INCLUSIONS
+                </div>
+            </td>
+        </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
+        @foreach($tour->activityInventoryTours as $tourComponent)
+        <tr>
+            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                DATE:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{ \Carbon\Carbon::parse($tourComponent->inventory->starts_at)->format('d F Y | ha') }}
+                to
+                {{ \Carbon\Carbon::parse($tourComponent->inventory->ends_at)->format('d F Y | ha') }}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                EVENT:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{ $tourComponent->inventory->component->name }}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                VENUE:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{$tourComponent->inventory->component->address}}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+                DESCRIPTION:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {!! $tourComponent->inventory->component->description !!}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="40" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">&nbsp;
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px;">
+                &nbsp;
+            </td>
+        </tr>
+        @endforeach
     </table>
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
         <tr>
