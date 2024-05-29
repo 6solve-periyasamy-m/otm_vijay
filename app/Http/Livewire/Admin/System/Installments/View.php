@@ -9,7 +9,7 @@ use Settings;
 class View extends Component
 {
     use SendsEvents;
-    public float|int|null $deposit;
+    public string|float|int|null $deposit;
 
     protected $listeners = ['refreshLivewireDatatable' => 'update',];
 
@@ -26,7 +26,7 @@ class View extends Component
 
     public function setDeposit(): void
     {
-        Settings::set('system.installments.deposit', $this->deposit);
+        Settings::set('system.installments.deposit', empty($this->deposit) ? null : $this->deposit);
         $this->refreshTables();
         $this->toast('Updated Successfully', 'Successfully updated the default deposit', 'success');
     }
@@ -44,6 +44,6 @@ class View extends Component
 
     public function rules(): array
     {
-        return ['deposit' => 'required|numeric|gte:0',];
+        return ['deposit' => 'nullable|numeric|gte:0',];
     }
 }

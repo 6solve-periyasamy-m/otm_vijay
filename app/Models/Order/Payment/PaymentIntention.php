@@ -2,7 +2,10 @@
 
 namespace App\Models\Order\Payment;
 
+use App\Models\Booking\Booking;
 use App\Models\Customer\Customer;
+use App\Models\Order\Order;
+use App\Models\System\Brand;
 use App\Repository\Intention\PaymentIntentionRepository;
 use Carbon\Carbon;
 use Eloquent;
@@ -81,5 +84,16 @@ class PaymentIntention extends Model
     {
         $this->repo = $this->repo ?? new PaymentIntentionRepository($this);
         return $this->repo;
+    }
+
+    public function getBrand(): Brand
+    {
+        return $this->getRelatedModel()?->tour?->brand ?? Brand::getSystemBrand();
+    }
+
+    public function getRelatedModel(): Order|Booking|null
+    {
+        return Order::where('booking_reference', '=', $this->reference)->first()
+            ?? Booking::where('token', '=', $this->reference)->first();
     }
 }

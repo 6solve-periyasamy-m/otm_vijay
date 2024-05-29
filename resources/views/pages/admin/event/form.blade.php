@@ -24,6 +24,9 @@
     @include('partials.fields.date',
                 ['name' => 'End Date', 'field' => 'ends_at', 'value' => $event?->ends_at ?? null,
                  'onChange' => 'removeAutoset($(\'#starts_at-input\'), $(\'#ends_at-input\'));', 'classes' => 'autoset', 'width' => 6,])
+    <div class="form-group col-xl-6">
+    @include('partials.fields.raw.dropdown', ['name' => 'Event Category', 'field' => 'event_category','selected' => $event?->event_category, 'values' => \App\Models\Helper\EventType::toArray(),])
+    </div>
     @include('partials.fields.text', ['name' => 'Booking URL', 'field' => 'booking_url', 'value' => $event?->booking_url ?? null,])
     @include('partials.fields.textarea', ['name' => 'Notes', 'field' => 'notes', 'value' => $event?->notes ?? null])
     @include('partials.fields.submit')

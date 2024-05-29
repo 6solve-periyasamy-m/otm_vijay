@@ -32,7 +32,7 @@
                     <td></td>
                 </tr>
             @endif
-            @php $total = $deposit; @endphp
+            @php $total = !empty($deposit) ? $deposit : 0; @endphp
             @foreach(array_reverse(\Settings::getDefaultInstallments(), true) as $days => $percentage)
                 @php $total += $percentage; @endphp
                 <tr>
