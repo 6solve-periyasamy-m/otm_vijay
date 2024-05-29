@@ -7,7 +7,8 @@ $quote = $sent->built;
 $travelling = $sent->free;
 $paying = $sent->paid;
 $brand = $sent->quote->brand;
-
+$showInbound = 0;
+$showOutbound = 0;
 @endphp
 
 @php
@@ -16,6 +17,7 @@ if (!empty($quote->event->image_url)){
 } else{
     $evenImg = 'images/default_image.png';
 }
+
 @endphp
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -278,6 +280,18 @@ if (!empty($quote->event->image_url)){
             </td>
         </tr>
     </table>
+
+
+    @foreach($quote->repository->getFlightsForInvoice() as $component)
+    @if($component->get()->flight_type != 'Inbound')
+        @php
+
+      
+            $showOutbound = 1;
+            @endphp
+        @endif
+        @endforeach
+    @if($showOutbound == 1)
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
         @foreach($quote->repository->getFlightsForInvoice() as $component)
         @if($component->get()->flight_type != 'Inbound')
@@ -313,6 +327,7 @@ if (!empty($quote->event->image_url)){
         @endif
         @endforeach
     </table>
+    @endif
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
         @endif
         @if(sizeof($quote->repository->getTransportForInvoice()))
@@ -324,6 +339,9 @@ if (!empty($quote->event->image_url)){
             </td>
         </tr>
     </table>
+
+
+
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
         @foreach($quote->repository->getTransportForInvoice() as $component)
         @php
@@ -567,8 +585,17 @@ if (!empty($quote->event->image_url)){
         @endforeach
       
     @endif
-   
-    @if(sizeof($quote->flights))
+
+    @foreach($quote->repository->getFlightsForInvoice() as $component)
+        @if($component->get()->flight_type == 'Inbound')
+        @php
+    
+        $showInbound = 1;
+
+        @endphp
+        @endif
+        @endforeach
+    @if($showInbound == 1)
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
         <tr>
             <td colspan="2" align="left" >
@@ -614,33 +641,19 @@ if (!empty($quote->event->image_url)){
     </table>
     @endif
     <!-- Notes Section -->
+    @if(!empty($quote->external_notes))
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
+        <thead>
+            <tr style=" background-color: #353535; padding: 2px 15px;">
+                <th align="left" valign="top" style="padding: 10px 15px; color: #ffffff; font-weight: 700;" class="oc_f16">
+                EXTERNAL NOTES
+                </th>
+            </tr>
+        </thead>
+    </table>
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
-        @if(!empty($quote->external_notes))
-        <tr>
-            <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
-                &nbsp;
-            </td>
-        </tr>
-        <tr>
-            <td align="left" valign="top">
-                <table align="left" width="60%" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f12 oc_lblack">
-                            NOTE
-                        </td>
-                        <td  align="right" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">&nbsp;</td>
-                    </tr>
-                </table>
-                <table align="right" width="40%" cellspacing="0" cellpadding="0">
-                    <tbody>
-                        <tr>
-                            <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f14 oc_lblack">&nbsp;</td>
-                            <td width="180" align="center" valign="top" style="padding: 2px 15px;" class="oc_f14 oc_lblack">&nbsp;</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
+     
+       
         <tr>
             <td align="left" valign="top">
                 <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
@@ -652,8 +665,9 @@ if (!empty($quote->event->image_url)){
                 </table>
             </td>
         </tr>
-        @endif
+      
     </table>
+    @endif
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
         <thead>
             <tr style=" background-color: #353535; padding: 2px 15px;">
