@@ -3,13 +3,11 @@
 namespace App\Providers;
 
 use App\Models\Customer\Customer;
-use App\Models\User;
 use App\Transport\MinimalLogTransport;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Cashier\Cashier;
-use Laravel\Pennant\Feature;
 use Mail;
 use Stripe\Stripe;
 
