@@ -188,8 +188,8 @@
                         <td width="310" align="center" valign="top">
                             <table width="100%" align="center" border="0" cellspacing="0" style="margin: 10px auto; text-align: center;" cellpadding="0">
                                 <tr>
-                                    <td align="center" valign="center" class="oc_black" style="border-radius: 30px; padding: 20px 10px; font-weight: normal; background-color: #ffffff; color: #E95B15; margin: 0 auto; outline: 2px solid #E95B15; font-size: 15pt; min-width: 160px; max-width: 180px; display: block;">
-                                        FINAL ITINERARY
+                                    <td align="center" valign="center" class="oc_black" style="border-radius: 30px; padding: 20px 10px; font-weight: normal; background-color: #ffffff; color: #E95B15; margin: 0 auto; outline: 2px solid #E95B15; font-size: 15pt; min-width: 200px; max-width: 180px; display: block;">
+                                        TRAVEL ITINERARY
                                     </td>
                                 </tr>
                             </table>
