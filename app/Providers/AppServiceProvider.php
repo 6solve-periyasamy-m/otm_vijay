@@ -46,11 +46,5 @@ class AppServiceProvider extends ServiceProvider
                 ->symbols()
                 ->uncompromised();
         });
-        Feature::define('bleeding-edge', function (User $user) {
-            return config('app.features.bleeding-edge');
-        });
-        Feature::define('is-kpt', function (User $user) {
-            return config('app.features.is-kpt');
-        });
     }
 }

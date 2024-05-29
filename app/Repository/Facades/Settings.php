@@ -142,7 +142,7 @@ class Settings
     public function availableInvoiceStyles(): array
     {
         $styles = [1 => 'Default Invoice Style',];
-        if (\Feature::someAreActive(['bleeding-edge', 'is-kpt'])) {
+        if (config('app.features.bleeding-edge') || config('app.features.kpt')) {
             $styles[2] = 'Alternative Style (Under Development)';
         }
         return $styles;
@@ -151,7 +151,7 @@ class Settings
     public function availableQuoteStyles(): array
     {
         $styles = [1 => 'Default Quote Style',];
-        if (\Feature::someAreActive(['bleeding-edge', 'is-kpt'])) {
+        if (config('app.features.bleeding-edge') || config('app.features.kpt')) {
             $styles[2] = 'Alternative Style (Under Development)';
         }
         return $styles;

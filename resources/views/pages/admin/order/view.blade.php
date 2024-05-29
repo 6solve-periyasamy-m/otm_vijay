@@ -183,11 +183,11 @@
                     <div class="col-2">
                         <a href="{{ route('orders.invoice.latest', ['order' => $order,]) }}" target="_blank" class="invoice-button btn btn-primary text-white mb-1">View Invoice</a>
                     </div>
-                    @feature('bleeding-edge')
+                    @if(config('app.features.bleeding-edge'))
                     <div class="col-2">
                         <a href="{{ route('orders.itinerary.latest', ['order' => $order,]) }}" target="_blank" class="invoice-button btn btn-primary text-white mb-1">View Itinerary</a>
                     </div>
-                    @endfeature
+                    @endif
                     @can('create', \App\Models\Order\Payment\Payment::class)
                         <div class="col-3">
                             <a href="{{ route('payments.create', ['order' => $order, ]) }}" class="btn btn-success text-white mb-1">
