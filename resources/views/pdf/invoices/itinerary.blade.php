@@ -168,6 +168,7 @@
             border-collapse: collapse;
         }
     </style>
+    <title>Itinerary - {{ $invoice->booking_reference }}</title>
 </head>
 
 <body class="body" style="padding:0; margin:0 auto !important; display:block !important; width:100% !important; background:#ffffff; -webkit-text-size-adjust:none">

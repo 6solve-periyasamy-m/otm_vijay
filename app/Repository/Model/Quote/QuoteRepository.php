@@ -35,6 +35,7 @@ use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Database\Eloquent\Collection;
+use Settings;
 use Spatie\Browsershot\Browsershot;
 
 class QuoteRepository extends ComponentPackageRepository implements SerializesToJson
@@ -52,6 +53,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'consultant_id' => get_current_admin()?->id,
             'event_id' => $tour->event_id,
             'deposit' => $tour->deposit,
+            'is_deposit_percentage' => $tour->is_deposit_percentage,
             'final_payment' => $tour->final_payment,
             'date_from' => $tour->date_from,
             'date_to' => $tour->date_to,
@@ -81,7 +83,24 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $quote->reference = $quote->repository->generateReference();
         $quote->repository->save();
         $quote->repository->addPricePoint(1, $pricePerPerson);
+        $quote->repository->cloneFromDefaultInstallments();
         return $quote;
+    }
+
+    public function cloneFromDefaultInstallments(): void
+    {
+        $this->quote->installments()->delete();
+        if ($this->quote->deposit === null) {
+            $this->quote->deposit = setting('system.installments.deposit');
+            $this->quote->is_deposit_percentage = true;
+            $this->quote->save();
+        }
+        $installments = Settings::getDefaultInstallments();
+        if (sizeof($installments) > 0) {
+            foreach($installments as $days => $percentage) {
+                $this->quote->installments()->save(new QuoteInstallment(['due_on' => $this->quote->date_from->subDays($days), 'amount' => $percentage, 'is_percentage' => true,]));
+            }
+        }
     }
 
     public static function getFromReference(string $reference): ?Quote

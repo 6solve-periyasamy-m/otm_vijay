@@ -181,11 +181,11 @@
                         </select>
                     </div>
                     <div class="col-2">
-                        <a href="{{ route('orders.invoice.latest', ['order' => $order->tour_id,]) }}" target="_blank" class="invoice-button btn btn-primary text-white mb-1">View Invoice</a>
+                        <a href="{{ route('orders.invoice.view', ['order' => $order,]) }}" target="_blank" class="invoice-button btn btn-primary text-white mb-1">View Invoice</a>
                     </div>
 
                     <div class="col-2">
-                        <a href="{{ route('orders.itineary.latest', ['order' => $order,]) }}" target="_blank" class="invoice-button btn btn-primary text-white mb-1">View Final Itineary</a>
+                        <a href="{{ route('orders.itinerary.latest', ['order' => $order,]) }}" target="_blank" class="invoice-button btn btn-primary text-white mb-1">View Final Itineary</a>
                     </div>
 
                     @can('create', \App\Models\Order\Payment\Payment::class)

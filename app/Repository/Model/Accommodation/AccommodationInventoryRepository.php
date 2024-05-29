@@ -84,12 +84,21 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         if ($this->inventory->stock_parent_id !== null && $this->inventory->stock_parent_id !== $this->inventory->id) {
             return $this->inventory->stockParent->repository->getAvailableStock();
         }
-        return $this->getTotalStock() - $this->getUsedStock();
+        return $this->getTotalStock() - $this->getTotalUsedStock();
     }
 
     public function getTotalStock(): int
     {
         return $this->inventory->stock_parent_id !== null ? $this->inventory->stockParent->repository->getTotalStock() : $this->inventory->stock;
+    }
+
+    public function getTotalUsedStock(): int
+    {
+        $used = $this->getUsedStock();
+        foreach ($this->inventory->stockChildren as $children) {
+            $used += $children->used_stock;
+        }
+        return $used;
     }
 
     public function getUsedStock(): int
@@ -99,9 +108,6 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
             foreach ($component->orders as $orderComponent) {
                 if (!$orderComponent->cancelled) $used++;
             }
-        }
-        foreach ($this->inventory->stockChildren as $children) {
-            $used += $children->used_stock;
         }
         return $used;
     }
