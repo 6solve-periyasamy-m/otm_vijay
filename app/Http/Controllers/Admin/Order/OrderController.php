@@ -155,25 +155,9 @@ class OrderController extends Controller
             'paymentInstallments', 'orders', 'orders.leadBooker'
         )->find($order->tour_id);
         
-        $html = view('pdf.invoices.reservation', compact('tour','order','invoice'))->render();
+        //$html = view('pdf.invoices.reservation', compact('tour','order','invoice'))->render();
+        return dompdf(view('pdf.invoices.reservation', ['tour' => $tour, 'order' => $order, 'invoice' => $invoice,]));
 
-        // Create options for Dompdf
-        $options = new Options();
-        $options->set('dpi', 96);
-        $options->set('isHtml5ParserEnabled', true);
-        $dompdf = new Dompdf($options);
-        $dompdf->setPaper('A4', 'portrait');
-        
-        $dompdf->loadHtml($html);
-
-        // Render the PDF
-        $dompdf->render();
-
-        // Output PDF content as base64 encoded string
-        $pdfContent = base64_encode($dompdf->output());
-
-        // Pass the PDF content to the view
-        return view('pdf.dom_pdf_preview', compact('pdfContent'));
     }
 
 }
