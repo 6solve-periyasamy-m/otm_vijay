@@ -138,4 +138,22 @@ class Settings
             'rate' => null,
         ]);
     }
+
+    public function availableInvoiceStyles(): array
+    {
+        $styles = [1 => 'Default Invoice Style',];
+        if (config('app.features.bleeding-edge') || config('app.features.kpt')) {
+            $styles[2] = 'Alternative Style (Under Development)';
+        }
+        return $styles;
+    }
+
+    public function availableQuoteStyles(): array
+    {
+        $styles = [1 => 'Default Quote Style',];
+        if (config('app.features.bleeding-edge') || config('app.features.kpt')) {
+            $styles[2] = 'Alternative Style (Under Development)';
+        }
+        return $styles;
+    }
 }
