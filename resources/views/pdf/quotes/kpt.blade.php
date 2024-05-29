@@ -696,7 +696,7 @@ if (!empty($quote->event->image_url)){
                             </td>
                             <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
                         
-                            {{f_currency($price_per_person)}}
+                            {{f_currency($quote->repository->getPricePerPerson($paying + $travelling)?->price_per_person)}}
                             </td>
                         </tr>
 
