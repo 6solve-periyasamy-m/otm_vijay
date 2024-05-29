@@ -143,7 +143,7 @@ class Settings
     {
         $styles = [1 => 'Default Invoice Style',];
         if (\Feature::someAreActive(['bleeding-edge', 'is-kpt'])) {
-            $styles = [2 => 'Alternative Style (Under Development',];
+            $styles[2] = 'Alternative Style (Under Development)';
         }
         return $styles;
     }
@@ -152,7 +152,7 @@ class Settings
     {
         $styles = [1 => 'Default Quote Style',];
         if (\Feature::someAreActive(['bleeding-edge', 'is-kpt'])) {
-            $styles = [2 => 'Alternative Style (Under Development',];
+            $styles[2] = 'Alternative Style (Under Development)';
         }
         return $styles;
     }
