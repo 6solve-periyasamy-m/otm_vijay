@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Models\Customer\Customer;
+use App\Models\User;
 use App\Transport\MinimalLogTransport;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Cashier\Cashier;
+use Laravel\Pennant\Feature;
 use Mail;
 use Stripe\Stripe;
 
@@ -43,6 +45,12 @@ class AppServiceProvider extends ServiceProvider
                 ->numbers()
                 ->symbols()
                 ->uncompromised();
+        });
+        Feature::define('bleeding-edge', function (User $user) {
+            return config('app.features.bleeding-edge');
+        });
+        Feature::define('is-kpt', function (User $user) {
+            return config('app.features.is-kpt');
         });
     }
 }
