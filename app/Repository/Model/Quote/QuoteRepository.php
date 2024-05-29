@@ -34,7 +34,6 @@ use App\Repository\Storage\Quote\CustomerForConversion;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Settings;
-use Spatie\Browsershot\Browsershot;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class QuoteRepository extends ComponentPackageRepository implements SerializesToJson
@@ -444,14 +443,12 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getResponseStream(SentQuote $sent): StreamedResponse
     {
-        return response()->stream(function () use ($sent) { echo $this->getStream($sent); }, 200, ['Content-Type' => 'application/pdf']);
+        return $sent->pdf()->getResponseStream();
     }
 
     public function getStream(SentQuote $sent): string
     {
-        $invoice = Browsershot::html(view('pdf.quotes.columns', ['sent' => $sent,])->render());
-        $invoice->showBackground()->margins(10, 2, 10, 2);
-        return $invoice->pdf();
+        return $sent->pdf()->getContent();
     }
 
     public function getRemaining(int $paying = 1): float
