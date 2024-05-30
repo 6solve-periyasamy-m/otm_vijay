@@ -67,7 +67,7 @@ class UserProfileController
             }
         }
         EventLogger::simple($user, ModelEventType::UPDATED);
-        return redirect()->route('users.view', ['user' => $user]);
+        return redirect()->route('users.profile', ['user' => $user]);
     }
 
     public function password(ChangePasswordRequest $request, User|null $user = null)
