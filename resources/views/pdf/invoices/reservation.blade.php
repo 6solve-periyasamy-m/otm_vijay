@@ -611,23 +611,30 @@ if (!empty($order->tour->event->image_url)){
         @endif
         @endforeach
     </table>
+    @if(!empty($order->external_notes))     
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
+        <thead>
+            <tr style=" background-color: #353535; padding: 2px 15px;">
+                <th align="left" valign="top" style="padding: 10px 15px; color: #ffffff; font-weight: 700;" class="oc_f16">
+                    NOTE
+                </th>
+            </tr>
+        </thead>
+    </table>
+
+
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
         <!-- Notes Section -->
-        @if(!empty($order->external_notes))       
-        <tr>
-            <td align="left" width="150" style="padding: 10px 40px; color: #ffffff; background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 200px;" class="oc_f12 oc_lblack">
-                <div style="background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 190px; padding: 10px 25px; margin: 10px 0; color: #ffffff; display: block;" class="oc_f16 oc_lblack">
-                    NOTE
-                </div>
-            </td>
-        </tr>
+        
+    
         <tr>
             <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
                 {!! $order->external_notes !!}
             </td>
         </tr>
-        @endif
+       
     </table>
+    @endif
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
         <thead>
             <tr style=" background-color: #353535; padding: 2px 15px;">
