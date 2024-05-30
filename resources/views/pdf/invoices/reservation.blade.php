@@ -626,13 +626,19 @@ if (!empty($order->tour->event->image_url)){
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
         <!-- Notes Section -->
         
-    
+        <tr>
+                                        <td width="120" align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
+                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
+                                    </tr>
         <tr>
             <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
                 {!! $order->external_notes !!}
             </td>
         </tr>
-       
+        <tr>
+                                        <td width="120" align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
+                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
+                                    </tr>
     </table>
     @endif
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
