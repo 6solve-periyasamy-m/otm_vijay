@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Activity\Activity;
 use App\Models\Activity\ActivityType;
+use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Location\Address;
 use App\Models\Location\Country;
@@ -50,7 +51,7 @@ class ActivityImport implements ToCollection, WithHeadingRow, WithValidation
                 'currency_id' => $currency?->id,
                 'internal_notes' => trim($row['notes'] ?? ''),
                 'event_id' => $event?->id,
-                'activity_category' => trim($row['headliner'] ?? 0) == 1 ? 1 : 0,
+                'activity_category' => trim($row['headliner'] ?? 0) == 1 ? ActivityCategory::MAIN : ActivityCategory::NORMAL,
             ]);
         }
         return $data;

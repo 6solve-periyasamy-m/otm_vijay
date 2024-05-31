@@ -2,6 +2,7 @@
 
 namespace App\Models\Activity;
 
+use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Location\Address;
 use App\Models\Location\Currency;
 use App\Models\Order\Component\OrderActivity;
@@ -31,7 +32,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property string|null $description
  * @property string|null $image_url Asset url for the activity image
  * @property int $address_id
- * @property int $activity_category
+ * @property ActivityCategory $activity_category
  * @property int|null $currency_id
  * @property int|null $event_id
  * @property string|null $name
@@ -73,6 +74,7 @@ class Activity extends Model
 
     protected $guarded = [];
     protected array $cascadeDeletes = ['activityInventory'];
+    protected $casts = ['activity_category' => ActivityCategory::class,];
 
     public static function getValidationRules(): array
     {
