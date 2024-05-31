@@ -17,7 +17,7 @@
             <div class="d-flex justify-content-between">
                 <div>
                     <h4 class="fw-bold">
-                        {{ Icon::minimize() }} System Settings
+                        {{ Icon::maximize() }} System Settings
                     </h4>
                 </div>
                 <div>
@@ -29,7 +29,7 @@
             </div>
         </div>
     </div>
-    <div class="collapse show mx-1" id="settings">
+    <div class="collapse mx-1" id="settings">
         @include('partials.admin.system.settings.form')
     </div>
     <div class="card">
@@ -100,7 +100,7 @@
             </div>
         </div>
     </div>
-    <div class="collapse show mx-1" id="brands">
+    <div class="collapse mx-1" id="brands">
         <livewire:admin.system.brand.brand-list />
     </div>
     <div class="card">
@@ -120,7 +120,7 @@
             </h4>
         </div>
     </div>
-    <div class="row mx-1" id="default-installments">
+    <div class="collapse row mx-1" id="default-installments">
         <livewire:admin.system.installments.view />
     </div>
     <div class="card">
@@ -128,7 +128,7 @@
             <h4 class="fw-bold">{{ Icon::maximize() }} Conversion Rates</h4>
         </div>
     </div>
-    <div class="collapse show mx-1" id="conversions">
+    <div class="collapse mx-1" id="conversions">
         <x-admin.section.card>
             <div class="flex float-end">
                 <button class="btn btn-success" onclick="openModal('admin.system.conversion.form')">
