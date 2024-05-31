@@ -3,8 +3,8 @@
 namespace App\Models\Quote;
 
 use App\Models\Customer\Organization;
+use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Helper\Model;
-use App\Models\Helper\QuoteStatus;
 use App\Models\Helper\Traits\HasAdditionalCosts;
 use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;

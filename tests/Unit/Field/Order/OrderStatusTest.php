@@ -2,7 +2,7 @@
 
 namespace Field\Order;
 
-use App\Models\Helper\OrderStatus;
+use App\Models\Helper\Enum\OrderStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Bases\DatabaseTestCase;
 use Tests\Traits\Model\TestsOrder;

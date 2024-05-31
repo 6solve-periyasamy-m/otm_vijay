@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Admin\Report;
 use App\Http\Livewire\Abstract\CurrencyColumn;
 use App\Http\Livewire\Abstract\ExportableDatatable;
 use App\Http\Livewire\Abstract\OrderBadgeColumn;
-use App\Models\Helper\OrderStatus;
+use App\Models\Helper\Enum\OrderStatus;
 use App\Models\Order\Order;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;

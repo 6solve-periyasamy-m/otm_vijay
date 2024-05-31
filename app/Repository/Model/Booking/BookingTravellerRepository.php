@@ -10,7 +10,7 @@ use App\Models\Booking\Component\BookingFlight;
 use App\Models\Booking\Component\BookingTransport;
 use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
-use App\Models\Helper\AddressParent;
+use App\Models\Helper\Enum\AddressParent;
 use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;

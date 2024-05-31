@@ -4,7 +4,7 @@ namespace App\Imports;
 
 use App\Models\Activity\Activity;
 use App\Models\Activity\ActivityType;
-use App\Models\Helper\AddressParent;
+use App\Models\Helper\Enum\AddressParent;
 use App\Models\Location\Address;
 use App\Models\Location\Country;
 use App\Models\Location\Currency;

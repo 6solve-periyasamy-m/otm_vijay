@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\Location;
 
 use App\Http\Controllers\Controller;
-use App\Models\Helper\AddressParent;
+use App\Models\Helper\Enum\AddressParent;
 use App\Models\Location\Address;
 use Illuminate\Http\Request;
 

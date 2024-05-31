@@ -2,7 +2,7 @@
 
 namespace App\Models\Tour;
 
-use App\Models\Helper\EventType;
+use App\Models\Helper\Enum\EventType;
 use App\Models\Order\Order;
 use App\Models\System\TaxBracket;
 use Eloquent;

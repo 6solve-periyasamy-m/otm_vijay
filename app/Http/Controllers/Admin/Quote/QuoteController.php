@@ -10,7 +10,7 @@ use App\Http\Requests\Admin\Quote\CreateBespokeQuoteRequest;
 use App\Http\Requests\Admin\Quote\QuoteEditRequest;
 use App\Http\Requests\Admin\Quote\StartConversionRequest;
 use App\Http\Requests\Admin\TableRequest;
-use App\Models\Helper\QuoteStatus;
+use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Quote\Quote;
 use App\Models\Quote\SentQuote;
 use App\Models\Tour\Tour;
