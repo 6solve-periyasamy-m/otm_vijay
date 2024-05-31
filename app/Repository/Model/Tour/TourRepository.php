@@ -371,6 +371,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             $components[] = OrderActivity::make([
                 'activity_inventory_tour_id' => $component->id,
                 'cost' => $component->tour_sales_price,
+                'estimated_purchase_price' => $component->inventory->local_purchase_price,
             ]);
         }
         return $components;
@@ -386,6 +387,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             $components[] = OrderFlight::make([
                 'flight_inventory_tour_id' => $component->id,
                 'cost' => $component->tour_sales_price,
+                'estimated_purchase_price' => $component->inventory->local_purchase_price,
             ]);
         }
         return $components;
@@ -401,6 +403,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             $components[] = OrderTransport::make([
                 'transport_inventory_tour_id' => $component->id,
                 'cost' => $component->tour_sales_price,
+                'estimated_purchase_price' => $component->inventory->local_purchase_price,
             ]);
         }
         return $components;
@@ -416,6 +419,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             $components[] = OrderMerchandise::make([
                 'merchandise_inventory_tour_id' => $component->id,
                 'cost' => $component->tour_sales_price,
+                'estimated_purchase_price' => $component->inventory->local_purchase_price,
             ]);
         }
         return $components;

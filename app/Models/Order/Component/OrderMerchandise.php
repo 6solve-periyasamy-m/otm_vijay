@@ -25,6 +25,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property float|null $estimated_purchase_price
+ * @property-read float $purchase_price
  * @property-read bool $cancelled Is the order cancelled?
  * @property-read string $details
  * @property-read string $tour_component_type
@@ -96,5 +98,11 @@ class OrderMerchandise extends Model
     {
         if (!isset ($this->internal_repository)) $this->internal_repository = new OrderMerchandiseRepository($this);
         return $this->internal_repository;
+    }
+
+    public function getPurchasePriceAttribute(): float
+    {
+        $inventory = $this->tourComponent->inventory;
+        return $this->estimated_purchase_price ?? $inventory->local_purchase_price;
     }
 }

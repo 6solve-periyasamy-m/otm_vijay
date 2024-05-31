@@ -43,6 +43,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read int $contracted Amount of contracted stock
+ * @property-read float $local_purchase_price FX Converted Purchase Price
  * @property-read Accommodation $accommodation
  * @property-read BoardType $boardType
  * @property-read Accommodation $component
@@ -201,5 +202,10 @@ class AccommodationInventory extends Model
     {
         if (!isset($this->internal_repository)) $this->internal_repository = new AccommodationInventoryRepository($this);
         return $this->internal_repository;
+    }
+
+    public function getLocalPurchasePriceAttribute(): float
+    {
+        return fx_convert($this->purchase_price, $this->component->currency);
     }
 }

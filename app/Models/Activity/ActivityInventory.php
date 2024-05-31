@@ -39,6 +39,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read int $contracted Amount of contracted stock
+ * @property-read float $local_purchase_price FX Converted Purchase Price
  * @property-read Activity $activity
  * @property-read Activity $component
  * @property-read string $activity_for_tour
@@ -174,5 +175,10 @@ class ActivityInventory extends Model
     {
         if (!isset($this->internal_repository)) $this->internal_repository = new ActivityInventoryRepository($this);
         return $this->internal_repository;
+    }
+
+    public function getLocalPurchasePriceAttribute(): float
+    {
+        return fx_convert($this->purchase_price, $this->component->currency);
     }
 }
