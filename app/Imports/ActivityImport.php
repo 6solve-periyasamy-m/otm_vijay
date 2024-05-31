@@ -9,6 +9,7 @@ use App\Models\Location\Address;
 use App\Models\Location\Country;
 use App\Models\Location\Currency;
 use App\Models\Location\LocationType;
+use App\Models\Tour\Event;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -29,6 +30,7 @@ class ActivityImport implements ToCollection, WithHeadingRow, WithValidation
         foreach ($collection as $row) {
             $country = Country::where('name', 'like', trim($row['country']))->first();
             $currency = Currency::where('code', '=', trim($row['currency']))->first();
+            $event = Event::where('name', 'like', trim($row['event']))->first();
             $address = Address::create([
                 'name' => $row['name'],
                 'parent' => AddressParent::ACTIVITY,
@@ -47,6 +49,8 @@ class ActivityImport implements ToCollection, WithHeadingRow, WithValidation
                 'address_id' => $address->id,
                 'currency_id' => $currency?->id,
                 'internal_notes' => trim($row['notes'] ?? ''),
+                'event_id' => $event?->id,
+                'activity_category' => trim($row['headliner'] ?? 0) == 1 ? 1 : 0,
             ]);
         }
         return $data;
