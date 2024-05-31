@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Location\Currency;
+
 if (!function_exists('setting')) {
     /**
      * Alias for fetching a setting key
@@ -22,5 +24,37 @@ if (!function_exists('flag')) {
     function flag(string $key, bool $default = false): bool
     {
         return Settings::getBoolean($key, $default);
+    }
+}
+if (!function_exists('fx_convert')) {
+    /**
+     * @param float|int $value The value to convert
+     * @param Currency|string|null $from The currency it is in. can leave null if providing rate
+     * @param Currency|string|null $to The currency to convert to (defaults to system)
+     * @param float|null $rate The conversion rate (will lookup if null)
+     * @return float The converted amount
+     */
+    function fx_convert(float|int $value, Currency|string|null $from = null, Currency|string|null $to = null, float $rate = null): float
+    {
+        if ($rate === null) {
+            $systemCurrency = Currency::code(setting('system.currency', 'GBP'));
+            if (is_string($from)) { $from = Currency::code($from); }
+            if (is_string($to)) { $to = Currency::code($to); }
+            $to = $to ?? $systemCurrency;
+            $rate = Settings::getConversionRate($from, $to) ?? 1;
+        }
+        return fx_rate($value, $rate);
+    }
+}
+if (!function_exists('fx_rate')) {
+    /**
+     * @param float $value
+     * @param float|null $rate
+     * @return float
+     */
+    function fx_rate(float $value, float|null $rate): float
+    {
+        $rate = $rate ?? 1;
+        return sigfig($value * $rate);
     }
 }
