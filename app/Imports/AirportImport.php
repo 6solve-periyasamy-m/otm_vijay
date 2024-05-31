@@ -3,7 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Flight\Airport;
-use App\Models\Helper\AddressParent;
+use App\Models\Helper\Enum\AddressParent;
 use App\Models\Location\Address;
 use App\Models\Location\Country;
 use App\Models\Location\LocationType;

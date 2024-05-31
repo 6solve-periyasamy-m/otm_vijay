@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Admin\User;
 
-use App\Models\Helper\ModelEventType;
+use App\Models\Helper\Enum\ModelEventType;
 use App\Models\System\ModelEvent;
 use App\Models\User;
 use Jenssegers\Agent\Agent;

@@ -7,7 +7,7 @@ use App\Models\Customer\Customer;
 use App\Models\Customer\Group;
 use App\Models\Customer\OrderCustomerGroup;
 use App\Models\Customer\Organization;
-use App\Models\Helper\OrderStatus;
+use App\Models\Helper\Enum\OrderStatus;
 use App\Models\Helper\Traits\HasPermissions;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Adjustment\OrderCustomerAdjustment;

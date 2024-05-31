@@ -2,7 +2,7 @@
 
 namespace App\Models\System;
 
-use App\Models\Helper\ModelEventType;
+use App\Models\Helper\Enum\ModelEventType;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
