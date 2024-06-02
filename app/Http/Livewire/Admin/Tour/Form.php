@@ -1,0 +1,103 @@
+<?php
+
+namespace App\Http\Livewire\Admin\Tour;
+
+use App\Http\Livewire\Abstract\LivewireForm;
+use App\Models\Tour\Event;
+use App\Models\Tour\Tour;
+use Livewire\Component;
+
+class Form extends Component
+{
+    use LivewireForm;
+
+    public $manuallySet = [];
+    /** @var Tour */
+    public Tour|int|null $tour = null;
+
+    public function mount(Tour|int|null $tour = null): void
+    {
+        if (is_int($tour)) { $tour = Tour::find($tour); }
+        if ($tour === null) { $tour = new Tour(); }
+        $this->tour = $tour;
+
+        if ($this->tour->date_from !== null) $this->manuallySet('tour.date_from');
+        if ($this->tour->date_to !== null) $this->manuallySet('tour.date_to');
+        if ($this->tour->final_payment !== null) $this->manuallySet('tour.final_payment');
+    }
+
+
+    public function inputChanged(string|null $key = null): void
+    {
+        $this->manuallySet($key);
+        match ($key) {
+            default => function () {},
+            "tour.event_id" => $this->eventChanged(),
+            "tour.brand_id" => function () { if ($this->tour->brand_id === -1) $this->tour->brand_id = null; },
+            "tour.atol_protection" => function () {
+                $this->tour->atol_protected = $this->tour->atol_protected === -1
+                    ? null : $this->tour->atol_protected;
+            },
+        };
+    }
+
+    public function manuallySet($key): void
+    {
+        if (in_array($key, $this->manuallySet)) return;
+        $this->manuallySet[] = $key;
+    }
+
+    private function eventChanged(): void
+    {
+        if (in_array("tour.date_from", $this->manuallySet) || in_array("tour.date_to", $this->manuallySet)) return;
+        $event = Event::find($this->tour->event_id);
+        $this->tour->date_from = $event?->starts_at;
+        $this->tour->date_to = $event?->ends_at;
+        $this->render();
+    }
+
+    public function render()
+    {
+        return view('livewire.admin.tour.form');
+    }
+
+    public function save()
+    {
+        if ($this->tour->brand_id <= 0) $this->tour->brand_id = null;
+        $this->tour->atol_protected = $this->tour->atol_protected === -1 ? null : $this->tour->atol_protected;
+        $this->validate();
+    }
+
+    public function rules()
+    {
+        return [
+            'tour.event_id' => 'nullable|int|exists:events,id',
+            'tour.name' => 'required|string|min:3',
+            'tour.brand_id' => 'nullable|int',
+            'tour.tax_bracket_id' => 'nullable|int',
+            'tour.description' => 'nullable|string',
+            'tour.atol_protected' => 'nullable|int',
+            'tour.tour_category_id' => 'nullable|int',
+            'tour.is_active' => 'nullable|boolean',
+            'tour.booking_form_url' => 'required_if:tour.is_active,true|string',
+            'tour.final_payment' => 'required|date|date_format:Y-m-d',
+            'tour.date_from' => 'required|date|date_format:Y-m-d',
+            'tour.date_to' => 'required|date|date_format:Y-m-d',
+            'tour.base_price_per_person' => 'required|numeric|gte:0',
+            'tour.deposit' => 'nullable|numeric|gte:0',
+            'tour.is_deposit_percentage' => 'nullable|boolean',
+            'tour.booking_fee' => 'nullable|numeric|gte:0',
+            'tour.single_occupancy_surcharge' => 'nullable|numeric|gte:0',
+            'tour.stock' => 'nullable|integer|gte:0',
+            'tour.stock_control_active' => 'nullable|boolean',
+            'tour.accommodation_stock_control' => 'nullable|boolean',
+            'tour.activity_stock_control' => 'nullable|boolean',
+            'tour.flight_stock_control' => 'nullable|boolean',
+            'tour.transport_stock_control' => 'nullable|boolean',
+            'tour.merchandise_stock_control' => 'nullable|boolean',
+            'tour.terms' => 'required',
+            'tour.invoice_footer' => 'nullable',
+            'tour.notes' => 'nullable',
+        ];
+    }
+}
