@@ -83,14 +83,29 @@ class Form extends Component
         return view('livewire.admin.tour.form');
     }
 
-    public function save()
+    public function prepareForSaving(): void
     {
         if ($this->tour->brand_id <= 0) $this->tour->brand_id = null;
+        $this->tour->is_active = $this->tour->is_active ?? false;
+        $this->tour->is_deposit_percentage = $this->tour->is_deposit_percentage ?? false;
+        $this->tour->booking_fee = $this->tour->booking_fee ?? 0;
         $this->tour->atol_protected = $this->tour->atol_protected === -1 ? null : $this->tour->atol_protected;
-        $this->validate();
+        $this->tour->accommodation_stock_control = $this->tour->accommodation_stock_control ?? false;
+        $this->tour->activity_stock_control = $this->tour->activity_stock_control ?? false;
+        $this->tour->flight_stock_control = $this->tour->flight_stock_control ?? false;
+        $this->tour->transport_stock_control = $this->tour->transport_stock_control ?? false;
+        $this->tour->merchandise_stock_control = $this->tour->merchandise_stock_control ?? false;
     }
 
-    public function rules()
+    public function save(): void
+    {
+        $this->prepareForSaving();
+        $this->validate();
+        $this->tour->save();
+        $this->redirect(route('tours.view', ['tour' => $this->tour,]));
+    }
+
+    public function rules(): array
     {
         return [
             'tour.event_id' => 'nullable|int|exists:events,id',
@@ -101,7 +116,7 @@ class Form extends Component
             'tour.atol_protected' => 'nullable|int',
             'tour.tour_category_id' => 'nullable|int',
             'tour.is_active' => 'nullable|boolean',
-            'tour.booking_form_url' => 'required_if:tour.is_active,true|string',
+            'tour.booking_form_url' => 'nullable|required_if:tour.is_active,true|string',
             'tour.final_payment' => 'required|date|date_format:Y-m-d',
             'tour.date_from' => 'required|date|date_format:Y-m-d',
             'tour.date_to' => 'required|date|date_format:Y-m-d',
@@ -110,7 +125,7 @@ class Form extends Component
             'tour.is_deposit_percentage' => 'nullable|boolean',
             'tour.booking_fee' => 'nullable|numeric|gte:0',
             'tour.single_occupancy_surcharge' => 'nullable|numeric|gte:0',
-            'tour.stock' => 'nullable|integer|gte:0',
+            'tour.stock' => 'nullable|required_if:tour.stock_control_active,true|integer|gte:0',
             'tour.stock_control_active' => 'nullable|boolean',
             'tour.accommodation_stock_control' => 'nullable|boolean',
             'tour.activity_stock_control' => 'nullable|boolean',
