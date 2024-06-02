@@ -3,7 +3,7 @@
     @if($attributes->get('label') !== null)
         <label>{{ $attributes->get('label', "") ?? $slot }} @if($attributes->has('required')) <x-admin.required /> @endif</label>
     @endif
-    <textarea id="{{$id}}" {{ $attributes->except(['id', 'width', 'value', 'label']) }}>{{ $attributes->get('value', "") }}</textarea>
+    <textarea id="{{$id}}" {{ $attributes->except(['id', 'width', 'value', 'label']) }}>{!! $attributes->get('value', "") !!}</textarea>
     <script type="text/javascript">
         ClassicEditor
             .create(document.querySelector('#{{$id}}'))
