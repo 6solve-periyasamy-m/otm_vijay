@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\System;
 
 use App\Http\Controllers\Controller;
 use App\Models\Location\Currency;
+use App\Models\System\LargeTextTemplate;
 use Illuminate\Http\Request;
 use Settings;
 
@@ -100,6 +101,16 @@ class SettingsController extends Controller
         $currency = Currency::where('id', '=', $request->input('currency_id'))->first();
         Settings::set('system.currency', $currency->code);
         return redirect()->route('dash');
+    }
+
+    public function template()
+    {
+        return view('pages.admin.system.template.view');
+    }
+
+    public function editTemplate(LargeTextTemplate|null $template = null)
+    {
+        return view('pages.admin.system.template.form', ['template' => $template,]);
     }
 
     public function authorizeReminders(int $days)
