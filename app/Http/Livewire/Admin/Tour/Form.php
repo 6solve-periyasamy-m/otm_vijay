@@ -66,7 +66,16 @@ class Form extends Component
         $event = Event::find($this->tour->event_id);
         $this->tour->date_from = $event?->starts_at;
         $this->tour->date_to = $event?->ends_at;
-        $this->render();
+        $this->dateFromChanged();
+    }
+
+    private function dateFromChanged(): void
+    {
+        if (in_array("tour.final_payment", $this->manuallySet)) return;
+        $final = setting('system.installments.final', null);
+        if ($final !== null) {
+            $this->tour->final_payment = $this->tour->date_from->subDays($final);
+        }
     }
 
     public function render()
