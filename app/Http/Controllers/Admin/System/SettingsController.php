@@ -35,7 +35,6 @@ class SettingsController extends Controller
     }
 
     public function edit() {
-        //return view('pages.settings.form');
         return view('pages.admin.system.settings');
     }
 
@@ -111,6 +110,16 @@ class SettingsController extends Controller
     public function editTemplate(LargeTextTemplate|null $template = null)
     {
         return view('pages.admin.system.template.form', ['template' => $template,]);
+    }
+
+    public function mail()
+    {
+        return view('pages.admin.system.mail');
+    }
+
+    public function import()
+    {
+        return view('pages.admin.system.import');
     }
 
     public function authorizeReminders(int $days)

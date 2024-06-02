@@ -88,6 +88,8 @@ Route::middleware('auth:web')->group(function () {
             Route::get('/', [SettingsController::class, 'edit'])->name('edit');
             Route::post('/', [SettingsController::class, 'update'])->name('update');
         });
+        Route::get('/mail', [SettingsController::class, 'mail'])->name('settings.mail');
+        Route::get('/import', [SettingsController::class, 'import'])->name('settings.import');
         Route::get('/template', [SettingsController::class, 'template'])->name('settings.template');
         Route::get('/template/edit/{template?}', [SettingsController::class, 'editTemplate'])->name('settings.template.form');
         Route::prefix('import')->name('import.')->group(function () {
