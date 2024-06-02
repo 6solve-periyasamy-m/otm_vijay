@@ -10,9 +10,7 @@
         <x-slot:create>{{ route('customers.create') }}</x-slot:create>
         Lead Traveller
     </x-admin.input.selector.add>
-    <x-admin.input.selector.standard name="brand_id" route="brands" value="{{$quote->brand_id}}" width="3">
-        Quote Branding
-    </x-admin.input.selector.standard>
+    <x-livewire.input.select.brand name="brand_id" label="Quote Branding" width="3" value="{{ $quote->brand_id ?? -1 }}" />
     <x-livewire.input.select.tax-bracket name="tax_bracket_id" label="Tax Bracket" width="3"/>
     <x-livewire.input.select.organization name="organization_id" value="{{ $quote?->organization_id }}" label="Organization (Optional)" width="6" />
     <x-livewire.input.select.user name="consultant_id" value="{{ $quote?->consultant_id }}" label="Consultant (Optional)" width="6" clear="true" />
