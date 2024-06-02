@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Voucher\Tour;
 
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Tour\Tour;
 use App\Models\Voucher\VoucherCode;
@@ -10,6 +11,7 @@ use Livewire\Component;
 class Card extends Component
 {
     use SendsEvents;
+    use LivewireForm;
 
     public VoucherCode $voucher;
     public $tour;

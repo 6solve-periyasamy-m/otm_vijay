@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin\Quote;
 
 use App\Exceptions\MailDisabledException;
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Quote\Quote;
 use Livewire\Component;
@@ -10,6 +11,7 @@ use Livewire\Component;
 class Calculator extends Component
 {
     use SendsEvents;
+    use LivewireForm;
 
     public $listeners = ['refreshLivewireDatatable' => 'calculate',];
 

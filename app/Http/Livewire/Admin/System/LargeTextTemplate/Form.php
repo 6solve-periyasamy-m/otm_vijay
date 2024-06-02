@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\System\LargeTextTemplate;
 
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\System\LargeTextTemplate;
 use Livewire\Component;
@@ -9,6 +10,7 @@ use Livewire\Component;
 class Form extends Component
 {
     use SendsEvents;
+    use LivewireForm;
 
     /** @var LargeTextTemplate $template */
     public LargeTextTemplate|int|null $template;
