@@ -23,7 +23,13 @@ class Form extends Component
     public function mount(Tour|int|null $tour = null): void
     {
         if (is_int($tour)) { $tour = Tour::find($tour); }
-        if ($tour === null) { $tour = new Tour(); }
+        if ($tour === null) {
+            $tour = new Tour();
+            if (setting('system.installments.deposit', null) !== null) {
+                $tour->deposit = setting('system.installments.deposit', null);
+                $tour->is_deposit_percentage = true;
+            }
+        }
         $this->tour = $tour;
 
         if ($this->tour->date_from !== null) $this->manuallySet('tour.date_from');
