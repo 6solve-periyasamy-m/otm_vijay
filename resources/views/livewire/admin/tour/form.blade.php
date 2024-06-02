@@ -24,9 +24,9 @@ $atol = [
     </div>
     <div class="col-xl-4">
         <x-admin.section.card>
-            <x-livewire.input type="date" wire:model="tour.final_payment" label="Final Payment Date" />
-            <x-livewire.input type="date" wire:model="tour.date_from" label="Tour Start" />
-            <x-livewire.input type="date" wire:model="tour.date_to" label="Tour End" />
+            <x-livewire.input type="date" wire:model="tour.final_payment" label="Final Payment Date" required />
+            <x-livewire.input type="date" wire:model="tour.date_from" label="Tour Start" required />
+            <x-livewire.input type="date" wire:model="tour.date_to" label="Tour End" required />
         </x-admin.section.card>
     </div>
     <div class="col-xl-4">
@@ -62,7 +62,7 @@ $atol = [
     <div class="col-xl-6">
         <x-admin.section.card>
             <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" />
-            <x-livewire.ckeditor name="tour.terms" value="{{ $tour?->terms }}" label="Terms and Conditions" />
+            <x-livewire.ckeditor name="tour.terms" value="{{ $tour?->terms }}" label="Terms and Conditions" required />
         </x-admin.section.card>
     </div>
     <div class="col-xl-6">
