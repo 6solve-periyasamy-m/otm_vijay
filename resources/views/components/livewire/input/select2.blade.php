@@ -22,7 +22,10 @@
     $create = $create ?? $attributes->get('create');
 @endphp
 <div wire:ignore class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}">
-    <label for="{{ $id }}">{{ $attributes->get('label') }} @if($attributes->has('required')) <x-admin.required /> @endif</label>
+    <label for="{{ $id }}">
+        {{ $attributes->get('label') }} @if($attributes->has('required')) <x-admin.required /> @endif
+        @error($attributes->get('name')) <span class="text-danger">({{ $message }})</span> @enderror
+    </label>
     <div class="d-flex">
         <select name="{{ $attributes->get('name') }}" style="width: 100%" class="form-control" id="{{ $id }}"></select>
         @if(isset($create))

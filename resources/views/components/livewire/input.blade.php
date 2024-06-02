@@ -6,7 +6,10 @@
 @endphp
 <div class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}" style="padding-left: 5px;">
     @if($attributes->get('label') !== null)
-    <label>{{ $attributes->get('label', "") ?? $slot }} @if($attributes->has('required')) <x-admin.required /> @endif</label>
+    <label>
+        {{ $attributes->get('label', "") ?? $slot }} @if($attributes->has('required')) <x-admin.required /> @endif
+        @error($attributes->get('wire:model')) <span class="text-danger">({{ $message }})</span> @enderror
+    </label>
     @endif
     <div class="input-group">
         @if($attributes->has('prepend'))

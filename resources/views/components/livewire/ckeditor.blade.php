@@ -1,9 +1,12 @@
 @php $id = $attributes->get('id', 'a' . \Str::uuid()); @endphp
-<div class="{{ $attributes->has('width') ? 'col-xl-' . $attributes->get('width', 12) : '' }}" wire:ignore>
-    @if($attributes->get('label') !== null)
-        <label>{{ $attributes->get('label', "") ?? $slot }} @if($attributes->has('required')) <x-admin.required /> @endif</label>
-    @endif
-    <textarea id="{{$id}}" {{ $attributes->except(['id', 'width', 'value', 'label']) }}>{!! $attributes->get('value', "") !!}</textarea>
+<div class="{{ $attributes->has('width') ? 'col-xl-' . $attributes->get('width', 12) : '' }}">
+    <label>
+        {{ $attributes->get('label', "") ?? $slot }} @if($attributes->has('required')) <x-admin.required /> @endif
+        @error($attributes->get('name')) <span class="text-danger">({{ $message }})</span> @enderror
+    </label>
+    <div wire:ignore>
+        <textarea id="{{$id}}" {{ $attributes->except(['id', 'width', 'value', 'label']) }}>{!! $attributes->get('value', "") !!}</textarea>
+    </div>
     <script type="text/javascript">
         ClassicEditor
             .create(document.querySelector('#{{$id}}'))
