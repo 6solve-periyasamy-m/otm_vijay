@@ -11,6 +11,11 @@
                 editor.model.document.on('change:data', () => {
                     @this.set('{{$attributes->get('name')}}', editor.getData());
                 });
+                window.addEventListener('updateValue', (data) => {
+                    if (data.detail.key === '{{ $attributes->get('name') }}') {
+                        editor.setData(data.detail.value);
+                    }
+                });
             })
             .catch(error => console.error(error));
     </script>

@@ -9,6 +9,7 @@ use App\View\Components\Livewire\Input\Select\Customer;
 use App\View\Components\Livewire\Input\Select\Event\All as AllEvents;
 use App\View\Components\Livewire\Input\Select\Event\Main as MainEvent;
 use App\View\Components\Livewire\Input\Select\Event\Normal as NormalEvent;
+use App\View\Components\Livewire\Input\Select\LargeTextTemplate;
 use App\View\Components\Livewire\Input\Select\Organization;
 use App\View\Components\Livewire\Input\Select\TaxBracket;
 use App\View\Components\Livewire\Input\Select\TourCategory;
@@ -54,6 +55,12 @@ Route::prefix('customers')->name('customers.')->group(function () {
 Route::prefix('brands')->name('brands.')->group(function () {
     Route::post('/', [Brand::class, 'getAll'])->name('select');
     Route::post('/{id}', [Brand::class, 'getOne'])->name('selected');
+});
+
+
+Route::prefix('large-text-template')->name('large-text-templates.')->group(function () {
+    Route::post('/', [LargeTextTemplate::class, 'getAll'])->name('select');
+    Route::post('/{id}', [LargeTextTemplate::class, 'getOne'])->name('selected');
 });
 
 Route::prefix('events')->name('events.')->group(function () {

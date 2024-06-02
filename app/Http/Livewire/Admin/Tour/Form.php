@@ -3,17 +3,22 @@
 namespace App\Http\Livewire\Admin\Tour;
 
 use App\Http\Livewire\Abstract\LivewireForm;
+use App\Http\Livewire\SendsEvents;
+use App\Models\System\LargeTextTemplate;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use Livewire\Component;
 
 class Form extends Component
 {
+    use SendsEvents;
     use LivewireForm;
 
     public $manuallySet = [];
     /** @var Tour */
     public Tour|int|null $tour = null;
+    public int|null $termsTemplate = null;
+    public int|null $footerTemplate = null;
 
     public function mount(Tour|int|null $tour = null): void
     {
@@ -38,6 +43,8 @@ class Form extends Component
                 $this->tour->atol_protected = $this->tour->atol_protected === -1
                     ? null : $this->tour->atol_protected;
             },
+            'termsTemplate' => $this->refreshTermsTemplate(),
+            'footerTemplate' => $this->refreshFooterTemplate(),
         };
     }
 
@@ -99,5 +106,23 @@ class Form extends Component
             'tour.invoice_footer' => 'nullable',
             'tour.notes' => 'nullable',
         ];
+    }
+
+    private function refreshTermsTemplate(): void
+    {
+        $template = LargeTextTemplate::find($this->termsTemplate);
+        if ($template !== null) {
+            $this->tour->terms = $template->content;
+            $this->updateValue('tour.terms', $template->content);
+        }
+    }
+
+    private function refreshFooterTemplate(): void
+    {
+        $template = LargeTextTemplate::find($this->footerTemplate);
+        if ($template !== null) {
+            $this->tour->invoice_footer = $template->content;
+            $this->updateValue('tour.invoice_footer', $template->content);
+        }
     }
 }
