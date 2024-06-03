@@ -71,7 +71,9 @@ class Settings
 
     public function getDefaultInstallments(): array
     {
-        return json_decode($this->get('system.installments.default', "{}"), true);
+        $installments = json_decode($this->get('system.installments.default', "{}"), true);
+        krsort($installments);
+        return $installments;
     }
 
     public function setDefaultInstallment(int $days, float|null $percentage): void

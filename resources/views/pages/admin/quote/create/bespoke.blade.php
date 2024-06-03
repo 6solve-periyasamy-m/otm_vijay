@@ -13,9 +13,7 @@ $defaultDeposit = setting('system.installments.deposit');
         <x-slot:create>{{ route('customers.create') }}</x-slot:create>
         Lead Traveller
     </x-admin.input.selector.add>
-    <x-admin.input.selector.standard name="brand_id" route="brands" width="3">
-        Quote Branding
-    </x-admin.input.selector.standard>
+    <x-livewire.input.select.brand name="brand_id" label="Quote Branding" width="3" value="-1" />
     <x-livewire.input.select.tax-bracket name="tax_bracket_id" label="Tax Bracket" width="3"/>
     <x-livewire.input.select.organization name="organization_id" label="Organization (Optional)" />
     <x-admin.input name="deposit" width="3" value="{{$defaultDeposit}}">Deposit</x-admin.input>

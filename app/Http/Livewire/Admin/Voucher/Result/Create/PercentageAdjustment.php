@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Voucher\Result\Create;
 
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Voucher\Executors\PercentageCostReductionExecutor;
 use App\Models\Voucher\VoucherCode;
@@ -10,6 +11,7 @@ use LivewireUI\Modal\ModalComponent;
 class PercentageAdjustment extends ModalComponent
 {
     use SendsEvents;
+    use LivewireForm;
 
     /** @var VoucherCode $voucher */
     public $voucher;
