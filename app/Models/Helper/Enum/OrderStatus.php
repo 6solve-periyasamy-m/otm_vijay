@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Helper;
+namespace App\Models\Helper\Enum;
 
 use App\View\Components\Badge\Order as OrderBadge;
 use Closure;

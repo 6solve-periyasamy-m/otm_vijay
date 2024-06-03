@@ -29,7 +29,7 @@
     </div>
     <x-livewire.input.select.event.main name="event_id" value="{{ $activity?->event_id }}" label="Main Event" width="4" />
     <div class="form-group col-xl-4">
-        @include('partials.fields.dropdown', ['name' => 'Activity Category', 'field' => 'activity_category','selected' => $activity?->activity_category, 'values' => ["0" => "Normal Activity", "1" => "Main Activity"]])
+        @include('partials.fields.dropdown', ['name' => 'Activity Category', 'field' => 'activity_category', 'selected' => $activity?->activity_category, 'values' => \App\Models\Helper\Enum\ActivityCategory::toArray(),])
     </div>
     @include('partials.fields.ckeditor', ['name' => 'Description', 'field' => 'description', 'value' => $activity?->description,])
     @include('partials.fields.prefab.addresses.switcher', ['address' => $activity?->address,])

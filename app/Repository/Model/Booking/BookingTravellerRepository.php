@@ -10,7 +10,7 @@ use App\Models\Booking\Component\BookingFlight;
 use App\Models\Booking\Component\BookingTransport;
 use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
-use App\Models\Helper\AddressParent;
+use App\Models\Helper\Enum\AddressParent;
 use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
@@ -200,7 +200,7 @@ class BookingTravellerRepository extends ModelRepository
             } catch (\Exception $e) {
                 // Likely failed due to non-unique email address. Wipe address and try again.
                 Log::error($e);
-                $this->traveller->email_address === null;
+                $this->traveller->email_address = null;
                 $customer = $this->convertToCustomer();
             }
         } else {

@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Order;
 
-use App\Models\Helper\OrderStatus;
+use App\Models\Helper\Enum\OrderStatus;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
 use Mediconesystems\LivewireDatatables\Column;

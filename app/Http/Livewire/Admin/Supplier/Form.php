@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Admin\Supplier;
 
 use App\Http\Livewire\SendsEvents;
-use App\Models\Helper\AddressParent;
+use App\Models\Helper\Enum\AddressParent;
 use App\Models\Location\Address;
 use App\Models\Supplier\Supplier;
 use Illuminate\Contracts\Foundation\Application;

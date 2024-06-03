@@ -8,7 +8,7 @@ use App\Http\Requests\Admin\Authentication\PasswordResetRequest;
 use App\Http\Requests\Admin\Authentication\ReceivedResetRequest;
 use App\Http\Requests\Admin\Authentication\SendResetRequest;
 use App\Http\Requests\Admin\LoginRequest;
-use App\Models\Helper\ModelEventType;
+use App\Models\Helper\Enum\ModelEventType;
 use App\Models\User;
 use Auth;
 use EventLogger;
