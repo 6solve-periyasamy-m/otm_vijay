@@ -90,6 +90,7 @@ class Form extends Component
         $this->tour->is_deposit_percentage = $this->tour->is_deposit_percentage ?? false;
         $this->tour->booking_fee = $this->tour->booking_fee ?? 0;
         $this->tour->atol_protected = $this->tour->atol_protected === -1 ? null : $this->tour->atol_protected;
+        $this->tour->stock_control_active = $this->tour->stock_control_active ?? false;
         $this->tour->accommodation_stock_control = $this->tour->accommodation_stock_control ?? false;
         $this->tour->activity_stock_control = $this->tour->activity_stock_control ?? false;
         $this->tour->flight_stock_control = $this->tour->flight_stock_control ?? false;
