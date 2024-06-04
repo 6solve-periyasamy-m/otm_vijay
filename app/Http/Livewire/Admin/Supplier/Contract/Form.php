@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Supplier\Contract;
 
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Supplier\Supplier;
 use App\Models\Supplier\SupplierContract;
@@ -13,6 +14,7 @@ use LivewireUI\Modal\ModalComponent;
 class Form extends ModalComponent
 {
     use SendsEvents;
+    use LivewireForm;
 
     /** @var Supplier $supplier Will only be int at initialization */
     public Supplier|int $supplier;

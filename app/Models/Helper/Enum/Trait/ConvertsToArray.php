@@ -7,7 +7,7 @@ namespace App\Models\Helper\Enum\Trait;
  */
 trait ConvertsToArray
 {
-    public function toArray(): array
+    public static function toArray(): array
     {
         $array = [];
         foreach (self::cases() as $case) {
