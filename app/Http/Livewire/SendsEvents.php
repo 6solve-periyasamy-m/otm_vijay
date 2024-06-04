@@ -22,6 +22,11 @@ trait SendsEvents
         $this->toast(__("$lang.title"), __("$lang.body"), $color, $hide, $delay);
     }
 
+    public function updateValue(string $key, string|null $value): void
+    {
+        $this->dispatchBrowserEvent('updateValue', ['key' => $key, 'value' => $value]);
+    }
+
     public function refreshTables(): void
     {
         $this->emit('refreshLivewireDatatable');
