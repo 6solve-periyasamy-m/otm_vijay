@@ -102,7 +102,9 @@ class Form extends Component
     {
         $this->prepareForSaving();
         $this->validate();
+        $create = $this->tour->id === null;
         $this->tour->save();
+        if ($create) { $this->tour->repository->cloneFromDefaultInstallments(); }
         $this->redirect(route('tours.view', ['tour' => $this->tour,]));
     }
 
