@@ -302,7 +302,7 @@
                             $imageUrl = $order->tour->event->image_url;
                             
                         } else{
-                            $imageUrl = 'uploads/images/events.jpg';
+                            $imageUrl = 'images/default_image.png';
                         }
 
                     @endphp
