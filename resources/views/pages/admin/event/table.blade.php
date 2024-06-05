@@ -50,7 +50,7 @@
                             </span>
                     @endcan
                     @can('delete', \App\Models\Tour\Event::class)
-                        <a href="javascript:$('#events-{{ $event->id }}-delete').submit()"  title="Delete" class="btn btn-sm btn-outline-danger mb-1">
+                        <a href="javascript:void(0);" onclick="confirmDeletion({{ $event->id }})" title="Delete" class="btn btn-sm btn-outline-danger mb-1">
                             {{ Icon::delete() }}
                         </a>
                         <form id="events-{{ $event->id }}-delete"
@@ -68,3 +68,12 @@
     </table>
 </x-admin.section.card>
 @endsection
+
+@section('footer-script')
+<script type="text/javascript">
+    function confirmDeletion(eventId) {
+        if (confirm('Are you sure you want to delete this event?')) {
+            document.getElementById('events-' + eventId + '-delete').submit();
+        }
+    }
+</script>
