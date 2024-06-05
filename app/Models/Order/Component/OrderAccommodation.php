@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -27,6 +29,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property float|null $estimated_purchase_price
+ * @property-read float $purchase_price
  * @property-read AccommodationInventoryTour $accommodationInventoryTour
  * @property-read Accommodation $accommodation
  * @property-read AccommodationInventory $accommodation_inventory
@@ -57,7 +61,7 @@ class OrderAccommodation extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['order_customer_id', 'accommodation_inventory_tour_id', 'cost', 'group_id'];
+    protected $guarded = [];
     protected $casts = ['cost' => 'double',];
 
     private OrderAccommodationRepository $internal_repository;
@@ -137,5 +141,11 @@ class OrderAccommodation extends Model
         $this->accommodation_inventory_tour_id = $swap->id;
         $this->cost = $swap->tour_sales_price;
         $this->save();
+    }
+
+    public function getPurchasePriceAttribute(): float
+    {
+        $inventory = $this->tourComponent->inventory;
+        return $this->estimated_purchase_price ?? $inventory->local_purchase_price;
     }
 }

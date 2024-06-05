@@ -42,6 +42,16 @@ class Icon
         return $this->regular('star');
     }
 
+    public function import(): View|string|Closure
+    {
+        return $this->solid('download');
+    }
+
+    public function template(): View|string|Closure
+    {
+        return $this->solid('sticky-note');
+    }
+
     public function cross(): View|string|Closure
     {
         return $this->solid('xmark');

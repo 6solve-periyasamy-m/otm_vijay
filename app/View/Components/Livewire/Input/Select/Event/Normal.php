@@ -2,7 +2,7 @@
 
 namespace App\View\Components\Livewire\Input\Select\Event;
 
-use App\Models\Helper\EventType;
+use App\Models\Helper\Enum\EventType;
 use App\Models\Tour\Event as DataModel;
 use App\View\Components\Livewire\Input\Select\AbstractSelectComponent;
 use Illuminate\Contracts\Foundation\Application;

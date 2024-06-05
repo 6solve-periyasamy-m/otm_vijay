@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin\Quote;
 
 use App\Exceptions\MailDisabledException;
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Quote\Quote;
 use Livewire\Component;
@@ -10,6 +11,7 @@ use Livewire\Component;
 class Calculator extends Component
 {
     use SendsEvents;
+    use LivewireForm;
 
     public $listeners = ['refreshLivewireDatatable' => 'calculate',];
 
@@ -32,8 +34,9 @@ class Calculator extends Component
 
     public function calculate(): void
     {
-        $this->costToCompany = $this->quote->repository->getTotalCostToCompany($this->paying + $this->travelling + 1);
-        $costPerPerson = sigfig($this->costToCompany / ($this->paying + $this->travelling + 1));
+        $companyCostTravellers = ($this->paying + $this->travelling + ($this->leadTravelling()));
+        $this->costToCompany = $this->quote->repository->getTotalCostToCompany($companyCostTravellers);
+        $costPerPerson = $companyCostTravellers > 0 ? sigfig($this->costToCompany / $companyCostTravellers) : 0;
         $this->total = $this->quote->repository->getTotalCost($this->paying + ($this->quote->leadTraveller->paying ? 1 : 0));
         $this->profit = sigfig($this->total - $this->costToCompany);
         $this->margin = $this->costToCompany == 0 ? 100 : sigfig(($this->total / $this->costToCompany) * 100);

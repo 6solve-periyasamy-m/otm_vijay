@@ -7,8 +7,8 @@ use App\Events\Order\OrderCreatedEvent;
 use App\Exceptions\MailDisabledException;
 use App\Mail\Storage\OrderMail;
 use App\Models\Customer\Customer;
-use App\Models\Helper\AddressParent;
-use App\Models\Helper\OrderStatus;
+use App\Models\Helper\Enum\AddressParent;
+use App\Models\Helper\Enum\OrderStatus;
 use App\Models\Location\Address;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Component\OrderAccommodation;
@@ -202,6 +202,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
      * @param ConvertedCustomer $customer The customer to be added to the Order
      * @param bool $refresh Should the cache be refreshed and invoice generated (default: true)
      * @param bool $components Should the components be added (default: true)
+     * @param bool $silent
      * @return OrderCustomer
      */
     public function addCustomer(ConvertedCustomer $customer, bool $refresh = true, bool $components = true, bool $silent = false): OrderCustomer

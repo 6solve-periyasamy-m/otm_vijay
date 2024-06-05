@@ -2,7 +2,7 @@
 
 namespace Database\Factories\Location;
 
-use App\Models\Helper\AddressParent;
+use App\Models\Helper\Enum\AddressParent;
 use App\Models\Location\Address;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

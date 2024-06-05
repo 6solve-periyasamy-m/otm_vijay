@@ -74,6 +74,11 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         return $this->inventory->check_out;
     }
 
+    public function getHotelName()
+    {
+        return $this->inventory;
+    }
+
     public function getAvailableStock(): int
     {
         if ($this->inventory->stock_parent_id !== null && $this->inventory->stock_parent_id !== $this->inventory->id) {
@@ -176,6 +181,10 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         )->get();
     }
 
+    public function getRoomingListt(): Collection|array
+    {
+        return $this->inventory->orderComponents()->get();
+    }
     public function getSalesPrice(): ?float
     {
         return $this->inventory->sales_price;

@@ -6,8 +6,8 @@ use App\Exceptions\MailDisabledException;
 use App\Mail\Storage\Attachment;
 use App\Mail\Storage\SettingsMail;
 use App\Models\Customer\Customer;
-use App\Models\Helper\AddressParent;
-use App\Models\Helper\QuoteStatus;
+use App\Models\Helper\Enum\AddressParent;
+use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;
@@ -34,7 +34,6 @@ use App\Repository\Storage\Quote\CustomerForConversion;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Settings;
-use Spatie\Browsershot\Browsershot;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class QuoteRepository extends ComponentPackageRepository implements SerializesToJson
@@ -53,6 +52,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'event_id' => $tour->event_id,
             'deposit' => $tour->deposit,
             'is_deposit_percentage' => $tour->is_deposit_percentage,
+            'tax_bracket_id' => $tour->tax_bracket_id,
             'final_payment' => $tour->final_payment,
             'date_from' => $tour->date_from,
             'date_to' => $tour->date_to,
@@ -152,6 +152,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $tour = TourRepository::create([
             'is_active' => false,
+            'event_id' => $this->quote->event_id,
+            'tax_bracket_id' => $this->quote->tax_bracket_id,
             'name' => $this->quote->name,
             'notes' => $this->quote->internal_notes,
             'description' => $this->quote->description,
@@ -444,14 +446,12 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getResponseStream(SentQuote $sent): StreamedResponse
     {
-        return response()->stream(function () use ($sent) { echo $this->getStream($sent); }, 200, ['Content-Type' => 'application/pdf']);
+        return $sent->pdf()->getResponseStream();
     }
 
     public function getStream(SentQuote $sent): string
     {
-        $invoice = Browsershot::html(view('pdf.quotes.columns', ['sent' => $sent,])->render());
-        $invoice->showBackground()->margins(10, 2, 10, 2);
-        return $invoice->pdf();
+        return $sent->pdf()->getContent();
     }
 
     public function getRemaining(int $paying = 1): float
