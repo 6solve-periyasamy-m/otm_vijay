@@ -361,21 +361,114 @@
         @php
         $departs_at = new DateTime($tourComponent->inventory->departs_at);
         $arrives_at = new DateTime($tourComponent->inventory->arrives_at);
+
+        $f_starts_at = DateTime::createFromFormat('d/m/Y H:i', f_datetime($tourComponent->inventory->departs_at))->format('d M Y | h:i A');
+        $f_ends_at = DateTime::createFromFormat('d/m/Y H:i', f_datetime($tourComponent->inventory->arrives_at))->format('d M Y | h:i A');
+
+
+
         @endphp
         @if($date->format('Y-m-d') >= $arrives_at->format('Y-m-d') && $date->format('Y-m-d') <= $departs_at->format('Y-m-d'))
         @php 
         $daysData = 1;
         @endphp
+
         <tr>
-            <td align="left" colspan="2" width="100%" style="padding: 0px 40px; font-weight: bold; font-size: 11pt;" class="oc_f12 oc_lblack">Arrival from {{ $tourComponent->inventory->flight->departureAirport->name }} to {{ $tourComponent->inventory->flight->arrivalAirport->name }} </td>
+        <td align="left" colspan="2" style="padding: 0px 40px; color: #E95B15; font-size: 11pt;" class="oc_f16 ">TRANSFER
+            </td>
         </tr>
+        <tr>
+        <td align="left" width="50" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+            TYPE:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                Flight
+            </td>
+        </tr>
+        <tr>
+        <td align="left" width="50" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                DATE:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+            {{$f_starts_at }} to {{$f_ends_at}}
+            </td>
+        </tr>
+      
+        <td align="left" width="50" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+            DESCRIPTION:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+            {{ $tourComponent->inventory->flight->departureAirport->name }} to {{ $tourComponent->inventory->flight->arrivalAirport->name }} 
+            </td>
+        </tr>
+        <tr>
+       
+        <tr>
+            <td align="left" width="40" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">&nbsp;
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px;">
+                &nbsp;
+            </td>
+        </tr>
+
+        
+        @endif
+        @endforeach
+
+        @foreach($tour->transportInventoryTours as $tourComponent)
+        @if($date->format('Y-m-d') >= date('Y-m-d', strtotime($tourComponent->inventory->departs_at)) && $date->format('Y-m-d') <= date('Y-m-d', strtotime($tourComponent->inventory->arrives_at)))
+
+        <tr>
+        <td align="left" colspan="2" style="padding: 0px 40px; color: #E95B15; font-size: 11pt;" class="oc_f16 ">TRANSFER
+            </td>
+        </tr>
+        <tr>
+        <td align="left" width="50" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+            TYPE:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{ $tourComponent->inventory->component->arrivalTransferType() }}
+            </td>
+        </tr>
+        <tr>
+        <td align="left" width="50" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+                DATE:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{ \Carbon\Carbon::parse($tourComponent->inventory->departs_at)->format('d F Y | G A') }} to {{ \Carbon\Carbon::parse($tourComponent->inventory->arrives_at)->format('d F Y | G A') }}
+            </td>
+        </tr>
+      
+        <td align="left" width="50" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+            DESCRIPTION:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{ $tourComponent->inventory->component->name }} {{ $tourComponent->inventory->transport_number }} 
+            </td>
+        </tr>
+        <tr>
+        <td align="left" width="50" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
+            QUANTITY:
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
+                {{ $order->customer_count }}
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="40" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">&nbsp;
+            </td>
+            <td align="left" valign="top" style="padding: 0px 40px;">
+                &nbsp;
+            </td>
+        </tr>
+        
         @endif
         @endforeach
        
         @foreach($tour->accommodationInventoryTours as $tourComponent)
         @if($date->format('Y-m-d') >= date('Y-m-d', strtotime($tourComponent->inventory->check_in)) && $date->format('Y-m-d') <= date('Y-m-d', strtotime($tourComponent->inventory->check_out)))
         @php
-        $nights = 0;
+        
 
           
             
@@ -390,7 +483,7 @@
         $interval = $datetime1->diff($datetime2);
 
         // Get the number of nights
-        $nights = $interval->format('%a') - 1;
+        $nights = $interval->format('%a');
         
         $is_accommodation++;
         @endphp
@@ -464,6 +557,7 @@
         @endif
         @endforeach
         @if(isset($order->tour->event))
+        
         @if($date->format('Y-m-d') >= date('Y-m-d', strtotime($order->tour->event->starts_at)) && $date->format('Y-m-d') <= date('Y-m-d', strtotime($order->tour->event->ends_at)))
         @php 
         $daysData = 1;
@@ -596,6 +690,20 @@
         </tr>
     </table>
  
+
+    @if(!empty($order->external_notes))     
+    <table align="left" width="100%" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr style=" background-color: #353535; padding: 2px 15px;">
+                <th align="left" valign="top" style="padding: 10px 15px; color: #ffffff; font-weight: 700;" class="oc_f16 ">NOTE</th>
+            </tr>
+        </thead>
+    </table>
+    <div style="padding: 10px 15px 10px 25px;">
+        <p class="oc_f12 oc_lblack" >{!! $order->external_notes !!}</p>
+    </div>
+    @endif
+
     <table align="left" width="100%" cellspacing="0" cellpadding="0">
         <thead>
             <tr style=" background-color: #353535; padding: 2px 15px;">
@@ -604,7 +712,7 @@
         </thead>
     </table>
     <div style="padding: 10px 15px 10px 25px;">
-        <p class="oc_f12 oc_lblack" >{!! $tour->description !!}</p>
+        <p class="oc_f12 oc_lblack" >{!! $order->tour->event->description !!}</p>
     </div>
     <table align="left" width="100%" cellspacing="0" cellpadding="0">
         <thead>
