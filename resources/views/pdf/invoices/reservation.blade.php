@@ -319,7 +319,7 @@ if (!empty($order->tour->event->image_url)){
         @foreach($tour->flightInventoryTours as $tourComponent)
         @if($tourComponent->flight_type != 'Inbound')
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 DATE: 
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -327,7 +327,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
             DESCRIPTION:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -335,7 +335,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
             QUANTITY:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -357,7 +357,7 @@ if (!empty($order->tour->event->image_url)){
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
         @foreach($tour->transportInventoryTours as $tourComponent)
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 DATE:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -365,7 +365,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
             DESCRIPTION:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -373,7 +373,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
             QUANTITY:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -394,7 +394,7 @@ if (!empty($order->tour->event->image_url)){
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
         @foreach($tour->accommodationInventoryTours as $tourComponent)
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 CHECK IN:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -402,7 +402,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 CHECK OUT:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -410,7 +410,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 HOTEL NAME:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -418,7 +418,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 ADDRESS:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -426,7 +426,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 ROOM TYPE:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -446,7 +446,7 @@ if (!empty($order->tour->event->image_url)){
     </table>
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 DATE:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -456,7 +456,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 EVENT:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -464,7 +464,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 DESCRIPTION:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -474,7 +474,7 @@ if (!empty($order->tour->event->image_url)){
         @foreach($tour->activityInventoryTours as $tourComponent)
         @if($tourComponent->inventory->component->activity_category == 1)
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 DATE:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -484,7 +484,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 EVENT:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -492,7 +492,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 VENUE:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -500,7 +500,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 TICKET TYPE(S):
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -508,7 +508,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 DESCRIPTION:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -530,7 +530,7 @@ if (!empty($order->tour->event->image_url)){
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
         @foreach($tour->activityInventoryTours as $tourComponent)
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 DATE:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -540,7 +540,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 EVENT:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -548,7 +548,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 VENUE:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -556,18 +556,11 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 DESCRIPTION:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
                 {!! $tourComponent->inventory->component->description !!}
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="40" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">&nbsp;
-            </td>
-            <td align="left" valign="top" style="padding: 0px 40px;">
-                &nbsp;
             </td>
         </tr>
         @endforeach
@@ -585,7 +578,7 @@ if (!empty($order->tour->event->image_url)){
         @foreach($tour->flightInventoryTours as $tourComponent)
         @if($tourComponent->flight_type == 'Inbound')
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
                 DATE: 
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -593,7 +586,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
             DESCRIPTION:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -601,7 +594,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold; line-height: 10px;" class="oc_f12 oc_lblack">
             QUANTITY:
             </td>
             <td align="left" valign="top" style="padding: 0px 40px; line-height: 10px;" class="oc_f12 oc_lblack">
@@ -621,24 +614,21 @@ if (!empty($order->tour->event->image_url)){
             </tr>
         </thead>
     </table>
-
-
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
         <!-- Notes Section -->
-        
         <tr>
-                                        <td width="120" align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
-                                    </tr>
+            <td width="80" align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
+            <td align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
+        </tr>
         <tr>
             <td align="left" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">
                 {!! $order->external_notes !!}
             </td>
         </tr>
         <tr>
-                                        <td width="120" align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
-                                        <td align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
-                                    </tr>
+            <td width="80" align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
+            <td align="left" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
+        </tr>
     </table>
     @endif
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
@@ -652,7 +642,7 @@ if (!empty($order->tour->event->image_url)){
     </table>
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap"> 
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;;" class="oc_f12 oc_lblack">
                 BOOKING TOTAL
             </td>
             <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
@@ -660,7 +650,7 @@ if (!empty($order->tour->event->image_url)){
             </td>
         </tr>
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;;" class="oc_f12 oc_lblack">
                 GST (included)
             </td>
             <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
@@ -669,7 +659,7 @@ if (!empty($order->tour->event->image_url)){
         </tr>
         @if(!empty($order->commission_amount)) 
         <tr>
-            <td align="left" width="100" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 2px 40px; font-weight: bold;;" class="oc_f12 oc_lblack">
                 COMMISSION
             </td>
             <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
@@ -678,11 +668,11 @@ if (!empty($order->tour->event->image_url)){
         </tr>
         @endif
         <tr>
-            <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" width="120">&nbsp;</td>
+            <td align="left" valign="top" style="padding: 10px 15px 0px 25px;" width="80">&nbsp;</td>
             <td align="center" valign="top" style="padding: 10px 15px 0px 25px;">&nbsp;</td>
         </tr>
         <tr>
-            <td align="left" width="140" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
+            <td align="left" width="80" valign="top" style="padding: 2px 10px 10px 40px; font-weight: bold;" class="oc_f12 oc_lblack">
                 FINAL BOOKING AMOUNT    
             </td>
             <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
