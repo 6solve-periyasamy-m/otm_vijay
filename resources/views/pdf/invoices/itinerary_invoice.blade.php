@@ -180,7 +180,7 @@
                             <table align="left" width="100%" border="0" cellspacing="0">
                                 <tr>
                                     <td align="left" valign="top" style="padding: 0 20px;">
-                                        <img src="{{img_to_b64($invoice->brand->logo)}}" alt="{{ $invoice->brand->name }}" width="100%" style="display: block; max-width: 190px">
+                                    <img src="{{img_to_b64($invoice->brand->logo)}}" alt="{{ $invoice->brand->name }}" width="100%" style="display: block; max-width: 190px">
                                     </td>
                                 </tr>
                             </table>
@@ -221,15 +221,43 @@
                                             CUSTOMER DETAILS
                                         </td>
                                     </tr>
+                                    @php 
+                                    $otherGuest = 0;
+                                    $isTBC = 0;
+                                    @endphp
                                     @foreach($order->orderCustomers as $ordersCustomer)
                                     <tr>
-                                        <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; color: #ffffff; line-height:10px;" class="oc_f14">
-                                            {{ ($order->lead_booker_id == $ordersCustomer->id) ? 'LEAD GUEST:' : ' OTHER GUESTS:'}}
+                                        <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; color: #ffffff; line-height:20px;" class="oc_f14">
+                                            @if($order->lead_booker_id == $ordersCustomer->id)
+                                                LEAD GUEST
+                                            @else
+                                            @if($otherGuest == 0)
+                                                    OTHER GUESTS
+                                                   
+                                            @endif
+                                            @php 
+                                                    $otherGuest++;
+                                                    @endphp
+                                            @endif
+                                            
 
                                         </td>
-                                        <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; color: #ffffff; line-height:10px;" class="oc_f14">
-                                            {{$ordersCustomer->customer->title}} {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
+                                        @if($otherGuest < 4)
+                                     
+                                        <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; color: #ffffff; line-height:20px;" class="oc_f14">
+                                            {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }} 
+                                           
                                         </td>
+                                        @else
+                                        @if($otherGuest > 3 && $isTBC == 0)
+                                        @php 
+                                                    $isTBC++;
+                                                    @endphp
+                                        <td  align="left" valign="top" style="padding: 10px 15px 0px 25px; color: #ffffff; line-height:20px;" class="oc_f14">
+                                                TBC                                           
+                                        </td>
+                                        @endif
+                                        @endif
                                     </tr>
                                     @endforeach
                                     <tr>
@@ -270,14 +298,20 @@
                             </table>
                         </td>
                         @php
-                        $imageUrl = 'uploads/images/events.jpg';
+                        if (!empty($order->tour->event->image_url)){
+                            $imageUrl = $order->tour->event->image_url;
+                            
+                        } else{
+                            $imageUrl = 'uploads/images/events.jpg';
+                        }
 
-                        @endphp
+                    @endphp
                         <td width="50%" align="right" valign="top">
                             <table align="left" width="100%" border="0" cellspacing="0">
                                 <tr>
                                     <td align="left" valign="top">
-                                        <img src="{{ img_to_b64($imageUrl) }}"  width="100%" style="display: block; height: 100%; max-height: 350px; object-fit: cover">
+                                    <img src="{{ img_to_b64($imageUrl) }}"  width="100%" style="display: block; height: 100%; max-height: 350px; object-fit: cover">
+
                                     </td>
                                 </tr>
                             </table>
@@ -299,7 +333,9 @@
         </tr>
     </table>
     <table border="0" width="60%" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="background-color:#ffffff; padding: 5px 0 10px 0;" class="full-wrap">
-        @php
+    @php
+        $is_accommodation = 0;
+       
         // Start and end dates
         $date_from = date('Y-m-d', strtotime($tour->date_from));
         $date_to = date('Y-m-d', strtotime($tour->date_to));
@@ -308,9 +344,12 @@
         @endphp
 
         @foreach ($start_date->daysUntil($end_date) as $keyAcc => $date)
+        @php 
+        $daysData = 0;
+        @endphp
         <tr>
             <td colspan="2" align="left" >
-                <div style="background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 190px; padding: 10px 25px; margin: 10px 0; color: #ffffff; display: block;" class="oc_f16 oc_lblack">
+                <div style="background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 190px; padding: 10px 25px; margin: 10px 0; color: #ffffff; display: block;" class="oc_f16 oc_lblack " id="day_heading_{{ $loop->iteration }}">
                 DAY {{ $loop->iteration }} - {{ $date->format('d M Y') }}
                 </div>
             </td>
@@ -324,17 +363,19 @@
         $arrives_at = new DateTime($tourComponent->inventory->arrives_at);
         @endphp
         @if($date->format('Y-m-d') >= $arrives_at->format('Y-m-d') && $date->format('Y-m-d') <= $departs_at->format('Y-m-d'))
+        @php 
+        $daysData = 1;
+        @endphp
         <tr>
             <td align="left" colspan="2" width="100%" style="padding: 0px 40px; font-weight: bold; font-size: 11pt;" class="oc_f12 oc_lblack">Arrival from {{ $tourComponent->inventory->flight->departureAirport->name }} to {{ $tourComponent->inventory->flight->arrivalAirport->name }} </td>
         </tr>
         @endif
         @endforeach
-
+       
         @foreach($tour->accommodationInventoryTours as $tourComponent)
         @if($date->format('Y-m-d') >= date('Y-m-d', strtotime($tourComponent->inventory->check_in)) && $date->format('Y-m-d') <= date('Y-m-d', strtotime($tourComponent->inventory->check_out)))
         @php
         $nights = 0;
-        if($keyAcc == 0){
 
           
             
@@ -350,8 +391,11 @@
 
         // Get the number of nights
         $nights = $interval->format('%a') - 1;
-        }
-
+        
+        $is_accommodation++;
+        @endphp
+        @php 
+        $daysData = 1;
         @endphp
         <tr>
             <td align="left" colspan="2" style="padding: 0px 40px; color: #E95B15; font-size: 11pt;" class="oc_f16 ">ACCOMMODATION
@@ -372,7 +416,7 @@
                 {{ $tourComponent->inventory->component->name }}
             </td>
         </tr>
-        @if($nights > 0)
+        @if($is_accommodation == 1)
         <tr>
             <td align="left" width="50" valign="top" style="padding: 0px 40px;" class="oc_f12 oc_lblack">No Of Nights:
             </td>
@@ -421,6 +465,9 @@
         @endforeach
         @if(isset($order->tour->event))
         @if($date->format('Y-m-d') >= date('Y-m-d', strtotime($order->tour->event->starts_at)) && $date->format('Y-m-d') <= date('Y-m-d', strtotime($order->tour->event->ends_at)))
+        @php 
+        $daysData = 1;
+        @endphp
         <tr>
             <td align="left" width="" style="padding: 0px 40px; color: #E95B15; font-size: 11pt;" class="oc_f16 ">
                 EVENT
@@ -481,6 +528,9 @@
 
         @endphp
         @if($date->format('Y-m-d') >= $startDateTime->format('Y-m-d') && $date->format('Y-m-d') <= $endDateTime->format('Y-m-d'))
+        @php 
+        $daysData = 1;
+        @endphp
         <tr>
             <td align="left" width="" style="padding: 0px 40px; color: #E95B15; font-size: 11pt;" class="oc_f16 ">
                 {{ ($tourComponent->inventory->component->activity_category == 0 ) ? 'INCLUSION' : 'EVENT';  }}
@@ -535,16 +585,17 @@
 
         @endif
         @endforeach
-
+       
         @endforeach
 
         <tr>
-        <td align="left" colspan="2" width="100%" style="padding: 0px 40px; font-weight: bold; font-size: 11pt;" class="oc_f12 oc_lblack">
-            End of experience
+        <td align="left" colspan="2" width="100%" style="padding: 0px 40px; font-weight: bold; font-size: 11pt;" class="oc_f12 oc_lblack ">
+           End of experience
             </td>
            
         </tr>
     </table>
+ 
     <table align="left" width="100%" cellspacing="0" cellpadding="0">
         <thead>
             <tr style=" background-color: #353535; padding: 2px 15px;">
