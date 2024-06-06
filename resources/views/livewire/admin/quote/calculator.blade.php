@@ -126,7 +126,7 @@
                 </x-admin.section.otm-text>
             </div>
             <div class="col-6">
-                <button class="btn btn-info" wire:click="calculate">Refresh</button>
+                <button class="btn btn-info" wire:click="calculate">Calculate</button>
             </div>
             <div class="col-6">
                 <x-admin.section.otm-text class="profit-updater">
