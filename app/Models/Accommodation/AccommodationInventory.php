@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use PhpOffice\PhpSpreadsheet\Calculation\Category;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 /**
@@ -28,6 +29,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int $accommodation_id
  * @property int $room_type_id
  * @property int $board_type_id
+ * @property int|null $room_category_id
  * @property int|null $stock_parent_id
  * @property Carbon|null $check_in
  * @property bool $check_in_time_confirmed
@@ -45,6 +47,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read int $contracted Amount of contracted stock
  * @property-read Accommodation $accommodation
  * @property-read BoardType $boardType
+ * @property-read RoomCategory $category
  * @property-read Accommodation $component
  * @property-read AccommodationInventory|null $stockParent
  * @property-read AccommodationInventory[] $stockChildren
@@ -142,6 +145,11 @@ class AccommodationInventory extends Model
     public function roomType(): BelongsTo
     {
         return $this->belongsTo(RoomType::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(RoomCategory::class, 'room_category_id');
     }
 
     public function getAccommodationForTourAttribute(): string

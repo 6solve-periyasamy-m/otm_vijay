@@ -5,7 +5,6 @@ namespace App\Models\Helper;
 use App\Models\Helper\Traits\HasPermissions;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * App\Models\Helper\SimpleModel

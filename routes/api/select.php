@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\SelectController;
+use App\View\Components\Livewire\Input\Select\Accommodation\RoomCategory;
 use App\View\Components\Livewire\Input\Select\AccommodationInventory;
 use App\View\Components\Livewire\Input\Select\Brand;
 use App\View\Components\Livewire\Input\Select\Country;
@@ -33,6 +34,11 @@ Route::prefix('tax-brackets')->name('tax-brackets.')->group(function () {
 Route::prefix('tour-categories')->name('tour-categories.')->group(function () {
     Route::post('/', [TourCategory::class, 'getAll'])->name('select');
     Route::post('/{id}', [TourCategory::class, 'getOne'])->name('selected');
+});
+
+Route::prefix('room-categories')->name('room-categories.')->group(function () {
+    Route::post('/', [RoomCategory::class, 'getAll'])->name('select');
+    Route::post('/{id}', [RoomCategory::class, 'getOne'])->name('selected');
 });
 
 Route::prefix('currencies')->name('currencies.')->group(function () {

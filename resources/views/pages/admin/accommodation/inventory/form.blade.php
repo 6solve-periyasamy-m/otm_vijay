@@ -18,21 +18,22 @@
     @can('create', \App\Models\Accommodation\RoomType::class)
         @include('partials.fields.selector.adder',
                     ['name' => 'Room Type', 'field' => 'room_type_id', 'value' => $inventory?->room_type_id,
-                     'route' => 'room-types', 'createRoute' => route('room-types.create'), 'width' => 3,])
+                     'route' => 'room-types', 'createRoute' => route('room-types.create'), 'width' => 2,])
     @else
         @include('partials.fields.selector.default',
                 ['name' => 'Room Type', 'field' => 'room_type_id', 'value' => $inventory?->room_type_id,
-                 'route' => 'room-types', 'width' => 3,])
+                 'route' => 'room-types', 'width' => 2,])
     @endcan
     @can('create', \App\Models\Accommodation\BoardType::class)
         @include('partials.fields.selector.adder',
                     ['name' => 'Board Type', 'field' => 'board_type_id', 'value' => $inventory?->board_type_id,
-                     'route' => 'board-types', 'createRoute' => route('board-types.create'), 'width' => 3,])
+                     'route' => 'board-types', 'createRoute' => route('board-types.create'), 'width' => 2,])
     @else
         @include('partials.fields.selector.default',
                     ['name' => 'Board Type', 'field' => 'board_type_id', 'value' => $inventory?->board_type_id,
-                     'route' => 'board-types', 'width' => 3,])
+                     'route' => 'board-types', 'width' => 2,])
     @endcan
+    <x-livewire.input.select.accommodation.room-category name="room_category_id" label="Category" value="{{ $inventory?->room_category_id }}" width="2" clear />
     <x-livewire.input.select.accommodation-inventory width="6" label="Stock Parent" name="stock_parent_id" value="{{ $inventory?->stock_parent_id }}" clear />
     <div class="form-group col-xl-6">
         @include('partials.fields.raw.datetime',
