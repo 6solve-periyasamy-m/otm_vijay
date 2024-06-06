@@ -200,7 +200,7 @@ class BookingTravellerRepository extends ModelRepository
             } catch (\Exception $e) {
                 // Likely failed due to non-unique email address. Wipe address and try again.
                 Log::error($e);
-                $this->traveller->email_address === null;
+                $this->traveller->email_address = null;
                 $customer = $this->convertToCustomer();
             }
         } else {

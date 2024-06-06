@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Quote\PricePoint;
 
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
@@ -10,6 +11,7 @@ use Livewire\Component;
 class Form extends Component
 {
     use SendsEvents;
+    use LivewireForm;
 
     public Quote $quote;
     public QuotePricePoint|null $pricePoint = null;

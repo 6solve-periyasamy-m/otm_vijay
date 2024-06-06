@@ -62,7 +62,13 @@
     },
     "autoload": {
         "files": [
-            "app/helpers.php"
+            "helpers/auth.php",
+            "helpers/formatting.php",
+            "helpers/images.php",
+            "helpers/internal.php",
+            "helpers/pdf.php",
+            "helpers/settings.php",
+            "helpers/ui.php"
         ],
         "psr-4": {
             "App\\": "app/",

@@ -202,6 +202,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
      * @param ConvertedCustomer $customer The customer to be added to the Order
      * @param bool $refresh Should the cache be refreshed and invoice generated (default: true)
      * @param bool $components Should the components be added (default: true)
+     * @param bool $silent
      * @return OrderCustomer
      */
     public function addCustomer(ConvertedCustomer $customer, bool $refresh = true, bool $components = true, bool $silent = false): OrderCustomer
