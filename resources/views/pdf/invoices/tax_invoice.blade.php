@@ -264,7 +264,7 @@
                                                                 </td>
                                                                 <td align="left" valign="top" style="padding: 2px 15px;"
                                                                     class="oc_f12 oc_lblack">
-                                                                    {{$invoice->event}} | {{$invoice->lead->last_name }}</td>
+                                                                    {{$invoice->event ?? $invoice->name}} | {{$invoice->lead->last_name }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td width="40" align="left" valign="top"
