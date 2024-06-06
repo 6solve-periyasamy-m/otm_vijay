@@ -27,9 +27,11 @@ class AccommodationInventoryImport implements ToCollection, WithHeadingRow, With
         $data = [];
         foreach ($collection as $row) {
             $accommodation = Accommodation::where('name', 'like', trim($row['accommodation']))->first();
+            $parent = AccommodationInventory::find($row['parent_id']);
             if ($accommodation == null) return null;
             $data[] = AccommodationInventory::create([
                 'accommodation_id' => $accommodation->id,
+                'stock_parent_id' => $parent?->id,
                 'room_type_id' => RoomType::findOrCreate(trim($row['room_type']), trim($row['size']))->id,
                 'board_type_id' => BoardType::findOrCreate(trim($row['board_type']))->id,
                 'check_in' => Carbon::createFromFormat('d-m-Y H:i', trim($row['check_in'])),
@@ -37,7 +39,7 @@ class AccommodationInventoryImport implements ToCollection, WithHeadingRow, With
                 'check_out' => Carbon::createFromFormat('d-m-Y H:i', trim($row['check_out'])),
                 'check_out_time_confirmed' => true,
                 'fit_selectable' => trim($row['fit_selectable']) == 'YES',
-                'stock' => trim($row['stock']),
+                'stock' => trim($row['stock']) != '' ? trim($row['stock']) : 0,
                 'purchase_price' => trim($row['purchase_price']),
                 'sales_price' => trim($row['sales_price']) != '' ? trim($row['sales_price']) : trim($row['purchase_price']),
                 'internal_notes' => trim($row['notes']),
@@ -55,7 +57,7 @@ class AccommodationInventoryImport implements ToCollection, WithHeadingRow, With
             'check_in' => 'required|date|date_format:"d-m-Y H:i"',
             'check_out' => 'required|date|date_format:"d-m-Y H:i"|after:check_in',
             'fit_selectable' => ['nullable', Rule::in(['YES', 'NO', null])],
-            'stock' => 'required|integer',
+            'stock' => 'nullable|integer',
             'purchase_price' => 'required|numeric',
             'sales_price' => 'nullable|numeric',
         ];
