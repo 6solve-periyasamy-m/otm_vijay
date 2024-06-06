@@ -43,6 +43,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read int $contracted Amount of contracted stock
+ * @property-read float $local_purchase_price FX Converted Purchase Price
  * @property-read Accommodation $accommodation
  * @property-read BoardType $boardType
  * @property-read Accommodation $component
@@ -53,6 +54,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read int $used_on_tour_count How many tours this inventory is used on
  * @property-read int $used_stock The amount of stock that has been sold
  * @property-read int $available_stock The amount of stock that is available to be sold
+ * @property-read int $total_stock The total stock available to sell (either for component or parent)
  * @property-read RoomType $roomType
  * @property-read Collection|SupplierContractComponent[] $contractComponents
  * @property-read Collection|AccommodationInventoryTour[] $tourComponents
@@ -100,19 +102,6 @@ class AccommodationInventory extends Model
         'sales_price' => 'double',
     ];
     private AccommodationInventoryRepository $internal_repository;
-
-    public static function getValidationRules(): array
-    {
-        return [
-            'room_type_id' => 'required|exists:room_types,id',
-            'board_type_id' => 'required|exists:board_types,id',
-            'check_in' => 'date',
-            'check_out' => 'date',
-            'stock' => 'required|numeric|integer',
-            'purchase_price' => 'nullable|numeric',
-            'sales_price' => 'nullable|numeric',
-        ];
-    }
 
     public static function findByTour($tour_id): Collection|array
     {
@@ -164,6 +153,11 @@ class AccommodationInventory extends Model
         return "{$this->accommodation->name} - {$this->accommodation->region->name}｜Check in: {$check_in} - Check out: {$check_out}｜Room Type: {$this->roomType->name} - Board Type: {$this->boardType->name}";
     }
 
+    public function getTotalStockAttribute(): int
+    {
+        return $this->repository->getTotalStock();
+    }
+
     public function getUsedStockAttribute(): int
     {
         return $this->repository->getUsedStock();
@@ -208,5 +202,10 @@ class AccommodationInventory extends Model
     {
         if (!isset($this->internal_repository)) $this->internal_repository = new AccommodationInventoryRepository($this);
         return $this->internal_repository;
+    }
+
+    public function getLocalPurchasePriceAttribute(): float
+    {
+        return fx_convert($this->purchase_price, $this->component->currency);
     }
 }

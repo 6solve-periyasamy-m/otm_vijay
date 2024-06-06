@@ -2,7 +2,7 @@
 
 namespace App\Repository\Model\Location;
 
-use App\Models\Helper\AddressParent;
+use App\Models\Helper\Enum\AddressParent;
 use App\Models\Location\Address;
 use App\Repository\Abstracts\ModelRepository;
 use Illuminate\Http\Request;

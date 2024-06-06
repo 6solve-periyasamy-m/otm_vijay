@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Quote\Installment;
 
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuoteInstallment;
@@ -10,6 +11,7 @@ use LivewireUI\Modal\ModalComponent;
 class Form extends ModalComponent
 {
     use SendsEvents;
+    use LivewireForm;
 
     /** @var Quote $quote */
     public Quote|int $quote;

@@ -50,7 +50,11 @@ class GroupRepository
     {
         $exists = OrderAccommodation::where('group_id', '=', $this->group->id)->where('accommodation_inventory_tour_id', '=', $tourComponent->id)->first();
         if ($exists) return $exists;
-        $orderAccommodation = OrderAccommodation::make(['accommodation_inventory_tour_id' => $tourComponent->id, 'cost' => $tourComponent->tour_sales_price,]);
+        $orderAccommodation = OrderAccommodation::make([
+            'accommodation_inventory_tour_id' => $tourComponent->id,
+            'cost' => $tourComponent->tour_sales_price,
+            'estimated_purchase_price' => $tourComponent->inventory->local_purchase_price,
+        ]);
         $silent ? $this->group->rooms()->saveQuietly($orderAccommodation) : $this->group->rooms()->save($orderAccommodation);
         return $orderAccommodation;
     }

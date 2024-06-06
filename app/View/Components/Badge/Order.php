@@ -2,7 +2,7 @@
 
 namespace App\View\Components\Badge;
 
-use App\Models\Helper\OrderStatus;
+use App\Models\Helper\Enum\OrderStatus;
 use Illuminate\View\Component;
 
 class Order extends Component

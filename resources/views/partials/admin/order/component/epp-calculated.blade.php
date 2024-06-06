@@ -1,0 +1,1 @@
+<abbr title="Purchase price was not cached during order conversion, so is using live conversion rates">*</abbr>

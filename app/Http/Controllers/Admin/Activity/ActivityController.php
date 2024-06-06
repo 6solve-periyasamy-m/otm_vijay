@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin\Activity;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity\Activity;
-use App\Models\Helper\AddressParent;
+use App\Models\Helper\Enum\AddressParent;
 use App\Models\Location\Address;
 use App\Repository\Model\Location\AddressRepository;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
@@ -34,6 +34,7 @@ class ActivityController extends Controller
             'currency_id' => $request->input('currency_id'),
             'internal_notes' => $request->input('notes'),
             'activity_category' => $request->input('activity_category'),
+            'event_id' => $request->input('event_id'),
         ]);
         if ($request->input('use_existing') == 'on') {
             $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::ACTIVITY);
@@ -80,6 +81,7 @@ class ActivityController extends Controller
             'currency_id' => $request->input('currency_id'),
             'internal_notes' => $request->input('notes'),
             'activity_category' => $request->input('activity_category'),
+            'event_id' => $request->input('event_id'),
         ]);
         if ($request->input('use_existing') == 'on') {
             Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::ACTIVITY, $activity->address);

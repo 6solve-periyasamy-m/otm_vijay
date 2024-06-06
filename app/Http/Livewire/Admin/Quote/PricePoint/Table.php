@@ -3,12 +3,15 @@
 namespace App\Http\Livewire\Admin\Quote\PricePoint;
 
 use App\Http\Livewire\Abstract\CurrencyColumn;
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Models\Quote\QuotePricePoint;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class Table extends LivewireDatatable
 {
+    use LivewireForm;
+
     public int $quote;
 
     public function builder()

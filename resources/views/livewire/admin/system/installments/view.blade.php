@@ -1,16 +1,28 @@
 <div>
     <x-admin.section.card>
-        <div class="d-flex justify-content-between">
-            <div class="d-flex justify-content-between">
-                <div>
-                    <x-livewire.input wire:model="deposit" label="Deposit (%)" />
+        <div class="row">
+            <div class="col-6 d-flex justify-content-between">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <x-livewire.input wire:model="deposit" label="Deposit (%)" />
+                    </div>
+                    <div class="my-auto">
+                        <label></label>
+                        <button class="btn btn-primary" wire:click="setDeposit">Set Deposit</button>
+                    </div>
                 </div>
-                <div class="my-auto">
-                    <label></label>
-                    <button class="btn btn-primary" wire:click="setDeposit">Set Deposit</button>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <x-livewire.input wire:model="final" label="Final Payment (days)" />
+                    </div>
+                    <div class="my-auto">
+                        <label></label>
+                        <button class="btn btn-primary" wire:click="setFinal">Set Final</button>
+                    </div>
                 </div>
             </div>
-            <div>
+            <div class="col-4"></div>
+            <div class="col-2">
                 <button onclick="openModal('admin.system.installments.form')" class="btn btn-success">{{ Icon::create() }} Create New</button>
             </div>
         </div>
@@ -32,8 +44,8 @@
                     <td></td>
                 </tr>
             @endif
-            @php $total = $deposit; @endphp
-            @foreach(array_reverse(\Settings::getDefaultInstallments(), true) as $days => $percentage)
+            @php $total = !empty($deposit) ? $deposit : 0; @endphp
+            @foreach(\Settings::getDefaultInstallments() as $days => $percentage)
                 @php $total += $percentage; @endphp
                 <tr>
                     <td>{{$days}} Days Before</td>
@@ -48,6 +60,13 @@
                     </td>
                 </tr>
             @endforeach
+            @if(!empty($final))
+                <tr>
+                    <td>{{$final}} Days Before</td>
+                    <td>Final Payment</td>
+                    <td></td>
+                </tr>
+            @endif
             </tbody>
         </table>
     </x-admin.section.card>

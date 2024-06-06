@@ -42,6 +42,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read int $contracted Amount of contracted stock
+ * @property-read float $local_purchase_price FX Converted Purchase Price
  * @property-read Airport|null $arrivalAirport
  * @property-read Flight $component
  * @property-read Airport|null $departureAirport
@@ -201,5 +202,10 @@ class FlightInventory extends Model
     public function orders(): HasManyThrough
     {
         return $this->hasManyThrough(OrderFlight::class, FlightInventoryTour::class, 'flight_inventory_id', 'flight_inventory_tour_id');
+    }
+
+    public function getLocalPurchasePriceAttribute(): float
+    {
+        return fx_convert($this->purchase_price, $this->component->currency);
     }
 }

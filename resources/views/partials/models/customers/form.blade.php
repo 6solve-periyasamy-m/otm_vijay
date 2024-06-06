@@ -23,7 +23,7 @@
 @include('partials.fields.date', ['name' => 'Date Of Birth', 'field' => 'date_of_birth', 'value' => $date_of_birth ?? null, 'width' => 4,])
 @include('partials.fields.file', ['name' => 'Profile Picture', 'field' => 'profile_picture', 'width' => 4,])
 <hr class="splitter"/>
-@include('partials.fields.text', ['name' => 'Email Address', 'field' => 'email_address', 'value' => $email_address ?? null, 'width' => 6,])
+@include('partials.fields.text', ['name' => 'Email Address', 'field' => 'email_address', 'value' => $email_address ?? null, 'width' => 6, 'autocomplete' => false])
 @include('partials.fields.password', ['name' => 'Password', 'field' => 'password', 'width' => 6,])
 <hr class="splitter"/>
 @include('partials.fields.checkbox', ['name' => 'Billing Address is Same As Home', 'field' => 'home_is_billing',

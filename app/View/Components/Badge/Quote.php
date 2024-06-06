@@ -2,7 +2,7 @@
 
 namespace App\View\Components\Badge;
 
-use App\Models\Helper\QuoteStatus;
+use App\Models\Helper\Enum\QuoteStatus;
 use Illuminate\View\Component;
 
 class Quote extends Component
