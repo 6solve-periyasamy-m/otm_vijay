@@ -143,7 +143,7 @@ class OrderController extends Controller
         return dompdf(view('pdf.invoices.itinerary', ['tour' => $tour, 'order' => $order, 'invoice' => $invoice,]));
     }
 
-    public function reservarionPreview(Order $order,Invoice $invoice)
+    public function reservationPreview(Order $order,Invoice $invoice)
     {
         $invoice = $order->repository->getInvoiceRepository()->invoice;
 
