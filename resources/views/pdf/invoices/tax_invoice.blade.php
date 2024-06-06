@@ -1,3 +1,6 @@
+@php
+    /** @var \App\Models\Order\Invoice\Invoice $invoice */
+@endphp
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
@@ -9,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet" />
 
     <style type="text/css">
-        /* Define margin-top for all pages */
+        /* Define margin-top for all pages  #f35b15 */
         @page {
             margin: 20px 0px 0px 0px; /* Adjust the value as needed */
             padding: 0px;
@@ -157,7 +160,7 @@
                 <table align="center" border="0" cellpadding="0" cellspacing="0" width="670"
                     style="width: 794px; background-color: #fff">
                     <tr>
-                        <td align="center" valign="top" style="padding: 35px 35px; border-top: 10px solid #CAA974;">
+                        <td align="center" valign="top" style="padding: 35px 35px; border-top: 10px solid #f35b15;">
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td align="left" valign="top" style="padding-bottom: 10px;">
@@ -167,7 +170,7 @@
                                                     <table align="left" width="100%" border="0" cellspacing="0">
                                                         <tr>
                                                             <td align="left" valign="top">
-                                                                <img src="{{img_to_b64($invoice->brand->logo)}}" alt="logo" width="300"
+                                                                <img src="{{img_to_b64($invoice->brand->logo)}}" alt="logo" width="200"
                                                                     style="display: block;">
                                                             </td>
                                                         </tr>
@@ -215,9 +218,9 @@
                                             <thead>
                                                 <tr>
                                                     <th align="center" valign="top"
-                                                        style="border-bottom: 2px solid #CAA974; padding: 5px 15px; color: #CAA974; "
+                                                        style="border-bottom: 2px solid #f35b15; padding: 5px 15px; color: #f35b15; "
                                                         class="oc_f18">
-                                                        T A X &nbsp; &nbsp; I N V O I C E @if($invoice->cancelled) (Cancelled) @endif</th>
+                                                        TAX&nbsp;INVOICE @if($invoice->cancelled) (Cancelled) @endif</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -261,7 +264,7 @@
                                                                 </td>
                                                                 <td align="left" valign="top" style="padding: 2px 15px;"
                                                                     class="oc_f12 oc_lblack">
-                                                                    {{$invoice->name}} | {{ $invoice->lead->full_name }}</td>
+                                                                    {{$invoice->event}} | {{$invoice->lead->last_name }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td width="40" align="left" valign="top"
@@ -348,11 +351,11 @@
                                                         <thead>
                                                             <tr>
                                                                 <th align="left" valign="top"
-                                                                    style="border-bottom: 2px solid #CAA974; padding: 2px 15px; color: #CAA974;"
+                                                                    style="border-bottom: 2px solid #f35b15; padding: 2px 15px; color: #f35b15;"
                                                                     class="oc_f16">
                                                                     DESCRIPTION</th>
                                                                 <th width="180" align="left" valign="top"
-                                                                    style="border-bottom: 2px solid #CAA974; padding: 2px 15px; color: #CAA974;"
+                                                                    style="border-bottom: 2px solid #f35b15; padding: 2px 15px; color: #f35b15;"
                                                                     class="oc_f16">QUANTITY
                                                                 </th>
 
@@ -365,6 +368,7 @@
                                                             @endphp
 
                                                             @foreach($billables as $b_index => $billable)
+                                                                @if($billable->shared_key === 'base-components') @continue @endif
                                                                 <tr style="background-color: {{ $counter % 2 == 0 ? '#f5f5f5' : '#ffffff' }};"> 
                                                                     <td align="left" valign="top" style="padding: 2px 15px;"
                                                                         class="oc_f12 oc_lblack">{{$billable->description}}
@@ -393,9 +397,9 @@
                                                     <table align="left" width="100%" cellspacing="0" cellpadding="0">
                                                         <thead>
                                                             <tr
-                                                                style=" border-bottom: 2px solid #CAA974; padding: 2px 15px;">
+                                                                style=" border-bottom: 2px solid #f35b15; padding: 2px 15px;">
                                                                 <th align="right" valign="top"
-                                                                    style="padding: 2px 15px; color: #CAA974; font-weight: 700;"
+                                                                    style="padding: 2px 15px; color: #f35b15; font-weight: 700;"
                                                                     class="oc_f16 ">PAYMENT DETAILS</th>
                                                             </tr>
                                                         </thead>
@@ -444,14 +448,14 @@
                                                             <td align="right" style="padding: 2px 15px;"
                                                                 class="oc_f12 oc_lblack">Final Amount Remaining:</td>
                                                             <td width="150" align="right" valign="top"
-                                                                style="padding: 2px 15px; border-top: 1px solid #CAA974; "
+                                                                style="padding: 2px 15px; border-top: 1px solid #f35b15; "
                                                                 class="oc_f12 oc_lblack">{{f_currency($invoice->total_cost - $invoice->total_paid)}}</td>
                                                         </tr>
                                                         <tr>
                                                             <td align="right" style="padding: 2px 15px;"
                                                                 class="oc_f14 oc_lblack">&nbsp;</td>
                                                             <td width="150" align="right" valign="top"
-                                                                style="padding: 2px 15px; border-top: 1px solid #CAA974; "
+                                                                style="padding: 2px 15px; border-top: 1px solid #f35b15; "
                                                                 class="oc_f14 oc_lblack">&nbsp;</td>
                                                         </tr>
                                                     </table>
@@ -465,19 +469,19 @@
                                                         <thead>
                                                             <tr>
                                                                 <th width="25%" align="left" valign="top"
-                                                                    style="border-bottom: 2px solid #CAA974; padding: 2px 15px; color: #CAA974;"
+                                                                    style="border-bottom: 2px solid #f35b15; padding: 2px 15px; color: #f35b15;"
                                                                     class="oc_f16">
                                                                     DUE DATE</th>
                                                                 <th width="25%" align="left" valign="top"
-                                                                    style="border-bottom: 2px solid #CAA974; padding: 2px 15px; color: #CAA974;"
+                                                                    style="border-bottom: 2px solid #f35b15; padding: 2px 15px; color: #f35b15;"
                                                                     class="oc_f16">AMOUNT
                                                                 </th>
                                                                 <th width="25%" align="left" valign="top"
-                                                                    style="border-bottom: 2px solid #CAA974; padding: 2px 15px; color: #CAA974;"
+                                                                    style="border-bottom: 2px solid #f35b15; padding: 2px 15px; color: #f35b15;"
                                                                     class="oc_f16">
                                                                     PAID</th>
                                                                 <th width="25%" align="left" valign="top"
-                                                                    style="border-bottom: 2px solid #CAA974; padding: 2px 15px; color: #CAA974;"
+                                                                    style="border-bottom: 2px solid #f35b15; padding: 2px 15px; color: #f35b15;"
                                                                     class="oc_f16">RECEIVED
                                                                 </th>
                                                             </tr>
@@ -532,7 +536,7 @@
                                             <thead>
                                                 <tr>
                                                     <th align="left" valign="top"
-                                                        style=" border-bottom: 2px solid #CAA974; padding: 2px 15px; color: #CAA974; "
+                                                        style=" border-bottom: 2px solid #f35b15; padding: 2px 15px; color: #f35b15; "
                                                         class="oc_f16">
                                                         PAYMENT OPTIONS
                                                     </th>
@@ -547,7 +551,7 @@
                                             <tbody>
                                                 <tr>
                                                     <td width="80" align="left" valign="top"
-                                                        style="padding: 2px 15px; color: #CAA974; font-weight: 700;"
+                                                        style="padding: 2px 15px; color: #f35b15; font-weight: 700;"
                                                         class="oc_f12">BANK TRANSFER
                                                     </td>
                                                     <td width="180" align="left" valign="top" style="padding: 2px 15px;"
@@ -573,7 +577,7 @@
                                             <thead>
                                                 <tr>
                                                     <th align="left" valign="top"
-                                                        style=" border-bottom: 2px solid #CAA974; padding: 20px 15px 2px; color: #CAA974; "
+                                                        style=" border-bottom: 2px solid #f35b15; padding: 20px 15px 2px; color: #f35b15; "
                                                         class="oc_f16">
                                                         TERMS AND CONDITIONS
                                                     </th>
@@ -590,21 +594,8 @@
 
                                                     <td align="left" valign="top" style="padding: 2px 15px;"
                                                         class="oc_f12 oc_lblack">
-                                                        Terms and conditions apply. Please see our website for a copy or
-                                                        <a href="https://www.kpt.com.au/terms-and-conditions"
-                                                            target="_blank"
-                                                            style="color: #CAA974; text-decoration: underline;">view
-                                                            them here</a>
-                                                        .
+                                                        {!! $invoice->invoice_footer !!}
                                                     </td>
-                                                </tr>
-                                                <tr>
-                                                    <td align="left" valign="top" style="padding: 2px 15px;"
-                                                        class="oc_f14 oc_lblack">&nbsp;
-                                                    </td>
-                                                    <td width="180" align="center" valign="top"
-                                                        style="padding: 2px 15px;" class="oc_f14 oc_lblack">
-                                                        &nbsp;</td>
                                                 </tr>
                                             </tbody>
                                         </table>
