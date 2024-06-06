@@ -2,6 +2,7 @@
 
 namespace App\Models\Accommodation;
 
+use App\Models\Helper\Model;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Supplier\SupplierContractComponent;
 use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
@@ -11,7 +12,6 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
-use PhpOffice\PhpSpreadsheet\Calculation\Category;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 /**
@@ -95,10 +94,10 @@ class AccommodationInventory extends Model
     protected $guarded = [];
     protected array $cascadeDeletes = ['tourComponents'];
     protected $casts = [
-        'check_in' => 'datetime',
+        'check_in' => 'datetime:Y-m-d H:i:s',
+        'check_out' => 'datetime:Y-m-d H:i:s',
         'check_in_time_confirmed' => 'boolean',
         'check_out_time_confirmed' => 'boolean',
-        'check_out' => 'datetime',
         'fit_selectable' => 'boolean',
         'purchase_price' => 'double',
         'sales_price' => 'double',
