@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\System\Conversion;
 
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\System\ConversionRate;
 use LivewireUI\Modal\ModalComponent;
@@ -9,6 +10,7 @@ use LivewireUI\Modal\ModalComponent;
 class Form extends ModalComponent
 {
     use SendsEvents;
+    use LivewireForm;
 
     /** @var ConversionRate|null $rate */
     public ConversionRate|int|null $rate = null;

@@ -2,11 +2,14 @@
 
 namespace App\Http\Livewire\Admin\Voucher;
 
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Models\Voucher\VoucherCode;
 use LivewireUI\Modal\ModalComponent;
 
 class Form extends ModalComponent
 {
+    use LivewireForm;
+
     public $voucher;
 
     public function mount(VoucherCode|int|null $voucher)

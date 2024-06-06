@@ -3,7 +3,7 @@
 namespace App\Repository\Authentication;
 
 use App\Mail\PasswordResetMailable;
-use App\Models\Helper\ModelEventType;
+use App\Models\Helper\Enum\ModelEventType;
 use App\Models\System\ApiToken;
 use App\Models\User;
 use Bouncer;

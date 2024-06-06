@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\System;
 
 use App\Http\Controllers\Controller;
 use App\Models\Location\Currency;
+use App\Models\System\LargeTextTemplate;
 use Illuminate\Http\Request;
 use Settings;
 
@@ -34,7 +35,6 @@ class SettingsController extends Controller
     }
 
     public function edit() {
-        //return view('pages.settings.form');
         return view('pages.admin.system.settings');
     }
 
@@ -88,7 +88,8 @@ class SettingsController extends Controller
             'flight.unlock' => $request->input('flight_unlock'),
             'transport.lock' => $request->input('transport_lock'),
             'transport.unlock' => $request->input('transport_unlock'),
-            'invoice.style' => $request->input('invoice_format')
+            'invoice.style' => $request->input('invoice_format'),
+            'quote.style' => $request->input('quote_format'),
         ]);
         if ($request->has('company_logo')  && $request->file('company_logo') != null) {
             Settings::set('company.logo', $this->saveImage($request->file('company_logo')));
@@ -99,6 +100,26 @@ class SettingsController extends Controller
         $currency = Currency::where('id', '=', $request->input('currency_id'))->first();
         Settings::set('system.currency', $currency->code);
         return redirect()->route('dash');
+    }
+
+    public function template()
+    {
+        return view('pages.admin.system.template.view');
+    }
+
+    public function editTemplate(LargeTextTemplate|null $template = null)
+    {
+        return view('pages.admin.system.template.form', ['template' => $template,]);
+    }
+
+    public function mail()
+    {
+        return view('pages.admin.system.mail');
+    }
+
+    public function import()
+    {
+        return view('pages.admin.system.import');
     }
 
     public function authorizeReminders(int $days)

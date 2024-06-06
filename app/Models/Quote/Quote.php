@@ -3,8 +3,8 @@
 namespace App\Models\Quote;
 
 use App\Models\Customer\Organization;
+use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Helper\Model;
-use App\Models\Helper\QuoteStatus;
 use App\Models\Helper\Traits\HasAdditionalCosts;
 use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;
@@ -271,6 +271,6 @@ class Quote extends Model
     public function getDepositPercentage(int $count = 1): float|null
     {
         $price = $this->repository->getPricePerPerson($count)?->price_per_person;
-        return $this->is_deposit_percentage ? $this->deposit : (empty($this->deposit) ? 0 : sigfig(($this->deposit / $price) * 100));
+        return $this->is_deposit_percentage ? $this->deposit : (empty($price) ? 0 : sigfig(($this->deposit / $price) * 100));
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\Quote;
 
 use App\Http\Controllers\Controller;
-use App\Models\Helper\QuoteStatus;
+use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Quote\Quote;
 
 class QuoteStatusController extends Controller

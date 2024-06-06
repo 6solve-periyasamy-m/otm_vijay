@@ -12,12 +12,28 @@
 @endpush
 
 @section('content')
+    <x-admin.section.card>
+        <div class="d-flex justify-content-between">
+            <div>
+                <a href="{{ route('settings.template') }}" class="btn btn-info">{{ Icon::template() }} Editor Templates</a>
+            </div>
+            <div>
+                <a href="{{ route('settings.import') }}" class="btn btn-info">{{ Icon::import() }} Bulk Import</a>
+            </div>
+            <div>
+                <a href="{{ route('settings.mail') }}" class="btn btn-info">{{ Icon::email() }} Email Templates</a>
+            </div>
+            <div>
+                <a href="{{ route('orders.reminders') }}" class="btn btn-info">{{ Icon::order() }} Order Reminders</a>
+            </div>
+        </div>
+    </x-admin.section.card>
     <div class="card">
         <div class="card-body" data-target="#settings" onclick="toggleAccordion(this)">
             <div class="d-flex justify-content-between">
                 <div>
                     <h4 class="fw-bold">
-                        {{ Icon::minimize() }} System Settings
+                        {{ Icon::maximize() }} System Settings
                     </h4>
                 </div>
                 <div>
@@ -29,42 +45,8 @@
             </div>
         </div>
     </div>
-    <div class="collapse show mx-1" id="settings">
+    <div class="collapse mx-1" id="settings">
         @include('partials.admin.system.settings.form')
-    </div>
-    <div class="card">
-        <div class="card-body" data-target="#reminders" onclick="toggleAccordion(this)">
-            <div class="d-flex justify-content-between">
-                <div>
-                    <h4 class="fw-bold">
-                        {{ Icon::maximize() }} Order Reminders
-                    </h4>
-                </div>
-                <div>
-                    <a href="{{ route('orders.reminders') }}"
-                       class="btn btn-outline-success btn-sm mb-1">
-                        {{ Icon::list() }}View Due Reminders
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="collapse mx-1" id="reminders">
-        @include('partials.orders.reminder.authorize')
-    </div>
-    <div class="card">
-        <div class="card-body" data-target="#mail" onclick="toggleAccordion(this)">
-            <h4 class="fw-bold">
-                {{ Icon::maximize() }} Mail Templates
-            </h4>
-        </div>
-    </div>
-    <div class="collapse row mx-1" id="mail">
-        @foreach(\App\Repository\Mailing\MailRepository::getAvailableMail() as $template)
-            <div class="col-xl-6">
-                @include('partials.admin.system.mail.card', ['template' => $template,])
-            </div>
-        @endforeach
     </div>
     <div class="card">
         <div class="card-body" data-target="#taxes" onclick="toggleAccordion(this)">
@@ -100,18 +82,8 @@
             </div>
         </div>
     </div>
-    <div class="collapse show mx-1" id="brands">
+    <div class="collapse mx-1" id="brands">
         <livewire:admin.system.brand.brand-list />
-    </div>
-    <div class="card">
-        <div class="card-body" data-target="#import" onclick="toggleAccordion(this)">
-            <h4 class="fw-bold">
-                {{ Icon::maximize() }} Bulk Import
-            </h4>
-        </div>
-    </div>
-    <div class="collapse row mx-1" id="import">
-        @include('partials.admin.system.import')
     </div>
     <div class="card">
         <div class="card-body" data-target="#default-installments" onclick="toggleAccordion(this)">
@@ -120,7 +92,7 @@
             </h4>
         </div>
     </div>
-    <div class="row mx-1" id="default-installments">
+    <div class="collapse row mx-1" id="default-installments">
         <livewire:admin.system.installments.view />
     </div>
     <div class="card">
@@ -128,7 +100,7 @@
             <h4 class="fw-bold">{{ Icon::maximize() }} Conversion Rates</h4>
         </div>
     </div>
-    <div class="collapse show mx-1" id="conversions">
+    <div class="collapse mx-1" id="conversions">
         <x-admin.section.card>
             <div class="flex float-end">
                 <button class="btn btn-success" onclick="openModal('admin.system.conversion.form')">

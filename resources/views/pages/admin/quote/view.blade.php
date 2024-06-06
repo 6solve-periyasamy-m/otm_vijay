@@ -35,7 +35,7 @@
                 {{ Icon::create() }}
                 {{ __('quotes.view.buttons.add') }}
             </a>
-            @if($quote->status == \App\Models\Helper\QuoteStatus::AWAITING)
+            @if($quote->status == \App\Models\Helper\Enum\QuoteStatus::AWAITING)
                 <a href="{{ route('quotes.status.approve', ['quote' => $quote,]) }}" class="btn btn-success">
                     {{ Icon::approve() }}
                     {{ __('quotes.view.buttons.approve') }}
@@ -62,9 +62,9 @@
     </div>
 
     {{-- Calculator --}}
-    <livewire:admin.quote.calculator :quote="$quote" />
+    <livewire:admin.quote.calculator :quote="$quote"/>
 
-    <hr class="splitter" />
+    <hr class="splitter"/>
 
     {{-- Components--}}
     <x-admin.section.card>
@@ -83,84 +83,88 @@
                         </button>
                     </div>
                 </x-slot:header>
-                    <table class="datatable table table-striped" id="schedule-table">
-                        <thead>
+                <table class="datatable table table-striped" id="schedule-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">{{ __('quotes.view.cards.installments.table.type') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.installments.table.due') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.installments.table.amount') }}</th>
+                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ __('quotes.view.cards.installments.types.deposit') }}</td>
+                        <td data-order="0000-00-00">{{ __('quotes.view.cards.installments.with-order') }}</td>
+                        <td>{{ f_currency($quote->getDepositAmount()) }} ({{$quote->getDepositPercentage()}}%)</td>
+                        <td>
+                            <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}"
+                               class="btn btn-outline-success btn-sm mb-1" title="Edit">
+                                {{ Icon::edit() }}
+                            </a>
+                        </td>
+                    </tr>
+                    @foreach($quote->installments as $installment)
                         <tr>
-                            <th scope="col">{{ __('quotes.view.cards.installments.table.type') }}</th>
-                            <th scope="col">{{ __('quotes.view.cards.installments.table.due') }}</th>
-                            <th scope="col">{{ __('quotes.view.cards.installments.table.amount') }}</th>
-                            <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>{{ __('quotes.view.cards.installments.types.deposit') }}</td>
-                            <td data-order="0000-00-00">{{ __('quotes.view.cards.installments.with-order') }}</td>
-                            <td>{{ f_currency($quote->getDepositAmount()) }} ({{$quote->getDepositPercentage()}}%)</td>
+                            <td>{{ __('quotes.view.cards.installments.types.installment') }}</td>
                             <td>
-                                <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}"
+                                {{ f_date($installment->due_on) }}
+                            </td>
+                            <td>
+                                {{ f_currency($installment->getAmount()) }} ({{$installment->getPercentage()}}%)
+                            </td>
+                            <td>
+                                <a href="javascript:showInstallmentForm({{$installment->id}})"
                                    class="btn btn-outline-success btn-sm mb-1" title="Edit">
                                     {{ Icon::edit() }}
                                 </a>
-                            </td>
-                        </tr>
-                        @foreach($quote->installments as $installment)
-                            <tr>
-                                <td>{{ __('quotes.view.cards.installments.types.installment') }}</td>
-                                <td>
-                                    {{ f_date($installment->due_on) }}
-                                </td>
-                                <td>
-                                    {{ f_currency($installment->getAmount()) }} ({{$installment->getPercentage()}}%)
-                                </td>
-                                <td>
-                                    <a href="javascript:showInstallmentForm({{$installment->id}})" class="btn btn-outline-success btn-sm mb-1" title="Edit">
-                                        {{ Icon::edit() }}
-                                    </a>
-                                    <a href="javascript:$('#installment-{{ $installment->id }}-delete').submit()"
-                                       class="btn btn-outline-danger btn-sm mb-1" title="Delete">
-                                        {{ Icon::delete() }}
-                                    </a>
-                                </td>
-                                <form id="installment-{{ $installment->id }}-delete" class="d-none" method="post"
-                                      action="{{ route('quotes.installments.delete', ['quote' => $quote, 'installment' => $installment,]) }}">@csrf</form>
-                            </tr>
-                        @endforeach
-                        <tr>
-                            <td>{{ __('quotes.view.cards.installments.types.remaining') }}</td>
-                            <td data-order="{{$quote->final_payment->format('Y-m-d')}}">{{ f_date($quote->final_payment) }}</td>
-                            <td>{{ f_currency($quote->remaining) }} ({{ $quote->getRemainingPercentage() }}%)</td>
-                            <td>
-                                <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}"
-                                   class="btn btn-outline-success btn-sm mb-1" title="Edit">
-                                    {{ Icon::edit() }}
+                                <a href="javascript:$('#installment-{{ $installment->id }}-delete').submit()"
+                                   class="btn btn-outline-danger btn-sm mb-1" title="Delete">
+                                    {{ Icon::delete() }}
                                 </a>
                             </td>
+                            <form id="installment-{{ $installment->id }}-delete" class="d-none" method="post"
+                                  action="{{ route('quotes.installments.delete', ['quote' => $quote, 'installment' => $installment,]) }}">@csrf</form>
                         </tr>
-                        </tbody>
-                    </table>
+                    @endforeach
+                    <tr>
+                        <td>{{ __('quotes.view.cards.installments.types.remaining') }}</td>
+                        <td data-order="{{$quote->final_payment->format('Y-m-d')}}">{{ f_date($quote->final_payment) }}</td>
+                        <td>{{ f_currency($quote->remaining) }} ({{ $quote->getRemainingPercentage() }}%)</td>
+                        <td>
+                            <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}"
+                               class="btn btn-outline-success btn-sm mb-1" title="Edit">
+                                {{ Icon::edit() }}
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </x-admin.section.card>
         </div>
         <div class="col-xl-6">
             <x-admin.section.card>
                 <x-slot:title>{{ __('quotes.view.cards.price-points.header') }}</x-slot:title>
-                <livewire:admin.quote.price-point.form :quote="$quote" />
-                <livewire:admin.quote.price-point.table :quote="$quote->id" />
+                <livewire:admin.quote.price-point.form :quote="$quote"/>
+                <livewire:admin.quote.price-point.table :quote="$quote->id"/>
             </x-admin.section.card>
         </div>
         <div class="col-xl-12">
             <x-admin.section.card>
                 <x-slot:title>{{ __('quotes.view.cards.sections.header') }}</x-slot:title>
                 <div class="pb-3 text-end">
-                    <a href="{{ route('quotes.section.show', ['quote' => $quote, ]) }}" class="btn btn-primary text-white mb-1">
+                    <a href="{{ route('quotes.section.show', ['quote' => $quote, ]) }}"
+                       class="btn btn-primary text-white mb-1">
                         {{ Icon::show() }}
                         Show All
                     </a>
-                    <a href="{{ route('quotes.section.hide', ['quote' => $quote, ]) }}" class="btn btn-info text-white mb-1">
+                    <a href="{{ route('quotes.section.hide', ['quote' => $quote, ]) }}"
+                       class="btn btn-info text-white mb-1">
                         {{ Icon::hide() }}
                         Hide All
                     </a>
-                    <a href="{{ route('quotes.section.create', ['quote' => $quote, ]) }}" class="btn btn-success text-white mb-1">
+                    <a href="{{ route('quotes.section.create', ['quote' => $quote, ]) }}"
+                       class="btn btn-success text-white mb-1">
                         {{ Icon::create() }}
                         New Section
                     </a>
@@ -189,10 +193,12 @@
                                    class="btn btn-outline-success btn-sm mb-1" title="Edit">
                                     {{ Icon::edit() }}
                                 </a>
-                                <a href="javascript:$('#section-{{$section->id}}-delete').submit()" title="Delete" class="btn btn-outline-danger btn-sm mb-1">
+                                <a href="javascript:$('#section-{{$section->id}}-delete').submit()" title="Delete"
+                                   class="btn btn-outline-danger btn-sm mb-1">
                                     {{ Icon::delete() }}
                                 </a>
-                                <form id="section-{{$section->id}}-delete" class="d-none" method="post" action="{{ route('quotes.section.delete', ['quote' => $quote, 'section' => $section,]) }}">
+                                <form id="section-{{$section->id}}-delete" class="d-none" method="post"
+                                      action="{{ route('quotes.section.delete', ['quote' => $quote, 'section' => $section,]) }}">
                                     @csrf
                                 </form>
                             </td>

@@ -7,7 +7,7 @@ use App\Http\Requests\Admin\User\ChangePasswordRequest;
 use App\Http\Requests\Admin\User\Enable2faRequest;
 use App\Http\Requests\Admin\User\UpdateAvatarRequest;
 use App\Http\Requests\Admin\User\UpdateUserRequest;
-use App\Models\Helper\ModelEventType;
+use App\Models\Helper\Enum\ModelEventType;
 use App\Models\User;
 use App\Repository\Authentication\PermissionsRepository;
 use EventLogger;
@@ -67,7 +67,7 @@ class UserProfileController
             }
         }
         EventLogger::simple($user, ModelEventType::UPDATED);
-        return redirect()->route('users.view', ['user' => $user]);
+        return redirect()->route('users.profile', ['user' => $user]);
     }
 
     public function password(ChangePasswordRequest $request, User|null $user = null)

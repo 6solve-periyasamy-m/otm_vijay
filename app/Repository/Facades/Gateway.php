@@ -29,7 +29,10 @@ class Gateway
         if (config('app.gateways.airwallex.client') != null
             && config('app.gateways.airwallex.secret') != null
             && config('app.gateways.airwallex.webhook') != null) {
-            $this->gateways['airwallex'] = new AirwallexGateway();
+            try {
+                $gateway = new AirwallexGateway();
+                $this->gateways['airwallex'] = $gateway;
+            } catch (\Exception $ignored) {}
         }
         if (config('app.gateways.demo', false) === true
             && config('app.debug', false) === true

@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Models\Helper;
+namespace App\Models\Helper\Enum;
 
-use App\View\Components\Badge\Quote as QuoteBadge; // Prevents confusion
+use App\View\Components\Badge\Quote as QuoteBadge;
 use Closure;
 use Illuminate\Contracts\View\View;
+
+// Prevents confusion
 
 enum QuoteStatus: int
 {

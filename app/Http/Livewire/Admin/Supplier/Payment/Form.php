@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Supplier\Payment;
 
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Supplier\Supplier;
 use App\Models\Supplier\SupplierPaymentInformation;
@@ -10,6 +11,7 @@ use LivewireUI\Modal\ModalComponent;
 class Form extends ModalComponent
 {
     use SendsEvents;
+    use LivewireForm;
 
     public Supplier|int $supplier;
     public SupplierPaymentInformation|int|null $information;

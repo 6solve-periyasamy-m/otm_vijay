@@ -280,6 +280,10 @@ return [
             'webhook' => env('AIRWALLEX_WEBHOOK'),
         ],
     ],
+    'features' => [
+        'bleeding-edge' => env('BLEEDING_EDGE', false),
+        'kpt' => env('IS_KPT', false),
+    ],
 
     'user-limit' => env('USER_LIMIT', 0),
     'anonymization' => env('ALLOW_ANONYMIZATION', false), // Prevents running anonymization commands on production servers

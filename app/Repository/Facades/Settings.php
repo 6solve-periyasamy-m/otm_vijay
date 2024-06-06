@@ -71,7 +71,9 @@ class Settings
 
     public function getDefaultInstallments(): array
     {
-        return json_decode($this->get('system.installments.default', "{}"), true);
+        $installments = json_decode($this->get('system.installments.default', "{}"), true);
+        krsort($installments);
+        return $installments;
     }
 
     public function setDefaultInstallment(int $days, float|null $percentage): void
@@ -137,5 +139,23 @@ class Settings
             'description'=> __('custom.tax.null.description'),
             'rate' => null,
         ]);
+    }
+
+    public function availableInvoiceStyles(): array
+    {
+        $styles = [1 => 'Default Invoice Style',];
+        if (config('app.features.bleeding-edge') || config('app.features.kpt')) {
+            $styles[2] = 'Alternative Style (Under Development)';
+        }
+        return $styles;
+    }
+
+    public function availableQuoteStyles(): array
+    {
+        $styles = [1 => 'Default Quote Style',];
+        if (config('app.features.bleeding-edge') || config('app.features.kpt')) {
+            $styles[2] = 'Alternative Style (Under Development)';
+        }
+        return $styles;
     }
 }
