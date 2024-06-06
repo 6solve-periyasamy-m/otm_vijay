@@ -53,7 +53,7 @@ class AccommodationInventoryImport implements ToCollection, WithHeadingRow, With
             'room_type' => 'required',
             'size' => 'required|integer|gte:1',
             'check_in' => 'required|date|date_format:"d-m-Y H:i"',
-            'check_out' => 'required|date|date_format:"d-m-Y H:i"',
+            'check_out' => 'required|date|date_format:"d-m-Y H:i"|after:check_in',
             'fit_selectable' => ['nullable', Rule::in(['YES', 'NO', null])],
             'stock' => 'required|integer',
             'purchase_price' => 'required|numeric',
