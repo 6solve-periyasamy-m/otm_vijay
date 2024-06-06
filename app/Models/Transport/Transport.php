@@ -117,6 +117,12 @@ class Transport extends Model
         return $this->hasOne(Address::class, 'id', 'arrival_address_id');
     }
 
+
+    public function arrivalTransferType(): string
+    {
+        return $this->transportType;
+    }
+
     public function orders(): HasManyDeep
     {
         return $this->hasManyDeep(OrderTransport::class, [TransportInventory::class, TransportInventoryTour::class]);

@@ -14,6 +14,7 @@ use App\Models\Order\Invoice\Invoice;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\InvoiceRepository;
+use App\Repository\Model\Order\ItineraryRepository;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Reporting\ReportRepository;
 
