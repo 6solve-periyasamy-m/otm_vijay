@@ -6,8 +6,8 @@ use App\Exceptions\MailDisabledException;
 use App\Mail\Storage\Attachment;
 use App\Mail\Storage\SettingsMail;
 use App\Models\Customer\Customer;
-use App\Models\Helper\AddressParent;
-use App\Models\Helper\QuoteStatus;
+use App\Models\Helper\Enum\AddressParent;
+use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;
@@ -33,7 +33,7 @@ use App\Repository\Storage\ConvertedCustomer;
 use App\Repository\Storage\Quote\CustomerForConversion;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
-use Spatie\Browsershot\Browsershot;
+use Settings;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class QuoteRepository extends ComponentPackageRepository implements SerializesToJson
@@ -51,6 +51,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'consultant_id' => get_current_admin()?->id,
             'event_id' => $tour->event_id,
             'deposit' => $tour->deposit,
+            'is_deposit_percentage' => $tour->is_deposit_percentage,
+            'tax_bracket_id' => $tour->tax_bracket_id,
             'final_payment' => $tour->final_payment,
             'date_from' => $tour->date_from,
             'date_to' => $tour->date_to,
@@ -80,7 +82,24 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $quote->reference = $quote->repository->generateReference();
         $quote->repository->save();
         $quote->repository->addPricePoint(1, $pricePerPerson);
+        $quote->repository->cloneFromDefaultInstallments();
         return $quote;
+    }
+
+    public function cloneFromDefaultInstallments(): void
+    {
+        $this->quote->installments()->delete();
+        if ($this->quote->deposit === null) {
+            $this->quote->deposit = setting('system.installments.deposit');
+            $this->quote->is_deposit_percentage = true;
+            $this->quote->save();
+        }
+        $installments = Settings::getDefaultInstallments();
+        if (sizeof($installments) > 0) {
+            foreach($installments as $days => $percentage) {
+                $this->quote->installments()->save(new QuoteInstallment(['due_on' => $this->quote->date_from->subDays($days), 'amount' => $percentage, 'is_percentage' => true,]));
+            }
+        }
     }
 
     public static function getFromReference(string $reference): ?Quote
@@ -133,6 +152,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $tour = TourRepository::create([
             'is_active' => false,
+            'event_id' => $this->quote->event_id,
+            'tax_bracket_id' => $this->quote->tax_bracket_id,
             'name' => $this->quote->name,
             'notes' => $this->quote->internal_notes,
             'description' => $this->quote->description,
@@ -160,10 +181,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function generateReference(): string
     {
         return setting('quote.prefix', 'OTMQ')
-            . str_pad($this->quote->tour?->id ?? 0, 4, '0', STR_PAD_LEFT)
-            . str_pad($this->quote->id, 4, '0', STR_PAD_LEFT)
-            . str_pad($this->quote->leadTraveller->id, 4, '0', STR_PAD_LEFT)
-            . substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(4 / strlen($x)))), 1, 4);
+            . str_pad(strtoupper(dechex($this->quote->tour?->id ?? 0)), 3, '0', STR_PAD_LEFT)
+            . str_pad(strtoupper(dechex($this->quote->id)), 3, '0', STR_PAD_LEFT)
+            . substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(1 / strlen($x)))), 1, 1);
     }
 
     public function createProspect(?Customer $customer = null, array $data = []): QuoteProspect
@@ -426,14 +446,12 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getResponseStream(SentQuote $sent): StreamedResponse
     {
-        return response()->stream(function () use ($sent) { echo $this->getStream($sent); }, 200, ['Content-Type' => 'application/pdf']);
+        return $sent->pdf()->getResponseStream();
     }
 
     public function getStream(SentQuote $sent): string
     {
-        $invoice = Browsershot::html(view('pdf.quotes.columns', ['sent' => $sent,])->render());
-        $invoice->showBackground()->margins(10, 2, 10, 2);
-        return $invoice->pdf();
+        return $sent->pdf()->getContent();
     }
 
     public function getRemaining(int $paying = 1): float

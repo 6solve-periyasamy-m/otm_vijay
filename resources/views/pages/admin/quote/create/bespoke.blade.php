@@ -1,4 +1,7 @@
-@php /** @var \App\Models\Tour\Tour $tour */ @endphp
+@php
+    /** @var \App\Models\Tour\Tour $tour */
+$defaultDeposit = setting('system.installments.deposit');
+@endphp
 
 @extends('layout.form', ['action' => route('quotes.store-bespoke')])
 
@@ -10,13 +13,11 @@
         <x-slot:create>{{ route('customers.create') }}</x-slot:create>
         Lead Traveller
     </x-admin.input.selector.add>
-    <x-admin.input.selector.standard name="brand_id" route="brands" width="3">
-        Quote Branding
-    </x-admin.input.selector.standard>
+    <x-livewire.input.select.brand name="brand_id" label="Quote Branding" width="3" value="-1" />
     <x-livewire.input.select.tax-bracket name="tax_bracket_id" label="Tax Bracket" width="3"/>
     <x-livewire.input.select.organization name="organization_id" label="Organization (Optional)" />
-    <x-admin.input name="deposit" width="3">Deposit</x-admin.input>
-    <x-admin.input.checkbox name="percentage" width="3">Is Percentage</x-admin.input.checkbox>
+    <x-admin.input name="deposit" width="3" value="{{$defaultDeposit}}">Deposit</x-admin.input>
+    <x-admin.input.checkbox name="percentage" width="3" value="{{!empty($defaultDeposit)}}">Is Percentage</x-admin.input.checkbox>
     <x-admin.input name="single_occupancy_surcharge" width="6">Single Occupancy Surcharge</x-admin.input>
     <x-admin.input.text-area name="description">Description</x-admin.input.text-area>
     <hr class="splitter"/>

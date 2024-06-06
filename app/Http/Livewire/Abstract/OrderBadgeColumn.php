@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Abstract;
 
-use App\Models\Helper\OrderStatus;
+use App\Models\Helper\Enum\OrderStatus;
 use App\View\Components\Badge\Order as OrderBadge;
 use Mediconesystems\LivewireDatatables\Column;
 

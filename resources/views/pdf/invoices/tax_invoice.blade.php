@@ -144,8 +144,8 @@
         .oc_right {
             text-align: right;
         }
-        
     </style>
+    <title>Invoice - {{ $invoice->booking_reference }}</title>
 </head>
 
 <body class="body"
@@ -299,7 +299,7 @@
                                                                     style="padding: 2px 15px;" class="oc_f12 oc_lblack">
                                                                     {{ date('d M Y', strtotime($invoice->generated)) }}</td>
                                                             </tr>
-                                                            <tr>
+                                                            <!--<tr>
                                                                 <td width="180" align="left" valign="top"
                                                                     style="padding: 2px 15px; font-weight: 700;"
                                                                     class="oc_f12 oc_lblack">
@@ -308,7 +308,7 @@
                                                                 <td align="right" valign="top"
                                                                     style="padding: 2px 15px;" class="oc_f12 oc_lblack">
                                                                     N/A</td>
-                                                            </tr>
+                                                            </tr>-->
                                                             <tr>
                                                                 <td width="180" align="left" valign="top"
                                                                     style="padding: 2px 15px; font-weight: 700;"

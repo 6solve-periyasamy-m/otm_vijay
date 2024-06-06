@@ -69,4 +69,11 @@ return [
             ],
         ],
     ],
+    'text' => [
+        'type' => [
+            'generic' => 'Generic',
+            'terms' => 'Terms and Conditions',
+            'invoice_footer' => 'Invoice Footer',
+        ],
+    ],
 ];

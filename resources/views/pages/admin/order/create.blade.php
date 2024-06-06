@@ -116,7 +116,7 @@
     @endcan
     @include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'width' => 4 ])
     @include('partials.fields.text', ['name' => 'Booking Fee', 'field' => 'booking_fee', 'width' => 4 ])
-    @include('partials.fields.datetime', ['name' => 'Ordered On', 'field' => 'ordered_on', 'width' => 4 ])
+    @include('partials.fields.datetime', ['name' => 'Ordered On', 'field' => 'ordered_on', 'width' => 4, 'value' => now(), ])
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'width' => 6 ])
     @include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'width' => 6 ])
     @include('partials.fields.checkbox', ['name' => 'Send Booking Confirmation Email?', 'field' => 'should_invoice', 'value' => flag('order.manual.mail', false),])

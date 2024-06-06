@@ -7,7 +7,7 @@ use App\Http\Requests\Admin\Quote\StartConversionRequest;
 use App\Http\Requests\Api\Admin\Quote\AddComponentRequest;
 use App\Http\Requests\Api\Admin\Quote\QuoteCostRequest;
 use App\Http\Requests\Api\Admin\Quote\UnknownTravellerRequest;
-use App\Models\Helper\QuoteStatus;
+use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Quote\Quote;
 use App\Repository\Abstracts\InventoryRepository;
 

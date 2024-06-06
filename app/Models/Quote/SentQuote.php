@@ -3,6 +3,7 @@
 namespace App\Models\Quote;
 
 use App\Models\Customer\Organization;
+use App\Repository\Model\Quote\QuotePdfGenerator;
 use App\Repository\Model\Quote\QuoteRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -76,5 +77,10 @@ class SentQuote extends Model
     {
         $bool = $this->built->leadTraveller->paying;
         return $this->paying + ($bool ? 1 : 0);
+    }
+
+    public function pdf(): QuotePdfGenerator
+    {
+        return new QuotePdfGenerator($this);
     }
 }

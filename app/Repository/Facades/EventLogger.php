@@ -2,7 +2,7 @@
 
 namespace App\Repository\Facades;
 
-use App\Models\Helper\ModelEventType;
+use App\Models\Helper\Enum\ModelEventType;
 use App\Models\System\ModelEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;

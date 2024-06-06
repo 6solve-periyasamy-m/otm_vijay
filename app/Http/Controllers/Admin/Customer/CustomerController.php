@@ -8,7 +8,7 @@ use App\Events\Customer\CustomerRemovedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginAsCustomerRequest;
 use App\Models\Customer\Customer;
-use App\Models\Helper\AddressParent;
+use App\Models\Helper\Enum\AddressParent;
 use App\Models\Location\Address;
 use Auth;
 use Illuminate\Http\Request;

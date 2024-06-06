@@ -14,7 +14,6 @@
                 @include('partials.fields.text', ['name' => 'Facebook Link', 'field' => 'social_facebook', 'value' => setting('social.facebook', ''), 'width' => 3])
                 @include('partials.fields.text', ['name' => 'Twitter Link', 'field' => 'social_twitter', 'value' => setting('social.twitter', ''), 'width' => 3])
                 @include('partials.fields.text', ['name' => 'Instagram Link', 'field' => 'social_instagram', 'value' => setting('social.instagram', ''), 'width' => 3])
-                @include('partials.fields.ckeditor', ['name' => 'Bank Transfer', 'field' => 'bank_transfer', 'value' => setting('company.bank_transfer', ''), 'width' => 12])
             </div>
         </x-admin.section.card>
     </div>
@@ -43,17 +42,21 @@
                     @include('partials.fields.text', ['name' => 'Order Prefix ', 'field' => 'booking_prefix', 'value' => setting('booking.prefix', 'OTM'), 'width' => 4])
                     @include('partials.fields.text', ['name' => 'Quote Prefix', 'field' => 'quote_prefix', 'value' => setting('quote.prefix', 'OTMQ'), 'width' => 4])
                     <x-livewire.input.select.currency name="currency_id" label="System Currency" value="{{\App\Repository\LocationsRepository::getCurrencyIdByCode(setting('system.currency', '')) ?? null}}" width="4" />
-                    @include('partials.fields.text', ['name' => 'ATOL Issuer', 'field' => 'atol_issuer', 'value' => setting('atol.issuer', ''), 'width' => 4])
-                    @include('partials.fields.text', ['name' => 'ATOL Number', 'field' => 'atol_number', 'value' => setting('atol.number', ''), 'width' => 4])
+                    @include('partials.fields.text', ['name' => 'ATOL Issuer', 'field' => 'atol_issuer', 'value' => setting('atol.issuer', ''), 'width' => 6])
+                    @include('partials.fields.text', ['name' => 'ATOL Number', 'field' => 'atol_number', 'value' => setting('atol.number', ''), 'width' => 6])
                     @include('partials.fields.dropdown', [
                         'name' => 'Invoice Format',
                         'field' => 'invoice_format',
-                        'values' => [
-                            '1' => 'System Default',
-                            //'2' => 'Alternative Style (Under Development)',
-                        ],
+                        'values' => \Settings::availableInvoiceStyles(),
                         'selected' => setting('invoice.style', 1),
-                        'width' => 4,
+                        'width' => 6,
+                    ])
+                    @include('partials.fields.dropdown', [
+                        'name' => 'Quote Format',
+                        'field' => 'quote_format',
+                        'values' => \Settings::availableQuoteStyles(),
+                        'selected' => setting('quote.style', 1),
+                        'width' => 6,
                     ])
                 </div>
             </div>
@@ -150,7 +153,7 @@
             </div>
     </x-admin.section.card>
     </div>
-    <div class="col-xl-12">
+    <div class="col-xl-6">
         <x-admin.section.card>
             <x-slot:title>
                 Customer Data Locking
@@ -164,6 +167,12 @@
                 @include('partials.admin.system.settings.lock', ['name' => 'Flight Notes', 'field' => 'flight'])
                 @include('partials.admin.system.settings.lock', ['name' => 'Transport Notes', 'field' => 'transport'])
             </div>
+        </x-admin.section.card>
+    </div>
+    <div class="col-xl-6">
+        <x-admin.section.card>
+            <x-slot:title>Bank Transfer Details</x-slot:title>
+            @include('partials.fields.ckeditor', ['name' => 'Bank Transfer', 'field' => 'bank_transfer', 'value' => setting('company.bank_transfer', ''), 'width' => 12])
         </x-admin.section.card>
     </div>
 </form>

@@ -5,12 +5,6 @@ namespace App\Repository\Model\Order;
 use App\Models\Order\Invoice\Invoice;
 use App\Repository\Storage\Invoice\QuantityBillable;
 use Illuminate\Support\Collection;
-use Spatie\Browsershot\Browsershot;
-use Symfony\Component\HttpFoundation\StreamedResponse;
-
-use Dompdf\Dompdf;
-use Dompdf\Options;
-use PDF;
 
 class ItineraryRepository
 {
@@ -35,25 +29,9 @@ class ItineraryRepository
     {
         $invoice = $this->invoice;
         dd($invoice);
-        $html = view('pdf.invoices.itinerary_invoice', compact('invoice'))->render();
-
-        // Create options for Dompdf
-        $options = new Options();
-        $options->set('dpi', 96);
-        $options->set('isHtml5ParserEnabled', true);
-        $dompdf = new Dompdf($options);
-        $dompdf->setPaper('A4', 'portrait');
-        
-        $dompdf->loadHtml($html);
-
-        // Render the PDF
-        $dompdf->render();
-
-        // Output PDF content as base64 encoded string
-        $pdfContent = base64_encode($dompdf->output());
 
         // Pass the PDF content to the view
-        return view('pdf.dom_pdf_preview', compact('pdfContent'));
+        return dompdf(view('pdf.invoices.itinerary', ['invoice' => $this->invoice,]));
     }
 
     /**

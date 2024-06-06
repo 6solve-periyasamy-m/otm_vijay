@@ -2,6 +2,8 @@
 
 namespace App\Repository\Facades;
 
+use App\Http\Gateways\AirwallexGateway;
+use App\Http\Gateways\DemoGateway;
 use App\Http\Gateways\FellohGateway;
 use App\Http\Gateways\OpayoGateway;
 use App\Http\Gateways\StripeGateway;
@@ -23,6 +25,19 @@ class Gateway
             && config("app.gateways.felloh.private") != null
             && config("app.gateways.felloh.organisation") != null) {
             $this->gateways['felloh'] = new FellohGateway();
+        }
+        if (config('app.gateways.airwallex.client') != null
+            && config('app.gateways.airwallex.secret') != null
+            && config('app.gateways.airwallex.webhook') != null) {
+            try {
+                $gateway = new AirwallexGateway();
+                $this->gateways['airwallex'] = $gateway;
+            } catch (\Exception $ignored) {}
+        }
+        if (config('app.gateways.demo', false) === true
+            && config('app.debug', false) === true
+            && sizeof($this->gateways) === 0) {
+            $this->gateways['demo'] = new DemoGateway();
         }
     }
 

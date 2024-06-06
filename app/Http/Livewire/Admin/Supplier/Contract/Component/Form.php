@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Supplier\Contract\Component;
 
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Supplier\SupplierContractComponent;
 use LivewireUI\Modal\ModalComponent;
@@ -9,6 +10,7 @@ use LivewireUI\Modal\ModalComponent;
 class Form extends ModalComponent
 {
     use SendsEvents;
+    use LivewireForm;
 
     /**
      * @noinspection PhpDocFieldTypeMismatchInspection
