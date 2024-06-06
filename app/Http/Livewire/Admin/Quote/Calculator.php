@@ -13,7 +13,7 @@ class Calculator extends Component
     use SendsEvents;
     use LivewireForm;
 
-    public $listeners = ['refreshLivewireDatatable' => 'calculate',];
+    public $listeners = ['refreshLivewireDatatable' => 'calculate','sendEmail' => 'send'];
 
     public int $paying = 0;
     public int $travelling = 0;
@@ -21,7 +21,7 @@ class Calculator extends Component
     public float $total = 0;
     public float $profit = 0;
     public float $margin = 0;
-    public float|null $markup = null;
+    public string|float|null $markup = null;
     public float $marked_up_price = 0;
 
     public Quote $quote;
@@ -34,6 +34,7 @@ class Calculator extends Component
 
     public function calculate(): void
     {
+        $this->setMarkup();
         $companyCostTravellers = ($this->paying + $this->travelling + ($this->leadTravelling()));
         $this->costToCompany = $this->quote->repository->getTotalCostToCompany($companyCostTravellers);
         $costPerPerson = $companyCostTravellers > 0 ? sigfig($this->costToCompany / $companyCostTravellers) : 0;
@@ -42,6 +43,16 @@ class Calculator extends Component
         $this->margin = $this->costToCompany == 0 ? 100 : sigfig(($this->total / $this->costToCompany) * 100);
         $this->markup = sigfig($this->markup ?? $this->margin - 100);
         $this->marked_up_price = sigfig($costPerPerson + ($costPerPerson * ($this->markup / 100)));
+    }
+
+    public function inputChanged(?string $key = null): void
+    {
+        $this->calculate();
+    }
+
+    public function setMarkup(): void
+    {
+        $this->markup = empty($this->markup) ? null : floatval(preg_replace("/[^-0-9.]/","",$this->markup));
     }
 
     public function incrementPaying(int $value): void
