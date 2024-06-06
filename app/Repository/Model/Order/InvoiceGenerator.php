@@ -199,6 +199,8 @@ class InvoiceGenerator
                 'invoice_id' => $invoice,
                 'lead' => $this->order->lead_booker_id === $orderCustomer->id,
                 'full_name' => $orderCustomer->customer_name,
+                'first_name' => $orderCustomer->customer->first_name,
+                'last_name' => $orderCustomer->customer->last_name,
                 'email' => $orderCustomer->customer->email_address,
                 'address_line_1' => $orderCustomer->customer->billingAddress->address_line_1,
                 'address_line_2' => $orderCustomer->customer->billingAddress->address_line_2,
