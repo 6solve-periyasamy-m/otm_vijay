@@ -14,7 +14,6 @@
                 @include('partials.fields.text', ['name' => 'Facebook Link', 'field' => 'social_facebook', 'value' => setting('social.facebook', ''), 'width' => 3])
                 @include('partials.fields.text', ['name' => 'Twitter Link', 'field' => 'social_twitter', 'value' => setting('social.twitter', ''), 'width' => 3])
                 @include('partials.fields.text', ['name' => 'Instagram Link', 'field' => 'social_instagram', 'value' => setting('social.instagram', ''), 'width' => 3])
-                @include('partials.fields.ckeditor', ['name' => 'Bank Transfer', 'field' => 'bank_transfer', 'value' => setting('company.bank_transfer', ''), 'width' => 12])
             </div>
         </x-admin.section.card>
     </div>
@@ -154,7 +153,7 @@
             </div>
     </x-admin.section.card>
     </div>
-    <div class="col-xl-12">
+    <div class="col-xl-6">
         <x-admin.section.card>
             <x-slot:title>
                 Customer Data Locking
@@ -168,6 +167,12 @@
                 @include('partials.admin.system.settings.lock', ['name' => 'Flight Notes', 'field' => 'flight'])
                 @include('partials.admin.system.settings.lock', ['name' => 'Transport Notes', 'field' => 'transport'])
             </div>
+        </x-admin.section.card>
+    </div>
+    <div class="col-xl-6">
+        <x-admin.section.card>
+            <x-slot:title>Bank Transfer Details</x-slot:title>
+            @include('partials.fields.ckeditor', ['name' => 'Bank Transfer', 'field' => 'bank_transfer', 'value' => setting('company.bank_transfer', ''), 'width' => 12])
         </x-admin.section.card>
     </div>
 </form>

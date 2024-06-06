@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Quote;
 
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Models\Customer\Customer;
 use App\Models\Quote\Quote;
 use App\Repository\Storage\Quote\CustomerForConversion;
@@ -9,6 +10,8 @@ use Livewire\Component;
 
 class Conversion extends Component
 {
+    use LivewireForm;
+
     public array $travellers = [];
     public Quote $quote;
     public int $paying;
@@ -30,7 +33,7 @@ class Conversion extends Component
         $this->verifyAllComponents();
     }
 
-    public function selectorChanged(string|null $key = null): void
+    public function inputChanged(string|null $key = null): void
     {
         foreach ($this->travellers as $key => $traveller) {
             if (((int)$traveller['id'] ?? 0) > 0) {

@@ -175,9 +175,9 @@ class Tour extends Model
 
     protected $guarded = [];
     protected $casts = [
-        'date_from' => 'date',
-        'date_to' => 'date',
-        'final_payment' => 'date',
+        'date_from' => 'date:Y-m-d',
+        'date_to' => 'date:Y-m-d',
+        'final_payment' => 'date:Y-m-d',
         'is_active' => 'boolean',
         'is_deposit_percentage' => 'boolean',
         'base_price_per_person' => 'double',

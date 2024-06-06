@@ -48,7 +48,7 @@ class CreateBespokeQuoteRequest extends FormRequest
             'description' => $this->description,
             'deposit' => $this->deposit,
             'is_deposit_percentage' => $this->percentage == 'on',
-            'brand_id' => $this->brand_id == 0 ? null : $this->brand_id,
+            'brand_id' => $this->brand_id > 0 ? $this->brand_id : null,
             'tax_bracket_id' => $this->tax_bracket_id
         ];
     }

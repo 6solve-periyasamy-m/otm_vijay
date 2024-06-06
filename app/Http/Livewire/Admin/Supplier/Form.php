@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Supplier;
 
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Location\Address;
@@ -14,6 +15,7 @@ use LivewireUI\Modal\ModalComponent;
 class Form extends ModalComponent
 {
     use SendsEvents;
+    use LivewireForm;
 
     /** @var Supplier */
     public $supplier;
