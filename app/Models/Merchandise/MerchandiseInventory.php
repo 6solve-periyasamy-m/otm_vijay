@@ -36,6 +36,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read int $contracted Amount of contracted stock
+ * @property-read float $local_purchase_price FX Converted Purchase Price
  * @property-read Merchandise $component
  * @property-read string $asset
  * @property-read int $available_stock
@@ -138,5 +139,10 @@ class MerchandiseInventory extends Model
     public function __toString(): string
     {
         return "{$this->component} ({$this->variant->name}) ({$this->size->name})";
+    }
+
+    public function getLocalPurchasePriceAttribute(): float
+    {
+        return fx_convert($this->purchase_price, $this->component->currency);
     }
 }

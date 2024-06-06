@@ -29,6 +29,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property float|null $estimated_purchase_price
+ * @property-read float $purchase_price
  * @property-read Airport|null $arrivalAirport
  * @property-read Airport|null $departureAirport
  * @property-read FlightInventoryTour|null $flightInventoryTour
@@ -62,7 +64,7 @@ class OrderFlight extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['order_customer_id', 'flight_inventory_tour_id', 'cost'];
+    protected $guarded = [];
     protected $casts = ['cost' => 'double',];
 
     private OrderFlightRepository $internal_repository;
@@ -152,5 +154,11 @@ class OrderFlight extends Model
         $this->flight_inventory_tour_id = $swap->id;
         $this->cost = $swap->tour_sales_price;
         $this->save();
+    }
+
+    public function getPurchasePriceAttribute(): float
+    {
+        $inventory = $this->tourComponent->inventory;
+        return $this->estimated_purchase_price ?? $inventory->local_purchase_price;
     }
 }

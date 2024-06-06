@@ -44,6 +44,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read int $contracted Amount of contracted stock
+ * @property-read float $local_purchase_price FX Converted Purchase Price
  * @property-read Transport $component
  * @property-read string $transport_for_tour
  * @property-read int $used_on_tour_count
@@ -188,5 +189,10 @@ class TransportInventory extends Model
     {
         if (!isset($this->internal_repository)) $this->internal_repository = new TransportInventoryRepository($this);
         return $this->internal_repository;
+    }
+
+    public function getLocalPurchasePriceAttribute(): float
+    {
+        return fx_convert($this->purchase_price, $this->component->currency);
     }
 }

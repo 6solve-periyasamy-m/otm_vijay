@@ -326,6 +326,7 @@
                                 <th scope="col">Shared With</th>
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Cost</th>
+                                <th scope="col">Purchase Price</th>
                                 <th scope="col">Upgrades</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -345,6 +346,7 @@
                                             {{ f_currency($orderAccommodation->cost) }}
                                         @endif
                                     </td>
+                                    <td>{{ f_currency($orderAccommodation->purchase_price) }} @includeWhen($orderAccommodation->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
                                     <td style="width: 20%">
                                         @if($orderAccommodation->tourComponent->tour_component_type == 'Add-on')
                                             Not Available
@@ -399,6 +401,7 @@
                                 <th scope="col">Ticket Type</th>
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Cost</th>
+                                <th scope="col">Purchase Price</th>
                                 <th scope="col">Upgrades</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -417,6 +420,7 @@
                                             {{ f_currency($orderActivity->cost) }}
                                         @endif
                                     </td>
+                                    <td>{{ f_currency($orderActivity->purchase_price) }} @includeWhen($orderActivity->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
                                     <td style="width: 20%">
                                         @if($orderActivity->tourComponent->tour_component_type == 'Add-on')
                                             Not Available
@@ -471,6 +475,7 @@
                                 <th scope="col">Travel Class</th>
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Cost</th>
+                                <th scope="col">Purchase Price</th>
                                 <th scope="col">Upgrades</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -489,6 +494,7 @@
                                             {{ f_currency($orderFlight->cost) }}
                                         @endif
                                     </td>
+                                    <td>{{ f_currency($orderFlight->purchase_price) }} @includeWhen($orderFlight->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
                                     <td style="width: 20%">
                                         @if($orderFlight->tourComponent->tour_component_type == 'Add-on')
                                             Not Available
@@ -544,6 +550,7 @@
                                 <th scope="col">Travel Class</th>
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Cost</th>
+                                <th scope="col">Purchase Price</th>
                                 <th scope="col">Upgrades</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -563,6 +570,7 @@
                                             {{ f_currency($orderTransport->cost) }}
                                         @endif
                                     </td>
+                                    <td>{{ f_currency($orderTransport->purchase_price) }} @includeWhen($orderTransport->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
                                     <td style="width: 20%">
                                         @if($orderTransport->tourComponent->tour_component_type == 'Add-on')
                                             Not Available
