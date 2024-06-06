@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Tour;
 
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
+use App\Models\Helper\Enum\LargeTextType;
 use App\Models\System\LargeTextTemplate;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
@@ -24,7 +25,14 @@ class Form extends Component
     {
         if (is_int($tour)) { $tour = Tour::find($tour); }
         if ($tour === null) {
-            $tour = new Tour();
+            $footer = LargeTextTemplate::where('default', '=', true)->where('type', '=', LargeTextType::INVOICE_FOOTER)->first();
+            $terms = LargeTextTemplate::where('default', '=', true)->where('type', '=', LargeTextType::TERMS)->first();
+            $tour = new Tour([
+                'invoice_footer' => $footer?->content,
+                'terms' => $terms?->content,
+            ]);
+            $this->termsTemplate = $terms?->id;
+            $this->footerTemplate = $footer?->id;
             if (setting('system.installments.deposit', null) !== null) {
                 $tour->deposit = setting('system.installments.deposit', null);
                 $tour->is_deposit_percentage = true;
