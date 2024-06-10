@@ -4,9 +4,15 @@
             {{ Icon::eye() }}
         </a>
     @endisset
-    <button title="Edit" wire:click="$emit('openModal', '{{ $modal }}', {'{{$field}}': {{$id}}, {{$parent ?? ''}}})" class="btn btn-outline-success btn-sm mb-1">
-        {{ Icon::edit() }}
-    </button>
+    @if(isset($modal))
+        <button title="Edit" wire:click="$emit('openModal', '{{ $modal }}', {'{{$field}}': {{$id}}, {{$parent ?? ''}}})" class="btn btn-outline-success btn-sm mb-1">
+            {{ Icon::edit() }}
+        </button>
+    @elseif(isset($edit))
+        <a title="Edit" href="{{ route($edit, [$field => $id,]) }}" class="btn btn-outline-success btn-sm mb-1">
+            {{ Icon::edit() }}
+        </a>
+    @endif
     <button wire:click="delete({{ $id }})" class="btn btn-outline-danger btn-sm mb-1" title="Delete">
         {{ Icon::delete() }}
     </button>
