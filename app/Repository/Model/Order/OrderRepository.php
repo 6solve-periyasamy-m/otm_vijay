@@ -25,6 +25,7 @@ use App\Repository\Interfaces\GeneratesFellohData;
 use App\Repository\Mailing\Mailer\Order\OrderMailer;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
+use App\Repository\Storage\Order\ItineraryItem;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
@@ -375,14 +376,14 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         $additionalValue = 0;
         foreach ($this->order->orderCustomers()->where('is_charged', '=', 1)->get() as $orderCustomer) {
             $data = $orderCustomer->getAdditionalCosts();
-            $addons = array_merge($addons, $data['addons']);
-            $upgrades = array_merge($upgrades, $data['upgrades']);
+            $addons = [...$addons, ...$data['addons']];
+            $upgrades = [...$upgrades, ...$data['upgrades']];
             $additionalValue += $data['additionalValue'];
         }
         foreach ($this->order->groups as $group) {
             $data = $group->repository->getAdditionalCosts();
-            $addons = array_merge($addons, $data['addons']);
-            $upgrades = array_merge($upgrades, $data['upgrades']);
+            $addons = [...$addons, ...$data['addons']];
+            $upgrades = [...$upgrades, ...$data['upgrades']];
             $additionalValue += $data['additionalValue'];
         }
         return ['upgrades' => $upgrades, 'addons' => $addons, 'additionalValue' => $additionalValue,];
@@ -737,5 +738,57 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         } else {
             $this->order->felloh()->save(new FellohLink(['felloh_id' => $id]));
         }
+    }
+
+    /**
+     * @return array<int, ItineraryItem[]> Array of itinerary items, with the int representing the unix timestamp
+     */
+    public function getItineraryItems(): array
+    {
+        $items = [];
+        $seen = [];
+        foreach ($this->order->groups as $group) {
+            foreach ($group->rooms as $component) {
+                $key = "accommodation-{$component->accommodation_inventory_tour_id}";
+                if (in_array($key, $seen, true)) { continue; }
+                $seen[] = $key;
+                $item = $component->repository->getItineraryItem($this->order);
+                $start = $item->start->clone()->setTime(0,0)->unix();
+                if (!array_key_exists($start, $items)) { $items[$start] = []; }
+                $items[$start][] = $item;
+            }
+        }
+
+        foreach ($this->order->orderActivities()->groupBy('activity_inventory_tour_id')->get() as  $component) {
+            $key = "activity-{$component->activity_inventory_tour_id}";
+            if (in_array($key, $seen, true)) { continue; }
+            $seen[] = $key;
+            $item = $component->repository->getItineraryItem($this->order);
+            $start = $item->start->clone()->setTime(0,0)->unix();
+            if (!array_key_exists($start, $items)) { $items[$start] = []; }
+            $items[$start][] = $item;
+        }
+
+        foreach ($this->order->orderFlights()->groupBy('flight_inventory_tour_id')->get() as  $component) {
+            $key = "flight-{$component->flight_inventory_tour_id}";
+            if (in_array($key, $seen, true)) { continue; }
+            $seen[] = $key;
+            $item = $component->repository->getItineraryItem($this->order);
+            $start = $item->start->clone()->setTime(0,0)->unix();
+            if (!array_key_exists($start, $items)) { $items[$start] = []; }
+            $items[$start][] = $item;
+        }
+
+        foreach ($this->order->orderTransport()->groupBy('transport_inventory_tour_id')->get() as  $component) {
+            $key = "transport-{$component->transport_inventory_tour_id}";
+            if (in_array($key, $seen, true)) { continue; }
+            $seen[] = $key;
+            $item = $component->repository->getItineraryItem($this->order);
+            $start = $item->start->clone()->setTime(0,0)->unix();
+            if (!array_key_exists($start, $items)) { $items[$start] = []; }
+            $items[$start][] = $item;
+        }
+        ksort($items);
+        return $items;
     }
 }

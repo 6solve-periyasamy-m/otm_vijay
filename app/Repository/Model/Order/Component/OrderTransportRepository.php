@@ -4,8 +4,10 @@ namespace App\Repository\Model\Order\Component;
 
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Invoice\InvoiceBillable;
+use App\Models\Order\Order;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Storage\Order\ItineraryItem;
 use App\Repository\Traits\Component\IsTransport;
 
 class OrderTransportRepository extends OrderComponentRepository
@@ -92,5 +94,30 @@ class OrderTransportRepository extends OrderComponentRepository
             'amount' => $this->orderComponent->tourComponent->tour_component_type === 'Included' ? 0 : $this->orderComponent->cost,
             'is_base' => $this->orderComponent->tourComponent->tour_component_type === 'Included',
         ]);
+    }
+
+    public function getQuantity(Order $order = null): int
+    {
+        $order = $order ?? $this->orderComponent->orderCustomer->order;
+        return $order?->orderTransport()->where('transport_inventory_tour_id', '=', $this->orderComponent->transport_inventory_tour_id)->count() ?? 0;
+    }
+
+    public function getItineraryItem(Order $order = null): ItineraryItem
+    {
+        $tourComponent = $this->orderComponent->tourComponent;
+        $inventory = $tourComponent->inventory;
+        $component = $inventory->component;
+
+        return new ItineraryItem(
+            'Journey',
+            $this->getQuantity($order),
+            $inventory->departs_at,
+            $inventory->arrives_at,
+            [
+                'Details' => $component->name,
+                'Transport' => $component->transportType->name,
+                'Travel Class' => $inventory->travelClass->name,
+            ]
+        );
     }
 }
