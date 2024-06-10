@@ -11,6 +11,10 @@ use App\Models\Helper\Enum\OrderStatus;
 use App\Models\Helper\Traits\HasPermissions;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Adjustment\OrderCustomerAdjustment;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderMerchandise;
+use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Quote\Quote;
@@ -108,7 +112,25 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read int|null $payments_count The amount of payments for the order
  * @property-read Collection|PaymentReminder[] $reminders The reminders that have been sent for the order
  * @property-read int|null $reminders_count The amount of reminders that have been sent for the order
- * @property-read Tour $tour The tour that the order was made in relation to
+ * @property-read Tour $tour The tour that the order was made in relation to @property-read int|null $additional_travellers_count
+ * @property-read TaxBracket|null $bracket
+ * @property-read Collection<int, OrderCustomerAdjustment> $customerAdjustments
+ * @property-read int|null $customer_adjustments_count
+ * @property-read Carbon $end_date
+ * @property-read Carbon $start_date
+ * @property-read string $tour_name
+ * @property-read Collection<int, OrderActivity> $orderActivities
+ * @property-read int|null $order_activities_count
+ * @property-read Collection<int, OrderFlight> $orderFlights
+ * @property-read int|null $order_flights_count
+ * @property-read Collection<int, OrderMerchandise> $orderMerchandise
+ * @property-read int|null $order_merchandise_count
+ * @property-read Collection<int, OrderTransport> $orderTransport
+ * @property-read int|null $order_transport_count
+ * @property-read Collection<int, \App\Models\Order\OrderCustomer> $payingTravellers
+ * @property-read int|null $paying_travellers_count
+ * @property-read int|null $vouchers_count
+ * @property-read int|null $groups_count
  * @property-read FellohLink|null $felloh
  * @method static OrderFactory factory(...$parameters)
  * @method static Builder|Order newModelQuery()
@@ -131,6 +153,12 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @method static Builder|Order whereUpdatedAt($value)
  * @method static QueryBuilder|Order withTrashed()
  * @method static QueryBuilder|Order withoutTrashed()
+ * @method static Builder|Order whereBookingFee($value)
+ * @method static Builder|Order whereCommission($value)
+ * @method static Builder|Order whereConsultantId($value)
+ * @method static Builder|Order whereOrganizationId($value)
+ * @method static Builder|Order whereStatusOverride($value)
+ * @method static Builder|Order whereTaxBracketId($value)
  * @mixin Eloquent
  */
 class Order extends Model
@@ -166,6 +194,46 @@ class Order extends Model
     public function cache(): HasOne
     {
         return $this->hasOne(OrderCache::class, 'order_id');
+    }
+
+    public function orderActivities(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            OrderActivity::class, 
+            OrderCustomer::class, 
+            'order_id', 
+            'order_customer_id'
+        );
+    }
+
+    public function orderFlights(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            OrderFlight::class, 
+            OrderCustomer::class, 
+            'order_id', 
+            'order_customer_id'
+        );
+    }
+
+    public function orderTransport(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            OrderTransport::class, 
+            OrderCustomer::class, 
+            'order_id', 
+            'order_customer_id'
+        );
+    }
+
+    public function orderMerchandise(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            OrderMerchandise::class, 
+            OrderCustomer::class, 
+            'order_id', 
+            'order_customer_id'
+        );
     }
 
     public function tour(): BelongsTo
