@@ -27,6 +27,6 @@ class AddressColumn extends Column
                     $address .= $line;
                 }
                 return $address;
-        });
+        })->filterable(Country::pluck('name'))->filterOn("$country.name");
     }
 }
