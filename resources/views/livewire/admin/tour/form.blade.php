@@ -61,13 +61,13 @@ $atol = [
     </div>
     <div class="col-xl-6">
         <x-admin.section.card>
-            <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" />
+            <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" value="{{ $termsTemplate }}" />
             <x-livewire.ckeditor name="tour.terms" value="{{ $tour?->terms }}" label="Terms and Conditions" required />
         </x-admin.section.card>
     </div>
     <div class="col-xl-6">
         <x-admin.section.card>
-            <x-livewire.input.select.large-text-template name="footerTemplate" label="Copy from Template" />
+            <x-livewire.input.select.large-text-template name="footerTemplate" label="Copy from Template" value="{{ $footerTemplate }}" />
             <x-livewire.ckeditor name="tour.invoice_footer" value="{{ $tour?->invoice_footer }}" label="Invoice Footer" />
         </x-admin.section.card>
     </div>

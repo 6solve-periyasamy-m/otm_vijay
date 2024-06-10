@@ -39,6 +39,7 @@ class Form extends Component
         return [
             'template.name' => 'required',
             'template.description' => 'nullable',
+            'template.default' => 'nullable|boolean',
             'template.type' => 'required|integer',
             'template.content' => 'nullable'
         ];
