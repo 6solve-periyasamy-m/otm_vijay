@@ -2,6 +2,7 @@
 
 namespace App\Models\Order\Invoice;
 
+use App\Repository\Model\Order\InvoiceGenerator;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -42,5 +43,10 @@ class InvoiceBillable extends Model
     public function billed(): MorphTo
     {
         return $this->morphTo('billed');
+    }
+
+    public function isGroupedBase(): bool
+    {
+        return $this->shared_key === InvoiceGenerator::BASE_KEY;
     }
 }

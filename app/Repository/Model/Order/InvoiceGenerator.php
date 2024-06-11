@@ -15,6 +15,7 @@ use App\Models\Order\Order;
 
 class InvoiceGenerator
 {
+    public const BASE_KEY = 'base-components';
     private Order $order;
 
     public function __construct(Order $order)
@@ -215,7 +216,7 @@ class InvoiceGenerator
                 new InvoiceBillable([
                     'description' => __('invoice.customer.billable.base'),
                     'amount' => $orderCustomer->tour_cost,
-                    'shared_key' => 'base-components',
+                    'shared_key' => static::BASE_KEY,
                     'is_base' => false,
                 ]),
             ];

@@ -264,7 +264,7 @@
                                                                 </td>
                                                                 <td align="left" valign="top" style="padding: 2px 15px;"
                                                                     class="oc_f12 oc_lblack">
-                                                                    {{$invoice->event ?? $invoice->name}} | {{$invoice->lead->last_name }}</td>
+                                                                    {{$invoice->name}}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td width="40" align="left" valign="top"
@@ -368,8 +368,8 @@
                                                             @endphp
 
                                                             @foreach($billables as $b_index => $billable)
-                                                                @if($billable->shared_key === 'base-components') @continue @endif
-                                                                <tr style="background-color: {{ $counter % 2 == 0 ? '#f5f5f5' : '#ffffff' }};"> 
+                                                                @continue($billable->isGroupedBase())
+                                                                <tr style="background-color: {{ $counter % 2 == 0 ? '#f5f5f5' : '#ffffff' }};">
                                                                     <td align="left" valign="top" style="padding: 2px 15px;"
                                                                         class="oc_f12 oc_lblack">{{$billable->description}}
                                                                     </td>
