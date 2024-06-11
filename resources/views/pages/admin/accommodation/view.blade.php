@@ -93,16 +93,16 @@
                 <tr>
                     <td>{{ $inventory->roomType->name }}</td>
                     <td>{{ $inventory->boardType->name }}</td>
-                    <td>{{ $inventory->category->name }}</td>
+                    <td>{{ $inventory->category?->name ?? "Not Set" }}</td>
                     <td data-sort="{{$inventory->check_in->unix()}}">
                         {{ f_datetime($inventory->check_in) }}&nbsp
                         <input type="checkbox" disabled
-                               @if($inventory->check_in_time_confirmed == 1) checked @endif>
+                               @if($inventory->check_in_time_confirmed) checked @endif>
                     </td>
                     <td data-sort="{{$inventory->check_out->unix()}}">
                         {{ f_datetime($inventory->check_out) }}&nbsp
                         <input type="checkbox" disabled
-                               @if($inventory->check_out_time_confirmed == 1) checked @endif>
+                               @if($inventory->check_out_time_confirmed) checked @endif>
                     </td>
                     <td>
                         <input type="checkbox" disabled
