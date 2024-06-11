@@ -15,6 +15,21 @@
         <div class="col-xl-4">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Accommodation\BoardTypeRepository::class])
         </div>
+        <div class="col-xl-4">
+            <x-admin.section.card>
+                <slot:header>
+                    <div class="d-flex justify-content-between">
+                        <h4 class="fw-bold">Room Categories</h4>
+                        <button class="btn btn-primary" onclick="openModal('admin.accommodation.room-category.form')">
+                            {{ Icon::create() }}
+                            Create New
+                        </button>
+                    </div>
+
+                </slot:header>
+                <livewire:admin.accommodation.room-category.table />
+            </x-admin.section.card>
+        </div>
     </div>
     <x-admin.section.card>
         <h4 class="fw-bold">

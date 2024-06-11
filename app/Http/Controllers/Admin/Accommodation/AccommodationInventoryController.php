@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Accommodation;
 
+use App\Exports\Identifier\AccommodationInventoryExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Accommodation\AccommodationInventoryRequest;
 use App\Models\Accommodation\Accommodation;
@@ -62,5 +63,10 @@ class AccommodationInventoryController extends Controller
         $inventory = $inventory->replicate();
         $inventory->save();
         return redirect()->route('accommodation-inventories.edit', ['accommodation' => $accommodation, 'inventory' => $inventory,]);
+    }
+
+    public function exportIdentifier()
+    {
+        return new AccommodationInventoryExport();
     }
 }
