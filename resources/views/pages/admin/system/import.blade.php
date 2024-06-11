@@ -102,6 +102,8 @@
                     Each row must have the following: accommodation, room type, size, check in, check out, stock and purchase price.
                     If sales price is not provided, it will default to the purchase price.
                     Check in and Check out should be in the date-time format, and fit selectable should be in yes/no format.
+                    If you wish to use the parent_id field, make sure to have imported the inventory that will be used, and put the ID number of the inventory.
+                    You can find the IDs <a href="{{route('accommodation-inventories.identifiers')}}">here</a>.
                     <form action="{{ route('import.accommodation.inventory') }}" enctype="multipart/form-data" method="post" class="d-none">
                         @csrf
                         <input id="accommodation-inventory-file-upload" type="file" name="file" class="d-none" onchange="form.submit()">

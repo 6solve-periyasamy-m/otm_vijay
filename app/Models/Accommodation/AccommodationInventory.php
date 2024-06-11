@@ -2,6 +2,7 @@
 
 namespace App\Models\Accommodation;
 
+use App\Models\Helper\Model;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Supplier\SupplierContractComponent;
 use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
@@ -11,7 +12,6 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -28,6 +28,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int $accommodation_id
  * @property int $room_type_id
  * @property int $board_type_id
+ * @property int|null $room_category_id
  * @property int|null $stock_parent_id
  * @property Carbon|null $check_in
  * @property bool $check_in_time_confirmed
@@ -46,6 +47,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read float $local_purchase_price FX Converted Purchase Price
  * @property-read Accommodation $accommodation
  * @property-read BoardType $boardType
+ * @property-read RoomCategory $category
  * @property-read Accommodation $component
  * @property-read AccommodationInventory|null $stockParent
  * @property-read AccommodationInventory[] $stockChildren
@@ -93,10 +95,10 @@ class AccommodationInventory extends Model
     protected $guarded = [];
     protected array $cascadeDeletes = ['tourComponents'];
     protected $casts = [
-        'check_in' => 'datetime',
+        'check_in' => 'datetime:Y-m-d H:i:s',
+        'check_out' => 'datetime:Y-m-d H:i:s',
         'check_in_time_confirmed' => 'boolean',
         'check_out_time_confirmed' => 'boolean',
-        'check_out' => 'datetime',
         'fit_selectable' => 'boolean',
         'purchase_price' => 'double',
         'sales_price' => 'double',
@@ -143,6 +145,11 @@ class AccommodationInventory extends Model
     public function roomType(): BelongsTo
     {
         return $this->belongsTo(RoomType::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(RoomCategory::class, 'room_category_id');
     }
 
     public function getAccommodationForTourAttribute(): string

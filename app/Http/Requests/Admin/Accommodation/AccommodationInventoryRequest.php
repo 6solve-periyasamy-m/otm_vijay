@@ -8,6 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * @property int $room_type_id
  * @property int $board_type_id
+ * @property int|null $room_category_id
  * @property int|null $stock_parent_id
  * @property string $check_in
  * @property string $check_out
@@ -27,6 +28,7 @@ class AccommodationInventoryRequest extends FormRequest
         return [
             'room_type_id' => $this->room_type_id,
             'board_type_id' => $this->board_type_id,
+            'room_category_id' => $this->room_category_id,
             'stock_parent_id' => $this->stock_parent_id,
             'check_in' => $this->check_in,
             'check_out' => $this->check_out,
@@ -51,6 +53,7 @@ class AccommodationInventoryRequest extends FormRequest
         return [
             'room_type_id' => 'required|exists:room_types,id',
             'board_type_id' => 'required|exists:board_types,id',
+            'room_category_id' => 'nullable|exists:room_categories,id',
             'stock_parent_id' => 'nullable|exists:accommodation_inventories,id',
             'check_in' => 'nullable|date',
             'check_out' => 'nullable|date',
