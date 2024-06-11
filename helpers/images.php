@@ -1,5 +1,9 @@
 <?php
 
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
 use Illuminate\Http\UploadedFile;
 
 if (!function_exists('store_file')) {
