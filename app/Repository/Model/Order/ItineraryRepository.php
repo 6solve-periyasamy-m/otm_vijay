@@ -3,55 +3,30 @@
 namespace App\Repository\Model\Order;
 
 use App\Models\Order\Invoice\Invoice;
+use App\Models\Order\Order;
+use App\Models\Order\OrderCustomer;
 use App\Repository\Storage\Invoice\QuantityBillable;
 use Illuminate\Support\Collection;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ItineraryRepository
 {
-    public readonly Invoice $invoice;
+    public readonly Order $order;
 
     /**
-     * @param Invoice $invoice
+     * @param Order $order
      */
-    public function __construct(Invoice $invoice)
+    public function __construct(Order $order)
     {
-        $this->invoice = $invoice;
+        $this->order = $order;
     }
 
-    // public function getResponseStream(): StreamedResponse
-    // {
-    //     $invoice = Browsershot::html(view('pdf.invoices.columns', ['invoice' => $this->invoice,])->render())->noSandbox();
-    //     $invoice->showBackground()->margins(10, 2, 10, 2);
-    //     return response()->stream(function () use ($invoice) { echo $invoice->pdf(); }, 200, ['Content-Type' => 'application/pdf']);
-    // }
-
-    public function getResponseStream()
+    public function getResponseStream(OrderCustomer $orderCustomer): StreamedResponse
     {
-        $invoice = $this->invoice;
-        dd($invoice);
-
-        // Pass the PDF content to the view
-        return dompdf(view('pdf.invoices.itinerary', ['invoice' => $this->invoice,]));
+        return match ((int)setting('itinerary.style', 1)) {
+            2 => dompdf(view('pdf.invoices.itinerary', ['order' => $this->order,])),
+            default => dompdf(view('pdf.itinerary', ['order' => $this->order, 'orderCustomer' => $orderCustomer,])),
+        };
     }
 
-    /**
-     * @return Collection<string, QuantityBillable>
-     */
-    public function getItemsByQuantity(): Collection
-    {
-        $data = collect();
-        foreach ($this->invoice->customers as $customer) {
-            foreach ($customer->billables as $billable) {
-                $qBillable = $data->get($billable->shared_key, new QuantityBillable($billable->description, $billable->shared_key, $billable->amount, $billable->is_base));
-                $data->put($billable->shared_key, $qBillable->addQuantity());
-            }
-        }
-        foreach ($this->invoice->groups as $group) {
-            foreach ($group->billables as $billable) {
-                $qBillable = $data->get($billable->shared_key, new QuantityBillable($billable->description, $billable->shared_key, $billable->amount, $billable->is_base));
-                $data->put($billable->shared_key, $qBillable->addQuantity());
-            }
-        }
-        return $data;
-    }
 }

@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class OrderRepository extends ModelRepository implements GeneratesFellohData
 {
@@ -790,5 +791,11 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         }
         ksort($items);
         return $items;
+    }
+
+    public function getItinerary(OrderCustomer|null $orderCustomer = null): StreamedResponse
+    {
+        $orderCustomer = $orderCustomer ?? $this->order->leadBooker;
+        return (new ItineraryRepository($this->order))->getResponseStream($orderCustomer);
     }
 }
