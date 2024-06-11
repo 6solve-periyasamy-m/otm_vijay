@@ -32,7 +32,7 @@
                     View ATOL
                 </x-admin.popup-button>
                 @endif
-                <x-admin.popup-button href="#" onclick="event.preventDefault();resend()" class="color-mint row-2">
+                <x-admin.popup-button href="#" onclick="event.preventDefault(); if(confirm('Are you sure you want to resend the booking confirmation email?')) { resend(); }" class="color-mint row-2">
                     <x-slot:icon>{{ Icon::email() }}</x-slot:icon>
                     Resend Booking Confirmation
                 </x-admin.popup-button>

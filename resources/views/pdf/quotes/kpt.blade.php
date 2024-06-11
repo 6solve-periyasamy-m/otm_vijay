@@ -29,7 +29,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet"/>
     <style type="text/css">
         @page {
-            margin: 0px;
+            margin: 0px 0px 10px 0px;
             padding: 0px;
         }
 
@@ -38,7 +38,6 @@
             mso-table-lspace: 0px;
             mso-table-rspace: 0px;
         }
-
         td,
         a,
         span {
@@ -598,8 +597,21 @@
             </tr>
         </table>
     @endforeach
-@endif
+    @endif
+    @php
 
+           $is_events_heading = 0;
+       @endphp
+    @foreach($quote->repository->getActivitiesForInvoice() as $component)
+    @if($component->getActivityData()->activity_category == 1 )
+
+    @php
+    $is_events_heading = 1;
+        @endphp
+
+        @endif
+        @endforeach
+    @if((isset($quote->event->name) && $quote->event->name!='') || $is_events_heading == 1)
 <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
     <tr>
         <td colspan="2" align="left">
@@ -610,7 +622,7 @@
         </td>
     </tr>
 </table>
-
+    @endif
 
 @if(isset($quote->event->name) && $quote->event->name!='')
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
@@ -850,8 +862,12 @@
         </thead>
     </table>
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
-
-
+     
+    <tr>
+            <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
+                &nbsp;
+            </td>
+        </tr>
         <tr>
             <td align="left" valign="top">
                 <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
@@ -861,6 +877,11 @@
                         </td>
                     </tr>
                 </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
+                &nbsp;
             </td>
         </tr>
 
@@ -876,7 +897,7 @@
     </thead>
 </table>
 <!-- Installments Section -->
-<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
+<table width="105%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" class="full-wrap">
     <tr>
         <td colspan="2" align="left" valign="top" style="padding: 10px 15px 0px 25px;">
             &nbsp;

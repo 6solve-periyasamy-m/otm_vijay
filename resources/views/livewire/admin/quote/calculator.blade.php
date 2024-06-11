@@ -67,7 +67,7 @@
                 {{ Icon::view() }}
                 {{ __('quotes.view.cards.quick.calculator.preview') }}
             </button>
-            <button wire:click="send" class="btn btn-success">
+            <button onclick="confirmAndSend()" class="btn btn-success">
                 {{ Icon::email() }}
                 {{ __('quotes.view.cards.quick.calculator.send') }}
             </button>
@@ -126,7 +126,7 @@
                 </x-admin.section.otm-text>
             </div>
             <div class="col-6">
-                <button class="btn btn-info" wire:click="calculate">Refresh</button>
+                <button class="btn btn-info" wire:click="calculate">Calculate</button>
             </div>
             <div class="col-6">
                 <x-admin.section.otm-text class="profit-updater">
@@ -157,3 +157,10 @@
         </div>
     </x-admin.section.card>
 </div>
+<script type="text/javascript">
+    function confirmAndSend() {
+        if (confirm('Are you sure you want to resend email?')) {
+            Livewire.emit('sendEmail');
+        }
+    }
+</script>

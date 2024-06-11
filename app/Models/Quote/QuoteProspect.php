@@ -3,7 +3,6 @@
 namespace App\Models\Quote;
 
 use App\Models\Customer\Customer;
-use App\Models\Location\Address;
 use Database\Factories\Quote\QuoteProspectFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -71,11 +70,11 @@ class QuoteProspect extends Model
 
     public function getEmailAttribute(): string
     {
-        return $this->customer?->email_address ?? "Customer Not Found";
+        return $this->customer?->email_address ?? "Email Not Found";
     }
 
     public function getPhoneAttribute(): string
     {
-        return $this->customer?->mobile_number ?? "Customer Not Found";
+        return $this->customer?->mobile_number ?? "Phone Not Found";
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Repository\Storage\Invoice;
 
+use App\Repository\Model\Order\InvoiceGenerator;
+
 class QuantityBillable
 {
     private int $quantity;
@@ -19,6 +21,11 @@ class QuantityBillable
         public readonly bool $included,
     ) {
         $this->quantity = 0;
+    }
+
+    public function isGroupedBase(): bool
+    {
+        return $this->shared_key === InvoiceGenerator::BASE_KEY;
     }
 
     public function getQuantity(): int

@@ -70,6 +70,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
             'order_customer_id' => $orderCustomer->id,
             'flight_inventory_tour_id' => $this->tourComponent->id,
             'cost' => $this->tourComponent->tour_sales_price ?? 0,
+            'estimated_purchase_price' => $this->tourComponent->inventory->local_purchase_price,
         ]);
         $silent ? $orderComponent->saveQuietly() : $orderComponent->save();
         event(new OrderCustomerComponentAddedEvent($orderComponent));

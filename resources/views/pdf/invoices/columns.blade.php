@@ -101,6 +101,7 @@
                                 <td colspan="3" class="metadata center-text">{{ $customer->full_name }}</td>
                             </tr>
                             @foreach($customer->billables as $billable)
+                                @continue($billable->is_base)
                                 <tr>
                                     <td class="description"><div class="order-table-description">{!! nl2br($billable->description) !!}</div></td>
                                     <td class="quantity">1</td>
