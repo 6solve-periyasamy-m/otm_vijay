@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\System\Notification;
 
+use App\Models\Customer\Customer;
 use App\Models\Helper\Enum\NotificationType;
 use App\Models\System\Notification;
 use App\Models\User;
@@ -26,6 +27,18 @@ class Table extends LivewireDatatable
         return [
             DateTimeColumn::name('notifications.created_at')
                 ->label('Created')
+                ->sortable()
+                ->searchable(),
+            Column::callback(['notifications.actor_type', 'notifications.actor_id'], static function ($type, $id) {
+                if (empty($type) || empty($id)) { return "System"; }
+                try {
+                    $actor = ($type)::find($id);
+                    if ($actor instanceof User) { return "(Admin) {$actor->name}"; }
+                    if ($actor instanceof Customer) { return "(Customer) {$actor->full_name}"; }
+                    return "Unknown";
+                } catch (\Throwable $th) { return "Unknown"; }
+            })
+                ->label('Actor')
                 ->sortable()
                 ->searchable(),
             Column::callback(['notifications.type'], static function ($type) { return NotificationType::from($type)->label(); })
