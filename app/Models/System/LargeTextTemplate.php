@@ -16,6 +16,7 @@ use Illuminate\Support\Carbon;
  * @property LargeTextType $type
  * @property string|null $description
  * @property string|null $content
+ * @property bool $default
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @method static Builder|LargeTextTemplate newModelQuery()
@@ -33,5 +34,5 @@ use Illuminate\Support\Carbon;
 class LargeTextTemplate extends Model
 {
     protected $guarded = [];
-    protected $casts = ['type' => LargeTextType::class,];
+    protected $casts = ['type' => LargeTextType::class, 'default' => 'boolean'];
 }
