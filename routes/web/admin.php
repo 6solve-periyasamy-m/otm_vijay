@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\OrganizationController;
 use App\Http\Controllers\Admin\Reporting\BespokeReportController;
 use App\Http\Controllers\Admin\System\ImportController;
 use App\Http\Controllers\Admin\System\MailController;
+use App\Http\Controllers\Admin\System\NotificationController;
 use App\Http\Controllers\Admin\System\PermissionsController;
 use App\Http\Controllers\Admin\System\SettingsController;
 use App\Http\Controllers\Admin\TravelClassController;
@@ -165,5 +166,9 @@ Route::middleware('auth:web')->group(function () {
         Route::prefix('bespoke')->group(__DIR__ . '/admin/report/bespoke.php');
         Route::prefix('advanced')->group(__DIR__ . '/admin/report/advanced.php');
         Route::prefix('/')->group(__DIR__ . '/admin/report/system.php');
+    });
+
+    Route::prefix('notifications')->group(function () {
+        Route::get('/', [NotificationController::class, 'center'])->name('notifications.all');
     });
 });

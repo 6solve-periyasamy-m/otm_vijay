@@ -4,5 +4,5 @@ namespace App\Models\Helper;
 
 interface NotificationSubject
 {
-    public function getUrl();
+    public function getLink();
 }

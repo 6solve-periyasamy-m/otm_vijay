@@ -91,7 +91,7 @@ class Notification extends Model
         return $this->seenNotifications()->where('user_id', '=', $user->id)->first();
     }
 
-    public function markSeen(User $user): void
+    public function markSeen(User $user, bool $preValidated = false): void
     {
         if ($this->seen($user) === null) {
             $this->seenBy()->attach($user);
@@ -101,5 +101,25 @@ class Notification extends Model
     public function markUnseen(User $user): void
     {
         $this->seen($user)?->delete();
+    }
+
+    public function toggleSeen(User $user): void
+    {
+        $seen = $this->seen($user);
+        if ($seen === null) {
+            $this->markSeen($user, true);
+        } else {
+            $seen->delete();
+        }
+    }
+
+    public function toggleResolved(User $user): void
+    {
+        if ($this->resolved_by !== null) {
+            $this->resolved_by = null;
+        } else {
+            $this->resolved_by = $user->id;
+        }
+        $this->save();
     }
 }

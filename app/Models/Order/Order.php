@@ -554,8 +554,9 @@ class Order extends Model implements NotificationSubject
         return $this->taxBracket()->calculate($this->total);
     }
 
-    public function getUrl(): string
+    public function getLink(): string
     {
-        return route('orders.view', ['order' => $this,]);
+        $url = route('orders.view', ['order' => $this,]);
+        return "<a href='{$url}'>{$this->booking_reference}</a>";
     }
 }
