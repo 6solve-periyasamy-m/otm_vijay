@@ -17,12 +17,7 @@
             <div class="nav-item dp-down">
                 <a class="nav-item nav-link dp-button" href="#">
                     <span class='text-light'>
-                        @php $unseen = Auth::user()->unseen(); @endphp
-                        @if($unseen > 0)
-                            <span class="badge badge-pill badge-danger">
-                                {{ $unseen > 99 ? "99+" : $unseen }}
-                            </span>
-                        @endif
+                        <livewire:admin.system.notification.badge />
                         {{ Auth::user()->name }}
                     </span>
                     <img src="{{ asset(Auth::user()->avatar_url) }}" class="img-thumbnail inline">

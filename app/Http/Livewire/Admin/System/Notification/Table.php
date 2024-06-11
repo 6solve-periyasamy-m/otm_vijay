@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\System\Notification;
 
+use App\Http\Livewire\SendsEvents;
 use App\Models\Customer\Customer;
 use App\Models\Helper\Enum\NotificationType;
 use App\Models\System\Notification;
@@ -9,12 +10,13 @@ use App\Models\User;
 use Auth;
 use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Column;
-use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\DatetimeColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class Table extends LivewireDatatable
 {
+    use SendsEvents;
+
     public function builder()
     {
         return Notification::query()
@@ -74,7 +76,7 @@ class Table extends LivewireDatatable
     {
         $notification = Notification::find($id);
         $notification?->toggleSeen(Auth::user());
-        $this->refreshLivewireDatatable();
+        $this->refreshTables();
     }
 
     public function resolve($id): void
@@ -82,6 +84,6 @@ class Table extends LivewireDatatable
         $notification = Notification::find($id);
         $notification?->toggleResolved(Auth::user());
         $notification?->markSeen(Auth::user());
-        $this->refreshLivewireDatatable();
+        $this->refreshTables();
     }
 }
