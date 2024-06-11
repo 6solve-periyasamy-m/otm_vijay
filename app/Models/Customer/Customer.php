@@ -2,6 +2,8 @@
 
 namespace App\Models\Customer;
 
+use App\Models\Helper\NotificationSubject;
+use App\Models\Helper\Traits\HasNotifications;
 use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
@@ -155,7 +157,7 @@ use Laravel\Cashier\Subscription;
  * @method static QueryBuilder|Customer withoutTrashed()
  * @mixin Eloquent
  */
-class Customer extends Authenticatable
+class Customer extends Authenticatable implements NotificationSubject
 {
     use SoftDeletes;
     use HasFactory;
@@ -163,6 +165,7 @@ class Customer extends Authenticatable
     use Billable;
     use CascadeSoftDeletes;
     use HasRepository;
+    use HasNotifications;
 
     protected string $guard = 'customer';
 
@@ -291,12 +294,12 @@ class Customer extends Authenticatable
         return CustomerAuthenticationRepository::generateUserToken($this, $expiresIn);
     }
 
-    public function invalidateAllTokens()
+    public function invalidateAllTokens(): void
     {
         CustomerAuthenticationRepository::invalidateAllUserTokens($this);
     }
 
-    public function purgeTokens(int $limit = ApiToken::DEFAULT_LIMIT)
+    public function purgeTokens(int $limit = ApiToken::DEFAULT_LIMIT): void
     {
         CustomerAuthenticationRepository::purgeUserTokens($this, $limit);
     }
@@ -313,6 +316,12 @@ class Customer extends Authenticatable
 
     public function getRegisteredAttribute(): bool
     {
-        return isset($this->email_address) && isset($this->password);
+        return isset($this->email_address, $this->password);
+    }
+
+    public function getLink(): string
+    {
+        $route = route('customers.view', ['customer' => $this,]);
+        return "<a href='$route'>{$this->full_name}</a>";
     }
 }

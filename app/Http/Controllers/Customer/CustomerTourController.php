@@ -12,6 +12,7 @@ use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
+use App\Models\Helper\Enum\NotificationType;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
@@ -124,6 +125,7 @@ class CustomerTourController extends CustomerController
             }
         } else {
             $tourComponent->grantToCustomer($orderCustomer);
+            $order->createNotification(NotificationType::COMPONENTS_CHANGED, 'Add-on/Upgrade added via dashboard');
             return redirect($redirect);
         }
     }
@@ -180,6 +182,8 @@ class CustomerTourController extends CustomerController
         if ($order->tour->repository->isFlightLocked()) { unset($details['flight_notes']); }
         if ($order->tour->repository->isTransportLocked()) { unset($details['transport_notes']); }
         $orderCustomer->repository->update($details);
+
+        $order->createNotification(NotificationType::ORDER_UPDATED, 'Order Notes updated by customer', $this->user());
         return redirect()->route('customer.itinerary', ['reference' => $order->booking_reference,]);
     }
 

@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  */
 trait HasNotifications
 {
-    public function notifications(): MorphMany
+    public function systemNotifications(): MorphMany
     {
         return $this->morphMany(Notification::class, 'subject');
     }
