@@ -2,6 +2,8 @@
 
 namespace App\Models\Helper\Enum\Trait;
 
+use App\Models\Helper\Enum\OrderStatus;
+
 /**
  * @method static self[] cases()
  */
@@ -19,5 +21,14 @@ trait ConvertsToArray
     public function label(): string
     {
         return ucwords(camel_to_text(strtolower($this->name)));
+    }
+
+    public static function asFilter(): array
+    {
+        $data = [];
+        foreach (self::cases() as $case) {
+            $data[] = ['id' => $case->value, 'name' => $case->label()];
+        }
+        return $data;
     }
 }
