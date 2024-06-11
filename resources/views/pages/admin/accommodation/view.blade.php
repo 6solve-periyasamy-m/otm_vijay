@@ -75,6 +75,7 @@
             <tr>
                 <th scope="col">Room Type</th>
                 <th scope="col">Board Type</th>
+                <th scope="col">Category</th>
                 <th scope="col">Check In Time</th>
                 <th scope="col">Check Out Time</th>
                 <th scope="col">FIT Selectable</th>
@@ -92,6 +93,7 @@
                 <tr>
                     <td>{{ $inventory->roomType->name }}</td>
                     <td>{{ $inventory->boardType->name }}</td>
+                    <td>{{ $inventory->category->name }}</td>
                     <td data-sort="{{$inventory->check_in->unix()}}">
                         {{ f_datetime($inventory->check_in) }}&nbsp
                         <input type="checkbox" disabled
