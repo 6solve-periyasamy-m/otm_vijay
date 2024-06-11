@@ -15,9 +15,9 @@ class Table extends LivewireDatatable
     public function builder()
     {
         return Activity::query()
-            ->join('activity_types', 'activity_types.id', '=', 'activities.activity_type_id')
-            ->join('addresses', 'addresses.id', '=', 'activities.address_id')
-            ->join('countries', 'countries.id', '=', 'addresses.country_id');
+            ->leftJoin('activity_types', 'activity_types.id', '=', 'activities.activity_type_id')
+            ->leftJoin('addresses', 'addresses.id', '=', 'activities.address_id')
+            ->leftJoin('countries', 'countries.id', '=', 'addresses.country_id');
     }
 
     public function columns()
