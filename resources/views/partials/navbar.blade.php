@@ -16,10 +16,19 @@
         @if(Auth::check())
             <div class="nav-item dp-down">
                 <a class="nav-item nav-link dp-button" href="#">
-                    <span class='text-light'>{{ Auth::user()->name }}</span>
+                    <span class='text-light'>
+                        @php $unseen = Auth::user()->unseen(); @endphp
+                        @if($unseen > 0)
+                            <span class="badge badge-pill badge-danger">
+                                {{ $unseen > 99 ? "99+" : $unseen }}
+                            </span>
+                        @endif
+                        {{ Auth::user()->name }}
+                    </span>
                     <img src="{{ asset(Auth::user()->avatar_url) }}" class="img-thumbnail inline">
                 </a>
                 <div class="dp-content">
+                    <a href="{{ route('notifications.all') }}">{{ Icon::note() }}&nbsp;Notifications</a>
                     <a href="{{ route('users.profile') }}">{{ Icon::view() }}&nbsp;View Profile</a>
                     <a href="#" onclick="event.preventDefault();logout();">{{ Icon::logout() }}&nbsp;Logout</a>
                 </div>

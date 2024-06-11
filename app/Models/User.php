@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Order\Order;
 use App\Models\Quote\Quote;
 use App\Models\System\ApiToken;
+use App\Models\System\Notification;
 use App\Models\System\SeenNotification;
 use App\Repository\Authentication\UserRepository;
 use Database\Factories\UserFactory;
@@ -256,5 +257,10 @@ class User extends UserAuthenticatable implements MustVerifyEmail
     public function seenNotifications(): HasMany
     {
         return $this->hasMany(SeenNotification::class, 'user_id');
+    }
+
+    public function unseen(): int
+    {
+        return Notification::whereNotIn('id', $this->seenNotifications()->pluck('notification_id'))->count();
     }
 }

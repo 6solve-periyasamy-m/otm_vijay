@@ -68,6 +68,7 @@ class Table extends LivewireDatatable
     {
         $notification = Notification::find($id);
         $notification?->toggleResolved(Auth::user());
+        $notification?->markSeen(Auth::user());
         $this->refreshLivewireDatatable();
     }
 }
