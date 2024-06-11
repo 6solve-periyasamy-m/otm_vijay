@@ -120,15 +120,13 @@ class Settings
         $to = $to ?? setting('system.currency', 'GBP');
         $to = is_string($to) ? $to : $to->code;
         if ($from !== $to) {
-            $conversion = Settings::getConversionRate($from, $to);
+            $conversion = $this->getConversionRate($from, $to);
             if ($conversion !== null) {
                 return sigfig($amount * $conversion);
-            } else {
-                return null;
             }
-        } else {
             return null;
         }
+        return null;
     }
 
     public function getNullTaxBracket(): TaxBracket
@@ -153,6 +151,15 @@ class Settings
     public function availableQuoteStyles(): array
     {
         $styles = [1 => 'Default Quote Style',];
+        if (config('app.features.bleeding-edge') || config('app.features.kpt')) {
+            $styles[2] = 'Alternative Style (Under Development)';
+        }
+        return $styles;
+    }
+
+    public function availableItineraryStyles(): array
+    {
+        $styles = [1 => 'Default Itinerary Style',];
         if (config('app.features.bleeding-edge') || config('app.features.kpt')) {
             $styles[2] = 'Alternative Style (Under Development)';
         }

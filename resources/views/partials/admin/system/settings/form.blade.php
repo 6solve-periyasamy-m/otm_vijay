@@ -49,14 +49,21 @@
                         'field' => 'invoice_format',
                         'values' => \Settings::availableInvoiceStyles(),
                         'selected' => setting('invoice.style', 1),
-                        'width' => 6,
+                        'width' => 4,
                     ])
                     @include('partials.fields.dropdown', [
                         'name' => 'Quote Format',
                         'field' => 'quote_format',
                         'values' => \Settings::availableQuoteStyles(),
                         'selected' => setting('quote.style', 1),
-                        'width' => 6,
+                        'width' => 4,
+                    ])
+                    @include('partials.fields.dropdown', [
+                        'name' => 'Itinerary Format',
+                        'field' => 'itinerary_format',
+                        'values' => \Settings::availableItineraryStyles(),
+                        'selected' => setting('itinerary.style', 1),
+                        'width' => 4,
                     ])
                 </div>
             </div>

@@ -1,17 +1,3 @@
-@php use App\Models\Quote\Quote; @endphp
-@php use App\Models\Tour\Tour; @endphp
-@php use App\Models\Accommodation\AccommodationInventoryTour; @endphp
-@php use App\Models\Activity\ActivityInventoryTour; @endphp
-@php use App\Models\Flight\FlightInventoryTour; @endphp
-@php use App\Models\Transport\TransportInventoryTour; @endphp
-@php use App\Models\Merchandise\Merchandise; @endphp
-@php use App\Models\Customer\Customer; use Carbon\Carbon; @endphp
-@php
-    /**
-    * @var Tour $tour
-    */
-@endphp
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -35,7 +21,7 @@
                             <table align="left" width="100%" border="0" cellspacing="0">
                                 <tr>
                                     <td align="left" valign="top" style="padding: 0 20px;">
-                                        <img src="{{img_to_b64($invoice->brand->logo)}}" alt="{{ $invoice->brand->name }}"
+                                        <img src="{{img_to_b64($order->tour->brand->logo)}}" alt="{{ $order->tour->brand->name }}"
                                              width="100%" style="display: block; max-width: 190px">
                                     </td>
                                 </tr>
@@ -69,7 +55,7 @@
                                         <td colspan="2" align="left" valign="top"
                                             style="padding: 10px 15px 2px 25px; color: #ffffff; line-height: 20px;"
                                             class="fs-16">
-                                            {{ strtoupper($tour->name) }}
+                                            {{ strtoupper($order->tour->name) }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -222,7 +208,7 @@
             <tr>
                 <td colspan="2" align="left">
                     <div style="background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 300px; padding: 10px 25px; margin: 10px 0; color: #ffffff; display: block;" class="fs-16 text-dark ">
-                        DAY {{ $day }} - {{ Carbon::createFromTimestamp($date)->format('l jS F Y') }}
+                        DAY {{ $day }} - {{ \Carbon\Carbon::createFromTimestamp($date)->format('l jS F Y') }}
                     </div>
                 </td>
             </tr>
@@ -230,7 +216,7 @@
 
         @php /** @var \App\Repository\Storage\Order\ItineraryItem $item */ @endphp
         @foreach($items as $item)
-            <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="background-color:#ffffff; padding: 5px 0 10px 0;" class="full-wrap">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="background-color:#ffffff; padding: 5px 0 10px 0; page-break-inside: avoid;" class="full-wrap">
                 <tr>
                     <td align="left" colspan="2" style="padding: 0 40px; color: #E95B15; font-size: 11pt;" class="fs-16 ">
                         {{ strtoupper($item->type) }}
@@ -271,43 +257,49 @@
     @endforeach
 
     @if(!empty($order->external_notes))
+        <div style="page-break-inside: avoid">
+            <table align="left" width="100%" cellspacing="0" cellpadding="0">
+                <thead>
+                    <tr style=" background-color: #353535; padding: 2px 15px;">
+                        <th align="left" valign="top" style="padding: 10px 15px; color: #ffffff; font-weight: 700;" class="fs-16 ">
+                            NOTES
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+            <div style="padding: 10px 15px 10px 25px;">
+                <p class="fs-12 text-dark">{!! $order->external_notes !!}</p>
+            </div>
+        </div>
+    @endif
+
+    <div style="page-break-inside: avoid">
         <table align="left" width="100%" cellspacing="0" cellpadding="0">
             <thead>
                 <tr style=" background-color: #353535; padding: 2px 15px;">
                     <th align="left" valign="top" style="padding: 10px 15px; color: #ffffff; font-weight: 700;" class="fs-16 ">
-                        NOTES
+                        EVENT INFORMATION
                     </th>
                 </tr>
             </thead>
         </table>
         <div style="padding: 10px 15px 10px 25px;">
-            <p class="fs-12 text-dark">{!! $order->external_notes !!}</p>
+            <p class="fs-12 text-dark">{!! $order->tour->event?->description ?? $order->tour->description !!}</p>
         </div>
-    @endif
-
-    <table align="left" width="100%" cellspacing="0" cellpadding="0">
-        <thead>
-            <tr style=" background-color: #353535; padding: 2px 15px;">
-                <th align="left" valign="top" style="padding: 10px 15px; color: #ffffff; font-weight: 700;" class="fs-16 ">
-                    EVENT INFORMATION
-                </th>
-            </tr>
-        </thead>
-    </table>
-    <div style="padding: 10px 15px 10px 25px;">
-        <p class="fs-12 text-dark">{!! $order->tour->event?->description ?? $order->tour->description !!}</p>
     </div>
-    <table align="left" width="100%" cellspacing="0" cellpadding="0">
-        <thead>
-            <tr style=" background-color: #353535; padding: 2px 15px;">
-                <th align="left" valign="top" style="padding: 10px 15px; color: #ffffff; font-weight: 700;" class="fs-16 ">
-                    FINAL DETAILS
-                </th>
-            </tr>
-        </thead>
-    </table>
-    <div style="padding: 10px 15px 0 25px;">
-        <p class="fs-12 text-dark">{!! $tour->invoice_footer !!}</p>
+    <div style="page-break-inside: avoid">
+        <table align="left" width="100%" cellspacing="0" cellpadding="0">
+            <thead>
+                <tr style=" background-color: #353535; padding: 2px 15px;">
+                    <th align="left" valign="top" style="padding: 10px 15px; color: #ffffff; font-weight: 700;" class="fs-16 ">
+                        FINAL DETAILS
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        <div style="padding: 10px 15px 0 25px;">
+            <p class="fs-12 text-dark">{!! $order->invoice_footer !!}</p>
+        </div>
     </div>
 </body>
 </html>

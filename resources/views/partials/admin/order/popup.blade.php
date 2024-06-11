@@ -14,13 +14,15 @@
                     <x-slot:icon>{{ Icon::tour() }}</x-slot:icon>
                     View Tour
                 </x-admin.popup-button>
+                @if(config('app.features.kpt') || config('app.features.bleeding-edge'))
                 <x-admin.popup-button href="{{ route('orders.reservation.preview', ['order' => $order,]) }}" class="color-info row-1">
                     <x-slot:icon>{{ Icon::view() }}</x-slot:icon>
                     View Reservation Document
                 </x-admin.popup-button>
-                <x-admin.popup-button href="{{ route('orders.migrate', ['order' => $order,]) }}" class="color-warning row-1">
-                    <x-slot:icon>{{ Icon::edit() }}</x-slot:icon>
-                    Change Tour
+                @endif
+                <x-admin.popup-button href="{{ route('orders.itinerary.latest', ['order' => $order,]) }}" class="color-info row-1">
+                    <x-slot:icon>{{ Icon::view() }}</x-slot:icon>
+                    View Itinerary Document
                 </x-admin.popup-button>
                 <x-admin.popup-button href="{{ route('orders.occupancy', ['order' => $order,]) }}" class="color-primary row-2">
                     <x-slot:icon>{{ Icon::edit() }}</x-slot:icon>
@@ -35,6 +37,11 @@
                 <x-admin.popup-button href="#" onclick="event.preventDefault(); if(confirm('Are you sure you want to resend the booking confirmation email?')) { resend(); }" class="color-mint row-2">
                     <x-slot:icon>{{ Icon::email() }}</x-slot:icon>
                     Resend Booking Confirmation
+                </x-admin.popup-button>
+
+                <x-admin.popup-button href="{{ route('orders.migrate', ['order' => $order,]) }}" class="color-warning row-3">
+                    <x-slot:icon>{{ Icon::edit() }}</x-slot:icon>
+                    Change Tour
                 </x-admin.popup-button>
                 @can('delete', \App\Models\Order\Order::class)
                     @if($order->cancelled)
