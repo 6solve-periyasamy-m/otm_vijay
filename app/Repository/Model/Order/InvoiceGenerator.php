@@ -89,7 +89,7 @@ class InvoiceGenerator
             'address_line_2' => $brand->address->address_line_2,
             'town' => $brand->address->town,
             'region' => $brand->address->region,
-            'country' => $brand->address->country?->name,
+            'country' => $brand->address->country?->name ?? setting('company.address.country', ''),
             'postcode' => $brand->address->postcode,
             'vat_code' => $brand->vat_code, //before it was: setting('company.vat'),
             'logo' => $brand->image_path,
