@@ -89,19 +89,17 @@ class Settings
 
     public function getTaxBracket(): TaxBracket
     {
-        return TaxBracket::find(static::get('system.tax.bracket')) ?? static::getNullTaxBracket();
+        return TaxBracket::find($this->get('system.tax.bracket')) ?? $this->getNullTaxBracket();
     }
     
-    public function getConversionRate(Currency|string $from, Currency|string $to): float|null
+    public function getConversionRate(Currency|string|null $from, Currency|string|null $to): float|null
     {
-        if (is_string($from)) {
-            $from = Currency::where('code', '=', $from)->first();
-        }
-        if (is_string($to)) {
-            $to = Currency::where('code', '=', $to)->first();
-        }
-        if ($from === null || $to === null) return null;
-        if ($from->id === $to->id) return 1;
+        if (is_string($from)) { $from = Currency::where('code', '=', $from)->first(); }
+        if (is_string($to)) { $to = Currency::where('code', '=', $to)->first(); }
+
+        if ($from === null || $to === null) { return null; }
+        if ($from->id === $to->id) { return 1; }
+
         return ConversionRate::where('from_currency_id', '=', $from->id)
             ->where('to_currency_id', '=', $to->id)
             ->first()?->rate;
@@ -121,15 +119,12 @@ class Settings
         $to = is_string($to) ? $to : $to->code;
         if ($from === null) { return $amount; }
         if ($from !== $to) {
-            $conversion = Settings::getConversionRate($from, $to);
+            $conversion = $this->getConversionRate($from, $to);
             if ($conversion !== null) {
                 return sigfig($amount * $conversion);
-            } else {
-                return null;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     public function getNullTaxBracket(): TaxBracket
