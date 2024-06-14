@@ -6,6 +6,7 @@ use App\Exceptions\MailDisabledException;
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Quote\Quote;
+use App\Models\Quote\QuotePricePoint;
 use Livewire\Component;
 
 class Calculator extends Component
@@ -29,12 +30,15 @@ class Calculator extends Component
     public function mount(Quote $quote)
     {
         $this->quote = $quote;
-        $this->calculate();
+        $this->calculate(false);
     }
 
-    public function calculate(): void
+    public function calculate(bool $validate = true): void
     {
-        $this->setMarkup();
+        if ($validate) {
+            $this->validate();
+            $this->markup = (float)$this->markup;
+        }
         $companyCostTravellers = ($this->paying + $this->travelling + ($this->leadTravelling()));
         $this->costToCompany = $this->quote->repository->getTotalCostToCompany($companyCostTravellers);
         $costPerPerson = $companyCostTravellers > 0 ? sigfig($this->costToCompany / $companyCostTravellers) : 0;
@@ -50,11 +54,6 @@ class Calculator extends Component
         $this->calculate();
     }
 
-    public function setMarkup(): void
-    {
-        $this->markup = empty($this->markup) ? null : floatval(preg_replace("/[^-0-9.]/","",$this->markup));
-    }
-
     public function incrementPaying(int $value): void
     {
         $this->paying += $value;
@@ -67,7 +66,7 @@ class Calculator extends Component
         $this->refresh();
     }
 
-    public function refresh()
+    public function refresh(): void
     {
         $this->calculate();
         $this->refreshTables();
@@ -79,9 +78,15 @@ class Calculator extends Component
         return view('livewire.admin.quote.calculator');
     }
 
-    public function updatePricePoint(bool $all = false)
+    public function rules(): array
     {
-        $point = $this->quote->repository->getPricePerPerson(1);
+        return ['markup' => 'numeric|required',];
+    }
+
+    public function updatePricePoint(bool $all = false): void
+    {
+        $point = $this->quote->repository->getPricePerPerson(1)
+            ?? $this->quote->pricePoints()->save(QuotePricePoint::make(['quantity' => 1, 'price_per_person' => 0]));
         $oldPrice = $point->price_per_person;
         $point->price_per_person = $this->marked_up_price;
         $point->save();
