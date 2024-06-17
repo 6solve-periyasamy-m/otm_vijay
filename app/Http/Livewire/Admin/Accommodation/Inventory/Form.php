@@ -27,7 +27,7 @@ class Form extends Component
         $this->validate();
         $this->inventory->accommodation_id = $this->inventory->accommodation_id ?? $this->accommodation->id;
         if (!empty($this->inventory->id)) {
-            if ($this->inventory->repository->validateParent($this->inventory->stock_parent_id)) {
+            if (!$this->inventory->repository->validateParent($this->inventory->stock_parent_id)) {
                 $this->toast('Cannot Save', 'You cannot use this stock parent, as it is a child of this inventory', 'danger');
                 return;
             }
