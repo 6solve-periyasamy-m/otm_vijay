@@ -114,10 +114,10 @@ class Settings
      */
     public function convertCurrency(float $amount, Currency|string|null $from, Currency|string|null $to = null): ?float
     {
+        if ($from === null) { return null; }
         $from = is_string($from) ? $from : $from->code;
         $to = $to ?? setting('system.currency', 'GBP');
         $to = is_string($to) ? $to : $to->code;
-        if ($from === null) { return $amount; }
         if ($from !== $to) {
             $conversion = $this->getConversionRate($from, $to);
             if ($conversion !== null) {
