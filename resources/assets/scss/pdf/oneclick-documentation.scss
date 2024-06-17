@@ -120,6 +120,21 @@ table.cell-padding-0 td, th {
   padding: 0;
 }
 
+.paymentTable {
+  border: 2px solid #353535;
+  border-collapse: collapse;
+}
+
+.paymentTable th {
+  border: 2px solid #353535;
+  border-collapse: collapse;
+}
+
+.paymentTable td {
+  border: 2px solid #353535;
+  border-collapse: collapse;
+}
+
 .document-logo {
   text-align: center !important;
   vertical-align: middle !important;
@@ -137,10 +152,21 @@ table.cell-padding-0 td, th {
   border-collapse: separate !important;
   overflow: hidden !important;
 }
+
 .document-logo-table {
   width: 100%;
   text-align: center;
   border: 0;
   border-spacing: 0;
   margin: 10px auto;
+}
+
+.quote-footer-table {
+  border: 0;
+  background-color: #ffffff;
+  padding: 0;
+  width: 100%;
+  td, th {
+    padding: 0;
+  }
 }
