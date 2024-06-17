@@ -369,7 +369,7 @@
 
                                                             @foreach($billables as $b_index => $billable)
                                                                 @continue($billable->isGroupedBase())
-                                                                <tr style="background-color: {{ $counter % 2 == 0 ? '#f5f5f5' : '#ffffff' }};"> 
+                                                                <tr style="background-color: {{ $counter % 2 == 0 ? '#f5f5f5' : '#ffffff' }};">
                                                                     <td align="left" valign="top" style="padding: 2px 15px;"
                                                                         class="oc_f12 oc_lblack">{{$billable->description}}
                                                                     </td>

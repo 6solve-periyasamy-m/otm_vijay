@@ -7,7 +7,7 @@ use Illuminate\Console\OutputStyle;
 
 class InvoiceUpgrader
 {
-    const LATEST_VERSION = 2;
+    const LATEST_VERSION = 3;
 
     public static function upgradeAll(OutputStyle|null $style = null): void
     {
@@ -15,6 +15,7 @@ class InvoiceUpgrader
         $bar = $style?->createProgressBar($invoices->count());
         foreach ($invoices as $invoice) {
             $invoice = self::version_1_to_2($invoice);
+            $invoice = self::version_2_to_3($invoice);
             $bar->advance();
         }
         $bar->finish();
@@ -40,6 +41,22 @@ class InvoiceUpgrader
             }
         }
         $invoice->generator_version = 2;
+        $invoice->save();
+        return $invoice;
+    }
+
+    public static function version_2_to_3(Invoice $invoice): Invoice
+    {
+        if ($invoice->generator_version !== 2) return $invoice;
+        $invoice->event = $invoice->order?->tour?->event?->name;
+        foreach ($invoice->customers as $customer) {
+            $lastName = explode(' ', $customer->full_name);
+            $firstName = array_splice($lastName, 0, round(sizeof($lastName)/2));
+            $customer->first_name = implode(' ', $firstName);
+            $customer->last_name = implode(' ', $lastName);
+            $customer->save();
+        }
+        $invoice->generator_version = 3;
         $invoice->save();
         return $invoice;
     }
