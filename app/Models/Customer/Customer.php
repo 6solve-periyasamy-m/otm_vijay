@@ -182,7 +182,7 @@ class Customer extends Authenticatable
         return [
             'first_name' => 'required',
             'last_name' => 'required',
-            'date_of_birth' => 'required|date',
+            'date_of_birth' => 'nullable|date',
             'email_address' => 'nullable|email|unique:customers,email_address',
         ];
     }
