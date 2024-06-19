@@ -129,6 +129,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'deposit' => $this->quote->getDepositAmount($paying),
             'ordered_on' => now(),
             'organization_id' => $this->quote->organization_id,
+            'commission' => $this->quote->organization?->commission,
             'consultant_id' => $this->quote->consultant_id,
             'internal_notes' => $this->quote->internal_notes,
             'external_notes' => $this->quote->external_notes,
