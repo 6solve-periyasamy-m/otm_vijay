@@ -52,7 +52,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'event_id' => $tour->event_id,
             'deposit' => $tour->deposit,
             'is_deposit_percentage' => $tour->is_deposit_percentage,
-            'tax_bracket_id' => $tour->tax_bracket_id,
+            'tax_bracket_id' => $tour->tax_bracket_id ?? $tour->event?->tax_bracket_id,
             'final_payment' => $tour->final_payment,
             'date_from' => $tour->date_from,
             'date_to' => $tour->date_to,
