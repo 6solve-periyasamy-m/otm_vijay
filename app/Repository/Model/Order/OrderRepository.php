@@ -826,6 +826,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         return new Itinerary(
             $this->order->tour->name,
             $this->order->tour->event?->name,
+            $this->order->tour->event?->description ?? $this->order->tour->description,
             $this->order->tour->event?->image_url,
             $this->order->booking_reference,
             $this->order->tour->date_from,
@@ -839,6 +840,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $this->order->tour->terms,
             $this->order->invoice_footer,
             setting('company.bank_transfer'),
+            $this->order->external_notes,
         );
     }
 

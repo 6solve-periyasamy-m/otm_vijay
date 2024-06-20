@@ -218,6 +218,7 @@ table.cell-padding-0 td, th {
     padding: 2px 15px;
   }
   .text {
+    @extend .fs-16;
      text-align: left;
      vertical-align: top;
      padding: 10px 15px;
@@ -228,4 +229,10 @@ table.cell-padding-0 td, th {
 
 .avoid-break {
   page-break-inside: avoid !important;
+}
+
+.text-section {
+  @extend .fs-12;
+  @extend .text-dark;
+  padding: 10px 15px 10px 25px;
 }

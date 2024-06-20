@@ -185,11 +185,11 @@
         </tr>
     </table>
 
-    <!-- Itinerary Header -->
+    <!-- Itinerary Divider -->
     <table class="divider">
         <thead>
             <tr>
-                <th class="text fs-16">
+                <th class="text">
                     TRIP ITINERARY AND INCLUSION
                 </th>
             </tr>
@@ -262,45 +262,50 @@
             <table class="divider">
                 <thead>
                     <tr>
-                        <th class="text fs-16">
+                        <th class="text">
                             NOTES
                         </th>
                     </tr>
                 </thead>
             </table>
-            <div style="padding: 10px 15px 10px 25px;">
-                <p class="fs-12 text-dark">{!! $order->external_notes !!}</p>
+            <div class="text-section">
+                <p>{!! $order->external_notes !!}</p>
             </div>
         </div>
     @endif
 
-    <div style="page-break-inside: avoid">
-        <table class="divider">
-            <thead>
-                <tr>
-                    <th class="text fs-16">
-                        EVENT INFORMATION
-                    </th>
-                </tr>
-            </thead>
-        </table>
-        <div style="padding: 10px 15px 10px 25px;">
-            <p class="fs-12 text-dark">{!! $order->tour->event?->description ?? $order->tour->description !!}</p>
+    @if(!empty($itinerary->description))
+        <div class="avoid-break">
+            <table class="divider">
+                <thead>
+                    <tr>
+                        <th class="text">
+                            EVENT INFORMATION
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+            <div class="text-section">
+                <p>{!! $itinerary->description !!}</p>
+            </div>
         </div>
-    </div>
-    <div style="page-break-inside: avoid">
-        <table class="divider">
-            <thead>
-                <tr>
-                    <th class="text fs-16">
-                        FINAL DETAILS
-                    </th>
-                </tr>
-            </thead>
-        </table>
-        <div style="padding: 10px 15px 0 25px;">
-            <p class="fs-12 text-dark">{!! $order->invoice_footer !!}</p>
+   @endif
+
+    @if(!empty($itinerary->footer))
+        <div class="avoid-break">
+            <table class="divider">
+                <thead>
+                    <tr>
+                        <th class="text">
+                            FINAL DETAILS
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+            <div  class="text-section">
+                <p>{!! $itinerary->footer !!}</p>
+            </div>
         </div>
-    </div>
+    @endif
 </body>
 </html>

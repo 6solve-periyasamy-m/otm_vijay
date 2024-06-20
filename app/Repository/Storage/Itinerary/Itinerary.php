@@ -33,6 +33,7 @@ class Itinerary
     public function __construct(
         public string $package,
         public string|null $event,
+        public string|null $description,
         public string|null $image,
         public string|null $reference,
         public Carbon $start,
@@ -46,6 +47,7 @@ class Itinerary
         public string|null $terms,
         public string|null $footer,
         public string|null $paymentDetails,
+        public string|null $notes,
     )
     {
         $this->setImage($this->image);
