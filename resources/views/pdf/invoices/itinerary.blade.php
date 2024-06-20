@@ -12,27 +12,111 @@
 </head>
 
 <body class="body">
+    <div class="logos">
+        <table class="logo-table">
+            <tr>
+                <td class="text-left v-top">
+                    <table class="brand-logo-table">
+                        <tr>
+                            <td>
+                                <img src="{{img_to_b64($itinerary->brand->logo)}}" alt="{{ $itinerary->brand->name }}" />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td class="circle-td">
+                    <table class="cell-padding-0 document-logo-table debug">
+                        <tr>
+                            <td class="document-logo">
+                                TRAVEL ITINERARY
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
     <!-- Header -->
-    <table class="header full-wrap">
-        <!-- Logos -->
+    <table class="header">
+        <!-- Order Information -->
         <tr>
-            <td class="logos">
-                <table class="logo-table">
+            <td align="left" valign="top" colspan="2">
+                <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
                     <tr>
-                        <td class="text-left v-top">
-                            <table class="brand-logo-table">
-                                <tr>
-                                    <td>
-                                        <img src="{{img_to_b64($itinerary->brand->logo)}}" alt="{{ $itinerary->brand->name }}">
-                                    </td>
-                                </tr>
+                        <td width="50%" align="left" valign="top" style="background-color: #E95B15;">
+                            <table align="left" border="0" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-left v-top">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="reference">
+                                            REFERENCE: {{ $itinerary->reference }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left v-top">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="header-detail-title">
+                                            CUSTOMER DETAILS
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="header-detail-data">
+                                            NAME: {{ $itinerary->booker->full_name }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="header-detail-data">
+                                            PHONE: {{ $itinerary->booker->mobile_number }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="header-detail-data">
+                                            EMAIL: <a href="mailto:{{ $itinerary->booker->email_address }}">{{ $itinerary->booker->email_address }}</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left v-top">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left v-top">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="header-detail-title">
+                                            AGENT DETAILS
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="header-detail-data">
+                                            NAME: {{ $itinerary->brand->name }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="header-detail-data">
+                                            EMAIL:
+                                            <a href="mailto:{{ $itinerary->brand->email ?? setting('company.contact.email', 'Email not set') }}">
+                                                {{ $itinerary->brand->email ??  setting('company.contact.email', 'Email not set') }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="header-detail-data">
+                                            DATE CREATED: {{ $itinerary->brand->created_at->format('d F Y') }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left v-top">&nbsp;</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </td>
-                        <td class="circle-td">
-                            <table class="cell-padding-0 document-logo-table">
+                        <td class="header-image-td">
+                            <table class="header-image-table">
                                 <tr>
-                                    <td class="document-logo">
-                                        TRAVEL ITINERARY
+                                    <td class="text-left v-top">
+                                        <img src="{{ $itinerary->image }}" alt="{{ $itinerary->package }}" class="header-image">
                                     </td>
                                 </tr>
                             </table>
@@ -41,145 +125,59 @@
                 </table>
             </td>
         </tr>
-        <!-- Order Information -->
         <tr>
-            <td class="text-left v-top">
-                <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                    <tr>
-                        <td width="50%" align="left" valign="top" style="background-color: #E95B15;">
-                            <table align="left" border="0" cellspacing="0" cellpadding="0">
-                                <tbody>
-                                    <tr>
-                                        <td align="left" valign="top">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" align="left" valign="top"
-                                            style="padding: 10px 15px 2px 25px; color: #ffffff; line-height: 20px;"
-                                            class="fs-16">
-                                            {{ strtoupper($itinerary->package) }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" valign="top">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" class="fs-14"
-                                            style="padding: 10px 15px 0 25px; color: #353535; font-weight: 700;">
-                                            CUSTOMER DETAILS
-                                        </td>
-                                    </tr>
-                                    @php
-                                        $otherGuest = 0;
-                                        $isTBC = 0;
-                                    @endphp
-                                    @foreach($order->orderCustomers as $ordersCustomer)
-                                        <tr>
-                                            <td align="left" valign="top"
-                                                style="padding: 10px 15px 0 25px; color: #ffffff; line-height:20px;"
-                                                class="fs-14">
-                                                @if($order->lead_booker_id == $ordersCustomer->id)
-                                                    LEAD GUEST
-                                                @else
-                                                    @if($otherGuest == 0)
-                                                    OTHER GUESTS
-
-                                                    @endif
-                                                    @php
-                                                        $otherGuest++;
-                                                    @endphp
-                                                @endif
-
-
-                                            </td>
-                                            @if($otherGuest < 4)
-                                                <td align="left" valign="top"
-                                                    style="padding: 10px 15px 0 25px; color: #ffffff; line-height:20px;"
-                                                    class="fs-14">
-                                                    {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
-
-                                                </td>
-                                            @else
-                                                @if($otherGuest > 3 && $isTBC == 0)
-                                                    @php
-                                                        $isTBC++;
-                                                    @endphp
-                                                    <td align="left" valign="top"
-                                                        style="padding: 10px 15px 0 25px; color: #ffffff; line-height:20px;"
-                                                        class="fs-14">
-                                                        TBC
-                                                    </td>
-                                                @endif
-                                            @endif
-                                        </tr>
-                                    @endforeach
-                                    <tr>
-                                        <td class="fs-14"
-                                            style="padding: 10px 15px 0 25px; color: #ffffff; line-height:20px;">
-                                            BOOKING REFERENCE:
-                                        </td>
-                                        <td class="fs-14"
-                                            style="padding: 10px 15px 0 25px; color: #ffffff; line-height:10px;">
-                                            {{$itinerary->reference}}
-                                        </td>
-                                    </tr>
-                                    @foreach($order->orderCustomers as $ordersCustomer)
-                                        @if($order->lead_booker_id == $ordersCustomer->id)
-                                            <tr>
-                                                <td colspan="2" class="fs-14"
-                                                    style="padding: 10px 15px 0 25px; color: #353535; font-weight: 700;">
-                                                    ONSITE AGENT DETAILS
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" align="left" valign="top"
-                                                    style="padding: 10px 15px 0 25px; line-height:10px; color: #ffffff; "
-                                                    class="fs-14">
-                                                    NAME: {{$ordersCustomer->customer->title}} {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" align="left" valign="top"
-                                                    style="padding: 10px 15px 0 25px; line-height:10px; color: #ffffff;"
-                                                    class="fs-14">
-                                                    PHONE: {{$ordersCustomer->customer->mobile_number}}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" align="left" valign="top"
-                                                    style="padding: 10px 15px 0 25px; line-height:10px; color: #ffffff;"
-                                                    class="fs-14">
-                                                    EMAIL:
-                                                    <a href="mailto:{{$ordersCustomer->customer->email_address}}">
-                                                        {{$ordersCustomer->customer->email_address}}
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </td>
-                        @php
-                            if (!empty($order->tour->event->image_url)){
-                                $imageUrl = $order->tour->event->image_url;
-
-                            } else{
-                                $imageUrl = 'images/default_image.png';
-                            }
-                        @endphp
-                        <td width="50%" align="right" valign="top">
-                            <table align="left" width="100%" border="0" cellspacing="0">
-                                <tr>
-                                    <td align="left" valign="top">
-                                        <img src="{{ img_to_b64($imageUrl) }}" width="100%"
-                                             alt="Event Image"
-                                             style="display: block; height: 100%; max-height: 350px; object-fit: cover">
-
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+            <td class="lower-header-td text-left">
+                <table class="lower-header-table">
+                    <tbody>
+                        <tr>
+                            <td class="lower-header-detail-title">
+                                PACKAGE:
+                            </td>
+                            <td class="lower-header-detail">
+                                {{ $itinerary->package }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lower-header-detail-title">
+                                TRAVEL DATES:
+                            </td>
+                            <td class="lower-header-detail">
+                                {{ $itinerary->start->format('d F Y') }} - {{ $itinerary->end->format('d F Y') }}
+                            </td>
+                        </tr>
+                        @if(!empty($itinerary->event))
+                            <tr>
+                                <td class="lower-header-detail-title">
+                                    EVENT:
+                                </td>
+                                <td class="lower-header-detail">
+                                    {{ $itinerary->event }}
+                                </td>
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </td>
+            <td class="lower-header-td text-right">
+                <table class="lower-header-table">
+                    <tbody>
+                        <tr>
+                            <td class="lower-header-detail-title">
+                                TOTAL NUMBER OF PERSONS:
+                            </td>
+                            <td class="lower-header-detail">
+                                {{ $itinerary->travellerCount }} Adult(s)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lower-header-detail-title">
+                                LEAD GUEST:
+                            </td>
+                            <td class="lower-header-detail">
+                                {{ $itinerary->booker->full_name }}
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </td>
         </tr>

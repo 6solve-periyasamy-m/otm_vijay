@@ -1,3 +1,7 @@
+.debug {
+  border: 1px solid black;
+}
+
 @page {
   margin: 10px 0;
   padding: 0;
@@ -108,10 +112,15 @@ body {
   padding: 0 40px;
 }
 
+.avoid-break {
+  page-break-inside: avoid !important;
+}
+
 .header {
   width: 100%;
   border: 0;
-  padding: 35px 0 10px 0;
+  padding: 0;
+  margin: 0;
   border-spacing: 0;
   background: white;
 }
@@ -143,6 +152,35 @@ table.cell-padding-0 td, th {
   }
 }
 
+.divider {
+  text-align: left;
+  width: 100%;
+  border-spacing: 0;
+  td, th {
+    padding: 0;
+  }
+  tr {
+    background-color: #353535;
+    padding: 2px 15px;
+  }
+  .text {
+    @extend .fs-16;
+    text-align: left;
+    vertical-align: top;
+    padding: 10px 15px;
+    color: #ffffff;
+    font-weight: 700;
+  }
+}
+
+.text-section {
+  @extend .fs-12;
+  @extend .text-dark;
+  padding: 10px 15px 10px 25px;
+}
+
+// Header
+
 .logos {
   text-align: left;
   vertical-align: top;
@@ -157,6 +195,7 @@ table.cell-padding-0 td, th {
       width: 100%;
       border: 0;
       border-spacing: 0;
+      vertical-align: middle !important;
 
       td {
         text-align: left;
@@ -165,9 +204,9 @@ table.cell-padding-0 td, th {
       }
 
       img {
-        width: 100%;
-        display: block;
-        max-width: 190px
+        display: block !important;
+        max-width: 190px !important;
+        min-width: 190px !important;
       }
     }
     .circle-td {
@@ -204,36 +243,92 @@ table.cell-padding-0 td, th {
   }
 }
 
-.divider {
+.reference {
+  @extend .fs-16;
+  width: 300px;
   text-align: left;
+  vertical-align: top;
+  padding: 10px 15px 10px 25px;
+  color: #ffffff;
+  line-height: 20px;
+  background-color: #353535;
+  border-radius: 0 30px 30px 0;
+}
+
+.header-detail-title {
+  @extend .fs-12;
+  padding: 10px 15px 0 25px;
+  color: #353535;
+  font-weight: 700;
+}
+
+.header-detail-data {
+  @extend .fs-12;
+  text-align: left;
+  vertical-align: top;
+  padding: 10px 15px 0 25px;
+  line-height:10px;
+  color: #ffffff;
+}
+
+.header-image-td {
+  width: 50%;
+  text-align: right;
+  vertical-align: top;
+}
+
+.header-image-table {
+  @extend .cell-padding-0;
   width: 100%;
+  border: 0;
+  border-spacing: 0 !important;
+  text-align: left;
+}
+
+.header-image {
+  width: 100%;
+  display: block;
+  padding: 0;
+  height: 100%;
+  max-height: 350px;
+  object-fit: cover
+}
+
+// Lower Header
+
+.lower-header-td {
+  width: 50%;
+  vertical-align: top;
+  background-color: #F8DED0;
+  padding: 15px 30px;
+}
+
+.lower-header-table {
+  @extend .cell-padding-0;
+  width: 100%;
+  text-align: left;
   border-spacing: 0;
-  td, th {
-    padding: 0;
-  }
-  tr {
-    background-color: #353535;
-    padding: 2px 15px;
-  }
-  .text {
-    @extend .fs-16;
-     text-align: left;
-     vertical-align: top;
-     padding: 10px 15px;
-     color: #ffffff;
-     font-weight: 700;
-   }
 }
 
-.avoid-break {
-  page-break-inside: avoid !important;
-}
-
-.text-section {
+.lower-header-detail-title {
   @extend .fs-12;
   @extend .text-dark;
-  padding: 10px 15px 10px 25px;
+  text-align: left;
+  min-width: 75px;
+  vertical-align: middle;
+  font-weight: 700;
+  line-height: 20px;
 }
+
+.lower-header-detail {
+  @extend .fs-12;
+  @extend .text-dark;
+  text-align: left;
+  vertical-align: middle;
+  line-height: 20px;
+}
+
+// Itinerary Items
 
 .date-header {
   @extend .cell-padding-0;
@@ -254,8 +349,6 @@ table.cell-padding-0 td, th {
     display: block;
   }
 }
-
-// Itinerary Items
 
 .item-table {
   @extend .avoid-break;
