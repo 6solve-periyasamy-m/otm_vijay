@@ -16,6 +16,7 @@ class Itinerary
     /**
      * @param string $package
      * @param string|null $event
+     * @param string|null $description
      * @param string|null $image
      * @param string|null $reference
      * @param Carbon $start
@@ -29,6 +30,7 @@ class Itinerary
      * @param string|null $terms
      * @param string|null $footer
      * @param string|null $paymentDetails
+     * @param string|null $notes
      */
     public function __construct(
         public string $package,

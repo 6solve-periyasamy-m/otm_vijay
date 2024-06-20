@@ -198,17 +198,17 @@
 
     <!-- Components -->
     @php $day = 0; @endphp
-    @foreach($order->repository->getItineraryItems() as $date => $items)
+    @foreach($itinerary->items as $date => $items)
         @php
             $date = \Carbon\Carbon::createFromTimestamp($date);
             $day += isset($previous) ? diff_in_nights($date, $previous) : 1;
             $previous = $date;
         @endphp
 
-        <table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="background-color:#ffffff; padding: 5px 0 10px 0;" class="full-wrap">
+        <table class="date-header">
             <tr>
-                <td colspan="2" align="left">
-                    <div style="background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 300px; padding: 10px 25px; margin: 10px 0; color: #ffffff; display: block;" class="fs-16 text-dark ">
+                <td colspan="2" class="text-left">
+                    <div class="date-content">
                         DAY {{ $day }} - {{ $date->format('l jS F Y') }}
                     </div>
                 </td>
@@ -217,35 +217,35 @@
 
         @php /** @var \App\Repository\Storage\Itinerary\ItineraryItem $item */ @endphp
         @foreach($items as $item)
-            <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="background-color:#ffffff; padding: 5px 0 10px 0; page-break-inside: avoid;" class="full-wrap">
+            <table class="item-table">
                 <tr>
-                    <td align="left" colspan="2" style="padding: 0 40px; color: #E95B15; font-size: 11pt;" class="fs-16 ">
+                    <td class="item-title">
                         {{ strtoupper($item->type) }}
                     </td>
                 </tr>
                 @foreach($item->details as $key => $value)
                     <tr>
-                        <td align="left" width="75" valign="top" style="padding: 0 40px;" class="fs-12 text-dark">
+                        <td class="item-header">
                             {{ strtoupper($key) }}:
                         </td>
-                        <td align="left" valign="top" style="padding: 0 40px; max-width: 100%;" class="fs-12 text-dark">
+                        <td class="item-detail">
                             {!! $value !!}
                         </td>
                     </tr>
                 @endforeach
                 <tr>
-                    <td align="left" width="75" valign="top" style="padding: 0 40px;" class="fs-12 text-dark">
+                    <td class="item-header">
                         QUANTITY:
                     </td>
-                    <td align="left" valign="top" style="padding: 0 40px; max-width: 100%;" class="fs-12 text-dark">
+                    <td class="item-detail">
                         {{ $item->quantity }}
                     </td>
                 </tr>
                 <tr>
-                    <td align="left" width="75" valign="top" style="padding: 0 40px;" class="fs-12 text-dark">
+                    <td class="item-header">
                         DATES:
                     </td>
-                    <td align="left" valign="top" style="padding: 0 40px; max-width: 100%;" class="fs-12 text-dark">
+                    <td class="item-detail">
                         {{ f_datetime($item->start) }} to {{ f_datetime($item->end) }}
                     </td>
                 </tr>

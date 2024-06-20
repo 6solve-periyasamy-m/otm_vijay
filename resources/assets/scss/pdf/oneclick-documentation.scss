@@ -111,7 +111,7 @@ body {
 .header {
   width: 100%;
   border: 0;
-  padding: 35px 0;
+  padding: 35px 0 10px 0;
   border-spacing: 0;
   background: white;
 }
@@ -235,4 +235,59 @@ table.cell-padding-0 td, th {
   @extend .fs-12;
   @extend .text-dark;
   padding: 10px 15px 10px 25px;
+}
+
+.date-header {
+  @extend .cell-padding-0;
+  border: 0;
+  width: 100%;
+  border-spacing: 0;
+  background: #ffffff;
+  padding: 5px 0 10px 0;
+  .date-content {
+    @extend .text-dark;
+    @extend .fs-16;
+    background-color: #E95B15;
+    border-radius: 0 30px 30px 0;
+    max-width: 300px;
+    padding: 10px 25px;
+    margin: 10px 0;
+    color: #ffffff;
+    display: block;
+  }
+}
+
+.item-table {
+  @extend .avoid-break;
+  width: 100%;
+  border: 0;
+  border-spacing: 0;
+  background-color:#ffffff;
+  padding: 5px 0 10px 0;
+}
+
+.item-title {
+  @extend .fs-16;
+  text-align: left;
+  padding: 0 40px;
+  color: #E95B15;
+  font-size: 11pt;
+}
+
+.item-header {
+  @extend .fs-12;
+  @extend .text-dark;
+  @extend .text-left;
+  @extend .v-top;
+  width: 75px;
+  padding: 0 40px;
+}
+
+.item-detail {
+  @extend .fs-12;
+  @extend .text-left;
+  @extend .text-dark;
+  @extend .v-top;
+  padding: 0 40px;
+  max-width: 100%;
 }
