@@ -225,3 +225,7 @@ table.cell-padding-0 td, th {
      font-weight: 700;
    }
 }
+
+.avoid-break {
+  page-break-inside: avoid !important;
+}

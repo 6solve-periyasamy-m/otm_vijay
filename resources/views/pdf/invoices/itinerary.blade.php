@@ -258,7 +258,7 @@
     @endforeach
 
     @if(!empty($order->external_notes))
-        <div style="page-break-inside: avoid">
+        <div class="avoid-break">
             <table class="divider">
                 <thead>
                     <tr>
