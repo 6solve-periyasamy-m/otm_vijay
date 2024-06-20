@@ -232,7 +232,7 @@
                             {{ strtoupper($key) }}:
                         </td>
                         <td align="left" valign="top" style="padding: 0 40px; max-width: 100%;" class="fs-12 text-dark">
-                            {{ $value }}
+                            {!! $value !!}
                         </td>
                     </tr>
                 @endforeach
