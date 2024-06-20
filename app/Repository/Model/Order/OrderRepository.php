@@ -25,7 +25,10 @@ use App\Repository\Interfaces\GeneratesFellohData;
 use App\Repository\Mailing\Mailer\Order\OrderMailer;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
+use App\Repository\Storage\Itinerary\Itinerary;
 use App\Repository\Storage\Itinerary\ItineraryItem;
+use App\Repository\Storage\Itinerary\ItineraryPayment;
+use App\Repository\Storage\Itinerary\ItinerarySchedule;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
@@ -779,5 +782,73 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         }
         ksort($items);
         return $items;
+    }
+
+    private function getTravellerItineraryArray(): array
+    {
+        $travellers = [];
+        foreach ($this->order->orderCustomers as $traveller) {
+            if ($traveller->id === $this->order->lead_booker_id) { continue; }
+            $travellers[] = $traveller->customer->full_name;
+        }
+        return $travellers;
+    }
+
+    public function getPaymentItineraryArray(): array
+    {
+        $payments = [];
+        foreach ($this->order->payments as $payment) {
+            $payments[] = new ItineraryPayment($payment->paid_on, $payment->amount, $payment->payment_type, $payment->customer?->full_name);
+        }
+        return $payments;
+    }
+
+    private function getScheduleItineraryArray(): array
+    {
+        $schedule = [];
+        if ($this->order->booking_fee > 0) {
+            $schedule[] = new ItinerarySchedule(null, $this->order->booking_fee, $this->order->booking_fee <= $this->order->paid);
+        }
+        if ($this->order->calculated_deposit > 0) {
+            $schedule[] = new ItinerarySchedule(null, $this->order->calculated_deposit, $this->order->deposit_paid);
+        }
+        foreach ($this->getInstallments() as $installment) {
+            $schedule[] = new ItinerarySchedule($installment->due_on, $installment->calculated_amount, $installment->paid);
+        }
+        if ($this->order->remaining_installment > 0) {
+            $schedule[] = new ItinerarySchedule($this->order->tour->final_payment, $this->order->remaining_installment, $this->order->remaining <= 0);
+        }
+        return $schedule;
+    }
+
+    private function getGenericItinerary(): Itinerary
+    {
+        return new Itinerary(
+            $this->order->tour->name,
+            $this->order->tour->event?->name,
+            $this->order->tour->event?->image_url,
+            $this->order->booking_reference,
+            $this->order->tour->date_from,
+            $this->order->tour->date_to,
+            $this->order->leadBooker->customer,
+            $this->order->tour->brand,
+            $this->getTravellerItineraryArray(),
+            $this->getItineraryItems(),
+            $this->getScheduleItineraryArray(),
+            $this->getPaymentItineraryArray(),
+            $this->order->tour->terms,
+            $this->order->invoice_footer,
+            setting('company.bank_transfer'),
+        );
+    }
+
+    public function getItinerary(): Itinerary
+    {
+        $itinerary = $this->getGenericItinerary();
+        $itinerary->setSchedule([]);
+        $itinerary->setPayments([]);
+        $itinerary->setPaymentDetails(null);
+
+        return $itinerary;
     }
 }

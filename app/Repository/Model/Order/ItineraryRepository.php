@@ -2,11 +2,8 @@
 
 namespace App\Repository\Model\Order;
 
-use App\Models\Order\Invoice\Invoice;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
-use App\Repository\Storage\Invoice\QuantityBillable;
-use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ItineraryRepository
@@ -24,7 +21,7 @@ class ItineraryRepository
     public function getResponseStream(OrderCustomer $orderCustomer): StreamedResponse
     {
         return match ((int)setting('itinerary.style', 1)) {
-            2 => dompdf(view('pdf.invoices.itinerary', ['order' => $this->order,])),
+            2 => dompdf(view('pdf.invoices.itinerary', ['order' => $this->order, 'itinerary' => $this->order->repository->getItinerary(),])),
             default => dompdf(view('pdf.itinerary', ['order' => $this->order, 'orderCustomer' => $orderCustomer,])),
         };
     }

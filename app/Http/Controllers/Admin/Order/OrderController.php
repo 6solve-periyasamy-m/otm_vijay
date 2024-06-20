@@ -120,7 +120,7 @@ class OrderController extends Controller
 
     public function itineraryInvoice(Order $order)
     {
-        return $order->repository->getItinerary();
+        return (new ItineraryRepository($order))->getResponseStream($order->leadBooker);
     }
 
     public function reservationPreview(Order $order,Invoice $invoice)
