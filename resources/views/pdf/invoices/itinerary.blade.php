@@ -165,7 +165,6 @@
                             } else{
                                 $imageUrl = 'images/default_image.png';
                             }
-
                         @endphp
                         <td width="50%" align="right" valign="top">
                             <table align="left" width="100%" border="0" cellspacing="0">
