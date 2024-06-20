@@ -255,43 +255,128 @@ table.cell-padding-0 td, th {
   border-radius: 0 30px 30px 0;
 }
 
-.header-detail-title {
-  @extend .fs-12;
-  padding: 10px 15px 0 25px;
-  color: #353535;
-  font-weight: 700;
+.new {
+  &.header-table {
+    text-align: left;
+    border: 0;
+    margin: 0;
+    border-spacing: 0;
+    width: 100%
+  }
+
+  &.header-detail-table {
+    text-align: left;
+    border: 0;
+    margin: 0;
+    border-spacing: 0;
+  }
+
+  &.header-details {
+    width: 50%;
+    text-align: left;
+    vertical-align: top;
+    background-color: #E95B15;
+  }
+
+  &.header-detail-title {
+    @extend .fs-12;
+    padding: 10px 15px 0 25px;
+    color: #353535;
+    font-weight: 700;
+  }
+
+  &.header-detail-data {
+    @extend .fs-12;
+    text-align: left;
+    vertical-align: top;
+    padding: 10px 15px 0 25px;
+    line-height:10px;
+    color: #ffffff;
+  }
+
+  &.header-image-td {
+    width: 50%;
+    text-align: right;
+    vertical-align: top;
+  }
+
+  &.header-image-table {
+    @extend .cell-padding-0;
+    width: 100%;
+    border: 0;
+    border-spacing: 0 !important;
+    text-align: left;
+  }
+
+  &.header-image {
+    width: 100%;
+    display: block;
+    padding: 0;
+    height: 100%;
+    max-height: 350px;
+    object-fit: cover
+  }
 }
 
-.header-detail-data {
-  @extend .fs-12;
-  text-align: left;
-  vertical-align: top;
-  padding: 10px 15px 0 25px;
-  line-height:10px;
-  color: #ffffff;
-}
-
-.header-image-td {
-  width: 50%;
-  text-align: right;
-  vertical-align: top;
-}
-
-.header-image-table {
-  @extend .cell-padding-0;
-  width: 100%;
-  border: 0;
-  border-spacing: 0 !important;
-  text-align: left;
-}
-
-.header-image {
-  width: 100%;
-  display: block;
-  padding: 0;
-  height: 100%;
-  max-height: 350px;
-  object-fit: cover
+.old {
+  &.header-table {
+    text-align: left;
+    border: 0;
+    border-spacing: 0;
+    width: 100%;
+  }
+  &.header-details {
+    width: 50%;
+    text-align: left;
+    vertical-align: top;
+    background-color: #E95B15;
+    .header-details-table {
+      @extend .cell-padding-0;
+      text-align: left;
+      border: 0;
+      border-spacing: 0;
+      .header-details-title {
+        @extend .fs-16;
+        text-align: left;
+        vertical-align: top;
+        padding: 10px 15px 2px 25px;
+        color: #ffffff;
+        line-height: 20px;
+      }
+      .header-details-heading {
+        @extend .fs-14;
+        text-align: left;
+        vertical-align: top;
+        padding: 10px 15px 0 25px;
+        color: #ffffff;
+        line-height: 10px;
+      }
+      .header-details-alt {
+        @extend .fs-14;
+        padding: 10px 15px 0 25px;
+        color: #353535;
+        font-weight: 700;
+      }
+    }
+  }
+  &.image-td {
+    width: 50%;
+    text-align: right;
+    vertical-align: top;
+  }
+  &.image-table {
+    text-align: left;
+    width: 100%;
+    border: 0;
+    border-spacing: 0;
+  }
+  &.image {
+    display: block;
+    height: 100%;
+    max-height: 350px;
+    object-fit: cover;
+    width: 100%;
+  }
 }
 
 // Lower Header
