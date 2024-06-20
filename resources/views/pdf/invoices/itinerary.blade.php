@@ -202,13 +202,17 @@
     <!-- Components -->
     @php $day = 0; @endphp
     @foreach($order->repository->getItineraryItems() as $date => $items)
-        @php $day++; @endphp
+        @php
+            $date = \Carbon\Carbon::createFromTimestamp($date);
+            $day += isset($previous) ? diff_in_nights($date, $previous) : 1;
+            $previous = $date;
+        @endphp
 
         <table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="background-color:#ffffff; padding: 5px 0 10px 0;" class="full-wrap">
             <tr>
                 <td colspan="2" align="left">
                     <div style="background-color: #E95B15; border-radius: 0 30px 30px 0; max-width: 300px; padding: 10px 25px; margin: 10px 0; color: #ffffff; display: block;" class="fs-16 text-dark ">
-                        DAY {{ $day }} - {{ \Carbon\Carbon::createFromTimestamp($date)->format('l jS F Y') }}
+                        DAY {{ $day }} - {{ $date->format('l jS F Y') }}
                     </div>
                 </td>
             </tr>
