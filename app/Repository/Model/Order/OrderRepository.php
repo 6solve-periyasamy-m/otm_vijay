@@ -31,7 +31,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class OrderRepository extends ModelRepository implements GeneratesFellohData
 {
@@ -122,9 +121,8 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         )->whereHas('tour', function ($query) use ($historic) {
             if (!$historic && setting('system.historic', 6) >= 0) {
                 return $query->whereDate('date_to', '>', now()->subMonths(setting('system.historic', 6)));
-            } else {
-                return $query;
             }
+            return $query;
         })->get();
         $data = [];
         foreach ($orders as $order) {
@@ -168,19 +166,19 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
      */
     public static function create(Tour $tour, array $data, ConvertedCustomer $lead, array $customers = [], bool $shouldInvoice = true): Order
     {
-        $order = Order::make(['consultant_id' => get_current_admin()?->id, 'tax_bracket_id' => $tour?->tax_bracket_id, ...$data]);
+        $order = Order::make(['consultant_id' => get_current_admin()?->id, 'tax_bracket_id' => $tour->tax_bracket_id, ...$data]);
         $order->commission = $lead->customer->organization?->commission;
         $tour->orders()->saveQuietly($order);
         $leadBooker = $order->repository->addCustomer($lead, false, false, true);
         $order->updateQuietly(['lead_booker_id' => $leadBooker->id,]);
         $order->saveQuietly();
-        $order->updateQuietly(['booking_reference' => Order::generateBookingReference($order)]); // To Future Me: Must be done seperately because Lead Booker ID is *required*
+        $order->updateQuietly(['booking_reference' => Order::generateBookingReference($order)]); // To Future Me: Must be done separately because Lead Booker ID is *required*
         $order->saveQuietly();
         $included = $tour->repository->getComponentSetForSaving();
         $defaultRooms = RoomingRepository::getDefaultRoomList($tour);
         if ($lead->travelling) {
             $leadBooker->repository->bulkSaveStandard($included->clone());
-            OrderAccommodation::withoutEvents(function () use ($leadBooker, $defaultRooms) {
+            OrderAccommodation::withoutEvents(static function () use ($leadBooker, $defaultRooms) {
                 RoomingRepository::createGroupFromRoomList($leadBooker, $defaultRooms);
             });
         }
@@ -189,7 +187,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $orderCustomer = $order->repository->addCustomer($customer, false, false, true);
             if ($customer->travelling) {
                 $orderCustomer->repository->bulkSaveStandard($included->clone());
-                OrderAccommodation::withoutEvents(function () use ($orderCustomer, $defaultRooms)  {
+                OrderAccommodation::withoutEvents(static function () use ($orderCustomer, $defaultRooms)  {
                     RoomingRepository::createGroupFromRoomList($orderCustomer, $defaultRooms);
                 });
             }
@@ -247,7 +245,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public function getInstallments(bool $final = false): Collection|array
     {
         $customers = $this->order->orderCustomers()->count();
-        $paid = $this->order->paid - (($this->order->deposit ?? 0) * $customers) - ($this->order->booking_fee ?? 0);
+        $paid = $this->order->paid - (($this->order->deposit ?? 0.0) * $customers) - ($this->order->booking_fee ?? 0.0);
         DB::statement("SET @total:={$paid};");
         $installments = OrderInstallment::where('order_id', '=', $this->order->id)
             ->orderBy('due_on')
@@ -261,7 +259,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
     public function generateRemainingOrderInstallment(): ?OrderInstallment
     {
-        if ($this->order->orderCustomers()->count() < 1) return null;
+        if ($this->order->orderCustomers()->count() < 1) { return null; }
         return new OrderInstallment([
             'id' => 0,
             'order_id' => $this->order->id,
@@ -278,6 +276,12 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
      */
     public function getInvoiceRepository(int $number = 0): InvoiceRepository
     {
+        if ($number > 0) {
+            $invoice = $this->order->invoices()->where('invoice_number', '=', $number)->first();
+            if ($invoice !== null) {
+                return $invoice->repository;
+            }
+        }
         return (new InvoiceGenerator($this->order))->generate()->repository;
     }
 
@@ -292,23 +296,6 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public function getAtolRepository(): AtolRepository
     {
         return $this->atolRepository;
-    }
-    
-    public function savePayment(Payment $payment): Payment
-    {
-        $this->order->payments()->save($payment);
-        $this->refresh();
-        return $payment;
-    }
-
-    public function addInstallment(Carbon $due, float $amount): OrderInstallment
-    {
-        $installment = OrderInstallment::create([
-            'due_on' => $due,
-            'amount' => $amount,
-        ]);
-        $this->refresh();
-        return $installment;
     }
 
     public function addAdjustment(float $amount, string $reason, Carbon|null $when = null): Model|bool
@@ -330,10 +317,10 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         if (isset($this->cost) && !$recache) {
             return $this->cost;
         }
-        $total = $this->order->booking_fee ?? 0;
+        $total = $this->order->booking_fee ?? 0.0;
         foreach ($this->order->orderCustomers()->where('is_charged', '=', 1)->get() as $orderCustomer) {
             $total += $orderCustomer->tour_cost;
-            if ($orderCustomer->has_surcharge) $total += $orderCustomer->single_occupancy_surcharge;
+            if ($orderCustomer->has_surcharge) { $total += $orderCustomer->single_occupancy_surcharge; }
         }
         $total += $this->getAdditionalComponentTotal();
         $this->cost = $total;
@@ -342,12 +329,12 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
     public function getDepositPayment(): Payment|null
     {
-        return $this->getPaymentCoveringAmount($this->order->calculated_deposit + ($this->order->booking_fee ?? 0));
+        return $this->getPaymentCoveringAmount($this->order->calculated_deposit + ($this->order->booking_fee ?? 0.0));
     }
 
     public function getBookingFeePayment(): Payment|null
     {
-        return $this->getPaymentCoveringAmount($this->order->booking_fee ?? 0);
+        return $this->getPaymentCoveringAmount($this->order->booking_fee ?? 0.0);
     }
 
     public function getRemainingPayment(): Payment|null
@@ -359,9 +346,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     {
         $paidTotal = $this->order->payments()->where('amount', '<', 0)->sum('amount');
         foreach ($this->order->payments as $payment) {
-            if ($payment->amount < 0) continue;
+            if ($payment->amount < 0) { continue; }
             $paidTotal += $payment->amount;
-            if ($amount <= $paidTotal) return $payment;
+            if ($amount <= $paidTotal) { return $payment; }
         }
         return null;
     }
@@ -420,7 +407,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
      */
     public function isLeadBooker(Customer $customer): bool
     {
-        return $this->order->leadBooker->customer_id == $customer->id;
+        return $this->order->leadBooker->customer_id === $customer->id;
     }
 
     /**
@@ -448,27 +435,25 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $cost = $this->cost ?? $this->order->cost;
             $adjustments = $this->order->total_adjustments;
             $total = $cost + $adjustments;
-            if ($this->order->trashed() || $this->order->cancelled) {
-                if ($paidAmount <= ($this->order->booking_fee ?? 0)) {
+            if ($this->order->cancelled || $this->order->trashed()) {
+                if ($paidAmount <= ($this->order->booking_fee ?? 0.0)) {
                     $status = $paidAmount < 0 ? OrderStatus::CANCELLED_OVER_REFUNDED : OrderStatus::CANCELLED_FULL_REFUND;
                 }  else if ($paidAmount <= $this->order->calculated_deposit) {
                     $status = OrderStatus::CANCELLED_DEPOSIT_HELD;
                 } else {
                     $status = OrderStatus::CANCELLED_REFUND_REQUIRED;
                 }
-            } else {
-                if ($total > $paidAmount) {
-                    $next = $this->order->next_installment;
-                    if (isset($next) && Carbon::now()->isAfter($next->due_on)) {
-                        $status = OrderStatus::PAYMENT_OVERDUE;
-                    } else {
-                        $status = OrderStatus::BALANCE_OUTSTANDING;
-                    }
-                } elseif ($total < $paidAmount) {
-                    $status = OrderStatus::OVERPAID;
+            } else if ($total > $paidAmount) {
+                $next = $this->order->next_installment;
+                if (isset($next) && Carbon::now()->isAfter($next->due_on)) {
+                    $status = OrderStatus::PAYMENT_OVERDUE;
                 } else {
-                    $status = OrderStatus::PAID_IN_FULL;
+                    $status = OrderStatus::BALANCE_OUTSTANDING;
                 }
+            } else if ($total < $paidAmount) {
+                $status = OrderStatus::OVERPAID;
+            } else {
+                $status = OrderStatus::PAID_IN_FULL;
             }
         }
         return $status;
@@ -484,7 +469,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         if ($includeFinal && $installment === null) {
             $installment = $this->generateRemainingOrderInstallment();
         }
-        if ($installment === null) return null;
+        if ($installment === null) { return null; }
         return $installment->remaining > 0 ? $installment : null;
     }
 
@@ -509,7 +494,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
     public function sendReminderEmails(int $days, int $minDays = -1000): void
     {
-        if (!$this->shouldRemind($days, $minDays)) return;
+        if (!$this->shouldRemind($days, $minDays)) { return; }
         $installment = $this->order->next_installment;
         if ($installment->id > 0) {
             $this->processInstallmentForReminder($this->order->next_installment, $days, $minDays);
@@ -519,6 +504,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public function sendFinalPaymentEmails(int $days, int $minDays = -1000): void
     {
         $installment = $this->generateRemainingOrderInstallment();
+        if ($installment === null) { return; }
         if ($this->shouldRemindForFinal($days, $minDays, $installment)) {
             $this->processInstallmentForReminder($installment, $days, $minDays);
         }
@@ -526,7 +512,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
     public function processInstallmentForReminder(OrderInstallment $installment, int $days, int $minDays = -1000): void
     {
-        if ($this->hasBeenReminded($installment, $days)) return;
+        if ($this->hasBeenReminded($installment, $days)) { return; }
         PaymentReminder::create([
             'order_id' => $this->order->id,
             'order_installment_id' => $installment->id,
@@ -551,6 +537,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public function shouldRemindForFinal(int $days, int $minDays = -1000, OrderInstallment $installment = null): bool
     {
         $installment = $installment ?? $this->generateRemainingOrderInstallment();
+        if ($installment === null) { return false; }
         $daysUntil = days_until($installment->due_on);
         return $installment->remaining > 0 && (isset($daysUntil) && ($daysUntil <= $days && $daysUntil >= $minDays));
     }
@@ -671,8 +658,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             } elseif ($this->order->commission_amount > 0) {
                 $string .= "commission";
             }
+            return $string;
         }
-        return $string ?? null;
+        return null;
     }
 
     public function forceDelete(): void
@@ -791,11 +779,5 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         }
         ksort($items);
         return $items;
-    }
-
-    public function getItinerary(OrderCustomer|null $orderCustomer = null): StreamedResponse
-    {
-        $orderCustomer = $orderCustomer ?? $this->order->leadBooker;
-        return (new ItineraryRepository($this->order))->getResponseStream($orderCustomer);
     }
 }
