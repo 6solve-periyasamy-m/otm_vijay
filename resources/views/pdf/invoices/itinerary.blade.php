@@ -1,3 +1,5 @@
+@php /** @var \App\Repository\Storage\Itinerary\Itinerary $itinerary */ @endphp
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -6,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet" />
 
     <style type="text/css"><?php include(public_path() . '/css/kpt.css') ?></style>
-    <title>{{ $order->tour->name }} Itinerary | {{ $order->booking_reference }}</title>
+    <title>{{ $itinerary->package }} Itinerary | {{ $itinerary->reference }}</title>
 </head>
 
 <body class="body">
@@ -14,20 +16,19 @@
     <table class="header full-wrap">
         <!-- Logos -->
         <tr>
-            <td align="left" valign="top" style="padding-bottom: 10px;">
-                <table width="100%" border="0" cellspacing="0">
+            <td class="logos">
+                <table class="logo-table">
                     <tr>
-                        <td align="left" valign="top">
-                            <table align="left" width="100%" border="0" cellspacing="0">
+                        <td class="text-left v-top">
+                            <table class="brand-logo-table">
                                 <tr>
-                                    <td align="left" valign="top" style="padding: 0 20px;">
-                                        <img src="{{img_to_b64($order->tour->brand->logo)}}" alt="{{ $order->tour->brand->name }}"
-                                             width="100%" style="display: block; max-width: 190px">
+                                    <td>
+                                        <img src="{{img_to_b64($itinerary->brand->logo)}}" alt="{{ $itinerary->brand->name }}">
                                     </td>
                                 </tr>
                             </table>
                         </td>
-                        <td width="310" align="center" valign="top">
+                        <td class="circle-td">
                             <table class="cell-padding-0 document-logo-table">
                                 <tr>
                                     <td class="document-logo">
@@ -55,7 +56,7 @@
                                         <td colspan="2" align="left" valign="top"
                                             style="padding: 10px 15px 2px 25px; color: #ffffff; line-height: 20px;"
                                             class="fs-16">
-                                            {{ strtoupper($order->tour->name) }}
+                                            {{ strtoupper($itinerary->package) }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -118,7 +119,7 @@
                                         </td>
                                         <td class="fs-14"
                                             style="padding: 10px 15px 0 25px; color: #ffffff; line-height:10px;">
-                                            {{$order->booking_reference}}
+                                            {{$itinerary->reference}}
                                         </td>
                                     </tr>
                                     @foreach($order->orderCustomers as $ordersCustomer)
