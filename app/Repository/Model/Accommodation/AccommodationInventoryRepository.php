@@ -11,6 +11,7 @@ use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Interfaces\Manifest\HasRoomingList;
 use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
+use App\Repository\Storage\Order\ItineraryItem;
 use App\Repository\Traits\Component\IsAccommodation;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -213,5 +214,19 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
     public function getPurchasePriceString(): string
     {
         return f_currency($this->getPurchasePrice(), $this->inventory->component->currency);
+    }
+    public function getItineraryItem(): ItineraryItem
+    {
+        return new ItineraryItem(
+            'Accommodation',
+            null,
+            $this->inventory->check_in,
+            $this->inventory->check_out,
+            [
+                'Hotel' => $this->inventory->component->name,
+                'No Of Nights' => diff_in_nights($this->inventory->check_in, $this->inventory->check_out),
+                'Address' => $this->inventory->component->address,
+            ]
+        );
     }
 }

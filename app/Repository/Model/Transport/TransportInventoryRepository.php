@@ -12,6 +12,7 @@ use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Interfaces\Manifest\HasTransportManifest;
 use App\Repository\Model\Quote\Component\QuoteTransportRepository;
 use App\Repository\Reporting\Manifest\TransportManifestRepository;
+use App\Repository\Storage\Order\ItineraryItem;
 use App\Repository\Traits\Component\IsTransport;
 use Carbon\Carbon;
 use DB;
@@ -168,5 +169,20 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
     public function getPurchasePriceString(): string
     {
         return f_currency($this->getPurchasePrice(), $this->inventory->component->currency);
+    }
+
+    public function getItineraryItem(): ItineraryItem
+    {
+        return new ItineraryItem(
+            'Journey',
+            null,
+            $this->inventory->departs_at,
+            $this->inventory->arrives_at,
+            [
+                'Details' => $this->inventory->component->name,
+                'Transport' => $this->inventory->component->transportType->name,
+                'Travel Class' => $this->inventory->travelClass->name,
+            ]
+        );
     }
 }

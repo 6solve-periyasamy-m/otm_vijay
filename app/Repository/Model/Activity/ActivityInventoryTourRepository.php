@@ -23,6 +23,7 @@ use App\Repository\Model\Order\Component\OrderActivityRepository;
 use App\Repository\Model\Quote\Component\QuoteActivityRepository;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use App\Repository\Storage\ComponentInformation;
+use App\Repository\Storage\Order\ItineraryItem;
 use App\Repository\Traits\Component\IsActivity;
 use Icon;
 use Illuminate\Support\Collection;
@@ -305,5 +306,10 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
     public static function find($id): ActivityInventoryTour|null
     {
         return ActivityInventoryTour::find($id);
+    }
+
+    public function getItineraryItem(): ItineraryItem
+    {
+        return $this->getInventory()?->getItineraryItem();
     }
 }

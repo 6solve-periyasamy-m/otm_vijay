@@ -22,6 +22,7 @@ use App\Repository\Model\Order\Component\OrderFlightRepository;
 use App\Repository\Model\Quote\Component\QuoteFlightRepository;
 use App\Repository\Reporting\Manifest\FlightManifestRepository;
 use App\Repository\Storage\ComponentInformation;
+use App\Repository\Storage\Order\ItineraryItem;
 use App\Repository\Traits\Component\IsFlight;
 use Icon;
 use Illuminate\Support\Collection;
@@ -289,5 +290,14 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
     public static function find($id): FlightInventoryTour|null
     {
         return FlightInventoryTour::find($id);
+    }
+
+    public function getItineraryItem(): ItineraryItem
+    {
+        $item = $this->getInventory()?->getItineraryItem();
+        if ($this->tourComponent->flight_type === 'Outbound') { $item->type = 'Outbound Flight'; }
+        elseif ($this->tourComponent->flight_type === 'Inbound') { $item->type = 'Inbound Flight'; }
+        else { $item->type = 'Mid-Package Flight'; }
+        return $item;
     }
 }

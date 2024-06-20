@@ -9,6 +9,7 @@ use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Activity\ActivityInventoryRepository;
+use App\Repository\Storage\Order\ItineraryItem;
 use App\Repository\Traits\Component\IsActivity;
 
 class QuoteActivityRepository extends QuoteComponentRepository
@@ -140,5 +141,12 @@ class QuoteActivityRepository extends QuoteComponentRepository
     public static function find($id): QuoteActivity|null
     {
         return QuoteActivity::find($id);
+    }
+
+    public function getItineraryItem(int $travelling = 1): ItineraryItem
+    {
+        $item = $this->quoteComponent->inventory->repository->getItineraryItem();
+        $item->quantity = $this->quoteComponent->quantity ?? $travelling;
+        return $item;
     }
 }

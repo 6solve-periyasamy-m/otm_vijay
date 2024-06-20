@@ -104,20 +104,8 @@ class OrderActivityRepository extends OrderComponentRepository
 
     public function getItineraryItem(Order $order = null): ItineraryItem
     {
-        $inventory = $this->orderComponent->tourComponent->inventory;
-        $component = $inventory->component;
-
-        return new ItineraryItem(
-            $component->activity_category === ActivityCategory::MAIN ? 'Headliner' : 'Event',
-            $this->getQuantity($order),
-            $inventory->starts_at,
-            $inventory->ends_at,
-            [
-                'Event' => $component->name,
-                'Venue' => $component->address,
-                'Ticket' => $inventory->ticketType->name,
-                'Description' => $component->description,
-            ]
-        );
+        $item = $this->orderComponent->tourComponent->repository->getItineraryItem();
+        $item->quantity = $this->getQuantity($order);
+        return $item;
     }
 }

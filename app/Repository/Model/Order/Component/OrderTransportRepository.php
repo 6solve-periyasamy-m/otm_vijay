@@ -104,20 +104,8 @@ class OrderTransportRepository extends OrderComponentRepository
 
     public function getItineraryItem(Order $order = null): ItineraryItem
     {
-        $tourComponent = $this->orderComponent->tourComponent;
-        $inventory = $tourComponent->inventory;
-        $component = $inventory->component;
-
-        return new ItineraryItem(
-            'Journey',
-            $this->getQuantity($order),
-            $inventory->departs_at,
-            $inventory->arrives_at,
-            [
-                'Details' => $component->name,
-                'Transport' => $component->transportType->name,
-                'Travel Class' => $inventory->travelClass->name,
-            ]
-        );
+        $item = $this->orderComponent->tourComponent->repository->getItineraryItem();
+        $item->quantity = $this->getQuantity($order);
+        return $item;
     }
 }
