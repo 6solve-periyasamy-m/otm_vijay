@@ -6,8 +6,8 @@
 
 table {
   border-collapse: collapse;
-  mso-table-lspace: 0px;
-  mso-table-rspace: 0px;
+  mso-table-lspace: 0;
+  mso-table-rspace: 0;
 }
 
 td, a, span {
@@ -123,16 +123,14 @@ table.cell-padding-0 td, th {
 .paymentTable {
   border: 2px solid #353535;
   border-collapse: collapse;
-}
-
-.paymentTable th {
-  border: 2px solid #353535;
-  border-collapse: collapse;
-}
-
-.paymentTable td {
-  border: 2px solid #353535;
-  border-collapse: collapse;
+  th {
+    border: 2px solid #353535;
+    border-collapse: collapse;
+  }
+  td {
+     border: 2px solid #353535;
+     border-collapse: collapse;
+   }
 }
 
 .quote-footer-table {
@@ -256,6 +254,8 @@ table.cell-padding-0 td, th {
     display: block;
   }
 }
+
+// Itinerary Items
 
 .item-table {
   @extend .avoid-break;
