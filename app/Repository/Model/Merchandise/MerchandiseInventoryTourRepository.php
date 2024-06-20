@@ -18,7 +18,7 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteMerchandiseRepository;
 use App\Repository\Storage\ComponentInformation;
-use App\Repository\Storage\Order\ItineraryItem;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsMerchandise;
 
 class MerchandiseInventoryTourRepository extends InventoryTourRepository

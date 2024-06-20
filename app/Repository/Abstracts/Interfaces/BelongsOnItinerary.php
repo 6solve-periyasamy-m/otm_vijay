@@ -2,7 +2,7 @@
 
 namespace App\Repository\Abstracts\Interfaces;
 
-use App\Repository\Storage\Order\ItineraryItem;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 
 interface BelongsOnItinerary
 {

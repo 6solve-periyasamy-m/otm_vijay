@@ -9,7 +9,7 @@ use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Transport\TransportInventoryRepository;
-use App\Repository\Storage\Order\ItineraryItem;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsTransport;
 
 class QuoteTransportRepository extends QuoteComponentRepository

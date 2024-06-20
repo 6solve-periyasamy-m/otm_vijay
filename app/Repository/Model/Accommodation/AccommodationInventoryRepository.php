@@ -11,7 +11,7 @@ use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Interfaces\Manifest\HasRoomingList;
 use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
-use App\Repository\Storage\Order\ItineraryItem;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsAccommodation;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;

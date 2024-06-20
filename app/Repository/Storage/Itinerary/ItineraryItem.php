@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository\Storage\Order;
+namespace App\Repository\Storage\Itinerary;
 
 use Carbon\Carbon;
 

@@ -12,7 +12,7 @@ use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Interfaces\Manifest\HasTransportManifest;
 use App\Repository\Model\Quote\Component\QuoteTransportRepository;
 use App\Repository\Reporting\Manifest\TransportManifestRepository;
-use App\Repository\Storage\Order\ItineraryItem;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsTransport;
 use Carbon\Carbon;
 use DB;

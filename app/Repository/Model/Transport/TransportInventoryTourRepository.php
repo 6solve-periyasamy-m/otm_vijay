@@ -20,7 +20,7 @@ use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Order\Component\OrderTransportRepository;
 use App\Repository\Model\Quote\Component\QuoteTransportRepository;
 use App\Repository\Storage\ComponentInformation;
-use App\Repository\Storage\Order\ItineraryItem;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsTransport;
 use Icon;
 use Illuminate\Support\Collection;

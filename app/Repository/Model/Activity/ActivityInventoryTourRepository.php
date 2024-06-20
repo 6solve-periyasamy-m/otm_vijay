@@ -23,7 +23,7 @@ use App\Repository\Model\Order\Component\OrderActivityRepository;
 use App\Repository\Model\Quote\Component\QuoteActivityRepository;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use App\Repository\Storage\ComponentInformation;
-use App\Repository\Storage\Order\ItineraryItem;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsActivity;
 use Icon;
 use Illuminate\Support\Collection;

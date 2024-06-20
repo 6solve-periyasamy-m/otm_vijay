@@ -13,7 +13,7 @@ use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Interfaces\Manifest\HasActivityManifest;
 use App\Repository\Model\Quote\Component\QuoteActivityRepository;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
-use App\Repository\Storage\Order\ItineraryItem;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsActivity;
 use Carbon\Carbon;
 use DB;

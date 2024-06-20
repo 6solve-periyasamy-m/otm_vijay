@@ -214,7 +214,7 @@
             </tr>
         </table>
 
-        @php /** @var \App\Repository\Storage\Order\ItineraryItem $item */ @endphp
+        @php /** @var \App\Repository\Storage\Itinerary\ItineraryItem $item */ @endphp
         @foreach($items as $item)
             <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="background-color:#ffffff; padding: 5px 0 10px 0; page-break-inside: avoid;" class="full-wrap">
                 <tr>

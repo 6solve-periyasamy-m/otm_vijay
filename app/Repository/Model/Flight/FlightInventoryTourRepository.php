@@ -22,7 +22,7 @@ use App\Repository\Model\Order\Component\OrderFlightRepository;
 use App\Repository\Model\Quote\Component\QuoteFlightRepository;
 use App\Repository\Reporting\Manifest\FlightManifestRepository;
 use App\Repository\Storage\ComponentInformation;
-use App\Repository\Storage\Order\ItineraryItem;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsFlight;
 use Icon;
 use Illuminate\Support\Collection;

@@ -7,7 +7,7 @@ use App\Models\Order\Invoice\InvoiceBillable;
 use App\Models\Order\Order;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
-use App\Repository\Storage\Order\ItineraryItem;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsMerchandise;
 use Illuminate\Database\Eloquent\Model;
 
