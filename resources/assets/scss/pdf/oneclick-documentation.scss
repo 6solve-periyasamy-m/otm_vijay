@@ -205,3 +205,23 @@ table.cell-padding-0 td, th {
     }
   }
 }
+
+.divider {
+  text-align: left;
+  width: 100%;
+  border-spacing: 0;
+  td, th {
+    padding: 0;
+  }
+  tr {
+    background-color: #353535;
+    padding: 2px 15px;
+  }
+  .text {
+     text-align: left;
+     vertical-align: top;
+     padding: 10px 15px;
+     color: #ffffff;
+     font-weight: 700;
+   }
+}

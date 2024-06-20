@@ -43,7 +43,7 @@
         </tr>
         <!-- Order Information -->
         <tr>
-            <td align="left" valign="top">
+            <td class="text-left v-top">
                 <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
                     <tr>
                         <td width="50%" align="left" valign="top" style="background-color: #E95B15;">
@@ -183,20 +183,17 @@
                 </table>
             </td>
         </tr>
-        <!-- Itinerary Header -->
-        <tr>
-            <td align="right" colspan="2" valign="top">
-                <table align="left" width="100%" cellspacing="0" cellpadding="0">
-                    <thead>
-                        <tr style=" background-color: #353535;">
-                            <th align="left" valign="top" style="padding: 10px 25px; color: #ffffff; font-weight: 700;"
-                                class="fs-16 ">TRIP ITINERARY AND INCLUSIONS
-                            </th>
-                        </tr>
-                    </thead>
-                </table>
-            </td>
-        </tr>
+    </table>
+
+    <!-- Itinerary Header -->
+    <table class="divider">
+        <thead>
+            <tr>
+                <th class="text fs-16">
+                    TRIP ITINERARY AND INCLUSION
+                </th>
+            </tr>
+        </thead>
     </table>
 
     <!-- Components -->
@@ -262,10 +259,10 @@
 
     @if(!empty($order->external_notes))
         <div style="page-break-inside: avoid">
-            <table align="left" width="100%" cellspacing="0" cellpadding="0">
+            <table class="divider">
                 <thead>
-                    <tr style=" background-color: #353535; padding: 2px 15px;">
-                        <th align="left" valign="top" style="padding: 10px 15px; color: #ffffff; font-weight: 700;" class="fs-16 ">
+                    <tr>
+                        <th class="text fs-16">
                             NOTES
                         </th>
                     </tr>
@@ -278,10 +275,10 @@
     @endif
 
     <div style="page-break-inside: avoid">
-        <table align="left" width="100%" cellspacing="0" cellpadding="0">
+        <table class="divider">
             <thead>
-                <tr style=" background-color: #353535; padding: 2px 15px;">
-                    <th align="left" valign="top" style="padding: 10px 15px; color: #ffffff; font-weight: 700;" class="fs-16 ">
+                <tr>
+                    <th class="text fs-16">
                         EVENT INFORMATION
                     </th>
                 </tr>
@@ -292,10 +289,10 @@
         </div>
     </div>
     <div style="page-break-inside: avoid">
-        <table align="left" width="100%" cellspacing="0" cellpadding="0">
+        <table class="divider">
             <thead>
-                <tr style=" background-color: #353535; padding: 2px 15px;">
-                    <th align="left" valign="top" style="padding: 10px 15px; color: #ffffff; font-weight: 700;" class="fs-16 ">
+                <tr>
+                    <th class="text fs-16">
                         FINAL DETAILS
                     </th>
                 </tr>
