@@ -1,1 +1,1 @@
-name,contact_email,contact_number,internal_notes,external_notes
+name,contact_email,contact_number,commission,delivery_line_1,delivery_line_2,delivery_town,delivery_region,delivery_country,delivery_postcode,billing_line_1,billing_line_2,billing_town,billing_region,billing_country,billing_postcode,internal_notes,external_notes

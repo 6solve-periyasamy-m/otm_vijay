@@ -201,3 +201,8 @@ body * {
 .clickable:hover {
   filter: brightness(80%);
 }
+
+// Fix the length of CKEditor so it doesn't infinitely expand
+.ck-editor__editable {
+  max-height: 400px;
+}
