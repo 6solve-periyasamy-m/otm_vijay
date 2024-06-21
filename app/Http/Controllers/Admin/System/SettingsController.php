@@ -94,6 +94,7 @@ class SettingsController extends Controller
             'invoice.style' => $request->input('invoice_format'),
             'quote.style' => $request->input('quote_format'),
             'itinerary.style' => $request->input('itinerary_format'),
+            'customization.documentation.colors' => $request->input('document_css'),
         ]);
         if ($request->has('company_logo')  && !empty($request->file('company_logo'))) {
             Settings::set('company.logo', $this->saveImage($request->file('company_logo')));

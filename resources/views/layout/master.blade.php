@@ -13,7 +13,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.6.0/dt-1.11.2/fh-3.1.9/r-2.2.9/sl-1.3.3/datatables.min.css"/>
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <!-- Styles -->
-        @if(!isset($tailwind) || $tailwind === true)
+        @if( !isset($tailwind) || $tailwind === true)
         <link href="{{ asset('css/tailwind.css') }}" rel="stylesheet">
         @endif
         <link href="{{ asset('/css/mdb.css') }}" rel="stylesheet">
@@ -22,6 +22,24 @@
         @livewireStyles
         <script src="{{ asset('/js/app.js') }}"></script>
         <script src="{{ asset('js/ckeditor/ckeditor.js') }}"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css" rel="stylesheet">
+        {{-- Addons (fold): --}}
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/fold/foldgutter.min.css" rel="stylesheet" />
+        <style>
+            .CodeMirror {
+                border: 1px solid #ced4da;
+                border-radius: 4px;
+                resize: vertical;
+            }
+            .CodeMirror .CodeMirror-scroll {
+                font-size: .9rem;
+                font-family: Nunito, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            }
+            .CodeMirror .CodeMirror-gutters {
+                background: #f8fafc;
+                border-right-color: #ced4da;
+            }
+        </style>
     </head>
     <body>
         @include('partials.navbar')

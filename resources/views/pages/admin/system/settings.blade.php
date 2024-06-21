@@ -28,6 +28,7 @@
             </div>
         </div>
     </x-admin.section.card>
+    <!-- Settings -->
     <div class="card">
         <div class="card-body" data-target="#settings" onclick="toggleAccordion(this)">
             <div class="d-flex justify-content-between">
@@ -48,6 +49,7 @@
     <div class="collapse mx-1" id="settings">
         @include('partials.admin.system.settings.form')
     </div>
+    <!-- Taxes -->
     <div class="card">
         <div class="card-body" data-target="#taxes" onclick="toggleAccordion(this)">
             <div class="flex justify-between">
@@ -66,6 +68,7 @@
     <div class="collapse row mx-1" id="taxes">
         <livewire:admin.system.tax-bracket.tiles />
     </div>
+    <!-- Brands -->
     <div class="card">
         <div class="card-body" data-target="#brands" onclick="toggleAccordion(this)">
             <div class="d-flex justify-content-between">
@@ -85,6 +88,7 @@
     <div class="collapse mx-1" id="brands">
         <livewire:admin.system.brand.brand-list />
     </div>
+    <!-- Default Installments -->
     <div class="card">
         <div class="card-body" data-target="#default-installments" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
@@ -95,6 +99,7 @@
     <div class="collapse row mx-1" id="default-installments">
         <livewire:admin.system.installments.view />
     </div>
+    <!-- Conversion Rates -->
     <div class="card">
         <div class="card-body" data-target="#conversions" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">{{ Icon::maximize() }} Conversion Rates</h4>

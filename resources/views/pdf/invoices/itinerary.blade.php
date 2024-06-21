@@ -13,7 +13,10 @@ $type = $type ?? "Travel Itinerary"
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet" />
 
-    <style type="text/css"><?php include(public_path() . '/css/kpt.css') ?></style>
+    <style type="text/css">
+        <?php include(public_path() . '/css/kpt.css') ?>
+        {!! setting('customization.documentation.colors') !!}
+    </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
 
