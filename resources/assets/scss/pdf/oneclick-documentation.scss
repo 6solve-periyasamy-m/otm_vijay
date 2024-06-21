@@ -451,6 +451,7 @@ table.cell-padding-0 td, th {
 .item-title {
   @extend .fs-16;
   text-align: left;
+  width: 100%;
   padding: 0 40px;
   color: var(--itinerary-item-title);
   font-size: 11pt;

@@ -20,7 +20,7 @@ $type = $type ?? "Travel Itinerary"
 <body class="body">
     @include('partials.pdf.kpt.logos', ['type' => $type,])
     <!-- Header -->
-    @include('partials.pdf.kpt.header.old')
+    @include('partials.pdf.kpt.header.new')
 
     @if(!empty($itinerary->description))
         <div class="avoid-break">
@@ -72,7 +72,7 @@ $type = $type ?? "Travel Itinerary"
         @foreach($items as $item)
             <table class="item-table">
                 <tr>
-                    <td class="item-title">
+                    <td colspan="2" class="item-title">
                         {{ strtoupper($item->type) }}
                     </td>
                 </tr>
