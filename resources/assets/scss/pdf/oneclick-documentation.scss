@@ -14,6 +14,7 @@
   --section-bubble-background: #E95B15;
   --section-bubble-text: #FFFFFF;
   --itinerary-item-title: #E95B15;
+  --table-background-color: #F8DED0;
   --table-border-color: #353535;
   --table-header-background: #353535;
   --table-header-text: #FFFFFF;
@@ -517,7 +518,7 @@ table.cell-padding-0 td, th {
   .schedule-td {
     text-align: left;
     vertical-align: top;
-    background-color: var(--alt-background-color);
+    background-color: var(--table-background-color);
     padding: 10px 30px;
   }
 
@@ -525,7 +526,7 @@ table.cell-padding-0 td, th {
     @extend .fs-16;
     text-align: left;
     vertical-align: top;
-    background-color: var(--alt-background-color);
+    background-color: var(--table-background-color);
     color: #000000;
     font-weight: bold;
     padding: 10px 15px 0 25px;
@@ -563,7 +564,7 @@ table.cell-padding-0 td, th {
       vertical-align: top;
       padding: 2px 15px;
       width: 25%;
-      background-color: var(--alt-background-color);
+      background-color: var(--table-background-color);
     }
   }
 }
