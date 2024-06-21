@@ -28,7 +28,9 @@ use App\Repository\Storage\ConvertedCustomer;
 use App\Repository\Storage\Itinerary\Itinerary;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Storage\Itinerary\ItineraryPayment;
+use App\Repository\Storage\Itinerary\ItineraryPaymentDetails;
 use App\Repository\Storage\Itinerary\ItinerarySchedule;
+use App\Repository\Storage\Itinerary\ItineraryScheduleType;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
@@ -807,18 +809,30 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     {
         $schedule = [];
         if ($this->order->booking_fee > 0) {
-            $schedule[] = new ItinerarySchedule(null, $this->order->booking_fee, $this->order->booking_fee <= $this->order->paid);
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::BOOKING_FEE, null, $this->order->booking_fee, null, $this->order->booking_fee <= $this->order->paid);
         }
         if ($this->order->calculated_deposit > 0) {
-            $schedule[] = new ItinerarySchedule(null, $this->order->calculated_deposit, $this->order->deposit_paid);
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::DEPOSIT, null, $this->order->calculated_deposit, $this->order->deposit_percentage, $this->order->deposit_paid);
         }
         foreach ($this->getInstallments() as $installment) {
-            $schedule[] = new ItinerarySchedule($installment->due_on, $installment->calculated_amount, $installment->paid);
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::INSTALLMENT, $installment->due_on, $installment->calculated_amount, $installment->percentage, $installment->paid);
         }
         if ($this->order->remaining_installment > 0) {
-            $schedule[] = new ItinerarySchedule($this->order->tour->final_payment, $this->order->remaining_installment, $this->order->remaining <= 0);
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->order->tour->final_payment, $this->order->remaining_installment, $this->order->remaining_percentage, $this->order->remaining <= 0);
         }
         return $schedule;
+    }
+
+    private function getItineraryFinances(): ItineraryPaymentDetails
+    {
+        return new ItineraryPaymentDetails(
+            $this->order->cost,
+            $this->order->getTaxes(),
+            $this->order->commission_amount,
+            $this->order->total,
+            $this->getScheduleItineraryArray(),
+            $this->getPaymentItineraryArray(),
+        );
     }
 
     private function getGenericItinerary(): Itinerary
@@ -835,11 +849,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $this->order->tour->brand,
             $this->getTravellerItineraryArray(),
             $this->getItineraryItems(),
-            $this->getScheduleItineraryArray(),
-            $this->getPaymentItineraryArray(),
+            $this->getItineraryFinances(),
             $this->order->tour->terms,
             $this->order->invoice_footer,
-            setting('company.bank_transfer'),
             $this->order->external_notes,
         );
     }
@@ -847,9 +859,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public function getItinerary(): Itinerary
     {
         $itinerary = $this->getGenericItinerary();
-        $itinerary->setSchedule([]);
-        $itinerary->setPayments([]);
-        $itinerary->setPaymentDetails(null);
+        //$itinerary->finances = null;
 
         return $itinerary;
     }
