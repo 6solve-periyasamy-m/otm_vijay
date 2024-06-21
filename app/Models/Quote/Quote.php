@@ -13,6 +13,7 @@ use App\Models\Quote\Component\QuoteFlight;
 use App\Models\Quote\Component\QuoteMerchandise;
 use App\Models\Quote\Component\QuoteTransport;
 use App\Models\System\Brand;
+use App\Models\System\TaxBracket;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Models\User;
@@ -157,6 +158,16 @@ class Quote extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');
+    }
+
+    public function bracket(): BelongsTo
+    {
+        return $this->belongsTo(TaxBracket::class, 'tax_bracket_id');
+    }
+
+    public function taxBracket(): TaxBracket|null
+    {
+        return $this->bracket ?? $this->event?->taxBracket() ?? $this->brand?->taxBracket();
     }
 
     public function organization(): BelongsTo

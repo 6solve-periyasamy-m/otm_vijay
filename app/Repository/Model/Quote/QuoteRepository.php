@@ -30,6 +30,10 @@ use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Model\Tour\TourRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
+use App\Repository\Storage\Itinerary\Itinerary;
+use App\Repository\Storage\Itinerary\ItineraryPaymentDetails;
+use App\Repository\Storage\Itinerary\ItinerarySchedule;
+use App\Repository\Storage\Itinerary\ItineraryScheduleType;
 use App\Repository\Storage\Quote\CustomerForConversion;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -140,13 +144,13 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         return $order;
     }
 
-    public function getRemainingInstallment(int $paying = 1)
+    public function getRemainingInstallment(int $paying = 1, float|null $price = null): float|null
     {
-        $price = $this->getPricePerPerson($paying)?->price_per_person ?? 0;
+        $price = $price ?? $this->getPricePerPerson($paying)?->price_per_person ?? 0;
         foreach ($this->quote->installments as $installment) {
-            $price -= $installment->getAmount();
+            $price -= $installment->getAmount($paying, $price);
         }
-        return $price - $this->quote->getDepositAmount();
+        return $price - $this->quote->getDepositAmount($paying);
     }
 
     public function convertToTour(int $customerCount = 1, bool $components = true): Tour
@@ -940,5 +944,111 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             || $customer->hasComponent($type, $component->id)) {
             $tourComponent->grantToCustomer($customer->orderCustomer, true);
         }
+    }
+
+    public function getItineraryItems(int $travelling): array
+    {
+        $items = [];
+        $seen = [];
+
+        foreach ($this->quote->accommodation as  $component) {
+            $key = "activity-{$component->accommodation_inventory_id}";
+            if (in_array($key, $seen, true)) { continue; }
+            $seen[] = $key;
+            $item = $component->repository->getItineraryItem($travelling);
+            $start = $item->start->clone()->setTime(0,0)->unix();
+            if (!array_key_exists($start, $items)) { $items[$start] = []; }
+            $items[$start][] = $item;
+        }
+
+        foreach ($this->quote->activities as  $component) {
+            $key = "activity-{$component->activity_inventory_id}";
+            if (in_array($key, $seen, true)) { continue; }
+            $seen[] = $key;
+            $item = $component->repository->getItineraryItem($travelling);
+            $start = $item->start->clone()->setTime(0,0)->unix();
+            if (!array_key_exists($start, $items)) { $items[$start] = []; }
+            $items[$start][] = $item;
+        }
+
+        foreach ($this->quote->flights as  $component) {
+            $key = "flight-{$component->flight_inventory_id}";
+            if (in_array($key, $seen, true)) { continue; }
+            $seen[] = $key;
+            $item = $component->repository->getItineraryItem($travelling);
+            $start = $item->start->clone()->setTime(0,0)->unix();
+            if (!array_key_exists($start, $items)) { $items[$start] = []; }
+            $items[$start][] = $item;
+        }
+
+        foreach ($this->quote->transport as  $component) {
+            $key = "transport-{$component->transport_inventory_id}";
+            if (in_array($key, $seen, true)) { continue; }
+            $seen[] = $key;
+            $item = $component->repository->getItineraryItem($travelling);
+            $start = $item->start->clone()->setTime(0,0)->unix();
+            if (!array_key_exists($start, $items)) { $items[$start] = []; }
+            $items[$start][] = $item;
+        }
+        ksort($items);
+        return $items;
+    }
+
+    private function getScheduleItineraryArray(int $paying): array
+    {
+        $price = $this->getPricePerPerson($paying)?->price_per_person;
+        $schedule = [];
+        if ($this->quote->getDepositAmount($paying) > 0) {
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::DEPOSIT, null, $this->quote->getDepositAmount($paying), $this->quote->getDepositPercentage($paying));
+        }
+        foreach ($this->quote->installments as $installment) {
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::INSTALLMENT, $installment->due_on, $installment->getAmount($paying, $price), $installment->getPercentage($paying, $price));
+        }
+        if ($this->quote->remaining > 0) {
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->quote->final_payment, $this->getRemainingInstallment($paying, $price), $this->quote->getRemainingPercentage());
+        }
+        return $schedule;
+    }
+
+    public function getItineraryFinances(int $paying): ItineraryPaymentDetails
+    {
+        return new ItineraryPaymentDetails(
+            $this->getTotalCost($paying),
+            $this->getTaxAmount($paying),
+            null, // TODO: Implement
+            $this->getTotalCost($paying),
+            $this->getScheduleItineraryArray($paying),
+            [], // No Payments on Quotes
+        );
+    }
+    
+    public function getItineraryForDocument(int $paying, int $travelling): Itinerary
+    {
+        $paying += $this->quote->leadTraveller->paying;
+        $travelling += $this->quote->leadTraveller->travelling;
+        return new Itinerary(
+            $this->quote->name,
+            $this->quote->event?->name,
+            $this->quote->description ?? $this->quote->event?->description,
+            $this->quote->event?->image_url,
+            $this->quote->reference,
+            $this->quote->date_from,
+            $this->quote->date_to,
+            $this->quote->leadTraveller->customer,
+            $this->quote->brand,
+            $travelling,
+            $this->getItineraryItems($travelling),
+            $this->getItineraryFinances($paying),
+            $this->quote->terms,
+            $this->quote->invoice_footer,
+            $this->quote->external_notes,
+        );
+    }
+
+    public function getTaxAmount(int $paying): float|null
+    {
+        $bracket = $this->quote->taxBracket();
+        if ($bracket === null || $bracket->rate === null) { return null; }
+        return $this->getTotalCost($paying) * ($bracket->rate/100);
     }
 }

@@ -66,7 +66,7 @@ class QuoteController extends Controller
 
     public function document(Quote $quote, SentQuote $sent)
     {
-        return $quote->repository->getResponseStream($sent,$quote);
+        return $quote->repository->getResponseStream($sent, $quote);
     }
  
     public function preview(StartConversionRequest $request, Quote $quote)
