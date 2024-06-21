@@ -1,5 +1,22 @@
-.debug {
-  border: 1px solid black;
+:root {
+  --text-color: #1A1A1A;
+  --document-background: #FFFFFF;
+  --divider-background-color: #353535;
+  --divider-text-color: #FFFFFF;
+  --document-title-color: #E95B15;
+  --document-title-outline: #E95B15;
+  --reference-bubble-background: #353535;
+  --reference-bubble-text: #FFFFFF;
+  --header-background: #E95B15;
+  --header-title-color: #353535;
+  --header-data-color: #FFFFFF;
+  --alt-background-color: #F8DED0;
+  --section-bubble-background: #E95B15;
+  --section-bubble-text: #FFFFFF;
+  --itinerary-item-title: #E95B15;
+  --table-border-color: #353535;
+  --table-header-background: #353535;
+  --table-header-text: #FFFFFF;
 }
 
 @page {
@@ -76,7 +93,7 @@ body {
 }
 
 .text-dark {
-  color: #1a1a1a;
+  color: var(--text-color);
 }
 
 .body {
@@ -84,7 +101,7 @@ body {
   margin: 0 auto !important;
   display: block !important;
   width: 100% !important;
-  background: #ffffff;
+  background: var(--document-background);
   -webkit-text-size-adjust: none;
 }
 
@@ -122,7 +139,7 @@ body {
   padding: 0;
   margin: 0;
   border-spacing: 0;
-  background: white;
+  background: var(--document-background);
 }
 
 table.cell-padding-0 td, th {
@@ -131,7 +148,7 @@ table.cell-padding-0 td, th {
 
 .quote-footer-table {
   border: 0;
-  background-color: #ffffff;
+  background-color: var(--document-background);
   padding: 0;
   width: 100%;
   td, th {
@@ -147,7 +164,7 @@ table.cell-padding-0 td, th {
     padding: 0;
   }
   tr {
-    background-color: #353535;
+    background-color: var(--divider-background-color);
     padding: 2px 15px;
   }
   .text {
@@ -155,7 +172,7 @@ table.cell-padding-0 td, th {
     text-align: left;
     vertical-align: top;
     padding: 10px 15px;
-    color: #ffffff;
+    color: var(--divider-text-color);
     font-weight: 700;
   }
 }
@@ -207,10 +224,10 @@ table.cell-padding-0 td, th {
         border-radius: 30px !important;
         padding: 20px 10px !important;
         font-weight: normal !important;
-        background-color: #ffffff !important;
-        color: #E95B15 !important;
+        background-color: var(--document-background) !important;
+        color: var(--document-title-color) !important;
         margin: 10px auto !important;
-        outline: 2px solid #E95B15 !important;
+        outline: 2px solid var(--document-title-outline) !important;
         font-size: 15pt !important;
         min-width: 200px !important;
         max-width: 180px !important;
@@ -236,9 +253,9 @@ table.cell-padding-0 td, th {
   text-align: left;
   vertical-align: top;
   padding: 10px 15px 10px 25px;
-  color: #ffffff;
+  color: var(--reference-bubble-text);
   line-height: 20px;
-  background-color: #353535;
+  background-color: var(--reference-bubble-background);
   border-radius: 0 30px 30px 0;
 }
 
@@ -262,13 +279,13 @@ table.cell-padding-0 td, th {
     width: 50%;
     text-align: left;
     vertical-align: top;
-    background-color: #E95B15;
+    background-color: var(--header-background);
   }
 
   &.header-detail-title {
     @extend .fs-12;
     padding: 10px 15px 0 25px;
-    color: #353535;
+    color: var(--header-title-color);
     font-weight: 700;
   }
 
@@ -278,7 +295,7 @@ table.cell-padding-0 td, th {
     vertical-align: top;
     padding: 10px 15px 0 25px;
     line-height:10px;
-    color: #ffffff;
+    color: var(--header-data-color);
   }
 
   &.header-image-td {
@@ -316,7 +333,7 @@ table.cell-padding-0 td, th {
     width: 50%;
     text-align: left;
     vertical-align: top;
-    background-color: #E95B15;
+    background-color: var(--header-background);
     .header-details-table {
       @extend .cell-padding-0;
       text-align: left;
@@ -327,7 +344,7 @@ table.cell-padding-0 td, th {
         text-align: left;
         vertical-align: top;
         padding: 10px 15px 2px 25px;
-        color: #ffffff;
+        color: var(--header-data-color);
         line-height: 20px;
       }
       .header-details-heading {
@@ -335,13 +352,13 @@ table.cell-padding-0 td, th {
         text-align: left;
         vertical-align: top;
         padding: 10px 15px 0 25px;
-        color: #ffffff;
+        color: var(--header-data-color);
         line-height: 10px;
       }
       .header-details-alt {
         @extend .fs-14;
         padding: 10px 15px 0 25px;
-        color: #353535;
+        color: var(--header-title-color);
         font-weight: 700;
       }
     }
@@ -371,7 +388,7 @@ table.cell-padding-0 td, th {
 .lower-header-td {
   width: 50%;
   vertical-align: top;
-  background-color: #F8DED0;
+  background-color: var(--alt-background-color);
   padding: 15px 30px;
 }
 
@@ -407,17 +424,17 @@ table.cell-padding-0 td, th {
   border: 0;
   width: 100%;
   border-spacing: 0;
-  background: #ffffff;
+  background: var(--document-background);
   padding: 5px 0 10px 0;
   .date-content {
     @extend .text-dark;
     @extend .fs-16;
-    background-color: #E95B15;
+    background-color: var(--section-bubble-background);
     border-radius: 0 30px 30px 0;
     max-width: 300px;
     padding: 10px 25px;
     margin: 10px 0;
-    color: #ffffff;
+    color: var(--section-bubble-text);
     display: block;
   }
 }
@@ -427,7 +444,7 @@ table.cell-padding-0 td, th {
   width: 100%;
   border: 0;
   border-spacing: 0;
-  background-color:#ffffff;
+  background-color:var(--document-background);
   padding: 5px 0 10px 0;
 }
 
@@ -435,7 +452,7 @@ table.cell-padding-0 td, th {
   @extend .fs-16;
   text-align: left;
   padding: 0 40px;
-  color: #E95B15;
+  color: var(--itinerary-item-title);
   font-size: 11pt;
 }
 
@@ -464,7 +481,7 @@ table.cell-padding-0 td, th {
   width: 100%;
   border: 0;
   border-spacing: 0;
-  background-color: #FFFFFF;
+  background-color: var(--document-background);
 
   .payment-details-blank {
     padding: 10px 15px 0 25px;
@@ -494,12 +511,12 @@ table.cell-padding-0 td, th {
   width: 100%;
   border: 0;
   border-spacing: 0;
-  background-color: #FFFFFF;
+  background-color: var(--document-background);
 
   .schedule-td {
     text-align: left;
     vertical-align: top;
-    background-color: #F8DED0;
+    background-color: var(--alt-background-color);
     padding: 10px 30px;
   }
 
@@ -507,7 +524,7 @@ table.cell-padding-0 td, th {
     @extend .fs-16;
     text-align: left;
     vertical-align: top;
-    background-color: #FBDED0;
+    background-color: var(--alt-background-color);
     color: #000000;
     font-weight: bold;
     padding: 10px 15px 0 25px;
@@ -515,14 +532,14 @@ table.cell-padding-0 td, th {
 
   .schedule-table {
     //@extend .cell-padding-0;
-    border: 2px solid #353535;
+    border: 2px solid var(--table-border-color);
     border-collapse: collapse;
     width: 100%;
     border-spacing: 0;
     text-align: left;
     thead {
       tr {
-        background-color: #353535;
+        background-color: var(--table-header-background);
       }
     }
     th {
@@ -530,22 +547,22 @@ table.cell-padding-0 td, th {
       text-align: left;
       vertical-align: top;
       width: 25%;
-      border: 2px solid #353535;
+      border: 2px solid var(--table-border-color);
       border-collapse: collapse;
       padding: 2px 15px;
       font-weight: bold;
-      color: #ffffff;
+      color: var(--table-header-text);
     }
     td {
       @extend .fs-12;
       @extend .text-dark;
-      border: 2px solid #353535;
+      border: 2px solid var(--table-border-color);
       border-collapse: collapse;
       text-align: left;
       vertical-align: top;
       padding: 2px 15px;
       width: 25%;
-      background-color: #FBDED0;
+      background-color: var(--alt-background-color);
     }
   }
 }
