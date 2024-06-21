@@ -22,10 +22,9 @@ Route::prefix('{order}')->group(function () {
     Route::post('/delete/', [OrderController::class, 'destroy'])->name('orders.delete')->middleware('bouncer:Order\Order,delete');
     Route::post('/delete/force', [OrderController::class, 'forceDelete'])->name('orders.delete.force')->middleware(['bouncer:Order\Order,delete', 'auth.otm']);
     Route::post('/restore/', [OrderController::class, 'restore'])->name('orders.restore')->middleware('bouncer:Order\Order,delete');
-    Route::get('/invoice', [OrderController::class, 'latestInvoice'])->name('orders.invoice.latest')->middleware('bouncer:Order\Order,read');
-    Route::get('/invoice/{version}', [OrderController::class, 'invoice'])->name('orders.invoice.view')->middleware('bouncer:Order\Order,read');
-    Route::get('/itinerary', [OrderController::class, 'itineraryInvoice'])->name('orders.itinerary.latest')->middleware('bouncer:Order\Order,read');
-    Route::get('/preview', [OrderController::class, 'reservationPreview'])->name('orders.reservation.preview')->middleware('bouncer:Order\Order,read');
+    Route::get('/invoice/{version?}', [OrderController::class, 'invoice'])->name('orders.invoice')->middleware('bouncer:Order\Order,read');
+    Route::get('/itinerary', [OrderController::class, 'itinerary'])->name('orders.itinerary')->middleware('bouncer:Order\Order,read');
+    Route::get('/preview', [OrderController::class, 'reservation'])->name('orders.reservation')->middleware('bouncer:Order\Order,read');
     Route::get('/atol', [OrderController::class, 'atol'])->name('orders.atol')->middleware('bouncer:Order\Order,read');
     Route::get('/occupancy', [OrderController::class, 'occupancy'])->name('orders.occupancy')->middleware('bouncer:Order\Order,update');
     Route::get('/migrate', [OrderController::class, 'switchTour'])->name('orders.switch')->middleware('bouncer:Order\Order,update');

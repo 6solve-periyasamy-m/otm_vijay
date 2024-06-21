@@ -15,12 +15,12 @@
                     View Tour
                 </x-admin.popup-button>
                 @if(config('app.features.kpt') || config('app.features.bleeding-edge'))
-                <x-admin.popup-button href="{{ route('orders.reservation.preview', ['order' => $order,]) }}" class="color-info row-1">
+                <x-admin.popup-button href="{{ route('orders.reservation', ['order' => $order,]) }}" class="color-info row-1">
                     <x-slot:icon>{{ Icon::view() }}</x-slot:icon>
                     View Reservation Document
                 </x-admin.popup-button>
                 @endif
-                <x-admin.popup-button href="{{ route('orders.itinerary.latest', ['order' => $order,]) }}" class="color-info row-1">
+                <x-admin.popup-button href="{{ route('orders.itinerary', ['order' => $order,]) }}" class="color-info row-1">
                     <x-slot:icon>{{ Icon::view() }}</x-slot:icon>
                     View Itinerary Document
                 </x-admin.popup-button>

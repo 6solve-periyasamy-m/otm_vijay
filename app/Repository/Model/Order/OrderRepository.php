@@ -859,8 +859,13 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public function getItinerary(): Itinerary
     {
         $itinerary = $this->getGenericItinerary();
-        //$itinerary->finances = null;
+        $itinerary->finances = null;
 
         return $itinerary;
+    }
+
+    public function getReservationDocument(): Itinerary
+    {
+        return $this->getGenericItinerary();
     }
 }
