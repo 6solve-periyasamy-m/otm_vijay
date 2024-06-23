@@ -46,6 +46,7 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property string|null $description
  * @property float|null $deposit
+ * @property float|null $commission
  * @property bool $is_deposit_percentage
  * @property float $single_occupancy_surcharge
  * @property Carbon $final_payment
@@ -126,13 +127,11 @@ class Quote extends Model
 
     protected $guarded = [];
     protected $casts = [
-        'deposit' => 'double',
         'is_deposit_percentage' => 'bool',
-        'single_occupancy_surcharge' => 'double',
-        'expires' => 'datetime',
-        'date_from' => 'date',
-        'date_to' => 'date',
-        'final_payment' => 'date',
+        'expires' => 'date:Y-m-d',
+        'date_from' => 'date:Y-m-d',
+        'date_to' => 'date:Y-m-d',
+        'final_payment' => 'date:Y-m-d',
         'sent' => 'datetime',
         'quote_status' => QuoteStatus::class
     ];

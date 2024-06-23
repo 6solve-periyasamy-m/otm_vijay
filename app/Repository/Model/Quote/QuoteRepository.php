@@ -71,6 +71,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         }
         $quote->repository->cloneInstallments($tour);
         $quote->repository->addPricePoint(1, $tour->base_price_per_person);
+        $quote->commission = $quote->organization?->commission;
+        $quote->save();
         return $quote;
     }
 
@@ -83,6 +85,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $quote->repository->save();
         $quote->repository->addPricePoint(1, $pricePerPerson);
         $quote->repository->cloneFromDefaultInstallments();
+        $quote->commission = $quote->organization?->commission;
+        $quote->save();
         return $quote;
     }
 
