@@ -23,9 +23,12 @@ class Calculator extends Component
     public float $profit = 0;
     public float $margin = 0;
     public string|float|null $markup = null;
+    public float|null $commission = null;
+    public float $toBePaid;
     public float $marked_up_price = 0;
 
     public Quote $quote;
+    public float|null $taxes = null;
 
     public function mount(Quote $quote)
     {
@@ -47,6 +50,13 @@ class Calculator extends Component
         $this->margin = $this->costToCompany == 0 ? 100 : sigfig(($this->total / $this->costToCompany) * 100);
         $this->markup = sigfig($this->markup ?? $this->margin - 100);
         $this->marked_up_price = sigfig($costPerPerson + ($costPerPerson * ($this->markup / 100)));
+        if ($this->quote->commission !== null) {
+            $this->commission = sigfig($this->total * ($this->quote->commission / 100));
+        }
+        if ($this->quote->taxBracket()?->rate !== null) {
+            $this->taxes = sigfig($this->total * ($this->quote->taxBracket()->rate / 100));
+        }
+        $this->toBePaid = $this->total - ($this->commission ?? 0.0);
     }
 
     public function inputChanged(?string $key = null): void
