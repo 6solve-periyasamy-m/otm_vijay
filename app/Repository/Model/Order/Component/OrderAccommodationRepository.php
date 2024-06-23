@@ -4,8 +4,10 @@ namespace App\Repository\Model\Order\Component;
 
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Invoice\InvoiceBillable;
+use App\Models\Order\Order;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsAccommodation;
 use Illuminate\Database\Eloquent\Model;
 
@@ -93,5 +95,34 @@ class OrderAccommodationRepository extends OrderComponentRepository
             'amount' => $this->orderComponent->tourComponent->tour_component_type === 'Included' ? 0 : $this->orderComponent->cost,
             'is_base' => $this->orderComponent->tourComponent->tour_component_type === 'Included',
         ]);
+    }
+
+    public function getQuantity(Order $order = null): int
+    {
+        $order = $order ?? $this->orderComponent->group->orderCustomers()->first()?->order;
+        if ($order === null) { return 0; }
+        $quantity = 0;
+        foreach ($order->groups as $group) {
+            $quantity += $group->rooms()->where('accommodation_inventory_tour_id', '=', $this->orderComponent->accommodation_inventory_tour_id)->count();
+        }
+        return $quantity;
+    }
+
+    public function getItineraryItem(Order $order = null): ItineraryItem
+    {
+        $inventory = $this->orderComponent->tourComponent->inventory;
+        $component = $inventory->component;
+
+        return new ItineraryItem(
+            'Accommodation',
+            $this->getQuantity($order),
+            $inventory->check_in,
+            $inventory->check_out,
+            [
+                'Hotel' => $component->name,
+                'No Of Nights' => diff_in_nights($inventory->check_in, $inventory->check_out),
+                'Address' => $component->address,
+            ]
+        );
     }
 }

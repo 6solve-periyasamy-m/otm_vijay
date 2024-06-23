@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer\Customer;
+use App\Models\Order\Order;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\Model\Order\OrderRepository;
 
@@ -10,7 +11,7 @@ class CustomerController extends Controller
 {
     private Customer $iUser;
 
-    protected function fetchOrder(string $booking)
+    protected function fetchOrder(string $booking): ?Order
     {
         return OrderRepository::getFromBookingReference($booking);
     }

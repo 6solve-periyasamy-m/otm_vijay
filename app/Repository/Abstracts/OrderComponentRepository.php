@@ -8,16 +8,20 @@ use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Invoice\InvoiceBillable;
+use App\Models\Order\Order;
 use App\Repository\Interfaces\HasComponentType;
 use App\Repository\Storage\Customer\Component\OrderComponent;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 
 abstract class OrderComponentRepository extends ModelRepository implements HasComponentType
 {
-    public abstract function getTourComponentType(): string;
-    public abstract function getCost(): float;
-    public abstract function getTourComponent(): ?InventoryTourRepository;
-    public abstract function getItineraryItems(): array;
-    public abstract function getInvoiceBillable(): InvoiceBillable;
+    abstract public function getTourComponentType(): string;
+    abstract public function getCost(): float;
+    abstract public function getTourComponent(): ?InventoryTourRepository;
+    abstract public function getItineraryItems(): array;
+    abstract public function getInvoiceBillable(): InvoiceBillable;
+    abstract public function getQuantity(Order $order = null): int;
+    abstract public function getItineraryItem(Order $order = null): ItineraryItem;
 
     public function getAbstractOrderComponent(): OrderComponent
     {

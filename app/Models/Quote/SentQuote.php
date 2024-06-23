@@ -63,8 +63,10 @@ class SentQuote extends Model
 
     public function getBuiltAttribute(): Quote
     {
-        if (!isset($builtData)) $builtData = QuoteRepository::deserialize(json_decode($this->data, true));
-        return $builtData;
+        if (!isset($this->builtData)) {
+            $this->builtData = QuoteRepository::deserialize(json_decode($this->data, true));
+        }
+        return $this->builtData;
     }
 
     public function getFreeAttribute(): int

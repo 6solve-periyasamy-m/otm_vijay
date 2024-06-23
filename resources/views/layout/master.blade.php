@@ -22,6 +22,24 @@
     @livewireStyles
     <script src="{{ asset('/js/app.js') }}"></script>
     <script src="{{ asset('js/ckeditor/ckeditor.js') }}"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css" rel="stylesheet">
+    {{-- Addons (fold): --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/fold/foldgutter.min.css" rel="stylesheet" />
+    <style>
+        .CodeMirror {
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        .CodeMirror .CodeMirror-scroll {
+            font-size: .9rem;
+            font-family: Nunito, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+        .CodeMirror .CodeMirror-gutters {
+            background: #f8fafc;
+            border-right-color: #ced4da;
+        }
+    </style>
 </head>
 <body>
     @include('partials.navbar')

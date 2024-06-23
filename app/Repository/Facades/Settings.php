@@ -154,4 +154,39 @@ class Settings
         }
         return $styles;
     }
+
+    public function availableItineraryStyles(): array
+    {
+        $styles = [1 => 'Default Itinerary Style',];
+        if (config('app.features.bleeding-edge') || config('app.features.kpt')) {
+            $styles[2] = 'Alternative Style (Under Development)';
+        }
+        return $styles;
+    }
+
+    public function defaultDocumentationColors(): string
+    {
+        return
+            ':root {
+                --text-color: #1A1A1A;
+                --document-background: #FFFFFF;
+                --divider-background-color: #353535;
+                --divider-text-color: #FFFFFF;
+                --document-title-color: #E95B15;
+                --document-title-outline: #E95B15;
+                --reference-bubble-background: #353535;
+                --reference-bubble-text: #FFFFFF;
+                --header-background: #E95B15;
+                --header-title-color: #353535;
+                --header-data-color: #FFFFFF;
+                --alt-background-color: #F8DED0;
+                --section-bubble-background: #E95B15;
+                --section-bubble-text: #FFFFFF;
+                --itinerary-item-title: #E95B15;
+                --table-background-color: #F8DED0;
+                --table-border-color: #353535;
+                --table-header-background: #353535;
+                --table-header-text: #FFFFFF;
+            }';
+    }
 }

@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Repository\Storage\Itinerary;
+
+class ItineraryPaymentDetails
+{
+    public string $paymentDetails;
+
+    /**
+     * @param float $total
+     * @param float|null $tax
+     * @param float|null $commission
+     * @param float $cost
+     * @param ItinerarySchedule[] $schedule
+     * @param ItineraryPayment[] $payments
+     */
+    public function __construct(
+        public float $total,
+        public float|null $tax,
+        public float|null $commission,
+        public float $cost,
+        public array $schedule,
+        public array $payments,
+    ) {
+        $this->paymentDetails = setting('company.bank_transfer');
+    }
+
+    public function paid(): float
+    {
+        $paid = 0;
+        foreach ($this->payments as $payment) { $paid += $payment->amount; }
+        return $paid;
+    }
+}
