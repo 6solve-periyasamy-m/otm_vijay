@@ -204,7 +204,7 @@ $type = $type ?? "Travel Itinerary"
                                     COMMISSION
                                 </td>
                                 <td class="payment-details-content">
-                                    {{ f_currency($itinerary->finances->commission) }} ({{ $order->commission }}%)
+                                    {{ f_currency($itinerary->finances->commission) }} ({{ $itinerary->finances->commissionPercent }}%)
                                 </td>
                             </tr>
                         @endif

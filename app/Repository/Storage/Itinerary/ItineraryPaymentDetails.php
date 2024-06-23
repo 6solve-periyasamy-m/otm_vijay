@@ -10,6 +10,7 @@ class ItineraryPaymentDetails
      * @param float $total
      * @param float|null $tax
      * @param float|null $commission
+     * @param float|null $commissionPercent
      * @param float $cost
      * @param ItinerarySchedule[] $schedule
      * @param ItineraryPayment[] $payments
@@ -18,6 +19,7 @@ class ItineraryPaymentDetails
         public float $total,
         public float|null $tax,
         public float|null $commission,
+        public float|null $commissionPercent,
         public float $cost,
         public array $schedule,
         public array $payments,

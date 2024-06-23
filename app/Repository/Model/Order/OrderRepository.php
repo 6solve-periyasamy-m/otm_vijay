@@ -829,6 +829,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $this->order->cost,
             $this->order->getTaxes(),
             $this->order->commission_amount,
+            $this->order->commission,
             $this->order->total,
             $this->getScheduleItineraryArray(),
             $this->getPaymentItineraryArray(),

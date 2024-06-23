@@ -137,7 +137,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'deposit' => $this->quote->getDepositAmount($paying),
             'ordered_on' => now(),
             'organization_id' => $this->quote->organization_id,
-            'commission' => $this->quote->organization?->commission,
+            'commission' => $this->quote->commission,
             'consultant_id' => $this->quote->consultant_id,
             'internal_notes' => $this->quote->internal_notes,
             'external_notes' => $this->quote->external_notes,
@@ -1014,13 +1014,24 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         return $schedule;
     }
 
+    public function getCommission(int $paying): ?float
+    {
+        return $this->quote->commission !== null ? sigfig($this->getTotalCost($paying) * ($this->quote->commission / 100)) : null;
+    }
+
+    public function getFinalCost(int $paying): ?float
+    {
+        return $this->getTotalCost($paying) - ($this->getCommission($paying) ?? 0.0);
+    }
+
     public function getItineraryFinances(int $paying): ItineraryPaymentDetails
     {
         return new ItineraryPaymentDetails(
             $this->getTotalCost($paying),
             $this->getTaxAmount($paying),
-            null, // TODO: Implement
-            $this->getTotalCost($paying),
+            $this->getCommission($paying),
+            $this->quote->commission,
+            $this->getFinalCost($paying),
             $this->getScheduleItineraryArray($paying),
             [], // No Payments on Quotes
         );
