@@ -36,6 +36,7 @@ class Form extends Component
     public function save()
     {
         $this->validate();
+        if ($this->quote->commission != 0 && empty($this->quote->commission)) { $this->quote->commission = null; }
         $this->quote->is_deposit_percentage = $this->quote->is_deposit_percentage ?? false;
         $this->prospect->travelling = $this->prospect->travelling ?? false;
         $this->prospect->paying = $this->prospect->paying ?? false;
@@ -87,7 +88,7 @@ class Form extends Component
             'quote.tax_bracket_id' => 'nullable|integer|exists:tax_brackets,id',
             'quote.consultant_id' => 'nullable|integer|exists:users,id',
             'quote.organization_id' => 'nullable|integer|exists:organizations,id',
-            'quote.commission' => 'nullable',
+            'quote.commission' => 'nullable|numeric|between:0,100',
             'quote.deposit' => 'nullable|numeric',
             'quote.is_deposit_percentage' => 'nullable|boolean',
             'pricePoint.price_per_person' => 'required|numeric|gte:0',
