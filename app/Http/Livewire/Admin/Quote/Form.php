@@ -38,7 +38,7 @@ class Form extends Component
         $this->validate();
         $this->quote->is_deposit_percentage = $this->quote->is_deposit_percentage ?? false;
         $this->prospect->travelling = $this->prospect->travelling ?? false;
-        $this->prospect->paying = $this->quote->paying ?? false;
+        $this->prospect->paying = $this->prospect->paying ?? false;
         $this->prospect->save();
         $this->quote->lead_traveller_id = $this->prospect->id;
         $this->quote->save();
