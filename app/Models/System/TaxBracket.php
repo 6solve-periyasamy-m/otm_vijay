@@ -2,8 +2,10 @@
 
 namespace App\Models\System;
 
+use Database\Factories\System\TaxBracketFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -16,6 +18,7 @@ use Illuminate\Support\Carbon;
  * @property float|null $rate
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @method static TaxBracketFactory factory()
  * @method static Builder|TaxBracket newModelQuery()
  * @method static Builder|TaxBracket newQuery()
  * @method static Builder|TaxBracket query()
@@ -29,6 +32,8 @@ use Illuminate\Support\Carbon;
  */
 class TaxBracket extends Model
 {
+    use HasFactory;
+
     protected $guarded = [];
     protected $casts = ['rate' => 'float',];
 
@@ -36,10 +41,12 @@ class TaxBracket extends Model
     {
         if ($this->rate === null) {
             return null;
-        } else if ($this->rate === 0) {
-            return 0;
-        } else {
-            return sigfig($amount * sigfig($this->rate / 100));
         }
+
+        if ($this->rate === 0) {
+            return 0;
+        }
+
+        return sigfig($amount * sigfig($this->rate / 100));
     }
 }
