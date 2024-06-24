@@ -4,6 +4,7 @@ namespace App\Models\Tour;
 
 use App\Models\Helper\Enum\EventType;
 use App\Models\Order\Order;
+use App\Models\System\Brand;
 use App\Models\System\TaxBracket;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,6 +24,7 @@ use Settings;
  *
  * @property int $id
  * @property string $name
+ * @property int|null $brand_id
  * @property int|null $tax_bracket_id
  * @property string|null $description
  * @property Carbon $starts_at
@@ -71,6 +73,11 @@ class Event extends Model
             'starts_at' => 'required|date',
             'ends_at' => 'required|date',
         ];
+    }
+
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class, 'brand_id');
     }
 
     function getEventDetailsAttribute(): string

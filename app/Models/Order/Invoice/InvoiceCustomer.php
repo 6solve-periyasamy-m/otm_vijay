@@ -16,6 +16,8 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $invoice_id
  * @property string $full_name Full name of the customer
+ * @property string $first_name First name of the customer
+ * @property string $last_name Last name of the customer
  * @property string|null $email Email address of customer
  * @property string|null $address_line_1 First line of customer billing address
  * @property string|null $address_line_2 Second line of customer billing address

@@ -52,7 +52,7 @@
                         @endif
                     </td>
                     <td>
-                        @if($tour->booking_form_url !== null)
+                        @if(!empty(trim($tour->booking_form_url)))
                             <a href="{{route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,])}}">{{ $tour->booking_form_url }}</a>
                         @else
                             No URL
