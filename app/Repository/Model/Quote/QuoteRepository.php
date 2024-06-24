@@ -52,7 +52,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'event_id' => $tour->event_id,
             'deposit' => $tour->deposit,
             'is_deposit_percentage' => $tour->is_deposit_percentage,
-            'tax_bracket_id' => $tour->tax_bracket_id,
+            'tax_bracket_id' => $tour->tax_bracket_id ?? $tour->event?->tax_bracket_id,
             'final_payment' => $tour->final_payment,
             'date_from' => $tour->date_from,
             'date_to' => $tour->date_to,
@@ -126,9 +126,10 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         }
         $tour = $this->convertToTour($paying);
         $data = [
-            'deposit' => $this->quote->deposit,
+            'deposit' => $this->quote->getDepositAmount($paying),
             'ordered_on' => now(),
             'organization_id' => $this->quote->organization_id,
+            'commission' => $this->quote->organization?->commission,
             'consultant_id' => $this->quote->consultant_id,
             'internal_notes' => $this->quote->internal_notes,
             'external_notes' => $this->quote->external_notes,

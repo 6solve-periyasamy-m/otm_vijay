@@ -36,6 +36,7 @@ if (!function_exists('fx_convert')) {
      */
     function fx_convert(float|int $value, Currency|string|null $from = null, Currency|string|null $to = null, float $rate = null): float
     {
+        if ($from === null || $to === null) { return $value * ($rate ?? 1.0); }
         if ($rate === null) {
             $systemCurrency = Currency::code(setting('system.currency', 'GBP'));
             if (is_string($from)) { $from = Currency::code($from); }

@@ -66,6 +66,7 @@ class QuoteInstallment extends Model
     public function getPercentage(int $count = 1): float|null
     {
         $price = $this->quote->repository->getPricePerPerson($count)?->price_per_person;
+        if (empty($price)) { return 100; }
         return $this->percentage ? $this->amount : sigfig(($this->amount / $price) * 100);
     }
 }

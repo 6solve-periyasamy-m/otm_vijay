@@ -21,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property string $booking_reference The booking reference for the order
  * @property int $invoice_number Current version number for the invoice
  * @property string $name The name of the tour that the order is placed for
+ * @property string|null $event The name of the event
  * @property bool $cancelled Whether the order is cancelled
  * @property Carbon $generated Date that the invoice was generated
  * @property string|null $invoice_footer The footer section for the invoice

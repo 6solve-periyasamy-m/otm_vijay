@@ -28,6 +28,8 @@ use Illuminate\Support\Carbon;
  */
 class RoomCategory extends SimpleModel
 {
+    protected $guarded = [];
+
     public function inventories(): HasMany
     {
         return $this->hasMany(AccommodationInventory::class, 'room_category_id');

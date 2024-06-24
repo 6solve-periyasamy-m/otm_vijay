@@ -93,10 +93,10 @@ class Form extends Component
 
     public function prepareForSaving(): void
     {
-        if ($this->tour->brand_id <= 0) $this->tour->brand_id = null;
+        if ($this->tour->brand_id <= 0) { $this->tour->brand_id = null; }
         $this->tour->is_active = $this->tour->is_active ?? false;
         $this->tour->is_deposit_percentage = $this->tour->is_deposit_percentage ?? false;
-        $this->tour->booking_fee = $this->tour->booking_fee ?? 0;
+        $this->tour->booking_fee = $this->tour->booking_fee ?? 0.0;
         $this->tour->atol_protected = $this->tour->atol_protected === -1 ? null : $this->tour->atol_protected;
         $this->tour->stock_control_active = $this->tour->stock_control_active ?? false;
         $this->tour->accommodation_stock_control = $this->tour->accommodation_stock_control ?? false;
@@ -104,6 +104,8 @@ class Form extends Component
         $this->tour->flight_stock_control = $this->tour->flight_stock_control ?? false;
         $this->tour->transport_stock_control = $this->tour->transport_stock_control ?? false;
         $this->tour->merchandise_stock_control = $this->tour->merchandise_stock_control ?? false;
+        $this->tour->booking_form_url = trim($this->tour->booking_form_url);
+        $this->tour->booking_form_url = empty($this->tour->booking_form_url) ? null : $this->tour->booking_form_url;
     }
 
     public function save(): void

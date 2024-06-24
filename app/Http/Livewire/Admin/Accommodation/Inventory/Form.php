@@ -27,7 +27,7 @@ class Form extends Component
         $this->validate();
         $this->inventory->accommodation_id = $this->inventory->accommodation_id ?? $this->accommodation->id;
         if (!empty($this->inventory->id)) {
-            if ($this->inventory->repository->validateParent($this->inventory->stock_parent_id)) {
+            if (!$this->inventory->repository->validateParent($this->inventory->stock_parent_id)) {
                 $this->toast('Cannot Save', 'You cannot use this stock parent, as it is a child of this inventory', 'danger');
                 return;
             }
@@ -52,9 +52,9 @@ class Form extends Component
             'inventory.board_type_id' => 'required|integer|exists:board_types,id',
             'inventory.room_category_id' => 'nullable|integer|exists:room_categories,id',
             'inventory.stock_parent_id' => 'nullable|integer|exists:accommodation_inventories,id',
-            'inventory.check_in' => 'nullable|date|date_format:Y-m-d H:i',
+            'inventory.check_in' => 'nullable|date',
             'inventory.check_in_time_confirmed' => 'nullable|boolean',
-            'inventory.check_out' => 'nullable|date|date_format:Y-m-d H:i',
+            'inventory.check_out' => 'nullable|date',
             'inventory.check_out_time_confirmed' => 'nullable|boolean',
             'inventory.fit_selectable' => 'nullable|boolean',
             'inventory.stock' => 'nullable|integer',
