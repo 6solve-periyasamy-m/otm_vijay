@@ -154,4 +154,13 @@ class Settings
         }
         return $styles;
     }
+
+    public function availableItineraryStyles(): array
+    {
+        $styles = [1 => 'Default Itinerary Style',];
+        if (config('app.features.bleeding-edge') || config('app.features.kpt')) {
+            $styles[2] = 'Alternative Style (Under Development)';
+        }
+        return $styles;
+    }
 }

@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Order\Payment\PaymentIntention
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float|null $amount
  * @property bool $processed Has the intention been processed
  * @property-read PaymentIntentionRepository $repository
+ * @property-read Customer|null $customer
  * @method static Builder|PaymentIntention newModelQuery()
  * @method static Builder|PaymentIntention newQuery()
  * @method static Builder|PaymentIntention query()
@@ -95,5 +97,10 @@ class PaymentIntention extends Model
     {
         return Order::where('booking_reference', '=', $this->reference)->first()
             ?? Booking::where('token', '=', $this->reference)->first();
+    }
+
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
 }

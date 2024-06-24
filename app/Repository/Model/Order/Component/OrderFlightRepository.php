@@ -4,8 +4,10 @@ namespace App\Repository\Model\Order\Component;
 
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Invoice\InvoiceBillable;
+use App\Models\Order\Order;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Storage\Order\ItineraryItem;
 use App\Repository\Traits\Component\IsFlight;
 
 class OrderFlightRepository extends OrderComponentRepository
@@ -94,5 +96,34 @@ class OrderFlightRepository extends OrderComponentRepository
             'amount' => $this->orderComponent->tourComponent->tour_component_type === 'Included' ? 0 : $this->orderComponent->cost,
             'is_base' => $this->orderComponent->tourComponent->tour_component_type === 'Included',
         ]);
+    }
+
+    public function getQuantity(Order $order = null): int
+    {
+        $order = $order ?? $this->orderComponent->orderCustomer->order;
+        return $order?->orderFlights()->where('flight_inventory_tour_id', '=', $this->orderComponent->flight_inventory_tour_id)->count() ?? 0;
+    }
+
+    public function getItineraryItem(Order $order = null): ItineraryItem
+    {
+        $tourComponent = $this->orderComponent->tourComponent;
+        $inventory = $tourComponent->inventory;
+        $component = $inventory->component;
+        if ($tourComponent->flight_type === 'Outbound') { $title = 'Outbound Flight'; }
+        elseif ($tourComponent->flight_type === 'Inbound') { $title = 'Inbound Flight'; }
+        else { $title = 'Mid-Package Flight'; }
+
+        return new ItineraryItem(
+            $title,
+            $this->getQuantity($order),
+            $inventory->departs_at,
+            $inventory->arrives_at,
+            [
+                'Airline' => $component->airline->name,
+                'Details' => $component->departureAirport->name . ' to ' . $component->arrivalAirport->name,
+                'Travel Class' => $inventory->travelClass->name,
+                'Check In' => f_datetime($inventory->check_in),
+            ]
+        );
     }
 }
