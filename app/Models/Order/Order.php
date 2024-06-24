@@ -419,8 +419,10 @@ class Order extends Model
 
     public function getCommissionAmountAttribute(): float|null
     {
-        if ($this->commission === null) return null;
-        return sigfig(($this->cost + $this->total_adjustments) * ($this->commission/100));
+        if ($this->commission === null) {
+            return null;
+        }
+        return sigfig(($this->getTotalAttribute() - $this->getTotalAdjustmentsAttribute()) * ($this->commission/100));
     }
 
     /**
@@ -481,6 +483,6 @@ class Order extends Model
 
     public function getTaxes(): float|null
     {
-        return $this->taxBracket()->calculate($this->total);
+        return $this->taxBracket()->calculate($this->getCostAttribute());
     }
 }
