@@ -8,6 +8,8 @@ use App\Models\Customer\Group;
 use App\Models\Customer\OrderCustomerGroup;
 use App\Models\Customer\Organization;
 use App\Models\Helper\Enum\OrderStatus;
+use App\Models\Helper\NotificationSubject;
+use App\Models\Helper\Traits\HasNotifications;
 use App\Models\Helper\Traits\HasPermissions;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Adjustment\OrderCustomerAdjustment;
@@ -161,9 +163,9 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @method static Builder|Order whereTaxBracketId($value)
  * @mixin Eloquent
  */
-class Order extends Model
+class Order extends Model implements NotificationSubject
 {
-    use SoftDeletes, CascadeSoftDeletes, HasFactory, HasRelationships, HasPermissions;
+    use SoftDeletes, CascadeSoftDeletes, HasFactory, HasRelationships, HasPermissions, HasNotifications;
 
     protected $guarded = [];
     protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double', 'status_override' => OrderStatus::class,];
@@ -552,5 +554,11 @@ class Order extends Model
     public function getTaxes(): float|null
     {
         return $this->taxBracket()->calculate($this->getCostAttribute());
+    }
+
+    public function getLink(): string
+    {
+        $url = route('orders.view', ['order' => $this,]);
+        return "<a href='{$url}'>{$this->booking_reference}</a>";
     }
 }

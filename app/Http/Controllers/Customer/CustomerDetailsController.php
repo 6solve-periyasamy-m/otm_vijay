@@ -6,6 +6,7 @@ use App\Events\Customer\CustomerEditedEvent;
 use App\Http\Controllers\CustomerController;
 use App\Http\Requests\Customer\DetailsRequest;
 use App\Models\Customer\Customer;
+use App\Models\Helper\Enum\NotificationType;
 use Hash;
 
 class CustomerDetailsController extends CustomerController
@@ -30,11 +31,11 @@ class CustomerDetailsController extends CustomerController
 
     public function update(DetailsRequest $request)
     {
-        $this->user()->update($request->getCustomerDetails(!$this->user()->repository->isPassportLocked()));
-        $this->user()->homeAddress->repository->update($request->getHomeAddress());
-        $this->user()->billingAddress->repository->update($request->getBillingAddress());
+        $this->user()?->update($request->getCustomerDetails(!$this->user()->repository->isPassportLocked()));
+        $this->user()?->homeAddress->repository->update($request->getHomeAddress());
+        $this->user()?->billingAddress->repository->update($request->getBillingAddress());
 
-        if ($request->has('profile_picture') && $request->file('profile_picture') != null) {
+        if ($request->has('profile_picture') && $request->file('profile_picture') !== null) {
             $this->user()->profile_picture = store_file($request->profile_picture, $this->user()->profile_picture);
         }
 
@@ -42,8 +43,10 @@ class CustomerDetailsController extends CustomerController
             $this->user()->password = Hash::make($request->new_password);
         }
 
-        $this->user()->save();
+        $this->user()?->save();
         event(new CustomerEditedEvent($this->user()));
+
+        $this->user()?->createNotification(NotificationType::CUSTOMER_UPDATED, 'Customer details updated via dashboard', $this->user());
 
         return redirect()->route('customer.edit');
     }
@@ -62,6 +65,9 @@ class CustomerDetailsController extends CustomerController
 
         $customer->save();
         event(new CustomerEditedEvent($customer));
+
+        $customer->createNotification(NotificationType::CUSTOMER_UPDATED, 'Customer details updated via dashboard', $this->user());
+
         return redirect()->route('customer.edit.other', ['customer' => $customer,]);
     }
 }

@@ -10,6 +10,7 @@ use App\Http\Gateways\Storage\LineItem;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
+use App\Models\Helper\Enum\NotificationType;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Order\Payment\PaymentMethod;
@@ -30,9 +31,9 @@ abstract class Gateway
      * @throws UnauthorizedGatewayException
      * @throws RemoteGatewayError
      */
-    public abstract function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string;
+    abstract public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string;
 
-    public abstract function process(string $reference, float $amount, string $created = null): void;
+    abstract public function process(string $reference, float $amount, string $created = null): void;
 
     public function processIntention(PaymentIntention $intention, float $amount, string $gateway, string $created = null): ?Order
     {
@@ -44,6 +45,11 @@ abstract class Gateway
                 $intention->process();
                 $intention->processed = true;
                 $intention->save();
+                if (empty($intention->data)) {
+                    $order->createNotification(NotificationType::PAYMENT_MADE, 'Payment of ' . f_currency($amount / 100) . " made.", $intention->customer);
+                } else {
+                    $order->createNotification(NotificationType::COMPONENTS_CHANGED, 'Upgrade/Add-on purchased for order', $intention->customer);
+                }
                 event(new PaymentCreatedEvent($payment));
                 return $order;
             }
@@ -56,6 +62,7 @@ abstract class Gateway
                 $order->payments()->save($payment);
                 $intention->processed = true;
                 $intention->save();
+                $order->createNotification(NotificationType::ORDER_CREATED, 'Booking confirmed', $intention->customer);
                 event(new OrderCreatedEvent($order));
                 return $order;
             }
