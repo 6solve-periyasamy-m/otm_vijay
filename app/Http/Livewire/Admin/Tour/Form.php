@@ -70,10 +70,12 @@ class Form extends Component
 
     private function eventChanged(): void
     {
-        if (in_array("tour.date_from", $this->manuallySet) || in_array("tour.date_to", $this->manuallySet)) return;
+        if (in_array("tour.date_from", $this->manuallySet) || in_array("tour.date_to", $this->manuallySet)) { return; }
         $event = Event::find($this->tour->event_id);
         $this->tour->date_from = $event?->starts_at;
         $this->tour->date_to = $event?->ends_at;
+        $this->tour->brand_id = $event?->brand_id;
+        $this->updateValue('tour.brand_id', $event?->brand_id);
         $this->dateFromChanged();
     }
 

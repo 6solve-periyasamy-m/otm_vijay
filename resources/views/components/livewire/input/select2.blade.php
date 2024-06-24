@@ -7,7 +7,7 @@
     $clear = $attributes->get('clear', false);
     $updateRoute = null;
     if ($value !== null) {
-        $updateRoute = route("api.{$route}.selected", ['id' => $value, ]);
+        $updateRoute = route("api.{$route}.selected", ['id' => '%id%', ]);
     }
 
     $createRoute = $attributes->get('createRoute');
@@ -55,18 +55,23 @@
                 @this.inputChanged('{{$attributes->get('name')}}');
             });
             @endisset
-            @if($value !== null)
-            $.ajax({
-                url: '{{ $updateRoute }}',
-                type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }
-            }).then(function (data) {
-                selector.append(new Option(data.text, data.id, true, true)).trigger('change');
+            window.addEventListener('updateValue', function (event) {
+                if (event.detail.key === '{{ $attributes->get('name') }}') {
+                    $.ajax({
+                        url: '{{ $updateRoute }}'.replace('%id%', event.detail.value),
+                        type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }
+                    }).then(function (data) {
+                        selector.append(new Option(data.text, data.id, true, true)).trigger('change');
 
-                selector.trigger({
-                    type: 'select2:select',
-                    params: { data: data, }
-                });
+                        selector.trigger({
+                            type: 'select2:select',
+                            params: { data: data, }
+                        });
+                    });
+                }
             });
+            @if(isset($value))
+                dispatchUpdateEvent('{{ $attributes->get('name') }}', {{$value}})
             @endif
         });
     </script>

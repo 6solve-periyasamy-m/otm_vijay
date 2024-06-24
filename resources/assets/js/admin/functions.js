@@ -20,17 +20,14 @@ function swapButton(btn, field) {
     flipButton(button, checked);
 }
 function verifyCheckButton(btn, field) {
-    console.log("Verifying Button...")
     flipButton($(btn), $(`input[type=checkbox][name="${field}"]`).prop('checked'));
 }
 function flipButton(btn, state) {
     if (state) {
-        console.log('On');
         btn.removeClass('btn-danger');
         btn.removeClass('cross-out');
         btn.addClass('btn-success');
     } else {
-        console.log('Off');
         btn.removeClass('btn-success');
         btn.addClass('btn-danger');
         btn.addClass('cross-out');
@@ -50,6 +47,10 @@ function toggleSidebar() {
 
     // Store the state of the sidebar in localStorage
     localStorage.setItem('isSidebarShown', sidebar.hasClass('shown'));
+}
+
+function dispatchUpdateEvent(key, value) {
+    window.dispatchEvent(new CustomEvent("updateValue", { detail: { key: key, 'value': value, }}))
 }
 
 // Initialize sidebar state on page load
