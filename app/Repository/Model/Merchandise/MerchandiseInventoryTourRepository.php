@@ -18,6 +18,7 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteMerchandiseRepository;
 use App\Repository\Storage\ComponentInformation;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsMerchandise;
 
 class MerchandiseInventoryTourRepository extends InventoryTourRepository
@@ -230,5 +231,10 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
     public static function find($id): MerchandiseInventoryTour|null
     {
         return MerchandiseInventoryTour::find($id);
+    }
+
+    public function getItineraryItem(): ItineraryItem
+    {
+        return $this->getInventory()?->getItineraryItem();
     }
 }

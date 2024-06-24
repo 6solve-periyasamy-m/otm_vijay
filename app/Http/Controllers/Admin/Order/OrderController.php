@@ -17,6 +17,7 @@ use App\Repository\Model\Order\InvoiceRepository;
 use App\Repository\Model\Order\ItineraryRepository;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Reporting\ReportRepository;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class OrderController extends Controller
 {
@@ -61,12 +62,7 @@ class OrderController extends Controller
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
-    public function latestInvoice(Order $order)
-    {
-        return $order->repository->getInvoiceRepository()->getResponseStream();
-    }
-
-    public function invoice(Order $order, string $version = 'latest')
+    public function invoice(Order $order, $version = 0): StreamedResponse
     {
         $invoice =
             $order->invoices()->where('invoice_number', '=', $version)->first()
@@ -77,6 +73,17 @@ class OrderController extends Controller
     public function atol(Order $order)
     {
         return $order->repository->getAtolRepository()->showAtolCertificate();
+    }
+
+    public function itinerary(Order $order): StreamedResponse
+    {
+        return (new ItineraryRepository($order))->getResponseStream($order->leadBooker);
+    }
+
+    public function reservation(Order $order)
+    {
+        return dompdf(view('pdf.invoices.itinerary', ['itinerary' => $order->repository->getReservationDocument(),]));
+
     }
 
     public function occupancy(Order $order)
@@ -116,29 +123,6 @@ class OrderController extends Controller
         if (!is_otm()) abort(403);
         $order->repository->forceDelete();
         return redirect()->route('orders.all');
-    }
-
-    public function itineraryInvoice(Order $order)
-    {
-        return $order->repository->getItinerary();
-    }
-
-    public function reservationPreview(Order $order,Invoice $invoice)
-    {
-        $invoice = $order->repository->getInvoiceRepository()->invoice;
-
-        $tour = Tour::with(
-            'accommodationInventoryTours', 'accommodationInventoryTours.inventory','accommodationInventoryTours.inventory.roomType','accommodationInventoryTours.inventory.boardType', 'accommodationInventoryTours.inventory.component',
-            'activityInventoryTours', 'activityInventoryTours.inventory','activityInventoryTours.inventory.ticketType', 'activityInventoryTours.inventory.component', 'activityInventoryTours.inventory.component.activityType',
-            'flightInventoryTours', 'flightInventoryTours.inventory', 'flightInventoryTours.inventory.component', 'flightInventoryTours.inventory.component.airline', 'flightInventoryTours.inventory.component.departureAirport', 'transportInventoryTours.inventory.component.arrivalAddress',
-            'transportInventoryTours', 'transportInventoryTours.inventory', 'transportInventoryTours.inventory.travelClass', 'transportInventoryTours.inventory.component', 'transportInventoryTours.inventory.component.operator', 'transportInventoryTours.inventory.component.departureAddress', 'transportInventoryTours.inventory.component.arrivalAddress',
-            'merchandise', 'merchandise.inventory', 'merchandise.inventory.size', 'merchandise.inventory.variant', 'merchandise.inventory.component', 'merchandise.inventory.component.type',
-            'paymentInstallments', 'orders', 'orders.leadBooker'
-        )->find($order->tour_id);
-        
-        //$html = view('pdf.invoices.reservation', compact('tour','order','invoice'))->render();
-        return dompdf(view('pdf.invoices.reservation', ['tour' => $tour, 'order' => $order, 'invoice' => $invoice,]));
-
     }
 
 }

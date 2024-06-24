@@ -7,7 +7,7 @@ use App\Models\Order\Invoice\InvoiceBillable;
 use App\Models\Order\Order;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
-use App\Repository\Storage\Order\ItineraryItem;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsTransport;
 
 class OrderTransportRepository extends OrderComponentRepository
@@ -104,20 +104,8 @@ class OrderTransportRepository extends OrderComponentRepository
 
     public function getItineraryItem(Order $order = null): ItineraryItem
     {
-        $tourComponent = $this->orderComponent->tourComponent;
-        $inventory = $tourComponent->inventory;
-        $component = $inventory->component;
-
-        return new ItineraryItem(
-            'Journey',
-            $this->getQuantity($order),
-            $inventory->departs_at,
-            $inventory->arrives_at,
-            [
-                'Details' => $component->name,
-                'Transport' => $component->transportType->name,
-                'Travel Class' => $inventory->travelClass->name,
-            ]
-        );
+        $item = $this->orderComponent->tourComponent->repository->getItineraryItem();
+        $item->quantity = $this->getQuantity($order);
+        return $item;
     }
 }

@@ -21,7 +21,7 @@
     }
     $create = $create ?? $attributes->get('create');
 @endphp
-<div wire:ignore class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}">
+<div wire:ignore style="padding-left: 5px;" class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}">
     <label for="{{ $id }}">
         {{ $attributes->get('label') }} @if($attributes->has('required')) <x-admin.required /> @endif
         @error($attributes->get('name')) <span class="text-danger">({{ $message }})</span> @enderror

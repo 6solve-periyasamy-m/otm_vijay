@@ -2,28 +2,29 @@
 
 namespace App\Repository\Abstracts;
 
+use App\Repository\Abstracts\Interfaces\BelongsOnItinerary;
 use App\Repository\Interfaces\HasComponentType;
 use Carbon\Carbon;
 
-abstract class InventoryContainerRepository extends ModelRepository implements HasComponentType
+abstract class InventoryContainerRepository extends ModelRepository implements HasComponentType, BelongsOnItinerary
 {
-    public abstract function getTourComponentType(): string;
-    public abstract function getCost(): float;
-    public abstract function getInventory(): ?InventoryRepository;
+    abstract public function getTourComponentType(): string;
+    abstract public function getCost(): float;
+    abstract public function getInventory(): ?InventoryRepository;
 
     public function getSalesPrice(): ?float
     {
-        return $this->getInventory()->getSalesPrice();
+        return $this->getInventory()?->getSalesPrice();
     }
 
     public function getPurchasePrice(): ?float
     {
-        return $this->getInventory()->getPurchasePrice();
+        return $this->getInventory()?->getPurchasePrice();
     }
 
     public function getLocalPurchasePrice(): ?float
     {
-        return $this->getInventory()->getLocalPurchasePrice();
+        return $this->getInventory()?->getLocalPurchasePrice();
     }
 
     public function getMargin(): ?float
@@ -45,11 +46,11 @@ abstract class InventoryContainerRepository extends ModelRepository implements H
 
     public function getStartTime(): Carbon|null
     {
-        return $this->getInventory()->getStartTime();
+        return $this->getInventory()?->getStartTime();
     }
 
     public function getEndTime(): Carbon|null
     {
-        return $this->getInventory()->getEndTime();
+        return $this->getInventory()?->getEndTime();
     }
 }

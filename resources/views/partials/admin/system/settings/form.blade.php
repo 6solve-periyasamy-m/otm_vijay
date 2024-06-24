@@ -160,7 +160,7 @@
             </div>
     </x-admin.section.card>
     </div>
-    <div class="col-xl-6">
+    <div class="col-xl-12">
         <x-admin.section.card>
             <x-slot:title>
                 Customer Data Locking
@@ -182,4 +182,12 @@
             @include('partials.fields.ckeditor', ['name' => 'Bank Transfer', 'field' => 'bank_transfer', 'value' => setting('company.bank_transfer', ''), 'width' => 12])
         </x-admin.section.card>
     </div>
+    @if(config('app.features.kpt') || config('app.features.bleeding-edge'))
+        <div class="col-xl-6">
+            <x-admin.section.card>
+                <x-slot:title>Default Documentation Colors</x-slot:title>
+                <x-livewire.input.code-mirror name="document_css">{{ setting('customization.documentation.colors', \Settings::defaultDocumentationColors()) }}</x-livewire.input.code-mirror>
+            </x-admin.section.card>
+        </div>
+    @endif
 </form>
