@@ -4,8 +4,10 @@ namespace App\Repository\Model\Order\Component;
 
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Invoice\InvoiceBillable;
+use App\Models\Order\Order;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsTransport;
 
 class OrderTransportRepository extends OrderComponentRepository
@@ -92,5 +94,18 @@ class OrderTransportRepository extends OrderComponentRepository
             'amount' => $this->orderComponent->tourComponent->tour_component_type === 'Included' ? 0 : $this->orderComponent->cost,
             'is_base' => $this->orderComponent->tourComponent->tour_component_type === 'Included',
         ]);
+    }
+
+    public function getQuantity(Order $order = null): int
+    {
+        $order = $order ?? $this->orderComponent->orderCustomer->order;
+        return $order?->orderTransport()->where('transport_inventory_tour_id', '=', $this->orderComponent->transport_inventory_tour_id)->count() ?? 0;
+    }
+
+    public function getItineraryItem(Order $order = null): ItineraryItem
+    {
+        $item = $this->orderComponent->tourComponent->repository->getItineraryItem();
+        $item->quantity = $this->getQuantity($order);
+        return $item;
     }
 }

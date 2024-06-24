@@ -19,9 +19,11 @@
     <div class="card">
         <h2 class="label-card">{{ \Carbon\Carbon::createFromTimestamp($day)->format('l jS F Y') }}</h2>
     </div>
-    @foreach($components as $component)
-        @include('partials.pdf.customer.itinerary', ['orderComponent' => $component,])
-    @endforeach
+    <div style="break-after: page">
+        @foreach($components as $component)
+            @include('partials.pdf.customer.itinerary', ['orderComponent' => $component,])
+        @endforeach
+    </div>
 @endforeach
 </body>
 </html>

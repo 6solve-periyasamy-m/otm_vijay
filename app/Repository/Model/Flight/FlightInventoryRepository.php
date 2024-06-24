@@ -12,6 +12,7 @@ use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Interfaces\Manifest\HasFlightManifest;
 use App\Repository\Model\Quote\Component\QuoteFlightRepository;
 use App\Repository\Reporting\Manifest\FlightManifestRepository;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsFlight;
 use Carbon\Carbon;
 use DB;
@@ -168,5 +169,21 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
     public function getPurchasePriceString(): string
     {
         return f_currency($this->getPurchasePrice(), $this->inventory->component->currency);
+    }
+
+    public function getItineraryItem(): ItineraryItem
+    {
+        return new ItineraryItem(
+            'Flight',
+            null,
+            $this->inventory->departs_at,
+            $this->inventory->arrives_at,
+            [
+                'Airline' => $this->inventory->component->airline->name,
+                'Details' => $this->inventory->component->departureAirport->name . ' to ' . $this->inventory->component->arrivalAirport->name,
+                'Travel Class' => $this->inventory->travelClass->name,
+                'Check In' => f_datetime($this->inventory->check_in),
+            ]
+        );
     }
 }

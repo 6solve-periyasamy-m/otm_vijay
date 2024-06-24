@@ -28,7 +28,7 @@ class QuotePdfGenerator
     public function getView(): View
     {
         return match ($this->getStyle()) {
-            2 =>  view('pdf.quotes.kpt', ['sent' => $this->quote,]),
+            2 =>  view('pdf.invoices.itinerary', ['itinerary' => $this->quote->built->repository->getItineraryForDocument($this->quote->paying, $this->quote->travelling), 'type' => 'Quote']),
             default => view('pdf.quotes.columns', ['sent' => $this->quote,]),
         };
     }
