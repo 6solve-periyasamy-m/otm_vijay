@@ -71,7 +71,7 @@
                 }
             });
             @if(isset($value))
-                window.dispatchEvent(new CustomEvent("updateValue", { detail: { key: '{{ $attributes->get('name') }}', 'value': {{$value}}, }}))
+                dispatchUpdateEvent('{{ $attributes->get('name') }}', {{$value}})
             @endif
         });
     </script>
