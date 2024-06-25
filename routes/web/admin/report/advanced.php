@@ -8,5 +8,5 @@ Route::prefix('{report}')->group(function () {
     Route::get('/', [AdvancedBespokeController::class, 'view'])->name('reports.advanced.view');
     Route::get('/update', [AdvancedBespokeController::class, 'edit'])->name('reports.advanced.edit');
     Route::post('/update', [AdvancedBespokeController::class, 'update'])->name('reports.advanced.update');
-    Route::post('/delete', [AdvancedBespokeController::class, 'update'])->name('reports.advanced.delete');
+    Route::post('/delete', [AdvancedBespokeController::class, 'delete'])->name('reports.advanced.delete');
 });
