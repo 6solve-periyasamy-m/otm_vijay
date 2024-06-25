@@ -231,7 +231,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function cloneInstallments(Tour $tour)
     {
         foreach ($tour->paymentInstallments as $installment) {
-            $this->addInstallment($installment->due_on, $installment->cost);
+            $this->addInstallment($installment->due_on, $installment->amount, $installment->is_percentage);
         }
     }
 
