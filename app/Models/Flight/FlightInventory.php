@@ -204,7 +204,7 @@ class FlightInventory extends Model
         return $this->hasManyThrough(OrderFlight::class, FlightInventoryTour::class, 'flight_inventory_id', 'flight_inventory_tour_id');
     }
 
-    public function getLocalPurchasePriceAttribute(): float
+    public function getLocalPurchasePriceAttribute(): float|null
     {
         return fx_convert($this->purchase_price, $this->component->currency);
     }

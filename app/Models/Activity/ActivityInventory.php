@@ -177,7 +177,7 @@ class ActivityInventory extends Model
         return $this->internal_repository;
     }
 
-    public function getLocalPurchasePriceAttribute(): float
+    public function getLocalPurchasePriceAttribute(): float|null
     {
         return fx_convert($this->purchase_price, $this->component->currency);
     }
