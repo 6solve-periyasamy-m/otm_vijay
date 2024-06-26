@@ -12,6 +12,7 @@ use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Model\Quote\Component\QuoteMerchandiseRepository;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsMerchandise;
 use Carbon\Carbon;
 use DB;
@@ -202,5 +203,16 @@ class MerchandiseInventoryRepository extends InventoryRepository
     public function getPurchasePriceString(): string
     {
         return f_currency($this->getPurchasePrice());
+    }
+
+    public function getItineraryItem(): ItineraryItem
+    {
+        return new ItineraryItem(
+            'Merchandise',
+            null,
+            null,
+            null,
+            [],
+        );
     }
 }

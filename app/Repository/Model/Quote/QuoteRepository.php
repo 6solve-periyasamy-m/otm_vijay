@@ -6,6 +6,7 @@ use App\Exceptions\MailDisabledException;
 use App\Mail\Storage\Attachment;
 use App\Mail\Storage\SettingsMail;
 use App\Models\Customer\Customer;
+use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Location\Address;
@@ -146,9 +147,10 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getRemainingInstallment(int $paying = 1, float|null $price = null): float|null
     {
-        $price = $price ?? $this->getPricePerPerson($paying)?->price_per_person ?? 0;
+        $ppp = ($price ?? $this->getPricePerPerson($paying)?->price_per_person ?? 0);
+        $price = ($ppp * $paying);
         foreach ($this->quote->installments as $installment) {
-            $price -= $installment->getAmount($paying, $price);
+            $price -= $installment->getAmount($paying, $ppp);
         }
         return $price - $this->quote->getDepositAmount($paying);
     }
@@ -366,11 +368,15 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 'quote_id' => $this->quote->id,
                 'price_per_person' => 0,
             ]);
-        } elseif (!isset($price)) {
+        }
+
+        if (!isset($price)) {
             $highest = null;
             foreach ($this->quote->pricePoints as $pricePoint) {
-                if ($pricePoint->quantity == $count) return $pricePoint;
-                if ($pricePoint->quantity < $count && ($highest == null || $highest->quantity < $pricePoint->quantity)) {
+                if ($pricePoint->quantity === $count) {
+                    return $pricePoint;
+                }
+                if ($pricePoint->quantity < $count && ($highest === null || $highest->quantity < $pricePoint->quantity)) {
                     $highest = $pricePoint;
                 }
             }
@@ -609,7 +615,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $installments = [];
         $pricepoints = [];
         $sections = [];
-        foreach ($this->quote->installments as $installment) { $installments[] = ['due_on' => $installment->due_on->format('Y-m-d'), 'amount' => $installment->amount,]; }
+        foreach ($this->quote->installments as $installment) { $installments[] = ['due_on' => $installment->due_on->format('Y-m-d'), 'percentage' => $installment->percentage, 'amount' => $installment->amount,]; }
         foreach ($this->quote->pricePoints as $pricePoint) { $pricepoints[$pricePoint->quantity] = $pricePoint->price_per_person; }
         foreach ($this->quote->sections as $section) { $sections[] =  $section->serialize(); }
         $quote['installments'] = $installments;
@@ -676,7 +682,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         unset($data['merchandise']);
         $installments = [];
         foreach ($data['installments'] as $installment) {
-            $installments[] = QuoteInstallment::make(['due_on' => Carbon::parse($installment['due_on']), 'amount' => $installment['amount']]);
+            $installments[] = QuoteInstallment::make(['due_on' => Carbon::parse($installment['due_on']), 'percentage' => $installment['percentage'] ?? false, 'amount' => $installment['amount']]);
         }
         unset($data['installments']);
         $pricepoints = [];
@@ -956,9 +962,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($travelling);
-            $start = $item->start->clone()->setTime(0,0)->unix();
-            if (!array_key_exists($start, $items)) { $items[$start] = []; }
-            $items[$start][] = $item;
+            $heading = "Accommodation";
+            if (!array_key_exists($heading, $items)) { $items[$heading] = []; }
+            $items[$heading][] = $item;
         }
 
         foreach ($this->quote->activities as  $component) {
@@ -966,9 +972,10 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($travelling);
-            $start = $item->start->clone()->setTime(0,0)->unix();
-            if (!array_key_exists($start, $items)) { $items[$start] = []; }
-            $items[$start][] = $item;
+            $heading =
+                $component->inventory->component->activity_category === ActivityCategory::MAIN ? 'Headliner' : 'Inclusion';
+            if (!array_key_exists($heading, $items)) { $items[$heading] = []; }
+            $items[$heading][] = $item;
         }
 
         foreach ($this->quote->flights as  $component) {
@@ -976,9 +983,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($travelling);
-            $start = $item->start->clone()->setTime(0,0)->unix();
-            if (!array_key_exists($start, $items)) { $items[$start] = []; }
-            $items[$start][] = $item;
+            $heading = "Flights";
+            if (!array_key_exists($heading, $items)) { $items[$heading] = []; }
+            $items[$heading][] = $item;
         }
 
         foreach ($this->quote->transport as  $component) {
@@ -986,11 +993,10 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($travelling);
-            $start = $item->start->clone()->setTime(0,0)->unix();
-            if (!array_key_exists($start, $items)) { $items[$start] = []; }
-            $items[$start][] = $item;
+            $heading = "Transfers";
+            if (!array_key_exists($heading, $items)) { $items[$heading] = []; }
+            $items[$heading][] = $item;
         }
-        ksort($items);
         return $items;
     }
 
@@ -1024,14 +1030,16 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     
     public function getItineraryForDocument(int $paying, int $travelling): Itinerary
     {
+        $travelling += $paying;
         $paying += $this->quote->leadTraveller->paying;
         $travelling += $this->quote->leadTraveller->travelling;
         return new Itinerary(
-            $this->quote->name,
+            null,
             $this->quote->event?->name,
             $this->quote->description ?? $this->quote->event?->description,
             $this->quote->event?->image_url,
             $this->quote->reference,
+            $this->quote->organization,
             $this->quote->date_from,
             $this->quote->date_to,
             $this->quote->leadTraveller->customer,

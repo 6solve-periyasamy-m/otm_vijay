@@ -463,8 +463,9 @@ table.cell-padding-0 td, th {
   @extend .text-dark;
   @extend .text-left;
   @extend .v-top;
-  width: 75px;
-  padding: 0 40px;
+  width: 200px;
+  border: 1px solid black !important;
+  padding: 0 10px;
 }
 
 .item-detail {

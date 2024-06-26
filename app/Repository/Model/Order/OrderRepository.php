@@ -843,6 +843,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $this->order->tour->event?->description ?? $this->order->tour->description,
             $this->order->tour->event?->image_url,
             $this->order->booking_reference,
+            $this->order->organization,
             $this->order->tour->date_from,
             $this->order->tour->date_to,
             $this->order->leadBooker->customer,
