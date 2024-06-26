@@ -129,9 +129,9 @@ class ReportRepository
             $row = collect();
             $row->ordered_on = $order->ordered_on;
             $row->booking_reference = $order->booking_reference;
-            $row->lb_first_name = $order->leadBooker->customer->first_name;
-            $row->lb_last_name = $order->leadBooker->customer->last_name;
-            $row->lb_email = $order->leadBooker->customer->email_address;
+            $row->lb_first_name = $order->leadBooker?->customer?->first_name;
+            $row->lb_last_name = $order->leadBooker?->customer?->last_name;
+            $row->lb_email = $order->leadBooker?->customer?->email_address;
             $row->customer_count = $order->customer_count;
             $row->tour_name = $order->tour->name;
             $row->event_name = $order->tour->event?->name;
@@ -166,9 +166,9 @@ class ReportRepository
             $row = collect();
             $row->ordered_on = $order->ordered_on;
             $row->booking_reference = $order->booking_reference;
-            $row->lb_first_name = $order->leadBooker->customer->first_name;
-            $row->lb_last_name = $order->leadBooker->customer->last_name;
-            $row->lb_email = $order->leadBooker->customer->email_address;
+            $row->lb_first_name = $order->leadBooker?->customer?->first_name;
+            $row->lb_last_name = $order->leadBooker?->customer?->last_name;
+            $row->lb_email = $order->leadBooker?->customer?->email_address;
             $row->customer_count = $order->customer_count;
             $row->tour_name = $order->tour->name;
             $row->event_name = $order->tour->event?->name;
