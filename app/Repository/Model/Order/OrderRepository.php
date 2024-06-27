@@ -7,6 +7,7 @@ use App\Events\Order\OrderCreatedEvent;
 use App\Exceptions\MailDisabledException;
 use App\Mail\Storage\OrderMail;
 use App\Models\Customer\Customer;
+use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Helper\Enum\OrderStatus;
 use App\Models\Location\Address;
@@ -865,8 +866,60 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         return $itinerary;
     }
 
+    public function getReservationComponents(): array
+    {
+        $items = [];
+        $seen = [];
+        foreach ($this->order->groups as $group) {
+            foreach ($group->rooms as $component) {
+                $key = "accommodation-{$component->accommodation_inventory_tour_id}";
+                if (in_array($key, $seen, true)) { continue; }
+                $seen[] = $key;
+                $item = $component->repository->getItineraryItem($this->order);
+                $start = "Accommodation";
+                if (!array_key_exists($start, $items)) { $items[$start] = []; }
+                $items[$start][] = $item;
+            }
+        }
+
+        foreach ($this->order->orderActivities()->groupBy('activity_inventory_tour_id')->get() as  $component) {
+            $key = "activity-{$component->activity_inventory_tour_id}";
+            if (in_array($key, $seen, true)) { continue; }
+            $seen[] = $key;
+            $item = $component->repository->getItineraryItem($this->order);
+            $start =
+                $component->tourComponent->inventory->component->activity_category === ActivityCategory::MAIN ? 'Headliner' : 'Inclusion';
+            if (!array_key_exists($start, $items)) { $items[$start] = []; }
+            $items[$start][] = $item;
+        }
+
+        foreach ($this->order->orderFlights()->groupBy('flight_inventory_tour_id')->get() as  $component) {
+            $key = "flight-{$component->flight_inventory_tour_id}";
+            if (in_array($key, $seen, true)) { continue; }
+            $seen[] = $key;
+            $item = $component->repository->getItineraryItem($this->order);
+            $start = "Flights";
+            if (!array_key_exists($start, $items)) { $items[$start] = []; }
+            $items[$start][] = $item;
+        }
+
+        foreach ($this->order->orderTransport()->groupBy('transport_inventory_tour_id')->get() as  $component) {
+            $key = "transport-{$component->transport_inventory_tour_id}";
+            if (in_array($key, $seen, true)) { continue; }
+            $seen[] = $key;
+            $item = $component->repository->getItineraryItem($this->order);
+            $start = "Transfers";
+            if (!array_key_exists($start, $items)) { $items[$start] = []; }
+            $items[$start][] = $item;
+        }
+        return $items;
+    }
+
     public function getReservationDocument(): Itinerary
     {
-        return $this->getGenericItinerary();
+        $itinerary = $this->getGenericItinerary();
+        $itinerary->package = null;
+        $itinerary->items = $this->getReservationComponents();
+        return $itinerary;
     }
 }
