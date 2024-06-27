@@ -29,16 +29,27 @@
                                         NAME: {{ $itinerary->booker->full_name }}
                                     </td>
                                 </tr>
+                                @if(!empty($itinerary->booker->mobile_number))
                                 <tr>
                                     <td colspan="2" class="new header-detail-data">
                                         PHONE: {{ $itinerary->booker->mobile_number }}
                                     </td>
                                 </tr>
+                                @endif
+                                @if(!empty($itinerary->booker->email_address))
                                 <tr>
                                     <td colspan="2" class="new header-detail-data">
                                         EMAIL: <a href="mailto:{{ $itinerary->booker->email_address }}">{{ $itinerary->booker->email_address }}</a>
                                     </td>
                                 </tr>
+                                @endif
+                                @if(!empty($itinerary->organization?->name))
+                                    <tr>
+                                        <td colspan="2" class="new header-detail-data">
+                                            ORGANIZATION: {{ $itinerary->organization?->name }}
+                                        </td>
+                                    </tr>
+                                @endif
                                 <tr>
                                     <td class="text-left v-top">&nbsp;</td>
                                 </tr>
@@ -91,14 +102,16 @@
         <td class="lower-header-td text-left">
             <table class="lower-header-table">
                 <tbody>
-                    <tr>
-                        <td class="lower-header-detail-title">
-                            PACKAGE:
-                        </td>
-                        <td class="lower-header-detail">
-                            {{ $itinerary->package }}
-                        </td>
-                    </tr>
+                    @if(!empty($itinerary->event))
+                        <tr>
+                            <td class="lower-header-detail-title">
+                                EVENT:
+                            </td>
+                            <td class="lower-header-detail">
+                                {{ $itinerary->event }}
+                            </td>
+                        </tr>
+                    @endif
                     <tr>
                         <td class="lower-header-detail-title">
                             TRAVEL DATES:
@@ -107,13 +120,13 @@
                             {{ $itinerary->start->format('d F Y') }} - {{ $itinerary->end->format('d F Y') }}
                         </td>
                     </tr>
-                    @if(!empty($itinerary->event))
+                    @if(!empty($itinerary->package))
                         <tr>
                             <td class="lower-header-detail-title">
-                                EVENT:
+                                PACKAGE:
                             </td>
                             <td class="lower-header-detail">
-                                {{ $itinerary->event }}
+                                {{ $itinerary->package }}
                             </td>
                         </tr>
                     @endif

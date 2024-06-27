@@ -3,6 +3,7 @@
 namespace App\Repository\Storage\Itinerary;
 
 use App\Models\Customer\Customer;
+use App\Models\Customer\Organization;
 use App\Models\System\Brand;
 use Carbon\Carbon;
 
@@ -14,11 +15,12 @@ class Itinerary
     public int $travellerCount;
 
     /**
-     * @param string $package
+     * @param string|null $package
      * @param string|null $event
      * @param string|null $description
      * @param string|null $image
      * @param string|null $reference
+     * @param Organization|null $organization
      * @param Carbon $start
      * @param Carbon $end
      * @param Customer $booker
@@ -31,11 +33,12 @@ class Itinerary
      * @param string|null $notes
      */
     public function __construct(
-        public string $package,
+        public string|null $package,
         public string|null $event,
         public string|null $description,
         public string|null $image,
         public string|null $reference,
+        public Organization|null $organization,
         public Carbon $start,
         public Carbon $end,
         public Customer $booker,
