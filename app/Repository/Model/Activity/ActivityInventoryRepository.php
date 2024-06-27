@@ -186,7 +186,7 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
             [
                 'Event' => $this->inventory->component->name,
                 'Venue' => $this->inventory->component->address,
-                'Ticket' => $this->inventory->ticketType->name,
+                'Ticket Type' => $this->inventory->ticketType->name,
                 'Description' => $this->inventory->component->description,
             ]
         );
