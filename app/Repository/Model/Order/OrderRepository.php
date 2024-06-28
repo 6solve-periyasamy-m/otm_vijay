@@ -748,7 +748,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
                 if (in_array($key, $seen, true)) { continue; }
                 $seen[] = $key;
                 $item = $component->repository->getItineraryItem($this->order);
-                $start = $item->start->clone()->setTime(0,0)->unix();
+                $start = $component->tourComponent->inventory->check_in->clone()->setTime(0,0)->unix();
                 if (!array_key_exists($start, $items)) { $items[$start] = []; }
                 $items[$start][] = $item;
             }
@@ -759,7 +759,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($this->order);
-            $start = $item->start->clone()->setTime(0,0)->unix();
+            $start = $component->tourComponent->inventory->starts_at->clone()->setTime(0,0)->unix();
             if (!array_key_exists($start, $items)) { $items[$start] = []; }
             $items[$start][] = $item;
         }
@@ -769,7 +769,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($this->order);
-            $start = $item->start->clone()->setTime(0,0)->unix();
+            $start = $component->tourComponent->inventory->departs_at->clone()->setTime(0,0)->unix();
             if (!array_key_exists($start, $items)) { $items[$start] = []; }
             $items[$start][] = $item;
         }
@@ -779,7 +779,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($this->order);
-            $start = $item->start->clone()->setTime(0,0)->unix();
+            $start = $component->tourComponent->inventory->departs_at->clone()->setTime(0,0)->unix();
             if (!array_key_exists($start, $items)) { $items[$start] = []; }
             $items[$start][] = $item;
         }

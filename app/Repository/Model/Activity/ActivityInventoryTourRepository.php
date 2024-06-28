@@ -308,8 +308,8 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
         return ActivityInventoryTour::find($id);
     }
 
-    public function getItineraryItem(): ItineraryItem
+    public function getItineraryItem(int|null $quantity = null): ItineraryItem
     {
-        return $this->getInventory()?->getItineraryItem();
+        return $this->getInventory()?->getItineraryItem($quantity);
     }
 }

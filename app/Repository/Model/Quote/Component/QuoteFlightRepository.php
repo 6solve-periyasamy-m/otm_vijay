@@ -140,11 +140,10 @@ class QuoteFlightRepository extends QuoteComponentRepository
 
     public function getItineraryItem(int $travelling = 1): ItineraryItem
     {
-        $item = $this->quoteComponent->inventory->repository->getItineraryItem();
+        $item = $this->getInventory()?->getItineraryItem($this->quoteComponent->quantity ?? $travelling);
         if ($this->quoteComponent->flight_type === 'Outbound') { $item->type = 'Outbound Flight'; }
         elseif ($this->quoteComponent->flight_type === 'Inbound') { $item->type = 'Inbound Flight'; }
         else { $item->type = 'Mid-Package Flight'; }
-        $item->quantity = $this->quoteComponent->quantity ?? $travelling;
         return $item;
     }
 }

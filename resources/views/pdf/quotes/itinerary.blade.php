@@ -78,42 +78,8 @@
                             </tr>
                         </table>
                     @endif
-                    @if($item->type !== 'Accommodation')
-                        <tr>
-                            <td class="item-header" style="width: 125px;">
-                                Dates:
-                            </td>
-                            <td class="item-detail">
-                                {{ $item->start->format('d M Y') }} to {{ $item->end->format('d M Y') }}
-                            </td>
-                        </tr>
-                    @else
-                        <tr>
-                            <td class="item-header" style="width: 125px">
-                                Check In:
-                            </td>
-                            <td class="item-detail">
-                                {{ $item->start->format('d M Y') }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="item-header" style="width: 125px">
-                                Check Out:
-                            </td>
-                            <td class="item-detail">
-                                {{ $item->end->format('d M Y') }}
-                            </td>
-                        </tr>
-                    @endif
-                    <tr>
-                        <td class="item-header" style="width: 125px">
-                            Quantity:
-                        </td>
-                        <td class="item-detail">
-                            {{ $item->quantity }}
-                        </td>
-                    </tr>
                     @foreach($item->details as $key => $value)
+                        @continue(empty($value))
                         <tr>
                             <td class="item-header" style="width: 125px">
                                 {{ $key }}:

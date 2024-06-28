@@ -146,8 +146,7 @@ class QuoteActivityRepository extends QuoteComponentRepository
 
     public function getItineraryItem(int $travelling = 1, Quote|null $quote = null): ItineraryItem
     {
-        $item = $this->quoteComponent->inventory->repository->getItineraryItem();
-        $item->quantity = $this->quoteComponent->quantity ?? $travelling;
+        $item = $this->getInventory()?->getItineraryItem($this->quoteComponent->quantity ?? $travelling);
         $item->name =  $quote?->event?->name;
         return $item;
     }

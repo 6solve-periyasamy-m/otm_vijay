@@ -107,8 +107,6 @@ class OrderFlightRepository extends OrderComponentRepository
 
     public function getItineraryItem(Order $order = null): ItineraryItem
     {
-        $item = $this->orderComponent->tourComponent->repository->getItineraryItem();
-        $item->quantity = $this->getQuantity($order);
-        return $item;
+        return $this->getTourComponent()?->getItineraryItem($this->getQuantity($order));
     }
 }
