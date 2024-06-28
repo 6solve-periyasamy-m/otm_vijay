@@ -26,20 +26,20 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2" class="new header-detail-data">
-                                        NAME: {{ $itinerary->booker->full_name }}
+                                        NAME: {{ $itinerary->booker->customer->full_name }}
                                     </td>
                                 </tr>
-                                @if(!empty($itinerary->booker->mobile_number))
+                                @if(!empty($itinerary->booker->customer->mobile_number))
                                 <tr>
                                     <td colspan="2" class="new header-detail-data">
-                                        PHONE: {{ $itinerary->booker->mobile_number }}
+                                        PHONE: {{ $itinerary->booker->customer->mobile_number }}
                                     </td>
                                 </tr>
                                 @endif
-                                @if(!empty($itinerary->booker->email_address))
+                                @if(!empty($itinerary->booker->customer->email_address))
                                 <tr>
                                     <td colspan="2" class="new header-detail-data">
-                                        EMAIL: <a href="mailto:{{ $itinerary->booker->email_address }}">{{ $itinerary->booker->email_address }}</a>
+                                        EMAIL: <a href="mailto:{{ $itinerary->booker->customer->email_address }}">{{ $itinerary->booker->customer->email_address }}</a>
                                     </td>
                                 </tr>
                                 @endif
@@ -141,7 +141,7 @@
                             TOTAL NUMBER OF PERSONS:
                         </td>
                         <td class="lower-header-detail">
-                            {{ $itinerary->travellerCount }} Adult(s)
+                            {{ $itinerary->getTravellingCount() }} Adult(s)
                         </td>
                     </tr>
                     <tr>
@@ -149,7 +149,7 @@
                             LEAD GUEST:
                         </td>
                         <td class="lower-header-detail">
-                            {{ $itinerary->booker->full_name }}
+                            {{ $itinerary->booker->customer->full_name }}
                         </td>
                     </tr>
                 </tbody>

@@ -12,8 +12,6 @@ use Carbon\Carbon;
  */
 class Itinerary
 {
-    public int $travellerCount;
-
     /**
      * @param string|null $package
      * @param string|null $event
@@ -23,9 +21,9 @@ class Itinerary
      * @param Organization|null $organization
      * @param Carbon $start
      * @param Carbon $end
-     * @param Customer $booker
+     * @param ItineraryTraveller $booker
      * @param Brand $brand
-     * @param Customer[] $travellers
+     * @param ItineraryTraveller[] $travellers
      * @param array<int, ItineraryItem[]> $items
      * @param ItineraryPaymentDetails|null $finances
      * @param string|null $terms
@@ -41,9 +39,9 @@ class Itinerary
         public Organization|null $organization,
         public Carbon $start,
         public Carbon $end,
-        public Customer $booker,
+        public ItineraryTraveller $booker,
         public Brand $brand,
-        public array|int $travellers,
+        public array $travellers,
         public array $items,
         public ItineraryPaymentDetails|null $finances,
         public string|null $terms,
@@ -52,7 +50,6 @@ class Itinerary
     )
     {
         $this->setImage($this->image);
-        $this->setTravellers($this->travellers);
     }
 
     public function setImage(string|null $image): Itinerary
@@ -64,16 +61,18 @@ class Itinerary
         }
         return $this;
     }
-
-    public function setTravellers(array|int $travellers): Itinerary
+    
+    public function getPayingCount(): int
     {
-        if (is_int($travellers)) {
-            $this->travellerCount = $travellers;
-            $this->travellers = [];
-        } else {
-            $this->travellers = $travellers;
-            $this->travellerCount = count($this->travellers);
-        }
-        return $this;
+        $paying = 0 + $this->booker->paying;
+        foreach ($this->travellers as $traveller) { $paying += $traveller->paying; }
+        return $paying;
+    }
+    
+    public function getTravellingCount(): int
+    {
+        $travelling = 0 + $this->booker->travelling;
+        foreach ($this->travellers as $traveller) { $travelling += $traveller->travelling; }
+        return $travelling;
     }
 }

@@ -35,6 +35,7 @@ use App\Repository\Storage\Itinerary\Itinerary;
 use App\Repository\Storage\Itinerary\ItineraryPaymentDetails;
 use App\Repository\Storage\Itinerary\ItinerarySchedule;
 use App\Repository\Storage\Itinerary\ItineraryScheduleType;
+use App\Repository\Storage\Itinerary\ItineraryTraveller;
 use App\Repository\Storage\Quote\CustomerForConversion;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -1048,9 +1049,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $this->quote->organization,
             $this->quote->date_from,
             $this->quote->date_to,
-            $this->quote->leadTraveller->customer,
+            new ItineraryTraveller($this->quote->leadTraveller->customer, $this->quote->leadTraveller->paying, $this->quote->leadTraveller->travelling),
             $this->quote->brand,
-            $travelling,
+            $this->getTravellerArray($paying, $travelling),
             $this->getItineraryItems($travelling),
             $this->getItineraryFinances($paying),
             $this->quote->terms,
@@ -1064,5 +1065,15 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $bracket = $this->quote->taxBracket();
         if ($bracket === null || $bracket->rate === null) { return null; }
         return $this->getTotalCost($paying) * ($bracket->rate/100);
+    }
+
+    private function getTravellerArray(int $paying, int $travelling): array
+    {
+        $travelling = $travelling - ($this->quote->leadTraveller->travelling) - $paying;
+        $paying -= ($this->quote->leadTraveller->paying);
+        $travellers = [];
+        for ($x = 0; $x < $paying; $x++) { $travellers[] = new ItineraryTraveller(null, true, true); }
+        for ($x = 0; $x < $travelling; $x++) { $travellers[] = new ItineraryTraveller(null, false, true); }
+        return $travellers;
     }
 }
