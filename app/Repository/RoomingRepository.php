@@ -41,7 +41,7 @@ class RoomingRepository
             OrderAccommodation::create([
                 'accommodation_inventory_tour_id' => $found->id,
                 'group_id' => $group->id,
-                'cost' => $found->tour_sales_price,
+                'cost' => $found->tour_sales_price ?? 0.0,
             ]);
         }
     }

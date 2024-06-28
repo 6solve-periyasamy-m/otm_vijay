@@ -141,7 +141,7 @@ class MerchandiseInventory extends Model
         return "{$this->component} ({$this->variant->name}) ({$this->size->name})";
     }
 
-    public function getLocalPurchasePriceAttribute(): float
+    public function getLocalPurchasePriceAttribute(): float|null
     {
         return fx_convert($this->purchase_price, $this->component->currency);
     }
