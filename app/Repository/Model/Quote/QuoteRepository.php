@@ -596,6 +596,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $components = ['accommodation' => [], 'activity' => [], 'flight' => [], 'transport' => [], 'merchandise' => []];
         foreach ($this->getComponents() as $component) {
             $data = [
+                'quantity' => $component->get()?->quantity,
                 'inventory' => $component->getInventory()->get()->id,
                 'tour_component_type' => $component->getTourComponentType(),
                 'tour_sales_price' => $component->get()->tour_sales_price,
@@ -631,6 +632,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $accommodation = [];
         foreach ($data['accommodation'] as $datum) {
             $accommodation[] = QuoteAccommodation::make([
+                'quantity' => $datum['quantity'] ?? null,
                 'accommodation_inventory_id' => $datum['inventory'],
                 'tour_component_type' => $datum['tour_component_type'],
                 'tour_sales_price' => $datum['tour_sales_price'],
@@ -641,6 +643,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $activity = [];
         foreach ($data['activity'] as $datum) {
             $activity[] = QuoteActivity::make([
+                'quantity' => $datum['quantity'] ?? null,
                 'activity_inventory_id' => $datum['inventory'],
                 'tour_component_type' => $datum['tour_component_type'],
                 'tour_sales_price' => $datum['tour_sales_price'],
@@ -650,6 +653,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $flight = [];
         foreach ($data['flight'] as $datum) {
             $flight[] = QuoteFlight::make([
+                'quantity' => $datum['quantity'] ?? null,
                 'flight_inventory_id' => $datum['inventory'],
                 'tour_component_type' => $datum['tour_component_type'],
                 'tour_sales_price' => $datum['tour_sales_price'],
@@ -660,6 +664,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $transport = [];
         foreach ($data['transport'] as $datum) {
             $transport[] = QuoteTransport::make([
+                'quantity' => $datum['quantity'] ?? null,
                 'transport_inventory_id' => $datum['inventory'],
                 'tour_component_type' => $datum['tour_component_type'],
                 'tour_sales_price' => $datum['tour_sales_price'],
@@ -669,6 +674,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $merchandise = [];
         foreach ($data['merchandise'] as $datum) {
             $merchandise[] = QuoteMerchandise::make([
+                'quantity' => $datum['quantity'] ?? null,
                 'merchandise_inventory_id' => $datum['inventory'],
                 'tour_component_type' => $datum['tour_component_type'],
                 'tour_sales_price' => $datum['tour_sales_price'],
@@ -971,9 +977,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $key = "activity-{$component->activity_inventory_id}";
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
-            $item = $component->repository->getItineraryItem($travelling);
+            $item = $component->repository->getItineraryItem($travelling, $this->quote);
             $heading =
-                $component->inventory->component->activity_category === ActivityCategory::MAIN ? 'Headliner' : 'Inclusion';
+                $component->inventory->component->activity_category === ActivityCategory::MAIN ? 'Event' : 'Inclusion';
             if (!array_key_exists($heading, $items)) { $items[$heading] = []; }
             $items[$heading][] = $item;
         }

@@ -14,6 +14,7 @@ class ItineraryItem
      * @param array<string, string> $details Extra details about the item
      */
     public function __construct(
+        public string|null $name,
         public string $type,
         public int|null $quantity,
         public Carbon|null $start,

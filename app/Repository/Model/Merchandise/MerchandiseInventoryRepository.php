@@ -208,6 +208,7 @@ class MerchandiseInventoryRepository extends InventoryRepository
     public function getItineraryItem(): ItineraryItem
     {
         return new ItineraryItem(
+            $this->inventory->component->name,
             'Merchandise',
             null,
             null,

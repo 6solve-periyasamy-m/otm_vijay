@@ -6,6 +6,7 @@ use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Location\Address;
 use App\Models\Location\Currency;
 use App\Models\Order\Component\OrderActivity;
+use App\Models\Tour\Event;
 use App\Models\Traits\HasRepository;
 use App\Repository\Model\Activity\ActivityRepository;
 use Database\Factories\Activity\ActivityFactory;
@@ -90,6 +91,11 @@ class Activity extends Model
     public function activityInventory(): HasMany
     {
         return $this->hasMany(ActivityInventory::class, 'activity_id');
+    }
+
+    public function event(): BelongsTo
+    {
+        return $this->belongsTo(Event::class, 'event_id');
     }
 
     public function orders(): HasManyDeep

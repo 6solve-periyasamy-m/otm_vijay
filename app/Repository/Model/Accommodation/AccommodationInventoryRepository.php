@@ -218,17 +218,17 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
     public function getItineraryItem(): ItineraryItem
     {
         return new ItineraryItem(
+            $this->inventory->component->name,
             'Accommodation',
             null,
             $this->inventory->check_in,
             $this->inventory->check_out,
             [
-                'Hotel' => $this->inventory->component->name,
-                'No Of Nights' => diff_in_nights($this->inventory->check_in, $this->inventory->check_out),
+                'No of Nights' => diff_in_nights($this->inventory->check_in, $this->inventory->check_out),
                 'Address' => $this->inventory->component->address,
                 'Room Type' => $this->inventory->roomType->name,
                 'Board Type' => $this->inventory->boardType->name,
-                'description' => $this->inventory->component->description,
+                'Description' => $this->inventory->component->description,
             ]
         );
     }

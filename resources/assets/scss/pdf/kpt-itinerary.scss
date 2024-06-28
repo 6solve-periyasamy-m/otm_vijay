@@ -12,6 +12,7 @@
   --header-data-color: #FFFFFF;
   --alt-background-color: #F8DED0;
   --section-bubble-background: #E95B15;
+  --section-sub-bubble-background: #E2DBD2;
   --section-bubble-text: #FFFFFF;
   --itinerary-item-title: #E95B15;
   --table-background-color: #F8DED0;
@@ -436,6 +437,24 @@ table.cell-padding-0 td, th {
     padding: 10px 25px;
     margin: 10px 0;
     color: var(--section-bubble-text);
+    display: block;
+  }
+}
+.sub-date-header {
+  @extend .cell-padding-0;
+  border: 0;
+  width: 100%;
+  border-spacing: 0;
+  background: var(--document-background);
+  padding: 5px 0 10px 0;
+  .sub-date-content {
+    @extend .text-dark;
+    @extend .fs-12;
+    background-color: var(--alt-background-color);
+    border-radius: 0 30px 30px 0;
+    max-width: 250px;
+    padding: 10px 25px;
+    margin: 10px 0;
     display: block;
   }
 }

@@ -174,12 +174,12 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
     public function getItineraryItem(): ItineraryItem
     {
         return new ItineraryItem(
+            $this->inventory->component->name,
             'Journey',
             null,
             $this->inventory->departs_at,
             $this->inventory->arrives_at,
             [
-                'Details' => $this->inventory->component->name,
                 'Transport' => $this->inventory->component->transportType->name,
                 'Travel Class' => $this->inventory->travelClass->name,
             ]

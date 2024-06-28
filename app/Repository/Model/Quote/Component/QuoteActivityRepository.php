@@ -4,6 +4,7 @@ namespace App\Repository\Model\Quote\Component;
 
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Quote\Component\QuoteActivity;
+use App\Models\Quote\Quote;
 use App\Models\Quote\QuoteSection;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
@@ -143,10 +144,11 @@ class QuoteActivityRepository extends QuoteComponentRepository
         return QuoteActivity::find($id);
     }
 
-    public function getItineraryItem(int $travelling = 1): ItineraryItem
+    public function getItineraryItem(int $travelling = 1, Quote|null $quote = null): ItineraryItem
     {
         $item = $this->quoteComponent->inventory->repository->getItineraryItem();
         $item->quantity = $this->quoteComponent->quantity ?? $travelling;
+        $item->name =  $quote?->event?->name;
         return $item;
     }
 }

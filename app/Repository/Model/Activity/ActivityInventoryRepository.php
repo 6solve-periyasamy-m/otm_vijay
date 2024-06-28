@@ -179,14 +179,14 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
     public function getItineraryItem(): ItineraryItem
     {
         return new ItineraryItem(
+            $this->inventory->component->name,
             $this->inventory->component->activity_category === ActivityCategory::MAIN ? 'Headliner' : 'Event',
             null,
             $this->inventory->starts_at,
             $this->inventory->ends_at,
             [
-                'Event' => $this->inventory->component->name,
-                'Venue' => $this->inventory->component->address,
-                'Ticket Type' => $this->inventory->ticketType->name,
+                'Venue' => $this->inventory->component->address->name,
+                'Ticket' => $this->inventory->component->name,
                 'Description' => $this->inventory->component->description,
             ]
         );

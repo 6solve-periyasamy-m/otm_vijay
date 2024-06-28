@@ -174,12 +174,12 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
     public function getItineraryItem(): ItineraryItem
     {
         return new ItineraryItem(
+            $this->inventory->component->airline->name,
             'Flight',
             null,
             $this->inventory->departs_at,
             $this->inventory->arrives_at,
             [
-                'Airline' => $this->inventory->component->airline->name,
                 'Details' => $this->inventory->component->departureAirport->name . ' to ' . $this->inventory->component->arrivalAirport->name,
                 'Travel Class' => $this->inventory->travelClass->name,
                 'Check In' => f_datetime($this->inventory->check_in),

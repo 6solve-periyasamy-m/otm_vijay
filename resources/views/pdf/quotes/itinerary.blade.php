@@ -67,9 +67,20 @@
             @php /** @var \App\Repository\Storage\Itinerary\ItineraryItem $item */ @endphp
             @foreach($items as $item)
                 <table class="item-table avoid-break">
+                    @if($item->name !== null)
+                        <table class="sub-date-header">
+                            <tr>
+                                <td colspan="2" class="text-left">
+                                    <div class="sub-date-content">
+                                        {{ $item->name }}
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    @endif
                     @if($item->type !== 'Accommodation')
                         <tr>
-                            <td class="item-header" style="width: 125px">
+                            <td class="item-header" style="width: 125px;">
                                 Dates:
                             </td>
                             <td class="item-detail">
@@ -105,7 +116,7 @@
                     @foreach($item->details as $key => $value)
                         <tr>
                             <td class="item-header" style="width: 125px">
-                                {{ ucwords($key) }}:
+                                {{ $key }}:
                             </td>
                             <td class="item-detail">
                                 {!! $value !!}
@@ -315,7 +326,7 @@
     @endif
 
     @if(!empty($itinerary->notes))
-        <div class="avoid-break">
+        <div>
             <table class="divider">
                 <thead>
                     <tr>
@@ -332,7 +343,7 @@
     @endif
 
     @if(!empty($itinerary->terms))
-        <div class="avoid-break">
+        <div>
             <table class="divider">
                 <thead>
                     <tr>
@@ -349,7 +360,7 @@
     @endif
 
     @if(!empty($itinerary->footer))
-        <div class="avoid-break">
+        <div>
             <table class="divider">
                 <thead>
                     <tr>
