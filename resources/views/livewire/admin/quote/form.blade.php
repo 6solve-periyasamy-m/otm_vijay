@@ -1,0 +1,58 @@
+<div>
+    <x-admin.section.card>
+        <div class="float-end">
+            <button wire:click="save" class="btn btn-success">{{ Icon::save() }} Save Quote</button>
+        </div>
+    </x-admin.section.card>
+    <x-admin.section.card>
+        <div class="row">
+            <x-livewire.input wire:model="quote.name" label="Name" width="3" required />
+            <x-livewire.input.select.brand name="quote.brand_id" value="{{$quote->brand_id}}" label="Branding" width="3" />
+            <x-livewire.input.select.tax-bracket name="quote.tax_bracket_id" value="{{$quote->tax_bracket_id}}" label="Tax Bracket" width="3" />
+            <x-livewire.input.select.user name="quote.consultant_id" value="{{$quote->consultant_id ?? get_current_admin()?->id}}" label="Consultant" width="3" />
+            <!-- -->
+            <x-livewire.input.select.organization name="quote.organization_id" value="{{$quote->organization_id}}" label="Organization" width="6" />
+            <x-livewire.input wire:model="quote.commission" label="Commission" width="6" />
+            <!-- -->
+            <x-livewire.input wire:model="quote.deposit" label="Deposit" width="3" />
+            <x-livewire.input.checkbox wire:model="quote.is_deposit_percentage" label="Percentage?" width="1" />
+            <x-livewire.input wire:model="pricePoint.price_per_person" label="Base Price" width="4" required />
+            <x-livewire.input wire:model="quote.single_occupancy_surcharge" label="Single Occupancy Surcharge" width="4" required />
+            <!-- -->
+            <x-livewire.input.text-area wire:model="quote.description" label="Description" />
+        </div>
+    </x-admin.section.card>
+    <x-admin.section.card>
+        <div class="row">
+            <x-livewire.input.select.customer name="prospect.customer_id" value="{{ $prospect->customer_id }}" label="Lead Booker" width="4" required />
+            <x-livewire.input.checkbox wire:model="prospect.travelling" label="Lead Travelling" width="4" />
+            <x-livewire.input.checkbox wire:model="prospect.paying" label="Lead Paying" width="4" />
+        </div>
+    </x-admin.section.card>
+    <x-admin.section.card>
+        <div class="row">
+            <x-livewire.input type="date" wire:model="quote.date_from" label="Date From" width="3" required />
+            <x-livewire.input type="date" wire:model="quote.date_to" label="Date To" width="3" required />
+            <x-livewire.input type="date" wire:model="quote.final_payment" label="Final Payment" width="3" required />
+            <x-livewire.input type="date" wire:model="quote.expires" label="Expires" width="3" required />
+        </div>
+    </x-admin.section.card>
+    <x-admin.section.card>
+        <div class="row">
+            <x-livewire.input.text-area wire:model="quote.internal_notes" label="Internal Notes" width="6" />
+            <x-livewire.input.text-area wire:model="quote.external_notes" label="External Notes" width="6" />
+        </div>
+    </x-admin.section.card>
+    <x-admin.section.card>
+        <div class="row">
+            <div class="col-xl-6">
+                <x-livewire.input.select.large-text-template name="footerTemplate" label="Copy from Template" value="{{ $footerTemplate }}" />
+                <x-livewire.ckeditor name="quote.invoice_footer" value="{{ $quote?->invoice_footer }}" label="Invoice Footer" required />
+            </div>
+            <div class="col-xl-6">
+                <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" value="{{ $termsTemplate }}" />
+                <x-livewire.ckeditor name="quote.terms" value="{{ $quote?->terms }}" label="Terms and Conditions" />
+            </div>
+        </div>
+    </x-admin.section.card>
+</div>

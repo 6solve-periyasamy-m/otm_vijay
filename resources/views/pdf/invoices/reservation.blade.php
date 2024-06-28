@@ -1,4 +1,3 @@
-@php use App\Models\Quote\Quote; @endphp
 @php use App\Models\Tour\Tour; @endphp
 @php use App\Models\Accommodation\AccommodationInventoryTour; @endphp
 @php use App\Models\Activity\ActivityInventoryTour; @endphp

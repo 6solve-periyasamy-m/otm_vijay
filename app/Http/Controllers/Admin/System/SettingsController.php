@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Admin\System;
 use App\Http\Controllers\Controller;
 use App\Models\Location\Currency;
 use App\Models\System\LargeTextTemplate;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Settings;
 
 class SettingsController extends Controller
 {
-    public static function getValidationRules() {
+    public static function getValidationRules(): array
+    {
         return [
             'company_name' => 'required',
             'company_email' => 'required|email',
@@ -38,8 +40,9 @@ class SettingsController extends Controller
         return view('pages.admin.system.settings');
     }
 
-    public function update(Request $request) {
-        $request->validate(SettingsController::getValidationRules());;
+    public function update(Request $request): RedirectResponse
+    {
+        $request->validate(self::getValidationRules());
         Settings::setAll([
             'company.name' => $request->input('company_name'),
             'company.contact.email' => $request->input('company_email'),
@@ -61,9 +64,9 @@ class SettingsController extends Controller
             'atol.issuer' => $request->input('atol_issuer'),
             'atol.number' => $request->input('atol_number'),
             'atol.filter' => $request->input('atol_filter'),
-            'atol.enabled' => $request->input('atol_enabled') == 'on' ? 1 : 0,
+            'atol.enabled' => $request->input('atol_enabled') === 'on' ? 1 : 0,
             'atol.year.start' => $request->input('atol_start'),
-            'system.mail.enabled' => $request->input('mail_enabled') == 'on' ? 1 : 0,
+            'system.mail.enabled' => $request->input('mail_enabled') === 'on' ? 1 : 0,
             'billing.stripe.key' => $request->input('stripe_key'),
             'system.format.date' => $request->input('date_format'),
             'system.format.time' => $request->input('time_format'),
@@ -73,8 +76,8 @@ class SettingsController extends Controller
             'company.bank_transfer' => $request->input('bank_transfer'), //for invoice: Bank Transfer
             'system.year.start' => $request->input('year_start'),
             'system.historic' => $request->input('historic'),
-            'payment.required' => $request->input('payment_required') == 'on' ? 1 : 0,
-            'installments.force' => $request->input('force_installments') == 'on' ? 1 : 0,
+            'payment.required' => $request->input('payment_required') === 'on' ? 1 : 0,
+            'installments.force' => $request->input('force_installments') === 'on' ? 1 : 0,
             'components.lock' => $request->input('components_lock'),
             'passport.lock' => $request->input('passport_lock'),
             'passport.unlock' => $request->input('passport_unlock'),
@@ -90,16 +93,18 @@ class SettingsController extends Controller
             'transport.unlock' => $request->input('transport_unlock'),
             'invoice.style' => $request->input('invoice_format'),
             'quote.style' => $request->input('quote_format'),
+            'itinerary.style' => $request->input('itinerary_format'),
+            'customization.documentation.colors' => $request->input('document_css'),
         ]);
-        if ($request->has('company_logo')  && $request->file('company_logo') != null) {
+        if ($request->has('company_logo')  && !empty($request->file('company_logo'))) {
             Settings::set('company.logo', $this->saveImage($request->file('company_logo')));
         }
-        if ($request->has('atol_stamp') && $request->file('atol_stamp') != null) {
+        if ($request->has('atol_stamp') && !empty($request->file('atol_stamp'))) {
             Settings::set('atol.stamp', $this->saveImage($request->file('atol_stamp')));
         }
         $currency = Currency::where('id', '=', $request->input('currency_id'))->first();
-        Settings::set('system.currency', $currency->code);
-        return redirect()->route('dash');
+        Settings::set('system.currency', $currency?->code);
+        return redirect()->route('settings.edit');
     }
 
     public function template()
@@ -122,13 +127,14 @@ class SettingsController extends Controller
         return view('pages.admin.system.import');
     }
 
-    public function authorizeReminders(int $days)
+    public function authorizeReminders(int $days): RedirectResponse
     {
         Settings::authorize('authorization.reminders', $days < 0 ? -1 : $days * 24 * 60 * 60);
         return back();
     }
 
-    private function saveImage($file) {
+    private function saveImage($file)
+    {
         return $file->storePublicly('uploads/images');
     }
 }

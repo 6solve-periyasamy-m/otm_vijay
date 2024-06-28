@@ -12,6 +12,7 @@ use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
+use App\Models\Helper\Enum\NotificationType;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
@@ -24,6 +25,7 @@ use App\Repository\Intention\PaymentIntentionRepository;
 use App\Repository\Intention\Storage\AdditionIntention;
 use Gateway;
 use Spatie\Browsershot\Browsershot;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class CustomerTourController extends CustomerController
 {
@@ -35,7 +37,7 @@ class CustomerTourController extends CustomerController
         if (!isset($order)) abort(404);
         $oCustomer = null;
         foreach ($order->orderCustomers as $orderCustomer) {
-            if ($orderCustomer->customer_id == $customer->id) {
+            if ($orderCustomer->customer_id === $customer?->id) {
                 $oCustomer = $orderCustomer;
                 break;
             }
@@ -51,17 +53,15 @@ class CustomerTourController extends CustomerController
             'orderCustomer' => $orderCustomer,
             'order' => $orderCustomer->order,
             'orders' => $this->user()->orders,
-            'editable' => self::getOrderCustomers($orderCustomer->order, $this->user()),
+            'editable' => $this->getOrderCustomers($orderCustomer->order, $this->user()),
         ]);
     }
 
-    public function downloadItinerary(?Order $reference = null, ?Customer $customer = null)
+    public function downloadItinerary(?Order $reference = null, ?Customer $customer = null): StreamedResponse
     {
         $orderCustomer = $this->getOrderCustomer($reference, $customer);
-        if (!isset($orderCustomer)) abort(404);$invoice = Browsershot::html(view('pdf.itinerary', ['orderCustomer' => $orderCustomer,])->render())->noSandbox();
-        $invoice->showBackground()->margins(10, 2, 10, 2);
-        return response()->stream(function () use ($invoice) { echo $invoice->pdf(); }, 200, ['Content-Type' => 'application/pdf']);
-
+        if (!isset($orderCustomer)) { abort(404); }
+        return $orderCustomer->order->repository->getItinerary($orderCustomer);
     }
 
     public function showExtras(?Order $reference = null, ?Customer $customer = null)
@@ -82,7 +82,7 @@ class CustomerTourController extends CustomerController
             'order' => $orderCustomer->order,
             'orders' => $this->user()->orders,
             'orderCustomer' => $orderCustomer,
-            'editable' => self::getOrderCustomers($orderCustomer->order, $this->user()),
+            'editable' => $this->getOrderCustomers($orderCustomer->order, $this->user()),
             'accommodation' => $accommodation,
             'activities' => $activities,
             'flights' => $flights,
@@ -95,9 +95,9 @@ class CustomerTourController extends CustomerController
         if ($order->cancelled) abort(404);
         $customer = $customer ?? $this->user();
         if (!isset($customer)) abort(404);
-        if ($this->user()->id != $customer->id) {
-            if ($order->leadBooker->customer_id != $this->user()->id) abort(404);
-            if (isset($customer->email_address) && isset($customer->password)) abort(404);
+        if ($this->user()?->id !== $customer?->id) {
+            if ($order->leadBooker->customer_id !== $this->user()?->id) { abort(404); }
+            if (isset($customer->email_address, $customer->password)) { abort(404); }
         }
         $orderCustomer = $order->repository->getOrderCustomer($customer);
         if (!isset($orderCustomer)) abort(404);
@@ -117,7 +117,7 @@ class CustomerTourController extends CustomerController
             $intention = PaymentIntentionRepository::create($order, $orderCustomer->customer, 'Installment', [$data,]);
 
             try {
-                return redirect(Gateway::getDefaultGateway()->checkout([$item,], $intention, $this->user(), $redirect));
+                return redirect(Gateway::getDefaultGateway()?->checkout([$item,], $intention, $this->user(), $redirect));
             } catch (UnauthorizedGatewayException $e) {
                 return back()->withErrors(['msg' => 'Something went wrong with our payment processing. Please try again later.']);
             } catch (RemoteGatewayError $e) {
@@ -125,6 +125,7 @@ class CustomerTourController extends CustomerController
             }
         } else {
             $tourComponent->grantToCustomer($orderCustomer);
+            $order->createNotification(NotificationType::COMPONENTS_CHANGED, 'Add-on/Upgrade added via dashboard');
             return redirect($redirect);
         }
     }
@@ -181,6 +182,8 @@ class CustomerTourController extends CustomerController
         if ($order->tour->repository->isFlightLocked()) { unset($details['flight_notes']); }
         if ($order->tour->repository->isTransportLocked()) { unset($details['transport_notes']); }
         $orderCustomer->repository->update($details);
+
+        $order->createNotification(NotificationType::ORDER_UPDATED, 'Order Notes updated by customer', $this->user());
         return redirect()->route('customer.itinerary', ['reference' => $order->booking_reference,]);
     }
 

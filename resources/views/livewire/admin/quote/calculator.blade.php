@@ -129,19 +129,52 @@
                 <button class="btn btn-info" wire:click="calculate">Calculate</button>
             </div>
             <div class="col-6">
-                <x-admin.section.otm-text class="profit-updater">
-                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.profit') }} <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span></x-slot:header>
-                    {{ f_currency($profit) }} ({{ sigfig($margin) }}%)
-                </x-admin.section.otm-text>
+                <div class="row">
+                    <div class="col-6">
+                        <x-admin.section.otm-text class="profit-updater">
+                            <x-slot:header>{{ __('quotes.view.cards.quick.calculator.profit') }} <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span></x-slot:header>
+                            {{ f_currency($profit) }} ({{ sigfig($margin) }}%)
+                        </x-admin.section.otm-text>
+                    </div>
+                    @if($taxes !== null)
+                    <div class="col-6">
+                        <x-admin.section.otm-text class="cost-updater">
+                            <x-slot:header>{{ __('quotes.view.cards.quick.calculator.taxes') }}</x-slot:header>
+                            {{ f_currency($taxes) }}
+                        </x-admin.section.otm-text>
+                    </div>
+                    @endif
+
+                </div>
             </div>
             <div class="col-6">
                 <x-livewire.input wire:model="markup" wire:change="calculate" label="Expected Markup" append="%"/>
             </div>
             <div class="col-6">
-                <x-admin.section.otm-text class="cost-updater">
-                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.cost') }}</x-slot:header>
-                    {{ f_currency($total) }}
-                </x-admin.section.otm-text>
+                <div class="row">
+                    @if($total !== $toBePaid)
+                    <div class="col-3">
+                        <x-admin.section.otm-text class="cost-updater">
+                            <x-slot:header>{{ __('quotes.view.cards.quick.calculator.cost') }}</x-slot:header>
+                            {{ f_currency($total) }}
+                        </x-admin.section.otm-text>
+                    </div>
+                    @endif
+                    @if($commission !== null)
+                    <div class="col-3">
+                        <x-admin.section.otm-text class="cost-updater">
+                            <x-slot:header>{{ __('quotes.view.cards.quick.calculator.commission') }}</x-slot:header>
+                            {{ f_currency($commission) }}
+                        </x-admin.section.otm-text>
+                    </div>
+                    @endif
+                    <div class="col-3">
+                        <x-admin.section.otm-text class="cost-updater">
+                            <x-slot:header>{{ __('quotes.view.cards.quick.calculator.final') }}</x-slot:header>
+                            {{ f_currency($toBePaid) }}
+                        </x-admin.section.otm-text>
+                    </div>
+                </div>
             </div>
             <div class="col-6 row">
                 <x-livewire.input wire:model.debounce.300ms="marked_up_price" label="Price per Person" width="4" />

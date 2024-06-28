@@ -7,7 +7,7 @@
     $clear = $attributes->get('clear', false);
     $updateRoute = null;
     if ($value !== null) {
-        $updateRoute = route("api.{$route}.selected", ['id' => $value, ]);
+        $updateRoute = route("api.{$route}.selected", ['id' => '%id%', ]);
     }
 
     $createRoute = $attributes->get('createRoute');
@@ -21,7 +21,7 @@
     }
     $create = $create ?? $attributes->get('create');
 @endphp
-<div wire:ignore class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}">
+<div wire:ignore style="padding-left: 5px;" class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}">
     <label for="{{ $id }}">
         {{ $attributes->get('label') }} @if($attributes->has('required')) <x-admin.required /> @endif
         @error($attributes->get('name')) <span class="text-danger">({{ $message }})</span> @enderror
@@ -55,18 +55,23 @@
                 @this.inputChanged('{{$attributes->get('name')}}');
             });
             @endisset
-            @if($value !== null)
-            $.ajax({
-                url: '{{ $updateRoute }}',
-                type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }
-            }).then(function (data) {
-                selector.append(new Option(data.text, data.id, true, true)).trigger('change');
+            window.addEventListener('updateValue', function (event) {
+                if (event.detail.key === '{{ $attributes->get('name') }}') {
+                    $.ajax({
+                        url: '{{ $updateRoute }}'.replace('%id%', event.detail.value),
+                        type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }
+                    }).then(function (data) {
+                        selector.append(new Option(data.text, data.id, true, true)).trigger('change');
 
-                selector.trigger({
-                    type: 'select2:select',
-                    params: { data: data, }
-                });
+                        selector.trigger({
+                            type: 'select2:select',
+                            params: { data: data, }
+                        });
+                    });
+                }
             });
+            @if(isset($value))
+                dispatchUpdateEvent('{{ $attributes->get('name') }}', {{$value}})
             @endif
         });
     </script>

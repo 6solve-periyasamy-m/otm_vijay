@@ -29,6 +29,7 @@ class EventController extends Controller
             'ends_at' => $request->input('ends_at'),
             'booking_url' => $request->input('booking_url'),
             'tax_bracket_id' => $request->input('tax_bracket_id'),
+            'brand_id' => $request->input('brand_id'),
             'notes' => $request->input('notes'),
             'event_category' => $request->input('event_category'),
         ]);
@@ -60,6 +61,7 @@ class EventController extends Controller
             'ends_at' => $request->input('ends_at'),
             'booking_url' => $request->input('booking_url'),
             'tax_bracket_id' => $request->input('tax_bracket_id'),
+            'brand_id' => $request->input('brand_id'),
             'notes' => $request->input('notes'),
             'event_category' => $request->input('event_category'),
         ]);

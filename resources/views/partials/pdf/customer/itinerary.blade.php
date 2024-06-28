@@ -4,7 +4,7 @@
      */
     $component = $orderComponent->getAbstractOrderComponent();
 @endphp
-<div class="card">
+<div class="card" style="page-break-inside: avoid;">
     <div class="component-header">
         <div class="width-100 my-auto px-2 py-3 item-name">
             {!! $component->name !!}
@@ -16,7 +16,7 @@
             <div class="py-2">
                 @if($component->image !== null)
                     <div class="width-1-4 inline-block border-right">
-                        <img src="{{ asset($component->image) }}" class="booking-image"/>
+                        <img src="{{ img_to_b64($component->image) }}" class="booking-image"/>
                     </div>
                     <div class="inline-block width-3-4 ml-1">
                         <div>

@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Models\Order\Order;
 use App\Models\Quote\Quote;
 use App\Models\System\ApiToken;
+use App\Models\System\Notification;
+use App\Models\System\SeenNotification;
 use App\Repository\Authentication\UserRepository;
 use Database\Factories\UserFactory;
 use Eloquent;
@@ -16,6 +18,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as UserAuthenticatable;
@@ -44,6 +47,17 @@ use Silber\Bouncer\Database\Role;
  * @property string|null $settings
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read int|null $orders_count
+ * @property-read int|null $quotes_count
+ * @property-read Collection<int, SeenNotification> $seenNotifications
+ * @property-read int|null $seen_notifications_count
+ * @method static Builder|User onlyTrashed()
+ * @method static Builder|User whereDeletedAt($value)
+ * @method static Builder|User whereOtpSecret($value)
+ * @method static Builder|User whereTelephone($value)
+ * @method static Builder|User withTrashed()
+ * @method static Builder|User withoutTrashed()
  * @property-read Collection|Ability[] $abilities
  * @property-read int|null $abilities_count
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
@@ -238,5 +252,15 @@ class User extends UserAuthenticatable implements MustVerifyEmail
     {
         if (!isset($this->internal_repository)) $this->internal_repository = new UserRepository($this);
         return $this->internal_repository;
+    }
+
+    public function seenNotifications(): HasMany
+    {
+        return $this->hasMany(SeenNotification::class, 'user_id');
+    }
+
+    public function unseen(): int
+    {
+        return Notification::whereNotIn('id', $this->seenNotifications()->pluck('notification_id'))->count();
     }
 }

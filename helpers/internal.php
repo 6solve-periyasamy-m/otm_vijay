@@ -96,3 +96,14 @@ if (!function_exists('debug_stack')) {
         }
     }
 }
+if (!function_exists('diff_in_nights')) {
+    /**
+     * @param Carbon $start Start date
+     * @param Carbon $end End date
+     * @return string
+     */
+    function diff_in_nights(Carbon $start, Carbon $end): string
+    {
+        return $start->setTime(0,0)->diff($end)->format('%a');
+    }
+}

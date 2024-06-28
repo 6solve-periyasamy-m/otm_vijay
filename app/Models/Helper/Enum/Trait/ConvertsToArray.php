@@ -20,7 +20,7 @@ trait ConvertsToArray
 
     public function label(): string
     {
-        return ucwords(camel_to_text(strtolower($this->name)));
+        return ucwords(camel_to_text(strtolower(preg_replace('/[-_]/', ' ', $this->name))));
     }
 
     public static function asFilter(): array
