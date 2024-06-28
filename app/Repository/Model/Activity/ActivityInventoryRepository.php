@@ -4,6 +4,7 @@ namespace App\Repository\Model\Activity;
 
 use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
+use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Quote\Component\QuoteActivity;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
@@ -12,6 +13,7 @@ use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Interfaces\Manifest\HasActivityManifest;
 use App\Repository\Model\Quote\Component\QuoteActivityRepository;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsActivity;
 use Carbon\Carbon;
 use DB;
@@ -172,5 +174,22 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
     public function getPurchasePriceString(): string
     {
         return f_currency($this->getPurchasePrice(), $this->inventory->component->currency);
+    }
+
+    public function getItineraryItem(int|null $quantity = null): ItineraryItem
+    {
+        $details = [
+            'Dates' => $this->inventory->starts_at->format('d M Y') . ' to ' . $this->inventory->ends_at->format('d M Y'),
+            'Venue' => $this->inventory->component->address->name,
+            'Ticket' => $this->inventory->component->name,
+            'Quantity' => $quantity,
+            'Description' => $this->inventory->component->description,
+        ];
+        if ($quantity === null) { unset($details['Quantity']); }
+        return new ItineraryItem(
+            $this->inventory->component->name,
+            $this->inventory->component->activity_category === ActivityCategory::MAIN ? 'Event' : 'Inclusions',
+            $details,
+        );
     }
 }

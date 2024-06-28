@@ -7,7 +7,7 @@ use App\Models\Order\Invoice\InvoiceBillable;
 use App\Models\Order\Order;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
-use App\Repository\Storage\Order\ItineraryItem;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsMerchandise;
 use Illuminate\Database\Eloquent\Model;
 
@@ -97,20 +97,6 @@ class OrderMerchandiseRepository extends OrderComponentRepository
 
     public function getItineraryItem(Order $order = null): ItineraryItem
     {
-        $tourComponent = $this->orderComponent->tourComponent;
-        $inventory = $tourComponent->inventory;
-        $component = $inventory->component;
-
-        return new ItineraryItem(
-            'Merchandise',
-            $this->getQuantity($order),
-            null,
-            null,
-            [
-                'Details' => $component->name,
-                'Type' => $component->type->name,
-                'Size' => $inventory->size->name,
-            ]
-        );
+        return $this->getTourComponent()?->getItineraryItem($this->getQuantity($order));
     }
 }

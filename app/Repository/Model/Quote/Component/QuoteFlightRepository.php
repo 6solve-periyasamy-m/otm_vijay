@@ -9,6 +9,7 @@ use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Flight\FlightInventoryRepository;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsFlight;
 
 class QuoteFlightRepository extends QuoteComponentRepository
@@ -135,5 +136,14 @@ class QuoteFlightRepository extends QuoteComponentRepository
     public static function find($id): QuoteFlight|null
     {
         return QuoteFlight::find($id);
+    }
+
+    public function getItineraryItem(int $travelling = 1): ItineraryItem
+    {
+        $item = $this->getInventory()?->getItineraryItem($this->quoteComponent->quantity ?? $travelling);
+        if ($this->quoteComponent->flight_type === 'Outbound') { $item->type = 'Outbound Flight'; }
+        elseif ($this->quoteComponent->flight_type === 'Inbound') { $item->type = 'Inbound Flight'; }
+        else { $item->type = 'Mid-Package Flight'; }
+        return $item;
     }
 }

@@ -2,13 +2,12 @@
 
 namespace App\Repository\Model\Order\Component;
 
-use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Invoice\InvoiceBillable;
 use App\Models\Order\Order;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
-use App\Repository\Storage\Order\ItineraryItem;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsActivity;
 
 class OrderActivityRepository extends OrderComponentRepository
@@ -104,20 +103,6 @@ class OrderActivityRepository extends OrderComponentRepository
 
     public function getItineraryItem(Order $order = null): ItineraryItem
     {
-        $inventory = $this->orderComponent->tourComponent->inventory;
-        $component = $inventory->component;
-
-        return new ItineraryItem(
-            $component->activity_category === ActivityCategory::MAIN ? 'Headliner' : 'Event',
-            $this->getQuantity($order),
-            $inventory->starts_at,
-            $inventory->ends_at,
-            [
-                'Event' => $component->name,
-                'Venue' => $component->address,
-                'Ticket' => $inventory->ticketType->name,
-                'Description' => $component->description,
-            ]
-        );
+        return $this->getTourComponent()?->getItineraryItem($this->getQuantity($order));
     }
 }

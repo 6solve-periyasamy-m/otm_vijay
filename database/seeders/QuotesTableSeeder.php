@@ -27,7 +27,7 @@ class QuotesTableSeeder extends Seeder
                 'order_id' => NULL,
                 'lead_traveller_id' => null,
                 'event_id' => 1,
-                'reference' => 'OTMQ000000010001PWFJ',
+                'reference' => 'OTMQ000001V',
                 'name' => 'Double Test - The Impala',
                 'revision' => 1,
             'description' => 'Double Test - The Impala (Tests 2 & 3)',
@@ -80,7 +80,12 @@ class QuotesTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'deleted_at' => NULL,
                 'created_at' => '2022-09-14 09:39:27',
-                'updated_at' => '2022-09-14 09:39:27',
+                'updated_at' => '2024-06-20 11:36:10',
+                'brand_id' => NULL,
+                'organization_id' => NULL,
+                'consultant_id' => NULL,
+                'tax_bracket_id' => NULL,
+                'is_deposit_percentage' => 0,
             ),
             1 => 
             array (
@@ -89,7 +94,7 @@ class QuotesTableSeeder extends Seeder
                 'order_id' => NULL,
                 'lead_traveller_id' => null,
                 'event_id' => 1,
-                'reference' => 'OTMQ000000020002ROZB',
+                'reference' => 'OTMQ000002A',
                 'name' => 'The Impala 2023 - England v SA - Double Test',
                 'revision' => 2,
             'description' => 'The Impala (Tests 2 & 3)',
@@ -142,7 +147,12 @@ class QuotesTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'deleted_at' => NULL,
                 'created_at' => '2022-09-14 10:54:13',
-                'updated_at' => '2022-09-15 09:16:49',
+                'updated_at' => '2024-06-20 11:36:10',
+                'brand_id' => NULL,
+                'organization_id' => NULL,
+                'consultant_id' => NULL,
+                'tax_bracket_id' => NULL,
+                'is_deposit_percentage' => 0,
             ),
             2 => 
             array (
@@ -151,7 +161,7 @@ class QuotesTableSeeder extends Seeder
                 'order_id' => 8,
                 'lead_traveller_id' => null,
                 'event_id' => 1,
-                'reference' => 'OTMQ000000030003OHRJ',
+                'reference' => 'OTMQ000003S',
                 'name' => 'The Impala 2023 - England v SA - Double Test',
                 'revision' => 2,
             'description' => 'The Impala (Tests 2 & 3)',
@@ -204,7 +214,12 @@ class QuotesTableSeeder extends Seeder
                 'external_notes' => NULL,
                 'deleted_at' => NULL,
                 'created_at' => '2022-09-20 10:36:07',
-                'updated_at' => '2022-09-20 10:39:19',
+                'updated_at' => '2024-06-20 11:36:10',
+                'brand_id' => NULL,
+                'organization_id' => NULL,
+                'consultant_id' => NULL,
+                'tax_bracket_id' => NULL,
+                'is_deposit_percentage' => 0,
             ),
         ));
 
@@ -214,7 +229,7 @@ class QuotesTableSeeder extends Seeder
         $this->updateQuoteProspect(3, 3);
 
     }
-    
+
     private function updateQuoteProspect(int $quote, int $prospect)
     {
         $quote = Quote::find($quote);

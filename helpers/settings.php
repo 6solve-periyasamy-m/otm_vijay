@@ -28,21 +28,22 @@ if (!function_exists('flag')) {
 }
 if (!function_exists('fx_convert')) {
     /**
-     * @param float|int $value The value to convert
+     * @param float|int|null $value The value to convert
      * @param Currency|string|null $from The currency it is in. can leave null if providing rate
      * @param Currency|string|null $to The currency to convert to (defaults to system)
      * @param float|null $rate The conversion rate (will lookup if null)
-     * @return float The converted amount
+     * @return float|null The converted amount
      */
-    function fx_convert(float|int $value, Currency|string|null $from = null, Currency|string|null $to = null, float $rate = null): float
+    function fx_convert(float|int|null $value, Currency|string|null $from = null, Currency|string|null $to = null, float $rate = null): float|null
     {
+        if ($value === null) { return null; }
         if ($from === null || $to === null) { return $value * ($rate ?? 1.0); }
         if ($rate === null) {
             $systemCurrency = Currency::code(setting('system.currency', 'GBP'));
             if (is_string($from)) { $from = Currency::code($from); }
             if (is_string($to)) { $to = Currency::code($to); }
             $to = $to ?? $systemCurrency;
-            $rate = Settings::getConversionRate($from, $to) ?? 1;
+            $rate = Settings::getConversionRate($from, $to) ?? 1.0;
         }
         return fx_rate($value, $rate);
     }
@@ -55,7 +56,7 @@ if (!function_exists('fx_rate')) {
      */
     function fx_rate(float $value, float|null $rate): float
     {
-        $rate = $rate ?? 1;
+        $rate = $rate ?? 1.0;
         return sigfig($value * $rate);
     }
 }

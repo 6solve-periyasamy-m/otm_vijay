@@ -28,7 +28,7 @@
         });
     }
     function updateInvoice(selector) {
-        let url = "{{ route('orders.invoice.view', ['order' => $order, 'version' => '#replace#']) }}"
+        let url = "{{ route('orders.invoice', ['order' => $order, 'version' => '#replace#']) }}"
         $('.invoice-button').prop('href', url.replace('#replace#', $(selector).val()))
     }
 </script>
@@ -182,7 +182,7 @@
                         </select>
                     </div>
                     <div class="col-2">
-                        <a href="{{ route('orders.invoice.latest', ['order' => $order,]) }}" target="_blank" class="invoice-button btn btn-primary text-white mb-1">View Invoice</a>
+                        <a href="{{ route('orders.invoice', ['order' => $order,]) }}" target="_blank" class="invoice-button btn btn-primary text-white mb-1">View Invoice</a>
                     </div>
                     @can('create', \App\Models\Order\Payment\Payment::class)
                         <div class="col-3">

@@ -20,6 +20,7 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
 use App\Repository\Storage\ComponentInformation;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsAccommodation;
 use Icon;
 use Illuminate\Support\Collection;
@@ -308,5 +309,10 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     public static function find($id): AccommodationInventoryTour|null
     {
         return AccommodationInventoryTour::find($id);
+    }
+
+    public function getItineraryItem(int|null $quantity = null): ItineraryItem
+    {
+        return $this->getInventory()?->getItineraryItem($quantity);
     }
 }

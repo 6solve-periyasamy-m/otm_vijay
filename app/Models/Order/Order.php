@@ -390,7 +390,7 @@ class Order extends Model implements NotificationSubject
      */
     public function getTotalAttribute(): float
     {
-        return $this->cancelled ? $this->paid : (($this->cost + $this->total_adjustments) - ($this->commission_amount));
+        return $this->cancelled ? $this->paid : (($this->cost + $this->total_adjustments) - ($this->getCommissionAmountAttribute()));
     }
 
     /**
@@ -492,7 +492,7 @@ class Order extends Model implements NotificationSubject
         if ($this->commission === null) {
             return null;
         }
-        return sigfig(($this->getTotalAttribute() - $this->getTotalAdjustmentsAttribute()) * ($this->commission/100));
+        return sigfig(($this->getCostAttribute()) * ($this->commission/100));
     }
 
     /**

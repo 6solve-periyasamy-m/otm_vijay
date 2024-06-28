@@ -7,7 +7,7 @@ use App\Models\Order\Invoice\InvoiceBillable;
 use App\Models\Order\Order;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
-use App\Repository\Storage\Order\ItineraryItem;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsFlight;
 
 class OrderFlightRepository extends OrderComponentRepository
@@ -72,6 +72,7 @@ class OrderFlightRepository extends OrderComponentRepository
     {
         $tourComponent = $this->orderComponent->tourComponent;
         $inventory = $tourComponent->inventory;
+
         $component = $inventory->component;
         $data = [];
         $data[] = ['start' => $inventory->check_in, 'activity' => 'Flight Check In',
@@ -106,24 +107,6 @@ class OrderFlightRepository extends OrderComponentRepository
 
     public function getItineraryItem(Order $order = null): ItineraryItem
     {
-        $tourComponent = $this->orderComponent->tourComponent;
-        $inventory = $tourComponent->inventory;
-        $component = $inventory->component;
-        if ($tourComponent->flight_type === 'Outbound') { $title = 'Outbound Flight'; }
-        elseif ($tourComponent->flight_type === 'Inbound') { $title = 'Inbound Flight'; }
-        else { $title = 'Mid-Package Flight'; }
-
-        return new ItineraryItem(
-            $title,
-            $this->getQuantity($order),
-            $inventory->departs_at,
-            $inventory->arrives_at,
-            [
-                'Airline' => $component->airline->name,
-                'Details' => $component->departureAirport->name . ' to ' . $component->arrivalAirport->name,
-                'Travel Class' => $inventory->travelClass->name,
-                'Check In' => f_datetime($inventory->check_in),
-            ]
-        );
+        return $this->getTourComponent()?->getItineraryItem($this->getQuantity($order));
     }
 }

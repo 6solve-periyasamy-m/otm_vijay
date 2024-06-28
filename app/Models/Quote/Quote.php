@@ -13,6 +13,7 @@ use App\Models\Quote\Component\QuoteFlight;
 use App\Models\Quote\Component\QuoteMerchandise;
 use App\Models\Quote\Component\QuoteTransport;
 use App\Models\System\Brand;
+use App\Models\System\TaxBracket;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Models\User;
@@ -46,6 +47,7 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property string|null $description
  * @property float|null $deposit
+ * @property float|null $commission
  * @property bool $is_deposit_percentage
  * @property float $single_occupancy_surcharge
  * @property Carbon $final_payment
@@ -126,13 +128,11 @@ class Quote extends Model
 
     protected $guarded = [];
     protected $casts = [
-        'deposit' => 'double',
         'is_deposit_percentage' => 'bool',
-        'single_occupancy_surcharge' => 'double',
-        'expires' => 'datetime',
-        'date_from' => 'date',
-        'date_to' => 'date',
-        'final_payment' => 'date',
+        'expires' => 'date:Y-m-d',
+        'date_from' => 'date:Y-m-d',
+        'date_to' => 'date:Y-m-d',
+        'final_payment' => 'date:Y-m-d',
         'sent' => 'datetime',
         'quote_status' => QuoteStatus::class
     ];
@@ -157,6 +157,16 @@ class Quote extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');
+    }
+
+    public function bracket(): BelongsTo
+    {
+        return $this->belongsTo(TaxBracket::class, 'tax_bracket_id');
+    }
+
+    public function taxBracket(): TaxBracket|null
+    {
+        return $this->bracket ?? $this->event?->taxBracket() ?? $this->brand?->taxBracket();
     }
 
     public function organization(): BelongsTo
@@ -265,7 +275,7 @@ class Quote extends Model
     public function getDepositAmount(int $count = 1): float|null
     {
         $price = $this->repository->getPricePerPerson($count)?->price_per_person;
-        return $this->is_deposit_percentage ? sigfig($price * ($this->deposit/100)) : $this->deposit;
+        return ($this->is_deposit_percentage ? sigfig(($price * ($this->deposit/100))) : $this->deposit) * $count;
     }
 
     public function getDepositPercentage(int $count = 1): float|null

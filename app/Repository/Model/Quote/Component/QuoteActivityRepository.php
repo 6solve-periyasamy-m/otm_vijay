@@ -4,11 +4,13 @@ namespace App\Repository\Model\Quote\Component;
 
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Quote\Component\QuoteActivity;
+use App\Models\Quote\Quote;
 use App\Models\Quote\QuoteSection;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Activity\ActivityInventoryRepository;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsActivity;
 
 class QuoteActivityRepository extends QuoteComponentRepository
@@ -140,5 +142,12 @@ class QuoteActivityRepository extends QuoteComponentRepository
     public static function find($id): QuoteActivity|null
     {
         return QuoteActivity::find($id);
+    }
+
+    public function getItineraryItem(int $travelling = 1, Quote|null $quote = null): ItineraryItem
+    {
+        $item = $this->getInventory()?->getItineraryItem($this->quoteComponent->quantity ?? $travelling);
+        $item->name =  $quote?->event?->name;
+        return $item;
     }
 }

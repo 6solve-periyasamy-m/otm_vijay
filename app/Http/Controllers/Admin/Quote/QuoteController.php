@@ -6,8 +6,6 @@ use App\Exceptions\MailDisabledException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Quote\ConversionRequest;
 use App\Http\Requests\Admin\Quote\CreateBasicQuoteRequest;
-use App\Http\Requests\Admin\Quote\CreateBespokeQuoteRequest;
-use App\Http\Requests\Admin\Quote\QuoteEditRequest;
 use App\Http\Requests\Admin\Quote\StartConversionRequest;
 use App\Http\Requests\Admin\TableRequest;
 use App\Models\Helper\Enum\QuoteStatus;
@@ -16,6 +14,8 @@ use App\Models\Quote\SentQuote;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Quote\QuoteRepository;
 use App\Repository\Storage\ConvertedCustomer;
+use Illuminate\Http\RedirectResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 
 class QuoteController extends Controller
@@ -35,16 +35,10 @@ class QuoteController extends Controller
         if (isset($tour)) {
             return view('pages.admin.quote.create.basic', ['tour' => $tour,]);
         }
-        return view('pages.admin.quote.create.bespoke');
+        return view('pages.admin.quote.form');
     }
 
-    public function storeBespoke(CreateBespokeQuoteRequest $request)
-    {
-        $quote = QuoteRepository::createBespoke($request->getCustomer(), $request->cost, $request->getTourDetails());
-        return redirect()->route('quotes.view', ['quote' => $quote,]);
-    }
-
-    public function storeBasic(CreateBasicQuoteRequest $request, Tour $tour)
+    public function storeBasic(CreateBasicQuoteRequest $request, Tour $tour): RedirectResponse
     {
         $quote = QuoteRepository::createFromTour($tour, $request->getCustomer(), $request->getDataset());
         return redirect()->route('quotes.view', ['quote' => $quote,]);
@@ -64,23 +58,23 @@ class QuoteController extends Controller
         return view('pages.admin.quote.convert', ['quote' => $quote, 'travelling' => $request->travelling, 'paying' => $request->paying, 'email' => $request->doEmail()]);
     }
 
-    public function document(Quote $quote, SentQuote $sent)
+    public function document(Quote $quote, SentQuote $sent): StreamedResponse
     {
-        return $quote->repository->getResponseStream($sent,$quote);
+        return $quote->repository->getResponseStream($sent);
     }
  
-    public function preview(StartConversionRequest $request, Quote $quote)
+    public function preview(StartConversionRequest $request, Quote $quote): StreamedResponse
     {
-        return $quote->repository->getResponseStream($quote->repository->makeSent($quote->leadTraveller->email, $request->paying, $request->travelling),$quote);
+        return $quote->repository->getResponseStream($quote->repository->makeSent($quote->leadTraveller->email, $request->paying, $request->travelling));
     }
 
-    public function convert(ConversionRequest $request, Quote $quote)
+    public function convert(ConversionRequest $request, Quote $quote): RedirectResponse
     {
         $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->paying, $quote->leadTraveller->travelling), $request->getCustomers(), $request->doEmail());
         return redirect()->route('orders.view', ['order' => $order]);
     }
 
-    public function send(StartConversionRequest $request, Quote $quote)
+    public function send(StartConversionRequest $request, Quote $quote): RedirectResponse
     {
         $paying = $request->paying + ($quote->leadTraveller->paying ? 1 : 0);
         $pricePoint = $quote->repository->getPricePerPerson($request->paying + ($quote->leadTraveller->paying ? 1 : 0));
@@ -95,13 +89,17 @@ class QuoteController extends Controller
         return redirect()->route('quotes.view', ['quote' => $quote,]);
     }
 
-    public function resend(Quote $quote, SentQuote $sent)
+    public function resend(Quote $quote, SentQuote $sent): RedirectResponse
     {
-        $quote->repository->resend($sent);
+        try {
+            $quote->repository->resend($sent);
+        } catch (MailDisabledException) {
+            return back()->withErrors(['msg' => 'Emails are not enabled on this system']);
+        }
         return redirect()->route('quotes.view', ['quote' => $quote,]);
     }
 
-    public function rebuild(Quote $quote, SentQuote $sent)
+    public function rebuild(Quote $quote, SentQuote $sent): RedirectResponse
     {
         $newQuote = QuoteRepository::deserializeAndSave($sent);
         $quote->repository->update(['quote_status' => QuoteStatus::CLOSED->value]);
@@ -122,17 +120,10 @@ class QuoteController extends Controller
 
     public function edit(Quote $quote)
     {
-        return view('pages.admin.quote.edit', ['quote' => $quote,]);
+        return view('pages.admin.quote.form', ['quote' => $quote,]);
     }
 
-    public function update(QuoteEditRequest $request, Quote $quote)
-    {
-        $quote->repository->update($request->getDataset());
-        $quote->repository->updateLead($request->getCustomerDataset());
-        return redirect()->route('quotes.view', ['quote' => $quote,]);
-    }
-
-    public function delete(Quote $quote)
+    public function delete(Quote $quote): RedirectResponse
     {
         $quote->delete();
         return redirect()->route('quotes.all');

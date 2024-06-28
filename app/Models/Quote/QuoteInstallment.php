@@ -57,15 +57,15 @@ class QuoteInstallment extends Model
         return $this->belongsTo(Quote::class);
     }
 
-    public function getAmount(int $count = 1): float|null
+    public function getAmount(int $count = 1, float|null $price = null): float|null
     {
-        $price = $this->quote->repository->getPricePerPerson($count)?->price_per_person;
-        return $this->percentage ? sigfig($price * ($this->amount/100)) : $this->amount;
+        $price = ($price ?? $this->quote->repository->getPricePerPerson($count)?->price_per_person);
+        return ($this->percentage ? sigfig($price * ($this->amount/100)) : $this->amount) * $count;
     }
 
-    public function getPercentage(int $count = 1): float|null
+    public function getPercentage(int $count = 1, float|null $price = null): float|null
     {
-        $price = $this->quote->repository->getPricePerPerson($count)?->price_per_person;
+        $price = $price ?? $this->quote->repository->getPricePerPerson($count)?->price_per_person;
         if (empty($price)) { return 100; }
         return $this->percentage ? $this->amount : sigfig(($this->amount / $price) * 100);
     }
