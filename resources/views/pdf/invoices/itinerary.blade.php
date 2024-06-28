@@ -90,22 +90,6 @@ $type = $type ?? "Travel Itinerary"
                         </tr>
                     @endforeach
                     <tr>
-                        <td class="item-header">
-                            QUANTITY:
-                        </td>
-                        <td class="item-detail">
-                            {{ $item->quantity }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="item-header">
-                            DATES:
-                        </td>
-                        <td class="item-detail">
-                            {{ f_datetime($item->start) }} to {{ f_datetime($item->end) }}
-                        </td>
-                    </tr>
-                    <tr>
                         <td class="cell-header fs-12 text-dark">&nbsp;</td>
                         <td class="empty-cell">&nbsp;</td>
                     </tr>

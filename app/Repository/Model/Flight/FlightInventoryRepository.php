@@ -171,19 +171,20 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
         return f_currency($this->getPurchasePrice(), $this->inventory->component->currency);
     }
 
-    public function getItineraryItem(): ItineraryItem
+    public function getItineraryItem(int|null $quantity = null): ItineraryItem
     {
+        $details = [
+            'Dates' => $this->inventory->departs_at->format('d M Y') . ' to ' . $this->inventory->arrives_at->format('d M Y'),
+            'Details' => $this->inventory->component->departureAirport->name . ' to ' . $this->inventory->component->arrivalAirport->name,
+            'Travel Class' => $this->inventory->travelClass->name,
+            'Check In' => f_datetime($this->inventory->check_in),
+            'Quantity' => $quantity,
+        ];
+        if ($quantity === null) { unset($details['Quantity']); }
         return new ItineraryItem(
+            $this->inventory->component->airline->name,
             'Flight',
-            null,
-            $this->inventory->departs_at,
-            $this->inventory->arrives_at,
-            [
-                'Airline' => $this->inventory->component->airline->name,
-                'Details' => $this->inventory->component->departureAirport->name . ' to ' . $this->inventory->component->arrivalAirport->name,
-                'Travel Class' => $this->inventory->travelClass->name,
-                'Check In' => f_datetime($this->inventory->check_in),
-            ]
+            $details,
         );
     }
 }

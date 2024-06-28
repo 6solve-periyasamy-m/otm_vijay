@@ -176,19 +176,20 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
         return f_currency($this->getPurchasePrice(), $this->inventory->component->currency);
     }
 
-    public function getItineraryItem(): ItineraryItem
+    public function getItineraryItem(int|null $quantity = null): ItineraryItem
     {
+        $details = [
+            'Dates' => $this->inventory->starts_at->format('d M Y') . ' to ' . $this->inventory->ends_at->format('d M Y'),
+            'Venue' => $this->inventory->component->address->name,
+            'Ticket' => $this->inventory->component->name,
+            'Quantity' => $quantity,
+            'Description' => $this->inventory->component->description,
+        ];
+        if ($quantity === null) { unset($details['Quantity']); }
         return new ItineraryItem(
-            $this->inventory->component->activity_category === ActivityCategory::MAIN ? 'Headliner' : 'Event',
-            null,
-            $this->inventory->starts_at,
-            $this->inventory->ends_at,
-            [
-                'Event' => $this->inventory->component->name,
-                'Venue' => $this->inventory->component->address,
-                'Ticket Type' => $this->inventory->ticketType->name,
-                'Description' => $this->inventory->component->description,
-            ]
+            $this->inventory->component->name,
+            $this->inventory->component->activity_category === ActivityCategory::MAIN ? 'Event' : 'Inclusions',
+            $details,
         );
     }
 }

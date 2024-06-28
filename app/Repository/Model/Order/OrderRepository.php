@@ -32,6 +32,7 @@ use App\Repository\Storage\Itinerary\ItineraryPayment;
 use App\Repository\Storage\Itinerary\ItineraryPaymentDetails;
 use App\Repository\Storage\Itinerary\ItinerarySchedule;
 use App\Repository\Storage\Itinerary\ItineraryScheduleType;
+use App\Repository\Storage\Itinerary\ItineraryTraveller;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
@@ -748,7 +749,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
                 if (in_array($key, $seen, true)) { continue; }
                 $seen[] = $key;
                 $item = $component->repository->getItineraryItem($this->order);
-                $start = $item->start->clone()->setTime(0,0)->unix();
+                $start = $component->tourComponent->inventory->check_in->clone()->setTime(0,0)->unix();
                 if (!array_key_exists($start, $items)) { $items[$start] = []; }
                 $items[$start][] = $item;
             }
@@ -759,7 +760,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($this->order);
-            $start = $item->start->clone()->setTime(0,0)->unix();
+            $start = $component->tourComponent->inventory->starts_at->clone()->setTime(0,0)->unix();
             if (!array_key_exists($start, $items)) { $items[$start] = []; }
             $items[$start][] = $item;
         }
@@ -769,7 +770,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($this->order);
-            $start = $item->start->clone()->setTime(0,0)->unix();
+            $start = $component->tourComponent->inventory->departs_at->clone()->setTime(0,0)->unix();
             if (!array_key_exists($start, $items)) { $items[$start] = []; }
             $items[$start][] = $item;
         }
@@ -779,7 +780,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($this->order);
-            $start = $item->start->clone()->setTime(0,0)->unix();
+            $start = $component->tourComponent->inventory->departs_at->clone()->setTime(0,0)->unix();
             if (!array_key_exists($start, $items)) { $items[$start] = []; }
             $items[$start][] = $item;
         }
@@ -792,7 +793,11 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         $travellers = [];
         foreach ($this->order->orderCustomers as $traveller) {
             if ($traveller->id === $this->order->lead_booker_id) { continue; }
-            $travellers[] = $traveller->customer->full_name;
+            $travellers[] = new ItineraryTraveller(
+                $traveller->customer,
+                $traveller->is_charged,
+                $traveller->is_travelling,
+            );
         }
         return $travellers;
     }
@@ -848,7 +853,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $this->order->organization,
             $this->order->tour->date_from,
             $this->order->tour->date_to,
-            $this->order->leadBooker->customer,
+            new ItineraryTraveller($this->order->leadBooker->customer, $this->order->leadBooker->is_charged, $this->order->leadBooker->is_travelling),
             $this->order->tour->brand,
             $this->getTravellerItineraryArray(),
             $this->getItineraryItems(),

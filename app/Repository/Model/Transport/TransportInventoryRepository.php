@@ -171,18 +171,20 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
         return f_currency($this->getPurchasePrice(), $this->inventory->component->currency);
     }
 
-    public function getItineraryItem(): ItineraryItem
+    public function getItineraryItem(int|null $quantity = null): ItineraryItem
     {
+        $details = [
+            'Dates' => $this->inventory->departs_at->format('d M Y') . ' to ' . $this->inventory->arrives_at->format('d M Y'),
+            'Transport' => $this->inventory->component->transportType->name,
+            'Travel Class' => $this->inventory->travelClass->name,
+            'Quantity' => $quantity,
+            'Description' => $this->inventory->component->description,
+        ];
+        if ($quantity === null) { unset($details['Quantity']); }
         return new ItineraryItem(
+            $this->inventory->component->name,
             'Journey',
-            null,
-            $this->inventory->departs_at,
-            $this->inventory->arrives_at,
-            [
-                'Details' => $this->inventory->component->name,
-                'Transport' => $this->inventory->component->transportType->name,
-                'Travel Class' => $this->inventory->travelClass->name,
-            ]
+            $details,
         );
     }
 }

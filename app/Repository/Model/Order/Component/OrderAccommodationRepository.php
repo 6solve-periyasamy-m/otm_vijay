@@ -110,19 +110,6 @@ class OrderAccommodationRepository extends OrderComponentRepository
 
     public function getItineraryItem(Order $order = null): ItineraryItem
     {
-        $inventory = $this->orderComponent->tourComponent->inventory;
-        $component = $inventory->component;
-
-        return new ItineraryItem(
-            'Accommodation',
-            $this->getQuantity($order),
-            $inventory->check_in,
-            $inventory->check_out,
-            [
-                'Hotel' => $component->name,
-                'No Of Nights' => diff_in_nights($inventory->check_in, $inventory->check_out),
-                'Address' => $component->address,
-            ]
-        );
+        return $this->getTourComponent()?->getItineraryItem($this->getQuantity($order));
     }
 }

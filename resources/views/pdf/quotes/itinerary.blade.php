@@ -67,45 +67,22 @@
             @php /** @var \App\Repository\Storage\Itinerary\ItineraryItem $item */ @endphp
             @foreach($items as $item)
                 <table class="item-table avoid-break">
-                    @if($item->type !== 'Accommodation')
-                        <tr>
-                            <td class="item-header" style="width: 125px">
-                                Dates:
-                            </td>
-                            <td class="item-detail">
-                                {{ $item->start->format('d M Y') }} to {{ $item->end->format('d M Y') }}
-                            </td>
-                        </tr>
-                    @else
-                        <tr>
-                            <td class="item-header" style="width: 125px">
-                                Check In:
-                            </td>
-                            <td class="item-detail">
-                                {{ $item->start->format('d M Y') }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="item-header" style="width: 125px">
-                                Check Out:
-                            </td>
-                            <td class="item-detail">
-                                {{ $item->end->format('d M Y') }}
-                            </td>
-                        </tr>
+                    @if($item->name !== null)
+                        <table class="sub-date-header">
+                            <tr>
+                                <td colspan="2" class="text-left">
+                                    <div class="sub-date-content">
+                                        {{ $item->name }}
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                     @endif
-                    <tr>
-                        <td class="item-header" style="width: 125px">
-                            Quantity:
-                        </td>
-                        <td class="item-detail">
-                            {{ $item->quantity }}
-                        </td>
-                    </tr>
                     @foreach($item->details as $key => $value)
+                        @continue(empty($value))
                         <tr>
                             <td class="item-header" style="width: 125px">
-                                {{ ucwords($key) }}:
+                                {{ $key }}:
                             </td>
                             <td class="item-detail">
                                 {!! $value !!}
@@ -315,7 +292,7 @@
     @endif
 
     @if(!empty($itinerary->notes))
-        <div class="avoid-break">
+        <div>
             <table class="divider">
                 <thead>
                     <tr>
@@ -332,7 +309,7 @@
     @endif
 
     @if(!empty($itinerary->terms))
-        <div class="avoid-break">
+        <div>
             <table class="divider">
                 <thead>
                     <tr>
@@ -349,7 +326,7 @@
     @endif
 
     @if(!empty($itinerary->footer))
-        <div class="avoid-break">
+        <div>
             <table class="divider">
                 <thead>
                     <tr>

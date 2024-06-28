@@ -292,9 +292,9 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
         return FlightInventoryTour::find($id);
     }
 
-    public function getItineraryItem(): ItineraryItem
+    public function getItineraryItem(int|null $quantity = null): ItineraryItem
     {
-        $item = $this->getInventory()?->getItineraryItem();
+        $item = $this->getInventory()?->getItineraryItem($quantity);
         if ($this->tourComponent->flight_type === 'Outbound') { $item->type = 'Outbound Flight'; }
         elseif ($this->tourComponent->flight_type === 'Inbound') { $item->type = 'Inbound Flight'; }
         else { $item->type = 'Mid-Package Flight'; }

@@ -143,8 +143,6 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
 
     public function getItineraryItem(int $travelling = 1): ItineraryItem
     {
-        $item = $this->quoteComponent->inventory->repository->getItineraryItem();
-        $item->quantity = $this->quoteComponent->quantity ?? $travelling;
-        return $item;
+        return $this->getInventory()?->getItineraryItem($this->quoteComponent->quantity ?? $travelling);
     }
 }
