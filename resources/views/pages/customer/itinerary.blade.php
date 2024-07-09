@@ -34,7 +34,7 @@ $transportLock = $order->tour->repository->isTransportLocked();
                                 @endif &#41;</option>
                         @endforeach
                     </select>
-                    @if($order !== null)
+                    @if($order !== null && $order->booking_reference !== null)
                     <a href="{{ route('customer.invoice', ['reference' => $order->booking_reference]) }}"
                        target="_blank" class=" invoice btn btn-primary">Invoice</a>
                     @endif
