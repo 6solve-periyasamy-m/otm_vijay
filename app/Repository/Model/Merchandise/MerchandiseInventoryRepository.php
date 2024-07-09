@@ -197,7 +197,7 @@ class MerchandiseInventoryRepository extends InventoryRepository
 
     public function getLocalPurchasePrice(): ?float
     {
-        return $this->getPurchasePrice();
+        return $this->getPurchasePrice() ?? 0.0;
     }
 
     public function getPurchasePriceString(): string

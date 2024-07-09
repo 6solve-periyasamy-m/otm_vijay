@@ -208,7 +208,7 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
 
     public function getLocalPurchasePrice(): ?float
     {
-        return Settings::convertCurrency($this->getPurchasePrice(), $this->inventory->component->currency) ?? $this->getPurchasePrice();
+        return Settings::convertCurrency($this->getPurchasePrice(), $this->inventory->component->currency) ?? $this->getPurchasePrice() ?? 0;
     }
 
     public function getPurchasePriceString(): string
