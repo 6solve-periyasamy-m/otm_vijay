@@ -91,7 +91,7 @@ class OrderMerchandise extends Model
 
     public function getTourSalesPriceAttribute(): float
     {
-        return $this->tourComponent->tour_sales_price ?? 0;
+        return $this->tourComponent->tour_sales_price ?? 0.0;
     }
 
     public function getRepositoryAttribute(): OrderMerchandiseRepository

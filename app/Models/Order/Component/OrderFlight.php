@@ -135,7 +135,7 @@ class OrderFlight extends Model
 
     public function getTourSalesPriceAttribute(): float
     {
-        return $this->tourComponent->tour_sales_price;
+        return $this->tourComponent->tour_sales_price ?? 0.0;
     }
 
     public function getAtolStringAttribute(): string
