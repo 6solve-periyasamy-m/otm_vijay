@@ -54,7 +54,7 @@ class Calculator extends Component
             $this->commission = sigfig($this->total * ($this->quote->commission / 100));
         }
         if ($this->quote->taxBracket()?->rate !== null) {
-            $this->taxes = sigfig($this->total * ($this->quote->taxBracket()->rate / 100));
+            $this->taxes = sigfig($this->quote->taxBracket()?->calculate($this->total));
         }
         $this->toBePaid = $this->total - ($this->commission ?? 0.0);
     }

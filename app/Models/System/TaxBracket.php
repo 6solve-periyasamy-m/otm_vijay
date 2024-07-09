@@ -47,6 +47,6 @@ class TaxBracket extends Model
             return 0;
         }
 
-        return sigfig($amount * sigfig($this->rate / 100));
+        return sigfig($amount - ($amount / (1 + ($this->rate / 100))));
     }
 }
