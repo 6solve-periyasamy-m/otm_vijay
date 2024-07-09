@@ -52,8 +52,8 @@ class GroupRepository
         if ($exists) return $exists;
         $orderAccommodation = OrderAccommodation::make([
             'accommodation_inventory_tour_id' => $tourComponent->id,
-            'cost' => $tourComponent->tour_sales_price,
-            'estimated_purchase_price' => $tourComponent->inventory->local_purchase_price,
+            'cost' => $tourComponent->tour_sales_price ?? 0.0,
+            'estimated_purchase_price' => $tourComponent->inventory->local_purchase_price ?? 0.0,
         ]);
         $silent ? $this->group->rooms()->saveQuietly($orderAccommodation) : $this->group->rooms()->save($orderAccommodation);
         return $orderAccommodation;
