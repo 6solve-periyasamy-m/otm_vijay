@@ -50,10 +50,10 @@
             <td>{{ $inventory->component->address->region . ' - ' . $inventory->component->address->country?->name }}</td>
             <td>{{ $inventory->component->activityType }}</td>
             <td>{{ $inventory->ticketType }}</td>
-            <td>
+            <td data-sort="{{$inventory->starts_at?->unix()}}">
                 {{ f_datetime($inventory->starts_at) }}&nbsp
             </td>
-            <td>
+            <td data-sort="{{$inventory->ends_at?->unix()}}">
                 {{ f_datetime($inventory->ends_at) }}&nbsp
             </td>
             <td>

@@ -31,6 +31,12 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
         $this->inventory = $inventory;
     }
 
+    /**
+     * @param Carbon $from
+     * @param Carbon $to
+     * @param ComponentPackageRepository|null $repository
+     * @return Collection<ActivityInventory>
+     */
     public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
     {
         $from->setTime(0, 0);

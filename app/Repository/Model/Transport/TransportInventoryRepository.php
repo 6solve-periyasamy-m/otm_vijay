@@ -30,6 +30,12 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
         $this->inventory = $inventory;
     }
 
+    /**
+     * @param Carbon $from
+     * @param Carbon $to
+     * @param ComponentPackageRepository|null $repository
+     * @return Collection<TransportInventory>
+     */
     public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
     {
         $from->setTime(0, 0);

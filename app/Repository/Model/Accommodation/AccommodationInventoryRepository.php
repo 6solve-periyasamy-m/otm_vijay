@@ -47,6 +47,12 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         return static::validateStockParent($parent, $this->inventory);
     }
 
+    /**
+     * @param Carbon $from
+     * @param Carbon $to
+     * @param ComponentPackageRepository|null $repository
+     * @return Collection<AccommodationInventory>
+     */
     public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
     {
         $from->setTime(0, 0);
