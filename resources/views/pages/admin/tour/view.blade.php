@@ -149,7 +149,7 @@
                         </thead>
                         @foreach($tour->accommodationInventoryTours as $tourComponent)
                             <tr>
-                                <td style="min-width: 200px">
+                                <td style="min-width: 200px" data-sort="{{$tourComponent->inventory->check_in?->unix()}}">
                                     {{ f_datetime($tourComponent->inventory->check_in) }}
                                     <input type="checkbox" disabled
                                            @if($tourComponent->inventory->check_in_time_confirmed == 1) checked @endif>
@@ -249,7 +249,8 @@
                         </thead>
                         @foreach($tour->activityInventoryTours as $tourComponent)
                             <tr>
-                                <td style="min-width: 200px">{{ f_datetime($tourComponent->inventory->starts_at) }}
+                                <td style="min-width: 200px" data-sort="{{$tourComponent->inventory->starts_at?->unix()}}">
+                                    {{ f_datetime($tourComponent->inventory->starts_at) }}
                                     to {{ f_datetime($tourComponent->inventory->ends_at) }}</td>
                                 <td>{{ $tourComponent->inventory->component->name }}</td>
                                 <td>{{ $tourComponent->inventory->component->activityType->name }}</td>
@@ -339,7 +340,8 @@
                         </thead>
                         @foreach($tour->flightInventoryTours as $tourComponent)
                             <tr>
-                                <td style="min-width: 200px">{{ f_datetime($tourComponent->inventory->departs_at) }}
+                                <td style="min-width: 200px" data-sort="{{$tourComponent->inventory->departs_at?->unix()}}">
+                                    {{ f_datetime($tourComponent->inventory->departs_at) }}
                                     to {{ f_datetime($tourComponent->inventory->arrives_at) }}</td>
                                 <td>{{ $tourComponent->inventory->flight->departureAirport->name }} to {{ $tourComponent->inventory->flight->arrivalAirport->name }} ({{ $tourComponent->inventory->flight_number }})</td>
                                 <td>{{ $tourComponent->inventory->flight->airline->name }}</td>
@@ -429,7 +431,8 @@
                         </thead>
                         @foreach($tour->transportInventoryTours as $tourComponent)
                             <tr>
-                                <td style="min-width: 200px">{{ f_datetime($tourComponent->inventory->departs_at) }}
+                                <td style="min-width: 200px" data-sort="{{$tourComponent->inventory->departs_at?->unix()}}">
+                                    {{ f_datetime($tourComponent->inventory->departs_at) }}
                                     to {{ f_datetime($tourComponent->inventory->arrives_at) }}</td>
                                 <td>{{ $tourComponent->inventory->component->name }}</td>
                                 <td>{{ $tourComponent->inventory->transport_number }}</td>
