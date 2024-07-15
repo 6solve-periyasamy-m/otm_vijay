@@ -61,9 +61,9 @@
             <td>{{ $inventory->travelClass }}</td>
             <td>{{ $inventory->component->operator }}</td>
             <td>{{ $inventory->component->departureAddress->name }}</td>
-            <td>{{ f_datetime($inventory->departs_at) }}</td>
+            <td data-sort="{{$inventory->departs_at?->unix()}}">{{ f_datetime($inventory->departs_at) }}</td>
             <td>{{ $inventory->component->arrivalAddress->name }}</td>
-            <td>{{ f_datetime($inventory->arrives_at) }}</td>
+            <td data-sort="{{$inventory->arrives_at?->unix()}}">{{ f_datetime($inventory->arrives_at) }}</td>
             <td>{{ f_bool($inventory->component->is_domestic) }}</td>
             <td>
                 <input type="checkbox" disabled @if($inventory->fit_selectable == 1) checked @endif>

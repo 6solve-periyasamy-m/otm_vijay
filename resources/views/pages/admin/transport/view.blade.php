@@ -96,12 +96,12 @@
                 <tr>
                     <td>{{ $inventory->travelClass->name }}</td>
                     <td>{{ $inventory->transport_number ?? 'Not Set' }}</td>
-                    <td data-sort="{{$inventory->departs_at->unix()}}">
+                    <td data-sort="{{$inventory->departs_at?->unix()}}">
                         {{ f_datetime($inventory->departs_at) }}&nbsp
                         <input type="checkbox" disabled
                                @if($inventory->departure_time_confirmed == 1) checked @endif>
                     </td>
-                    <td data-sort="{{$inventory->arrives_at->unix()}}">
+                    <td data-sort="{{$inventory->arrives_at?->unix()}}">
                         {{ f_datetime($inventory->arrives_at) }}
                         <input type="checkbox" disabled
                                @if($inventory->arrival_time_confirmed == 1) checked @endif>
