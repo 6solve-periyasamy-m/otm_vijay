@@ -1079,7 +1079,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $bracket = $this->quote->taxBracket();
         if ($bracket === null || $bracket->rate === null) { return null; }
-        return $this->getTotalCost($paying) * ($bracket->rate/100);
+        return $bracket->calculate($this->getTotalCost($paying));
     }
 
     private function getTravellerArray(int $paying, int $travelling): array
