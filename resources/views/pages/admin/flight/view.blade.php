@@ -89,9 +89,9 @@
                 <tr>
                     <td>{{ $inventory->flight_number }}</td>
                     <td>{{ $inventory->travelClass->name }}</td>
-                    <td data-sort="{{$inventory->check_in->unix()}}">{{ f_datetime($inventory->check_in) }}</td>
-                    <td data-sort="{{$inventory->departs_at->unix()}}">{{ f_datetime($inventory->departs_at) }}</td>
-                    <td data-sort="{{$inventory->arrives_at->unix()}}">{{ f_datetime($inventory->arrives_at) }}</td>
+                    <td data-sort="{{$inventory->check_in?->unix()}}">{{ f_datetime($inventory->check_in) }}</td>
+                    <td data-sort="{{$inventory->departs_at?->unix()}}">{{ f_datetime($inventory->departs_at) }}</td>
+                    <td data-sort="{{$inventory->arrives_at?->unix()}}">{{ f_datetime($inventory->arrives_at) }}</td>
                     <td>
                         <input type="checkbox" disabled @if($inventory->fit_selectable == 1) checked @endif>
                     </td>
