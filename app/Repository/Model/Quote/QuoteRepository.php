@@ -10,6 +10,7 @@ use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Location\Address;
+use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;
 use App\Models\Quote\Component\QuoteActivity;
@@ -860,7 +861,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         return $this->quote->merchandise()->whereNotNull('quantity')->where('quantity', '<', $travellers)->get();
     }
 
-    public function forceDelete()
+    public function forceDelete(): void
     {
         $this->quote->leadTraveller()->forceDelete();
         $this->quote->accommodation()->forceDelete();
@@ -946,10 +947,10 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 $this->addComponent($customer, $travellers, 'merchandise', $component, $tourComponent);
             }
         }
-        RoomingRepository::assignDefaultRooming($lead->orderCustomer);
-        foreach ($customers as $customer) {
-            RoomingRepository::assignDefaultRooming($customer->orderCustomer);
-        }
+
+        OrderAccommodation::withoutEvents(static function () use ($order)  {
+            RoomingRepository::assignDefaultSharedRooms($order);
+        });
         $order->repository->resetInstallments();
         return $order;
     }
