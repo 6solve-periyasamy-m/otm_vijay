@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
 
 namespace App\Repository\Model\Tour;
 
@@ -84,7 +84,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
 
     public function __toString(): string
     {
-        return "{$this->tour->name}";
+        return $this->tour->name;
     }
 
     public function getAvailableStock(): int
@@ -112,7 +112,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         $newTour->save();
         foreach ($this->getComponents(true, true, true, true, false, ['Included', 'Add-on']) as $inventoryTourRepository) {
             $inventoryTour = $inventoryTourRepository->get();
-            if ($inventoryTourRepository->getTourComponentType() == 'Upgrade') continue;
+            if ($inventoryTourRepository->getTourComponentType() === 'Upgrade') continue;
             $newInventoryTour = $inventoryTour->replicate();
             $newInventoryTour->tour_id = $newTour->id;
             $newInventoryTour->save();
@@ -189,11 +189,11 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 ->where('accommodation_inventories.accommodation_id', '=', $inventoryTour->inventory->component->id)
                 ->where('accommodation_inventories.check_in', '=', $inventoryTour->inventory->check_in)
                 ->where('accommodation_inventories.room_type_id', '=', $inventoryTour->inventory->room_type_id)
-                ->select('*', 'accommodation_inventory_tours.id as t_id')
+                ->select(['*', 'accommodation_inventory_tours.id as t_id'])
                 ->get();
             foreach ($upgrades as $component) {
                 $existing = AccommodationInventoryTourUpgrade::where('base_id', '=', $inventoryTour->id)->where('upgrade_id', '=', $component->t_id)->get();
-                if (sizeof($existing) > 0) continue;
+                if (count($existing) > 0) continue;
                 $upgrade = AccommodationInventoryTourUpgrade::make([
                     'upgrade_id' => $component->t_id,
                     'description' => 'Upgrade to ' . $component->inventory->boardType,
@@ -209,11 +209,11 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 ->where('activity_inventory_tours.tour_component_type', '=', 'Upgrade')
                 ->where('activity_inventories.activity_id', '=', $inventoryTour->inventory->component->id)
                 ->where('activity_inventories.starts_at', '=', $inventoryTour->inventory->starts_at)
-                ->select('*', 'activity_inventory_tours.id as t_id')
+                ->select(['*', 'activity_inventory_tours.id as t_id'])
                 ->get();
             foreach ($upgrades as $component) {
                 $existing = ActivityInventoryTourUpgrade::where('base_id', '=', $inventoryTour->id)->where('upgrade_id', '=', $component->t_id)->get();
-                if (sizeof($existing) > 0) continue;
+                if (count($existing) > 0) continue;
                 $upgrade = ActivityInventoryTourUpgrade::make([
                     'upgrade_id' => $component->t_id,
                     'description' => 'Upgrade to ' . $component->inventory->ticketType,
@@ -229,11 +229,11 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 ->where('flight_inventory_tours.tour_component_type', '=', 'Upgrade')
                 ->where('flight_inventories.flight_id', '=', $inventoryTour->inventory->component->id)
                 ->where('flight_inventories.departs_at', '=', $inventoryTour->inventory->check_in)
-                ->select('*', 'flight_inventory_tours.id as t_id')
+                ->select(['*', 'flight_inventory_tours.id as t_id'])
                 ->get();
             foreach ($upgrades as $component) {
                 $existing = FlightInventoryTourUpgrade::where('base_id', '=', $inventoryTour->id)->where('upgrade_id', '=', $component->t_id)->get();
-                if (sizeof($existing) > 0) continue;
+                if (count($existing) > 0) continue;
                 $upgrade = FlightInventoryTourUpgrade::make([
                     'upgrade_id' => $component->t_id,
                     'description' => 'Upgrade to ' . $component->inventory->travelClass,
@@ -249,11 +249,11 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 ->where('transport_inventory_tours.tour_component_type', '=', 'Upgrade')
                 ->where('transport_inventories.transport_id', '=', $inventoryTour->inventory->component->id)
                 ->where('transport_inventories.departs_at', '=', $inventoryTour->inventory->departs_at)
-                ->select('*', 'transport_inventory_tours.id as t_id')
+                ->select(['*', 'transport_inventory_tours.id as t_id'])
                 ->get();
             foreach ($upgrades as $component) {
                 $existing = TransportInventoryTourUpgrade::where('base_id', '=', $inventoryTour->id)->where('upgrade_id', '=', $component->t_id)->get();
-                if (sizeof($existing) > 0) continue;
+                if (count($existing) > 0) continue;
                 $upgrade = TransportInventoryTourUpgrade::make([
                     'upgrade_id' => $component->t_id,
                     'description' => 'Upgrade to ' . $component->inventory->travelClass,
@@ -264,6 +264,9 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         }
     }
 
+    /**
+     * @return array<int, array{template: AccommodationInventoryTour, available: AccommodationInventoryTour[]}>
+     */
     public function getTemplateData(): array
     {
         $data = [];
@@ -298,7 +301,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         }
     }
 
-    public function fulfilAll()
+    public function fulfilAll(): void
     {
         /** @var MerchandiseInventoryTour $merchandiseInventoryTour */
         foreach ($this->tour->merchandise()->with('orderComponents')->get() as $merchandiseInventoryTour) {
@@ -578,7 +581,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             $this->tour->save();
         }
         $installments = Settings::getDefaultInstallments();
-        if (sizeof($installments) > 0) {
+        if (count($installments) > 0) {
             foreach($installments as $days => $percentage) {
                 $this->tour->paymentInstallments()->save(new PaymentInstallment(['due_on' => $this->tour->date_from->subDays($days), 'amount' => $percentage, 'is_percentage' => true,]));
             }
