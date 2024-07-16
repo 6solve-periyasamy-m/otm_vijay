@@ -143,5 +143,16 @@
                 <livewire:admin.location.currency.table />
             </x-admin.section.card>
         </div>
+        <div class="col-6">
+            <x-admin.section.card>
+                <x-slot:header>
+                    <div class="flex justify-between">
+                        <div><h4 class="fw-bold">Payment Methods</h4></div>
+                        <div><button class="btn btn-primary" onclick="openModal('admin.system.payment-method.form')">{{ \Icon::create() }} Create New</button></div>
+                    </div>
+                </x-slot:header>
+                <livewire:admin.system.payment-method.table />
+            </x-admin.section.card>
+        </div>
     </div>
 @endsection
