@@ -21,7 +21,7 @@
     <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
     @livewireStyles
     <script src="{{ asset('/js/app.js') }}"></script>
-    <script src="{{ asset('js/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('js/ckeditor.js') }}"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css" rel="stylesheet">
     {{-- Addons (fold): --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/fold/foldgutter.min.css" rel="stylesheet" />

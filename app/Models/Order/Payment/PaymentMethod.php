@@ -6,18 +6,20 @@ use App\Models\Helper\SimpleModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 /**
  * App\Models\Order\Payment\PaymentMethod
  *
  * @property int $id
  * @property string $name
- * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Collection<Payment> $payments
  * @method static Builder|PaymentMethod newModelQuery()
  * @method static Builder|PaymentMethod newQuery()
  * @method static QueryBuilder|PaymentMethod onlyTrashed()
@@ -33,13 +35,11 @@ use Illuminate\Support\Carbon;
  */
 class PaymentMethod extends SimpleModel
 {
-    use HasFactory, SoftDeletes;
+    protected $guarded = [];
 
-    protected $fillable = ['name',];
-
-    public static function getValidationRules(): array
+    public function payments(): HasMany
     {
-        return ['name' => 'required|unique:payment_methods,name'];
+        return $this->hasMany(Payment::class, 'payment_method_id');
     }
 
     public static function findOrCreate(string $name)
@@ -49,10 +49,5 @@ class PaymentMethod extends SimpleModel
             $type = self::create(['name' => $name,]);
         }
         return $type;
-    }
-
-    public function __toString()
-    {
-        return $this->name;
     }
 }

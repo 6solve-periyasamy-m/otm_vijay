@@ -182,23 +182,19 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         $order->updateQuietly(['booking_reference' => Order::generateBookingReference($order)]); // To Future Me: Must be done separately because Lead Booker ID is *required*
         $order->saveQuietly();
         $included = $tour->repository->getComponentSetForSaving();
-        $defaultRooms = RoomingRepository::getDefaultRoomList($tour);
         if ($lead->travelling) {
             $leadBooker->repository->bulkSaveStandard($included->clone());
-            OrderAccommodation::withoutEvents(static function () use ($leadBooker, $defaultRooms) {
-                RoomingRepository::createGroupFromRoomList($leadBooker, $defaultRooms);
-            });
         }
         $order->repository->resetInstallments();
         foreach ($customers as $customer) {
             $orderCustomer = $order->repository->addCustomer($customer, false, false, true);
             if ($customer->travelling) {
                 $orderCustomer->repository->bulkSaveStandard($included->clone());
-                OrderAccommodation::withoutEvents(static function () use ($orderCustomer, $defaultRooms)  {
-                    RoomingRepository::createGroupFromRoomList($orderCustomer, $defaultRooms);
-                });
             }
         }
+        OrderAccommodation::withoutEvents(static function () use ($order)  {
+            RoomingRepository::assignDefaultSharedRooms($order);
+        });
         event(new OrderCreatedEvent($order, $shouldInvoice));
         $order->repository->refresh();
         return $order;
@@ -637,9 +633,10 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $orderCustomer->repository->addAllIncluded();
         }
         $this->resetInstallments();
-        foreach ($this->order->orderCustomers as $orderCustomer) {
-            RoomingRepository::assignDefaultRooming($orderCustomer);
-        }
+        $order = $this->order;
+        OrderAccommodation::withoutEvents(static function () use ($order)  {
+            RoomingRepository::assignDefaultSharedRooms($order);
+        });
         if ($resetAdjustments) {
             $this->order->adjustments()->delete();
         }

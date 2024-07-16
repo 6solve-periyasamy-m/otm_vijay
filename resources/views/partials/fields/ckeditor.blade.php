@@ -5,7 +5,7 @@
 @push('footer-stack')
     <script type="text/javascript">
         ClassicEditor
-            .create(document.querySelector('#{{ $id }}'))
+            .create(document.querySelector('#{{ $id }}'), ckConfig)
             .catch(error => console.log(error));
     </script>
 @endpush

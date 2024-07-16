@@ -55,6 +55,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon $date_to
  * @property string $terms
  * @property string $invoice_footer
+ * @property int $paying Cached paying value
+ * @property int $travelling Cached travelling value
  * @property Carbon|null $expires
  * @property QuoteStatus $quote_status
  * @property string|null $internal_notes

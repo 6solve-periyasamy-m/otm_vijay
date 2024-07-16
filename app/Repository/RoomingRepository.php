@@ -25,23 +25,26 @@ class RoomingRepository
      */
     public static function addRoomsToGroup(Order $order, Group $group, RoomType $roomType): void
     {
-        $templates = RoomingRepository::getTemplateTourInventory($order->tour);
+        $templates = self::getTemplateTourInventory($order->tour);
         foreach ($templates as $template) {
-            $found = RoomingRepository::getInventoryWithRoomType($template, $roomType);
+            $found = self::getInventoryWithRoomType($template, $roomType);
             if (!isset($found)) {
-                $types = RoomingRepository::hydrateRoomTypes(RoomingRepository::getRoomTypesForInventory($template));
+                $types = self::hydrateRoomTypes(self::getRoomTypesForInventory($template));
                 foreach ($types as $type) {
-                    if ($type->maximum_occupancy == $roomType->maximum_occupancy) {
-                        $found = RoomingRepository::getInventoryWithRoomType($template, $type);
+                    if ($type->maximum_occupancy === $roomType->maximum_occupancy) {
+                        $found = self::getInventoryWithRoomType($template, $type);
                         break;
                     }
                 }
             }
-            if (!isset($found)) throw new RoomingFailedException("Template {$template->id} has no inventory of type {$roomType->name} or size {$roomType->maximum_occupancy}");
+            if (!isset($found)) {
+                throw new RoomingFailedException("Template {$template->id} has no inventory of type {$roomType->name} or size {$roomType->maximum_occupancy}");
+            }
             OrderAccommodation::create([
                 'accommodation_inventory_tour_id' => $found->id,
                 'group_id' => $group->id,
                 'cost' => $found->tour_sales_price ?? 0.0,
+                'estimated_purchase_price' => $found->inventory->repository->getLocalPurchasePrice(),
             ]);
         }
     }
@@ -68,7 +71,7 @@ class RoomingRepository
         $query->whereNull('accommodation_inventory_tours.deleted_at');
         $query->select('accommodation_inventory_tours.id');
 
-        return $query->first() == null ? null : AccommodationInventoryTour::find($query->first()->id);
+        return $query->first() === null ? null : AccommodationInventoryTour::find($query->first()?->id);
     }
 
     /**
@@ -87,7 +90,6 @@ class RoomingRepository
     public static function getRoomTypesForInventory(AccommodationInventoryTour $inventoryTour): array
     {
         $inventory = $inventoryTour->inventory;
-        $accommodation = $inventory->component;
 
         $query = DB::table('accommodation_inventory_tours');
         $query->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', '=', 'accommodation_inventories.id');
@@ -108,10 +110,10 @@ class RoomingRepository
     public static function getSingleRoomType(Tour $tour): RoomType|null
     {
         $singleRoom = null;
-        foreach (RoomingRepository::getAvailableRoomTypes($tour) as $roomType) {
-            if ($singleRoom != null && $singleRoom->maximum_occupancy <= $roomType->maximum_occupancy) continue;
+        foreach (self::getAvailableRoomTypes($tour) as $roomType) {
+            if ($singleRoom !== null && $singleRoom->maximum_occupancy <= $roomType->maximum_occupancy) continue;
             $singleRoom = $roomType;
-            if ($singleRoom->maximum_occupancy == 1) break;
+            if ($singleRoom->maximum_occupancy === 1) break;
         }
         return $singleRoom;
     }
@@ -133,35 +135,35 @@ class RoomingRepository
 
     public static function getAvailableRoomTypes(Tour $tour): array
     {
-        $templates = RoomingRepository::getTemplateTourInventory($tour);
-        $sizes = RoomingRepository::getAvailableRoomSizes($tour);
+        $templates = self::getTemplateTourInventory($tour);
+        $sizes = self::getAvailableRoomSizes($tour);
         $available = [];
         foreach ($templates as $template) {
-            $availableTypes = RoomingRepository::hydrateRoomTypes(RoomingRepository::getRoomTypesForInventory($template));
+            $availableTypes = self::hydrateRoomTypes(self::getRoomTypesForInventory($template));
             foreach ($availableTypes as $type) {
                 if (in_array($type->maximum_occupancy, $sizes)) {
                     $available[] = $type->id;
                 }
             }
         }
-        return RoomingRepository::hydrateRoomTypes(array_unique($available));
+        return self::hydrateRoomTypes(array_unique($available));
     }
 
     public static function getAvailableRoomSizes(Tour $tour): array
     {
-        $templates = RoomingRepository::getTemplateTourInventory($tour);
+        $templates = self::getTemplateTourInventory($tour);
         $first = true;
         $available = [];
         foreach ($templates as $template) {
             if ($first && empty($available)) {
-                $types = RoomingRepository::hydrateRoomTypes(RoomingRepository::getRoomTypesForInventory($template));
+                $types = self::hydrateRoomTypes(self::getRoomTypesForInventory($template));
                 foreach ($types as $type) {
                     $available[] = $type->maximum_occupancy;
                 }
                 $available = array_unique($available);
                 continue;
             }
-            $roomTypes = RoomingRepository::hydrateRoomTypes(RoomingRepository::getRoomTypesForInventory($template));
+            $roomTypes = self::hydrateRoomTypes(self::getRoomTypesForInventory($template));
             $types = [];
             foreach ($roomTypes as $type) {
                 $types[] = $type->maximum_occupancy;
@@ -179,59 +181,43 @@ class RoomingRepository
      */
     public static function getHydratedRoomTypesForInventory(AccommodationInventoryTour $inventoryTour): array
     {
-        return RoomingRepository::hydrateRoomTypes(RoomingRepository::getRoomTypesForInventory($inventoryTour));
+        return self::hydrateRoomTypes(self::getRoomTypesForInventory($inventoryTour));
     }
 
-    /**
-     * Returns a list of rooms to be given by default to a traveller
-     * @return AccommodationInventoryTour[]
-     */
-    public static function getDefaultRoomList(Tour $tour): array
+    public static function assignDefaultSharedRooms(Order $order): void
     {
-        $singleRoom = null;
-        $availableTypes = [];
-        foreach (RoomingRepository::getAvailableRoomTypes($tour) as $roomType) {
-            if ($singleRoom != null && $singleRoom->maximum_occupancy < $roomType->maximum_occupancy) continue;
-            if (!isset($singleRoom) || $roomType?->maximum_occupancy < $singleRoom->maximum_occupancy) {
-                $singleRoom = $roomType;
-                $availableTypes = [];
-            }
-            $availableTypes[] = $roomType;
-        }
-        if (!isset($singleRoom)) return [];
-        $rooms = [];
-        foreach ($tour->templates as $template) {
-            $room = self::getInventoryWithRoomType($template, $singleRoom);
-            if (empty($room)) {
-                for ($x = 1; $x < sizeof($availableTypes); $x++) {
-                    $room = self::getInventoryWithRoomType($template, $availableTypes[$x]);
-                    if (!empty($room)) break;
+        foreach ($order->tour->repository->getTemplateData() as $date => $details) {
+            // Default to template, then find the largest included room
+            $room = $details['template'];
+            foreach ($details['available'] as $available) {
+                if ($available->tour_component_type === 'Included') {
+                    if ($room->tour_component_type !== 'Included'
+                        || $available->inventory->roomType->maximum_occupancy > $room->inventory->roomType->maximum_occupancy
+                    ) {
+                        $room = $available;
+                    }
                 }
             }
-            if (!empty($room)) {
-                $rooms[] = $room;
-            }
-        }
-        return $rooms;
-    }
+            // If no included rooms were found, skip assigning
+            if ($room->tour_component_type !== 'Included') { continue; }
 
-    /**
-     * @param OrderCustomer $orderCustomer
-     * @param AccommodationInventoryTour[] $rooms
-     * @return void
-     */
-    public static function createGroupFromRoomList(OrderCustomer $orderCustomer, array $rooms): void
-    {
-        if (!empty($rooms)) {
+            // Populate the room with as many travellers as allowed by occupancy
+            $travellers = 0;
             $group = Group::create();
-            $group->repository->addCustomerToGroup($orderCustomer);
-            $count = 0;
-            foreach ($rooms as $room) {
-                $count++;
-                if (empty($room)) {
-                    continue;
+            $group->repository->addRoomToGroup($room);
+            foreach ($order->orderCustomers as $orderCustomer) {
+                if (!$orderCustomer->is_travelling) { continue; }
+                $group->repository->addCustomerToGroup($orderCustomer);
+                $travellers++;
+                if ($travellers >= $room->inventory->roomType->maximum_occupancy) {
+                    $travellers = 0;
+                    $group = Group::create();
+                    $group->repository->addRoomToGroup($room);
                 }
-                $group->repository->addRoomToGroup($room);
+            }
+            // Delete the last group if empty
+            if ($group->orderCustomers()->count() === 0) {
+                $group->repository->forceDelete();
             }
         }
     }
