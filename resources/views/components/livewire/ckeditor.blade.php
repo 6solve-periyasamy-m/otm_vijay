@@ -9,7 +9,7 @@
     </div>
     <script type="text/javascript">
         ClassicEditor
-            .create(document.querySelector('#{{$id}}'))
+            .create(document.querySelector('#{{ $id }}'), ckConfig)
             .then(editor => {
                 editor.model.document.on('change:data', () => {
                     @this.set('{{$attributes->get('name')}}', editor.getData());
