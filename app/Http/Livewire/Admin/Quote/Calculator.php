@@ -33,6 +33,8 @@ class Calculator extends Component
     public function mount(Quote $quote)
     {
         $this->quote = $quote;
+        $this->paying = $this->quote->paying ?? 0;
+        $this->travelling = $this->quote->travelling ?? 0;
         $this->calculate(false);
     }
 
@@ -57,6 +59,7 @@ class Calculator extends Component
             $this->taxes = sigfig($this->quote->taxBracket()?->calculate($this->total));
         }
         $this->toBePaid = $this->total - ($this->commission ?? 0.0);
+        $this->save();
     }
 
     public function inputChanged(?string $key = null): void
@@ -166,5 +169,12 @@ class Calculator extends Component
     private function leadPaying(): bool
     {
         return $this->quote->leadTraveller->paying;
+    }
+
+    private function save(): void
+    {
+        $this->quote->travelling = $this->travelling;
+        $this->quote->paying = $this->paying;
+        $this->quote->save();
     }
 }
