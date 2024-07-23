@@ -22,8 +22,8 @@ class OrderRoomingRepository
                 'name' => $inventoryTour->repository->formatAdminOccupancy(),
                 'size' => $inventoryTour->inventory->roomType->maximum_occupancy,
                 'price' => $inventoryTour->tour_component_type === 'Included' ? 0 : $inventoryTour->tour_sales_price,
-                'start' => $inventoryTour->inventory->check_in->unix(),
-                'end' => $inventoryTour->inventory->check_out->unix(),
+                'start' => $inventoryTour->inventory->check_in->tz('UTC')->unix(),
+                'end' => $inventoryTour->inventory->check_out->tz('UTC')->unix(),
             ];
         }
         $customers = [];
