@@ -84,7 +84,7 @@ class Form extends Component
     {
         return [
             'quote.name' => 'required|string|min:3',
-            'quote.brand_id' => 'nullable|integer|exists:brands,id',
+            'quote.brand_id' => 'nullable|integer',
             'quote.tax_bracket_id' => 'nullable|integer|exists:tax_brackets,id',
             'quote.consultant_id' => 'nullable|integer|exists:users,id',
             'quote.organization_id' => 'nullable|integer|exists:organizations,id',
