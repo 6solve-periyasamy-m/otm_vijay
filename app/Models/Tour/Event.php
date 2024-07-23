@@ -92,7 +92,13 @@ class Event extends Model
 
     public function taxBracket(): TaxBracket
     {
-        return $this->bracket ?? Settings::getTaxBracket();
+        if ($this->bracket instanceof TaxBracket) {
+            return $this->bracket;
+        }
+        if (is_array($this->bracket)) {
+            return new TaxBracket($this->bracket);
+        }
+        return Settings::getTaxBracket();
     }
 
     public function tours(): HasMany
