@@ -31,7 +31,7 @@
             </div>
             <div class="col-12 col-xl-6 row">
                 <div class="col-12 text-center">
-                    <p>{{ __('quotes.view.cards.quick.calculator.travelling') }}</p>
+                    <abbr title="Free-of-Charge (FOC) Travellers will be granted components, but will not be charged any fees">{{ __('quotes.view.cards.quick.calculator.travelling') }}</abbr>
                 </div>
                 <div class="col-12 col-xl-3">
                     <button wire:click="incrementTravelling(-1)" class="btn btn-outline-danger btn-sm mb-1">
