@@ -215,7 +215,7 @@ class InvoiceGenerator
             $billables = [
                 new InvoiceBillable([
                     'description' => __('invoice.customer.billable.base'),
-                    'amount' => $orderCustomer->tour_cost,
+                    'amount' => $orderCustomer->tour_cost ?? 0.0,
                     'shared_key' => static::BASE_KEY,
                     'is_base' => false,
                 ]),
@@ -223,7 +223,7 @@ class InvoiceGenerator
             if ($orderCustomer->has_surcharge) {
                 $billables[] = new InvoiceBillable([
                     'description' => __('invoice.customer.billable.surcharge'),
-                    'amount' => $orderCustomer->single_occupancy_surcharge,
+                    'amount' => $orderCustomer->single_occupancy_surcharge ?? 0.0,
                     'shared_key' => "surcharge",
                     'is_base' => false,
                 ]);
@@ -238,7 +238,7 @@ class InvoiceGenerator
             foreach ($orderCustomer->adjustments as $adjustment) {
                 $billables[] = new InvoiceBillable([
                     'description' => $adjustment->reason,
-                    'amount' => $adjustment->amount,
+                    'amount' => $adjustment->amount ?? 0.0,
                     'shared_key' => "adjustment-{$adjustment->id}",
                     'is_base' => false,
                 ]);
