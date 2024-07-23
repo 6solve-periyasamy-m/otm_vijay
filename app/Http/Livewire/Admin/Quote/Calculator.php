@@ -25,7 +25,7 @@ class Calculator extends Component
     public string|float|null $markup = null;
     public float|null $commission = null;
     public float $toBePaid;
-    public float $marked_up_price = 0;
+    public float|string $marked_up_price = 0;
 
     public Quote $quote;
     public float|null $taxes = null;
