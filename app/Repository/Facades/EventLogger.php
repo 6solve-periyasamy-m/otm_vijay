@@ -11,8 +11,9 @@ use Log;
 
 class EventLogger
 {
-    public function simple(Model $model, ModelEventType $type): void
+    public function simple(Model|null $model, ModelEventType $type): void
     {
+        if ($model === null) { return; }
         $event = ModelEvent::make([
             'target_id' => $model->id,
             'target_type' => $model::class,
@@ -25,11 +26,11 @@ class EventLogger
     public function event(Model|null $from, Model|null $to, ModelEventType $type): void
     {
         $event = ModelEvent::make([
-            'target_id' => $to->id,
+            'target_id' => $to?->id,
             'target_type' => $to::class,
             'action' => $type,
-            'from' => $from->toJson(),
-            'to' => $to->toJson(),
+            'from' => $from?->toJson(),
+            'to' => $to?->toJson(),
             ...$this->populate(),
         ]);
         $event->save();

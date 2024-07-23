@@ -6,6 +6,7 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Quote\Component\QuoteActivity;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuoteSection;
+use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
@@ -147,7 +148,9 @@ class QuoteActivityRepository extends QuoteComponentRepository
     public function getItineraryItem(int $travelling = 1, Quote|null $quote = null): ItineraryItem
     {
         $item = $this->getInventory()?->getItineraryItem($this->quoteComponent->quantity ?? $travelling);
-        $item->name =  $quote?->event?->name;
+
+        $event = is_array($quote->event) ? new Event($quote->event) : $quote->event;
+        $item->name =  $event?->name;
         return $item;
     }
 }
