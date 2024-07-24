@@ -42,33 +42,27 @@
             <div class="second-block rme-det">
                 <h3>Your room details</h3>
                 <p>ROOMS</p>
+                @foreach($tour->repository->getHotels() as $hotel)
                 <div class="mkvk-wh-bl">
-                    <h6>PARKROYAL at Beach Road - Superior Room</h6>
+                    <h6>{{ $hotel->name }}</h6>
                     <div class="marl"><img src="{{ asset('css/booking/icon/Icon.svg') }}" alt="tip-img"></div>
-
                     <div class="ov-block-on-cl">
                         <div class="contain">
                             <div class="first-block">
                                 <h6>Hotel details</h6>
                                 <div class="full">
                                     <div class="left-col">
-                                        <img src="assets/images/Hotel details.png" alt="featured-img">
+                                        <img src="{{ asset($hotel->image_url) }}" alt="featured-img">
                                     </div>
                                     <div class="right-col">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vestibulum morbi blandit cursus risus at ultrices. Nec nam aliquam sem et tortor.<!-- <- Accommodation Description --></p>
+                                        <p>{!! $hotel->description !!}</p>
                                     </div>
                                 </div>
                             </div>
-                            <!--
-                            <div class="snd-blo">
-                                <h6>Bedding configuration</h6>
-                                <p>Tellus orci ac auctor augue mauris augue neque gravida in. Nunc non blandit massa enim nec dui nunc mattis enim. Ullamcorper morbi tincidunt ornare massa. Ultrices eros in.</p>
-                            </div>
-                            -->
                         </div>
                     </div>
-
                 </div>
+                @endforeach
                 <div class="inner-block">
                     <div class="left-col">
                         <h6>Number of rooms</h6>
@@ -213,38 +207,6 @@
                             <div class="upgrade-btn-cls-v">Upgrade</div>
 
                         </div>
-                    </div>
-                    <div class="close-btn">
-                        <img src="assets/images/close-white-arrow.png" alt="close-btn">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- <- See More Popup -->
-        <div class="accom-popup-overlay-in-two">
-            <div class="popup-inner-two">
-                <div class="convco-two">
-                    <div class="whole-block-two">
-                        <div class="full-top-blcls-two">
-                            <h3> Package details </h3>
-                            <div class="upp-block-two">
-                                <div class="snd-sec">
-                                    <div class="left-col">
-                                        <img src="assets/images/Super pit package.png" alt="featured-img">
-                                    </div>
-                                    <div class="right-col">
-                                        <h6>Super pit package</h6>
-                                        <p class="location">Sydney, Australia</p>
-                                        <p class="date">Nov 20, 2024 - Nov 30, 2024</p>
-                                        <p class="inclusion">Inclusion</p>
-                                        <p class="inclusion">Inclusion</p>
-                                        <p class="inclusion">Inclusion</p>
-                                        <p class="inclusion">Inclusion</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- TODO: Put tour description here -->
                     </div>
                     <div class="close-btn">
                         <img src="assets/images/close-white-arrow.png" alt="close-btn">

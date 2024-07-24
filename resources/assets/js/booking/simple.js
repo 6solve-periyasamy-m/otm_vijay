@@ -1,10 +1,15 @@
 jQuery(document).ready(function () {
+    // Show Upgrade popup on click
     jQuery('.upgrade-cls').click(function () {
         jQuery(".accom-popup-overlay-in").css("display", "block");
     });
+
+    // Close popup on click
     jQuery('#liveToast .btn-close').click(function () {
         jQuery('#liveToast').hide();
     })
+
+    //
     jQuery('.accom-popup-overlay-in .convco .close-btn').click(function () {
         jQuery(".accom-popup-overlay-in").css("display", "none");
     });
@@ -328,12 +333,8 @@ jQuery(document).ready(function () {
         jQuery(this).addClass('active');
     })
 
-    jQuery('p.see-more a').click(function (e) {
-        e.preventDefault();
-        jQuery('.accom-popup-overlay-in-two').css('display', 'block');
-    });
-    jQuery('.accom-popup-overlay-in-two .close-btn').click(function () {
-        jQuery('.accom-popup-overlay-in-two').css('display', 'none');
+    jQuery('.see-more-popup .close-btn').click(function () {
+        jQuery('.see-more-popup').css('display', 'none');
     })
     const inputs = document.querySelectorAll("#mobile_number");
     inputs.forEach(input => {
@@ -345,4 +346,9 @@ jQuery(document).ready(function () {
     });
     jQuery('.mobile_field .iti__preferred').remove();
     jQuery('.mobile_field .iti__divider').remove();
+
+    jQuery('a[data-action="popup"]').click(function (event) {
+        event.preventDefault();
+        jQuery('.' + jQuery(event.target).attr('data-target')).css('display', 'block');
+    })
 });

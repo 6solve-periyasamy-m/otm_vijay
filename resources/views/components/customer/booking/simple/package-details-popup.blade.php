@@ -1,5 +1,5 @@
 @php /** @var \App\Models\Tour\Tour $tour */ @endphp
-<div class="accom-popup-overlay-in-two">
+<div class="see-more-popup">
     <div class="popup-inner-two">
         <div class="convco-two">
             <div class="whole-block-two">

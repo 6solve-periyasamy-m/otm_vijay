@@ -22,7 +22,9 @@
         @foreach($tour->repository->getInclusions(3) as $inclusion)
             <p class="inclusion">{{ $inclusion }}</p>
         @endforeach
-        <p class="see-more"><a href="#">See more</a></p>
+        <p class="see-more">
+            <a href="#" data-action="popup" data-target="see-more-popup">See more</a>
+        </p>
     </div>
 </div>
 <div class="third-col">
@@ -58,3 +60,36 @@
     </ul>
     {{ $slot }}
 </div>
+@push('popups')
+<!-- <- See More Popup -->
+<div class="see-more-popup">
+    <div class="popup-inner-two">
+        <div class="convco-two">
+            <div class="whole-block-two">
+                <div class="full-top-blcls-two">
+                    <h3> Package details </h3>
+                    <div class="upp-block-two">
+                        <div class="snd-sec">
+                            <div class="left-col">
+                                <img src="{{ asset($tour->event->image_url) }}" class="package-image" alt="featured-img">
+                            </div>
+                            <div class="right-col">
+                                <h6>{{ $tour->name }}</h6>
+                                <!--<p class="location">Sydney, Australia</p>-->
+                                <p class="date">{{ $tour->date_from?->format('M d, Y') }} - {{ $tour->date_to?->format('M d, Y') }}</p>
+                                @foreach($tour->repository->getInclusions() as $inclusion)
+                                    <p class="inclusion">{{ $inclusion }}</p>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ $tour->description }}
+            </div>
+            <div class="close-btn">
+                <img src="{{ asset('css/booking/icon/close-btn.svg') }}" alt="close-btn">
+            </div>
+        </div>
+    </div>
+</div>
+@endpush

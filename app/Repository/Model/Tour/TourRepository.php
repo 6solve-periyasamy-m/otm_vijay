@@ -2,6 +2,7 @@
 
 namespace App\Repository\Model\Tour;
 
+use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\Activity\ActivityInventoryTour;
@@ -606,12 +607,14 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         });
         $inclusions = [];
         foreach ($components as $component) {
-            if ($limit === 0) { break; }
+            if ($limit === 0) {
+                break;
+            }
             $inclusion = match (true) {
                 $component instanceof AccommodationInventoryRepository =>
                     $component->get()->accommodation->name . ' - ' . diff_in_nights($component->getStartTime(), $component->getEndTime()) . ' Nights',
                 $component instanceof ActivityInventoryRepository =>
-                $component->get()->activity->name,
+                    $component->get()->activity->name,
                 default => null,
             };
             // TODO: Implement Flights, Transport and Merchandise
@@ -621,5 +624,18 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             }
         }
         return $inclusions;
+    }
+
+    /**
+     * @return array<int, Accommodation>
+     */
+    public function getHotels(): array
+    {
+        // TODO: Optimize
+        $hotels = [];
+        foreach ($this->tour->accommodationInventory()->groupBy('accommodation_id')->get() as $inventory) {
+            $hotels[$inventory->accommodation_id] = $inventory->accommodation;
+        }
+        return $hotels;
     }
 }
