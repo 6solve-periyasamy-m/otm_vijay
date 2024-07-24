@@ -23,39 +23,15 @@ jQuery(document).ready(function () {
 
 
     //hover details
-    jQuery(document).on('mouseover', '.first-form .second-block .marl', function () {
-        jQuery('.ov-block-on-cl').css('display', 'none');
-        jQuery('.marl').removeClass('hovor');
-        jQuery(this).closest('.second-block ').find('.mkvk-wh-bl .marl').addClass('hovor');
-        jQuery(this).closest('.second-block ').find('.ov-block-on-cl').css('display', 'block');
-    });
-
-    jQuery(document).on('mouseleave', '.first-form .second-block', function () {
-        jQuery(this).find('.mkvk-wh-bl .marl').removeClass('hovor');
-        jQuery(this).find('.ov-block-on-cl').css('display', 'none');
-    });
-
-    jQuery(document).on('mouseover', '.first-form .third-block .first-bl .marl', function () {
-        jQuery('.ov-block-on-cl').css('display', 'none');
-        jQuery('.marl').removeClass('hovor');
-        jQuery(this).closest('.first-bl').find('.ov-block-on-cl').css('display', 'block');
-        jQuery(this).addClass('hovor');
-    });
-
-    jQuery(document).on('mouseleave', '.first-form .third-block .first-bl', function () {
-        jQuery(this).find('.marl').removeClass('hovor');
-        jQuery(this).find('.ov-block-on-cl').css('display', 'none');
-    });
-
-
     jQuery(document).on('click', function (event) {
-        jQuery('.ov-block-on-cl').css('display', 'none');
-        jQuery('.mkvk-wh-bl .marl').removeClass('hovor');
+        return;
+        jQuery('.accommodation-details-hover').css('display', 'none');
+        jQuery('.hotel-details .information-hover').removeClass('hovor');
         if (!jQuery(event.target).closest('.second-block, .third-block').length) {
-            jQuery('.second-block .mkvk-wh-bl .marl').removeClass('hovor');
-            jQuery('.second-block .ov-block-on-cl').css('display', 'none');
-            jQuery('.third-block .marl').removeClass('hovor');
-            jQuery('.third-block .inn .ov-block-on-cl').css('display', 'none');
+            jQuery('.second-block .hotel-details .information-hover').removeClass('hovor');
+            jQuery('.second-block .accommodation-details-hover').css('display', 'none');
+            jQuery('.third-block .information-hover').removeClass('hovor');
+            jQuery('.third-block .inn .accommodation-details-hover').css('display', 'none');
         }
     });
 
@@ -344,5 +320,39 @@ jQuery(document).ready(function () {
     jQuery('[data-action="close"]').click(function (event) {
         event.preventDefault();
         jQuery(event.target).closest('[data-role="closeable"]').css('display', 'none');
+    });
+
+
+    // TODO: Debug hover sometimes not finding the target
+    let hover = jQuery('[data-action="hover"]');
+
+    hover.on('mouseover', function (event) {
+        let target = jQuery('.' + jQuery(event.target).attr('data-target'));
+        target.css('display', 'block');
+        target.addClass('hovor');
+    });
+
+    hover.on('mouseleave', function (event) {
+        let target = jQuery('.' + jQuery(event.target).attr('data-target'));
+        if (!target.hasClass('persist')) {
+            console.log('not persisting');
+            console.log(target);
+            target.css('display', 'none');
+            target.removeClass('hovor');
+        }
+    });
+
+    hover.on('click', function (event) {
+        event.preventDefault();
+        let target = jQuery('.' + jQuery(event.target).attr('data-target'));
+        if (target.hasClass('persist')) {
+            target.removeClass('persist');
+            target.removeClass('hovor');
+            target.css('display', 'none');
+        } else {
+            target.addClass('persist');
+            target.addClass('hovor');
+            target.css('display', 'block');
+        }
     });
 });

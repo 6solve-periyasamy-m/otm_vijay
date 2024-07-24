@@ -43,16 +43,18 @@
                 <h3>Your room details</h3>
                 <p>ROOMS</p>
                 @foreach($tour->repository->getHotels() as $hotel)
-                <div class="mkvk-wh-bl">
+                <div wire:ignore class="hotel-details">
                     <h6>{{ $hotel->name }}</h6>
-                    <div class="marl"><img src="{{ asset('css/booking/icon/Icon.svg') }}" alt="tip-img"></div>
-                    <div class="ov-block-on-cl">
+                    <div class="information-hover" data-action="hover" data-target="accommodation-{{$hotel->id}}">
+                        <img src="{{ asset('css/booking/icon/Icon.svg') }}" alt="tip-img">
+                    </div>
+                    <div class="accommodation-details-hover accommodation-{{$hotel->id}}">
                         <div class="contain">
                             <div class="first-block">
                                 <h6>Hotel details</h6>
                                 <div class="full">
                                     <div class="left-col">
-                                        <img src="{{ asset($hotel->image_url) }}" alt="featured-img">
+                                        <img class="package-image" src="{{ asset($hotel->image_url) }}" alt="featured-img">
                                     </div>
                                     <div class="right-col">
                                         <p>{!! $hotel->description !!}</p>
@@ -82,29 +84,7 @@
             <div class="third-block">
                 <div class="first-bl">
                     <div class="inn">
-                        <h6>Room 1 </h6>
-                        <!--
-                        <div class="marl"><img src="assets/images/Icon.svg" alt="tip-img"></div>
-                        <div class="ov-block-on-cl">
-                            <div class="contain">
-                                <div class="first-block">
-                                    <h6>Hotel details</h6>
-                                    <div class="full">
-                                        <div class="left-col">
-                                            <img src="assets/images/Hotel details.png" alt="featured-img">
-                                        </div>
-                                        <div class="right-col">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vestibulum morbi blandit cursus risus at ultrices. Nec nam aliquam sem et tortor.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="snd-blo">
-                                    <h6>Bedding configuration</h6>
-                                    <p>Tellus orci ac auctor augue mauris augue neque gravida in. Nunc non blandit massa enim nec dui nunc mattis enim. Ullamcorper morbi tincidunt ornare massa. Ultrices eros in.</p>
-                                </div>
-                            </div>
-                        </div>
-                        -->
+                        <h6>Room 1</h6>
                     </div>
                     <div class="form-field">
                         <select id="pax_number" name="pax_number">

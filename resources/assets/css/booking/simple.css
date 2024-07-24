@@ -741,23 +741,23 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     background: url(icon/arrow-down-hover.svg) no-repeat;
 }
 
-.ma-block .second-block .mkvk-wh-bl, .ma-block .third-block .inn {
+.ma-block .second-block .hotel-details, .ma-block .third-block .inn {
     display: flex;
     position: relative;
 }
 
-.ma-block .second-block .mkvk-wh-bl .imn {
+.ma-block .second-block .hotel-details .imn {
     position: absolute;
     top: 0;
     left: 0;
 }
 
-.ma-block .second-block .mkvk-wh-bl .marl {
+.ma-block .second-block .hotel-details .information-hover {
     top: 4px;
 }
 
 .ma-block .third-block .inn
-.ma-block .second-block .mkvk-wh-bl .marl, .ma-block .third-block .inn .marl {
+.ma-block .second-block .hotel-details .information-hover, .ma-block .third-block .inn .information-hover {
     margin-left: 5.33px;
     width: 16px;
     cursor: pointer;
@@ -766,7 +766,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     top: 4px;
 }
 
-.ma-block .second-block .mkvk-wh-bl .marl:after, .ma-block .third-block .inn .marl:after {
+.ma-block .second-block .hotel-details .information-hover:after, .ma-block .third-block .inn .information-hover:after {
     content: "";
     width: 16px;
     height: 16px;
@@ -783,15 +783,15 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     background: #ffffff;
 }
 
-.ma-block .second-block .mkvk-wh-bl .marl:after, .ma-block .third-block .inn .marl:after {
+.ma-block .second-block .hotel-details .information-hover:after, .ma-block .third-block .inn .information-hover:after {
     display: none;
 }
 
-.ma-block .second-block .mkvk-wh-bl .marl.hovor:after, .ma-block .third-block .inn .marl.hovor:after {
+.ma-block .second-block .hotel-details .information-hover.hovor:after, .ma-block .third-block .inn .information-hover.hovor:after {
     display: inline-block;
 }
 
-.ma-block .row .left-col .contain .ov-block-on-cl {
+.ma-block .row .left-col .contain .accommodation-details-hover {
     position: absolute;
     top: 41px;
     left: 0;
@@ -799,7 +799,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     z-index: 999;
 }
 
-.ma-block .row .left-col .contain .ov-block-on-cl .contain {
+.ma-block .row .left-col .contain .accommodation-details-hover .contain {
     background: #FFFFFF;
     border: 3px solid #F35B15;
     box-shadow: 0 0 34px 0 #00000026;
@@ -807,29 +807,29 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     padding: 34px 24px 24px 24px;
 }
 
-.ma-block .row .left-col .contain .ov-block-on-cl .contain h6 {
+.ma-block .row .left-col .contain .accommodation-details-hover .contain h6 {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
     color: #F35B15;
     margin-bottom: 8px;
 }
 
-.ma-block .row .left-col .contain .ov-block-on-cl .contain .full {
+.ma-block .row .left-col .contain .accommodation-details-hover .contain .full {
     display: flex;
 }
 
-.ma-block .row .left-col .contain .ov-block-on-cl .contain .full .left-col {
+.ma-block .row .left-col .contain .accommodation-details-hover .contain .full .left-col {
     width: 150px;
     height: 150px;
     display: flex;
     margin-right: 16px;
 }
 
-.ma-block .row .left-col .contain .ov-block-on-cl .contain .full .right-col {
+.ma-block .row .left-col .contain .accommodation-details-hover .contain .full .right-col {
     width: 100%;
 }
 
-.ma-block .row .left-col .contain .ov-block-on-cl .contain .full .right-col p, .ma-block .row .left-col .contain .snd-blo p {
+.ma-block .row .left-col .contain .accommodation-details-hover .contain .full .right-col p, .ma-block .row .left-col .contain .snd-blo p {
     padding: 0 !important;
     font-size: 14px;
     line-height: 20px;
@@ -844,11 +844,11 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     margin-bottom: 20px;
 }
 
-.ma-block .row .left-col .contain .ov-block-on-cl, .ma-block .marl:after {
+.ma-block .row .left-col .contain .accommodation-details-hover, .ma-block .information-hover:after {
     display: none;
 }
 
-.ma-block .second-block .mkvk-wh-bl .marl {
+.ma-block .second-block .hotel-details .information-hover {
     margin-left: 5.33px;
     width: 16px;
     cursor: pointer;
@@ -1796,12 +1796,12 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 @media only screen and (max-width: 580px) {
-    .ma-block .row .left-col .contain .ov-block-on-cl .contain .full {
+    .ma-block .row .left-col .contain .accommodation-details-hover .contain .full {
         flex-wrap: wrap;
         row-gap: 25px;
     }
 
-    .ma-block .row .left-col .contain .ov-block-on-cl .contain .full .left-col, .ma-block .row .left-col .contain .ov-block-on-cl .contain .full .right-col {
+    .ma-block .row .left-col .contain .accommodation-details-hover .contain .full .left-col, .ma-block .row .left-col .contain .accommodation-details-hover .contain .full .right-col {
         width: 100%;
     }
 }
