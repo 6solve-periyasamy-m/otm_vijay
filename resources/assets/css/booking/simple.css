@@ -1126,6 +1126,10 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     cursor: pointer;
 }
 
+.close-btn {
+    color: white;
+}
+
 .see-more-popup .convco-two .whole-block-two .full-top-blcls-two,
 .upgrades-popup .convco .whole-block .full-top-blcls {
     max-height: 380px;

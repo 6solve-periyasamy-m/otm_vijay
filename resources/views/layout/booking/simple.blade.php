@@ -16,8 +16,6 @@
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
-    <script src="https://use.fontawesome.com/52e183519a.js"></script>
-
     <link href="{{ asset('external/summernote/emoji/css/emoji.css') }}" rel="stylesheet">
     <script src="{{ asset('external/summernote/emoji/js/config.js') }}"></script>
     <script src="{{ asset('external/summernote/emoji/js/tam-emoji.min.js') }}"></script>
@@ -27,6 +25,7 @@
 
     <link rel="stylesheet" href="{{ asset('css/booking/simple.css') }}">
     <script src="{{ asset('js/booking/simple.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('css/fontawesome.css') }}"
     @livewireStyles
 </head>
 <body>

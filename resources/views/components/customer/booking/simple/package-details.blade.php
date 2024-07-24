@@ -87,7 +87,7 @@
                 {{ $tour->description }}
             </div>
             <div class="close-btn" data-action="close">
-                <img src="{{ asset('css/booking/icon/close-btn.svg') }}" alt="close-btn">
+                {{ Icon::solid('xmark') }}
             </div>
         </div>
     </div>
@@ -156,7 +156,7 @@
                 </div>
             </div>
             <div class="close-btn" data-action="close">
-                <img src="{{ asset('css/booking/icon/close-btn.svg') }}" alt="close-btn">
+                {{ Icon::solid('xmark') }}
             </div>
         </div>
     </div>
