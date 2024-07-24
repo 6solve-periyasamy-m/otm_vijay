@@ -1,3 +1,12 @@
+:root {
+    --primary-color: #F35B15;
+    --secondary-color: #F9F4EE;
+    --white: #FFFFFF;
+    --footer-color: #000000;
+    --text-dark: #000000;
+    --sub-text-color: #721111;
+}
+
 @font-face {
     font-family: "PP Editorial New";
     src: url(./font/PPEditorialNew-Ultralight.ttf);
@@ -20,7 +29,7 @@ body {
 }
 
 .top-head {
-    background: #F35B15;
+    background: var(--primary-color);
 }
 
 .package-image {
@@ -70,18 +79,18 @@ body {
     font-size: 14px;
     line-height: 16.8px;
     letter-spacing: 2.24px;
-    color: #FFFFFF;
+    color: var(--white);
     text-transform: uppercase;
 }
 
 .top-head .row .col-two .cont-details .single-div a {
     padding: 11.35px 16px 11.35px 40px;
-    border: 1px solid #ffffff;
+    border: 1px solid var(--white);
     border-radius: 40px;
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    color: #F35B15;
-    background: #ffffff;
+    color: var(--primary-color);
+    background: var(--white);
     font-size: 14px;
     line-height: 16.8px;
     letter-spacing: 2.24px;
@@ -129,7 +138,7 @@ body {
 .top-head .row .col-two .cont-details .single-div a:hover {
     background: transparent;
     transition: 0.5s;
-    color: #ffffff;
+    color: var(--white);
 }
 
 @media only screen and (min-width: 981px) and (max-width: 1199px) {
@@ -238,7 +247,7 @@ body {
 }
 
 .bottom-foot {
-    background: #000000;
+    background: var(--footer-color);
 }
 
 .bottom-foot .row {
@@ -250,7 +259,7 @@ body {
 .bottom-foot .row p, .bottom-foot .row p a {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    color: #ffffff;
+    color: var(--white);
     font-size: 14px;
     line-height: 20px;
     margin: 0;
@@ -268,7 +277,7 @@ body {
 }
 
 .top-block {
-    background: #F9F4EE;
+    background: var(--secondary-color);
     padding: 40px 0;
 }
 
@@ -282,7 +291,7 @@ body {
 .top-block .row .top-nav-sec .navi p {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    color: #000000;
+    color: var(--text-dark);
     font-size: 14px;
     line-height: 14px;
     margin: 0;
@@ -294,7 +303,7 @@ body {
     margin-top: 16px;
     margin-bottom: 0;
     font-family: 'PP Editorial New', Helvetica, Arial, Lucida, sans-serif;
-    color: #F35B15;
+    color: var(--primary-color);
     font-weight: 200;
     font-size: 40px;
     line-height: 48px;
@@ -322,7 +331,7 @@ body {
 .ma-block .row .left-col h3, .ma-block .row .left-col h4, .ma-block .row .left-col h6, .ma-block .row .left-col p {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    color: #000000;
+    color: var(--text-dark);
     font-size: 24px;
     line-height: 32px;
     margin: 0;
@@ -330,7 +339,7 @@ body {
 }
 
 .ma-block .row .left-col .contain h3 {
-    color: #000000;
+    color: var(--text-dark);
     font-size: 24px;
     line-height: 32px;
     margin: 0 0 40px 0;
@@ -338,7 +347,7 @@ body {
 
 .ma-block .row .left-col .contain p {
     margin: 0 0 24px 0;
-    color: #F35B15;
+    color: var(--primary-color);
     font-size: 14px;
     line-height: 16.8px;
     letter-spacing: 2.24px;
@@ -364,8 +373,8 @@ body {
 .ma-block .row .left-col .contain .top-form-contain .form-field input {
     width: 100%;
     height: 50px;
-    background: #F9F4EE;
-    border: 2px solid #F9F4EE;
+    background: var(--secondary-color);
+    border: 2px solid var(--secondary-color);
     border-radius: 50px;
     margin: 0;
     font-family: "PP Neue Montreal Medium";
@@ -375,14 +384,14 @@ body {
 }
 
 .ma-block .row .left-col .contain .top-form-contain .form-field input::placeholder {
-    color: #721111;
+    color: var(--sub-text-color);
     text-transform: uppercase;
     letter-spacing: 2.24px;
 }
 
 body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus, .ma-block .row .left-col .contain .third-block select:focus {
-    background-color: #ffffff !important;
-    border: 2px solid #F35B15 !important;
+    background-color: var(--white) !important;
+    border: 2px solid var(--primary-color) !important;
     outline: 0 !important;
 }
 
@@ -396,7 +405,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     font-size: 14px;
     line-height: 20px;
     margin-bottom: 0;
-    color: #000000;
+    color: var(--text-dark);
     letter-spacing: 0;
 }
 
@@ -407,7 +416,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .ma-block .row .left-col .contain .second-block .inner-block .right .inn {
-    background: #F9F4EE;
+    background: var(--secondary-color);
     width: 153px;
     height: 52px;
     border-radius: 50PX;
@@ -426,7 +435,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     font-family: "PP Neue Montreal Medium";
     font-size: 16px;
     line-height: 24px;
-    color: #F35B15;
+    color: var(--primary-color);
 }
 
 .ma-block .row .left-col .contain .second-block .inner-block .right .inn span.No .text {
@@ -436,7 +445,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
     font-size: 14px;
-    color: #721111;
+    color: var(--sub-text-color);
     margin-left: 8px;
     margin-right: 8px;
 }
@@ -449,13 +458,13 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     background: #F4F4F4;
     padding: 10px 16px;
     border: 1px solid #D7D7D7;
-    color: #000000;
+    color: var(--text-dark);
     letter-spacing: 0;
     font-weight: 500;
 }
 
 .ma-block .row .left-col .contain .second-block .contain p a {
-    color: #F35B15;
+    color: var(--primary-color);
     text-decoration: none;
     padding: 0 0 0 4px;
     cursor: pointer;
@@ -488,14 +497,14 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 .ma-block .row .left-col .contain .third-block select {
     width: 100%;
     height: 53px;
-    background: #F9F4EE;
-    border: 2px solid #F9F4EE;
+    background: var(--secondary-color);
+    border: 2px solid var(--secondary-color);
     border-radius: 50px;
     padding: 0 0 0 24px;
     font-family: "PP Neue Montreal Medium";
     font-size: 16px;
     line-height: 24px;
-    color: #721111;
+    color: var(--sub-text-color);
     text-transform: uppercase;
     letter-spacing: 2.24px;
     margin: 0 0 24px;
@@ -530,7 +539,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .ma-block .row .right-col .contain {
-    border: 2px solid #F35B15;
+    border: 2px solid var(--primary-color);
     box-shadow: 0 0 34px 0 #00000026;
     border-radius: 40px;
     padding: 60px 60px 70px 60px;
@@ -546,19 +555,19 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     margin: 0;
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    color: #000000;
+    color: var(--text-dark);
     font-size: 24px;
     line-height: 32px;
 }
 
 .ma-block .row .right-col .contain .top-sec .upgrade-cls {
     padding: 12px 40px 12px 16px;
-    border: 1px solid #F35B15;
+    border: 1px solid var(--primary-color);
     border-radius: 40px;
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    color: #F35B15;
-    background: #ffffff;
+    color: var(--primary-color);
+    background: var(--white);
     font-size: 14px;
     line-height: 16.8px;
     letter-spacing: 2.24px;
@@ -609,7 +618,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     font-weight: 500;
     font-size: 14px;
     line-height: 16.8px;
-    color: #721111;
+    color: var(--sub-text-color);
     text-transform: uppercase;
     letter-spacing: 2.24px;
     margin-bottom: 0;
@@ -645,7 +654,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .ma-block .row .right-col .contain .snd-sec .right-col p.see-more a {
-    color: #F35B15;
+    color: var(--primary-color);
     text-decoration: none;
     text-transform: none;
     font-size: 16px;
@@ -657,7 +666,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     margin: 0;
     list-style: none;
     padding: 24px 0 0;
-    border-bottom: 1px solid #F9F4EE;
+    border-bottom: 1px solid var(--secondary-color);
 }
 
 .ma-block .row .right-col .contain .third-col ul li {
@@ -679,7 +688,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .ma-block .row .right-col .contain .third-col ul li p.total {
-    color: #F35B15;
+    color: var(--primary-color);
 }
 
 .ma-block .row .right-col .contain .third-col .submit-btn-cls {
@@ -690,12 +699,12 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 
 .ma-block .row .right-col .contain .third-col .submit-btn-cls input {
     padding: 12px 40px 12px 16px;
-    border: 1px solid #F35B15;
+    border: 1px solid var(--primary-color);
     border-radius: 40px;
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    color: #ffffff;
-    background: #F35B15;
+    color: var(--white);
+    background: var(--primary-color);
     font-size: 14px;
     line-height: 16.8px;
     letter-spacing: 2.24px;
@@ -723,7 +732,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .ma-block .row .right-col .contain .third-col .submit-btn-cls input:hover {
-    color: #F35B15;
+    color: var(--primary-color);
     background: transparent;
     transition: 0.5s;
 }
@@ -733,8 +742,8 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .ma-block .row .right-col .contain .top-sec .upgrade-cls:hover {
-    background: #F35B15;
-    color: #ffffff;
+    background: var(--primary-color);
+    color: var(--white);
 }
 
 .ma-block .row .right-col .contain .top-sec .upgrade-cls:hover:before {
@@ -774,13 +783,13 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     top: 29.5px;
     right: 0;
     z-index: 99999;
-    border: solid #F35B15;
+    border: solid var(--primary-color);
     border-width: 0 3px 3px 0;
     display: inline-block;
     padding: 3px;
     transform: rotate(-135deg);
     -webkit-transform: rotate(-135deg);
-    background: #ffffff;
+    background: var(--white);
 }
 
 .ma-block .second-block .hotel-details .information-hover:after, .ma-block .third-block .inn .information-hover:after {
@@ -800,8 +809,8 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .ma-block .row .left-col .contain .accommodation-details-hover .contain {
-    background: #FFFFFF;
-    border: 3px solid #F35B15;
+    background: var(--white);
+    border: 3px solid var(--primary-color);
     box-shadow: 0 0 34px 0 #00000026;
     border-radius: 20px;
     padding: 34px 24px 24px 24px;
@@ -810,7 +819,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 .ma-block .row .left-col .contain .accommodation-details-hover .contain h6 {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    color: #F35B15;
+    color: var(--primary-color);
     margin-bottom: 8px;
 }
 
@@ -834,7 +843,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     font-size: 14px;
     line-height: 20px;
     margin: 0;
-    color: #000000 !important;
+    color: var(--text-dark) !important;
     letter-spacing: 0;
     background: transparent !important;
     border: 0 !important;
@@ -863,7 +872,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #000000BF;
+    background-color: var(--text-dark)BF;
     width: 100%;
     height: 100%;
     padding: 0;
@@ -891,9 +900,9 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 
 .see-more-popup .convco-two .whole-block-two,
 .upgrades-popup .convco .whole-block {
-    background: #ffffff;
+    background: var(--white);
     border-radius: 40px;
-    border: 2px solid #F35B15;
+    border: 2px solid var(--primary-color);
     box-shadow: 0 0 34px 0 #00000026;
     padding: 60px 0 0 0;
 }
@@ -901,7 +910,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 .upgrades-popup .convco .whole-block h3 {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    color: #000000;
+    color: var(--text-dark);
     font-size: 24px;
     line-height: 32px;
     margin: 0 0 40px;
@@ -917,7 +926,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 .upgrades-popup .convco .whole-block .upp-block h6 {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    color: #F35B15;
+    color: var(--primary-color);
     font-size: 14px;
     line-height: 16.8px;
     margin: 0 0 24px;
@@ -947,7 +956,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 .upgrades-popup .convco .whole-block .upp-block .inner-contain .snd-lv p {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    color: #000000;
+    color: var(--text-dark);
     font-size: 14px;
     line-height: 16.8px;
     margin: 0;
@@ -993,7 +1002,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 
 .upgrades-popup .convco .whole-block .upp-block .inner-contain .snd-lv p.location, .upgrades-popup .convco .whole-block .upp-block .inner-contain .snd-lv p.value {
     letter-spacing: 2.24px;
-    color: #721111;
+    color: var(--sub-text-color);
     text-transform: uppercase;
 }
 
@@ -1004,7 +1013,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 .upgrades-popup .convco .whole-block .upp-block .inner-contain .third-col .doll p {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    color: #000000;
+    color: var(--text-dark);
     font-size: 16px;
     line-height: 24px;
     margin: 0;
@@ -1021,15 +1030,15 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     text-transform: uppercase;
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    border: 1px solid #F35B15;
+    border: 1px solid var(--primary-color);
     border-radius: 40px;
     padding: 12px 16px 12px 40px;
     display: block;
     height: 100%;
     cursor: pointer;
     position: relative;
-    background: #F35B15;
-    color: #ffffff;
+    background: var(--primary-color);
+    color: var(--white);
 }
 
 .upgrades-popup .convco .whole-block .upp-block .inner-contain .third-col .intial:before {
@@ -1043,8 +1052,8 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .upgrades-popup .convco .whole-block .upp-block .inner-contain .third-col .intial.add {
-    background: #ffffff;
-    color: #F35B15;
+    background: var(--white);
+    color: var(--primary-color);
 }
 
 .upgrades-popup .convco .whole-block .upp-block .inner-contain .third-col .intial.add:before {
@@ -1065,12 +1074,12 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 
 .upgrade-btn-cls-v {
     padding: 12px 40px 12px 16px;
-    border: 1px solid #F35B15;
+    border: 1px solid var(--primary-color);
     border-radius: 40px;
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    color: #ffffff;
-    background: #F35B15;
+    color: var(--white);
+    background: var(--primary-color);
     font-size: 14px;
     line-height: 16.8px;
     letter-spacing: 2.24px;
@@ -1095,8 +1104,8 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .upgrade-btn-cls-v:hover {
-    color: #F35B15;
-    background: #ffffff;
+    color: var(--primary-color);
+    background: var(--white);
     transition: 0.5s;
 }
 
@@ -1111,7 +1120,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 .upgrades-popup .convco .whole-block .bottom-block .total-col p {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    color: #FFFFFF;
+    color: var(--white);
     font-size: 16px;
     line-height: 24px;
 }
@@ -1144,7 +1153,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
  background: #000000;
 } */
 .upgrades-popup ::-webkit-scrollbar-thumb {
-    background: #F35B15;
+    background: var(--primary-color);
 }
 
 .upgrades-popup {
@@ -1159,7 +1168,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
     margin: 24px 0;
-    color: #F35B15;
+    color: var(--primary-color);
     letter-spacing: 2.24px;
     font-size: 14px;
     line-height: 16.8px;
@@ -1200,8 +1209,8 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     left: 0;
     height: 21.5px;
     width: 21.5px;
-    background-color: #ffffff;
-    outline: 2.5px solid #F35B15;
+    background-color: var(--white);
+    outline: 2.5px solid var(--primary-color);
     border-radius: 50%;
 }
 
@@ -1220,7 +1229,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     top: 1px;
     width: 19px;
     height: 19px;
-    background: #F35B15;
+    background: var(--primary-color);
     border-radius: 50%;
 }
 
@@ -1257,7 +1266,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 .additional-block .form-field-checkbox:last-child {
     padding-bottom: 24px;
     margin-bottom: 24px;
-    border-bottom: 1px solid #F9F4EE;
+    border-bottom: 1px solid var(--secondary-color);
 }
 
 .additional-block .card-field-box {
@@ -1266,18 +1275,18 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     width: 100%;
     margin-top: 24px;
     padding-top: 24px;
-    border-top: 1px solid #F9F4EE;
+    border-top: 1px solid var(--secondary-color);
 }
 
 .additional-block .card-field-box .first-in.active {
-    border: 2px solid #F35B15;
-    background: #ffffff;
+    border: 2px solid var(--primary-color);
+    background: var(--white);
 }
 
 .additional-block .card-field-box .first-in {
     padding: 16px;
-    border: 2px solid #F9F4EE;
-    background: #F9F4EE;
+    border: 2px solid var(--secondary-color);
+    background: var(--secondary-color);
     border-radius: 19px;
     cursor: pointer;
 }
@@ -1285,7 +1294,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 .additional-block .card-field-box .first-in p {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    color: #000000;
+    color: var(--text-dark);
     font-size: 16px;
     line-height: 24px;
     margin-bottom: 0;
@@ -1339,8 +1348,8 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     left: 0;
     height: 24px;
     width: 24px;
-    background-color: #ffffff;
-    border: 1px solid #F35B15;
+    background-color: var(--white);
+    border: 1px solid var(--primary-color);
     border-radius: 8px;
 }
 
@@ -1359,7 +1368,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     top: 5px;
     width: 5px;
     height: 10px;
-    border: solid #F35B15;
+    border: solid var(--primary-color);
     border-width: 0 3px 3px 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
@@ -1369,7 +1378,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 .ma-block .row .right-col .wh-las-cls-con .acc-tp-cond .contain-v .fnal-txt {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    color: #000000;
+    color: var(--text-dark);
     font-size: 16px;
     line-height: 20px;
     top: -4px;
@@ -1377,7 +1386,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .ma-block .row .right-col .wh-las-cls-con .acc-tp-cond .contain-v .fnal-txt a {
-    color: #F35B15;
+    color: var(--primary-color);
     text-decoration: none;
 }
 
@@ -1400,7 +1409,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 
 .ma-block .row .left-col .contain .top-form-contain .form-field input#event-date {
     padding-left: 48px;
-    color: #721111;
+    color: var(--sub-text-color);
     text-transform: uppercase;
 }
 
@@ -1422,9 +1431,9 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 
 .form-field-full-width .note-editor.note-frame.panel.panel-default {
     display: flex;
-    background: #F9F4EE;
+    background: var(--secondary-color);
     padding: 16px 24px;
-    border: 1px solid #F9F4EE;
+    border: 1px solid var(--secondary-color);
     border-radius: 25px;
     height: 111px;
     margin: 0;
@@ -1490,7 +1499,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .form-field-full-width i:before, .form-field-full-width .note-icon-caret:before {
-    color: #F35B15;
+    color: var(--primary-color);
 }
 
 .form-field-full-width .note-btn-group.btn-group.note-font {
@@ -1597,8 +1606,8 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     left: 0;
     height: 24px;
     width: 24px;
-    background-color: #ffffff;
-    border: 1px solid #F35B15;
+    background-color: var(--white);
+    border: 1px solid var(--primary-color);
     border-radius: 8px;
 }
 
@@ -1617,7 +1626,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     top: 5px;
     width: 5px;
     height: 10px;
-    border: solid #F35B15;
+    border: solid var(--primary-color);
     border-width: 0 3px 3px 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
@@ -1626,7 +1635,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 
 .lmnvkp .top-check-top-cls span {
     display: block;
-    color: #000000;
+    color: var(--text-dark);
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
     font-size: 16px;
@@ -1700,7 +1709,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     }
 
     .ma-block .row .right-col .contain {
-        border: 2px solid #F35B15;
+        border: 2px solid var(--primary-color);
         box-shadow: 0 0 34px 0 #00000026;
         border-radius: 40px;
         padding: 30px 15px 35px 15px;
@@ -1811,23 +1820,23 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .ui-datepicker .ui-datepicker-header {
-    background: #F9F4EE !important;
+    background: var(--secondary-color) !important;
     border: none !important;
 }
 
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active {
-    border: 1px solid #F9F4EE !important;
-    background: #F9F4EE !important;
+    border: 1px solid var(--secondary-color) !important;
+    background: var(--secondary-color) !important;
 }
 
 .ui-datepicker .ui-datepicker-title, .ui-datepicker th span, .ui-datepicker td a {
     font-family: "PP Neue Montreal Medium" !important;
     font-weight: 500 !important;
-    color: #000000 !important;
+    color: var(--text-dark) !important;
 }
 
 body .ui-state-default.ui-state-highlight.ui-state-active {
-    background: #F35B15 !important;
+    background: var(--primary-color) !important;
 }
 
 .ui-datepicker .ui-datepicker-prev {
@@ -1853,7 +1862,7 @@ body .ui-state-default.ui-state-highlight.ui-state-active {
     bottom: 50px;
     z-index: 99999;
     right: 50px;
-    background: #F9F4EE;
+    background: var(--secondary-color);
 }
 
 .ma-block .position-fixed #liveToast {
@@ -1868,7 +1877,7 @@ body .ui-state-default.ui-state-highlight.ui-state-active {
     padding-left: 10px;
     font-family: "PP Neue Montreal Medium" !important;
     font-weight: 500 !important;
-    color: #000000 !important;
+    color: var(--text-dark) !important;
     font-size: 16px;
     line-height: 24px;
     text-transform: uppercase;
@@ -1878,7 +1887,7 @@ body .ui-state-default.ui-state-highlight.ui-state-active {
 .ma-block .position-fixed .toast-body {
     font-family: "PP Neue Montreal Medium" !important;
     font-weight: 500 !important;
-    color: #000000 !important;
+    color: var(--text-dark) !important;
     font-size: 16px;
     line-height: 24px;
 }
@@ -1976,7 +1985,7 @@ input::-webkit-inner-spin-button {
     font-weight: 500;
     font-size: 14px;
     line-height: 16.8px;
-    color: #721111;
+    color: var(--sub-text-color);
     text-transform: uppercase;
     letter-spacing: 2.24px;
     margin-bottom: 0;
@@ -1987,7 +1996,7 @@ input::-webkit-inner-spin-button {
 }
 
 .upp-block-two .right-col p a {
-    color: #F35B15;
+    color: var(--primary-color);
     text-decoration: none;
     text-transform: none;
     font-size: 16px;
@@ -2022,7 +2031,7 @@ input::-webkit-inner-spin-button {
 
 .ui-datepicker-year option,
 .ui-datepicker-month option {
-    background-color: #F9F4EE !important;
+    background-color: var(--secondary-color) !important;
     cursor: pointer;
 }
 
@@ -2035,7 +2044,7 @@ input::-webkit-inner-spin-button {
     font-family: "PP Neue Montreal Medium";
     font-size: 16px;
     line-height: 24px;
-    color: #721111;
+    color: var(--sub-text-color);
     font-weight: 400;
 }
 
@@ -2055,14 +2064,14 @@ input::-webkit-inner-spin-button {
     font-family: "PP Neue Montreal Medium" !important;
     font-size: 16px !important;
     line-height: 24px !important;
-    color: #721111 !important;
+    color: var(--sub-text-color) !important;
 }
 
 .top-form-contain .iti__arrow {
     width: 1px;
     height: 17px;
     display: inline-block;
-    background: #F35B15;
+    background: var(--primary-color);
     border: unset !important;
     margin-left: 7px;
 }
@@ -2072,7 +2081,7 @@ input::-webkit-inner-spin-button {
 }
 
 .top-form-contain .mobile_field ::-webkit-scrollbar-thumb {
-    background: #F35B15;
+    background: var(--primary-color);
     border-radius: 10px;
 }
 
@@ -2082,7 +2091,7 @@ input::-webkit-inner-spin-button {
     line-height: 26px;
     padding-right: 10px;
     margin-left: 10px;
-    color: #000000;
+    color: var(--text-dark);
 }
 
 .top-form-contain .mobile_field .iti__country-list {
