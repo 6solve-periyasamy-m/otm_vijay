@@ -857,7 +857,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .see-more-popup,
-.accom-popup-overlay-in {
+.upgrades-popup {
     position: fixed;
     top: 0;
     left: 0;
@@ -873,7 +873,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .see-more-popup .popup-inner-two,
-.accom-popup-overlay-in .popup-inner {
+.upgrades-popup .popup-inner {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -882,7 +882,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .see-more-popup .convco-two,
-.accom-popup-overlay-in .convco {
+.upgrades-popup .convco {
     max-width: 690px;
     width: 100%;
     position: relative;
@@ -890,7 +890,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .see-more-popup .convco-two .whole-block-two,
-.accom-popup-overlay-in .convco .whole-block {
+.upgrades-popup .convco .whole-block {
     background: #ffffff;
     border-radius: 40px;
     border: 2px solid #F35B15;
@@ -898,7 +898,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     padding: 60px 0 0 0;
 }
 
-.accom-popup-overlay-in .convco .whole-block h3 {
+.upgrades-popup .convco .whole-block h3 {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
     color: #000000;
@@ -907,14 +907,14 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     margin: 0 0 40px;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain {
     display: flex;
     column-gap: 24px;
     row-gap: 24px;
     align-items: center;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block h6 {
+.upgrades-popup .convco .whole-block .upp-block h6 {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
     color: #F35B15;
@@ -925,26 +925,26 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     letter-spacing: 2.24px;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .fst-lv {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain .fst-lv {
     width: 100px;
     display: flex;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .fst-lv img {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain .fst-lv img {
     width: 100px;
     height: 100px;
     object-fit: cover;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .snd-lv {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain .snd-lv {
     width: 100%;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .third-col {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain .third-col {
     width: 120px;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .snd-lv p {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain .snd-lv p {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
     color: #000000;
@@ -955,23 +955,23 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     position: relative;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .snd-lv p:last-child {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain .snd-lv p:last-child {
     padding-bottom: 0;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block:first-of-type {
+.upgrades-popup .convco .whole-block .upp-block:first-of-type {
     margin-bottom: 40px;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain:first-of-type {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain:first-of-type {
     margin-bottom: 24px;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .snd-lv p.location, .accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .snd-lv p.value {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain .snd-lv p.location, .upgrades-popup .convco .whole-block .upp-block .inner-contain .snd-lv p.value {
     padding-left: 24px;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .snd-lv p.location:before {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain .snd-lv p.location:before {
     content: "";
     background: url(icon/location.svg) no-repeat;
     position: absolute;
@@ -981,7 +981,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     left: 0;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .snd-lv p.value:before {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain .snd-lv p.value:before {
     content: "";
     background: url(icon/dollar.svg) no-repeat;
     position: absolute;
@@ -991,17 +991,17 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     left: 0;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .snd-lv p.location, .accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .snd-lv p.value {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain .snd-lv p.location, .upgrades-popup .convco .whole-block .upp-block .inner-contain .snd-lv p.value {
     letter-spacing: 2.24px;
     color: #721111;
     text-transform: uppercase;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .third-col .doll {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain .third-col .doll {
     width: 113px;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .third-col .doll p {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain .third-col .doll p {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
     color: #000000;
@@ -1013,7 +1013,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     text-align: center;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .third-col .intial {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain .third-col .intial {
     text-align: center;
     font-size: 14px;
     line-height: 16.8px;
@@ -1032,7 +1032,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     color: #ffffff;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .third-col .intial:before {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain .third-col .intial:before {
     content: "";
     background: url(icon/add-white.svg) no-repeat;
     position: absolute;
@@ -1042,18 +1042,18 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     left: 26px;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .third-col .intial.add {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain .third-col .intial.add {
     background: #ffffff;
     color: #F35B15;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .third-col .intial.add:before {
+.upgrades-popup .convco .whole-block .upp-block .inner-contain .third-col .intial.add:before {
     background: url(icon/check-cls.svg) no-repeat;
     top: 13px;
     left: 18px;
 }
 
-.accom-popup-overlay-in .convco .whole-block .bottom-block {
+.upgrades-popup .convco .whole-block .bottom-block {
     display: flex;
     padding: 24px 60px;
     background: rgba(0, 0, 0, 0.9);
@@ -1104,11 +1104,11 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     background: url(icon/arrow-down.svg) no-repeat;
 }
 
-.accom-popup-overlay-in .convco .whole-block .upp-block, .accom-popup-overlay-in .convco .whole-block h3 {
+.upgrades-popup .convco .whole-block .upp-block, .upgrades-popup .convco .whole-block h3 {
     padding: 0 60px;
 }
 
-.accom-popup-overlay-in .convco .whole-block .bottom-block .total-col p {
+.upgrades-popup .convco .whole-block .bottom-block .total-col p {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
     color: #FFFFFF;
@@ -1117,7 +1117,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .see-more-popup .convco-two .close-btn,
-.accom-popup-overlay-in .convco .close-btn {
+.upgrades-popup .convco .close-btn {
     position: absolute;
     top: 0;
     right: -30px;
@@ -1127,23 +1127,23 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .see-more-popup .convco-two .whole-block-two .full-top-blcls-two,
-.accom-popup-overlay-in .convco .whole-block .full-top-blcls {
+.upgrades-popup .convco .whole-block .full-top-blcls {
     max-height: 380px;
     overflow-y: scroll;
 }
 
-.accom-popup-overlay-in ::-webkit-scrollbar {
+.upgrades-popup ::-webkit-scrollbar {
     width: 3px;
 }
 
-/* .accom-popup-overlay-in ::-webkit-scrollbar-track {
+/* .upgrades-popup ::-webkit-scrollbar-track {
  background: #000000;
 } */
-.accom-popup-overlay-in ::-webkit-scrollbar-thumb {
+.upgrades-popup ::-webkit-scrollbar-thumb {
     background: #F35B15;
 }
 
-.accom-popup-overlay-in {
+.upgrades-popup {
     display: none;
 }
 
@@ -1741,41 +1741,41 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
         padding: 60px 0 60px 0;
     }
 
-    .accom-popup-overlay-in .convco .whole-block .upp-block, .accom-popup-overlay-in .convco .whole-block h3 {
+    .upgrades-popup .convco .whole-block .upp-block, .upgrades-popup .convco .whole-block h3 {
         padding: 0 30px;
     }
 
-    .accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain {
+    .upgrades-popup .convco .whole-block .upp-block .inner-contain {
         flex-wrap: wrap;
     }
 
-    .accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain {
+    .upgrades-popup .convco .whole-block .upp-block .inner-contain {
         flex-wrap: wrap;
         row-gap: 20px;
     }
 
-    .accom-popup-overlay-in .convco {
+    .upgrades-popup .convco {
         width: 90%;
     }
 
-    .accom-popup-overlay-in .convco .close-btn {
+    .upgrades-popup .convco .close-btn {
         top: -40px;
         right: 0;
     }
 
-    .accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain:first-of-type {
+    .upgrades-popup .convco .whole-block .upp-block .inner-contain:first-of-type {
         margin-bottom: 50px;
     }
 
-    .accom-popup-overlay-in .convco .whole-block .upp-block:first-of-type {
+    .upgrades-popup .convco .whole-block .upp-block:first-of-type {
         margin-bottom: 60px;
     }
 
-    .accom-popup-overlay-in .convco .whole-block .bottom-block {
+    .upgrades-popup .convco .whole-block .bottom-block {
         padding: 24px 20px;
     }
 
-    .accom-popup-overlay-in .convco .whole-block .upp-block .inner-contain .third-col .doll p {
+    .upgrades-popup .convco .whole-block .upp-block .inner-contain .third-col .doll p {
         text-align: left !important;
     }
 }

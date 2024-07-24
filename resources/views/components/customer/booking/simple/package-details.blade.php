@@ -6,7 +6,7 @@
 @endphp
 <div class="top-sec">
     <div class="head-txt"><h4>Package details</h4></div>
-    <div class="upgrade-cls">UPGRADE</div>
+    <div class="upgrade-cls" data-action="popup" data-target="upgrades-popup">UPGRADE</div>
 </div>
 <div class="snd-sec">
     @if(isset($tour->event?->image_url))
@@ -88,6 +88,75 @@
             </div>
             <div class="close-btn">
                 <img src="{{ asset('css/booking/icon/close-btn.svg') }}" alt="close-btn">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <- Upgrades Popup -->
+<div class="upgrades-popup">
+    <div class="popup-inner">
+        <div class="convco">
+            <div class="whole-block">
+                <div class="full-top-blcls">
+                    <h3>Optional add-ons & upgrades</h3>
+                    <div class="upp-block">
+                        <h6>Ticket Upgrade</h6>
+                        <div class="inner-contain">
+                            <div class="fst-lv">
+                                <img src="assets/images/5 Star Accommodation.png" alt="featured-image">
+                            </div>
+                            <div class="snd-lv">
+                                <p>4 Nights, 5 Star Accommodation</p>
+                                <p class="location">Sydney Australia</p>
+                                <p class="value">Nov 20, 2024 - Nov 30, 2024</p>
+                            </div>
+                            <div class="third-col">
+                                <div class="doll"><p>A$2,300</p></div>
+                                <div class="intial add">Added</div>
+                            </div>
+                        </div>
+                        <div class="inner-contain">
+                            <div class="fst-lv">
+                                <img src="assets/images/4 Star f.png" alt="featured-image">
+                            </div>
+                            <div class="snd-lv">
+                                <p>4 Nights, 5 Star Accommodation</p>
+                                <p class="location">Sydney Australia</p>
+                                <p class="value">Nov 20, 2024 - Nov 30, 2024</p>
+                            </div>
+                            <div class="third-col">
+                                <div class="doll"><p>A$2,300</p></div>
+                                <div class="intial">Add</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="upp-block">
+                        <h6>Stay extra nights</h6>
+                        <div class="inner-contain">
+                            <div class="fst-lv">
+                                <img src="assets/images/5 Star Accommodation.png" alt="featured-image">
+                            </div>
+                            <div class="snd-lv">
+                                <p>4 Nights, 5 Star Accommodation</p>
+                                <p class="location">Sydney Australia</p>
+                                <p class="value">Nov 20, 2024 - Nov 30, 2024</p>
+                            </div>
+                            <div class="third-col">
+                                <div class="doll"><p>A$2,300</p></div>
+                                <div class="intial add">Added</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom-block">
+                    <div class="total-col"><p>Total : A$2,300</p></div>
+                    <div class="upgrade-btn-cls-v">Upgrade</div>
+
+                </div>
+            </div>
+            <div class="close-btn">
+                <img src="assets/images/close-white-arrow.png" alt="close-btn">
             </div>
         </div>
     </div>

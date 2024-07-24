@@ -1,8 +1,4 @@
 jQuery(document).ready(function () {
-    // Show Upgrade popup on click
-    jQuery('.upgrade-cls').click(function () {
-        jQuery(".accom-popup-overlay-in").css("display", "block");
-    });
 
     // Close popup on click
     jQuery('#liveToast .btn-close').click(function () {
@@ -10,8 +6,8 @@ jQuery(document).ready(function () {
     })
 
     //
-    jQuery('.accom-popup-overlay-in .convco .close-btn').click(function () {
-        jQuery(".accom-popup-overlay-in").css("display", "none");
+    jQuery('.upgrades-popup .convco .close-btn').click(function () {
+        jQuery(".upgrades-popup").css("display", "none");
     });
 
     jQuery('.first-form').submit(function (e) {
@@ -344,10 +340,12 @@ jQuery(document).ready(function () {
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
         });
     });
+
     jQuery('.mobile_field .iti__preferred').remove();
     jQuery('.mobile_field .iti__divider').remove();
 
-    jQuery('a[data-action="popup"]').click(function (event) {
+    jQuery('[data-action="popup"]').click(function (event) {
+        console.log('clicked');
         event.preventDefault();
         jQuery('.' + jQuery(event.target).attr('data-target')).css('display', 'block');
     })
