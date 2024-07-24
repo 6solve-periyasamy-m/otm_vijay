@@ -5,11 +5,6 @@ jQuery(document).ready(function () {
         jQuery('#liveToast').hide();
     })
 
-    //
-    jQuery('.upgrades-popup .convco .close-btn').click(function () {
-        jQuery(".upgrades-popup").css("display", "none");
-    });
-
     jQuery('.first-form').submit(function (e) {
         e.preventDefault();
         jQuery('.first-form').hide();
@@ -329,9 +324,6 @@ jQuery(document).ready(function () {
         jQuery(this).addClass('active');
     })
 
-    jQuery('.see-more-popup .close-btn').click(function () {
-        jQuery('.see-more-popup').css('display', 'none');
-    })
     const inputs = document.querySelectorAll("#mobile_number");
     inputs.forEach(input => {
         window.intlTelInput(input, {
@@ -345,8 +337,12 @@ jQuery(document).ready(function () {
     jQuery('.mobile_field .iti__divider').remove();
 
     jQuery('[data-action="popup"]').click(function (event) {
-        console.log('clicked');
         event.preventDefault();
         jQuery('.' + jQuery(event.target).attr('data-target')).css('display', 'block');
-    })
+    });
+
+    jQuery('[data-action="close"]').click(function (event) {
+        event.preventDefault();
+        jQuery(event.target).closest('[data-role="closeable"]').css('display', 'none');
+    });
 });

@@ -62,7 +62,7 @@
 </div>
 @push('popups')
 <!-- <- See More Popup -->
-<div class="see-more-popup">
+<div class="see-more-popup" data-role="closeable">
     <div class="popup-inner-two">
         <div class="convco-two">
             <div class="whole-block-two">
@@ -86,14 +86,14 @@
                 </div>
                 {{ $tour->description }}
             </div>
-            <div class="close-btn">
+            <div class="close-btn" data-action="close">
                 <img src="{{ asset('css/booking/icon/close-btn.svg') }}" alt="close-btn">
             </div>
         </div>
     </div>
 </div>
 <!-- <- Upgrades Popup -->
-<div class="upgrades-popup">
+<div class="upgrades-popup" data-role="closeable">
     <div class="popup-inner">
         <div class="convco">
             <div class="whole-block">
@@ -155,8 +155,8 @@
 
                 </div>
             </div>
-            <div class="close-btn">
-                <img src="assets/images/close-white-arrow.png" alt="close-btn">
+            <div class="close-btn" data-action="close">
+                <img src="{{ asset('css/booking/icon/close-btn.svg') }}" alt="close-btn">
             </div>
         </div>
     </div>
