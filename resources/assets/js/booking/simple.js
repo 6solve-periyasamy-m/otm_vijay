@@ -300,14 +300,19 @@ jQuery(document).ready(function () {
         jQuery(this).addClass('active');
     })
 
-    const inputs = document.querySelectorAll("#mobile_number");
-    inputs.forEach(input => {
-        window.intlTelInput(input, {
-            initialCountry: "au",
+    window.setupPhoneField = function (input) {
+        return window.intlTelInput(input, {
+            initialCountry: "auto",
+            geoIpLookup: callback => {
+                fetch("https://ipapi.co/json")
+                    .then(res => res.json())
+                    .then(data => callback(data.country_code))
+                    .catch(() => callback("us"));
+            },
             separateDialCode: true,
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
         });
-    });
+    }
 
     jQuery('.mobile_field .iti__preferred').remove();
     jQuery('.mobile_field .iti__divider').remove();

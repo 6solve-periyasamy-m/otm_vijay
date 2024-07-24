@@ -3,7 +3,7 @@
         <div class="contain">
             <h3>Your trip details</h3>
 
-            <p class="psg-det">PASSENGER DETAILS</p>
+            <p class="psg-det">PASSENGER DETAILS ({{ $lead->mobile_number }})</p>
 
             <div class="top-form-contain">
                 <div class="form-field">
@@ -15,8 +15,18 @@
                 <div class="form-field">
                     <input type="email" wire:model="lead.email_address" placeholder="Email" required>
                 </div>
-                <div class="form-field mobile_field">
-                    <input type="tel" id="mobile_number" wire:ignore name="mobile_number" placeholder="Mobile number" required>
+                <div wire:ignore class="form-field mobile_field">
+                    <input type="tel" id="mobile_number" name="mobile_number" placeholder="Mobile number" required>
+                    <script type="text/javascript">
+                        jQuery(document).ready(function () {
+                            let input = document.querySelector('#mobile_number');
+                            let iti = window.setupPhoneField(input);
+
+                            jQuery(input).on('change', function (event) {
+                                @this.set('lead.mobile_number', iti.getNumber());
+                            });
+                        });
+                    </script>
                 </div>
             </div>
             <div class="second-block tra-det">
@@ -87,27 +97,19 @@
                         <h6>Room 1</h6>
                     </div>
                     <div class="form-field">
-                        <select id="pax_number" name="pax_number">
-                            <option value="">Number of Travellers</option>
-                            <option value="1">1 Traveller</option>
-                            <option value="2">2 Travellers</option>
-                        </select>
-                    </div>
-                    <div class="form-field">
                         <select id="bedding_configuration" name="bedding_configuration">
-                            <option value="">Hotel</option>
-                            <option value="1">Parkroyd </option>
-                            <option value="2">Mariot</option>
-                            <option value="1">Holiday Inn</option>
-                        </select>
-                    </div>
-                    <div class="form-field">
-                        <select id="bedding_configuration" name="bedding_configuration">
-                            <option value="">Bedding Configuration</option>
+                            <option selected disabled>Bedding Configuration</option>
                             <option value="1">Parkroyd - Deluxe - Double Room</option>
                             <option value="2">Parkroyd - Deluxe - Twin Room</option>
                             <option value="1">Parkroyd - Superior - Double Room (+£250)</option>
                             <option value="2">Parkroyd - Superior - Twin Room (+£250)</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <select id="pax_number" name="pax_number">
+                            <option selected disabled>Number of Travellers</option>
+                            <option value="1">1 Traveller</option>
+                            <option value="2">2 Travellers</option>
                         </select>
                     </div>
                 </div>
