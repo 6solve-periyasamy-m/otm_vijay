@@ -23,6 +23,12 @@ body {
     background: #F35B15;
 }
 
+.package-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 15%;
+}
+
 .top-head .row {
     display: flex;
     padding: 24px 0;
@@ -296,6 +302,7 @@ body {
 
 .ma-block .row {
     padding: 80px 0 150px 0;
+    display: flex;
 }
 
 .ma-block .row form {

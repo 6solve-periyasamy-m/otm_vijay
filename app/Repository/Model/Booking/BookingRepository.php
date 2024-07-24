@@ -533,4 +533,25 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     {
         return Booking::find($id);
     }
+
+    public function getUpgradeCosts(): float
+    {
+        $cost = 0;
+        foreach ($this->booking->travellers as $traveller) {
+            foreach ($traveller->repository->getComponents(true, ['Upgrade', 'Add-on']) as $component) {
+                $cost += $component->getCost();
+            }
+        }
+        return $cost;
+    }
+
+    public function getTaxes(): float|null
+    {
+        return $this->booking->tour->taxBracket()?->calculate($this->getTotalCost());
+    }
+
+    public function getBasePrice(): float
+    {
+        return $this->booking->tour->base_price_per_person * $this->booking->travellers()->count();
+    }
 }

@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KPT</title>
-    <link rel="stylesheet" href="{{ asset('css/booking/simple.css') }}">
-    <script src="{{ asset('js/booking/simple.js') }}"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
 
@@ -26,6 +24,10 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+
+    <link rel="stylesheet" href="{{ asset('css/booking/simple.css') }}">
+    <script src="{{ asset('js/booking/simple.js') }}"></script>
+    @livewireStyles
 </head>
 <body>
     <header>
@@ -73,9 +75,7 @@
             </div>
         </section>
         <section class="ma-block">
-            <div class="row">
-                {{ $content }}
-            </div>
+            @yield('content')
             {{-- Toast Notifications --}}
             <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
                 <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -111,5 +111,9 @@
 
             </div>
         </div>
+        @livewireScripts
+        @livewire('livewire-ui-modal')
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
     </footer>
 </body>

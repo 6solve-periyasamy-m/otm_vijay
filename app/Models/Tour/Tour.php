@@ -7,8 +7,10 @@ use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\AdditionalCost;
+use App\Models\Booking\Booking;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
+use App\Models\Helper\Model;
 use App\Models\Helper\Traits\HasAdditionalCosts;
 use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Order\Component\OrderAccommodation;
@@ -31,7 +33,6 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -221,6 +222,11 @@ class Tour extends Model
         return $this->belongsTo(TaxBracket::class, 'tax_bracket_id');
     }
 
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class, 'tour_id');
+    }
+
     public function taxBracket(): TaxBracket
     {
         return $this->bracket ?? $this->event?->taxBracket() ?? $this->brand?->taxBracket();
@@ -231,24 +237,24 @@ class Tour extends Model
         return $this->belongsTo(Brand::class, 'brand_id');
     }
 
-    public function flightInventory(): BelongsToMany
+    public function accommodationInventory(): HasManyThrough
     {
-        return $this->belongsToMany(FlightInventory::class, 'flight_inventory_tours')->withPivot('sales_price', 'tour_component_type');
+        return $this->hasManyThrough(AccommodationInventory::class, AccommodationInventoryTour::class, 'accommodation_inventory_id', 'id');
     }
 
-    public function accommodationInventory(): BelongsToMany
+    public function activityInventory(): HasManyThrough
     {
-        return $this->belongsToMany(AccommodationInventory::class, 'accommodation_inventory_tours')->withPivot('sales_price', 'tour_component_type');
+        return $this->hasManyThrough(ActivityInventory::class, ActivityInventoryTour::class, 'activity_inventory_id', 'id');
     }
 
-    public function activityInventory(): BelongsToMany
+    public function flightInventory(): HasManyThrough
     {
-        return $this->belongsToMany(ActivityInventory::class, 'activity_inventory_tours')->withPivot('sales_price', 'tour_component_type');
+        return $this->hasManyThrough(FlightInventory::class, FlightInventoryTour::class, 'flight_inventory_id', 'id');
     }
 
-    public function transportInventory(): BelongsToMany
+    public function transportInventory(): HasManyThrough
     {
-        return $this->belongsToMany(TransportInventory::class, 'transport_inventory_tours')->withPivot('sales_price', 'tour_component_type');
+        return $this->hasManyThrough(TransportInventory::class, TransportInventoryTour::class, 'transport_inventory_id', 'id');
     }
 
     public function accommodationInventoryTours(): HasMany

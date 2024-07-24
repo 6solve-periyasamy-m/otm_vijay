@@ -22,6 +22,7 @@ use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Repository\Abstracts\ComponentPackageRepository;
+use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Costing\Tour\TourCostingRepository;
 use App\Repository\Interfaces\HasStockControl;
@@ -29,6 +30,8 @@ use App\Repository\Interfaces\Manifest\HasActivityManifest;
 use App\Repository\Interfaces\Manifest\HasFlightManifest;
 use App\Repository\Interfaces\Manifest\HasRoomingList;
 use App\Repository\Interfaces\Manifest\HasTransportManifest;
+use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
+use App\Repository\Model\Activity\ActivityInventoryRepository;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use App\Repository\Reporting\Manifest\FlightManifestRepository;
 use App\Repository\Reporting\Manifest\TransportManifestRepository;
@@ -586,5 +589,37 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 $this->tour->paymentInstallments()->save(new PaymentInstallment(['due_on' => $this->tour->date_from->subDays($days), 'amount' => $percentage, 'is_percentage' => true,]));
             }
         }
+    }
+
+    public function getInclusions(int $limit = -1): array
+    {
+        /** @var InventoryRepository[] $components */
+        $components = [];
+        foreach ($this->tour->accommodationInventory()->groupBy('accommodation_id')->get() as $component) {
+            $components[] = $component->repository;
+        }
+        foreach ($this->tour->activityInventory as $component) {
+            $components[] = $component->repository;
+        }
+        usort($components, function (InventoryRepository $a, InventoryRepository $b) {
+            return $a->getStartTime()?->unix() <=> $b->getStartTime()?->unix();
+        });
+        $inclusions = [];
+        foreach ($components as $component) {
+            if ($limit === 0) { break; }
+            $inclusion = match (true) {
+                $component instanceof AccommodationInventoryRepository =>
+                    $component->get()->accommodation->name . ' - ' . diff_in_nights($component->getStartTime(), $component->getEndTime()) . ' Nights',
+                $component instanceof ActivityInventoryRepository =>
+                $component->get()->activity->name,
+                default => null,
+            };
+            // TODO: Implement Flights, Transport and Merchandise
+            if ($inclusion !== null) {
+                $inclusions[] = $inclusion;
+                $limit--;
+            }
+        }
+        return $inclusions;
     }
 }

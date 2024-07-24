@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Customer\CustomerBookingController;
+use App\Http\Controllers\Customer\SimpleBookingController;
 use App\Http\Controllers\StripeController;
 use App\Http\Gateways\FellohGateway;
 use App\Http\Gateways\OpayoGateway;
@@ -39,6 +40,11 @@ Route::prefix('payment')->name('payment.')->group(function () {
         });
     });
 });
+
+Route::prefix('/booking/simple/{tour}')->group(function () {
+    Route::get('/{token?}', [SimpleBookingController::class, 'index'])->name('booking.simple.index');
+});
+
 
 Route::prefix('/booking/{bookingUrl}')->group(function () {
     Route::get('/{token?}', [CustomerBookingController::class, 'index'])->name('customer-booking.index');
