@@ -17,8 +17,10 @@ class SimpleBookingController extends Controller
         return view('customer.booking.simple.index', ['tour' => $tour, 'booking' => $booking ?? null]);
     }
 
-    public function purchase()
+    public function checkout(string $tour, string|null $token = null)
     {
-
+        $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
+        $booking = $tour->bookings()->where('token', '=', $token)->firstOrFail();
+        return view('customer.booking.simple.checkout', ['tour' => $tour, 'booking' => $booking,]);
     }
 }

@@ -42,6 +42,7 @@ Route::prefix('payment')->name('payment.')->group(function () {
 });
 
 Route::prefix('/booking/simple/{tour}')->group(function () {
+    Route::get('/checkout/{token}', [SimpleBookingController::class, 'checkout'])->name('booking.simple.checkout');
     Route::get('/{token?}', [SimpleBookingController::class, 'index'])->name('booking.simple.index');
 });
 

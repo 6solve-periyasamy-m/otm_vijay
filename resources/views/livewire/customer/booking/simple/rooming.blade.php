@@ -3,7 +3,7 @@
         <div class="contain">
             <h3>Your trip details</h3>
 
-            <p class="psg-det">PASSENGER DETAILS ({{ $lead->mobile_number }})</p>
+            <p class="psg-det">PASSENGER DETAILS</p>
 
             <div class="top-form-contain">
                 <div class="form-field">
@@ -122,7 +122,7 @@
             <x-customer.booking.simple.package-details :booking="$booking" :tour="$tour">
                 <div class="submit-btn-cls">
                     <div class="inner">
-                        <input class="submit-btn" type="submit" value="Proceed">
+                        <input type="submit" class="submit-btn" wire:click="proceed" value="Proceed">
                     </div>
                 </div>
             </x-customer.booking.simple.package-details>

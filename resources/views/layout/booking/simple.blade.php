@@ -62,14 +62,17 @@
         <section class="top-block">
             <div class="row">
                 <div class="top-nav-sec">
+                    @if(!empty($return ?? null))
                     <div class="navi">
-                        <img src="{{ asset('css/booking/icon/arrow-left.svg') }}" alt="left-arrow">
-                        <p>Back</p>
+                        <a href="{{ $return }}">
+                            <img src="{{ asset('css/booking/icon/arrow-left.svg') }}" alt="left-arrow">
+                            <p>Back</p>
+                        </a>
                     </div>
+                    @endif
                     <div class="head">
                         <h1>Request to book</h1>
                     </div>
-
                 </div>
             </div>
         </section>
