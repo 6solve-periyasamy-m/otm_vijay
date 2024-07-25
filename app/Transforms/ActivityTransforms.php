@@ -107,7 +107,7 @@ class ActivityTransforms implements ActivityTransformsInterface
         return $subData;
     }
 
-    public static function getAvailableAddons(OrderCustomer $orderCustomer, string $filter)
+    public static function getAvailableAddons(OrderCustomer $orderCustomer, string|null $filter)
     {
         $tour = $orderCustomer->order->tour;
         $data = [];
