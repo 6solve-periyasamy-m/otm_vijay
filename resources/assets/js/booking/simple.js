@@ -5,14 +5,6 @@ jQuery(document).ready(function () {
         jQuery('#liveToast').hide();
     })
 
-    jQuery('.first-form').submit(function (e) {
-        e.preventDefault();
-        jQuery('.first-form').hide();
-        jQuery('.top-nav-sec .head h1').text('Checkout');
-        jQuery('.second-form').css('display', 'flex');
-        jQuery('.second-form .left-col .top-check-top-cls').trigger('click');
-    });
-
     $("#custom-input-date").datepicker({
         dateFormat: 'dd/mm/yy',
         changeMonth: true,
@@ -20,7 +12,6 @@ jQuery(document).ready(function () {
         yearRange: '1900:c',
         minDate: new Date(1900, 0, 1)
     });
-
 
     //hover details
     jQuery(document).on('click', function (event) {
@@ -34,49 +25,6 @@ jQuery(document).ready(function () {
             jQuery('.third-block .inn .accommodation-details-hover').css('display', 'none');
         }
     });
-
-    //get data from prev form
-    jQuery('.second-form .left-col .top-check-top-cls').click(function () {
-        if (jQuery('.contain-vv input').is(':checked')) {
-            var firstform = jQuery('.first-form .top-form-contain');
-            var secondform = jQuery('.second-form .top-form-contain');
-            jQuery(secondform).find('#first_name').val(jQuery(firstform).find('#first_name').val());
-            jQuery(secondform).find('#last_name').val(jQuery(firstform).find('#last_name').val());
-            jQuery(secondform).find('#email').val(jQuery(firstform).find('#email').val());
-            jQuery(secondform).find('#mobile_number').val(jQuery(firstform).find('#mobile_number').val());
-
-            var firstFormDialCode = jQuery(firstform).find('.mobile_field ul li.iti__active').data('dial-code');
-            var selector = jQuery(secondform).find('.mobile_field ul li[data-dial-code="' + firstFormDialCode + '"]');
-            jQuery(secondform).find('.mobile_field .iti__selected-dial-code').text(jQuery(firstform).find('.mobile_field .iti__selected-dial-code').text())
-
-
-            var flag = jQuery(secondform).find('.iti__flag');
-            flag.removeClass();
-            flag.addClass('iti__flag');
-            var flag1 = jQuery(firstform).find('.iti__flag');
-            jQuery(flag1).removeClass('iti__flag');
-            var otherClasses = flag1.attr('class')
-            flag.addClass(otherClasses);
-            jQuery(flag1).addClass('iti__flag')
-
-            jQuery(selector).trigger('click');
-            jQuery(selector).addClass('iti__highlight iti__active');
-
-        } else {
-            var secondform = jQuery('.second-form .top-form-contain');
-            jQuery(secondform).find('#first_name').val('');
-            jQuery(secondform).find('#last_name').val('');
-            jQuery(secondform).find('#email').val('');
-            jQuery(secondform).find('#mobile_number').val('');
-            jQuery(secondform).find('.mobile_field .iti__selected-dial-code').text('+61');
-            var flag = jQuery(secondform).find('.iti__flag');
-            flag.removeClass();
-            flag.addClass('iti__flag');
-            flag.addClass('iti__au')
-
-        }
-    });
-
 
     // ACTIONS
     $("input").on("change", function (e) {
@@ -137,7 +85,6 @@ jQuery(document).ready(function () {
         jQuery('.ma-block .first-form').css('display', 'flex');
         jQuery('.ma-block .second-form').css('display', 'none');
         jQuery('.top-nav-sec .head h1').text('Request to book');
-
     })
     //add and minus the count
     /*var textcont =  parseInt(jQuery('.rme-det .inner-block .right .inn').find('.No .text').text());

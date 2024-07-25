@@ -8,25 +8,31 @@
             <div class="top-form-contain">
                 <div class="form-field">
                     <input type="text" wire:model="lead.first_name" placeholder="First Name" required>
+                    @error('lead.first_name') <label class="error-label">{{ $message }}</label> @enderror
                 </div>
                 <div class="form-field">
                     <input type="text" wire:model="lead.last_name" placeholder="Last Name">
+                    @error('lead.last_name') <label class="error-label">{{ $message }}</label> @enderror
                 </div>
                 <div class="form-field">
                     <input type="email" wire:model="lead.email_address" placeholder="Email" required>
+                    @error('lead.email_address') <label class="error-label">{{ $message }}</label> @enderror
                 </div>
-                <div wire:ignore class="form-field mobile_field">
-                    <input type="tel" id="mobile_number" name="mobile_number" placeholder="Mobile number" required>
-                    <script type="text/javascript">
-                        jQuery(document).ready(function () {
-                            let input = document.querySelector('#mobile_number');
-                            let iti = window.setupPhoneField(input);
+                <div class="form-field mobile_field">
+                    <div wire:ignore>
+                        <input type="tel" id="mobile_number" name="mobile_number" placeholder="Mobile number" required>
+                        <script type="text/javascript">
+                            jQuery(document).ready(function () {
+                                let input = document.querySelector('#mobile_number');
+                                let iti = window.setupPhoneField(input);
 
-                            jQuery(input).on('change', function (event) {
-                                @this.set('lead.mobile_number', iti.getNumber());
+                                jQuery(input).on('change', function (event) {
+                                    @this.set('lead.mobile_number', iti.getNumber());
+                                });
                             });
-                        });
-                    </script>
+                        </script>
+                    </div>
+                    @error('lead.mobile_number') <label class="error-label">{{ $message }}</label> @enderror
                 </div>
             </div>
             <div class="second-block tra-det">
@@ -53,27 +59,27 @@
                 <h3>Your room details</h3>
                 <p>ROOMS</p>
                 @foreach($tour->repository->getHotels() as $hotel)
-                <div wire:ignore class="hotel-details">
-                    <h6>{{ $hotel->name }}</h6>
-                    <div class="information-hover" data-action="hover" data-target="accommodation-{{$hotel->id}}">
-                        <img src="{{ asset('css/booking/icon/Icon.svg') }}" alt="tip-img">
-                    </div>
-                    <div class="accommodation-details-hover accommodation-{{$hotel->id}}">
-                        <div class="contain">
-                            <div class="first-block">
-                                <h6>Hotel details</h6>
-                                <div class="full">
-                                    <div class="left-col">
-                                        <img class="package-image" src="{{ asset($hotel->image_url) }}" alt="featured-img">
-                                    </div>
-                                    <div class="right-col">
-                                        <p>{!! $hotel->description !!}</p>
+                    <div wire:ignore class="hotel-details">
+                        <h6>{{ $hotel->name }}</h6>
+                        <div class="information-hover" data-action="hover" data-target="accommodation-{{$hotel->id}}">
+                            <img src="{{ asset('css/booking/icon/Icon.svg') }}" alt="tip-img">
+                        </div>
+                        <div class="accommodation-details-hover accommodation-{{$hotel->id}}">
+                            <div class="contain">
+                                <div class="first-block">
+                                    <h6>Hotel details</h6>
+                                    <div class="full">
+                                        <div class="left-col">
+                                            <img class="package-image" src="{{ asset($hotel->image_url) }}" alt="featured-img">
+                                        </div>
+                                        <div class="right-col">
+                                            <p>{!! $hotel->description !!}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 @endforeach
                 <div class="inner-block">
                     <div class="left-col">
