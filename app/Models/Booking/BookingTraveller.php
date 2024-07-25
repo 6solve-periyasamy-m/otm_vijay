@@ -97,7 +97,7 @@ class BookingTraveller extends Model
     use HasFactory;
     use HasDeepRelation;
 
-    protected $casts = ['date_of_birth' => 'date',];
+    protected $casts = ['date_of_birth' => 'date:Y-m-d',];
     protected $guarded = [];
     private BookingTravellerRepository $internal_repository;
 

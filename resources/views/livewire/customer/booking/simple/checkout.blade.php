@@ -1,5 +1,5 @@
 <div class="row">
-    <form class="second-form">
+    <div class="second-form">
         <div class="left-col">
             <div class="contain">
                 <div class="lmnvkp">
@@ -28,25 +28,32 @@
                     </div>
                     <div class="form-field mobile_field">
                         <div wire:ignore>
-                            <input type="tel" id="mobile_number" name="mobile_number" placeholder="Mobile number" required>
+                            <input type="tel" id="mobile_number" name="mobile_number" value="{{ $this->payer->mobile_number }}" placeholder="Mobile number" required>
                             <script type="text/javascript">
                                 jQuery(document).ready(function () {
                                     let input = document.querySelector('#mobile_number');
                                     let iti = window.setupPhoneField(input);
 
                                     jQuery(input).on('change', function (event) {
-                                        @this.set('lead.mobile_number', iti.getNumber());
+                                        @this.set('payer.mobile_number', iti.getNumber());
+                                    });
+                                    document.addEventListener('updateValue', function (event) {
+                                        if (event.detail.key === 'payer.mobile_number') {
+                                            input.value = event.detail.value;
+                                        }
                                     });
                                 });
                             </script>
                         </div>
-                        @error('payer.mobile_number') <label class="error-label">{{ $message }}</label> @enderror
+                        @error('lead.mobile_number') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                     <div class="form-field">
-                        <input type="text" id="postal-code" name="postal-code" pattern="[A-Za-z0-9]{3,10}" title="Enter a valid postal code"  placeholder="Postal code*" required>
+                        <input type="text" id="postal-code" name="postal-code" placeholder="Postal code*" required>
+                        @error('payer.email_address') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                     <div class="form-field rap-las-cls">
-                        <input id="custom-input-date" class="calendar" type="text" name="upload-release" placeholder="DATE OF BIRTH*">
+                        <input type="date" style="padding-left: 4rem" wire:model="payer.date_of_birth" placeholder="DATE OF BIRTH*">
+                        @error('payer.email_address') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                 </div>
                 <h3>Special requests</h3>
@@ -111,12 +118,12 @@
                         </div>
                         <div class="submit-btn-cls">
                             <div class="inner">
-                                <input class="submit-btn" type="submit" value="Checkout">
+                                <input class="submit-btn" wire:click="checkout" type="submit" value="Checkout">
                             </div>
                         </div>
                     </div>
                 </x-customer.booking.simple.package-details>
             </div>
         </div>
-    </form>
+    </div>
 </div>

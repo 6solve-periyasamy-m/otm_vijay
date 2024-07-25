@@ -20,7 +20,7 @@
                 </div>
                 <div class="form-field mobile_field">
                     <div wire:ignore>
-                        <input type="tel" id="mobile_number" name="mobile_number" placeholder="Mobile number" required>
+                        <input type="tel" id="mobile_number" name="mobile_number" value="{{ $this->lead->mobile_number }}" placeholder="Mobile number" required>
                         <script type="text/javascript">
                             jQuery(document).ready(function () {
                                 let input = document.querySelector('#mobile_number');
@@ -28,6 +28,11 @@
 
                                 jQuery(input).on('change', function (event) {
                                     @this.set('lead.mobile_number', iti.getNumber());
+                                });
+                                document.addEventListener('updateValue', function (event) {
+                                    if (event.detail.key === 'lead.mobile_number') {
+                                        input.value = event.detail.value;
+                                    }
                                 });
                             });
                         </script>

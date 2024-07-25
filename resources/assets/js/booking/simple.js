@@ -5,14 +5,6 @@ jQuery(document).ready(function () {
         jQuery('#liveToast').hide();
     })
 
-    $("#custom-input-date").datepicker({
-        dateFormat: 'dd/mm/yy',
-        changeMonth: true,
-        changeYear: true,
-        yearRange: '1900:c',
-        minDate: new Date(1900, 0, 1)
-    });
-
     //hover details
     jQuery(document).on('click', function (event) {
         return;
@@ -27,45 +19,6 @@ jQuery(document).ready(function () {
     });
 
     // ACTIONS
-    $("input").on("change", function (e) {
-        $(this).siblings(".label-error").text("");
-        $(this).removeClass("error");
-    })
-
-    $("#custom-input-date").on("focusout", function (e) {
-        if ($(this).val() != '') {
-            dateValidation($(this));
-        }
-    })
-
-    // CHECK
-    function dateValidation(input) {
-        var errorLabel = input.siblings(".label-error");
-        var date = input.val();
-
-        input.removeClass("error");
-        errorLabel.text("");
-
-        var matches = /^(\d{1,2})[/\/](\d{1,2})[/\/](\d{4})$/.exec(date);
-
-        if (matches == null) {
-            input.addClass("error");
-            errorLabel.text("Date not valid.");
-        };
-
-        var d = matches[1];
-        var m = matches[2] - 1;
-        var y = matches[3];
-        var composedDate = new Date(y, m, d);
-
-        if (composedDate.getDate() == d && composedDate.getMonth() == m && composedDate.getFullYear() == y) {
-        } else {
-            input.addClass("error");
-            errorLabel.text("Date not valid.");
-        }
-    }
-
-
     document.emojiSource = './tam-emoji/img/';
 
     $('#summernote').summernote({
@@ -80,22 +33,6 @@ jQuery(document).ready(function () {
         ]
     });
 
-    //back to form
-    jQuery('.top-nav-sec .navi').click(function () {
-        jQuery('.ma-block .first-form').css('display', 'flex');
-        jQuery('.ma-block .second-form').css('display', 'none');
-        jQuery('.top-nav-sec .head h1').text('Request to book');
-    })
-    //add and minus the count
-    /*var textcont =  parseInt(jQuery('.rme-det .inner-block .right .inn').find('.No .text').text());
-    for (var i = 0; i < textcont; i++) {
-        if(i==0){
-            continue
-        }
-        var newRoom = jQuery('.third-block .first-bl:first').clone();
-        clearSelectedValues(newRoom);
-        newRoom.appendTo('.third-block');
-    }*/
     //dynamic rooms
 
     let minRooms = 1;
@@ -260,9 +197,6 @@ jQuery(document).ready(function () {
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
         });
     }
-
-    jQuery('.mobile_field .iti__preferred').remove();
-    jQuery('.mobile_field .iti__divider').remove();
 
     jQuery('[data-action="popup"]').click(function (event) {
         event.preventDefault();
