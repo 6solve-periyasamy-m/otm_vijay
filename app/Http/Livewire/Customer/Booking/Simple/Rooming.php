@@ -58,8 +58,8 @@ class Rooming extends Component
         return [
             'lead.first_name' => 'required|string',
             'lead.last_name' => 'required|string',
-            'lead.email_address' => 'required|email',
-            'lead.mobile_number' => 'required|string',
+            'lead.email_address' => 'required|email:rfc,dns',
+            'lead.mobile_number' => 'required|phone:INTERNATIONAL',
         ];
     }
 }
