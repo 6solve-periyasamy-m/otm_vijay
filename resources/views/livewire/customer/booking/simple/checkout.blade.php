@@ -84,9 +84,9 @@
                             <div class="left-ass">
                                 <label class="containr">
                                 <span class="txt">
-                                    Pay a 50% deposit now, and the rest later
+                                    Pay a {{ $booking->tour->deposit_percentage }}% deposit now, and the rest later
                                     <span class="inn-txt-cls">
-                                        The remaining balance of {{ f_currency($booking->repository->getTotalCost() - $booking->repository->getDueTodayAmount()) }} will be automatically charged to the same payment method on 24 June 2024
+                                        You will receive a reminder to pay the balance amount before {{ f_date($booking->tour->final_payment) }}
                                     </span>
                                 </span>
                                     <input type="checkbox">
