@@ -98,7 +98,7 @@
                     <td>{{ $inventory->external_notes }}</td>
                     <td class="actions-4">
                         @can('read', \App\Models\Activity\ActivityInventory::class)
-                            <a href="{{route('activity-inventories.manifest.view', ['activity' => $activity, 'activityInventory' => $inventory,])}}"
+                            <a href="{{route('activity-inventories.manifest.view', ['activity' => $activity, 'inventory' => $inventory,])}}"
                                class="btn btn-outline-secondary btn-sm mb-1"  title="List">
                                 {{ Icon::list() }}
                             </a>
@@ -108,7 +108,7 @@
                             </span>
                         @endcan
                         @can('create', \App\Models\Activity\ActivityInventory::class)
-                            <a href="{{route('activity-inventories.duplicate', ['activity' => $activity, 'activityInventory' => $inventory,])}}"
+                            <a href="{{route('activity-inventories.duplicate', ['activity' => $activity, 'inventory' => $inventory,])}}"
                                class="btn btn-outline-blue btn-sm mb-1"  title="Copy">
                                 {{ Icon::copy() }}
                             </a>
@@ -118,7 +118,7 @@
                             </span>
                         @endcan
                         @can('update', \App\Models\Activity\ActivityInventory::class)
-                            <a href="{{route('activity-inventories.edit', ['activity' => $activity, 'activityInventory' => $inventory,])}}"
+                            <a href="{{route('activity-inventories.edit', ['activity' => $activity, 'inventory' => $inventory,])}}"
                                class="btn btn-outline-success btn-sm mb-1"  title="Edit">
                                 {{ Icon::edit() }}
                             </a>
@@ -133,7 +133,7 @@
                                 {{ Icon::delete() }}
                             </a>
                             <form id="activityInventory-{{ $inventory->id }}-delete"
-                                  action="{{ route('activity-inventories.delete', ['activity' => $activity, 'activityInventory' => $inventory,]) }}"
+                                  action="{{ route('activity-inventories.delete', ['activity' => $activity, 'inventory' => $inventory,]) }}"
                                   method="POST" style="display: none;">{{ csrf_field() }}</form>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">

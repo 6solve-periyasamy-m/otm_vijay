@@ -3,6 +3,7 @@
 namespace App\Mail\Storage;
 
 use App\Exceptions\MailDisabledException;
+use App\Exceptions\MailFailedException;
 use App\Mail\TemplatedMailable;
 use Exception;
 use Faker\Factory as Faker;
@@ -10,6 +11,7 @@ use Faker\Generator;
 use Illuminate\Support\Facades\Mail;
 use Log;
 use Settings;
+use Validator;
 
 
 abstract class TemplatedMail
@@ -85,11 +87,21 @@ abstract class TemplatedMail
      * @param bool $force
      * @return bool
      * @throws MailDisabledException
+     * @throws MailFailedException
      */
-    public final function send(string $email, $model = null, array $attachments = [], bool $force = false): bool
+    final public function send(string|null $email, $model = null, array $attachments = [], bool $force = false): bool
     {
-        if (!flag('system.mail.enabled', true) && !$force ) {
+        \Log::info(flag('system.mail.enabled', true) ? "Mail Enabled" : "Mail Disabled");
+        \Log::info(setting('system.mail.enabled'));
+        if (!$force && !flag('system.mail.enabled', true)) {
             throw new MailDisabledException('Sending Emails is disabled on this system');
+        }
+        $validator = Validator::make(['email' => $email,], ['email' => 'required|email:rfc,dns'], [
+            'email.required' => 'Recipient does not have an email address',
+            'email.email' => 'Recipient does not have a valid email address',
+        ]);
+        if ($validator->fails()) {
+            throw new MailFailedException($validator->errors()->first());
         }
         try {
             if (empty(config('mail.from.address'))) return false;

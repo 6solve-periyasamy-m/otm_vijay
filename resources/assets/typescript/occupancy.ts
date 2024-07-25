@@ -32,7 +32,7 @@ class Room {
     public containsDate(date: Date): boolean {
         let start = new Date(new Date(this.start).setHours(0,0,0));
         let end = new Date(new Date(this.end).setHours(0,0,0));
-        return start <= date && date < end;
+        return start <= date && date <= end;
     }
 }
 

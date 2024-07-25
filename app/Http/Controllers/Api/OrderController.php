@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+use App\Exceptions\MailFailedException;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Admin\TableRequest;
 use App\Http\Requests\Api\Admin\Order\UnknownTravellerRequest;
@@ -44,11 +45,16 @@ class OrderController extends ApiController
     public function resendOrderConfirmation(OrderRequest $request)
     {
         $order = $request->getOrder();
-        $success = $order->repository->mailer()->sendBookingConfirmation();
+        try {
+            $success = $order->repository->mailer()->sendBookingConfirmation();
+        } catch (MailFailedException $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+
         if ($success) {
             return response()->json(['success' => true, 'message' => 'Successfully resent the booking confirmation email']);
-        } else {
-            return response()->json(['success' => false, 'message' => 'Mailing is currently disabled on this system']);
         }
+
+        return response()->json(['success' => false, 'message' => 'Mailing is currently disabled on this system']);
     }
 }

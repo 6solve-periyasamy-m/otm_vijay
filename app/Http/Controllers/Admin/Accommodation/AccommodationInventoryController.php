@@ -26,7 +26,7 @@ class AccommodationInventoryController extends Controller
     public function rooming(Request $request, Accommodation $accommodation, AccommodationInventory $inventory)
     {
         $notes = !$request->has('notes') || $request->notes == true;
-        return RoomingReportRepository::viewReport($inventory->repository, 'accommodation-inventories.rooming.export', $notes, ['accommodation' => $accommodation, 'accommodationInventory' => $inventory,]);
+        return RoomingReportRepository::viewReport($inventory->repository, 'accommodation-inventories.rooming.export', $notes, ['accommodation' => $accommodation, 'inventory' => $inventory,]);
     }
 
     public function exportRooming(Request $request, Accommodation $accommodation, AccommodationInventory $inventory, string $extension)
