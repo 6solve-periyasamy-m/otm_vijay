@@ -35,7 +35,7 @@ class ActivityInventoryController extends Controller
 
     public function manifest(Activity $activity, ActivityInventory $activityInventory)
     {
-        return ActivityManifestRepository::viewReport($activityInventory->repository, 'activity-inventories.manifest.export', ['activity' => $activity, 'activityInventory' => $activityInventory]);
+        return ActivityManifestRepository::viewReport($activityInventory->repository, 'activity-inventories.manifest.export', ['activity' => $activity, 'inventory' => $activityInventory]);
     }
 
     public function export(Activity $activity, ActivityInventory $activityInventory, string $extension = 'xlsx')

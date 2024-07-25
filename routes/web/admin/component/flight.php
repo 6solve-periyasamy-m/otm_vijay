@@ -19,7 +19,7 @@ Route::prefix('{flight}')->group(function () {
     Route::prefix('inventory')->group(function () {
         Route::get('/create', [FlightInventoryController::class, 'create'])->name('flight-inventories.create')->middleware('bouncer:Flight\FlightInventory,create');
         Route::post('/create', [FlightInventoryController::class, 'store'])->name('flight-inventories.store')->middleware('bouncer:Flight\FlightInventory,create');
-        Route::prefix('{flightInventory}')->group(function () {
+        Route::prefix('{inventory}')->group(function () {
             Route::get('/manifest', [FlightInventoryController::class, 'manifest'])->name('flight-inventories.manifest.view')->middleware('bouncer:Flight\FlightInventory,read');
             Route::get('/manifest/export/{extension?}', [FlightInventoryController::class, 'export'])->name('flight-inventories.manifest.export')->middleware('bouncer:Flight\FlightInventory,read');
             Route::get('/update', [FlightInventoryController::class, 'edit'])->name('flight-inventories.edit')->middleware('bouncer:Flight\FlightInventory,update');
