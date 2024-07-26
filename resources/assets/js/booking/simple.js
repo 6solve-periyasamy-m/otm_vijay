@@ -21,18 +21,6 @@ jQuery(document).ready(function () {
     // ACTIONS
     document.emojiSource = './tam-emoji/img/';
 
-    $('#summernote').summernote({
-        placeholder: 'Message',
-        tabsize: 2,
-        height: 120,
-        toolbar: [
-            ['font', ['bold', 'italic', 'underline']],
-            //   ['para', ['paragraph']],
-            ['para', ['paragraph', 'ol']],
-            ['insert', ['link', 'picture', 'emoji']],
-        ]
-    });
-
     //dynamic rooms
 
     let minRooms = 1;

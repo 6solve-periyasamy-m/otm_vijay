@@ -59,7 +59,23 @@
                 <h3>Special requests</h3>
                 <div class="form-field-full-width" wire:ignore>
                     <div id="summernote"></div>
-                    <!-- <textarea id="Message" name="Message" placeholder="Message"></textarea> -->
+                    <script type="text/javascript">
+                        $('#summernote').summernote({
+                            placeholder: 'Message',
+                            tabsize: 2,
+                            height: 120,
+                            toolbar: [
+                                ['font', ['bold', 'italic', 'underline']],
+                                ['para', ['paragraph', 'ol']],
+                                ['insert', ['link', 'picture', 'emoji']],
+                            ],
+                            callbacks: {
+                                onChange: function (content, $editable) {
+                                    @this.set('booking.notes', content)
+                                }
+                            }
+                        });
+                    </script>
                 </div>
             </div>
         </div>
