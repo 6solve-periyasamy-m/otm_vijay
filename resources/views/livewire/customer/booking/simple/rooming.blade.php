@@ -50,9 +50,9 @@
                     </div>
                     <div class="right">
                         <div class="inn">
-                            <button class="Min" wire:click="removeTraveller()"><img src="{{ asset('css/booking/icon/minus.svg') }}" alt="minus" /></button>
+                            <span class="Min" wire:click="removeTraveller()"><img src="{{ asset('css/booking/icon/minus.svg') }}" alt="minus" /></span>
                             <span class="No"><span>|</span> <span class="text">{{ $this->getTravellerCount() }}</span> <span>|</span></span>
-                            <button class="Max" wire:click="addTraveller()"><img src="{{ asset('css/booking/icon/Plus.svg') }}" alt="minus" /></button>
+                            <span class="Max" wire:click="addTraveller()"><img src="{{ asset('css/booking/icon/Plus.svg') }}" alt="minus" /></span>
                         </div>
                     </div>
                 </div>
