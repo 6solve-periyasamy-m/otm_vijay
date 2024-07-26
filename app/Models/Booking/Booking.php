@@ -31,6 +31,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelations;
  * @property int|null $lead_traveller_id
  * @property int|null $order_id
  * @property string|null $token
+ * @property string|null $notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at

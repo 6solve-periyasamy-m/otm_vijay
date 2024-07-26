@@ -236,6 +236,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             'invoice_footer' => $tour->invoice_footer,
             'ordered_on' => $orderedOn ?? now(),
             'booking_fee' => $tour->booking_fee,
+            'external_notes' => $this->booking->notes,
         ]);
         $order->saveQuietly();
         foreach ($this->booking->travellers as $traveller) {
