@@ -104,10 +104,11 @@
                     </div>
                 </div>
                 <div class="contain">
-                    <p>Can't find what you're looking for?<a href="https://www.kpt.com.au/contact-us/" target="_blank">Get
-                                                                                                                       in
-                                                                                                                       touch</a>
-                       for a custom package.</p>
+                    <p>
+                       Can't find what you're looking for?
+                       <a href="https://www.kpt.com.au/contact-us/" target="_blank">Get in touch</a>
+                       for a custom package.
+                    </p>
                 </div>
             </div>
             <div class="third-block">
