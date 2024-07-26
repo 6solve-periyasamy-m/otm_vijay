@@ -39,7 +39,7 @@ class TransportInventoryController extends Controller
 
     public function manifest(Transport $transport, TransportInventory $transportInventory)
     {
-        return TransportManifestRepository::viewReport($transportInventory->repository, 'transport-inventories.manifest.export', ['transport' => $transport, 'transportInventory' => $transportInventory]);
+        return TransportManifestRepository::viewReport($transportInventory->repository, 'transport-inventories.manifest.export', ['transport' => $transport, 'inventory' => $transportInventory]);
     }
 
     public function export(Transport $transport, TransportInventory $transportInventory, string $extension = 'xlsx')

@@ -31,7 +31,7 @@
             </div>
             <div class="col-12 col-xl-6 row">
                 <div class="col-12 text-center">
-                    <p>{{ __('quotes.view.cards.quick.calculator.travelling') }}</p>
+                    <abbr title="Free-of-Charge (FOC) Travellers will be granted components, but will not be charged any fees">{{ __('quotes.view.cards.quick.calculator.travelling') }}</abbr>
                 </div>
                 <div class="col-12 col-xl-3">
                     <button wire:click="incrementTravelling(-1)" class="btn btn-outline-danger btn-sm mb-1">
@@ -177,7 +177,7 @@
                 </div>
             </div>
             <div class="col-6 row">
-                <x-livewire.input wire:model.debounce.300ms="marked_up_price" label="Price per Person" width="4" />
+                <x-livewire.input wire:model.debounce.300ms="marked_up_price" key="marked_up_price" label="Price per Person" width="4" />
                 <div class="col-4">
                     <label></label>
                     <button class="btn-warning" wire:click="updatePricePoint()">Update Single Price Point</button>
@@ -189,11 +189,11 @@
             </div>
         </div>
     </x-admin.section.card>
-</div>
-<script type="text/javascript">
-    function confirmAndSend() {
-        if (confirm('Are you sure you want to resend email?')) {
-            Livewire.emit('sendEmail');
+    <script type="text/javascript">
+        function confirmAndSend() {
+            if (confirm('Are you sure you want to resend email?')) {
+                Livewire.emit('sendEmail');
+            }
         }
-    }
-</script>
+    </script>
+</div>

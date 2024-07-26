@@ -106,7 +106,7 @@
                     <td>{{ $inventory->external_notes }}</td>
                     <td class="actions-4">
                         @can('read', \App\Models\Flight\FlightInventory::class)
-                            <a href="{{route('flight-inventories.manifest.view', ['flight' => $flight, 'flightInventory' => $inventory,])}}"
+                            <a href="{{route('flight-inventories.manifest.view', ['flight' => $flight, 'inventory' => $inventory,])}}"
                                class="btn btn-outline-secondary btn-sm mb-1" title="List">
                                 {{ Icon::list() }}
                             </a>
@@ -116,7 +116,7 @@
                             </span>
                         @endcan
                         @can('create', \App\Models\Flight\FlightInventory::class)
-                            <a href="{{route('flight-inventories.duplicate', ['flight' => $flight, 'flightInventory' => $inventory,])}}"
+                            <a href="{{route('flight-inventories.duplicate', ['flight' => $flight, 'inventory' => $inventory,])}}"
                                class="btn btn-outline-blue btn-sm mb-1" title="Copy">
                                 {{ Icon::copy() }}
                             </a>
@@ -126,7 +126,7 @@
                             </span>
                         @endcan
                         @can('update', \App\Models\Flight\FlightInventory::class)
-                            <a href="{{route('flight-inventories.edit', ['flight' => $flight, 'flightInventory' => $inventory,])}}"
+                            <a href="{{route('flight-inventories.edit', ['flight' => $flight, 'inventory' => $inventory,])}}"
                                class="btn btn-outline-success btn-sm mb-1" title="Edit">
                                 {{ Icon::edit() }}
                             </a>
@@ -141,7 +141,7 @@
                                 {{ Icon::delete() }}
                             </a>
                             <form id="flightInventory-{{ $inventory->id }}-delete"
-                                  action="{{ route('flight-inventories.delete', ['flight' => $flight, 'flightInventory' => $inventory,]) }}"
+                                  action="{{ route('flight-inventories.delete', ['flight' => $flight, 'inventory' => $inventory,]) }}"
                                   method="POST"
                                   style="display: none;">{{ csrf_field() }}</form>
                         @else

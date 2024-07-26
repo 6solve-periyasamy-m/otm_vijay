@@ -7,7 +7,7 @@
     $title = __('flight.inventory.form.title.' . ($inventory === null ? 'create' : 'update'));
     $route = $inventory === null ?
         route('flight-inventories.store', ['flight' => $flight, ]) :
-        route('flight-inventories.update', ['flight' => $flight, 'flightInventory' => $inventory,]);
+        route('flight-inventories.update', ['flight' => $flight, 'inventory' => $inventory,]);
 @endphp
 
 @extends('layout.form', ['action' => $route,])

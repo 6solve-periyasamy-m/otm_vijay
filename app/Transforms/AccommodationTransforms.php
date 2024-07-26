@@ -107,7 +107,7 @@ class AccommodationTransforms implements AccommodationTransformsInterface
         return $subData;
     }
 
-    public static function getAvailableAddons(OrderCustomer $orderCustomer, string $filter)
+    public static function getAvailableAddons(OrderCustomer $orderCustomer, string|null $filter)
     {
         $group = $orderCustomer->primary_group;
         $tour = $orderCustomer->order->tour;

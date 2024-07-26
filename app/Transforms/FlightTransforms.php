@@ -107,7 +107,7 @@ class FlightTransforms implements FlightTransformsInterface
         return $subData;
     }
 
-    public static function getAvailableAddons(OrderCustomer $orderCustomer, ?string $filter)
+    public static function getAvailableAddons(OrderCustomer $orderCustomer, string|null $filter)
     {
         $filter = $filter ?? "";
         $tour = $orderCustomer->order->tour;

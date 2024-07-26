@@ -18,7 +18,7 @@ Route::prefix('{activity}')->group(function () {
     Route::prefix('inventory')->group(function () {
         Route::get('/create', [ActivityInventoryController::class, 'create'])->name('activity-inventories.create')->middleware('bouncer:Activity\ActivityInventory,create');
         Route::post('/create', [ActivityInventoryController::class, 'store'])->name('activity-inventories.store')->middleware('bouncer:Activity\ActivityInventory,create');
-        Route::prefix('{activityInventory}')->group(function () {
+        Route::prefix('{inventory}')->group(function () {
             Route::get('/manifest', [ActivityInventoryController::class, 'manifest'])->name('activity-inventories.manifest.view')->middleware('bouncer:Activity\ActivityInventory,read');
             Route::get('/manifest/export/{extension?}', [ActivityInventoryController::class, 'export'])->name('activity-inventories.manifest.export')->middleware('bouncer:Activity\ActivityInventory,read');
             Route::get('/update', [ActivityInventoryController::class, 'edit'])->name('activity-inventories.edit')->middleware('bouncer:Activity\ActivityInventory,update');

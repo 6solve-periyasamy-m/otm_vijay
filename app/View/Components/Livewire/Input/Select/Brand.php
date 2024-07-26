@@ -32,8 +32,9 @@ class Brand extends AbstractSelectComponent
         return ['results' => [$this->systemDefault(), ...(parent::getAll($request)['results']??[]),]];
     }
 
-    public function getOne(int $id): array|null
+    public function getOne(int|string $id): array|null
     {
+        $id = (int)$id;
         if ($id === -1) return $this->systemDefault();
         return parent::getOne($id);
     }

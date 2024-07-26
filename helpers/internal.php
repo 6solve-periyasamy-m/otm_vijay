@@ -4,8 +4,11 @@ use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
 
 if (!function_exists('sigfig')) {
-    function sigfig($number, $figures = 2): float
+    function sigfig($number, $figures = 2, bool $floor = false): float
     {
+        if ($floor) {
+            return floor(($number * (10**$figures)))/(10**$figures);
+        }
         return ceil(($number * (10**$figures)))/(10**$figures);
     }
 }

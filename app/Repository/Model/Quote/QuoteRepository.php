@@ -23,6 +23,7 @@ use App\Models\Quote\QuotePricePoint;
 use App\Models\Quote\QuoteProspect;
 use App\Models\Quote\QuoteSection;
 use App\Models\Quote\SentQuote;
+use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
@@ -719,6 +720,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'merchandise' => $merchandise,
             'sections' => $sections,
             'leadTraveller' => $lead,
+            'event' => is_array($quote->event) ? new Event($quote->event) : $quote->event,
         ]);
         return $quote;
     }
@@ -766,7 +768,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $lead->save();
         $quote->internal_notes .= "\nRebuilt from Quote sent at " . f_datetime($sent->sent);
         $quote->lead_traveller_id = $lead->id;
-        $quote->revision += 1;
+        ++$quote->revision;
         $quote->save();
         $quote->accommodation()->saveMany($accommodation);
         $quote->activities()->saveMany($activities);
@@ -1056,11 +1058,12 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $travelling += $paying;
         $paying += $this->quote->leadTraveller->paying;
         $travelling += $this->quote->leadTraveller->travelling;
+        $event = is_array($this->quote->event) ? new Event($this->quote->event) : $this->quote->event;
         return new Itinerary(
             null,
-            $this->quote->event?->name,
-            $this->quote->description ?? $this->quote->event?->description,
-            $this->quote->event?->image_url,
+            $event?->name,
+            $this->quote->description ?? $event?->description,
+            $event?->image_url,
             $this->quote->reference,
             $this->quote->organization,
             $this->quote->date_from,

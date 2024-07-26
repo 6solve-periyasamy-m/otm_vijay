@@ -121,7 +121,7 @@
                     <td>{{ $inventory->external_notes }}</td>
                     <td class="actions-4">
                         @can('read', \App\Models\Transport\TransportInventory::class)
-                            <a href="{{route('transport-inventories.manifest.view', ['transport' => $transport, 'transportInventory' => $inventory,])}}"
+                            <a href="{{route('transport-inventories.manifest.view', ['transport' => $transport, 'inventory' => $inventory,])}}"
                                class="btn btn-outline-secondary btn-sm mb-1" title="Manifest">
                                 {{ Icon::list() }}
                             </a>
@@ -131,7 +131,7 @@
                             </span>
                         @endcan
                         @can('create', \App\Models\Transport\TransportInventory::class)
-                            <a href="{{route('transport-inventories.duplicate', ['transport' => $transport, 'transportInventory' => $inventory,])}}"
+                            <a href="{{route('transport-inventories.duplicate', ['transport' => $transport, 'inventory' => $inventory,])}}"
                                class="btn btn-outline-blue btn-sm mb-1"  title="Copy">
                                 {{ Icon::copy() }}
                             </a>
@@ -141,7 +141,7 @@
                         </span>
                         @endcan
                         @can('update', \App\Models\Transport\TransportInventory::class)
-                            <a href="{{route('transport-inventories.edit', ['transport' => $transport, 'transportInventory' => $inventory,])}}"
+                            <a href="{{route('transport-inventories.edit', ['transport' => $transport, 'inventory' => $inventory,])}}"
                                class="btn btn-sm btn-outline-success mb-1"  title="Edit">
                                 {{ Icon::edit() }}
                             </a>
@@ -156,7 +156,7 @@
                                 {{ Icon::delete() }}
                             </a>
                             <form id="transportInventory-{{ $inventory->id }}-delete"
-                                  action="{{ route('transport-inventories.delete', ['transport' => $transport, 'transportInventory' => $inventory,]) }}"
+                                  action="{{ route('transport-inventories.delete', ['transport' => $transport, 'inventory' => $inventory,]) }}"
                                   method="POST" style="display: none;">{{ csrf_field() }}</form>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1"  title="Delete">

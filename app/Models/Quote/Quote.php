@@ -168,7 +168,15 @@ class Quote extends Model
 
     public function taxBracket(): TaxBracket|null
     {
-        return $this->bracket ?? $this->event?->taxBracket() ?? $this->brand?->taxBracket();
+        $event = is_array($this->event) ? new Event($this->event) : $this->event;
+        $bracket = $this->bracket ?? $event?->taxBracket() ?? $this->brand?->taxBracket();
+        if ($bracket === null || $bracket instanceof TaxBracket) {
+            return $bracket;
+        }
+        if (is_array($bracket)) {
+            return new TaxBracket($bracket);
+        }
+        return null;
     }
 
     public function organization(): BelongsTo

@@ -37,7 +37,7 @@ class FlightInventoryController extends Controller
 
     public function manifest(Flight $flight, FlightInventory $flightInventory)
     {
-        return FlightManifestRepository::viewReport($flightInventory->repository, 'flight-inventories.manifest.export', ['flight' => $flight, 'flightInventory' => $flightInventory]);
+        return FlightManifestRepository::viewReport($flightInventory->repository, 'flight-inventories.manifest.export', ['flight' => $flight, 'inventory' => $flightInventory]);
     }
 
     public function export(Flight $flight, FlightInventory $flightInventory, string $extension = 'xlsx')

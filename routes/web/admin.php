@@ -27,8 +27,7 @@ Route::prefix('password')->name('password.')->group(function () {
     Route::post('/reset', [AuthenticationController::class, 'resetPassword'])->name('reset');
 });
 
-
-//Auth::routes(['verify' => true, 'register' => false]);
+Route::emailVerification();
 
 Route::middleware('auth:web')->group(function () {
 
