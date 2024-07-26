@@ -638,4 +638,23 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         }
         return $hotels;
     }
+
+    public function getRooms(): array
+    {
+        $rooms = [];
+        foreach ($this->tour->accommodationInventoryTours as $inventoryTour) {
+            $name = $inventoryTour->inventory->component->name . ' - ' . $inventoryTour->inventory->boardType . ' - ' . $inventoryTour->inventory->roomType;
+            if ($inventoryTour->tour_component_type !== 'Included') {
+                $cost = $inventoryTour->tour_sales_price;
+                if ($cost > 0) {
+                    $name .= ' (+' . f_currency($cost) . ')';
+                }
+                if ($cost < 0) {
+                    $name .= ' (-' . f_currency($cost*-1) . ')';
+                }
+            }
+            $rooms[$inventoryTour->id] = $name;
+        }
+        return $rooms;
+    }
 }

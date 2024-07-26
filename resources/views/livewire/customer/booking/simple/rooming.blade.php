@@ -120,10 +120,9 @@
                         <div class="form-field">
                             <select wire:model="rooms.{{$x}}.room" name="bedding_configuration">
                                 <option value="" selected disabled>Bedding Configuration</option>
-                                <option value="1">Parkroyd - Deluxe - Double Room</option>
-                                <option value="2">Parkroyd - Deluxe - Twin Room</option>
-                                <option value="1">Parkroyd - Superior - Double Room (+£250)</option>
-                                <option value="2">Parkroyd - Superior - Twin Room (+£250)</option>
+                                @foreach($this->tour->repository->getRooms() as $id => $name)
+                                    <option value="{{$id}}">{{ $name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-field">
