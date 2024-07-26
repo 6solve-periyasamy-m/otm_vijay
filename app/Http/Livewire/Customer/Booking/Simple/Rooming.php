@@ -14,6 +14,7 @@ class Rooming extends Component
     public Tour|int $tour;
     public Booking|int|null $booking;
     public BookingTraveller|null $lead = null;
+    public array $rooms = [];
 
     public function mount(Tour|int $tour, Booking|int|null $booking = null): void
     {
@@ -34,6 +35,7 @@ class Rooming extends Component
             $this->booking->lead_traveller_id = $this->lead->id;
             $this->booking->save();
         }
+        $this->validateRoomCount();
     }
 
     public function getTravellerCount(): int
@@ -45,12 +47,14 @@ class Rooming extends Component
     {
         if ($this->booking->travellers()->count() >= 7) { return; }
         $this->booking->repository->addUnknownTraveller();
+        $this->validateRoomCount();
         $this->render();
     }
 
     public function removeTraveller(): void
     {
         $this->booking->repository->removeUnknownTraveller();
+        $this->validateRoomCount();
         $this->render();
     }
 
@@ -67,6 +71,38 @@ class Rooming extends Component
         ]);
     }
 
+    public function addRoom(): void
+    {
+        if (count($this->rooms) >= $this->getMaximumRooms()) { return; }
+        $this->rooms[] = ['room' => null, 'travellers' => null,];
+    }
+
+    public function removeRoom(): void
+    {
+        if ((count($this->rooms) - 1) < $this->getMinimumRooms()) { return; }
+        unset($this->rooms[count($this->rooms) - 1]);
+    }
+
+    public function validateRoomCount(): void
+    {
+        for ($i = count($this->rooms); $i < $this->getMinimumRooms(); $i++) {
+            $this->rooms[] = ['room' => null, 'travellers' => null,];
+        }
+        for ($i = count($this->rooms) - 1; $i >= $this->getMaximumRooms(); $i--) {
+            unset($this->rooms[$i]);
+        }
+    }
+
+    public function getMinimumRooms(): int
+    {
+        return (int)ceil($this->getTravellerCount() / 2);
+    }
+
+    public function getMaximumRooms(): int
+    {
+        return $this->getTravellerCount();
+    }
+
     public function render()
     {
         return view('livewire.customer.booking.simple.rooming');
@@ -79,6 +115,8 @@ class Rooming extends Component
             'lead.last_name' => 'required|string',
             'lead.email_address' => 'required|email:rfc,dns',
             'lead.mobile_number' => 'required|phone:INTERNATIONAL',
+            'rooms.*.room' => 'required|integer',
+            'rooms.*.travellers' => 'required|integer|min:1',
         ];
     }
 }

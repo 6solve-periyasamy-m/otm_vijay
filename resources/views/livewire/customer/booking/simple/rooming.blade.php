@@ -27,7 +27,8 @@
                                 let iti = window.setupPhoneField(input);
 
                                 jQuery(input).on('change', function (event) {
-                                    @this.set('lead.mobile_number', iti.getNumber());
+                                    @this.
+                                    set('lead.mobile_number', iti.getNumber());
                                 });
                                 document.addEventListener('updateValue', function (event) {
                                     if (event.detail.key === 'lead.mobile_number') {
@@ -57,7 +58,9 @@
                     </div>
                 </div>
                 <div class="contain">
-                    <p>Travelling with children?<a href="https://www.kpt.com.au/contact-us/" target="_blank">Get in touch</a> for a custom package.</p>
+                    <p>Travelling with children?<a href="https://www.kpt.com.au/contact-us/" target="_blank">Get in
+                                                                                                             touch</a>
+                       for a custom package.</p>
                 </div>
             </div>
             <hr>
@@ -94,38 +97,43 @@
                     </div>
                     <div class="right">
                         <div class="inn">
-                            <span class="Min"><img src="{{ asset('css/booking/icon/minus.svg') }}" alt="minus"></span>
-                            <span class="No"><span>|</span> <span class="text">1</span> <span>|</span></span>
-                            <span class="Max"><img src="{{ asset('css/booking/icon/Plus.svg') }}" alt="minus"></span>
+                            <span class="Min" wire:click="removeRoom"><img src="{{ asset('css/booking/icon/minus.svg') }}" alt="minus"></span>
+                            <span class="No"><span>|</span> <span class="text">{{ count($this->rooms) }}</span> <span>|</span></span>
+                            <span class="Max" wire:click="addRoom"><img src="{{ asset('css/booking/icon/Plus.svg') }}" alt="minus"></span>
                         </div>
                     </div>
                 </div>
                 <div class="contain">
-                    <p>Can't find what you're looking for?<a href="https://www.kpt.com.au/contact-us/" target="_blank">Get in touch</a> for a custom package.</p>
+                    <p>Can't find what you're looking for?<a href="https://www.kpt.com.au/contact-us/" target="_blank">Get
+                                                                                                                       in
+                                                                                                                       touch</a>
+                       for a custom package.</p>
                 </div>
             </div>
             <div class="third-block">
-                <div class="first-bl">
-                    <div class="inn">
-                        <h6>Room 1</h6>
+                @for($x = 0, $xMax = count($rooms); $x < $xMax; $x++)
+                    <div class="first-bl">
+                        <div class="inn">
+                            <h6>Room {{ $x + 1 }}</h6>
+                        </div>
+                        <div class="form-field">
+                            <select wire:model="rooms.{{$x}}.room" name="bedding_configuration">
+                                <option value="" selected disabled>Bedding Configuration</option>
+                                <option value="1">Parkroyd - Deluxe - Double Room</option>
+                                <option value="2">Parkroyd - Deluxe - Twin Room</option>
+                                <option value="1">Parkroyd - Superior - Double Room (+£250)</option>
+                                <option value="2">Parkroyd - Superior - Twin Room (+£250)</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <select wire:model="rooms.{{$x}}.travellers" name="pax_number">
+                                <option value="" selected disabled>Number of Travellers</option>
+                                <option value="1">1 Traveller</option>
+                                <option value="2">2 Travellers</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-field">
-                        <select id="bedding_configuration" name="bedding_configuration">
-                            <option selected disabled>Bedding Configuration</option>
-                            <option value="1">Parkroyd - Deluxe - Double Room</option>
-                            <option value="2">Parkroyd - Deluxe - Twin Room</option>
-                            <option value="1">Parkroyd - Superior - Double Room (+£250)</option>
-                            <option value="2">Parkroyd - Superior - Twin Room (+£250)</option>
-                        </select>
-                    </div>
-                    <div class="form-field">
-                        <select id="pax_number" name="pax_number">
-                            <option selected disabled>Number of Travellers</option>
-                            <option value="1">1 Traveller</option>
-                            <option value="2">2 Travellers</option>
-                        </select>
-                    </div>
-                </div>
+                @endfor
             </div>
         </div>
     </div>
