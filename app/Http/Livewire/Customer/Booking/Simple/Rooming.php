@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Customer\Booking\Simple;
 
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
+use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Booking\BookingRepository;
 use Livewire\Component;
@@ -33,6 +34,24 @@ class Rooming extends Component
             $this->booking->lead_traveller_id = $this->lead->id;
             $this->booking->save();
         }
+    }
+
+    public function getTravellerCount(): int
+    {
+        return $this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count();
+    }
+
+    public function addTraveller(): void
+    {
+        if ($this->booking->travellers()->count() >= 7) { return; }
+        $this->booking->repository->addUnknownTraveller();
+        $this->render();
+    }
+
+    public function removeTraveller(): void
+    {
+        $this->booking->repository->removeUnknownTraveller();
+        $this->render();
     }
 
     public function proceed()

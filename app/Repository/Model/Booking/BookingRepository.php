@@ -14,6 +14,9 @@ use App\Models\Booking\BookingGroup;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Group;
 use App\Models\Flight\FlightInventoryTour;
+use App\Models\Helper\Enum\AddressParent;
+use App\Models\Helper\Enum\BookingTravellerRole;
+use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\System\FellohLink;
@@ -554,5 +557,30 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     public function getBasePrice(): float
     {
         return $this->booking->tour->base_price_per_person * $this->booking->travellers()->count();
+    }
+
+    public function addUnknownTraveller(): BookingTraveller
+    {
+        $homeAddress = Address::create(['name' => 'Unknown Traveller - Home Address', 'parent' => AddressParent::CUSTOMER,]);
+        $billingAddress = Address::create(['name' => 'Unknown Traveller - Billing Address', 'parent' => AddressParent::CUSTOMER,]);
+        $traveller = $this->booking->travellers()->create([
+            'first_name' => 'Unknown',
+            'last_name' => 'Traveller',
+            'role' => BookingTravellerRole::UNKNOWN,
+            'home_address_id' => $homeAddress->id,
+            'billing_address_id' => $billingAddress->id,
+        ]);
+        // Primary traveller may not be lead booker
+        $primary = $this->booking->travellers()->where('role', '=', BookingTravellerRole::NORMAL)->first();
+        foreach (($primary?->repository->getComponents(false) ?? []) as $component) {
+            $component->getTourComponent()->grantToBookingTraveller($traveller);
+        }
+        return $traveller;
+    }
+
+    public function removeUnknownTraveller(): void
+    {
+        $traveller = $this->booking->travellers()->where('role', '=', BookingTravellerRole::UNKNOWN)->first();
+        $traveller?->repository->delete();
     }
 }

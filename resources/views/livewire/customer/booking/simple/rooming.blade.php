@@ -40,6 +40,7 @@
                     @error('lead.mobile_number') <label class="error-label">{{ $message }}</label> @enderror
                 </div>
             </div>
+            <!-- <- Additional Travellers -->
             <div class="second-block tra-det">
                 <p>TRAVELLERS</p>
                 <div class="inner-block">
@@ -49,9 +50,9 @@
                     </div>
                     <div class="right">
                         <div class="inn">
-                            <span class="Min"><img src="{{ asset('css/booking/icon/minus.svg') }}" alt="minus"></span>
-                            <span class="No"><span>|</span> <span class="text">1</span> <span>|</span></span>
-                            <span class="Max"><img src="{{ asset('css/booking/icon/Plus.svg') }}" alt="minus"></span>
+                            <button class="Min" wire:click="removeTraveller()"><img src="{{ asset('css/booking/icon/minus.svg') }}" alt="minus" /></button>
+                            <span class="No"><span>|</span> <span class="text">{{ $this->getTravellerCount() }}</span> <span>|</span></span>
+                            <button class="Max" wire:click="addTraveller()"><img src="{{ asset('css/booking/icon/Plus.svg') }}" alt="minus" /></button>
                         </div>
                     </div>
                 </div>
@@ -60,6 +61,7 @@
                 </div>
             </div>
             <hr>
+            <!-- <- Rooming -->
             <div class="second-block rme-det">
                 <h3>Your room details</h3>
                 <p>ROOMS</p>

@@ -123,44 +123,6 @@ jQuery(document).ready(function () {
         }
     });
 
-    jQuery('.tra-det .inner-block .right .inn .Max').click(function () {
-        let textval = jQuery(this).closest('.inn').find('.No .text');
-        let text = parseInt(textval.text());
-        if (text < 7) {
-            textval.text(text + 1);
-            updateRooms(text + 1);
-        }
-    });
-
-    jQuery('.rme-det .inner-block .right .inn .Min').click(function () {
-        let textval = jQuery(this).closest('.inn').find('.No .text');
-        let text = parseInt(textval.text());
-
-        if (text > minRooms) {
-            textval.text(text - 1);
-            let roomCount = jQuery('.third-block .first-bl').length;
-            if (roomCount > 1) {
-                jQuery('.third-block .first-bl:last').remove();
-                updateRoomNumbers(text - 1);
-            } else {
-                jQuery('.third-block .first-bl:first').hide();
-            }
-        }
-    });
-
-    jQuery('.rme-det .inner-block .right .inn .Max').click(function () {
-        let textval = jQuery(this).closest('.inn').find('.No .text');
-        let text = parseInt(textval.text());
-
-        if (text < maxRooms) {
-            textval.text(text + 1);
-            let newRoom = jQuery('.third-block .first-bl:first').clone();
-            clearSelectedValues(newRoom);
-            newRoom.appendTo('.third-block');
-            updateRoomNumbers(text + 1);
-        }
-    });
-
     //check box right colm
     jQuery('.right-col .third-col .additional-block .form-field-checkbox').click(function () {
         jQuery('.right-col .third-col .additional-block .form-field-checkbox .left-ass input').prop('checked', false);

@@ -456,6 +456,10 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     cursor: pointer;
 }
 
+.ma-block .row .left-col .contain .second-block .inner-block .right .inn > div {
+    cursor: pointer;
+}
+
 .ma-block .row .left-col .contain .second-block .contain p {
     background: #F4F4F4;
     padding: 10px 16px;
