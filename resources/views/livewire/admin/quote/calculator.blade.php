@@ -177,7 +177,7 @@
                 </div>
             </div>
             <div class="col-6 row">
-                <x-livewire.input wire:model.debounce.300ms="marked_up_price" label="Price per Person" width="4" />
+                <x-livewire.input wire:model.debounce.300ms="marked_up_price" key="marked_up_price" label="Price per Person" width="4" />
                 <div class="col-4">
                     <label></label>
                     <button class="btn-warning" wire:click="updatePricePoint()">Update Single Price Point</button>
@@ -189,11 +189,11 @@
             </div>
         </div>
     </x-admin.section.card>
-</div>
-<script type="text/javascript">
-    function confirmAndSend() {
-        if (confirm('Are you sure you want to resend email?')) {
-            Livewire.emit('sendEmail');
+    <script type="text/javascript">
+        function confirmAndSend() {
+            if (confirm('Are you sure you want to resend email?')) {
+                Livewire.emit('sendEmail');
+            }
         }
-    }
-</script>
+    </script>
+</div>
