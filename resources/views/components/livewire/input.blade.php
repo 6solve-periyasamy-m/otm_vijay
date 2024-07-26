@@ -17,7 +17,7 @@
                 <span class="input-group-text">{{ $attributes->get('prepend') }}</span>
             </div>
         @endif
-        <input {{ ($disabled ?? false) ? 'disabled' : '' }} wire:change="inputChanged({{$attributes->get('wire:model', null)}})" {{ $attributes->class(['form-control', ...($classes ?? [])])->except(['width', 'label', 'prepend', 'append','disabled']) }} />
+        <input {{ ($disabled ?? false) ? 'disabled' : '' }} wire:change="inputChanged('{{$attributes->get("wire:model", $attributes->get("key", null))}}')" {{ $attributes->class(['form-control', ...($classes ?? [])])->except(['width', 'label', 'prepend', 'append','disabled']) }} />
         @if($attributes->has('append'))
             <div class="input-group-append">
                 <span class="input-group-text">{{ $attributes->get('append') }}</span>

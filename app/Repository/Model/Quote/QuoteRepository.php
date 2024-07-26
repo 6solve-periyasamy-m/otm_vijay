@@ -720,7 +720,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'merchandise' => $merchandise,
             'sections' => $sections,
             'leadTraveller' => $lead,
-            'event' => !empty($quote->event) ? new Event($quote->event) : null,
+            'event' => is_array($quote->event) ? new Event($quote->event) : $quote->event,
         ]);
         return $quote;
     }

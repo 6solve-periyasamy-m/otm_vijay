@@ -64,6 +64,11 @@ class Calculator extends Component
 
     public function inputChanged(?string $key = null): void
     {
+        if ($key === 'marked_up_price') {
+            $companyCostTravellers = ($this->paying + $this->travelling + ($this->leadTravelling()));
+            $costPerPerson = $companyCostTravellers > 0 ? sigfig($this->costToCompany / $companyCostTravellers) : 0;
+            $this->markup = sigfig(((($this->marked_up_price - $costPerPerson)/$costPerPerson) * 100), 2, true);
+        }
         $this->calculate();
     }
 

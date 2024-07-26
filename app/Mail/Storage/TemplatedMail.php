@@ -91,8 +91,6 @@ abstract class TemplatedMail
      */
     final public function send(string|null $email, $model = null, array $attachments = [], bool $force = false): bool
     {
-        \Log::info(flag('system.mail.enabled', true) ? "Mail Enabled" : "Mail Disabled");
-        \Log::info(setting('system.mail.enabled'));
         if (!$force && !flag('system.mail.enabled', true)) {
             throw new MailDisabledException('Sending Emails is disabled on this system');
         }
