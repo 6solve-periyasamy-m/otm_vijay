@@ -60,11 +60,11 @@ class Rooming extends Component
 
     public function proceed()
     {
-        // TODO: Implement Rooming
         $this->validate();
         $this->lead->save();
         $this->booking->lead_traveller_id = $this->lead->id;
         $this->booking->save();
+        $this->booking->repository->setupSimpleRooming($this->rooms);
         return redirect()->route('booking.simple.checkout', [
             'token' => $this->booking->token,
             'tour' => $this->tour->booking_form_url,

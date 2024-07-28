@@ -7,6 +7,7 @@ use App\Exceptions\RemoteGatewayError;
 use App\Exceptions\RoomingFailedException;
 use App\Exceptions\UnauthorizedGatewayException;
 use App\Http\Gateways\Storage\LineItem;
+use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\RoomType;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Booking\Booking;
@@ -582,5 +583,25 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     {
         $traveller = $this->booking->travellers()->where('role', '=', BookingTravellerRole::UNKNOWN)->first();
         $traveller?->repository->delete();
+    }
+
+    /**
+     * @param array<array{room: int, travellers: int}> $rooming
+     * @return void
+     */
+    public function setupSimpleRooming(array $rooming): void
+    {
+        $key = -1;
+        $group = null;
+        foreach ($this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->get() as $traveller) {
+            if ($group === null || $rooming[$key]['travellers'] === 0) {
+                $key++;
+                $group = new BookingGroup(['booking_id' => $this->booking->id,]);
+                $group->repository->addRoomToGroup(AccommodationInventoryTour::find($rooming[$key]['room']));
+            }
+            if ($key >= count($rooming)) { break; }
+            $group->repository->addTravellerToGroup($traveller);
+            --$rooming[$key]['travellers'];
+        }
     }
 }
