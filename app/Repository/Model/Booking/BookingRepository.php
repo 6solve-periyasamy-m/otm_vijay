@@ -33,6 +33,9 @@ use App\Repository\Storage\Rooming\RemoteBookingGroup;
 use Carbon\Carbon;
 use DB;
 use Gateway;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 use Log;
 use Throwable;
 
@@ -613,5 +616,20 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             $group->repository->addTravellerToGroup($traveller);
             --$rooming[$key]['travellers'];
         }
+    }
+
+    /**
+     * @throws RemoteGatewayError
+     * @throws UnauthorizedGatewayException
+     */
+    public function getCheckoutLink(float $amount): string|null
+    {
+        $gateway = Gateway::getDefaultGateway();
+        $item = new LineItem("Deposit for Booking from {$this->booking->leadTraveller->full_name}", $amount);
+        $intention = PaymentIntention::build($this->booking->leadTraveller->customer, $this->booking->token, 'Deposit');
+
+        $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
+
+        return $gateway?->checkout([$item,], $intention, $this->booking->leadTraveller, $redirect);
     }
 }

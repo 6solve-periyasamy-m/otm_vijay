@@ -85,10 +85,10 @@
                 <x-customer.booking.simple.package-details :booking="$booking" :tour="$this->booking->tour">
                     <div class="additional-block" id="">
                         <h6>Payment method</h6>
-                        <div class="form-field-checkbox">
+                        <div class="form-field-checkbox" wire:click="setPayFull(1)">
                             <div class="left-ass">
                                 <label class="containr"><span class="txt">Pay in full</span>
-                                    <input type="checkbox">
+                                    <input type="checkbox" @if($payFull) checked @endif>
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -96,7 +96,7 @@
                                 <p>{{ f_currency($booking->repository->getTotalCost()) }}</p>
                             </div>
                         </div>
-                        <div class="form-field-checkbox">
+                        <div class="form-field-checkbox" wire:click="setPayFull(0)">
                             <div class="left-ass">
                                 <label class="containr">
                                 <span class="txt">
@@ -105,7 +105,7 @@
                                         You will receive a reminder to pay the balance amount before {{ f_date($booking->tour->final_payment) }}
                                     </span>
                                 </span>
-                                    <input type="checkbox">
+                                    <input type="checkbox" @if(!$payFull) checked @endif>
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -128,7 +128,7 @@
                     <div class="wh-las-cls-con">
                         <div class="acc-tp-cond">
                             <label class="contain-v"><span class="fnal-txt">I accept the <a href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">Terms & Conditions</a></span>
-                                <input type="checkbox">
+                                <input type="checkbox" wire:model="terms">
                                 <span class="checkmark"></span>
                             </label>
                         </div>

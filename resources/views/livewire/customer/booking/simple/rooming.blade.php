@@ -127,7 +127,6 @@
                         </div>
                         <div class="form-field">
                             <select wire:model="rooms.{{$x}}.travellers" name="pax_number">
-                                <option value="" selected disabled>Number of Travellers</option>
                                 <option value="1">1 Traveller</option>
                                 <option value="2">2 Travellers</option>
                             </select>
