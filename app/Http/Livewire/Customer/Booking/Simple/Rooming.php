@@ -11,6 +11,11 @@ use Livewire\Component;
 
 class Rooming extends Component
 {
+    protected $messages = [
+        'rooms.*.room.required' => "This field is required",
+        'rooms.*.travellers.required' => "This field is required",
+    ];
+
     public Tour|int $tour;
     public Booking|int|null $booking;
     public BookingTraveller|null $lead = null;
@@ -74,7 +79,7 @@ class Rooming extends Component
     public function addRoom(): void
     {
         if (count($this->rooms) >= $this->getMaximumRooms()) { return; }
-        $this->rooms[] = ['room' => null, 'travellers' => null,];
+        $this->rooms[] = ['room' => $this->tour->repository->getDefaultRoom(), 'travellers' => 2,];
     }
 
     public function removeRoom(): void
@@ -86,7 +91,7 @@ class Rooming extends Component
     public function validateRoomCount(): void
     {
         for ($i = count($this->rooms); $i < $this->getMinimumRooms(); $i++) {
-            $this->rooms[] = ['room' => null, 'travellers' => null,];
+            $this->rooms[] = ['room' => $this->tour->repository->getDefaultRoom(), 'travellers' => 2,];
         }
         for ($i = count($this->rooms) - 1; $i >= $this->getMaximumRooms(); $i--) {
             unset($this->rooms[$i]);

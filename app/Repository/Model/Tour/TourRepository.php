@@ -657,4 +657,12 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         }
         return $rooms;
     }
+
+    public function getDefaultRoom(): int|null
+    {
+        foreach ($this->getRooms() as $key => $name) {
+            return $key;
+        }
+        return null;
+    }
 }

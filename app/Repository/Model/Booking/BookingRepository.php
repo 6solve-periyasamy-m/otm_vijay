@@ -54,6 +54,17 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         return Booking::make(['token' => $token, 'tour_id' => $tour->id]);
     }
 
+    public function makeTraveller(array $details): BookingTraveller
+    {
+        $homeAddress = Address::create(['name' => 'Booking Traveller - Home Address', 'parent' => AddressParent::CUSTOMER,]);
+        $billingAddress = Address::create(['name' => 'Booking Traveller - Billing Address', 'parent' => AddressParent::CUSTOMER,]);
+        return $this->booking->travellers()->make([
+            'home_address_id' => $homeAddress->id,
+            'billing_address_id' => $billingAddress->id,
+            ...$details,
+        ]);
+    }
+
     public function upgradeActivityForAll(ActivityInventoryTour $from, ActivityInventoryTour $to): bool
     {
         if (!$to->repository->hasEnoughStock($this->booking->travellers()->count())) return false;
@@ -562,15 +573,12 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
 
     public function addUnknownTraveller(): BookingTraveller
     {
-        $homeAddress = Address::create(['name' => 'Unknown Traveller - Home Address', 'parent' => AddressParent::CUSTOMER,]);
-        $billingAddress = Address::create(['name' => 'Unknown Traveller - Billing Address', 'parent' => AddressParent::CUSTOMER,]);
-        $traveller = $this->booking->travellers()->create([
+        $traveller = $this->makeTraveller([
             'first_name' => 'Unknown',
             'last_name' => 'Traveller',
             'role' => BookingTravellerRole::UNKNOWN,
-            'home_address_id' => $homeAddress->id,
-            'billing_address_id' => $billingAddress->id,
         ]);
+        $traveller->save();
         // Primary traveller may not be lead booker
         $primary = $this->booking->travellers()->where('role', '=', BookingTravellerRole::NORMAL)->first();
         foreach (($primary?->repository->getComponents(false) ?? []) as $component) {
@@ -591,12 +599,14 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
      */
     public function setupSimpleRooming(array $rooming): void
     {
+        $this->booking->groups()->delete();
         $key = -1;
         $group = null;
         foreach ($this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->get() as $traveller) {
             if ($group === null || $rooming[$key]['travellers'] === 0) {
                 $key++;
                 $group = new BookingGroup(['booking_id' => $this->booking->id,]);
+                $group->save();
                 $group->repository->addRoomToGroup(AccommodationInventoryTour::find($rooming[$key]['room']));
             }
             if ($key >= count($rooming)) { break; }
