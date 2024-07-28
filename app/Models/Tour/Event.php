@@ -65,16 +65,6 @@ class Event extends Model
     protected $guarded = [];
     protected $casts = ['starts_at' => 'date', 'ends_at' => 'date', 'event_category' => EventType::class,];
 
-    public static function getValidationRules(): array
-    {
-        return [
-            'name' => 'required',
-            'image' => 'nullable|image',
-            'starts_at' => 'required|date',
-            'ends_at' => 'required|date',
-        ];
-    }
-
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class, 'brand_id');
