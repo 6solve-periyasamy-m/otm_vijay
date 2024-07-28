@@ -25,7 +25,7 @@ class EventController extends Controller
         $event = Event::create($request->getData());
 
         if ($request->image !== null) {
-            $event->image_url = $request->image->storePublicly('uploads/images');
+            $event->image_url = store_file($request->image);
         }
         $event->save();
         return redirect()->route('events.view', ['event' => $event,]);
@@ -46,7 +46,7 @@ class EventController extends Controller
         $event->update($request->getData());
 
         if ($request->image !== null) {
-            $event->image_url = $request->image->storePublicly('uploads/images');
+            $event->image_url = store_file($request->image, $event->image_url);
         }
         $event->save();
         return redirect()->route('events.view', ['event' => $event,]);

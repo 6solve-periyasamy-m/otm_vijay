@@ -29,17 +29,23 @@
                 <div class="col-12">
                     <h4 class="fw-bold">{{ $event->name }}</h4>
                 </div>
-                <div class="col-12 col-xl-4">
+                <div class="col-12 col-xl-6">
                     <p>Booking URL</p>
                     <h6 class="fw-bold">
                         {{ $event->booking_url ?? 'No Booking URL Set' }}
                     </h6>
                 </div>
-                <div class="col-12 col-xl-4">
+                <div class="col-12 col-xl-6">
+                    <p>Category</p>
+                    <h6 class="fw-bold">
+                        {{ $event->event_category->label() }}
+                    </h6>
+                </div>
+                <div class="col-12 col-xl-6">
                     <p>From</p>
                     <h6 class="fw-bold">{{ f_date($event->starts_at) }}</h6>
                 </div>
-                <div class="col-12 col-xl-4">
+                <div class="col-12 col-xl-6">
                     <p>To</p>
                     <h6 class="fw-bold">{{ f_date($event->ends_at) }}</h6>
                 </div>

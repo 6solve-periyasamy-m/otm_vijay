@@ -39,7 +39,9 @@ class EventRequest extends FormRequest
     public function prepareForValidation(): void
     {
         if ($this->brand_id <= 0) {
-            $this->brand_id = null;
+            $this->merge([
+                'brand_id' => null,
+            ]);
         }
     }
 

@@ -48,7 +48,7 @@
             @include('partials.sidebar')
             <div id="container" class=' py-md-3 px-md-4 otm-content'>
                 <div id="content" class="w-100">
-                    @if ($showErrors && $errors->any())
+                    @if (($showErrors ?? true) && $errors->any())
                         @foreach ($errors->all() as $error)
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 {{ $error }}
