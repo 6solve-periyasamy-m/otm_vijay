@@ -30,8 +30,13 @@
                 <p>Booking URL</p>
                 <h6 class="fw-bold">
                     @if(isset($tour->booking_form_url))
-                        <a target="_blank"
-                           href="{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,]) }}">{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,]) }}</a>
+                        @if(config('app.features.kpt', config('app.features.bleeding-edge', false)))
+                            <a target="_blank"
+                               href="{{ route('booking.simple.index', ['bookingUrl' => $tour->booking_form_url,]) }}">{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,]) }}</a>
+                        @else
+                            <a target="_blank"
+                               href="{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,]) }}">{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,]) }}</a>
+                        @endif
                     @else
                         No Booking URL set
                     @endif
