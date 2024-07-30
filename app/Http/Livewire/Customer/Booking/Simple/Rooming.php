@@ -63,13 +63,17 @@ class Rooming extends Component
         $this->render();
     }
 
+    public function setupRooming(): void
+    {
+        $this->booking->repository->setupSimpleRooming($this->rooms);
+    }
+
     public function proceed()
     {
         $this->validate();
         $this->lead->save();
         $this->booking->lead_traveller_id = $this->lead->id;
         $this->booking->save();
-        $this->booking->repository->setupSimpleRooming($this->rooms);
         return redirect()->route('booking.simple.checkout', [
             'token' => $this->booking->token,
             'tour' => $this->tour->booking_form_url,
@@ -96,6 +100,7 @@ class Rooming extends Component
         for ($i = count($this->rooms) - 1; $i >= $this->getMaximumRooms(); $i--) {
             unset($this->rooms[$i]);
         }
+        $this->setupRooming();
     }
 
     public function getMinimumRooms(): int

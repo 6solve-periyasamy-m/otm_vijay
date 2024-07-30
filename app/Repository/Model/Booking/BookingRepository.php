@@ -602,12 +602,13 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
      */
     public function setupSimpleRooming(array $rooming): void
     {
-        $this->booking->groups()->delete();
+        $this->wipeGroups();
         $key = -1;
         $group = null;
         foreach ($this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->get() as $traveller) {
             if ($group === null || $rooming[$key]['travellers'] === 0) {
                 $key++;
+                if ($key >= count($rooming)) { break; }
                 $group = new BookingGroup(['booking_id' => $this->booking->id,]);
                 $group->save();
                 $group->repository->addRoomToGroup(AccommodationInventoryTour::find($rooming[$key]['room']));
