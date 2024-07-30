@@ -49,7 +49,7 @@
         @endif
         @if($booking->repository->getTaxes() !== null)
             <li>
-                <p class="txt">{{ $tour->taxBracket()->name }}</p>
+                <p class="txt">{{ $tour->taxBracket()->name }} (Included)</p>
                 <p class="price">{{ f_currency($booking->repository->getTaxes()) }}</p>
             </li>
         @endif
