@@ -11,6 +11,8 @@ use Livewire\Component;
 
 class Rooming extends Component
 {
+    private const MAX_TRAVELLERS = 7;
+
     protected $messages = [
         'rooms.*.room.required' => "This field is required",
         'rooms.*.travellers.required' => "This field is required",
@@ -50,7 +52,7 @@ class Rooming extends Component
 
     public function addTraveller(): void
     {
-        if ($this->booking->travellers()->count() >= 7) { return; }
+        if ($this->booking->travellers()->count() >= self::MAX_TRAVELLERS) { return; }
         $this->booking->repository->addUnknownTraveller();
         $this->validateRoomCount();
         $this->render();
