@@ -84,7 +84,9 @@
                         </div>
                     </div>
                 </div>
-                {{ $tour->description }}
+                <div style="margin: 2rem;">
+                    {{ $tour->description }}
+                </div>
             </div>
             <div class="close-btn" data-action="close">
                 {{ Icon::solid('xmark') }}
