@@ -149,7 +149,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     public function getDueTodayAmount(): float
     {
         $travellers = $this->booking->travellers()->count();
-        $upfront = ($this->booking->tour->booking_fee ?? 0) + (($this->booking->tour->deposit ?? 0) * $travellers);
+        $upfront = ($this->booking->tour->booking_fee ?? 0.0) + (($this->booking->tour->deposit_amount ?? 0.0) * $travellers);
         if (flag('installments.force', false)) {
             if ($this->booking->tour->final_payment->isBefore(now())) {
                 return $this->getTotalCost();
