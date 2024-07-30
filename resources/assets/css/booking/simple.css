@@ -878,7 +878,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--text-dark)BF;
+    background-color: rgba(0,0,0,0.5);
     width: 100%;
     height: 100%;
     padding: 0;
