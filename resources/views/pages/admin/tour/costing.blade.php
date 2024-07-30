@@ -48,11 +48,11 @@ $profit = $revenue - $costOfTour;
             <div class="col-12 col-xl-4">
                 <p>Booking URL</p>
                 <h6 class="fw-bold">
-                    @isset($tour->booking_form_url)
-                        <a href="{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,]) }}">{{$tour->booking_form_url}}</a>
+                    @if($tour->getBookingFormUrl() !== null)
+                        <a href="{{ $tour->getBookingFormUrl() }}">{{$tour->getBookingFormUrl()}}</a>
                     @else
                         No Booking URL Set
-                    @endisset
+                    @endif
                 </h6>
             </div>
             <div class="col-12 col-xl-2">

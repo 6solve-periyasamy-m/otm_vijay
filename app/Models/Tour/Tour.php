@@ -388,6 +388,24 @@ class Tour extends Model
         return $this->repository->getTemplateData();
     }
 
+    public function getBookingFormUrl(Booking|null $booking = null, bool $checkout = false): string|null
+    {
+        if ($this->booking_form_url === null) {
+            return null;
+        }
+        if (config('app.features.bleeding-edge')) {
+            if ($checkout && $booking !== null) {
+                return route('booking.simple.checkout', ['tour' => $this->booking_form_url, 'token' => $booking?->token]);
+            }
+            return route('booking.simple.index', ['tour' => $this->booking_form_url, 'token' => $booking?->token]);
+        }
+
+        if ($checkout && $booking !== null) {
+            return route('customer-booking.summary', ['bookingUrl' => $this->booking_form_url, 'token' => $booking?->token]);
+        }
+        return route('customer-booking.index', ['bookingUrl' => $this->booking_form_url, 'token' => $booking?->token]);
+    }
+
     public function getProtectedAttribute(): bool
     {
         return $this->atol_protected ?? flag('atol.enabled', true);
