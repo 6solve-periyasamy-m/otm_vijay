@@ -124,7 +124,7 @@
                             {{ $component->repository->__toString() }}
                         </td>
                         <td>
-                            {{ $componentRepository->getQuantity() ?? "All Travellers" }}
+                            {{ $component->repository->getQuantity() ?? "All Travellers" }}
                         </td>
                         <td>
                             {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
@@ -183,7 +183,7 @@
                             {{ $component->repository->__toString() }}
                         </td>
                         <td>
-                            {{ $componentRepository->getQuantity() ?? "All Travellers" }}
+                            {{ $component->repository->getQuantity() ?? "All Travellers" }}
                         </td>
                         <td>
                             {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
@@ -242,7 +242,7 @@
                             {{ $component->repository->__toString() }}
                         </td>
                         <td>
-                            {{ $componentRepository->getQuantity() ?? "All Travellers" }}
+                            {{ $component->repository->getQuantity() ?? "All Travellers" }}
                         </td>
                         <td>
                             {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
@@ -301,7 +301,7 @@
                             {{ $component->repository->__toString() }}
                         </td>
                         <td>
-                            {{ $componentRepository->getQuantity() ?? "All Travellers" }}
+                            {{ $component->repository->getQuantity() ?? "All Travellers" }}
                         </td>
                         <td>
                             {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
@@ -354,7 +354,7 @@
                             {{ $component->repository->__toString() }}
                         </td>
                         <td>
-                            {{ $componentRepository->getQuantity() ?? "All Travellers" }}
+                            {{ $component->repository->getQuantity() ?? "All Travellers" }}
                         </td>
                         <td>
                             {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
