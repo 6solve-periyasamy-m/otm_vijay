@@ -596,10 +596,10 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
     {
         /** @var InventoryRepository[] $components */
         $components = [];
-        foreach ($this->tour->accommodationInventory()->groupBy('accommodation_id')->get() as $component) {
+        foreach ($this->tour->accommodationInventory()->groupBy('accommodation_inventories.accommodation_id')->get() as $component) {
             $components[] = $component->repository;
         }
-        foreach ($this->tour->activityInventory as $component) {
+        foreach ($this->tour->activityInventory()->groupBy('activity_inventories.activity_id')->get() as $component) {
             $components[] = $component->repository;
         }
         usort($components, function (InventoryRepository $a, InventoryRepository $b) {

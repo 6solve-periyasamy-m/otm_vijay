@@ -239,22 +239,50 @@ class Tour extends Model
 
     public function accommodationInventory(): HasManyThrough
     {
-        return $this->hasManyThrough(AccommodationInventory::class, AccommodationInventoryTour::class, 'accommodation_inventory_id', 'id');
+        return $this->hasManyThrough(
+            AccommodationInventory::class,
+            AccommodationInventoryTour::class,
+            'tour_id',
+            'id',
+            'id',
+            'accommodation_inventory_id'
+        );
     }
 
     public function activityInventory(): HasManyThrough
     {
-        return $this->hasManyThrough(ActivityInventory::class, ActivityInventoryTour::class, 'activity_inventory_id', 'id');
+        return $this->hasManyThrough(
+            ActivityInventory::class,
+            ActivityInventoryTour::class,
+            'tour_id',
+            'id',
+            'id',
+            'activity_inventory_id'
+        );
     }
 
     public function flightInventory(): HasManyThrough
     {
-        return $this->hasManyThrough(FlightInventory::class, FlightInventoryTour::class, 'flight_inventory_id', 'id');
+        return $this->hasManyThrough(
+            FlightInventory::class,
+            FlightInventoryTour::class,
+            'tour_id',
+            'id',
+            'id',
+            'flight_inventory_id'
+        );
     }
 
     public function transportInventory(): HasManyThrough
     {
-        return $this->hasManyThrough(TransportInventory::class, TransportInventoryTour::class, 'transport_inventory_id', 'id');
+        return $this->hasManyThrough(
+            TransportInventory::class,
+            TransportInventoryTour::class,
+            'tour_id',
+            'id',
+            'id',
+            'transport_inventory_id'
+        );
     }
 
     public function accommodationInventoryTours(): HasMany
