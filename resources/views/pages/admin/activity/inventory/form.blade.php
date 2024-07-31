@@ -5,7 +5,7 @@
      */
     $inventory = $inventory ?? null;
     $title = __('activity.inventory.form.title.' . ($inventory === null ? 'create' : 'update'));
-    $route = $inventory === null ?
+    $route = $inventory?->id === null ?
         route('activity-inventories.store', ['activity' => $activity, ]) :
         route('activity-inventories.update', ['activity' => $activity, 'inventory' => $inventory,]);
 @endphp
