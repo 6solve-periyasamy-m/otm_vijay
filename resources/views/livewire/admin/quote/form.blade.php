@@ -11,8 +11,9 @@
             <x-livewire.input.select.tax-bracket name="quote.tax_bracket_id" value="{{$quote->tax_bracket_id}}" label="Tax Bracket" width="3" />
             <x-livewire.input.select.user name="quote.consultant_id" value="{{$quote->consultant_id ?? get_current_admin()?->id}}" label="Consultant" width="3" />
             <!-- -->
-            <x-livewire.input.select.organization name="quote.organization_id" value="{{$quote->organization_id}}" label="Organization" width="6" />
-            <x-livewire.input wire:model="quote.commission" label="Commission" width="6" />
+            <x-livewire.input.select.event.normal name="quote.event_id" value="{{$quote->event_id}}" label="Event" width="4" />
+            <x-livewire.input.select.organization name="quote.organization_id" value="{{$quote->organization_id}}" label="Organization" width="4" />
+            <x-livewire.input wire:model="quote.commission" label="Commission" width="4" />
             <!-- -->
             <x-livewire.input wire:model="quote.deposit" label="Deposit" width="3" />
             <x-livewire.input.checkbox wire:model="quote.is_deposit_percentage" label="Percentage?" width="1" />

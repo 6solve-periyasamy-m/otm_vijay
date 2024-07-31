@@ -88,6 +88,7 @@ class Form extends Component
             'quote.tax_bracket_id' => 'nullable|integer|exists:tax_brackets,id',
             'quote.consultant_id' => 'nullable|integer|exists:users,id',
             'quote.organization_id' => 'nullable|integer|exists:organizations,id',
+            'quote.event_id' => 'nullable|integer|exists:events,id',
             'quote.commission' => 'nullable|numeric|between:0,100',
             'quote.deposit' => 'nullable|numeric',
             'quote.is_deposit_percentage' => 'nullable|boolean',
