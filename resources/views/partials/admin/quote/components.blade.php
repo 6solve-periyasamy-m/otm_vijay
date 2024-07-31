@@ -41,6 +41,7 @@
                     <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
                     <th scope="col">Quantity</th>
+                    <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
@@ -66,6 +67,11 @@
                         </td>
                         <td>
                             {{ $componentRepository->getQuantity() ?? "All Travellers" }}
+                        </td>
+                        <td>
+                            {{ $componentRepository->getInventory()->getAvailableStock() }} / {{ $componentRepository->getInventory()->getTotalStock() }}
+                            <br />
+                            ({{ $componentRepository->getInventory()->getUsedStock() }} used)
                         </td>
                         <td>
                             {{ $componentRepository->getPurchasePrice() !== null ? $componentRepository->getInventory()->getPurchasePriceString() : 'Not Set' }}
@@ -107,6 +113,7 @@
                     <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
                     <th scope="col">Quantity</th>
+                    <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
@@ -125,6 +132,11 @@
                         </td>
                         <td>
                             {{ $component->repository->getQuantity() ?? "All Travellers" }}
+                        </td>
+                        <td>
+                            {{ $component->repository->getInventory()->getAvailableStock() }} / {{ $component->repository->getInventory()->getTotalStock() }}
+                            <br />
+                            ({{ $component->repository->getInventory()->getUsedStock() }} used)
                         </td>
                         <td>
                             {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
@@ -166,6 +178,7 @@
                     <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
                     <th scope="col">Quantity</th>
+                    <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
@@ -184,6 +197,11 @@
                         </td>
                         <td>
                             {{ $component->repository->getQuantity() ?? "All Travellers" }}
+                        </td>
+                        <td>
+                            {{ $component->repository->getInventory()->getAvailableStock() }} / {{ $component->repository->getInventory()->getTotalStock() }}
+                            <br />
+                            ({{ $component->repository->getInventory()->getUsedStock() }} used)
                         </td>
                         <td>
                             {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
@@ -225,6 +243,7 @@
                     <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
                     <th scope="col">Quantity</th>
+                    <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
@@ -243,6 +262,11 @@
                         </td>
                         <td>
                             {{ $component->repository->getQuantity() ?? "All Travellers" }}
+                        </td>
+                        <td>
+                            {{ $component->repository->getInventory()->getAvailableStock() }} / {{ $component->repository->getInventory()->getTotalStock() }}
+                            <br />
+                            ({{ $component->repository->getInventory()->getUsedStock() }} used)
                         </td>
                         <td>
                             {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
@@ -284,6 +308,7 @@
                     <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
                     <th scope="col">Quantity</th>
+                    <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
@@ -302,6 +327,11 @@
                         </td>
                         <td>
                             {{ $component->repository->getQuantity() ?? "All Travellers" }}
+                        </td>
+                        <td>
+                            {{ $component->repository->getInventory()->getAvailableStock() }} / {{ $component->repository->getInventory()->getTotalStock() }}
+                            <br />
+                            ({{ $component->repository->getInventory()->getUsedStock() }} used)
                         </td>
                         <td>
                             {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
@@ -342,6 +372,7 @@
                 <tr>
                     <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
                     <th scope="col">Quantity</th>
+                    <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
@@ -355,6 +386,11 @@
                         </td>
                         <td>
                             {{ $component->repository->getQuantity() ?? "All Travellers" }}
+                        </td>
+                        <td>
+                            {{ $component->repository->getInventory()->getAvailableStock() }} / {{ $component->repository->getInventory()->getTotalStock() }}
+                            <br />
+                            ({{ $component->repository->getInventory()->getUsedStock() }} used)
                         </td>
                         <td>
                             {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
