@@ -82,6 +82,12 @@ class Rooming extends Component
         ]);
     }
 
+    public function updated($name, $value): void
+    {
+        $this->validate($name);
+        $this->validateRoomCount();
+    }
+
     public function addRoom(): void
     {
         if (count($this->rooms) >= $this->getMaximumRooms()) { return; }
