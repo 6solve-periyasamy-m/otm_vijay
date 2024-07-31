@@ -76,6 +76,13 @@ class Rooming extends Component
         $this->lead->save();
         $this->booking->lead_traveller_id = $this->lead->id;
         $this->booking->save();
+        $travellerExcess = $this->getTravellerCount();
+        foreach ($this->rooms as $room) {
+            $travellerExcess -= $room['travellers'];
+        }
+        if ($travellerExcess > 0) {
+            return $this->addError('common', 'Not all travellers have rooms');
+        }
         return redirect()->route('booking.simple.checkout', [
             'token' => $this->booking->token,
             'tour' => $this->tour->booking_form_url,
@@ -84,7 +91,7 @@ class Rooming extends Component
 
     public function updated($name, $value): void
     {
-        $this->validate($name);
+        $this->validateOnly($name);
         $this->validateRoomCount();
     }
 

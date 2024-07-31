@@ -59,11 +59,10 @@ class Checkout extends Component
 
     public function checkout()
     {
-        if (!$this->terms) { return null; }
+        if (!$this->terms) { return $this->addError('common', 'You must accept terms and conditions.'); }
         try {
             return redirect($this->booking->repository->getCheckoutLink($this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount()));
         } catch (\Exception $e) {
-            dd($this);
             return null;
         }
     }
