@@ -93,6 +93,7 @@ class Rooming extends Component
     {
         $this->validateOnly($name);
         $this->validateRoomCount();
+        $this->render();
     }
 
     public function addRoom(): void
