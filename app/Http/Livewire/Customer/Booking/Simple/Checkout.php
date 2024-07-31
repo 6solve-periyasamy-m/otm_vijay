@@ -2,14 +2,11 @@
 
 namespace App\Http\Livewire\Customer\Booking\Simple;
 
-use App\Exceptions\RemoteGatewayError;
-use App\Exceptions\UnauthorizedGatewayException;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Location\Address;
-use App\Repository\Model\Booking\BookingTravellerRepository;
 use Livewire\Component;
 
 class Checkout extends Component

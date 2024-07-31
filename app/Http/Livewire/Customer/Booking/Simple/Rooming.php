@@ -11,7 +11,7 @@ use Livewire\Component;
 
 class Rooming extends Component
 {
-    private const MAX_TRAVELLERS = 7;
+    private const MAX_TRAVELLERS = 5;
 
     protected $messages = [
         'rooms.*.room.required' => "This field is required",
