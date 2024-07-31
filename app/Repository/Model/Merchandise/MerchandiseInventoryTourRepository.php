@@ -237,4 +237,11 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
     {
         return $this->getInventory()?->getItineraryItem($quantity);
     }
+
+    public function getOverview(): string
+    {
+        $inventory = $this->tourComponent->inventory;
+        $component = $inventory->component;
+        return $component->name . ' - ' . $inventory->size . ' - ' . $inventory->variant;
+    }
 }

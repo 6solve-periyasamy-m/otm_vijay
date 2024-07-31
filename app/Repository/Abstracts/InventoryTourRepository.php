@@ -49,6 +49,8 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
 
     public abstract function getStockUsedOnBooking(Booking $booking): int;
 
+    public abstract function getOverview(): string;
+
     public function getCostToCustomer(): float|int
     {
         return $this->getTourComponentType() === 'Included' ? 0 : ($this->get()?->tour_sales_price ?? 0);

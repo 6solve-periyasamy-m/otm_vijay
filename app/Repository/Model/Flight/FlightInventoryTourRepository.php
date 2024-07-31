@@ -300,4 +300,11 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
         else { $item->type = 'Mid-Package Flight'; }
         return $item;
     }
+
+    public function getOverview(): string
+    {
+        $inventory = $this->tourComponent->inventory;
+        $component = $inventory->component;
+        return $component->departureAirport->name . ' to ' . $component->arrivalAirport->name . ' - ' . $component->airline . ' - ' . $inventory->travelClass;
+    }
 }

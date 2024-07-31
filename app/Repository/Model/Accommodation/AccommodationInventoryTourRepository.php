@@ -315,4 +315,9 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     {
         return $this->getInventory()?->getItineraryItem($quantity);
     }
+
+    public function getOverview(): string
+    {
+        return $this->tourComponent->inventory->component->name . ' - ' . $this->tourComponent->inventory->roomType . ' - ' . $this->tourComponent->inventory->boardType;
+    }
 }

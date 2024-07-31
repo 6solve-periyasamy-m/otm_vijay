@@ -312,4 +312,9 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
     {
         return $this->getInventory()?->getItineraryItem($quantity);
     }
+
+    public function getOverview(): string
+    {
+        return $this->tourComponent->inventory->activity->name . ' - ' . $this->tourComponent->inventory->ticketType;
+    }
 }

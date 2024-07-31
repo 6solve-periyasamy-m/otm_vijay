@@ -283,4 +283,11 @@ class TransportInventoryTourRepository extends InventoryTourRepository
     {
         return $this->getInventory()?->getItineraryItem();
     }
+
+    public function getOverview(): string
+    {
+        $inventory = $this->tourComponent->inventory;
+        $component = $inventory->component;
+        return $component->departureAddress->name . ' to ' . $component->arrivalAddress->name . ' - ' . $component->operator . ' - ' . $inventory->travelClass;
+    }
 }
