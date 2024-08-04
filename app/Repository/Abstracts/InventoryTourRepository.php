@@ -21,33 +21,39 @@ use Illuminate\Support\Collection;
 
 abstract class InventoryTourRepository extends InventoryContainerRepository implements HasStockControl
 {
-    public static abstract function getAvailableAddons(Tour $tour, OrderCustomer $orderCustomer = null): array;
+    abstract public static function getAvailableAddons(Tour $tour, OrderCustomer $orderCustomer = null): array;
 
-    public abstract function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderComponentRepository;
+    abstract public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderComponentRepository;
 
-    public abstract function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository;
+    abstract public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository;
 
-    public abstract function addToQuote(Quote $quote): ?QuoteComponentRepository;
+    abstract public function addToQuote(Quote $quote): ?QuoteComponentRepository;
 
-    public abstract function getUpgradeParent(): Model;
+    abstract public function getUpgradeParent(): Model;
 
-    public abstract function onUpgradeTree(ComponentUpgradeRepository $upgradeRepository): bool;
+    abstract public function onUpgradeTree(ComponentUpgradeRepository $upgradeRepository): bool;
 
-    public abstract function getAvailableForUpgrade(): array|Collection;
+    abstract public function getAvailableForUpgrade(): array|Collection;
 
-    public abstract function getUpgradeId(): int;
+    abstract public function getUpgradeId(): int;
 
-    public abstract function getOrderComponent(OrderCustomer $orderCustomer): ?OrderComponentRepository;
+    abstract public function getOrderComponent(OrderCustomer $orderCustomer): ?OrderComponentRepository;
 
-    public abstract function getBookingComponent(BookingTraveller $traveller): ?BookingComponentRepository;
+    abstract public function getBookingComponent(BookingTraveller $traveller): ?BookingComponentRepository;
 
-    public abstract function isBookable(): bool;
+    abstract public function isBookable(): bool;
 
-    public abstract function getUsedOnOrderCount(): int;
+    abstract public function getUsedOnOrderCount(): int;
 
-    public abstract function getComponentInformation(): ComponentInformation;
+    abstract public function getComponentInformation(): ComponentInformation;
 
-    public abstract function getStockUsedOnBooking(Booking $booking): int;
+    abstract public function getStockUsedOnBooking(Booking $booking): int;
+
+    abstract public function getUpdateLink(): string|null;
+
+    abstract public function getDeleteLink(): string|null;
+
+    abstract public function getRestoreLink(): string|null;
 
     public abstract function getOverview(): string;
 

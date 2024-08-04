@@ -320,4 +320,37 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     {
         return $this->tourComponent->inventory->component->name . ' - ' . $this->tourComponent->inventory->roomType . ' - ' . $this->tourComponent->inventory->boardType;
     }
+
+    public function getUpdateLink(): string|null
+    {
+        if (\Auth::user()?->can('update', $this->tourComponent)) {
+            return route('accommodation-inventory-tours.edit', [
+                'tour' => $this->tourComponent->tour_id,
+                'accommodationInventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
+
+    public function getDeleteLink(): string|null
+    {
+        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+            return route('accommodation-inventory-tours.delete', [
+                'tour' => $this->tourComponent->tour_id,
+                'accommodationInventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
+
+    public function getRestoreLink(): string|null
+    {
+        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+            return route('accommodation-inventory-tours.restore', [
+                'tour' => $this->tourComponent->tour_id,
+                'accommodationInventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
 }

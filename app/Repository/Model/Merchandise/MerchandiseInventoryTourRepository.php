@@ -244,4 +244,37 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
         $component = $inventory->component;
         return $component->name . ' - ' . $inventory->size . ' - ' . $inventory->variant;
     }
+
+    public function getUpdateLink(): string|null
+    {
+        if (\Auth::user()?->can('update', $this->tourComponent)) {
+            return route('merchandise-inventory-tours.edit', [
+                'tour' => $this->tourComponent->tour_id,
+                'merchandiseInventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
+
+    public function getDeleteLink(): string|null
+    {
+        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+            return route('merchandise-inventory-tours.delete', [
+                'tour' => $this->tourComponent->tour_id,
+                'merchandiseInventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
+
+    public function getRestoreLink(): string|null
+    {
+        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+            return route('merchandise-inventory-tours.restore', [
+                'tour' => $this->tourComponent->tour_id,
+                'merchandiseInventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
 }

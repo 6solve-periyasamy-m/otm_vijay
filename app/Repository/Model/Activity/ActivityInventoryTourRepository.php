@@ -317,4 +317,37 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
     {
         return $this->tourComponent->inventory->activity->name . ' - ' . $this->tourComponent->inventory->ticketType;
     }
+
+    public function getUpdateLink(): string|null
+    {
+        if (\Auth::user()?->can('update', $this->tourComponent)) {
+            return route('activity-inventory-tours.edit', [
+                'tour' => $this->tourComponent->tour_id,
+                'activityInventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
+
+    public function getDeleteLink(): string|null
+    {
+        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+            return route('activity-inventory-tours.delete', [
+                'tour' => $this->tourComponent->tour_id,
+                'activityInventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
+
+    public function getRestoreLink(): string|null
+    {
+        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+            return route('activity-inventory-tours.restore', [
+                'tour' => $this->tourComponent->tour_id,
+                'activityInventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
 }

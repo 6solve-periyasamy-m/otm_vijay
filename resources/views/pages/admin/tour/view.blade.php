@@ -154,7 +154,7 @@
                                 <th scope="col">Stock</th>
                                 <th scope="col">Purchase Price</th>
                                 <th scope="col">Sales Price</th>
-                                <!-- TODO: Implement Actions -->
+                                <th scope="col">Actions>
                             </tr>
                         </thead>
                         <tbody>
@@ -171,6 +171,45 @@
                                     </td>
                                     <td>{{ $component->getInventory()->getPurchasePriceString() }}</td>
                                     <td>{{ f_currency($component->getSalesPrice()) }}</td>
+                                    <td class="actions">
+                                        @if($component->getUpdateLink() !== null)
+                                            <a href="{{ $component->getUpdateLink() }}"
+                                               class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
+                                        @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">{{ Icon::edit() }}</span>
+                                        @endif
+                                        @if($component->isBookable())
+                                            @if($component->getDeleteLink() !== null)
+                                                <a href="#"
+                                                   onclick="$('#component-{{$component->getComponentType()}}-{{$component->get()->id}}-delete').submit()"
+                                                   class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete() }}</a>
+                                                <form action="{{ $component->getDeleteLink() }}"
+                                                      method="post"
+                                                      id="component-{{$component->getComponentType()}}-{{$component->get()->id}}-delete">
+                                                    @csrf
+                                                </form>
+                                            @else
+                                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                    {{ Icon::delete() }}
+                                                </span>
+                                            @endif
+                                        @else
+                                            @if($component->getRestoreLink() !== null)
+                                                <a href="#"
+                                                   onclick="$('#component-{{$component->getComponentType()}}-{{$component->get()->id}}-restore').submit()"
+                                                   class="btn btn-outline-danger btn-sm mb-1" title="Restore">{{ Icon::wand() }}</a>
+                                                <form action="{{ $component->getRestoreLink() }}"
+                                                      method="post"
+                                                      id="component-{{$component->getComponentType()}}-{{$component->get()->id}}-restore">
+                                                    @csrf
+                                                </form>
+                                            @else
+                                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                    {{ Icon::wand() }}
+                                                </span>
+                                            @endif
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
