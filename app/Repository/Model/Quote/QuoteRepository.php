@@ -4,6 +4,7 @@ namespace App\Repository\Model\Quote;
 
 use App\Exceptions\MailDisabledException;
 use App\Mail\Storage\Attachment;
+use App\Mail\Storage\QuoteMail;
 use App\Mail\Storage\SettingsMail;
 use App\Models\Customer\Customer;
 use App\Models\Helper\Enum\ActivityCategory;
@@ -756,7 +757,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function resend(SentQuote $sent, string $email = null): void
     {
         $attachment = new Attachment($this->getStream($sent), $this->quote->reference . '.pdf', ['mime' => 'application/pdf',]);
-        (new SettingsMail('quote'))->send($email ?? $sent->recipient, $sent, [$attachment,], true);
+        (new QuoteMail('quote'))->send($email ?? $sent->recipient, $sent, [$attachment,], true);
     }
 
     public static function deserializeAndSave(SentQuote $sent): Quote
