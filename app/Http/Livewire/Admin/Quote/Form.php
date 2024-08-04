@@ -31,6 +31,7 @@ class Form extends Component
         if ($this->pricePoint === null) {
             $this->pricePoint = new QuotePricePoint(['quantity' => 1, 'price_per_person' => 0,]);
         }
+        $this->quote->expires = $this->quote->expires ?? now()->addDays(setting('system.quote.expiry', null));
     }
 
     public function save()
@@ -88,6 +89,7 @@ class Form extends Component
             'quote.tax_bracket_id' => 'nullable|integer|exists:tax_brackets,id',
             'quote.consultant_id' => 'nullable|integer|exists:users,id',
             'quote.organization_id' => 'nullable|integer|exists:organizations,id',
+            'quote.event_id' => 'nullable|integer|exists:events,id',
             'quote.commission' => 'nullable|numeric|between:0,100',
             'quote.deposit' => 'nullable|numeric',
             'quote.is_deposit_percentage' => 'nullable|boolean',

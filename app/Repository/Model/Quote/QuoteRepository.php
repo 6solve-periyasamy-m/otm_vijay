@@ -4,6 +4,7 @@ namespace App\Repository\Model\Quote;
 
 use App\Exceptions\MailDisabledException;
 use App\Mail\Storage\Attachment;
+use App\Mail\Storage\QuoteMail;
 use App\Mail\Storage\SettingsMail;
 use App\Models\Customer\Customer;
 use App\Models\Helper\Enum\ActivityCategory;
@@ -417,7 +418,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $cost = 0;
         foreach ($this->quote->accommodation()->with('inventory')->get() as $component) {
-            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0) * min($travellers, ($component->quantity ?? $travellers));
+            if ($component->inventory === null) {continue;}
+            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0.0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
@@ -427,7 +429,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $cost = 0;
         /** @var QuoteActivity $component */
         foreach ($this->quote->activities()->with('inventory')->get() as $component) {
-            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0) * min($travellers, ($component->quantity ?? $travellers));
+            if ($component->inventory === null) {continue;}
+            $cost += ($component->inventory?->repository->getLocalPurchasePrice() ?? 0.0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
@@ -437,7 +440,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $cost = 0;
         /** @var QuoteFlight $component */
         foreach ($this->quote->flights()->with('inventory')->get() as $component) {
-            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0) * min($travellers, ($component->quantity ?? $travellers));
+            if ($component->inventory === null) {continue;}
+            $cost += ($component->inventory?->repository->getLocalPurchasePrice() ?? 0.0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
@@ -447,7 +451,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $cost = 0;
         /** @var QuoteTransport $component */
         foreach ($this->quote->transport()->with('inventory')->get() as $component) {
-            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0) * min($travellers, ($component->quantity ?? $travellers));
+            if ($component->inventory === null) {continue;}
+            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0.0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
@@ -457,7 +462,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $cost = 0;
         /** @var QuoteMerchandise $component */
         foreach ($this->quote->merchandise()->with('inventory')->get() as $component) {
-            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0) * min($travellers, ($component->quantity ?? $travellers));
+            if ($component->inventory === null) {continue;}
+            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0.0) * min($travellers, ($component->quantity ?? $travellers));
         }
         return $cost;
     }
@@ -751,7 +757,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function resend(SentQuote $sent, string $email = null): void
     {
         $attachment = new Attachment($this->getStream($sent), $this->quote->reference . '.pdf', ['mime' => 'application/pdf',]);
-        (new SettingsMail('quote'))->send($email ?? $sent->recipient, $sent, [$attachment,], true);
+        (new QuoteMail('quote'))->send($email ?? $sent->recipient, $sent, [$attachment,], true);
     }
 
     public static function deserializeAndSave(SentQuote $sent): Quote

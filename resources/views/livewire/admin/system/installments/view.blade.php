@@ -20,6 +20,15 @@
                         <button class="btn btn-primary" wire:click="setFinal">Set Final</button>
                     </div>
                 </div>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <x-livewire.input wire:model="expiry" label="Default Quote Expiry (days)" />
+                    </div>
+                    <div class="my-auto">
+                        <label></label>
+                        <button class="btn btn-primary" wire:click="setExpiry">Set Expiry</button>
+                    </div>
+                </div>
             </div>
             <div class="col-4"></div>
             <div class="col-2">

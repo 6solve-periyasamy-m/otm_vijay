@@ -11,6 +11,7 @@ class View extends Component
     use SendsEvents;
     public string|float|int|null $deposit;
     public string|float|int|null $final;
+    public string|float|int|null $expiry;
 
     protected $listeners = ['refreshLivewireDatatable' => 'update',];
 
@@ -23,6 +24,7 @@ class View extends Component
     {
         $this->deposit = setting('system.installments.deposit', null);
         $this->final = setting('system.installments.final', null);
+        $this->expiry = setting('system.installments.expiry', null);
         $this->render();
     }
 
@@ -40,6 +42,11 @@ class View extends Component
         $this->toast('Updated Successfully', 'Successfully updated the default final payment date', 'success');
     }
 
+    public function setExpiry(): void
+    {
+        Settings::set('system.installments.expiry', empty($this->expiry) ? null : $this->expiry);
+    }
+
     public function delete($days): void
     {
         Settings::setDefaultInstallment($days, null);
@@ -53,6 +60,6 @@ class View extends Component
 
     public function rules(): array
     {
-        return ['deposit' => 'nullable|numeric|gte:0', 'final' => 'nullable|integer|gte:0',];
+        return ['deposit' => 'nullable|numeric|gte:0', 'final' => 'nullable|integer|gte:0', 'expiry' => 'nullable|integer|gte:0'];
     }
 }

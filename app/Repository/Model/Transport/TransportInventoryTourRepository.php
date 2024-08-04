@@ -283,4 +283,44 @@ class TransportInventoryTourRepository extends InventoryTourRepository
     {
         return $this->getInventory()?->getItineraryItem();
     }
+
+    public function getOverview(): string
+    {
+        $inventory = $this->tourComponent->inventory;
+        $component = $inventory->component;
+        return $component->departureAddress->name . ' to ' . $component->arrivalAddress->name . ' - ' . $component->operator . ' - ' . $inventory->travelClass;
+    }
+
+    public function getUpdateLink(): string|null
+    {
+        if (\Auth::user()?->can('update', $this->tourComponent)) {
+            return route('transport-inventory-tours.edit', [
+                'tour' => $this->tourComponent->tour_id,
+                'transportInventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
+
+    public function getDeleteLink(): string|null
+    {
+        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+            return route('transport-inventory-tours.delete', [
+                'tour' => $this->tourComponent->tour_id,
+                'transportInventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
+
+    public function getRestoreLink(): string|null
+    {
+        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+            return route('transport-inventory-tours.restore', [
+                'tour' => $this->tourComponent->tour_id,
+                'transportInventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
 }

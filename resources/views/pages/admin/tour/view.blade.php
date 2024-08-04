@@ -102,35 +102,122 @@
         </div>
         {{-- Tabs Definition --}}
         <ul class="nav nav-pills otm-tab">
-            <li class="nav-item col-6 col-md-3">
-                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#accommodation">
+            <li class="nav-item col-6 col-md-2">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#components">
+                    {{ Icon::list() }}
+                    All Components
+                </button>
+            </li>
+            <li class="nav-item col-6 col-md-2">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#accommodation">
                     {{ Icon::accommodation() }}
                     Accommodation
                 </button>
             </li>
-            <li class="nav-item col-6 col-md-3">    
+            <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities">
                     {{ Icon::activity() }}
                     Activities
                 </button>
             </li>
-            <li class="nav-item col-6 col-md-3">
+            <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#flights">
                     {{ Icon::flight() }}
                     Flights
                 </button>
             </li>
-            <li class="nav-item col-6 col-md-3">
+            <li class="nav-item col-6 col-md-2">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transports">
                     {{ Icon::transport() }}
                     Transport
                 </button>
             </li>
+            <li class="nav-item col-6 col-md-2">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#merchandise">
+                    {{ Icon::merchandise() }}
+                    Merchandise
+                </button>
+            </li>
         </ul>
         {{-- Tables Definition --}}
         <div id="tables" class="tab-content otm-tab-content">
+            {{-- All Components --}}
+            <div id="components" role="tabpanel" class="tab-pane fade show active">
+                <div id="components-details">
+                    <table id="components-table" class="datatable table table-striped table-responsive-sm">
+                        <thead>
+                            <tr>
+                                <th scope="col">Type</th>
+                                <th scope="col">Dates</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Component Type</th>
+                                <th scope="col">Stock</th>
+                                <th scope="col">Purchase Price</th>
+                                <th scope="col">Sales Price</th>
+                                <th scope="col">Actions>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($tour->repository->getComponents() as $component)
+                                <tr>
+                                    <td>{{ ucwords($component->getComponentType()) }}</td>
+                                    <td>{{ f_datetime($component->getStartTime()) }} to {{ f_datetime($component->getEndTime()) }}</td>
+                                    <td>{{ $component->getOverview() }}</td>
+                                    <td>{{ $component->getTourComponentType() }}</td>
+                                    <td>
+                                        {{ $component->getUsedStock() }}
+                                        /{{ $component->getTotalStock() }}<br/>
+                                        ({{$component->getAvailableStock()}} Available)
+                                    </td>
+                                    <td>{{ $component->getInventory()->getPurchasePriceString() }}</td>
+                                    <td>{{ f_currency($component->getSalesPrice()) }}</td>
+                                    <td class="actions">
+                                        @if($component->getUpdateLink() !== null)
+                                            <a href="{{ $component->getUpdateLink() }}"
+                                               class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
+                                        @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">{{ Icon::edit() }}</span>
+                                        @endif
+                                        @if($component->isBookable())
+                                            @if($component->getDeleteLink() !== null)
+                                                <a href="#"
+                                                   onclick="$('#component-{{$component->getComponentType()}}-{{$component->get()->id}}-delete').submit()"
+                                                   class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete() }}</a>
+                                                <form action="{{ $component->getDeleteLink() }}"
+                                                      method="post"
+                                                      id="component-{{$component->getComponentType()}}-{{$component->get()->id}}-delete">
+                                                    @csrf
+                                                </form>
+                                            @else
+                                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                    {{ Icon::delete() }}
+                                                </span>
+                                            @endif
+                                        @else
+                                            @if($component->getRestoreLink() !== null)
+                                                <a href="#"
+                                                   onclick="$('#component-{{$component->getComponentType()}}-{{$component->get()->id}}-restore').submit()"
+                                                   class="btn btn-outline-danger btn-sm mb-1" title="Restore">{{ Icon::wand() }}</a>
+                                                <form action="{{ $component->getRestoreLink() }}"
+                                                      method="post"
+                                                      id="component-{{$component->getComponentType()}}-{{$component->get()->id}}-restore">
+                                                    @csrf
+                                                </form>
+                                            @else
+                                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                    {{ Icon::wand() }}
+                                                </span>
+                                            @endif
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             {{-- Accommodation Table --}}
-            <div id="accommodation" role="tabpanel" class="tab-pane fade show active">
+            <div id="accommodation" role="tabpanel" class="tab-pane fade">
                 <div id="accommodation-details">
                     <table id="accommodation-table" class="datatable table table-striped table-responsive-sm">
                         <thead>
@@ -502,31 +589,70 @@
                     </table>
                 </div>
             </div>
+            {{-- Merchandise Table --}}
+            <div id="merchandise" role="tabpanel" class="tab-pane fade">
+                <div id="merchandise-details">
+                    <table id="merchandise-table" class="datatable table table-striped table-responsive-sm">
+                        <thead>
+                            <tr>
+                                <th scope="col">Icon</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Variant</th>
+                                <th scope="col">Size</th>
+                                <th scope="col">Component Type</th>
+                                <th scope="col">Stock Controlled?</th>
+                                <th scope="col">Sales Price</th>
+                                <th scope="col">Stock</th>
+                                <th scope="col">Notes</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        @foreach($tour->merchandise as $merchandise)
+                            <tr>
+                                <td><img src="{{ $merchandise->inventory->asset }}" class="image tiny"/></td>
+                                <td style="min-width: 100px">{{ $merchandise->inventory->component->name }}</td>
+                                <td>{{ $merchandise->inventory->variant->name }}</td>
+                                <td>{{ $merchandise->inventory->size?->name ?? 'No Size'  }}</td>
+                                <td>{{ $merchandise->stock_control_active }}</td>
+                                <td>{{ f_currency($merchandise->tour_sales_price) }}</td>
+                                <td>
+                                    {{ $merchandise->repository->getUsedStock() }}
+                                    /{{ $merchandise->repository->getTotalStock() }}<br/>
+                                    ({{$merchandise->repository->getAvailableStock()}} Available)
+                                </td>
+                                <td>{{ $merchandise->internal_notes }}</td>
+                                <td class="actions">
+                                    @can('update', Merchandise::class)
+                                        <a href="{{ route('merchandise.inventory.tour.edit', ['tour' => $tour, 'inventoryTour' => $merchandise,]) }}"
+                                           class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
+                                    @else
+                                        <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
+                                            {{ Icon::delete() }}
+                                        </span>
+                                    @endcan
+                                    @can('delete', Merchandise::class)
+                                        <a href="#" title="Delete" onclick="$('#merchandise-{{$merchandise->id}}-delete').submit()"
+                                           class="btn btn-outline-{{ $merchandise->is_bookable ? 'danger' : 'warning' }} btn-sm mb-1">
+                                            {{ $merchandise->is_bookable ? Icon::delete() : Icon::enable() }}
+                                        </a>
+                                        <form action="{{ route($merchandise->is_bookable ? 'merchandise.inventory.tour.delete' : 'merchandise.inventory.tour.restore',['tour' => $tour, 'inventoryTour' => $merchandise,]) }}"
+                                              method="post" id="merchandise-{{$merchandise->id}}-delete">
+                                            @csrf
+                                        </form>
+                                    @else
+                                        <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
+                                    {{ Icon::delete() }}
+                                </span>
+                                    @endcan
+                                </td>
+                            </tr>
+                        @endforeach
+                    </table>
+                </div>
+            </div>
         </div>
     </x-admin.section.card>
-    {{-- Payment Installment Section --}}
     <hr class="splitter"/>
-    <div class="heading pt-2 pb-md-3 pb-2">
-        <h2 class="fw-bold">Room Availability</h2>
-    </div>
-    <x-admin.section.card>
-        <table id="templates-table" class="datatable table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Template</th>
-                <th scope="col">Available</th>
-            </tr>
-            </thead>
-            @foreach($tour->getAccommodationTemplateData() as $templateData)
-                <tr>
-                    <th scope="row">{{ f_date($templateData['template']->inventory->check_in->clone()->setTime(0,0,0)) }}</th>
-                    <td>{{ $templateData['template'] }}</td>
-                    <td>{{ implode(', ', $templateData['available']) }}</td>
-                </tr>
-            @endforeach
-        </table>
-    </x-admin.section.card>
     {{-- Payment Installment Section --}}
     <hr class="splitter"/>
     <div class="heading pt-2 pb-md-3 pb-2">
@@ -597,67 +723,27 @@
     </x-admin.section.card>
     {{-- Merchandise Section --}}
     <hr class="splitter"/>
-    <div class="heading pt-2 pb-md-3 pb-2">
-        <h2 class="fw-bold">Merchandise</h2>
-    </div>
-    <x-admin.section.card>
-        <table id="merchandise-table" class="datatable table table-striped table-responsive-sm">
-            <thead>
-            <tr>
-                <th scope="col">Icon</th>
-                <th scope="col">Name</th>
-                <th scope="col">Variant</th>
-                <th scope="col">Size</th>
-                <th scope="col">Component Type</th>
-                <th scope="col">Stock Controlled?</th>
-                <th scope="col">Sales Price</th>
-                <th scope="col">Stock</th>
-                <th scope="col">Notes</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-            @foreach($tour->merchandise as $merchandise)
-                <tr>
-                    <td><img src="{{ $merchandise->inventory->asset }}" class="image tiny"/></td>
-                    <td style="min-width: 100px">{{ $merchandise->inventory->component->name }}</td>
-                    <td>{{ $merchandise->inventory->variant->name }}</td>
-                    <td>{{ $merchandise->inventory->size?->name ?? 'No Size'  }}</td>
-                    <td>{{ $merchandise->stock_control_active }}</td>
-                    <td>{{ f_currency($merchandise->tour_sales_price) }}</td>
-                    <td>
-                        {{ $merchandise->repository->getUsedStock() }}
-                        /{{ $merchandise->repository->getTotalStock() }}<br/>
-                        ({{$merchandise->repository->getAvailableStock()}} Available)
-                    </td>
-                    <td>{{ $merchandise->internal_notes }}</td>
-                    <td class="actions">
-                        @can('update', Merchandise::class)
-                            <a href="{{ route('merchandise.inventory.tour.edit', ['tour' => $tour, 'inventoryTour' => $merchandise,]) }}"
-                               class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
-                        @else
-                            <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
-                                            {{ Icon::delete() }}
-                                        </span>
-                        @endcan
-                        @can('delete', Merchandise::class)
-                            <a href="#" title="Delete" onclick="$('#merchandise-{{$merchandise->id}}-delete').submit()"
-                               class="btn btn-outline-{{ $merchandise->is_bookable ? 'danger' : 'warning' }} btn-sm mb-1">
-                                {{ $merchandise->is_bookable ? Icon::delete() : Icon::enable() }}
-                            </a>
-                            <form action="{{ route($merchandise->is_bookable ? 'merchandise.inventory.tour.delete' : 'merchandise.inventory.tour.restore',['tour' => $tour, 'inventoryTour' => $merchandise,]) }}"
-                                  method="post" id="merchandise-{{$merchandise->id}}-delete">
-                                @csrf
-                            </form>
-                        @else
-                            <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
-                                    {{ Icon::delete() }}
-                                </span>
-                        @endcan
-                    </td>
-                </tr>
-            @endforeach
-        </table>
-    </x-admin.section.card>
+    <x-admin.section.accordion closed>
+        <x-slot:title>Room Availability</x-slot:title>
+        <x-admin.section.card>
+            <table id="templates-table" class="datatable table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Template</th>
+                        <th scope="col">Available</th>
+                    </tr>
+                </thead>
+                @foreach($tour->getAccommodationTemplateData() as $templateData)
+                    <tr>
+                        <th scope="row">{{ f_date($templateData['template']->inventory->check_in->clone()->setTime(0,0,0)) }}</th>
+                        <td>{{ $templateData['template'] }}</td>
+                        <td>{{ implode(', ', $templateData['available']) }}</td>
+                    </tr>
+                @endforeach
+            </table>
+        </x-admin.section.card>
+    </x-admin.section.accordion>
     <hr class="splitter"/>
     <div class="heading pt-2 pb-md-3 pb-2">
         <h2 class="fw-bold">Orders</h2>

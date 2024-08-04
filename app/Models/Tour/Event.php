@@ -110,4 +110,9 @@ class Event extends Model
     {
         return $this->hasManyThrough(Order::class, Tour::class, 'event_id', 'tour_id');
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }
