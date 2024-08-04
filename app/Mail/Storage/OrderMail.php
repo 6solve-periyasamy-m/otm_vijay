@@ -39,6 +39,7 @@ class OrderMail extends TemplatedMail
             'FINAL_PAYMENT_REMAINING' => f_currency(isset($order) ? $finalPayment?->remaining : $this->faker->numberBetween(100, 1000)),
             'FINAL_PAYMENT_DATE' => f_date(isset($order) ? $finalPayment?->due_on : $this->faker->date),
             'TOUR_NAME' => $tour?->name ?? implode(' ', $this->faker?->words),
+            'EVENT_NAME' => $tour?->event?->name ?? implode(' ', $this->faker?->words),
             'TOUR_DESCRIPTION' => $tour?->description ?? $this->faker?->sentence,
             'TOUR_START' => f_date($tour?->date_from ?? $this->faker->date),
             'TOUR_END' => f_date($tour?->date_to ?? $this->faker->date),
