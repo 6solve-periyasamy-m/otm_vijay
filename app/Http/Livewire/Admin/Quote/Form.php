@@ -31,6 +31,7 @@ class Form extends Component
         if ($this->pricePoint === null) {
             $this->pricePoint = new QuotePricePoint(['quantity' => 1, 'price_per_person' => 0,]);
         }
+        $this->quote->expires = $this->quote->expires ?? now()->addDays(setting('system.quote.expiry', null));
     }
 
     public function save()
