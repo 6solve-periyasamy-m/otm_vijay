@@ -156,6 +156,15 @@ class ReportFieldRepository
                         'name' => 'Activity Type',
                         'method' => 'activityType',
                     ],
+                    'activity_category' => [
+                        'name' => 'Activity Category',
+                        'method' => 'activity_category',
+                        'format' => 'enum-label'
+                    ],
+                    'main_event' => [
+                        'name' => 'Main Event',
+                        'method' => 'event'
+                    ],
                     'image_url' => [
                         'name' => 'Image URL',
                         'method' => 'image_url',
