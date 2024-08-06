@@ -1,0 +1,37 @@
+FROM php:8.2-fpm
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    npm
+
+
+RUN apt-get update 
+
+# Setup Puppeteer
+RUN if [ "$PUPPETEER" = "true" ]; then \
+        apt-get install -y wget gnupg \
+        && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+        && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
+        && apt-get update \
+        && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
+          --no-install-recommends
+    else \
+        echo "No puppeteer in this install"; \
+    fi
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl
+
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
