@@ -137,6 +137,9 @@ class BespokeReportRepository
             case 'asset':
                 $data = asset($data);
                 break;
+            case 'enum-label':
+                $data = $data->label();
+                break;
             default:
                 break;
         }

@@ -300,4 +300,44 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
         else { $item->type = 'Mid-Package Flight'; }
         return $item;
     }
+
+    public function getOverview(): string
+    {
+        $inventory = $this->tourComponent->inventory;
+        $component = $inventory->component;
+        return $component->departureAirport->name . ' to ' . $component->arrivalAirport->name . ' - ' . $component->airline . ' - ' . $inventory->travelClass;
+    }
+
+    public function getUpdateLink(): string|null
+    {
+        if (\Auth::user()?->can('update', $this->tourComponent)) {
+            return route('flight-inventory-tours.edit', [
+                'tour' => $this->tourComponent->tour_id,
+                'flightInventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
+
+    public function getDeleteLink(): string|null
+    {
+        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+            return route('flight-inventory-tours.delete', [
+                'tour' => $this->tourComponent->tour_id,
+                'flightInventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
+
+    public function getRestoreLink(): string|null
+    {
+        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+            return route('flight-inventory-tours.restore', [
+                'tour' => $this->tourComponent->tour_id,
+                'flightInventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
 }

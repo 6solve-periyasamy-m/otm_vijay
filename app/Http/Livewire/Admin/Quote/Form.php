@@ -31,12 +31,15 @@ class Form extends Component
         if ($this->pricePoint === null) {
             $this->pricePoint = new QuotePricePoint(['quantity' => 1, 'price_per_person' => 0,]);
         }
+        $this->quote->expires = $this->quote->expires ?? now()->addDays(setting('system.quote.expiry', null));
     }
 
     public function save()
     {
         $this->validate();
         if ($this->quote->commission != 0 && empty($this->quote->commission)) { $this->quote->commission = null; }
+        if ($this->quote->brand_id || $this->quote->brand_id < 0) { $this->quote->brand_id = null; }
+        $this->quote->brand_id = $this->quote->brand_id ?? null;
         $this->quote->is_deposit_percentage = $this->quote->is_deposit_percentage ?? false;
         $this->prospect->travelling = $this->prospect->travelling ?? false;
         $this->prospect->paying = $this->prospect->paying ?? false;
@@ -88,6 +91,7 @@ class Form extends Component
             'quote.tax_bracket_id' => 'nullable|integer|exists:tax_brackets,id',
             'quote.consultant_id' => 'nullable|integer|exists:users,id',
             'quote.organization_id' => 'nullable|integer|exists:organizations,id',
+            'quote.event_id' => 'nullable|integer|exists:events,id',
             'quote.commission' => 'nullable|numeric|between:0,100',
             'quote.deposit' => 'nullable|numeric',
             'quote.is_deposit_percentage' => 'nullable|boolean',

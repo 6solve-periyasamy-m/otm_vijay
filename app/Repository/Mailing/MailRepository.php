@@ -5,6 +5,7 @@ namespace App\Repository\Mailing;
 use App\Mail\Storage\OrderCustomerMail;
 use App\Mail\Storage\OrderMail;
 use App\Mail\Storage\PaymentMail;
+use App\Mail\Storage\QuoteMail;
 use App\Mail\Storage\SettingsMail;
 use App\Mail\Storage\TemplatedMail;
 
@@ -33,7 +34,7 @@ class MailRepository
             'additional-traveller-removed' => new OrderCustomerMail('additional-traveller-removed'),
             'order-changed' => new OrderMail('order-changed'),
             'order-cancelled' => new OrderMail('order-cancelled'),
-            'quote' => new SettingsMail('quote'),
+            'quote' => new QuoteMail('quote'),
         ];
     }
 }
