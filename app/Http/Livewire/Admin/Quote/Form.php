@@ -38,6 +38,8 @@ class Form extends Component
     {
         $this->validate();
         if ($this->quote->commission != 0 && empty($this->quote->commission)) { $this->quote->commission = null; }
+        if ($this->quote->brand_id || $this->quote->brand_id < 0) { $this->quote->brand_id = null; }
+        $this->quote->brand_id = $this->quote->brand_id ?? null;
         $this->quote->is_deposit_percentage = $this->quote->is_deposit_percentage ?? false;
         $this->prospect->travelling = $this->prospect->travelling ?? false;
         $this->prospect->paying = $this->prospect->paying ?? false;
