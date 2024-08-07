@@ -58,6 +58,7 @@
             <p class="price">{{ f_currency($booking->repository->getTotalCost()) }}</p>
         </li>
     </ul>
+    {{ $slot }}
     @error('common')
     <div class="submit-btn-cls">
         <div class="inner">
@@ -65,7 +66,6 @@
         </div>
     </div>
     @enderror
-    {{ $slot }}
 </div>
 @push('popups')
 <!-- <- See More Popup -->
