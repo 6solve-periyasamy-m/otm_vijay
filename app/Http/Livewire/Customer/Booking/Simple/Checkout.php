@@ -77,6 +77,7 @@ class Checkout extends Component
             'payer.email_address' => 'required|email:rfc,dns',
             'payer.mobile_number' => 'required|phone:INTERNATIONAL',
             'payer.date_of_birth' => 'required|date',
+            'booking.notes' => 'nullable|string',
         ];
     }
 }
