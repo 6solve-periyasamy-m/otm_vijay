@@ -7,7 +7,7 @@
     <x-admin.section.card>
         <div class="row">
             <x-livewire.input wire:model="quote.name" label="Name" width="3" required />
-            <x-livewire.input.select.brand wire:model="quote.brand" name="quote.brand_id" value="{{$quote->brand_id}}" label="Branding" width="3" />
+            <x-livewire.input.select.brand name="quote.brand_id" value="{{$quote->brand_id}}" label="Branding" width="3" />
             <x-livewire.input.select.tax-bracket name="quote.tax_bracket_id" value="{{$quote->tax_bracket_id}}" label="Tax Bracket" width="3" />
             <x-livewire.input.select.user name="quote.consultant_id" value="{{$quote->consultant_id ?? get_current_admin()?->id}}" label="Consultant" width="3" />
             <!-- -->

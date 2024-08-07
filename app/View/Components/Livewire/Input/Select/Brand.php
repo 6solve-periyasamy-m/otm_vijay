@@ -35,9 +35,6 @@ class Brand extends AbstractSelectComponent
     public function getOne(int|string $id): array|null
     {
         $id = (int)$id;
-        if ($systemDefault() === null) {
-            return null;
-        }
         if ($id === -1) return $this->systemDefault();
         return parent::getOne($id);
     }
