@@ -39,7 +39,7 @@ class Form extends Component
         $this->validate();
         if ($this->quote->commission != 0 && empty($this->quote->commission)) { $this->quote->commission = null; }
         $this->quote->is_deposit_percentage = $this->quote->is_deposit_percentage ?? false;
-        $this->quote->brand_id = $this->quote->brand_id ?? false;
+        $this->quote->brand_id = $this->quote->brand_id ?? null;
         $this->prospect->travelling = $this->prospect->travelling ?? false;
         $this->prospect->paying = $this->prospect->paying ?? false;
         $this->prospect->save();
@@ -86,7 +86,7 @@ class Form extends Component
     {
         return [
             'quote.name' => 'required|string|min:3',
-            'quote.brand_id' => 'integer|min:0',
+            'quote.brand_id' => 'nullable|integer',
             'quote.tax_bracket_id' => 'nullable|integer|exists:tax_brackets,id',
             'quote.consultant_id' => 'nullable|integer|exists:users,id',
             'quote.organization_id' => 'nullable|integer|exists:organizations,id',
