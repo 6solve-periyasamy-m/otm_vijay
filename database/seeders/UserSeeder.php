@@ -79,6 +79,12 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
                 'password' => '$2y$10$BjbO0lpgLYrY3LNWCnrADOo4AXgOPjTXV1sW9F/2KgABZnRCBbAXO',
             ]),
+            'work@sfsw.net' => new User([
+                'name' => 'Nicholas Alexander',
+                'email' => 'work@sfsw.net',
+                'email_verified_at' => now(),
+                'password' => '$2y$10$NCq3PTzn.yxzLduk/J2GMevVw3qBj/K685xbtyQq7y.YTF5uvI3lO',
+            ]),
         ];
     }
 }
