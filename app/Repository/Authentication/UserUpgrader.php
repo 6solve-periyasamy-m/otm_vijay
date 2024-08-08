@@ -10,14 +10,13 @@ class UserUpgrader
     public function run_upgrades()
     {
         $this->upgrade_1_to_2();
+        $this->setupDefaultUsers(); // Added Nicholas Alexander as a default user. No users left to remove
     }
 
     public function upgrade_1_to_2(): void
     {
         // Remove Charlotte Redding
         $this->removeUser('clr@octopustravelmatrix.com');
-        // Remove Nicholas Alexander
-        $this->removeUser('work@sfsw.net');
         // Remove Steve Eatherington
         $this->removeUser('sae@octopustravelmatrix.com');
 
