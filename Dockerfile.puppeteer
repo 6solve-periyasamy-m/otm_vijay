@@ -12,11 +12,13 @@ RUN apt-get update && apt-get install -y \
     unzip \
     npm
 
-# ... (other Dockerfile commands)
-COPY install_chrome.sh /tmp/install_chrome.sh
-RUN chmod +x /tmp/install_chrome.sh && /tmp/install_chrome.sh || echo "Script execution failed with error code $?"
-# ... (other Dockerfile commands)
-
+RUN apt-get update \
+    && apt-get install -y wget gnupg \
+    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
+    && apt-get update \
+    && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
+    --no-install-recommends
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*

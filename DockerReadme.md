@@ -1,3 +1,13 @@
+Docker: 
+
+First step is to build a docker instance that can be mounted with `docker-compose up`
+
+# build an instance with a tag name otm, without puppeteer
+docker build -t otm .
+
+# build an instance with a tag name otmp, with puppeteer (NB: this does not work)
+docker build -t otmp . -f ./Dockerfile.puppeteer
+
 Docker Compose:
 
 docker-compose up: Starts, stops, and rebuilds services as required based on the configuration in the docker-compose.yml file.
