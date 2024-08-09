@@ -9,7 +9,7 @@
         <x-slot:create>{{ route('customers.create') }}</x-slot:create>
         Lead Traveller
     </x-admin.input.selector.add>
-    <x-livewire.input.select.brand name="brand_id" label="Quote Branding" width="3" value="-1" />
+    <x-livewire.input.select.brand name="brand_id" label="Quote Branding" width="3" />
     <x-admin.input type="date" name="expires" width="3" value="{{\Settings::defaultQuoteExpiry()}}">Expiry Date</x-admin.input>
     <x-admin.input name="single_occupancy_surcharge" width="3">Single Occupancy Surcharge</x-admin.input>
     <x-livewire.input.select.organization name="organization_id" label="Organization (Optional)" width="6"/>
