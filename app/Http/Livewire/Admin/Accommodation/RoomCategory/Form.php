@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire\Admin\Accommodation\RoomCategory;
 
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Accommodation\RoomCategory;
 use LivewireUI\Modal\ModalComponent;
 
 class Form extends ModalComponent
 {
-    use SendsEvents;
+    use SendsEvents, LivewireForm;
 
     /** @var RoomCategory */
     public RoomCategory|int|null $category;

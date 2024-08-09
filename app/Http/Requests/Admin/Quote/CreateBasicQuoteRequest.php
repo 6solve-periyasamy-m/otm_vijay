@@ -33,7 +33,7 @@ class CreateBasicQuoteRequest extends FormRequest
             'single_occupancy_surcharge' => $this->single_occupancy_surcharge ?? 0,
             'internal_notes' => $this->internal_notes,
             'external_notes' => $this->external_notes,
-            'brand_id' => $this->brand_id > 0 ? $this->brand_id : null,
+            'brand_id' => $this->brand_id,
             'tax_bracket_id' => $this->tax_bracket_id,
         ];
     }

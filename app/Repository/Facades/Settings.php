@@ -164,6 +164,15 @@ class Settings
         return $styles;
     }
 
+    public function defaultQuoteExpiry(): string
+    {
+        $days = (int)$this->get('system.quote.expiry', -1);
+        if ($days >= 0) {
+            return now()->addDays($days)->format('Y-m-d');
+        }
+        return "";
+    }
+
     public function defaultDocumentationColors(): string
     {
         return
