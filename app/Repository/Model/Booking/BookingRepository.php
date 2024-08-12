@@ -21,6 +21,7 @@ use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\System\FellohLink;
+use App\Models\System\TaxBracket;
 use App\Models\Tour\Tour;
 use App\Models\Voucher\Executors\FlatCostReductionExecutor;
 use App\Models\Voucher\Executors\PercentageCostReductionExecutor;
@@ -564,9 +565,14 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         return $cost;
     }
 
+    private function getTaxBracket(): TaxBracket|null
+    {
+        return $this->booking->tour->taxBracket();
+    }
+
     public function getTaxes(): float|null
     {
-        return $this->booking->tour->taxBracket()?->calculate($this->getTotalCost());
+        return $this->getTaxBracket()?->calculate($this->getTotalCost());
     }
 
     public function getBasePrice(): float
@@ -632,5 +638,46 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
 
         return $gateway?->checkout([$item,], $intention, $this->booking->leadTraveller, $redirect);
+    }
+
+    public function getSimpleData(): array
+    {
+        $travellers = [];
+        foreach ($this->booking->travellers as $traveller) {
+            $travellers[] = $traveller->repository->getData();
+        }
+
+        return [
+            'token' => $this->booking->token,
+            'url' => $this->booking->tour->booking_form_url,
+            'tour' => $this->booking->tour->repository->getDataForBooking(),
+            'lead' => [
+                'first_name' => $this->booking->leadTraveller->first_name,
+                'last_name' => $this->booking->leadTraveller->last_name,
+                'email' => $this->booking->leadTraveller->email_address,
+                'telephone' => $this->booking->leadTraveller->mobile_number,
+            ],
+            'finances' => [
+                'currency' => setting('system.currency'),
+                'package' => $this->getBasePrice(),
+                'upgrade' => $this->getUpgradeCosts(),
+                'surcharge' => $this->getSingleOccupancyAmount(),
+                'tax' => [
+                    'name' => $this->getTaxBracket()?->name ?? 'No Taxes',
+                    'percentage' => $this->getTaxBracket()?->rate,
+                    'amount' => $this->getTaxes(),
+                ],
+                'total' => $this->getTotalCost(),
+                'due' => [
+                    'deposit' => [
+                        'percentage' => $this->booking->tour->deposit_percentage,
+                        'amount' => ($this->booking->tour->deposit_amount ?? 0.0) *
+                            ($this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count()),
+                    ],
+                    'amount' => $this->getDueTodayAmount(),
+                ]
+            ],
+            'travellers' => $travellers,
+        ];
     }
 }

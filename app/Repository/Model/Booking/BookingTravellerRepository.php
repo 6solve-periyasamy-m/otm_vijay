@@ -11,6 +11,7 @@ use App\Models\Booking\Component\BookingTransport;
 use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Helper\Enum\AddressParent;
+use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
@@ -522,5 +523,19 @@ class BookingTravellerRepository extends ModelRepository
     public static function find($id): BookingTraveller|null
     {
         return BookingTraveller::find($id);
+    }
+
+    public function getData()
+    {
+        $source = $this->traveller->customer ?? $this->traveller;
+        return [
+            'first_name' => $source->first_name,
+            'last_name' => $source->last_name,
+            'email' => $source->email_address,
+            'telephone' => $source->mobile_number,
+            'unknown' => $this->traveller->role === BookingTravellerRole::UNKNOWN,
+            'paying' => $this->traveller->role !== BookingTravellerRole::NOT_TRAVELLING,
+            'is_lead' => $this->traveller->id === $this->traveller->booking->lead_traveller_id,
+        ];
     }
 }

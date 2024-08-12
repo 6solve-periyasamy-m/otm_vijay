@@ -665,4 +665,22 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         }
         return null;
     }
+
+    public function getDataForBooking(): array
+    {
+        return [
+            'name' => $this->tour->name,
+            'event' => [
+                'name' => $this->tour->event?->name,
+                'description' => $this->tour->event?->description,
+                'image' => $this->tour->event?->image_url !== null ? asset($this->tour->event?->image_url) : null,
+            ],
+            'start' => $this->tour->date_from,
+            'end' => $this->tour->date_to,
+            'description' => $this->tour->description,
+            'image' => $this->tour->event?->image_url !== null ? asset($this->tour->event?->image_url) : null,
+            'inclusions' => $this->getInclusions(),
+            'rooms' => $this->getRooms(),
+        ];
+    }
 }
