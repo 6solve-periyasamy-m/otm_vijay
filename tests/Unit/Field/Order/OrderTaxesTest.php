@@ -31,22 +31,23 @@ class OrderTaxesTest extends DatabaseTestCase
         $this->assertNull($order->getTaxes());
     }
 
+    // Tax is being calculated as an inclusive amount, i.e. £1000 with 10% tax is £909.09 + £90.91 tax
     public function testTenPercentTaxes(): void
     {
         $order = $this->getOrder(10, 1000, 0, 0);
-        $this->assertEquals(100, $order->getTaxes());
+        $this->assertEquals(90.91, $order->getTaxes());
     }
 
     public function testTwentyPercentTaxes(): void
     {
         $order = $this->getOrder(20, 1000, 0, 0);
-        $this->assertEquals(200, $order->getTaxes());
+        $this->assertEquals(166.67, $order->getTaxes());
     }
 
     public function testTenPercentTaxesWithTenPercentCommission(): void
     {
         $order = $this->getOrder(10, 1000, 0, 0, 10);
         // Commission should not affect taxes
-        $this->assertEquals(100, $order->getTaxes());
+        $this->assertEquals(90.91, $order->getTaxes());
     }
 }
