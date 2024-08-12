@@ -6,6 +6,7 @@ use App\Exceptions\UnauthorizedGatewayException;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Order\Payment\PaymentIntention;
+use App\Repository\Intention\PaymentIntentionRepository;
 use Cache;
 use Carbon\Carbon;
 use Exception;
@@ -47,19 +48,21 @@ class AirwallexGateway extends Gateway
             $cost += sigfig($item->cost);
             $description .= $item->name . ", ";
         }
-        $description = preg_replace('/[^a-zA-Z0-9]/', '', substr($description, 0, -2));
-        $body = [
-            'amount' => $cost,
-            'currency' => setting('system.currency', config('cashier.currency', 'gbp')),
-            'description' => $description,
-            'metadata' => [
-                'intention_id' => $intention->id,
-            ],
-            'reusable' => false,
-            'title' => $intention->getBrand()->name . ' Payment',
-        ];
-        $data = $this->sendRequest("pa/payment_links/create", $body);
-        return $data['url'];
+        $intention->amount = $cost;
+        $intention->save();
+        return route('payment.gateway.airwallex.checkout', ['intent' => $intention->id,]);
+    }
+
+    public function showCheckout(Request $request)
+    {
+        try {
+            $intent = PaymentIntention::find($request->intent);
+            $aIntent = $this->getPaymentIntention($intent->amount, $intent);
+            return view('pages.customer.payment.airwallex', ['intent' => $aIntent,]);
+        } catch (UnauthorizedGatewayException $e) {
+            return back()->withErrors(['msg' => 'That gateway has not been setup for use.']);
+        }
+
     }
 
     /**
@@ -80,6 +83,23 @@ class AirwallexGateway extends Gateway
         }
     }
 
+    /**
+     * @throws UnauthorizedGatewayException
+     */
+    public function getPaymentIntention(float $amount, PaymentIntention $intention): array
+    {
+        $data = $this->sendRequest('pa/payment_intents/create', [
+            'amount' => $amount,
+            'currency' => setting('system.currency', config('cashier.currency', 'gbp')),
+            'merchant_order_id' => $intention->reference,
+            'metadata' => [
+                'intention_id' => $intention->id,
+            ],
+            'request_id' => $intention->id,
+        ]);
+        return ['id' => $data['id'], 'secret' => $data['client_secret'],];
+    }
+
     public function process(string $reference, float $amount, string $created = null): void
     {
         $intention = PaymentIntention::find($reference);
@@ -93,7 +113,7 @@ class AirwallexGateway extends Gateway
         } catch(Exception $e) {
             Log::error($e);
         }
-        if ($request->json('name') === 'payment_link.paid') {
+        if ($request->json('name') === 'payment_link.paid' || $request->json('name') === 'payment_intent.succeeded') {
             $this->process($request->json('data.object.metadata.intention_id'), $request->json('data.object.amount'), $request->json('data.object.created_at'));
         }
     }
