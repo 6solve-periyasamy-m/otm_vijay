@@ -3,6 +3,7 @@
 namespace App\Http\Gateways;
 
 use App\Exceptions\UnauthorizedGatewayException;
+use App\Http\Gateways\Interfaces\SupportsRedirect;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Order\Payment\PaymentIntention;
@@ -14,7 +15,7 @@ use Http;
 use Illuminate\Http\Request;
 use Log;
 
-class AirwallexGateway extends Gateway
+class AirwallexGateway extends Gateway implements SupportsRedirect
 {
     private string $success;
     private string $cancelled;
@@ -44,7 +45,35 @@ class AirwallexGateway extends Gateway
         }
     }
 
+    public function getRedirect(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
+    {
+        $cost = 0;
+        $description = "";
+        foreach ($items as $item) {
+            $cost += sigfig($item->cost);
+            $description .= $item->name . ", ";
+        }
+        $description = preg_replace('/[^a-zA-Z0-9]/', '', substr($description, 0, -2));
+        $body = [
+            'amount' => $cost,
+            'currency' => setting('system.currency', config('cashier.currency', 'gbp')),
+            'description' => $description,
+            'metadata' => [
+                'intention_id' => $intention->id,
+            ],
+            'reusable' => false,
+            'title' => $intention->getBrand()->name . ' Payment',
+        ];
+        $data = $this->sendRequest("pa/payment_links/create", $body);
+        return $data['url'];
+    }
+
     public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
+    {
+        return $this->getRedirect($items, $intention, $customer, $success);
+    }
+
+    public function getKeysForModal(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
     {
         $cost = 0;
         $description = "";

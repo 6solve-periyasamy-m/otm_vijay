@@ -4,6 +4,7 @@ namespace App\Http\Gateways;
 
 use App\Exceptions\RemoteGatewayError;
 use App\Exceptions\UnauthorizedGatewayException;
+use App\Http\Gateways\Interfaces\SupportsRedirect;
 use App\Http\Requests\Gateway\Felloh\NewWebhookRequest;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
@@ -23,7 +24,7 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Http\JsonResponse;
 use Log;
 
-class FellohGateway extends Gateway
+class FellohGateway extends Gateway implements SupportsRedirect
 {
     private string $token;
     private int $expiry;
@@ -48,7 +49,7 @@ class FellohGateway extends Gateway
      * @throws UnauthorizedGatewayException Thrown if a 4xx error is returned from the API
      * @throws RemoteGatewayError Thrown if a 5xx error is returned from the API
      */
-    public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
+    public function getRedirect(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
     {
         $cost = 0;
         $description = "";
@@ -89,6 +90,11 @@ class FellohGateway extends Gateway
         } else {
             return "https://pay.felloh.com/{$link}";
         }
+    }
+
+    public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
+    {
+        return $this->getRedirect($items, $intention, $customer, $success);
     }
 
     public function process(string $reference, float $amount, string $created = null): void
