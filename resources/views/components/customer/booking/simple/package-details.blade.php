@@ -41,12 +41,10 @@
             </li>
         @endif
         @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
-        @if($singleOccupancy > 0 || $singleOccupancy < 0)
-            <li>
-                <p class="txt">Single occupancy surcharge</p>
-                <p class="price">{{ f_currency($singleOccupancy) }}</p>
-            </li>
-        @endif
+        <li>
+            <p class="txt">Single occupancy surcharge</p>
+            <p class="price">{{ f_currency($singleOccupancy) }}</p>
+        </li>
         @if($booking->repository->getTaxes() !== null)
             <li>
                 <p class="txt">{{ $tour->taxBracket()->name }} (Included)</p>
