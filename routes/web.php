@@ -3,6 +3,7 @@
 use App\Http\Controllers\Customer\CustomerBookingController;
 use App\Http\Controllers\Customer\SimpleBookingController;
 use App\Http\Controllers\StripeController;
+use App\Http\Gateways\AirwallexGateway;
 use App\Http\Gateways\FellohGateway;
 use App\Http\Gateways\OpayoGateway;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,9 @@ Route::prefix('payment')->name('payment.')->group(function () {
         });
         Route::prefix('opayo')->name('opayo.')->group(function () {
             Route::get('failed', [OpayoGateway::class, 'failed'])->name('failed');
+        });
+        Route::prefix('airwallex')->name('airwallex.')->group(function () {
+            Route::get('checkout', [AirwallexGateway::class, 'showCheckout'])->name('checkout');
         });
     });
 });
