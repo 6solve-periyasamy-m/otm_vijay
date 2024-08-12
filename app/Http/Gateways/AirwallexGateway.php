@@ -73,17 +73,18 @@ class AirwallexGateway extends Gateway implements SupportsRedirect
         return $this->getRedirect($items, $intention, $customer, $success);
     }
 
-    public function getKeysForModal(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
+    /**
+     * @throws UnauthorizedGatewayException
+     */
+    public function getApiKeys(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): array
     {
         $cost = 0;
-        $description = "";
         foreach ($items as $item) {
             $cost += sigfig($item->cost);
-            $description .= $item->name . ", ";
         }
         //$intention->amount = $cost;
         $intention->save();
-        return route('payment.gateway.airwallex.checkout', ['intent' => $intention->id,]);
+        return $this->getPaymentIntention($cost, $intention);
     }
 
     public function showCheckout(Request $request)
