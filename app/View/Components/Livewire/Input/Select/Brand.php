@@ -22,23 +22,6 @@ class Brand extends AbstractSelectComponent
         return view('components.livewire.input.select.generic', ['route' => 'brands']);
     }
 
-    private function systemDefault(): array
-    {
-        return ['id' => -1, 'text' => 'Use System Default'];
-    }
-
-    public function getAll(SelectFilterRequest $request): array
-    {
-        return ['results' => [$this->systemDefault(), ...(parent::getAll($request)['results']??[]),]];
-    }
-
-    public function getOne(int|string $id): array|null
-    {
-        $id = (int)$id;
-        if ($id === -1) return $this->systemDefault();
-        return parent::getOne($id);
-    }
-
     protected function getModels(?int $id = null): Collection
     {
         if ($id !== null) {

@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire\Admin\System\Installments;
 
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use Livewire\Component;
 use Settings;
 
 class View extends Component
 {
-    use SendsEvents;
+    use SendsEvents, LivewireForm;
     public string|float|int|null $deposit;
     public string|float|int|null $final;
     public string|float|int|null $expiry;
@@ -24,7 +25,7 @@ class View extends Component
     {
         $this->deposit = setting('system.installments.deposit', null);
         $this->final = setting('system.installments.final', null);
-        $this->expiry = setting('system.installments.expiry', null);
+        $this->expiry = setting('system.quote.expiry', null);
         $this->render();
     }
 
@@ -44,7 +45,8 @@ class View extends Component
 
     public function setExpiry(): void
     {
-        Settings::set('system.installments.expiry', empty($this->expiry) ? null : $this->expiry);
+        Settings::set('system.quote.expiry', empty($this->expiry) ? null : $this->expiry);
+        $this->toast('Updated Successfully', 'Successfully updated the default quote expiry date', 'success');
     }
 
     public function delete($days): void
