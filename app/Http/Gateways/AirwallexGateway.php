@@ -16,13 +16,17 @@ use Log;
 
 class AirwallexGateway extends Gateway
 {
+    private string $success;
+    private string $cancelled;
     private static string $GATEWAY = 'Airwallex';
     private string $token;
     private int $expiry;
     private string $url;
 
-    public function __construct()
+    public function __construct(?string $success = null, ?string $cancelled = null)
     {
+        $this->success = $success ?? route('payment.gateway.stripe.success');
+        $this->cancelled = $cancelled ?? route('payment.gateway.stripe.cancelled');
         if (config('app.gateways.airwallex.live', false)) {
             $this->url = "https://api.airwallex.com/api/v1/";
         } else {
@@ -95,6 +99,7 @@ class AirwallexGateway extends Gateway
                 'intention_id' => $intention->id,
             ],
             'request_id' => $intention->id,
+            'return_url' => $this->success,
         ]);
         return ['id' => $data['id'], 'secret' => $data['client_secret'],];
     }
