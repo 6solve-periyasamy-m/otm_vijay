@@ -27,28 +27,26 @@ jQuery(document).ready(function () {
     let maxRooms = 1;
     
     function updateperseons() {
-        let roomCount = parseInt(jQuery('.second-block.rme-det .inner-block .right .No .text').text());
-        let personCount = parseInt(jQuery('.second-block.tra-det .inner-block .right .No .text').text());
-
-        jQuery('.third-block .first-bl').each(function(index) {
-            if (personCount > 0) {
-                let personsForThisRoom = Math.min(2, Math.ceil(personCount / roomCount));
-
-                jQuery(this).find('#bedding_configuration option').prop('disabled', false); 
-                jQuery(this).find('#bedding_configuration option').eq(personsForThisRoom - 1).prop('selected', true);
-
-                jQuery(this).find('#bedding_configuration option').each(function(optIndex) {
-                    if (optIndex !== personsForThisRoom - 1) {
-                        jQuery(this).prop('disabled', true);
-                    }
-                });
-                personCount -= personsForThisRoom;
-                roomCount--;
-            } else {
-                jQuery(this).find('#bedding_configuration option').prop('disabled', true).prop('selected', false);
-            }
-        });
-    }
+		let roomCount = parseInt(jQuery('.second-block.rme-det .inner-block .right .No .text').text());
+		let personCount = parseInt(jQuery('.second-block.tra-det .inner-block .right .No .text').text());
+		jQuery('.third-block .first-bl').each(function(index) {
+			if (personCount > 0) {
+                console.log(personCount);
+				let personsForThisRoom = Math.min(2, Math.ceil(personCount / roomCount));
+				jQuery(this).find('#bedding_configuration option').prop('disabled', false); 
+				jQuery(this).find('#bedding_configuration option').eq(personsForThisRoom - 1).prop('selected', true);
+				jQuery(this).find('#bedding_configuration option').each(function(optIndex) {
+					if (optIndex !== personsForThisRoom - 1) {
+						jQuery(this).prop('disabled', true);
+					}
+				});
+				personCount -= personsForThisRoom;
+				roomCount--;
+			} else {
+				jQuery(this).find('#bedding_configuration option').prop('disabled', true).prop('selected', false);
+			}
+		});
+	}
 
     function updateRoomNumbers(minRooms) {
         jQuery('.third-block .first-bl').each(function (index) {
