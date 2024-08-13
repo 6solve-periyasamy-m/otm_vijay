@@ -34,7 +34,7 @@ jQuery(document).ready(function () {
                 jQuery(this).closest('.first-bl').remove();
             }
         });
-        let sele = jQuery('.second-block.tra-det .inner-block .right .No .text').text();
+        /*let sele = jQuery('.second-block.tra-det .inner-block .right .No .text').text();
         sele = parseInt(sele);
         console.log(sele);
         if(sele % 2 == 0){
@@ -44,7 +44,7 @@ jQuery(document).ready(function () {
             jQuery('.third-block .first-bl:last .travellers-select option:eq(0)').prop('selected', true).prop('disabled', false);
             jQuery('.third-block .first-bl:last .travellers-select option:eq(1)').prop('disabled', true);
         }
-        
+        */
 
 //         jQuery('.third-block .first-bl').each(function(index) {
 //             jQuery(this).find('h6:first').text('Room ' + (index + 1));
@@ -216,7 +216,7 @@ jQuery(document).ready(function () {
     /* input scroll */
 
 
-    jQuery('.submit-btn-cls .submit-btn').click(function() {
+    /*jQuery('.submit-btn-cls .submit-btn').click(function() {
         function isGmail(email) {
             return /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email);
         }
@@ -243,6 +243,6 @@ jQuery(document).ready(function () {
             }
         });
 
-    });
+    });*/
 
 });
