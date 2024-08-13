@@ -45,6 +45,13 @@ class Rooming extends Component
         $this->validateRoomCount();
     }
 
+    public function renew()
+    {
+        $this->booking = Booking::find($this->booking->id);
+        $this->lead = $this->booking->leadTraveller;
+        $this->tour = Tour::find($this->tour->id);
+    }
+
     public function getTravellerCount(): int
     {
         return $this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count();
@@ -131,6 +138,7 @@ class Rooming extends Component
 
     public function render()
     {
+        $this->renew();
         return view('livewire.customer.booking.simple.rooming');
     }
 
