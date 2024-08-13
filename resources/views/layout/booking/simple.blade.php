@@ -30,7 +30,7 @@
 </head>
 <body>
     <header>
-        <section class="top-head test-class-nibble">
+        <section class="top-head test">
             <div class="row">
                 <div class="col-one">
                     <div class="img-contain">

@@ -7,7 +7,7 @@
 
             <div class="top-form-contain">
                 <div class="form-field">
-                    <input type="text" wire:model="lead.first_name" placeholder="First Name" required>
+                    <input type="text" wire:model="lead.first_name" placeholder="First Name*" required>
                     @error('lead.first_name') <label class="error-label">{{ $message }}</label> @enderror
                 </div>
                 <div class="form-field">
@@ -15,12 +15,12 @@
                     @error('lead.last_name') <label class="error-label">{{ $message }}</label> @enderror
                 </div>
                 <div class="form-field">
-                    <input type="email" wire:model="lead.email_address" placeholder="Email" required>
+                    <input type="email" wire:model="lead.email_address" placeholder="Email*" required>
                     @error('lead.email_address') <label class="error-label">{{ $message }}</label> @enderror
                 </div>
                 <div class="form-field mobile_field">
                     <div wire:ignore>
-                        <input type="tel" id="mobile_number" name="mobile_number" value="{{ $this->lead->mobile_number }}" placeholder="Mobile number" required>
+                        <input type="tel" id="mobile_number" name="mobile_number" value="{{ $this->lead->mobile_number }}" placeholder="Mobile number*" required>
                         <script type="text/javascript">
                             jQuery(document).ready(function () {
                                 let input = document.querySelector('#mobile_number');
@@ -126,7 +126,7 @@
                             @error("rooms.$x.room") <label class="error-label">{{ $message }}</label> @enderror
                         </div>
                         <div class="form-field">
-                            <select wire:model="rooms.{{$x}}.travellers" name="pax_number">
+                            <select class="travellers-select" wire:model="rooms.{{$x}}.travellers" name="pax_number">
                                 <option value="1">1 Traveller</option>
                                 <option value="2">2 Travellers</option>
                             </select>

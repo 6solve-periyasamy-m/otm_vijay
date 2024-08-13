@@ -34,6 +34,16 @@ jQuery(document).ready(function () {
                 jQuery(this).closest('.first-bl').remove();
             }
         });
+        let sele = jQuery('.second-block.tra-det .inner-block .right .No .text').text();
+        sele = parseInt(sele);
+
+        if(sele % 2 == 0){
+            jQuery('.third-block .first-bl:last .travellers-select option:eq(1)').prop('selected', true).prop('disabled', false);
+            jQuery('.third-block .first-bl:last .travellers-select option:eq(0)').prop('disabled', true);
+        } else {
+            jQuery('.third-block .first-bl:last .travellers-select option:eq(0)').prop('selected', true).prop('disabled', false);
+            jQuery('.third-block .first-bl:last .travellers-select option:eq(1)').prop('disabled', true);
+        }
 
 //         jQuery('.third-block .first-bl').each(function(index) {
 //             jQuery(this).find('h6:first').text('Room ' + (index + 1));
@@ -191,4 +201,47 @@ jQuery(document).ready(function () {
             target.css('display', 'block');
         }
     });
+    /* Popup Close */
+    $(document).on('click', function (event) {
+        var target = $(event.target);
+        if (!target.closest('.upgrades-popup .convco').length && !target.hasClass('upgrade-cls')) {
+          $('.upgrades-popup').css('display', 'none');
+        }
+        if (!target.closest('.see-more-popup .convco-two').length && !target.hasClass('seemore-href')) {
+            $('.see-more-popup').css('display', 'none');
+        }
+    });
+
+    /* input scroll */
+
+
+    jQuery('.submit-btn-cls .submit-btn').click(function() {
+        function isGmail(email) {
+            return /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email);
+        }
+        var form = jQuery(this).closest('form');
+        var error = false;
+        
+        jQuery(form).find('input:required').each(function() {
+            if (jQuery(this).attr('type') == 'email') {
+                var email = jQuery(this).val().trim();
+                if (!isGmail(email)) {
+                    error = true;
+                    jQuery('html, body').animate({
+                        scrollTop: form.offset().top
+                    }, 500);
+                    return false; 
+                }
+            }
+            if (jQuery(this).val().trim().length === 0) {
+                error = true;
+                jQuery('html, body').animate({
+                    scrollTop: form.offset().top
+                }, 500);
+                return false; 
+            }
+        });
+
+    });
+
 });
