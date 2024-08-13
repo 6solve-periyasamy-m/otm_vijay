@@ -76,7 +76,7 @@
                 </div>
             </div>
         </section>
-        <section class="ma-block">
+        <section id="kpt-ms-sec-idmod" class="ma-block">
             @yield('content')
             {{-- Toast Notifications --}}
             <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
