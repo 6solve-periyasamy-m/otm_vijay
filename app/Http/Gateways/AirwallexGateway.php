@@ -47,7 +47,7 @@ class AirwallexGateway extends Gateway
             $cost += sigfig($item->cost);
             $description .= $item->name . ", ";
         }
-        $description = preg_replace('/[^a-zA-Z0-9]/', '', substr($description, 0, -2));
+        //$description = preg_replace('/[^a-zA-Z0-9]/', '', substr($description, 0, -2));
         $body = [
             'amount' => $cost,
             'currency' => setting('system.currency', config('cashier.currency', 'gbp')),
