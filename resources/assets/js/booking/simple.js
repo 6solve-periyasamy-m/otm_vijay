@@ -265,12 +265,12 @@ jQuery(document).ready(function () {
     jQuery(document).on('mouseover', '.second-block .hotel-details .information-hover', function() {
         jQuery('.accommodation-details-hover').css('display', 'none');
         jQuery('.information-hover').removeClass('hovor');
-        jQuery(this).closest('.hotel-details ').find('.hotel-details .information-hover').addClass('hovor');
-        jQuery(this).closest('.hotel-details ').find('.accommodation-details-hover').css('display', 'block');
+        jQuery(this).closest('.hotel-details').find('.information-hover').addClass('hovor');
+        jQuery(this).closest('.hotel-details').find('.accommodation-details-hover').css('display', 'block');
     });
 
-    jQuery(document).on('mouseleave', '.second-block', function() {
-        jQuery(this).find('.hotel-details .information-hover').removeClass('hovor');
+    jQuery(document).on('mouseleave', '.hotel-details', function() {
+        jQuery(this).find('.information-hover').removeClass('hovor');
         jQuery(this).find('.accommodation-details-hover').css('display', 'none');
     });
 
