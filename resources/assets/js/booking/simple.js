@@ -49,6 +49,7 @@ jQuery(document).ready(function () {
 	}
 
     $(document).ajaxComplete(function(){
+        console.log('ajaxcoml')
         setTimeout(() => {
             updateperseons();
         }, 5000);
