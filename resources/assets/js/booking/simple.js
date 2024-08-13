@@ -201,4 +201,37 @@ jQuery(document).ready(function () {
             $('.see-more-popup').css('display', 'none');
         }
     });
+
+    /* input scroll */
+
+
+    jQuery('.submit-btn-cls .submit-btn').click(function() {
+        function isGmail(email) {
+            return /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email);
+        }
+        var form = jQuery(this).closest('form');
+        var error = false;
+        
+        jQuery(form).find('input:required').each(function() {
+            if (jQuery(this).attr('type') == 'email') {
+                var email = jQuery(this).val().trim();
+                if (!isGmail(email)) {
+                    error = true;
+                    jQuery('html, body').animate({
+                        scrollTop: form.offset().top
+                    }, 500);
+                    return false; 
+                }
+            }
+            if (jQuery(this).val().trim().length === 0) {
+                error = true;
+                jQuery('html, body').animate({
+                    scrollTop: form.offset().top
+                }, 500);
+                return false; 
+            }
+        });
+
+    });
+
 });

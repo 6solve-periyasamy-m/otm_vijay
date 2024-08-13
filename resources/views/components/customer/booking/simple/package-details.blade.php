@@ -23,7 +23,7 @@
             <p class="inclusion">{{ $inclusion }}</p>
         @endforeach
         <p class="see-more">
-            <a href="#" data-action="popup" data-target="see-more-popup">See more</a>
+            <a href="#" class="seemore-href" data-action="popup" data-target="see-more-popup">See more</a>
         </p>
     </div>
 </div>
