@@ -120,10 +120,12 @@
                                 {{ Icon::regular('credit-card') }}
                                 <p>Credit / Debit card</p>
                             </div>
+                            {{--
                             <div class="first-in">
                                 {{ Icon::solid('file-invoice') }}
                                 <p>Invoice – Direct Debit</p>
                             </div>
+                            --}}
                         </div>
                     </div>
                     <div class="wh-las-cls-con">

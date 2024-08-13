@@ -1304,7 +1304,9 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .additional-block .card-field-box .first-in {
-    width: 50%;
+    min-width: 50%;
+    width: 100%;
+    max-width: 100%;
 }
 
 .additional-block .form-field-checkbox .containr .inn-txt-cls {
