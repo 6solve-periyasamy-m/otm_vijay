@@ -2,7 +2,7 @@
     <div class="second-form">
         <div class="left-col">
             <div class="contain">
-                <div class="lmnvkp">
+                <div class="purchase-info-block">
                     <h3>Enter purchaser information</h3>
                     <div class="top-check-top-cls">
                         <div class="txt-cls-mod-fs">

@@ -1557,19 +1557,19 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     margin: 0 0 24px 0;
 }
 
-.lmnvkp {
+.purchase-info-block {
     display: flex
 }
 
-.lmnvkp h3 {
+.purchase-info-block h3 {
     width: 100%;
 }
 
-.lmnvkp .top-check-top-cls, .lmnvkp .top-check-top-cls label {
+.purchase-info-block .top-check-top-cls, .purchase-info-block .top-check-top-cls label {
     width: 205px;
 }
 
-.lmnvkp .top-check-top-cls {
+.purchase-info-block .top-check-top-cls {
     display: block;
     position: relative;
     padding-left: 35px;
@@ -1582,7 +1582,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     user-select: none;
 }
 
-.lmnvkp .top-check-top-cls .contain-vv input {
+.purchase-info-block .top-check-top-cls .contain-vv input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
@@ -1590,7 +1590,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     width: 0;
 }
 
-.lmnvkp .top-check-top-cls .contain-vv .checkmark {
+.purchase-info-block .top-check-top-cls .contain-vv .checkmark {
     position: absolute;
     top: 0;
     left: 0;
@@ -1601,17 +1601,17 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     border-radius: 8px;
 }
 
-.lmnvkp .top-check-top-cls .contain-vv .checkmark:after {
+.purchase-info-block .top-check-top-cls .contain-vv .checkmark:after {
     content: "";
     position: absolute;
     display: none;
 }
 
-.lmnvkp .top-check-top-cls .contain-vv input:checked ~ .checkmark:after {
+.purchase-info-block .top-check-top-cls .contain-vv input:checked ~ .checkmark:after {
     display: block;
 }
 
-.lmnvkp .top-check-top-cls .contain-vv .checkmark:after {
+.purchase-info-block .top-check-top-cls .contain-vv .checkmark:after {
     left: 9px;
     top: 5px;
     width: 5px;
@@ -1623,7 +1623,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     transform: rotate(45deg);
 }
 
-.lmnvkp .top-check-top-cls span {
+.purchase-info-block .top-check-top-cls span {
     display: block;
     color: var(--text-dark);
     font-family: "PP Neue Montreal Medium";
@@ -1784,7 +1784,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 @media only screen and (max-width: 1278px) {
-    .lmnvkp {
+    .purchase-info-block {
         flex-wrap: wrap;
         margin-bottom: 30px;
     }
