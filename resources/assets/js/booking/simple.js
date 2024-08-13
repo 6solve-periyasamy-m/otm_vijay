@@ -38,13 +38,14 @@ jQuery(document).ready(function () {
         sele = parseInt(sele);
         console.log(sele);
         if(sele % 2 == 0){
+            console.log(jQuery('.third-block .first-bl:last .travellers-select option:eq(1)'));
             jQuery('.third-block .first-bl:last .travellers-select option:eq(1)').prop('selected', true).prop('disabled', false);
             jQuery('.third-block .first-bl:last .travellers-select option:eq(0)').prop('disabled', true);
         } else {
             jQuery('.third-block .first-bl:last .travellers-select option:eq(0)').prop('selected', true).prop('disabled', false);
             jQuery('.third-block .first-bl:last .travellers-select option:eq(1)').prop('disabled', true);
         }
-        
+
 
 //         jQuery('.third-block .first-bl').each(function(index) {
 //             jQuery(this).find('h6:first').text('Room ' + (index + 1));
@@ -213,10 +214,19 @@ jQuery(document).ready(function () {
         }
     });
 
+    
+    $("#custom-input-date").datepicker({
+        dateFormat: 'dd/mm/yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: '1970:c', 
+        minDate: new Date(1970, 0, 1) 
+    });
+
     /* input scroll */
 
 
-    jQuery('.submit-btn-cls .submit-btn').click(function() {
+    /*jQuery('.submit-btn-cls .submit-btn').click(function() {
         function isGmail(email) {
             return /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email);
         }
@@ -243,6 +253,6 @@ jQuery(document).ready(function () {
             }
         });
 
-    });
+    });*/
 
 });
