@@ -96,6 +96,7 @@
                                 <p>{{ f_currency($booking->repository->getTotalCost()) }}</p>
                             </div>
                         </div>
+                        @if(!$this->mustPayAll())
                         <div class="form-field-checkbox" wire:click="setPayFull(0)">
                             <div class="left-ass">
                                 <label class="containr">
@@ -113,7 +114,7 @@
                                 <p>{{ f_currency($booking->repository->getDueTodayAmount()) }}</p>
                             </div>
                         </div>
-
+                        @endif
                         <div class="card-field-box">
                             <div class="first-in active">
                                 {{ Icon::regular('credit-card') }}

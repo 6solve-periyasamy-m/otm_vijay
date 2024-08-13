@@ -40,9 +40,18 @@ class Checkout extends Component
         $this->updateValue('payer.mobile_number', $this->payer->mobile_number);
     }
 
+    public function mustPayAll(): bool
+    {
+        return now()->gt($this->booking->tour->final_payment);
+    }
+
     public function setPayFull(bool $payFull): void
     {
-        $this->payFull = $payFull;
+        if ($this->mustPayAll()) {
+            $this->payFull = true;
+        } else {
+            $this->payFull = $payFull;
+        }
     }
 
     private function preCheckout(): void
@@ -57,6 +66,7 @@ class Checkout extends Component
     public function checkout()
     {
         if (!$this->terms) { return $this->addError('common', 'You must accept terms and conditions.'); }
+        $this->preCheckout();
         try {
             return redirect($this->booking->repository->getCheckoutLink($this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount()));
         } catch (\Exception $e) {
