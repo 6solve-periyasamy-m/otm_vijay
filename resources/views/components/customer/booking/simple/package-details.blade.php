@@ -116,7 +116,7 @@
                         <h6>Ticket Upgrade</h6>
                         <div class="inner-contain">
                             <div class="fst-lv">
-                                <img src="../../../../../../assets/images/accommodation/accommodation_5.jpg" alt="featured-image">
+                                <img src="https://qa.octopustravelmatrix.com/images/accommodation/accommodation_5.jpg" alt="featured-image">
                             </div>
                             <div class="snd-lv">
                                 <p>4 Nights, 5 Star Accommodation</p>
@@ -130,7 +130,7 @@
                         </div>
                         <div class="inner-contain">
                             <div class="fst-lv">
-                                <img src="assets/images/4 Star f.png" alt="featured-image">
+                                <img src="https://qa.octopustravelmatrix.com/images/accommodation/accommodation_5.jpg" alt="featured-image">
                             </div>
                             <div class="snd-lv">
                                 <p>4 Nights, 5 Star Accommodation</p>
@@ -148,7 +148,7 @@
                         <h6>Stay extra nights</h6>
                         <div class="inner-contain">
                             <div class="fst-lv">
-                                <img src="assets/images/accommodation/accommodation_5.jpg" alt="featured-image">
+                                <img src="https://qa.octopustravelmatrix.com/images/accommodation/accommodation_5.jpg" alt="featured-image">
                             </div>
                             <div class="snd-lv">
                                 <p>4 Nights, 5 Star Accommodation</p>
