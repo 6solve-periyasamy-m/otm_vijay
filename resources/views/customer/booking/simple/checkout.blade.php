@@ -12,6 +12,8 @@
     ])
 ])
 
+@section('title', "{$tour->name} - {$tour->brand->name}")
+
 @section('content')
     <livewire:customer.booking.simple.checkout :tour="$tour" :booking="$booking" />
 @endsection
