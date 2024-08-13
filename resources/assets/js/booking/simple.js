@@ -26,6 +26,38 @@ jQuery(document).ready(function () {
     let minRooms = 1;
     let maxRooms = 1;
 
+    function updateperseons() {
+        let roomCount = parseInt(jQuery('.second-block.rme-det .inner-block .right .No .text').text());
+        let personCount = parseInt(jQuery('.second-block.tra-det .inner-block .right .No .text').text());
+    
+        jQuery('.third-block .first-bl').each(function(index) {
+            // Check if there are remaining persons to allocate
+            if (personCount > 0) {
+                // Calculate the number of persons for this room (2 max per room)
+                let personsForThisRoom = Math.min(2, Math.ceil(personCount / roomCount));
+    
+                // Enable and select the appropriate option in the dropdown for this room
+                jQuery(this).find('#bedding_configuration option').prop('disabled', false); // Enable all options initially
+                jQuery(this).find('#bedding_configuration option').eq(personsForThisRoom - 1).prop('selected', true);
+    
+                // Disable the options that are not selected
+                if (personsForThisRoom < 2) {
+                    jQuery(this).find('#bedding_configuration option').eq(1).prop('disabled', true);
+                }
+                if (personsForThisRoom < 1) {
+                    jQuery(this).find('#bedding_configuration option').eq(0).prop('disabled', true);
+                }
+    
+                // Reduce the person count and room count
+                personCount -= personsForThisRoom;
+                roomCount--;
+            } else {
+                // If no persons left, disable all options for the remaining rooms
+                jQuery(this).find('#bedding_configuration option').prop('disabled', true).prop('selected', false);
+            }
+        });
+    }
+
     function updateRoomNumbers(minRooms) {
         jQuery('.third-block .first-bl').each(function (index) {
             if (index < minRooms) {
@@ -34,17 +66,7 @@ jQuery(document).ready(function () {
                 jQuery(this).closest('.first-bl').remove();
             }
         });
-        let sele = jQuery('.second-block.tra-det .inner-block .right .No .text').text();
-        sele = parseInt(sele);
-        console.log(sele);
-        if(sele % 2 == 0){
-            console.log(jQuery('.third-block .first-bl:last .travellers-select option:eq(1)'));
-            jQuery('.third-block .first-bl:last .travellers-select option:eq(1)').prop('selected', true).prop('disabled', false);
-            jQuery('.third-block .first-bl:last .travellers-select option:eq(0)').prop('disabled', true);
-        } else {
-            jQuery('.third-block .first-bl:last .travellers-select option:eq(0)').prop('selected', true).prop('disabled', false);
-            jQuery('.third-block .first-bl:last .travellers-select option:eq(1)').prop('disabled', true);
-        }
+        updateperseons();
 
 
 //         jQuery('.third-block .first-bl').each(function(index) {
@@ -132,6 +154,44 @@ jQuery(document).ready(function () {
             }
 
             updateRoomNumbers(minRooms);
+        }
+    });
+
+    jQuery('.tra-det .inner-block .right .inn .Max').click(function() {
+        let textval = jQuery(this).closest('.inn').find('.No .text');
+        let text = parseInt(textval.text());
+        if (text < 5) {
+            textval.text(text + 1);
+            updateRooms(text + 1);
+        }
+    });
+
+    jQuery('.rme-det .inner-block .right .inn .Min').click(function() {
+        let textval = jQuery(this).closest('.inn').find('.No .text');
+        let text = parseInt(textval.text());
+
+        if (text > minRooms) {
+            textval.text(text - 1);
+            let roomCount = jQuery('.third-block .first-bl').length;
+            if (roomCount > 1) {
+                jQuery('.third-block .first-bl:last').remove();
+                updateRoomNumbers(text - 1);
+            } else {
+                jQuery('.third-block .first-bl:first').hide();
+            }
+        }
+    });
+
+    jQuery('.rme-det .inner-block .right .inn .Max').click(function() {
+        let textval = jQuery(this).closest('.inn').find('.No .text');
+        let text = parseInt(textval.text());
+
+        if (text < maxRooms) {
+            textval.text(text + 1);
+            let newRoom = jQuery('.third-block .first-bl:first').clone();
+            clearSelectedValues(newRoom);
+            newRoom.appendTo('.third-block');
+            updateRoomNumbers(text + 1);
         }
     });
 
@@ -226,24 +286,12 @@ jQuery(document).ready(function () {
     /* input scroll */
 
 
-    /*jQuery('.submit-btn-cls .submit-btn').click(function() {
-        function isGmail(email) {
-            return /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email);
-        }
+    jQuery('.submit-btn-cls .submit-btn').click(function() {
+       
         var form = jQuery(this).closest('form');
         var error = false;
         
         jQuery(form).find('input:required').each(function() {
-            if (jQuery(this).attr('type') == 'email') {
-                var email = jQuery(this).val().trim();
-                if (!isGmail(email)) {
-                    error = true;
-                    jQuery('html, body').animate({
-                        scrollTop: form.offset().top
-                    }, 500);
-                    return false; 
-                }
-            }
             if (jQuery(this).val().trim().length === 0) {
                 error = true;
                 jQuery('html, body').animate({
@@ -253,6 +301,6 @@ jQuery(document).ready(function () {
             }
         });
 
-    });*/
+    });
 
 });
