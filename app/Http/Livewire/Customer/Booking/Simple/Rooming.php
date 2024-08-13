@@ -62,6 +62,7 @@ class Rooming extends Component
         if ($this->booking->travellers()->count() >= self::MAX_TRAVELLERS) { return; }
         $this->booking->repository->addUnknownTraveller();
         $this->validateRoomCount();
+        $this->renew();
         $this->render();
     }
 
@@ -69,6 +70,7 @@ class Rooming extends Component
     {
         $this->booking->repository->removeUnknownTraveller();
         $this->validateRoomCount();
+        $this->renew();
         $this->render();
     }
 
@@ -99,7 +101,10 @@ class Rooming extends Component
     public function updated($name, $value): void
     {
         $this->validateOnly($name);
+        $this->booking->save();
+        $this->lead->save();
         $this->validateRoomCount();
+        $this->renew();
         $this->render();
     }
 
@@ -138,7 +143,6 @@ class Rooming extends Component
 
     public function render()
     {
-        $this->renew();
         return view('livewire.customer.booking.simple.rooming');
     }
 
