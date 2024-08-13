@@ -33,6 +33,12 @@
             <p class="txt">Package Price</p>
             <p class="price">{{ f_currency($booking->repository->getBasePrice()) }}</p>
         </li>
+        @if($tour->booking_fee !== 0)
+            <li>
+                <p class="txt">Booking Fee</p>
+                <p class="price">{{ f_currency($tour->booking_fee) }}</p>
+            </li>
+        @endif
         @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
         @if($upgradePrice > 0 || $upgradePrice < 0)
             <li>
