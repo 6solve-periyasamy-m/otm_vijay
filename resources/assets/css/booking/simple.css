@@ -541,9 +541,8 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     background-repeat: no-repeat;
     background-position-x: 96%;
     background-position-y: 14px;
-
+    text-wrap: wrap;
 }
-
 .ma-block .row .right-col .contain {
     border: 2px solid var(--primary-color);
     box-shadow: 0 0 34px 0 #00000026;
@@ -1381,7 +1380,6 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
-
 .ma-block .row .right-col .wh-las-cls-con .acc-tp-cond .contain-v .fnal-txt {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
@@ -1391,7 +1389,6 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     top: -4px;
     position: relative;
 }
-
 .ma-block .row .right-col .wh-las-cls-con .acc-tp-cond .contain-v .fnal-txt a {
     color: var(--primary-color);
     text-decoration: none;
@@ -2092,10 +2089,24 @@ input::-webkit-inner-spin-button {
 .top-form-contain .mobile_field .iti__country-list {
     max-width: 416px;
 }
-
 .error-label {
     color: var(--error-label-color);
     padding: 0.5rem 2rem;
+    font-family: "PP Neue Montreal Medium";
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+}
+.ma-block .row .right-col .contain .third-col > .submit-btn-cls  {
+    display:block;
+}
+.ma-block .row .right-col .contain .third-col > .submit-btn-cls .inner span {
+    font-family: "PP Neue Montreal Medium";
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--error-label-color);
+    text-align: left;
 }
 /* .ma-block .row .second-form{display:flex!important;} */
 @media only screen and (max-width:767px) {
