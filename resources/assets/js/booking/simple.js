@@ -213,6 +213,15 @@ jQuery(document).ready(function () {
         }
     });
 
+    
+    $("#custom-input-date").datepicker({
+        dateFormat: 'dd/mm/yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: '1970:c', 
+        minDate: new Date(1970, 0, 1) 
+    });
+
     /* input scroll */
 
 
