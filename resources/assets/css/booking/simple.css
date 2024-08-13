@@ -1133,6 +1133,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 
 .see-more-popup .convco-two .close-btn,
 .upgrades-popup .convco .close-btn {
+    display:none;
     position: absolute;
     top: 0;
     right: -30px;

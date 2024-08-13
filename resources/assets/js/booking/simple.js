@@ -191,4 +191,14 @@ jQuery(document).ready(function () {
             target.css('display', 'block');
         }
     });
+    /* Popup Close */
+    $(document).on('click', function (event) {
+        var target = $(event.target);
+        if (!target.closest('.upgrades-popup .convco').length && !target.hasClass('upgrade-cls')) {
+          $('.upgrades-popup').css('display', 'none');
+        }
+        if (!target.closest('.see-more-popup .convco-two').length && !target.hasClass('seemore-href')) {
+            $('.see-more-popup').css('display', 'none');
+        }
+    });
 });
