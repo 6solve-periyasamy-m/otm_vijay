@@ -58,6 +58,7 @@ class Checkout extends Component
 
     private function saveAll()
     {
+        $this->booking->save();
         $this->payer->save();
         $this->booking->lead_traveller_id = $this->payer->id;
         if ($this->payer->homeAddress === null) {
