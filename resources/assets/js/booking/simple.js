@@ -49,7 +49,10 @@ jQuery(document).ready(function () {
 	}
 
     $(document).ajaxComplete(function(){
-        updateperseons();
+        setTimeout(() => {
+            updateperseons();
+        }, 5000);
+        
     });
 
     function updateRoomNumbers(minRooms) {
@@ -262,8 +265,8 @@ jQuery(document).ready(function () {
     jQuery(document).on('mouseover', '.second-block .hotel-details .information-hover', function() {
         jQuery('.accommodation-details-hover').css('display', 'none');
         jQuery('.information-hover').removeClass('hovor');
-        jQuery(this).closest('.second-block ').find('.hotel-details .information-hover').addClass('hovor');
-        jQuery(this).closest('.second-block ').find('.accommodation-details-hover').css('display', 'block');
+        jQuery(this).closest('.hotel-details ').find('.hotel-details .information-hover').addClass('hovor');
+        jQuery(this).closest('.hotel-details ').find('.accommodation-details-hover').css('display', 'block');
     });
 
     jQuery(document).on('mouseleave', '.second-block', function() {
