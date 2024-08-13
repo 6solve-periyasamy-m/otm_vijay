@@ -224,7 +224,7 @@ jQuery(document).ready(function () {
 
 
     // TODO: Debug hover sometimes not finding the target
-    let hover = jQuery('[data-action="hover"]');
+    /*let hover = jQuery('[data-action="hover"]');
 
     hover.on('mouseover', function (event) {
         let target = jQuery('.' + jQuery(event.target).attr('data-target'));
@@ -254,7 +254,21 @@ jQuery(document).ready(function () {
             target.addClass('hovor');
             target.css('display', 'block');
         }
+    });*/
+
+    //hover details
+    jQuery(document).on('mouseover', '.second-block .hotel-details .information-hover', function() {
+        jQuery('.accommodation-details-hover').css('display', 'none');
+        jQuery('.information-hover').removeClass('hovor');
+        jQuery(this).closest('.second-block ').find('.hotel-details .information-hover').addClass('hovor');
+        jQuery(this).closest('.second-block ').find('.accommodation-details-hover').css('display', 'block');
     });
+
+    jQuery(document).on('mouseleave', '.second-block', function() {
+        jQuery(this).find('.hotel-details .information-hover').removeClass('hovor');
+        jQuery(this).find('.accommodation-details-hover').css('display', 'none');
+    });
+
     /* Popup Close */
     $(document).on('click', function (event) {
         var target = $(event.target);
