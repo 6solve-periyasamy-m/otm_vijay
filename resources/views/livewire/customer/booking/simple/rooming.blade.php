@@ -126,7 +126,7 @@
                             @error("rooms.$x.room") <label class="error-label">{{ $message }}</label> @enderror
                         </div>
                         <div class="form-field">
-                            <select wire:model="rooms.{{$x}}.travellers" name="pax_number">
+                            <select class="travellers-select" wire:model="rooms.{{$x}}.travellers" name="pax_number">
                                 <option value="1">1 Traveller</option>
                                 <option value="2">2 Travellers</option>
                             </select>
