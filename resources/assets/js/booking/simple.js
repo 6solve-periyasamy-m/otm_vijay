@@ -48,6 +48,10 @@ jQuery(document).ready(function () {
 		});
 	}
 
+    $(document).ajaxComplete(function(){
+        updateperseons();
+    });
+
     function updateRoomNumbers(minRooms) {
         jQuery('.third-block .first-bl').each(function (index) {
             if (index < minRooms) {
