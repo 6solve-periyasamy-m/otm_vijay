@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Customer\Booking\Simple;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
+use App\Models\Helper\Enum\AddressParent;
 use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Location\Address;
 use Livewire\Component;
@@ -24,6 +25,7 @@ class Checkout extends Component
     {
         $this->booking = Booking::getForMount($booking);
         $this->payer = $this->booking->leadTraveller;
+        $this->payerAddress = $this->payer->billingAddress ?? new Address();
     }
 
     public function toggleLeadPaying(): void
@@ -54,13 +56,38 @@ class Checkout extends Component
         }
     }
 
+    private function saveAll()
+    {
+        $this->payer->save();
+        $this->booking->lead_traveller_id = $this->payer->id;
+        if ($this->payer->homeAddress === null) {
+            $address = Address::create([
+                'name' => $this->payer->first_name . ' ' . $this->payer->last_name . ' Home Address',
+                'parent' => AddressParent::CUSTOMER,
+                'postcode' => $this->payerAddress->postcode,
+            ]);
+            $this->payer->homeAddress()->associate($address);
+            $this->payer->save();
+        }
+        if ($this->payer->homeAddress === null) {
+            $address = Address::create([
+                'name' => $this->payer->first_name . ' ' . $this->payer->last_name . ' Billing Address',
+                'parent' => AddressParent::CUSTOMER,
+                'postcode' => $this->payerAddress->postcode,
+            ]);
+            $this->payer->billingAddress()->associate($address);
+            $this->payer->save();
+        }
+        $this->payer->homeAddress->postcode = $this->payerAddress->postcode;
+        $this->payer->homeAddress->save();
+        $this->payer->billingAddress->postcode = $this->payerAddress->postcode;
+        $this->payer->billingAddress->save();
+    }
+
     private function preCheckout(): void
     {
         $this->validate();
-        $this->payer->save();
-        $this->booking->lead_traveller_id = $this->payer->id;
-        $this->payer->homeAddress->save();
-        $this->payer->billingAddress->save();
+        $this->saveAll();
     }
 
     public function checkout()
@@ -72,6 +99,12 @@ class Checkout extends Component
         } catch (\Exception $e) {
             return null;
         }
+    }
+
+    public function updated($key, $value): void
+    {
+        $this->validateOnly($key);
+        $this->saveAll();
     }
 
     public function render()
@@ -87,6 +120,7 @@ class Checkout extends Component
             'payer.email_address' => 'required|email:rfc,dns',
             'payer.mobile_number' => 'required|phone:INTERNATIONAL',
             'payer.date_of_birth' => 'required|date',
+            'payerAddress.postcode' => 'required|string',
             'booking.notes' => 'nullable|string',
         ];
     }

@@ -7,6 +7,7 @@ use App\Models\Booking\BookingTraveller;
 use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Booking\BookingRepository;
+use App\Repository\Model\Booking\BookingTravellerRepository;
 use Livewire\Component;
 
 class Rooming extends Component
@@ -27,7 +28,6 @@ class Rooming extends Component
     {
         $this->tour = Tour::getForMount($tour);
         $this->booking = Booking::getForMount($booking);
-        $this->lead = $this->booking->leadTraveller ?? new BookingTraveller();
 
         if ($this->booking->tour_id !== null && $this->booking->tour_id !== $this->tour->id) { abort(404); }
 
@@ -35,6 +35,8 @@ class Rooming extends Component
             $this->booking = BookingRepository::make($this->tour);
             $this->booking->save();
         }
+
+        $this->lead = $this->booking->leadTraveller ?? BookingTravellerRepository::make([]);
 
         if ($this->lead->id === null) {
             $this->lead->booking_id = $this->booking->id;
