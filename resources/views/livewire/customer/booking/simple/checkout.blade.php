@@ -15,7 +15,7 @@
                 </div>
                 <div class="top-form-contain">
                     <div class="form-field">
-                        <input type="text" wire:model="payer.first_name" placeholder="First Name" required>
+                        <input type="text" wire:model="payer.first_name" placeholder="First Name*" required>
                         @error('payer.first_name') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                     <div class="form-field">
@@ -23,12 +23,12 @@
                         @error('payer.last_name') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                     <div class="form-field">
-                        <input type="email" wire:model="payer.email_address" placeholder="Email" required>
+                        <input type="email" wire:model="payer.email_address" placeholder="Email*" required>
                         @error('payer.email_address') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                     <div class="form-field mobile_field">
                         <div wire:ignore>
-                            <input type="tel" id="mobile_number" name="mobile_number" value="{{ $this->payer->mobile_number }}" placeholder="Mobile number" required>
+                            <input type="tel" id="mobile_number" name="mobile_number" value="{{ $this->payer->mobile_number }}" placeholder="Mobile number*" required>
                             <script type="text/javascript">
                                 jQuery(document).ready(function () {
                                     let input = document.querySelector('#mobile_number');
@@ -52,7 +52,7 @@
                         @error('payer.email_address') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                     <div class="form-field rap-las-cls">
-                        <input type="date" style="padding-left: 4rem" wire:model="payer.date_of_birth" placeholder="DATE OF BIRTH*">
+                        <input type="date" style="padding-left: 4rem" wire:model="payer.date_of_birth" placeholder="DATE OF BIRTH">
                         @error('payer.email_address') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                 </div>
