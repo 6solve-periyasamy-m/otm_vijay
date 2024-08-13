@@ -25,34 +25,26 @@ jQuery(document).ready(function () {
 
     let minRooms = 1;
     let maxRooms = 1;
-
+    
     function updateperseons() {
         let roomCount = parseInt(jQuery('.second-block.rme-det .inner-block .right .No .text').text());
         let personCount = parseInt(jQuery('.second-block.tra-det .inner-block .right .No .text').text());
-    
+
         jQuery('.third-block .first-bl').each(function(index) {
-            // Check if there are remaining persons to allocate
             if (personCount > 0) {
-                // Calculate the number of persons for this room (2 max per room)
                 let personsForThisRoom = Math.min(2, Math.ceil(personCount / roomCount));
-    
-                // Enable and select the appropriate option in the dropdown for this room
-                jQuery(this).find('#bedding_configuration option').prop('disabled', false); // Enable all options initially
+
+                jQuery(this).find('#bedding_configuration option').prop('disabled', false); 
                 jQuery(this).find('#bedding_configuration option').eq(personsForThisRoom - 1).prop('selected', true);
-    
-                // Disable the options that are not selected
-                if (personsForThisRoom < 2) {
-                    jQuery(this).find('#bedding_configuration option').eq(1).prop('disabled', true);
-                }
-                if (personsForThisRoom < 1) {
-                    jQuery(this).find('#bedding_configuration option').eq(0).prop('disabled', true);
-                }
-    
-                // Reduce the person count and room count
+
+                jQuery(this).find('#bedding_configuration option').each(function(optIndex) {
+                    if (optIndex !== personsForThisRoom - 1) {
+                        jQuery(this).prop('disabled', true);
+                    }
+                });
                 personCount -= personsForThisRoom;
                 roomCount--;
             } else {
-                // If no persons left, disable all options for the remaining rooms
                 jQuery(this).find('#bedding_configuration option').prop('disabled', true).prop('selected', false);
             }
         });
