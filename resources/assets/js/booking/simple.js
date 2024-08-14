@@ -319,23 +319,7 @@ jQuery(document).ready(function () {
 
 document.addEventListener('livewire:load', function () {
     console.log('live check datepick 2.5');
-    $(document).ready(function () {
-        const $dateInput = $("#custom-input-date");
     
-        if (!$dateInput.hasClass('ui-datepicker-input')) {
-            $dateInput.datepicker({
-                dateFormat: 'dd/mm/yy',
-                changeMonth: true,
-                changeYear: true,
-                yearRange: '1970:c',
-                minDate: new Date(1970, 0, 1),
-            }).on("click", function () {
-                console.log('datepick click');
-                $(this).datepicker("show");
-            });
-        }
-    });
-
     Livewire.hook('message.processed', (message, component) => {
         if (Object.keys(component.serverMemo.errors).length > 0) {
             const firstErrorElement = document.querySelector('.error-label');

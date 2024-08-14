@@ -52,7 +52,9 @@
                         @error('payerAddress.postcode') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                     <div class="form-field rap-las-cls" wire:ignore>
-                        <input id="custom-input-date" class="calendar hasDatepicker" type="text" name="upload-release" placeholder="DATE OF BIRTH*">
+                        <input type="text" wire:model="date" data-picker placeholder="Select date">
+
+                       <!-- <input id="custom-input-date" class="calendar hasDatepicker" type="text" name="upload-release" placeholder="DATE OF BIRTH*">-->
                         @error('payer.date_of_birth') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
 
@@ -148,3 +150,39 @@
         </div>
     </div>
 </div>
+
+@script
+<script>
+    $(document).ready(function () {
+        const $dateInput = $("#custom-input-date");
+    
+        if (!$dateInput.hasClass('ui-datepicker-input')) {
+            $dateInput.datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                yearRange: '1970:c',
+                minDate: new Date(1970, 0, 1),
+            }).on("click", function () {
+                console.log('datepick click');
+                $(this).datepicker("show");
+            });
+        }
+    });
+</script>
+
+
+<script>
+    new Pikaday({ 
+        field: $wire.$el.querySelector('[data-picker]'), 
+        onSelect: function() {
+            @this.set('date', this.getDate());
+        } 
+    });
+</script>
+@endscript
+
+@assets
+<script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js" defer></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+@endassets
