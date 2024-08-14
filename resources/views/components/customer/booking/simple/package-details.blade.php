@@ -64,7 +64,7 @@
     </ul>
     {{ $slot }}
     @error('common')
-    <div class="submit-btn-cls upd-cls">
+    <div class="submit-btn-cls add-on">
         <div class="inner">
             <span style="color: red">{{ $message }}</span>
         </div>
