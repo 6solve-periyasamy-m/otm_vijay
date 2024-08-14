@@ -2183,3 +2183,21 @@ input::-webkit-inner-spin-button {
 @media only screena and (max-width:767px) {
     .ma-block .row, .ma-block .row .second-form  {row-gap:60px;}
 }
+.pika-single.is-boun {
+    background: #F9F4EE !important;
+    border: 2px solid #F35B15 !important;
+}
+.pika-single.is-boun {
+    background: #F9F4EE !important;
+    border: 2px solid #F35B15 !important;
+}
+.pika-single.is-boun .pika-label {
+    background: #F9F4EE !important;
+}
+.pika-single.is-boun table tr th, .pika-single.is-boun table tr td,.pika-single.is-boun table tr th abbr, .pika-single.is-boun table tbody tr td,.pika-single .is-disabled .pika-button, .pika-single.is-boun .pika-label {
+    font-family: "PP Neue Montreal Medium" !important;
+    font-weight: 500 !important;
+    color: #000000 !important;
+    text-decoration: none!important;
+    background:transparent!important;
+}
