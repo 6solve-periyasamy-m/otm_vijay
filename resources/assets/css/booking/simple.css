@@ -2043,7 +2043,7 @@ input::-webkit-inner-spin-button {
 }
 
 .ma-block .row .left-col .contain .top-form-contain .form-field.mobile_field input {
-    padding-left: 92px !important;
+    padding-left: 96px !important;
 }
 
 .iti--separate-dial-code .iti__selected-flag {
@@ -2133,4 +2133,27 @@ input::-webkit-inner-spin-button {
     border-radius: 50%;
     top: 5px;
     left: 5px;
+}
+@media only screen and (min-width:768px) and (max-width:1080px) {
+    .ma-block .row {flex-wrap: wrap;}
+    .ma-block .row .left-col, .ma-block .row .right-col  {
+       width:100%;
+       margin-right:0%;
+    }
+    .ma-block .row .left-col .contain .top-form-contain .form-field.mobile_field .iti--allow-dropdown {
+       width:100%;
+    }
+}
+@media only screen and (min-width:1081px) and (max-width:1366px) {
+    .ma-block .row .left-col {
+        width:46%;
+        margin-right:4%;
+    }
+    .ma-block .row .left-col .contain .top-form-contain .form-field.mobile_field .iti--allow-dropdown {
+        width:100%;
+     }
+     .ma-block .row .left-col .contain .top-form-contain .form-field input {
+        font-size: 12px;
+        line-height: 20px;
+     }
 }
