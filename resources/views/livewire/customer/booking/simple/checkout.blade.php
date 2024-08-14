@@ -157,6 +157,26 @@
 @endassets
 
 @script
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const datePickerElement = document.querySelector('[data-picker]');
+
+        if (datePickerElement) {
+            new Pikaday({
+                field: datePickerElement,
+                format: 'DD/MM/YYYY',
+                onSelect: function(date) {
+                    // Optionally, you can use Livewire or other methods to update the value
+                    console.log('Selected date:', date.toDateString());
+                    // Example for Livewire:
+                    // @this.set('date', date.toISOString());
+                }
+            });
+        }
+    });
+</script>
+
 <script>
     $(document).ready(function () {
         const $dateInput = $("#custom-input-date");
@@ -176,14 +196,5 @@
     });
 </script>
 
-
-<script>
-    new Pikaday({ 
-        field: $wire.$el.querySelector('[data-picker]'), 
-        onSelect: function() {
-            @this.set('date', this.getDate());
-        } 
-    });
-</script>
 @endscript
 
