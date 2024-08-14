@@ -326,7 +326,17 @@ document.addEventListener('livewire:load', function () {
             changeYear: true,
             yearRange: '1970:c',
             minDate: new Date(1970, 0, 1),
+            onSelect: function() {
+                console.log("Date picker initialized and date selected!");
+            }
         });
+    
+        // Check if datepicker is initialized
+        if ($("#custom-input-date").datepicker("widget")) {
+            console.log("Date picker successfully initialized.");
+        } else {
+            console.log("Date picker not initialized.");
+        }
     });
     
 
