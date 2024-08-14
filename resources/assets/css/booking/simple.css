@@ -2113,7 +2113,7 @@ input::-webkit-inner-spin-button {
 @media only screen and (max-width:767px) {
     .ma-block .row {flex-wrap:wrap;}
 }
-/* .ma-block .row .left-col .contain .top-form-contain .form-field.rap-las-cls:before {
+.ma-block .row .left-col .contain .top-form-contain .form-field.rap-las-cls:before {
     content: "";
     background: url(icon/calendar.svg) no-repeat;
     display: inline-block;
@@ -2122,7 +2122,7 @@ input::-webkit-inner-spin-button {
     position: absolute;
     top: 16.5px;
     left: 24px;
-} */
+}
 .ma-block .row .right-col .contain .snd-sec .right-col p.inclusion:before , .upp-block-two .snd-sec .right-col p.inclusion:before {
     content: "";
     display: inline-block;
