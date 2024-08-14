@@ -52,7 +52,7 @@
                         @error('payerAddress.postcode') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                     <div class="form-field rap-las-cls" wire:ignore>
-                        <input id="custom-input-date" type="date" class="calendar hasDatepicker" style="padding-left: 4rem" placeholder="DATE OF BIRTH">
+                        <input id="custom-input-date" class="calendar hasDatepicker" type="text" name="upload-release" placeholder="DATE OF BIRTH*">
                         @error('payer.date_of_birth') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
 

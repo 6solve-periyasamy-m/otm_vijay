@@ -319,16 +319,18 @@ jQuery(document).ready(function () {
 
 document.addEventListener('livewire:load', function () {
     Livewire.hook('message.processed', (message, component) => {
-        console.log('live check')
-        // Check if there are any validation errors
+        console.log('live check');
         if (Object.keys(component.serverMemo.errors).length > 0) {
-            // Scroll to the first error label
             const firstErrorElement = document.querySelector('.error-label');
             if (firstErrorElement) {
-                firstErrorElement.scrollIntoView({
+                const elementPosition = firstErrorElement.getBoundingClientRect().top + window.scrollY;
+                const offsetPosition = elementPosition - 50; 
+                window.scrollTo({
+                    top: offsetPosition,
                     behavior: 'smooth'
                 });
             }
         }
     });
 });
+
