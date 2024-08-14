@@ -94,6 +94,9 @@ class Rooming extends Component
         if ($travellerExcess > 0) {
             return $this->addError('common', 'Not all travellers have rooms');
         }
+        if ($travellerExcess < 0) {
+            return $this->addError('common', 'More travellers have been added to rooms than are travelling');
+        }
         return redirect()->route('booking.simple.checkout', [
             'token' => $this->booking->token,
             'tour' => $this->tour->booking_form_url,
