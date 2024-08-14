@@ -2180,3 +2180,6 @@ input::-webkit-inner-spin-button {
         top: 4px;
     }
 }
+@media only screena and (max-width:767px) {
+    .ma-block .row, .ma-block .row .second-form  {row-gap:60px;}
+}
