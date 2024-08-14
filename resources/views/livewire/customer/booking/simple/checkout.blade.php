@@ -52,9 +52,9 @@
                         @error('payerAddress.postcode') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                     <div class="form-field rap-las-cls" wire:ignore>
-                        <input type="text" data-picker placeholder="Select date">
+                        <input type="text" id="custom-input-date" class="calendar hasDatepicker" data-picker name="upload-release" placeholder="DATE OF BIRTH*">
 
-                       <input id="custom-input-date" class="calendar hasDatepicker" type="text" name="upload-release" placeholder="DATE OF BIRTH*">
+                       <!--<input id="custom-input-date" class="calendar hasDatepicker" type="text" name="upload-release" placeholder="DATE OF BIRTH*">-->
                         @error('payer.date_of_birth') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
 
@@ -157,8 +157,41 @@
 @endassets
 
 @script
+
 <script>
-    $(document).ready(function () {
+    document.addEventListener('DOMContentLoaded', function() {
+        const datePickerElement = document.querySelector('[data-picker]');
+        console.log('pika pi');
+        if (datePickerElement) {
+            const picker = new Pikaday({
+                field: datePickerElement,
+                format: 'DD/MM/YYYY',  // Date format for display
+                minDate: new Date(1970, 0, 1),  // Set minimum date
+                maxDate: new Date(),  // Optional: Set maximum date to today or another value
+                yearRange: [1970, new Date().getFullYear()],  // Set the year range, approximation for yearRange
+                onSelect: function(date) {
+                    // Format the selected date as 'DD/MM/YYYY'
+                    const formattedDate = formatDate(date);
+                    console.log('Selected date:', formattedDate);
+
+                    // Optionally, use Livewire or other methods to update the value
+                    @this.set('date', formattedDate);
+                }
+            });
+
+            // Format date as 'DD/MM/YYYY'
+            function formatDate(date) {
+                const day = ('0' + date.getDate()).slice(-2);
+                const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                const year = date.getFullYear();
+                return `${day}/${month}/${year}`;
+            }
+        }
+    });
+</script>
+
+<script>
+    /*$(document).ready(function () {
         const $dateInput = $("#custom-input-date");
     
         if (!$dateInput.hasClass('ui-datepicker-input')) {
@@ -173,17 +206,8 @@
                 $(this).datepicker("show");
             });
         }
-    });
+    });*/
 </script>
 
-
-<script>
-    new Pikaday({ 
-        field: $wire.$el.querySelector('[data-picker]'), 
-        onSelect: function() {
-            @this.set('date', this.getDate());
-        } 
-    });
-</script>
 @endscript
 
