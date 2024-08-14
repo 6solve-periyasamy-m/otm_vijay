@@ -287,13 +287,13 @@ jQuery(document).ready(function () {
     });
 
 
-    $("#custom-input-date").datepicker({
+    /*$("#custom-input-date").datepicker({
         dateFormat: 'dd/mm/yy',
         changeMonth: true,
         changeYear: true,
         yearRange: '1970:c',
         minDate: new Date(1970, 0, 1)
-    });
+    });*/
 
     /* input scroll */
 
@@ -319,15 +319,21 @@ jQuery(document).ready(function () {
 
 document.addEventListener('livewire:load', function () {
     console.log('live check datepick 2.5');
-    $("#custom-input-date").datepicker({
-        dateFormat: 'dd/mm/yy',
-        changeMonth: true,
-        changeYear: true,
-        yearRange: '1970:c',
-        minDate: new Date(1970, 0, 1),
-    }).on("focus click", function () {
-        console.log('datepick click')
-        $(this).datepicker("show");
+    $(document).ready(function () {
+        const $dateInput = $("#custom-input-date");
+    
+        if (!$dateInput.hasClass('ui-datepicker-input')) {
+            $dateInput.datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                yearRange: '1970:c',
+                minDate: new Date(1970, 0, 1),
+            }).on("click", function () {
+                console.log('datepick click');
+                $(this).datepicker("show");
+            });
+        }
     });
 
     Livewire.hook('message.processed', (message, component) => {
