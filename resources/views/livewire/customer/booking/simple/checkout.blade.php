@@ -173,9 +173,9 @@
                     // Format the selected date as 'DD/MM/YYYY'
                     const formattedDate = formatDate(date);
                     console.log('Selected date:', formattedDate);
-
+                    datePickerElement.value=formattedDate;
                     // Optionally, use Livewire or other methods to update the value
-                    @this.set('date', formattedDate);
+                    //@this.set('date', formattedDate);
                 }
             });
 
