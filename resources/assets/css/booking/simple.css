@@ -2170,3 +2170,13 @@ input::-webkit-inner-spin-button {
        width:100%;
     }
 }
+.ma-block .row .second-form .right-col .contain .third-col .submit-btn-cls {
+      margin-top: 0px;
+}
+@media only screen and (min-width:1200px) and (max-width:1400px) {
+    .ma-block .row .second-form .right-col .wh-las-cls-con .acc-tp-cond .contain-v .fnal-txt {
+        display: block;
+        width: 280px;
+        top: 4px;
+    }
+}
