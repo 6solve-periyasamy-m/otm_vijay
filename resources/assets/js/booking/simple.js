@@ -319,34 +319,25 @@ jQuery(document).ready(function () {
 
 document.addEventListener('livewire:load', function () {
 
-    $(document).ready(function() {
-        $("#custom-input-date").datepicker({
-            dateFormat: 'dd/mm/yy',
-            changeMonth: true,
-            changeYear: true,
-            yearRange: '1970:c',
-            minDate: new Date(1970, 0, 1),
-            onSelect: function() {
-                console.log("Date picker initialized and date selected!");
-            }
-        });
-    
-        // Check if datepicker is initialized
-        if ($("#custom-input-date").datepicker("widget")) {
-            console.log("Date picker successfully initialized.");
-        } else {
-            console.log("Date picker not initialized.");
-        }
+    console.log('live check datepick');
+    $("#custom-input-date").datepicker({
+        dateFormat: 'dd/mm/yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: '1970:c',
+        minDate: new Date(1970, 0, 1),
     });
-    
+
+    $("#custom-input-date").on("focus click", function() {
+        $(this).datepicker("show");
+    });
 
     Livewire.hook('message.processed', (message, component) => {
-        console.log('live check');
         if (Object.keys(component.serverMemo.errors).length > 0) {
             const firstErrorElement = document.querySelector('.error-label');
             if (firstErrorElement) {
                 const elementPosition = firstErrorElement.getBoundingClientRect().top + window.scrollY;
-                const offsetPosition = elementPosition - 50; 
+                const offsetPosition = elementPosition - 70; 
                 window.scrollTo({
                     top: offsetPosition,
                     behavior: 'smooth'
