@@ -48,11 +48,11 @@
                         @error('lead.mobile_number') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                     <div class="form-field">
-                        <input type="text" id="postal-code" name="postal-code" wire:model="payerAddress.postcode" placeholder="Postal code" required>
+                        <input type="text" id="postal-code" name="postal-code" wire:model="payerAddress.postcode" placeholder="Postal code*" required>
                         @error('payerAddress.postcode') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                     <div class="form-field rap-las-cls" wire:ignore>
-                        <input type="text" id="custom-input-date" class="calendar hasDatepicker" data-picker name="upload-release" placeholder="DATE OF BIRTH*" autocomplete="off">
+                        <input type="text" id="custom-input-date" class="calendar hasDatepicker" data-picker name="upload-release" placeholder="DATE OF BIRTH*" required>
 
                        <!--<input id="custom-input-date" class="calendar hasDatepicker" type="text" name="upload-release" placeholder="DATE OF BIRTH*">-->
                         @error('payer.date_of_birth') <label class="error-label">{{ $message }}</label> @enderror
