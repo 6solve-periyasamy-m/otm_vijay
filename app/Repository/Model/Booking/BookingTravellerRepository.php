@@ -239,11 +239,17 @@ class BookingTravellerRepository extends ModelRepository
             if ($lookup !== null) {
                 if (strtolower($this->traveller->first_name) === strtolower($lookup)
                     && strtolower($this->traveller->last_name) === strtolower($lookup->last_name)) {
-                    $this->traveller->customer_id === $lookup->id;
+                    $this->traveller->customer_id = $lookup->id;
                     $this->traveller->save();
                     return $lookup;
                 } else {
-                    $this->traveller->email_address === null;
+                    $count = 0;
+                    $prefix = strtolower(strip_non_alphanumeric($this->traveller->booking->tour->brand));
+                    do {
+                        $count++;
+                        $email = add_email_alias($this->traveller->email_address, "{$prefix}{$count}");
+                    } while (Customer::where('email_address', '=', $email)->exists());
+                    $this->traveller->email_address = $email;
                     $this->traveller->save();
                 }
             }

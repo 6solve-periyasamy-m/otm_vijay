@@ -110,3 +110,23 @@ if (!function_exists('diff_in_nights')) {
         return $start->setTime(0,0)->diff($end)->format('%a');
     }
 }
+if (!function_exists('strip_non_alphanumeric')) {
+    /**
+     * @param string $string
+     * @return string
+     */
+    function strip_non_alphanumeric(string $string): string
+    {
+        return preg_replace('/[^a-zA-Z0-9]/', '', $string);
+    }
+}
+if (!function_exists('add_email_alias')) {
+    function add_email_alias(string $email, string $alias): string
+    {
+        [$localPart, $domainPart] = explode('@', $email);
+
+        $newLocalPart = $localPart . '+'. $alias;
+
+        return $newLocalPart . '@' . $domainPart;
+    }
+}
