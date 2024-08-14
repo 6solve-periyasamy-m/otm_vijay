@@ -319,6 +319,7 @@ jQuery(document).ready(function () {
 
 document.addEventListener('livewire:load', function () {
     Livewire.hook('message.processed', (message, component) => {
+        console.log('live check')
         // Check if there are any validation errors
         if (Object.keys(component.serverMemo.errors).length > 0) {
             // Scroll to the first error label
