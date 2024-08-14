@@ -33,25 +33,25 @@ class ActivityInventoryController extends Controller
         return redirect()->route('activities.view', ['activity' => $activity,]);
     }
 
-    public function manifest(Activity $activity, ActivityInventory $activityInventory)
+    public function manifest(Activity $activity, ActivityInventory $inventory)
     {
-        return ActivityManifestRepository::viewReport($activityInventory->repository, 'activity-inventories.manifest.export', ['activity' => $activity, 'inventory' => $activityInventory]);
+        return ActivityManifestRepository::viewReport($inventory->repository, 'activity-inventories.manifest.export', ['activity' => $activity, 'inventory' => $inventory]);
     }
 
-    public function export(Activity $activity, ActivityInventory $activityInventory, string $extension = 'xlsx')
+    public function export(Activity $activity, ActivityInventory $inventory, string $extension = 'xlsx')
     {
-        return ActivityManifestRepository::exportReport($activityInventory->repository, $extension);
+        return ActivityManifestRepository::exportReport($inventory->repository, $extension);
     }
 
-    public function edit(Activity $activity, ActivityInventory $activityInventory)
+    public function edit(Activity $activity, ActivityInventory $inventory)
     {
-        return view('pages.admin.activity.inventory.form', ['activity' => $activity, 'inventory' => $activityInventory,]);
+        return view('pages.admin.activity.inventory.form', ['activity' => $activity, 'inventory' => $inventory,]);
     }
 
-    public function update(Request $request, Activity $activity, ActivityInventory $activityInventory)
+    public function update(Request $request, Activity $activity, ActivityInventory $inventory)
     {
         $request->validate(ActivityInventory::getValidationRules());
-        $activityInventory->update([
+        $inventory->update([
             'ticket_type_id' => $request->input('ticket_type_id'),
             'starts_at' => $request->input('starts_at'),
             'ends_at' => $request->input('ends_at'),
@@ -65,19 +65,19 @@ class ActivityInventoryController extends Controller
         return redirect()->route('activities.view', ['activity' => $activity,]);
     }
 
-    public function destroy(Activity $activity, ActivityInventory $activityInventory)
+    public function destroy(Activity $activity, ActivityInventory $inventory)
     {
-        if ($activityInventory->tourComponents()->count() > 0) {
+        if ($inventory->tourComponents()->count() > 0) {
             return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Activity Inventory']));
         }
-        $activityInventory->delete();
+        $inventory->delete();
         return redirect()->route('activities.view', ['activity' => $activity,]);
     }
 
-    public function duplicate(Activity $activity, ActivityInventory $activityInventory)
+    public function duplicate(Activity $activity, ActivityInventory $inventory)
     {
-        $inventory = $activityInventory->replicate();
-        $inventory->save();
-        return redirect()->route('activity-inventories.edit', ['activity' => $activity, 'inventory' => $inventory,]);
+        $cloned = $inventory->replicate();
+        $cloned->save();
+        return redirect()->route('activity-inventories.edit', ['activity' => $activity, 'inventory' => $cloned,]);
     }
 }
