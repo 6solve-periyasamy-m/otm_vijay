@@ -204,7 +204,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function createProspect(?Customer $customer = null, array $data = []): QuoteProspect
     {
         if (isset($customer)) {
-            $prospect = QuoteProspect::create(['customer_id' => $customer->id]);
+            $prospect = QuoteProspect::create(['customer_id' => $customer->id, ...$data]);
         } else {
             $prospect = QuoteProspect::create($data);
         }
