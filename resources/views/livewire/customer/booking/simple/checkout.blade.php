@@ -54,7 +54,7 @@
                     <div class="form-field rap-las-cls" wire:ignore>
                         <input type="text" wire:model="date" data-picker placeholder="Select date">
 
-                       <!-- <input id="custom-input-date" class="calendar hasDatepicker" type="text" name="upload-release" placeholder="DATE OF BIRTH*">-->
+                       <input id="custom-input-date" class="calendar hasDatepicker" type="text" name="upload-release" placeholder="DATE OF BIRTH*">
                         @error('payer.date_of_birth') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
 
@@ -151,6 +151,11 @@
     </div>
 </div>
 
+@assets
+<script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js" defer></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+@endassets
+
 @script
 <script>
     $(document).ready(function () {
@@ -182,7 +187,3 @@
 </script>
 @endscript
 
-@assets
-<script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js" defer></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
-@endassets
