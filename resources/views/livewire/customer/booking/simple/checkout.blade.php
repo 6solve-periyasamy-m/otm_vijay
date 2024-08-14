@@ -175,7 +175,7 @@
                     console.log('Selected date:', formattedDate);
 
                     // Optionally, use Livewire or other methods to update the value
-                    // @this.set('date', formattedDate);
+                    @this.set('date', formattedDate);
                 }
             });
 
