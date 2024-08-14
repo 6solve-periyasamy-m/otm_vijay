@@ -56,6 +56,7 @@
                         @error('payer.date_of_birth') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
 
+
                 </div>
                 <h3>Special requests</h3>
                 <div class="form-field-full-width" wire:ignore>
