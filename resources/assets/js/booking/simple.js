@@ -25,35 +25,35 @@ jQuery(document).ready(function () {
 
     let minRooms = 1;
     let maxRooms = 1;
-    
-    function updateperseons() {
-		let roomCount = parseInt(jQuery('.second-block.rme-det .inner-block .right .No .text').text());
-		let personCount = parseInt(jQuery('.second-block.tra-det .inner-block .right .No .text').text());
-		jQuery('.third-block .first-bl').each(function(index) {
-			if (personCount > 0) {
-                console.log(personCount);
-				let personsForThisRoom = Math.min(2, Math.ceil(personCount / roomCount));
-				jQuery(this).find('#bedding_configuration option').prop('disabled', false); 
-				jQuery(this).find('#bedding_configuration option').eq(personsForThisRoom - 1).prop('selected', true);
-				jQuery(this).find('#bedding_configuration option').each(function(optIndex) {
-					if (optIndex !== personsForThisRoom - 1) {
-						jQuery(this).prop('disabled', true);
-					}
-				});
-				personCount -= personsForThisRoom;
-				roomCount--;
-			} else {
-				jQuery(this).find('#bedding_configuration option').prop('disabled', true).prop('selected', false);
-			}
-		});
-	}
 
-    $(document).ajaxComplete(function(){
+    function updateperseons() {
+        let roomCount = parseInt(jQuery('.second-block.rme-det .inner-block .right .No .text').text());
+        let personCount = parseInt(jQuery('.second-block.tra-det .inner-block .right .No .text').text());
+        jQuery('.third-block .first-bl').each(function (index) {
+            if (personCount > 0) {
+                console.log(personCount);
+                let personsForThisRoom = Math.min(2, Math.ceil(personCount / roomCount));
+                jQuery(this).find('#bedding_configuration option').prop('disabled', false);
+                jQuery(this).find('#bedding_configuration option').eq(personsForThisRoom - 1).prop('selected', true);
+                jQuery(this).find('#bedding_configuration option').each(function (optIndex) {
+                    if (optIndex !== personsForThisRoom - 1) {
+                        jQuery(this).prop('disabled', true);
+                    }
+                });
+                personCount -= personsForThisRoom;
+                roomCount--;
+            } else {
+                jQuery(this).find('#bedding_configuration option').prop('disabled', true).prop('selected', false);
+            }
+        });
+    }
+
+    $(document).ajaxComplete(function () {
         console.log('ajaxcoml')
         setTimeout(() => {
             updateperseons();
         }, 5000);
-        
+
     });
 
     function updateRoomNumbers(minRooms) {
@@ -67,9 +67,9 @@ jQuery(document).ready(function () {
         updateperseons();
 
 
-//         jQuery('.third-block .first-bl').each(function(index) {
-//             jQuery(this).find('h6:first').text('Room ' + (index + 1));
-//         });
+        //         jQuery('.third-block .first-bl').each(function(index) {
+        //             jQuery(this).find('h6:first').text('Room ' + (index + 1));
+        //         });
     }
 
     function clearSelectedValues(clonedBlock) {
@@ -155,7 +155,7 @@ jQuery(document).ready(function () {
         }
     });
 
-    jQuery('.tra-det .inner-block .right .inn .Max').click(function() {
+    jQuery('.tra-det .inner-block .right .inn .Max').click(function () {
         let textval = jQuery(this).closest('.inn').find('.No .text');
         let text = parseInt(textval.text());
         if (text < 5) {
@@ -164,7 +164,7 @@ jQuery(document).ready(function () {
         }
     });
 
-    jQuery('.rme-det .inner-block .right .inn .Min').click(function() {
+    jQuery('.rme-det .inner-block .right .inn .Min').click(function () {
         let textval = jQuery(this).closest('.inn').find('.No .text');
         let text = parseInt(textval.text());
 
@@ -180,7 +180,7 @@ jQuery(document).ready(function () {
         }
     });
 
-    jQuery('.rme-det .inner-block .right .inn .Max').click(function() {
+    jQuery('.rme-det .inner-block .right .inn .Max').click(function () {
         let textval = jQuery(this).closest('.inn').find('.No .text');
         let text = parseInt(textval.text());
 
@@ -263,14 +263,14 @@ jQuery(document).ready(function () {
     });*/
 
     //hover details
-    jQuery(document).on('mouseover', '.second-block .hotel-details .information-hover', function() {
+    jQuery(document).on('mouseover', '.second-block .hotel-details .information-hover', function () {
         jQuery('.accommodation-details-hover').css('display', 'none');
         jQuery('.information-hover').removeClass('hovor');
         jQuery(this).closest('.hotel-details').find('.information-hover').addClass('hovor');
         jQuery(this).closest('.hotel-details').find('.accommodation-details-hover').css('display', 'block');
     });
 
-    jQuery(document).on('mouseleave', '.hotel-details', function() {
+    jQuery(document).on('mouseleave', '.hotel-details', function () {
         jQuery(this).find('.information-hover').removeClass('hovor');
         jQuery(this).find('.accommodation-details-hover').css('display', 'none');
     });
@@ -279,37 +279,37 @@ jQuery(document).ready(function () {
     $(document).on('click', function (event) {
         var target = $(event.target);
         if (!target.closest('.upgrades-popup .convco').length && !target.hasClass('upgrade-cls')) {
-          $('.upgrades-popup').css('display', 'none');
+            $('.upgrades-popup').css('display', 'none');
         }
         if (!target.closest('.see-more-popup .convco-two').length && !target.hasClass('seemore-href')) {
             $('.see-more-popup').css('display', 'none');
         }
     });
 
-    
+
     $("#custom-input-date").datepicker({
         dateFormat: 'dd/mm/yy',
         changeMonth: true,
         changeYear: true,
-        yearRange: '1970:c', 
-        minDate: new Date(1970, 0, 1) 
+        yearRange: '1970:c',
+        minDate: new Date(1970, 0, 1)
     });
 
     /* input scroll */
 
 
-    jQuery('.submit-btn-cls .submit-btn').click(function() {
-       
+    jQuery('.submit-btn-cls .submit-btn').click(function () {
+
         var form = jQuery(this).closest('form');
         var error = false;
-        
-        jQuery(form).find('input:required').each(function() {
+
+        jQuery(form).find('input:required').each(function () {
             if (jQuery(this).val().trim().length === 0) {
                 error = true;
                 jQuery('html, body').animate({
                     scrollTop: form.offset().top
                 }, 500);
-                return false; 
+                return false;
             }
         });
 
@@ -318,17 +318,15 @@ jQuery(document).ready(function () {
 });
 
 document.addEventListener('livewire:load', function () {
-
-    console.log('live check datepick');
+    console.log('live check datepick 2.5');
     $("#custom-input-date").datepicker({
         dateFormat: 'dd/mm/yy',
         changeMonth: true,
         changeYear: true,
         yearRange: '1970:c',
         minDate: new Date(1970, 0, 1),
-    });
-
-    $("#custom-input-date").on("focus click", function() {
+    }).on("focus click", function () {
+        console.log('datepick click')
         $(this).datepicker("show");
     });
 
@@ -337,7 +335,7 @@ document.addEventListener('livewire:load', function () {
             const firstErrorElement = document.querySelector('.error-label');
             if (firstErrorElement) {
                 const elementPosition = firstErrorElement.getBoundingClientRect().top + window.scrollY;
-                const offsetPosition = elementPosition - 70; 
+                const offsetPosition = elementPosition - 70;
                 window.scrollTo({
                     top: offsetPosition,
                     behavior: 'smooth'
@@ -346,4 +344,5 @@ document.addEventListener('livewire:load', function () {
         }
     });
 });
+
 
