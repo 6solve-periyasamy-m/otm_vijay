@@ -2183,18 +2183,14 @@ input::-webkit-inner-spin-button {
 @media only screena and (max-width:767px) {
     .ma-block .row, .ma-block .row .second-form  {row-gap:60px;flex-wrap:wrap;}
 }
-.pika-single.is-boun {
+.pika-single.is-bound {
     background: #F9F4EE !important;
     border: 2px solid #F35B15 !important;
 }
-.pika-single.is-boun {
-    background: #F9F4EE !important;
-    border: 2px solid #F35B15 !important;
-}
-.pika-single.is-boun .pika-label {
+.pika-single.is-bound .pika-label {
     background: #F9F4EE !important;
 }
-.pika-single.is-boun table tr th, .pika-single.is-boun table tr td,.pika-single.is-boun table tr th abbr, .pika-single.is-boun table tbody tr td,.pika-single .is-disabled .pika-button, .pika-single.is-boun .pika-label {
+.pika-single.is-bound table tr th, .pika-single.is-bound table tr td,.pika-single.is-bound table tr th abbr, .pika-single.is-bound table tbody tr td,.pika-single.is-bound .is-disabled .pika-button, .pika-single.is-bound .pika-label {
     font-family: "PP Neue Montreal Medium" !important;
     font-weight: 500 !important;
     color: #000000 !important;
