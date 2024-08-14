@@ -51,10 +51,11 @@
                         <input type="text" id="postal-code" name="postal-code" wire:model="payerAddress.postcode" placeholder="Postal code*" required>
                         @error('payerAddress.postcode') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
-                    <div class="form-field rap-las-cls">
-                        <input id="custom-input-date" type="date" class="calendar hasDatepicker" style="padding-left: 4rem" wire:model="payer.date_of_birth" placeholder="DATE OF BIRTH">
-                        @error('payer.email_address') <label class="error-label">{{ $message }}</label> @enderror
+                    <div class="form-field rap-las-cls" wire:ignore>
+                        <input id="custom-input-date" type="date" class="calendar hasDatepicker" style="padding-left: 4rem" placeholder="DATE OF BIRTH">
+                        @error('payer.date_of_birth') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
+
                 </div>
                 <h3>Special requests</h3>
                 <div class="form-field-full-width" wire:ignore>

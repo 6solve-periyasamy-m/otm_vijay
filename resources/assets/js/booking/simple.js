@@ -316,3 +316,18 @@ jQuery(document).ready(function () {
     });
 
 });
+
+document.addEventListener('livewire:load', function () {
+    Livewire.hook('message.processed', (message, component) => {
+        // Check if there are any validation errors
+        if (Object.keys(component.serverMemo.errors).length > 0) {
+            // Scroll to the first error label
+            const firstErrorElement = document.querySelector('.error-label');
+            if (firstErrorElement) {
+                firstErrorElement.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        }
+    });
+});
