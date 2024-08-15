@@ -248,9 +248,9 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
     public function getUpdateLink(): string|null
     {
         if (\Auth::user()?->can('update', $this->tourComponent)) {
-            return route('merchandise-inventory-tours.edit', [
+            return route('merchandise.inventory.tour.edit', [
                 'tour' => $this->tourComponent->tour_id,
-                'merchandiseInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;
@@ -259,9 +259,9 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
     public function getDeleteLink(): string|null
     {
         if (\Auth::user()?->can('delete', $this->tourComponent)) {
-            return route('merchandise-inventory-tours.delete', [
+            return route('merchandise.inventory.tour.delete', [
                 'tour' => $this->tourComponent->tour_id,
-                'merchandiseInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;
@@ -270,9 +270,9 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
     public function getRestoreLink(): string|null
     {
         if (\Auth::user()?->can('delete', $this->tourComponent)) {
-            return route('merchandise-inventory-tours.restore', [
+            return route('merchandise.inventory.tour.restore', [
                 'tour' => $this->tourComponent->tour_id,
-                'merchandiseInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;
