@@ -27,6 +27,7 @@
     <script src="{{ asset('js/booking/simple.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('css/fontawesome.css') }}"
     @livewireStyles
+    @stack('scripts')
 </head>
 <body>
     <header>

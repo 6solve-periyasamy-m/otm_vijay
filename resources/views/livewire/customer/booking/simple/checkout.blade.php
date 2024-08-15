@@ -51,10 +51,41 @@
                         <input type="text" id="postal-code" name="postal-code" wire:model="payerAddress.postcode" placeholder="Postal code*" required>
                         @error('payerAddress.postcode') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
-                    <div class="form-field rap-las-cls" wire:ignore>
-                        <input type="text" wire:model="payer.date_of_birth" id="custom-input-date" class="calendar hasDatepicker" data-picker name="upload-release" placeholder="DATE OF BIRTH*">
+                    <div class="form-field rap-las-cls">
+                        <div wire:ignore>
+                            <input type="text" id="custom-input-date" class="calendar hasDatepicker" data-picker name="upload-release" placeholder="DATE OF BIRTH*">
 
-                       <!--<input id="custom-input-date" class="calendar hasDatepicker" type="text" name="upload-release" placeholder="DATE OF BIRTH*">-->
+                            <script type="text/javascript">
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const datePickerElement = document.querySelector('[data-picker]');
+                                    if (datePickerElement) {
+                                        const picker = new Pikaday({
+                                            field: datePickerElement,
+                                            format: 'DD/MM/YYYY',  // Date format for display
+                                            minDate: new Date(1900, 0, 1),  // Set minimum date
+                                            maxDate: new Date(),  // Optional: Set maximum date to today or another value
+                                            yearRange: [1900, new Date().getFullYear()],  // Set the year range, approximation for yearRange
+                                            onSelect: function(date) {
+                                                // Format the selected date as 'Y-m-d'
+                                                const formattedDate = formatDate(date);
+                                                datePickerElement.value = formattedDate;
+                                                // Optionally, use Livewire or other methods to update the value
+                                                @this.set('payer.date_of_birth', formattedDate);
+                                            }
+                                        });
+
+                                        // Format date as Y-m-d'
+                                        function formatDate(date) {
+                                            const day = ('0' + date.getDate()).slice(-2);
+                                            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                                            const year = date.getFullYear();
+                                            return `${year}-${month}-${day}`;
+                                        }
+                                    }
+                                });
+                            </script>
+                        </div>
+                        <!--<input id="custom-input-date" class="calendar hasDatepicker" type="text" name="upload-release" placeholder="DATE OF BIRTH*">-->
                         @error('payer.date_of_birth') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
 
@@ -151,63 +182,8 @@
     </div>
 </div>
 
-@assets
+@push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js" defer></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
-@endassets
-
-@script
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const datePickerElement = document.querySelector('[data-picker]');
-        console.log('pika pi');
-        if (datePickerElement) {
-            const picker = new Pikaday({
-                field: datePickerElement,
-                format: 'DD/MM/YYYY',  // Date format for display
-                minDate: new Date(1970, 0, 1),  // Set minimum date
-                maxDate: new Date(),  // Optional: Set maximum date to today or another value
-                yearRange: [1970, new Date().getFullYear()],  // Set the year range, approximation for yearRange
-                onSelect: function(date) {
-                    // Format the selected date as 'DD/MM/YYYY'
-                    const formattedDate = formatDate(date);
-                    console.log('Selected date:', formattedDate);
-                    datePickerElement.value=formattedDate;
-                    // Optionally, use Livewire or other methods to update the value
-                    //@this.set('date', formattedDate);
-                }
-            });
-
-            // Format date as 'DD/MM/YYYY'
-            function formatDate(date) {
-                const day = ('0' + date.getDate()).slice(-2);
-                const month = ('0' + (date.getMonth() + 1)).slice(-2);
-                const year = date.getFullYear();
-                return `${day}/${month}/${year}`;
-            }
-        }
-    });
-</script>
-
-<script>
-    /*$(document).ready(function () {
-        const $dateInput = $("#custom-input-date");
-    
-        if (!$dateInput.hasClass('ui-datepicker-input')) {
-            $dateInput.datepicker({
-                dateFormat: 'dd/mm/yy',
-                changeMonth: true,
-                changeYear: true,
-                yearRange: '1970:c',
-                minDate: new Date(1970, 0, 1),
-            }).on("click", function () {
-                console.log('datepick click');
-                $(this).datepicker("show");
-            });
-        }
-    });*/
-</script>
-
-@endscript
+@endpush
 

@@ -244,7 +244,7 @@ class BookingTravellerRepository extends ModelRepository
                     return $lookup;
                 } else {
                     $count = 0;
-                    $prefix = strtolower(strip_non_alphanumeric($this->traveller->booking->tour->brand));
+                    $prefix = strtolower(strip_non_alphanumeric($this->traveller->booking->tour->brand->name));
                     do {
                         $count++;
                         $email = add_email_alias($this->traveller->email_address, "{$prefix}{$count}");

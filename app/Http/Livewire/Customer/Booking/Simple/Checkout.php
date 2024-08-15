@@ -98,6 +98,7 @@ class Checkout extends Component
         try {
             return redirect($this->booking->repository->getCheckoutLink($this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount()));
         } catch (\Exception $e) {
+            \Log::error($e);
             return null;
         }
     }
@@ -120,7 +121,7 @@ class Checkout extends Component
             'payer.last_name' => 'required|string',
             'payer.email_address' => 'required|email:rfc,dns',
             'payer.mobile_number' => 'required|phone:INTERNATIONAL',
-            'payer.date_of_birth' => 'required|date',
+            'payer.date_of_birth' => 'nullable|date:Y-m-d',
             'payerAddress.postcode' => 'required|string',
             'booking.notes' => 'nullable|string',
         ];
