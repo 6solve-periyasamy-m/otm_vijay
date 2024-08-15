@@ -55,7 +55,7 @@
             </div>
             <div class="col-12 col-xl-6">
                 <p>Margin</p>
-                <h6 class="fw-bold">{{ f_currency($tour->margin) }}</h6>
+                <h6 class="fw-bold">{{ sigfig($tour->repository->getCosting()->getBaseMargin()) }}%</h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>Is Active</p>
