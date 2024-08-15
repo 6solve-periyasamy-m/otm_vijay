@@ -763,8 +763,8 @@
                 <tr>
                     <th scope="row"><a href="{{route('orders.view', ['order' => $order,])}}"
                                        class="link link-primary">{{ $order->booking_reference }}</a></th>
-                    <td>{{ $order->leadBooker->customer->first_name . ' ' . $order->leadBooker->customer->last_name }}</td>
-                    <td>{{ sizeof($order->orderCustomers) }}</td>
+                    <td>{{ $order->leadBooker?->customer?->first_name . ' ' . $order->leadBooker?->customer?->last_name }}</td>
+                    <td>{{ $order->orderCustomers()->count() }}</td>
                     <td>
                         <h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6>
                     </td>
