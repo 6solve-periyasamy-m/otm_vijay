@@ -19,7 +19,7 @@ class TransportInventoryController extends Controller
     public function store(Request $request, Transport $transport)
     {
         $request->validate(TransportInventory::getValidationRules());
-        $transportInventory = TransportInventory::make([
+        $inventory = TransportInventory::make([
             'travel_class_id' => $request->input('travel_class_id'),
             'departs_at' => $request->input('departs_at'),
             'departure_time_confirmed' => $request->input('departure_time_confirmed') === 'on' ? 1 : 0,
@@ -33,29 +33,29 @@ class TransportInventoryController extends Controller
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
         ]);
-        $transport->transportInventory()->save($transportInventory);
+        $transport->transportInventory()->save($inventory);
         return redirect()->route('transports.view', ['transport' => $transport,]);
     }
 
-    public function manifest(Transport $transport, TransportInventory $transportInventory)
+    public function manifest(Transport $transport, TransportInventory $inventory)
     {
-        return TransportManifestRepository::viewReport($transportInventory->repository, 'transport-inventories.manifest.export', ['transport' => $transport, 'inventory' => $transportInventory]);
+        return TransportManifestRepository::viewReport($inventory->repository, 'transport-inventories.manifest.export', ['transport' => $transport, 'inventory' => $inventory]);
     }
 
-    public function export(Transport $transport, TransportInventory $transportInventory, string $extension = 'xlsx')
+    public function export(Transport $transport, TransportInventory $inventory, string $extension = 'xlsx')
     {
-        return TransportManifestRepository::exportReport($transportInventory->repository, $extension);
+        return TransportManifestRepository::exportReport($inventory->repository, $extension);
     }
 
-    public function edit(Transport $transport, TransportInventory $transportInventory)
+    public function edit(Transport $transport, TransportInventory $inventory)
     {
-        return view('pages.admin.transport.inventory.form', ['transport' => $transport, 'inventory' => $transportInventory,]);
+        return view('pages.admin.transport.inventory.form', ['transport' => $transport, 'inventory' => $inventory,]);
     }
 
-    public function update(Request $request, Transport $transport, TransportInventory $transportInventory)
+    public function update(Request $request, Transport $transport, TransportInventory $inventory)
     {
         $request->validate(TransportInventory::getValidationRules());
-        $transportInventory->update([
+        $inventory->update([
             'travel_class_id' => $request->input('travel_class_id'),
             'departs_at' => $request->input('departs_at'),
             'departure_time_confirmed' => $request->input('departure_time_confirmed') === 'on' ? 1 : 0,
@@ -72,19 +72,19 @@ class TransportInventoryController extends Controller
         return redirect()->route('transports.view', ['transport' => $transport,]);
     }
 
-    public function destroy(Transport $transport, TransportInventory $transportInventory)
+    public function destroy(Transport $transport, TransportInventory $inventory)
     {
-        if ($transportInventory->tourComponents()->count() > 0) {
+        if ($inventory->tourComponents()->count() > 0) {
             return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Transport Inventory']));
         }
-        $transportInventory->delete();
+        $inventory->delete();
         return redirect()->route('transports.view', ['transport' => $transport,]);
     }
 
-    public function duplicate(Transport $transport, TransportInventory $transportInventory)
+    public function duplicate(Transport $transport, TransportInventory $inventory)
     {
-        $inventory = $transportInventory->replicate();
-        $inventory->save();
-        return redirect()->route('transport-inventories.edit', ['transport' => $transport, 'inventory' => $inventory,]);
+        $cloned = $inventory->replicate();
+        $cloned->save();
+        return redirect()->route('transport-inventories.edit', ['transport' => $transport, 'inventory' => $cloned,]);
     }
 }

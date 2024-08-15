@@ -40,7 +40,7 @@ class QuoteController extends Controller
 
     public function storeBasic(CreateBasicQuoteRequest $request, Tour $tour): RedirectResponse
     {
-        $quote = QuoteRepository::createFromTour($tour, $request->getCustomer(), $request->getDataset());
+        $quote = QuoteRepository::createFromTour($tour, $request->getCustomer(), $request->getDataset(), $request->getCustomerDataset());
         return redirect()->route('quotes.view', ['quote' => $quote,]);
     }
 

@@ -18,7 +18,7 @@ class FlightInventoryController extends Controller
     public function store(Request $request, Flight $flight)
     {
         $request->validate(FlightInventory::getValidationRules());
-        $flightInventory = FlightInventory::make([
+        $inventory = FlightInventory::make([
             'travel_class_id' => $request->input('travel_class_id'),
             'flight_number' => $request->input('flight_number'),
             'check_in' => $request->input('check_in'),
@@ -31,29 +31,29 @@ class FlightInventoryController extends Controller
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
         ]);
-        $flight->flightInventory()->save($flightInventory);
-        return redirect()->route('flights.view', ['flight' => $flight, 'flightInventory' => $flightInventory,]);
+        $flight->flightInventory()->save($inventory);
+        return redirect()->route('flights.view', ['flight' => $flight, 'flightInventory' => $inventory,]);
     }
 
-    public function manifest(Flight $flight, FlightInventory $flightInventory)
+    public function manifest(Flight $flight, FlightInventory $inventory)
     {
-        return FlightManifestRepository::viewReport($flightInventory->repository, 'flight-inventories.manifest.export', ['flight' => $flight, 'inventory' => $flightInventory]);
+        return FlightManifestRepository::viewReport($inventory->repository, 'flight-inventories.manifest.export', ['flight' => $flight, 'inventory' => $inventory]);
     }
 
-    public function export(Flight $flight, FlightInventory $flightInventory, string $extension = 'xlsx')
+    public function export(Flight $flight, FlightInventory $inventory, string $extension = 'xlsx')
     {
-        return FlightManifestRepository::exportReport($flightInventory->repository, $extension);
+        return FlightManifestRepository::exportReport($inventory->repository, $extension);
     }
 
-    public function edit(Flight $flight, FlightInventory $flightInventory)
+    public function edit(Flight $flight, FlightInventory $inventory)
     {
-        return view('pages.admin.flight.inventory.form', ['flight' => $flight, 'inventory' => $flightInventory,]);
+        return view('pages.admin.flight.inventory.form', ['flight' => $flight, 'inventory' => $inventory,]);
     }
 
-    public function update(Request $request, Flight $flight, FlightInventory $flightInventory)
+    public function update(Request $request, Flight $flight, FlightInventory $inventory)
     {
         $request->validate(FlightInventory::getValidationRules());
-        $flightInventory->update([
+        $inventory->update([
             'travel_class_id' => $request->input('travel_class_id'),
             'flight_number' => $request->input('flight_number'),
             'check_in' => $request->input('check_in'),
@@ -69,19 +69,19 @@ class FlightInventoryController extends Controller
         return redirect()->route('flights.view', ['flight' => $flight,]);
     }
 
-    public function destroy(Flight $flight, FlightInventory $flightInventory)
+    public function destroy(Flight $flight, FlightInventory $inventory)
     {
-        if ($flightInventory->flightInventoryTour()->count() > 0) {
+        if ($inventory->flightInventoryTour()->count() > 0) {
             return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Flight Inventory']));
         }
-        $flightInventory->delete();
+        $inventory->delete();
         return redirect()->route('flights.view', ['flight' => $flight,]);
     }
 
-    public function duplicate(Flight $flight, FlightInventory $flightInventory)
+    public function duplicate(Flight $flight, FlightInventory $inventory)
     {
-        $inventory = $flightInventory->replicate();
-        $inventory->save();
-        return redirect()->route('flight-inventories.edit', ['flight' => $flight, 'inventory' => $inventory,]);
+        $cloned = $inventory->replicate();
+        $cloned->save();
+        return redirect()->route('flight-inventories.edit', ['flight' => $flight, 'inventory' => $cloned,]);
     }
 }
