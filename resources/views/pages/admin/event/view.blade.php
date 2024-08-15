@@ -129,7 +129,7 @@
                             <td>
                                 <a href="{{route('tours.view', ['tour' => $order->tour,])}}" class="link link-primary">{{ $order->tour->name }}</a>
                             </td>
-                            <td>{{ $order->leadBooker->customer_name }}{{ $count > 0 ? " + $count" : '' }}</td>
+                            <td>{{ $order->leadBooker?->customer_name }}{{ $count > 0 ? " + $count" : '' }}</td>
                             <td>
                                 <h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6>
                             </td>
