@@ -2183,7 +2183,7 @@ input::-webkit-inner-spin-button {
 @media only screen and (max-width:767px) {
     .ma-block .row, .ma-block .row .second-form  {flex-wrap:wrap;}
     .ma-block .row .left-col {
-        margin-bottom:65px;
+        margin-bottom:55px;
     }
 }
 .pika-single.is-bound {
