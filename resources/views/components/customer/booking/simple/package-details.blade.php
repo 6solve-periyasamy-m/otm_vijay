@@ -6,7 +6,7 @@
 @endphp
 <div class="top-sec">
     <div class="head-txt"><h4>Package details</h4></div>
-    <div class="upgrade-cls" data-action="popup" data-target="upgrades-popup">UPGRADE</div>
+    {{--<div class="upgrade-cls" data-action="popup" data-target="upgrades-popup">UPGRADE</div>--}}
 </div>
 <div class="snd-sec">
     @if(isset($tour->event?->image_url))
