@@ -11,7 +11,7 @@
                     @error('lead.first_name') <label class="error-label">{{ $message }}</label> @enderror
                 </div>
                 <div class="form-field">
-                    <input type="text" wire:model="lead.last_name" placeholder="Last Name">
+                    <input type="text" wire:model="lead.last_name" placeholder="Last Name*">
                     @error('lead.last_name') <label class="error-label">{{ $message }}</label> @enderror
                 </div>
                 <div class="form-field">

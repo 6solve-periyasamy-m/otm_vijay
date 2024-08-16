@@ -19,7 +19,7 @@
                         @error('payer.first_name') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                     <div class="form-field">
-                        <input type="text" wire:model="payer.last_name" placeholder="Last Name">
+                        <input type="text" wire:model="payer.last_name" placeholder="Last Name*">
                         @error('payer.last_name') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                     <div class="form-field">
