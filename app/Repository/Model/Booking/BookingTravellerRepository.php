@@ -398,7 +398,7 @@ class BookingTravellerRepository extends ModelRepository
 
     public function getSingleOccupancy(): float
     {
-        return $this->hasSingleOccupancy() ? $this->traveller->booking->tour->single_occupancy_surcharge : 0;
+        return $this->hasSingleOccupancy() ? ($this->traveller->booking->tour->single_occupancy_surcharge ?? 0.0) : 0;
     }
 
     public function hasSingleOccupancy(): bool

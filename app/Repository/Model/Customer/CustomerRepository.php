@@ -34,6 +34,12 @@ class CustomerRepository extends ModelRepository
 
     public function delete(): bool
     {
+        if ($this->customer->orderCustomers()->count() > 0) {
+            return false;
+        }
+        if ($this->customer->quoteProspects()->count() > 0) {
+            return false;
+        }
         return $this->customer->delete();
     }
 

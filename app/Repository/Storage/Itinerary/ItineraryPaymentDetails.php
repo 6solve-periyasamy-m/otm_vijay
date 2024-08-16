@@ -4,7 +4,7 @@ namespace App\Repository\Storage\Itinerary;
 
 class ItineraryPaymentDetails
 {
-    public string $paymentDetails;
+    public string|null $paymentDetails;
 
     /**
      * @param float $total
