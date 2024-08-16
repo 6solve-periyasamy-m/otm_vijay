@@ -2180,8 +2180,8 @@ input::-webkit-inner-spin-button {
         top: 4px;
     }
 }
-@media only screena and (max-width:767px) {
-    .ma-block .row, .ma-block .row .second-form  {row-gap:60px;flex-wrap:wrap;}
+@media only screen and (max-width:767px) {
+    .ma-block .row, .ma-block .row .second-form  {row-gap:65px;flex-wrap:wrap;}
 }
 .pika-single.is-bound {
     background: #F9F4EE !important;
