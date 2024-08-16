@@ -24,12 +24,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
 
     <link rel="stylesheet" href="{{ asset('css/booking/simple.css') }}">
+    
     <script src="{{ asset('js/booking/simple.js') }}"></script>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-P6TKNMN');</script>
+
     <link rel="stylesheet" href="{{ asset('css/fontawesome.css') }}"
     @livewireStyles
     @stack('scripts')
+    
 </head>
 <body>
+
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P6TKNMN"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
     <header>
         <section class="top-head test">
             <div class="row">
