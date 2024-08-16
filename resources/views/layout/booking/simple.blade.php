@@ -23,9 +23,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
 
+    @livewireStyles
+
     <link rel="stylesheet" href="{{ asset('css/booking/simple.css') }}">
     
     <script src="{{ asset('js/booking/simple.js') }}"></script>
+
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -33,9 +36,7 @@
     })(window,document,'script','dataLayer','GTM-P6TKNMN');</script>
 
     <link rel="stylesheet" href="{{ asset('css/fontawesome.css') }}"
-    @livewireStyles
     @stack('scripts')
-    
 </head>
 <body>
 
