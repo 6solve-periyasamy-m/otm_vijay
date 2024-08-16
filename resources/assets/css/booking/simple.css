@@ -2181,7 +2181,10 @@ input::-webkit-inner-spin-button {
     }
 }
 @media only screen and (max-width:767px) {
-    .ma-block .row, .ma-block .row .second-form  {row-gap:65px;flex-wrap:wrap;}
+    .ma-block .row, .ma-block .row .second-form  {flex-wrap:wrap;}
+    .ma-block .row .left-col {
+        margin-bottom:65px;
+    }
 }
 .pika-single.is-bound {
     background: #F9F4EE !important;
