@@ -113,7 +113,7 @@
             </div>
             <div class="third-block">
                 @for($x = 0, $xMax = count($rooms); $x < $xMax; $x++)
-                    <div class="first-bl">
+                    <div class="first-bl" wire:key="{{Str::random()}}">
                         <div class="inn">
                             <h6>Room {{ $x + 1 }}</h6>
                         </div>
@@ -126,7 +126,7 @@
                             @error("rooms.$x.room") <label class="error-label">{{ $message }}</label> @enderror
                         </div>
                         <div class="form-field">
-                            <select class="travellers-select" wire:model="rooms.{{$x}}.travellers" name="pax_number">
+                            <select class="travellers-select" wire:model.live="rooms.{{$x}}.travellers" name="pax_number">
                                 <option value="1">1 Traveller</option>
                                 <option value="2">2 Travellers</option>
                             </select>

@@ -52,6 +52,8 @@ class Rooming extends Component
         $this->booking = Booking::find($this->booking->id);
         $this->lead = $this->booking->leadTraveller;
         $this->tour = Tour::find($this->tour->id);
+        $this->rooms = $this->rooms;
+        //$this->renewRooming();
     }
 
     public function getTravellerCount(): int
@@ -127,6 +129,9 @@ class Rooming extends Component
 
     public function validateRoomCount(): void
     {
+        foreach ($this->rooms as $i => $iValue) {
+            $this->rooms[$i]['travellers'] = (int)$iValue['travellers'];
+        }
         for ($i = count($this->rooms); $i < $this->getMinimumRooms(); $i++) {
             $this->rooms[] = ['room' => $this->tour->repository->getDefaultRoom(), 'travellers' => 2,];
         }
