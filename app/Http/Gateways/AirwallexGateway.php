@@ -181,4 +181,3 @@ class AirwallexGateway extends Gateway implements SupportsRedirect, SupportsApiK
         return $details;
     }
 }
-
