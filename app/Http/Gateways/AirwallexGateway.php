@@ -3,11 +3,11 @@
 namespace App\Http\Gateways;
 
 use App\Exceptions\UnauthorizedGatewayException;
+use App\Http\Gateways\Interfaces\SupportsApiKeys;
 use App\Http\Gateways\Interfaces\SupportsRedirect;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Order\Payment\PaymentIntention;
-use App\Repository\Intention\PaymentIntentionRepository;
 use Cache;
 use Carbon\Carbon;
 use Exception;
@@ -15,7 +15,7 @@ use Http;
 use Illuminate\Http\Request;
 use Log;
 
-class AirwallexGateway extends Gateway implements SupportsRedirect
+class AirwallexGateway extends Gateway implements SupportsRedirect, SupportsApiKeys
 {
     private string $success;
     private string $cancelled;
@@ -118,6 +118,7 @@ class AirwallexGateway extends Gateway implements SupportsRedirect
     }
 
     /**
+     * Gets the Payment Intention details needed to use the drop-in element for
      * @throws UnauthorizedGatewayException
      */
     public function getPaymentIntention(float $amount, PaymentIntention $intention): array
