@@ -643,7 +643,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
     {
         $rooms = [];
         foreach ($this->tour->accommodationInventoryTours as $inventoryTour) {
-            $name = $inventoryTour->inventory->component->name . ' - ' . $inventoryTour->inventory->boardType . ' - ' . $inventoryTour->inventory->roomType;
+            $name = $inventoryTour->inventory->component->name . ' - ' . $inventoryTour->inventory->boardType . ' - ' . $inventoryTour->inventory->roomType->name;
             if ($inventoryTour->tour_component_type !== 'Included') {
                 $cost = $inventoryTour->tour_sales_price;
                 if ($cost > 0) {
