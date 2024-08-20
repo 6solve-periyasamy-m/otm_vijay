@@ -17,11 +17,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quote - {{ $quote->reference }}</title>
     <style>
-        <?php include(public_path() . '/css/invoice.css') ?>
+        <?php /*include(public_path() . '/css/invoice.css') */?>
     </style>
     <style>
         .cancelled {
-            background-image: url('{{ svg_to_b64('images/rubberstamp.svg') }}') !important;
+            /*background-image: url('{{ svg_to_b64('images/rubberstamp.svg') }}') !important;*/
             background-repeat: no-repeat !important;
             background-position-x: calc(50% + 3em) !important;
             background-position-y: 8em;
@@ -30,7 +30,7 @@
     </style>
 </head>
 <body>
-<div class="background center-screen @if($quote->status == QuoteStatus::CLOSED || $quote->status == QuoteStatus::EXPIRED) cancelled @endif">
+<div class="background center-screen @if($quote->status == QuoteStatus::CLOSED || $quote->status == QuoteStatus::EXPIRED) cancelled @endif test-class-pdf">
     <!-- Header Section -->
     <div class="section">
         <div class="header">
