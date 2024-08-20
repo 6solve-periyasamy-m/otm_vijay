@@ -229,7 +229,7 @@
                     <tr>
                         <td colspan="2" class="text-left">
                             <div class="date-content">
-                                PAYMENT SCHEDULE
+                                PAYMENT SCHEDULE check
                             </div>
                         </td>
                     </tr>
