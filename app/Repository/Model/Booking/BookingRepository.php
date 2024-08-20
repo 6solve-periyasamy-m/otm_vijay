@@ -6,6 +6,7 @@ use App\Exceptions\NotOnTourException;
 use App\Exceptions\RemoteGatewayError;
 use App\Exceptions\RoomingFailedException;
 use App\Exceptions\UnauthorizedGatewayException;
+use App\Http\Gateways\AirwallexGateway;
 use App\Http\Gateways\Storage\LineItem;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\RoomType;
@@ -638,6 +639,23 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
 
         return $gateway?->checkout([$item,], $intention, $this->booking->leadTraveller, $redirect);
+    }
+
+    /**
+     * @throws UnauthorizedGatewayException
+     */
+    public function getAirwallexKeys(float $amount): array|null
+    {
+        $gateway = Gateway::getPaymentGateway('airwallex');
+        if (!($gateway instanceof AirwallexGateway)) {
+            return null;
+        }
+        $item = new LineItem("Deposit for Booking from {$this->booking->leadTraveller->full_name}", $amount);
+        $intention = PaymentIntention::build($this->booking->leadTraveller->customer, $this->booking->token, 'Deposit');
+
+        $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
+
+        return $gateway?->getApiKeys([$item,], $intention, $this->booking->leadTraveller, $redirect);
     }
 
     public function getSimpleData(): array

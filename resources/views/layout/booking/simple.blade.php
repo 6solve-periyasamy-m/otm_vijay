@@ -1,5 +1,6 @@
-@php /** @var \App\Models\System\Brand $brand */ @endphp
-<!DOCTYPE html>
+@php use App\Models\System\Brand; @endphp
+@php /** @var Brand $brand */ @endphp
+        <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,26 +23,57 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <script src="https://checkout.airwallex.com/assets/elements.bundle.min.js"></script>
 
     @livewireStyles
 
     <link rel="stylesheet" href="{{ asset('css/booking/simple.css') }}">
-    
+
     <script src="{{ asset('js/booking/simple.js') }}"></script>
 
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-P6TKNMN');</script>
+    <script type="text/javascript">
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-P6TKNMN');
+    </script>
+
+    <script type="text/javascript">
+        window.addEventListener('popupCheckout', (event) => {
+            Airwallex.init({
+                env: '{{ config('app.gateways.airwallex.live', false) ? 'prod' : 'demo' }}',
+                origin: window.location.origin,
+            });
+            const element = Airwallex.createElement('dropIn', {
+                intent_id: event.detail.key,
+                client_secret: event.detail.secret,
+                currency: '{{ setting('system.currency', 'GBP') }}',
+            });
+            jQuery('#airwallex-popup').css('display', 'flex');
+            let mount = element.mount('airwallex-container');
+            mount.addEventListener('onSuccess', (event) => {
+                window.location = event.detail.intent.return_url;
+            });
+        });
+    </script>
 
     <link rel="stylesheet" href="{{ asset('css/fontawesome.css') }}"
+
     @stack('scripts')
 </head>
 <body>
-
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P6TKNMN"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P6TKNMN" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
 
     <header>
         <section class="top-head test-class-pdf">
@@ -77,12 +109,12 @@
             <div class="row">
                 <div class="top-nav-sec">
                     @if(!empty($return ?? null))
-                    <div class="navi">
-                        <a href="{{ $return }}">
-                            <img src="{{ asset('css/booking/icon/arrow-left.svg') }}" alt="left-arrow">
-                            <p>Back</p>
-                        </a>
-                    </div>
+                        <div class="navi">
+                            <a href="{{ $return }}">
+                                <img src="{{ asset('css/booking/icon/arrow-left.svg') }}" alt="left-arrow">
+                                <p>Back</p>
+                            </a>
+                        </div>
                     @endif
                     <div class="head">
                         <h1>Request to book</h1>
@@ -117,7 +149,8 @@
                     <div class="contain">
                         <p>Legal Notices <span>|</span></p>
                         <p>
-                            <a href="https://www.kpt.com.au/privacy-policy/" target="_blank">Privacy Policy</a> <span>|</span>
+                            <a href="https://www.kpt.com.au/privacy-policy/" target="_blank">Privacy Policy</a>
+                            <span>|</span>
                         </p>
                         <p>
                             <a href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">Terms & Conditions</a>

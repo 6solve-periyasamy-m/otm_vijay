@@ -95,8 +95,15 @@ class Checkout extends Component
     {
         if (!$this->terms) { return $this->addError('common', 'You must accept terms and conditions.'); }
         $this->preCheckout();
+        $amount = $this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount();
         try {
-            return redirect($this->booking->repository->getCheckoutLink($this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount()));
+            $keys = $this->booking->repository->getAirwallexKeys($amount);
+            if ($keys !== null && array_key_exists('id', $keys) && array_key_exists('secret', $keys)) {
+                $this->popupAirwallex($keys['id'], $keys['secret']);
+                return null;
+            } else {
+                return redirect($this->booking->repository->getCheckoutLink($amount));
+            }
         } catch (\Exception $e) {
             \Log::error($e);
             $this->addError('common', 'Something went wrong with our payment processing. Please try again later.');
@@ -126,5 +133,10 @@ class Checkout extends Component
             'payerAddress.postcode' => 'required|string',
             'booking.notes' => 'nullable|string',
         ];
+    }
+
+    private function popupAirwallex(string $id, string $secret): void
+    {
+        $this->dispatchBrowserEvent('popupCheckout', ['key' => $id, 'secret' => $secret]);
     }
 }

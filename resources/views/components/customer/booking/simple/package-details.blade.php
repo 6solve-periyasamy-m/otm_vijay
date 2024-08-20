@@ -174,4 +174,9 @@
         </div>
     </div>
 </div>
+<div class="airwallex-popup" id="airwallex-popup">
+    <div class="card">
+        <div id="airwallex-container" class="airwallex-content"></div>
+    </div>
+</div>
 @endpush
