@@ -99,6 +99,7 @@ class Checkout extends Component
             return redirect($this->booking->repository->getCheckoutLink($this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount()));
         } catch (\Exception $e) {
             \Log::error($e);
+            $this->addError('common', 'Something went wrong with our payment processing. Please try again later.');
             return null;
         }
     }
