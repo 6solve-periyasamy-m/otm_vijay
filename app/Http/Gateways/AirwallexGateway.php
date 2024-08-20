@@ -138,7 +138,9 @@ class AirwallexGateway extends Gateway implements SupportsRedirect, SupportsApiK
     public function process(string $reference, float $amount, string $created = null): void
     {
         $intention = PaymentIntention::find($reference);
-        $this->processIntention($intention, $amount * 100, self::$GATEWAY, $created);
+        if ($intention !== null) {
+            $this->processIntention($intention, $amount * 100, self::$GATEWAY, $created);
+        }
     }
 
     public function webhook(Request $request)
