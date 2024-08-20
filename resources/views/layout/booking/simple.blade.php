@@ -44,7 +44,7 @@
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <header>
-        <section class="top-head test">
+        <section class="top-head test-class-pdf">
             <div class="row">
                 <div class="col-one">
                     <div class="img-contain">
