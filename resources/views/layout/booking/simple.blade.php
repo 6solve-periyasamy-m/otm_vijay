@@ -79,7 +79,7 @@
             <div class="row">
                 <div class="col-one">
                     <div class="img-contain">
-                        <img style="width: 300px; height: 32px;" src="{{ $brand->image }}" alt="logo">
+                        <img style="width: 300px; height: 32px;" src="{{ $brand->alt_image }}" alt="logo">
                     </div>
                 </div>
                 <div class="col-two">

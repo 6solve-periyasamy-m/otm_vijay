@@ -153,6 +153,10 @@
                 <div class="col-12 col-xl-6">
                     <img class="image medium" src="{{ asset(setting('company.logo')) }}"/>
                 </div>
+                @include('partials.fields.file', ['name' => 'Alternative Company Logo', 'field' => 'alt_company_logo', 'width' => 6])
+                <div class="col-12 col-xl-6">
+                    <img class="image medium" src="{{ asset(setting('company.logo.alternative', setting('company.logo'))) }}"/>
+                </div>
                 @include('partials.fields.file', ['name' => 'ATOL Stamp', 'field' => 'atol_stamp', 'width' => 6])
                 <div class="col-12 col-xl-6">
                     <img class="image tiny" src="{{ asset(setting('atol.stamp')) }}"/>

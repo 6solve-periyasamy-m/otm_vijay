@@ -27,6 +27,7 @@ class SettingsController extends Controller
             'booking_prefix' => 'required',
             'quote_prefix' => 'required',
             'company_logo' => 'nullable|image',
+            'alt_company_logo' => 'nullable|image',
             'atol_stamp' => 'nullable|image',
             'atol_filter' => 'required',
             'currency_id' => 'required|exists:currencies,id',
@@ -98,6 +99,9 @@ class SettingsController extends Controller
         ]);
         if ($request->has('company_logo')  && !empty($request->file('company_logo'))) {
             Settings::set('company.logo', $this->saveImage($request->file('company_logo')));
+        }
+        if ($request->has('alt_company_logo')  && !empty($request->file('alt_company_logo'))) {
+            Settings::set('company.logo.alternative', $this->saveImage($request->file('alt_company_logo')));
         }
         if ($request->has('atol_stamp') && !empty($request->file('atol_stamp'))) {
             Settings::set('atol.stamp', $this->saveImage($request->file('atol_stamp')));
