@@ -58,7 +58,6 @@
                 client_secret: event.detail.secret,
                 currency: '{{ setting('system.currency', 'GBP') }}',
             });
-            jQuery('#airwallex-popup').css('display', 'flex');
             let mount = element.mount('airwallex-container');
             mount.addEventListener('onSuccess', (event) => {
                 window.location = event.detail.intent.return_url;
