@@ -23,6 +23,7 @@ use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Intention\PaymentIntentionRepository;
 use App\Repository\Intention\Storage\AdditionIntention;
+use App\Repository\Model\Order\ItineraryRepository;
 use Gateway;
 use Spatie\Browsershot\Browsershot;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -61,7 +62,7 @@ class CustomerTourController extends CustomerController
     {
         $orderCustomer = $this->getOrderCustomer($reference, $customer);
         if (!isset($orderCustomer)) { abort(404); }
-        return $orderCustomer->order->repository->getItinerary($orderCustomer);
+        return (new ItineraryRepository($orderCustomer->order))->getResponseStream($orderCustomer);
     }
 
     public function showExtras(?Order $reference = null, ?Customer $customer = null)
