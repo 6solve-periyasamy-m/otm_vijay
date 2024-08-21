@@ -113,6 +113,9 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
     public function duplicate(): Tour
     {
         $newTour = $this->tour->replicate();
+        $newTour->name = "{$newTour->name} ({$this->tour->id} Duplicate)";
+        $newTour->booking_form_url = null;
+        $newTour->is_active = false;
         $newTour->save();
         foreach ($this->getComponents(true, true, true, true, false, ['Included', 'Add-on']) as $inventoryTourRepository) {
             $inventoryTour = $inventoryTourRepository->get();
