@@ -139,7 +139,7 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
 
     public function getPurchasePrice(): float
     {
-        return $this->inventory->purchase_price;
+        return $this->inventory->purchase_price ?? 0.0;
     }
 
     public function isStockControlActive(): bool
