@@ -61,7 +61,7 @@
           </div>  
         </div>
         <div class="customer-details-image-block">
-        <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('/images/pdf_assets/images/featured-image.png'))?>" alt="image-block">
+        <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('https://qa.octopustravelmatrix.com/images/pdf_assets/images/featured-image.png'))?>" alt="image-block">
         </div>       
       </div>
 	
