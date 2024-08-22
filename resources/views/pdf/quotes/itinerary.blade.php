@@ -34,7 +34,7 @@
     <div class="row">
       <div class="header">
          <div class="header-logo">
-             <img src="" alt="logo">
+             <img srcset="/images/pdf_assets/images/KeithProwse_Logo.png" src="/images/pdf_assets/images/KeithProwse_Logo.png" alt="logo">
          </div>
       </div>
       <div class="customer-details-block">
@@ -56,7 +56,7 @@
           </div>  
         </div>
         <div class="customer-details-image-block">
-            <img src="" alt="image-block">
+            <img src="/images/pdf_assets/images/featured-image.png" srcset="/images/pdf_assets/images/featured-image.png" alt="image-block">
         </div>
       </div>
   </section>
