@@ -611,9 +611,9 @@ table.cell-padding-0 td, th {
   src: url(/images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf);
   }
 
-  .pdf-individual-block  h1 {
+  h1 {
     color: var(--text-color);
-    font-family: PlayfairDisplay-Medium;
+    font-family: "PlayfairDisplay-Medium";
     font-size: 35px;
     font-weight: 500;
     line-height: 35px;
@@ -674,5 +674,10 @@ table.cell-padding-0 td, th {
   line-height: 10.58px; 
   color: var(--text-color);
 }
-
+h2 {
+  font-family: "PlayfairDisplay-Medium";
+  font-size: 35px;
+  font-weight: 500;
+  line-height: 20px;
+}
 
