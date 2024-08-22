@@ -38,7 +38,7 @@
   <div class="row">
       <div class="pdf-header">
          <div class="header-logo">
-             <img srcset="https://qa.octopustravelmatrix.com/images/pdf_assets/images/KeithProwse_Logo.png" src="https://qa.octopustravelmatrix.com/images/pdf_assets/images/KeithProwse_Logo.png" alt="logo-ch">
+            <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('https://qa.octopustravelmatrix.com/images/pdf_assets/images/KeithProwse_Logo.png'))?>" alt="logo-ch">
          </div>
       </div>
 	  
@@ -61,7 +61,7 @@
           </div>  
         </div>
         <div class="customer-details-image-block">
-            <img src="<?php echo $imagePath;?>" srcset="<?php echo $imagePath;?>" alt="image-block">
+        <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('/images/pdf_assets/images/featured-image.png'))?>" alt="image-block">
         </div>       
       </div>
 	
