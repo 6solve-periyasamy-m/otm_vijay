@@ -62,7 +62,7 @@
       </div>
 	
     <div class="information-block">
-     <div class="column">
+     <div class="column-1">
           <div class="single">
               <p class="heading">Event:</p>
               <p class="description">British and Irish Lions Tour 2025</p>
@@ -72,7 +72,7 @@
             <p class="description">18 July 2025 - 02 August 2025</p>
           </div>
      </div>
-	 <div class="column">
+	 <div class="column-2">
           <div class="single">
               <p class="heading">Total number of persons:</p>
               <p class="description">2 Adult(s)</p>
@@ -83,8 +83,7 @@
           </div>
      </div>
 	</div>
-	  
-      
+	<h2></h2> 
    </div>
   </section>
     
