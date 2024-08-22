@@ -634,7 +634,7 @@ table.cell-padding-0 td, th {
  }
  .customer-details-block .customer-details-text-block {width: 386px;}
  .customer-details-text-block  h3 {
-  font-family: PPNeueMontreal-Medium;
+  font-family: "PPNeueMontreal-Medium";
   font-size: 12px;
   font-weight: 500;
   line-height: 14.4px;
@@ -642,13 +642,35 @@ table.cell-padding-0 td, th {
   color: var(--text-color);
  }
  .customer-agent-details {display:flex;}
- .customer-agent-details .customer-details, .customer-agent-details .agent-details{display:flex;width:185px;}
+ .customer-agent-details .customer-details, .customer-agent-details .agent-details{width:185px;}
  .customer-agent-details p {
-  font-family: PPNeueMontreal-Medium;
+  font-family: "PPNeueMontreal-Medium";
   font-size: 10px;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 10px;
   margin-bottom: 9px ! Important;
   color: var(--text-color);
  }
 .customer-details-image-block {width:209px;}
+.customer-details-text-block  h3 span {
+  display:block;
+  width:44px;
+  height:3px;
+  background-color:var( --text-head-color);
+  margin-top:4px;
+}
+.information-block {
+  background-color: var(--main-background-color);
+  display: flex;
+  padding: 12.5px 20px;
+}
+.information-block .column,.information-block .column p {width:50%;}
+.information-block .column .single {display:flex;}
+.information-block .column p {
+  font-family: "PPNeueMontreal-Medium";
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 10.58px; 
+  color: var(--text-color);
+}
+.information-block .column .single:first-child {margin-bottom:5px;}

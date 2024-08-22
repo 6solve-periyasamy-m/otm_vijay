@@ -41,7 +41,7 @@
       <div class="customer-details-block">
         <div class="customer-details-text-block">
              <h1>Quote</h1>
-             <h3>REFERENCE: KPQ00004FF</h3>         
+             <h3>REFERENCE: KPQ00004FF <span></span></h3>         
           <div class="customer-agent-details">
             <div class="customer-details">
                <h4>Customer details</h4>
