@@ -19,6 +19,8 @@
   --table-border-color: #353535;
   --table-header-background: #353535;
   --table-header-text: #FFFFFF;
+
+  --main-background-color:#F9F4EE;
 }
 
 @page {
@@ -586,4 +588,9 @@ table.cell-padding-0 td, th {
       background-color: var(--table-background-color);
     }
   }
+}
+
+.header {
+  background-color: var(--main-background-color);
+  padding:14px 20px;
 }
