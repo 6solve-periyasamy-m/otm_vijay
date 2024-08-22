@@ -30,7 +30,7 @@
 <body class="body">
 
 <main>
-  <section>
+  <section class="pdf-individual-block">
     <div class="row">
       <div class="header">
          <div class="header-logo">

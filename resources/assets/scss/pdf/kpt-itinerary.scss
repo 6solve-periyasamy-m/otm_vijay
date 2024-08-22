@@ -21,6 +21,9 @@
   --table-header-text: #FFFFFF;
 
   --main-background-color:#F9F4EE;
+  --text-head-color: #F35B15;
+  --text-color: #000;
+   
 }
 
 @page {
@@ -594,4 +597,35 @@ table.cell-padding-0 td, th {
   background-color: var(--main-background-color);
   padding:14px 20px;
 }
+.pdf-individual-block {
+  width: 595px;
+  margin: auto;
+  height: 841px;
+}
 
+ @font-face {
+  font-family: "PlayfairDisplay-Medium";
+  src: url(/images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf);
+  }
+  @font-face {
+  font-family: "PPNeueMontreal-Medium";
+  src: url(/images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf);
+  }
+
+  .pdf-individual-block  h1 {
+    font-family: "PlayfairDisplay-Medium";
+    font-size:35px;
+    line-height:20px;
+    font-weight:500;
+    margin-bottom:16px;
+    color: var( --text-color);
+  }
+  .customer-details-block h4 {
+    font-family: "PPNeueMontreal-Medium";
+    font-size:9px;
+    font-weight:500;
+    line-height:10px;
+    margin-bottom:6px;
+    color: var( --text-head-color);
+  }
+ 
