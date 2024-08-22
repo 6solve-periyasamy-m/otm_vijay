@@ -37,6 +37,28 @@
              <img src="" alt="logo">
          </div>
       </div>
+      <div class="customer-details-block">
+        <div class="customer-details-text-block">
+             <h1>Quote</h1>
+             <h3>REFERENCE: KPQ00004FF</h3>         
+          <div class="customer-agent-details">
+            <div class="customer-details">
+               <h4>Customer details</h4>
+               <p>Name: <span>Adrian Robins</span></p>
+               <p>Email: <span>adrian.robins@hotmail.co.uk</span><p>
+            </div>
+            <div class="agent-details">
+               <h4>Customer details</h4>
+               <p>Name: <span>Keith Prowse Travel</span></p>
+               <p>Email: <span>travel@kpt.com.au</span><p>
+               <p>Date created: <span>06 August 2024</span><p>
+            </div>
+          </div>  
+        </div>
+        <div class="customer-details-image-block">
+            <img src="" alt="image-block">
+        </div>
+      </div>
   </section>
     
 
