@@ -31,12 +31,13 @@
 
 <main>
   <section class="pdf-individual-block">
-    <div class="row">
-      <div class="header">
+  <div class="row">
+      <div class="pdf-header">
          <div class="header-logo">
              <img srcset="/images/pdf_assets/images/KeithProwse_Logo.png" src="/images/pdf_assets/images/KeithProwse_Logo.png" alt="logo">
          </div>
       </div>
+	  
       <div class="customer-details-block">
         <div class="customer-details-text-block">
              <h1>Quote</h1>
@@ -57,8 +58,34 @@
         </div>
         <div class="customer-details-image-block">
             <img src="/images/pdf_assets/images/featured-image.png" srcset="/images/pdf_assets/images/featured-image.png" alt="image-block">
-        </div>
+        </div>       
       </div>
+	
+    <div class="information-block">
+     <div class="column">
+          <div class="single">
+              <p class="heading">Event:</p>
+              <p class="description">British and Irish Lions Tour 2025</p>
+          </div>
+          <div class="single">
+            <p class="heading">Travel dates:</p>
+            <p class="description">18 July 2025 - 02 August 2025</p>
+          </div>
+     </div>
+	 <div class="column">
+          <div class="single">
+              <p class="heading">Total number of persons:</p>
+              <p class="description">2 Adult(s)</p>
+          </div>
+          <div class="single">
+            <p class="heading">Lead guest:</p>
+            <p class="description">Adrian Robins</p>
+          </div>
+     </div>
+	</div>
+	  
+      
+   </div>
   </section>
     
 
