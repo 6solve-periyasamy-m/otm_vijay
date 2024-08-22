@@ -4,7 +4,11 @@
      * @var string $type
      */
     $type = $type ?? "Travel Itinerary"
+    
 @endphp
+<?php 
+  $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/images/pdf_assets/images/featured-image.png';
+?>
 
         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -34,7 +38,7 @@
   <div class="row">
       <div class="pdf-header">
          <div class="header-logo">
-             <img srcset="/images/pdf_assets/images/KeithProwse_Logo.png" src="/images/pdf_assets/images/KeithProwse_Logo.png" alt="logo">
+             <img srcset="https://qa.octopustravelmatrix.com/images/pdf_assets/images/KeithProwse_Logo.png" src="https://qa.octopustravelmatrix.com/images/pdf_assets/images/KeithProwse_Logo.png" alt="logo">
          </div>
       </div>
 	  
@@ -57,7 +61,7 @@
           </div>  
         </div>
         <div class="customer-details-image-block">
-            <img src="/images/pdf_assets/images/featured-image.png" srcset="/images/pdf_assets/images/featured-image.png" alt="image-block">
+            <img src="<?php echo $imagePath;?>" srcset="<?php echo $imagePath;?>" alt="image-block">
         </div>       
       </div>
 	
