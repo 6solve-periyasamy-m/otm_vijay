@@ -1,6 +1,6 @@
 <?php
 
-namespace Method\Repository\Accommodation;
+namespace Tests\Unit\Method\Repository\Accommodation;
 
 use App\Models\Accommodation\AccommodationInventory;
 use App\Repository\Model\Accommodation\AccommodationInventoryRepository;

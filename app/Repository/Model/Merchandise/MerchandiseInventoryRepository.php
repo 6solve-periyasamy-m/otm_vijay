@@ -172,7 +172,7 @@ class MerchandiseInventoryRepository extends InventoryRepository
 
     public function getPurchasePrice(): float
     {
-        return $this->inventory->purchase_price ?? 0;
+        return $this->inventory->purchase_price ?? 0.0;
     }
 
     public function isStockControlActive(): bool

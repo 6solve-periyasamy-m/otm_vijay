@@ -1,9 +1,8 @@
 <?php
 
-namespace Tests\Repository\Costing\Tour;
+namespace Tests\Unit\Method\Repository\Costing\Tour;
 
 use App\Repository\Costing\Tour\TourCostingRepository;
-use PHPUnit\Framework\TestCase;
 use Tests\Bases\DatabaseTestCase;
 use Tests\Traits\Model\TestsTour;
 

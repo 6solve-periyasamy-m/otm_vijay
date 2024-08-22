@@ -171,7 +171,7 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
 
     public function getPurchasePrice(): float
     {
-        return $this->inventory->purchase_price;
+        return $this->inventory->purchase_price ?? 0.0;
     }
 
     public function getRoomingList(): Collection|array
