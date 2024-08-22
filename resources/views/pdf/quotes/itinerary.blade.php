@@ -34,7 +34,7 @@
     <div class="row">
       <div class="header">
          <div class="header-logo">
-             <img src="https://www.kpt.com.au/wp-content/uploads/2024/06/KeithProwse_Logo_Horizontal_RGB_White_L-1.svg" alt="logo">
+             <img src="" alt="logo">
          </div>
       </div>
   </section>
