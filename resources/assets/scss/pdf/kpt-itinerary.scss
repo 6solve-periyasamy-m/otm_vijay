@@ -610,9 +610,10 @@ table.cell-padding-0 td, th {
   font-family: "PPNeueMontreal-Medium";
   src: url(/images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf);
   }
-  h1 {
+
+  .pdf-individual-block  h1 {
     color: var(--text-color);
-    font-family: "PlayfairDisplay-Medium";
+    font-family: PlayfairDisplay-Medium;
     font-size: 35px;
     font-weight: 500;
     line-height: 35px;
@@ -674,9 +675,6 @@ table.cell-padding-0 td, th {
   color: var(--text-color);
 }
 h2 {
-  font-family: "PlayfairDisplay-Medium";
-  font-size: 35px;
-  font-weight: 500;
-  line-height: 20px;
+  font-size:80px!important;
 }
 
