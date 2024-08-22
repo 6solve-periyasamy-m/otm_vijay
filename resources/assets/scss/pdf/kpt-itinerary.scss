@@ -675,3 +675,5 @@ table.cell-padding-0 td, th {
   color: var(--text-color);
 }
 .information-block .column-1 .single, .information-block .column-2 .single {display:flex;justify-content: space-between;}
+.information-block .column-1 p.description {width:148px;}
+.information-block .column-2 p.description {width:64px;}
