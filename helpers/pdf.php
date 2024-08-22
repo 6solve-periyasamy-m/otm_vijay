@@ -23,22 +23,22 @@ if(!function_exists('puppeteer')) {
 
 }
 
-if(!function_exists('dompdf')) {
-    /**
-     * @param \Illuminate\Contracts\View\View|Factory $view
-     * @param bool $response Should it be a streamed response, or just formatted for other uses
-     * @return StreamedResponse|string
-     */
-    function dompdf(\Illuminate\Contracts\View\View|Factory $view, bool $response = true): StreamedResponse|string
-    {
-        $dompdf = new Dompdf((new Options())->set('dpi', 96)->set('isHtml5ParserEnabled', true));
-        $dompdf->setPaper('A4', 'portrait');
+// if(!function_exists('dompdf')) {
+//     /**
+//      * @param \Illuminate\Contracts\View\View|Factory $view
+//      * @param bool $response Should it be a streamed response, or just formatted for other uses
+//      * @return StreamedResponse|string
+//      */
+//     function dompdf(\Illuminate\Contracts\View\View|Factory $view, bool $response = true): StreamedResponse|string
+//     {
+//         $dompdf = new Dompdf((new Options())->set('dpi', 96)->set('isHtml5ParserEnabled', true));
+//         $dompdf->setPaper('A4', 'portrait');
 
-        $dompdf->loadHtml($view->render());
-        $dompdf->render();
+//         $dompdf->loadHtml($view->render());
+//         $dompdf->render();
 
-        if (!$response) return $dompdf->output();
+//         if (!$response) return $dompdf->output();
 
-        return response()->stream(function () use ($dompdf) { echo $dompdf->output(); }, 200, ['Content-Type' => 'application/pdf']);
-    }
-}
+//         return response()->stream(function () use ($dompdf) { echo $dompdf->output(); }, 200, ['Content-Type' => 'application/pdf']);
+//     }
+// }
