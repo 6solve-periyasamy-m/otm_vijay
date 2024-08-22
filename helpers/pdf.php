@@ -17,7 +17,7 @@ if(!function_exists('puppeteer')) {
         $invoice = Browsershot::html($view->render())->noSandbox();
         $invoice->showBackground()->margins(10, 2, 10, 2);
         if (!$response) return $invoice->pdf();
-        return response()->stream(function () use ($invoice) { echo $invoice->pdf(); }, 200, ['Content-Type' => 'application/pdf']);
+        return response()->stream(function () use ($invoice) { echo $invoice->pdf(); }, 200, ['Content-Type' => 'text/html']);
     }
 }
 
