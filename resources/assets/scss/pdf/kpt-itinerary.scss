@@ -611,9 +611,9 @@ table.cell-padding-0 td, th {
   src: url(/images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf);
   }
 
-  .pdf-individual-block  h1 {
+  h1 {
     color: var(--text-color);
-    font-family: PlayfairDisplay-Medium;
+    font-family: "PlayfairDisplay-Medium";
     font-size: 35px;
     font-weight: 500;
     line-height: 35px;
@@ -651,7 +651,7 @@ table.cell-padding-0 td, th {
   margin-bottom: 9px ! Important;
   color: var(--text-color);
  }
-.customer-details-image-block {width:209px;}
+ .customer-details-image-block {width:209px;}
 .customer-details-text-block  h3 span {
   background-color: var(--text-head-color);
   display: block;
@@ -666,7 +666,7 @@ table.cell-padding-0 td, th {
   padding: 12.5px 53px 12.5px 20px ;
   justify-content: space-between;
 }
-.information-block .column-1, .information-block .column-2{width:222px;display;flex;justify-content: space-between;}
+.information-block .column-1, .information-block .column-2{width:222px;display:flex;justify-content: space-between;}
 .information-block .column-1 p,.information-block .column-1 p {
   font-family: "PPNeueMontreal-Medium";
   font-size: 10px;
@@ -674,7 +674,3 @@ table.cell-padding-0 td, th {
   line-height: 10.58px; 
   color: var(--text-color);
 }
-h2 {
-  font-size:80px!important;
-}
-
