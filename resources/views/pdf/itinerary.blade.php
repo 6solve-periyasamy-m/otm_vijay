@@ -8,7 +8,7 @@
     <title>Itinerary - {{$orderCustomer->order->booking_reference}} - {{$orderCustomer->customer_name}}</title>
 
     <style>
-        <?php /*include(public_path().'/css/itinerary.css') */?>
+        <?php include(public_path().'/css/itinerary.css') ?>
     </style>
 </head>
 <body>
