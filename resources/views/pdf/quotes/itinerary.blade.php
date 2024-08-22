@@ -38,7 +38,7 @@
   <div class="row">
       <div class="pdf-header">
          <div class="header-logo">
-             <img srcset="https://qa.octopustravelmatrix.com/images/pdf_assets/images/KeithProwse_Logo.png" src="https://qa.octopustravelmatrix.com/images/pdf_assets/images/KeithProwse_Logo.png" alt="logo">
+             <img srcset="https://qa.octopustravelmatrix.com/images/pdf_assets/images/KeithProwse_Logo.png" src="https://qa.octopustravelmatrix.com/images/pdf_assets/images/KeithProwse_Logo.png" alt="logo-ch">
          </div>
       </div>
 	  
