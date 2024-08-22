@@ -37,6 +37,7 @@ body {
     width: 150px;
     height: 150px;
     border-radius: 15%;
+    object-fit:cover;
 }
 
 .top-head .row {
