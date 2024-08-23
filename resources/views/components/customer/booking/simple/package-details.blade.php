@@ -70,7 +70,6 @@
         </div>
     </div>
     @enderror
-    <div id="airwallex-container" class="airwallex-content"></div>
 </div>
 @push('popups')
 <!-- <- See More Popup -->

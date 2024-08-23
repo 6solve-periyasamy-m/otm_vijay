@@ -113,6 +113,7 @@
                     </script>
                 </div>
             </div>
+            <div id="airwallex-container" class="airwallex-content"></div>
         </div>
 
         <div class="right-col">
