@@ -323,14 +323,14 @@ h5 span {
             <div class="customer-agent-details">
                 <div class="customer-details">
                     <h6>CUSTOMER DETAILS</h6>
-                    <p>Name: <span>{{ $itineraryTraveller->customer->first_name }} {{ $itineraryTraveller->customer->last_name }}</span></p>
-                    <p>Email: <span>{{ $itineraryTraveller->customer->email_address }}</span><p>
+                    <p>Name: <span>{{ $itinerary->booker->customer->first_name }} {{ $itinerary->booker->customer->last_name }}</span></p>
+                    <p>Email: <span>{{ $itinerary->booker->customer->email_address }}</span><p>
                 </div>
                 <div class="agent-details">
                     <h6>AGENT DETAILS</h6>
                     <p>Name: <span>Keith Prowse Travel</span></p> <!-- You might need to replace this with dynamic data if available -->
                     <p>Email: <span>travel@kpt.com.au</span><p> <!-- You might need to replace this with dynamic data if available -->
-                    <p>Date created: <span>{{ \Carbon\Carbon::parse($itineraryTraveller->customer->created_at)->format('d F Y') }}</span><p>
+                    <p>Date created: <span>{{ \Carbon\Carbon::parse($itinerary->booker->customer->created_at)->format('d F Y') }}</span><p>
                 </div>
             </div>  
         </div>
@@ -346,13 +346,13 @@ h5 span {
             <td><strong>Event:</strong></td>
             <td>{!! $itinerary->event !!}</td>
             <td><strong>Total number of persons:</strong></td>
-            <td>{{ $itineraryTraveller->total_persons }} Adult(s)</td> <!-- Replace 'total_persons' with the appropriate variable if different -->
+            <td>2 Adult(s)</td> <!-- Replace 'total_persons' with the appropriate variable if different -->
         </tr>
         <tr>
             <td><strong>Travel dates:</strong></td>
             <td>{{ \Carbon\Carbon::parse($itinerary->start_date)->format('d F Y') }} - {{ \Carbon\Carbon::parse($itinerary->end_date)->format('d F Y') }}</td>
             <td><strong>Lead guest:</strong></td>
-            <td>{{ $itineraryTraveller->customer->first_name }} {{ $itineraryTraveller->customer->last_name }}</td>
+            <td>{{ $itinerary->booker->customer->first_name }} {{ $itinerary->booker->customer->last_name }}</td>
         </tr>
     </table>
 </div>
