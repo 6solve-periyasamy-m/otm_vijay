@@ -7,7 +7,7 @@
     
 @endphp
 <?php 
-  $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/images/pdf_assets/images/featured-image.png';
+  var_dump($itinerary);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -254,7 +254,7 @@ h5 span {
 .custom-details-module  h6{
     font-family: "PPNeueMontreal-Medium";
     font-weight: 500;
-    margin: 30px 0px 15px 20px;
+    margin: 30px 0px 15px 0px;
     font-size: 9px;
     line-height: 18px;
 }
@@ -312,8 +312,7 @@ h5 span {
   <div class="row">
       <div class="pdf-header">
          <div class="header-logo">
-          <img src="{{ svg_to_b64('images/pdf_assets/images/KeithProwse_Logo.png') }}" alt="logo-ch">
-        
+            <img src="{{ svg_to_b64('images/pdf_assets/images/KeithProwse_Logo.png') }}" alt="logo-ch">
          </div>
       </div>
 	  
@@ -336,8 +335,7 @@ h5 span {
           </div>  
         </div>
         <div class="customer-details-image-block">
-          <img src="{{ svg_to_b64('images/pdf_assets/images/featured-image.png') }}" alt="image-block">
-        
+            <img src="{{ svg_to_b64('images/pdf_assets/images/featured-image.png') }}" alt="image-block">
         </div>       
       </div>
 	
@@ -465,7 +463,7 @@ h5 span {
    </div>
    <div class="single-module">
     <h4>   
-    <span class="text">The Langham, Melbourne</span>
+    <span class="text">The Westin Brisbane</span>
     <span class="mark"></span>
     </h4> 
     <div class="details-module">
@@ -510,7 +508,7 @@ h5 span {
    </div>
    <div class="single-module">
     <h4>   
-    <span class="text">The Langham, Melbourne</span>
+    <span class="text">The Westin Brisbane</span>
     <span class="mark"></span>
     </h4> 
     <div class="details-module">
@@ -518,11 +516,11 @@ h5 span {
            <tbody>
               <tr>            
                 <td><strong>Check In:</strong></td>
-                 <td>18 Jul 2025</td>
+                 <td>19 Jul 2025</td>
                   </tr>
                   <tr>
                       <td><strong>Check Out:</strong></td>
-                      <td>19 Jul 2025</td>
+                      <td>20 Jul 2025</td>
                   </tr>
                   <tr>
                       <td><strong>No of Nights:</strong></td>
@@ -537,7 +535,7 @@ h5 span {
                       <td>Westin Room - Double</td>
                   </tr>
                   <tr>
-                      <td><strong>Room and breakfast</strong></td>
+                      <td><strong>Board Type</strong></td>
                       <td>Room and breakfast</td>
                   </tr>
                   <tr>
@@ -561,7 +559,7 @@ h5 span {
 
    <div class="single-module">
     <h4>   
-    <span class="text">The Langham, Melbourne</span>
+    <span class="text">The Westin Brisbane</span>
     <span class="mark"></span>
     </h4> 
     <div class="details-module">
@@ -569,11 +567,11 @@ h5 span {
            <tbody>
               <tr>            
                 <td><strong>Check In:</strong></td>
-                 <td>18 Jul 2025</td>
+                 <td>20 Jul 2025</td>
                   </tr>
                   <tr>
                       <td><strong>Check Out:</strong></td>
-                      <td>19 Jul 2025</td>
+                      <td>21 Jul 2025</td>
                   </tr>
                   <tr>
                       <td><strong>No of Nights:</strong></td>
@@ -588,7 +586,7 @@ h5 span {
                       <td>Westin Room - Double</td>
                   </tr>
                   <tr>
-                      <td><strong>Room and breakfast</strong></td>
+                      <td><strong>Board Type</strong></td>
                       <td>Room and breakfast</td>
                   </tr>
                   <tr>
@@ -612,7 +610,7 @@ h5 span {
    </div>
    <div class="single-module">
     <h4>   
-    <span class="text">The Langham, Melbourne</span>
+    <span class="text">British and Irish Lions Tour 2025</span>
     <span class="mark"></span>
     </h4> 
     <div class="details-module">
@@ -646,7 +644,7 @@ h5 span {
    </div>
    <div class="single-module">
     <h4>   
-    <span class="text">The Langham, Melbourne</span>
+    <span class="text">British and Irish Lions Tour 2025</span>
     <span class="mark"></span>
     </h4> 
     <div class="details-module">
@@ -654,25 +652,23 @@ h5 span {
            <tbody>
               <tr>            
                 <td><strong>Dates:</strong></td>
-                 <td>26 Jul 2025 to 26 Jul 2025</td>
+                 <td>19 Jul 2025 to 19 Jul 2025</td>
                   </tr>
                   <tr>
                       <td><strong>Venue:</strong></td>
-                      <td>Melbourne Cricket Ground</td>
+                      <td>Suncorp Stadium</td>
                   </tr>
                   <tr>
                       <td><strong>Ticket:</strong></td>
-                      <td>Test 2 - Wallabies v Lions - Category 1</td>
+                      <td>Test 1 - Wallabies v Lions - Category 1</td>
                   </tr>
                   <tr>
                       <td><strong>Quantity:</strong></td>
-                      <td>1</td>
+                      <td>2</td>
                   </tr>
                   <tr>
                       <td><strong>Description:</strong></td>
-                      <td>Be there as the MCG comes alive with the second Test of the series, where The British & Irish Lions will clash with the Wallabies in this high-stakes Test match. The Wallabies beat the Lions
-                      in front of a full-house the last time the two teams played in Melbourne, and with the Lions competing on the hallowed MCG turf for the first time ever, this showdown promises a night of
-                      sporting drama. Don’t miss this epic battle!</td>
+                      <td>Be there as the Wallabies and The British & Irish Lions go head-to-head on Australian soil for the first time in 12 years! Last time the two teams played in Brisbane, the Lions clinched victory by just two points. Will history repeat itself or will the Wallabies claim revenge in front of another sell-out crowd? Brace yourself for a thrilling clash of sheer determination as these rugby giants battle for supremacy.</td>
                   </tr>                 
            </tbody>
         </table>
@@ -721,9 +717,9 @@ h5 span {
                   </tr>    
                   <tr>
                       <td><strong></strong></td>
-                      <td>Inclusions
-                          - 2.5 hour package pre-match
-                          - Wine, Beer and Sparkling
+                      <td>Inclusion</br>
+                          - 2.5 hour package pre-match</br>
+                          - Wine, Beer and Sparkling</br>
                           - Food stations</td>
                   </tr>               
            </tbody>
@@ -732,7 +728,10 @@ h5 span {
    </div>
    <h2>Payment summary</h2> 
    <div class="single-module">
-  
+   <h3>
+     <span class="mark"></span>
+     <span class="text">Order total</span>
+    </h3>
     <div class="details-module">
         <table>
            <tbody>
@@ -916,18 +915,261 @@ We strongly encourage you to purchase travel insurance that adequately responds 
            <li>reschedule your travel arrangements, but only if you are agreeable to the rescheduled arrangements; or</li>
            <li>cancel your travel arrangements, in which case our contract with you will terminate.</li>
           </ul>
+          
     </div>
     <div class="paragraph">
+          <p>If we cancel your travel arrangements, neither of us will have any claim for damages against the other for the cancelled arrangements.</p>
           <h5>However, we will either:</h5>
           <ul>
            <li>issue you with a credit equal to payments received by us for the cancelled travel arrangements, redeemable within 12 months of issue against any travel services offered by us; or</li>
            <li>refund payments attributable to the cancelled travel arrangements less: (a) unrecoverable third party costs and other expenses incurred or payable by us for the cancelled travel arrangements; (b) overhead charges incurred by us relative to the price of the cancelled travel arrangements; and (c) fair compensation for work undertaken by us in relation to the cancelled travel arrangements until the time of cancellation and in connection with the processing of any refund.</li>
           </ul>
-
+          
+    </div>
+    <div class="paragraph">
+          <h5></h5>
+          <p>Please note that our ability to issue you with a credit may be dependent on our suppliers issuing corresponding credits to us. We cannot guarantee that our suppliers will issue corresponding credits and so in such circumstances we may opt to pay you a limited cash refund as outlined.
+          </p>
+    </div>
+    <div class="paragraph">
+          <h5>Force Majeure - During travel</h5>
+          <p>If due to Force Majeure we cancel travel arrangements after your trip has commenced, we will provide you with a refund of recovered third party costs plus any third party costs we don’t incur for cancelled travel arrangements only.</p>
+    </div>
+    <div class="paragraph">
+          <h5>Force Majeure – General</h5>
+          <p> 
+          Where a limited cash refund is to be paid by us, we will use reasonable endeavours to recover payments from third parties attributable to your booking, but we make no guarantee that we will be able to recover these payments either partially or at all. If after we have paid you a limited cash refund (or after we determine that no cash refund is currently payable) we recover payments from third parties attributable to your booking, then we will pass on this payment to you.
+          </p>
+          <p> 
+          We will not be responsible for any other loss or costs you incur in connection with your booking (for example, airfares, insurance and visa expenses) if your trip or particular travel arrangements are cancelled due to an event of Force Majeure.
+          </p>
+          <p> 
+          If we provide you with any alternative services or assistance where travel arrangements are cancelled or rescheduled due to Force Majeure which you accept, then you agree the amount to be refunded to you will be reduced by the value of these services and assistance. You acknowledge that the terms in this section are reasonably necessary to protect our legitimate business interests. We strongly encourage you to purchase travel insurance that adequately responds to cancellation and rescheduling risks associated with Force Majeure events as soon as you have paid a deposit.
+          </p>
+    </div>
+    <div class="paragraph">
+          <h5>Other cancellations</h5>
+          <p> 
+          If we cancel your travel arrangements for reasons other than Force Majeure or a failure to satisfy minimum numbers, you will be offered (at your election) a refund of all funds paid, or the offer of travel arrangements of substantially equal quality if appropriate. To the fullest extent permitted by law, we will not be responsible to you for any other expenses or loss you incur resulting from our cancellation.
+          </p>
+    </div>
+    <div class="paragraph">
+          <h5>AMENDMENTS BY YOU</h5>
+          <p> 
+          We will endeavour to accommodate amendments and additional requests. You acknowledge that these may not be possible to fulfil, and for group departures a transfer of a booking to a different departure is deemed a cancellation. An amendment fee of $150 will be levied to cover communication and administration costs for any changes to bookings. You will also be required to pay any additional costs we incur associated with the amendments.
+          </p>
+    </div>
+    <div class="paragraph">
+          <h5></h5>
+          <p> 
+            </p>
     </div>
    <div>
 <section>
+<section class="pdf-individual-block">
+   <div class="row"> 
+   <div class="paragraph">
+          <h5>AMENDMENTS BY US</h5>
+          <h6>Prior to travel</h6>
+          <p> 
+          Due to the dynamic nature of the travel industry, we may occasionally need to make amendments or modifications to the itinerary and its
+          inclusions and you acknowledge our right to do this. Most changes will not be significant. If we become aware of any significant changes to your itinerary or its inclusions that materially detract from the overall value of the trip (where we determine it can still proceed), then we will notify you within a reasonable time and refund you an amount attributable to any reduction in value determined by us acting reasonably.
+          </p>
+    </div>
+    <div class="paragraph">
+          <h5>During travel</h5>
+          <p> 
+          You acknowledge that the itinerary, modes of transport, accommodation and/or the trip’s inclusions may need to change during your trip due to local circumstances beyond our reasonable control, including road conditions, poor weather, changes in transport schedules, and/or vehicle breakdowns.
+          </p>
+    </div>
+    <div class="paragraph">
+          <h5>General</h5>
+          <p> 
+          To the fullest extent permitted by law:
+          </p>
+          <ul>
+            <li>we will not be responsible for any omissions or modifications to the itinerary or the inclusions due to Force Majeure or other circumstances beyond our control happening after we have accepted your booking. This includes any loss of enjoyment or distress caused by omissions or modifications;</li>
+            <li>if you are entitled to any compensation for any modifications or omissions, then you agree it will be reduced by the value of any alternative services we provide which you accept; and we will not be responsible to you for any other expenses or loss you incur resulting from any amendment or change to the itinerary or its inclusions.</li>
+          </ul>
+    </div>
+    <div class="paragraph">
+          <h5>EVENTS & TICKETS</h5>
+          <h6>Events</h6>
+          <p> 
+          Your travel arrangements may be associated with a particular event, for example a sporting event (Event). We do not operate any Event. You acknowledge that we have no control over the Event and will not be liable for any representations, actions, omissions of the Event organisers. You acknowledge that the cancellation or postponement of the Event, or the withdrawal or disqualification of any team or individual (Event Change) will not in any circumstance be considered a cancellation of travel arrangements by Keith Prowse Travel. We will however use reasonable endeavours to obtain a refund of the cost we incurred to obtain any ticket(s) to the Event for you. We will promptly make a corresponding refund to you once received. If you choose to cancel your booking due to an Event Change, then cancellation fees and charges will be applied in accordance with the ‘Cancellation by You’ condition above.
+          </p>
+          <p>We give no warranties (and expressly disclaim any warranty) that the Event will take place at a particular time, at a particular place, in a
+          particular format, to a particular standard or at all.</p>
+    </div>
+    <div class="paragraph">
+          <h5>Tickets</h5>
+          <p>Keith Prowse Travel does not issue any tickets. Tickets are issued by or for Event organisers. You acknowledge that all tickets are subject to the terms and conditions and limitations of liability imposed by the Event organiser and associated venue operators. </p>
+          <p>Tickets are non-transferable and cannot be exchanged. If you lose your ticket (or if it is stolen), we will use reasonable endeavours to assist you to obtain a replacement ticket from the Event organiser or other supplier. Additional charges may be payable. We make no warranty that the ticket will be able to be replaced, and we are in no way responsible if it cannot be replaced.</p>
+          <p>Venue maps are given as a guide only and are issued by venues or Event organisers. We will use reasonable endeavours to meet special requests, but we do not promise that we will be able to meet that request, or that tickets will be located in a particular area or sat together. You must not advertise any ticket for resale. If you do so, you acknowledge that the ticket may be cancelled by the Event organiser. If there are any issues with your ticket and it does not permit entry to the Event for whatever reason, then you agree that our maximum liability is to refund you the cost we incurred to secure the ticket</p>
+          <p>Arrangements which include tickets must not be used for advertising or promotional purposes or trade incentives unless Keith Prowse Travel authorises in writing. Authorisation may be denied in our absolute discretion.</p>
+          <p>Tickets for Events within Australia are generally sent by post or by email as an e-ticket to your nominated address approximately 1-2 weeks prior to the Event. For international Events, tickets may be delivered to your hotel or may be sent as an e-ticket to your nominated address. Please ensure you have access to your email address while travelling.</p>
+    </div>
+   </div>
+</section>
+<section class="pdf-individual-block">
+   <div class="row"> 
+   <div class="paragraph">
+      <h5>PROMOTIONAL MATERIAL</h5>
+      <p>We endeavour to ensure the accuracy of the information contained in our promotional material. However, please note that imagery used
+      within promotional material is reflective of the general experience, may not reflect the actual experience and may be derived from past trips operated by us. 
+      Without limitation, imagery contained within promotional material does not mean that a particular speaker or host will be present during your trip. 
+      You should refer to the inclusions for the trip you are booking to determine the included travel arrangements and other services for that trip.</p>
+     </div>
+    <div class="paragraph">
+       <h5>ACCOMMODATION</h5>
+       <p>Due to the dynamic nature of the travel industry, we may need to substitute hotels, vessels and other forms of accommodation with properties or vessels of a substantially comparable or higher standard. We will endeavour to minimise substitutions. You acknowledge that these substitutions will not be considered a significant change.</p>
+    </div>
+    <div class="paragraph">
+       <h5>FLIGHTS</h5>
+       <p>A number of domestic and international flights may be included in your arrangements. All airfares are subject to the terms and conditions of the airfare purchased.
+       It is your responsibility to contact the airline prior to departure as airlines have the right to reschedule or cancel flights. For significant delays, it is your responsibility to notify the third parties including but not limited to the transfer company, accommodation, tour company and Event organisers as no-shows or significant delays can result in involuntary cancellation. It is prudent to arrive to any significant Event a day ahead, especially if travelling internationally.</p>
+    </div>
+    <div class="paragraph">
+       <h5>CLIENT NAMES – EXACTLY AS PER PASSPORT</h5>
+       <p>For security reasons, airlines and our overseas suppliers require names to be given exactly as stated in your passport. If you do not advise the correct information and we have to re-issue airline tickets or other documentation, then you will be responsible for any fees charged (such as airline cancellation charges or re-issue fees) in addition to our own reasonable administration fees.</p>
+    </div>
+    <div class="paragraph">
+       <h5>TRAVEL INSURANCE</h5>
+       <p>It is a condition of your booking that you are adequately insured for the duration of your travel, including in respect of cancellations due to
+       Force Majeure events. We recommend comprehensive travel insurance to cover cancellation, medical requirements, luggage and additional expenses. The choice of insurer is yours. We strongly suggest you purchase insurance at the time you pay your deposit. This is because cancellation fees and charges are payable from that time.</p>
+    </div>
+    <div class="paragraph">
+       <h5>PASSPORTS, VISAS & VACCINATIONS</h5>
+       <p>It is a requirement that you hold a valid passport with sufficient validity and any required visas for your travel. It is your responsibility to ensure that you are in possession of the necessary documentation to comply with the laws and regulations of the countries to be visited. It is your responsibility to obtain vaccinations and preventative medicines as may be required for the duration of your travel. Any information provided by us is given in good faith.</p>
+    </div>
+    <div class="paragraph">
+       <h5>HEALTH & FITNESS</h5>
+       <p>It is your responsibility to ensure that you have a suitable level of health and fitness to undertake the trip of your choice. If you have doubts
+       about your ability to undertake the trip, please contact us to discuss your circumstances prior to making a booking request.</p>
+    </div>
+    <div class="paragraph">
+       <h5>Existing Medical Conditions</h5>
+       <p>If you have a medical condition which may reasonably be expected to increase your risk of needing medical attention, or which may materially affect the usual conduct of the trip, then you must advise us prior to or at the time you make your booking request.</p>
+       <p>We may request you to provide an assessment of your medical condition from a qualified medical practitioner. If the assessment indicates that you are not fit to travel or will require special assistance which we cannot reasonably provide, then we may cancel your booking. Provided you notified us of your medical condition prior to or at the time you made your booking request, we will provide you with a full refund of payments received.</p>
+       <p>If you fail to provide a medical assessment within a reasonable time, then this will be considered a cancellation by you and cancellation fees and charges will apply (See ‘Cancellation By You’ section above).</p>
+    </div>
+ 
 
+   </div>
+</section>
+
+<section class="pdf-individual-block">
+   <div class="row"> 
+   <div class="paragraph">
+      <h5>New Medical Conditions</h5>
+      <p>You must advise us of any new or changed medical conditions which may reasonably be expected to increase your risk of needing medical attention, or which may materially affect the usual conduct of the trip.</p>
+      <p>We may request you to provide an assessment of your medical condition from a qualified medical practitioner. If the assessment indicates that you will require special assistance which we cannot reasonably provide or if you fail to provide a medical assessment within a reasonable time, then this will be considered a cancellation by you and cancellation fees and charges will apply (See ‘Cancellation By You’ section above).</p>
+    </div>
+    <div class="paragraph">
+      <h5>Non-Disclosed Medical Conditions</h5>
+      <p>If any non-disclosed medical conditions mean that you will require special assistance which we cannot reasonably provide, then we acting reasonably may exclude you from the trip. This will be considered a cancellation by you and cancellation fees and charges will apply (See ‘Cancellation By You’ section above).</p>
+    </div>
+    <div class="paragraph">
+      <h5>Dietary Requirements</h5>
+      <p>Special dietary requests are required to be notified to us at the time of booking. Although we will use reasonable endeavours to accommodate requests, we cannot guarantee requests will be met by suppliers. It is your responsibility to check that meals and beverages do not contain any allergens. We expressly disclaim any liability for meals or beverages that contain allergens.</p>
+    </div>
+    <div class="paragraph">
+      <h5>AUTHORITY & CONDUCT</h5>
+      <p>If you are joining an escorted tour, you undertake to conduct yourself in a manner conducive to good group dynamics. If you act in a manner that threatens or disrupts the safety or enjoyment of others on the tour, the tour leader may, acting reasonably, require that you leave the tour. You will not be entitled to any refund for unused services and you will be responsible for any additional costs you incur.</p>
+      <p>If you cause any damage to property or injury to person, then you will be responsible for all and any loss or damage incurred by Keith Prowse Travel. This is irrespective of whether you are travelling on an escorted tour or independently.</p>
+    </div>
+    <div class="paragraph">
+      <h5>MINIMUM NUMBERS</h5>
+      <p>Some trips are based on a minimum number of passengers travelling. We will advise you prior to confirming your booking if this is the case. If a trip fails to satisfy minimum numbers, the trip may be cancelled or re-costed. We will give you notice no later than 45 days prior to the trip’s commencement. If the trip is re-costed, you will have the option to either accept the new cost or to cancel your booking. You must make this election within 14 days of receiving notice from us. If the trip is cancelled or if you cancel your booking in these circumstances, we will at your election refund all payments made or credit payments towards alternative arrangements.</p>
+      <p>We will not be responsible for any other travel arrangements affected by, or any additional costs incurred, as a result of cancellation in these circumstances.</p>
+    </div>
+    <div class="paragraph">
+      <h5>UNUSED SERVICES</h5>
+      <p>No refunds will be made for of any travel arrangements not utilised, whether by choice or because of late arrival or early departure. This
+      includes the failure of transport to operate according to schedule, for which we disclaim responsibility.</p>
+    </div>
+    <div class="paragraph">
+      <h5>ADDITIONAL INDEPENDENT SERVICES</h5>
+      <p>We are not responsible for any additional travel arrangements (for example, pre and post tour accommodation), activities or excursions that we sell as agent for the principal supplier. Where we sell travel arrangements as agent for the principal supplier, you agree that our
+      responsibility to you is limited to arranging for you to contract with the principal supplier for the arrangements. You agree that you will be
+      subject to the principal supplier’s booking conditions, and that any claim in connection with the supply of (or failure to supply) such travel
+      arrangements must be made directly against the principal supplier.</p>
+    </div>
+    <div class="paragraph">
+      <h5>ACCEPTANCE OF RISK</h5>
+      <p>You acknowledge that travel involves personal risks which may be greater than those present in your everyday life. This could be because of the adventurous nature of your tour or the visiting of destinations which present geographical, political or cultural risks and dangers. You should consult guidance issued by the Department of Foreign Affairs and Trade (DFAT) applicable to the destinations within your itinerary. You acknowledge that your choice to travel is made having had the benefit of DFAT guidance, and you accept any additional personal risks associated with your travel. To the fullest extent permitted by law, we disclaim any liability for these risks.</p>
+      <p>You acknowledge that you are travelling at a time when Covid-19 is endemic and that Covid-19 presents risks to your health and may cause death. By making a booking request, you accept all risks associated with Covid-19 infection during travel and you release us (and our directors, officers, employees and suppliers) from liability in connection with Covid-19 infection.</p>
+    </div>
+   </div>
+</section>
+
+<section class="pdf-individual-block">
+  <div class="row"> 
+    <div class="paragraph">
+      <h5>RESPONSIBILITY</h5>
+      <h6>Services supplied by independent suppliers</h6>
+      <p>Where a third party over whom we have no direct control (Independent Supplier) is the supplier of travel arrangements sold by us, you
+          acknowledge that our obligations to you are limited to taking reasonable steps to select a reputable Independent Supplier and arranging for them to provide those travel arrangements to you. Independent Suppliers over whom we have no direct control include but are not limited to airlines, railway and cruise operators, hoteliers, independent transport companies (i.e., vehicles not operated by us), attraction and venue operators and common carriers.</p>
+         <p> To the fullest extent permitted by law, we will not be responsible to you for any loss, damage, personal injury or delay attributable to the
+          actions or omissions of an Independent Supplier and not caused by our negligence. You will be subject to the terms and conditions of the
+          Independent Supplier. Any disputes between you and the Independent Supplier are to be resolved between you and them.</p>
+      <p>In the event of the insolvency of an Independent Supplier prior to them delivering travel arrangements to you, our liability is limited to(a) using reasonable endeavours to recover payments made to them for your travel arrangements, which we will refund to you subject to receipt; and (b) using reasonable endeavours to put alternative travel arrangements in place, which will be at your cost.</p>
+    </div>
+    <div class="paragraph">
+      <h5>Services we directly supply</h5>
+      <p>To the extent only that we are the principal supplier to you of travel arrangements or other services which we control, then we will provide those travel arrangements and services with reasonable skill and care.</p>
+      <p>We will only be responsible for our employees in the course of their employment, and for our agents and contractors (where we have control over them) if they were carrying out the work we had asked them to do.</p>
+      <p>We will not be responsible for any loss, damage, claim or expense caused by the acts or omissions of yourself, of any other third party not connected with the provision of the travel arrangements or services, or due to an event of Force Majeure.</p>
+    </div>
+    <div class="paragraph">
+        <h5>Recreational services</h5>
+        <p>If we supply any recreational services to you, then to the maximum extent permitted by law we exclude any liability for death, physical injury or mental injury or any other liability referred to in section 139A(3) of the Competition and Consumer Act 2010 (Cth) resulting from our failure to comply with a guarantee that applies under Subdivision B of Division 1 of Part 3-2 of the Australian Consumer Law.</p>
+        <p>This exclusion does not apply to significant personal injury caused by our reckless conduct.</p>
+        <p>Recreational services means services that consist of participation in the activities referred to in Section 139A of the Competition and
+        Consumer Act 2010 (Cth), being participation in:</p>
+        <p>(a) a sporting activity or similar leisure time pursuit; or</p>
+        <p>(b) any other activity that:</p>
+        <p>(i) involves a significant degree of physical exertion or physical risk; and</p>
+        <p>(ii) is undertaken for the purposes of recreation, enjoyment or leisure.</p>
+        <p>(ii) is undertaken for the purposes of recreation, enjoyment or leisure.</p>
+    </div>
+    <div class="paragraph">
+        <h5>General liability limitation</h5>
+        <p>While we endeavour to meet scheduled arrival and departure times, we cannot guarantee this. We will not be responsible for any loss or additional expenses you incur for any missed connections/services attributable to delays.</p>
+        <p>You acknowledge that travel arrangements or services which comply with local laws and regulations will be deemed to have been properly performed, even if this would not be considered the case in Australia.</p>
+        <p>Australian Consumer Law and corresponding legislation in State jurisdictions in certain circumstances imply mandatory guarantees into
+        consumer contracts (“Consumer Guarantees”). These Booking Conditions do not exclude or limit the application of the Consumer Guarantees other than to the extent they can be excluded or limited, in which case we limit or exclude the Consumer Guarantees to the fullest extent possible. Other than the Consumer Guarantees, we disclaim all warranties and guarantees.</p>
+        <p>To the fullest extent permitted by law, our maximum liability to you under these Booking Conditions, in tort (including negligence) or at law is limited to arranging for the travel arrangements to be resupplied or payment of the cost of having the travel arrangements resupplied.</p>
+    </div>
+    <div class="paragraph">
+        <h5>COMPLAINTS</h5>
+        <p>In the event of a problem with any aspect of your travel arrangements you must tell us or make our representative or our local supplier aware of such problems as soon as possible. This is so we or our suppliers have had the opportunity to put things right on the ground. If you notify us of a problem during travel and we haven’t resolved it to your satisfaction, please follow this up in writing within 30 days from the end of your travel arrangements. This is so we have the opportunity to pursue the claim with our own suppliers (if relevant). If you fail to follow this procedure, this may limit your rights to make a claim. Prior to submitting or publishing any negative public review of our services or your travel arrangements, you agree to first contact us so that we can discuss your concerns and any issues with a view to resolving them. You agree to promptly remove any reviews published in contravention of this obligation upon receiving notice from us.</p>
+    </div>
+
+  </div>
+</section>
+
+<section class="pdf-individual-block">
+  <div class="row"> 
+    <div class="paragraph">
+       <h5>DEEMED ACCEPTANCE</h5>
+       <p>If you place a booking on behalf of another party, you represent and warrant us that you are duly authorised to provide the agreement and consent of the other party to be bound by these Booking Conditions. You agree that you will be responsible for any loss or damage we incur if this is not the case. Image release We may take photographs or make recordings of you and your activities that identify you during travel. We reserve the right to use any images and/or recordings for promotional and marketing purposes. You consent to this use and acknowledge you will not be entitled to any payment or other compensation. If you do not consent to the use of your image or likeness, please advise us as least 21 days prior to the commencement of your arrangements.</p>
+    </div>
+    <div class="paragraph">
+       <h5>GENERAL</h5>
+       <p>The contract between Keith Prowse Travel Pty Limited and you is governed by the laws of the State of New South Wales. Any disputes will be dealt with by a court with the appropriate jurisdiction in New South Wales. If any provision of these Booking Conditions is found to be unenforceable, then to the extent possible it will be severed without affecting the remaining provisions. Any personal information you provide to us will be collected, stored, used, protected and shared in accordance with Australian Privacy Principles, and Privacy Policy, which is published here https://www.kpt.com.au/privacy-policy</p>
+       <p>Updated: April 2024</p>
+       <p>Keith Prowse Travel PTY LTD </p>
+       <p>ABN 31 003 276 775</p>
+       <p>Level 7, 99 Mount Street</p>
+       <p>North Sydney 2060 NSW</p>
+       <p>Tel: 1300 730 023</p>
+       <p>Email: travel@kpt.com.au</p>
+    
+      </div>
+
+    </div>
+ </section>
 </main>
 
 

@@ -14,11 +14,13 @@ if(!function_exists('puppeteer')) {
      */
     function puppeteer(\Illuminate\Contracts\View\View|Factory $view, bool $response = true): StreamedResponse|string
     {
-        $invoice = Browsershot::html($view->render())->noSandbox();
-        $invoice->showBackground()->margins(10, 2, 10, 2);
-        if (!$response) return $invoice->pdf();
-        return response()->stream(function () use ($invoice) { echo $invoice->pdf(); }, 200, ['Content-Type' => 'application/pdf']);
+        $html = $view->render();
+        
+        if (!$response) return $html;
+
+        return response()->stream(function () use ($html) { echo $html; }, 200, ['Content-Type' => 'text/html']);
     }
+
 }
 
 if(!function_exists('dompdf')) {
@@ -29,14 +31,20 @@ if(!function_exists('dompdf')) {
      */
     function dompdf(\Illuminate\Contracts\View\View|Factory $view, bool $response = true): StreamedResponse|string
     {
-        $dompdf = new Dompdf((new Options())->set('dpi', 96)->set('isHtml5ParserEnabled', true));
-        $dompdf->setPaper('A4', 'portrait');
+        $html = $view->render();
+        
+        if (!$response) return $html;
 
-        $dompdf->loadHtml($view->render());
-        $dompdf->render();
+        return response()->stream(function () use ($html) { echo $html; }, 200, ['Content-Type' => 'text/html']);
 
-        if (!$response) return $dompdf->output();
+        // $dompdf = new Dompdf((new Options())->set('dpi', 96)->set('isHtml5ParserEnabled', true));
+        // $dompdf->setPaper('A4', 'portrait');
 
-        return response()->stream(function () use ($dompdf) { echo $dompdf->output(); }, 200, ['Content-Type' => 'application/pdf']);
+        // $dompdf->loadHtml($view->render());
+        // $dompdf->render();
+
+        // if (!$response) return $dompdf->output();
+
+        // return response()->stream(function () use ($dompdf) { echo $dompdf->output(); }, 200, ['Content-Type' => 'application/pdf']);
     }
 }
