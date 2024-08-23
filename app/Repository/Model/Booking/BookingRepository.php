@@ -613,16 +613,19 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         $key = -1;
         $group = null;
         foreach ($this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->get() as $traveller) {
-            if ($group === null || $rooming[$key]['travellers'] === 0) {
-                $key++;
+            $room = AccommodationInventoryTour::find($rooming[$key]['room']);
+            if ($room instanceof AccommodationInventoryTour) {
+                if ($group === null || $rooming[$key]['travellers'] === 0) {
+                    $key++;
+                    if ($key >= count($rooming)) { break; }
+                    $group = new BookingGroup(['booking_id' => $this->booking->id,]);
+                    $group->save();
+                    $group->repository->addRoomToGroup(AccommodationInventoryTour::find($rooming[$key]['room']));
+                }
                 if ($key >= count($rooming)) { break; }
-                $group = new BookingGroup(['booking_id' => $this->booking->id,]);
-                $group->save();
-                $group->repository->addRoomToGroup(AccommodationInventoryTour::find($rooming[$key]['room']));
+                $group->repository->addTravellerToGroup($traveller);
+                --$rooming[$key]['travellers'];
             }
-            if ($key >= count($rooming)) { break; }
-            $group->repository->addTravellerToGroup($traveller);
-            --$rooming[$key]['travellers'];
         }
     }
 
