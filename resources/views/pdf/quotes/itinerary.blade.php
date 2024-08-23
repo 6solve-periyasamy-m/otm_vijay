@@ -346,7 +346,7 @@ h5 span {
             <td><strong>Event:</strong></td>
             <td>{!! $itinerary->event !!}</td>
             <td><strong>Total number of persons:</strong></td>
-            <td>2 Adult(s)</td> <!-- Replace 'total_persons' with the appropriate variable if different -->
+            <td>{{ $itinerary->travellers}} Adult(s)</td> <!-- Replace 'total_persons' with the appropriate variable if different -->
         </tr>
         <tr>
             <td><strong>Travel dates:</strong></td>
