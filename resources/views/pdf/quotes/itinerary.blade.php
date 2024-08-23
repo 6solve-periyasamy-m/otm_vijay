@@ -350,7 +350,7 @@ h5 span {
         </tr>
         <tr>
             <td><strong>Travel dates:</strong></td>
-            <td>{{ \Carbon\Carbon::parse($itinerary->start_date)->format('d F Y') }} - {{ \Carbon\Carbon::parse($itinerary->end_date)->format('d F Y') }}</td>
+            <td></td>
             <td><strong>Lead guest:</strong></td>
             <td>{{ $itinerary->booker->customer->first_name }} {{ $itinerary->booker->customer->last_name }}</td>
         </tr>
