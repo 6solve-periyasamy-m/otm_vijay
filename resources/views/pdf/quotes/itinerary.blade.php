@@ -335,15 +335,15 @@ h5 span {
           </div>  
         </div>
         <div class="customer-details-image-block">
-            <img src="{{ svg_to_b64('images/pdf_assets/images/featured-image.png') }}" alt="image-block">
+            <img src="{!! $itinerary->image !!}" alt="image-block">
         </div>       
       </div>
-	
+      @if(!empty($itinerary->event))
     <div class="information-block">
     <table>
     <tr>
         <td><strong>Event:</strong></td>
-        <td>British and Irish Lions Tour 2025</td>
+        <td>{!! $itinerary->event !!}</td>
         <td><strong>Total number of persons:</strong></td>
         <td>2 Adult(s)</td>
     </tr>
@@ -355,6 +355,7 @@ h5 span {
     </tr>
 </table>
 </div>
+@endif
   <div class="heading-2">
 	  <h2>Package inclusions</h2> 
   </div>
