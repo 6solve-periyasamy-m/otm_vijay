@@ -7,7 +7,7 @@
     
 @endphp
 <?php 
-  var_dump($itinerary->booker);
+  //var_dump($itinerary->booker);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -319,7 +319,7 @@ h5 span {
       <div class="customer-details-block">
         <div class="customer-details-text-block">
             <h1>Quote</h1>
-            <h5>REFERENCE: KPQ00004FF <span></span></h5>         
+            <h5>REFERENCE: {{ $itinerary->reference }} <span></span></h5>         
             <div class="customer-agent-details">
                 <div class="customer-details">
                     <h6>CUSTOMER DETAILS</h6>
