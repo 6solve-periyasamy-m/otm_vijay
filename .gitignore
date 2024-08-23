@@ -30,3 +30,4 @@ Archived
 .npm/
 .cache/
 *.exclude
+/.phpunit.cache
