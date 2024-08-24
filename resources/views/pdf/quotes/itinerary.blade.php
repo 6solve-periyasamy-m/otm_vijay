@@ -7,7 +7,17 @@
 
     //pdf variables
     $headlogo = svg_to_b64('images/pdf_assets/images/KeithProwse_Logo.png') ;
+    $clname ='Keith Prowse Travel';
+    $clmail ='travel@kpt.com.au';
+    $dacre = \Carbon\Carbon::parse($itinerary->booker->customer->created_at)->format('d F Y');
+
     $reference = $itinerary->reference;
+    $cusname = $itinerary->booker->customer->first_name . $itinerary->booker->customer->last_name;
+    $cusmail = $itinerary->booker->customer->email_address;
+
+    $eveimg =$itinerary->image;
+    $evename = $itinerary->event;
+    $evatra = count($itinerary->travellers);
     
 @endphp
 <?php 
@@ -328,36 +338,36 @@ h5 span {
             <div class="customer-agent-details">
                 <div class="customer-details">
                     <h6>CUSTOMER DETAILS</h6>
-                    <p>Name: <span>{{ $itinerary->booker->customer->first_name }} {{ $itinerary->booker->customer->last_name }}</span></p>
-                    <p>Email: <span>{{ $itinerary->booker->customer->email_address }}</span><p>
+                    <p>Name: <span>{{ $cusname  }}</span></p>
+                    <p>Email: <span>{{ $cusmail }}</span><p>
                 </div>
                 <div class="agent-details">
                     <h6>AGENT DETAILS</h6>
-                    <p>Name: <span>Keith Prowse Travel</span></p> <!-- You might need to replace this with dynamic data if available -->
-                    <p>Email: <span>travel@kpt.com.au</span><p> <!-- You might need to replace this with dynamic data if available -->
-                    <p>Date created: <span>{{ \Carbon\Carbon::parse($itinerary->booker->customer->created_at)->format('d F Y') }}</span><p>
+                    <p>Name: <span>{{$clname}}</span></p>
+                    <p>Email: <span>{{$clmail}}</span><p> 
+                    <p>Date created: <span>{{ $dacre }}</span><p>
                 </div>
             </div>  
         </div>
         <div class="customer-details-image-block">
-            <img src="{!! $itinerary->image !!}" alt="image-block">
+            <img src="{!! $eveimg !!}" alt="image-block">
         </div>       
     </div>
 
-    @if(!empty($itinerary->event))
+    @if(!empty($evename))
 <div class="information-block">
     <table>
         <tr>
             <td><strong>Event:</strong></td>
-            <td>{!! $itinerary->event !!}</td>
+            <td>{!! $evename !!}</td>
             <td><strong>Total number of persons:</strong></td>
-            <td>{{ count($itinerary->travellers) }} Adult(s)</td> <!-- Replace 'total_persons' with the appropriate variable if different -->
+            <td>{{ $evatra }} Adult(s)</td> <!-- Replace 'total_persons' with the appropriate variable if different -->
         </tr>
         <tr>
             <td><strong>Travel dates:</strong></td>
             <td></td>
             <td><strong>Lead guest:</strong></td>
-            <td>{{ $itinerary->booker->customer->first_name }} {{ $itinerary->booker->customer->last_name }}</td>
+            <td>{{ $cusname }}</td>
         </tr>
     </table>
 </div>
