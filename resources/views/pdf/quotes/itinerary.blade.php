@@ -432,10 +432,17 @@ h5 span {
             </table>
         </div>
     </div>
-@endforeach
+  @endforeach
   </div>
   </section>
+  @else
+  <style>
+    .pdf-individual-block {margin-left:-48px;}
+    .pdf-individual-block:first-child {margin-top:-50px;}
+    </style>
   @endif
+  
+
 <section class="pdf-individual-block">
    <div class="row">
 
