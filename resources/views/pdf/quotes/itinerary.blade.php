@@ -64,9 +64,12 @@
     margin: 50px 10px 0px 0px!important;
   }
   .pdf-individual-block:first-child .single-module {
-    margin-top: 26px!important;
-    margin-bottom: 26px!important;
+    margin-top: 28px!important;
+    margin-bottom: 28px!important;
   }
+  .single-module {
+        page-break-inside: avoid;
+    } 
   #static-pages {margin-top:65px;}
     @font-face {
     font-family: "PlayfairDisplay-Medium";
