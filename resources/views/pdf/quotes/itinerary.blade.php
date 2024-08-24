@@ -21,7 +21,7 @@
     
 @endphp
 <?php 
-  var_dump($itinerary);
+  var_dump($itinerary->items);
   var_dump(setting('customization.documentation.colors'));
 ?>
 
@@ -361,7 +361,7 @@ h5 span {
             <td><strong>Event:</strong></td>
             <td>{!! $evename !!}</td>
             <td><strong>Total number of persons:</strong></td>
-            <td>{{ $evatra }} Adult(s)</td> <!-- Replace 'total_persons' with the appropriate variable if different -->
+            <td>{{ $evatra }} Adult(s)</td> 
         </tr>
         <tr>
             <td><strong>Travel dates:</strong></td>
