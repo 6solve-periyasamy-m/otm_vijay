@@ -22,7 +22,7 @@
 @endphp
 <?php 
   //var_dump($itinerary->items);
-  var_dump(setting('customization.documentation.colors'));
+  //var_dump(setting('customization.documentation.colors'));
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -31,6 +31,7 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet" />
+    <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 
     <style type="text/css">
         <?php //include(public_path() . '/css/kpt.css') ?>
