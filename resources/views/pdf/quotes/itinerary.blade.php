@@ -415,40 +415,7 @@ h5 span {
         </div>
     </div>
 @endforeach
-@foreach($itinerary->items['Accommodation'] as $accommodation)
-    <div class="single-module">
-        <h4>   
-            <span class="text">{{ $accommodation->name }}</span>
-            <span class="mark"></span>
-        </h4> 
-        <div class="details-module">
-            <table>
-                <tbody>
-                    @foreach($accommodation->details as $key => $value)
-                        @continue(empty($value))
-                        <tr>
-                            <td class="item-header" style="width: 125px">
-                                {{ $key }}:
-                            </td>
-                            <td class="item-detail">
-                                @if(is_array($value))
-                                    @if(isset($value['attributes']['address_line_1']))
-                                        {{ $value['attributes']['address_line_1'] }}
-                                    @else
-                                        Address not available
-                                    @endif
-                                @else
-                                    {!! $value !!}
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
-@endforeach
- 
+
   </div>
   </section>
 
@@ -527,13 +494,7 @@ h5 span {
         </table>
     </div>
  </div>
-
-   </div>
-</section>
-
-<section class="pdf-individual-block">
-   <div class="row">
-   <div class="heading-module">
+ <div class="heading-module">
     <h3>
      <span class="mark"></span>
      <span class="text">Inclusion</span>
@@ -579,6 +540,12 @@ h5 span {
         </table>
     </div>
    </div>
+   </div>
+</section>
+
+<section class="pdf-individual-block">
+   <div class="row">
+   
    <h2>Payment summary</h2> 
    <div class="single-module">
    <h3>
