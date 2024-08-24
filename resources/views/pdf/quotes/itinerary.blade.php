@@ -102,7 +102,7 @@
   width:209px;
   height:198px;
  }
- .customer-details-block .customer-details-text-block {width: 386px;}
+ .customer-details-block .customer-details-text-block {width: 567px;padding-left:20px;}
   h5 {
   font-family: "PPNeueMontreal-Medium";
   font-size: 12px;
@@ -112,7 +112,7 @@
   color: var(--text-color);
  }
  /* .customer-agent-details .customer-details,.customer-agent-details .agent-details {float:left;} */
- .customer-agent-details .customer-details, .customer-agent-details .agent-details{width:185px;}
+ .customer-agent-details .customer-details, .customer-agent-details .agent-details{width:290px;}
  .customer-agent-details p {
   font-family: "PPNeueMontreal-Medium";
   font-size: 10px;
