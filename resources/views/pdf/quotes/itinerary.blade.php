@@ -321,7 +321,7 @@ h5 span {
    
 </head>
 
-<body class="body">
+<body class="body" style="margin: 0;">
 
 <main>
 <section class="pdf-individual-block">
