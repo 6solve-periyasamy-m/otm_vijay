@@ -61,7 +61,11 @@
     max-width:700px!important;
   }
   .pdf-individual-block:first-child .heading-module h3 {
-    margin: 50px 10px 0px 0px;
+    margin: 50px 10px 0px 0px!important;
+  }
+  .pdf-individual-block:first-child .single-module {
+    margin-top: 26px!important;
+    margin-bottom: 26px!important;
   }
   #static-pages {margin-top:65px;}
     @font-face {
