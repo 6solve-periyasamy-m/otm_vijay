@@ -60,6 +60,9 @@
   .pdf-individual-block .paragraph {
     max-width:700px!important;
   }
+  .pdf-individual-block:first-child .heading-module h3 {
+    margin: 50px 10px 0px 0px;
+  }
   #static-pages {margin-top:65px;}
     @font-face {
     font-family: "PlayfairDisplay-Medium";
@@ -200,10 +203,10 @@ h3 span.text {
     font-weight: 400;
   }
 .single-module {
-  margin-top: 30px;
+  margin-top: 24px;
   padding-left: 22px;
   max-width: 586px;
-  margin-bottom:30px;
+  margin-bottom:24px;
 }
 h4 {
     font-family: "PPNeueMontreal-Regular";
