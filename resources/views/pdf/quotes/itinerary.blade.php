@@ -58,7 +58,7 @@
   .pdf-individual-block {margin-left:-48px;}
   .pdf-individual-block:first-child {margin-top:-50px;}
   .pdf-individual-block .paragraph {
-    max-width:750px!important;
+    max-width:726px!important;
   }
   #static-pages {margin-top:50px;}
     @font-face {
@@ -200,7 +200,7 @@ h3 span.text {
     font-weight: 400;
   }
 .single-module {
-  margin-top: 30px;
+  margin-top: 24px;
   padding-left: 22px;
   max-width: 586px;
   margin-bottom:24px;
