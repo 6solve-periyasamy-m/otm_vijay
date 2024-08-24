@@ -51,10 +51,12 @@
     padding:14px 20px;
   }
   .pdf-individual-block {
-    width: 760px;
-    margin: auto;
+    width: 796px;
+    /* margin: auto; */
     /* height: 1000px; */
   }
+  .pdf-individual-block {margin-left:-48px;}
+  .pdf-individual-block:first-child {margin-top:-50px;}
     @font-face {
     font-family: "PlayfairDisplay-Medium";
     src: url(/images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf);
