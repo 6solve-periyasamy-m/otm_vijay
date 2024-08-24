@@ -51,9 +51,9 @@
     padding:14px 20px;
   }
   .pdf-individual-block {
-    width: 700px;
+    width: 760px;
     margin: auto;
-    height: 1000px;
+    /* height: 1000px; */
   }
     @font-face {
     font-family: "PlayfairDisplay-Medium";
