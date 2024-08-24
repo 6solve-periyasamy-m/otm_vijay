@@ -612,7 +612,7 @@ h5 span {
     <tr>
         <td style="vertical-align: top;">
             <strong>BANK TRANSFER</strong><br>
-            {!! $itinerary->items['finances']->paymentDetails !!}
+            {!! $itinerary->finances->paymentDetails !!}
         </td>
         <td style="vertical-align: top;">
             <strong>PAYMENT GATE</strong><br>
