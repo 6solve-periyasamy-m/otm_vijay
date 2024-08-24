@@ -433,17 +433,12 @@ h5 span {
         </div>
     </div>
   @endforeach
-  </div>
-  </section>
+  
    
   @endif
-  
-@if(empty($itinerary->items['Accommodation']))
-  <style>
-    .pdf-individual-block {margin-left:0px;}
-    .pdf-individual-block:first-child {margin-top:0px;}
-    </style>
-@endif
+  </div>
+  </section>
+
 <section class="pdf-individual-block">
    <div class="row">
 
