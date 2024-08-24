@@ -573,7 +573,7 @@ h5 span {
     </div>
    </div>
    
-   <h2>Payment summary</h2> 
+   <h2>Payment Details</h2> 
    <div class="custom-details-module">     
        <h6>Keith Prowse Travel PTY LTD</h6>      
   <table>
