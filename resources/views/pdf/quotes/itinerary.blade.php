@@ -433,141 +433,53 @@ h5 span {
 
 <section class="pdf-individual-block">
    <div class="row">
-   <div class="single-module">
-    <h4>   
-    <span class="text">The Langham, Melbourne</span>
-    <span class="mark"></span>
-    </h4> 
-    <div class="details-module">
-        <table>
-           <tbody>
-              <tr>            
-                <td><strong>Check In:</strong></td>
-                 <td>25 Jul 2025</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Check Out:</strong></td>
-                      <td>27 Jul 2025</td>
-                  </tr>
-                  <tr>
-                      <td><strong>No of Nights:</strong></td>
-                      <td>1</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Address:</strong></td>
-                      <td>1 Southgate Avenue, Southbank, VIC, Australia, 3006</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Room Type:</strong></td>
-                      <td>Superior Room - Double</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Board Type:</strong></td>
-                      <td>Room and breakfast</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Quantity:</strong></td>
-                      <td>2</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Description:</strong></td>
-                      <td>The Langham, Melbourne offers five-star service and hospitality on the banks of the Yarra River overlooking the Melbourne skyline. All rooms feature elegant decor, modern, stylish furnishing,
-                 and attention to detail that makes for a relaxing stay in Australia's City of Arts and Culture.</td>
-                  </tr>
-           </tbody>
-        </table>
+   @foreach($itinerary->items['Accommodation'] as $accommodation)
+    <div class="single-module">
+        <h4>   
+            <span class="text">{{ $accommodation->name }}</span>
+            <span class="mark"></span>
+        </h4> 
+        <div class="details-module">
+            <table>
+                <tbody>
+                    <tr>
+                        <td><strong>Check In:</strong></td>
+                        <td>{{ $accommodation->details['Check In'] }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Check Out:</strong></td>
+                        <td>{{ $accommodation->details['Check Out'] }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>No of Nights:</strong></td>
+                        <td>{{ $accommodation->details['No of Nights'] }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Address:</strong></td>
+                        <td>{{ $accommodation->details['Address']->attributes['address_line_1'] }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Room Type:</strong></td>
+                        <td>{{ $accommodation->details['Room Type'] }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Board Type:</strong></td>
+                        <td>{{ $accommodation->details['Board Type'] }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Quantity:</strong></td>
+                        <td>{{ $accommodation->details['Quantity'] }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Description:</strong></td>
+                        <td>{{ $accommodation->details['Description'] }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-   </div>
-   <div class="single-module">
-    <h4>   
-    <span class="text">The Westin Brisbane</span>
-    <span class="mark"></span>
-    </h4> 
-    <div class="details-module">
-        <table>
-           <tbody>
-              <tr>            
-                <td><strong>Check In:</strong></td>
-                 <td>18 Jul 2025</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Check Out:</strong></td>
-                      <td>19 Jul 2025</td>
-                  </tr>
-                  <tr>
-                      <td><strong>No of Nights:</strong></td>
-                      <td>1</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Address:</strong></td>
-                      <td>111 Mary Street, Brisbane City, Queensland, Australia, 4000</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Room Type:</strong></td>
-                      <td>Westin Room - Double</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Room and breakfast</strong></td>
-                      <td>Room and breakfast</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Quantity:</strong></td>
-                      <td>2</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Description:</strong></td>
-                      <td>Refreshingly unique The Westin Brisbane celebrates Brisbane City’s air of laid-back sophistication.Located in the city centre near popular attractions like the Botanic Gardens,
-                      Queen Street Mall, Suncorp Stadium and Queensland Performing Arts Centre (QPAC), this luxury hotel features contemporary rooms with Westin Heavenly® Beds and floor-to-ceiling windows.</td>
-                  </tr>
-           </tbody>
-        </table>
-    </div>
-   </div>
-   <div class="single-module">
-    <h4>   
-    <span class="text">The Westin Brisbane</span>
-    <span class="mark"></span>
-    </h4> 
-    <div class="details-module">
-        <table>
-           <tbody>
-              <tr>            
-                <td><strong>Check In:</strong></td>
-                 <td>19 Jul 2025</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Check Out:</strong></td>
-                      <td>20 Jul 2025</td>
-                  </tr>
-                  <tr>
-                      <td><strong>No of Nights:</strong></td>
-                      <td>1</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Address:</strong></td>
-                      <td>111 Mary Street, Brisbane City, Queensland, Australia, 4000</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Room Type:</strong></td>
-                      <td>Westin Room - Double</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Board Type</strong></td>
-                      <td>Room and breakfast</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Quantity:</strong></td>
-                      <td>2</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Description:</strong></td>
-                      <td>Refreshingly unique The Westin Brisbane celebrates Brisbane City’s air of laid-back sophistication.Located in the city centre near popular attractions like the Botanic Gardens,
-                      Queen Street Mall, Suncorp Stadium and Queensland Performing Arts Centre (QPAC), this luxury hotel features contemporary rooms with Westin Heavenly® Beds and floor-to-ceiling windows.</td>
-                  </tr>
-           </tbody>
-        </table>
-    </div>
-   </div>
+    @endforeach
+
    </div>
 </section>
 
