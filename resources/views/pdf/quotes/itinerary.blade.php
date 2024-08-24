@@ -50,7 +50,7 @@
     padding:14px 20px;
   }
   .pdf-individual-block {
-    width: 595px;
+    width: 700px;
     margin: auto;
     height: 1000px;
   }
@@ -420,60 +420,7 @@ h5 span {
 
 <section class="pdf-individual-block">
    <div class="row">
-  
 
-
-   </div>
-</section>
-
-<section class="pdf-individual-block">
-   <div class="row">
-
-   <div class="single-module">
-    <h4>   
-    <span class="text">The Westin Brisbane</span>
-    <span class="mark"></span>
-    </h4> 
-    <div class="details-module">
-        <table>
-           <tbody>
-              <tr>            
-                <td><strong>Check In:</strong></td>
-                 <td>20 Jul 2025</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Check Out:</strong></td>
-                      <td>21 Jul 2025</td>
-                  </tr>
-                  <tr>
-                      <td><strong>No of Nights:</strong></td>
-                      <td>1</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Address:</strong></td>
-                      <td>111 Mary Street, Brisbane City, Queensland, Australia, 4000</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Room Type:</strong></td>
-                      <td>Westin Room - Double</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Board Type</strong></td>
-                      <td>Room and breakfast</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Quantity:</strong></td>
-                      <td>2</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Description:</strong></td>
-                      <td>Refreshingly unique The Westin Brisbane celebrates Brisbane City’s air of laid-back sophistication.Located in the city centre near popular attractions like the Botanic Gardens,
-                      Queen Street Mall, Suncorp Stadium and Queensland Performing Arts Centre (QPAC), this luxury hotel features contemporary rooms with Westin Heavenly® Beds and floor-to-ceiling windows.</td>
-                  </tr>
-           </tbody>
-        </table>
-    </div>
-   </div>
    <div class="heading-module">
     <h3>
      <span class="mark"></span>
