@@ -431,40 +431,6 @@ h5 span {
         </div>
     </div>
 @endforeach
-@foreach($itinerary->items['Accommodation'] as $accommodation)
-    <div class="single-module">
-        <h4>   
-            <span class="text">{{ $accommodation->name }}</span>
-            <span class="mark"></span>
-        </h4> 
-        <div class="details-module">
-            <table>
-                <tbody>
-                    @foreach($accommodation->details as $key => $value)
-                        @continue(empty($value))
-                        <tr>
-                            <td class="item-header" style="width: 125px">
-                                {{ $key }}:
-                            </td>
-                            <td class="item-detail">
-                                @if(is_array($value))
-                                    @if(isset($value['attributes']['address_line_1']))
-                                        {{ $value['attributes']['address_line_1'] }}
-                                    @else
-                                        Address not available
-                                    @endif
-                                @else
-                                    {!! $value !!}
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
-@endforeach
-
   </div>
   </section>
 
