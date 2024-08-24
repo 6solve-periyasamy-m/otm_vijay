@@ -57,6 +57,9 @@
   }
   .pdf-individual-block {margin-left:-48px;}
   .pdf-individual-block:first-child {margin-top:-50px;}
+  .pdf-individual-block .paragraph {
+    max-width:760px!important;
+  }
     @font-face {
     font-family: "PlayfairDisplay-Medium";
     src: url(/images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf);
