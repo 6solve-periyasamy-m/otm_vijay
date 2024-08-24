@@ -200,7 +200,7 @@ h3 span.text {
     font-weight: 400;
   }
 .single-module {
-  margin-top: 34px;
+  margin-top: 30px;
   padding-left: 22px;
   max-width: 586px;
   margin-bottom:30px;
