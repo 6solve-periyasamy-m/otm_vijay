@@ -200,10 +200,10 @@ h3 span.text {
     font-weight: 400;
   }
 .single-module {
-  margin-top: 24px;
+  margin-top: 34px;
   padding-left: 22px;
   max-width: 586px;
-  margin-bottom:24px;
+  margin-bottom:30px;
 }
 h4 {
     font-family: "PPNeueMontreal-Regular";
