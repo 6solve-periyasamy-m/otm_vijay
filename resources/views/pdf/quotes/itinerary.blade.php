@@ -442,43 +442,31 @@ h5 span {
         <div class="details-module">
             <table>
                 <tbody>
-                    <tr>
-                        <td><strong>Check In:</strong></td>
-                        <td>{{ $accommodation->details['Check In'] }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Check Out:</strong></td>
-                        <td>{{ $accommodation->details['Check Out'] }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>No of Nights:</strong></td>
-                        <td>{{ $accommodation->details['No of Nights'] }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Address:</strong></td>
-                        <td>{{ $accommodation->details['Address']->attributes['address_line_1'] }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Room Type:</strong></td>
-                        <td>{{ $accommodation->details['Room Type'] }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Board Type:</strong></td>
-                        <td>{{ $accommodation->details['Board Type'] }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Quantity:</strong></td>
-                        <td>{{ $accommodation->details['Quantity'] }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Description:</strong></td>
-                        <td>{{ $accommodation->details['Description'] }}</td>
-                    </tr>
+                    @foreach($accommodation->details as $key => $value)
+                        @continue(empty($value))
+                        <tr>
+                            <td class="item-header" style="width: 125px">
+                                {{ $key }}:
+                            </td>
+                            <td class="item-detail">
+                                @if(is_array($value))
+                                    @if(isset($value['attributes']['address_line_1']))
+                                        {{ $value['attributes']['address_line_1'] }}
+                                    @else
+                                        Address not available
+                                    @endif
+                                @else
+                                    {!! $value !!}
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
     </div>
-    @endforeach
+@endforeach
+
 
    </div>
 </section>
