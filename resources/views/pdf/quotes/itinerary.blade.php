@@ -579,12 +579,7 @@ h5 span {
     <tr>
         <td style="vertical-align: top;">
             <strong>BANK TRANSFER</strong><br>
-            ABN: 31 003 276 775<br>
-            BSB: 032-298<br>
-            ACC: 540726<br>
-            SWIFT: WPACAU2S<br>
-            BANK: Westpac<br>
-            BRANCH: Crows Nest
+            {!! $itinerary->items['finances']->paymentDetails !!}
         </td>
         <td style="vertical-align: top;">
             <strong>PAYMENT GATE</strong><br>
