@@ -389,6 +389,8 @@ h5 span {
     </table>
 </div>
 @endif
+
+@if(!empty($itinerary->items['Accommodation']))
   <div class="heading-2">
 	  <h2>Package inclusions</h2> 
   </div>
@@ -433,7 +435,7 @@ h5 span {
 @endforeach
   </div>
   </section>
-
+  @endif
 <section class="pdf-individual-block">
    <div class="row">
 
@@ -557,7 +559,7 @@ h5 span {
    </div>
    </div>
 </section>
-
+@if(!empty($itinerary->finances))
 <section class="pdf-individual-block">
    <div class="row">
    
@@ -606,7 +608,7 @@ h5 span {
    </div>
    </div>
 </section>
-
+@endif
 
 <section id="static-pages" class="pdf-individual-block">
    <div class="row">
