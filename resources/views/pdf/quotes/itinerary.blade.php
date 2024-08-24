@@ -3,11 +3,16 @@
      * @var \App\Repository\Storage\Itinerary\Itinerary $itinerary
      * @var string $type
      */
-    $type = $type ?? "Travel Itinerary"
+    $type = $type ?? "Travel Itinerary";
+
+    //pdf variables
+    $headlogo = svg_to_b64('images/pdf_assets/images/KeithProwse_Logo.png') ;
+    $reference = $itinerary->reference;
     
 @endphp
 <?php 
-  //var_dump($itinerary->booker);
+  var_dump($itinerary);
+  var_dump(setting('customization.documentation.colors'));
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -312,14 +317,14 @@ h5 span {
   <div class="row">
       <div class="pdf-header">
          <div class="header-logo">
-            <img src="{{ svg_to_b64('images/pdf_assets/images/KeithProwse_Logo.png') }}" alt="logo-ch">
+            <img src="{{ $headlogo }}" alt="logo-ch">
          </div>
       </div>
 	  
       <div class="customer-details-block">
         <div class="customer-details-text-block">
             <h1>Quote</h1>
-            <h5>REFERENCE: {{ $itinerary->reference }} <span></span></h5>         
+            <h5>REFERENCE: {{ $reference }} <span></span></h5>         
             <div class="customer-agent-details">
                 <div class="customer-details">
                     <h6>CUSTOMER DETAILS</h6>
