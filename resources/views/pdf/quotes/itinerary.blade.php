@@ -60,6 +60,7 @@
   .pdf-individual-block .paragraph {
     max-width:750px!important;
   }
+  #static-pages {margin-top:50px;}
     @font-face {
     font-family: "PlayfairDisplay-Medium";
     src: url(/images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf);
@@ -631,7 +632,7 @@ h5 span {
 </section>
 
 
-<section class="pdf-individual-block">
+<section id="static-pages" class="pdf-individual-block">
    <div class="row">
      
    <h2>Notes</h2> 
