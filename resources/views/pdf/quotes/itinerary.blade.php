@@ -381,59 +381,7 @@ h5 span {
      <span class="text">Accommodation</span>
     </h3>
   </div>
-
-  <div class="single-module">
-    <h4>   
-    <span class="text">The Langham, Melbourne</span>
-    <span class="mark"></span>
-    </h4> 
-    <div class="details-module">
-        <table>
-           <tbody>
-              <tr>            
-                <td><strong>Check In:</strong></td>
-                 <td>25 Jul 2025</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Check Out:</strong></td>
-                      <td>26 Jul 2025</td>
-                  </tr>
-                  <tr>
-                      <td><strong>No of Nights:</strong></td>
-                      <td>1</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Address:</strong></td>
-                      <td>1 Southgate Avenue, Southbank, VIC, Australia, 3006</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Room Type:</strong></td>
-                      <td>Superior Room - Double</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Board Type:</strong></td>
-                      <td>Room and breakfast</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Quantity:</strong></td>
-                      <td>2</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Description:</strong></td>
-                      <td>The Langham, Melbourne offers five-star service and hospitality on the banks of the Yarra River
-                          overlooking the Melbourne skyline. All rooms feature elegant decor, modern, stylish furnishing,
-                          and attention to detail that makes for a relaxing stay in Australia's City of Arts and Culture.</td>
-                  </tr>
-           </tbody>
-        </table>
-    </div>
-   </div>
-  </div>
-  </section>
-
-<section class="pdf-individual-block">
-   <div class="row">
-   @foreach($itinerary->items['Accommodation'] as $accommodation)
+  @foreach($itinerary->items['Accommodation'] as $accommodation)
     <div class="single-module">
         <h4>   
             <span class="text">{{ $accommodation->name }}</span>
@@ -466,6 +414,13 @@ h5 span {
         </div>
     </div>
 @endforeach
+ 
+  </div>
+  </section>
+
+<section class="pdf-individual-block">
+   <div class="row">
+  
 
 
    </div>
