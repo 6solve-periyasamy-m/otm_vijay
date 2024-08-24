@@ -815,7 +815,7 @@ We strongly encourage you to purchase travel insurance that adequately responds 
             </p>
     </div>
    <div>
-<section>
+</section>
 <section class="pdf-individual-block">
    <div class="row"> 
    <div class="paragraph">
