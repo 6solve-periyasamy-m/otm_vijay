@@ -96,6 +96,7 @@
     margin-bottom: 16px;
     margin-top: 20px;
   }
+  .customer-details-block {width:!00%};
   .customer-details-block h6 {
     font-family: "PPNeueMontreal-Medium";
     font-size:9px;
@@ -110,10 +111,11 @@
     float:left;  
  }
  .customer-details-block .customer-details-image-block {
-  width:209px;
-  height:198px;
+    max-width: 277px;
+    max-height: 198px;
+    width: 38%;
  }
- .customer-details-block .customer-details-text-block {width: 567px;padding-left:20px;}
+ .customer-details-block .customer-details-text-block {width: 62%;padding-left:20px;}
   h5 {
   font-family: "PPNeueMontreal-Medium";
   font-size: 12px;
@@ -123,7 +125,7 @@
   color: var(--text-color);
  }
  /* .customer-agent-details .customer-details,.customer-agent-details .agent-details {float:left;} */
- .customer-agent-details .customer-details, .customer-agent-details .agent-details{width:290px;}
+ .customer-agent-details .customer-details, .customer-agent-details .agent-details{width:50%;}
  .customer-agent-details p {
   font-family: "PPNeueMontreal-Medium";
   font-size: 10px;
@@ -173,7 +175,7 @@
 .information-block .column:first-child {margin-right:15px;}
 .information-block .column .single:first-child {margin-bottom:15px;}
 .customer-details-image-block {display:inline-block;}
-.customer-details-image-block img {width:100%;height:100%;object-fit:cover;}
+/* .customer-details-image-block img {width:100%;height:100%;object-fit:cover;} */
 h2 {
     color: var(--table-header-text);
     font-family: "PlayfairDisplay-Bold";
