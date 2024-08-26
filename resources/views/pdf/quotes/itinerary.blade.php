@@ -18,7 +18,22 @@
     $eveimg =$itinerary->image;
     $evename = $itinerary->event;
     $evatra = count($itinerary->travellers);
-    var_dump($eveimg);
+    
+    if (!function_exists('font_to_b64')) {
+      function font_to_b64($fontPath)
+      {
+          // Check if the file exists
+          if (!file_exists($fontPath)) {
+              return '';
+          }
+
+          // Get the contents of the font file
+          $fontData = file_get_contents($fontPath);
+
+          // Encode the font data to Base64
+          return base64_encode($fontData);
+      }
+    }
 @endphp
 <?php 
   //var_dump($itinerary->items);
@@ -71,21 +86,24 @@
         page-break-inside: avoid;
     } 
   #static-pages {margin-top:65px;}
-    @font-face {
-    font-family: "PlayfairDisplay-Medium";
-    src: url('/images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf');
+  @font-face {
+        font-family: "PlayfairDisplay-Medium";
+        src:url('data:font/ttf;base64{{ font_to_b64('images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf') }}')format('truetype');
     }
     @font-face {
-    font-family: "PlayfairDisplay-Bold";
-    src: url('/images/pdf_assets/fonts/PlayfairDisplay-Bold.ttf');
+        font-family: "PlayfairDisplay-Bold";
+        src:url('data:font/ttf;base64{{ font_to_b64('images/pdf_assets/fonts/PlayfairDisplay-Bold.ttf') }}')format('truetype');
+    
+        src: url("data:font/ttf;base64,{{ font_to_b64(public_path('images/pdf_assets/fonts/PlayfairDisplay-Bold.ttf')) }}") format('truetype');
     }
     @font-face {
-    font-family: "PPNeueMontreal-Medium";
-    src: url('/images/pdf_assets/fonts/PPNeueMontreal-Medium.ttf');
+        font-family: "PPNeueMontreal-Medium";
+        src:url('data:font/ttf;base64{{ font_to_b64('images/pdf_assets/fonts/PPNeueMontreal-Medium.ttf') }}')format('truetype');
+  
     }
     @font-face {
-    font-family: "PPNeueMontreal-Regular";
-    src: url('/images/pdf_assets/fonts/PPNeueMontreal-Regular.ttf');
+        font-family: "PPNeueMontreal-Regular";
+        src:url('data:font/ttf;base64{{ font_to_b64('images/pdf_assets/fonts/PPNeueMontreal-Regular.ttf') }}')format('truetype');
     }
   h1 {
     color: var(--text-color);
