@@ -133,7 +133,6 @@
   margin-bottom: 0px ! Important;
   color: var(--text-color);
  }
-.customer-details-image-block {width:209px;}
 .customer-details-text-block  h3 span {
   background-color: var(--text-head-color);
   display: block;
