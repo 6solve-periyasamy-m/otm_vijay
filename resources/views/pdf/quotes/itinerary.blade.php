@@ -57,6 +57,7 @@
     
 @endphp
 <?php 
+var_dump(generateFontFaceCSS($fonts));
   //var_dump($itinerary->items);
   //var_dump(setting('customization.documentation.colors'));
 ?>
