@@ -18,7 +18,7 @@
     $eveimg =$itinerary->image;
     $evename = $itinerary->event;
     $evatra = count($itinerary->travellers);
-    
+    var_dump($eveimg);
 @endphp
 <?php 
   //var_dump($itinerary->items);
