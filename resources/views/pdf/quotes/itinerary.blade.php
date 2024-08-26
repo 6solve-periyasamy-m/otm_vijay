@@ -19,16 +19,6 @@
     $evename = $itinerary->event;
     $evatra = count($itinerary->travellers);
     
-    if (!function_exists('font_to_b64')) {
-      function font_to_b64($fontPath)
-      {
-          if (file_exists($fontPath)) {
-              $fontData = file_get_contents($fontPath);
-              return 'data:font/truetype;base64,' . base64_encode($fontData);
-          }
-          return '';
-      }
-      }
 @endphp
 <?php 
   //var_dump($itinerary->items);
@@ -81,21 +71,21 @@
         page-break-inside: avoid;
     } 
   #static-pages {margin-top:65px;}
-  @font-face {
-        font-family: "PlayfairDisplay-Medium";
-        src: url("{{font_to_b64('images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf')}}") format('truetype');
+    @font-face {
+    font-family: "PlayfairDisplay-Medium";
+    src: url(/images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf);
     }
     @font-face {
-        font-family: "PlayfairDisplay-Bold";
-        src: url("{{font_to_b64('images/pdf_assets/fonts/PlayfairDisplay-Bold.ttf')}}") format('truetype');
+    font-family: "PlayfairDisplay-Bold";
+    src: url(/images/pdf_assets/fonts/PlayfairDisplay-Bold.ttf);
     }
     @font-face {
-        font-family: "PPNeueMontreal-Medium";
-        src: url("{{font_to_b64('images/pdf_assets/fonts/PPNeueMontreal-Medium.ttf')}}") format('truetype');
+    font-family: "PPNeueMontreal-Medium";
+    src: url(/images/pdf_assets/fonts/PPNeueMontreal-Medium.ttf);
     }
     @font-face {
-        font-family: "PPNeueMontreal-Regular";
-        src: url("{{font_to_b64('images/pdf_assets/fonts/PPNeueMontreal-Regular.ttf')}}") format('truetype');
+    font-family: "PPNeueMontreal-Regular";
+    src: url(/images/pdf_assets/fonts/PPNeueMontreal-Regular.ttf);
     }
   h1 {
     color: var(--text-color);
@@ -376,7 +366,7 @@ h5 span {
             </div>  
         </div>
         <div class="customer-details-image-block">
-            <img style="object-fit:cover;width:100%;height:100%;" src="{!! $eveimg !!}" alt="image-block">
+            <img src="{!! $eveimg !!}" alt="image-block">
         </div>       
     </div>
 
