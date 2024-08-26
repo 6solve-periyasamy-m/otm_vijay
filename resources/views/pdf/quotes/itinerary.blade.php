@@ -93,8 +93,6 @@
     @font-face {
         font-family: "PlayfairDisplay-Bold";
         src:url('data:font/ttf;base64{{ font_to_b64('images/pdf_assets/fonts/PlayfairDisplay-Bold.ttf') }}')format('truetype');
-    
-        src: url("data:font/ttf;base64,{{ font_to_b64(public_path('images/pdf_assets/fonts/PlayfairDisplay-Bold.ttf')) }}") format('truetype');
     }
     @font-face {
         font-family: "PPNeueMontreal-Medium";
