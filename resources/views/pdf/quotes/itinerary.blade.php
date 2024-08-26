@@ -57,7 +57,7 @@
     
 @endphp
 <?php 
-  var_dump(generateFontFaceCSS($fonts));
+  //var_dump(generateFontFaceCSS($fonts));
   //var_dump($itinerary->items);
   //var_dump(setting('customization.documentation.colors'));
 ?>
@@ -83,7 +83,7 @@
   --table-header-text: #FFFFFF;
   --head-text-background:#F35B15;
   }
-  {!! generateFontFaceCSS($fonts) !!}
+  {!! /*generateFontFaceCSS($fonts) */!!}
   .pdf-header {
     background-color: var(--main-background-color);
     padding:14px 20px;
@@ -109,22 +109,22 @@
         page-break-inside: avoid;
     } 
   #static-pages {margin-top:65px;}
-    /* @font-face {
+    @font-face {
     font-family: "PlayfairDisplay-Medium";
-    src: url(images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf);
+    src: url('images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf');
     }
     @font-face {
     font-family: "PlayfairDisplay-Bold";
-    src: url(images/pdf_assets/fonts/PlayfairDisplay-Bold.ttf);
+    src: url('images/pdf_assets/fonts/PlayfairDisplay-Bold.ttf');
     }
     @font-face {
     font-family: "PPNeueMontreal-Medium";
-    src: url(images/pdf_assets/fonts/PPNeueMontreal-Medium.ttf);
+    src: url('images/pdf_assets/fonts/PPNeueMontreal-Medium.ttf');
     }
     @font-face {
     font-family: "PPNeueMontreal-Regular";
-    src: url(images/pdf_assets/fonts/PPNeueMontreal-Regular.ttf);
-    } */
+    src: url('images/pdf_assets/fonts/PPNeueMontreal-Regular.ttf');
+    }
   h1 {
     color: var(--text-color);
     font-family: "PlayfairDisplay-Medium";
