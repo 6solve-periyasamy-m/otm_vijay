@@ -108,7 +108,7 @@
         page-break-inside: avoid;
     } 
   #static-pages {margin-top:65px;}
-    @font-face {
+    /* @font-face {
     font-family: "PlayfairDisplay-Medium";
     src: url(images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf);
     }
@@ -123,7 +123,7 @@
     @font-face {
     font-family: "PPNeueMontreal-Regular";
     src: url(images/pdf_assets/fonts/PPNeueMontreal-Regular.ttf);
-    }
+    } */
   h1 {
     color: var(--text-color);
     font-family: "PlayfairDisplay-Medium";
