@@ -22,18 +22,13 @@
     if (!function_exists('font_to_b64')) {
       function font_to_b64($fontPath)
       {
-          // Check if the file exists
-          if (!file_exists($fontPath)) {
-              return '';
+          if (file_exists($fontPath)) {
+              $fontData = file_get_contents($fontPath);
+              return 'data:font/truetype;base64,' . base64_encode($fontData);
           }
-
-          // Get the contents of the font file
-          $fontData = file_get_contents($fontPath);
-
-          // Encode the font data to Base64
-          return base64_encode($fontData);
+          return '';
       }
-    }
+      }
 @endphp
 <?php 
   //var_dump($itinerary->items);
@@ -88,20 +83,19 @@
   #static-pages {margin-top:65px;}
   @font-face {
         font-family: "PlayfairDisplay-Medium";
-        src:url('data:font/ttf;base64{{ font_to_b64('images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf') }}')format('truetype');
+        src: url("{{font_to_b64('images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf')}}") format('truetype');
     }
     @font-face {
         font-family: "PlayfairDisplay-Bold";
-        src:url('data:font/ttf;base64{{ font_to_b64('images/pdf_assets/fonts/PlayfairDisplay-Bold.ttf') }}')format('truetype');
+        src: url("{{font_to_b64('images/pdf_assets/fonts/PlayfairDisplay-Bold.ttf')}}") format('truetype');
     }
     @font-face {
         font-family: "PPNeueMontreal-Medium";
-        src:url('data:font/ttf;base64{{ font_to_b64('images/pdf_assets/fonts/PPNeueMontreal-Medium.ttf') }}')format('truetype');
-  
+        src: url("{{font_to_b64('images/pdf_assets/fonts/PPNeueMontreal-Medium.ttf')}}") format('truetype');
     }
     @font-face {
         font-family: "PPNeueMontreal-Regular";
-        src:url('data:font/ttf;base64{{ font_to_b64('images/pdf_assets/fonts/PPNeueMontreal-Regular.ttf') }}')format('truetype');
+        src: url("{{font_to_b64('images/pdf_assets/fonts/PPNeueMontreal-Regular.ttf')}}") format('truetype');
     }
   h1 {
     color: var(--text-color);
@@ -382,7 +376,7 @@ h5 span {
             </div>  
         </div>
         <div class="customer-details-image-block">
-            <img src="{!! $eveimg !!}" alt="image-block">
+            <img style="object-fit:cover;width:100%;height:100%;" src="{!! $eveimg !!}" alt="image-block">
         </div>       
     </div>
 
