@@ -1,4 +1,5 @@
 @php
+    use Illuminate\Support\Facades\File;
     /**
      * @var \App\Repository\Storage\Itinerary\Itinerary $itinerary
      * @var string $type
@@ -18,6 +19,41 @@
     $eveimg =$itinerary->image;
     $evename = $itinerary->event;
     $evatra = count($itinerary->travellers);
+
+    if (!function_exists('generateFontFaceCSS')) {
+      /**
+       * Generate @font-face CSS for fonts if they exist.
+       *
+       * @param array $fonts Array of fonts with name and path.
+       * @return string
+       */
+      function generateFontFaceCSS(array $fonts)
+      {
+          $css = '';
+  
+          foreach ($fonts as $font) {
+              $fontPath = public_path($font['path']);
+  
+              if (File::exists($fontPath)) {
+                  $fontBase64 = base64_encode(file_get_contents($fontPath));
+                  $css .= <<<CSS
+  @font-face {
+      font-family: "{$font['name']}";
+      src: url(data:font/ttf;base64,{$fontBase64}) format('truetype');
+  }
+  CSS;
+              }
+          }
+  
+          return $css;
+      }
+  }
+  $fonts = [
+    ['name' => 'PlayfairDisplay-Medium', 'path' => 'images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf'],
+    ['name' => 'PlayfairDisplay-Bold', 'path' => 'images/pdf_assets/fonts/PlayfairDisplay-Bold.ttf'],
+    ['name' => 'PPNeueMontreal-Medium', 'path' => 'images/pdf_assets/fonts/PPNeueMontreal-Medium.ttf'],
+    ['name' => 'PPNeueMontreal-Regular', 'path' => 'images/pdf_assets/fonts/PPNeueMontreal-Regular.ttf'],
+];
     
 @endphp
 <?php 
@@ -46,6 +82,7 @@
   --table-header-text: #FFFFFF;
   --head-text-background:#F35B15;
   }
+  {!! generateFontFaceCSS($fonts) !!}
   .pdf-header {
     background-color: var(--main-background-color);
     padding:14px 20px;
