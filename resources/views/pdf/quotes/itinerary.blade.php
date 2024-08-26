@@ -60,6 +60,7 @@
   //var_dump(generateFontFaceCSS($fonts));
   //var_dump($itinerary->items);
   //var_dump(setting('customization.documentation.colors'));
+  //{!! /*generateFontFaceCSS($fonts) */!!}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -83,7 +84,7 @@
   --table-header-text: #FFFFFF;
   --head-text-background:#F35B15;
   }
-  {!! /*generateFontFaceCSS($fonts) */!!}
+  
   .pdf-header {
     background-color: var(--main-background-color);
     padding:14px 20px;
