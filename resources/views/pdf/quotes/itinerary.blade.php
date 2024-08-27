@@ -420,7 +420,7 @@ h5 span {
         </tr>
         <tr>
             <td><strong>Travel dates:</strong></td>
-            <td>{{date('d-m-y', strtotime($itinerary->start))}} - {{date('d-m-y', strtotime($itinerary->end))}}</td>
+            <td>{{ date('d F Y', strtotime($itinerary->start)) }} - {{ date('d F Y', strtotime($itinerary->end)) }}</td>
             <td><strong>Lead guest:</strong></td>
             <td>{{ $cusname }}</td>
         </tr>
