@@ -61,9 +61,6 @@
   //var_dump($itinerary->items);
   //var_dump(setting('customization.documentation.colors'));
   //{!! /*generateFontFaceCSS($fonts) */!!}
-  var_dump($itinerary->event);
-  var_dump('check inclusion <br>');
-  var_dump($itinerary->items);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -423,7 +420,7 @@ h5 span {
         </tr>
         <tr>
             <td><strong>Travel dates:</strong></td>
-            <td>{{$itinerary->start}} - {{$itinerary->end}}</td>
+            <td>{{date('d-m-y', strtotime($itinerary->start))}} - {{date('d-m-y', strtotime($itinerary->end))}}</td>
             <td><strong>Lead guest:</strong></td>
             <td>{{ $cusname }}</td>
         </tr>
