@@ -2258,5 +2258,6 @@ input::-webkit-inner-spin-button {
     }
     .full-top-blcls-two h3 {margin:0;}
     .evnt-name {display:block!important;}
+    .ma-block .second-block .hotel-details .information-hover {margin-right:16px;}
 }
 /* Css Book Now Mobile bugs - Addressing  */
