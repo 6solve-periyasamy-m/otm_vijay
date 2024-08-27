@@ -103,6 +103,13 @@
                     @endforeach
                 </table>
             </x-admin.section.card>
+            {{-- Linked Activities --}}
+            <div class="heading pt-2 pb-md-3 pb-2">
+                <h2 class="fw-bold">Linked Activities</h2>
+            </div>
+            <x-admin.section.card>
+                <livewire:admin.report.event.activity-report :event="$event" />
+            </x-admin.section.card>
         </div>
         <div class="col-xl-6">
             <div class="heading pt-2 pb-md-3 pb-2">
