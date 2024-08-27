@@ -2239,5 +2239,9 @@ input::-webkit-inner-spin-button {
         width: 100% !important;
         height: 100% !important;
         object-fit: contain;
+        max-height: 30px;
+    }
+    .accommodation-details-hover .full .left-col {
+        margin-bottom:0!important;
     }
 }
