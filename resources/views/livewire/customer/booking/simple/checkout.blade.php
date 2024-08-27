@@ -1,3 +1,7 @@
+<?php 
+var_dump($tour);
+?>
+
 <div class="row">
     <div class="second-form">
         <div class="left-col">
