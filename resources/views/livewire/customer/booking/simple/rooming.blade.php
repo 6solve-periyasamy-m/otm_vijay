@@ -1,6 +1,9 @@
 <div class="row">
     <div class="left-col">
         <div class="contain">
+            <div class="evnt-name">
+                <h4 class="head-evnt">{{ $tour->event?->name }}</h4>
+            </div>
             <h3>Your trip details</h3>
 
             <p class="psg-det">PASSENGER DETAILS</p>
