@@ -2260,5 +2260,6 @@ input::-webkit-inner-spin-button {
     .evnt-name {display:block!important;}
     .ma-block .second-block .hotel-details .information-hover {margin-right:16px;}
     .evnt-name h4 {margin-bottom:15px!important;}
+    .ma-block .row .left-col .contain .accommodation-details-hover .contain .full {row-gap:0!important;}
 }
 /* Css Book Now Mobile bugs - Addressing  */
