@@ -40,6 +40,7 @@ use App\Repository\Storage\Itinerary\ItinerarySchedule;
 use App\Repository\Storage\Itinerary\ItineraryScheduleType;
 use App\Repository\Storage\Itinerary\ItineraryTraveller;
 use App\Repository\Storage\Quote\CustomerForConversion;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Settings;
@@ -1072,6 +1073,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $event?->image_url,
             $this->quote->reference,
             $this->quote->organization,
+            $this->order->consultant ?? Auth::user(),
             $this->quote->date_from,
             $this->quote->date_to,
             new ItineraryTraveller($this->quote->leadTraveller->customer, $this->quote->leadTraveller->paying, $this->quote->leadTraveller->travelling),

@@ -30,7 +30,6 @@
       function generateFontFaceCSS(array $fonts)
       {
           $css = '';
-  
           foreach ($fonts as $font) {
               $fontPath = public_path($font['path']);
   
@@ -398,8 +397,8 @@ h5 span {
                 </div>
                 <div class="agent-details">
                     <h6>AGENT DETAILS</h6>
-                    <p>Name: <span>{{$clname}}</span></p>
-                    <p>Email: <span>{{$clmail}}</span><p> 
+                    <p>Name: <span>{{$itinerary->consultant?->name}}</span></p>
+                    <p>Email: <span>{{$itinerary->consultant?->email}}</span><p>
                     <p>Date created: <span>{{ $dacre }}</span><p>
                 </div>
             </div>  

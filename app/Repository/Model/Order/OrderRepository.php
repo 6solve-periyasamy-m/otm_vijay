@@ -33,6 +33,7 @@ use App\Repository\Storage\Itinerary\ItineraryPaymentDetails;
 use App\Repository\Storage\Itinerary\ItinerarySchedule;
 use App\Repository\Storage\Itinerary\ItineraryScheduleType;
 use App\Repository\Storage\Itinerary\ItineraryTraveller;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
@@ -848,6 +849,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $this->order->tour->event?->image_url,
             $this->order->booking_reference,
             $this->order->organization,
+            $this->order->consultant ?? Auth::user(),
             $this->order->tour->date_from,
             $this->order->tour->date_to,
             new ItineraryTraveller($this->order->leadBooker->customer, $this->order->leadBooker->is_charged, $this->order->leadBooker->is_travelling),
