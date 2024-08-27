@@ -2217,7 +2217,6 @@ input::-webkit-inner-spin-button {
     justify-content: center;
     z-index: 1111 !important;
 }
-
 .card {
     display: flex;
     background-color: white;
@@ -2234,6 +2233,9 @@ input::-webkit-inner-spin-button {
     align-content: center;
     margin: auto;
 }
+
+/* Css Book Now Mobile bugs - Addressing  */
+.evnt-name {display:none!important;}
 @media only screen and (max-width:767px) {
     .top-head .row .col-one .img-contain img {
         width: 100% !important;
@@ -2255,4 +2257,7 @@ input::-webkit-inner-spin-button {
         margin: auto;
     }
     .full-top-blcls-two h3 {margin:0;}
+    .evnt-name {display:block!important;}
+    .ma-block .second-block .hotel-details .information-hover {margin-right:16px;}
 }
+/* Css Book Now Mobile bugs - Addressing  */
