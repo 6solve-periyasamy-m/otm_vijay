@@ -2244,4 +2244,15 @@ input::-webkit-inner-spin-button {
     .accommodation-details-hover .full .left-col {
         margin-bottom:0!important;
     }
+    .ma-block .row .left-col {
+        margin-bottom:20px!important;
+    }
+    .upp-block-two .snd-sec {flex-wrap:wrap;}
+    .upp-block-two .snd-sec .left-col, .upp-block-two .snd-sec .right-col {width:100%!important;margin-right:0!important;}
+    .upp-block-two .snd-sec .right-col {margin-top:20px!important;}
+    .see-more-popup .popup-inner-two, .upgrades-popup .popup-inner {
+        width: 92%;
+        margin: auto;
+    }
+    .full-top-blcls-two h3 {margin:0;}
 }
