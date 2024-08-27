@@ -4,7 +4,7 @@
             <div class="contain">
                 <div class="purchase-info-block">
                 <div class="evnt-name">
-                    <h4 class="head-evnt">{{ $tour->event?->name }}</h4>
+                    <h4 class="head-evnt">{{ $booking->tour->event?->name }}</h4>
                 </div>
                     <h3>Enter purchaser information</h3>
                     <div class="top-check-top-cls">
