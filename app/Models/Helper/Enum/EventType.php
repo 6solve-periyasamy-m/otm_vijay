@@ -19,8 +19,8 @@ enum EventType: int
     public function label(): string
     {
         return match ($this) {
-            self::NORMAL => "Normal Event",
-            self::MAIN => "Main Event",
+            self::NORMAL => "Child Event",
+            self::MAIN => "Parent Event",
         };
     }
 }
