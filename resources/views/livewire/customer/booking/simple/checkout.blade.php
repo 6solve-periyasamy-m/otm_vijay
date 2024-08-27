@@ -1,5 +1,5 @@
 <?php 
-var_dump($tour);
+var_dump($booking);
 ?>
 
 <div class="row">
