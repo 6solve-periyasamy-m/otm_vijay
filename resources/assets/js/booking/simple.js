@@ -315,6 +315,9 @@ jQuery(document).ready(function () {
 
     });
 
+    jQuery('.second-form .left-col .evnt-name .head-evnt').text(jQuery('.second-form .right-col .snd-sec .right-col h4:first').text());
+
+
 });
 
 document.addEventListener('livewire:load', function () {
