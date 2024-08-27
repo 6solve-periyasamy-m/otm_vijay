@@ -2234,3 +2234,10 @@ input::-webkit-inner-spin-button {
     align-content: center;
     margin: auto;
 }
+@media only screen and (max-width:767px) {
+    .top-head .row .col-one .img-contain img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain;
+    }
+}
