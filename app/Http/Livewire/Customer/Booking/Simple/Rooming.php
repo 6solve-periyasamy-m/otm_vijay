@@ -44,6 +44,7 @@ class Rooming extends Component
             $this->booking->lead_traveller_id = $this->lead->id;
             $this->booking->save();
         }
+        $this->addTraveller();
         $this->validateRoomCount();
     }
 
