@@ -2,9 +2,11 @@
     <div class="second-form">
         <div class="left-col">
             <div class="contain">
-            <div class="evnt-name">
+                <!-- The event name mobile update -->
+                <div class="evnt-name">
                     <h4 class="head-evnt">{{ $tour->event?->name }}</h4>
                 </div>
+                <!-- The event name mobile update -->
                 <div class="purchase-info-block">
                
                     <h3>Enter purchaser information</h3>
