@@ -368,6 +368,9 @@ h5 span {
     padding-left: 15px;
     margin: 8px 0px 0px 0px;
 }
+.single-module .heading-module{
+  margin-bottom: 24px;
+}
 
 </style>
 
