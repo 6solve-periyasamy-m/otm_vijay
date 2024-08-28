@@ -251,7 +251,7 @@ h3 span.text {
   padding-left: 22px;
   margin-bottom:24px;
 }
-.single-module table {
+.single-module .details-module {
   max-width:586px;
 }
 h4 {
