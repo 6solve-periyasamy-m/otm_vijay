@@ -94,7 +94,7 @@
     /* height: 1000px; */
   }
   .pdf-individual-block {/*margin-left:-48px;*/}
-  .pdf-individual-block:first-child {margin-top:-50px;}
+  .pdf-individual-block:first-child {/*margin-top:-50px;*/}
   .pdf-individual-block .paragraph {
     max-width:700px!important;
   }
