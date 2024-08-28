@@ -57,7 +57,7 @@
 @endphp
 <?php 
   //var_dump(generateFontFaceCSS($fonts));
-  var_dump($itinerary);
+  //var_dump($itinerary);
   //var_dump(setting('customization.documentation.colors'));
   //{!! /*generateFontFaceCSS($fonts) */!!}
 ?>
@@ -514,7 +514,7 @@ h5 span {
                         @endphp
                     @endif
                     <h4>   
-                        <span class="text">{{ $item->name ?? 'Event Name Not Available' }}</span>
+                        <span class="text">{{ $item->name ?? '' }}</span>
                         <span class="mark"></span>
                     </h4> 
                     <div class="details-module">
