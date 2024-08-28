@@ -57,7 +57,7 @@
 @endphp
 <?php 
   //var_dump(generateFontFaceCSS($fonts));
-  var_dump($itinerary);
+  //var_dump($itinerary);
   //var_dump(setting('customization.documentation.colors'));
   //{!! /*generateFontFaceCSS($fonts) */!!}
 ?>
@@ -71,7 +71,7 @@
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 
     <style type="text/css">
-        <?php //include(public_path() . '/css/kpt.css') ?>
+        <?php include(public_path() . '/css/kpt.css') ?>
         {!! setting('customization.documentation.colors') !!}
     </style>
 
@@ -491,84 +491,74 @@ h5 span {
   </div>
   </section>
 
-<section class="pdf-individual-block">
-   <div class="row">
+  @if(!empty($itinerary->Event)) 
+    @php
+        $firstLoop = true;
+    @endphp
+    <section class="pdf-individual-block">
+        <div class="row">
+            @foreach($itinerary->Event as $item)
+                <div class="single-module">
+                    @if($firstLoop)
+                        <div class="heading-module">
+                            <h3>
+                                <span class="mark"></span>
+                                <span class="text">Event</span>
+                            </h3>
+                        </div>
+                        @php
+                            $firstLoop = false;
+                        @endphp
+                    @endif
+                    <h4>   
+                        <span class="text">{{ $item->name ?? 'Event Name Not Available' }}</span>
+                        <span class="mark"></span>
+                    </h4> 
+                    <div class="details-module">
+                        <table>
+                            <tbody>
+                                @if(!empty($item->details['Dates']))
+                                    <tr>
+                                        <td><strong>Dates:</strong></td>
+                                        <td>{{ $item->details['Dates'] }}</td>
+                                    </tr>
+                                @endif
 
-   <div class="heading-module">
-    <h3>
-     <span class="mark"></span>
-     <span class="text">Event</span>
-    </h3>
-   </div>
-   <div class="single-module">
-    <h4>   
-    <span class="text">British and Irish Lions Tour 2025</span>
-    <span class="mark"></span>
-    </h4> 
-    <div class="details-module">
-        <table>
-           <tbody>
-              <tr>            
-                <td><strong>Dates:</strong></td>
-                 <td>26 Jul 2025 to 26 Jul 2025</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Venue:</strong></td>
-                      <td>Melbourne Cricket Ground</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Ticket:</strong></td>
-                      <td>Test 2 - Wallabies v Lions - Category 1</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Quantity:</strong></td>
-                      <td>1</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Description:</strong></td>
-                      <td>Be there as the MCG comes alive with the second Test of the series, where The British & Irish Lions will clash with the Wallabies in this high-stakes Test match. The Wallabies beat the Lions
-                      in front of a full-house the last time the two teams played in Melbourne, and with the Lions competing on the hallowed MCG turf for the first time ever, this showdown promises a night of
-                      sporting drama. Don’t miss this epic battle!</td>
-                  </tr>                 
-           </tbody>
-        </table>
-    </div>
-   </div>
-   <div class="single-module">
-    <h4>   
-    <span class="text">British and Irish Lions Tour 2025</span>
-    <span class="mark"></span>
-    </h4> 
-    <div class="details-module">
-        <table>
-           <tbody>
-              <tr>            
-                <td><strong>Dates:</strong></td>
-                 <td>19 Jul 2025 to 19 Jul 2025</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Venue:</strong></td>
-                      <td>Suncorp Stadium</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Ticket:</strong></td>
-                      <td>Test 1 - Wallabies v Lions - Category 1</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Quantity:</strong></td>
-                      <td>2</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Description:</strong></td>
-                      <td>Be there as the Wallabies and The British & Irish Lions go head-to-head on Australian soil for the first time in 12 years! Last time the two teams played in Brisbane, the Lions clinched victory by just two points. Will history repeat itself or will the Wallabies claim revenge in front of another sell-out crowd? Brace yourself for a thrilling clash of sheer determination as these rugby giants battle for supremacy.</td>
-                  </tr>                 
-           </tbody>
-        </table>
-    </div>
- </div>
- 
-   </div>
-</section>
+                                @if(!empty($item->details['Venue']))
+                                    <tr>
+                                        <td><strong>Venue:</strong></td>
+                                        <td>{{ $item->details['Venue'] }}</td>
+                                    </tr>
+                                @endif
+
+                                @if(!empty($item->details['Ticket']))
+                                    <tr>
+                                        <td><strong>Ticket:</strong></td>
+                                        <td>{{ $item->details['Ticket'] }}</td>
+                                    </tr>
+                                @endif
+
+                                @if(!empty($item->details['Quantity']) && $item->details['Quantity'] > 0)
+                                    <tr>
+                                        <td><strong>Quantity:</strong></td>
+                                        <td>{{ $item->details['Quantity'] }}</td>
+                                    </tr>
+                                @endif
+
+                                @if(!empty($item->details['Description']))
+                                    <tr>
+                                        <td><strong>Description:</strong></td>
+                                        <td>{{ $item->details['Description'] }}</td>
+                                    </tr>
+                                @endif                 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </section>
+@endif
 
 @if(!empty($itinerary->items['Inclusion']))
   @php
