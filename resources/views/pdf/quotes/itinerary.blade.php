@@ -494,13 +494,13 @@ h5 span {
   </div>
   </section>
 
-  @if(!empty($itinerary->Event)) 
+  @if(!empty($itinerary->items['Event'])) 
     @php
         $firstLoop = true;
     @endphp
     <section class="pdf-individual-block">
         <div class="row">
-            @foreach($itinerary->Event as $item)
+            @foreach($itinerary->items['Event'] as $item)
                 <div class="single-module">
                     @if($firstLoop)
                         <div class="heading-module">
