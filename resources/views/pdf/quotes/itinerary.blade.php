@@ -659,8 +659,8 @@ h5 span {
    </div>
    
    
-   <div class="custom-details-module">     
-   style="margin-left:-20px;"
+   <div class="custom-details-module">  
+   <h2 style="margin-left:-20px;">Payment Details</h2>    
        <h6>Keith Prowse Travel PTY LTD</h6>      
   <table>
     <tr>
