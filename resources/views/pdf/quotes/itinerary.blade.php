@@ -249,8 +249,10 @@ h3 span.text {
 .single-module {
   margin-top: 24px;
   padding-left: 22px;
-  max-width: 586px;
   margin-bottom:24px;
+}
+.single-module table {
+  max-width:586px;
 }
 h4 {
     font-family: "PPNeueMontreal-Regular";
@@ -656,8 +658,9 @@ h5 span {
     </div>
    </div>
    
-   <h2>Payment Details</h2> 
+   
    <div class="custom-details-module">     
+   style="margin-left:-20px;"
        <h6>Keith Prowse Travel PTY LTD</h6>      
   <table>
     <tr>
