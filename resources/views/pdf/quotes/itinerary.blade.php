@@ -551,54 +551,58 @@ h5 span {
         </table>
     </div>
  </div>
- <div class="heading-module">
-    <h3>
-     <span class="mark"></span>
-     <span class="text">Inclusion</span>
-    </h3>
-   </div>
-   <div class="single-module">
-    <h4>   
-    <span class="text">British and Irish Lions Tour 2025</span>
-    <span class="mark"></span>
-    </h4> 
-    <div class="details-module">
-        <table>
-           <tbody>
-              <tr>            
-                <td><strong>Dates:</strong></td>
-                 <td>19 Jul 2025 to 19 Jul 2025</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Venue:</strong></td>
-                      <td>Suncorp Stadium</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Ticket:</strong></td>
-                      <td>Keith Prowse Travel Pre-Match Function - Test 1</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Quantity:</strong></td>
-                      <td>2</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Description:</strong></td>
-                      <td>???Join Keith Prowse Travel and fellow rugby enthusiasts for food and drinks on Caxton Street.
-                      Don't miss this opportunity to meet one of our rugby ambassadors!</td>
-                  </tr>    
-                  <tr>
-                      <td><strong></strong></td>
-                      <td>Inclusion</br>
-                          - 2.5 hour package pre-match</br>
-                          - Wine, Beer and Sparkling</br>
-                          - Food stations</td>
-                  </tr>               
-           </tbody>
-        </table>
-    </div>
-   </div>
+ 
    </div>
 </section>
+
+@if(!empty($itinerary->items['Inclusion']))
+<section class="pdf-individual-block">
+   <div class="row">
+      <div class="heading-module">
+         <h3>
+            <span class="mark"></span>
+            <span class="text">Inclusion</span>
+         </h3>
+      </div>
+
+      @foreach($itinerary->items['Inclusion'] as $item)
+      <div class="single-module">
+         <h4>
+            <span class="text">{{ $item->name }}</span>
+            <span class="mark"></span>
+         </h4>
+         <div class="details-module">
+            <table>
+               <tbody>
+                  <tr>
+                     <td><strong>Dates:</strong></td>
+                     <td>{{ $item->details['Dates'] }}</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Venue:</strong></td>
+                     <td>{{ $item->details['Venue'] }}</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Ticket:</strong></td>
+                     <td>{{ $item->details['Ticket'] }}</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Quantity:</strong></td>
+                     <td>{{ $item->details['Quantity'] }}</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Description:</strong></td>
+                     <td>{{ $item->details['Description'] }}</td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+      </div>
+      @endforeach
+   </div>
+</section>
+@endif
+
 @if(!empty($itinerary->finances))
 <section class="pdf-individual-block">
    <div class="row">
