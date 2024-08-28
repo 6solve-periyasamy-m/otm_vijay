@@ -414,24 +414,27 @@ h5 span {
         </div>       
     </div>
 
-    @if(!empty($evename))
-<div class="information-block">
+    
+    <div class="information-block">
     <table>
         <tr>
             <td><strong>Event:</strong></td>
-            <td>{!! $evename !!}</td>
+            <td>{!! !empty($evename) ? $evename : '' !!}</td>
             <td><strong>Total number of persons:</strong></td>
-            <td>{{ $evatra }} Adult(s)</td> 
+            <td>{{ !empty($evatra) ? $evatra : '0' }} Adult(s)</td> 
         </tr>
         <tr>
             <td><strong>Travel dates:</strong></td>
-            <td>{{ date('d F Y', strtotime($itinerary->start)) }} - {{ date('d F Y', strtotime($itinerary->end)) }}</td>
+            <td>
+                {{ !empty($itinerary->start) ? date('d F Y', strtotime($itinerary->start)) : '' }} - 
+                {{ !empty($itinerary->end) ? date('d F Y', strtotime($itinerary->end)) : '' }}
+            </td>
             <td><strong>Lead guest:</strong></td>
-            <td>{{ $cusname }}</td>
+            <td>{{ !empty($cusname) ? $cusname : '' }}</td>
         </tr>
     </table>
 </div>
-@endif
+
 <div class="heading-2">
 	  <h2>Package inclusions</h2> 
   </div>
