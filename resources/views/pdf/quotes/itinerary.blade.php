@@ -426,18 +426,27 @@ h5 span {
     </table>
 </div>
 @endif
-
-@if(!empty($itinerary->items['Accommodation']))
-  <div class="heading-2">
+<div class="heading-2">
 	  <h2>Package inclusions</h2> 
   </div>
-  <div class="heading-module">
-    <h3>
-     <span class="mark"></span>
-     <span class="text">Accommodation</span>
-    </h3>
-  </div>
+@if(!empty($itinerary->items['Accommodation']))
+  @php
+      $firstLoop = true;
+  @endphp
+    
   @foreach($itinerary->items['Accommodation'] as $accommodation)
+
+      @if($firstLoop)
+          <div class="heading-module">
+              <h3>
+                  <span class="mark"></span>
+                  <span class="text">Accommodation</span>
+              </h3>
+          </div>
+          @php
+              $firstLoop = false;
+          @endphp
+      @endif
     <div class="single-module">
         <h4>   
             <span class="text">{{ $accommodation->name }}</span>
@@ -556,15 +565,22 @@ h5 span {
 </section>
 
 @if(!empty($itinerary->items['Inclusion']))
+  @php
+    $firstLoop = true;
+  @endphp
 <section class="pdf-individual-block">
    <div class="row">
-      <div class="heading-module">
-         <h3>
-            <span class="mark"></span>
-            <span class="text">Inclusion</span>
-         </h3>
-      </div>
-
+   @if($firstLoop)
+    <div class="heading-module">
+        <h3>
+          <span class="mark"></span>
+          <span class="text">Inclusion</span>
+        </h3>
+    </div>
+    @php
+        $firstLoop = false;
+      @endphp
+    @endif
       @foreach($itinerary->items['Inclusion'] as $item)
       <div class="single-module">
          <h4>
