@@ -436,6 +436,7 @@ h5 span {
     
   @foreach($itinerary->items['Accommodation'] as $accommodation)
 
+    <div class="single-module">
       @if($firstLoop)
           <div class="heading-module">
               <h3>
@@ -447,7 +448,6 @@ h5 span {
               $firstLoop = false;
           @endphp
       @endif
-    <div class="single-module">
         <h4>   
             <span class="text">{{ $accommodation->name }}</span>
             <span class="mark"></span>
@@ -570,19 +570,20 @@ h5 span {
   @endphp
 <section class="pdf-individual-block">
    <div class="row">
-   @if($firstLoop)
-    <div class="heading-module">
-        <h3>
-          <span class="mark"></span>
-          <span class="text">Inclusion</span>
-        </h3>
-    </div>
-    @php
-        $firstLoop = false;
-      @endphp
-    @endif
+   
       @foreach($itinerary->items['Inclusion'] as $item)
       <div class="single-module">
+      @if($firstLoop)
+        <div class="heading-module">
+            <h3>
+              <span class="mark"></span>
+              <span class="text">Inclusion</span>
+            </h3>
+        </div>
+        @php
+            $firstLoop = false;
+          @endphp
+        @endif
          <h4>
             <span class="text">{{ $item->name }}</span>
             <span class="mark"></span>
