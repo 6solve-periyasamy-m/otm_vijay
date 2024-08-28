@@ -105,7 +105,7 @@
     margin-top: 28px!important;
     margin-bottom: 28px!important;
   }
-  .single-module {
+  .single-module,.custom-details-module {
         page-break-inside: avoid;
     } 
   #static-pages {margin-top:65px;}
