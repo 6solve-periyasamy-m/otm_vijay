@@ -514,7 +514,7 @@ h5 span {
                         @endphp
                     @endif
                     <h4>   
-                        <span class="text">{{ $item->name ?? '' }}</span>
+                        <span class="text">{!! $item->name ?? $evename !!}</span>
                         <span class="mark"></span>
                     </h4> 
                     <div class="details-module">
