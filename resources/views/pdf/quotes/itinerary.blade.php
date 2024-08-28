@@ -370,6 +370,7 @@ h5 span {
 }
 .single-module .heading-module{
   margin-bottom: 24px;
+  margin-left: -20px;
 }
 
 </style>
@@ -627,8 +628,9 @@ h5 span {
 <section class="pdf-individual-block">
    <div class="row">
    
-   <h2>Payment summary</h2> 
+   
    <div class="single-module">
+   <h2 style="margin-left:-20px;">Payment summary</h2> 
    <h3>
      <span class="mark"></span>
      <span class="text">Order total</span>
