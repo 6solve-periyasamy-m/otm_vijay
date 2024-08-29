@@ -631,7 +631,7 @@ h5 span {
                   </tr>
                   <tr>
                      <td><strong>Description:</strong></td>
-                     <td>{{ $item->details['Description'] }}</td>
+                     <td>{!! $item->details['Description'] !!}</td>
                   </tr>
                </tbody>
             </table>
