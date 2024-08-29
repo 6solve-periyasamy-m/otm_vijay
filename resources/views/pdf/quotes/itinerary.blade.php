@@ -1,5 +1,6 @@
 @php
     use Illuminate\Support\Facades\File;
+    use Illuminate\Support\Facades\DB;
     /**
      * @var \App\Repository\Storage\Itinerary\Itinerary $itinerary
      * @var string $type
@@ -57,23 +58,31 @@
 @endphp
 <?php 
   //var_dump(generateFontFaceCSS($fonts));
-  var_dump($itinerary);
+  //var_dump($itinerary);
   //var_dump(setting('customization.documentation.colors'));
   //{!! /*generateFontFaceCSS($fonts) */!!}
-  use Illuminate\Support\Facades\DB;
+  $consul_name = '';
+  $consul_mail = '';
+ 
+  $url = $_SERVER['REQUEST_URI'];
+  $parsedUrl = parse_url($url);
+  parse_str($parsedUrl['query'], $queryParams);
+  $id = $parsedUrl['path']; 
+  $id = explode('/', $id)[3];
 
-// Get the details of the row where id = 3
-$rowDetails = DB::table('quotes')->where('id', 9)->first();
+  $rowDetails = DB::table('quotes')->where('id', $id)->first();
 
-// Check if data was found
-if ($rowDetails) {
-    // Loop through the data and print each field and its value
-    foreach ($rowDetails as $field => $value) {
-        echo $field . ': ' . $value . '<br>';
-    }
-} else {
-    echo 'No data found for id = 3';
-}
+  if ($rowDetails) {
+    
+    $consultantId = $rowDetails->consultant_id;
+
+    $userDetails = DB::table('users')->where('id', $consultantId)->first();
+
+    if ($userDetails) {
+        $consul_name = $userDetails->name ;
+        $consul_mail = $userDetails->email ;
+    } 
+  } 
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -419,8 +428,8 @@ h5 span {
                 </div>
                 <div class="agent-details">
                     <h6>AGENT DETAILS</h6>
-                    <p>Name: <span>{{$itinerary->consultant?->name}}</span></p>
-                    <p>Email: <span>{{$itinerary->consultant?->email}}</span><p>
+                    <p>Name: <span>{{$consul_name}}</span></p>
+                    <p>Email: <span>{{$consul_mail}}</span><p>
                     <p>Date created: <span>{{ $dacre }}</span><p>
                 </div>
             </div>  
