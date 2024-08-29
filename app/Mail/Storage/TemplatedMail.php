@@ -9,20 +9,25 @@ use Exception;
 use Faker\Factory as Faker;
 use Faker\Generator;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 use Log;
 use Settings;
 use Validator;
-
 
 abstract class TemplatedMail
 {
     protected string|null $code;
     protected Generator $faker;
+    protected string $email;
+    protected string $name;
 
     public function __construct(string|null $code = null)
     {
         $this->code = $code;
         $this->faker = Faker::create();
+        $user = Auth::user();
+        $this->email = $user->email;
+        $this->name = $user->name;
     }
 
     public function getName(): ?string
@@ -64,7 +69,8 @@ abstract class TemplatedMail
 
     public function getTemplatedMailable($model = null, array $attachments = []): TemplatedMailable
     {
-        $template = new TemplatedMailable($this->getFormattedSubject($model), $this->getFormattedBody($model));
+
+        $template = new TemplatedMailable($this->getFormattedSubject($model), $this->getFormattedBody($model), $this->email, $this->name);
         foreach ($attachments as $attachment) {
             $template->attachData($attachment->data, $attachment->filename, $attachment->opts);
         }
@@ -103,6 +109,7 @@ abstract class TemplatedMail
         }
         try {
             if (empty(config('mail.from.address'))) return false;
+
             $mail = Mail::to($email);
             if (config('mail.bcc') !== null) {
                 $mail->bcc(config('mail.bcc'));
