@@ -9,8 +9,7 @@
 
     //pdf variables
     $headlogo = svg_to_b64('images/pdf_assets/images/KeithProwse_Logo.png') ;
-    $clname ='Keith Prowse Travel';
-    $clmail ='travel@kpt.com.au';
+   
     $dacre = \Carbon\Carbon::parse($itinerary->booker->customer->created_at)->format('d F Y');
 
     $reference = $itinerary->reference;
