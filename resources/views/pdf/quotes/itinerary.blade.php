@@ -404,8 +404,6 @@ h5 span {
 </head>
 
 <body class="body" style="margin: 0;">
-@include('partials.pdf.kpt.logos', ['type' => $type,])
-@include('partials.pdf.kpt.header.new')
 
 <main>
 <section class="pdf-individual-block">
