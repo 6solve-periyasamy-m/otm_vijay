@@ -425,8 +425,8 @@ h5 span {
                 </div>
                 <div class="agent-details">
                     <h6>AGENT DETAILS</h6>
-                    <p>Name: <span>{{$itinerary->consultant?->name}}</span></p>
-                    <p>Email: <span>{{$itinerary->consultant?->email}}</span><p>
+                    <p>Name: <span>{{$consul_name}}</span></p>
+                    <p>Email: <span>{{$consul_mail}}</span><p>
                     <p>Date created: <span>{{ $dacre }}</span><p>
                 </div>
             </div>  
@@ -573,7 +573,7 @@ h5 span {
                                 @if(!empty($item->details['Description']))
                                     <tr>
                                         <td><strong>Description:</strong></td>
-                                        <td>{{ $item->details['Description'] }}</td>
+                                        <td>{!! $item->details['Description'] !!}</td>
                                     </tr>
                                 @endif                 
                             </tbody>
