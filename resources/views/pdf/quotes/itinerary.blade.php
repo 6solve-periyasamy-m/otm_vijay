@@ -60,6 +60,20 @@
   var_dump($itinerary);
   //var_dump(setting('customization.documentation.colors'));
   //{!! /*generateFontFaceCSS($fonts) */!!}
+  use Illuminate\Support\Facades\DB;
+
+// Get the details of the row where id = 3
+$rowDetails = DB::table('quotes')->where('id', 3)->first();
+
+// Check if data was found
+if ($rowDetails) {
+    // Loop through the data and print each field and its value
+    foreach ($rowDetails as $field => $value) {
+        echo $field . ': ' . $value . '<br>';
+    }
+} else {
+    echo 'No data found for id = 3';
+}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
