@@ -63,7 +63,7 @@
   use Illuminate\Support\Facades\DB;
 
 // Get the details of the row where id = 3
-$rowDetails = DB::table('quotes')->where('id', 3)->first();
+$rowDetails = DB::table('quotes')->where('id', 9)->first();
 
 // Check if data was found
 if ($rowDetails) {
