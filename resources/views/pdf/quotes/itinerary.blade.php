@@ -13,7 +13,7 @@
     $dacre = \Carbon\Carbon::parse($itinerary->booker->customer->created_at)->format('d F Y');
 
     $reference = $itinerary->reference;
-    $cusname = $itinerary->booker->customer->first_name . $itinerary->booker->customer->last_name;
+    $cusname = $itinerary->booker->customer->first_name .' '. $itinerary->booker->customer->last_name;
     $cusmail = $itinerary->booker->customer->email_address;
 
     $eveimg =$itinerary->image;
@@ -381,6 +381,8 @@ h5 span {
 </head>
 
 <body class="body" style="margin: 0;">
+@include('partials.pdf.kpt.logos', ['type' => $type,])
+@include('partials.pdf.kpt.header.new')
 
 <main>
 <section class="pdf-individual-block">
