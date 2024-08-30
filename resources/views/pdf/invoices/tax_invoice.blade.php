@@ -217,7 +217,7 @@
             max-width: 112px;
             padding-right: 32px;
         }
-        .details tr td p {
+        .details tr td:first-child p, .details tr td:nth-child(2) p {
             font-family: 'Lato', sans-serif;
             font-weight: 400;
             font-size: 10px;
@@ -225,7 +225,13 @@
             padding: 0px 0px 0px 20px !important;
             vertical-align: top;
         }
-      
+        .details tr td {
+            font-family: 'Lato', sans-serif;
+            font-weight: 400;
+            font-size: 10px;
+            line-height: 17px;
+            vertical-align: top;
+        }
         .details tr td span {font-weight:500;}
         .details tr td:last-child {
             background-color: #F9F4EE;
