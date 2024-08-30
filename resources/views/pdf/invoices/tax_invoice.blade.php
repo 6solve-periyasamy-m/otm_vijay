@@ -1,6 +1,6 @@
 @php
     /** @var \App\Models\Order\Invoice\Invoice $invoice */
-    var_dump($invoice);
+    //var_dump($invoice);
 @endphp
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -382,18 +382,17 @@
         <tr>
             <td>
             <p class="name">{{ $invoice->lead->full_name }}</p>
-            <p class="address">85 William St, Darlinghurst
-            NSW 2010 </p>
+            <p class="address">{{$invoice->lead->address_line_1}} ,{{$invoice->lead->address_line_2}} ,{{$invoice->lead->town}} ,{{$invoice->lead->region}} ,{{$invoice->lead->country}} ,{{$invoice->lead->postcode}} </p>
             </td>
             <td>
-            <p class="event-name"><span>Event Name:</span> Lorem ipsum</p>
+            <p class="event-name"><span>Event Name:</span> {{ $invoice->event }}</p>
             <p class="event-name"> <span>Email:</span> Lorem ipsum </p>
             </td>
             <td>
             <p><span>Invoice No:</span> {{ $invoice->invoice_number }}</p>
             <p><span>Invoice Date:</span> {{ date('d M Y', strtotime($invoice->generated)) }}</p>
             <p><span>Number of Pax:</span> {{count($invoice->customers)}}</p>
-            </p><span>Due Date:</span> 05/09/2024</p>
+            </p><span>Due Date:</span> {{$invoice->due_date}}</p>
             </td>
         </tr>
     </table>
@@ -441,12 +440,13 @@
         </tr>
         <tr>
             <td>
-                <h4>Bank Transfer</h4>
+                <!-- <h4>Bank Transfer</h4>
                 <p>Example bank transfer details.</p>
                 <p>IBAN: Test formatting</p>
                 <br>
                 <p>1. ABC</p>
-                <p>2. DEF</p>
+                <p>2. DEF</p> -->
+                {!! setting('company.bank_transfer', '-')  !!}
                 <p class="terms-conditions">
                     <a href="#">Terms & conditions</a>
                 </p>
