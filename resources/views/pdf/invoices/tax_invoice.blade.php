@@ -422,6 +422,7 @@
         @endphp
 
         @foreach($billables as $b_index => $billable)
+            @continue($billable->isGroupedBase())
             <tr>
                 <td>{{$counter}}</td>
                 <td>{{$billable->description}}</td>
