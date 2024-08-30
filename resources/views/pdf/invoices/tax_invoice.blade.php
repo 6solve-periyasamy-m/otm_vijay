@@ -331,7 +331,7 @@
         font-weight:400!important;
         }       
        .payment-options td:last-child h3 span:first-child {padding-left:15px;}
-       .payment-options td:last-child h3 span {padding-top:20px;padding-bottom:20px;}
+       .payment-options td:last-child h3 span {padding-top:25px;padding-bottom:25px;}
        .payment-options td:last-child h3 span {
         font-family: 'Lato', sans-serif;
         font-size: 16px;
