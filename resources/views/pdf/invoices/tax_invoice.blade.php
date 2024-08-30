@@ -4,7 +4,6 @@
     $due_date = 'No due';
    //if (!sizeof($invoice->installments) === 0)
     foreach($invoice->installments as $installment) {
-    var_dump($installment->paid);
         if (!$installment->paid) {
             $due_date = date('d M Y', strtotime($installment->due));
             break; 
