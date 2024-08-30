@@ -362,8 +362,8 @@
         <tr>
             <td class="left-column"> <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('https://qa.octopustravelmatrix.com/images/pdf_assets/images/KeithProwse_Logo.png'))?>"  alt="logo-ch"></td>
             <td class="right-column">
-                <p>Level 7/99 Mount St, <br>North Sydney NSW 2060<br><br>
-                VAT/ABN: 31 003 276 775</p>
+                <p>{{$invoice->brand->address_line_1}} <br>{{$invoice->brand->address_line_2}}, {{$invoice->brand->town}}, {{$invoice->brand->region}}, {{$invoice->brand->postcode}}<br><br>
+                {{$invoice->brand->vat_code}}</p>
             </td>
         </tr>
     </table>
@@ -381,7 +381,7 @@
         </tr>
         <tr>
             <td>
-            <p class="name">John Smith</p>
+            <p class="name">{{ $invoice->lead->full_name }}</p>
             <p class="address">85 William St, Darlinghurst
             NSW 2010 </p>
             </td>
@@ -390,9 +390,9 @@
             <p class="event-name"> <span>Email:</span> Lorem ipsum </p>
             </td>
             <td>
-            <p><span>Invoice No:</span> OTM000DIDT</p>
-            <p><span>Invoice Date:</span> 25/08/2024</p>
-            <p><span>Number of Pax:</span> 1</p>
+            <p><span>Invoice No:</span> {{ $invoice->invoice_number }}</p>
+            <p><span>Invoice Date:</span> {{ date('d M Y', strtotime($invoice->generated)) }}</p>
+            <p><span>Number of Pax:</span> {{count($invoice->customers)}}</p>
             </p><span>Due Date:</span> 05/09/2024</p>
             </td>
         </tr>
@@ -406,7 +406,21 @@
             <th><h2>Description</h2></th>
             <th><h2>Qty</h2></th>
         </tr>
-        <tr>
+        @php
+            $billables = $invoice->repository->getItemsByQuantity(); 
+            $counter = 1;
+        @endphp
+
+        @foreach($billables as $b_index => $billable)
+            <tr>
+                <td>{{$counter}}</td>
+                <td>{{$billable->description}}</td>
+                <td>{{$billable->getQuantity()}}</td>
+            </tr>
+
+        @php $counter++; @endphp
+        @endforeach
+        <!-- <tr>
             <td>1</td>
             <td>Single Occupancy Surcharge</td>
             <td>1</td>
@@ -415,7 +429,7 @@
             <td>2</td>
             <td>Carlton Hotel Singapore (19/09/2024 15:00 to 23/09/2024 11:00) (Double 1 Room, Bed & Breakfast)</td>
             <td>1</td>
-        </tr>
+        </tr> -->
     </table>
     </div>
 
@@ -438,11 +452,11 @@
                 </p>
             </td>
             <td>
-                <p><span>Invoice Total:</span> <span>$20.00</span></p>
-                <p><span>GST (included):</span> <span>$0.00</span></p>
-                <p><span>Received:</span> <span>$20.00</span></p>
-                <p><span>Balance Due:</span> <span>$20.00</span></p>
-                <h3><span>GRAND TOTAL:</span> <span>$20.00</span></h3>
+                <p><span>Invoice Total:</span> <span> {{f_currency($invoice->total_cost)}}</span></p>
+                <p><span>GST (included):</span> <span>{{f_currency($invoice->tax_amount)}}</span></p>
+                <p><span>Received:</span> <span>{{f_currency($invoice->total_paid)}}</span></p>
+                <p><span>Balance Due:</span> <span>{{f_currency($invoice->total_cost - $invoice->total_paid)}}</span></p>
+                <h3><span>GRAND TOTAL:</span> <span>{{f_currency($invoice->total_cost + $invoice->tax_amount)}}</span></h3>
             </td>
         </tr>
     </table>
