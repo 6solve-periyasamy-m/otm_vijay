@@ -326,12 +326,12 @@
         background: #F9F4EE;
         width: 100%;
         margin-top:30px;
-        }
+        height:40px;        }
        .details tr td p span:last-child {
         font-weight:400!important;
         }       
        .payment-options td:last-child h3 span:first-child {padding-left:15px;}
-       .payment-options td:last-child h3 span {padding-top:25px;padding-bottom:25px;margin-top:10px;}
+       .payment-options td:last-child h3 span {padding-top:25px;padding-bottom:25px;}
        .payment-options td:last-child h3 span {
         font-family: 'Lato', sans-serif;
         font-size: 16px;
