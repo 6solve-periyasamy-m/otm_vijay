@@ -44,6 +44,8 @@ class Rooming extends Component
             $this->booking->lead_traveller_id = $this->lead->id;
             $this->booking->save();
             $this->addTraveller();
+        } else {
+            $this->renewRooming();
         }
         $this->validateRoomCount();
     }
@@ -53,8 +55,15 @@ class Rooming extends Component
         $this->booking = Booking::find($this->booking->id);
         $this->lead = $this->booking->leadTraveller;
         $this->tour = Tour::find($this->tour->id);
+        /** @noinspection PhpSillyAssignmentInspection Seems to fix an issue with rooming caching */
         $this->rooms = $this->rooms;
-        //$this->renewRooming();
+    }
+
+    private function renewRooming(): void
+    {
+        foreach ($this->booking->groups as $group) {
+            $this->rooms[] = ['room' => $group->accommodation()->first()?->accommodation_inventory_tour_id, 'travellers' => $group->travellers()->count(),];
+        }
     }
 
     public function getTravellerCount(): int
