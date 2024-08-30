@@ -323,7 +323,6 @@
          display:inline-block;
         }
        .payment-options td:last-child h3 {
-        height: 60px;
         background: #F9F4EE;
         width: 100%;
         margin-top:30px;
