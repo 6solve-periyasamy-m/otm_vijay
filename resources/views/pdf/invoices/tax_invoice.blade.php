@@ -368,7 +368,7 @@
         font-weight: 400;
        }
        .footer img {padding-left:20px;}
-       .whole-items-cls {min-height:360px;}
+       .whole-items-cls {min-height:496px;}
     </style>
     <title>Invoice - {{ $invoice->booking_reference }}</title>
 </head>
