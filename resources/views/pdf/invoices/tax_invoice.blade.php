@@ -301,7 +301,7 @@
             font-size: 10px;
             line-height: 12px;
             margin-bottom: 12px;
-       }
+        }
        .payment-options tr td {
             font-family: 'Lato', sans-serif;
             font-weight: 400;
@@ -310,24 +310,27 @@
             font-size: 10px;
             line-height: 12px;
             width:398px;
-       }
+        }
        .payment-options tr td p.terms-conditions {
             margin-top: 30px !important;
             text-decoration: underline;
-       }
+         }
        .payment-options td:last-child p {
            padding-left:15px!important; 
-       }
+        }
        .payment-options td span:first-child {
          width:200px;
          display:inline-block;
-       }
+        }
        .payment-options td:last-child h3 {
         height: 66px;
         background: #F9F4EE;
         width: 100%;
         margin-top:30px;
-       }
+        }
+       .details tr td p span:last-child {
+        font-weight:400!important;
+        }       
        .payment-options td:last-child h3 span:first-child {padding-left:15px;}
        .payment-options td:last-child h3 span {padding-top:15px;}
        .payment-options td:last-child h3 span {
