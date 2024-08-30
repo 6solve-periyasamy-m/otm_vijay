@@ -1,5 +1,6 @@
 @php
     use Illuminate\Support\Facades\File;
+    use Illuminate\Support\Facades\DB;
     /**
      * @var \App\Repository\Storage\Itinerary\Itinerary $itinerary
      * @var string $type
@@ -8,12 +9,11 @@
 
     //pdf variables
     $headlogo = svg_to_b64('images/pdf_assets/images/KeithProwse_Logo.png') ;
-    $clname ='Keith Prowse Travel';
-    $clmail ='travel@kpt.com.au';
+   
     $dacre = \Carbon\Carbon::parse($itinerary->booker->customer->created_at)->format('d F Y');
 
     $reference = $itinerary->reference;
-    $cusname = $itinerary->booker->customer->first_name . $itinerary->booker->customer->last_name;
+    $cusname = $itinerary->booker->customer->first_name .' '. $itinerary->booker->customer->last_name;
     $cusmail = $itinerary->booker->customer->email_address;
 
     $eveimg =$itinerary->image;
@@ -57,9 +57,31 @@
 @endphp
 <?php 
   //var_dump(generateFontFaceCSS($fonts));
-  //var_dump($itinerary->items);
+  //var_dump($itinerary);
   //var_dump(setting('customization.documentation.colors'));
   //{!! /*generateFontFaceCSS($fonts) */!!}
+  $consul_name = '';
+  $consul_mail = '';
+ 
+  $url = $_SERVER['REQUEST_URI'];
+  $parsedUrl = parse_url($url);
+  parse_str($parsedUrl['query'], $queryParams);
+  $id = $parsedUrl['path']; 
+  $id = explode('/', $id)[3];
+
+  $rowDetails = DB::table('quotes')->where('id', $id)->first();
+
+  if ($rowDetails) {
+    
+    $consultantId = $rowDetails->consultant_id;
+
+    $userDetails = DB::table('users')->where('id', $consultantId)->first();
+
+    if ($userDetails) {
+        $consul_name = $userDetails->name ;
+        $consul_mail = $userDetails->email ;
+    } 
+  } 
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -71,7 +93,7 @@
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 
     <style type="text/css">
-        <?php //include(public_path() . '/css/kpt.css') ?>
+        <?php include(public_path() . '/css/kpt.css') ?>
         {!! setting('customization.documentation.colors') !!}
     </style>
 
@@ -93,8 +115,8 @@
     /* margin: auto; */
     /* height: 1000px; */
   }
-  .pdf-individual-block {margin-left:-48px;}
-  .pdf-individual-block:first-child {margin-top:-50px;}
+  .pdf-individual-block {/*margin-left:-48px;*/}
+  .pdf-individual-block:first-child {/*margin-top:-50px;*/}
   .pdf-individual-block .paragraph {
     max-width:700px!important;
   }
@@ -105,7 +127,7 @@
     margin-top: 28px!important;
     margin-bottom: 28px!important;
   }
-  .single-module {
+  .single-module,.custom-details-module {
         page-break-inside: avoid;
     } 
   #static-pages {margin-top:65px;}
@@ -249,8 +271,10 @@ h3 span.text {
 .single-module {
   margin-top: 24px;
   padding-left: 22px;
-  max-width: 586px;
   margin-bottom:24px;
+}
+.single-module .details-module {
+  max-width:586px;
 }
 h4 {
     font-family: "PPNeueMontreal-Regular";
@@ -368,6 +392,10 @@ h5 span {
     padding-left: 15px;
     margin: 8px 0px 0px 0px;
 }
+.single-module .heading-module{
+  margin-bottom: 24px;
+  margin-left: -20px;
+}
 
 </style>
 
@@ -397,8 +425,8 @@ h5 span {
                 </div>
                 <div class="agent-details">
                     <h6>AGENT DETAILS</h6>
-                    <p>Name: <span>{{$itinerary->consultant?->name}}</span></p>
-                    <p>Email: <span>{{$itinerary->consultant?->email}}</span><p>
+                    <p>Name: <span>{{$consul_name}}</span></p>
+                    <p>Email: <span>{{$consul_mail}}</span><p>
                     <p>Date created: <span>{{ $dacre }}</span><p>
                 </div>
             </div>  
@@ -408,37 +436,49 @@ h5 span {
         </div>       
     </div>
 
-    @if(!empty($evename))
-<div class="information-block">
+    
+    <div class="information-block">
     <table>
         <tr>
             <td><strong>Event:</strong></td>
-            <td>{!! $evename !!}</td>
+            <td>{!! !empty($evename) ? $evename : '' !!}</td>
             <td><strong>Total number of persons:</strong></td>
-            <td>{{ $evatra }} Adult(s)</td> 
+            <td>{{ !empty($evatra) ? $evatra : '0' }} Adult(s)</td> 
         </tr>
         <tr>
             <td><strong>Travel dates:</strong></td>
-            <td>{{ date('d F Y', strtotime($itinerary->start)) }} - {{ date('d F Y', strtotime($itinerary->end)) }}</td>
+            <td>
+                {{ !empty($itinerary->start) ? date('d F Y', strtotime($itinerary->start)) : '' }} - 
+                {{ !empty($itinerary->end) ? date('d F Y', strtotime($itinerary->end)) : '' }}
+            </td>
             <td><strong>Lead guest:</strong></td>
-            <td>{{ $cusname }}</td>
+            <td>{{ !empty($cusname) ? $cusname : '' }}</td>
         </tr>
     </table>
 </div>
-@endif
 
-@if(!empty($itinerary->items['Accommodation']))
-  <div class="heading-2">
+<div class="heading-2">
 	  <h2>Package inclusions</h2> 
   </div>
-  <div class="heading-module">
-    <h3>
-     <span class="mark"></span>
-     <span class="text">Accommodation</span>
-    </h3>
-  </div>
+@if(!empty($itinerary->items['Accommodation']))
+  @php
+      $firstLoop = true;
+  @endphp
+    
   @foreach($itinerary->items['Accommodation'] as $accommodation)
+
     <div class="single-module">
+      @if($firstLoop)
+          <div class="heading-module">
+              <h3>
+                  <span class="mark"></span>
+                  <span class="text">Accommodation</span>
+              </h3>
+          </div>
+          @php
+              $firstLoop = false;
+          @endphp
+      @endif
         <h4>   
             <span class="text">{{ $accommodation->name }}</span>
             <span class="mark"></span>
@@ -476,135 +516,138 @@ h5 span {
   </div>
   </section>
 
+  @if(!empty($itinerary->items['Event'])) 
+    @php
+        $firstLoop = true;
+    @endphp
+    <section class="pdf-individual-block">
+        <div class="row">
+            @foreach($itinerary->items['Event'] as $item)
+                <div class="single-module">
+                    @if($firstLoop)
+                        <div class="heading-module">
+                            <h3>
+                                <span class="mark"></span>
+                                <span class="text">Event</span>
+                            </h3>
+                        </div>
+                        @php
+                            $firstLoop = false;
+                        @endphp
+                    @endif
+                    <h4>   
+                        <span class="text">{!! $item->name ?? $evename !!}</span>
+                        <span class="mark"></span>
+                    </h4> 
+                    <div class="details-module">
+                        <table>
+                            <tbody>
+                                @if(!empty($item->details['Dates']))
+                                    <tr>
+                                        <td><strong>Dates:</strong></td>
+                                        <td>{{ $item->details['Dates'] }}</td>
+                                    </tr>
+                                @endif
+
+                                @if(!empty($item->details['Venue']))
+                                    <tr>
+                                        <td><strong>Venue:</strong></td>
+                                        <td>{{ $item->details['Venue'] }}</td>
+                                    </tr>
+                                @endif
+
+                                @if(!empty($item->details['Ticket']))
+                                    <tr>
+                                        <td><strong>Ticket:</strong></td>
+                                        <td>{{ $item->details['Ticket'] }}</td>
+                                    </tr>
+                                @endif
+
+                                @if(!empty($item->details['Quantity']) && $item->details['Quantity'] > 0)
+                                    <tr>
+                                        <td><strong>Quantity:</strong></td>
+                                        <td>{{ $item->details['Quantity'] }}</td>
+                                    </tr>
+                                @endif
+
+                                @if(!empty($item->details['Description']))
+                                    <tr>
+                                        <td><strong>Description:</strong></td>
+                                        <td>{!! $item->details['Description'] !!}</td>
+                                    </tr>
+                                @endif                 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </section>
+@endif
+
+@if(!empty($itinerary->items['Inclusion']))
+  @php
+    $firstLoop = true;
+  @endphp
 <section class="pdf-individual-block">
    <div class="row">
-
-   <div class="heading-module">
-    <h3>
-     <span class="mark"></span>
-     <span class="text">Event</span>
-    </h3>
-   </div>
-   <div class="single-module">
-    <h4>   
-    <span class="text">British and Irish Lions Tour 2025</span>
-    <span class="mark"></span>
-    </h4> 
-    <div class="details-module">
-        <table>
-           <tbody>
-              <tr>            
-                <td><strong>Dates:</strong></td>
-                 <td>26 Jul 2025 to 26 Jul 2025</td>
+   
+      @foreach($itinerary->items['Inclusion'] as $item)
+      <div class="single-module">
+      @if($firstLoop)
+        <div class="heading-module">
+            <h3>
+              <span class="mark"></span>
+              <span class="text">Inclusion</span>
+            </h3>
+        </div>
+        @php
+            $firstLoop = false;
+          @endphp
+        @endif
+         <h4>
+            <span class="text">{{ $item->name }}</span>
+            <span class="mark"></span>
+         </h4>
+         <div class="details-module">
+            <table>
+               <tbody>
+                  <tr>
+                     <td><strong>Dates:</strong></td>
+                     <td>{{ $item->details['Dates'] }}</td>
                   </tr>
                   <tr>
-                      <td><strong>Venue:</strong></td>
-                      <td>Melbourne Cricket Ground</td>
+                     <td><strong>Venue:</strong></td>
+                     <td>{{ $item->details['Venue'] }}</td>
                   </tr>
                   <tr>
-                      <td><strong>Ticket:</strong></td>
-                      <td>Test 2 - Wallabies v Lions - Category 1</td>
+                     <td><strong>Ticket:</strong></td>
+                     <td>{{ $item->details['Ticket'] }}</td>
                   </tr>
                   <tr>
-                      <td><strong>Quantity:</strong></td>
-                      <td>1</td>
+                     <td><strong>Quantity:</strong></td>
+                     <td>{{ $item->details['Quantity'] }}</td>
                   </tr>
                   <tr>
-                      <td><strong>Description:</strong></td>
-                      <td>Be there as the MCG comes alive with the second Test of the series, where The British & Irish Lions will clash with the Wallabies in this high-stakes Test match. The Wallabies beat the Lions
-                      in front of a full-house the last time the two teams played in Melbourne, and with the Lions competing on the hallowed MCG turf for the first time ever, this showdown promises a night of
-                      sporting drama. Don’t miss this epic battle!</td>
-                  </tr>                 
-           </tbody>
-        </table>
-    </div>
-   </div>
-   <div class="single-module">
-    <h4>   
-    <span class="text">British and Irish Lions Tour 2025</span>
-    <span class="mark"></span>
-    </h4> 
-    <div class="details-module">
-        <table>
-           <tbody>
-              <tr>            
-                <td><strong>Dates:</strong></td>
-                 <td>19 Jul 2025 to 19 Jul 2025</td>
+                     <td><strong>Description:</strong></td>
+                     <td>{!! $item->details['Description'] !!}</td>
                   </tr>
-                  <tr>
-                      <td><strong>Venue:</strong></td>
-                      <td>Suncorp Stadium</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Ticket:</strong></td>
-                      <td>Test 1 - Wallabies v Lions - Category 1</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Quantity:</strong></td>
-                      <td>2</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Description:</strong></td>
-                      <td>Be there as the Wallabies and The British & Irish Lions go head-to-head on Australian soil for the first time in 12 years! Last time the two teams played in Brisbane, the Lions clinched victory by just two points. Will history repeat itself or will the Wallabies claim revenge in front of another sell-out crowd? Brace yourself for a thrilling clash of sheer determination as these rugby giants battle for supremacy.</td>
-                  </tr>                 
-           </tbody>
-        </table>
-    </div>
- </div>
- <div class="heading-module">
-    <h3>
-     <span class="mark"></span>
-     <span class="text">Inclusion</span>
-    </h3>
-   </div>
-   <div class="single-module">
-    <h4>   
-    <span class="text">British and Irish Lions Tour 2025</span>
-    <span class="mark"></span>
-    </h4> 
-    <div class="details-module">
-        <table>
-           <tbody>
-              <tr>            
-                <td><strong>Dates:</strong></td>
-                 <td>19 Jul 2025 to 19 Jul 2025</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Venue:</strong></td>
-                      <td>Suncorp Stadium</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Ticket:</strong></td>
-                      <td>Keith Prowse Travel Pre-Match Function - Test 1</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Quantity:</strong></td>
-                      <td>2</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Description:</strong></td>
-                      <td>???Join Keith Prowse Travel and fellow rugby enthusiasts for food and drinks on Caxton Street.
-                      Don't miss this opportunity to meet one of our rugby ambassadors!</td>
-                  </tr>    
-                  <tr>
-                      <td><strong></strong></td>
-                      <td>Inclusion</br>
-                          - 2.5 hour package pre-match</br>
-                          - Wine, Beer and Sparkling</br>
-                          - Food stations</td>
-                  </tr>               
-           </tbody>
-        </table>
-    </div>
-   </div>
+               </tbody>
+            </table>
+         </div>
+      </div>
+      @endforeach
    </div>
 </section>
+@endif
+
 @if(!empty($itinerary->finances))
 <section class="pdf-individual-block">
    <div class="row">
    
-   <h2>Payment summary</h2> 
+   
    <div class="single-module">
+   <h2 style="margin-left:-20px;">Payment summary</h2> 
    <h3>
      <span class="mark"></span>
      <span class="text">Order total</span>
@@ -630,8 +673,9 @@ h5 span {
     </div>
    </div>
    
-   <h2>Payment Details</h2> 
-   <div class="custom-details-module">     
+   
+   <div class="custom-details-module">  
+   <h2 style="margin-left:-20px;">Payment Details</h2>    
        <h6>Keith Prowse Travel PTY LTD</h6>      
   <table>
     <tr>
