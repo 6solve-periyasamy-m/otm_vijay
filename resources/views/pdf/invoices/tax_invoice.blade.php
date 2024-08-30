@@ -405,14 +405,14 @@
             </p>
             </td>
             <td>
-            <p class="event-name"><span>Event Name:</span> {{ $invoice->event }}</p>
-            <p class="event-name"> <span>Email:</span> {{$invoice->lead->email}} </p>
+            <p class="event-name"><span>Event Name:</span> <span>{{ $invoice->event }}</span></p>
+            <p class="event-name"> <span>Email:</span> <span>{{$invoice->lead->email}}</span> </p>
             </td>
             <td>
-            <p><span>Invoice No:</span> {{ $invoice->invoice_number }}</p>
-            <p><span>Invoice Date:</span> {{ date('d M Y', strtotime($invoice->generated)) }}</p>
-            <p><span>Number of Pax:</span> {{count($invoice->customers)}}</p>
-            </p><span>Due Date:</span> {{$due_date}}</p>
+            <p><span>Invoice No:</span> <span>{{ $invoice->invoice_number }}</span></p>
+            <p><span>Invoice Date:</span> <span>{{ date('d M Y', strtotime($invoice->generated)) }}</span></p>
+            <p><span>Number of Pax:</span> <span>{{count($invoice->customers)}}</span></p>
+            </p><span>Due Date:</span> <span>{{$due_date}}</span></p>
             </td>
         </tr>
     </table>
