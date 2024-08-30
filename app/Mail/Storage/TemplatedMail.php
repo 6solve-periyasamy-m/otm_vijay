@@ -25,9 +25,14 @@ abstract class TemplatedMail
     {
         $this->code = $code;
         $this->faker = Faker::create();
-        $user = Auth::user();
-        $this->email = $user->email;
-        $this->name = $user->name;
+        if (env('MAIL_FROM_INDIVIDUAL')) {
+            $user = Auth::user();
+            $this->email = $user->email;
+            $this->name = $user->name;
+        } else {
+            $this->email = env('MAIL_FROM_ADDRESS', env('MAIL_USERNAME', 'info@octopustravelmatrix.com'));
+            $this->name = env('MAIL_FROM_NAME', env('APP_NAME'));
+        }
     }
 
     public function getName(): ?string
