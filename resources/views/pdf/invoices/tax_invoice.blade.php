@@ -326,13 +326,18 @@
             background: #F9F4EE;
             width: 100%;
             margin-top:30px;
-            height:40px;    
+            height:60px;    
         }
        .details tr td p span:last-child {
            font-weight:400!important;
         }       
        .payment-options td:last-child h3 span:first-child {padding-left:15px;}
-       .payment-options td:last-child h3 span {padding-top:25px;padding-bottom:25px;}
+       .payment-options td:last-child h3 span {
+            padding-top: 0px;
+            padding-bottom: 0px;
+            top: 25px;
+            position: relative;
+       }
        .payment-options td:last-child h3 span {
             font-family: 'Lato', sans-serif;
             font-size: 16px;
@@ -343,10 +348,10 @@
             display: inline-block;
        }
        .footer > div {
-        float: left;
-        width: 22%;
-        padding: 0px 0px;
-        margin: 30px 0px;
+            float: left;
+            width: 22%;
+            padding: 0px 0px;
+            margin: 30px 0px;
        }
        .footer div:first-child {
         width: 29%;
