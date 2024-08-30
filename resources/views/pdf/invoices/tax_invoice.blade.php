@@ -213,13 +213,17 @@
             padding: 0px 0px 0px 20px;
             margin-top:8px;
         }
-        .details tr td {
+        .details tr td  {
+            max-width: 112px;
+            padding-right: 32px;
+        }
+        .details tr td p {
             font-family: 'Lato', sans-serif;
             font-weight: 400;
             font-size: 10px;
             line-height: 17px;
-            padding: 0px 0px 0px 20px;
-            vertical-align:top;
+            padding: 0px 0px 0px 20px !important;
+            vertical-align: top;
         }
       
         .details tr td span {font-weight:500;}
@@ -370,7 +374,7 @@
         <tr>
             <td class="left-column"> <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('https://qa.octopustravelmatrix.com/images/pdf_assets/images/KeithProwse_Logo.png'))?>"  alt="logo-ch"></td>
             <td class="right-column">
-                <p>{{$invoice->brand->address_line_1}} <br>{{$invoice->brand->address_line_2}}, {{$invoice->brand->town}}, {{$invoice->brand->region}}, {{$invoice->brand->postcode}}<br><br>
+                <p>{{$invoice->brand->address_line_1}} <br>{{$invoice->brand->address_line_2}}, {{$invoice->brand->town}}, {{$invoice->brand->region}}, {{$invoice->brand->postcode}}<br>
                 {{$invoice->brand->vat_code}}</p>
             </td>
         </tr>
