@@ -1,6 +1,10 @@
 @php
-    /** @var \App\Models\Order\Invoice\Invoice $invoice */
-    var_dump($invoice);
+/**
+ * @var \App\Repository\Storage\Itinerary\Itinerary $itinerary
+ * @var string $type
+ */
+$type = $type ?? "Travel Itinerary";
+var_dump($itinerary);
 @endphp
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
