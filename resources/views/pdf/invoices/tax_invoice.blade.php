@@ -382,11 +382,13 @@
         <tr>
             <td>
             <p class="name">{{ $invoice->lead->full_name }}</p>
-            <p class="address">{{$invoice->lead->address_line_1}} ,{{$invoice->lead->address_line_2}} ,{{$invoice->lead->town}} ,{{$invoice->lead->region}} ,{{$invoice->lead->country}} ,{{$invoice->lead->postcode}} </p>
+            <p class="address">
+                {{ implode(', ', array_filter([$invoice->lead->address_line_1, $invoice->lead->address_line_2, $invoice->lead->town, $invoice->lead->region, $invoice->lead->country, $invoice->lead->postcode])) }}
+            </p>
             </td>
             <td>
             <p class="event-name"><span>Event Name:</span> {{ $invoice->event }}</p>
-            <p class="event-name"> <span>Email:</span> Lorem ipsum </p>
+            <p class="event-name"> <span>Email:</span> {{$invoice->email}} </p>
             </td>
             <td>
             <p><span>Invoice No:</span> {{ $invoice->invoice_number }}</p>
