@@ -143,9 +143,9 @@
                             <div class="left-ass">
                                 <label class="containr">
                                 <span class="txt">
-                                    Pay a {{ $booking->tour->deposit_percentage }}% deposit now, and the rest later
+                                    Pay a {{ $booking->tour?->deposit_percentage }}% deposit now, and the rest later
                                     <span class="inn-txt-cls">
-                                        You will receive a reminder to pay the balance amount before {{ f_date($booking->tour->final_payment) }}
+                                        You will receive a reminder to pay the balance amount before {{ f_date($booking->tour?->final_payment) }}
                                     </span>
                                 </span>
                                     <input type="checkbox" @if(!$payFull) checked @endif>

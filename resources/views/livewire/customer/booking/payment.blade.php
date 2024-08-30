@@ -4,7 +4,7 @@
             <x-slot:header>
                 <h2 class="mb-0" style="width: 100%; text-align: center;">Terms and Conditions</h2>
             </x-slot:header>
-            {!! $this->booking->tour->terms !!}
+            {!! $this->booking->tour?->terms !!}
             <br />
             <button wire:click="accept" class="btn btn-success">Accept the Terms and Conditions</button>
         </x-customer.accordion>

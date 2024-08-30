@@ -132,7 +132,7 @@ class Booking extends Model
 
     public function getTotalCostAttribute(): float
     {
-        return $this->tour->base_price_per_person * $this->traveller_count;
+        return $this->tour?->base_price_per_person * $this->traveller_count;
     }
 
     public function getTravellerCountAttribute(): int
@@ -152,7 +152,7 @@ class Booking extends Model
 
     public function getDepositAttribute(): float
     {
-        return $this->tour->deposit_amount;
+        return $this->tour?->deposit_amount;
     }
 
     public function getDueTodayAttribute(): float

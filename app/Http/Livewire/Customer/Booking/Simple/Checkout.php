@@ -44,7 +44,7 @@ class Checkout extends Component
 
     public function mustPayAll(): bool
     {
-        return now()->gt($this->booking->tour->final_payment);
+        return now()->gt($this->booking->tour?->final_payment);
     }
 
     public function setPayFull(bool $payFull): void

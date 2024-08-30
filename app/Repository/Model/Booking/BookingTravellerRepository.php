@@ -209,8 +209,8 @@ class BookingTravellerRepository extends ModelRepository
         }
         $orderCustomer = OrderCustomer::make([
             'customer_id' => $customer->id,
-            'tour_cost' => $this->traveller->booking->tour->base_price_per_person,
-            'single_occupancy_surcharge' => $this->traveller->booking->tour->single_occupancy_surcharge,
+            'tour_cost' => $this->traveller->booking->tour?->base_price_per_person,
+            'single_occupancy_surcharge' => $this->traveller->booking->tour?->single_occupancy_surcharge,
         ]);
         $order->orderCustomers()->saveQuietly($orderCustomer);
         foreach ($this->getComponents(false) as $componentRepository) {
@@ -244,7 +244,7 @@ class BookingTravellerRepository extends ModelRepository
                     return $lookup;
                 } else {
                     $count = 0;
-                    $prefix = strtolower(strip_non_alphanumeric($this->traveller->booking->tour->brand->name));
+                    $prefix = strtolower(strip_non_alphanumeric($this->traveller->booking->tour?->brand->name));
                     do {
                         $count++;
                         $email = add_email_alias($this->traveller->email_address, "{$prefix}{$count}");
@@ -384,7 +384,7 @@ class BookingTravellerRepository extends ModelRepository
 
     public function getBaseCost(): float
     {
-        return $this->traveller->booking->tour->base_price_per_person;
+        return $this->traveller->booking->tour?->base_price_per_person;
     }
 
     public function getAdditionalCost(): float
@@ -398,7 +398,7 @@ class BookingTravellerRepository extends ModelRepository
 
     public function getSingleOccupancy(): float
     {
-        return $this->hasSingleOccupancy() ? ($this->traveller->booking->tour->single_occupancy_surcharge ?? 0.0) : 0;
+        return $this->hasSingleOccupancy() ? ($this->traveller->booking->tour?->single_occupancy_surcharge ?? 0.0) : 0;
     }
 
     public function hasSingleOccupancy(): bool
@@ -446,7 +446,7 @@ class BookingTravellerRepository extends ModelRepository
          * @var BookingComponent[] $components
          */
         $components = [];
-        foreach ($this->traveller->booking->tour->repository->getComponents(false, true, true, true, false, ['Included', 'Add-on']) as $component) {
+        foreach ($this->traveller->booking->tour?->repository->getComponents(false, true, true, true, false, ['Included', 'Add-on']) as $component) {
             $active = $component->getActiveUpgrade($this->traveller);
             if ($active !== null) {
                 $components[] = $active->getAbstractBookingComponent($this->traveller);
@@ -503,7 +503,7 @@ class BookingTravellerRepository extends ModelRepository
         if ($this->traveller->has_single_occupancy) {
             $data[] = [
                 'name' => 'Single Occupancy Surcharge',
-                'cost' => $this->traveller->booking->tour->single_occupancy_surcharge,
+                'cost' => $this->traveller->booking->tour?->single_occupancy_surcharge,
             ];
         }
         foreach ($this->traveller->vouchers as $voucher) {

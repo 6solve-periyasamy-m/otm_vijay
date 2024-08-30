@@ -118,10 +118,10 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
 
     public function addIncludedToAll(): void
     {
-        $components = $this->booking->tour->repository->getComponents(false, true, false, true, false, ['Included',]);
+        $components = $this->booking->tour?->repository->getComponents(false, true, false, true, false, ['Included',]);
         foreach ($this->booking->travellers as $traveller) {
             $traveller->repository->addComponents($components);
-            foreach ($this->booking->tour->flightInventoryTours()->where('flight_type', '=', 'Mid-Package')->where('tour_component_type', '=', 'Included')->get() as $flight) {
+            foreach ($this->booking->tour?->flightInventoryTours()->where('flight_type', '=', 'Mid-Package')->where('tour_component_type', '=', 'Included')->get() as $flight) {
                 $traveller->repository->addComponent($flight->repository);
             }
         }
@@ -129,7 +129,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
 
     public function getTotalCost(): float
     {
-        $cost = $this->booking->tour->booking_fee ?? 0;
+        $cost = $this->booking->tour?->booking_fee ?? 0;
         foreach ($this->booking->travellers as $traveller) {
             $cost += $traveller->total_cost;
         }
@@ -141,7 +141,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
                     $cost += $executor->getAmount();
                 }
                 if ($executor instanceof PercentageCostReductionExecutor) {
-                    $cost -= $executor->getAmount($this->booking->tour->base_price_per_person);
+                    $cost -= $executor->getAmount($this->booking->tour?->base_price_per_person);
                 }
             }
         }
@@ -151,12 +151,12 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     public function getDueTodayAmount(): float
     {
         $travellers = $this->booking->travellers()->count();
-        $upfront = ($this->booking->tour->booking_fee ?? 0.0) + (($this->booking->tour->deposit_amount ?? 0.0) * $travellers);
+        $upfront = ($this->booking->tour?->booking_fee ?? 0.0) + (($this->booking->tour?->deposit_amount ?? 0.0) * $travellers);
         if (flag('installments.force', false)) {
-            if ($this->booking->tour->final_payment->isBefore(now())) {
+            if ($this->booking->tour?->final_payment->isBefore(now())) {
                 return $this->getTotalCost();
             }
-            foreach ($this->booking->tour->paymentInstallments as $installment) {
+            foreach ($this->booking->tour?->paymentInstallments as $installment) {
                 if ($installment->due_on->isBefore(now())) {
                     $upfront += $installment->amount * $travellers;
                 }
@@ -209,7 +209,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         $outboundSelected = false;
         $inboundIncluded = false;
         $inboundSelected = false;
-        foreach ($this->booking->tour->flightInventoryTours as $flight) {
+        foreach ($this->booking->tour?->flightInventoryTours as $flight) {
             if (!$flight->repository->hasEnoughStock($this->booking->travellers()->count())) continue;
             if (!$flight->is_bookable) continue;
             if ($flight->flight_type == 'Outbound') {
@@ -243,7 +243,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
 
     public function __toString(): string
     {
-        return "{{$this->booking->token}} - {$this->booking->tour->name}";
+        return "{{$this->booking->token}} - {$this->booking->tour?->name}";
     }
 
     public function convertToOrder(?Carbon $orderedOn = null): Order
@@ -336,7 +336,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     public function getRoomingData(): array
     {
         $rooms = [];
-        foreach ($this->booking->tour->accommodationInventoryTours()->with('inventory', 'inventory.component')->get() as $inventoryTour) {
+        foreach ($this->booking->tour?->accommodationInventoryTours()->with('inventory', 'inventory.component')->get() as $inventoryTour) {
             $rooms[$inventoryTour->id] = [
                 'name' => $inventoryTour->repository->formatAdminOccupancy(),
                 'size' => $inventoryTour->inventory->roomType->maximum_occupancy,
@@ -388,7 +388,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     {
         $base = 0;
         foreach ($this->booking->travellers as $traveller) {
-            $base += $this->booking->tour->remaining_installment;
+            $base += $this->booking->tour?->remaining_installment;
             $base += $traveller->surcharge_amount;
             $base += $traveller->additional_cost;
             foreach ($traveller->vouchers()->get() as $voucher) {
@@ -488,7 +488,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
 
     public function hasRooming(): bool
     {
-        return $this->booking->tour->templates->count() > 0;
+        return $this->booking->tour?->templates->count() > 0;
     }
 
     public function validateVouchers(): void
@@ -504,8 +504,8 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             'customer_name' => $this->booking->leadTraveller->full_name,
             'email' => $this->booking->leadTraveller->email_address,
             'booking_reference' => $this->getReference(),
-            'departure_date' => $this->booking->tour->date_from->format('Y-m-d'),
-            'return_date' => $this->booking->tour->date_to->format('Y-m-d'),
+            'departure_date' => $this->booking->tour?->date_from->format('Y-m-d'),
+            'return_date' => $this->booking->tour?->date_to->format('Y-m-d'),
             'gross_amount' => (int)($this->getTotalCost()*100),
         ];
     }
@@ -568,7 +568,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
 
     private function getTaxBracket(): TaxBracket|null
     {
-        return $this->booking->tour->taxBracket();
+        return $this->booking->tour?->taxBracket();
     }
 
     public function getTaxes(): float|null
@@ -578,7 +578,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
 
     public function getBasePrice(): float
     {
-        return $this->booking->tour->base_price_per_person * $this->booking->travellers()->count();
+        return $this->booking->tour?->base_price_per_person * $this->booking->travellers()->count();
     }
 
     public function addUnknownTraveller(): BookingTraveller
@@ -670,8 +670,8 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
 
         return [
             'token' => $this->booking->token,
-            'url' => $this->booking->tour->booking_form_url,
-            'tour' => $this->booking->tour->repository->getDataForBooking(),
+            'url' => $this->booking->tour?->booking_form_url,
+            'tour' => $this->booking->tour?->repository->getDataForBooking(),
             'lead' => [
                 'first_name' => $this->booking->leadTraveller->first_name,
                 'last_name' => $this->booking->leadTraveller->last_name,
@@ -691,8 +691,8 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
                 'total' => $this->getTotalCost(),
                 'due' => [
                     'deposit' => [
-                        'percentage' => $this->booking->tour->deposit_percentage,
-                        'amount' => ($this->booking->tour->deposit_amount ?? 0.0) *
+                        'percentage' => $this->booking->tour?->deposit_percentage,
+                        'amount' => ($this->booking->tour?->deposit_amount ?? 0.0) *
                             ($this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count()),
                     ],
                     'amount' => $this->getDueTodayAmount(),
