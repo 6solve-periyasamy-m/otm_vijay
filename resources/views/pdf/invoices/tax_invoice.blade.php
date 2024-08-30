@@ -336,6 +336,8 @@
         line-height: 36px;
         font-weight: 700;
         color: #f35b15;
+        height: 51px;
+        display: inline-block;
        }
        .footer > div {
         float: left;
