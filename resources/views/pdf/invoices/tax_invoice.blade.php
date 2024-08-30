@@ -259,7 +259,7 @@
             text-align:left;
         }
         .payment-options {
-            margin-top:120px;
+            margin-top:10px;
             border-top: 1px solid #f35b15;
             border-bottom: 1px solid #f35b15;
         }
