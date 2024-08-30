@@ -252,7 +252,7 @@
             padding-bottom:18px;
             text-align:center;
         }
-        .items tr:nth-child(2) td  {
+        .items tr:nth-child(even) td  {
             background-color: #F9F4EE;     
         }       
         .items tr td:nth-child(2)  {
