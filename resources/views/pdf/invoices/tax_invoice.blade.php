@@ -388,7 +388,7 @@
             </td>
             <td>
             <p class="event-name"><span>Event Name:</span> {{ $invoice->event }}</p>
-            <p class="event-name"> <span>Email:</span> {{$invoice->email}} </p>
+            <p class="event-name"> <span>Email:</span> {{$invoice->lead->email}} </p>
             </td>
             <td>
             <p><span>Invoice No:</span> {{ $invoice->invoice_number }}</p>
