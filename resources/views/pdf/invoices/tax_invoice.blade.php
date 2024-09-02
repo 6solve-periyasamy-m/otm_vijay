@@ -237,10 +237,8 @@
         .details tr td:last-child {
             background-color: #F9F4EE;
             padding: 0px 0px 0px 30px; 
-            position:relative;     
-        }
-        .details tr td p.bg-box-contain {
-            border-right: 10px solid #f35b15;
+            position:relative;  
+            border-right: 10px solid #f35b15;   
         }
         .details tr p.bg-box-contain.f-1 {
             padding-top:15px!important;
