@@ -425,10 +425,10 @@
 
     <!-- Details Table -->
     <table class="details">
-        <tr>
+        <!-- <tr>
             <th><h6>Invoice To</h6></th>
             <th><h6>Details</h6></th>
-        </tr>
+        </tr> -->
         <tr>
             <td>
             <h6>Invoice To</h6>
