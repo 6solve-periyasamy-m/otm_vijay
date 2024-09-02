@@ -203,7 +203,7 @@
             margin-top: 10px;
             padding-left:20px;
         }
-        .details tr th h6{
+        .details tr h6{
             font-family: 'Lato', sans-serif;
             font-weight: 400;
             text-align: left;
@@ -431,12 +431,14 @@
         </tr>
         <tr>
             <td>
+            <h6>Invoice To</h6>
             <p class="name">{{ $invoice->lead->full_name }}</p>
             <p class="address">
                 {{ implode(', ', array_filter([$invoice->lead->address_line_1, $invoice->lead->address_line_2, $invoice->lead->town, $invoice->lead->region, $invoice->lead->country, $invoice->lead->postcode])) }}
             </p>
             </td>
             <td>
+            <h6>Details</h6>
             <p class="event-name"><span>Event Name:</span> <span>{{ $invoice->event }}</span></p>
             <p class="event-name"> <span>Email:</span> <span>{{$invoice->lead->email}}</span> </p>
             <p class="no-of-pax"><span>Number of Pax:</span> <span>{{count($invoice->customers)}}</span></p>
