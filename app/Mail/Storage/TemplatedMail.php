@@ -29,7 +29,7 @@ abstract class TemplatedMail
         if (env('MAIL_FROM_INDIVIDUAL')) {
             $user = Auth::user();
             $this->email = $user->email ?? $defaultEmail;
-            $this->name = $user->name;
+            $this->name = $user->name ?? env('OTP_COMPANY', env('APP_NAME'));
         } else {
             $this->email = $defaultEmail;
             $this->name = env('MAIL_FROM_NAME', env('APP_NAME'));
