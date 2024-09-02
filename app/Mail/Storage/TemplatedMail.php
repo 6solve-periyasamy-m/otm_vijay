@@ -10,9 +10,9 @@ use Faker\Factory as Faker;
 use Faker\Generator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Log;
 use Settings;
-use Validator;
 
 abstract class TemplatedMail
 {
@@ -107,15 +107,12 @@ abstract class TemplatedMail
      * @throws MailDisabledException
      * @throws MailFailedException
      */
-    final public function send(string|null $email, $model = null, array $attachments = [], bool $force = false): bool
+    final public function send(string|null $email, $model = null, array $attachments = [], string|array $bccTargets = "", bool $force = false): bool
     {
         if (!$force && !flag('system.mail.enabled', true)) {
             throw new MailDisabledException('Sending Emails is disabled on this system');
         }
-        $validator = Validator::make(['email' => $email,], ['email' => 'required|email:rfc,dns'], [
-            'email.required' => 'Recipient does not have an email address',
-            'email.email' => 'Recipient does not have a valid email address',
-        ]);
+        $validator = $this->validateEmail($email);
         if ($validator->fails()) {
             throw new MailFailedException($validator->errors()->first());
         }
@@ -129,6 +126,12 @@ abstract class TemplatedMail
             if (flag('mail.bcc-sender', false)) {
                 $bcc = array_merge($bcc, [$this->email,]);
             }
+            foreach (explode(';', $bccTargets) as $target) {
+                $validator = $this->validateEmail($target);
+                if (!$validator->fails()) {
+                    $bcc[] = $target;
+                }
+            }
             $mail->bcc($bcc);
             $bcc = " and " . implode(', ', $bcc);
             $mail->send($this->getTemplatedMailable($model, $attachments));
@@ -138,6 +141,14 @@ abstract class TemplatedMail
             Log::error($e);
             return false;
         }
+    }
+
+    final protected function validateEmail(string $email)
+    {
+        return Validator::make(['email' => $email,], ['email' => 'required|email:rfc,dns'], [
+            'email.required' => 'Recipient does not have an email address',
+            'email.email' => 'Recipient does not have a valid email address',
+        ]);
     }
 
     final public function update(string $subject, string $body): void
