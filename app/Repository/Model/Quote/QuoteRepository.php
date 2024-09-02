@@ -758,8 +758,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
      */
     public function resend(SentQuote $sent, string $email = null): bool
     {
+        $bcc = flag('mail.bcc-consultant', false) ? $this->quote->consultant->email : "";
         $attachment = new Attachment($this->getStream($sent), $this->quote->reference . '.pdf', ['mime' => 'application/pdf',]);
-        return (new QuoteMail('quote'))->send($email ?? $sent->recipient, $sent, [$attachment,], $this->quote->consultant->email, true);
+        return (new QuoteMail('quote'))->send($email ?? $sent->recipient, $sent, [$attachment,], $bcc, true);
     }
 
     public static function deserializeAndSave(SentQuote $sent): Quote

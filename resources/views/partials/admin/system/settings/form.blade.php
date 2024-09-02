@@ -141,6 +141,7 @@
                 @include('partials.fields.checkbox', ['name' => 'Enable Automatically Sending Emails', 'field' => 'mail_enabled', 'value' => flag('system.mail.enabled', true),])
                 @include('partials.fields.checkbox', ['name' => 'Enable ATOL Certificate Generation', 'field' => 'atol_enabled', 'value' => flag('atol.enabled', true),])
                 @include('partials.fields.checkbox', ['name' => 'BCC Emails to Sender', 'field' => 'bcc_sender', 'value' => flag('mail.bcc-sender', false),])
+                @include('partials.fields.checkbox', ['name' => 'BCC Emails to Consultant', 'field' => 'bcc_consultant', 'value' => flag('mail.bcc-consultant', false),])
             </div>
     </x-admin.section.card>
     </div>
