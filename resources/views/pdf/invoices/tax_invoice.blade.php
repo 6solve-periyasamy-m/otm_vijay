@@ -235,8 +235,7 @@
         .details tr td span {font-weight:500;}
         .details tr td:last-child {
             background-color: #F9F4EE;
-            padding: 14px 0px 14px 30px;
-            
+            padding: 14px 0px 14px 30px;           
             position:relative;
             top:-13px;
         }
