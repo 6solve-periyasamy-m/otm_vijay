@@ -237,9 +237,7 @@
         .details tr td:last-child {
             background-color: #F9F4EE;
             padding: 0px 0px 0px 30px; 
-            position:relative;
-            top:-13px; 
-            margin-top:-13px;         
+            position:relative;     
         }
         .details tr td p.bg-box-contain {
             border-right: 10px solid #f35b15;
@@ -272,7 +270,8 @@
             font-size: 16px;
             line-height: 21.33px;
             color: #fff;
-            text-align:center;
+            text-align: center;
+            padding: 4px 0px 6px 0px;
         }
         .items td {
             padding:4px 30px;
