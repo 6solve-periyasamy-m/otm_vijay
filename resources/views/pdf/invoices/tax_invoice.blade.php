@@ -236,7 +236,19 @@
         .details tr td:last-child {
             background-color: #F9F4EE;
             padding: 14px 0px 14px 30px;
-            border-right: 10px solid #f35b15;
+            
+            position:relative;
+            top:-13px;
+        }
+        .details tr td:last-child:after {
+            content:"";
+            height:100%;
+            width:10px;
+            background-color:#f35b15;
+            display:inline-block;
+            position:absolute;
+            right:0px;
+            top:0px;
         }
         .items th {
             background-color: #f35b15;
