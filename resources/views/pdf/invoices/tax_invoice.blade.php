@@ -237,15 +237,16 @@
             background-color: #F9F4EE;
             padding: 0px 0px 0px 30px;           
         }
-        .details tr td p {
+        .details tr td p.bg-box-contain {
             border-right: 10px solid #f35b15;
         }
-        .details tr .bg-box-contain td p:first-child {
-            padding-top:15px;
+        .details tr p.bg-box-contain.f-1 {
+            padding-top:15px!important;
         }
-        .details tr .bg-box-contain td p:last-child {
-            padding-bottom:15px;
+        .details tr p.bg-box-contain.f-3 {
+            padding-bottom:15px!important;
         }
+        .bg-box-contain
         /* .details tr .bg-box-contain:after {
             content:"";
             height:100%;
@@ -437,10 +438,10 @@
             <p class="event-name"> <span>Email:</span> <span>{{$invoice->lead->email}}</span> </p>
             <p class="no-of-pax"><span>Number of Pax:</span> <span>{{count($invoice->customers)}}</span></p>
             </td>
-            <td class="bg-box-contain">
-            <p><span>Invoice No:</span> <span>{{ $invoice->invoice_number }}</span></p>
-            <p><span>Invoice Date:</span> <span>{{ date('d M Y', strtotime($invoice->generated)) }}</span></p>
-            <p><span>Due Date:</span> <span>{{$due_date}}</span></p>
+            <td>
+            <p class="bg-box-contain f-1"><span>Invoice No:</span> <span>{{ $invoice->invoice_number }}</span></p>
+            <p class="bg-box-contain"><span>Invoice Date:</span> <span>{{ date('d M Y', strtotime($invoice->generated)) }}</span></p>
+            <p class="bg-box-contain f-3"><span>Due Date:</span> <span>{{$due_date}}</span></p>
             </td>
         </tr>
     </table>
