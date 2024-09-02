@@ -237,6 +237,15 @@
             background-color: #F9F4EE;
             padding: 0px 0px 0px 30px;           
         }
+        .details tr td p {
+            border-right: 10px solid #f35b15;
+        }
+        .details tr .bg-box-contain td p:first-child {
+            padding-top:15px;
+        }
+        .details tr .bg-box-contain td p:last-child {
+            padding-bottom:15px;
+        }
         /* .details tr .bg-box-contain:after {
             content:"";
             height:100%;
