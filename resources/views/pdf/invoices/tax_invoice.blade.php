@@ -425,15 +425,15 @@
                 {{ implode(', ', array_filter([$invoice->lead->address_line_1, $invoice->lead->address_line_2, $invoice->lead->town, $invoice->lead->region, $invoice->lead->country, $invoice->lead->postcode])) }}
             </p>
             </td>
-            <td class="bg-box-contain">
+            <td>
             <p class="event-name"><span>Event Name:</span> <span>{{ $invoice->event }}</span></p>
             <p class="event-name"> <span>Email:</span> <span>{{$invoice->lead->email}}</span> </p>
             <p class="no-of-pax"><span>Number of Pax:</span> <span>{{count($invoice->customers)}}</span></p>
             </td>
-            <td>
+            <td class="bg-box-contain">
             <p><span>Invoice No:</span> <span>{{ $invoice->invoice_number }}</span></p>
             <p><span>Invoice Date:</span> <span>{{ date('d M Y', strtotime($invoice->generated)) }}</span></p>
-            </p><span>Due Date:</span> <span>{{$due_date}}</span></p>
+            <p><span>Due Date:</span> <span>{{$due_date}}</span></p>
             </td>
         </tr>
     </table>
