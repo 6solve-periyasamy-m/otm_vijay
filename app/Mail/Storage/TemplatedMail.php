@@ -26,13 +26,12 @@ abstract class TemplatedMail
         $this->code = $code;
         $this->faker = Faker::create();
         $defaultEmail = env('MAIL_FROM_ADDRESS', env('MAIL_USERNAME', 'info@octopustravelmatrix.com'));
+        $this->name = env('MAIL_FROM_NAME', env('OTP_COMPANY', 'Octopus Travel Matrix'));
         if (env('MAIL_FROM_INDIVIDUAL')) {
             $user = Auth::user();
             $this->email = $user->email ?? $defaultEmail;
-            $this->name = $user->name ?? env('OTP_COMPANY', env('APP_NAME'));
         } else {
             $this->email = $defaultEmail;
-            $this->name = env('MAIL_FROM_NAME', env('APP_NAME', 'Octopus Travel Matrix'));
         }
     }
 
