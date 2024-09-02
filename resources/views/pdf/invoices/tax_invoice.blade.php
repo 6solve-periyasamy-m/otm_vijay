@@ -452,7 +452,7 @@
     <!-- Items Table -->
     <div class="whole-items-cls"> 
     <table class="items">
-        <tr>
+        <tr style="background-color:#f35b1;">
             <th><h2>No</h2></th>
             <th><h2>Description</h2></th>
             <th><h2>Qty</h2></th>
