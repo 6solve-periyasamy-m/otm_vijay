@@ -26,10 +26,16 @@ abstract class TemplatedMail
         $this->code = $code;
         $this->faker = Faker::create();
         $defaultEmail = config('mail.from.address', config('mail.mailers.smtp.username', 'info@octopustravelmatrix.com'));
-        $this->name = config('mail.from.name', setting('company.name', 'Octopus Travel Matrix'));
+        $defaultName = config('mail.from.name', setting('company.name', 'Octopus Travel Matrix'));
         if (config('mail.individual', false)) {
             $user = Auth::user();
             $this->email = $user->email ?? $defaultEmail;
+            // If sending as a user, prepend the users name
+            if ($user !== null) {
+                $this->name = "{$user->name} - " . $defaultName;
+            } else {
+                $this->name = $defaultName;
+            }
         } else {
             $this->email = $defaultEmail;
         }
