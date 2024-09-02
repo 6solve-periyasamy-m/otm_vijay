@@ -32,7 +32,7 @@ abstract class TemplatedMail
             $this->name = $user->name ?? env('OTP_COMPANY', env('APP_NAME'));
         } else {
             $this->email = $defaultEmail;
-            $this->name = env('MAIL_FROM_NAME', env('APP_NAME'));
+            $this->name = env('MAIL_FROM_NAME', env('APP_NAME', 'Octopus Travel Matrix'));
         }
     }
 
