@@ -120,18 +120,14 @@ abstract class TemplatedMail
             if (empty(config('mail.from.address'))) return false;
             $mail = Mail::to($email);
             $bcc = [];
+
             if (!empty(config('mail.bcc'))) {
-                $bcc[] = config('mail.bcc');
+                array_merge($bcc, $this->getValidEmails(config('mail.bcc')));
             }
             if (flag('mail.bcc-sender', false)) {
                 $bcc = array_merge($bcc, [$this->email,]);
             }
-            foreach (explode(';', $bccTargets) as $target) {
-                $validator = $this->validateEmail($target);
-                if (!$validator->fails()) {
-                    $bcc[] = $target;
-                }
-            }
+            array_merge($bcc, $this->getValidEmails($bccTargets));
             $mail->bcc($bcc);
             $bcc = " and " . implode(', ', $bcc);
             $mail->send($this->getTemplatedMailable($model, $attachments));
@@ -149,6 +145,18 @@ abstract class TemplatedMail
             'email.required' => 'Recipient does not have an email address',
             'email.email' => 'Recipient does not have a valid email address',
         ]);
+    }
+
+    final protected function getValidEmails(string $emails): array
+    {
+        $valid = [];
+        foreach (explode(';', $emails) as $email) {
+            $validator = $this->validateEmail($email);
+            if (!$validator->fails()) {
+                $valid[] = $email;
+            }
+        }
+        return $valid;
     }
 
     final public function update(string $subject, string $body): void
