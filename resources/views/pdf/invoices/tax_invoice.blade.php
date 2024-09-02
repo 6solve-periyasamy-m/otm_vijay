@@ -237,7 +237,8 @@
             background-color: #F9F4EE;
             padding: 0px 0px 0px 30px; 
             position:relative;
-            top:-13px;          
+            top:-13px; 
+            margin-top:-13px;         
         }
         .details tr td p.bg-box-contain {
             border-right: 10px solid #f35b15;
