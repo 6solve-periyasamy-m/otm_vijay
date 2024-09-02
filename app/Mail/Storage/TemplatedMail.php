@@ -122,12 +122,12 @@ abstract class TemplatedMail
             $bcc = [];
 
             if (!empty(config('mail.bcc'))) {
-                array_merge($bcc, $this->getValidEmails(config('mail.bcc')));
+                $bcc = array_merge($bcc, $this->getValidEmails(config('mail.bcc')));
             }
             if (flag('mail.bcc-sender', false)) {
                 $bcc = array_merge($bcc, [$this->email,]);
             }
-            array_merge($bcc, $this->getValidEmails($bccTargets));
+            $bcc = array_merge($bcc, $this->getValidEmails($bccTargets));
             $mail->bcc($bcc);
             $bcc = " and " . implode(', ', $bcc);
             $mail->send($this->getTemplatedMailable($model, $attachments));
@@ -150,10 +150,13 @@ abstract class TemplatedMail
     final protected function getValidEmails(string $emails): array
     {
         $valid = [];
+        \Log::info($emails);
         foreach (explode(';', $emails) as $email) {
             $validator = $this->validateEmail($email);
             if (!$validator->fails()) {
                 $valid[] = $email;
+            } else {
+                \Log::info($email . " is invalid");
             }
         }
         return $valid;
