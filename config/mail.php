@@ -112,5 +112,6 @@ return [
         ],
     ],
 
-    'bcc' => env('BCC_ADDRESS')
+    'bcc' => env('BCC_ADDRESS'),
+    'individual' => env('MAIL_FROM_INDIVIDUAL', false),
 ];

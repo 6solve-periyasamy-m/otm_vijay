@@ -25,9 +25,9 @@ abstract class TemplatedMail
     {
         $this->code = $code;
         $this->faker = Faker::create();
-        $defaultEmail = env('MAIL_FROM_ADDRESS', env('MAIL_USERNAME', 'info@octopustravelmatrix.com'));
-        $this->name = env('MAIL_FROM_NAME', env('OTP_COMPANY', 'Octopus Travel Matrix'));
-        if (env('MAIL_FROM_INDIVIDUAL')) {
+        $defaultEmail = config('mail.from.address', config('mail.mailers.smtp.username', 'info@octopustravelmatrix.com'));
+        $this->name = config('mail.from.name', setting('company.name', 'Octopus Travel Matrix'));
+        if (config('mail.individual', false)) {
             $user = Auth::user();
             $this->email = $user->email ?? $defaultEmail;
         } else {
@@ -48,7 +48,7 @@ abstract class TemplatedMail
         return $this->code;
     }
 
-    public abstract function getShortcodes($model = null): array;
+    abstract public function getShortcodes($model = null): array;
 
     public function getSubject(): string
     {
@@ -82,7 +82,7 @@ abstract class TemplatedMail
         return $template;
     }
 
-    public final function replaceShortcodes(string $body, $model = null): string
+    final public function replaceShortcodes(string $body, $model = null): string
     {
         $replacement = $body;
         foreach ($this->getShortcodes($model) as $key => $value) {
@@ -92,7 +92,7 @@ abstract class TemplatedMail
     }
 
     /**
-     * @param string $email
+     * @param string|null $email
      * @param null $model
      * @param Attachment[] $attachments
      * @param bool $force
@@ -129,23 +129,23 @@ abstract class TemplatedMail
         }
     }
 
-    public final function update(string $subject, string $body): void
+    final public function update(string $subject, string $body): void
     {
         Settings::set("email.{$this->code}.subject", $subject);
         Settings::set("email.{$this->code}.template", $body);
     }
 
-    public final function getEditUrl(): string
+    final public function getEditUrl(): string
     {
         return route('email.edit', ['mail' => $this->code,]);
     }
 
-    public final function getUpdateUrl(): string
+    final public function getUpdateUrl(): string
     {
         return route('email.update', ['mail' => $this->code,]);
     }
 
-    public final function getDemoUrl(): string
+    final public function getDemoUrl(): string
     {
         return route('email.demo', ['mail' => $this->code,]);
     }
