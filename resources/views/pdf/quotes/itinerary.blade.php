@@ -59,29 +59,6 @@
   //var_dump(generateFontFaceCSS($fonts));
   //var_dump($itinerary);
   //var_dump(setting('customization.documentation.colors'));
-  //{!! /*generateFontFaceCSS($fonts) */!!}
-  $consul_name = '';
-  $consul_mail = '';
- 
-  $url = $_SERVER['REQUEST_URI'];
-  $parsedUrl = parse_url($url);
-  parse_str($parsedUrl['query'], $queryParams);
-  $id = $parsedUrl['path']; 
-  $id = explode('/', $id)[3];
-
-  $rowDetails = DB::table('quotes')->where('id', $id)->first();
-
-  if ($rowDetails) {
-    
-    $consultantId = $rowDetails->consultant_id;
-
-    $userDetails = DB::table('users')->where('id', $consultantId)->first();
-
-    if ($userDetails) {
-        $consul_name = $userDetails->name ;
-        $consul_mail = $userDetails->email ;
-    } 
-  } 
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -415,7 +392,7 @@ h5 span {
 	  
       <div class="customer-details-block">
         <div class="customer-details-text-block">
-            <h1>Quote</h1>
+            <h1>{{ $type ?? "Quote" }}</h1>
             <h5>REFERENCE: {{ $reference }} <span></span></h5>         
             <div class="customer-agent-details">
                 <div class="customer-details">
@@ -425,8 +402,8 @@ h5 span {
                 </div>
                 <div class="agent-details">
                     <h6>AGENT DETAILS</h6>
-                    <p>Name: <span>{{$consul_name}}</span></p>
-                    <p>Email: <span>{{$consul_mail}}</span><p>
+                    <p>Name: <span>{{$itinerary->consultant?->name}}</span></p>
+                    <p>Email: <span>{{$itinerary->consultant?->email}}</span><p>
                     <p>Date created: <span>{{ $dacre }}</span><p>
                 </div>
             </div>  
