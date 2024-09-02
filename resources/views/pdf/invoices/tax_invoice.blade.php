@@ -422,7 +422,6 @@
             <td>
             <p><span>Invoice No:</span> <span>{{ $invoice->invoice_number }}</span></p>
             <p><span>Invoice Date:</span> <span>{{ date('d M Y', strtotime($invoice->generated)) }}</span></p>
-            <p><span>Number of Pax:</span> <span>{{count($invoice->customers)}}</span></p>
             </p><span>Due Date:</span> <span>{{$due_date}}</span></p>
             </td>
         </tr>
