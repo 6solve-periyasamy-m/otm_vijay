@@ -235,11 +235,9 @@
         .details tr td span {font-weight:500;}
         .details tr td:last-child {
             background-color: #F9F4EE;
-            padding: 14px 0px 14px 30px;           
-            position:relative;
-            top:-13px;
+            padding: 0px 0px 0px 30px;           
         }
-        .details tr .bg-box-contain:after {
+        /* .details tr .bg-box-contain:after {
             content:"";
             height:100%;
             width:10px;
@@ -248,7 +246,7 @@
             position:absolute;
             right:0px;
             top:0px;
-        }
+        } */
         .items th {
             background-color: #f35b15;
             padding:4px 30px;
