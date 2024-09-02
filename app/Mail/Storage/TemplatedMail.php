@@ -38,6 +38,7 @@ abstract class TemplatedMail
             }
         } else {
             $this->email = $defaultEmail;
+            $this->name = $defaultName;
         }
     }
 
@@ -120,12 +121,16 @@ abstract class TemplatedMail
         }
         try {
             if (empty(config('mail.from.address'))) return false;
-
             $mail = Mail::to($email);
-            if (config('mail.bcc') !== null) {
-                $mail->bcc(config('mail.bcc'));
-                $bcc = " and " . config('mail.bcc');
+            $bcc = [];
+            if (!empty(config('mail.bcc'))) {
+                $bcc[] = config('mail.bcc');
             }
+            if (flag('mail.bcc-sender', false)) {
+                $bcc = array_merge($bcc, [$this->email,]);
+            }
+            $mail->bcc($bcc);
+            $bcc = " and " . implode(', ', $bcc);
             $mail->send($this->getTemplatedMailable($model, $attachments));
             Log::channel('mail')->debug(class_basename(get_class($this)) . " mail sent to {$email}" . ($bcc ?? ""));
             return true;

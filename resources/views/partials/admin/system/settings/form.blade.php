@@ -140,6 +140,7 @@
                 @include('partials.fields.checkbox', ['name' => 'Default to Sending Booking Confirmation on Manual Order Creation', 'field' => 'mail_enabled', 'value' => flag('order.manual.mail', false),])
                 @include('partials.fields.checkbox', ['name' => 'Enable Automatically Sending Emails', 'field' => 'mail_enabled', 'value' => flag('system.mail.enabled', true),])
                 @include('partials.fields.checkbox', ['name' => 'Enable ATOL Certificate Generation', 'field' => 'atol_enabled', 'value' => flag('atol.enabled', true),])
+                @include('partials.fields.checkbox', ['name' => 'BCC Emails to Sender', 'field' => 'bcc_sender', 'value' => flag('mail.bcc-sender', false),])
             </div>
     </x-admin.section.card>
     </div>

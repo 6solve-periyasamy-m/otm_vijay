@@ -78,6 +78,7 @@ class SettingsController extends Controller
             'system.historic' => $request->input('historic'),
             'payment.required' => $request->input('payment_required') === 'on' ? 1 : 0,
             'installments.force' => $request->input('force_installments') === 'on' ? 1 : 0,
+            'mail.bcc-sender' => $request->input('bcc_sender') === 'on' ? 1 : 0,
             'components.lock' => $request->input('components_lock'),
             'passport.lock' => $request->input('passport_lock'),
             'passport.unlock' => $request->input('passport_unlock'),
