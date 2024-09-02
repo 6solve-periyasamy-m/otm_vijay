@@ -417,6 +417,7 @@
             <td>
             <p class="event-name"><span>Event Name:</span> <span>{{ $invoice->event }}</span></p>
             <p class="event-name"> <span>Email:</span> <span>{{$invoice->lead->email}}</span> </p>
+            <p class="no-of-pax"><span>Number of Pax:</span> <span>{{count($invoice->customers)}}</span></p>
             </td>
             <td>
             <p><span>Invoice No:</span> <span>{{ $invoice->invoice_number }}</span></p>
