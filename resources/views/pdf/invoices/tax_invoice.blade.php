@@ -239,7 +239,7 @@
             position:relative;
             top:-13px;
         }
-        .details tr td:last-child:after {
+        .details tr .bg-box-contain:after {
             content:"";
             height:100%;
             width:10px;
@@ -425,7 +425,7 @@
                 {{ implode(', ', array_filter([$invoice->lead->address_line_1, $invoice->lead->address_line_2, $invoice->lead->town, $invoice->lead->region, $invoice->lead->country, $invoice->lead->postcode])) }}
             </p>
             </td>
-            <td>
+            <td class="bg-box-contain">
             <p class="event-name"><span>Event Name:</span> <span>{{ $invoice->event }}</span></p>
             <p class="event-name"> <span>Email:</span> <span>{{$invoice->lead->email}}</span> </p>
             <p class="no-of-pax"><span>Number of Pax:</span> <span>{{count($invoice->customers)}}</span></p>
