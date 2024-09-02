@@ -211,7 +211,8 @@
             font-size: 9px;
             line-height: 10.18px;
             padding: 0px 0px 0px 20px;
-            margin-top:8px;
+            margin-top:0px;
+            margin-bottom:8px;
         }
         .details tr td  {
             max-width: 112px;
