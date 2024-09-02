@@ -150,13 +150,10 @@ abstract class TemplatedMail
     final protected function getValidEmails(string $emails): array
     {
         $valid = [];
-        \Log::info($emails);
         foreach (explode(';', $emails) as $email) {
             $validator = $this->validateEmail($email);
             if (!$validator->fails()) {
                 $valid[] = $email;
-            } else {
-                \Log::info($email . " is invalid");
             }
         }
         return $valid;
