@@ -530,6 +530,12 @@ h5 span {
                     <div class="details-module">
                         <table>
                             <tbody>
+                            @if(!empty($item->details['Ticket']))
+                                    <tr>
+                                        <td><strong>Ticket:</strong></td>
+                                        <td>{{ $item->details['Ticket'] }}</td>
+                                    </tr>
+                                @endif
                                 @if(!empty($item->details['Dates']))
                                     <tr>
                                         <td><strong>Dates:</strong></td>
@@ -544,12 +550,6 @@ h5 span {
                                     </tr>
                                 @endif
 
-                                @if(!empty($item->details['Ticket']))
-                                    <tr>
-                                        <td><strong>Ticket:</strong></td>
-                                        <td>{{ $item->details['Ticket'] }}</td>
-                                    </tr>
-                                @endif
 
                                 @if(!empty($item->details['Quantity']) && $item->details['Quantity'] > 0)
                                     <tr>
