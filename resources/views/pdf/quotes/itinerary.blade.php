@@ -147,7 +147,6 @@
  }
  .customer-details-block .customer-details-image-block {
     width: 297px;
-    padding-left: 32px;
  }
  .customer-details-block .customer-details-text-block {width: 487px;padding-left:32px;}
   h5 {
