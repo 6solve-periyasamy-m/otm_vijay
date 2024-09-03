@@ -247,7 +247,7 @@ h3 span.text {
   }
 .single-module {
   margin-top: 24px;
-  padding-left: 22px;
+  padding-left: 32px;
   margin-bottom:24px;
 }
 .single-module .details-module {
@@ -372,7 +372,7 @@ h5 span {
 }
 .single-module .heading-module{
   margin-bottom: 18px;
-  margin-left: -20px;
+  margin-left: -32px;
 }
 .single-module h3 {
   margin-left:-21px!important;
