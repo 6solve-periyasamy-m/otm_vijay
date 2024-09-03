@@ -146,10 +146,10 @@
     float:left;  
  }
  .customer-details-block .customer-details-image-block {
-    width: 487px;
+    width: 297px;
     padding-left: 32px;
  }
- .customer-details-block .customer-details-text-block {width: 499px;padding-left:20px;}
+ .customer-details-block .customer-details-text-block {width: 487px;padding-left:32px;}
   h5 {
     font-family: "PPNeueMontreal-Medium";
     font-size: 16px;
