@@ -130,7 +130,7 @@
     font-weight: 500;
     line-height: 42px;
     margin-bottom: 16px;
-    margin-top: 10px;
+    margin-top: 15px;
   }
   .customer-details-block h6 {
     font-family: "PPNeueMontreal-Medium";
