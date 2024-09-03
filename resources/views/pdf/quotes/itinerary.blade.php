@@ -95,7 +95,7 @@
   .pdf-individual-block {/*margin-left:-48px;*/}
   .pdf-individual-block:first-child {/*margin-top:-50px;*/}
   .pdf-individual-block .paragraph {
-    max-width:700px!important;
+    max-width:736px!important;
   }
   .pdf-individual-block:first-child .heading-module h3 {
     margin: 25px 10px 0px 0px!important;
