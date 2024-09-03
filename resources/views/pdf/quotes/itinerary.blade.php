@@ -281,6 +281,7 @@ h4 span.mark {
     color: var(--text-color);
     margin: 0px 0px 0px 0px;
     padding:0px;
+    vertical-align:top;
 }
 .single-module table td strong {
     font-family: "PPNeueMontreal-Medium";
