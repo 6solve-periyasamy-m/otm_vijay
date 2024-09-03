@@ -157,7 +157,7 @@
     color: var(--text-color);
  }
  /* .customer-agent-details .customer-details,.customer-agent-details .agent-details {float:left;} */
- .customer-agent-details .customer-details {width:219.5px;}
+ .customer-agent-details .customer-details {width:187.5px;}
  .customer-agent-details .agent-details {width:279.5px;}
  .customer-agent-details p {
   font-family: "PPNeueMontreal-Medium";
