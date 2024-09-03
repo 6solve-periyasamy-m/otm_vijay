@@ -107,7 +107,6 @@
   .single-module,.custom-details-module {
         page-break-inside: avoid;
     } 
-  #static-pages {margin-top:65px;}
     @font-face {
     font-family: "PlayfairDisplay-Medium";
     src: url('images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf');
@@ -280,7 +279,6 @@ h4 span.mark {
     color: var(--text-color);
     margin: 0px 0px 0px 0px;
     padding:0p;
-
 }
 .single-module table td strong {
     font-family: "PPNeueMontreal-Medium";
