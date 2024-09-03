@@ -321,7 +321,7 @@ h5 span {
     width: 44px;
     background-color:var(--head-text-background);
 }
-.custom-details-module {padding-left:20px;}
+.custom-details-module {padding-left:32px;}
 .custom-details-module  h6{
     font-family: "PPNeueMontreal-Medium";
     font-weight: 500;
@@ -344,7 +344,7 @@ h5 span {
 }
 .paragraph {
   margin: 20px 0px;
-  padding-left: 20px;
+  padding-left: 32px;
 }
 .paragraph h5, .paragraph p, .paragraph h6, .paragraph ul li {
     font-size: 14px;
@@ -375,7 +375,7 @@ h5 span {
   margin-left: -32px;
 }
 .single-module h3 {
-  margin-left:-21px!important;
+  margin-left:0px!important;
 }
 #static-pages h6 {margin-bottom:24px!important;}
 
