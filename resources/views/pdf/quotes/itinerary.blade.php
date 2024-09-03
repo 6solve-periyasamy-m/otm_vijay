@@ -276,9 +276,11 @@ h4 span.mark {
     font-family: "PPNeueMontreal-Regular";
     font-size: 14px;
     font-weight: 400;
-    line-height: 18px;
+    line-height: 24px;
     color: var(--text-color);
     margin: 0px 0px 0px 0px;
+    padding:0p;
+
 }
 .single-module table td strong {
     font-family: "PPNeueMontreal-Medium";
