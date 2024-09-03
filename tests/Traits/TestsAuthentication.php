@@ -43,4 +43,17 @@ trait TestsAuthentication
         $user->save();
         return $user;
     }
+
+    public function generateUser(bool $guest = false): User
+    {
+        $user = User::factory()->create();
+        if ($guest) {
+            $user->forbid()->everything();
+        } else {
+            $user->allow()->everything();
+        }
+        $user->save();
+        \Bouncer::refresh();
+        return $user;
+    }
 }

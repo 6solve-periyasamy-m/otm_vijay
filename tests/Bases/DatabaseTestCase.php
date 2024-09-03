@@ -3,6 +3,7 @@
 namespace Tests\Bases;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Settings;
 
 abstract class DatabaseTestCase extends TestCase
 {
@@ -12,6 +13,7 @@ abstract class DatabaseTestCase extends TestCase
     {
         parent::setUp();
         $this->seed();
+        Settings::forceRenewal();
     }
 
     protected function tearDown(): void
