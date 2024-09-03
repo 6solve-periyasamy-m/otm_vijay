@@ -16,9 +16,9 @@ class SettingsRepository
         $this->verifyCache();
     }
 
-    public static function getInstance(): SettingsRepository
+    public static function getInstance(bool $reset = false): SettingsRepository
     {
-        if (!isset(SettingsRepository::$instance)) SettingsRepository::$instance = new SettingsRepository();
+        if (!isset(SettingsRepository::$instance) || $reset) SettingsRepository::$instance = new SettingsRepository();
         return SettingsRepository::$instance;
     }
 

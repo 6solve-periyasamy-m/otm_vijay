@@ -4,7 +4,7 @@ namespace App\Events\Parent;
 
 use App\Events\Parent\Traits\ShouldInvoice;
 use App\Exceptions\MailDisabledException;
-use App\Mail\Storage\OrderMail;
+use App\Exceptions\MailFailedException;
 use App\Models\Order\Order;
 
 abstract class OrderEvent
@@ -20,7 +20,7 @@ abstract class OrderEvent
     public function sendMail(string $code, string $email): void
     {
         try {
-            (new OrderMail($code))->send($email, $this->order);
-        } catch (MailDisabledException) {}
+            $this->order->repository->mailer()->sendMail($code, $email);
+        } catch (MailDisabledException|MailFailedException) {}
     }
 }

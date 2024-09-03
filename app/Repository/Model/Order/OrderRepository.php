@@ -523,11 +523,19 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             'period' => $days
         ]);
         try {
-            $prefix = $installment->id === 0 ? 'final-' : '';
+            $final = $installment->id === 0 ? 'final-' : '';
             if ($days < 0) {
-                (new OrderMail($prefix . 'payment-overdue'))->send($this->order->leadBooker->customer->email_address, $this->order);
+                if ($final) {
+                    $this->mailer()->sendFinalPaymentDue();
+                } else {
+                    $this->mailer()->sendPaymentDue();
+                }
             } else {
-                (new OrderMail($prefix . 'payment-due'))->send($this->order->leadBooker->customer->email_address, $this->order);
+                if ($final) {
+                    $this->mailer()->sendFinalPaymentOverdue();
+                } else {
+                    $this->mailer()->sendPaymentOverdue();
+                }
             }
         } catch (MailDisabledException) {}
     }
