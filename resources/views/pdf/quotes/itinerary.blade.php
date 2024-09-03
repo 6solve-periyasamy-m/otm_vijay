@@ -233,7 +233,7 @@ h3 span.mark {
     width: 5px;
     height: 30px;
     display: inline-block;
-    margin-right: 15px;
+    margin-right: 22px;
     background-color: var(--head-text-background);
 }
 h3 span.text {
