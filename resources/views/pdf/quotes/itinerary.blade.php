@@ -130,7 +130,7 @@
     font-weight: 500;
     line-height: 42px;
     margin-bottom: 16px;
-    margin-top: 20px;
+    margin-top: 15px;
   }
   .customer-details-block h6 {
     font-family: "PPNeueMontreal-Medium";
@@ -138,7 +138,7 @@
     font-weight:500;
     line-height:16px;
     margin:0px;
-    margin-bottom:6px;
+    margin-bottom:8px;
     color: var(--text-head-color);
   }
   
@@ -398,7 +398,7 @@ h5 span {
       <div class="customer-details-block">
         <div class="customer-details-text-block">
             <h1>{{ $type ?? "Quote" }}</h1>
-            <h5>REFERENCE: {{ $reference }} <span></span></h5>         
+            <h5 style="margin-bottom:12px;">REFERENCE: {{ $reference }} <span></span></h5>         
             <div class="customer-agent-details">
                 <div class="customer-details">
                     <h6>CUSTOMER DETAILS</h6>
