@@ -286,9 +286,9 @@ h4 span.mark {
     font-family: "PPNeueMontreal-Medium";
     font-weight: 500;
     margin: 0px 0px 0px 0px;
-    margin-right: 30px;
+    margin-right: 6px;
     display: inline-block;
-    min-width: 55px;
+    min-width: 80px;
 }
 .customer-agent-details {position:relative;}
 .agent-details {
