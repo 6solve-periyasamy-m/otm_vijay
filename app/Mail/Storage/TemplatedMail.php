@@ -9,20 +9,37 @@ use Exception;
 use Faker\Factory as Faker;
 use Faker\Generator;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Log;
 use Settings;
-use Validator;
-
 
 abstract class TemplatedMail
 {
     protected string|null $code;
     protected Generator $faker;
+    protected string $email;
+    protected string $name;
 
     public function __construct(string|null $code = null)
     {
         $this->code = $code;
         $this->faker = Faker::create();
+        $defaultEmail = config('mail.from.address', config('mail.mailers.smtp.username', 'info@octopustravelmatrix.com'));
+        $defaultName = config('mail.from.name', setting('company.name', 'Octopus Travel Matrix'));
+        if (config('mail.individual', false)) {
+            $user = Auth::user();
+            $this->email = $user->email ?? $defaultEmail;
+            // If sending as a user, prepend the users name
+            if ($user !== null) {
+                $this->name = "{$user->name} - " . $defaultName;
+            } else {
+                $this->name = $defaultName;
+            }
+        } else {
+            $this->email = $defaultEmail;
+            $this->name = $defaultName;
+        }
     }
 
     public function getName(): ?string
@@ -38,7 +55,7 @@ abstract class TemplatedMail
         return $this->code;
     }
 
-    public abstract function getShortcodes($model = null): array;
+    abstract public function getShortcodes($model = null): array;
 
     public function getSubject(): string
     {
@@ -64,14 +81,15 @@ abstract class TemplatedMail
 
     public function getTemplatedMailable($model = null, array $attachments = []): TemplatedMailable
     {
-        $template = new TemplatedMailable($this->getFormattedSubject($model), $this->getFormattedBody($model));
+
+        $template = new TemplatedMailable($this->getFormattedSubject($model), $this->getFormattedBody($model), $this->email, $this->name);
         foreach ($attachments as $attachment) {
             $template->attachData($attachment->data, $attachment->filename, $attachment->opts);
         }
         return $template;
     }
 
-    public final function replaceShortcodes(string $body, $model = null): string
+    final public function replaceShortcodes(string $body, $model = null): string
     {
         $replacement = $body;
         foreach ($this->getShortcodes($model) as $key => $value) {
@@ -81,7 +99,7 @@ abstract class TemplatedMail
     }
 
     /**
-     * @param string $email
+     * @param string|null $email
      * @param null $model
      * @param Attachment[] $attachments
      * @param bool $force
@@ -89,25 +107,29 @@ abstract class TemplatedMail
      * @throws MailDisabledException
      * @throws MailFailedException
      */
-    final public function send(string|null $email, $model = null, array $attachments = [], bool $force = false): bool
+    final public function send(string|null $email, $model = null, array $attachments = [], string|array $bccTargets = "", bool $force = false): bool
     {
         if (!$force && !flag('system.mail.enabled', true)) {
             throw new MailDisabledException('Sending Emails is disabled on this system');
         }
-        $validator = Validator::make(['email' => $email,], ['email' => 'required|email:rfc,dns'], [
-            'email.required' => 'Recipient does not have an email address',
-            'email.email' => 'Recipient does not have a valid email address',
-        ]);
+        $validator = $this->validateEmail($email);
         if ($validator->fails()) {
             throw new MailFailedException($validator->errors()->first());
         }
         try {
             if (empty(config('mail.from.address'))) return false;
             $mail = Mail::to($email);
-            if (config('mail.bcc') !== null) {
-                $mail->bcc(config('mail.bcc'));
-                $bcc = " and " . config('mail.bcc');
+            $bcc = [];
+
+            if (!empty(config('mail.bcc'))) {
+                $bcc = array_merge($bcc, $this->getValidEmails(config('mail.bcc')));
             }
+            if (flag('mail.bcc-sender', false)) {
+                $bcc = array_merge($bcc, [$this->email,]);
+            }
+            $bcc = array_merge($bcc, $this->getValidEmails($bccTargets));
+            $mail->bcc($bcc);
+            $bcc = " and " . implode(', ', $bcc);
             $mail->send($this->getTemplatedMailable($model, $attachments));
             Log::channel('mail')->debug(class_basename(get_class($this)) . " mail sent to {$email}" . ($bcc ?? ""));
             return true;
@@ -117,23 +139,43 @@ abstract class TemplatedMail
         }
     }
 
-    public final function update(string $subject, string $body): void
+    final protected function validateEmail(string $email)
+    {
+        return Validator::make(['email' => $email,], ['email' => 'required|email:rfc,dns'], [
+            'email.required' => 'Recipient does not have an email address',
+            'email.email' => 'Recipient does not have a valid email address',
+        ]);
+    }
+
+    final protected function getValidEmails(string $emails): array
+    {
+        $valid = [];
+        foreach (explode(';', $emails) as $email) {
+            $validator = $this->validateEmail($email);
+            if (!$validator->fails()) {
+                $valid[] = $email;
+            }
+        }
+        return $valid;
+    }
+
+    final public function update(string $subject, string $body): void
     {
         Settings::set("email.{$this->code}.subject", $subject);
         Settings::set("email.{$this->code}.template", $body);
     }
 
-    public final function getEditUrl(): string
+    final public function getEditUrl(): string
     {
         return route('email.edit', ['mail' => $this->code,]);
     }
 
-    public final function getUpdateUrl(): string
+    final public function getUpdateUrl(): string
     {
         return route('email.update', ['mail' => $this->code,]);
     }
 
-    public final function getDemoUrl(): string
+    final public function getDemoUrl(): string
     {
         return route('email.demo', ['mail' => $this->code,]);
     }
