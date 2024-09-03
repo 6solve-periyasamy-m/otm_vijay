@@ -12,10 +12,21 @@ use Carbon\Carbon;
 class Settings
 {
     private SettingsRepository $repository;
+    private bool $renew = false;
 
     public function __construct()
     {
         $this->repository = SettingsRepository::getInstance();
+    }
+
+    public function refresh(): void
+    {
+        $this->repository = SettingsRepository::getInstance(true);
+    }
+
+    public function forceRenewal(): void
+    {
+        $this->renew = true;
     }
 
     public function get($key, $default = null): ?string
@@ -31,16 +42,19 @@ class Settings
     public function set($key, $value): void
     {
         $this->repository->set($key, $value);
+        $this->renew && $this->refresh();
     }
 
     public function setAll(array $keys): void
     {
         $this->repository->setAll($keys);
+        $this->renew && $this->refresh();
     }
 
     public function authorize(string $key, int $seconds): void
     {
         $this->repository->authorize($key, $seconds);
+        $this->renew && $this->refresh();
     }
 
     public function authorized(string $key): bool
