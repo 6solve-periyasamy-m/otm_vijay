@@ -146,8 +146,9 @@
  }
  .customer-details-block .customer-details-image-block {
     width: 297px;
+    height:198px;
  }
- .customer-details-block .customer-details-text-block {width: 487px;padding-left:32px;}
+ .customer-details-block .customer-details-text-block {width: 467px;padding-left:32px;}
   h5 {
     font-family: "PPNeueMontreal-Medium";
     font-size: 16px;
@@ -208,7 +209,7 @@
 .information-block .column:first-child {margin-right:15px;}
 .information-block .column .single:first-child {margin-bottom:15px;}
 .customer-details-image-block {display:inline-block;}
-.customer-details-image-block img {width:100%;height:100%;object-fit:cover;}
+.customer-details-image-block img {width:100%;height:100%;object-fit:contain;}
 h2 {
     color: var(--table-header-text);
     font-family: "PlayfairDisplay-Bold";
