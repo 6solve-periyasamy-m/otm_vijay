@@ -601,6 +601,10 @@ h5 span {
             <table>
                <tbody>
                   <tr>
+                     <td><strong>Ticket:</strong></td>
+                     <td>{{ $item->details['Ticket'] }}</td>
+                  </tr>
+                  <tr>
                      <td><strong>Dates:</strong></td>
                      <td>{{ $item->details['Dates'] }}</td>
                   </tr>
@@ -608,10 +612,7 @@ h5 span {
                      <td><strong>Venue:</strong></td>
                      <td>{{ $item->details['Venue'] }}</td>
                   </tr>
-                  <tr>
-                     <td><strong>Ticket:</strong></td>
-                     <td>{{ $item->details['Ticket'] }}</td>
-                  </tr>
+                 
                   <tr>
                      <td><strong>Quantity:</strong></td>
                      <td>{{ $item->details['Quantity'] }}</td>
