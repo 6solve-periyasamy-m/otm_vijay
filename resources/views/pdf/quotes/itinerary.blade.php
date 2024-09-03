@@ -147,7 +147,7 @@
  .customer-details-block .customer-details-image-block {
     width: 297px;
  }
- .customer-details-block .customer-details-text-block {width: 499px;padding-left:32px;}
+ .customer-details-block .customer-details-text-block {width: 487px;padding-left:32px;}
   h5 {
     font-family: "PPNeueMontreal-Medium";
     font-size: 16px;
