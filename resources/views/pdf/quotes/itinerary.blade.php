@@ -475,7 +475,7 @@ h5 span {
                         @continue(empty($value))
                         <tr>
                             <td class="item-header" style="width: 125px">
-                                {{ $key }}:
+                                <strong>{{ $key }}:</strong>
                             </td>
                             <td class="item-detail">
                                 @if(is_array($value))
