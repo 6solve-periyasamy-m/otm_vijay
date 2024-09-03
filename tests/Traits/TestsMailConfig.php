@@ -2,6 +2,7 @@
 
 namespace Tests\Traits;
 
+use App\Mail\Storage\SettingsMail;
 use Settings;
 use Config;
 
@@ -20,5 +21,10 @@ trait TestsMailConfig
         Config::set('mail.individual', $individual);
         Settings::set('mail.bcc-sender', $copySender);
         Settings::set('mail.bcc-consultant', $copyConsultant);
+    }
+
+    public function setMailTemplate(string $code): void
+    {
+        (new SettingsMail($code))->update($code, $code);
     }
 }

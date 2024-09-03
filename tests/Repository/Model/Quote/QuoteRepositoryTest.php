@@ -33,12 +33,14 @@ class QuoteRepositoryTest extends AuthenticationTestCase
 
         Mail::fake();
         $this->adjustMailConfig();
+        $this->setMailTemplate('quote');
 
         // First, test that the quote actually sends.
         $succeeded = $quote->repository->resend($sent);
         $this->assertTrue($succeeded);
         Mail::assertSent(TemplatedMailable::class, function (TemplatedMailable $mail) {
             return $mail->hasTo('customer@testing.com') &&
+                    $mail->hasSubject('quote') &&
                     !$mail->hasFrom('staff@testing.com');
         });
 
@@ -50,6 +52,7 @@ class QuoteRepositoryTest extends AuthenticationTestCase
         $this->assertTrue($succeeded);
         Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
             return $mail->hasTo('customer@testing.com') &&
+                $mail->hasSubject('quote') &&
                 !$mail->hasFrom('staff@testing.com') &&
                 $mail->hasBcc('bcc1@testing.com');
         });
@@ -62,6 +65,7 @@ class QuoteRepositoryTest extends AuthenticationTestCase
         $this->assertTrue($succeeded);
         Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
             return $mail->hasTo('customer@testing.com') &&
+                $mail->hasSubject('quote') &&
                 !$mail->hasFrom('staff@testing.com') &&
                 $mail->hasBcc('bcc1@testing.com') &&
                 $mail->hasBcc('bcc2@testing.com');
@@ -73,6 +77,7 @@ class QuoteRepositoryTest extends AuthenticationTestCase
         $this->assertTrue($succeeded);
         Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
             return $mail->hasTo('customer@testing.com') &&
+                $mail->hasSubject('quote') &&
                 $mail->hasFrom('staff@testing.com') &&
                 $mail->hasBcc('bcc1@testing.com') &&
                 $mail->hasBcc('bcc2@testing.com');
@@ -84,6 +89,7 @@ class QuoteRepositoryTest extends AuthenticationTestCase
         $this->assertTrue($succeeded);
         Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
             return $mail->hasTo('customer@testing.com') &&
+                $mail->hasSubject('quote') &&
                 $mail->hasFrom('staff@testing.com') &&
                 $mail->hasBcc('bcc1@testing.com') &&
                 $mail->hasBcc('bcc2@testing.com') &&
@@ -96,6 +102,7 @@ class QuoteRepositoryTest extends AuthenticationTestCase
         $this->assertTrue($succeeded);
         Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
             return $mail->hasTo('customer@testing.com') &&
+                $mail->hasSubject('quote') &&
                 $mail->hasFrom('staff@testing.com') &&
                 $mail->hasBcc('bcc1@testing.com') &&
                 $mail->hasBcc('bcc2@testing.com') &&
