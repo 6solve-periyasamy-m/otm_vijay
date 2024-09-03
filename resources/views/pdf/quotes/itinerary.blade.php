@@ -182,6 +182,7 @@
   clear: both;
   width: 100%;
   display: inline-block;
+  padding-left:12px;
 }
 .information-block .column {float:left;} 
 .information-block .column{width:290px;}
