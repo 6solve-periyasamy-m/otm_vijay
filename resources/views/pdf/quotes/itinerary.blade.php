@@ -140,8 +140,7 @@
     margin:0px;
     margin-bottom:8px;
     color: var(--text-head-color);
-  }
-  
+  } 
  .customer-details-block .customer-details-text-block,.customer-details-block .customer-details-image-block  {
     float:left;  
  }
@@ -657,7 +656,7 @@ h5 span {
    
    
    <div class="custom-details-module">  
-   <h2 style="margin-left:-20px;">Payment Details</h2>    
+   <h2 style="margin-left:-32px;">Payment Details</h2>    
        <h6>Keith Prowse Travel PTY LTD</h6>      
   <table>
     <tr>
