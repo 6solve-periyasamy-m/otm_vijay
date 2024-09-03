@@ -290,6 +290,8 @@ h4 span.mark {
     margin-right: 6px;
     display: inline-block;
     min-width: 80px;
+}
+.single-module table td.item-detail strong  {
     position:relative;
     top:5px;
 }
