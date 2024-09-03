@@ -74,7 +74,7 @@
         {!! setting('customization.documentation.colors') !!}
     </style>
 
-  <style>
+<style>
   :root { 
   --main-background-color:#F9F4EE;
   --text-head-color: #F35B15;
@@ -98,7 +98,7 @@
     max-width:700px!important;
   }
   .pdf-individual-block:first-child .heading-module h3 {
-    margin: 50px 10px 0px 0px!important;
+    margin: 25px 10px 0px 0px!important;
   }
   .pdf-individual-block:first-child .single-module {
     margin-top: 28px!important;
@@ -127,17 +127,17 @@
   h1 {
     color: var(--text-color);
     font-family: "PlayfairDisplay-Medium";
-    font-size: 35px;
+    font-size: 40px;
     font-weight: 500;
-    line-height: 35px;
+    line-height: 42px;
     margin-bottom: 16px;
     margin-top: 20px;
   }
   .customer-details-block h6 {
     font-family: "PPNeueMontreal-Medium";
-    font-size:9px;
+    font-size:14px;
     font-weight:500;
-    line-height:10px;
+    line-height:16px;
     margin:0px;
     margin-bottom:6px;
     color: var(--text-head-color);
@@ -153,9 +153,9 @@
  .customer-details-block .customer-details-text-block {width: 499px;padding-left:20px;}
   h5 {
   font-family: "PPNeueMontreal-Medium";
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 500;
-  line-height: 14.4px;
+  line-height: 18.4px;
   margin-bottom: 6px;
   color: var(--text-color);
  }
@@ -163,9 +163,9 @@
  .customer-agent-details .customer-details, .customer-agent-details .agent-details{width:249.5px;}
  .customer-agent-details p {
   font-family: "PPNeueMontreal-Medium";
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 19px;
+  line-height: 18px;
   margin:0px;
   margin-bottom: 0px ! Important;
   color: var(--text-color);
@@ -188,18 +188,18 @@
 .information-block .column{width:290px;}
 .information-block .column {
   font-family: "PPNeueMontreal-Medium";
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 10.58px; 
+  line-height: 16px; 
   color: var(--text-color);
 }
 .information-block .column .single p{
   float:left;
   width:130px;
   font-family: "PPNeueMontreal-Medium";
-  font-size: 9px;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 10.58px; 
+  line-height: 16px; 
   color: var(--text-color);
   margin:0;
 }
@@ -214,20 +214,20 @@
 h2 {
     color: var(--table-header-text);
     font-family: "PlayfairDisplay-Bold";
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 700;
-    line-height: 21.33px;
+    line-height: 24px;
     padding:6px 21px;
     background-color:var(--head-text-background);
     margin:0;
 }
 
 h3 {
-    margin: 40px 10px 0px 0px;
+    margin: 20px 10px 0px 0px;
     font-family: "PPNeueMontreal-Medium";
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 500;
-    line-height: 19.2px;
+    line-height: 24px;
     color: var(--text-color);
 }
 h3 span.mark {
@@ -255,9 +255,9 @@ h3 span.text {
 }
 h4 {
     font-family: "PPNeueMontreal-Regular";
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 500;
-    line-height: 16.8px;
+    line-height: 20px;
     color: var(--text-color);
     margin: 0px 0px 24px 0px;
 }
@@ -274,7 +274,7 @@ h4 span.mark {
 }
 .single-module table td {
     font-family: "PPNeueMontreal-Regular";
-    font-size: 9px;
+    font-size: 14px;
     font-weight: 400;
     line-height: 18px;
     color: var(--text-color);
@@ -300,9 +300,9 @@ h4 span.mark {
 }
 .information-block table td {
     font-family: "PPNeueMontreal-Regular";
-    font-size: 9px;
+    font-size: 14px;
     font-weight: 400;
-    line-height: 10.58px;
+    line-height: 18px;
     color: var(--text-color);
     margin: 0;
     width:160px;
@@ -324,13 +324,13 @@ h5 span {
 .custom-details-module  h6{
     font-family: "PPNeueMontreal-Medium";
     font-weight: 500;
-    margin: 30px 0px 15px 0px;
-    font-size: 9px;
+    margin: 20px 0px 15px 0px;
+    font-size: 14px;
     line-height: 18px;
 }
 .custom-details-module table td {
     font-family: "PPNeueMontreal-Regular";
-    font-size: 9px;
+    font-size: 14px;
     font-weight: 400;
     line-height: 18px;
     color: var(--text-color);
@@ -342,13 +342,13 @@ h5 span {
     font-weight: 500;
 }
 .paragraph {
-  margin: 25px 0px;
+  margin: 20px 0px;
   padding-left: 20px;
 }
 .paragraph h5, .paragraph p, .paragraph h6, .paragraph ul li {
-    font-size: 9px;
+    font-size: 14px;
     font-weight: 400;
-    line-height: 15.3px;
+    line-height: 18px;
     color: var(--text-color);
 }
 
@@ -373,7 +373,9 @@ h5 span {
   margin-bottom: 24px;
   margin-left: -20px;
 }
-
+.single-module h3 {
+  margin-left:-21px!important;
+}
 </style>
 
    
