@@ -85,7 +85,7 @@
   
   .pdf-header {
     background-color: var(--main-background-color);
-    padding:14px 20px;
+    padding:14px 32px;
   }
   .pdf-individual-block {
     width: 796px;
@@ -289,6 +289,8 @@ h4 span.mark {
     margin-right: 6px;
     display: inline-block;
     min-width: 80px;
+    position:relative;
+    top:5px;
 }
 .customer-agent-details {position:relative;}
 .agent-details {
