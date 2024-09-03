@@ -29,9 +29,9 @@ if(!function_exists('dompdf')) {
      */
     function dompdf(\Illuminate\Contracts\View\View|Factory $view, bool $response = true): StreamedResponse|string
     {
-        // $html = $view->render();   
-        // if (!$response) return $html;
-        // return response()->stream(function () use ($html) { echo $html; }, 200, ['Content-Type' => 'text/html']);
+        $html = $view->render();   
+        if (!$response) return $html;
+        return response()->stream(function () use ($html) { echo $html; }, 200, ['Content-Type' => 'text/html']);
 
         $dompdf = new Dompdf((new Options())->set('dpi', 96)->set('isHtml5ParserEnabled', true));
         $dompdf->setPaper('A4', 'portrait');
