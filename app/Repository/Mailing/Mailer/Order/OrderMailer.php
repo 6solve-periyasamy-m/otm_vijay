@@ -30,11 +30,12 @@ class OrderMailer
      */
     private function sendMail(string $code, string|null $email = null): bool
     {
+        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant->email : "";
         if ($email === null) {
             $email = $this->order->leadBooker->customer->email_address;
         }
         try {
-            (new OrderMail($code))->send($email, $this->order);
+            (new OrderMail($code))->send($email, $this->order, [], $bcc);
             return true;
         } catch (MailDisabledException) {
             return false;
