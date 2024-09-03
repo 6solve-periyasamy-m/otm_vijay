@@ -104,7 +104,7 @@
     margin-top: 28px!important;
     margin-bottom: 28px!important;
   }
-  .single-module,.custom-details-module {
+  .single-module,.custom-details-module, .paragraph {
         page-break-inside: avoid;
     } 
     @font-face {
