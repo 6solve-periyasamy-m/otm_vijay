@@ -305,7 +305,7 @@ h4 span.mark {
     line-height: 18px;
     color: var(--text-color);
     margin: 0;
-    width:160px;
+    width:190px;
 }
 .information-block table td strong {
   font-family: "PPNeueMontreal-Medium";
