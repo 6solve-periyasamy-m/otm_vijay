@@ -220,6 +220,7 @@ h2 {
     padding:6px 21px;
     background-color:var(--head-text-background);
     margin:0;
+    text-transform: capitalize;
 }
 
 h3 {
@@ -251,7 +252,7 @@ h3 span.text {
   margin-bottom:24px;
 }
 .single-module .details-module {
-  max-width:586px;
+  max-width:736px;
 }
 h4 {
     font-family: "PPNeueMontreal-Regular";
@@ -424,7 +425,7 @@ h5 span {
         <tr>
             <td><strong>Event:</strong></td>
             <td>{!! !empty($evename) ? $evename : '' !!}</td>
-            <td><strong>Total number of persons:</strong></td>
+            <td><strong>No. of guests:</strong></td>
             <td>{{ !empty($evatra) ? $evatra : '0' }} Adult(s)</td> 
         </tr>
         <tr>
