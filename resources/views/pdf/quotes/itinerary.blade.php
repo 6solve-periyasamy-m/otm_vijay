@@ -98,11 +98,11 @@
     max-width:736px!important;
   }
   .pdf-individual-block:first-child .heading-module h3 {
-    margin: 20px 10px 0px 0px!important;
+    margin: 0px 10px 0px 0px!important;
   }
   .pdf-individual-block:first-child .single-module {
-    margin-top: 28px!important;
-    margin-bottom: 28px!important;
+    margin-top: 24px!important;
+    margin-bottom: 24px!important;
   }
   .single-module, .custom-details-module, .paragraph {
         page-break-inside: avoid;
