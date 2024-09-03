@@ -377,7 +377,7 @@ h5 span {
 .single-module h3 {
   margin-left:-21px!important;
 }
-#static-pages {margin-top:12px!important;}
+#static-pages h6 {margin-bottom:12px!important;}
 
 </style>
 
