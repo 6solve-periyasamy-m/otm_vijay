@@ -28,7 +28,39 @@ class OrderMailer
     /**
      * @throws MailFailedException
      */
-    private function sendMail(string $code, string|null $email = null): bool
+    public function sendPaymentDue(string $email = null): bool
+    {
+        return $this->sendMail('payment-due', $email);
+    }
+
+    /**
+     * @throws MailFailedException
+     */
+    public function sendPaymentOverdue(string $email = null): bool
+    {
+        return $this->sendMail('payment-overdue', $email);
+    }
+
+    /**
+     * @throws MailFailedException
+     */
+    public function sendFinalPaymentDue(string $email = null): bool
+    {
+        return $this->sendMail('final-payment-due', $email);
+    }
+
+    /**
+     * @throws MailFailedException
+     */
+    public function sendFinalPaymentOverdue(string $email = null): bool
+    {
+        return $this->sendMail('final-payment-overdue', $email);
+    }
+
+    /**
+     * @throws MailFailedException
+     */
+    public function sendMail(string $code, string|null $email = null): bool
     {
         $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant->email : "";
         if ($email === null) {

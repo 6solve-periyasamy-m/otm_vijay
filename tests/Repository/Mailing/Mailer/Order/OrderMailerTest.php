@@ -107,4 +107,377 @@ class OrderMailerTest extends AuthenticationTestCase
         });
 
     }
+
+    /**
+     * @return void
+     * @covers \App\Repository\Mailing\Mailer\Order\OrderMailer::sendPaymentDue
+     * @throws MailFailedException
+     */
+    public function testSendPaymentDue(): void
+    {
+        // Authentication Setup
+        $user = $this->user();
+        $user->email = 'staff@testing.com';
+        $user->save();
+        Auth::login($user);
+
+        // Order Setup
+        $order = $this->generateOrder();
+        $consultant = $this->generateUser();
+        $consultant->update(['email' => 'consultant@testing.com']);
+        $order->update(['consultant_id' => $consultant->id]);
+        $order->leadBooker->customer->update(['email_address' => 'customer@testing.com',]);
+
+        Mail::fake();
+        $this->adjustMailConfig();
+
+        // First, test that the order actually sends.
+        $succeeded = $order->repository->mailer()->sendPaymentDue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                !$mail->hasFrom('staff@testing.com');
+        });
+
+        Mail::fake(); // Calling fake() again resets the sending for easier testing
+
+        // Second, test that it works when bcc-ing a single address
+        $this->adjustMailConfig("bcc1@testing.com");
+        $succeeded = $order->repository->mailer()->sendPaymentDue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                !$mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com');
+        });
+
+        Mail::fake();
+
+        // Third, test that it works with semicolon seperated bccs
+        $this->adjustMailConfig("bcc1@testing.com;bcc2@testing.com");
+        $succeeded = $order->repository->mailer()->sendPaymentDue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                !$mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com') &&
+                $mail->hasBcc('bcc2@testing.com');
+        });
+
+        // Fourth, test that it works with semicolon seperated bccs and sending as logged-in user
+        $this->adjustMailConfig("bcc1@testing.com;bcc2@testing.com", true);
+        $succeeded = $order->repository->mailer()->sendPaymentDue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                $mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com') &&
+                $mail->hasBcc('bcc2@testing.com');
+        });
+
+        // Fifth, test that it works with semicolon seperated bccs and sending as logged-in user, and bccing the sending user
+        $this->adjustMailConfig("bcc1@testing.com;bcc2@testing.com", true, true);
+        $succeeded = $order->repository->mailer()->sendPaymentDue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                $mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com') &&
+                $mail->hasBcc('bcc2@testing.com') &&
+                $mail->hasBcc('staff@testing.com');
+        });
+
+        // Finally, test that it works with semicolon seperated bccs and sending as logged-in user, and bccing the sending user + consultant
+        $this->adjustMailConfig("bcc1@testing.com;bcc2@testing.com", true, true, true);
+        $succeeded = $order->repository->mailer()->sendPaymentDue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                $mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com') &&
+                $mail->hasBcc('bcc2@testing.com') &&
+                $mail->hasBcc('consultant@testing.com') &&
+                $mail->hasBcc('staff@testing.com');
+        });
+
+    }
+
+    /**
+     * @return void
+     * @covers \App\Repository\Mailing\Mailer\Order\OrderMailer::sendPaymentOverdue
+     * @throws MailFailedException
+     */
+    public function testSendPaymentOverdue(): void
+    {
+        // Authentication Setup
+        $user = $this->user();
+        $user->email = 'staff@testing.com';
+        $user->save();
+        Auth::login($user);
+
+        // Order Setup
+        $order = $this->generateOrder();
+        $consultant = $this->generateUser();
+        $consultant->update(['email' => 'consultant@testing.com']);
+        $order->update(['consultant_id' => $consultant->id]);
+        $order->leadBooker->customer->update(['email_address' => 'customer@testing.com',]);
+
+        Mail::fake();
+        $this->adjustMailConfig();
+
+        // First, test that the order actually sends.
+        $succeeded = $order->repository->mailer()->sendPaymentOverdue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                !$mail->hasFrom('staff@testing.com');
+        });
+
+        Mail::fake(); // Calling fake() again resets the sending for easier testing
+
+        // Second, test that it works when bcc-ing a single address
+        $this->adjustMailConfig("bcc1@testing.com");
+        $succeeded = $order->repository->mailer()->sendPaymentOverdue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                !$mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com');
+        });
+
+        Mail::fake();
+
+        // Third, test that it works with semicolon seperated bccs
+        $this->adjustMailConfig("bcc1@testing.com;bcc2@testing.com");
+        $succeeded = $order->repository->mailer()->sendPaymentOverdue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                !$mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com') &&
+                $mail->hasBcc('bcc2@testing.com');
+        });
+
+        // Fourth, test that it works with semicolon seperated bccs and sending as logged-in user
+        $this->adjustMailConfig("bcc1@testing.com;bcc2@testing.com", true);
+        $succeeded = $order->repository->mailer()->sendPaymentOverdue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                $mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com') &&
+                $mail->hasBcc('bcc2@testing.com');
+        });
+
+        // Fifth, test that it works with semicolon seperated bccs and sending as logged-in user, and bccing the sending user
+        $this->adjustMailConfig("bcc1@testing.com;bcc2@testing.com", true, true);
+        $succeeded = $order->repository->mailer()->sendPaymentOverdue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                $mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com') &&
+                $mail->hasBcc('bcc2@testing.com') &&
+                $mail->hasBcc('staff@testing.com');
+        });
+
+        // Finally, test that it works with semicolon seperated bccs and sending as logged-in user, and bccing the sending user + consultant
+        $this->adjustMailConfig("bcc1@testing.com;bcc2@testing.com", true, true, true);
+        $succeeded = $order->repository->mailer()->sendPaymentOverdue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                $mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com') &&
+                $mail->hasBcc('bcc2@testing.com') &&
+                $mail->hasBcc('consultant@testing.com') &&
+                $mail->hasBcc('staff@testing.com');
+        });
+    }
+
+    /**
+     * @return void
+     * @covers \App\Repository\Mailing\Mailer\Order\OrderMailer::sendFinalPaymentDue
+     * @throws MailFailedException
+     */
+    public function testSendFinalPaymentDue(): void
+    {
+        // Authentication Setup
+        $user = $this->user();
+        $user->email = 'staff@testing.com';
+        $user->save();
+        Auth::login($user);
+
+        // Order Setup
+        $order = $this->generateOrder();
+        $consultant = $this->generateUser();
+        $consultant->update(['email' => 'consultant@testing.com']);
+        $order->update(['consultant_id' => $consultant->id]);
+        $order->leadBooker->customer->update(['email_address' => 'customer@testing.com',]);
+
+        Mail::fake();
+        $this->adjustMailConfig();
+
+        // First, test that the order actually sends.
+        $succeeded = $order->repository->mailer()->sendFinalPaymentDue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                !$mail->hasFrom('staff@testing.com');
+        });
+
+        Mail::fake(); // Calling fake() again resets the sending for easier testing
+
+        // Second, test that it works when bcc-ing a single address
+        $this->adjustMailConfig("bcc1@testing.com");
+        $succeeded = $order->repository->mailer()->sendFinalPaymentDue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                !$mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com');
+        });
+
+        Mail::fake();
+
+        // Third, test that it works with semicolon seperated bccs
+        $this->adjustMailConfig("bcc1@testing.com;bcc2@testing.com");
+        $succeeded = $order->repository->mailer()->sendFinalPaymentDue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                !$mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com') &&
+                $mail->hasBcc('bcc2@testing.com');
+        });
+
+        // Fourth, test that it works with semicolon seperated bccs and sending as logged-in user
+        $this->adjustMailConfig("bcc1@testing.com;bcc2@testing.com", true);
+        $succeeded = $order->repository->mailer()->sendFinalPaymentDue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                $mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com') &&
+                $mail->hasBcc('bcc2@testing.com');
+        });
+
+        // Fifth, test that it works with semicolon seperated bccs and sending as logged-in user, and bccing the sending user
+        $this->adjustMailConfig("bcc1@testing.com;bcc2@testing.com", true, true);
+        $succeeded = $order->repository->mailer()->sendFinalPaymentDue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                $mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com') &&
+                $mail->hasBcc('bcc2@testing.com') &&
+                $mail->hasBcc('staff@testing.com');
+        });
+
+        // Finally, test that it works with semicolon seperated bccs and sending as logged-in user, and bccing the sending user + consultant
+        $this->adjustMailConfig("bcc1@testing.com;bcc2@testing.com", true, true, true);
+        $succeeded = $order->repository->mailer()->sendFinalPaymentDue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                $mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com') &&
+                $mail->hasBcc('bcc2@testing.com') &&
+                $mail->hasBcc('consultant@testing.com') &&
+                $mail->hasBcc('staff@testing.com');
+        });
+    }
+
+    /**
+     * @return void
+     * @covers \App\Repository\Mailing\Mailer\Order\OrderMailer::sendFinalPaymentOverdue
+     * @throws MailFailedException
+     */
+    public function testSendFinalPaymentOverdue(): void
+    {
+        // Authentication Setup
+        $user = $this->user();
+        $user->email = 'staff@testing.com';
+        $user->save();
+        Auth::login($user);
+
+        // Order Setup
+        $order = $this->generateOrder();
+        $consultant = $this->generateUser();
+        $consultant->update(['email' => 'consultant@testing.com']);
+        $order->update(['consultant_id' => $consultant->id]);
+        $order->leadBooker->customer->update(['email_address' => 'customer@testing.com',]);
+
+        Mail::fake();
+        $this->adjustMailConfig();
+
+        // First, test that the order actually sends.
+        $succeeded = $order->repository->mailer()->sendFinalPaymentOverdue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                !$mail->hasFrom('staff@testing.com');
+        });
+
+        Mail::fake(); // Calling fake() again resets the sending for easier testing
+
+        // Second, test that it works when bcc-ing a single address
+        $this->adjustMailConfig("bcc1@testing.com");
+        $succeeded = $order->repository->mailer()->sendFinalPaymentOverdue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                !$mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com');
+        });
+
+        Mail::fake();
+
+        // Third, test that it works with semicolon seperated bccs
+        $this->adjustMailConfig("bcc1@testing.com;bcc2@testing.com");
+        $succeeded = $order->repository->mailer()->sendFinalPaymentOverdue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                !$mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com') &&
+                $mail->hasBcc('bcc2@testing.com');
+        });
+
+        // Fourth, test that it works with semicolon seperated bccs and sending as logged-in user
+        $this->adjustMailConfig("bcc1@testing.com;bcc2@testing.com", true);
+        $succeeded = $order->repository->mailer()->sendFinalPaymentOverdue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                $mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com') &&
+                $mail->hasBcc('bcc2@testing.com');
+        });
+
+        // Fifth, test that it works with semicolon seperated bccs and sending as logged-in user, and bccing the sending user
+        $this->adjustMailConfig("bcc1@testing.com;bcc2@testing.com", true, true);
+        $succeeded = $order->repository->mailer()->sendFinalPaymentOverdue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                $mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com') &&
+                $mail->hasBcc('bcc2@testing.com') &&
+                $mail->hasBcc('staff@testing.com');
+        });
+
+        // Finally, test that it works with semicolon seperated bccs and sending as logged-in user, and bccing the sending user + consultant
+        $this->adjustMailConfig("bcc1@testing.com;bcc2@testing.com", true, true, true);
+        $succeeded = $order->repository->mailer()->sendFinalPaymentOverdue();
+        $this->assertTrue($succeeded);
+        Mail::assertSent(TemplatedMailable::class, static function (TemplatedMailable $mail) {
+            return $mail->hasTo('customer@testing.com') &&
+                $mail->hasFrom('staff@testing.com') &&
+                $mail->hasBcc('bcc1@testing.com') &&
+                $mail->hasBcc('bcc2@testing.com') &&
+                $mail->hasBcc('consultant@testing.com') &&
+                $mail->hasBcc('staff@testing.com');
+        });
+    }
 }
