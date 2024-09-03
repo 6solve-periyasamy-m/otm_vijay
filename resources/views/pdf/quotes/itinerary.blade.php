@@ -633,10 +633,13 @@ h5 span {
    
    <div class="single-module">
    <h2 style="margin-left:-32px;">Payment summary</h2> 
-   <h3>
-     <span class="mark"></span>
-     <span class="text">Order total</span>
-    </h3>
+   
+   <div class="heading-module">
+    <h3>
+      <span class="mark"></span>
+      <span class="text">Order total</span>
+      </h3>
+        </div>
     <div class="details-module">
         <table>
            <tbody>
