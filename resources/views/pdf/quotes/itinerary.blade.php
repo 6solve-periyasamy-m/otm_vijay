@@ -10,7 +10,7 @@
     //pdf variables
     $headlogo = svg_to_b64('images/pdf_assets/images/KeithProwse_Logo.png') ;
    
-    $dacre = \Carbon\Carbon::parse($itinerary->booker->customer->created_at)->format('d F Y');
+    $dacre = \Carbon\Carbon::parse($itinerary->booker->customer->created_at)->format('d M Y');
 
     $reference = $itinerary->reference;
     $cusname = $itinerary->booker->customer->first_name .' '. $itinerary->booker->customer->last_name;
@@ -146,17 +146,17 @@
     float:left;  
  }
  .customer-details-block .customer-details-image-block {
-  width:297px;
-  height:198px;
+    width: 487px;
+    padding-left: 32px;
  }
  .customer-details-block .customer-details-text-block {width: 499px;padding-left:20px;}
   h5 {
-  font-family: "PPNeueMontreal-Medium";
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 18.4px;
-  margin-bottom: 6px;
-  color: var(--text-color);
+    font-family: "PPNeueMontreal-Medium";
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 18.4px;
+    margin-bottom: 6px;
+    color: var(--text-color);
  }
  /* .customer-agent-details .customer-details,.customer-agent-details .agent-details {float:left;} */
  .customer-agent-details .customer-details {width:219.5px;}
@@ -217,7 +217,7 @@ h2 {
     font-size: 20px;
     font-weight: 700;
     line-height: 24px;
-    padding:6px 21px;
+    padding:6px 32px;
     background-color:var(--head-text-background);
     margin:0;
     text-transform: capitalize;
@@ -431,8 +431,8 @@ h5 span {
         <tr>
             <td><strong>Travel dates:</strong></td>
             <td>
-                {{ !empty($itinerary->start) ? date('d F Y', strtotime($itinerary->start)) : '' }} - 
-                {{ !empty($itinerary->end) ? date('d F Y', strtotime($itinerary->end)) : '' }}
+                {{ !empty($itinerary->start) ? date('d M Y', strtotime($itinerary->start)) : '' }} - 
+                {{ !empty($itinerary->end) ? date('d M Y', strtotime($itinerary->end)) : '' }}
             </td>
             <td><strong>Lead guest:</strong></td>
             <td>{{ !empty($cusname) ? $cusname : '' }}</td>
