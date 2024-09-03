@@ -98,7 +98,7 @@
     max-width:736px!important;
   }
   .pdf-individual-block:first-child .heading-module h3 {
-    margin: 25px 10px 0px 0px!important;
+    margin: 20px 10px 0px 0px!important;
   }
   .pdf-individual-block:first-child .single-module {
     margin-top: 28px!important;
@@ -371,7 +371,7 @@ h5 span {
     margin: 8px 0px 0px 0px;
 }
 .single-module .heading-module{
-  margin-bottom: 24px;
+  margin-bottom: 18px;
   margin-left: -20px;
 }
 .single-module h3 {
