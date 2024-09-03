@@ -48,21 +48,21 @@
                         'name' => 'Invoice Format',
                         'field' => 'invoice_format',
                         'values' => \Settings::availableInvoiceStyles(),
-                        'selected' => setting('invoice.style', 1),
+                        'selected' => (int)setting('invoice.style', 1),
                         'width' => 4,
                     ])
                     @include('partials.fields.dropdown', [
                         'name' => 'Quote Format',
                         'field' => 'quote_format',
                         'values' => \Settings::availableQuoteStyles(),
-                        'selected' => setting('quote.style', 1),
+                        'selected' => (int)setting('quote.style', 1),
                         'width' => 4,
                     ])
                     @include('partials.fields.dropdown', [
                         'name' => 'Itinerary Format',
                         'field' => 'itinerary_format',
                         'values' => \Settings::availableItineraryStyles(),
-                        'selected' => setting('itinerary.style', 1),
+                        'selected' => (int)setting('itinerary.style', 1),
                         'width' => 4,
                     ])
                 </div>
@@ -140,6 +140,8 @@
                 @include('partials.fields.checkbox', ['name' => 'Default to Sending Booking Confirmation on Manual Order Creation', 'field' => 'mail_enabled', 'value' => flag('order.manual.mail', false),])
                 @include('partials.fields.checkbox', ['name' => 'Enable Automatically Sending Emails', 'field' => 'mail_enabled', 'value' => flag('system.mail.enabled', true),])
                 @include('partials.fields.checkbox', ['name' => 'Enable ATOL Certificate Generation', 'field' => 'atol_enabled', 'value' => flag('atol.enabled', true),])
+                @include('partials.fields.checkbox', ['name' => 'BCC Emails to Sender', 'field' => 'bcc_sender', 'value' => flag('mail.bcc-sender', false),])
+                @include('partials.fields.checkbox', ['name' => 'BCC Emails to Consultant', 'field' => 'bcc_consultant', 'value' => flag('mail.bcc-consultant', false),])
             </div>
     </x-admin.section.card>
     </div>

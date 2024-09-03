@@ -36,7 +36,7 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
+            'host' => env('MAIL_HOST', 'send.smtp.com'),
             'port' => env('MAIL_PORT', 587),
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'username' => env('MAIL_USERNAME'),
@@ -112,5 +112,6 @@ return [
         ],
     ],
 
-    'bcc' => env('BCC_ADDRESS')
+    'bcc' => env('BCC_ADDRESS'),
+    'individual' => env('MAIL_FROM_INDIVIDUAL', false),
 ];

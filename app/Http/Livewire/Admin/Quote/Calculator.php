@@ -3,10 +3,12 @@
 namespace App\Http\Livewire\Admin\Quote;
 
 use App\Exceptions\MailDisabledException;
+use App\Exceptions\MailFailedException;
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
+use Exception;
 use Livewire\Component;
 
 class Calculator extends Component
@@ -145,9 +147,17 @@ class Calculator extends Component
             return;
         }
         try {
-            $this->quote->repository->resend($this->quote->repository->generateSent($this->quote->leadTraveller->email, $this->paying, $this->travelling));
+            $status = $this->quote->repository->resend($this->quote->repository->generateSent($this->quote->leadTraveller->email, $this->paying, $this->travelling));
         } catch (MailDisabledException) {
             $this->toast('Failed to Send Quote', 'Emails are not enabled on this system', 'danger');
+            return;
+        } catch (MailFailedException $e) {
+            $status = false;
+        }
+        if ($status ?? false) {
+            $this->toast('Email Sent Successfully', 'The quote document has been successfully sent to the recipient', 'success');
+        } else {
+            $this->toast('Email Failed to Send', 'The quote document could not be sent to the recipient. Please double check the recipient email address and try again later.', 'danger');
         }
     }
 

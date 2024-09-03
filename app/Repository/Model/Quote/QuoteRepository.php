@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Quote;
 
 use App\Exceptions\MailDisabledException;
+use App\Exceptions\MailFailedException;
 use App\Mail\Storage\Attachment;
 use App\Mail\Storage\QuoteMail;
 use App\Mail\Storage\SettingsMail;
@@ -754,11 +755,13 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     /**
      * @throws MailDisabledException
+     * @throws MailFailedException
      */
-    public function resend(SentQuote $sent, string $email = null): void
+    public function resend(SentQuote $sent, string $email = null): bool
     {
+        $bcc = flag('mail.bcc-consultant', false) ? $this->quote->consultant->email : "";
         $attachment = new Attachment($this->getStream($sent), $this->quote->reference . '.pdf', ['mime' => 'application/pdf',]);
-        (new QuoteMail('quote'))->send($email ?? $sent->recipient, $sent, [$attachment,], true);
+        return (new QuoteMail('quote'))->send($email ?? $sent->recipient, $sent, [$attachment,], $bcc, true);
     }
 
     public static function deserializeAndSave(SentQuote $sent): Quote
