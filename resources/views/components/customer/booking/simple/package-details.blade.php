@@ -19,7 +19,7 @@
         <h6>{{ $tour->name }}</h6>
         <!--<p class="location"></p> TODO: Implement Location on Event -->
         <p class="date">{{ $tour->date_from?->format('M d, Y') }} - {{ $tour->date_to?->format('M d, Y') }}</p>
-        @foreach($tour->repository->getInclusions(3) as $inclusion)
+        @foreach($tour->repository->getInclusions(4) as $inclusion)
             <p class="inclusion">{{ $inclusion }}</p>
         @endforeach
         <p class="see-more">
