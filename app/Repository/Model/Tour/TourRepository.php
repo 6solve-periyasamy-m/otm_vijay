@@ -617,7 +617,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 $component instanceof AccommodationInventoryRepository =>
                     $component->get()->accommodation->name . ' - ' . diff_in_nights($component->getStartTime(), $component->getEndTime()) . ' Nights',
                 $component instanceof ActivityInventoryRepository =>
-                    $component->get()->activity->name,
+                    f_date($component->getStartTime()) . " " . $component->get()->activity->name,
                 default => null,
             };
             // TODO: Implement Flights, Transport and Merchandise
