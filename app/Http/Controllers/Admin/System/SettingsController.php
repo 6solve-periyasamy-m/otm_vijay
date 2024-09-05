@@ -81,6 +81,7 @@ class SettingsController extends Controller
             'installments.force' => $request->input('force_installments') === 'on' ? 1 : 0,
             'mail.bcc-sender' => $request->input('bcc_sender') === 'on' ? 1 : 0,
             'mail.bcc-consultant' => $request->input('bcc_consultant') === 'on' ? 1 : 0,
+            'booking.deposit.full' => $request->input('deposit_full') === 'on' ? 1 : 0,
             'components.lock' => $request->input('components_lock'),
             'passport.lock' => $request->input('passport_lock'),
             'passport.unlock' => $request->input('passport_unlock'),
