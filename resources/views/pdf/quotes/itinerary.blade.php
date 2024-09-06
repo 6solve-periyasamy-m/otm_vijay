@@ -398,6 +398,13 @@ h5 span {
     margin-top: 28px;
 }
 .customer-agent-details {clear:both;}
+@page {
+    margin-top: 50px; 
+}
+
+@page:first {
+    margin-top: 0px;
+}
 </style>
 
    
