@@ -53,7 +53,7 @@
     ['name' => 'PPNeueMontreal-Medium', 'path' => 'images/pdf_assets/fonts/PPNeueMontreal-Medium.ttf'],
     ['name' => 'PPNeueMontreal-Regular', 'path' => 'images/pdf_assets/fonts/PPNeueMontreal-Regular.ttf'],
 ];
-var_dump($itinerary);
+//var_dump($itinerary);
     
 @endphp
 <?php 
