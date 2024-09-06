@@ -129,8 +129,7 @@
     font-size: 40px;
     font-weight: 500;
     line-height: 42px;
-    margin-bottom: 16px;
-    margin-top: 10px;
+    margin-bottom: 0px;
   }
   .customer-details-block h6 {
     font-family: "PPNeueMontreal-Medium";
@@ -384,20 +383,26 @@ h5 span {
   margin-left:0px!important;
 }
 #static-pages h6 {margin-bottom:24px!important;}
-.top-heading-section {width: 517px;position: relative;}
+.top-heading-section {
+    width: 517px;
+    position: relative;
+    margin-top: 10px;
+    display: block;
+    margin-bottom: 16px;
+    height: 44px;
+}
 .top-heading-section h1 {
     float: left;
     width: 255px;
-    display: inline-block;
 }
 .top-heading-section h5 {
     width: 255px;
-    margin-bottom: 16px !important;
-    margin-top: 24px;
+    margin-bottom: 0px !important;
+    margin-top: 10px;
     margin-left: auto;
     position: absolute;
     right: 0;
-    top: 0;
+    top: 0px;
 }
 .customer-agent-details {clear:both;}
 @page {
