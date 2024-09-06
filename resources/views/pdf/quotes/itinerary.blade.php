@@ -409,9 +409,27 @@ h5 span {
 @page {
     margin-top: 50px; 
 }
-
 @page:first {
     margin-top: 0px;
+}
+.payment-detail table {
+  width: 100%;
+  max-width: 736px;
+}
+.payment-detail table th {
+    font-family: "PPNeueMontreal-Medium";
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 20px;
+    background-color: #F9F4EE;
+    padding: 8px 0px;
+    color: var(--head-text-background);
+    border: 1px solid var(--table-border-color);
+}
+.payment-detail table td {
+    padding: 6.5px;
+    text-align: center;
+    border: 1px solid var(--table-border-color);
 }
 </style>
 
@@ -693,6 +711,9 @@ h5 span {
            </tbody>
         </table>
     </div>
+    
+
+
    </div>
    
    
