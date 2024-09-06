@@ -403,8 +403,10 @@ h5 span {
 	  
       <div class="customer-details-block">
         <div class="customer-details-text-block">
+          <div class="top-heading-section">
             <h1>{{ $type ?? "Quote" }}</h1>
             <h5 style="margin-bottom:12px;">REFERENCE: {{ $reference }} <span></span></h5>         
+          </div>
             <div class="customer-agent-details">
                 <div class="customer-details">
                     <h6>CUSTOMER DETAILS</h6>
