@@ -384,7 +384,20 @@ h5 span {
   margin-left:0px!important;
 }
 #static-pages h6 {margin-bottom:24px!important;}
-
+.top-heading-section {width: 517px;}
+.top-heading-section h1 {
+    float: left;
+    width: 255px;
+    display: inline-block;
+}
+.top-heading-section h5 {
+    float: left;
+    width: 255px;
+    display: inline-block;
+    margin-bottom: 16px!important;
+    margin-top: 28px;
+}
+.customer-agent-details {clear:both;}
 </style>
 
    
