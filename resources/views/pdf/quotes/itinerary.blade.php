@@ -413,7 +413,7 @@ h5 span {
     margin-top: 0px;
 }
 .payment-detail table {
-  width: 100%;
+  width: 90%;
   max-width: 736px;
 }
 .payment-detail table th {
