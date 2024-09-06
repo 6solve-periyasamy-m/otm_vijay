@@ -718,33 +718,25 @@ h5 span {
     </h3>
   </div>
   <div class="payment-detail">
-      <table>
-      <thead>
+  <table>
+    <thead>
       <tr>
-      <th>INSTALLMENTS</th>
-      <th>AMOUNT DUE</th>
-      <th>DATE DUE</th>
+        <th>INSTALLMENTS</th>
+        <th>AMOUNT DUE</th>
+        <th>DATE DUE</th>
       </tr>
-      </thead>
-      <tbody>
-      <tr>
-      <td>Remaining</td>
-      <td>A$0.00 (25%)</td>
-      <td>10 October 2024</td>
-      </tr>
-      <tr>
-      <td>Remaining</td>
-      <td>A$0.00 (25%)</td>
-      <td>10 October 2024</td>
-      </tr>
-      <tr>
-      <td>Remaining</td>
-      <td>A$0.00 (25%)</td>
-      <td>10 October 2024</td>
-      </tr>
-      </tbody>
-      </table>
-  </div>
+    </thead>
+    <tbody>
+      @foreach ($itinerary->finances->schedule as $installment)
+        <tr>
+          <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
+          <td>{{ number_format($installment->amount, 2) }} ({{ number_format($installment->percentage, 2) }}%)</td>
+          <td>{{ optional($installment->due)->format('d M Y') ?? 'N/A' }}</td>
+        </tr>
+      @endforeach
+    </tbody>
+  </table>
+</div>
   </div>
    
    
