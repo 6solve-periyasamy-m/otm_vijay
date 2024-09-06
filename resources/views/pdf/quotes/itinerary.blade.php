@@ -53,6 +53,7 @@
     ['name' => 'PPNeueMontreal-Medium', 'path' => 'images/pdf_assets/fonts/PPNeueMontreal-Medium.ttf'],
     ['name' => 'PPNeueMontreal-Regular', 'path' => 'images/pdf_assets/fonts/PPNeueMontreal-Regular.ttf'],
 ];
+var_dump($itinerary);
     
 @endphp
 <?php 
@@ -129,8 +130,7 @@
     font-size: 40px;
     font-weight: 500;
     line-height: 42px;
-    margin-bottom: 16px;
-    margin-top: 10px;
+    margin-bottom: 0px;
   }
   .customer-details-block h6 {
     font-family: "PPNeueMontreal-Medium";
@@ -145,10 +145,10 @@
     float:left;  
  }
  .customer-details-block .customer-details-image-block {
-    width: 297px;
-    height:198px;
+    width: 247px;
+    height: 164px;
  }
- .customer-details-block .customer-details-text-block {width: 467px;padding-left:32px;}
+ .customer-details-block .customer-details-text-block {width: 517px;padding-left:32px;}
   h5 {
     font-family: "PPNeueMontreal-Medium";
     font-size: 16px;
@@ -158,8 +158,8 @@
     color: var(--text-color);
  }
  /* .customer-agent-details .customer-details,.customer-agent-details .agent-details {float:left;} */
- .customer-agent-details .customer-details {width:187.5px;}
- .customer-agent-details .agent-details {width:279.5px;}
+ .customer-agent-details .customer-details {width:255px;}
+ .customer-agent-details .agent-details {width:255px;}
  .customer-agent-details p {
   font-family: "PPNeueMontreal-Medium";
   font-size: 14px;
@@ -384,7 +384,35 @@ h5 span {
   margin-left:0px!important;
 }
 #static-pages h6 {margin-bottom:24px!important;}
+.top-heading-section {
+    width: 517px;
+    position: relative;
+    margin-top: 10px;
+    display: block;
+    margin-bottom: 16px;
+    height: 44px;
+}
+.top-heading-section h1 {
+    float: left;
+    width: 255px;
+}
+.top-heading-section h5 {
+    width: 255px;
+    margin-bottom: 0px !important;
+    margin-top: 10px;
+    margin-left: auto;
+    position: absolute;
+    right: 0;
+    top: 0px;
+}
+.customer-agent-details {clear:both;}
+@page {
+    margin-top: 50px; 
+}
 
+@page:first {
+    margin-top: 0px;
+}
 </style>
 
    
@@ -403,8 +431,10 @@ h5 span {
 	  
       <div class="customer-details-block">
         <div class="customer-details-text-block">
+          <div class="top-heading-section">
             <h1>{{ $type ?? "Quote" }}</h1>
             <h5 style="margin-bottom:12px;">REFERENCE: {{ $reference }} <span></span></h5>         
+          </div>
             <div class="customer-agent-details">
                 <div class="customer-details">
                     <h6>CUSTOMER DETAILS</h6>
@@ -593,10 +623,10 @@ h5 span {
             $firstLoop = false;
           @endphp
         @endif
-         <h4>
+         <!-- <h4>
             <span class="text">{{ $item->name }}</span>
             <span class="mark"></span>
-         </h4>
+         </h4> -->
          <div class="details-module">
             <table>
                <tbody>
@@ -675,10 +705,10 @@ h5 span {
             <strong>BANK TRANSFER</strong><br>
             {!! $itinerary->finances->paymentDetails !!}
         </td>
-        <td style="vertical-align: top;">
+        <!-- <td style="vertical-align: top;">
             <strong>PAYMENT GATE</strong><br>
             Payment Gate: KPTVL
-        </td>
+        </td> -->
     </tr>
   </table>   
    </div>

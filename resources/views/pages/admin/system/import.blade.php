@@ -2,7 +2,6 @@
 
 @section('title', 'Bulk Importing')
 
-
 @section('content')
     <x-admin.section.card>
         <div class="d-flex justify-content-start">
@@ -157,5 +156,4 @@
             </div>
         </div>
     </div>
-
 @endsection
