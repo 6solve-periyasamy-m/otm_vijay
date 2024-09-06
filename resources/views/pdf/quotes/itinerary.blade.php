@@ -711,10 +711,41 @@ h5 span {
            </tbody>
         </table>
     </div>
-    
-
-
-   </div>
+  <div class="heading-module">
+    <h3>
+      <span class="mark"></span>
+      <span class="text">Payment schedule</span>
+    </h3>
+  </div>
+  <div class="payment-detail">
+      <table>
+      <thead>
+      <tr>
+      <th>INSTALLMENTS</th>
+      <th>AMOUNT DUE</th>
+      <th>DATE DUE</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+      <td>Remaining</td>
+      <td>A$0.00 (25%)</td>
+      <td>10 October 2024</td>
+      </tr>
+      <tr>
+      <td>Remaining</td>
+      <td>A$0.00 (25%)</td>
+      <td>10 October 2024</td>
+      </tr>
+      <tr>
+      <td>Remaining</td>
+      <td>A$0.00 (25%)</td>
+      <td>10 October 2024</td>
+      </tr>
+      </tbody>
+      </table>
+  </div>
+  </div>
    
    
    <div class="custom-details-module">  
