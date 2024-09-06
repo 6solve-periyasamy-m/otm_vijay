@@ -593,10 +593,10 @@ h5 span {
             $firstLoop = false;
           @endphp
         @endif
-         <h4>
+         <!-- <h4>
             <span class="text">{{ $item->name }}</span>
             <span class="mark"></span>
-         </h4>
+         </h4> -->
          <div class="details-module">
             <table>
                <tbody>
