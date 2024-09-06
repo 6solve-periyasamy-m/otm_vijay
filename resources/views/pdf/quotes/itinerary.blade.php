@@ -77,11 +77,12 @@
 
 <style>
   :root { 
-  --main-background-color:#F9F4EE;
+    --main-background-color:#F9F4EE;
   --text-head-color: #F35B15;
   --text-color: #000;
   --table-header-text: #FFFFFF;
-  --head-text-background:#EAEAEA;
+  --head-text-background:#F35B15;
+  --table-border-color:#EAEAEA;
   }
   
   .pdf-header {
