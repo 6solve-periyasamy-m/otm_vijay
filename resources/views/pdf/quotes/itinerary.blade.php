@@ -81,7 +81,7 @@
   --text-head-color: #F35B15;
   --text-color: #000;
   --table-header-text: #FFFFFF;
-  --head-text-background:rgba(234, 234, 234, 0.5);
+  --head-text-background:#EAEAEA;
   }
   
   .pdf-header {
