@@ -431,6 +431,7 @@ h5 span {
     text-align: center;
     border: 1px solid var(--table-border-color);
 }
+.payment-detail {margin: 30px 0px;}
 </style>
 
    
