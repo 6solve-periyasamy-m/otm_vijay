@@ -53,6 +53,7 @@
     ['name' => 'PPNeueMontreal-Medium', 'path' => 'images/pdf_assets/fonts/PPNeueMontreal-Medium.ttf'],
     ['name' => 'PPNeueMontreal-Regular', 'path' => 'images/pdf_assets/fonts/PPNeueMontreal-Regular.ttf'],
 ];
+var_dump($itinerary);
     
 @endphp
 <?php 
@@ -704,10 +705,10 @@ h5 span {
             <strong>BANK TRANSFER</strong><br>
             {!! $itinerary->finances->paymentDetails !!}
         </td>
-        <td style="vertical-align: top;">
+        <!-- <td style="vertical-align: top;">
             <strong>PAYMENT GATE</strong><br>
             Payment Gate: KPTVL
-        </td>
+        </td> -->
     </tr>
   </table>   
    </div>
