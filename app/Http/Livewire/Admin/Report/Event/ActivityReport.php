@@ -29,11 +29,11 @@ class ActivityReport extends ExportableDatatable
                 ->label('Activity')
                 ->searchable()
                 ->sortable(),
-            NumberColumn::raw('(SELECT SUM(activity_inventories.stock) FROM activity_inventories WHERE activity_id = activities.id AND activity_inventories.starts_at >= DATE("' . $this->event->starts_at->format('Y-m-d') . '") AND activity_inventories.ends_at <= DATE("' . $this->event->ends_at->format('Y-m-d') .'"))')
+            NumberColumn::raw('(SELECT COALESCE(SUM(activity_inventories.stock), 0) FROM activity_inventories WHERE activity_id = activities.id AND activity_inventories.starts_at >= DATE("' . $this->event->starts_at->format('Y-m-d') . '") AND activity_inventories.ends_at <= DATE("' . $this->event->ends_at->format('Y-m-d') .'"))')
                 ->label('Total Stock')
                 ->sortable()
                 ->filterable(),
-            NumberColumn::raw('(SELECT COUNT(o.id) FROM order_activities o JOIN activity_inventory_tours t ON o.activity_inventory_tour_id = t.id JOIN activity_inventories i ON t.activity_inventory_id = i.id JOIN activities a ON i.activity_id = a.id WHERE a.id = activities.id AND i.starts_at >= DATE("' . $this->event->starts_at->format('Y-m-d') . '") AND i.ends_at <= DATE("' . $this->event->ends_at->format('Y-m-d') .'"))')
+            NumberColumn::raw('(SELECT COUNT(o.id) FROM order_activities o JOIN activity_inventory_tours t ON o.activity_inventory_tour_id = t.id JOIN activity_inventories i ON t.activity_inventory_id = i.id JOIN activities a ON i.activity_id = a.id WHERE a.id = activities.id AND i.starts_at >= DATE("' . $this->event->starts_at->format('Y-m-d') . '") AND i.ends_at <= DATE("' . $this->event->ends_at->format('Y-m-d') .'")) AS sold')
                 ->label('Sold Tickets')
                 ->sortable()
                 ->filterable(),
