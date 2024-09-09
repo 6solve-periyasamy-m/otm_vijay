@@ -58,9 +58,9 @@ if (!function_exists('stack_dump')) {
     function stack_dump(string|null $message = null): void
     {
         try {
-            throw new \Exception($message);
-        } catch (\Exception) {
-            \Log::info($message);
+            throw new Exception($message);
+        } catch (Exception) {
+            Log::info($message);
         }
     }
 }
@@ -93,9 +93,9 @@ if (!function_exists('debug_stack')) {
     function debug_stack(string $message = "Stack Dumped"): void
     {
         try {
-            throw new \Exception($message);
-        } catch (\Exception $e) {
-            \Log::debug($e);
+            throw new Exception($message);
+        } catch (Exception $e) {
+            Log::debug($e);
         }
     }
 }
