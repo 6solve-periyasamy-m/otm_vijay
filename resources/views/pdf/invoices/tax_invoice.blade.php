@@ -463,25 +463,15 @@
         @endphp
 
         @foreach($billables as $b_index => $billable)
+            @continue($billable->shared_key === 'surcharge')
             @continue($billable->isGroupedBase())
             <tr>
                 <td>{{$counter}}</td>
                 <td>{{$billable->description}}</td>
                 <td>{{$billable->getQuantity()}}</td>
             </tr>
-
-        @php $counter++; @endphp
+            @php $counter++; @endphp
         @endforeach
-        <!-- <tr>
-            <td>1</td>
-            <td>Single Occupancy Surcharge</td>
-            <td>1</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Carlton Hotel Singapore (19/09/2024 15:00 to 23/09/2024 11:00) (Double 1 Room, Bed & Breakfast)</td>
-            <td>1</td>
-        </tr> -->
     </table>
     </div>
 
@@ -493,12 +483,6 @@
         </tr>
         <tr>
             <td>
-                <!-- <h4>Bank Transfer</h4>
-                <p>Example bank transfer details.</p>
-                <p>IBAN: Test formatting</p>
-                <br>
-                <p>1. ABC</p>
-                <p>2. DEF</p> -->
                 {!! setting('company.bank_transfer', '-')  !!}
                 <p class="terms-conditions">
                     <a href="#">Terms & conditions</a>
@@ -509,7 +493,7 @@
                 <p><span>GST (included):</span> <span>{{f_currency($invoice->tax_amount)}}</span></p>
                 <p><span>Received:</span> <span>{{f_currency($invoice->total_paid)}}</span></p>
                 <p><span>Balance Due:</span> <span>{{f_currency($invoice->total_cost - $invoice->total_paid)}}</span></p>
-                <h3><span>GRAND TOTAL:</span> <span>{{f_currency($invoice->total_cost + $invoice->tax_amount)}}</span></h3>
+                <h3><span>GRAND TOTAL:</span> <span>{{f_currency($invoice->total_cost)}} {{-- Tax is inclusive, so shouldn't be added here --}}</span></h3>
             </td>
         </tr>
     </table>
@@ -533,5 +517,4 @@
     </div>
    </div>
 </body>
-
 </html>
