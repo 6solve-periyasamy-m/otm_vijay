@@ -15,9 +15,10 @@
 @section('title', $title)
 
 @section('form-body')
-    <x-livewire.input name="name" label="Name" value="{{ $event?->name }}" width="6" />
+    <x-livewire.input name="name" label="Name" value="{{ $event?->name }}" width="4" />
     <x-livewire.input.select.tax-bracket name="tax_bracket_id" label="Tax Bracket" value="{{ $event?->tax_bracket_id }}" width="2"/>
     <x-livewire.input.select.brand name="brand_id" label="Brand" value="{{ $event?->brand_id }}" width="2" />
+    <x-livewire.input.select.event.main name="parent_id" label="Parent Event" value="{{ $event?->parent_event_id }}" width="2" />
     <x-livewire.input.dropdown name="event_category" label="Event Category" :items="$categories" value="{{ $event?->event_category->value }}" width="2" />
     <x-livewire.input name="description" label="Description" value="{{ $event?->description }}" />
     <x-livewire.input type="date" name="starts_at" label="Starts At" width="5" value="{{ $event?->starts_at?->format('Y-m-d') }}" />

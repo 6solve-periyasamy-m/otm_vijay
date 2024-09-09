@@ -16,6 +16,7 @@ use Illuminate\Http\UploadedFile;
  * @property string|null $booking_url
  * @property int $event_category
  * @property int|null $tax_bracket_id
+ * @property int|null $parent_id
  * @property int|null $brand_id
  * @property string|null $notes
  */
@@ -31,6 +32,7 @@ class EventRequest extends FormRequest
             'booking_url' => $this->booking_url,
             'event_category' => $this->event_category,
             'tax_bracket_id' => $this->tax_bracket_id,
+            'parent_event_id' => $this->parent_id,
             'brand_id' => $this->brand_id,
             'notes' => $this->notes,
         ];
@@ -61,6 +63,7 @@ class EventRequest extends FormRequest
             'booking_url' => 'nullable',
             'event_category' => 'required|integer',
             'tax_bracket_id' => 'nullable|integer|exists:tax_brackets,id',
+            'parent_id' => 'nullable|integer|exists:events,id',
             'brand_id' => 'nullable|integer|exists:brands,id',
             'notes' => 'nullable|string',
         ];

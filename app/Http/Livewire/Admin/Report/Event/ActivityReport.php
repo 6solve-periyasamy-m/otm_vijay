@@ -17,6 +17,9 @@ class ActivityReport extends ExportableDatatable
     {
         $query = Activity::query();
         if ($this->event !== null) {
+            if ($this->event->parent !== null) {
+                $this->event = $this->event->parent;
+            }
             $query = $query->where('activities.event_id', '=', $this->event->id);
         }
         return $query;

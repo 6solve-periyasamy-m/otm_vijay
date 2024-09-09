@@ -26,6 +26,7 @@ use Settings;
  * @property string $name
  * @property int|null $brand_id
  * @property int|null $tax_bracket_id
+ * @property int|null $parent_event_id
  * @property string|null $description
  * @property Carbon $starts_at
  * @property Carbon $ends_at
@@ -65,14 +66,14 @@ class Event extends Model
     protected $guarded = [];
     protected $casts = ['starts_at' => 'date', 'ends_at' => 'date', 'event_category' => EventType::class,];
 
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Event::class, 'parent_event_id');
+    }
+
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class, 'brand_id');
-    }
-
-    function getEventDetailsAttribute(): string
-    {
-        return $this->name . ' - ' . Carbon::parse($this->starts_at)->format('d/m/Y') . ' : ' . Carbon::parse($this->ends_at)->format('d/m/Y');
     }
 
     public function bracket(): BelongsTo
