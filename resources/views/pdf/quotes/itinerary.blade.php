@@ -636,7 +636,7 @@ h5 span {
         <div class="heading-module">
             <h3>
               <span class="mark"></span>
-              <span class="text">Inclusion</span>
+              <span class="text">Additional Inclusions</span>
             </h3>
         </div>
         @php
@@ -651,12 +651,17 @@ h5 span {
             <table>
                <tbody>
                   <tr>
-                     <td><strong>Ticket:</strong></td>
+                     <td><strong>Inclusion:</strong></td>
                      <td>{{ $item->details['Ticket'] }}</td>
                   </tr>
                   <tr>
                      <td><strong>Dates:</strong></td>
-                     <td>{{ $item->details['Dates'] }}</td>
+                     <td>
+                        <?php
+                        $dates = explode('to', $item->details['Dates']); 
+                        echo trim($dates[0]); 
+                        ?>
+                    </td>
                   </tr>
                   <tr>
                      <td><strong>Venue:</strong></td>
