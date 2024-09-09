@@ -51,7 +51,7 @@ class OrderAccommodationRepository extends OrderComponentRepository
 
     public function __toString(): string
     {
-        return "{$this->orderComponent->tourComponent}";
+        return (string)($this->orderComponent->tourComponent);
     }
 
     public function getTourComponentType(): string
@@ -89,7 +89,7 @@ class OrderAccommodationRepository extends OrderComponentRepository
 
     public function getInvoiceBillable(): InvoiceBillable
     {
-        return InvoiceBillable::make([
+        return new InvoiceBillable([
             'description' => $this->__toString(),
             'shared_key' => "accommodation_" . $this->orderComponent->tourComponent->id,
             'amount' => $this->orderComponent->tourComponent->tour_component_type === 'Included' ? 0 : $this->orderComponent->cost,
@@ -110,6 +110,6 @@ class OrderAccommodationRepository extends OrderComponentRepository
 
     public function getItineraryItem(Order $order = null): ItineraryItem
     {
-        return $this->getTourComponent()?->getItineraryItem($this->getQuantity($order));
+        return $this->getTourComponent()?->getItineraryItem($this->getQuantity($order)); // @phpstan-ignore
     }
 }

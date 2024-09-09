@@ -71,7 +71,7 @@ class OrderFlight extends Model
 
     public static function findByOrderCustomer($orderCustomerId): Collection|array
     {
-        return OrderFlight::where('order_customer_id', $orderCustomerId)->with('arrivalAirport')->with('departureAirport')->get();
+        return self::where('order_customer_id', $orderCustomerId)->with('arrivalAirport')->with('departureAirport')->get();
     }
 
     public static function compare(OrderFlight $a, OrderFlight $b): int
@@ -149,7 +149,7 @@ class OrderFlight extends Model
         return $this->internal_repository;
     }
 
-    public function swap(FlightInventoryTour $swap)
+    public function swap(FlightInventoryTour $swap): void
     {
         $this->flight_inventory_tour_id = $swap->id;
         $this->cost = $swap->tour_sales_price;
@@ -159,6 +159,6 @@ class OrderFlight extends Model
     public function getPurchasePriceAttribute(): float
     {
         $inventory = $this->tourComponent->inventory;
-        return $this->estimated_purchase_price ?? $inventory->local_purchase_price;
+        return $this->estimated_purchase_price ?? $inventory->local_purchase_price ?? 0.0;
     }
 }

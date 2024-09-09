@@ -66,7 +66,7 @@ class OrderAccommodation extends Model
 
     public static function findByOrderCustomer($orderCustomerId): Collection|array
     {
-        return OrderAccommodation::where('order_customer_id', $orderCustomerId)->get();
+        return self::where('order_customer_id', $orderCustomerId)->get();
     }
 
     public static function compare(OrderAccommodation $a, OrderAccommodation $b): int
@@ -106,11 +106,8 @@ class OrderAccommodation extends Model
     public function getCancelledAttribute(): bool
     {
         // TODO: Fix when cross-order room sharing implemented
-        foreach ($this->group->orderCustomers as $orderCustomer) {
-            return $orderCustomer->order->cancelled;
-        }
-        // Assume the order is cancelled if the group has no customers
-        return true;
+        // Assume the order is cancelled if there are no travellers in the group
+        return $this->group->orderCustomers()->first()?->order->cancelled ?? true;
     }
 
     public function getDetailsAttribute(): string
@@ -134,7 +131,7 @@ class OrderAccommodation extends Model
         return $this->internal_repository;
     }
 
-    public function swap(AccommodationInventoryTour $swap)
+    public function swap(AccommodationInventoryTour $swap): void
     {
         $this->accommodation_inventory_tour_id = $swap->id;
         $this->cost = $swap->tour_sales_price;
@@ -144,6 +141,6 @@ class OrderAccommodation extends Model
     public function getPurchasePriceAttribute(): float
     {
         $inventory = $this->tourComponent->inventory;
-        return $this->estimated_purchase_price ?? $inventory->local_purchase_price;
+        return $this->estimated_purchase_price ?? $inventory->local_purchase_price ?? 0.0;
     }
 }
