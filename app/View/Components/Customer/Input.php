@@ -2,6 +2,8 @@
 
 namespace App\View\Components\Customer;
 
+use Closure;
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class Input extends Component
@@ -19,7 +21,7 @@ class Input extends Component
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
+     * @return View|Closure|string
      */
     public function render()
     {

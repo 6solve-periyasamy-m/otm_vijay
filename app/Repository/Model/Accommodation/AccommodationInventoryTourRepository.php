@@ -22,6 +22,7 @@ use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
 use App\Repository\Storage\ComponentInformation;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsAccommodation;
+use Auth;
 use Icon;
 use Illuminate\Support\Collection;
 
@@ -323,7 +324,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function getUpdateLink(): string|null
     {
-        if (\Auth::user()?->can('update', $this->tourComponent)) {
+        if (Auth::user()?->can('update', $this->tourComponent)) {
             return route('accommodation-inventory-tours.edit', [
                 'tour' => $this->tourComponent->tour_id,
                 'accommodationInventoryTour' => $this->tourComponent
@@ -334,7 +335,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function getDeleteLink(): string|null
     {
-        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+        if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('accommodation-inventory-tours.delete', [
                 'tour' => $this->tourComponent->tour_id,
                 'accommodationInventoryTour' => $this->tourComponent
@@ -345,7 +346,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function getRestoreLink(): string|null
     {
-        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+        if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('accommodation-inventory-tours.restore', [
                 'tour' => $this->tourComponent->tour_id,
                 'accommodationInventoryTour' => $this->tourComponent

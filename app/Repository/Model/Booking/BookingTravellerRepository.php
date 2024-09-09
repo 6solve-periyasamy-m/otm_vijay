@@ -25,6 +25,7 @@ use App\Repository\Model\Flight\FlightInventoryTourRepository;
 use App\Repository\Storage\BookingComponentStorage;
 use App\Repository\Storage\Customer\Component\BookingComponent;
 use DB;
+use Exception;
 use Log;
 use Throwable;
 
@@ -198,7 +199,7 @@ class BookingTravellerRepository extends ModelRepository
         if (!isset($this->traveller->customer_id)) {
             try {
                 $customer = $this->convertToCustomer();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // Likely failed due to non-unique email address. Wipe address and try again.
                 Log::error($e);
                 $this->traveller->email_address = null;

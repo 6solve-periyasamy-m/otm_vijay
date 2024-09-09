@@ -12,6 +12,7 @@ use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DatetimeColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
+use Throwable;
 
 class Table extends LivewireDatatable
 {
@@ -38,7 +39,7 @@ class Table extends LivewireDatatable
                     if ($actor instanceof User) { return "(Admin) {$actor->name}"; }
                     if ($actor instanceof Customer) { return "(Customer) {$actor->full_name}"; }
                     return "Unknown";
-                } catch (\Throwable $th) { return "Unknown"; }
+                } catch (Throwable $th) { return "Unknown"; }
             })
                 ->label('Actor')
                 ->sortable()

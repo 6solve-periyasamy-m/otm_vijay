@@ -284,7 +284,7 @@ class BookingCustomerController extends ApiController
             $home_address_id = $home_address->id;
         } else {
             Log::debug('Error creating address with record: ', $address_record);
-            throw new \Exception('Can not create address ');
+            throw new Exception('Can not create address ');
         }
         // if the same address flag is set, create the builling address with the same data
         if ($request->same_address) {
@@ -407,7 +407,7 @@ class BookingCustomerController extends ApiController
         if (!$booking || !$booking->id) {
             return json_encode(["success" => false, "message" => "No booking yet"]);
     
-            throw new \Exception('loadBookingTravellers: No booking found for token '.$token);
+            throw new Exception('loadBookingTravellers: No booking found for token '.$token);
         }
         $traveller = new BookingTraveller();
         $travellers = $traveller->where('booking_id', $booking->id)->get();

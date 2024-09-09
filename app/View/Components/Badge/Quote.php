@@ -3,6 +3,8 @@
 namespace App\View\Components\Badge;
 
 use App\Models\Helper\Enum\QuoteStatus;
+use Closure;
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class Quote extends Component
@@ -22,7 +24,7 @@ class Quote extends Component
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
+     * @return View|Closure|string
      */
     public function render()
     {

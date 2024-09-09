@@ -20,6 +20,7 @@ use App\Repository\Model\Quote\Component\QuoteMerchandiseRepository;
 use App\Repository\Storage\ComponentInformation;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsMerchandise;
+use Auth;
 
 class MerchandiseInventoryTourRepository extends InventoryTourRepository
 {
@@ -247,7 +248,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
 
     public function getUpdateLink(): string|null
     {
-        if (\Auth::user()?->can('update', $this->tourComponent)) {
+        if (Auth::user()?->can('update', $this->tourComponent)) {
             return route('merchandise.inventory.tour.edit', [
                 'tour' => $this->tourComponent->tour_id,
                 'inventoryTour' => $this->tourComponent
@@ -258,7 +259,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
 
     public function getDeleteLink(): string|null
     {
-        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+        if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('merchandise.inventory.tour.delete', [
                 'tour' => $this->tourComponent->tour_id,
                 'inventoryTour' => $this->tourComponent
@@ -269,7 +270,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
 
     public function getRestoreLink(): string|null
     {
-        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+        if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('merchandise.inventory.tour.restore', [
                 'tour' => $this->tourComponent->tour_id,
                 'inventoryTour' => $this->tourComponent

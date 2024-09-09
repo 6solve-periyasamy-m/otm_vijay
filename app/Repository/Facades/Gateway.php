@@ -7,6 +7,7 @@ use App\Http\Gateways\DemoGateway;
 use App\Http\Gateways\FellohGateway;
 use App\Http\Gateways\OpayoGateway;
 use App\Http\Gateways\StripeGateway;
+use Exception;
 
 class Gateway
 {
@@ -32,7 +33,7 @@ class Gateway
             try {
                 $gateway = new AirwallexGateway();
                 $this->gateways['airwallex'] = $gateway;
-            } catch (\Exception $ignored) {}
+            } catch (Exception $ignored) {}
         }
         if (config('app.gateways.demo', false) === true
             && config('app.debug', false) === true

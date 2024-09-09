@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Accommodation\RoomCategory;
 
 use App\Http\Livewire\SendsEvents;
 use App\Models\Accommodation\RoomCategory;
+use Icon;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 use Mediconesystems\LivewireDatatables\NumberColumn;
@@ -29,7 +30,7 @@ class Table extends LivewireDatatable
                 ->label('Related')
                 ->sortable(),
             Column::callback(['id'], function ($id) {
-                return '<button wire:click="delete(' . $id . ')" class="btn btn-outline-danger btn-sm mb-1" title="Delete">' . \Icon::delete() .'</button>';
+                return '<button wire:click="delete(' . $id . ')" class="btn btn-outline-danger btn-sm mb-1" title="Delete">' . Icon::delete() .'</button>';
             })
                 ->label('Actions')
         ];

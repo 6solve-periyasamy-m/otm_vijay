@@ -25,6 +25,7 @@ use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use App\Repository\Storage\ComponentInformation;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsActivity;
+use Auth;
 use Icon;
 use Illuminate\Support\Collection;
 
@@ -320,7 +321,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
 
     public function getUpdateLink(): string|null
     {
-        if (\Auth::user()?->can('update', $this->tourComponent)) {
+        if (Auth::user()?->can('update', $this->tourComponent)) {
             return route('activity-inventory-tours.edit', [
                 'tour' => $this->tourComponent->tour_id,
                 'activityInventoryTour' => $this->tourComponent
@@ -331,7 +332,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
 
     public function getDeleteLink(): string|null
     {
-        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+        if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('activity-inventory-tours.delete', [
                 'tour' => $this->tourComponent->tour_id,
                 'activityInventoryTour' => $this->tourComponent
@@ -342,7 +343,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
 
     public function getRestoreLink(): string|null
     {
-        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+        if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('activity-inventory-tours.restore', [
                 'tour' => $this->tourComponent->tour_id,
                 'activityInventoryTour' => $this->tourComponent

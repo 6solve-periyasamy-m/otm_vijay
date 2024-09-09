@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\User;
 use App\Models\Helper\Enum\ModelEventType;
 use App\Models\System\ModelEvent;
 use App\Models\User;
+use Exception;
 use Jenssegers\Agent\Agent;
 use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Column;
@@ -35,7 +36,7 @@ class EventLog extends LivewireDatatable
                 try {
                     $actor = $type::find($id);
                     return $actor?->name ?? "Not Found";
-                } catch (\Exception $e) { return "Not Found"; }
+                } catch (Exception $e) { return "Not Found"; }
             })
                 ->label('Actor')
                 ->sortable()

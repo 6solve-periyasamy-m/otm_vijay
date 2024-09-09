@@ -66,7 +66,7 @@ class OrderActivity extends Model
 
     public static function findByOrderCustomer($orderCustomerId): Collection|array
     {
-        return OrderActivity::where('order_customer_id', $orderCustomerId)->get();
+        return self::where('order_customer_id', $orderCustomerId)->get();
     }
 
     public static function compare(OrderActivity $a, OrderActivity $b): int
@@ -110,7 +110,7 @@ class OrderActivity extends Model
 
     public function getDetailsAttribute(): string
     {
-        return "{$this->tourComponent->inventory}";
+        return (string)($this->tourComponent->inventory);
     }
 
     public function getTourComponentTypeAttribute(): string
@@ -129,7 +129,7 @@ class OrderActivity extends Model
         return $this->internal_repository;
     }
 
-    public function swap(ActivityInventoryTour $swap)
+    public function swap(ActivityInventoryTour $swap): void
     {
         $this->activity_inventory_tour_id = $swap->id;
         $this->cost = $swap->tour_sales_price;
@@ -139,6 +139,6 @@ class OrderActivity extends Model
     public function getPurchasePriceAttribute(): float
     {
         $inventory = $this->tourComponent->inventory;
-        return $this->estimated_purchase_price ?? $inventory->local_purchase_price;
+        return $this->estimated_purchase_price ?? $inventory->local_purchase_price ?? 0.0;
     }
 }

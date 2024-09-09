@@ -206,7 +206,7 @@ class FlightController extends ApiController
         // token is posted: why look it up?  opportunity to catch a false post?
         $token = $_COOKIE['OTM_booking_token'];
         if ($token !== $booking_token) {
-            throw new \Exception('Booking token mismatch');
+            throw new Exception('Booking token mismatch');
         }
 
         $this->debug == 'flights' && Log::debug('postFlightBooking: validated parameters', [$customer_id, $tour_id, $flight_type, $flight_inventory_tour_id, $custom, $token]);

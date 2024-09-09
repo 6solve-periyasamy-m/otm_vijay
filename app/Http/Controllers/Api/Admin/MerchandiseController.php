@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\ApiController;
 use App\Models\Merchandise\Merchandise;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Tour\Tour;
 use Illuminate\Http\Request;
 
-class MerchandiseController extends \App\Http\Controllers\ApiController
+class MerchandiseController extends ApiController
 {
 
     public function addMerchandiseToTour(Request $request, Tour $tour) {
