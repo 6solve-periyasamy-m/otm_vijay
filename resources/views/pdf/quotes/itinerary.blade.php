@@ -589,7 +589,11 @@ h5 span {
                                 @if(!empty($item->details['Dates']))
                                     <tr>
                                         <td><strong>Dates:</strong></td>
-                                        <td>{{ $item->details['Dates'] }}</td>
+                                        <td> <?php
+                                                $dates = explode('to', $item->details['Dates']); 
+                                                echo trim($dates[0]); 
+                                                ?>
+                                        </td>
                                     </tr>
                                 @endif
 
