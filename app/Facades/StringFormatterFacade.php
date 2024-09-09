@@ -2,7 +2,9 @@
 
 namespace App\Facades;
 
-class StringFormatterFacade extends \Illuminate\Support\Facades\Facade
+use Illuminate\Support\Facades\Facade;
+
+class StringFormatterFacade extends Facade
 {
     public static function getFacadeAccessor()
     {
