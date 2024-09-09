@@ -16,6 +16,7 @@ use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Intention\PaymentIntentionRepository;
 use App\Repository\Intention\Storage\UpgradeIntention;
+use Exception;
 use Gateway;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
@@ -99,7 +100,7 @@ class CustomerComponentController extends Controller
         $intention = PaymentIntentionRepository::create($orderCustomer->order, $orderCustomer->customer, 'Installment', [$uIntention,]);
         try {
             return response()->json(['success' => true, 'location' => Gateway::getDefaultGateway()->checkout([$item,], $intention, $orderCustomer->customer, $redirect)]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => 'Something went wrong with our payment processing. Please try again later.']);
         }
     }

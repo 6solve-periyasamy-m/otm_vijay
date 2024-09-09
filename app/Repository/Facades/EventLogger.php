@@ -4,6 +4,7 @@ namespace App\Repository\Facades;
 
 use App\Models\Helper\Enum\ModelEventType;
 use App\Models\System\ModelEvent;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Location;
@@ -52,7 +53,7 @@ class EventLogger
 
     private function getLocationString(): string|null
     {
-        try { $location = Location::get(); } catch (\Exception $exception) { Log::error($exception); return null; }
+        try { $location = Location::get(); } catch (Exception $exception) { Log::error($exception); return null; }
         if (is_bool($location)) { return null; }
         return "{$location->cityName}, {$location->countryName}, {$location->zipCode}";
     }

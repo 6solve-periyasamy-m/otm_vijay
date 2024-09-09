@@ -3,6 +3,7 @@
 namespace App\Models\Accommodation;
 
 use App\Models\Helper\SimpleModel;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -24,7 +25,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|RoomCategory whereId($value)
  * @method static Builder|RoomCategory whereName($value)
  * @method static Builder|RoomCategory whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class RoomCategory extends SimpleModel
 {

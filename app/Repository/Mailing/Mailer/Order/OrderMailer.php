@@ -6,6 +6,7 @@ use App\Exceptions\MailDisabledException;
 use App\Exceptions\MailFailedException;
 use App\Mail\Storage\OrderMail;
 use App\Models\Order\Order;
+use Exception;
 use Log;
 
 class OrderMailer
@@ -92,7 +93,7 @@ class OrderMailer
             return false;
         } catch (MailFailedException $e) {
             throw $e;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error($e);
             return false;
         }

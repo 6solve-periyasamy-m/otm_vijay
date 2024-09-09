@@ -7,6 +7,7 @@ use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Repository\RoomingRepository;
 use Carbon\Carbon;
+use Exception;
 use LivewireUI\Modal\ModalComponent;
 
 class AdditionalTraveller extends ModalComponent
@@ -37,7 +38,7 @@ class AdditionalTraveller extends ModalComponent
     {
         try {
             $date = Carbon::createFromFormat('Y-m-d', $this->date_of_birth);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $date = null;
         }
         $this->traveller->date_of_birth = $date;

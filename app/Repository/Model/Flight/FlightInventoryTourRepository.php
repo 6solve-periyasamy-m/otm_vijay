@@ -24,6 +24,7 @@ use App\Repository\Reporting\Manifest\FlightManifestRepository;
 use App\Repository\Storage\ComponentInformation;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsFlight;
+use Auth;
 use Icon;
 use Illuminate\Support\Collection;
 
@@ -184,7 +185,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
     /**
      * @return Collection<FlightInventoryTour>
      */
-    public function getAvailableForUpgrade(): \Illuminate\Support\Collection
+    public function getAvailableForUpgrade(): Collection
     {
         $tour = $this->tourComponent->tour;
         return FlightInventoryRepository::getBetweenDates($tour->date_from->setTime(0,0), $tour->date_to->setTime(23,59,59), $tour->repository);
@@ -310,7 +311,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
 
     public function getUpdateLink(): string|null
     {
-        if (\Auth::user()?->can('update', $this->tourComponent)) {
+        if (Auth::user()?->can('update', $this->tourComponent)) {
             return route('flight-inventory-tours.edit', [
                 'tour' => $this->tourComponent->tour_id,
                 'flightInventoryTour' => $this->tourComponent
@@ -321,7 +322,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
 
     public function getDeleteLink(): string|null
     {
-        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+        if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('flight-inventory-tours.delete', [
                 'tour' => $this->tourComponent->tour_id,
                 'flightInventoryTour' => $this->tourComponent
@@ -332,7 +333,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
 
     public function getRestoreLink(): string|null
     {
-        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+        if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('flight-inventory-tours.restore', [
                 'tour' => $this->tourComponent->tour_id,
                 'flightInventoryTour' => $this->tourComponent

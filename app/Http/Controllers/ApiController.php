@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Http\Response;
+
 class ApiController extends Controller
 {
     protected $logging = 4;
@@ -14,7 +16,7 @@ class ApiController extends Controller
     /**
      * success response method.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function sendResponse($result, $message)
     {
@@ -29,7 +31,7 @@ class ApiController extends Controller
     /**
      * return error response.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function sendError($error, $errorMessages = [], $code = 404)
     {

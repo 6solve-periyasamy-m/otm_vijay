@@ -429,7 +429,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
                             $traveller->save();
                             $found = true;
                         } else {
-                            \Log::info("{$groups[$newGroup]['type']?->id}, {$traveller->room_type_id}");
+                            Log::info("{$groups[$newGroup]['type']?->id}, {$traveller->room_type_id}");
                         }
                     }
                 } while (!$found);

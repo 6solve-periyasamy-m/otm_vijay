@@ -6,6 +6,7 @@ use App\Models\Location\Currency;
 use App\Models\Traits\HasRepository;
 use App\Repository\Model\Supplier\SupplierContractRepository;
 use Database\Factories\Supplier\SupplierContractFactory;
+use DB;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -102,7 +103,7 @@ class SupplierContract extends Model
 
     public function getComponentCostAttribute(): float
     {
-        return $this->components()->sum(\DB::raw('`quantity` * `cost_per_unit`'));
+        return $this->components()->sum(DB::raw('`quantity` * `cost_per_unit`'));
     }
 
     public function currency(): BelongsTo

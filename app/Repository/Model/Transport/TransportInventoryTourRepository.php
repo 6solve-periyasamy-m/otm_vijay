@@ -22,6 +22,7 @@ use App\Repository\Model\Quote\Component\QuoteTransportRepository;
 use App\Repository\Storage\ComponentInformation;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsTransport;
+use Auth;
 use Icon;
 use Illuminate\Support\Collection;
 
@@ -293,7 +294,7 @@ class TransportInventoryTourRepository extends InventoryTourRepository
 
     public function getUpdateLink(): string|null
     {
-        if (\Auth::user()?->can('update', $this->tourComponent)) {
+        if (Auth::user()?->can('update', $this->tourComponent)) {
             return route('transport-inventory-tours.edit', [
                 'tour' => $this->tourComponent->tour_id,
                 'transportInventoryTour' => $this->tourComponent
@@ -304,7 +305,7 @@ class TransportInventoryTourRepository extends InventoryTourRepository
 
     public function getDeleteLink(): string|null
     {
-        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+        if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('transport-inventory-tours.delete', [
                 'tour' => $this->tourComponent->tour_id,
                 'transportInventoryTour' => $this->tourComponent
@@ -315,7 +316,7 @@ class TransportInventoryTourRepository extends InventoryTourRepository
 
     public function getRestoreLink(): string|null
     {
-        if (\Auth::user()?->can('delete', $this->tourComponent)) {
+        if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('transport-inventory-tours.restore', [
                 'tour' => $this->tourComponent->tour_id,
                 'transportInventoryTour' => $this->tourComponent

@@ -7,6 +7,7 @@ use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuoteProspect;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -48,7 +49,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @method static Builder|Organization whereId($value)
  * @method static Builder|Organization whereName($value)
  * @method static Builder|Organization whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Organization extends Model
 {

@@ -129,7 +129,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read int|null $order_merchandise_count
  * @property-read Collection<int, OrderTransport> $orderTransport
  * @property-read int|null $order_transport_count
- * @property-read Collection<int, \App\Models\Order\OrderCustomer> $payingTravellers
+ * @property-read Collection<int, OrderCustomer> $payingTravellers
  * @property-read int|null $paying_travellers_count
  * @property-read int|null $vouchers_count
  * @property-read int|null $groups_count
