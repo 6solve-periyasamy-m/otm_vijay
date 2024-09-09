@@ -79,6 +79,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         foreach ($tour->repository->getComponents(true, true, true, true, true, ['Included']) as $component) {
             $component->addToQuote($quote);
         }
+        foreach ($tour->costs as $cost) {
+            $quote->costs()->save($cost->replicate());
+        }
         $quote->repository->cloneInstallments($tour);
         $quote->repository->addPricePoint(1, $tour->base_price_per_person);
         $quote->commission = $quote->organization?->commission;
