@@ -2,6 +2,8 @@
 
 namespace App\View\Components\Admin\Input\Selector;
 
+use Closure;
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class QuoteConversion extends Component
@@ -19,7 +21,7 @@ class QuoteConversion extends Component
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
+     * @return View|Closure|string
      */
     public function render()
     {

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\Voucher;
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Models\Voucher\VoucherCode;
 use LivewireUI\Modal\ModalComponent;
+use Log;
 
 class Form extends ModalComponent
 {
@@ -18,7 +19,7 @@ class Form extends ModalComponent
             $voucher = VoucherCode::find($voucher);
         }
         $this->voucher = $voucher ?? new VoucherCode();
-        \Log::info($this->voucher);
+        Log::info($this->voucher);
     }
 
     public function save()

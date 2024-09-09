@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
+use Hash;
 use Illuminate\Console\Command;
 
 class TrainingUserSetup extends Command
@@ -49,19 +50,19 @@ class TrainingUserSetup extends Command
                 $this->error('Training user is not enabled');
             }
             return 0;
-        } else {
-            if ($user === null) {
-                $user = User::create([
-                    'name' => 'Training User',
-                    'email' => $username,
-                    'password' => \Hash::make($password),
-                ]);
-                $user->assign('otm-staff');
-                $this->info("Training user has been enabled!\nUser: $username\nPassword: $password");
-            } else {
-                $this->error('Training user is already enabled');
-            }
-            return 0;
         }
+
+        if ($user === null) {
+            $user = User::create([
+                'name' => 'Training User',
+                'email' => $username,
+                'password' => Hash::make($password),
+            ]);
+            $user->assign('otm-staff');
+            $this->info("Training user has been enabled!\nUser: $username\nPassword: $password");
+        } else {
+            $this->error('Training user is already enabled');
+        }
+        return 0;
     }
 }
