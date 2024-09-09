@@ -25,8 +25,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
     <script src="https://checkout.airwallex.com/assets/elements.bundle.min.js"></script>
 
-    <script async src="//c.webtrends-optimize.com/acs/accounts/7988bb72-52e8-4499-a177-7583e905f074/js/wt.js"></script>
-
+    <script type="text/javascript" src="//c.webtrends-optimize.com/acs/accounts/7988bb72-52e8-4499-a177-7583e905f074/js/wt.js"></script>
     @livewireStyles
 
     <link rel="stylesheet" href="{{ asset('css/booking/simple.css') }}">
