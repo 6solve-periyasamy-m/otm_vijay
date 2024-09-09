@@ -30,6 +30,7 @@ class Room {
     }
 
     public containsDate(date: Date): boolean {
+        date = new Date(date.setHours(1)); // Fixes final day showing as being a room
         let start = new Date(new Date(this.start).setHours(0,0,0));
         let end = new Date(new Date(this.end).setHours(0,0,0));
         return start <= date && date <= end;

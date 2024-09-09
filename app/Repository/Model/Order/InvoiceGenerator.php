@@ -28,7 +28,7 @@ class InvoiceGenerator
         $invoice = new Invoice([
             'order_id' => $this->order->id,
             'name' => $this->order->tour->name,
-            'event' => $this->order->tour->event->name,
+            'event' => $this->order->tour->event?->name,
             'cancelled' => $this->order->cancelled,
             'invoice_number' => $this->order->invoices()->count() + 1,
             'booking_reference' => $this->order->booking_reference,
