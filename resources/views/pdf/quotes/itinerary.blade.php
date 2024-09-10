@@ -11,7 +11,7 @@
     $headlogo = svg_to_b64('images/pdf_assets/images/KeithProwse_Logo.png') ;
    
     $dacre = \Carbon\Carbon::parse($itinerary->booker->customer->created_at)->format('d M Y');
-    var_dump($itinerary);
+  
     $reference = $itinerary->reference;
     $cusname = $itinerary->booker->customer->first_name .' '. $itinerary->booker->customer->last_name;
     $cusmail = $itinerary->booker->customer->email_address;
@@ -20,11 +20,11 @@
     $evename = $itinerary->event;
     $evatra = count($itinerary->travellers) + $itinerary->booker->travelling;
 
-    $travellersCount = is_array($itinerary->travellers) ? count($itinerary->travellers) : 0;
+    //$travellersCount = is_array($itinerary->travellers) ? count($itinerary->travellers) : 0;
 
-    $travellingCount = $itinerary->booker && isset($itinerary->booker->travelling) ? $itinerary->booker->travelling : 0;
+    //$travellingCount = $itinerary->booker && isset($itinerary->booker->travelling) ? $itinerary->booker->travelling : 0;
 
-    $evatra = $travellersCount + $travellingCount;
+    //$evatra = $travellersCount + $travellingCount;
 
     if (!function_exists('generateFontFaceCSS')) {
       /**
