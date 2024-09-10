@@ -18,7 +18,7 @@
 
     $eveimg =$itinerary->image;
     $evename = $itinerary->event;
-    $evatra = count($itinerary->travellers);
+    $evatra = count($itinerary->travellers) + $itinerary->booker->travelling;
 
     if (!function_exists('generateFontFaceCSS')) {
       /**
