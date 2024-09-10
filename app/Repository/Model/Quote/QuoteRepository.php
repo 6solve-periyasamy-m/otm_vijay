@@ -833,8 +833,12 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 + $this->getFlightCost($travellers)
                 + $this->getTransportCost($travellers)
                 + $this->getMerchandiseCost($travellers);
-        foreach ($this->quote->costs()->where('per_customer', false)->get() as $additional) {
-            $cost += $additional->amount;
+        foreach ($this->quote->costs()->get() as $additional) {
+            if ($additional->per_customer) {
+                $cost += ($additional->amount * $travellers);
+            } else {
+                $cost += $additional->amount;
+            }
         }
         return $cost;
     }
