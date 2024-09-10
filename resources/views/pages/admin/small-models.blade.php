@@ -3,11 +3,13 @@
 @section('title', 'Small Model Manager')
 
 @section('content')
-    <x-admin.section.card>
-        <h4 class="fw-bold">
-            {{ Icon::minimize() }} Accommodation
-        </h4>
-    </x-admin.section.card>
+    <div class="card">
+        <div class="card-body" data-target="#accommodation" onclick="toggleAccordion(this)">
+            <h4 class="fw-bold">
+                {{ Icon::minimize() }} Accommodation
+            </h4>
+        </div>
+    </div>
     <div class="row collapse show" id="accommodation">
         <div class="col-xl-4">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Accommodation\RoomTypeRepository::class])
@@ -31,11 +33,13 @@
             </x-admin.section.card>
         </div>
     </div>
-    <x-admin.section.card>
-        <h4 class="fw-bold">
-            {{ Icon::minimize() }} Activity
-        </h4>
-    </x-admin.section.card>
+    <div class="card">
+        <div class="card-body" data-target="#activity" onclick="toggleAccordion(this)">
+            <h4 class="fw-bold">
+                {{ Icon::minimize() }} Activity
+            </h4>
+        </div>
+    </div>
     <div class="row collapse show" id="activity">
         <div class="col-xl-4">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Activity\ActivityTypeRepository::class])
@@ -47,11 +51,13 @@
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Location\LocationTypeRepository::class])
         </div>
     </div>
-    <x-admin.section.card>
-        <h4 class="fw-bold">
-            {{ Icon::minimize() }} Flight
-        </h4>
-    </x-admin.section.card>
+    <div class="card">
+        <div class="card-body" data-target="#flight" onclick="toggleAccordion(this)">
+            <h4 class="fw-bold">
+                {{ Icon::minimize() }} Flight
+            </h4>
+        </div>
+    </div>
     <div class="row collapse show" id="flight">
         <div class="col-xl-4">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Flight\AirlineRepository::class])
