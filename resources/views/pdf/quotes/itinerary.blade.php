@@ -20,6 +20,12 @@
     $evename = $itinerary->event;
     $evatra = count($itinerary->travellers) + $itinerary->booker->travelling;
 
+    $travellersCount = is_array($itinerary->travellers) ? count($itinerary->travellers) : 0;
+
+    $travellingCount = $itinerary->booker && isset($itinerary->booker->travelling) ? $itinerary->booker->travelling : 0;
+
+    $evatra = $travellersCount + $travellingCount;
+
     if (!function_exists('generateFontFaceCSS')) {
       /**
        * Generate @font-face CSS for fonts if they exist.
@@ -741,7 +747,7 @@ h5 span {
       @foreach ($itinerary->finances->schedule as $installment)
         <tr>
           <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
-          <td>{{ number_format($installment->amount, 2) }} ({{ number_format($installment->percentage, 2) }}%)</td>
+          <td>{{ f_currency($installment->amount) }} ({{ number_format($installment->percentage, 2) }}%)</td>
           <td>{{ optional($installment->due)->format('d M Y') ?? 'N/A' }}</td>
         </tr>
       @endforeach
