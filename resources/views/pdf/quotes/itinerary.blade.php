@@ -11,7 +11,7 @@
     $headlogo = svg_to_b64('images/pdf_assets/images/KeithProwse_Logo.png') ;
    
     $dacre = \Carbon\Carbon::parse($itinerary->booker->customer->created_at)->format('d M Y');
-
+    var_dump($itinerary);
     $reference = $itinerary->reference;
     $cusname = $itinerary->booker->customer->first_name .' '. $itinerary->booker->customer->last_name;
     $cusmail = $itinerary->booker->customer->email_address;
