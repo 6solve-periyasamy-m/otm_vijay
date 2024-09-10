@@ -420,6 +420,7 @@ var_dump($invoice);
     <!-- Invoice Title -->
     <div class="invoice-title">
         <h1>Tax Invoice</h1>
+        <p>{{$invoice->booking_reference}}</p>
     </div>
 
     <!-- Details Table -->
