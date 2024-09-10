@@ -754,7 +754,7 @@ h5 span {
         <tr>
           <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
           <td>{{ f_currency($installment->amount) }} ({{ number_format($installment->percentage, 2) }}%)</td>
-          <td>{{ optional($installment->due)->format('d M Y') ?? 'N/A' }}</td>
+          <td>{{ optional($installment->due)->format('d M Y') ?? 'Now' }}</td>
         </tr>
       @endforeach
     </tbody>
