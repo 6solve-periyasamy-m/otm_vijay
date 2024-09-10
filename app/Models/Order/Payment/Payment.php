@@ -3,12 +3,12 @@
 namespace App\Models\Order\Payment;
 
 use App\Models\Customer\Customer;
+use App\Models\Helper\Model;
 use App\Models\Order\Order;
 use Database\Factories\PaymentFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -54,8 +54,8 @@ class Payment extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['order_id', 'payment_method_id', 'amount', 'paid_on', 'customer_id'];
-    protected $casts = ['paid_on' => 'datetime', 'amount' => 'double'];
+    protected $guarded = [];
+    protected $casts = ['paid_on' => 'datetime:Y-m-d H:i:s', 'amount' => 'double'];
 
     public static function getValidationRules(): array
     {
