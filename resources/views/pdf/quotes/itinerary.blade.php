@@ -165,8 +165,12 @@
     color: var(--text-color);
  }
  /* .customer-agent-details .customer-details,.customer-agent-details .agent-details {float:left;} */
- .customer-agent-details .customer-details {width:255px;}
- .customer-agent-details .agent-details {width:255px;}
+ .customer-agent-details .customer-details {width:100%;}
+ .customer-agent-details .agent-details {
+  width:100%;    
+  margin-top: 20px;
+  margin-bottom: 20px;
+  }
  .customer-agent-details p {
   font-family: "PPNeueMontreal-Medium";
   font-size: 14px;
@@ -303,12 +307,12 @@ h4 span.mark {
     top:5px;
 }
 .customer-agent-details {position:relative;}
-.agent-details {
+/* .agent-details {
     margin-left: auto;
     position: absolute;
     right: 0;
     top: 0;
-}
+} */
 .information-block table {
   padding: 15px 20px;
 }
