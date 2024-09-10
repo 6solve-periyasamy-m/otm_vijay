@@ -420,7 +420,7 @@ var_dump($invoice);
     <!-- Invoice Title -->
     <div class="invoice-title">
         <h1>Tax Invoice</h1>
-        <p>{{$invoice->booking_reference}}</p>
+       
     </div>
 
     <!-- Details Table -->
@@ -433,14 +433,15 @@ var_dump($invoice);
             <td>
             <h6>Invoice To</h6>
             <p class="name">{{ $invoice->lead->full_name }}</p>
+            <p class="name">{{$invoice->lead->email}}</p>
             <p class="address">
                 {{ implode(', ', array_filter([$invoice->lead->address_line_1, $invoice->lead->address_line_2, $invoice->lead->town, $invoice->lead->region, $invoice->lead->country, $invoice->lead->postcode])) }}
             </p>
             </td>
             <td>
             <h6>Details</h6>
+            <p class="event-name"><span>Reference:</span> <span>{{$invoice->booking_reference}}</span></p>
             <p class="event-name"><span>Event Name:</span> <span>{{ $invoice->event }}</span></p>
-            <p class="event-name"> <span>Email:</span> <span>{{$invoice->lead->email}}</span> </p>
             <p class="no-of-pax"><span>Number of Pax:</span> <span>{{count($invoice->customers)}}</span></p>
             </td>
             <td>
