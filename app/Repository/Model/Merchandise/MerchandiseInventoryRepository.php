@@ -8,6 +8,7 @@ use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Quote\Component\QuoteMerchandise;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
+use App\Models\Transport\TransportInventory;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
@@ -90,9 +91,22 @@ class MerchandiseInventoryRepository extends InventoryRepository
         return now();
     }
 
+    /**
+     * @param Carbon $from
+     * @param Carbon $to
+     * @param ComponentPackageRepository|null $repository
+     * @return Collection<MerchandiseInventory>
+     */
     public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
     {
-        return Merchandise::all();
+        $inventories = [];
+        if (isset($repository)) {
+            foreach ($repository->getComponents(false, false, false, false, true) as $inventoryTour) {
+                $inventories[] = $inventoryTour->getInventory()?->get()->id;
+            }
+        }
+        return MerchandiseInventory::whereNotIn('id', $inventories)->get();
+
     }
 
     public function get(): MerchandiseInventory
