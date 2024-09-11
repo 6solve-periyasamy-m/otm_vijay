@@ -786,7 +786,7 @@ h5 span {
 <section id="static-pages" class="pdf-individual-block">
    <div class="row">
      
-   <h4>   
+   <h4 style="margin-bottom:0px;pading-left:32px;">   
     <span class="text">Notes</span>
     <span class="mark"></span>
    </h4>
