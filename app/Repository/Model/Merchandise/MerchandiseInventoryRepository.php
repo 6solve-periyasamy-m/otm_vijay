@@ -219,15 +219,18 @@ class MerchandiseInventoryRepository extends InventoryRepository
         return f_currency($this->getPurchasePrice());
     }
 
-    public function getItineraryItem(): ItineraryItem
+    public function getItineraryItem(int|null $quantity = null): ItineraryItem
     {
+        $details = [
+            'Type' => $this->inventory->component->type?->name,
+            'Size' => $this->inventory->size?->name,
+            'Variant' => $this->inventory->variant?->name,
+            'Quantity' => $quantity,
+        ];
         return new ItineraryItem(
             $this->inventory->component->name,
             'Merchandise',
-            null,
-            null,
-            null,
-            [],
+            $details
         );
     }
 }
