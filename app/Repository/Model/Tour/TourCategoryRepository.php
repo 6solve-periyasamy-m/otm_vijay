@@ -36,13 +36,13 @@ class TourCategoryRepository extends AttributeRepository
 
     public function getEditUrl(): string|null
     {
-        return route('tour-categories.update', ['tourCategory' => $this->model,]);
+        return route('tour-categories.update', ['category' => $this->model,]);
     }
 
     public function getDeleteUrl(): string|null
     {
         if ($this->canDelete()) {
-            return route('tour-categories.delete', ['tourCategory' => $this->model,]);
+            return route('tour-categories.delete', ['category' => $this->model,]);
         }
         return null;
     }

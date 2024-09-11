@@ -18,7 +18,7 @@ class TourCategory extends AbstractSelectComponent
      */
     public function render()
     {
-        return view('components.livewire.input.select.generic', ['route' => 'tour-categories']);
+        return view('components.livewire.input.select.generic', ['route' => 'tour-categories',]);
     }
 
     protected function getModels(?int $id = null): Collection
