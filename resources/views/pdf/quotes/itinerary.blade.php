@@ -93,7 +93,7 @@
   
   .pdf-header {
     background-color: var(--main-background-color);
-    padding:14px 32px;
+    padding:28px 32px;
   }
   .pdf-individual-block {
     width: 796px;
@@ -235,7 +235,7 @@ h2 {
 }
 
 h3 {
-    margin: 20px 10px 0px 0px;
+    margin: 35px 10px 0px 0px;
     font-family: "PPNeueMontreal-Medium";
     font-size: 20px;
     font-weight: 500;
@@ -390,7 +390,7 @@ h5 span {
     margin: 8px 0px 0px 0px;
 }
 .single-module .heading-module{
-  margin-bottom: 18px;
+  margin-bottom: 15px;
   margin-left: -32px;
 }
 .single-module h3 {
@@ -719,7 +719,7 @@ h5 span {
         <table>
            <tbody>
                   <tr>            
-                   <td><strong>BOOKING TOTAL</strong></td>
+                   <td><strong>Booking Total</strong></td>
                    <td>{{ f_currency($itinerary->finances->total) }}</td>
                   </tr>
                   <tr>
@@ -727,7 +727,7 @@ h5 span {
                       <td>{{ $itinerary->finances->tax > 0 ? f_currency($itinerary->finances->tax) : 'No Taxes Due' }}</td>
                   </tr>
                   <tr>
-                      <td><strong>FINAL COST</strong></td>
+                      <td><strong>Final Cost</strong></td>
                       <td>{{ f_currency($itinerary->finances->cost) }}</td>
                   </tr>
                                     
