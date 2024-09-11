@@ -715,19 +715,19 @@ h5 span {
       <span class="text">Order total</span>
       </h3>
         </div>
-    <div class="details-module">
+    <div class="details-module" style="margin-top:-10px;">
         <table>
            <tbody>
                   <tr>            
-                   <td><strong>Booking Total</strong></td>
+                   <td>Booking Total</td>
                    <td>{{ f_currency($itinerary->finances->total) }}</td>
                   </tr>
                   <tr>
-                      <td><strong>GST (included)</strong></td>
+                      <td>GST (included)</td>
                       <td>{{ $itinerary->finances->tax > 0 ? f_currency($itinerary->finances->tax) : 'No Taxes Due' }}</td>
                   </tr>
                   <tr>
-                      <td><strong>Final Cost</strong></td>
+                      <td>Final Cost</td>
                       <td>{{ f_currency($itinerary->finances->cost) }}</td>
                   </tr>
                                     
