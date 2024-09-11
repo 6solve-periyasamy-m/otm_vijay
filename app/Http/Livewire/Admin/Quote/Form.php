@@ -108,7 +108,7 @@ class Form extends Component
             'quote.internal_notes' => 'nullable|string|min:3',
             'quote.external_notes' => 'nullable|string|min:3',
             'quote.terms' => 'required|string|min:3',
-            'quote.invoice_footer' => 'required|string|min:3',
+            'quote.invoice_footer' => 'nullable|string|min:3',
         ];
     }
 }
