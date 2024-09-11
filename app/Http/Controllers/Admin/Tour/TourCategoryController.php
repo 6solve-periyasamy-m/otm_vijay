@@ -21,12 +21,22 @@ class TourCategoryController extends Controller
         return view('pages.admin.tour.category.form');
     }
 
+    /**
+     * Store a new Category, then redirect back to the return url
+     * @param TourCategoryRequest $request
+     * @return RedirectResponse
+     */
     public function store(TourCategoryRequest $request): RedirectResponse
     {
         $tourCategory = TourCategory::create(['name' => $request->name,]);
         return $tourCategory->repository->getReturnURL();
     }
 
+    /**
+     * Redirect back to the return url
+     * @param TourCategory $category
+     * @return RedirectResponse
+     */
     public function view(TourCategory $category): RedirectResponse
     {
         return $category->repository->getReturnURL();

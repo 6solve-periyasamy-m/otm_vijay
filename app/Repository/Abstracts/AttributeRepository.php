@@ -60,6 +60,10 @@ abstract class AttributeRepository extends ModelRepository
         return preg_replace('/[^A-Za-z0-9-_]/', '', static::getName());
     }
 
+    /**
+     * A Redirect to the URL that the response should return to
+     * @return RedirectResponse
+     */
     public function getReturnURL(): RedirectResponse
     {
         return redirect()->route('attributes.edit');
