@@ -3,9 +3,9 @@
 @section('title', 'View Event')
 
 @php
-/**
- * @var \App\Models\Tour\Event $event
- */
+    /**
+     * @var \App\Models\Tour\Event $event
+     */
 @endphp
 
 @push('footer-stack')
@@ -68,7 +68,7 @@
             </div>
         </div>
     </div>
-    <hr class="splitter"/>
+    <hr class="splitter" />
     <div class="row">
         <div class="col-xl-6">
             <div class="heading pt-2 pb-md-3 pb-2">
@@ -77,13 +77,13 @@
             <x-admin.section.card>
                 <table id="tours" class="table table-striped">
                     <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Orders</th>
-                        <th scope="col">Booking URL</th>
-                        <th scope="col">Actions</th>
-                    </tr>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Orders</th>
+                            <th scope="col">Booking URL</th>
+                            <th scope="col">Actions</th>
+                        </tr>
                     </thead>
                     @foreach($event->tours as $tour)
                         <tr>
@@ -114,7 +114,28 @@
                 <h2 class="fw-bold">Linked Activities</h2>
             </div>
             <x-admin.section.card>
-                <livewire:admin.report.event.activity-report :event="$event" />
+                <table class="table table-striped datatable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Activity</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Total Stock</th>
+                            <th scope="col">Used Stock</th>
+                            <th scope="col">Available Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($event->repository->getActivityReport() as $row)
+                            <tr>
+                                <th scope="row">{{ $row->activity }}</th>
+                                <td>{{ $row->type }}</td>
+                                <td>{{ $row->totalStock }}</td>
+                                <td>{{ $row->usedStock }}</td>
+                                <td>{{ $row->totalStock - $row->usedStock }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </x-admin.section.card>
         </div>
         <div class="col-xl-6">
@@ -124,13 +145,13 @@
             <x-admin.section.card>
                 <table id="orders" class="table table-striped">
                     <thead>
-                    <tr>
-                        <th scope="col">Ordered On</th>
-                        <th scope="col">Booking Reference</th>
-                        <th scope="col">Tour</th>
-                        <th scope="col">Travelling</th>
-                        <th scope="col">Order Status</th>
-                    </tr>
+                        <tr>
+                            <th scope="col">Ordered On</th>
+                            <th scope="col">Booking Reference</th>
+                            <th scope="col">Tour</th>
+                            <th scope="col">Travelling</th>
+                            <th scope="col">Order Status</th>
+                        </tr>
                     </thead>
                     @foreach($event->orders as $order)
                         @php $count = $order->orderCustomers()->count() - 1; @endphp
@@ -149,7 +170,7 @@
                         </tr>
                     @endforeach
                 </table>
-        </x-admin.section.card>
+            </x-admin.section.card>
         </div>
     </div>
 @endsection
