@@ -36,7 +36,7 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
 
     public function getCost(): float
     {
-        return $this->quoteComponent->tour_sales_price;
+        return $this->quoteComponent->tour_sales_price ?? 0.0;
     }
 
     public function getInventory(): ?MerchandiseInventoryRepository
