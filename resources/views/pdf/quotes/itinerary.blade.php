@@ -719,15 +719,15 @@ h5 span {
         <table>
            <tbody>
                   <tr>            
-                   <td>Booking Total</td>
+                   <td style="font-weight:500;">Booking Total</td>
                    <td>{{ f_currency($itinerary->finances->total) }}</td>
                   </tr>
                   <tr>
-                      <td>GST (included)</td>
+                      <td style="font-weight:500;">GST (included)</td>
                       <td>{{ $itinerary->finances->tax > 0 ? f_currency($itinerary->finances->tax) : 'No Taxes Due' }}</td>
                   </tr>
                   <tr>
-                      <td>Final Cost</td>
+                      <td style="font-weight:500;">Final Cost</td>
                       <td>{{ f_currency($itinerary->finances->cost) }}</td>
                   </tr>
                                     
