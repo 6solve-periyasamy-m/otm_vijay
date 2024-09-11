@@ -51,6 +51,8 @@ return [
                         'flights' => 'Flights',
                         'transport' => 'Transport',
                         'merchandise' => 'Merchandise',
+                        'per-customer' => 'Per Customer',
+                        'overall' => 'Whole Order',
                         'total' => 'Total Per Person',
                         'approximate' => 'Amount is based on the purchase price of template accommodation and may differ',
                     ],

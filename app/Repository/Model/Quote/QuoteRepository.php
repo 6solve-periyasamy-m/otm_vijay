@@ -472,6 +472,24 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         return $cost;
     }
 
+    public function getPerCustomerAdditionals(int $travellers = 1): float
+    {
+        $cost = 0;
+        foreach ($this->quote->costs()->where('per_customer', '=', true)->get() as $additional) {
+            $cost += ($additional->amount * $travellers);
+        }
+        return $cost;
+    }
+
+    public function getWholeOrderAdditionals(int $travellers = 1): float
+    {
+        $cost = 0;
+        foreach ($this->quote->costs()->where('per_customer', '=', false)->get() as $additional) {
+            $cost += ($additional->amount);
+        }
+        return $cost;
+    }
+
     public function getResponseStream(SentQuote $sent): StreamedResponse
     {
         return $sent->pdf()->getResponseStream();
@@ -833,8 +851,12 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 + $this->getFlightCost($travellers)
                 + $this->getTransportCost($travellers)
                 + $this->getMerchandiseCost($travellers);
-        foreach ($this->quote->costs()->where('per_customer', false)->get() as $additional) {
-            $cost += $additional->amount;
+        foreach ($this->quote->costs()->get() as $additional) {
+            if ($additional->per_customer) {
+                $cost += ($additional->amount * $travellers);
+            } else {
+                $cost += $additional->amount;
+            }
         }
         return $cost;
     }
