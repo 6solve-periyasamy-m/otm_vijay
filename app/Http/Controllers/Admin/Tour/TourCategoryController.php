@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin\Tour;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Tour\Category\TourCategoryRequest;
 use App\Models\Tour\TourCategory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class TourCategoryController extends Controller
@@ -16,40 +18,47 @@ class TourCategoryController extends Controller
 
     public function create()
     {
-        return view('pages.models.tour_categories.create');
+        return view('pages.admin.tour.category.form');
     }
 
-    public function store(Request $request)
+    /**
+     * Store a new Category, then redirect back to the return url
+     * @param TourCategoryRequest $request
+     * @return RedirectResponse
+     */
+    public function store(TourCategoryRequest $request): RedirectResponse
     {
-        $request->validate(TourCategory::getValidationRules());
-        $tourCategory = TourCategory::create([
-            'name' => $request->input('name'),
-        ]);
+        $tourCategory = TourCategory::create(['name' => $request->name,]);
         return $tourCategory->repository->getReturnURL();
     }
 
-    public function view(TourCategory $tourCategory)
+    /**
+     * Redirect back to the return url
+     * @param TourCategory $category
+     * @return RedirectResponse
+     */
+    public function view(TourCategory $category): RedirectResponse
     {
-        return $tourCategory->repository->getReturnURL();
+        return $category->repository->getReturnURL();
     }
 
-    public function edit(TourCategory $tourCategory)
+    public function edit(TourCategory $category)
     {
-        return $tourCategory->repository->getReturnURL();
+        return view('pages.admin.tour.category.form', ['category' => $category,]);
     }
 
-    public function update(Request $request, TourCategory $tourCategory)
+    public function update(TourCategoryRequest $request, TourCategory $category): RedirectResponse
     {
-        $request->validate(TourCategory::getValidationRules());
-        $tourCategory->update([
-            'name' => $request->input('name'),
-        ]);
-        return $tourCategory->repository->getReturnURL();
+        $category->update(['name' => $request->name,]);
+        return $category->repository->getReturnURL();
     }
 
-    public function destroy(TourCategory $tourCategory)
+    public function destroy(TourCategory $category)
     {
-        $tourCategory->delete();
+        if ($category->tours()->count() > 0) {
+            return back()->withErrors(['msg' => 'Cannot delete a category with linked tours.']);
+        }
+        $category->delete();
         return redirect()->route('attributes.edit');
     }
 }

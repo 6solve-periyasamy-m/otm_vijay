@@ -146,7 +146,7 @@ Route::prefix('tour-categories')->group(function () {
     Route::get('/create', [TourCategoryController::class, 'create'])->name('tour-categories.create')->middleware('bouncer:Tour\TourCategory,create');
     Route::post('/create', [TourCategoryController::class, 'store'])->name('tour-categories.store')->middleware('bouncer:Tour\TourCategory,create');
 
-    Route::prefix('{tourCategory}')->group(function () {
+    Route::prefix('{category}')->group(function () {
         Route::get('/', [TourCategoryController::class, 'view'])->name('tour-categories.view')->middleware('bouncer:Tour\TourCategory,read');
         Route::get('/update', [TourCategoryController::class, 'edit'])->name('tour-categories.edit')->middleware('bouncer:Tour\TourCategory,update');
         Route::post('/update', [TourCategoryController::class, 'update'])->name('tour-categories.update')->middleware('bouncer:Tour\TourCategory,update');

@@ -13,6 +13,7 @@ use App\View\Components\Livewire\Input\Select\Event\All as AllEvents;
 use App\View\Components\Livewire\Input\Select\Event\Main as MainEvent;
 use App\View\Components\Livewire\Input\Select\Event\Normal as NormalEvent;
 use App\View\Components\Livewire\Input\Select\LargeTextTemplate;
+use App\View\Components\Livewire\Input\Select\Order\PaymentMethod;
 use App\View\Components\Livewire\Input\Select\Organization;
 use App\View\Components\Livewire\Input\Select\TaxBracket;
 use App\View\Components\Livewire\Input\Select\TourCategory;
@@ -75,10 +76,14 @@ Route::prefix('brands')->name('brands.')->group(function () {
     Route::post('/{id}', [Brand::class, 'getOne'])->name('selected');
 });
 
-
 Route::prefix('large-text-template')->name('large-text-templates.')->group(function () {
     Route::post('/', [LargeTextTemplate::class, 'getAll'])->name('select');
     Route::post('/{id}', [LargeTextTemplate::class, 'getOne'])->name('selected');
+});
+
+Route::prefix('payment-method')->name('payment-method')->group(function () {
+    Route::post('/', [PaymentMethod::class, 'getAll'])->name('select');
+    Route::post('/{id}', [PaymentMethod::class, 'getOne'])->name('selected');
 });
 
 Route::prefix('events')->name('events.')->group(function () {

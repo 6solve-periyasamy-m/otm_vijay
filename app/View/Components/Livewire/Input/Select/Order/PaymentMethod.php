@@ -1,15 +1,16 @@
 <?php
 
-namespace App\View\Components\Livewire\Input\Select;
+namespace App\View\Components\Livewire\Input\Select\Order;
 
-use App\Models\Tour\TourCategory as DataModel;
+use App\Models\Order\Payment\PaymentMethod as DataModel;
+use App\View\Components\Livewire\Input\Select\AbstractSelectComponent;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
-class TourCategory extends AbstractSelectComponent
+class PaymentMethod extends AbstractSelectComponent
 {
     /**
      * Get the view / contents that represent the component.
@@ -18,7 +19,7 @@ class TourCategory extends AbstractSelectComponent
      */
     public function render()
     {
-        return view('components.livewire.input.select.generic', ['route' => 'tour-categories',]);
+        return view('components.livewire.input.select.generic', ['route' => 'payment-method',]);
     }
 
     protected function getModels(?int $id = null): Collection
@@ -31,6 +32,7 @@ class TourCategory extends AbstractSelectComponent
 
     protected function format(DataModel|Model $model): string
     {
-        return "{$model->name}";
+        return $model->name;
     }
+
 }

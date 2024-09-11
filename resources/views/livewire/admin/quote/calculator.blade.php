@@ -84,38 +84,53 @@
         </x-admin.section.otm-text>
     </x-admin.section.card>
     {{-- Component Costs --}}
-    <x-admin.section.card width="6" class="row">
-        <x-admin.section.otm-text width="6">
-            <x-slot:header>
-                {{ __('quotes.view.cards.quick.calculator.components.accommodation') }}
-                <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span>
-            </x-slot:header>
-            {{ f_currency($quote->repository->getAccommodationCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}
-        </x-admin.section.otm-text>
-        <x-admin.section.otm-text width="6">
-            <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.activities') }}</x-slot:header>
-            {{ f_currency($quote->repository->getActivityCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}
-        </x-admin.section.otm-text>
-        <x-admin.section.otm-text width="6">
-            <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.flights') }}</x-slot:header>
-            {{ f_currency($quote->repository->getFlightCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}
-        </x-admin.section.otm-text>
-        <x-admin.section.otm-text width="6">
-            <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.transport') }}</x-slot:header>
-            {{ f_currency($quote->repository->getTransportCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}
-        </x-admin.section.otm-text>
-        <x-admin.section.otm-text width="6">
-            <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.merchandise') }}</x-slot:header>
-            {{ f_currency($quote->repository->getMerchandiseCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}
-        </x-admin.section.otm-text>
-        <x-admin.section.otm-text width="6">
-            <x-slot:header>
-                {{ __('quotes.view.cards.quick.calculator.components.total') }}
-                <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span>
-            </x-slot:header>
-            {{ f_currency($quote->repository->getPurchaseTotal()) }}
-        </x-admin.section.otm-text>
-    </x-admin.section.card>
+
+        <x-admin.section.card width="6">
+            <div class="row text-center">
+                <x-admin.section.otm-text width="4">
+                    <x-slot:header>
+                        {{ __('quotes.view.cards.quick.calculator.components.accommodation') }}
+                        <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span>
+                    </x-slot:header>
+                    {{ f_currency($quote->repository->getAccommodationCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}
+                </x-admin.section.otm-text>
+                <x-admin.section.otm-text width="4">
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.activities') }}</x-slot:header>
+                    {{ f_currency($quote->repository->getActivityCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}
+                </x-admin.section.otm-text>
+                <x-admin.section.otm-text width="4">
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.flights') }}</x-slot:header>
+                    {{ f_currency($quote->repository->getFlightCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}
+                </x-admin.section.otm-text>
+                <x-admin.section.otm-text width="4">
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.transport') }}</x-slot:header>
+                    {{ f_currency($quote->repository->getTransportCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}
+                </x-admin.section.otm-text>
+                <x-admin.section.otm-text width="4">
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.merchandise') }}</x-slot:header>
+                    {{ f_currency($quote->repository->getMerchandiseCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}
+                </x-admin.section.otm-text>
+                <x-admin.section.otm-text width="4">
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.per-customer') }}</x-slot:header>
+                    {{ f_currency($quote->repository->getPerCustomerAdditionals(($quote->leadTraveller->travelling) + $paying + $travelling)) }}
+                </x-admin.section.otm-text>
+                <div class="col-xl-6 text-center">
+                    <x-admin.section.otm-text>
+                        <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.overall') }}</x-slot:header>
+                        {{ f_currency($quote->repository->getWholeOrderAdditionals(($quote->leadTraveller->travelling) + $paying + $travelling)) }}
+                    </x-admin.section.otm-text>
+                </div>
+                <div class="col-xl-6 text-center">
+                    <x-admin.section.otm-text>
+                        <x-slot:header>
+                            {{ __('quotes.view.cards.quick.calculator.components.total') }}
+                            <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span>
+                        </x-slot:header>
+                        {{ f_currency($quote->repository->getPurchaseTotal()) }}
+                    </x-admin.section.otm-text>
+                </div>
+            </div>
+        </x-admin.section.card>
     {{-- Quote Costs --}}
     <x-admin.section.card width="6">
         <div class="row">
