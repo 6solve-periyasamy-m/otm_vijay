@@ -719,15 +719,15 @@ h5 span {
         <table>
            <tbody>
                   <tr>            
-                   <td style="font-weight:500;">Booking Total</td>
+                   <td style="font-weight:400;min-width:128px;">Booking Total:</td>
                    <td>{{ f_currency($itinerary->finances->total) }}</td>
                   </tr>
                   <tr>
-                      <td style="font-weight:500;">GST (included)</td>
+                      <td style="font-weight:400;min-width:128px;">GST (included):</td>
                       <td>{{ $itinerary->finances->tax > 0 ? f_currency($itinerary->finances->tax) : 'No Taxes Due' }}</td>
                   </tr>
                   <tr>
-                      <td style="font-weight:500;">Final Cost</td>
+                      <td style="font-weight:400;min-width:128px;">Final Cost:</td>
                       <td>{{ f_currency($itinerary->finances->cost) }}</td>
                   </tr>
                                     
@@ -786,7 +786,10 @@ h5 span {
 <section id="static-pages" class="pdf-individual-block">
    <div class="row">
      
-   <h2>Notes</h2> 
+   <h4>   
+    <span class="text">Notes</span>
+    <span class="mark"></span>
+   </h4>
   <div class="custom-details-module">     
      <h6>KPAD106309</h6>      
   </div>
