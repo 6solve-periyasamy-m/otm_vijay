@@ -144,6 +144,7 @@
     margin:0px;
     margin-bottom:8px;
     color: var(--text-head-color);
+    text-transform:uppercase;
   } 
  .customer-details-block .customer-details-text-block,.customer-details-block .customer-details-image-block  {
     float:left;  
