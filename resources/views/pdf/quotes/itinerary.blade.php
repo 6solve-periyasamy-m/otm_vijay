@@ -790,7 +790,7 @@ h5 span {
 @endif
 <!-- </section> -->
 <section id="static-pages" class="pdf-individual-block">
-   <div class="row">
+   <!-- <div class="row"> -->
      
    <h4 style="margin-bottom:0px;padding-left:32px;">   
     <span class="text">Notes</span>
@@ -852,11 +852,11 @@ and we will not be responsible if services become unavailable.
     </div>
     
 
-  </div>
+  <!-- </div> -->
 <!-- </section> -->
 
 <!-- <section class="pdf-individual-block"> -->
-   <div class="row">
+   <!-- <div class="row"> -->
     <div class="paragraph">
           <h5>Instalment & Balance Payments</h5>
           <p>Instalment and balance payments must be received in full by us by the date(s) specified on your invoice/reservation. If you fail to make
@@ -910,10 +910,10 @@ We strongly encourage you to purchase travel insurance that adequately responds 
           Force Majeure - Prior to travel
            </p>
     </div>
-   </div>
+   <!-- </div> -->
 <!-- </section> -->
 <!-- <section class="pdf-individual-block"> -->
-   <div class="row"> 
+   <!-- <div class="row">  -->
    <div class="paragraph">
           <h5>If:</h5>
           <ul>
@@ -972,10 +972,10 @@ We strongly encourage you to purchase travel insurance that adequately responds 
           <p> 
           We will endeavour to accommodate amendments and additional requests. You acknowledge that these may not be possible to fulfil, and for group departures a transfer of a booking to a different departure is deemed a cancellation. An amendment fee of $150 will be levied to cover communication and administration costs for any changes to bookings. You will also be required to pay any additional costs we incur associated with the amendments.
           </p>
-    </div>
+    <!-- </div> -->
 <!-- </section> -->
 <!-- <section class="pdf-individual-block"> -->
-   <div class="row"> 
+   <!-- <div class="row">  -->
    <div class="paragraph">
           <h5>AMENDMENTS BY US</h5>
           <h6>Prior to travel</h6>
@@ -1017,10 +1017,10 @@ We strongly encourage you to purchase travel insurance that adequately responds 
           <p>Arrangements which include tickets must not be used for advertising or promotional purposes or trade incentives unless Keith Prowse Travel authorises in writing. Authorisation may be denied in our absolute discretion.</p>
           <p>Tickets for Events within Australia are generally sent by post or by email as an e-ticket to your nominated address approximately 1-2 weeks prior to the Event. For international Events, tickets may be delivered to your hotel or may be sent as an e-ticket to your nominated address. Please ensure you have access to your email address while travelling.</p>
     </div>
-   </div>
+   <!-- </div> -->
 <!-- </section> -->
 <!-- <section class="pdf-individual-block"> -->
-   <div class="row"> 
+   <!-- <div class="row">  -->
    <div class="paragraph">
       <h5>PROMOTIONAL MATERIAL</h5>
       <p>We endeavour to ensure the accuracy of the information contained in our promotional material. However, please note that imagery used
@@ -1063,11 +1063,11 @@ We strongly encourage you to purchase travel insurance that adequately responds 
     </div>
  
 
-   </div>
+   <!-- </div> -->
 <!-- </section> -->
 
 <!-- <section class="pdf-individual-block"> -->
-   <div class="row"> 
+   <!-- <div class="row">  -->
    <div class="paragraph">
       <h5>New Medical Conditions</h5>
       <p>You must advise us of any new or changed medical conditions which may reasonably be expected to increase your risk of needing medical attention, or which may materially affect the usual conduct of the trip.</p>
@@ -1108,11 +1108,11 @@ We strongly encourage you to purchase travel insurance that adequately responds 
       <p>You acknowledge that travel involves personal risks which may be greater than those present in your everyday life. This could be because of the adventurous nature of your tour or the visiting of destinations which present geographical, political or cultural risks and dangers. You should consult guidance issued by the Department of Foreign Affairs and Trade (DFAT) applicable to the destinations within your itinerary. You acknowledge that your choice to travel is made having had the benefit of DFAT guidance, and you accept any additional personal risks associated with your travel. To the fullest extent permitted by law, we disclaim any liability for these risks.</p>
       <p>You acknowledge that you are travelling at a time when Covid-19 is endemic and that Covid-19 presents risks to your health and may cause death. By making a booking request, you accept all risks associated with Covid-19 infection during travel and you release us (and our directors, officers, employees and suppliers) from liability in connection with Covid-19 infection.</p>
     </div>
-   </div>
+   <!-- </div> -->
 <!-- </section> -->
 
 <!-- <section class="pdf-individual-block"> -->
-  <div class="row"> 
+  <!-- <div class="row">  -->
     <div class="paragraph">
       <h5>RESPONSIBILITY</h5>
       <h6>Services supplied by independent suppliers</h6>
@@ -1154,11 +1154,11 @@ We strongly encourage you to purchase travel insurance that adequately responds 
         <p>In the event of a problem with any aspect of your travel arrangements you must tell us or make our representative or our local supplier aware of such problems as soon as possible. This is so we or our suppliers have had the opportunity to put things right on the ground. If you notify us of a problem during travel and we haven’t resolved it to your satisfaction, please follow this up in writing within 30 days from the end of your travel arrangements. This is so we have the opportunity to pursue the claim with our own suppliers (if relevant). If you fail to follow this procedure, this may limit your rights to make a claim. Prior to submitting or publishing any negative public review of our services or your travel arrangements, you agree to first contact us so that we can discuss your concerns and any issues with a view to resolving them. You agree to promptly remove any reviews published in contravention of this obligation upon receiving notice from us.</p>
     </div>
 
-  </div>
+  <!-- </div> -->
 <!-- </section> -->
 
 <!-- <section class="pdf-individual-block"> -->
-  <div class="row"> 
+  <!-- <div class="row">  -->
     <div class="paragraph">
        <h5>DEEMED ACCEPTANCE</h5>
        <p>If you place a booking on behalf of another party, you represent and warrant us that you are duly authorised to provide the agreement and consent of the other party to be bound by these Booking Conditions. You agree that you will be responsible for any loss or damage we incur if this is not the case. Image release We may take photographs or make recordings of you and your activities that identify you during travel. We reserve the right to use any images and/or recordings for promotional and marketing purposes. You consent to this use and acknowledge you will not be entitled to any payment or other compensation. If you do not consent to the use of your image or likeness, please advise us as least 21 days prior to the commencement of your arrangements.</p>
@@ -1176,7 +1176,7 @@ We strongly encourage you to purchase travel insurance that adequately responds 
     
       </div>
 
-    </div>
+    <!-- </div> -->
  </section>
 </main>
 
