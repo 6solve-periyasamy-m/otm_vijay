@@ -678,9 +678,12 @@ h5 span {
                      <td><strong>Inclusion:</strong></td>
                       @if(array_key_exists('Ticket', $item->details))
                         <td>{{ $item->details['Ticket'] }}</td>
+                      @else
+                          <td>{{ $item->name }}</td>
                       @endif
                   </tr>
                    @foreach($item->details as $key => $value)
+                       @continue(empty($value))
                        <tr>
                            <td><strong>{{ $key }}:</strong></td>
                            <td>
