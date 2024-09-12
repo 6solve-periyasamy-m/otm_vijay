@@ -524,7 +524,7 @@ h5 span {
     
   @foreach($itinerary->items['Accommodation'] as $accommodation)
 
-    <div class="single-module"  style="margin-bottom:-10px;">
+    <div class="single-module"  style="margin-bottom:-20px;">
       @if($firstLoop)
           <div class="heading-module">
               <h3   style="margin-top:0px;">
