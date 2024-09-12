@@ -90,7 +90,7 @@
   }
   .pdf-header {
     background-color: var(--main-background-color);
-    padding:32px 32px;
+    padding:30px 32px;
   }
   .pdf-individual-block {
     width: 796px;
