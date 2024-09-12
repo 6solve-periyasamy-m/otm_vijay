@@ -445,7 +445,7 @@ h5 span {
     margin-top: 0px;
 }
 figure.table {
-     margin:10px 0px -40px 0px;
+     margin:-5px 0px -40px 0px;
 }
 figure.table tr td:nth-child(2) {display:none;}
 /* .single-module, .custom-details-module, .paragraph {
