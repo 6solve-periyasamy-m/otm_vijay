@@ -11,8 +11,8 @@
     $headlogo = svg_to_b64('images/pdf_assets/images/KeithProwse-Travel-Logo.png') ;             
     $dacre = \Carbon\Carbon::parse($itinerary->booker->customer->created_at)->format('d M Y');                               
     $reference = $itinerary->reference;
-    $commission = $itinerary->organization->commission;
-    echo "Commission: " . $commission;
+    //$commission = $itinerary->organization->commission;
+    //echo "Commission: " . $commission;
     $cusname = $itinerary->booker->customer->first_name .' '. $itinerary->booker->customer->last_name;
     $cusmail = $itinerary->booker->customer->email_address;
 
