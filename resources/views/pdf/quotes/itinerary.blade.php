@@ -82,10 +82,10 @@
 <style>
   :root { 
     --main-background-color:#F9F4EE;
-  --text-head-color: #F35B15;
+  --text-head-color: rgba(243, 91, 21, 1);
   --text-color: #000;
   --table-header-text: #FFFFFF;
-  --head-text-background:#F35B15;
+  --head-text-background:rgba(243, 91, 21, 1);
   --table-border-color:#EAEAEA;
   }
   .pdf-header {
