@@ -741,10 +741,10 @@ figure.table tr td:nth-child(2) {display:none;}
                   </tr>
                   @endif      
                   <tr>
-                      <td style="font-weight:400;min-width:128px;"><strong style="margint-top:15px">Final Cost:
+                      <td style="font-weight:400;min-width:128px;"><strong style="margin-top:10px">FINAL COST:
                       <span style="width: 84%;height: 1px;display: block;margin: 0;margin-top: 2px;background-color: var(--head-text-background);"></span>
                       </strong></td>
-                      <td style="margint-top:15px"><strong>{{ f_currency($itinerary->finances->cost) }}</strong></td>
+                      <td><strong style="margin-top:10px">{{ f_currency($itinerary->finances->cost) }}</strong></td>
                   </tr>
                                     
            </tbody>
