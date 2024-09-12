@@ -225,12 +225,12 @@ h2 {
     font-size: 20px;
     font-weight: 700;
     line-height: 24px;
-    padding:6px 32px;
-    background-color:var(--head-text-background);
-    margin:0;
-    text-transform: capitalize;
+    padding: 3px 32px;
+    background-color: var(--head-text-background);
+    margin: 0;
+    text-transform: uppercase;
+    text-align: center;
 }
-
 h3 {
     margin: 35px 10px 0px 0px;
     font-family: "PPNeueMontreal-Medium";
