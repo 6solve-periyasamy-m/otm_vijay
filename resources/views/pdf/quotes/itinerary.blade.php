@@ -418,7 +418,7 @@ h5 span {
 .customer-agent-details {clear:both;}
 .payment-detail table {
   width: 90%;
-  max-width: 736px;
+  max-width: 716px;
 }
 .payment-detail table th {
     font-family: "PPNeueMontreal-Medium";
