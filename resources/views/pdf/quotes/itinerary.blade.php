@@ -469,7 +469,7 @@ h5 span {
           </div>
             <div class="customer-agent-details">
                 <div class="customer-details">
-                @if ($itinerary->organization->commission)
+                @if (!is_null($itinerary->organization) && !is_null($itinerary->organization->commission))
                     <h6>Organization DETAILS</h6>
                     <p>Name: <span>{{ $itinerary->organization->name }}</span></p>
                     <p>Email: <span>{{ $itinerary->organization->contact_email }}</span></p>
