@@ -102,13 +102,13 @@
   .pdf-individual-block .paragraph {
     max-width:736px!important;
   }
-  .pdf-individual-block:first-child .heading-module h3 {
+  /* .pdf-individual-block:first-child .heading-module h3 {
     margin: 0px 10px 0px 0px!important;
   }
   .pdf-individual-block:first-child .single-module {
     margin-top: 24px!important;
     margin-bottom: 24px!important;
-  }
+  } */
   
     @font-face {
     font-family: "PlayfairDisplay-Medium";
@@ -230,7 +230,7 @@ h2 {
     text-align: center;
 }
 h3 {
-    margin: 35px 10px 0px 0px;
+    margin: 30px 10px 0px 0px;
     font-family: "PPNeueMontreal-Medium";
     font-size: 20px;
     font-weight: 500;
@@ -254,9 +254,9 @@ h3 span.text {
     font-weight: 400;
   }
 .single-module {
-  margin-top: 24px;
+  margin-top: 30px;
   padding-left: 32px;
-  margin-bottom:24px;
+  margin-bottom:30px;
 }
 .single-module .details-module {
   max-width:736px;
@@ -339,7 +339,7 @@ h5 span {
 .custom-details-module  h6{
     font-family: "PPNeueMontreal-Medium";
     font-weight: 500;
-    margin: 20px 0px 15px 0px;
+    margin: 30px 0px 15px 0px;
     font-size: 14px;
     line-height: 18px;
 }
@@ -357,7 +357,7 @@ h5 span {
     font-weight: 500;
 }
 .paragraph {
-  margin: 20px 0px;
+  margin: 30px 0px;
   padding-left: 32px;
 }
 .paragraph h5, .paragraph p, .paragraph h6, .paragraph ul li {
@@ -370,7 +370,7 @@ h5 span {
 .paragraph h5,.paragraph h6 {
     font-family: "PPNeueMontreal-Medium";
     font-weight: 500;
-    margin: 0px 0px 10px 0px;
+    margin: 0px 0px 15px 0px;
 }
 .paragraph h6 {
   margin: -10px 0px 10px 0px;
@@ -433,7 +433,7 @@ h5 span {
     text-align: center;
     border: 1px solid var(--table-border-color);
 }
-.payment-detail {margin: 30px 0px;}
+.payment-detail {margin: 0px 0px;}
 @page {
     margin-top: 25px; 
 }
@@ -713,7 +713,7 @@ h5 span {
       <span class="text">Order total</span>
       </h3>
         </div>
-    <div class="details-module" style="margin-top:-10px;">
+    <div class="details-module" style="margin-top:-5px;">
         <table>
            <tbody>
                   <tr>            
