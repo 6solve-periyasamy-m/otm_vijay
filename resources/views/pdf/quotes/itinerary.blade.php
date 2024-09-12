@@ -445,7 +445,7 @@ h5 span {
 /* .single-module, .custom-details-module, .paragraph {
         page-break-inside: avoid;
     }  */
-      #static-pages {page-break-inside: avoid;}
+      /* #static-pages {page-break-inside: avoid;} */
 </style>
 
    
@@ -804,7 +804,7 @@ h5 span {
     <span class="mark"></span>
    </h4> -->
    <div class="heading-module">
-      <h3   style="margin-top:0px;">
+      <h3 style="margin-top:0px;">
           <span class="mark"></span>
           <span class="text">Notes</span>
       </h3>
@@ -812,7 +812,6 @@ h5 span {
   <div class="custom-details-module">     
      <h6 style="margin-top:10px;">KPAD106309</h6>      
   </div>
-
   <h2>Terms & conditions</h2>
   
     <div class="paragraph">
