@@ -435,7 +435,7 @@ h5 span {
 }
 .payment-detail {margin: 30px 0px;}
 @page {
-    margin-top: 30px; 
+    margin-top: 25px; 
 }
 @page:first {
     margin-top: 0px;
