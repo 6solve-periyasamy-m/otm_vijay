@@ -159,7 +159,7 @@ return [
                 'description' => 'The amount remaining to be paid on the order'
             ],
             'next_payment' => [
-                'date' => [
+                'due' => [
                     'name' => 'Next Installment Due',
                     'description' => 'When is the next installment due'
                 ],
