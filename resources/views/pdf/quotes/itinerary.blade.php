@@ -562,13 +562,13 @@ h5 span {
    
   @endif
   </div>
-  </section>
+  <!-- </section> -->
 
   @if(!empty($itinerary->items['Event'])) 
     @php
         $firstLoop = true;
     @endphp
-    <section class="pdf-individual-block">
+    <!-- <section class="pdf-individual-block"> -->
         <div class="row">
             @foreach($itinerary->items['Event'] as $item)
                 <div class="single-module">
@@ -634,14 +634,14 @@ h5 span {
                 </div>
             @endforeach
         </div>
-    </section>
+    <!-- </section> -->
 @endif
 
 @if(!empty($itinerary->items['Inclusion']))
   @php
     $firstLoop = true;
   @endphp
-<section class="pdf-individual-block">
+<!-- <section class="pdf-individual-block"> -->
    <div class="row">
    
       @foreach($itinerary->items['Inclusion'] as $item)
@@ -696,11 +696,11 @@ h5 span {
       </div>
       @endforeach
    </div>
-</section>
+<!-- </section> -->
 @endif
 
 @if(!empty($itinerary->finances))
-<section class="pdf-individual-block">
+<!-- <section class="pdf-individual-block"> -->
    <div class="row">
    
    
@@ -784,9 +784,9 @@ h5 span {
   </table>   
    </div>
    </div>
-</section>
+<!-- </section> -->
 @endif
-
+</section>
 <section id="static-pages" class="pdf-individual-block">
    <div class="row">
      
