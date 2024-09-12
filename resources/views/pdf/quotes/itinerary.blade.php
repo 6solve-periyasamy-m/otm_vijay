@@ -973,7 +973,6 @@ We strongly encourage you to purchase travel insurance that adequately responds 
           We will endeavour to accommodate amendments and additional requests. You acknowledge that these may not be possible to fulfil, and for group departures a transfer of a booking to a different departure is deemed a cancellation. An amendment fee of $150 will be levied to cover communication and administration costs for any changes to bookings. You will also be required to pay any additional costs we incur associated with the amendments.
           </p>
     </div>
-   <div>
 <!-- </section> -->
 <!-- <section class="pdf-individual-block"> -->
    <div class="row"> 
