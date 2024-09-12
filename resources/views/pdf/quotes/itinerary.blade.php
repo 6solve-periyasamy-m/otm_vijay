@@ -734,10 +734,12 @@ h5 span {
                       <td style="font-weight:400;min-width:128px;">Commission:</td>
                       <td>{{ f_currency($itinerary->finances->commission) }} ({{$itinerary->finances->commissionPercent}}%)</td>
                   </tr>
-                  @endif
+                  @endif      
                   <tr>
-                      <td style="font-weight:400;min-width:128px;">Final Cost:</td>
-                      <td>{{ f_currency($itinerary->finances->cost) }}</td>
+                      <td style="font-weight:400;min-width:128px;"><strong style="margint-top:8px">Final Cost:
+                      <span style="width: 84%;height: 1px;display: block;margin: 0;margin-top: 2px;background-color: var(--head-text-background);"></span>
+                      </strong></td>
+                      <td style="margint-top:8px"><strong>{{ f_currency($itinerary->finances->cost) }}</strong></td>
                   </tr>
                                     
            </tbody>
