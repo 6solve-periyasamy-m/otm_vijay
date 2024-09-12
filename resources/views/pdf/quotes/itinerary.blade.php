@@ -354,6 +354,7 @@ h5 span {
     color: var(--text-color);
     margin: 0px 0px 0px 0px;
     min-width: 220px;
+    padding:0;
 }
 .custom-details-module table td strong {
     font-family: "PPNeueMontreal-Medium";
