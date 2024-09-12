@@ -469,9 +469,15 @@ h5 span {
           </div>
             <div class="customer-agent-details">
                 <div class="customer-details">
+                @if ($itinerary->organization->commission)
+                    <h6>Organization DETAILS</h6>
+                    <p>Name: <span>{{ $itinerary->organization->name }}</span></p>
+                    <p>Email: <span>{{ $itinerary->organization->contact_email }}</span></p>
+                @else
                     <h6>CUSTOMER DETAILS</h6>
-                    <p>Name: <span>{{ $cusname  }}</span></p>
-                    <p>Email: <span>{{ $cusmail }}</span><p>
+                    <p>Name: <span>{{ $cusname }}</span></p>
+                    <p>Email: <span>{{ $cusmail }}</span></p>
+                @endif
                 </div>
                 <div class="agent-details">
                     <h6>AGENT DETAILS</h6>
