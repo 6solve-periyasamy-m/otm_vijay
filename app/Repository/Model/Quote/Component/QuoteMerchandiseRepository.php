@@ -36,7 +36,7 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
 
     public function getCost(): float
     {
-        return $this->quoteComponent->tour_sales_price;
+        return $this->quoteComponent->tour_sales_price ?? 0.0;
     }
 
     public function getInventory(): ?MerchandiseInventoryRepository
@@ -73,19 +73,26 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
 
     public function __toString(): string
     {
-        return $this->getInventory()->__toString();
+        return $this->getInventory()?->__toString();
     }
 
     public function getPurchasePrice(): ?float
     {
-        return $this->getInventory()->get()->purchase_price;
+        return $this->getInventory()?->get()->purchase_price ?? 0.0;
     }
 
     public function getShortDescription(): string
     {
-        $inventory = $this->getInventory()->get();
+        $inventory = $this->getInventory()?->get();
         $component = $inventory->component;
-        return "{$component->name} ({$inventory->variant->name}) ({$inventory->size->name})";
+        $string = $component->name;
+        if ($inventory->variant !== null) {
+            $string .= ' (' . $inventory->variant->name . ')';
+        }
+        if ($inventory->size !== null) {
+            $string .= ' (' . $inventory->size . ')';
+        }
+        return $string;
     }
 
     public function getItineraryTitle(): string
@@ -95,14 +102,14 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
 
     public function getItineraryDescription(): string
     {
-        $inventory = $this->getInventory()->get();
+        $inventory = $this->getInventory()?->get();
         $component = $inventory->component;
         return "A {$inventory->variant->name} {$component->name}, in {$inventory->size->name}";
     }
 
     public function getItineraryAsset(): string
     {
-        return $this->getInventory()->get()->asset;
+        return $this->getInventory()?->get()->asset;
     }
 
     public function convertToTourComponent(Tour $tour): InventoryTourRepository
@@ -123,7 +130,7 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
 
     public function getSalesPrice(): float
     {
-        return $this->quoteComponent->tour_sales_price ?? 0;
+        return $this->quoteComponent->tour_sales_price ?? 0.0;
     }
 
     public function convertToQuoteSection(): QuoteSection

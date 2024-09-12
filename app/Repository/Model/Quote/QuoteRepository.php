@@ -1009,7 +1009,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $items = [];
         $seen = [];
 
-        foreach ($this->quote->accommodation as  $component) {
+        foreach ($this->quote->accommodation as $component) {
             $key = "activity-{$component->accommodation_inventory_id}";
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
@@ -1019,7 +1019,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $items[$heading][] = $item;
         }
 
-        foreach ($this->quote->activities as  $component) {
+        foreach ($this->quote->activities as $component) {
             $key = "activity-{$component->activity_inventory_id}";
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
@@ -1030,7 +1030,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $items[$heading][] = $item;
         }
 
-        foreach ($this->quote->flights as  $component) {
+        foreach ($this->quote->flights as $component) {
             $key = "flight-{$component->flight_inventory_id}";
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
@@ -1040,12 +1040,22 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $items[$heading][] = $item;
         }
 
-        foreach ($this->quote->transport as  $component) {
+        foreach ($this->quote->transport as $component) {
             $key = "transport-{$component->transport_inventory_id}";
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($travelling);
             $heading = "Transfers";
+            if (!array_key_exists($heading, $items)) { $items[$heading] = []; }
+            $items[$heading][] = $item;
+        }
+
+        foreach ($this->quote->merchandise as $component) {
+            $key = "merchandise-{$component->merchandise_inventory_id}";
+            if (in_array($key, $seen, true)) { continue; }
+            $seen[] = $key;
+            $item = $component->repository->getItineraryItem($travelling);
+            $heading = "Inclusion";
             if (!array_key_exists($heading, $items)) { $items[$heading] = []; }
             $items[$heading][] = $item;
         }
