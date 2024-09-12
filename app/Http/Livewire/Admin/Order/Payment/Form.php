@@ -37,7 +37,7 @@ class Form extends Component
 
     public function next(): void
     {
-        $this->payment->amount = $this->order->next_installment?->amount;
+        $this->payment->amount = $this->order->next_installment?->remaining;
     }
 
     public function remaining(): void

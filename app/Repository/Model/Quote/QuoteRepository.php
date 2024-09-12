@@ -194,6 +194,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         foreach ($this->quote->installments as $installment) {
             $tour->repository->addInstallment($installment->due_on, $installment->amount, $installment->percentage);
         }
+        foreach ($this->quote->costs as $cost) {
+            $tour->costs()->save($cost->replicate());
+        }
         $this->save();
         return $tour;
     }
