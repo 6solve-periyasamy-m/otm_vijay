@@ -23,7 +23,7 @@ class EventController extends Controller
     public function store(EventRequest $request)
     {
         $parent = Event::find($request->parent_id);
-        if ($parent->parent_event_id !== null) {
+        if ($parent?->parent_event_id !== null) {
             return back()->withErrors(['msg' => 'Cannot use a parent that is a child of another event',]);
         }
         $event = Event::create($request->getData());
@@ -48,7 +48,7 @@ class EventController extends Controller
     public function update(EventRequest $request, Event $event)
     {
         $parent = Event::find($request->parent_id);
-        if ($parent->parent_event_id !== null) {
+        if ($parent?->parent_event_id !== null) {
             return back()->withErrors(['msg' => 'Cannot use a parent that is a child of another event',]);
         }
         $event->update($request->getData());
