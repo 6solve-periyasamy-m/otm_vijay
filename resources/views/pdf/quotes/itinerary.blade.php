@@ -523,10 +523,10 @@ h5 span {
     
   @foreach($itinerary->items['Accommodation'] as $accommodation)
 
-    <div class="single-module">
+    <div class="single-module"  style="margin-bottom:0px;">
       @if($firstLoop)
           <div class="heading-module">
-              <h3>
+              <h3   style="margin-top:0px;">
                   <span class="mark"></span>
                   <span class="text">Accommodation</span>
               </h3>
