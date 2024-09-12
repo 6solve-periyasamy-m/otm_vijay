@@ -795,7 +795,7 @@ h5 span {
    </div>
 <!-- </section> -->
 @endif
-<!-- </section> -->
+</section>
 <section id="static-pages" class="pdf-individual-block">
    <!-- <div class="row"> -->
      
@@ -810,7 +810,7 @@ h5 span {
       </h3>
     </div>
   <div class="custom-details-module">     
-     <h6>KPAD106309</h6>      
+     <h6 style="margin-top:10px;">KPAD106309</h6>      
   </div>
 
   <h2>Terms & conditions</h2>
