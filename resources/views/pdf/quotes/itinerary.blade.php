@@ -786,7 +786,7 @@ h5 span {
    </div>
 <!-- </section> -->
 @endif
-</section>
+<!-- </section> -->
 <section id="static-pages" class="pdf-individual-block">
    <div class="row">
      
@@ -851,9 +851,9 @@ and we will not be responsible if services become unavailable.
     
 
   </div>
-</section>
+<!-- </section> -->
 
-<section class="pdf-individual-block">
+<!-- <section class="pdf-individual-block"> -->
    <div class="row">
     <div class="paragraph">
           <h5>Instalment & Balance Payments</h5>
@@ -909,8 +909,8 @@ We strongly encourage you to purchase travel insurance that adequately responds 
            </p>
     </div>
    </div>
-</section>
-<section class="pdf-individual-block">
+<!-- </section> -->
+<!-- <section class="pdf-individual-block"> -->
    <div class="row"> 
    <div class="paragraph">
           <h5>If:</h5>
@@ -977,8 +977,8 @@ We strongly encourage you to purchase travel insurance that adequately responds 
             </p>
     </div>
    <div>
-</section>
-<section class="pdf-individual-block">
+<!-- </section> -->
+<!-- <section class="pdf-individual-block"> -->
    <div class="row"> 
    <div class="paragraph">
           <h5>AMENDMENTS BY US</h5>
@@ -1022,8 +1022,8 @@ We strongly encourage you to purchase travel insurance that adequately responds 
           <p>Tickets for Events within Australia are generally sent by post or by email as an e-ticket to your nominated address approximately 1-2 weeks prior to the Event. For international Events, tickets may be delivered to your hotel or may be sent as an e-ticket to your nominated address. Please ensure you have access to your email address while travelling.</p>
     </div>
    </div>
-</section>
-<section class="pdf-individual-block">
+<!-- </section> -->
+<!-- <section class="pdf-individual-block"> -->
    <div class="row"> 
    <div class="paragraph">
       <h5>PROMOTIONAL MATERIAL</h5>
@@ -1068,9 +1068,9 @@ We strongly encourage you to purchase travel insurance that adequately responds 
  
 
    </div>
-</section>
+<!-- </section> -->
 
-<section class="pdf-individual-block">
+<!-- <section class="pdf-individual-block"> -->
    <div class="row"> 
    <div class="paragraph">
       <h5>New Medical Conditions</h5>
@@ -1113,9 +1113,9 @@ We strongly encourage you to purchase travel insurance that adequately responds 
       <p>You acknowledge that you are travelling at a time when Covid-19 is endemic and that Covid-19 presents risks to your health and may cause death. By making a booking request, you accept all risks associated with Covid-19 infection during travel and you release us (and our directors, officers, employees and suppliers) from liability in connection with Covid-19 infection.</p>
     </div>
    </div>
-</section>
+<!-- </section> -->
 
-<section class="pdf-individual-block">
+<!-- <section class="pdf-individual-block"> -->
   <div class="row"> 
     <div class="paragraph">
       <h5>RESPONSIBILITY</h5>
@@ -1159,9 +1159,9 @@ We strongly encourage you to purchase travel insurance that adequately responds 
     </div>
 
   </div>
-</section>
+<!-- </section> -->
 
-<section class="pdf-individual-block">
+<!-- <section class="pdf-individual-block"> -->
   <div class="row"> 
     <div class="paragraph">
        <h5>DEEMED ACCEPTANCE</h5>
