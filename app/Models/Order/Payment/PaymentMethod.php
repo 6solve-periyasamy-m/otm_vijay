@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
  *
  * @property int $id
  * @property string $name
+ * @property float|null $fee_percentage
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<Payment> $payments
@@ -36,6 +37,7 @@ use Illuminate\Support\Collection;
 class PaymentMethod extends SimpleModel
 {
     protected $guarded = [];
+    protected $casts = ['fee_percentage' => 'float',];
 
     public function payments(): HasMany
     {

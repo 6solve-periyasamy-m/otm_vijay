@@ -32,7 +32,8 @@ class PaymentMethod extends AbstractSelectComponent
 
     protected function format(DataModel|Model $model): string
     {
-        return $model->name;
+        $fee = $model->fee_percentage === null ? "No Fee" : "{$model->fee_percentage}%";
+        return "{$model->name} ({$fee})";
     }
 
 }
