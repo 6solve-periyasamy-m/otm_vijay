@@ -102,7 +102,7 @@
   .pdf-individual-block {/*margin-left:-48px;*/}
   .pdf-individual-block:first-child {margin-top:-8px;}
   .pdf-individual-block .paragraph {
-    max-width:736px!important;
+    max-width:720px!important;
   }
   /* .pdf-individual-block:first-child .heading-module h3 {
     margin: 0px 10px 0px 0px!important;
@@ -524,10 +524,10 @@ h5 span {
     
   @foreach($itinerary->items['Accommodation'] as $accommodation)
 
-    <div class="single-module"  style="margin-bottom:-20px;">
+    <div class="single-module"  style="margin-bottom:-15px;">
       @if($firstLoop)
           <div class="heading-module">
-              <h3   style="margin-top:0px;">
+              <h3   style="margin-top:10px;">
                   <span class="mark"></span>
                   <span class="text">Accommodation</span>
               </h3>
@@ -580,7 +580,7 @@ h5 span {
     <!-- <section class="pdf-individual-block"> -->
         <div class="row">
             @foreach($itinerary->items['Event'] as $item)
-                <div class="single-module">
+                <div class="single-module" style="margin-bottom:0px;">
                     @if($firstLoop)
                         <div class="heading-module">
                             <h3>
