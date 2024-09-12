@@ -109,9 +109,7 @@
     margin-top: 24px!important;
     margin-bottom: 24px!important;
   }
-  .single-module, .custom-details-module, .paragraph {
-        page-break-inside: avoid;
-    } 
+  
     @font-face {
     font-family: "PlayfairDisplay-Medium";
     src: url('images/pdf_assets/fonts/PlayfairDisplay-Medium.ttf');
@@ -416,12 +414,6 @@ h5 span {
     top: 0px;
 }
 .customer-agent-details {clear:both;}
-@page {
-    margin-top: 50px; 
-}
-@page:first {
-    margin-top: 0px;
-}
 .payment-detail table {
   width: 90%;
   max-width: 736px;
@@ -442,6 +434,15 @@ h5 span {
     border: 1px solid var(--table-border-color);
 }
 .payment-detail {margin: 30px 0px;}
+@page {
+    margin-top: 30px; 
+}
+@page:first {
+    margin-top: 0px;
+}
+/* .single-module, .custom-details-module, .paragraph {
+        page-break-inside: avoid;
+    }  */
 </style>
 
    
