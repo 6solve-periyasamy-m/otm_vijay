@@ -8,9 +8,8 @@
     $type = $type ?? "Travel Itinerary";
 
     //pdf variables
-    $headlogo = svg_to_b64('images/pdf_assets/images/KeithProwse Travel Logo.png') ;             
-    $dacre = \Carbon\Carbon::parse($itinerary->booker->customer->created_at)->format('d M Y');
-
+    $headlogo = svg_to_b64('images/pdf_assets/images/KeithProwse-Travel-Logo.png') ;             
+    $dacre = \Carbon\Carbon::parse($itinerary->booker->customer->created_at)->format('d M Y');                               
     $reference = $itinerary->reference;
     $cusname = $itinerary->booker->customer->first_name .' '. $itinerary->booker->customer->last_name;
     $cusmail = $itinerary->booker->customer->email_address;
@@ -89,10 +88,9 @@
   --head-text-background:#F35B15;
   --table-border-color:#EAEAEA;
   }
-  
   .pdf-header {
     background-color: var(--main-background-color);
-    padding:28px 32px;
+    padding:32px 32px;
   }
   .pdf-individual-block {
     width: 796px;
