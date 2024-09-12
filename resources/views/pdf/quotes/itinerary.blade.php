@@ -784,7 +784,7 @@ figure.table tr td:nth-child(2) {display:none;}
   <table>
     <tr>
         <td style="vertical-align: top;">
-            <strong>BANK TRANSFER</strong><br>
+            <!-- <strong>BANK TRANSFER</strong><br> -->
             {!! $itinerary->finances->paymentDetails !!}
         </td>
         <!-- <td style="vertical-align: top;">
