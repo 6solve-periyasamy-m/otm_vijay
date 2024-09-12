@@ -23,6 +23,7 @@ use Illuminate\Validation\Rule;
  * @property int $payment_method_id
  * @property int|null $customer_id
  * @property float $amount
+ * @property float|null $payment_fee
  * @property Carbon $paid_on Date when payment was made
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
@@ -55,7 +56,7 @@ class Payment extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
-    protected $casts = ['paid_on' => 'datetime:Y-m-d H:i:s', 'amount' => 'double'];
+    protected $casts = ['paid_on' => 'datetime:Y-m-d H:i:s', 'amount' => 'double', 'payment_fee' => 'double'];
 
     public static function getValidationRules(): array
     {
@@ -84,6 +85,11 @@ class Payment extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'customer_id');
+    }
+
+    public function totalWithFee(): float
+    {
+        return $this->amount + ($this->payment_fee ?? 0.0);
     }
 
     public function getPaymentTypeAttribute(): string
