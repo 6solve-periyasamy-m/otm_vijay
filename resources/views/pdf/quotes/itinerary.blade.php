@@ -102,7 +102,7 @@
   .pdf-individual-block {/*margin-left:-48px;*/}
   .pdf-individual-block:first-child {margin-top:-8px;}
   .pdf-individual-block .paragraph {
-    max-width:720px!important;
+    max-width:716px!important;
   }
   /* .pdf-individual-block:first-child .heading-module h3 {
     margin: 0px 10px 0px 0px!important;
@@ -261,7 +261,7 @@ h3 span.text {
   margin-bottom:30px;
 }
 .single-module .details-module {
-  max-width:736px;
+  max-width:716px;
 }
 h4 {
     font-family: "PPNeueMontreal-Regular";
