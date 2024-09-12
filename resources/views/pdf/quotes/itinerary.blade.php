@@ -445,6 +445,7 @@ h5 span {
 /* .single-module, .custom-details-module, .paragraph {
         page-break-inside: avoid;
     }  */
+      #static-pages {page-break-inside: avoid;}
 </style>
 
    
@@ -523,7 +524,7 @@ h5 span {
     
   @foreach($itinerary->items['Accommodation'] as $accommodation)
 
-    <div class="single-module"  style="margin-bottom:0px;">
+    <div class="single-module"  style="margin-bottom:-10px;">
       @if($firstLoop)
           <div class="heading-module">
               <h3   style="margin-top:0px;">
@@ -798,10 +799,16 @@ h5 span {
 <section id="static-pages" class="pdf-individual-block">
    <!-- <div class="row"> -->
      
-   <h4 style="margin-bottom:0px;padding-left:32px;">   
+   <!-- <h4 style="margin-bottom:0px;padding-left:32px;">   
     <span class="text">Notes</span>
     <span class="mark"></span>
-   </h4>
+   </h4> -->
+   <div class="heading-module">
+      <h3   style="margin-top:0px;">
+          <span class="mark"></span>
+          <span class="text">Notes</span>
+      </h3>
+    </div>
   <div class="custom-details-module">     
      <h6>KPAD106309</h6>      
   </div>
