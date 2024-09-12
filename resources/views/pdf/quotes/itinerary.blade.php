@@ -361,7 +361,7 @@ h5 span {
     font-weight: 500;
 }
 .paragraph {
-  margin: 30px 0px;
+  margin: 25px 0px;
   padding-left: 32px;
 }
 .paragraph h5, .paragraph p, .paragraph h6, .paragraph ul li {
