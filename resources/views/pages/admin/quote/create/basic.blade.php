@@ -5,20 +5,17 @@
 @section('title', 'Create Basic Quote for ' . $tour->name)
 
 @section('form-body')
-    <x-admin.input.selector.add name="customer_id" route="customers" width="3">
-        <x-slot:create>{{ route('customers.create') }}</x-slot:create>
-        Lead Traveller
-    </x-admin.input.selector.add>
+    <x-livewire.input.select.customer name="customer_id" width="3" label="Lead Traveller" />
     <x-livewire.input.select.brand name="brand_id" label="Quote Branding" width="3" />
-    <x-admin.input type="date" name="expires" width="3" value="{{\Settings::defaultQuoteExpiry()}}">Expiry Date</x-admin.input>
-    <x-admin.input name="single_occupancy_surcharge" width="3">Single Occupancy Surcharge</x-admin.input>
+    <x-livewire.input type="date" name="expires" width="3" value="{{\Settings::defaultQuoteExpiry()}}" label="Expiry Date"/>
+    <x-livewire.input name="single_occupancy_surcharge" width="3" label="Single Occupancy Surcharge" />
     <x-livewire.input.select.organization name="organization_id" label="Organization (Optional)" width="6"/>
     <x-livewire.input.select.tax-bracket name="tax_bracket_id" label="Tax Bracket" width="6"/>
     <hr class="splitter">
-    <x-admin.input.checkbox name="travelling" value="1" width="6" nofloat>Lead Travelling?</x-admin.input.checkbox >
-    <x-admin.input.checkbox name="paying" value="1" width="6" nofloat>Lead Paying?</x-admin.input.checkbox >
+    <x-livewire.input.checkbox name="travelling" value="1" width="6" label="Lead Travelling?" />
+    <x-livewire.input.checkbox name="paying" value="1" width="6" label="Lead Paying?"/>
     <hr class="splitter">
-    <x-admin.input.text-area name="internal_notes" width="6">Internal Notes</x-admin.input.text-area>
-    <x-admin.input.text-area name="external_notes" width="6">External Notes</x-admin.input.text-area>
+    <x-livewire.input.text-area name="internal_notes" width="6" label="Internal Notes" />
+    <x-livewire.input.text-area name="external_notes" width="6" label="External Notes" />
     <input type="submit" class="btn btn-primary text-white" name="Submit">
 @endsection

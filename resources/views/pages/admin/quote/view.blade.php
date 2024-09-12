@@ -31,10 +31,6 @@
                 {{ Icon::edit() }}
                 {{ __('quotes.view.buttons.edit') }}
             </a>
-            <a href="{{ route('quotes.components.add', ['quote' => $quote,]) }}" class="btn btn-primary">
-                {{ Icon::create() }}
-                {{ __('quotes.view.buttons.add') }}
-            </a>
             @if($quote->status == \App\Models\Helper\Enum\QuoteStatus::AWAITING)
                 <a href="{{ route('quotes.status.approve', ['quote' => $quote,]) }}" class="btn btn-success">
                     {{ Icon::approve() }}
@@ -67,7 +63,16 @@
     <hr class="splitter"/>
 
     {{-- Components--}}
+    <div class="heading pt-2 pb-md-3 pb-2">
+        <h2 class="fw-bold">Components</h2>
+    </div>
     <x-admin.section.card>
+        <div class="py-2 mb-3 text-end">
+            <a href="{{ route('quotes.components.add', ['quote' => $quote,]) }}" class="btn btn-primary text-white">
+                {{ Icon::create() }}
+                <span>Add Components</span>
+            </a>
+        </div>
         @include('partials.admin.quote.components', ['quote' => $quote,])
     </x-admin.section.card>
 
