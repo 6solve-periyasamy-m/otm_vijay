@@ -57,7 +57,7 @@
     ['name' => 'PPNeueMontreal-Medium', 'path' => 'images/pdf_assets/fonts/PPNeueMontreal-Medium.ttf'],
     ['name' => 'PPNeueMontreal-Regular', 'path' => 'images/pdf_assets/fonts/PPNeueMontreal-Regular.ttf'],
 ];
-//var_dump($itinerary);
+var_dump($itinerary);
     
 @endphp
 <?php 
@@ -727,7 +727,7 @@ h5 span {
                   @if($itinerary->finances->commission > 0 )
                   <tr>
                       <td style="font-weight:400;min-width:128px;">Commission:</td>
-                      <td>{{ f_currency($itinerary->finances->commission) }}({{$itinerary->finances->commissionPercent}})</td>
+                      <td>{{ f_currency($itinerary->finances->commission) }} ({{$itinerary->finances->commissionPercent}}%)</td>
                   </tr>
                   @endif
                   <tr>
