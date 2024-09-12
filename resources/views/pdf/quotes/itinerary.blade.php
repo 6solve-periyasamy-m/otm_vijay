@@ -600,7 +600,7 @@ h5 span {
                     <div class="details-module">
                         <table>
                             <tbody>
-                            @if(!empty($item->details['Ticket']))
+                            @if(array_key_exists('Ticket', $item->details) && !empty($item->details['Ticket']))
                                     <tr>
                                         <td><strong>Ticket:</strong></td>
                                         <td>{{ $item->details['Ticket'] }}</td>
@@ -676,30 +676,22 @@ h5 span {
                <tbody>
                   <tr>
                      <td><strong>Inclusion:</strong></td>
-                     <td>{{ $item->details['Ticket'] }}</td>
+                      @if(array_key_exists('Ticket', $item->details))
+                        <td>{{ $item->details['Ticket'] }}</td>
+                      @endif
                   </tr>
-                  <tr>
-                     <td><strong>Dates:</strong></td>
-                     <td>
-                        <?php
-                        $dates = explode('to', $item->details['Dates']); 
-                        echo trim($dates[0]); 
-                        ?>
-                    </td>
-                  </tr>
-                  <tr>
-                     <td><strong>Venue:</strong></td>
-                     <td>{{ $item->details['Venue'] }}</td>
-                  </tr>
-                 
-                  <tr>
-                     <td><strong>Quantity:</strong></td>
-                     <td>{{ $item->details['Quantity'] }}</td>
-                  </tr>
-                  <tr>
-                     <td><strong>Description:</strong></td>
-                     <td>{!! $item->details['Description'] !!}</td>
-                  </tr>
+                   @foreach($item->details as $key => $value)
+                       <tr>
+                           <td><strong>{{ $key }}:</strong></td>
+                           <td>
+                               @if($key === 'Dates')
+                                   {{ trim(explode('to', $value)[0]) }}
+                               @else
+                                   {!! $value !!}
+                               @endif
+                           </td>
+                       </tr>
+                   @endforeach
                </tbody>
             </table>
          </div>
