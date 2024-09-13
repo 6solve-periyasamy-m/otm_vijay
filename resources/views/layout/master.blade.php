@@ -137,6 +137,12 @@
         function sysFormatDateTime(date) {
             return formatDate(date, '{{ setting('system.format.date', 'd/m/Y') . ' ' . setting('system.format.time', 'H:i') }}');
         }
+        function sysFormatCurrency(amount, currency = "{{ setting('system.currency', 'GBP') }}") {
+            return (new Intl.NumberFormat('en-GB', {
+                style: 'currency',
+                currency: currency,
+            })).format(amount);
+        }
         function toggleAccordion(accordion) {
             let body = $($(accordion).attr('data-target'));
             if (body.hasClass('show')) {
