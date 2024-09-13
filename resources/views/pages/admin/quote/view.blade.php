@@ -108,6 +108,12 @@
                 {{ Icon::close() }}
                 {{ __('quotes.view.buttons.close') }}
             </a>
+            @if(is_otm())
+                <a href="{{ route('quotes.delete.force', ['quote' => $quote,]) }}" class="btn btn-danger">
+                    {{ Icon::forceDelete() }}
+                    Force Delete
+                </a>
+            @endif
         </div>
     </x-admin.section.header>
 

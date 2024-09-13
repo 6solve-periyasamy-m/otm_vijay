@@ -128,4 +128,13 @@ class QuoteController extends Controller
         $quote->delete();
         return redirect()->route('quotes.all');
     }
+
+    public function forceDelete(Quote $quote): RedirectResponse
+    {
+        if (!is_otm()) {
+            abort(403);
+        }
+        $quote->repository->forceDelete();
+        return redirect()->route('quotes.all');
+    }
 }
