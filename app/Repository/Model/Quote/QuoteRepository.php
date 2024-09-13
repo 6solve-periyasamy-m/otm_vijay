@@ -1144,4 +1144,16 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         for ($x = 0; $x < $travelling; $x++) { $travellers[] = new ItineraryTraveller(null, false, true); }
         return $travellers;
     }
+
+    public static function getComponent(string $type, int $id): QuoteComponentRepository|null
+    {
+        return match ($type) {
+            'accommodation' => QuoteAccommodation::find($id)?->repository,
+            'activity' => QuoteActivity::find($id)?->repository,
+            'flight' => QuoteFlight::find($id)?->repository,
+            'transport' => QuoteTransport::find($id)?->repository,
+            'merchandise' => QuoteMerchandise::find($id)?->repository,
+            default => null,
+        };
+    }
 }

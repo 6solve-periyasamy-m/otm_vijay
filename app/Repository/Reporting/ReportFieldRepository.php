@@ -658,6 +658,11 @@ class ReportFieldRepository
                         'method' => 'amount',
                         'format' => 'currency',
                     ],
+                    'payment_fee' => [
+                        'name' => 'Payment Fee',
+                        'method' => 'payment_fee',
+                        'format' => 'currency',
+                    ],
                     'paid_on' => [
                         'name' => 'Paid On',
                         'method' => 'paid_on',

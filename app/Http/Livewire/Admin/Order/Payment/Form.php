@@ -13,11 +13,13 @@ class Form extends Component
 
     public Order|int|null $order;
     public Payment|int|null $payment;
+    public bool $feeUpdated = false;
 
     public function mount(Order|int $order, Payment|int|null $payment = null)
     {
         $this->order = Order::getForMount($order);
         $this->payment = Payment::getForMount($payment);
+        $this->feeUpdated = $this->payment->id !== null;
     }
 
     public function render()
@@ -28,21 +30,45 @@ class Form extends Component
     public function updated($name, $value): void
     {
         $this->validateOnly($name);
+        if ($name === 'payment.payment_fee') {
+            $this->feeUpdated = true;
+        }
+        if ($name === 'payment.amount' && $this->payment->paymentMethod !== null) {
+            $this->updatePaymentFee();
+        }
+        if ($name === 'payment.payment_method_id' && $this->payment->amount !== null) {
+            $this->updatePaymentFee();
+        }
+    }
+
+    private function updatePaymentFee(): void
+    {
+        if (!$this->feeUpdated) {
+            $method = $this->payment->paymentMethod;
+            if ($method->fee_percentage === null) {
+                $this->payment->payment_fee = null;
+            } else {
+                $this->payment->payment_fee = ($method->fee_percentage / 100) * $this->payment->amount;
+            }
+        }
     }
 
     public function deposit(): void
     {
         $this->payment->amount = $this->order->calculated_deposit;
+        $this->updatePaymentFee();
     }
 
     public function next(): void
     {
         $this->payment->amount = $this->order->next_installment?->remaining;
+        $this->updatePaymentFee();
     }
 
     public function remaining(): void
     {
         $this->payment->amount = $this->order->remaining;
+        $this->updatePaymentFee();
     }
 
     public function save()
@@ -58,6 +84,7 @@ class Form extends Component
             'payment.customer_id' => 'required|int|exists:customers,id',
             'payment.payment_method_id' => 'required|int|exists:payment_methods,id',
             'payment.amount' => 'required|numeric',
+            'payment.payment_fee' => 'nullable|numeric',
             'payment.paid_on' => 'required|date',
         ];
     }
