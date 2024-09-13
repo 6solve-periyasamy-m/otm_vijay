@@ -104,7 +104,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read OrderInstallment|null $next_installment A temporary installment with details of the next payment, or null if all installments are paid
  * @property-read Collection|OrderInstallment[] $installments The installments for the order
  * @property-read int|null $installments_count The amount of installments for the order
- * @property-read Collection|Invoice[] $invoices The invoices for the order
+ * @property-read Collection|Invoice\Invoice[] $invoices The invoices for the order
  * @property-read int|null $invoices_count The amount of invoices for the order
  * @property-read OrderCustomer|null $leadBooker The lead booker for the order
  * @property-read Collection|OrderCustomer[] $orderCustomers The order customers
@@ -114,7 +114,8 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read int|null $payments_count The amount of payments for the order
  * @property-read Collection|PaymentReminder[] $reminders The reminders that have been sent for the order
  * @property-read int|null $reminders_count The amount of reminders that have been sent for the order
- * @property-read Tour $tour The tour that the order was made in relation to @property-read int|null $additional_travellers_count
+ * @property-read Tour $tour The tour that the order was made in relation to
+ * @property-read int|null $additional_travellers_count
  * @property-read TaxBracket|null $bracket
  * @property-read Collection<int, OrderCustomerAdjustment> $customerAdjustments
  * @property-read int|null $customer_adjustments_count

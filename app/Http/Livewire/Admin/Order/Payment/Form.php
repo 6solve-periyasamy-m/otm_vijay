@@ -45,7 +45,7 @@ class Form extends Component
     {
         if (!$this->feeUpdated) {
             $method = $this->payment->paymentMethod;
-            if ($method->fee_percentage === null) {
+            if ($method?->fee_percentage === null) {
                 $this->payment->payment_fee = null;
             } else {
                 $this->payment->payment_fee = ($method->fee_percentage / 100) * $this->payment->amount;

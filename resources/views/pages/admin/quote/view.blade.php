@@ -21,10 +21,19 @@
             flightTable = $('#flight-table').DataTable({fixedHeader: true,select: { style: "multi+shift" }, });
             transportTable = $('#transport-table').DataTable({fixedHeader: true,select: { style: "multi+shift" }, });
             merchandiseTable = $('#merchandise-table').DataTable({fixedHeader: true,select: { style: "multi+shift" }, });
+            updatePayingCount({{ $quote->paying + $quote->leadTraveller->paying }})
+            window.addEventListener('travellersUpdated', (event) => {
+                updatePayingCount(event.detail.paying);
+            });
         });
 
         function showInstallmentForm(id = null) {
             openModal('admin.quote.installment.form', {quote: {{$quote->id}}, installment: id})
+        }
+
+        function updatePayingCount(count = 1)
+        {
+            $('.installment-cell').each((index, cell) => { $(cell).text(sysFormatCurrency($(cell).attr('base') * count)); });
         }
 
         function multiDelete() {
@@ -99,6 +108,12 @@
                 {{ Icon::close() }}
                 {{ __('quotes.view.buttons.close') }}
             </a>
+            @if(is_otm())
+                <a href="{{ route('quotes.delete.force', ['quote' => $quote,]) }}" class="btn btn-danger">
+                    {{ Icon::forceDelete() }}
+                    Force Delete
+                </a>
+            @endif
         </div>
     </x-admin.section.header>
 
@@ -147,6 +162,7 @@
                         <th scope="col">{{ __('quotes.view.cards.installments.table.type') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.installments.table.due') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.installments.table.amount') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.installments.table.cost') }}</th>
                         <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                     </tr>
                     </thead>
@@ -155,6 +171,7 @@
                         <td>{{ __('quotes.view.cards.installments.types.deposit') }}</td>
                         <td data-order="0000-00-00">{{ __('quotes.view.cards.installments.with-order') }}</td>
                         <td>{{ f_currency($quote->getDepositAmount()) }} ({{$quote->getDepositPercentage()}}%)</td>
+                        <td class="installment-cell" base="{{ $quote->getDepositAmount() }}">{{ $quote->getDepositAmount() }}</td>
                         <td>
                             <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}"
                                class="btn btn-outline-success btn-sm mb-1" title="Edit">
@@ -170,6 +187,9 @@
                             </td>
                             <td>
                                 {{ f_currency($installment->getAmount()) }} ({{$installment->getPercentage()}}%)
+                            </td>
+                            <td class="installment-cell" base="{{$installment->getAmount()}}">
+                                {{ f_currency($installment->getAmount()) }}
                             </td>
                             <td>
                                 <a href="javascript:showInstallmentForm({{$installment->id}})"
@@ -189,6 +209,7 @@
                         <td>{{ __('quotes.view.cards.installments.types.remaining') }}</td>
                         <td data-order="{{$quote->final_payment->format('Y-m-d')}}">{{ f_date($quote->final_payment) }}</td>
                         <td>{{ f_currency($quote->remaining) }} ({{ $quote->getRemainingPercentage() }}%)</td>
+                        <td class="installment-cell" base="{{ $quote->remaining }}">{{ f_currency($quote->remaining) }}</td>
                         <td>
                             <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}"
                                class="btn btn-outline-success btn-sm mb-1" title="Edit">

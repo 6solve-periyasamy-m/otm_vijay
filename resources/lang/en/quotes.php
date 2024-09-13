@@ -85,7 +85,8 @@ return [
                 'table' => [
                     'type' => 'Type',
                     'due' => 'Due',
-                    'amount' => 'Amount',
+                    'amount' => 'Amount Per Person',
+                    'cost' => 'Amount',
                 ],
                 'form' => [
                     'due' => 'Due On',

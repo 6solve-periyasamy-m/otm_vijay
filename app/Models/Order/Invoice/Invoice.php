@@ -33,6 +33,7 @@ use Illuminate\Support\Carbon;
  * @property int $invoice_brand_id
  * @property float $total_cost Total cost of the order
  * @property float $total_paid Total amount paid to date
+ * @property float $total_fees Total fees for the order
  * @property int $generator_version Version of the generator that was used
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
