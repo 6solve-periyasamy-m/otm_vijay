@@ -21,7 +21,13 @@ class Table extends LivewireDatatable
     public function columns()
     {
         return [
-            Column::name('name')
+            Column::callback(['name', 'fee_percentage'], function ($name, $fee) {
+                if ($fee !== 0.0 && empty($fee)) {
+                    return "{$name} (No Fee)";
+                }
+                $fee = (float)$fee;
+                return "{$name} ({$fee}%)";
+            })
                 ->label('Name')
                 ->searchable()
                 ->sortable(),

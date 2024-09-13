@@ -210,7 +210,13 @@
                                 <td>{{ $payment->payment_type }}</td>
                                 <td>{{ $payment->paymentMethod->name }}</td>
                                 <td>{{ $payment->customer?->full_name ?? "No Customer Found" }}</td>
-                                <td>{{ f_currency($payment->amount) }}</td>
+                                <td>
+                                    @if($payment->payment_fee !== null)
+                                        <abbr title="{{ f_currency($payment->totalWithFee()) }} with payment fee">{{ f_currency($payment->amount) }}</abbr>
+                                    @else
+                                        {{ f_currency($payment->amount) }}
+                                    @endif
+                                </td>
                                 <td>{{ f_datetime($payment->paid_on) }}</td>
                                 <td class="actions">
                                     @can('update', \App\Models\Order\Payment\Payment::class)

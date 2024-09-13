@@ -81,7 +81,7 @@ Route::prefix('large-text-template')->name('large-text-templates.')->group(funct
     Route::post('/{id}', [LargeTextTemplate::class, 'getOne'])->name('selected');
 });
 
-Route::prefix('payment-method')->name('payment-method')->group(function () {
+Route::prefix('payment-method')->name('payment-method.')->group(function () {
     Route::post('/', [PaymentMethod::class, 'getAll'])->name('select');
     Route::post('/{id}', [PaymentMethod::class, 'getOne'])->name('selected');
 });
@@ -116,7 +116,6 @@ Route::post('airports', [SelectController::class, 'getAirports'])->name('airport
 Route::post('airlines', [SelectController::class, 'getAirlines'])->name('airlines.select');
 Route::post('quotes', [SelectController::class, 'getQuotes'])->name('quotes.select');
 Route::post('customer/{order}', [SelectController::class, 'getAvailableCustomers'])->name('available-customers.select');
-Route::post('payment-method', [SelectController::class, 'getPaymentMethods'])->name('payment-method.select');
 Route::post('merchandise-types', [SelectController::class, 'getAvailableMerchandiseTypes'])->name('merchandise-types.select');
 Route::post('variants', [SelectController::class, 'getAvailableVariants'])->name('variants.select');
 Route::post('sizes', [SelectController::class, 'getAvailableSizes'])->name('sizes.select');
@@ -150,7 +149,6 @@ Route::prefix('selected')->group(function () {
     Route::post('airports/{id}', [SelectController::class, 'getSelectedAirport'])->name('airports.selected');
     Route::post('airlines/{id}', [SelectController::class, 'getSelectedAirline'])->name('airlines.selected');
     Route::post('quotes/{id}', [SelectController::class, 'getSelectedQuote'])->name('quotes.selected');
-    Route::post('payment-method/{id}', [SelectController::class, 'getSelectedPaymentMethod'])->name('payment-method.selected');
     Route::post('merchandise-types/{id}', [SelectController::class, 'getSelectedMerchandiseType'])->name('merchandise-types.selected');
     Route::post('variants/{id}', [SelectController::class, 'getSelectedVariant'])->name('variants.selected');
     Route::post('sizes/{id}', [SelectController::class, 'getSelectedSize'])->name('sizes.selected');

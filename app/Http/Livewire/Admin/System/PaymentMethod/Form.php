@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\System\PaymentMethod;
 
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Order\Payment\PaymentMethod;
 use Illuminate\Validation\Rule;
@@ -9,7 +10,7 @@ use LivewireUI\Modal\ModalComponent;
 
 class Form extends ModalComponent
 {
-    use SendsEvents;
+    use SendsEvents, LivewireForm;
 
     public PaymentMethod|int|null $method = null;
 
@@ -37,6 +38,11 @@ class Form extends ModalComponent
             'method.name' => [
                 'required',
                 Rule::unique('payment_methods', 'name')->ignore($this->method->id),
+            ],
+            'method.fee_percentage' => [
+                'nullable',
+                'numeric',
+                'min:0',
             ]
         ];
     }
