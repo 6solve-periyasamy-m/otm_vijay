@@ -494,6 +494,9 @@
                 <p><span>Invoice Total:</span> <span> {{f_currency($invoice->total_cost)}}</span></p>
                 <p><span>GST (included):</span> <span>{{f_currency($invoice->tax_amount)}}</span></p>
                 <p><span>Received:</span> <span>{{f_currency($invoice->total_paid)}}</span></p>
+                @if($invoice->total_fees > 0)
+                    <p><span>Fees Paid:</span> <span>{{f_currency($invoice->total_fees)}}</span></p>
+                @endif
                 <p><span>Balance Due:</span> <span>{{f_currency($invoice->total_cost - $invoice->total_paid)}}</span></p>
                 <h3><span>GRAND TOTAL:</span> <span>{{f_currency($invoice->total_cost)}} {{-- Tax is inclusive, so shouldn't be added here --}}</span></h3>
             </td>
