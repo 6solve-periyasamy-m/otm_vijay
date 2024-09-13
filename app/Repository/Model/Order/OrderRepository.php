@@ -685,7 +685,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $orderCustomer->repository->forceDelete();
         }
         $this->order->adjustments()->forceDelete();
-        $this->order->invoices()->forceDelete();
+        foreach ($this->order->invoices as $invoice) {
+            $invoice->repository->forceDelete();
+        }
         $this->order->payments()->forceDelete();
         $this->order->installments()->forceDelete();
         $this->order->reminders()->forceDelete();

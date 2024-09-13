@@ -70,4 +70,21 @@ class InvoiceRepository
         }
         return $data;
     }
+
+    public function forceDelete(): void
+    {
+        foreach ($this->invoice->customers as $customer) {
+            $customer->billables()->forceDelete();
+            $customer->delete();
+        }
+        foreach ($this->invoice->groups as $group) {
+            $group->billables()->forceDelete();
+            $group->delete();
+        }
+        $this->invoice->brand()->delete();
+        $this->invoice->adjustments()->delete();
+        $this->invoice->installments()->delete();
+        $this->invoice->payments()->delete();
+        $this->invoice->delete();
+    }
 }
