@@ -436,6 +436,16 @@
                                                                 {{f_currency($invoice->tax_amount)}}
                                                             </td>
                                                         </tr>
+                                                        @if($invoice->total_fees > 0)
+                                                        <tr>
+                                                            <td align="right" style="padding: 2px 15px;"
+                                                                class="oc_f12 oc_lblack">Fees Paid:</td>
+                                                            <td width="150" align="right" valign="top"
+                                                                style="padding: 2px 15px; " class="oc_f12 oc_lblack">
+                                                                {{f_currency($invoice->total_fees)}}
+                                                            </td>
+                                                        </tr>
+                                                        @endif
 
                                                         <tr>
                                                             <td align="right" style="padding: 2px 15px;"
