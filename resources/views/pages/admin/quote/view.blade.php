@@ -6,13 +6,62 @@
 
 @section('footer-script')
     <script type="text/javascript">
+        let allTable;
+        let accommodationTable;
+        let activityTable;
+        let flightTable;
+        let transportTable;
+        let merchandiseTable;
         $(document).ready(function () {
             $('.sent-quotes').DataTable({fixedHeader: true, order: [[0, 'desc'],]});
             $('.sections').DataTable({fixedHeader: true, order: [[0, 'asc'],]});
+            allTable = $('#all-table').DataTable({fixedHeader: true,select: { style: "multi+shift" }, });
+            accommodationTable = $('#accommodation-table').DataTable({fixedHeader: true,select: { style: "multi+shift" }, });
+            activityTable = $('#activity-table').DataTable({fixedHeader: true,select: { style: "multi+shift" }, });
+            flightTable = $('#flight-table').DataTable({fixedHeader: true,select: { style: "multi+shift" }, });
+            transportTable = $('#transport-table').DataTable({fixedHeader: true,select: { style: "multi+shift" }, });
+            merchandiseTable = $('#merchandise-table').DataTable({fixedHeader: true,select: { style: "multi+shift" }, });
         });
 
         function showInstallmentForm(id = null) {
             openModal('admin.quote.installment.form', {quote: {{$quote->id}}, installment: id})
+        }
+
+        function multiDelete() {
+            if (!confirm('Are you sure you wish to delete components?')) {
+                return;
+            }
+            let keys = [];
+            allTable.rows({selected: true}).every((rowIdx, tableLoop, rowLoop) => {
+                keys.push({ type: $(allTable.row(rowIdx).node()).attr('component_type'), id: $(allTable.row(rowIdx).node()).attr('component_id'), });
+            });
+            accommodationTable.rows({selected: true}).every((rowIdx, tableLoop, rowLoop) => {
+                keys.push({ type: $(accommodationTable.row(rowIdx).node()).attr('component_type'), id: $(accommodationTable.row(rowIdx).node()).attr('component_id'), });
+            });
+            activityTable.rows({selected: true}).every((rowIdx, tableLoop, rowLoop) => {
+                keys.push({ type: $(activityTable.row(rowIdx).node()).attr('component_type'), id: $(activityTable.row(rowIdx).node()).attr('component_id'), });
+            });
+            flightTable.rows({selected: true}).every((rowIdx, tableLoop, rowLoop) => {
+                keys.push({ type: $(flightTable.row(rowIdx).node()).attr('component_type'), id: $(flightTable.row(rowIdx).node()).attr('component_id'), });
+            });
+            transportTable.rows({selected: true}).every((rowIdx, tableLoop, rowLoop) => {
+                keys.push({ type: $(transportTable.row(rowIdx).node()).attr('component_type'), id: $(transportTable.row(rowIdx).node()).attr('component_id'), });
+            });
+            merchandiseTable.rows({selected: true}).every((rowIdx, tableLoop, rowLoop) => {
+                keys.push({ type: $(merchandiseTable.row(rowIdx).node()).attr('component_type'), id: $(merchandiseTable.row(rowIdx).node()).attr('component_id'), });
+            });
+            if (keys.length <= 0) return alert('No components are selected');
+            $.ajax({
+                type: "POST",
+                url: "{{ route('api.quote.components.delete', ['quote' => $quote,]) }}",
+                dataType: "json",
+                statusCode: {
+                    200: function () { alert('Components deleted successfully'); location.reload(); },
+                    403: function () { alert('Authentication has expired. Please refresh the page'); },
+                    422: function () { alert('Validation Failed, please try again later'); location.reload(); }
+                },
+                data: { "components": keys,  "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', }
+            })
         }
     </script>
 @endsection
@@ -71,6 +120,10 @@
             <a href="{{ route('quotes.components.add', ['quote' => $quote,]) }}" class="btn btn-primary text-white">
                 {{ Icon::create() }}
                 <span>Add Components</span>
+            </a>
+            <a href="javascript:multiDelete()" class="btn btn-danger text-white">
+                {{ Icon::delete() }}
+                <span>Delete Components</span>
             </a>
         </div>
         @include('partials.admin.quote.components', ['quote' => $quote,])

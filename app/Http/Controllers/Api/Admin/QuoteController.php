@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Admin\Quote\StartConversionRequest;
 use App\Http\Requests\Api\Admin\Quote\AddComponentRequest;
+use App\Http\Requests\Api\Admin\Quote\DeleteComponentRequest;
 use App\Http\Requests\Api\Admin\Quote\QuoteCostRequest;
 use App\Http\Requests\Api\Admin\Quote\UnknownTravellerRequest;
 use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Quote\Quote;
 use App\Repository\Abstracts\InventoryRepository;
+use App\Repository\Model\Quote\QuoteRepository;
 
 class QuoteController extends ApiController
 {
@@ -64,6 +66,14 @@ class QuoteController extends ApiController
         }
         $quote->repository->autoAssignTemplating();
         return response()->json(['success' => true, 'message' => 'Components added successfully']);
+    }
+
+    public function deleteComponents(DeleteComponentRequest $request, Quote $quote)
+    {
+        foreach ($request->components as $component) {
+            QuoteRepository::getComponent($component['type'], $component['id'])?->delete();
+        }
+        return response()->json(['success' => true, 'message' => 'Components deleted successfully']);
     }
 
     public function getUnknownTraveller(UnknownTravellerRequest $request, Quote $quote)

@@ -34,7 +34,7 @@
     </ul>
     <div id="tables" class="tab-content otm-tab-content">
         <div id="summary" role="tabpanel" class="tab-pane fade show active">
-            <table class="datatable autowidth-off table table-striped summary">
+            <table id="all-table" class="autowidth-off table table-striped summary">
                 <thead>
                 <tr>
                     <th scope="col">{{ __('quotes.view.cards.components.common.type') }}</th>
@@ -49,7 +49,7 @@
                 </thead>
                 <tbody>
                 @foreach($quote->repository->getComponents() as $componentRepository)
-                    <tr>
+                    <tr component_id="{{$componentRepository->get()->id}}" component_type="{{$componentRepository->getComponentType()}}">
                         <td>
                             {{ ucwords($componentRepository->getComponentType()) }}
                         </td>
@@ -107,7 +107,7 @@
             </table>
         </div>
         <div id="accommodation" role="tabpanel" class="tab-pane fade">
-            <table class="datatable autowidth-off table table-striped summary">
+            <table id="accommodation-table" class="autowidth-off table table-striped summary">
                 <thead>
                 <tr>
                     <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
@@ -121,7 +121,7 @@
                 </thead>
                 <tbody>
                 @foreach($quote->accommodation()->with('inventory')->get() as $component)
-                    <tr>
+                    <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
                         <td>
                             {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
                             to
@@ -172,7 +172,7 @@
             </table>
         </div>
         <div id="activities" role="tabpanel" class="tab-pane fade">
-            <table class="datatable autowidth-off table table-striped summary">
+            <table id="activity-table" class="autowidth-off table table-striped summary">
                 <thead>
                 <tr>
                     <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
@@ -186,7 +186,7 @@
                 </thead>
                 <tbody>
                 @foreach($quote->activities()->with('inventory')->get() as $component)
-                    <tr>
+                    <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
                         <td>
                             {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
                             to
@@ -237,7 +237,7 @@
             </table>
         </div>
         <div id="flights" role="tabpanel" class="tab-pane fade">
-            <table class="datatable autowidth-off table table-striped summary">
+            <table id="flight-table" class="autowidth-off table table-striped summary">
                 <thead>
                 <tr>
                     <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
@@ -251,7 +251,7 @@
                 </thead>
                 <tbody>
                 @foreach($quote->flights()->with('inventory')->get() as $component)
-                    <tr>
+                    <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
                         <td>
                             {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
                             to
@@ -302,7 +302,7 @@
             </table>
         </div>
         <div id="transport" role="tabpanel" class="tab-pane fade">
-            <table class="datatable autowidth-off table table-striped summary">
+            <table id="transport-table" class="autowidth-off table table-striped summary">
                 <thead>
                 <tr>
                     <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
@@ -316,7 +316,7 @@
                 </thead>
                 <tbody>
                 @foreach($quote->transport()->with('inventory')->get() as $component)
-                    <tr>
+                    <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
                         <td>
                             {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
                             to
@@ -367,7 +367,7 @@
             </table>
         </div>
         <div id="extras" role="tabpanel" class="tab-pane fade">
-            <table class="datatable autowidth-off table table-striped summary">
+            <table id="merchandise-table" class="autowidth-off table table-striped summary">
                 <thead>
                 <tr>
                     <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
@@ -380,7 +380,7 @@
                 </thead>
                 <tbody>
                 @foreach($quote->merchandise()->with('inventory')->get() as $component)
-                    <tr>
+                    <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
                         <td>
                             {{ $component->repository->__toString() }}
                         </td>
