@@ -183,6 +183,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'stock_control_active' => false,
             'base_price_per_person' => $this->getPricePerPerson($customerCount)->price_per_person,
             'single_occupancy_surcharge' => $this->quote->single_occupancy_surcharge,
+            'deposit' => $this->quote->deposit,
+            'is_deposit_percentage' => $this->quote->is_deposit_percentage,
         ]);
         if ($components) {
             foreach ($this->getComponents() as $repository) {
@@ -935,7 +937,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'organization_id' => $lead->getCustomer()->organization_id,
             'consultant_id' => $this->quote->consultant_id,
             'tax_bracket_id' => $this->quote->tax_bracket_id,
-            'deposit' => $this->quote->deposit,
+            'deposit' => $this->quote->getDepositAmount(),
             'commission' => $lead->getCustomer()->organization?->commission,
             'ordered_on' => now(),
         ]);
