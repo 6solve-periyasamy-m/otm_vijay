@@ -499,7 +499,7 @@
         <tr>
             <td>
                 {!! setting('company.bank_transfer', '-')  !!}
-                <p class="terms-conditions">
+                <p class="terms-conditions" style="margin-top:30px;>
                    Terms and conditions apply
                 </p>
                 <p class="terms-conditions" style="margin-top:0px;">
