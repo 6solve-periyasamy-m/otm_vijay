@@ -411,7 +411,12 @@
        .payment-options tr td figure.table table tbody tr td:nth-child(3) strong {display:block;line-height:10px;}
        .payment-options tr td:first-child > p {display:none;}
        .payment-options tr td:first-child > p.terms-conditions {display:block;}
-
+       .payment-options tr td:first-child > p.terms-conditions {
+        margin-top:30px!important
+       }
+       .payment-options tr td:first-child > p.terms-conditions.upd {
+        margin-top:5px!important
+       }
     </style>
     <title>Invoice - {{ $invoice->booking_reference }}</title>
 </head>
@@ -425,9 +430,9 @@
             <td class="right-column">
                 <p>{{$invoice->brand->address_line_1}} <br>{{$invoice->brand->address_line_2}}, {{$invoice->brand->town}}, {{$invoice->brand->region}}, {{$invoice->brand->postcode}}<br>
                 {{$invoice->brand->vat_code}}</p>
-                <p><span>Company ABN:</span><span>31 003 276 775</span></p>
-                <p><span>Phone Number:</span><span><a href="tel:+01632960966">01632960966</a></span></p>
-                <p><span>Email Address:</span><span><a href="mailto:info@octopustravelmatrix.com">info@octopustravelmatrix.com</a></span></p>
+                <p><span>Company ABN:</span><span style="font-weight:400;margin-left:5px;">31 003 276 775</span></p>
+                <p><span>Phone Number:</span><span style="font-weight:400;margin-left:5px;">01632960966</span></p>
+                <p><span>Email Address:</span><span style="font-weight:400;margin-left:5px;">info@octopustravelmatrix.com</span></p>
             </td>
         </tr>
     </table>
