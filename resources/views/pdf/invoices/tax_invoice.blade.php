@@ -399,7 +399,7 @@
         font-weight: 400;
        }
        .footer img {padding-left:20px;}
-       .whole-items-cls {min-height:560px;}
+       .whole-items-cls {min-height:551px;}
        .payment-options tr td figure.table {margin:0;} 
        .payment-options tr td figure.table table tbody tr td:nth-child(2) {display:none;}
        .payment-options tr td figure.table table tbody tr td {
@@ -412,7 +412,7 @@
        .payment-options tr td:first-child > p {display:none;}
        .payment-options tr td:first-child > p.terms-conditions {display:block;}
        .payment-options tr td:first-child > p.terms-conditions {
-        margin-top:30px!important
+        margin-top:20px!important
        }
        .payment-options tr td:first-child > p.terms-conditions.upd {
         margin-top:5px!important
