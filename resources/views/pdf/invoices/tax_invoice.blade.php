@@ -498,7 +498,10 @@
             <td>
                 {!! setting('company.bank_transfer', '-')  !!}
                 <p class="terms-conditions">
-                    <a href="#">Terms & conditions</a>
+                   Terms and conditions apply
+                </p>
+                <p class="terms-conditions">
+                Please see our website for a copy or view them <a href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">here</a>
                 </p>
             </td>
             <td>
