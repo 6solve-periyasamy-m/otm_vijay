@@ -478,8 +478,10 @@ figure.table tr td:nth-child(2) {display:none;}
                 <div class="customer-details">
                 @if (!is_null($itinerary->organization) && !is_null($itinerary->organization->commission))
                     <h6>Organization DETAILS</h6>
-                    <p>Name: <span>{{ $itinerary->organization->name }}</span></p>
-                    <p>Email: <span>{{ $itinerary->organization->contact_email }}</span></p>
+                    <p>Organization Name: <span>{{ $itinerary->organization->name }}</span></p>
+                    <p>Organization Email: <span>{{ $itinerary->organization->contact_email }}</span></p>
+                    <p>Travel Agent Name: <span>{{ $cusname }}</span></p>
+                    <p>Travel Agent Email: <span>{{ $cusmail }}</span></p>
                 @else
                     <h6>CUSTOMER DETAILS</h6>
                     <p>Name: <span>{{ $cusname }}</span></p>
@@ -812,8 +814,8 @@ figure.table tr td:nth-child(2) {display:none;}
           <span class="text">Notes</span>
       </h3>
     </div>
-  <div class="custom-details-module">     
-     <h6 style="margin-top:10px;">KPAD106309</h6>      
+  <div class="custom-details-module" dat-bac="KPAD106309">      
+     <h6 style="margin-top:10px;">{!! $itinerary->notes !!}</h6>      
   </div>
   <h2>Terms & conditions</h2>
   
