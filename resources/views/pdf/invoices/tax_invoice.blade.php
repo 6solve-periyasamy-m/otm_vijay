@@ -331,7 +331,10 @@
             line-height: 12px;
         }
        .payment-options tr td p.terms-conditions {
-            margin-top: 30px;
+            margin-top: 30px!important;
+         }
+         .payment-options tr td p.terms-conditions.upd {
+            margin-top: 0px!important;
          }
        .payment-options td:last-child p {
            padding-left:15px!important; 
@@ -502,7 +505,7 @@
                 <p class="terms-conditions" style="margin-top:30px;>
                    Terms and conditions apply
                 </p>
-                <p class="terms-conditions" style="margin-top:0px;">
+                <p class="terms-conditions upd" style="margin-top:0px;">
                 Please see our website for a copy or view them <a href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">here</a>
                 </p>
             </td>
