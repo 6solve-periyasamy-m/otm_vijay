@@ -771,7 +771,7 @@ figure.table tr td:nth-child(2) {display:none;}
       @foreach ($itinerary->finances->schedule as $installment)
         <tr>
           <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
-          <td>{{ f_currency($installment->amount) }} ({{ number_format($installment->percentage, 2) }}%)</td>
+          <td>{{ f_currency($installment->amount) }}</td>
           <td>{{ optional($installment->due)->format('d M Y') ?? 'Now' }}</td>
         </tr>
       @endforeach
