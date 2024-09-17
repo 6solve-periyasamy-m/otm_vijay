@@ -131,9 +131,9 @@
   h1 {
     color: var(--text-color);
     font-family: "PlayfairDisplay-Medium";
-    font-size: 40px;
+    font-size: 38px;
     font-weight: 500;
-    line-height: 42px;
+    line-height: 40px;
     margin-bottom: 0px;
   }
   .customer-details-block h6 {
@@ -159,9 +159,9 @@
 }
   h5 {
     font-family: "PPNeueMontreal-Medium";
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 500;
-    line-height: 18.4px;
+    line-height: 16.4px;
     margin-bottom: 6px;
     color: var(--text-color);
  }
@@ -400,7 +400,7 @@ h5 span {
 }
 #static-pages h6 {margin-bottom:24px!important;}
 .top-heading-section {
-    width: 372px;
+    width: 365px;
     position: relative;
     margin-top: 10px;
     display: block;
@@ -746,10 +746,10 @@ figure.table tr td:nth-child(2) {display:none;}
                   </tr>
                   @endif      
                   <tr>
-                      <td style="font-weight:400;min-width:128px;"><strong style="margin-top:10px">FINAL COST:
+                      <td style="font-weight:400;min-width:128px;"><strong style="margin-top:15px">FINAL COST:
                       <span style="width: 100%;height: 1px;display: block;margin: 0;margin-top: 2px;background-color: var(--head-text-background);"></span>
                       </strong></td>
-                      <td><strong style="margin-top:10px">{{ f_currency($itinerary->finances->cost) }}</strong></td>
+                      <td><strong style="margin-top:15px">{{ f_currency($itinerary->finances->cost) }}</strong></td>
                   </tr>
                                     
            </tbody>
