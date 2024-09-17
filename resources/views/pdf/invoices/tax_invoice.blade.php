@@ -171,7 +171,7 @@
             vertical-align: top;
         }
         .header .left-column {
-            padding: 30px 20px 32px 20px;
+            padding: 32px 20px 32px 20px;
         }
         .header .right-column  {
             padding: 20px 28px 0px 20px;
