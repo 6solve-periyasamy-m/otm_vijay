@@ -419,7 +419,7 @@
     <!-- Header Section -->
     <table class="header">
         <tr>
-            <td class="left-column"> <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('https://qa.octopustravelmatrix.com/images/pdf_assets/images/KeithProwse_Logo.png'))?>"  alt="logo-ch"></td>
+            <td class="left-column"> <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('images/pdf_assets/images/KeithProwse-Travel-Logo.png'))?>"  alt="logo-ch"></td>
             <td class="right-column">
                 <p>{{$invoice->brand->address_line_1}} <br>{{$invoice->brand->address_line_2}}, {{$invoice->brand->town}}, {{$invoice->brand->region}}, {{$invoice->brand->postcode}}<br>
                 {{$invoice->brand->vat_code}}</p>
