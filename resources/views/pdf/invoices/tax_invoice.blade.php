@@ -520,7 +520,7 @@
         </tr>
     </table>
     <!-- Footer Section -->
-    <div class="footer">
+    <!-- <div class="footer">
         <div class="logo">
           <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('https://qa.octopustravelmatrix.com/images/pdf_assets/images/KeithProwse_Logo.png'))?>"  alt="logo-ch">
         </div>
@@ -537,6 +537,6 @@
            <a target="_blank" href="{{$invoice->brand->website}}">{{$invoice->brand->website}}</a>
         </div>
     </div>
-   </div>
+   </div> -->
 </body>
 </html>
