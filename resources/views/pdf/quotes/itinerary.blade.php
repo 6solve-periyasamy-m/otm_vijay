@@ -150,10 +150,13 @@
     float:left;  
  }
  .customer-details-block .customer-details-image-block {
-    width: 372px;
-    height: 247px;
+  width: 422px;
+  height: 284px;
  }
- .customer-details-block .customer-details-text-block {width: 392px;padding-left:32px;}
+ .customer-details-block .customer-details-text-block {    
+  width: 342px;
+  padding-left: 32px;
+}
   h5 {
     font-family: "PPNeueMontreal-Medium";
     font-size: 16px;
@@ -397,7 +400,7 @@ h5 span {
 }
 #static-pages h6 {margin-bottom:24px!important;}
 .top-heading-section {
-    width: 392px;
+    width: 372px;
     position: relative;
     margin-top: 10px;
     display: block;
@@ -739,7 +742,7 @@ figure.table tr td:nth-child(2) {display:none;}
                   @if($itinerary->finances->commission > 0 )
                   <tr>
                       <td style="font-weight:400;min-width:128px;">Commission:</td>
-                      <td>{{ f_currency($itinerary->finances->commission) }} ({{$itinerary->finances->commissionPercent}}%)</td>
+                      <td>{{ f_currency($itinerary->finances->commission) }}</td>
                   </tr>
                   @endif      
                   <tr>
