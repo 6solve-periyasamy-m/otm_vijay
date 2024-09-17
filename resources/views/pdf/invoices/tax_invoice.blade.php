@@ -399,7 +399,7 @@
         font-weight: 400;
        }
        .footer img {padding-left:20px;}
-       .whole-items-cls {min-height:580px;}
+       .whole-items-cls {min-height:600px;}
        .payment-options tr td figure.table {margin:0;} 
        .payment-options tr td figure.table table tbody tr td:nth-child(2) {display:none;}
        .payment-options tr td figure.table table tbody tr td {
