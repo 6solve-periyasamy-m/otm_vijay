@@ -354,7 +354,7 @@
        .payment-options td:last-child h3 span {
             padding-top: 0px;
             padding-bottom: 0px;
-            top: 15px;
+            top: 25px;
             position: relative;
        }
        .payment-options td:last-child h3 span {
