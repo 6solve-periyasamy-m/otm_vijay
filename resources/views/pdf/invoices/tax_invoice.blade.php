@@ -347,7 +347,7 @@
             background: #F9F4EE;
             width: 100%;
             margin-top:20px;
-            height:66px;    
+            height:68px;    
         }
        .details tr td p span:last-child {
            font-weight:400!important;
