@@ -329,7 +329,6 @@
             color: #000000;
             font-size: 10px;
             line-height: 12px;
-            width:398px;
         }
        .payment-options tr td p.terms-conditions {
             margin-top: 30px !important;
@@ -345,8 +344,8 @@
        .payment-options td:last-child h3 {
             background: #F9F4EE;
             width: 100%;
-            margin-top:30px;
-            height:60px;    
+            margin-top:20px;
+            height:66px;    
         }
        .details tr td p span:last-child {
            font-weight:400!important;
@@ -355,7 +354,7 @@
        .payment-options td:last-child h3 span {
             padding-top: 0px;
             padding-bottom: 0px;
-            top: 25px;
+            top: 15px;
             position: relative;
        }
        .payment-options td:last-child h3 span {
@@ -399,6 +398,18 @@
        }
        .footer img {padding-left:20px;}
        .whole-items-cls {min-height:560px;}
+       .payment-options tr td figure.table {margin:0;} 
+       .payment-options tr td figure.table table tbody tr td:nth-child(2) {display:none;}
+       .payment-options tr td figure.table table tbody tr td {
+        border: 0px !important;
+        padding: 0;
+        width: 120px;
+       }
+       .payment-options tr td figure.table table tbody tr td:nth-child(3) br {display:none;}
+       .payment-options tr td figure.table table tbody tr td:nth-child(3) strong {display:block;line-height:10px;}
+       .payment-options tr td:first-child > p {display:none;}
+       .payment-options tr td:first-child > p.terms-conditions {display:block;}
+
     </style>
     <title>Invoice - {{ $invoice->booking_reference }}</title>
 </head>
