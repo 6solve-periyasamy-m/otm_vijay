@@ -417,9 +417,7 @@
        .payment-options tr td:first-child > p.terms-conditions.upd {
         margin-top:5px!important
        }
-       .header {height:100px;display:block;}
-       .header .left-column {width:250px;}
-       .header .right-column {width:546px;}
+       .head-dv-cls {height:100px;}
     </style>
     <title>Invoice - {{ $invoice->booking_reference }}</title>
 </head>
@@ -427,6 +425,7 @@
 <body class="body" style="padding:0; margin:0 auto !important; display:block !important; min-width:100% !important; width:100% !important; background:#ffffff; -webkit-text-size-adjust:none">
 <div class="container">
     <!-- Header Section -->
+  <div class="head-dv-cls">
     <table class="header">
         <tr>
             <td class="left-column"> <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('images/pdf_assets/images/KeithProwse-Travel-Logo.png'))?>"  alt="logo-ch"></td>
@@ -439,6 +438,7 @@
             </td>
         </tr>
     </table>
+  </div>
     <!-- Invoice Title -->
     <div class="invoice-title">
         <h1>Tax Invoice</h1>
