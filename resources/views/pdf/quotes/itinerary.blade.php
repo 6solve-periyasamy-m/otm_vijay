@@ -480,9 +480,9 @@ figure.table tr td:nth-child(2) {display:none;}
             <div class="customer-agent-details">
                 <div class="customer-details">
                 @if (!is_null($itinerary->organization) && !is_null($itinerary->organization->commission))
-                    <h6>Organization DETAILS</h6>
-                    <p>Organization Name: <span>{{ $itinerary->organization->name }}</span></p>
-                    <p>Organization Email: <span>{{ $itinerary->organization->contact_email }}</span></p>
+                    <h6>Organisation DETAILS</h6>
+                    <p>Organisation <span>{{ $itinerary->organization->name }}</span></p>
+                    <!-- <p>Organization Email: <span>{{ $itinerary->organization->contact_email }}</span></p> -->
                     <p>Travel Agent Name: <span>{{ $cusname }}</span></p>
                     <p>Travel Agent Email: <span>{{ $cusmail }}</span></p>
                 @else
