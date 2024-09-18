@@ -435,8 +435,6 @@
                 <p><span>Company ABN:</span><span style="font-weight:400;margin-left:5px;">31 003 276 775</span></p>               
                 <p><span>Email:</span><span style="font-weight:400;margin-left:5px;">info@octopustravelmatrix.com</span></p>
                 <p><span>Phone:</span><span style="font-weight:400;margin-left:5px;">01632960966</span></p>
-                <p><span>Email:</span><span style="font-weight:400;margin-left:5px;">info@octopustravelmatrix.com</span></p>
-                <p><span>Phone:</span><span style="font-weight:400;margin-left:5px;">01632960966</span></p>
             </td>
         </tr>
     </table>
