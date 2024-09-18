@@ -150,7 +150,7 @@
     float:left;  
  }
  .customer-details-block .customer-details-image-block {
-  width: 376px;
+    width: 376px;
     height: 252px;
  }
  .customer-details-block .customer-details-text-block {    
@@ -159,9 +159,9 @@
 }
   h5 {
     font-family: "PPNeueMontreal-Medium";
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
-    line-height: 16.4px;
+    line-height: 14.4px;
     margin-bottom: 6px;
     color: var(--text-color);
  }
