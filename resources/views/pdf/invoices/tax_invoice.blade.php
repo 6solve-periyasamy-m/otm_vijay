@@ -1,6 +1,6 @@
 @php
     /** @var \App\Models\Order\Invoice\Invoice $invoice */
-   // var_dump($invoice);
+   var_dump($invoice);
     $due_date = 'No due';
    //if (!sizeof($invoice->installments) === 0)
     foreach($invoice->installments as $installment) {
