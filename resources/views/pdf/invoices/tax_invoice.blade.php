@@ -417,6 +417,9 @@
        .payment-options tr td:first-child > p.terms-conditions.upd {
         margin-top:5px!important
        }
+       .header {height:100px;display:block;}
+       .header .left-column {width:250px;}
+       .header .right-column {width:546px;}
     </style>
     <title>Invoice - {{ $invoice->booking_reference }}</title>
 </head>
