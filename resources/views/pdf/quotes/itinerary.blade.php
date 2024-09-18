@@ -159,7 +159,7 @@
 }
   h5 {
     font-family: "PPNeueMontreal-Medium";
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 500;
     line-height: 16.4px;
     margin-bottom: 6px;
@@ -400,7 +400,7 @@ h5 span {
 }
 #static-pages h6 {margin-bottom:24px!important;}
 .top-heading-section {
-    width: 365px;
+    width: 420px;
     position: relative;
     margin-top: 10px;
     display: block;
