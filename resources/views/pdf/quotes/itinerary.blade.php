@@ -131,9 +131,9 @@
   h1 {
     color: var(--text-color);
     font-family: "PlayfairDisplay-Medium";
-    font-size: 38px;
+    font-size: 30px;
     font-weight: 500;
-    line-height: 40px;
+    line-height: 36px;
     margin-bottom: 0px;
   }
   .customer-details-block h6 {
@@ -150,11 +150,11 @@
     float:left;  
  }
  .customer-details-block .customer-details-image-block {
-  width: 422px;
-  height: 284px;
+  width: 344px;
+  height: 250px;
  }
  .customer-details-block .customer-details-text-block {    
-  width: 342px;
+  width: 420px;
   padding-left: 32px;
 }
   h5 {
@@ -169,8 +169,8 @@
  .customer-agent-details .customer-details {width:100%;}
  .customer-agent-details .agent-details {
   width:100%;    
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 16px;
+  margin-bottom: 16px;
   }
  .customer-agent-details p {
   font-family: "PPNeueMontreal-Medium";
@@ -404,7 +404,7 @@ h5 span {
     position: relative;
     margin-top: 10px;
     display: block;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
     height: 44px;
 }
 .top-heading-section h1 {
@@ -412,7 +412,7 @@ h5 span {
     width: 255px;
 }
 .top-heading-section h5 {
-    width: 255px;
+    width: 200px;
     margin-bottom: 0px !important;
     margin-top: 10px;
     margin-left: auto;
