@@ -399,7 +399,7 @@
         font-weight: 400;
        }
        .footer img {padding-left:20px;}
-       .whole-items-cls {min-height:608px;}
+       .whole-items-cls {min-height:610px;}
        .payment-options tr td figure.table {margin:0;} 
        .payment-options tr td figure.table table tbody tr td:nth-child(2) {display:none;}
        .payment-options tr td figure.table table tbody tr td {
@@ -433,6 +433,8 @@
                 <p><span>Address:</span><span style="font-weight:400;margin-left:5px;">{{$invoice->brand->address_line_1}} <br>{{$invoice->brand->address_line_2}}, {{$invoice->brand->town}}, {{$invoice->brand->region}}, {{$invoice->brand->postcode}}<br>
                 {{$invoice->brand->vat_code}}</span></p>
                 <p><span>Company ABN:</span><span style="font-weight:400;margin-left:5px;">31 003 276 775</span></p>               
+                <p><span>Email:</span><span style="font-weight:400;margin-left:5px;">info@octopustravelmatrix.com</span></p>
+                <p><span>Phone:</span><span style="font-weight:400;margin-left:5px;">01632960966</span></p>
                 <p><span>Email:</span><span style="font-weight:400;margin-left:5px;">info@octopustravelmatrix.com</span></p>
                 <p><span>Phone:</span><span style="font-weight:400;margin-left:5px;">01632960966</span></p>
             </td>
