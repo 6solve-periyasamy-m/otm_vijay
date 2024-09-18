@@ -150,11 +150,11 @@
     float:left;  
  }
  .customer-details-block .customer-details-image-block {
-  width: 344px;
-  height: 250px;
+  width: 376px;
+    height: 252px;
  }
  .customer-details-block .customer-details-text-block {    
-  width: 420px;
+  width: 388px;
   padding-left: 32px;
 }
   h5 {
@@ -400,7 +400,7 @@ h5 span {
 }
 #static-pages h6 {margin-bottom:24px!important;}
 .top-heading-section {
-    width: 420px;
+    width: 400px;
     position: relative;
     margin-top: 10px;
     display: block;
@@ -412,7 +412,7 @@ h5 span {
     width: 255px;
 }
 .top-heading-section h5 {
-    width: 200px;
+    width: 194px;
     margin-bottom: 0px !important;
     margin-top: 10px;
     margin-left: auto;
