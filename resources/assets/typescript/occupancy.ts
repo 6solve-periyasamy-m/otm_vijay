@@ -85,20 +85,20 @@ class RoomingData {
     private readonly start: Date;
     private readonly end: Date;
 
-    constructor(rooms: Room[], customers: Customer[], groups: Group[]) {
+    constructor(rooms: Room[], customers: Customer[], groups: Group[], start: Date|null, end: Date|null) {
         this.groups = groups;
         this.customers = customers;
         this.rooms = rooms;
-        let start: Date | null = null;
-        let end: Date | null = null;
-        for (const room of this.rooms) {
-            if (start == null ||
-                start.getTime() > new Date(room.start.valueOf()).setHours(0, 0, 0)) {
-                start = new Date(room.start.valueOf());
-            }
-            if (end == null ||
-                end.getTime() < new Date(room.start.valueOf()).setHours(23, 59, 59)) {
-                end = new Date(room.start.valueOf());
+        if (start === null || end === null) {
+            for (const room of this.rooms) {
+                if (start == null ||
+                    start.getTime() > new Date(room.start.valueOf()).setHours(0, 0, 0)) {
+                    start = new Date(room.start.valueOf());
+                }
+                if (end == null ||
+                    end.getTime() < new Date(room.start.valueOf()).setHours(23, 59, 59)) {
+                    end = new Date(room.start.valueOf());
+                }
             }
         }
         this.start = start ?? new Date();
@@ -277,6 +277,8 @@ interface RemoteRoomingData {
     rooms: RemoteRoom[];
     customers: RemoteCustomer[];
     groups: RemoteGroup[];
+    start: number;
+    end: number;
 }
 
 class ExportedGroup {
@@ -337,7 +339,7 @@ async function generateRoomingManager(url: string, parameters: Object = {}): Pro
             }
         }
     }
-    return new RoomingData(rooms, customers, groups);
+    return new RoomingData(rooms, customers, groups, new Date(data.start*1000), new Date(data.end*1000));
 }
 
 (window as any).occupancy = {};

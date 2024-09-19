@@ -341,7 +341,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             }
             $groups[$group->id] = ['rooms' => $groupRooms, 'customers' => $groupCustomers,];
         }
-        return ['rooms' => $rooms, 'customers' => $customers, 'groups' => $groups,];
+        return ['rooms' => $rooms, 'customers' => $customers, 'groups' => $groups, 'start' => $this->booking->tour->date_from->unix(), 'end' => $this->booking->tour->date_to->unix()];
     }
 
     private function wipeGroups()
