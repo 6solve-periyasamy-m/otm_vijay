@@ -44,7 +44,7 @@ class OrderRoomingRepository
             }
             $groups[$group->id] = ['rooms' => $groupRooms, 'customers' => $groupCustomers,];
         }
-        return ['rooms' => $rooms, 'customers' => $customers, 'groups' => $groups,];
+        return ['rooms' => $rooms, 'customers' => $customers, 'groups' => $groups, 'start' => $this->order->tour->date_from->unix(), 'end' => $this->order->tour->date_to->unix()];
     }
 
     /**
