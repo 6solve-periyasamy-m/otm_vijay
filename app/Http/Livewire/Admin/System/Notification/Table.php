@@ -51,7 +51,7 @@ class Table extends LivewireDatatable
                 ->label('Details')
                 ->sortable()
                 ->searchable(),
-            Column::callback(['notifications.subject_type', 'notifications.subject_id',], static function ($type, $id) { return ($type)::find($id)->getLink(); })
+            Column::callback(['notifications.subject_type', 'notifications.subject_id',], static function ($type, $id) { return ($type)::find($id)?->getLink() ?? 'Subject Deleted'; })
                 ->label('Subject')
                 ->sortable()
                 ->searchable(),
