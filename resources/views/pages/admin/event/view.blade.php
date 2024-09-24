@@ -79,7 +79,6 @@
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
-                            <th scope="col">Description</th>
                             <th scope="col">Orders</th>
                             <th scope="col">Booking URL</th>
                             <th scope="col">Actions</th>
@@ -90,7 +89,6 @@
                             <td>
                                 <a href="{{route('tours.view', ['tour' => $tour,])}}" class="link link-primary">{{ $tour->name }}</a>
                             </td>
-                            <td>{{ $tour->description }}</td>
                             <td>{{ $tour->orders()->count() }}</td>
                             <td>
                                 @if(!empty($tour->getBookingFormUrl()))
