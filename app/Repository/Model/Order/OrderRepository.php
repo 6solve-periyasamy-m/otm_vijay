@@ -862,6 +862,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $this->order->consultant ?? Auth::user(),
             $this->order->tour->date_from,
             $this->order->tour->date_to,
+            $this->order->ordered_on,
             new ItineraryTraveller($this->order->leadBooker->customer, $this->order->leadBooker->is_charged, $this->order->leadBooker->is_travelling),
             $this->order->tour->brand,
             $this->getTravellerItineraryArray(),

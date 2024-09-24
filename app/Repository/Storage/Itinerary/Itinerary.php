@@ -42,6 +42,7 @@ class Itinerary
         public User|null $consultant,
         public Carbon $start,
         public Carbon $end,
+        public Carbon $created,
         public ItineraryTraveller $booker,
         public Brand $brand,
         public array $travellers,

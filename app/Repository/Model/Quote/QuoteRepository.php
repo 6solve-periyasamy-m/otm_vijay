@@ -1119,6 +1119,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $this->order->consultant ?? Auth::user(),
             $this->quote->date_from,
             $this->quote->date_to,
+            $this->quote->created_at,
             new ItineraryTraveller($this->quote->leadTraveller->customer, $this->quote->leadTraveller->paying, $this->quote->leadTraveller->travelling),
             $this->quote->brand,
             $this->getTravellerArray($paying, $travelling),

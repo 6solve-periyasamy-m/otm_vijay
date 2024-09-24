@@ -495,7 +495,7 @@ figure.table tr td:nth-child(2) {display:none;}
                     <h6>AGENT DETAILS</h6>
                     <p>Name: <span>{{$itinerary->consultant?->name}}</span></p>
                     <p>Email: <span>{{$itinerary->consultant?->email}}</span><p>
-                    <p>Date created: <span>{{ $dacre }}</span><p>
+                    <p>Quote date: <span>{{ $itinerary->created->format('d M Y') }}</span><p>
                 </div>
             </div>  
         </div>
