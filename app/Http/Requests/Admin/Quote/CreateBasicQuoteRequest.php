@@ -41,8 +41,8 @@ class CreateBasicQuoteRequest extends FormRequest
     public function getCustomerDataset(): array
     {
         return [
-            'travelling' => $this->travelling == 'on',
-            'paying' => $this->paying == 'on',
+            'travelling' => $this->travelling == 'on' || (bool)$this->travelling,
+            'paying' => $this->paying == 'on'|| (bool)$this->paying,
         ];
     }
 
