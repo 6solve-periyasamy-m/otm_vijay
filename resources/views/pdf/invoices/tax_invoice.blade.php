@@ -509,11 +509,11 @@
         <tr>
             <td>
                 {!! setting('company.bank_transfer', '-')  !!}
-                <p class="terms-conditions" style="margin-top:30px;">
+                <p class="terms-conditions" style="margin-top:30px; font-weight: bold">
                    Terms and conditions apply
                 </p>
                 <p class="terms-conditions upd" style="margin-top:0px;">
-                Please see our website for a copy or view them <a href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">here</a>
+                Please see our website for a copy or view them <a style="color: blue !important; text-decoration: underline !important;" href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">here</a>
                 </p>
             </td>
             <td>
