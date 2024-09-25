@@ -418,6 +418,11 @@
         margin-top:5px!important
        }
        .head-dv-cls {height:100px;}
+       .payment-options { 
+            position: fixed;
+            bottom: 0cm;
+            height: 283px; 
+        }
     </style>
     <title>Invoice - {{ $invoice->booking_reference }}</title>
 </head>
