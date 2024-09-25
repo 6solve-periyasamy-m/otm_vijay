@@ -6,6 +6,7 @@
 /**
  * @var \App\Models\Tour\Event $event
  */
+$hideNoCategory = $hideNoCategory ?? false;
 @endphp
 
 @push('footer-stack')
@@ -69,22 +70,27 @@
                 <h2 class="fw-bold">Tours</h2>
             </div>
             <x-admin.section.card>
+                <div class="flex justify-end mb-2">
+                    <a class="btn btn-primary" href="{{ route('events.view', ['event' => $event, 'hideNoCategory' => !($hideNoCategory)]) }}">
+                        {{ Icon::eye() }} {{ $hideNoCategory ? 'Show' : 'Hide' }} Tours Without Category
+                    </a>
+                </div>
                 <table id="tours" class="table table-striped">
                     <thead>
                     <tr>
                         <th scope="col">Name</th>
-                        <th scope="col">Description</th>
+                        <th scope="col">Category</th>
                         <th scope="col">Orders</th>
                         <th scope="col">Booking URL</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
-                    @foreach($event->tours as $tour)
+                    @foreach($event->getTours($hideNoCategory) as $tour)
                         <tr>
                             <td>
                                 <a href="{{route('tours.view', ['tour' => $tour,])}}" class="link link-primary">{{ $tour->name }}</a>
                             </td>
-                            <td>{{ $tour->description }}</td>
+                            <td>{{ $tour->category?->name ?? 'None' }}</td>
                             <td>{{ $tour->orders()->count() }}</td>
                             <td>
                                 @if(isset($tour->booking_form_url))
