@@ -1,6 +1,6 @@
 @php
     /** @var \App\Models\Order\Invoice\Invoice $invoice */
-   //var_dump($invoice);
+   var_dump($invoice);
     $due_date = 'No due';
    //if (!sizeof($invoice->installments) === 0)
     foreach($invoice->installments as $installment) {
@@ -431,8 +431,8 @@
             <td class="left-column"> <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('images/pdf_assets/images/KeithProwse-Travel-Logo.png'))?>"  alt="logo-ch"></td>
             <td class="right-column">
                 <p><span>Address:</span><span style="font-weight:400;margin-left:5px;">{{$invoice->brand->address_line_1}} <br>{{$invoice->brand->address_line_2}}, {{$invoice->brand->town}}, {{$invoice->brand->region}}, {{$invoice->brand->postcode}}<br>
-                {{$invoice->brand->vat_code}}</span></p>
-                <p><span>Company ABN:</span><span style="font-weight:400;margin-left:5px;">31 003 276 775</span></p>               
+                </span></p>
+                <p><span>Company ABN:</span><span style="font-weight:400;margin-left:5px;">{{$invoice->brand->vat_code}}</span></p>               
                 <p><span>Email:</span><span style="font-weight:400;margin-left:5px;">info@octopustravelmatrix.com</span></p>
                 <p><span>Phone:</span><span style="font-weight:400;margin-left:5px;">01632960966</span></p>
             </td>
