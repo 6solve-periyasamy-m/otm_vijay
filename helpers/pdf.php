@@ -48,3 +48,4 @@ if(!function_exists('dompdf')) {
         return response()->stream(function () use ($dompdf) { echo $dompdf->output(); }, 200, ['Content-Type' => 'application/pdf']);
     }
 }
+
