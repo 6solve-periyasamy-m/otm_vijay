@@ -14,12 +14,7 @@ class TourController extends Controller
 {
     public function index(TableRequest $request)
     {
-        if (($request->historic ?? (setting('system.historic', 6) < 0))) {
-            $tours = Tour::all();
-        } else {
-            $tours = Tour::whereDate('date_to', '>', now()->subMonths(setting('system.historic', 6)))->get();
-        }
-        return view('pages.admin.tour.table', ['tours' => $tours, 'historic' => ($request->historic ?? false)]);
+        return view('pages.admin.tour.table', ['hideNoCategory' => ($request->hideNoCategory ?? false)]);
     }
 
     public function create()

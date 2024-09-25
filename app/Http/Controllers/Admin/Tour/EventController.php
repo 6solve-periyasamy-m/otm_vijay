@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Tour;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Tour\EventRequest;
+use App\Http\Requests\Admin\TableRequest;
 use App\Models\Tour\Event;
 use Illuminate\Http\Request;
 
@@ -35,9 +36,9 @@ class EventController extends Controller
         return redirect()->route('events.view', ['event' => $event,]);
     }
 
-    public function view(Event $event)
+    public function view(TableRequest $request, Event $event)
     {
-        return view('pages.admin.event.view', ['event' => $event,]);
+        return view('pages.admin.event.view', ['event' => $event, 'hideNoCategory' => $request->hideNoCategory ?? false,]);
     }
 
     public function edit(Event $event)
