@@ -761,7 +761,8 @@ figure.table tr td:nth-child(2) {display:none;}
            </tbody>
         </table>
     </div>
-  <div class="heading-module">
+<div style="page-break-inside: avoid">
+  <div class="heading-module" style="page-break-inside: avoid">
     <h3>
       <span class="mark"></span>
       <span class="text">Payment schedule</span>
@@ -786,6 +787,7 @@ figure.table tr td:nth-child(2) {display:none;}
       @endforeach
     </tbody>
   </table>
+    </div>
 </div>
   </div>
    
