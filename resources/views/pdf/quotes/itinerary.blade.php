@@ -310,7 +310,7 @@ h4 span.mark {
     top:5px;
 }
 .single-module table td.item-detail.posclas strong{
-  top:0px;
+  top:3px;
 }
 .customer-agent-details {position:relative;}
 /* .agent-details {
