@@ -204,6 +204,11 @@ class PermissionsRepository
                 'group' => 'System',
                 'order' => 2,
             ],
+            'System\Notification' => [
+                'name' => 'Notification',
+                'group' => 'System',
+                'order' => 3,
+            ]
 
         ];
     }
