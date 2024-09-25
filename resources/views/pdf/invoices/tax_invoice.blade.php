@@ -517,7 +517,7 @@
                 </p>
             </td>
             <td>
-                <p><span>Invoice Total:</span> <span> {{f_currency($invoice->total_cost)}}</span></p>
+                <p><span>Invoice Total:</span> <span>{{f_currency($invoice->total_cost)}}</span></p>
                 <p><span>GST (included):</span> <span>{{f_currency($invoice->tax_amount)}}</span></p>
                 <p><span>Received:</span> <span>{{f_currency($invoice->total_paid)}}</span></p>
                 @if($invoice->total_fees > 0)
