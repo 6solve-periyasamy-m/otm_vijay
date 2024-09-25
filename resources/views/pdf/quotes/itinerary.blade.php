@@ -568,6 +568,7 @@ figure.table tr td:nth-child(2) {display:none;}
                                         Address not available
                                     @endif
                                 @else
+                                    var_dump($value)
                                     {!! $value !!}
                                 @endif
                             </td>
