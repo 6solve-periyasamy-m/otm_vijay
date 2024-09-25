@@ -309,6 +309,9 @@ h4 span.mark {
     position:relative;
     top:5px;
 }
+.single-module table td.item-detail.posclas strong{
+  top:0px;
+}
 .customer-agent-details {position:relative;}
 /* .agent-details {
     margin-left: auto;
@@ -555,12 +558,15 @@ figure.table tr td:nth-child(2) {display:none;}
             <table>
                 <tbody>
                     @foreach($accommodation->details as $key => $value)
+                    @php
+                      $classch = $key == 'Description' ? 'posclas' : '';
+                    @endphp
                         @continue(empty($value))
                         <tr>
                             <td class="item-header" style="width: 125px">
                                 <strong>{{ $key }}:</strong>
                             </td>
-                            <td class="item-detail">
+                            <td class="item-detail <?php echo $classch;?>">
                                 @if(is_array($value))
                                     @if(isset($value['attributes']['address_line_1']))
                                         {{ $value['attributes']['address_line_1'] }}
