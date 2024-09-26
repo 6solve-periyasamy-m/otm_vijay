@@ -165,7 +165,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         foreach ($this->quote->installments as $installment) {
             $price -= $installment->getAmount($paying, $ppp);
         }
-        return $price - $this->quote->getDepositAmount($paying);
+        return $price - $this->quote->getDepositAmount($paying) - $this->getCommission($paying);
     }
 
     public function convertToTour(int $customerCount = 1, bool $components = true): Tour
