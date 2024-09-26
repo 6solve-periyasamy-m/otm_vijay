@@ -36,6 +36,7 @@ use App\Repository\Model\Tour\TourRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
 use App\Repository\Storage\Itinerary\Itinerary;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Storage\Itinerary\ItineraryPaymentDetails;
 use App\Repository\Storage\Itinerary\ItinerarySchedule;
 use App\Repository\Storage\Itinerary\ItineraryScheduleType;
@@ -595,7 +596,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $data = [];
         foreach ($this->getAccommodationForInvoice(false) as $component) {
-            $time = $component->getInventory()->getStartTime()?->unix();
+            $time = $component->getInventory()?->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -603,7 +604,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $data[$time] = $component;
         }
         foreach ($this->getActivitiesForInvoice(false) as $component) {
-            $time = $component->getInventory()->getStartTime()?->unix();
+            $time = $component->getInventory()?->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -611,7 +612,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $data[$time] = $component;
         }
         foreach ($this->getFlightsForInvoice(false) as $component) {
-            $time = $component->getInventory()->getStartTime()?->unix();
+            $time = $component->getInventory()?->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -619,14 +620,14 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $data[$time] = $component;
         }
         foreach ($this->getTransportForInvoice(false) as $component) {
-            $time = $component->getInventory()->getStartTime()?->unix();
+            $time = $component->getInventory()?->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
             } while ($exists);
             $data[$time] = $component;
         }
-        ksort($data);
+        ksort($data, SORT_ASC);
         return $data;
     }
 
@@ -638,7 +639,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         foreach ($this->getComponents() as $component) {
             $data = [
                 'quantity' => $component->get()?->quantity,
-                'inventory' => $component->getInventory()->get()->id,
+                'inventory' => $component->getInventory()?->get()->id,
                 'tour_component_type' => $component->getTourComponentType(),
                 'tour_sales_price' => $component->get()->tour_sales_price,
                 'price_shown' => $component->priceShown(),
@@ -1060,6 +1061,10 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $heading = "Inclusion";
             if (!array_key_exists($heading, $items)) { $items[$heading] = []; }
             $items[$heading][] = $item;
+        }
+        foreach ($items as $key => $data) {
+            usort($data, static function (ItineraryItem $a, ItineraryItem $b) { return $a->sortKey >= $b->sortKey ? 1 : -1; });
+            $items[$key] = $data;
         }
         return $items;
     }
