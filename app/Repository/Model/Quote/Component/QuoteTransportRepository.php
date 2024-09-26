@@ -40,7 +40,7 @@ class QuoteTransportRepository extends QuoteComponentRepository
 
     public function getInventory(): ?TransportInventoryRepository
     {
-        return $this->quoteComponent->inventory->repository;
+        return $this->quoteComponent->inventory?->repository;
     }
 
     public function get(): QuoteTransport

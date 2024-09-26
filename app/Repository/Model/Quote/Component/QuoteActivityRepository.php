@@ -42,7 +42,7 @@ class QuoteActivityRepository extends QuoteComponentRepository
 
     public function getInventory(): ?ActivityInventoryRepository
     {
-        return $this->quoteComponent->inventory->repository;
+        return $this->quoteComponent->inventory?->repository;
     }
 
     public function get(): QuoteActivity

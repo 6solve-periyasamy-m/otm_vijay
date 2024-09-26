@@ -40,7 +40,7 @@ class QuoteAccommodationRepository extends QuoteComponentRepository
 
     public function getInventory(): ?AccommodationInventoryRepository
     {
-        return $this->quoteComponent->inventory->repository;
+        return $this->quoteComponent->inventory?->repository;
     }
 
     public function get(): QuoteAccommodation
