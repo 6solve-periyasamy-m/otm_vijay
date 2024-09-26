@@ -211,6 +211,8 @@ class InvoiceGenerator
                 'region' => $orderCustomer->customer->billingAddress->region,
                 'country' => $orderCustomer->customer->billingAddress->country?->name,
                 'postcode' => $orderCustomer->customer->billingAddress->postcode,
+                'paying' => $orderCustomer->is_charged,
+                'travelling' => $orderCustomer->is_travelling,
             ]);
             $total = $orderCustomer->tour_cost;
             $billables = [

@@ -468,7 +468,7 @@
             <h6>Details</h6>
             <p class="event-name"><span>Reference:</span> <span>{{$invoice->booking_reference}}</span></p>
             <p class="event-name"><span>Event Name:</span> <span>{{ $invoice->event }}</span></p>
-            <p class="no-of-pax"><span>Number of Pax:</span> <span>{{count($invoice->customers)}}</span></p>
+            <p class="no-of-pax"><span>Number of Pax:</span> <span>{{$invoice->getTravellingTravellersAtribute()}}</span></p>
             </td>
             <td>
             <p class="bg-box-contain f-1"><span>Invoice No:</span> <span>{{ $invoice->invoice_number }}</span></p>
