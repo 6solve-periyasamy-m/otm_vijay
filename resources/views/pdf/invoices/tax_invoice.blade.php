@@ -521,7 +521,10 @@
                 </p>
             </td>
             <td>
-                <p><span>Invoice Total:</span> <span>{{f_currency($invoice->total_cost)}}</span></p>
+                <p><span>Invoice Total:</span> <span>{{f_currency($invoice->total_cost + $invoice->commission_amount)}}</span></p>
+                @if($invoice->commission_amount > 0)
+                <p><span>Commission ({{$invoice->commission_percentage}}%):</span> <span>{{f_currency($invoice->commission_amount)}}</span></p>
+                @endif
                 <p><span>GST (included):</span> <span>{{f_currency($invoice->tax_amount)}}</span></p>
                 <p><span>Received:</span> <span>{{f_currency($invoice->total_paid)}}</span></p>
                 @if($invoice->total_fees > 0)
