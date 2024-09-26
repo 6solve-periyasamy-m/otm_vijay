@@ -599,11 +599,22 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
     {
         /** @var InventoryRepository[] $components */
         $components = [];
-        foreach ($this->tour->accommodationInventory()->groupBy('accommodation_inventories.accommodation_id')->get() as $component) {
-            $components[] = $component->repository;
+        $seen = [];
+        foreach ($this->tour->accommodationInventoryTours as $component) {
+            $key = 'accommodation-' .  $component->inventory->component->id;
+            if (in_array($key, $seen)) { continue; }
+            $seen[] = $key;
+            if ($component->tour_component_type === 'Included') {
+                $components[] = $component->inventory->repository;
+            }
         }
-        foreach ($this->tour->activityInventory()->groupBy('activity_inventories.activity_id')->get() as $component) {
-            $components[] = $component->repository;
+        foreach ($this->tour->activityInventoryTours as $component) {
+            $key = 'activity-' .  $component->inventory->component->id;
+            if (in_array($key, $seen)) { continue; }
+            $seen[] = $key;
+            if ($component->tour_component_type === 'Included') {
+                $components[] = $component->inventory->repository;
+            }
         }
         usort($components, function (InventoryRepository $a, InventoryRepository $b) {
             return $a->getStartTime()?->unix() <=> $b->getStartTime()?->unix();
