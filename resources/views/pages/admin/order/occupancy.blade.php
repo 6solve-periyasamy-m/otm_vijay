@@ -126,7 +126,7 @@
                 name: group.name,
                 price: price,
                 roomId: group.room.id,
-                editable: group.room.start.toLocaleDateString()
+                editable: group.room.start.toLocaleString()
             });
         }
         return render(template('room'), {
@@ -147,7 +147,7 @@
     }
 
     function updateDate() {
-        activeDate.text("Night of " + window.date.toLocaleDateString());
+        activeDate.text("Night of " + window.date.toLocaleString());
         updateSelector(data.getRooms(window.date));
         updateRooms(data.getGroups(window.date));
         updateOrphans(data.getOrphanedCustomers(window.date));
@@ -171,8 +171,7 @@
 
     function changeDay(days) {
         if (data === null) return;
-        let newDate = new Date(window.date.valueOf());
-        newDate.addDays(days);
+        let newDate = DateTime.fromSeconds(window.date.toSeconds()).plus({day: days});
         if (newDate > data.getEndDate() || newDate < data.getStartDate()) {
             return;
         }
