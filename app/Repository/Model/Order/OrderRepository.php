@@ -386,7 +386,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
      */
     public function getRemaining(): float
     {
-        return sigfig(($this->order->cost + $this->order->total_adjustments) - $this->order->paid);
+        return sigfig(($this->order->cost + $this->order->total_adjustments - $this->order->commission_amount) - $this->order->paid);
     }
 
     /**
