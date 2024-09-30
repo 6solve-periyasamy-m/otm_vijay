@@ -1,6 +1,6 @@
 @php
     /** @var \App\Models\Order\Invoice\Invoice $invoice */
-   //var_dump($invoice);
+   var_dump($invoice);
     $due_date = 'PAID';
    //if (!sizeof($invoice->installments) === 0)
     foreach($invoice->installments as $installment) {
@@ -521,10 +521,12 @@
                 </p>
             </td>
             <td>
+                @if($invoice->commission_amount > 0)
                 <p style="font-size:16px;font-weight:800;"><span>Invoice Total:</span> <span>{{f_currency($invoice->total_cost + $invoice->commission_amount)}}</span></p>
+                @en
                 @if($invoice->commission_amount > 0)
                 <p><span>Commission ({{$invoice->commission_percentage}}%):</span> <span>{{f_currency($invoice->commission_amount)}}</span></p>
-                <p><span>Commission ({{$invoice->commission_percentage}}%):</span> <span>{{f_currency($invoice->commission_amount)}}</span></p>
+                <p><span>Booking Total: </span> <span>{{f_currency($invoice->total_cost)}}</span></p>
                 @endif
                 <p><span>GST (included):</span> <span>{{f_currency($invoice->tax_amount)}}</span></p>
                 <p><span>Received:</span> <span>{{f_currency($invoice->total_paid)}}</span></p>
