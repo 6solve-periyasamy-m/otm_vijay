@@ -106,6 +106,18 @@ class Event extends Model
         return $this->hasMany(Tour::class, 'event_id');
     }
 
+    /**
+     * @param bool $hideNoCategory
+     * @return Collection<Tour>
+     */
+    public function getTours(bool $hideNoCategory = false): Collection
+    {
+        if ($hideNoCategory) {
+            return $this->tours()->whereNotNull('tour_category_id')->get();
+        }
+        return $this->tours;
+    }
+
     public function orders(): HasManyThrough
     {
         return $this->hasManyThrough(Order::class, Tour::class, 'event_id', 'tour_id');
