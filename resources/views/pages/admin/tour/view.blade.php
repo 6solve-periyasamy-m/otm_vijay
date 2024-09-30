@@ -161,7 +161,7 @@
                             @foreach($tour->repository->getComponents() as $component)
                                 <tr>
                                     <td>{{ ucwords($component->getComponentType()) }}</td>
-                                    <td>{{ f_datetime($component->getStartTime()) }} to {{ f_datetime($component->getEndTime()) }}</td>
+                                    <td data-sort="{{ $component->getStartTime()->unix() }}">{{ f_datetime($component->getStartTime()) }} to {{ f_datetime($component->getEndTime()) }}</td>
                                     <td>{{ $component->getOverview() }}</td>
                                     <td>{{ $component->getTourComponentType() }}</td>
                                     <td>
