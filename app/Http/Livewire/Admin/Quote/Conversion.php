@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Quote;
 
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Models\Customer\Customer;
+use App\Models\Order\Order;
 use App\Models\Quote\Quote;
 use App\Repository\Storage\Quote\CustomerForConversion;
 use Livewire\Component;
@@ -52,6 +53,11 @@ class Conversion extends Component
             $quantity += $this->hasComponent($key, $type, $id) ? 1 : 0;
         }
         return $quantity;
+    }
+
+    public function orderExists()
+    {
+        return Order::where('booking_reference', '=', $this->quote->reference)->first() !== null;
     }
 
     public function hasComponent(int $traveller, string $type, int $id): bool

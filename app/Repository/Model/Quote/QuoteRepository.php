@@ -153,6 +153,11 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'invoice_footer' => $this->quote->invoice_footer,
         ];
         $order = OrderRepository::create($tour, $data, $lead, $travellers, $email);
+        if (flag('quote.convert.reference', false) &&
+            Order::where('booking_reference', '=', $this->quote->reference)->first() === null) {
+           $order->booking_reference = $this->quote->reference;
+           $order->save();
+        }
         $this->update(['quote_status' => QuoteStatus::CONVERTED->value, 'order_id' => $order->id]);
         return $order;
     }
