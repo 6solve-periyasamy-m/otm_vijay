@@ -1,3 +1,8 @@
+import { DateTime, Settings, Interval } from "luxon";
+
+const startOfDay = {hour: 0, minute: 0, second: 0};
+const endOfDay = {hour: 23, minute: 59, second: 59};
+
 class Customer {
     id: number;
     name: string;
@@ -15,25 +20,23 @@ class Room {
     name: string;
     size: number;
     price: number;
-    start: Date;
-    end: Date;
+    start: DateTime;
+    end: DateTime;
     available: boolean;
 
-    constructor(id: number, name: string, price: number, size: number, start: Date, end: Date, available: boolean = true) {
+    constructor(id: number, name: string, price: number, size: number, start: DateTime, end: DateTime, available: boolean = true) {
         this.id = id;
         this.name = name;
         this.size = size;
         this.price = price;
-        this.start = new Date(start.setHours(0, 0, 0));
-        this.end = new Date(end.setHours(23, 59, 59));
+        this.start = start.set(startOfDay);
+        this.end = end.set(endOfDay);
         this.available = available;
     }
 
-    public containsDate(date: Date): boolean {
-        date = new Date(date.setHours(1)); // Fixes final day showing as being a room
-        let start = new Date(new Date(this.start).setHours(0,0,0));
-        let end = new Date(new Date(this.end).setHours(0,0,0));
-        return start <= date && date <= end;
+    public containsDate(date: DateTime): boolean {
+        let interval = Interval.fromDateTimes(this.start, this.end);
+        return interval.contains(date);
     }
 }
 
@@ -68,13 +71,13 @@ class Group {
         return ids;
     }
 
-    public isOnNight(night: Date): boolean {
+    public isOnNight(night: DateTime): boolean {
         return this.room.containsDate(night);
     }
 
-    public editable(night: Date): boolean {
-        let start = new Date(this.room.start.valueOf()).setHours(0,0,0);
-        return night.setHours(0,0,0) == start;
+    public editable(night: DateTime): boolean {
+        let start = this.room.start.set(startOfDay);
+        return night.set(startOfDay).toSeconds() == start.toSeconds();
     }
 }
 
@@ -82,30 +85,28 @@ class RoomingData {
     private groups: Group[];
     private readonly customers: Customer[];
     private readonly rooms: Room[];
-    private readonly start: Date;
-    private readonly end: Date;
+    private readonly start: DateTime;
+    private readonly end: DateTime;
 
-    constructor(rooms: Room[], customers: Customer[], groups: Group[], start: Date|null, end: Date|null) {
+    constructor(rooms: Room[], customers: Customer[], groups: Group[], start: DateTime, end: DateTime) {
         this.groups = groups;
         this.customers = customers;
         this.rooms = rooms;
         if (start === null || end === null) {
             for (const room of this.rooms) {
-                if (start == null ||
-                    start.getTime() > new Date(room.start.valueOf()).setHours(0, 0, 0)) {
-                    start = new Date(room.start.valueOf());
+                if (start == null || start.toSeconds() > room.start.set(startOfDay).toSeconds()) {
+                    start = room.start;
                 }
-                if (end == null ||
-                    end.getTime() < new Date(room.start.valueOf()).setHours(23, 59, 59)) {
-                    end = new Date(room.start.valueOf());
+                if (end == null || end.toSeconds() < room.end.set(endOfDay).toSeconds()) {
+                    end = room.end;
                 }
             }
         }
-        this.start = start ?? new Date();
-        this.end = end ?? new Date();
+        this.start = start ?? DateTime.now();
+        this.end = end ?? DateTime.now();
     }
 
-    public getRooms(night: Date | null = null): Room[] {
+    public getRooms(night: DateTime | null = null): Room[] {
         if (night !== null) {
             let rooms: Room[] = [];
             for (const room of this.rooms) {
@@ -123,7 +124,7 @@ class RoomingData {
         return null;
     }
 
-    public getGroups(night: Date|null = null): Group[] {
+    public getGroups(night: DateTime|null = null): Group[] {
         if (night !== null) {
             let groups = [];
             for (const group of this.groups) {
@@ -134,7 +135,7 @@ class RoomingData {
         return this.groups;
     }
 
-    public getOrphanedCustomers(date: Date|null): Customer[] {
+    public getOrphanedCustomers(date: DateTime|null): Customer[] {
         let groups = this.getGroups(date);
         let owned = [];
         for (const group of groups) {
@@ -203,20 +204,15 @@ class RoomingData {
         return null;
     }
 
-    public getStartDate(): Date {
+    public getStartDate(): DateTime {
         return this.start;
     }
 
-    public getEndDate(): Date {
+    public getEndDate(): DateTime {
         return this.end;
     }
 
-    public getNights(): Date[] {
-        // @ts-ignore
-        return this.start.range(this.end);
-    }
-
-    public reset(date: Date|null): void {
+    public reset(date: DateTime|null): void {
         if (date !== null) {
             for (const group of this.getGroups(date)) {
                 if (group.editable(date)) {
@@ -311,6 +307,7 @@ function removeElement<T>(array: T[], item: T, callback: EquivalenceCallback<T> 
 }
 
 async function generateRoomingManager(url: string, parameters: Object = {}): Promise<RoomingData> {
+    Settings.defaultZone = "Europe/London"; // Hack fix, but it works. Defaults all dates to UTC/UTC+1, rather than system date
     let data: RemoteRoomingData = await $.post({
         url: url,
         dataType: "json",
@@ -324,7 +321,7 @@ async function generateRoomingManager(url: string, parameters: Object = {}): Pro
     let rooms = [];
     for (const id of Object.keys(data.rooms)) {
         let nId: number = parseInt(id);
-        rooms.push(new Room(nId, data.rooms[nId].name, data.rooms[nId].price, data.rooms[nId].size, new Date(data.rooms[nId].start * 1000), new Date(data.rooms[nId].end * 1000), data.rooms[nId].available ?? true));
+        rooms.push(new Room(nId, data.rooms[nId].name, data.rooms[nId].price, data.rooms[nId].size, DateTime.fromSeconds(data.rooms[nId].start), DateTime.fromSeconds(data.rooms[nId].end), data.rooms[nId].available ?? true));
     }
     let groups = [];
     for (const id of Object.keys(data.groups)) {
@@ -339,11 +336,12 @@ async function generateRoomingManager(url: string, parameters: Object = {}): Pro
             }
         }
     }
-    return new RoomingData(rooms, customers, groups, new Date(data.start*1000), new Date(data.end*1000));
+    return new RoomingData(rooms, customers, groups, DateTime.fromSeconds(data.start), DateTime.fromSeconds(data.end));
 }
 
 (window as any).occupancy = {};
 (window as any).occupancy.generate = generateRoomingManager;
+(window as any).DateTime = DateTime;
 
 (Date as any).prototype.addDays = function (days: number): Date {
     this.setDate(this.getDate() + days);
