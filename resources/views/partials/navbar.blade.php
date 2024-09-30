@@ -23,7 +23,9 @@
                     <img src="{{ asset(Auth::user()->avatar_url) }}" class="img-thumbnail inline">
                 </a>
                 <div class="dp-content">
-                    <a href="{{ route('notifications.all') }}">{{ Icon::note() }}&nbsp;Notifications</a>
+                    @can('read', \App\Models\System\Notification::class)
+                        <a href="{{ route('notifications.all') }}">{{ Icon::note() }}&nbsp;Notifications</a>
+                    @endcan
                     <a href="{{ route('users.profile', ['user' => Auth::user(),]) }}">{{ Icon::view() }}&nbsp;View Profile</a>
                     <a href="#" onclick="event.preventDefault();logout();">{{ Icon::logout() }}&nbsp;Logout</a>
                 </div>
