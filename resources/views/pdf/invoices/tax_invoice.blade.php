@@ -1,6 +1,6 @@
 @php
     /** @var \App\Models\Order\Invoice\Invoice $invoice */
-   var_dump($invoice);
+   //var_dump($invoice);
     $due_date = 'PAID';
    //if (!sizeof($invoice->installments) === 0)
     foreach($invoice->installments as $installment) {
@@ -534,9 +534,9 @@
                     @if($invoice->total_fees > 0)
                         <p><span>Fees Paid:</span> <span>{{f_currency($invoice->total_fees)}}</span></p>
                     @endif
-                    <p><span>Balance Due:</span> <span>{{f_currency($invoice->total_cost - $invoice->total_paid)}}</span></p>
+                    <!-- <p><span>Balance Due:</span> <span>{{f_currency($invoice->total_cost - $invoice->total_paid)}}</span></p> -->
                 @endif
-                <h3><span>GRAND TOTAL:</span> <span>{{f_currency($invoice->total_cost)}} {{-- Tax is inclusive, so shouldn't be added here --}}</span></h3>
+                <h3><span>BALANCE DUE:</span> <span>{{f_currency($invoice->total_cost - $invoice->total_paid)}}</span></h3>
             </td>
         </tr>
     </table>
