@@ -28,6 +28,7 @@ class QuoteMail extends TemplatedMail
             'BOOKING_REFERENCE' => $quote?->ref ?? $this->faker->regexify('OTM[0-9]{12}[A-Z]{4}'),
             'TOTAL_COST' => f_currency($quote?->repository->getTotalCost($sent->paying) ?? 1000.0),
             'EXPIRY' => f_date($quote?->expires ?? now()),
+            'FINAL_PAYMENT' => f_date($quote?->final_payment ?? now()),
             'EVENT_NAME' => $quote?->event?->name ?? '',
             ...(new SettingsMail())->getShortcodes()
         ];
