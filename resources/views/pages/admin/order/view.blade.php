@@ -31,6 +31,9 @@
         let url = "{{ route('orders.invoice', ['order' => $order, 'version' => '#replace#']) }}"
         $('.invoice-button').prop('href', url.replace('#replace#', $(selector).val()))
     }
+    function showPopupModal() {
+        return openModal('admin.order.controls', {'order': {{$order->id}},});
+    }
 </script>
 @endsection
 
@@ -111,7 +114,7 @@
                 {{ Icon::edit() }}
                 Edit Order
             </a>
-            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#optionOrder">
+            <button type="button" class="btn btn-secondary" onclick="showPopupModal()">
                 {{ Icon::options() }}
                 <span>Options</span>
             </button>
