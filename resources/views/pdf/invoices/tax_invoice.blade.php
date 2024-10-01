@@ -494,7 +494,7 @@
 
         @foreach($billables as $b_index => $billable)
             @continue($billable->shared_key === 'surcharge')
-            @continue($billable->isGroupedBase())
+            <!-- @continue($billable->isGroupedBase()) -->
             @continue(strpos($billable->shared_key, 'activity_') === false)
             <tr>
                 <td>{{$counter}}</td>
