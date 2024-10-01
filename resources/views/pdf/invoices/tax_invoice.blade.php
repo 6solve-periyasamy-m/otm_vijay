@@ -5,7 +5,7 @@
    //if (!sizeof($invoice->installments) === 0)
    $due_date = 'PAID';
     foreach($invoice->installments as $installment) {
-        $due_date = $invoice->installments[0]->due;
+        $due_date = date('d M Y', strtotime($invoice->installments[0]->due));
         if ($installment->paid) {
             $due_date = date('d M Y', strtotime($installment->due));
             break;
