@@ -1,6 +1,6 @@
 @php
     /** @var \App\Models\Order\Invoice\Invoice $invoice */
-   var_dump($invoice);
+   //var_dump($invoice);
     
    //if (!sizeof($invoice->installments) === 0)
    $due_date = 'PAID';
