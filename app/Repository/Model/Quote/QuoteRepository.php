@@ -1126,7 +1126,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $event?->image_url,
             $this->quote->reference,
             $this->quote->organization,
-            $this->order->consultant ?? Auth::user(),
+            $this->quote->consultant ?? Auth::user(),
             $this->quote->date_from,
             $this->quote->date_to,
             $this->quote->created_at ?? now(), // TODO: Actually implement Quote Created At as a settable field
