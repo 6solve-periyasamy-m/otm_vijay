@@ -39,6 +39,11 @@
     @endforeach
     <x-admin.section.card>
         <div class="row">
+            @if(flag('quote.convert.reference', false) && $this->orderExists())
+                <div class="col-12 fw-bold" style="color: red">
+                    An order with the same reference already exists, so the reference will not be maintained
+                </div>
+            @endif
             <div class="col-10 fw-bold" style="color: red;">
                 @if($verifyComponents)
                     Some components may have incorrect quantity values. You should double-check before continuing.
