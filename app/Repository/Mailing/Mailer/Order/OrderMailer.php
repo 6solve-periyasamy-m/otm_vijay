@@ -14,6 +14,10 @@ class OrderMailer
     private Order $order;
     private bool $force;
 
+    /**
+     * @param Order $order Which order should the mailer be for
+     * @param bool $force Should the mailer ignore the disable mail setting
+     */
     public function __construct(Order $order, bool $force = false)
     {
         $this->order = $order;
