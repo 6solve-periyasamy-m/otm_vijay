@@ -29,7 +29,7 @@ class InvoiceGenerator
             'order_id' => $this->order->id,
             'name' => $this->order->tour->name,
             'event' => $this->order->tour->event?->name,
-            'cancelled' => $this->order->cancelled,
+            'cancelled' => $this->order->cancelled ?? false,
             'invoice_number' => $this->order->invoices()->count() + 1,
             'booking_reference' => $this->order->booking_reference,
             'generated' => now(),
