@@ -5,9 +5,10 @@
    //if (!sizeof($invoice->installments) === 0)
     foreach($invoice->installments as $installment) {
         if (!$installment->paid) {
-            $due_date = date('d M Y', strtotime($installment->due));
+            //$due_date = date('d M Y', strtotime($installment->due));
             break;
         }
+        $due_date = date('d M Y', strtotime($installment->due));
     }
 @endphp
 <!DOCTYPE html
