@@ -1,14 +1,16 @@
 @php
     /** @var \App\Models\Order\Invoice\Invoice $invoice */
-   var_dump($invoice->installments);
-    $due_date = 'PAID';
+   //var_dump($invoice->installments);
+    
    //if (!sizeof($invoice->installments) === 0)
+   $due_date = 'PAID';
     foreach($invoice->installments as $installment) {
-        if (!$installment->paid) {
-            //$due_date = date('d M Y', strtotime($installment->due));
+        $due_date = $invoice->installments[0]->due;
+        if ($installment->paid) {
+            $due_date = date('d M Y', strtotime($installment->due));
             break;
         }
-        $due_date = date('d M Y', strtotime($installment->due));
+        //$due_date = date('d M Y', strtotime($installment->due));
     }
 @endphp
 <!DOCTYPE html
