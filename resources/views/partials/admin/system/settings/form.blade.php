@@ -142,6 +142,7 @@
                 @include('partials.fields.checkbox', ['name' => 'Enable ATOL Certificate Generation', 'field' => 'atol_enabled', 'value' => flag('atol.enabled', true),])
                 @include('partials.fields.checkbox', ['name' => 'BCC Emails to Sender', 'field' => 'bcc_sender', 'value' => flag('mail.bcc-sender', false),])
                 @include('partials.fields.checkbox', ['name' => 'BCC Emails to Consultant', 'field' => 'bcc_consultant', 'value' => flag('mail.bcc-consultant', false),])
+                @include('partials.fields.checkbox', ['name' => 'Maintain quote reference on conversion where possible', 'field' => 'quote_reference', 'value' => flag('quote.convert.reference', false),])
                 @include('partials.fields.checkbox', ['name' => 'Should Booking Deposit Percentage Include Additional Costs', 'field' => 'deposit_full', 'value' => flag('booking.deposit.full', false),])
             </div>
     </x-admin.section.card>

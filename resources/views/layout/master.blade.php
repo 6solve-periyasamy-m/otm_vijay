@@ -111,6 +111,10 @@
             $(document).on('scroll', function (event) { onScrollEvent(); })
             onScrollEvent();
             @stack('footer-ready')
+            if (window.Livewire) {
+                window.Livewire.start();
+            }
+            Alpine.start();
         });
 
         function onScrollEvent() {

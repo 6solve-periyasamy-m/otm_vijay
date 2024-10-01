@@ -93,11 +93,12 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
     /**
      * Get an instance of OrderMailer for the current Order
+     * @param bool $force Should sending be forced
      * @return OrderMailer
      */
-    public function mailer(): OrderMailer
+    public function mailer(bool $force = false): OrderMailer
     {
-        return new OrderMailer($this->order);
+        return new OrderMailer($this->order, $force);
     }
 
     /**
@@ -387,7 +388,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
      */
     public function getRemaining(): float
     {
-        return sigfig(($this->order->cost + $this->order->total_adjustments) - $this->order->paid);
+        return sigfig(($this->order->cost + $this->order->total_adjustments - $this->order->commission_amount) - $this->order->paid);
     }
 
     /**

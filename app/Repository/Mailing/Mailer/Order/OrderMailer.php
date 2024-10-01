@@ -12,10 +12,16 @@ use Log;
 class OrderMailer
 {
     private Order $order;
+    private bool $force;
 
-    public function __construct(Order $order)
+    /**
+     * @param Order $order Which order should the mailer be for
+     * @param bool $force Should the mailer ignore the disable mail setting
+     */
+    public function __construct(Order $order, bool $force = false)
     {
         $this->order = $order;
+        $this->force = $force;
     }
 
     /**
@@ -74,6 +80,28 @@ class OrderMailer
     }
 
     /**
+     * Sends a payment made email for the order
+     * @param string|null $email Email to send the mail to. Defaults to lead booker if null
+     * @return bool Did the mail send successfully?
+     * @throws MailFailedException
+     */
+    public function sendPaymentMade(string $email = null): bool
+    {
+        return $this->sendMail('payment-made', $email);
+    }
+
+    /**
+     * Sends a Refund Given email for the order
+     * @param string|null $email Email to send the mail to. Defaults to lead booker if null
+     * @return bool Did the mail send successfully?
+     * @throws MailFailedException
+     */
+    public function sendRefundGiven(string $email = null): bool
+    {
+        return $this->sendMail('refund-given', $email);
+    }
+
+    /**
      * Send any coded mail related to the order. Refer to \App\Repository\Mailing\MailRepository::getAvailableMail for valid codes
      * @param string $code The mail code to use
      * @param string|null $email Email to send the mail to. Defaults to lead booker email if null
@@ -87,7 +115,7 @@ class OrderMailer
             $email = $this->order->leadBooker->customer->email_address;
         }
         try {
-            (new OrderMail($code))->send($email, $this->order, [], $bcc);
+            (new OrderMail($code))->send($email, $this->order, [], $bcc, $this->force);
             return true;
         } catch (MailDisabledException) {
             return false;
