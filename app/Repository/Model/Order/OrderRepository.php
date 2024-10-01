@@ -92,11 +92,12 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
     /**
      * Get an instance of OrderMailer for the current Order
+     * @param bool $force Should sending be forced
      * @return OrderMailer
      */
-    public function mailer(): OrderMailer
+    public function mailer(bool $force = false): OrderMailer
     {
-        return new OrderMailer($this->order);
+        return new OrderMailer($this->order, $force);
     }
 
     /**
