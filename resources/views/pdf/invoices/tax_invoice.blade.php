@@ -1,11 +1,13 @@
 @php
     /** @var \App\Models\Order\Invoice\Invoice $invoice */
    //var_dump($invoice);
-    $final = $invoice->installments()->orderBy('id', 'desc')->first();
-    if ($final !== null) {
-        $due_date = $invoice->installments()->orderBy('id', 'desc')->first()->due->format('d M Y');
-    } else {
-        $due_date = 'PAID';
+    $due_date = 'PAID';
+   //if (!sizeof($invoice->installments) === 0)
+    foreach($invoice->installments as $installment) {
+        if (!$installment->paid) {
+            $due_date = date('d M Y', strtotime($installment->due));
+            break;
+        }
     }
 @endphp
 <!DOCTYPE html
