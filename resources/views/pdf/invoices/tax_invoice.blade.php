@@ -421,9 +421,17 @@
         margin-top:5px!important
        }
        .payment-options { 
-            position: fixed;
-            bottom: 0cm;
-            height: 228px; 
+        position: fixed;
+        bottom: 0cm;
+        height: 228px; 
+        }
+        .full-btm-cls-mod p span {
+        font-family: 'Lato', sans-serif!important;
+        font-weight: 400!important;
+        text-align: left!important;
+        color: #000000!important;
+        font-size: 10px!important;
+        line-height: 12px!important;
         }
     </style>
     <title>Invoice - {{ $invoice->booking_reference }}</title>
