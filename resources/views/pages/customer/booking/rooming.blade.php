@@ -2,7 +2,7 @@
     /**
      * @var \App\Models\Booking\Booking $booking
      */
-    $urlParams = ['bookingUrl' => $booking->tour->booking_form_url, 'token' => $booking->token];
+    $urlParams = ['bookingUrl' => $booking->tour?->booking_form_url, 'token' => $booking->token];
     $tour = $booking->tour;
 @endphp
 

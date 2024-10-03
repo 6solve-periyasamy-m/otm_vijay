@@ -195,6 +195,7 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
         return new ItineraryItem(
             $this->inventory->component->name,
             $this->inventory->component->activity_category === ActivityCategory::MAIN ? 'Event' : 'Inclusions',
+            $this->inventory->starts_at->unix(),
             $details,
         );
     }

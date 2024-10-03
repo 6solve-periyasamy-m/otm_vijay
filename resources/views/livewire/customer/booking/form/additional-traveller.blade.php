@@ -28,7 +28,7 @@
         <x-customer.input wire:model="traveller.mobile_number" value="{{ $traveller?->mobile_number ?? '' }}" width="6" autocomplete="tel">
             Mobile Number
         </x-customer.input>
-        @if($this->booking->tour->templates->count() && empty($traveller?->id))
+        @if($this->booking->tour?->templates->count() && empty($traveller?->id))
             <div class="form-group col-md-6">
                 <label class="col-md-12 mb-0">Ideal Room Type</label>
                 <select wire:model="room_type" class="w-100">

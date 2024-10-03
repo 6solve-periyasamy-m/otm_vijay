@@ -3,9 +3,9 @@
 @section('title', 'View Event')
 
 @php
-/**
- * @var \App\Models\Tour\Event $event
- */
+    /**
+     * @var \App\Models\Tour\Event $event
+     */
 $hideNoCategory = $hideNoCategory ?? false;
 @endphp
 
@@ -30,17 +30,23 @@ $hideNoCategory = $hideNoCategory ?? false;
                 <div class="col-12">
                     <h4 class="fw-bold">{{ $event->name }}</h4>
                 </div>
-                <div class="col-12 col-xl-4">
+                <div class="col-12 col-xl-6">
                     <p>Booking URL</p>
                     <h6 class="fw-bold">
                         {{ $event->booking_url ?? 'No Booking URL Set' }}
                     </h6>
                 </div>
-                <div class="col-12 col-xl-4">
+                <div class="col-12 col-xl-6">
+                    <p>Category</p>
+                    <h6 class="fw-bold">
+                        {{ $event->event_category->label() }}
+                    </h6>
+                </div>
+                <div class="col-12 col-xl-6">
                     <p>From</p>
                     <h6 class="fw-bold">{{ f_date($event->starts_at) }}</h6>
                 </div>
-                <div class="col-12 col-xl-4">
+                <div class="col-12 col-xl-6">
                     <p>To</p>
                     <h6 class="fw-bold">{{ f_date($event->ends_at) }}</h6>
                 </div>
@@ -63,7 +69,7 @@ $hideNoCategory = $hideNoCategory ?? false;
             </div>
         </div>
     </div>
-    <hr class="splitter"/>
+    <hr class="splitter" />
     <div class="row">
         <div class="col-xl-6">
             <div class="heading pt-2 pb-md-3 pb-2">
@@ -93,8 +99,8 @@ $hideNoCategory = $hideNoCategory ?? false;
                             <td>{{ $tour->category?->name ?? 'None' }}</td>
                             <td>{{ $tour->orders()->count() }}</td>
                             <td>
-                                @if(isset($tour->booking_form_url))
-                                    <a href="{{route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,])}}" class="link link-primary">{{ $tour->booking_form_url }}</a>
+                                @if(!empty($tour->getBookingFormUrl()))
+                                    <a href="{{$tour->getBookingFormUrl()}}" class="link link-primary">{{ $tour->getBookingFormUrl() }}</a>
                                 @else
                                     No Booking URL Set
                                 @endif
@@ -109,21 +115,19 @@ $hideNoCategory = $hideNoCategory ?? false;
                     @endforeach
                 </table>
             </x-admin.section.card>
-        </div>
-        <div class="col-xl-6">
             <div class="heading pt-2 pb-md-3 pb-2">
                 <h2 class="fw-bold">Orders</h2>
             </div>
             <x-admin.section.card>
                 <table id="orders" class="table table-striped">
                     <thead>
-                    <tr>
-                        <th scope="col">Ordered On</th>
-                        <th scope="col">Booking Reference</th>
-                        <th scope="col">Tour</th>
-                        <th scope="col">Travelling</th>
-                        <th scope="col">Order Status</th>
-                    </tr>
+                        <tr>
+                            <th scope="col">Ordered On</th>
+                            <th scope="col">Booking Reference</th>
+                            <th scope="col">Tour</th>
+                            <th scope="col">Travelling</th>
+                            <th scope="col">Order Status</th>
+                        </tr>
                     </thead>
                     @foreach($event->orders as $order)
                         @php $count = $order->orderCustomers()->count() - 1; @endphp
@@ -142,7 +146,37 @@ $hideNoCategory = $hideNoCategory ?? false;
                         </tr>
                     @endforeach
                 </table>
-        </x-admin.section.card>
+            </x-admin.section.card>
+        </div>
+        <div class="col-xl-6">
+            {{-- Linked Activities --}}
+            <div class="heading pt-2 pb-md-3 pb-2">
+                <h2 class="fw-bold">Linked Activities</h2>
+            </div>
+            <x-admin.section.card>
+                <table class="table table-striped datatable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Activity</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Total Stock</th>
+                            <th scope="col">Used Stock</th>
+                            <th scope="col">Available Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($event->repository->getActivityReport() as $row)
+                            <tr>
+                                <th scope="row">{{ $row->activity }}</th>
+                                <td>{{ $row->type }}</td>
+                                <td>{{ $row->totalStock }}</td>
+                                <td>{{ $row->usedStock }}</td>
+                                <td>{{ $row->totalStock - $row->usedStock }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </x-admin.section.card>
         </div>
     </div>
 @endsection

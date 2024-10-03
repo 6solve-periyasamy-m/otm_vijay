@@ -29,9 +29,8 @@
             <div class="col-12 col-xl-6">
                 <p>Booking URL</p>
                 <h6 class="fw-bold">
-                    @if(isset($tour->booking_form_url))
-                        <a target="_blank"
-                           href="{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,]) }}">{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,]) }}</a>
+                    @if($tour->getBookingFormUrl() !== null)
+                        <a target="_blank" href="{{ $tour->getBookingFormUrl() }}">{{ $tour->getBookingFormUrl() }}</a>
                     @else
                         No Booking URL set
                     @endif

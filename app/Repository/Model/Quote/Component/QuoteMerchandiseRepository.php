@@ -41,7 +41,7 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
 
     public function getInventory(): ?MerchandiseInventoryRepository
     {
-        return $this->quoteComponent->inventory->repository;
+        return $this->quoteComponent->inventory?->repository;
     }
 
     public function get(): QuoteMerchandise

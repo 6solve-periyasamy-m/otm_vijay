@@ -190,6 +190,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
             'merchandise_inventory_id' => $this->tourComponent->merchandise_inventory_id,
             'tour_sales_price' => $this->tourComponent->tour_sales_price,
             'tour_component_type' => $this->tourComponent->tour_component_type,
+            'quantity' => null,
         ]);
         return $component->repository;
     }

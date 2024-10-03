@@ -27,6 +27,8 @@ use Illuminate\Support\Carbon;
  * @property string|null $postcode Postcode of customer billing address
  * @property bool $lead Are they the lead booker
  * @property float $total_cost Total cost for the customer
+ * @property bool $paying
+ * @property bool $travelling
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, InvoiceBillable> $billables List of all billing items for the customer
@@ -54,6 +56,6 @@ class InvoiceCustomer extends Model
     use Invoiced, HasBillables;
 
     protected $guarded = [];
-    protected $casts = ['total_cost' => 'float', 'lead' => 'boolean'];
+    protected $casts = ['total_cost' => 'float', 'lead' => 'boolean', 'paying' => 'boolean', 'travelling' => 'boolean'];
     protected $with = ['billables',];
 }

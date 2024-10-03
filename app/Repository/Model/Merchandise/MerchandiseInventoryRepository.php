@@ -231,6 +231,7 @@ class MerchandiseInventoryRepository extends InventoryRepository
         return new ItineraryItem(
             $this->inventory->component->name,
             'Merchandise',
+            1,
             $details
         );
     }

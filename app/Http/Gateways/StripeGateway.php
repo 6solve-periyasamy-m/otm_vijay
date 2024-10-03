@@ -2,12 +2,13 @@
 
 namespace App\Http\Gateways;
 
+use App\Http\Gateways\Interfaces\SupportsRedirect;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Order\Payment\PaymentIntention;
 use Stripe\Checkout\Session;
 
-class StripeGateway extends Gateway
+class StripeGateway extends Gateway implements SupportsRedirect
 {
     private string $success;
     private string $cancelled;
@@ -21,7 +22,7 @@ class StripeGateway extends Gateway
     /**
      * @inheritDoc
      */
-    public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
+    public function getRedirect(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
     {
         $lineItems = [];
         foreach ($items as $item) { $lineItems[] = $item->toStripe(); }
@@ -42,6 +43,11 @@ class StripeGateway extends Gateway
         ]);
 
         return $session->url;
+    }
+
+    public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
+    {
+        return $this->getRedirect($items, $intention, $customer, $success);
     }
 
     public function process(string $reference, float $amount, mixed $created = null): void

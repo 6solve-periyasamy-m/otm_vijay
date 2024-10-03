@@ -9,6 +9,7 @@ use App\Models\Booking\Component\BookingFlight;
 use App\Models\Booking\Component\BookingMerchandise;
 use App\Models\Booking\Component\BookingTransport;
 use App\Models\Customer\Customer;
+use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Location\Address;
 use App\Models\Order\OrderCustomer;
 use App\Models\Voucher\VoucherCode;
@@ -30,6 +31,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
  *
  * @property int $id
  * @property int $booking_id
+ * @property BookingTravellerRole $role
  * @property int|null $customer_id
  * @property int|null $order_customer_id
  * @property string|null $title
@@ -97,7 +99,7 @@ class BookingTraveller extends Model
     use HasFactory;
     use HasDeepRelation;
 
-    protected $casts = ['date_of_birth' => 'date',];
+    protected $casts = ['date_of_birth' => 'date:Y-m-d', 'role' => BookingTravellerRole::class,];
     protected $guarded = [];
     private BookingTravellerRepository $internal_repository;
 

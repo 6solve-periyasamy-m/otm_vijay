@@ -2,7 +2,7 @@
     <x-admin.section.card>
         <x-slot:header>
             Edit Travellers
-            <a href="{{ route('customer-booking.index', ['bookingUrl' => $this->booking->tour->booking_form_url, 'token' => $this->booking->token]) }}" class="btn btn-warning text-dark float-end">
+            <a href="{{ route('customer-booking.index', ['bookingUrl' => $this->booking->tour?->booking_form_url, 'token' => $this->booking->token]) }}" class="btn btn-warning text-dark float-end">
                 Back to Start
             </a>
         </x-slot:header>
@@ -29,7 +29,7 @@
     <x-admin.section.card>
         <x-slot:header>
             Rooming Manager
-            <a href="{{ route('customer-booking.rooming', ['bookingUrl' => $this->booking->tour->booking_form_url, 'token' => $this->booking->token]) }}" class="btn btn-success float-end">
+            <a href="{{ route('customer-booking.rooming', ['bookingUrl' => $this->booking->tour?->booking_form_url, 'token' => $this->booking->token]) }}" class="btn btn-success float-end">
                 Edit Rooming
             </a>
         </x-slot:header>

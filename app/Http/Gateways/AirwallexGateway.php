@@ -3,6 +3,8 @@
 namespace App\Http\Gateways;
 
 use App\Exceptions\UnauthorizedGatewayException;
+use App\Http\Gateways\Interfaces\SupportsApiKeys;
+use App\Http\Gateways\Interfaces\SupportsRedirect;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Order\Payment\PaymentIntention;
@@ -13,15 +15,19 @@ use Http;
 use Illuminate\Http\Request;
 use Log;
 
-class AirwallexGateway extends Gateway
+class AirwallexGateway extends Gateway implements SupportsRedirect, SupportsApiKeys
 {
+    private string $success;
+    private string $cancelled;
     private static string $GATEWAY = 'Airwallex';
     private string $token;
     private int $expiry;
     private string $url;
 
-    public function __construct()
+    public function __construct(?string $success = null, ?string $cancelled = null)
     {
+        $this->success = $success ?? route('payment.gateway.stripe.success');
+        $this->cancelled = $cancelled ?? route('payment.gateway.stripe.cancelled');
         if (config('app.gateways.airwallex.live', false)) {
             $this->url = "https://api.airwallex.com/api/v1/";
         } else {
@@ -39,7 +45,7 @@ class AirwallexGateway extends Gateway
         }
     }
 
-    public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
+    public function getRedirect(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
     {
         $cost = 0;
         $description = "";
@@ -62,6 +68,36 @@ class AirwallexGateway extends Gateway
         return $data['url'];
     }
 
+    public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
+    {
+        return $this->getRedirect($items, $intention, $customer, $success);
+    }
+
+    /**
+     * @throws UnauthorizedGatewayException
+     */
+    public function getApiKeys(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): array
+    {
+        $cost = 0;
+        foreach ($items as $item) {
+            $cost += sigfig($item->cost);
+        }
+        //$intention->amount = $cost;
+        $intention->save();
+        return $this->getPaymentIntention($cost, $intention);
+    }
+
+    public function showCheckout(Request $request)
+    {
+        try {
+            $intent = PaymentIntention::find($request->intent);
+            $aIntent = $this->getPaymentIntention($intent->amount, $intent);
+            return view('pages.customer.payment.airwallex', ['intent' => $aIntent,]);
+        } catch (UnauthorizedGatewayException $e) {
+            return back()->withErrors(['msg' => 'That gateway has not been setup for use.']);
+        }
+    }
+
     /**
      * @throws UnauthorizedGatewayException
      */
@@ -80,10 +116,31 @@ class AirwallexGateway extends Gateway
         }
     }
 
+    /**
+     * Gets the Payment Intention details needed to use the drop-in element for
+     * @throws UnauthorizedGatewayException
+     */
+    public function getPaymentIntention(float $amount, PaymentIntention $intention): array
+    {
+        $data = $this->sendRequest('pa/payment_intents/create', [
+            'amount' => $amount,
+            'currency' => setting('system.currency', config('cashier.currency', 'gbp')),
+            'merchant_order_id' => $intention->reference,
+            'metadata' => [
+                'intention_id' => $intention->id,
+            ],
+            'request_id' => $intention->id,
+            'return_url' => $this->success,
+        ]);
+        return ['id' => $data['id'], 'secret' => $data['client_secret'],];
+    }
+
     public function process(string $reference, float $amount, string $created = null): void
     {
         $intention = PaymentIntention::find($reference);
-        $this->processIntention($intention, $amount * 100, self::$GATEWAY, $created);
+        if ($intention !== null) {
+            $this->processIntention($intention, $amount * 100, self::$GATEWAY, $created);
+        }
     }
 
     public function webhook(Request $request)
@@ -93,7 +150,7 @@ class AirwallexGateway extends Gateway
         } catch(Exception $e) {
             Log::error($e);
         }
-        if ($request->json('name') === 'payment_link.paid') {
+        if ($request->json('name') === 'payment_link.paid' || $request->json('name') === 'payment_intent.succeeded') {
             $this->process($request->json('data.object.metadata.intention_id'), $request->json('data.object.amount'), $request->json('data.object.created_at'));
         }
     }

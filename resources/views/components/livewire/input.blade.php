@@ -8,7 +8,7 @@
     @if($attributes->get('label') !== null)
     <label>
         {{ $attributes->get('label', "") ?? $slot }} @if($attributes->has('required')) <x-admin.required /> @endif
-        @error($attributes->get('wire:model')) <span class="text-danger">({{ $message }})</span> @enderror
+        @error($attributes->get('wire:model', $attributes->get('name'))) <span class="text-danger">({{ $message }})</span> @enderror
     </label>
     @endif
     <div class="input-group">

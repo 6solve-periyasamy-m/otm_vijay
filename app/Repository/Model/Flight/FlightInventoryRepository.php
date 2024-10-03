@@ -190,6 +190,7 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
         return new ItineraryItem(
             $this->inventory->component->airline->name,
             'Flight',
+            $this->inventory->departs_at->unix(),
             $details,
         );
     }

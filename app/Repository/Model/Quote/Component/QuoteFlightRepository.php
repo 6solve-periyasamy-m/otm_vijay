@@ -40,7 +40,7 @@ class QuoteFlightRepository extends QuoteComponentRepository
 
     public function getInventory(): ?FlightInventoryRepository
     {
-        return $this->quoteComponent->inventory->repository;
+        return $this->quoteComponent->inventory?->repository;
     }
 
     public function get(): QuoteFlight

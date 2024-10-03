@@ -7,6 +7,7 @@ use App\Models\Booking\Component\BookingActivity;
 use App\Models\Booking\Component\BookingFlight;
 use App\Models\Booking\Component\BookingMerchandise;
 use App\Models\Booking\Component\BookingTransport;
+use App\Models\Helper\Model;
 use App\Models\System\FellohLink;
 use App\Models\Tour\Tour;
 use App\Models\Voucher\VoucherCode;
@@ -14,7 +15,6 @@ use App\Repository\Model\Booking\BookingRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -31,6 +31,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelations;
  * @property int|null $lead_traveller_id
  * @property int|null $order_id
  * @property string|null $token
+ * @property string|null $notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at
@@ -131,7 +132,7 @@ class Booking extends Model
 
     public function getTotalCostAttribute(): float
     {
-        return $this->tour->base_price_per_person * $this->traveller_count;
+        return $this->tour?->base_price_per_person * $this->traveller_count;
     }
 
     public function getTravellerCountAttribute(): int
@@ -151,7 +152,7 @@ class Booking extends Model
 
     public function getDepositAttribute(): float
     {
-        return $this->tour->deposit_amount;
+        return $this->tour?->deposit_amount;
     }
 
     public function getDueTodayAttribute(): float

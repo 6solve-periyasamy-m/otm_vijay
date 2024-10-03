@@ -335,7 +335,7 @@ class ReportRepository
             $row->contact_email = $cDetailsSource?->email_address ?? "Unknown";
             $row->contact_number = $cDetailsSource?->mobile_number ?? "Unknown";
             if (isset($booking->tour?->booking_form_url)) {
-                $row->continue = route('customer-booking.summary', ['bookingUrl' => $booking->tour->booking_form_url, 'token' => $booking->token,]);
+                $row->continue = $booking->tour?->getBookingFormUrl($booking, true);
             } else {
                 $row->continue = "Booking URL not found for tour: " . ($booking->tour_id ?? "ID not set");
             }

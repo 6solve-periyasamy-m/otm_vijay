@@ -254,6 +254,7 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         return new ItineraryItem(
             $this->inventory->component->name,
             'Hotel',
+            $this->inventory->check_in->unix(),
             $details,
         );
     }

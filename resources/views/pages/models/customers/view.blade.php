@@ -130,6 +130,7 @@
             </tr>
             </thead>
             @foreach($customer->quoteProspects as $prospect)
+                @continue($prospect->quote === null)
                 <tr>
                     <th scope="row"><a href="{{ route('quotes.view', ['quote' => $prospect->quote,]) }}">{{ $prospect->quote->ref }}</a></th>
                     <td>{{ $prospect->quote->name }}</td>

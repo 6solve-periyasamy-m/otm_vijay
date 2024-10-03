@@ -48,6 +48,8 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, InvoiceInstallment> $installments
  * @property-read int|null $installments_count
  * @property-read InvoiceCustomer|null $lead The lead booker
+ * @property-read int $paying_travellers
+ * @property-read int $travelling_travellers
  * @property-read Order $order
  * @property-read Collection<int, InvoicePayment> $payments
  * @property-read int|null $payments_count
@@ -97,7 +99,7 @@ class Invoice extends Model
     {
         return $this->hasMany(InvoiceCustomer::class, 'invoice_id');
     }
-
+    
     public function lead(): HasOne
     {
         return $this->hasOne(InvoiceCustomer::class, 'invoice_id')->where('lead', '=', true);
@@ -127,5 +129,23 @@ class Invoice extends Model
     {
         $this->internal_repository = $this->internal_repository ?? new InvoiceRepository($this);
         return $this->internal_repository;
+    }
+    
+    public function getPayingTravellersAtribute(): int
+    {
+        $count = 0;
+        foreach ($this->customers as $customer) {
+            $count += $customer->paying;
+        }
+        return $count;
+    }
+    
+    public function getTravellingTravellersAtribute(): int
+    {
+        $count = 0;
+        foreach ($this->customers as $customer) {
+            $count += $customer->travelling;
+        }
+        return $count;
     }
 }

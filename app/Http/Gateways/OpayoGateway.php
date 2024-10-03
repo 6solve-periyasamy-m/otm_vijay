@@ -3,6 +3,7 @@
 namespace App\Http\Gateways;
 
 use App\Exceptions\UnauthorizedGatewayException;
+use App\Http\Gateways\Interfaces\SupportsRedirect;
 use App\Http\Requests\Gateway\Opayo\WebhookRequest;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
@@ -10,7 +11,7 @@ use App\Models\Order\Payment\PaymentIntention;
 use Http;
 use Log;
 
-class OpayoGateway extends Gateway
+class OpayoGateway extends Gateway implements SupportsRedirect
 {
     private string $success;
     private string $url;
@@ -21,7 +22,7 @@ class OpayoGateway extends Gateway
         $this->url = config('app.gateways.opayo.live', false) ? 'https://live.opayo.eu.elavon.com/gateway/service/vspserver-register.vsp' : 'https://sandbox.opayo.eu.elavon.com/gateway/service/vspserver-register.vsp';
     }
 
-    public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
+    public function getRedirect(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
     {
         $amount = 0;
         $description = "";
@@ -64,6 +65,11 @@ class OpayoGateway extends Gateway
             Log::error("Failed to communicate with Opayo. Response:\n{$response->body()}");
             throw new UnauthorizedGatewayException('Failed to communicate with Opayo gateway');
         }
+    }
+
+    public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
+    {
+        return $this->getRedirect($items, $intention, $customer, $success);
     }
 
     public function webhook(WebhookRequest $request)

@@ -34,7 +34,9 @@ use Settings;
  * @property-read Address $active_address
  * @property-read BrandRepository $repository
  * @property-read string $image
+ * @property-read string $alt_image
  * @property-read string $image_path The raw path to the image on the system
+ * @property-read string $alt_image_path The raw path to the alt image on the system
  * @method static Builder|Brand newModelQuery()
  * @method static Builder|Brand newQuery()
  * @method static Builder|Brand query()
@@ -82,9 +84,19 @@ class Brand extends Model
         return asset($this->image_path);
     }
 
+    public function getAltImageAttribute(): string
+    {
+        return asset($this->alt_image_path);
+    }
+
     public function getImagePathAttribute(): string
     {
         return $this->logo ?? setting('company.logo', '');
+    }
+
+    public function getAltImagePathAttribute(): string
+    {
+        return $this->alt_logo ?? $this->logo ?? setting('company.logo.alternative') ?? $this->image_path;
     }
 
     public static function getSystemAddress(): Address
@@ -107,6 +119,7 @@ class Brand extends Model
             'email' => setting('company.contact.email', ''),
             'phone' => setting('company.contact.phone', ''),
             'logo' => setting('company.logo'),
+            'alt_logo' => setting('company.logo.alternative'),
             'url' => setting('company.url', ''),
             'created_at' => setting('company.created_at', ''),
             'facebook' => setting('social.facebook', ''),

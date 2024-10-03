@@ -6,7 +6,9 @@ use App\Exceptions\NotOnTourException;
 use App\Exceptions\RemoteGatewayError;
 use App\Exceptions\RoomingFailedException;
 use App\Exceptions\UnauthorizedGatewayException;
+use App\Http\Gateways\AirwallexGateway;
 use App\Http\Gateways\Storage\LineItem;
+use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\RoomType;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Booking\Booking;
@@ -14,9 +16,13 @@ use App\Models\Booking\BookingGroup;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Group;
 use App\Models\Flight\FlightInventoryTour;
+use App\Models\Helper\Enum\AddressParent;
+use App\Models\Helper\Enum\BookingTravellerRole;
+use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\System\FellohLink;
+use App\Models\System\TaxBracket;
 use App\Models\Tour\Tour;
 use App\Models\Voucher\Executors\FlatCostReductionExecutor;
 use App\Models\Voucher\Executors\PercentageCostReductionExecutor;
@@ -29,6 +35,9 @@ use App\Repository\Storage\Rooming\RemoteBookingGroup;
 use Carbon\Carbon;
 use DB;
 use Gateway;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 use Log;
 use Throwable;
 
@@ -48,6 +57,17 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             $booking = Booking::where('token', $token)->first();
         } while (isset($booking));
         return Booking::make(['token' => $token, 'tour_id' => $tour->id]);
+    }
+
+    public function makeTraveller(array $details): BookingTraveller
+    {
+        $homeAddress = Address::create(['name' => 'Booking Traveller - Home Address', 'parent' => AddressParent::CUSTOMER,]);
+        $billingAddress = Address::create(['name' => 'Booking Traveller - Billing Address', 'parent' => AddressParent::CUSTOMER,]);
+        return $this->booking->travellers()->make([
+            'home_address_id' => $homeAddress->id,
+            'billing_address_id' => $billingAddress->id,
+            ...$details,
+        ]);
     }
 
     public function upgradeActivityForAll(ActivityInventoryTour $from, ActivityInventoryTour $to): bool
@@ -98,10 +118,10 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
 
     public function addIncludedToAll(): void
     {
-        $components = $this->booking->tour->repository->getComponents(false, true, false, true, false, ['Included',]);
+        $components = $this->booking->tour?->repository->getComponents(false, true, false, true, false, ['Included',]);
         foreach ($this->booking->travellers as $traveller) {
             $traveller->repository->addComponents($components);
-            foreach ($this->booking->tour->flightInventoryTours()->where('flight_type', '=', 'Mid-Package')->where('tour_component_type', '=', 'Included')->get() as $flight) {
+            foreach ($this->booking->tour?->flightInventoryTours()->where('flight_type', '=', 'Mid-Package')->where('tour_component_type', '=', 'Included')->get() as $flight) {
                 $traveller->repository->addComponent($flight->repository);
             }
         }
@@ -109,7 +129,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
 
     public function getTotalCost(): float
     {
-        $cost = $this->booking->tour->booking_fee ?? 0;
+        $cost = $this->booking->tour?->booking_fee ?? 0;
         foreach ($this->booking->travellers as $traveller) {
             $cost += $traveller->total_cost;
         }
@@ -121,7 +141,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
                     $cost += $executor->getAmount();
                 }
                 if ($executor instanceof PercentageCostReductionExecutor) {
-                    $cost -= $executor->getAmount($this->booking->tour->base_price_per_person);
+                    $cost -= $executor->getAmount($this->booking->tour?->base_price_per_person);
                 }
             }
         }
@@ -131,12 +151,17 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     public function getDueTodayAmount(): float
     {
         $travellers = $this->booking->travellers()->count();
-        $upfront = ($this->booking->tour->booking_fee ?? 0) + (($this->booking->tour->deposit ?? 0) * $travellers);
+        $upfront = ($this->booking->tour?->booking_fee ?? 0.0);
+        if (flag('booking.deposit.full')) {
+            $upfront += ((($this->booking->tour?->deposit_percentage ?? 0.0)/100) * ($this->getTotalCost()));
+        } else {
+            $upfront += (($this->booking->tour?->deposit_amount ?? 0.0) * $travellers);
+        }
         if (flag('installments.force', false)) {
-            if ($this->booking->tour->final_payment->isBefore(now())) {
+            if ($this->booking->tour?->final_payment->isBefore(now())) {
                 return $this->getTotalCost();
             }
-            foreach ($this->booking->tour->paymentInstallments as $installment) {
+            foreach ($this->booking->tour?->paymentInstallments as $installment) {
                 if ($installment->due_on->isBefore(now())) {
                     $upfront += $installment->amount * $travellers;
                 }
@@ -189,7 +214,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         $outboundSelected = false;
         $inboundIncluded = false;
         $inboundSelected = false;
-        foreach ($this->booking->tour->flightInventoryTours as $flight) {
+        foreach ($this->booking->tour?->flightInventoryTours as $flight) {
             if (!$flight->repository->hasEnoughStock($this->booking->travellers()->count())) continue;
             if (!$flight->is_bookable) continue;
             if ($flight->flight_type == 'Outbound') {
@@ -223,7 +248,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
 
     public function __toString(): string
     {
-        return "{{$this->booking->token}} - {$this->booking->tour->name}";
+        return "{{$this->booking->token}} - {$this->booking->tour?->name}";
     }
 
     public function convertToOrder(?Carbon $orderedOn = null): Order
@@ -236,6 +261,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             'invoice_footer' => $tour->invoice_footer,
             'ordered_on' => $orderedOn ?? now(),
             'booking_fee' => $tour->booking_fee,
+            'external_notes' => $this->booking->notes,
         ]);
         $order->saveQuietly();
         foreach ($this->booking->travellers as $traveller) {
@@ -315,7 +341,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     public function getRoomingData(): array
     {
         $rooms = [];
-        foreach ($this->booking->tour->accommodationInventoryTours()->with('inventory', 'inventory.component')->get() as $inventoryTour) {
+        foreach ($this->booking->tour?->accommodationInventoryTours()->with('inventory', 'inventory.component')->get() as $inventoryTour) {
             $rooms[$inventoryTour->id] = [
                 'name' => $inventoryTour->repository->formatAdminOccupancy(),
                 'size' => $inventoryTour->inventory->roomType->maximum_occupancy,
@@ -367,7 +393,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     {
         $base = 0;
         foreach ($this->booking->travellers as $traveller) {
-            $base += $this->booking->tour->remaining_installment;
+            $base += $this->booking->tour?->remaining_installment;
             $base += $traveller->surcharge_amount;
             $base += $traveller->additional_cost;
             foreach ($traveller->vouchers()->get() as $voucher) {
@@ -467,7 +493,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
 
     public function hasRooming(): bool
     {
-        return $this->booking->tour->templates->count() > 0;
+        return $this->booking->tour?->templates->count() > 0;
     }
 
     public function validateVouchers(): void
@@ -483,8 +509,8 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             'customer_name' => $this->booking->leadTraveller->full_name,
             'email' => $this->booking->leadTraveller->email_address,
             'booking_reference' => $this->getReference(),
-            'departure_date' => $this->booking->tour->date_from->format('Y-m-d'),
-            'return_date' => $this->booking->tour->date_to->format('Y-m-d'),
+            'departure_date' => $this->booking->tour?->date_from->format('Y-m-d'),
+            'return_date' => $this->booking->tour?->date_to->format('Y-m-d'),
             'gross_amount' => (int)($this->getTotalCost()*100),
         ];
     }
@@ -532,5 +558,152 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     public static function find($id): Booking|null
     {
         return Booking::find($id);
+    }
+
+    public function getUpgradeCosts(): float
+    {
+        $cost = 0;
+        foreach ($this->booking->travellers as $traveller) {
+            foreach ($traveller->repository->getComponents(true, ['Upgrade', 'Add-on']) as $component) {
+                $cost += $component->getCost();
+            }
+        }
+        return $cost;
+    }
+
+    private function getTaxBracket(): TaxBracket|null
+    {
+        return $this->booking->tour?->taxBracket();
+    }
+
+    public function getTaxes(): float|null
+    {
+        return $this->getTaxBracket()?->calculate($this->getTotalCost());
+    }
+
+    public function getBasePrice(): float
+    {
+        return $this->booking->tour?->base_price_per_person * $this->booking->travellers()->count();
+    }
+
+    public function addUnknownTraveller(): BookingTraveller
+    {
+        $traveller = $this->makeTraveller([
+            'first_name' => 'Unknown',
+            'last_name' => 'Traveller',
+            'role' => BookingTravellerRole::UNKNOWN,
+        ]);
+        $traveller->save();
+        // Primary traveller may not be lead booker
+        $primary = $this->booking->travellers()->where('role', '=', BookingTravellerRole::NORMAL)->first();
+        foreach (($primary?->repository->getComponents(false) ?? []) as $component) {
+            $component->getTourComponent()->grantToBookingTraveller($traveller);
+        }
+        return $traveller;
+    }
+
+    public function removeUnknownTraveller(): void
+    {
+        $traveller = $this->booking->travellers()->where('role', '=', BookingTravellerRole::UNKNOWN)->first();
+        $traveller?->repository->delete();
+    }
+
+    /**
+     * @param array<array{room: int, travellers: int}> $rooming
+     * @return void
+     */
+    public function setupSimpleRooming(array $rooming): void
+    {
+        $this->wipeGroups();
+        $key = -1;
+        $group = null;
+        foreach ($this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->get() as $traveller) {
+            if ($group === null || $rooming[$key]['travellers'] === 0) {
+                $key++;
+                if ($key >= count($rooming)) { break; }
+                $room = AccommodationInventoryTour::find($rooming[$key]['room']);
+                if ($room instanceof AccommodationInventoryTour) {
+                    $group = new BookingGroup(['booking_id' => $this->booking->id,]);
+                    $group->save();
+                    $group->repository->addRoomToGroup(AccommodationInventoryTour::find($rooming[$key]['room']));
+                }
+            }
+            if ($key >= count($rooming)) { break; }
+            $group->repository->addTravellerToGroup($traveller);
+            --$rooming[$key]['travellers'];
+        }
+    }
+
+    /**
+     * @throws RemoteGatewayError
+     * @throws UnauthorizedGatewayException
+     */
+    public function getCheckoutLink(float $amount): string|null
+    {
+        $gateway = Gateway::getDefaultGateway();
+        $item = new LineItem("Deposit for Booking from {$this->booking->leadTraveller->full_name}", $amount);
+        $intention = PaymentIntention::build($this->booking->leadTraveller->customer, $this->booking->token, 'Deposit');
+
+        $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
+
+        return $gateway?->checkout([$item,], $intention, $this->booking->leadTraveller, $redirect);
+    }
+
+    /**
+     * @throws UnauthorizedGatewayException
+     */
+    public function getAirwallexKeys(float $amount): array|null
+    {
+        $gateway = Gateway::getPaymentGateway('airwallex');
+        if (!($gateway instanceof AirwallexGateway)) {
+            return null;
+        }
+        $item = new LineItem("Deposit for Booking from {$this->booking->leadTraveller->full_name}", $amount);
+        $intention = PaymentIntention::build($this->booking->leadTraveller->customer, $this->booking->token, 'Deposit');
+
+        $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
+
+        return $gateway?->getApiKeys([$item,], $intention, $this->booking->leadTraveller, $redirect);
+    }
+
+    public function getSimpleData(): array
+    {
+        $travellers = [];
+        foreach ($this->booking->travellers as $traveller) {
+            $travellers[] = $traveller->repository->getData();
+        }
+
+        return [
+            'token' => $this->booking->token,
+            'url' => $this->booking->tour?->booking_form_url,
+            'tour' => $this->booking->tour?->repository->getDataForBooking(),
+            'lead' => [
+                'first_name' => $this->booking->leadTraveller->first_name,
+                'last_name' => $this->booking->leadTraveller->last_name,
+                'email' => $this->booking->leadTraveller->email_address,
+                'telephone' => $this->booking->leadTraveller->mobile_number,
+            ],
+            'finances' => [
+                'currency' => setting('system.currency'),
+                'package' => $this->getBasePrice(),
+                'upgrade' => $this->getUpgradeCosts(),
+                'surcharge' => $this->getSingleOccupancyAmount(),
+                'tax' => [
+                    'name' => $this->getTaxBracket()?->name ?? 'No Taxes',
+                    'percentage' => $this->getTaxBracket()?->rate,
+                    'amount' => $this->getTaxes(),
+                ],
+                'total' => $this->getTotalCost(),
+                'due' => [
+                    'deposit' => [
+                        'percentage' => $this->booking->tour?->deposit_percentage,
+                        'amount' => ($this->booking->tour?->deposit_amount ?? 0.0) *
+                            ($this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count()),
+                    ],
+                    'amount' => $this->getDueTodayAmount(),
+                ]
+            ],
+            'travellers' => $travellers,
+        ];
     }
 }

@@ -30,7 +30,7 @@
     </style>
 </head>
 <body>
-<div class="background center-screen @if($quote->status == QuoteStatus::CLOSED || $quote->status == QuoteStatus::EXPIRED) cancelled @endif">
+<div class="background center-screen @if($quote->status == QuoteStatus::CLOSED || $quote->status == QuoteStatus::EXPIRED) cancelled @endif test-class-pdf">
     <!-- Header Section -->
     <div class="section">
         <div class="header">

@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Customer\CustomerBookingController;
+use App\Http\Controllers\Customer\SimpleBookingController;
 use App\Http\Controllers\StripeController;
+use App\Http\Gateways\AirwallexGateway;
 use App\Http\Gateways\FellohGateway;
 use App\Http\Gateways\OpayoGateway;
 use Illuminate\Support\Facades\Route;
@@ -37,8 +39,17 @@ Route::prefix('payment')->name('payment.')->group(function () {
         Route::prefix('opayo')->name('opayo.')->group(function () {
             Route::get('failed', [OpayoGateway::class, 'failed'])->name('failed');
         });
+        Route::prefix('airwallex')->name('airwallex.')->group(function () {
+            Route::get('checkout', [AirwallexGateway::class, 'showCheckout'])->name('checkout');
+        });
     });
 });
+
+Route::prefix('/booking/simple/{tour}')->group(function () {
+    Route::get('/checkout/{token}', [SimpleBookingController::class, 'checkout'])->name('booking.simple.checkout');
+    Route::get('/{token?}', [SimpleBookingController::class, 'index'])->name('booking.simple.index');
+});
+
 
 Route::prefix('/booking/{bookingUrl}')->group(function () {
     Route::get('/{token?}', [CustomerBookingController::class, 'index'])->name('customer-booking.index');

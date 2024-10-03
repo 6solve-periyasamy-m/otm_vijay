@@ -190,6 +190,7 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
         return new ItineraryItem(
             $this->inventory->component->name,
             'Journey',
+            $this->inventory->departs_at->unix(),
             $details,
         );
     }

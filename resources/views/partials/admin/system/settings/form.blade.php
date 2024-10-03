@@ -143,6 +143,7 @@
                 @include('partials.fields.checkbox', ['name' => 'BCC Emails to Sender', 'field' => 'bcc_sender', 'value' => flag('mail.bcc-sender', false),])
                 @include('partials.fields.checkbox', ['name' => 'BCC Emails to Consultant', 'field' => 'bcc_consultant', 'value' => flag('mail.bcc-consultant', false),])
                 @include('partials.fields.checkbox', ['name' => 'Maintain quote reference on conversion where possible', 'field' => 'quote_reference', 'value' => flag('quote.convert.reference', false),])
+                @include('partials.fields.checkbox', ['name' => 'Should Booking Deposit Percentage Include Additional Costs', 'field' => 'deposit_full', 'value' => flag('booking.deposit.full', false),])
             </div>
     </x-admin.section.card>
     </div>
@@ -155,6 +156,10 @@
                 @include('partials.fields.file', ['name' => 'Company Logo', 'field' => 'company_logo', 'width' => 6])
                 <div class="col-12 col-xl-6">
                     <img class="image medium" src="{{ asset(setting('company.logo')) }}"/>
+                </div>
+                @include('partials.fields.file', ['name' => 'Alternative Company Logo', 'field' => 'alt_company_logo', 'width' => 6])
+                <div class="col-12 col-xl-6">
+                    <img class="image medium" src="{{ asset(setting('company.logo.alternative', setting('company.logo'))) }}"/>
                 </div>
                 @include('partials.fields.file', ['name' => 'ATOL Stamp', 'field' => 'atol_stamp', 'width' => 6])
                 <div class="col-12 col-xl-6">

@@ -53,7 +53,7 @@ return [
                         'merchandise' => 'Merchandise',
                         'per-customer' => 'Per Customer',
                         'overall' => 'Whole Order',
-                        'total' => 'Total Per Person',
+                        'total' => 'Total Cost',
                         'approximate' => 'Amount is based on the purchase price of template accommodation and may differ',
                     ],
                     'lead' => [
