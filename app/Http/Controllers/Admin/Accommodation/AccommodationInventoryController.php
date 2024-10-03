@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin\Accommodation;
 
+use App\Exceptions\CannotDeleteException;
 use App\Exports\Identifier\AccommodationInventoryExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Accommodation\AccommodationInventoryRequest;
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Repository\Reporting\Manifest\RoomingReportRepository;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class AccommodationInventoryController extends Controller
@@ -49,12 +51,13 @@ class AccommodationInventoryController extends Controller
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 
-    public function destroy(Accommodation $accommodation, AccommodationInventory $inventory)
+    public function destroy(Accommodation $accommodation, AccommodationInventory $inventory): RedirectResponse
     {
-        if ($inventory->tourComponents()->count() > 0) {
-            return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Accommodation Inventory']));
+        try {
+            $inventory->repository->delete();
+        } catch (CannotDeleteException $e) {
+            return back()->withErrors($e->getMessage());
         }
-        $inventory->delete();
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 
