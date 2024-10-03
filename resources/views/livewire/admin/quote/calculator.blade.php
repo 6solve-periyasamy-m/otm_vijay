@@ -147,7 +147,7 @@
                     <div class="col-6">
                         <x-admin.section.otm-text class="profit-updater">
                             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.profit') }} <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span></x-slot:header>
-                            {{ f_currency($profit) }} ({{ sigfig($margin) }}%)
+                            {{ f_currency($profit) }}
                         </x-admin.section.otm-text>
                     </div>
                     @if($taxes !== null)
