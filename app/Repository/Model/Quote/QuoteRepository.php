@@ -27,6 +27,7 @@ use App\Models\Quote\QuoteSection;
 use App\Models\Quote\SentQuote;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
+use App\Models\User;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
@@ -1126,7 +1127,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $event?->image_url,
             $this->quote->reference,
             $this->quote->organization,
-            $this->quote->consultant ?? Auth::user(),
+            (is_array($this->quote->consultant) ? new User($this->quote->consultant) : $this->quote->consultant) ?? Auth::user(),
             $this->quote->date_from,
             $this->quote->date_to,
             $this->quote->created_at ?? now(), // TODO: Actually implement Quote Created At as a settable field

@@ -2,6 +2,7 @@
 
 namespace App\Repository\Model\Accommodation;
 
+use App\Exceptions\CannotDeleteException;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Quote\Component\QuoteAccommodation;
@@ -131,8 +132,24 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         return $this->inventory->save();
     }
 
+    /**
+     * @throws CannotDeleteException
+     */
     public function delete(): bool
     {
+        if ($this->inventory->tourComponents()->count() > 0) {
+            throw new CannotDeleteException(trans('custom.used-in-tour', ['model' => 'Accommodation Inventory']));
+        }
+        $children = $this->inventory->stockChildren()->count();
+        if ($children > 0) {
+            throw new CannotDeleteException("This inventory has {$children} stock children, and cannot be deleted");
+        }
+        if ($unlinkChildren ?? false) {
+            foreach ($this->inventory->stockChildren as $child) {
+                $child->stock_parent_id = null;
+                $child->save();
+            }
+        }
         return $this->inventory->delete();
     }
 

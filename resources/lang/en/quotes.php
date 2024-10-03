@@ -66,7 +66,7 @@ return [
                     'description' => 'Calculate cost for X travellers',
                     'purchase' => 'Purchase Price of Components (Approximate)',
                     'ctc' => 'Cost to Company',
-                    'profit' => 'Current Profit (Margin)',
+                    'profit' => 'Current Profit',
                     'cost' => 'Total Cost',
                     'commission' => 'Commission',
                     'taxes' => 'Taxes',
