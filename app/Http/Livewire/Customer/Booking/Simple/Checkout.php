@@ -89,6 +89,9 @@ class Checkout extends Component
     {
         $this->validate();
         $this->saveAll();
+        foreach ($this->booking->travellers as $traveller) {
+            $traveller->repository->validateIncluded();
+        }
     }
 
     public function checkout()

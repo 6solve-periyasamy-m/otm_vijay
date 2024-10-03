@@ -545,4 +545,43 @@ class BookingTravellerRepository extends ModelRepository
             'is_lead' => $this->traveller->id === $this->traveller->booking->lead_traveller_id,
         ];
     }
+
+    /**
+     * Validate that a booking traveller
+     * @return void
+     */
+    public function validateIncluded(): void
+    {
+        if ($this->traveller->role === BookingTravellerRole::NOT_TRAVELLING) {
+            return;
+        }
+        foreach ($this->traveller->booking->tour->activityInventoryTours as $component) {
+            if ($component->tour_component_type !== 'Included') { continue; }
+            $found = $this->traveller->activities()->where('activity_inventory_tour_id', '=', $component->id)->first();
+            if ($found === null) {
+                $component->repository->grantToBookingTraveller($this->traveller);
+            }
+        }
+        foreach ($this->traveller->booking->tour->flightInventoryTours as $component) {
+            if ($component->tour_component_type !== 'Included') { continue; }
+            $found = $this->traveller->flights()->where('flight_inventory_tour_id', '=', $component->id)->first();
+            if ($found === null) {
+                $component->repository->grantToBookingTraveller($this->traveller);
+            }
+        }
+        foreach ($this->traveller->booking->tour->transportInventoryTours as $component) {
+            if ($component->tour_component_type !== 'Included') { continue; }
+            $found = $this->traveller->transport()->where('transport_inventory_tour_id', '=', $component->id)->first();
+            if ($found === null) {
+                $component->repository->grantToBookingTraveller($this->traveller);
+            }
+        }
+        foreach ($this->traveller->booking->tour->merchandise as $component) {
+            if ($component->tour_component_type !== 'Included') { continue; }
+            $found = $this->traveller->merchandise()->where('merchandise_inventory_tour_id', '=', $component->id)->first();
+            if ($found === null) {
+                $component->repository->grantToBookingTraveller($this->traveller);
+            }
+        }
+    }
 }
