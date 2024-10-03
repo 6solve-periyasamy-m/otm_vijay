@@ -57,7 +57,7 @@ class Table extends LivewireDatatable
                 ->sortable()
                 ->searchable()
                 ->filterable(),
-            ActionColumn::modal('customer', 'customers.edit', 'customers.view'),
+            ActionColumn::view('customer', 'customers.edit', 'customers.view'),
         ];
     }
 
