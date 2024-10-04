@@ -282,9 +282,9 @@ jQuery(document).ready(function () {
         jQuery(this).closest('.inn').find('.accommodation-details-hover').css('display', 'block');
     });
 
-    jQuery(document).on('mouseleave', '.third-block .accommodation-details-hover', function () {
-        jQuery(this).closest('.inn').find('.information-hover').removeClass('hovor');
-        jQuery(this).closest('.inn').find('.accommodation-details-hover').css('display', 'none');
+    jQuery(document).on('mouseleave', '.third-block .inn', function () {
+        jQuery(this).find('.information-hover').removeClass('hovor');
+        jQuery(this).find('.accommodation-details-hover').css('display', 'none');
     });
 
     /* Popup Close */
