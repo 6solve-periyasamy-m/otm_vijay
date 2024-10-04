@@ -3,6 +3,7 @@
  * @var \App\Models\Booking\Booking $booking
  * @var \App\Models\Tour\Tour $tour
  */
+ var_dump($tour);
 @endphp
 <div class="top-sec">
     <div class="head-txt"><h4>Package details</h4></div>
@@ -92,17 +93,17 @@
                                 <h5>{{ $tour->name }}</h5>
                                 <!--<p class="location">Sydney, Australia</p>-->
                                 <p class="date">{{ $tour->date_from?->format('M d, Y') }} - {{ $tour->date_to?->format('M d, Y') }}</p>
-                                @foreach($tour->repository->getInclusions() as $inclusion)
-                                    <p class="inclusion">{{ $inclusion }}</p>
-                                @endforeach
                                 <h6>Description</h6>
-                                <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>                               
+                                <p>{{ $tour->description }}</p>                               
                                 <h6>Inclusions</h6>
-                                <p class="inclusion">Mens and womens final ticket</p>                                                         
+                                <!-- <p class="inclusion">Mens and womens final ticket</p>                                                         
                                 <p class="inclusion">3 nights, 5 star accommodation</p>
                                 <p class="inclusion">Exclusive tennis legend event</p>
                                 <p class="inclusion">Lorem Ipsum is simply dummy </p>
-                                <p class="inclusion">Lorem Ipsum is simply dummy text </p>
+                                <p class="inclusion">Lorem Ipsum is simply dummy text </p> -->
+                                @foreach($tour->repository->getInclusions() as $inclusion)
+                                    <p class="inclusion">{{ $inclusion }}</p>
+                                @endforeach
                             </div>
                         </div>
                     </div>
