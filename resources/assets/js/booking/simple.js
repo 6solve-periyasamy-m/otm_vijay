@@ -336,8 +336,10 @@ jQuery(document).ready(function () {
         jQuery('.lead-purchase-traveller-block input[type="checkbox"]').prop('checked', false);
         jQuery(this).prop('checked', true);
         if (jQuery(this).val() == 'Yes') {
+            jQuery('.purchase-info-block').hide();
             jQuery('.lead-passenger').hide();
         } else {
+            jQuery('.purchase-info-block').show();
             jQuery('.lead-passenger').show();
         }
     });
@@ -345,7 +347,9 @@ jQuery(document).ready(function () {
     var checkedValue = jQuery('.lead-purchase-traveller-block input[type="checkbox"]:checked').val();
     if (checkedValue == 'Yes') {
         jQuery('.lead-passenger').hide();
+        jQuery('.purchase-info-block').hide();
     } else {
+        jQuery('.purchase-info-block').show();
         jQuery('.lead-passenger').show();
     }
 
