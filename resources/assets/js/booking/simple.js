@@ -342,7 +342,12 @@ jQuery(document).ready(function () {
         }
     });
     
-    
+    var checkedValue = jQuery('.lead-purchase-traveller-block input[type="checkbox"]:checked').val();
+    if (checkedValue == 'Yes') {
+        jQuery('.lead-passenger').hide();
+    } else {
+        jQuery('.lead-passenger').show();
+    }
 
 });
 
@@ -361,14 +366,12 @@ document.addEventListener('livewire:load', function () {
             }
         }
     });
-    setTimeout(function(){
-        var checkedValue = jQuery('.lead-purchase-traveller-block input[type="checkbox"]:checked').val();
-        if (checkedValue == 'Yes') {
-            jQuery('.lead-passenger').hide();
-        } else {
-            jQuery('.lead-passenger').show();
-        }
-    },2000)
+    var checkedValue = jQuery('.lead-purchase-traveller-block input[type="checkbox"]:checked').val();
+    if (checkedValue == 'Yes') {
+        jQuery('.lead-passenger').hide();
+    } else {
+        jQuery('.lead-passenger').show();
+    }
 });
 
 

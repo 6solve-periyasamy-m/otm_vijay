@@ -112,22 +112,22 @@
                   <h3>lead passenger details</h3>
                 </div>
 
-                <div style="display:none;" class="top-form-contain lead-passenger">
+                <div class="top-form-contain lead-passenger">
                     <div class="form-field">
-                        <input type="text" wire:model="payer.first_name" placeholder="First Name*" required>
+                        <input type="text" wire:model="payer.first_name_lead" placeholder="First Name*" required>
                     </div>
                     <div class="form-field">
-                        <input type="text" wire:model="payer.last_name" placeholder="Last Name*">
+                        <input type="text" wire:model="payer.last_name_lead" placeholder="Last Name*">
                     </div>
                     <div class="form-field">
-                        <input type="email" wire:model="payer.email_address" placeholder="Email*" required>
+                        <input type="email" wire:model="payer.email_address_lead" placeholder="Email*" required>
                     </div>
                     <div class="form-field mobile_field">
                         <div wire:ignore>
-                            <input type="tel" id="mobile_number_1" name="mobile_number" placeholder="Mobile number*" required>
+                            <input type="tel" id="mobile_number_lead" name="mobile_number_lead" placeholder="Mobile number*" required>
                             <script type="text/javascript">
                                 jQuery(document).ready(function () {
-                                    let input = document.querySelector('#mobile_number_1');
+                                    let input = document.querySelector('#mobile_number_lead');
                                     let iti = window.setupPhoneField(input);
                                 });
                             </script>
