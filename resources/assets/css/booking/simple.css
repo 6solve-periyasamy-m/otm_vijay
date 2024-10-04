@@ -2452,6 +2452,7 @@ input::-webkit-inner-spin-button {
         background: #ffffff;
         padding: 16px 8px;
         z-index:999;
+        width: 100%;
     }
     .mob-trip-summary-block .block-container  {
         border: 2px solid #F35B15;
