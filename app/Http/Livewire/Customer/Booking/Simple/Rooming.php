@@ -166,13 +166,21 @@ class Rooming extends Component
         return view('livewire.customer.booking.simple.rooming');
     }
 
+    // public function rules()
+    // {
+    //     return [
+    //         'lead.first_name' => 'required|string',
+    //         'lead.last_name' => 'required|string',
+    //         'lead.email_address' => 'required|email:rfc,dns',
+    //         'lead.mobile_number' => 'required|phone:INTERNATIONAL',
+    //         'rooms.*.room' => 'required|integer',
+    //         'rooms.*.travellers' => 'required|integer|min:1',
+    //     ];
+    // }
     public function rules()
     {
         return [
-            'lead.first_name' => 'required|string',
-            'lead.last_name' => 'required|string',
             'lead.email_address' => 'required|email:rfc,dns',
-            'lead.mobile_number' => 'required|phone:INTERNATIONAL',
             'rooms.*.room' => 'required|integer',
             'rooms.*.travellers' => 'required|integer|min:1',
         ];

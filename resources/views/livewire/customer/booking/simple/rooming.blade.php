@@ -11,8 +11,8 @@
 
             <div class="top-form-contain">
                 <div class="form-field">
-                    <input type="text" wire:model="lead.first_name" placeholder="First Name*" required>
-                    @error('lead.first_name') <label class="error-label">{{ $message }}</label> @enderror
+                    <input type="email" wire:model="lead.email_address" placeholder="Email*" required>
+                    @error('lead.email_address') <label class="error-label">{{ $message }}</label> @enderror
                 </div>
             </div>
             <!-- <- Additional Travellers -->
