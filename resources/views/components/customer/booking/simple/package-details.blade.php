@@ -3,7 +3,6 @@
  * @var \App\Models\Booking\Booking $booking
  * @var \App\Models\Tour\Tour $tour
  */
- var_dump($tour->event);
 @endphp
 <div class="top-sec">
     <div class="head-txt"><h4>Package details</h4></div>
