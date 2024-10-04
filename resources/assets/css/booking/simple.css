@@ -2598,3 +2598,14 @@ input::-webkit-inner-spin-button {
 }
 .upp-block-two .right-col p.date {padding-left:24px!important;}
 .package-details-heading-block .close-button {cursor:pointer;}
+.submit-btn-cls {
+    background: var(--primary-color);
+    border-radius: 40px;
+}
+.submit-btn-cls .inner {
+    max-width: 152px;
+    margin: auto;
+}
+.submit-btn-cls .inner:after {
+    top:16px;
+}
