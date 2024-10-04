@@ -274,18 +274,17 @@ jQuery(document).ready(function () {
         jQuery(this).find('.information-hover').removeClass('hovor');
         jQuery(this).find('.accommodation-details-hover').css('display', 'none');
     });
-    console.log(jQuery('.third-block .information-hover'))
+    
     jQuery(document).on('mouseover', '.third-block .information-hover', function () {
-        
         jQuery('.accommodation-details-hover').css('display', 'none');
         jQuery('.information-hover').removeClass('hovor');
-        jQuery(this).addClass('hovor');
+        jQuery(this).closest('.inn').find('.information-hover').addClass('hovor');
         jQuery(this).closest('.inn').find('.accommodation-details-hover').css('display', 'block');
     });
 
-    jQuery(document).on('mouseleave', '.third-block .information-hover', function () {
-        jQuery(this).removeClass('hovor');
-        jQuery(this).find('.accommodation-details-hover').css('display', 'none');
+    jQuery(document).on('mouseleave', '.third-block .accommodation-details-hover', function () {
+        jQuery(this).closest('.inn').find('.information-hover').removeClass('hovor');
+        jQuery(this).closest('.inn').find('.accommodation-details-hover').css('display', 'none');
     });
 
     /* Popup Close */
