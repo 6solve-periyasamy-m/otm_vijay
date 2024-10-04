@@ -1,6 +1,4 @@
-@php
-var_dump($booking);
-@endphp
+
 <div class="row">
     <div class="second-form">
         <div class="left-col">
