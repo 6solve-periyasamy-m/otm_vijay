@@ -282,7 +282,7 @@ jQuery(document).ready(function () {
         jQuery(this).closest('.inn').find('.accommodation-details-hover').css('display', 'block');
     });
 
-    jQuery(document).on('mouseleave', '.information-hover', function () {
+    jQuery(document).on('mouseleave', '.third-block .information-hover', function () {
         jQuery(this).removeClass('hovor');
         jQuery(this).find('.accommodation-details-hover').css('display', 'none');
     });
