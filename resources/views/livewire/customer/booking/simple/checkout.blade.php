@@ -177,9 +177,15 @@
                         </div>
                        
                         @if(!$this->mustPayAll())
+                            @php
+                                $totalCost = $booking->repository->getTotalCost();
+                                $depositPercentage = $booking->tour?->deposit_percentage ?? 0;
+                                $depositAmount = ($totalCost * $depositPercentage) / 100;
+                                $remainingAmount = $totalCost - $depositAmount;
+                            @endphp
                         <div class="form-field-checkbox" wire:click="setPayFull(0)">
                             <div class="left-ass">
-                                <label class="containr"><span class="txt">Pay a {{ $booking->tour?->deposit_percentage }}% deposit now, and the rest later<span class="inn-txt-cls">The remaining balance of A$3,680 will be automatically charged to the same payment method on {{ f_date($booking->tour?->final_payment) }}</span></span>
+                                <label class="containr"><span class="txt">Pay a {{ $booking->tour?->deposit_percentage }}% deposit now, and the rest later<span class="inn-txt-cls">The remaining balance of {{ f_currency($remainingAmount) }} will be automatically charged to the same payment method on {{ f_date($booking->tour?->final_payment) }}</span></span>
                                     <input type="checkbox" @if(!$payFull) checked @endif>
                                     <span class="checkmark"></span>
                                 </label>
@@ -211,12 +217,10 @@
                                 {{ Icon::regular('credit-card') }}
                                 <p>Credit / Debit card</p>
                             </div>
-                            {{--
                             <div class="first-in">
                                 {{ Icon::solid('file-invoice') }}
                                 <p>Invoice – Direct Debit</p>
                             </div>
-                            --}}
                         </div>
                     </div>
                     <div class="wh-las-cls-con">
