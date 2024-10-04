@@ -2573,4 +2573,7 @@ input::-webkit-inner-spin-button {
     .mob-trip-summary-block .total-block ul li p.txt {
        color: var(--primary-color);
     }
+    .static-mobile-description, .price-details-block, .submit-btn-cls {
+        display: none;
+    }
 }
