@@ -1,5 +1,5 @@
 <?php
-
+// Define the values
 return [
     'table' => [
         'reference' => 'Reference',
