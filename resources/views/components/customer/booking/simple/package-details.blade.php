@@ -84,7 +84,7 @@
                 <div class="package-details-heading-block">
                 <h3> Package details </h3>
                 <div class="close-button">
-                    <img src="" alt="close-btn">
+                    <img src="/css/booking/icon/x-circle.svg" alt="close-btn">
                 </div>
                 </div>
                 <div class="full-top-blcls-two">
