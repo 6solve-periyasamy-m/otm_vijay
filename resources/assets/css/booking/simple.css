@@ -2577,4 +2577,16 @@ input::-webkit-inner-spin-button {
     .static-mobile-description, .price-details-block, .submit-btn-cls {
         display: none;
     }
+    .see-more-popup .convco-two .whole-block-two {
+        padding: 16px !important;
+        max-width: 328px;
+        margin: auto;
+        border-radius: 16px;
+    }
+    .see-more-popup .convco-two .whole-block-two .full-top-blcls-two {
+        padding: 0!important;
+    }
+    .see-more-popup .convco-two .whole-block-two .full-top-blcls-two {
+        max-height:436px!important;
+    }
 }
