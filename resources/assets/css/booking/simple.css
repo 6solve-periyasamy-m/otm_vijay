@@ -2590,3 +2590,8 @@ input::-webkit-inner-spin-button {
         max-height:436px!important;
     }
 }
+@media only screen and (min-width:768px) {
+    .ma-block .row .left-col .contain > h3.head-evnt {
+     margin-bottom:40px;
+    }
+}
