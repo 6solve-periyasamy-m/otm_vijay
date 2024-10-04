@@ -274,7 +274,7 @@ jQuery(document).ready(function () {
         jQuery(this).find('.information-hover').removeClass('hovor');
         jQuery(this).find('.accommodation-details-hover').css('display', 'none');
     });
-    
+
     jQuery(document).on('mouseover', '.third-block .information-hover', function () {
         jQuery('.accommodation-details-hover').css('display', 'none');
         jQuery('.information-hover').removeClass('hovor');
@@ -329,12 +329,22 @@ jQuery(document).ready(function () {
 
     jQuery('.second-form .left-col .evnt-name .head-evnt').text(jQuery('.second-form .right-col .snd-sec .right-col h4:first').text());
 
+    jQuery('.lead-purchase-traveller-block input[type="checkbox"]').click(function() {
+        jQuery('.lead-purchase-traveller-block input[type="checkbox"]').prop('checked', false);
+        jQuery(this).prop('checked', true);
+        if (jQuery(this).val() == 'Yes') {
+            jQuery('.lead-passenger').hide();
+        } else {
+            jQuery('.lead-passenger').show();
+        }
+    });
+    
+    
 
 });
 
 document.addEventListener('livewire:load', function () {
-    console.log('live check datepick 2.5');
-    
+        
     Livewire.hook('message.processed', (message, component) => {
         if (Object.keys(component.serverMemo.errors).length > 0) {
             const firstErrorElement = document.querySelector('.error-label');

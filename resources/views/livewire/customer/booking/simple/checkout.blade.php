@@ -96,11 +96,11 @@
                         <p>Is purchaser the same person as lead traveller</p>
                         <div class="cus-block-mod-ren">
                             <label class="contain-vv"><span class="fnal-txt">Yes</span>
-                                <input type="checkbox" name="Yes" value="Yes">                           
+                                <input type="checkbox" name="Yes" value="Yes" checked>                           
                                 <span class="checkmark"></span>
                             </label> 
                             <label class="contain-vv"><span class="fnal-txt">No</span>
-                                <input type="checkbox" name="No" value="">
+                                <input type="checkbox" name="No" value="No">
                                 <span class="checkmark"></span>
                             </label> 
                         </div>
@@ -112,7 +112,7 @@
                   <h3>lead passenger details</h3>
                 </div>
 
-                <div class="top-form-contain">
+                <div style="display:none;" class="top-form-contain lead-passenger">
                     <div class="form-field">
                         <input type="text" wire:model="payer.first_name" placeholder="First Name*" required>
                     </div>
