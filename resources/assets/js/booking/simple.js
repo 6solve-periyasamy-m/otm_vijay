@@ -298,6 +298,9 @@ jQuery(document).ready(function () {
         }
     });
 
+    jQuery('.see-more-popup .close-button').click(function(){
+        jQuery('.see-more-popup').css('display', 'none');
+    })
 
     /*$("#custom-input-date").datepicker({
         dateFormat: 'dd/mm/yy',
