@@ -274,8 +274,9 @@ jQuery(document).ready(function () {
         jQuery(this).find('.information-hover').removeClass('hovor');
         jQuery(this).find('.accommodation-details-hover').css('display', 'none');
     });
-
+    console.log(jQuery('.third-block .information-hover'))
     jQuery(document).on('mouseover', '.third-block .information-hover', function () {
+        
         jQuery('.accommodation-details-hover').css('display', 'none');
         jQuery('.information-hover').removeClass('hovor');
         jQuery(this).addClass('hovor');
