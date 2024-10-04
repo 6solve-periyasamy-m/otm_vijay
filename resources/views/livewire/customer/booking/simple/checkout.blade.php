@@ -175,6 +175,17 @@
                                 <p>{{ f_currency($booking->repository->getTotalCost()) }}</p>
                             </div>
                         </div>
+                        <div class="form-field-checkbox" wire:click="setPayFull(0)">
+                            <div class="left-ass">
+                            <label class="containr"><span class="txt">Pay a {{ $booking->tour?->deposit_percentage }}% deposit now, and the rest later<span class="inn-txt-cls">The remaining balance of A$3,680 will be automatically charged to the same payment method on {{ f_date($booking->tour?->final_payment) }}</span></span>
+                            <input type="checkbox" @if(!$payFull) checked @endif>
+                            <span class="checkmark"></span>
+                            </label>
+                            </div>
+                            <div class="right-assets">
+                        <p>{{ f_currency($booking->repository->getDueTodayAmount()) }}</p>
+                            </div>
+                        </div>
                         @if(!$this->mustPayAll())
                         <div class="form-field-checkbox" wire:click="setPayFull(0)">
                             <div class="left-ass">

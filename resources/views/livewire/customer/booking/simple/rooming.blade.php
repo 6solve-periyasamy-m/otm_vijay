@@ -136,6 +136,8 @@
     </div>
 
     <div class="right-col">
+    <h3>Your trip details</h3>
+    <h3 class="event-name">{{ $tour->event?->name }}</h3>
         <div class="contain">
             <x-customer.booking.simple.package-details :booking="$booking" :tour="$tour">
                 <div class="submit-btn-cls">
