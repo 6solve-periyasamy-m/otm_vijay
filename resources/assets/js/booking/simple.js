@@ -275,6 +275,18 @@ jQuery(document).ready(function () {
         jQuery(this).find('.accommodation-details-hover').css('display', 'none');
     });
 
+    jQuery(document).on('mouseover', '.third-block .information-hover', function () {
+        jQuery('.accommodation-details-hover').css('display', 'none');
+        jQuery('.information-hover').removeClass('hovor');
+        jQuery(this).addClass('hovor');
+        jQuery(this).closest('.inn').find('.accommodation-details-hover').css('display', 'block');
+    });
+
+    jQuery(document).on('mouseleave', '.information-hover', function () {
+        jQuery(this).removeClass('hovor');
+        jQuery(this).find('.accommodation-details-hover').css('display', 'none');
+    });
+
     /* Popup Close */
     $(document).on('click', function (event) {
         var target = $(event.target);
