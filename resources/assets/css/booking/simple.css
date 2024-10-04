@@ -194,7 +194,7 @@ body {
     }
 
     .top-head .row .col-two .cont-details .single-div a.phone:before {
-        background: url(icon/call-hover.svg) no-repeat !important;
+        background: url(icon/call.svg) no-repeat !important;
     }
 
     .top-head .row .col-two .cont-details .single-div:last-child a {
@@ -2615,6 +2615,7 @@ input::-webkit-inner-spin-button {
 .submit-btn-cls:hover {
     background: transparent;
     border: 1px solid var(--primary-color);
+    border: 1px solid transparent;
 } 
 .submit-btn-cls:hover .inner input {
     background: transparent;
