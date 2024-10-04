@@ -2595,6 +2595,9 @@ input::-webkit-inner-spin-button {
     .ma-block .row .left-col .contain > h3.head-evnt {
      margin-bottom:40px!important;
     }
+    .ma-block .row .right-col .wh-las-cls-con .acc-tp-cond,.ma-block .row .right-col .wh-las-cls-con .acc-tp-cond .contain-v {
+        width: 280px !important;
+    }
 }
 .upp-block-two .right-col p.date {padding-left:24px!important;}
 .package-details-heading-block .close-button {cursor:pointer;}
