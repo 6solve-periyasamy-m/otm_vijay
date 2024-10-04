@@ -750,7 +750,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     background: transparent;
     transition: 0.5s;
 }
-.submit-btn-cls .inner:hover:after {
+.submit-btn-cls:hover .inner:after {
     background: url(icon/arrow-down.svg) no-repeat;
 }
 .ma-block .row .right-col .contain .top-sec .upgrade-cls:hover {
@@ -2611,4 +2611,13 @@ input::-webkit-inner-spin-button {
 }
 .submit-btn-cls .inner:after {
     top:16px;
+}
+.submit-btn-cls:hover {
+    background: transparent;
+    border: 1px solid var(--primary-color);
+} 
+.submit-btn-cls:hover .inner input {
+    background: transparent;
+    border: 0;
+    color: var(--primary-color);
 }
