@@ -345,7 +345,7 @@ jQuery(document).ready(function () {
     });
 
     //jQuery('.second-form .left-col .evnt-name .head-evnt').text(jQuery('.second-form .right-col .snd-sec .right-col h4:first').text());
-    jQuery('.second-form .left-col h3.event-name').text(jQuery('.second-form .right-col .right-col h4').text());
+    jQuery('.second-form .left-col h3.event-name').text(jQuery('.second-form .right-col .right-col h4:first').text());
     console.log(jQuery('.second-form .left-col h3.event-name'))
     jQuery('.lead-purchase-traveller-block input[type="checkbox"]').click(function() {
         jQuery('.lead-purchase-traveller-block input[type="checkbox"]').prop('checked', false);
