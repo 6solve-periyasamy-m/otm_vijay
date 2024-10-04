@@ -154,7 +154,7 @@
       <div class="Inner-container">
         <div class="mob-static-tip-sum">
          <h4>Trip Summary</h4>
-         <div class="mob-static-see-more"><p>SEE MORE<p><div>     
+         <div class="mob-static-see-more"><p>SEE MORE<p></div>     
         </div>
         <div class="static-mobile-description">
               <h3>British & Irish Lions Tour 2025 Single Game Package - Brisbane</h3>
@@ -164,7 +164,7 @@
               <p class="points">Capri by Fraser Brisbane - 2 nights</p>
               <p class="points">Category 3 Tickets — Test 1 - Wallabies v Lions</p>
         </div>
-        <div class="mob-no-of-passengers-list">
+        <div class="mob-no.of-passengers-list">
            <p>2 Passengers</p>
         </div>
         <div class="price-details-block">
@@ -191,10 +191,10 @@
                 </li>
             </ul>
         </div>
-        <div class="mob-trip-static-button">
-          <p>
-           <input type="submit" class="submit-btn" wire:click="proceed" value="Proceed">
-          <p>
+        <div class="submit-btn-cls">
+            <div class="inner">
+                <input class="submit-btn" wire:click="checkout" type="submit" value="Checkout">
+            </div>
         </div>
       </div>
   </div>
