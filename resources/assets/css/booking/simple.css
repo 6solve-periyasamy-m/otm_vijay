@@ -715,7 +715,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
     color: var(--white);
-   
+    background:transparent;
     font-size: 14px;
     line-height: 16.8px;
     letter-spacing: 2.24px;
