@@ -1,5 +1,5 @@
 <?php
-// Define the values
+// Define the values - Changed 'Price' instead of 'Cost.' on Cost of Company section
 return [
     'table' => [
         'reference' => 'Reference',
@@ -67,10 +67,10 @@ return [
                     'purchase' => 'Purchase Price of Components (Approximate)',
                     'ctc' => 'Cost to Company',
                     'profit' => 'Current Profit (Margin)',
-                    'cost' => 'Total Cost',
+                    'cost' => 'Total Price',
                     'commission' => 'Commission',
                     'taxes' => 'Taxes',
-                    'final' => 'Final Cost',
+                    'final' => 'Final Price',
                     'count' => 'How many additional travellers?',
                     'paying' => 'Paying',
                     'travelling' => 'Non-paying',
