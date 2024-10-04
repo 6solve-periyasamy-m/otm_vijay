@@ -127,6 +127,11 @@
                     </div>
                 @endfor
             </div>
+            <div class="submit-btn-cls">
+                <div class="inner">
+                    <input type="submit" class="submit-btn" wire:click="proceed" value="Proceed">
+                </div>
+            </div>
         </div>
     </div>
 
