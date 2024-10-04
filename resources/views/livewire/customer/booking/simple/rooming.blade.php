@@ -17,7 +17,7 @@
             </div>
             <!-- <- Additional Travellers -->
             <div class="second-block tra-det">
-                <p>TRAVELLERS</p>
+                <p>TRAVELLER/s</p>
                 <div class="inner-block">
                     <div class="left-col">
                         <h6>Adults</h6>
