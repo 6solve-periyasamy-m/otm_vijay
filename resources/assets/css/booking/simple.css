@@ -2373,6 +2373,36 @@ input::-webkit-inner-spin-button {
 @media only screen and (min-width:768px) {
     .mob-trip-summary-block, .ma-block .row .right-col > h3,  .ma-block .row .left-col .submit-btn-cls {display:none!important;}
 }
+/* Css Book Now Mobile bugs - Addressing  */
+.evnt-name {display:none!important;}
+@media only screen and (max-width:767px) {
+    .top-head .row .col-one .img-contain img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain;
+        max-height: 30px;
+    }
+    .accommodation-details-hover .full .left-col {
+        margin-bottom:0!important;
+    }
+    .ma-block .row .left-col {
+        margin-bottom:20px!important;
+    }
+    .upp-block-two .snd-sec {flex-wrap:wrap;}
+    .upp-block-two .snd-sec .left-col, .upp-block-two .snd-sec .right-col {width:100%!important;margin-right:0!important;}
+    .upp-block-two .snd-sec .right-col {margin-top:20px!important;}
+    .see-more-popup .popup-inner-two, .upgrades-popup .popup-inner {
+        width: 92%;
+        margin: auto;
+    }
+    .full-top-blcls-two h3 {margin:0;}
+    .evnt-name {display:block!important;}
+    .ma-block .second-block .hotel-details .information-hover {margin-right:16px;}
+    .evnt-name h4 {margin-bottom:15px!important;}
+    .ma-block .row .left-col .contain .accommodation-details-hover .contain .full {row-gap:0!important;}
+}
+/* Css Book Now Mobile bugs - Addressing  */
+
 @media only screen and (max-width:767px) {
     .ma-block .row .right-col > h3, .ma-block .row .left-col .submit-btn-cls {
         display:block!important;;
@@ -2530,32 +2560,3 @@ input::-webkit-inner-spin-button {
     }
    
 }
-/* Css Book Now Mobile bugs - Addressing  */
-.evnt-name {display:none!important;}
-@media only screen and (max-width:767px) {
-    .top-head .row .col-one .img-contain img {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: contain;
-        max-height: 30px;
-    }
-    .accommodation-details-hover .full .left-col {
-        margin-bottom:0!important;
-    }
-    .ma-block .row .left-col {
-        margin-bottom:20px!important;
-    }
-    .upp-block-two .snd-sec {flex-wrap:wrap;}
-    .upp-block-two .snd-sec .left-col, .upp-block-two .snd-sec .right-col {width:100%!important;margin-right:0!important;}
-    .upp-block-two .snd-sec .right-col {margin-top:20px!important;}
-    .see-more-popup .popup-inner-two, .upgrades-popup .popup-inner {
-        width: 92%;
-        margin: auto;
-    }
-    .full-top-blcls-two h3 {margin:0;}
-    .evnt-name {display:block!important;}
-    .ma-block .second-block .hotel-details .information-hover {margin-right:16px;}
-    .evnt-name h4 {margin-bottom:15px!important;}
-    .ma-block .row .left-col .contain .accommodation-details-hover .contain .full {row-gap:0!important;}
-}
-/* Css Book Now Mobile bugs - Addressing  */
