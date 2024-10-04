@@ -2592,6 +2592,6 @@ input::-webkit-inner-spin-button {
 }
 @media only screen and (min-width:768px) {
     .ma-block .row .left-col .contain > h3.head-evnt {
-     margin-bottom:40px;
+     margin-bottom:40px!important;
     }
 }
