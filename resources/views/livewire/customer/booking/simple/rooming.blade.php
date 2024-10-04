@@ -2,48 +2,17 @@
     <div class="left-col">
         <div class="contain">
            <!-- The event name mobile update -->
-            <div class="evnt-name">
-                <h4 class="head-evnt">{{ $tour->event?->name }}</h4>
-            </div>
+            <!-- <div class="evnt-name">
+            </div> -->
             <!-- The event name mobile update -->
             <h3>Your trip details</h3>
-
+            <h3 class="head-evnt">{{ $tour->event?->name }}</h3>
             <p class="psg-det">PASSENGER DETAILS</p>
 
             <div class="top-form-contain">
                 <div class="form-field">
                     <input type="text" wire:model="lead.first_name" placeholder="First Name*" required>
                     @error('lead.first_name') <label class="error-label">{{ $message }}</label> @enderror
-                </div>
-                <div class="form-field">
-                    <input type="text" wire:model="lead.last_name" placeholder="Last Name*">
-                    @error('lead.last_name') <label class="error-label">{{ $message }}</label> @enderror
-                </div>
-                <div class="form-field">
-                    <input type="email" wire:model="lead.email_address" placeholder="Email*" required>
-                    @error('lead.email_address') <label class="error-label">{{ $message }}</label> @enderror
-                </div>
-                <div class="form-field mobile_field">
-                    <div wire:ignore>
-                        <input type="tel" id="mobile_number" name="mobile_number" value="{{ $this->lead->mobile_number }}" placeholder="Mobile number*" required>
-                        <script type="text/javascript">
-                            jQuery(document).ready(function () {
-                                let input = document.querySelector('#mobile_number');
-                                let iti = window.setupPhoneField(input);
-
-                                jQuery(input).on('change', function (event) {
-                                    @this.
-                                    set('lead.mobile_number', iti.getNumber());
-                                });
-                                document.addEventListener('updateValue', function (event) {
-                                    if (event.detail.key === 'lead.mobile_number') {
-                                        input.value = event.detail.value;
-                                    }
-                                });
-                            });
-                        </script>
-                    </div>
-                    @error('lead.mobile_number') <label class="error-label">{{ $message }}</label> @enderror
                 </div>
             </div>
             <!-- <- Additional Travellers -->
@@ -68,10 +37,10 @@
                        for a custom package.</p>
                 </div>
             </div>
-            <hr>
+
             <!-- <- Rooming -->
             <div class="second-block rme-det">
-                <h3>Your room details</h3>
+                
                 <p>ROOMS</p>
                 @foreach($tour->repository->getHotels() as $hotel)
                     <div wire:ignore class="hotel-details">
@@ -121,6 +90,25 @@
                     <div class="first-bl" wire:key="{{Str::random()}}">
                         <div class="inn">
                             <h6>Room {{ $x + 1 }}</h6>
+                            <div class="information-hover" data-action="hover" data-target="accommodation-{{$hotel->id}}">
+                                <img src="{{ asset('css/booking/icon/Icon.svg') }}" alt="tip-img">
+
+                                <div class="accommodation-details-hover accommodation-{{$hotel->id}}">
+                                    <div class="contain">
+                                        <div class="first-block">
+                                            <h6>Hotel details</h6>
+                                            <div class="full">
+                                                <div class="left-col">
+                                                    <img class="package-image" src="{{ asset($hotel->image_url) }}" alt="featured-img">
+                                                </div>
+                                                <div class="right-col">
+                                                    <p>{!! $hotel->description !!}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-field">
                             <select wire:model="rooms.{{$x}}.room" name="bedding_configuration">

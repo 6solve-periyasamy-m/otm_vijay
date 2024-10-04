@@ -1,3 +1,4 @@
+
 :root {
     --primary-color: #F35B15;
     --secondary-color: #F9F4EE;
@@ -17,7 +18,10 @@
     font-family: "PP Neue Montreal Medium";
     src: url(./font/PPNeueMontreal-Medium.ttf);
 }
-
+@font-face {
+    font-family: "PlayfairDisplay-Regular";
+    src: url(./font/PlayfairDisplay-Regular.ttf);
+}
 body .row {
     width: 90%;
     max-width: 1410px;
@@ -34,12 +38,12 @@ body {
 }
 
 .package-image {
-    width: 150px;
-    height: 150px;
-    border-radius: 15%;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
     object-fit:cover;
 }
-
+.accommodation-details-hover img.package-image {width:150px;}
 .top-head .row {
     display: flex;
     padding: 24px 0;
@@ -304,7 +308,7 @@ body {
 .top-block .row .top-nav-sec .head h1 {
     margin-top: 16px;
     margin-bottom: 0;
-    font-family: 'PP Editorial New', Helvetica, Arial, Lucida, sans-serif;
+    font-family: "PlayfairDisplay-Regular";
     color: var(--primary-color);
     font-weight: 200;
     font-size: 40px;
@@ -312,7 +316,7 @@ body {
 }
 
 .ma-block .row {
-    padding: 80px 0 150px 0;
+    padding: 80px 0 88px 0;
     display: flex;
 }
 
@@ -323,11 +327,11 @@ body {
 
 .ma-block .row .left-col {
     width: 41%;
-    margin-right: 9%;
+    margin-right: 14%;
 }
 
 .ma-block .row .right-col {
-    width: 50%;
+    width: 45%;
 }
 
 .ma-block .row .left-col h3, .ma-block .row .left-col h4, .ma-block .row .left-col h6, .ma-block .row .left-col p {
@@ -344,9 +348,11 @@ body {
     color: var(--text-dark);
     font-size: 24px;
     line-height: 32px;
-    margin: 0 0 40px 0;
+    margin: 0 0 9px 0;
 }
-
+.ma-block .row .left-col .contain h3.event-name {
+    margin-bottom:40px;
+}
 .ma-block .row .left-col .contain p {
     margin: 0 0 24px 0;
     color: var(--primary-color);
@@ -360,7 +366,7 @@ body {
     flex-wrap: wrap;
     row-gap: 20px;
     width: 100%;
-    margin-bottom: 40px;
+    margin-bottom: 48px;
 }
 
 .ma-block .row .left-col .contain .top-form-contain .form-field {
@@ -478,13 +484,13 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .ma-block .row .left-col .contain .second-block {
-    margin-bottom: 40px;
+    margin-bottom: 48px;
 }
 
 .ma-block .row .left-col .contain .second-block h6 {
-    font-size: 20px;
+    font-size: 16px;
     line-height: 24px;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
 }
 
 .ma-block .row .left-col .contain .second-block h6 span {
@@ -544,13 +550,13 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     border: 2px solid var(--primary-color);
     box-shadow: 0 0 34px 0 #00000026;
     border-radius: 40px;
-    padding: 60px 60px 70px 60px;
+    padding: 32px;
 }
 
 .ma-block .row .right-col .contain .top-sec {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 31px;
+    margin-bottom: 32px;
 }
 
 .ma-block .row .right-col .contain h4 {
@@ -559,7 +565,8 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     font-weight: 500;
     color: var(--text-dark);
     font-size: 24px;
-    line-height: 32px;
+    line-height: 28.8px;
+    padding-top:24px;
 }
 
 .ma-block .row .right-col .contain .top-sec .upgrade-cls {
@@ -578,6 +585,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     text-decoration: none;
     transition: 0.5s;
     cursor: pointer;
+    height:42px;
 }
 
 .ma-block .row .right-col .contain .top-sec .upgrade-cls:before {
@@ -592,16 +600,17 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .ma-block .row .right-col .contain .snd-sec {
-    display: flex;
-    margin-bottom: 20px;
+    display: block;
+    margin-bottom: 8px;
+    padding-bottom:22px;
+    border-bottom:1px solid #FAE8D3;
 }
 
 .ma-block .row .right-col .contain .snd-sec .left-col {
-    width: 150px;
-    height: 150px;
-    margin-right: 24px;
+    width: 100%;
+    height: 293px;
+    margin-right: 0px;
 }
-
 .ma-block .row .right-col .contain .snd-sec .right-col {
     width: 100%;
 
@@ -620,7 +629,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     font-weight: 500;
     font-size: 14px;
     line-height: 16.8px;
-    color: var(--sub-text-color);
+    color: var(--text-dark);
     text-transform: uppercase;
     letter-spacing: 2.24px;
     margin-bottom: 0;
@@ -628,8 +637,8 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     padding-bottom: 8px;
     position: relative;
     padding-left: 24px;
+    text-transform:none;
 }
-
 .ma-block .row .right-col .contain .snd-sec .right-col p.location:before {
     content: "";
     background: url(icon/location.svg) no-repeat;
@@ -639,7 +648,12 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     top: 0;
     left: 0;
 }
-
+.ma-block .row .right-col .contain .snd-sec .right-col p.date {
+    text-transform: capitalize;
+    margin:8px 0px;
+    padding-top:0px;
+    padding-bottom:8px;
+}
 .ma-block .row .right-col .contain .snd-sec .right-col p.date:before {
     content: "";
     background: url(icon/calendar.svg) no-repeat;
@@ -649,12 +663,10 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     top: 0;
     left: 0;
 }
-
 .ma-block .row .right-col .contain .snd-sec .right-col p.see-more {
-    margin-top: 40px;
+    margin-top: 16px;
     padding-left: 0;
 }
-
 .ma-block .row .right-col .contain .snd-sec .right-col p.see-more a {
     color: var(--primary-color);
     text-decoration: none;
@@ -662,21 +674,20 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     font-size: 16px;
     line-height: 24px;
     letter-spacing: 0;
+    text-transform:uppercase;
+    letter-spacing:2.24px;
 }
-
 .ma-block .row .right-col .contain .third-col ul {
     margin: 0;
     list-style: none;
     padding: 24px 0 0;
-    border-bottom: 1px solid var(--secondary-color);
+    border-bottom: 0px solid var(--secondary-color);
 }
-
 .ma-block .row .right-col .contain .third-col ul li {
     display: flex;
     justify-content: space-between;
     margin-bottom: 14px;
 }
-
 .ma-block .row .right-col .contain .third-col ul li p {
     margin: 0;
     font-family: "PP Neue Montreal Medium";
@@ -684,21 +695,19 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     font-size: 16px;
     line-height: 24px;
 }
-
 .ma-block .row .right-col .contain .third-col ul li:last-child {
-    margin-top: 24px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid #FAE8D3;
 }
-
 .ma-block .row .right-col .contain .third-col ul li p.total {
     color: var(--primary-color);
 }
-
 .ma-block .row .right-col .contain .third-col .submit-btn-cls {
-    margin-top: 16px;
+    margin-top: 32px;
     display: flex;
     justify-content: end;
 }
-
 .ma-block .row .right-col .contain .third-col .submit-btn-cls input {
     padding: 12px 40px 12px 16px;
     border: 1px solid var(--primary-color);
@@ -717,7 +726,6 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     cursor: pointer;
     text-transform: uppercase;
 }
-
 .ma-block .row .right-col .contain .third-col .submit-btn-cls .inner:after {
     content: "";
     background: url(icon/arrow-down-hover.svg) no-repeat;
@@ -728,30 +736,38 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     top: 12px;
     right: 12px;
 }
-
 .ma-block .row .right-col .contain .third-col .submit-btn-cls .inner {
     position: relative;
+    width:100%;
+    height:51px
 }
-
+.ma-block .row .right-col .contain .third-col .submit-btn-cls .inner input {
+    width:100%;
+    height:100%;
+}
 .ma-block .row .right-col .contain .third-col .submit-btn-cls input:hover {
     color: var(--primary-color);
     background: transparent;
     transition: 0.5s;
 }
-
-.ma-block .row .right-col .contain .third-col .submit-btn-cls .inner:hover:after {
+.ma-block .row .second-form .right-col .contain .third-col .submit-btn-cls .inner:hover:after {
     background: url(icon/arrow-down.svg) no-repeat;
 }
-
 .ma-block .row .right-col .contain .top-sec .upgrade-cls:hover {
     background: var(--primary-color);
     color: var(--white);
 }
-
 .ma-block .row .right-col .contain .top-sec .upgrade-cls:hover:before {
     background: url(icon/arrow-down-hover.svg) no-repeat;
 }
-
+.ma-block .row .right-col .contain .third-col ul li:last-child {
+    margin-top: 32px;
+    padding-top: 32px;
+    padding-bottom: 32px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid #FAE8D3;
+    border-top: 1px solid #FAE8D3;
+}
 .ma-block .second-block .hotel-details, .ma-block .third-block .inn {
     display: flex;
     position: relative;
@@ -764,7 +780,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .ma-block .second-block .hotel-details .information-hover {
-    top: 4px;
+    top: 1px;
 }
 
 .ma-block .third-block .inn
@@ -774,7 +790,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     cursor: pointer;
     display: block;
     position: relative;
-    top: 4px;
+    top: 0px;
 }
 
 .ma-block .second-block .hotel-details .information-hover:after, .ma-block .third-block .inn .information-hover:after {
@@ -782,7 +798,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     width: 16px;
     height: 16px;
     position: absolute;
-    top: 29.5px;
+    top: 33.5px;
     right: 0;
     z-index: 99999;
     border: solid var(--primary-color);
@@ -1141,17 +1157,17 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 .close-btn {
     color: white;
 }
-
-.see-more-popup .convco-two .whole-block-two .full-top-blcls-two,
+.see-more-popup .convco-two .whole-block-two .full-top-blcls-two {
+    max-height:560px;
+    padding:12px;
+}
 .upgrades-popup .convco .whole-block .full-top-blcls {
     max-height: 380px;
     overflow-y: scroll;
 }
-
 .upgrades-popup ::-webkit-scrollbar {
     width: 3px;
 }
-
 /* .upgrades-popup ::-webkit-scrollbar-track {
  background: #000000;
 } */
@@ -1247,6 +1263,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     position: relative;
     display: block;
     top: 0;
+    color: var(--text-dark);
 }
 
 .additional-block .right-assets p {
@@ -1276,9 +1293,9 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     display: flex;
     column-gap: 14px;
     width: 100%;
-    margin-top: 24px;
-    padding-top: 24px;
-    border-top: 1px solid var(--secondary-color);
+    margin-top: 32px;
+    padding-top: 0px;
+    border-top: 0px solid var(--secondary-color);
 }
 
 .additional-block .card-field-box .first-in.active {
@@ -1303,7 +1320,9 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     margin-bottom: 0;
     margin-top: 5px;
 }
-
+.ma-block .row .right-col .contain .top-sec h4 {
+    padding-top:0px;
+}
 .additional-block .card-field-box .first-in {
     min-width: 50%;
     width: 100%;
@@ -1934,58 +1953,83 @@ input::-webkit-inner-spin-button {
 }
 
 .upp-block-two .snd-sec {
-    display: flex;
-    padding: 0 40px;
+    display: block;
+    padding: 0px;
 }
-
 .full-top-blcls-two h3 {
-    padding: 0 40px 20px 40px;
+    padding: 0px;
+    margin-bottom: 32px;
+    margin-top: 0;
+    color: var(--text-dark);
+    font-family: "PP Neue Montreal Medium";
 }
-
 .see-more-popup .convco-two .whole-block-two {
-    padding: 30px 0 40px 0 !important;
+    padding: 32px!important;
+    max-width: 563px;
 }
 
+.see-more-popup .convco-two ::-webkit-scrollbar {
+  width: 8px;
+}
+.see-more-popup .convco-two ::-webkit-scrollbar-track {
+  border-radius: 16px;
+}
+.see-more-popup .convco-two ::-webkit-scrollbar-thumb {
+  background: #FAE8D3; 
+  border-radius: 10px;
+}
 .see-more-popup .convco-two .whole-block-two .full-top-blcls-two {
     overflow: auto !important;
 }
-
 .upp-block-two .snd-sec .left-col {
-    width: 30% !important;
-    margin-right: 6%;
+    width: 100% !important;
+    margin-right: 0%;
+    height:271px;
 }
-
 .upp-block-two .snd-sec .right-col {
-    width: 64% !important;
+    width: 100% !important;
 }
-
 .see-more-popup .convco-two {
-    max-width: 650px !important;
+    max-width: 563px !important;
 }
-
-.upp-block-two .right-col h6 {
+.upp-block-two .right-col h5 {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    font-size: 18px;
+    font-size: 24px;
     line-height: 24px;
-    margin: 0 0 11.5px;
+    margin: 24px 0 12px 0px;
+    color: var(--text-dark);
 }
-
+.upp-block-two .snd-sec .right-col h6 {
+    margin-top: 12px;
+    font-family: "PP Neue Montreal Medium";
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 16.8px;
+    letter-spacing: 2.24px;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+}
 .upp-block-two .right-col p {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    font-size: 14px;
-    line-height: 16.8px;
-    color: var(--sub-text-color);
-    text-transform: uppercase;
-    letter-spacing: 2.24px;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text-dark);
     margin-bottom: 0;
     margin-top: 0;
     padding-bottom: 8px;
-    position: relative;
+    position: relative;   
+    text-transform: none;
+    letter-spacing: 0;
+    padding-left:0px;
+}
+.upp-block-two .right-col p.inclusion {
     padding-left: 24px;
 }
-
+.upp-block-two .right-col p.date {
+    padding-bottom:16px;
+}
 .upp-block-two .right-col p a {
     color: var(--primary-color);
     text-decoration: none;
@@ -2127,14 +2171,15 @@ input::-webkit-inner-spin-button {
 .ma-block .row .right-col .contain .snd-sec .right-col p.inclusion:before , .upp-block-two .snd-sec .right-col p.inclusion:before {
     content: "";
     display: inline-block;
-    width: 6px;
-    height: 6px;
+    width: 4px;
+    height: 4px;
     position: absolute;
-    background-color: #F35B15;
-    border-radius: 50%;
-    top: 5px;
-    left: 5px;
+    background-color: #000000;
+    border-radius: 0%;
+    top: 6px;
+    left: 10px;
 }
+.upp-block-two .snd-sec .right-col p.inclusion:before {top:10px;}
 @media only screen and (min-width:1367px) and (max-width:1559px) {
     .ma-block .row .left-col {
         width:45%;
@@ -2217,6 +2262,7 @@ input::-webkit-inner-spin-button {
     justify-content: center;
     z-index: 1111 !important;
 }
+
 .card {
     display: flex;
     background-color: white;
@@ -2233,7 +2279,6 @@ input::-webkit-inner-spin-button {
     align-content: center;
     margin: auto;
 }
-
 /* Css Book Now Mobile bugs - Addressing  */
 .evnt-name {display:none!important;}
 @media only screen and (max-width:767px) {

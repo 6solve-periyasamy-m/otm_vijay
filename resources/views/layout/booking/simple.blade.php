@@ -117,7 +117,7 @@
                         </div>
                     @endif
                     <div class="head">
-                        <h1>Request to book</h1>
+                        <h1>Secure Booking</h1>
                     </div>
                 </div>
             </div>

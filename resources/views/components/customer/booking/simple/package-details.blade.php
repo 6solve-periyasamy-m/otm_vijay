@@ -6,7 +6,7 @@
 @endphp
 <div class="top-sec">
     <div class="head-txt"><h4>Package details</h4></div>
-    {{--<div class="upgrade-cls" data-action="popup" data-target="upgrades-popup">UPGRADE</div>--}}
+    <div class="upgrade-cls" data-action="popup" data-target="upgrades-popup">UPGRADE</div>
 </div>
 <div class="snd-sec">
     @if(isset($tour->event?->image_url))
@@ -16,7 +16,7 @@
     @endif
     <div class="right-col">
         <h4>{{ $tour->event?->name }}</h4>
-        <h6>{{ $tour->name }}</h6>
+        <!-- <h6>{{ $tour->name }}</h6> -->
         <!--<p class="location"></p> TODO: Implement Location on Event -->
         <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
         @foreach($tour->repository->getInclusions(4) as $inclusion)
@@ -33,12 +33,12 @@
             <p class="txt">Package Price</p>
             <p class="price">{{ f_currency($booking->repository->getBasePrice()) }}</p>
         </li>
-        @if($tour->booking_fee !== 0)
+        <!-- @if($tour->booking_fee !== 0)
             <li>
                 <p class="txt">Booking Fee</p>
                 <p class="price">{{ f_currency($tour->booking_fee) }}</p>
             </li>
-        @endif
+        @endif -->
         @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
         @if($upgradePrice > 0 || $upgradePrice < 0)
             <li>
@@ -89,19 +89,27 @@
                                 <img src="{{ asset($tour->event->image_url) }}" class="package-image" alt="featured-img">
                             </div>
                             <div class="right-col">
-                                <h6>{{ $tour->name }}</h6>
+                                <h5>{{ $tour->name }}</h5>
                                 <!--<p class="location">Sydney, Australia</p>-->
                                 <p class="date">{{ $tour->date_from?->format('M d, Y') }} - {{ $tour->date_to?->format('M d, Y') }}</p>
                                 @foreach($tour->repository->getInclusions() as $inclusion)
                                     <p class="inclusion">{{ $inclusion }}</p>
                                 @endforeach
+                                <h6>Description</h6>
+                                <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>                               
+                                <h6>Inclusions</h6>
+                                <p class="inclusion">Mens and womens final ticket</p>                                                         
+                                <p class="inclusion">3 nights, 5 star accommodation</p>
+                                <p class="inclusion">Exclusive tennis legend event</p>
+                                <p class="inclusion">Lorem Ipsum is simply dummy </p>
+                                <p class="inclusion">Lorem Ipsum is simply dummy text </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div style="margin: 2rem;">
+                <!-- <div style="margin: 2rem;">
                     {{ $tour->description }}
-                </div>
+                </div> -->
             </div>
             <div class="close-btn" data-action="close">
                 {{ Icon::solid('xmark') }}
@@ -115,7 +123,7 @@
         <div class="convco">
             <div class="whole-block">
                 <div class="full-top-blcls">
-                    <h3>Optional add-ons & upgrades</h3>
+                    <h3>Trip Summary</h3>
                     <div class="upp-block">
                         <h6>Ticket Upgrade</h6>
                         <div class="inner-contain">

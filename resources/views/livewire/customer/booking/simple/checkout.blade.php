@@ -183,6 +183,19 @@
                             </div>
                         </div>
                     </div>
+                    <div class="wh-las-cls-con">
+                        <div class="acc-tp-cond">
+                            <label class="contain-v"><span class="fnal-txt">I accept the <a href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">Terms & Conditions</a></span>
+                                <input type="checkbox" wire:model="terms">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="submit-btn-cls">
+                            <div class="inner">
+                                <input class="submit-btn" wire:click="checkout" type="submit" value="Checkout">
+                            </div>
+                        </div>
+                    </div>
                 </x-customer.booking.simple.package-details>
             </div>
         </div>
