@@ -2603,6 +2603,7 @@ input::-webkit-inner-spin-button {
 .submit-btn-cls {
     background: var(--primary-color);
     border-radius: 40px;
+    border: 0px solid transparent;
 }
 .submit-btn-cls .inner {
     max-width: 152px;
@@ -2620,4 +2621,8 @@ input::-webkit-inner-spin-button {
     background: transparent;
     border: 0;
     color: var(--primary-color);
+}
+.submit-btn-cls input {
+    background:transparent!important;
+    transition:0s!important;
 }
