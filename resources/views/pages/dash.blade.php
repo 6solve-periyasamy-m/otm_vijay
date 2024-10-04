@@ -42,7 +42,7 @@
 $get_late = $monthsData;
 $lastMonthData = array_pop($get_late);
 $lastPercentageChange = $lastMonthData['percentageChange'] ?? 0;
-$get_late = json_encode($get_late);
+$get_late = json_encode($monthsData);
 @endphp
 
 @section('bookings')
