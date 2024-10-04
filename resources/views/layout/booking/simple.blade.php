@@ -120,7 +120,13 @@
                         </div>
                     @endif
                     <div class="head">
-                        <h1>Secure Booking</h1>
+                        <h1>@if(!empty($return ?? null))
+                            Checkout
+                            @else
+                            Secure Booking
+                        @endif
+                            
+                        </h1>
                     </div>
                 </div>
             </div>
