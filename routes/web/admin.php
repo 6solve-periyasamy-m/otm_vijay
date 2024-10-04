@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\TravelClassController;
 use App\Http\Controllers\Admin\User\UserProfileController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\Voucher\VoucherCodeController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('show-login');
 Route::post('/login', [AuthenticationController::class, 'login'])->name('login');
@@ -75,9 +76,10 @@ Route::middleware('auth:web')->group(function () {
 
     Route::prefix('locations')->group(__DIR__ . '/admin/location.php');
 
-    Route::get('/', function () {
-        return view('pages.dash');
-    })->name('dash');
+    // Route::get('/', function () {
+    //     return view('pages.dash');
+    // })->name('dash');
+    Route::get('/', [DashboardController::class, 'dashboard'])->name('dash');
 
     Route::get('/attributes', function () {
         return view('pages.admin.small-models');
