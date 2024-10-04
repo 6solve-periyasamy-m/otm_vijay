@@ -39,6 +39,16 @@
             background: #f8fafc;
             border-right-color: #ced4da;
         }
+        .upcom-whol{
+            width: 100%;
+            background: #000000;
+            color: #fff;
+        }
+        .upcom-cent{
+            padding: 18px;
+            text-align: center;
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
