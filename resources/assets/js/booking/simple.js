@@ -302,6 +302,20 @@ jQuery(document).ready(function () {
         jQuery('.see-more-popup').css('display', 'none');
     })
 
+    jQuery('.mob-static-see-more').click(function() {
+        jQuery('.static-mobile-description').toggle();
+        jQuery('.price-details-block').toggle();
+        jQuery('.total-block').toggle();
+        
+        var currentText = jQuery('.mob-static-see-more p:first').text();
+        
+        if (currentText === 'SEE MORE') {
+            jQuery('.mob-static-see-more p:first').text('SEE LESS');
+        } else {
+            jQuery('.mob-static-see-more p:first').text('SEE MORE');
+        }
+    });
+
     /*$("#custom-input-date").datepicker({
         dateFormat: 'dd/mm/yy',
         changeMonth: true,
