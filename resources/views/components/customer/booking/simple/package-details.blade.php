@@ -81,8 +81,13 @@
     <div class="popup-inner-two">
         <div class="convco-two">
             <div class="whole-block-two">
+                <div class="package-details-heading-block">
+                <h3> Package details </h3>
+                <div class="close-button">
+                    <img src="" alt="close-btn">
+                </div>
+                </div>
                 <div class="full-top-blcls-two">
-                    <h3> Package details </h3>
                     <div class="upp-block-two">
                         <div class="snd-sec">
                             <div class="left-col">

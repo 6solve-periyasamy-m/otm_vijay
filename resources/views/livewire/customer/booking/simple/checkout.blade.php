@@ -3,22 +3,19 @@
     <div class="second-form">
         <div class="left-col">
             <div class="contain">
-                <!-- The event name mobile update -->
-                <div class="evnt-name">
-                    <h4 class="head-evnt"></h4>
-                </div>
+                <h3>Enter your details</h3>
+                <h3 class="event-name">Event name</h3>
                 <!-- The event name mobile update -->
                 <div class="purchase-info-block">
-               
                     <h3>Enter purchaser information</h3>
-                    <div class="top-check-top-cls">
+                    <!-- <div class="top-check-top-cls">
                         <div class="txt-cls-mod-fs">
                             <label class="contain-vv"><span class="fnal-txt">Use lead traveller details</span>
                                 <input type="checkbox" wire:click="toggleLeadPaying" @if($payer->id === $booking->lead_traveller_id) checked @endif>
                                 <span class="checkmark"></span>
                             </label>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="top-form-contain">
                     <div class="form-field">
@@ -95,9 +92,49 @@
                         <!--<input id="custom-input-date" class="calendar hasDatepicker" type="text" name="upload-release" placeholder="DATE OF BIRTH*">-->
                         @error('payer.date_of_birth') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
-
+                    <div class="lead-purchase-traveller-block">
+                        <p>Is purchaser the same person as lead traveller</p>
+                        <div class="cus-block-mod-ren">
+                            <label class="contain-vv"><span class="fnal-txt">Yes</span>
+                                <input type="checkbox" name="Yes" value="Yes">                           
+                                <span class="checkmark"></span>
+                            </label> 
+                            <label class="contain-vv"><span class="fnal-txt">No</span>
+                                <input type="checkbox" name="No" value="">
+                                <span class="checkmark"></span>
+                            </label> 
+                        </div>
+                    </div>
 
                 </div>
+
+                <div class="purchase-info-block">
+                  <h3>lead passenger details</h3>
+                </div>
+
+                <div class="top-form-contain">
+                    <div class="form-field">
+                        <input type="text" wire:model="payer.first_name" placeholder="First Name*" required>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" wire:model="payer.last_name" placeholder="Last Name*">
+                    </div>
+                    <div class="form-field">
+                        <input type="email" wire:model="payer.email_address" placeholder="Email*" required>
+                    </div>
+                    <div class="form-field mobile_field">
+                        <div wire:ignore>
+                            <input type="tel" id="mobile_number_1" name="mobile_number" placeholder="Mobile number*" required>
+                            <script type="text/javascript">
+                                jQuery(document).ready(function () {
+                                    let input = document.querySelector('#mobile_number_1');
+                                    let iti = window.setupPhoneField(input);
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
                 <h3>Special requests</h3>
                 <div class="form-field-full-width" wire:ignore>
                     <div id="summernote"></div>
