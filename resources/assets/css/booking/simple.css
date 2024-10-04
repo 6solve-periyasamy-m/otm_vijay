@@ -554,6 +554,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 
 .ma-block .row .right-col .contain .top-sec {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     margin-bottom: 32px;
 }
