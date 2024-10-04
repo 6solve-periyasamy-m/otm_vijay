@@ -175,9 +175,7 @@
                                 <p>{{ f_currency($booking->repository->getTotalCost()) }}</p>
                             </div>
                         </div>
-                        @php
-                        var_dump($booking->tour);
-                        @endphp
+                       
                         @if(!$this->mustPayAll())
                         <div class="form-field-checkbox" wire:click="setPayFull(0)">
                             <div class="left-ass">
