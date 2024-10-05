@@ -4,7 +4,8 @@
         <div class="left-col">
             <div class="contain">
                 <h3>Enter your details</h3>
-                <h3 class="event-name">{{ $booking->event?->name }}</h3>
+                @yield('check_out_event_name')
+                <!-- <h3 class="event-name">{{ $booking->event?->name }}</h3> -->
                 <!-- The event name mobile update -->
                 <div class="purchase-info-block">
                     <h3>Enter purchaser information</h3>

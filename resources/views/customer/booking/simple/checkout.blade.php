@@ -14,6 +14,13 @@
 
 @section('title', "{$tour->name} - {$tour->brand->name}")
 
+@section('check_out_event_name')
+<h3 style="display: block!important" class="event-name">{{ $booking->event?->name }}</h3>
+<!-- <div class="evnt-name" style="display: block!important">
+    <h4 class="head-evnt">{{ $tour->event?->name }}</h4>
+</div> -->
+@endsection
+
 @section('content')
     <livewire:customer.booking.simple.checkout :tour="$tour" :booking="$booking" />
 @endsection
