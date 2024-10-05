@@ -59,6 +59,7 @@ class Checkout extends Component
     private function saveAll()
     {
         $this->booking->save();
+        $this->payer->date_of_birth = Carbon::parse($this->payer->date_of_birth)->format('Y-m-d');
         $this->payer->save();
         $this->booking->lead_traveller_id = $this->payer->id;
         if ($this->payer->homeAddress === null) {
@@ -132,7 +133,7 @@ class Checkout extends Component
             'payer.last_name' => 'required|string',
             'payer.email_address' => 'required|email:rfc,dns',
             'payer.mobile_number' => 'required|phone:INTERNATIONAL',
-            'payer.date_of_birth' => 'nullable|date:Y-m-d',
+            'payer.date_of_birth' => 'nullable|date:d-m-Y',
             'payerAddress.postcode' => 'required|string',
             'booking.notes' => 'nullable|string',
         ];
