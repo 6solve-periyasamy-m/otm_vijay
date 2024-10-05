@@ -59,22 +59,21 @@
                     <div class="form-field rap-las-cls">
                         <div wire:ignore>
                             <input type="text" id="custom-input-date" class="calendar hasDatepicker" data-picker name="upload-release" placeholder="DATE OF BIRTH">
-
                             <script type="text/javascript">
                                 document.addEventListener('DOMContentLoaded', function() {
+                                    const initialDOB = @this.payer?.date_of_birth ? new Date(@this.payer.date_of_birth) : null;
+                                    
                                     const datePickerElement = document.querySelector('[data-picker]');
                                     if (datePickerElement) {
                                         const picker = new Pikaday({
                                             field: datePickerElement,
-                                            format: 'DD/MM/YYYY',  // Date format for display
-                                            minDate: new Date(1900, 0, 1),  // Set minimum date
-                                            maxDate: new Date(),  // Optional: Set maximum date to today or another value
-                                            yearRange: [1900, new Date().getFullYear()],  // Set the year range, approximation for yearRange
+                                            format: 'DD/MM/YYYY', 
+                                            minDate: new Date(1900, 0, 1), 
+                                            maxDate: new Date(),
+                                            yearRange: [1900, new Date().getFullYear()],
                                             onSelect: function(date) {
-                                                // Format the selected date as 'Y-m-d'
                                                 const formattedDate = formatDate(date);
                                                 datePickerElement.value = formattedDate;
-                                                // Optionally, use Livewire or other methods to update the value
                                                 @this.set('payer.date_of_birth', formattedDate);
                                             }
                                         });
@@ -86,6 +85,11 @@
                                             const year = date.getFullYear();
                                             return `${year}-${month}-${day}`;
                                         }
+
+                                        if (initialDOB) {
+                                        picker.setDate(initialDOB);
+                                        datePickerElement.value = formatDate(initialDOB);
+                                    }
                                     }
                                 });
                             </script>
