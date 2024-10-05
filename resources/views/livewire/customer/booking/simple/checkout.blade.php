@@ -180,7 +180,7 @@
               
                 <h3>Special requests</h3>
                 <div class="form-field-full-width" wire:ignore>
-                    <div id="summernote"></div>
+                    <div id="summernote">{!! $this->booking->notes !!}</div>
                     <script type="text/javascript">
                         $('#summernote').summernote({
                             placeholder: 'Message',
