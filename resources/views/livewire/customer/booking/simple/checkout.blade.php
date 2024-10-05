@@ -1,4 +1,6 @@
-
+@php
+    $is_different_traveller = $is_different_traveller === 'true' ? true : false;
+@endphp
 <div class="row">
     <div class="second-form">
         <div class="left-col">
@@ -99,7 +101,7 @@
                     </div>
                     <div class="lead-purchase-traveller-block">
                         <p>Is purchaser the same person as lead traveller</p>
-                        <div class="cus-block-mod-ren">
+                        <!-- <div class="cus-block-mod-ren">
                             <label class="contain-vv"><span class="fnal-txt">Yes</span>
                                 <input type="checkbox" name="Yes" value="Yes" checked>                           
                                 <span class="checkmark"></span>
@@ -108,16 +110,28 @@
                                 <input type="checkbox" name="No" value="No">
                                 <span class="checkmark"></span>
                             </label> 
-                        </div>
+                        </div> -->
+                        <div class="cus-block-mod-ren">
+                            <label class="contain-vv"><span class="fnal-txt">Yes</span>
+                                <input type="radio" wire:model="is_different_traveller" value="false" @checked($is_different_traveller == false)>                           
+                                <span class="checkmark"></span>
+                            </label> 
+                            <label class="contain-vv"><span class="fnal-txt">No</span>
+                                <input type="radio" wire:model="is_different_traveller" value="true" @checked($is_different_traveller == true)>
+                                <span class="checkmark"></span>
+                            </label> 
+                        </div>   
                     </div>
 
                 </div>
 
+                @if ($is_different_traveller)
                 <div class="purchase-info-block">
                   <h3>lead passenger details</h3>
                 </div>
+                @endif
 
-                <div class="top-form-contain lead-passenger">
+                <!-- <div class="top-form-contain lead-passenger">
                     <div class="form-field">
                         <input type="text" wire:model="payer.first_name_lead" placeholder="First Name*" required>
                     </div>
@@ -138,8 +152,29 @@
                             </script>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
+                @if ($is_different_traveller)
+                    <div class="top-form-contain lead-passenger">
+                        <div class="form-field">
+                            <input type="text" wire:model="payer.first_name1" placeholder="First Name*" required>
+                            @error('payer.first_name1') <label class="error-label">{{ $message }}</label> @enderror
+                        </div>
+                        <div class="form-field">
+                            <input type="text" wire:model="payer.last_name1" placeholder="Last Name*">
+                            @error('payer.last_name1') <label class="error-label">{{ $message }}</label> @enderror
+                        </div>
+                        <div class="form-field">
+                            <input type="email" wire:model="payer.email_address1" placeholder="Email*" required>
+                            @error('payer.email_address1') <label class="error-label">{{ $message }}</label> @enderror
+                        </div>
+                        <div class="form-field mobile_field">
+                            <input type="tel" wire:model="payer.mobile_number1" placeholder="Mobile number*" required>
+                            @error('payer.mobile_number1') <label class="error-label">{{ $message }}</label> @enderror
+                        </div>
+                    </div>
+                @endif
+              
                 <h3>Special requests</h3>
                 <div class="form-field-full-width" wire:ignore>
                     <div id="summernote"></div>

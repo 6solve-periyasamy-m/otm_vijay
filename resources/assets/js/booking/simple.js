@@ -347,26 +347,26 @@ jQuery(document).ready(function () {
     //jQuery('.second-form .left-col .evnt-name .head-evnt').text(jQuery('.second-form .right-col .snd-sec .right-col h4:first').text());
     // jQuery('.second-form .left-col h3.event-name').text(jQuery('.second-form .right-col .snd-sec h4:first').text());
     // console.log(jQuery('.second-form .left-col h3.event-name'))
-    jQuery('.lead-purchase-traveller-block input[type="checkbox"]').click(function() {
-        jQuery('.lead-purchase-traveller-block input[type="checkbox"]').prop('checked', false);
-        jQuery(this).prop('checked', true);
-        if (jQuery(this).val() == 'Yes') {
-            jQuery('.purchase-info-block').hide();
-            jQuery('.lead-passenger').hide();
-        } else {
-            jQuery('.purchase-info-block').show();
-            jQuery('.lead-passenger').show();
-        }
-    });
+    // jQuery('.lead-purchase-traveller-block input[type="checkbox"]').click(function() {
+    //     jQuery('.lead-purchase-traveller-block input[type="checkbox"]').prop('checked', false);
+    //     jQuery(this).prop('checked', true);
+    //     if (jQuery(this).val() == 'Yes') {
+    //         jQuery('.purchase-info-block').hide();
+    //         jQuery('.lead-passenger').hide();
+    //     } else {
+    //         jQuery('.purchase-info-block').show();
+    //         jQuery('.lead-passenger').show();
+    //     }
+    // });
     
-    var checkedValue = jQuery('.lead-purchase-traveller-block input[type="checkbox"]:checked').val();
-    if (checkedValue == 'Yes') {
-        jQuery('.lead-passenger').hide();
-        jQuery('.purchase-info-block').hide();
-    } else {
-        jQuery('.purchase-info-block').show();
-        jQuery('.lead-passenger').show();
-    }
+    // var checkedValue = jQuery('.lead-purchase-traveller-block input[type="checkbox"]:checked').val();
+    // if (checkedValue == 'Yes') {
+    //     jQuery('.lead-passenger').hide();
+    //     jQuery('.purchase-info-block').hide();
+    // } else {
+    //     jQuery('.purchase-info-block').show();
+    //     jQuery('.lead-passenger').show();
+    // }
 
 });
 
@@ -385,12 +385,12 @@ document.addEventListener('livewire:load', function () {
             }
         }
     });
-    var checkedValue = jQuery('.lead-purchase-traveller-block input[type="checkbox"]:checked').val();
-    if (checkedValue == 'Yes') {
-        jQuery('.lead-passenger').hide();
-    } else {
-        jQuery('.lead-passenger').show();
-    }
+    // var checkedValue = jQuery('.lead-purchase-traveller-block input[type="checkbox"]:checked').val();
+    // if (checkedValue == 'Yes') {
+    //     jQuery('.lead-passenger').hide();
+    // } else {
+    //     jQuery('.lead-passenger').show();
+    // }
 });
 
 
