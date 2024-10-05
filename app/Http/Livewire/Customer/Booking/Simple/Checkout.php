@@ -131,16 +131,7 @@ class Checkout extends Component
 
     public function rules()
     {
-        // return [
-        //     'payer.first_name' => 'required|string',
-        //     'payer.last_name' => 'required|string',
-        //     'payer.email_address' => 'required|email:rfc,dns',
-        //     'payer.mobile_number' => 'required|phone:INTERNATIONAL',
-        //     'payer.date_of_birth' => 'nullable|date:d-m-Y',
-        //     'payerAddress.postcode' => 'required|string',
-        //     'booking.notes' => 'nullable|string',
-        // ];
-        $rules = [
+        return [
             'payer.first_name' => 'required|string',
             'payer.last_name' => 'required|string',
             'payer.email_address' => 'required|email:rfc,dns',
@@ -149,13 +140,22 @@ class Checkout extends Component
             'payerAddress.postcode' => 'required|string',
             'booking.notes' => 'nullable|string',
         ];
-        if ($this->is_different_traveller) {
-            $rules['payer.first_name1'] = 'required|string';
-            $rules['payer.last_name1'] = 'required|string';
-            $rules['payer.email_address1'] = 'required|email:rfc,dns';
-            $rules['payer.mobile_number1'] = 'required|phone:INTERNATIONAL';
-        }
-        return $rules;
+        // $rules = [
+        //     'payer.first_name' => 'required|string',
+        //     'payer.last_name' => 'required|string',
+        //     'payer.email_address' => 'required|email:rfc,dns',
+        //     'payer.mobile_number' => 'required|phone:INTERNATIONAL',
+        //     'payer.date_of_birth' => 'nullable|date:d-m-Y',
+        //     'payerAddress.postcode' => 'required|string',
+        //     'booking.notes' => 'nullable|string',
+        // ];
+        // if ($this->is_different_traveller) {
+        //     $rules['payer.first_name1'] = 'required|string';
+        //     $rules['payer.last_name1'] = 'required|string';
+        //     $rules['payer.email_address1'] = 'required|email:rfc,dns';
+        //     $rules['payer.mobile_number1'] = 'required|phone:INTERNATIONAL';
+        // }
+        // return $rules;
     }
 
     private function popupAirwallex(string $id, string $secret): void
