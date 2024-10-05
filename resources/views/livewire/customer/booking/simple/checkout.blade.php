@@ -125,11 +125,9 @@
 
                 </div>
 
-                @if ($is_different_traveller)
-                <div class="purchase-info-block">
+                <div style="display:none;" class="purchase-info-block">
                   <h3>lead passenger details</h3>
                 </div>
-                @endif
 
                 <!-- <div class="top-form-contain lead-passenger">
                     <div class="form-field">
@@ -155,21 +153,26 @@
                 </div> -->
 
                 @if ($is_different_traveller)
+                <style>
+                    .purchase-info-block{
+                        display: block!important;
+                    }
+                </style>
                     <div class="top-form-contain lead-passenger">
                         <div class="form-field">
-                            <input type="text" wire:model="payer.first_name1" placeholder="First Name*" required>
+                            <input type="text"  {{-- wire:model="payer.first_name1" --}} placeholder="First Name*" required>
                             @error('payer.first_name1') <label class="error-label">{{ $message }}</label> @enderror
                         </div>
                         <div class="form-field">
-                            <input type="text" wire:model="payer.last_name1" placeholder="Last Name*">
+                            <input type="text"  {{--wire:model="payer.last_name1"--}} placeholder="Last Name*">
                             @error('payer.last_name1') <label class="error-label">{{ $message }}</label> @enderror
                         </div>
                         <div class="form-field">
-                            <input type="email" wire:model="payer.email_address1" placeholder="Email*" required>
+                            <input type="email"  {{-- wire:model="payer.email_address1"--}} placeholder="Email*" required>
                             @error('payer.email_address1') <label class="error-label">{{ $message }}</label> @enderror
                         </div>
                         <div class="form-field mobile_field">
-                            <input type="tel" wire:model="payer.mobile_number1" placeholder="Mobile number*" required>
+                            <input type="tel"  {{-- wire:model="payer.mobile_number1"--}} placeholder="Mobile number*" required>
                             @error('payer.mobile_number1') <label class="error-label">{{ $message }}</label> @enderror
                         </div>
                     </div>
