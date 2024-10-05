@@ -155,7 +155,7 @@
                 @if ($is_different_traveller)
                 <style>
                     .purchase-info-block{
-                        display: block!important;
+                        display: flex!important;
                     }
                 </style>
                     <div class="top-form-contain lead-passenger">
