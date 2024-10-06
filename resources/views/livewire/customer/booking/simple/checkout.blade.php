@@ -125,7 +125,6 @@
 
                 </div>
 
-
                 @if ($is_different_traveller)
                         <div class="class-test">
                             <div class="purchase-info-block">
