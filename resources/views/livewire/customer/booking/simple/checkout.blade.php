@@ -125,9 +125,9 @@
 
                 </div>
 
-                <div style="display:none;" class="purchase-info-block">
+                <!-- <div style="display:none;" class="purchase-info-block">
                   <h3>lead passenger details</h3>
-                </div>
+                </div> -->
 
                 <!-- <div class="top-form-contain lead-passenger">
                     <div class="form-field">
@@ -153,11 +153,15 @@
                 </div> -->
 
                 @if ($is_different_traveller)
-                <style>
+                <!-- <style>
                     .purchase-info-block{
                         display: flex!important;
                     }
-                </style>
+                </style> -->
+                <div class="whol-lead-contain">
+                    <div class="purchase-info-block">
+                        <h3>lead passenger details</h3>
+                    </div>
                     <div class="top-form-contain lead-passenger">
                         <div class="form-field">
                             <input type="text"  {{-- wire:model="payer.first_name1" --}} placeholder="First Name*" required>
@@ -175,6 +179,7 @@
                             <input type="tel"  {{-- wire:model="payer.mobile_number1"--}} placeholder="Mobile number*" required>
                             @error('payer.mobile_number1') <label class="error-label">{{ $message }}</label> @enderror
                         </div>
+                    </div>
                     </div>
                 @endif
               
