@@ -152,13 +152,13 @@
                     </div>
                 </div> -->
 
-                @if ($is_different_traveller)
+                <!-- @if ($is_different_traveller) -->
                 <!-- <style>
                     .purchase-info-block{
                         display: flex!important;
                     }
                 </style> -->
-                    <div class="whol-lead-contain">
+                    <!-- <div class="whol-lead-contain">
                         <div class="purchase-info-block">
                             <h3>lead passenger details</h3>
                         </div>
@@ -176,7 +176,7 @@
                                 @error('payer.email_address1') <label class="error-label">{{ $message }}</label> @enderror
                             </div>
                             <div class="form-field mobile_field">
-                                <input type="tel"  {{-- wire:model="payer.mobile_number1"--}} placeholder="Mobile number*" required>
+                                <input type="tel" id="mobile_number1" {{-- wire:model="payer.mobile_number1"--}} placeholder="Mobile number*" required>
                                 @error('payer.mobile_number1') <label class="error-label">{{ $message }}</label> @enderror
                                 <script type="text/javascript">
                                     jQuery(document).ready(function () {
@@ -186,9 +186,76 @@
                                 </script>
                             </div>
                         </div>
-                    </div>
-                @endif
+                    </div> -->
+                <!-- @endif
+               -->
+                <!-- <h3>Special requests</h3>
+                <div data-chk="{{$this->booking->notes}}" class="form-field-full-width" wire:ignore>
+                    <div id="summernote">{!! $this->booking->notes !!}</div>
+                    <script type="text/javascript">
+                        $('#summernote').summernote({
+                            placeholder: 'Message',
+                            tabsize: 2,
+                            height: 120,
+                            toolbar: [
+                                ['font', ['bold', 'italic', 'underline']],
+                                ['para', ['paragraph', 'ol']],
+                                ['insert', ['link', 'picture', 'emoji']],
+                            ],
+                            callbacks: {
+                                onChange: function (content, $editable) {
+                                    @this.set('booking.notes', content)
+                                }
+                            }
+                        });
+                    </script>
+                </div> -->
+
+                @if ($is_different_traveller)
+                        <div class="class-test">
+                            <div class="purchase-info-block">
+                                <h3>lead passenger details</h3>
+                            </div> 
+                            <div class="top-form-contain">
+                                <div class="form-field">
+                                    <input type="text" {{-- wire:model="payer.first_name1" --}} placeholder="First Name*" required>
+                                    @error('payer.first_name1') <label class="error-label">{{ $message }}</label> @enderror
+                                </div>
+                                <div class="form-field">
+                                    <input type="text"  {{-- wire:model="payer.last_name1" --}} placeholder="Last Name*">
+                                    @error('payer.last_name1') <label class="error-label">{{ $message }}</label> @enderror
+                                </div>
+                                <div class="form-field">
+                                    <input type="email"  {{-- wire:model="payer.email_address1" --}} placeholder="Email*" required>
+                                    @error('payer.email_address1') <label class="error-label">{{ $message }}</label> @enderror
+                                </div>
+                                <div class="form-field mobile_field">
+                                    <input type="tel" id="mobile_number1" {{-- wire:model="payer.mobile_number1" --}} placeholder="Mobile number*" required>
+                                    @error('payer.mobile_number1') <label class="error-label">{{ $message }}</label> @enderror
+                                    <script type="text/javascript">
+                                    jQuery(document).ready(function () {
+                                        //     if (event.detail.key === 'payer.mobile_number1') {
+                                                let input = document.querySelector('#mobile_number1');
+                                        let iti = window.setupPhoneField(input);
+
+
+                                        // jQuery(input).on('change', function (event) {
+                                        //     @this.set('payer.mobile_number1', iti.getNumber());
+                                        // });
+                                        // document.addEventListener('updateValue', function (event) {
+                                    //         input.value = event.detail.value;
+                                        //     }
+                                        // });
+                                    });
+                                </script>
+                                </div>
+                            </div>
+                        </div>
+                 @endif
+                  
+             
               
+
                 <h3>Special requests</h3>
                 <div data-chk="{{$this->booking->notes}}" class="form-field-full-width" wire:ignore>
                     <div id="summernote">{!! $this->booking->notes !!}</div>
@@ -210,6 +277,9 @@
                         });
                     </script>
                 </div>
+                
+
+
             </div>
         </div>
 
