@@ -178,6 +178,12 @@
                             <div class="form-field mobile_field">
                                 <input type="tel"  {{-- wire:model="payer.mobile_number1"--}} placeholder="Mobile number*" required>
                                 @error('payer.mobile_number1') <label class="error-label">{{ $message }}</label> @enderror
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function () {
+                                        let input = document.querySelector('#mobile_number1');
+                                        let iti = window.setupPhoneField(input);
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>
