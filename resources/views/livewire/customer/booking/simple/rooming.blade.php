@@ -132,6 +132,13 @@
                     <input type="submit" class="submit-btn" wire:click="proceed" value="Proceed">
                 </div>
             </div>
+            @error('common')
+                <div class="submit-btn-cls add-on">
+                    <div class="inner">
+                        <span style="color: red">{{ $message }}</span>
+                    </div>
+                </div>
+            @enderror
         </div>
     </div>
 
