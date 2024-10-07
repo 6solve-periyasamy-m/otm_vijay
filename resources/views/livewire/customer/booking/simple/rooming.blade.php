@@ -256,7 +256,7 @@
           </div>
           <div class="submit-btn-cls">
               <div class="inner">
-                <input type="submit" class="submit-btn" wire:click="proceed" value="Proceed">
+                <input type="submit" class="submit-btn" wire:click="proceed" value="Checkout">
               </div>
           </div>
         </div>
