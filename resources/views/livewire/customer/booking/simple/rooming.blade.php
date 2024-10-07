@@ -164,12 +164,11 @@
          <div class="mob-static-see-more"><p>SEE MORE<p></div>     
         </div>
         <div class="static-mobile-description">
-              <h3>British & Irish Lions Tour 2025 Single Game Package - Brisbane</h3>
-              <p class="date">18 July, 2025 - 20 July, 2025</p>
-              <p class="points">Capri by Fraser Brisbane - 2 nights</p>
-              <p class="points">Category 3 Tickets — Test 1 - Wallabies v Lions</p>
-              <p class="points">Capri by Fraser Brisbane - 2 nights</p>
-              <p class="points">Category 3 Tickets — Test 1 - Wallabies v Lions</p>
+              <h3>{{ $tour->event?->name }}</h3>
+              <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
+              @foreach($tour->repository->getInclusions(4) as $inclusion)
+                <p class="points">{{ $inclusion }}</p>
+              @endforeach
         </div>
         <div class="mob-no.of-passengers-list">
            <p>{{ $this->getTravellerCount() }} Passengers</p>
@@ -178,15 +177,17 @@
             <ul>
                 <li>
                 <p class="txt">Package Price</p>
-                <p class="price">A$2,000</p>
+                <p class="price">{{ f_currency($booking->repository->getBasePrice()) }}</p>
                 </li>
                 <li>
+                @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
                 <p class="txt">Single Supplement</p>
-                <p class="price">A$0</p>
+                <p class="price">{{ f_currency($singleOccupancy) }}</p>
                 </li>
                 <li>
-                <p class="txt">GST</p>
-                <p class="price">A$200</p>
+                @if($booking->repository->getTaxes() !== null)
+                <p class="txt">{{ $tour->taxBracket()->name }}</p>
+                <p class="price">{{ f_currency($booking->repository->getTaxes()) }}</p>
                 </li>
             </ul>
         </div>
@@ -194,7 +195,7 @@
             <ul>
                 <li>
                 <p class="txt">Total</p>
-                <p class="price">A$2000</p>
+                <p class="price">{{ f_currency($booking->repository->getTotalCost()) }}</p>
                 </li>
             </ul>
         </div>
