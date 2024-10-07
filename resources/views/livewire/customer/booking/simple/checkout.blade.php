@@ -1,7 +1,7 @@
 @php
     $is_different_traveller = $is_different_traveller === 'true' ? true : false;
 @endphp
-<script>
+<!-- <script>
     jQuery(document).ready(function ($) {
         var chval = @json($is_different_traveller); 
         setTimeout(() => {
@@ -14,7 +14,7 @@
         }
         }, 2000);
     });
-</script>
+</script> -->
 <div class="row">
     <div class="second-form">
         <div class="left-col">
