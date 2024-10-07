@@ -305,7 +305,7 @@ jQuery(document).ready(function () {
     jQuery('.mob-static-see-more').click(function() {
         jQuery('.static-mobile-description').toggle();
         jQuery('.price-details-block').toggle();
-        jQuery('.mob-static-see-more .submit-btn-cls').toggle();
+        jQuery('.mob-trip-summary-block .submit-btn-cls').toggle();
         
         var currentText = jQuery('.mob-static-see-more p:first').text();
         
