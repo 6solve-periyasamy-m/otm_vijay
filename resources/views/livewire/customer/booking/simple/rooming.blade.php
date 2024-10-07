@@ -156,7 +156,7 @@
         </div>
     </div>
 </div>
-<!-- <div class="mob-trip-summary-block">
+<div class="mob-trip-summary-block">
   <div class="block-container">
       <div class="Inner-container">
         <div class="mob-static-tip-sum">
@@ -174,7 +174,7 @@
            <p>{{ $this->getTravellerCount() }} Passengers</p>
         </div>
         <div class="price-details-block">
-            <ul>
+            <>
                 <li>
                 <p class="txt">Package Price</p>
                 <p class="price">{{ f_currency($booking->repository->getBasePrice()) }}</p>
@@ -184,11 +184,13 @@
                 <p class="txt">Single Supplement</p>
                 <p class="price">{{ f_currency($singleOccupancy) }}</p>
                 </li>
-                <li>
+                
                 @if($booking->repository->getTaxes() !== null)
+                <li>
                 <p class="txt">{{ $tour->taxBracket()->name }}</p>
                 <p class="price">{{ f_currency($booking->repository->getTaxes()) }}</p>
                 </li>
+                @endif
             </ul>
         </div>
         <div class="total-block">
@@ -206,4 +208,4 @@
         </div>
       </div>
   </div>
-</div> -->
+</div>
