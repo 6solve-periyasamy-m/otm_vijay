@@ -56,7 +56,7 @@
                         @error('payer.mobile_number') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                     <div class="form-field">
-                        <input type="text" id="postal-code" name="postal-code" wire:model="payerAddress.postcode" placeholder="Postal code*" required>
+                        <input type="text" id="postal-code" name="postal-code" wire:model="payerAddress.postcode" placeholder="Postal code" required>
                         @error('payerAddress.postcode') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                     <div class="form-field rap-las-cls">
