@@ -172,7 +172,7 @@
               <p class="points">Category 3 Tickets — Test 1 - Wallabies v Lions</p>
         </div>
         <div class="mob-no.of-passengers-list">
-           <p>2 Passengers</p>
+           <p>{{ $this->getTravellerCount() }} Passengers</p>
         </div>
         <div class="price-details-block">
             <ul>
