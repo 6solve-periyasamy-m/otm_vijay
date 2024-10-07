@@ -31,7 +31,7 @@
     <ul>
         <li>
             <p class="txt">Package Price</p>
-            <p class="price">{{ f_currency($booking->repository->getBasePrice()) }}</p>
+            <p class="price pkg-price">{{ f_currency($booking->repository->getBasePrice()) }}</p>
         </li>
         <!-- @if($tour->booking_fee !== 0)
             <li>
@@ -49,12 +49,12 @@
         @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
         <li>
             <p class="txt">Single occupancy surcharge</p>
-            <p class="price">{{ f_currency($singleOccupancy) }}</p>
+            <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>
         </li>
         @if($booking->repository->getTaxes() !== null)
             <li>
                 <p class="txt">{{ $tour->taxBracket()->name }} (Included)</p>
-                <p class="price">{{ f_currency($booking->repository->getTaxes()) }}</p>
+                <p class="price tax-price">{{ f_currency($booking->repository->getTaxes()) }}</p>
             </li>
         @endif
         <li>

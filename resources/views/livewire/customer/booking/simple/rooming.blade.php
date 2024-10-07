@@ -263,9 +263,17 @@
     </div>
   </div>
   <script>
+    jQuery('.mob-trip-summary-block .submit-btn-cls .submit-btn').click(function(){
+        jQuery('.third-col .submit-btn-cls .submit-btn').trigger('click')
+    })
     jQuery('.second-block.tra-det .Min,.second-block.tra-det .Max').click(function(){
         setTimeout(() => {
+            jQuery('.mob-trip-summary-block li:eq(0) .price').text(jQuery('.third-col .pkg-price').text());
+            jQuery('.mob-trip-summary-block li:eq(1) .price').text(jQuery('.third-col .sng-price').text());
+            jQuery('.mob-trip-summary-block li:eq(2) .price').text(jQuery('.third-col .tax-price').text());
+
             jQuery('.mob-no-of-passengers-list p:first').text(jQuery('.second-block.tra-det .right .No .text').text()+' Passengers')
         }, 2000);
     })
     </script>
+    
