@@ -119,13 +119,13 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
 
     public function getOrderComponent(OrderCustomer $orderCustomer): ?OrderComponentRepository
     {
-        $component = $orderCustomer->orderMerchandise()->where('merchandise_id', $this->tourComponent->id)->first();
+        $component = $orderCustomer->orderMerchandise()->where('merchandise_inventory_tour_id', $this->tourComponent->id)->first();
         return $component?->repository;
     }
 
     public function getBookingComponent(BookingTraveller $traveller): ?BookingComponentRepository
     {
-        $component = $traveller->merchandise()->where('merchandise_id', $this->tourComponent->id)->first();
+        $component = $traveller->merchandise()->where('merchandise_inventory_tour_id', $this->tourComponent->id)->first();
         return $component?->repository;
     }
 
