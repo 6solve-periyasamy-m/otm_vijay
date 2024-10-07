@@ -377,7 +377,9 @@ document.addEventListener('livewire:load', function () {
             const firstErrorElement = document.querySelector('.error-label');
             if (firstErrorElement) {
                 const elementPosition = firstErrorElement.getBoundingClientRect().top + window.scrollY;
-                const offsetPosition = elementPosition - 70;
+                // const offsetPosition = elementPosition - 70;
+                const isMobile = window.innerWidth <= 768;
+                const offsetPosition = elementPosition - (isMobile ? 120 : 70);
                 window.scrollTo({
                     top: offsetPosition,
                     behavior: 'smooth'
