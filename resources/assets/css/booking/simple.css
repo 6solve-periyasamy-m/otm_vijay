@@ -2625,3 +2625,13 @@ input::-webkit-inner-spin-button {
     background:transparent!important;
     transition:0s!important;
 }
+.submit-btn-cls.add-on {
+    background: transparent;
+    border: 0px !important;
+    text-align: right;
+}
+.submit-btn-cls.add-on .inner {
+    width: 100%;
+    max-width: 100%;
+    text-align: right;
+}
