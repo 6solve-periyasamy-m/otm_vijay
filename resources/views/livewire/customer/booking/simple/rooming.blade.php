@@ -156,7 +156,7 @@
         </div>
     </div>
 </div>
-<div class="mob-trip-summary-block">
+<!-- <div class="mob-trip-summary-block">
   <div class="block-container">
       <div class="Inner-container">
         <div class="mob-static-tip-sum">
@@ -206,4 +206,4 @@
         </div>
       </div>
   </div>
-</div>
+</div> -->
