@@ -2640,4 +2640,12 @@ input::-webkit-inner-spin-button {
         top:16px;
         right:32%;
     } 
+    .submit-btn-cls.add-on .inner span {
+        font-size: 11px;
+        line-height: 12px;
+        letter-spacing: 0;
+        font-family: "PP Neue Montreal Medium";
+        color: var(--error-label-color) !important;
+        text-align: left;
+    }
 }
