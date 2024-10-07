@@ -23,175 +23,175 @@ jQuery(document).ready(function () {
 
     //dynamic rooms
 
-    let minRooms = 1;
-    let maxRooms = 1;
+    // let minRooms = 1;
+    // let maxRooms = 1;
 
-    function updateperseons() {
-        let roomCount = parseInt(jQuery('.second-block.rme-det .inner-block .right .No .text').text());
-        let personCount = parseInt(jQuery('.second-block.tra-det .inner-block .right .No .text').text());
-        jQuery('.third-block .first-bl').each(function (index) {
-            if (personCount > 0) {
-                console.log(personCount);
-                let personsForThisRoom = Math.min(2, Math.ceil(personCount / roomCount));
-                jQuery(this).find('#bedding_configuration option').prop('disabled', false);
-                jQuery(this).find('#bedding_configuration option').eq(personsForThisRoom - 1).prop('selected', true);
-                jQuery(this).find('#bedding_configuration option').each(function (optIndex) {
-                    if (optIndex !== personsForThisRoom - 1) {
-                        jQuery(this).prop('disabled', true);
-                    }
-                });
-                personCount -= personsForThisRoom;
-                roomCount--;
-            } else {
-                jQuery(this).find('#bedding_configuration option').prop('disabled', true).prop('selected', false);
-            }
-        });
-    }
+    // function updateperseons() {
+    //     let roomCount = parseInt(jQuery('.second-block.rme-det .inner-block .right .No .text').text());
+    //     let personCount = parseInt(jQuery('.second-block.tra-det .inner-block .right .No .text').text());
+    //     jQuery('.third-block .first-bl').each(function (index) {
+    //         if (personCount > 0) {
+    //             console.log(personCount);
+    //             let personsForThisRoom = Math.min(2, Math.ceil(personCount / roomCount));
+    //             jQuery(this).find('#bedding_configuration option').prop('disabled', false);
+    //             jQuery(this).find('#bedding_configuration option').eq(personsForThisRoom - 1).prop('selected', true);
+    //             jQuery(this).find('#bedding_configuration option').each(function (optIndex) {
+    //                 if (optIndex !== personsForThisRoom - 1) {
+    //                     jQuery(this).prop('disabled', true);
+    //                 }
+    //             });
+    //             personCount -= personsForThisRoom;
+    //             roomCount--;
+    //         } else {
+    //             jQuery(this).find('#bedding_configuration option').prop('disabled', true).prop('selected', false);
+    //         }
+    //     });
+    // }
 
-    $(document).ajaxComplete(function () {
-        console.log('ajaxcoml')
-        setTimeout(() => {
-            updateperseons();
-        }, 5000);
+    // $(document).ajaxComplete(function () {
+    //     console.log('ajaxcoml')
+    //     setTimeout(() => {
+    //         updateperseons();
+    //     }, 5000);
 
-    });
+    // });
 
-    function updateRoomNumbers(minRooms) {
-        jQuery('.third-block .first-bl').each(function (index) {
-            if (index < minRooms) {
-                jQuery(this).find('h6:first').text('Room ' + (index + 1));
-            } else {
-                jQuery(this).closest('.first-bl').remove();
-            }
-        });
-        updateperseons();
+    // function updateRoomNumbers(minRooms) {
+    //     jQuery('.third-block .first-bl').each(function (index) {
+    //         if (index < minRooms) {
+    //             jQuery(this).find('h6:first').text('Room ' + (index + 1));
+    //         } else {
+    //             jQuery(this).closest('.first-bl').remove();
+    //         }
+    //     });
+    //     updateperseons();
 
 
-        //         jQuery('.third-block .first-bl').each(function(index) {
-        //             jQuery(this).find('h6:first').text('Room ' + (index + 1));
-        //         });
-    }
+    //     //         jQuery('.third-block .first-bl').each(function(index) {
+    //     //             jQuery(this).find('h6:first').text('Room ' + (index + 1));
+    //     //         });
+    // }
 
-    function clearSelectedValues(clonedBlock) {
-        clonedBlock.find('select').each(function () {
-            jQuery(this).val('');
-        });
-    }
+    // function clearSelectedValues(clonedBlock) {
+    //     clonedBlock.find('select').each(function () {
+    //         jQuery(this).val('');
+    //     });
+    // }
 
-    function updateRooms(people) {
-        switch (people) {
-            case 1:
-                minRooms = maxRooms = 1;
-                break;
-            case 2:
-                minRooms = 1;
-                maxRooms = 2;
-                break;
-            case 3:
-                minRooms = 2;
-                maxRooms = 3;
-                break;
-            case 4:
-                minRooms = 2;
-                maxRooms = 4;
-                break;
-            case 5:
-            case 6:
-                minRooms = 3;
-                maxRooms = 5;
-                break;
-            case 7:
-                minRooms = maxRooms = 4;
-                break;
-            default:
-                minRooms = 1;
-                maxRooms = 1;
-        }
+    // function updateRooms(people) {
+    //     switch (people) {
+    //         case 1:
+    //             minRooms = maxRooms = 1;
+    //             break;
+    //         case 2:
+    //             minRooms = 1;
+    //             maxRooms = 2;
+    //             break;
+    //         case 3:
+    //             minRooms = 2;
+    //             maxRooms = 3;
+    //             break;
+    //         case 4:
+    //             minRooms = 2;
+    //             maxRooms = 4;
+    //             break;
+    //         case 5:
+    //         case 6:
+    //             minRooms = 3;
+    //             maxRooms = 5;
+    //             break;
+    //         case 7:
+    //             minRooms = maxRooms = 4;
+    //             break;
+    //         default:
+    //             minRooms = 1;
+    //             maxRooms = 1;
+    //     }
 
-        let roomCount = jQuery('.third-block .first-bl').length;
+    //     let roomCount = jQuery('.third-block .first-bl').length;
 
-        while (roomCount > maxRooms) {
-            jQuery('.third-block .first-bl:last').remove();
-            roomCount--;
-        }
+    //     while (roomCount > maxRooms) {
+    //         jQuery('.third-block .first-bl:last').remove();
+    //         roomCount--;
+    //     }
 
-        while (roomCount < minRooms) {
-            let newRoom = jQuery('.third-block .first-bl:first').clone();
-            clearSelectedValues(newRoom);
-            newRoom.appendTo('.third-block');
-            roomCount++;
-        }
+    //     while (roomCount < minRooms) {
+    //         let newRoom = jQuery('.third-block .first-bl:first').clone();
+    //         clearSelectedValues(newRoom);
+    //         newRoom.appendTo('.third-block');
+    //         roomCount++;
+    //     }
 
-        updateRoomNumbers(minRooms);
+    //     updateRoomNumbers(minRooms);
 
-        jQuery('.rme-det .inner-block .right .inn .No .text').text(minRooms);
-    }
+    //     jQuery('.rme-det .inner-block .right .inn .No .text').text(minRooms);
+    // }
 
-    jQuery('.tra-det .inner-block .right .inn .Min').click(function () {
-        let textval = jQuery(this).closest('.inn').find('.No .text');
-        let text = parseInt(textval.text());
+    // jQuery('.tra-det .inner-block .right .inn .Min').click(function () {
+    //     let textval = jQuery(this).closest('.inn').find('.No .text');
+    //     let text = parseInt(textval.text());
 
-        if (text > 1) {
-            textval.text(text - 1);
-            updateRooms(text - 1);
+    //     if (text > 1) {
+    //         textval.text(text - 1);
+    //         updateRooms(text - 1);
 
-            jQuery('.rme-det .inner-block .right .inn .No .text').text(minRooms);
+    //         jQuery('.rme-det .inner-block .right .inn .No .text').text(minRooms);
 
-            let roomCount = jQuery('.third-block .first-bl').length;
+    //         let roomCount = jQuery('.third-block .first-bl').length;
 
-            while (roomCount > minRooms) {
-                jQuery('.third-block .first-bl:last').remove();
-                roomCount--;
-            }
+    //         while (roomCount > minRooms) {
+    //             jQuery('.third-block .first-bl:last').remove();
+    //             roomCount--;
+    //         }
 
-            while (roomCount < minRooms) {
-                let newRoom = jQuery('.third-block .first-bl:first').clone();
-                clearSelectedValues(newRoom);
-                newRoom.appendTo('.third-block');
-                roomCount++;
-            }
+    //         while (roomCount < minRooms) {
+    //             let newRoom = jQuery('.third-block .first-bl:first').clone();
+    //             clearSelectedValues(newRoom);
+    //             newRoom.appendTo('.third-block');
+    //             roomCount++;
+    //         }
 
-            updateRoomNumbers(minRooms);
-        }
-    });
+    //         updateRoomNumbers(minRooms);
+    //     }
+    // });
 
-    jQuery('.tra-det .inner-block .right .inn .Max').click(function () {
-        let textval = jQuery(this).closest('.inn').find('.No .text');
-        let text = parseInt(textval.text());
-        if (text < 5) {
-            textval.text(text + 1);
-            updateRooms(text + 1);
-        }
-    });
+    // jQuery('.tra-det .inner-block .right .inn .Max').click(function () {
+    //     let textval = jQuery(this).closest('.inn').find('.No .text');
+    //     let text = parseInt(textval.text());
+    //     if (text < 5) {
+    //         textval.text(text + 1);
+    //         updateRooms(text + 1);
+    //     }
+    // });
 
-    jQuery('.rme-det .inner-block .right .inn .Min').click(function () {
-        let textval = jQuery(this).closest('.inn').find('.No .text');
-        let text = parseInt(textval.text());
+    // jQuery('.rme-det .inner-block .right .inn .Min').click(function () {
+    //     let textval = jQuery(this).closest('.inn').find('.No .text');
+    //     let text = parseInt(textval.text());
 
-        if (text > minRooms) {
-            textval.text(text - 1);
-            let roomCount = jQuery('.third-block .first-bl').length;
-            if (roomCount > 1) {
-                jQuery('.third-block .first-bl:last').remove();
-                updateRoomNumbers(text - 1);
-            } else {
-                jQuery('.third-block .first-bl:first').hide();
-            }
-        }
-    });
+    //     if (text > minRooms) {
+    //         textval.text(text - 1);
+    //         let roomCount = jQuery('.third-block .first-bl').length;
+    //         if (roomCount > 1) {
+    //             jQuery('.third-block .first-bl:last').remove();
+    //             updateRoomNumbers(text - 1);
+    //         } else {
+    //             jQuery('.third-block .first-bl:first').hide();
+    //         }
+    //     }
+    // });
 
-    jQuery('.rme-det .inner-block .right .inn .Max').click(function () {
-        let textval = jQuery(this).closest('.inn').find('.No .text');
-        let text = parseInt(textval.text());
+    // jQuery('.rme-det .inner-block .right .inn .Max').click(function () {
+    //     let textval = jQuery(this).closest('.inn').find('.No .text');
+    //     let text = parseInt(textval.text());
 
-        if (text < maxRooms) {
-            textval.text(text + 1);
-            let newRoom = jQuery('.third-block .first-bl:first').clone();
-            clearSelectedValues(newRoom);
-            newRoom.appendTo('.third-block');
-            updateRoomNumbers(text + 1);
-        }
-    });
+    //     if (text < maxRooms) {
+    //         textval.text(text + 1);
+    //         let newRoom = jQuery('.third-block .first-bl:first').clone();
+    //         clearSelectedValues(newRoom);
+    //         newRoom.appendTo('.third-block');
+    //         updateRoomNumbers(text + 1);
+    //     }
+    // });
 
     //check box right colm
     jQuery('.right-col .third-col .additional-block .form-field-checkbox').click(function () {
