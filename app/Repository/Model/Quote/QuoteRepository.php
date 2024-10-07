@@ -938,7 +938,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
      */
     public function convert(CustomerForConversion $lead, array $customers): Order
     {
-        $travellers = 1 + sizeof($customers);
+        $travellers = 1 + count($customers);
         $tour = $this->convertToTour($travellers, false);
         $order = Order::forceCreateQuietly([
             'tour_id' => $tour->id,
@@ -989,7 +989,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             }
         }
         // Merchandise
-        foreach ($this->quote->transport as $component) {
+        foreach ($this->quote->merchandise as $component) {
             $tourComponent = $component->repository->convertToTourComponent($tour);
             $this->addComponent($lead, $travellers, 'merchandise', $component, $tourComponent);
             foreach ($customers as $customer) {
