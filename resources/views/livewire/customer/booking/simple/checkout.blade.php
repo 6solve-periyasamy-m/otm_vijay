@@ -1,6 +1,20 @@
 @php
     $is_different_traveller = $is_different_traveller === 'true' ? true : false;
 @endphp
+<script>
+    jQuery(document).ready(function ($) {
+        var chval = @json($is_different_traveller); 
+        setTimeout(() => {
+        if (chval) {
+            // If chval is true or a truthy value
+            jQuery('.contain-vv input:radio[value=true]').click(); // No quotes around true for boolean
+        } else {
+            // If chval is false or a falsy value
+            jQuery('.contain-vv input:radio[value=false]').click(); // Assuming there's a radio input with value false
+        }
+        }, 2000);
+    });
+</script>
 <div class="row">
     <div class="second-form">
         <div class="left-col">
