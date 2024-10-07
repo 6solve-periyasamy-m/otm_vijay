@@ -112,7 +112,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
         if ($active !== null) return $active;
         $bookingComponent = BookingMerchandise::create([
             'booking_traveller_id' => $traveller->id,
-            'merchandise_id' => $this->tourComponent->id,
+            'merchandise_inventory_tour_id' => $this->tourComponent->id,
         ]);
         return $bookingComponent->repository;
     }
