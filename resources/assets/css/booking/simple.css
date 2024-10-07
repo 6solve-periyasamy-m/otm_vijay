@@ -2606,11 +2606,11 @@ input::-webkit-inner-spin-button {
     border: 1px solid transparent;
 }
 .submit-btn-cls .inner {
-    max-width: 152px;
     margin: auto;
 }
 .submit-btn-cls .inner:after {
     top:16px;
+    right:40%;
 }
 .submit-btn-cls:hover {
     background: transparent;
@@ -2634,4 +2634,10 @@ input::-webkit-inner-spin-button {
     width: 100%;
     max-width: 100%;
     text-align: right;
+}
+@media only screen and (max-width:767px) {
+    .submit-btn-cls .inner:after {
+        top:16px;
+        right:32%;
+    } 
 }
