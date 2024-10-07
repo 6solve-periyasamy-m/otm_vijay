@@ -434,6 +434,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
           $this->getIncludedActivitiesForSaving(),
           $this->getIncludedFlightsForSaving(),
           $this->getIncludedTransportForSaving(),
+          $this->getIncludedMerchandiseForSaving(),
         );
     }
 
