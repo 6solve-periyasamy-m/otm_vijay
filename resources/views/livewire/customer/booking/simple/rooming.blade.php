@@ -156,7 +156,7 @@
         </div>
     </div>
 </div>
-<div class="mob-trip-summary-block">
+<!-- <div class="mob-trip-summary-block">
   <div class="block-container">
       <div class="Inner-container">
         <div class="mob-static-tip-sum">
@@ -164,40 +164,37 @@
          <div class="mob-static-see-more"><p>SEE MORE<p></div>     
         </div>
         <div class="static-mobile-description">
-              <h3>{{ $tour->event?->name }}</h3>
-              <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
-              @foreach($tour->repository->getInclusions(4) as $inclusion)
-                <p class="points">{{ $inclusion }}</p>
-              @endforeach
+              <h3>British & Irish Lions Tour 2025 Single Game Package - Brisbane</h3>
+              <p class="date">18 July, 2025 - 20 July, 2025</p>
+              <p class="points">Capri by Fraser Brisbane - 2 nights</p>
+              <p class="points">Category 3 Tickets — Test 1 - Wallabies v Lions</p>
+              <p class="points">Capri by Fraser Brisbane - 2 nights</p>
+              <p class="points">Category 3 Tickets — Test 1 - Wallabies v Lions</p>
         </div>
         <div class="mob-no.of-passengers-list">
-           <p>{{ $this->getTravellerCount() }} Passengers</p>
+           <p>2 Passengers</p>
         </div>
         <div class="price-details-block">
-            <>
+            <ul>
                 <li>
                 <p class="txt">Package Price</p>
-                <p class="price">{{ f_currency($booking->repository->getBasePrice()) }}</p>
+                <p class="price">A$2,000</p>
                 </li>
                 <li>
-                @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
                 <p class="txt">Single Supplement</p>
-                <p class="price">{{ f_currency($singleOccupancy) }}</p>
+                <p class="price">A$0</p>
                 </li>
-                
-                @if($booking->repository->getTaxes() !== null)
                 <li>
-                <p class="txt">{{ $tour->taxBracket()->name }}</p>
-                <p class="price">{{ f_currency($booking->repository->getTaxes()) }}</p>
+                <p class="txt">GST</p>
+                <p class="price">A$200</p>
                 </li>
-                @endif
             </ul>
         </div>
         <div class="total-block">
             <ul>
                 <li>
                 <p class="txt">Total</p>
-                <p class="price">{{ f_currency($booking->repository->getTotalCost()) }}</p>
+                <p class="price">A$2000</p>
                 </li>
             </ul>
         </div>
@@ -208,4 +205,59 @@
         </div>
       </div>
   </div>
-</div>
+</div> -->
+
+
+<div class="mob-trip-summary-block" style="display: block!important">
+    <div class="block-container">
+        <div class="Inner-container">
+          <div class="mob-static-tip-sum">
+           <h4>Trip Summary</h4>
+           <div class="mob-static-see-more"><p>SEE MORE<p></div>     
+          </div>
+          <div class="static-mobile-description">
+                <h3>{{ $tour->event?->name }}</h3>
+                <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
+                @foreach($tour->repository->getInclusions(4) as $inclusion)
+                  <p class="points">{{ $inclusion }}</p>
+                @endforeach
+          </div>
+          <div class="mob-no.of-passengers-list">
+             <p>{{ $this->getTravellerCount() }} Passengers</p>
+          </div>
+          <div class="price-details-block">
+              <ul>
+                  <li>
+                  <p class="txt">Package Price</p>
+                  <p class="price">{{ f_currency($booking->repository->getBasePrice()) }}</p>
+                  </li>
+                  <li>
+                  @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
+                  <p class="txt">Single Supplement</p>
+                  <p class="price">{{ f_currency($singleOccupancy) }}</p>
+                  </li>
+                  
+                  @if($booking->repository->getTaxes() !== null)
+                  <li>
+                  <p class="txt">{{ $tour->taxBracket()->name }}</p>
+                  <p class="price">{{ f_currency($booking->repository->getTaxes()) }}</p>
+                  </li>
+                  @endif
+              </ul>
+          </div>
+          <div class="total-block">
+              <ul>
+                  <li>
+                  <p class="txt">Total</p>
+                  <p class="price">{{ f_currency($booking->repository->getTotalCost()) }}</p>
+                  </li>
+              </ul>
+          </div>
+          <div class="submit-btn-cls">
+              <div class="inner">
+                  <input class="submit-btn" wire:click="checkout" type="submit" value="Checkout">
+              </div>
+          </div>
+        </div>
+    </div>
+  </div>
