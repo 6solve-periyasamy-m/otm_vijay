@@ -54,11 +54,12 @@
     </thead>
     <tbody>
         @foreach(\App\Repository\Model\Merchandise\MerchandiseInventoryRepository::getBetweenDates(now(), now(), $quote->repository) as $inventory)
+            @continue($inventory->component === null)
             <tr inventory_id="{{ $inventory->id }}">
-                <td>{{ $inventory->component->name }}</td>
-                <td>{{ $inventory->component->type?->name }}</td>
-                <td>{{ $inventory->variant }}</td>
-                <td>{{ $inventory->size }}</td>
+                <td>{{ $inventory->component?->name }}</td>
+                <td>{{ $inventory->component?->type?->name }}</td>
+                <td>{{ $inventory?->variant }}</td>
+                <td>{{ $inventory?->size }}</td>
                 <td>
                     <input type="checkbox" disabled @if($inventory->fit_selectable == 1) checked @endif>
                 </td>
