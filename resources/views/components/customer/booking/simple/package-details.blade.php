@@ -59,7 +59,7 @@
         @endif
         <li>
             <p class="total">Total</p>
-            <p class="price">{{ f_currency($booking->repository->getTotalCost()) }}</p>
+            <p class="price tot-price">{{ f_currency($booking->repository->getTotalCost()) }}</p>
         </li>
     </ul>
     {{ $slot }}

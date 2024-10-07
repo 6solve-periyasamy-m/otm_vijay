@@ -271,6 +271,7 @@
             jQuery('.mob-trip-summary-block li:eq(0) .price').text(jQuery('.third-col .pkg-price').text());
             jQuery('.mob-trip-summary-block li:eq(1) .price').text(jQuery('.third-col .sng-price').text());
             jQuery('.mob-trip-summary-block li:eq(2) .price').text(jQuery('.third-col .tax-price').text());
+            jQuery('.mob-trip-summary-block .total-block .price').text(jQuery('.third-col .tot-price').text());
 
             jQuery('.mob-no-of-passengers-list p:first').text(jQuery('.second-block.tra-det .right .No .text').text()+' Passengers')
         }, 2000);
