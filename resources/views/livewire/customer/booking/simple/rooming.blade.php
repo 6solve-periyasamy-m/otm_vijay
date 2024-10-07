@@ -156,6 +156,7 @@
         </div>
     </div>
 </div>
+
 <!-- <div class="mob-trip-summary-block">
   <div class="block-container">
       <div class="Inner-container">
@@ -222,7 +223,7 @@
                   <p class="points">{{ $inclusion }}</p>
                 @endforeach
           </div>
-          <div class="mob-no.of-passengers-list">
+          <div class="mob-no-of-passengers-list">
              <p>{{ $this->getTravellerCount() }} Passengers</p>
           </div>
           <div class="price-details-block">
@@ -261,3 +262,10 @@
         </div>
     </div>
   </div>
+  <script>
+    jQuery('.second-block.tra-det .Min,.second-block.tra-det .Max').click(function(){
+        setTimeout(() => {
+            jQuery('.mob-no-of-passengers-list p:first').text(jQuery('.second-block.tra-det .right .No .text').text()+' Passengers')
+        }, 2000);
+    })
+    </script>
