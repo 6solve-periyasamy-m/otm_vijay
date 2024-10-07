@@ -6,14 +6,14 @@ use Mediconesystems\LivewireDatatables\Column;
 
 class ActionColumn
 {
-    public static function view($field, $edit, $view = null): Column
+    public static function view($field, $edit, $viewRoute = null, $buttonView = 'partials.admin.livewire.table.actions'): Column
     {
-        return Column::callback(['id'], static function ($id) use ($view, $edit, $field) {
-            return view('partials.admin.livewire.table.actions', [
+        return Column::callback(['id'], static function ($id) use ($viewRoute, $edit, $field, $buttonView) {
+            return view($buttonView, [
                 'id' => $id,
                 'field' => $field,
                 'edit' => $edit,
-                'route' => $view,
+                'route' => $viewRoute,
             ]);
         })
             ->label(__('custom.table.actions'))
@@ -21,14 +21,14 @@ class ActionColumn
             ->unsortable();
     }
 
-    public static function modal($field, $edit, $view = null): Column
+    public static function modal($field, $edit, $viewRoute = null,  $buttonView = 'partials.admin.livewire.table.actions'): Column
     {
-        return Column::callback(['id'], static function ($id) use ($view, $edit, $field) {
-            return view('partials.admin.livewire.table.actions', [
+        return Column::callback(['id'], static function ($id) use ($viewRoute, $edit, $field, $buttonView) {
+            return view($buttonView, [
                 'id' => $id,
                 'field' => $field,
                 'modal' => $edit,
-                'route' => $view,
+                'route' => $viewRoute,
             ]);
         })
             ->label(__('custom.table.actions'))

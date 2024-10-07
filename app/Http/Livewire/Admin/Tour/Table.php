@@ -74,7 +74,7 @@ class Table extends LivewireDatatable
                 ->label('Active')
                 ->sortable()
                 ->filterable(),
-            ActionColumn::view('tour', 'tours.edit', 'tours.view'),
+            ActionColumn::view('tour', 'tours.edit', 'tours.view', 'partials.admin.livewire.table.tour-actions'),
         ];
     }
 }
