@@ -208,7 +208,7 @@
 </div> -->
 
 
-<div class="mob-trip-summary-block" style="display: block!important">
+<div class="mob-trip-summary-block">
     <div class="block-container">
         <div class="Inner-container">
           <div class="mob-static-tip-sum">
