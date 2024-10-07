@@ -1,5 +1,4 @@
 <?php
-// Define the values - Changed 'Price' instead of 'Cost.' on Cost of Company section
 return [
     'table' => [
         'reference' => 'Reference',
