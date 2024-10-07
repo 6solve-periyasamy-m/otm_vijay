@@ -269,7 +269,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             'order_id' => $this->order->id,
             'amount' => $this->order->remaining_installment / $this->order->orderCustomers()->count(),
             'remaining' => min($this->order->remaining, $this->order->remaining_installment),
-            'due_on' => $this->order->tour->final_payment,
+            'due_on' => $this->order->tour?->final_payment,
         ]);
     }
 
