@@ -84,14 +84,14 @@ class AirwallexGateway extends Gateway implements SupportsRedirect, SupportsApiK
         }
         //$intention->amount = $cost;
         $intention->save();
-        return $this->getPaymentIntention($cost, $intention);
+        return $this->getPaymentIntention($cost, $intention, $success);
     }
 
-    public function showCheckout(Request $request)
+    public function showCheckout(Request $request, string $success = null)
     {
         try {
             $intent = PaymentIntention::find($request->intent);
-            $aIntent = $this->getPaymentIntention($intent->amount, $intent);
+            $aIntent = $this->getPaymentIntention($intent->amount, $intent, $success);
             return view('pages.customer.payment.airwallex', ['intent' => $aIntent,]);
         } catch (UnauthorizedGatewayException $e) {
             return back()->withErrors(['msg' => 'That gateway has not been setup for use.']);
@@ -120,7 +120,7 @@ class AirwallexGateway extends Gateway implements SupportsRedirect, SupportsApiK
      * Gets the Payment Intention details needed to use the drop-in element for
      * @throws UnauthorizedGatewayException
      */
-    public function getPaymentIntention(float $amount, PaymentIntention $intention): array
+    public function getPaymentIntention(float $amount, PaymentIntention $intention, string $return = null): array
     {
         $data = $this->sendRequest('pa/payment_intents/create', [
             'amount' => $amount,
@@ -130,7 +130,7 @@ class AirwallexGateway extends Gateway implements SupportsRedirect, SupportsApiK
                 'intention_id' => $intention->id,
             ],
             'request_id' => $intention->id,
-            'return_url' => $this->success,
+            'return_url' => $return ?? $this->success,
         ]);
         return ['id' => $data['id'], 'secret' => $data['client_secret'],];
     }
