@@ -137,7 +137,7 @@ class Checkout extends Component
             'payer.email_address' => 'required|email:rfc,dns',
             'payer.mobile_number' => 'required|phone:INTERNATIONAL',
             'payer.date_of_birth' => 'nullable|date:d-m-Y',
-            'payerAddress.postcode' => 'required|string',
+            'payerAddress.postcode' => 'nullable|string',
             'booking.notes' => 'nullable|string',
         ];
         // $rules = [
