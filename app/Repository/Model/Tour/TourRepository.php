@@ -33,6 +33,7 @@ use App\Repository\Interfaces\Manifest\HasRoomingList;
 use App\Repository\Interfaces\Manifest\HasTransportManifest;
 use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
 use App\Repository\Model\Activity\ActivityInventoryRepository;
+use App\Repository\Model\Merchandise\MerchandiseInventoryTourRepository;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use App\Repository\Reporting\Manifest\FlightManifestRepository;
 use App\Repository\Reporting\Manifest\TransportManifestRepository;
@@ -638,8 +639,8 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                     $component->get()->accommodation->name . ' - ' . diff_in_nights($component->getStartTime(), $component->getEndTime()) . ' Nights',
                 $component instanceof ActivityInventoryRepository =>
                     $component->getStartTime()?->format('d M Y') . " - " . $component->get()->activity->name,
-                $component instanceof MerchandiseInventoryTour =>
-                    $component->inventory->component->name,
+                $component instanceof MerchandiseInventoryTourRepository =>
+                    $component->get()->inventory->component->name,
                 default => null,
             };
             // TODO: Implement Flights, Transport
