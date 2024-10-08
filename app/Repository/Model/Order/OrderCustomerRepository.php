@@ -338,4 +338,17 @@ class OrderCustomerRepository extends ModelRepository
             'date' => $when,
         ]));
     }
+
+    /**
+     * Does the traveller have any components at all
+     * @return bool
+     */
+    public function hasComponents(): bool
+    {
+        return $this->orderCustomer->orderAccommodation()->count() > 0
+            || $this->orderCustomer->orderActivities()->count() > 0
+            || $this->orderCustomer->orderFlights()->count() > 0
+            || $this->orderCustomer->orderTransports()->count() > 0
+            || $this->orderCustomer->orderMerchandise()->count() > 0;
+    }
 }
