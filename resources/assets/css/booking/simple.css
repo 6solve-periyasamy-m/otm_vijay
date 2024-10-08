@@ -2531,9 +2531,9 @@ input::-webkit-inner-spin-button {
         border-bottom: 1px solid #FAE8D3;
     }
     .mob-no-of-passengers-list {
-        padding-bottom: 24px;
+        padding-bottom: 5px;
         padding-top: 8px;
-        margin-bottom: 24px;
+        margin-bottom: 15px;
         border-bottom: 1px solid #FAE8D3;
     }
     .mob-no-of-passengers-list p {
