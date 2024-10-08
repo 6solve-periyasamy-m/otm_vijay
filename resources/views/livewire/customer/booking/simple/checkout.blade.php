@@ -239,7 +239,7 @@
                             @endphp
                         <div class="form-field-checkbox" wire:click="setPayFull(0)">
                             <div class="left-ass">
-                                <label class="containr"><span class="txt">Pay a {{ $booking->tour?->deposit_percentage }}% deposit now. You will receive a reminder to pay the remaining balance of {{ f_currency($remainingAmount) }} before {{ $booking->tour->final_payment->format('d M Y') }}</span></span>
+                                <label class="containr"><span class="txt">Pay a {{ $booking->tour?->deposit_percentage }}% deposit now. <br /> You will receive a reminder to pay the remaining balance of {{ f_currency($remainingAmount) }} before {{ $booking->tour->final_payment->format('d M Y') }}</span></span>
                                     <input type="checkbox" @if(!$payFull) checked @endif>
                                     <span class="checkmark"></span>
                                 </label>
