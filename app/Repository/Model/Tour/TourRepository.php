@@ -617,6 +617,14 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 $components[] = $component->inventory->repository;
             }
         }
+        foreach ($this->tour->merchandise as $component) {
+            $key = 'merchandise-' .  $component->inventory->component->id;
+            if (in_array($key, $seen)) { continue; }
+            $seen[] = $key;
+            if ($component->tour_component_type === 'Included') {
+                $components[] = $component->inventory->repository;
+            }
+        }
         usort($components, function (InventoryRepository $a, InventoryRepository $b) {
             return $a->getStartTime()?->unix() <=> $b->getStartTime()?->unix();
         });
@@ -630,9 +638,11 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                     $component->get()->accommodation->name . ' - ' . diff_in_nights($component->getStartTime(), $component->getEndTime()) . ' Nights',
                 $component instanceof ActivityInventoryRepository =>
                     $component->getStartTime()?->format('d M Y') . " - " . $component->get()->activity->name,
+                $component instanceof MerchandiseInventoryTour =>
+                    $component->inventory->component->name,
                 default => null,
             };
-            // TODO: Implement Flights, Transport and Merchandise
+            // TODO: Implement Flights, Transport
             if ($inclusion !== null) {
                 $inclusions[] = $inclusion;
                 $limit--;
