@@ -2669,3 +2669,6 @@ input::-webkit-inner-spin-button {
         right: 28%;
     }
 }
+.ma-block .row .left-col .contain > h3.head-evnt{
+    font-weight: 600 !important;
+}
