@@ -15,7 +15,8 @@
         </div>
     @endif
     <div class="right-col">
-        <h4>{{ $tour->event?->name }}</h4>
+        <h4>{{$tour->name}}</h4>
+        <!-- <h4>{{ $tour->event?->name }}</h4> -->
         <!-- <h6>{{ $tour->name }}</h6> -->
         <!--<p class="location"></p> TODO: Implement Location on Event -->
         <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
