@@ -97,7 +97,7 @@
                             <div class="right-col">
                                 <h5>{{ $tour->name }}</h5>
                                 <!--<p class="location">Sydney, Australia</p>-->
-                                <p class="date">{{ $tour->date_from?->format('M d, Y') }} - {{ $tour->date_to?->format('M d, Y') }}</p>
+                                <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
                                 <h6>Description</h6>
                                 <p>{{ $tour->description }}</p>                               
                                 <h6>Inclusions</h6>
