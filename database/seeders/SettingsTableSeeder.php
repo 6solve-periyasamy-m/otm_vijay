@@ -420,6 +420,11 @@ class SettingsTableSeeder extends Seeder
                 'key' => 'transport.unlock',
                 'value' => '0',
             ),
+            67 => 
+            array (
+                'key' => 'non-paying.travellers.enabled',
+                'value' => '0',
+            ),  
         ));
         
         

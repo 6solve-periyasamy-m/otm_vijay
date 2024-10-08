@@ -32,7 +32,7 @@ class SettingsController extends Controller
             'currency_id' => 'required|exists:currencies,id',
             'stripe_key' => 'nullable',
             'date_format' => 'required',
-            'year_start' => 'required|date',
+            'year_start' => 'required|date',        
         ];
     }
 
@@ -98,6 +98,7 @@ class SettingsController extends Controller
             'quote.style' => $request->input('quote_format'),
             'itinerary.style' => $request->input('itinerary_format'),
             'customization.documentation.colors' => $request->input('document_css'),
+            'non-paying.travellers.enabled' => $request->input('nonpaying_travellers_enabled') === 'on' ? 1 : 0,
         ]);
         if ($request->has('company_logo')  && !empty($request->file('company_logo'))) {
             Settings::set('company.logo', $this->saveImage($request->file('company_logo')));
