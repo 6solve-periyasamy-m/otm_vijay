@@ -966,6 +966,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $tourComponent = $component->repository->convertToTourComponent($tour);
             $this->addComponent($lead, $travellers, 'activity', $component, $tourComponent);
             foreach ($customers as $customer) {
+                if (!$customer->travelling) { continue; }
                 $this->addComponent($customer, $travellers, 'activity', $component, $tourComponent);
             }
         }
@@ -982,6 +983,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $tourComponent = $component->repository->convertToTourComponent($tour);
             $this->addComponent($lead, $travellers, 'transport', $component, $tourComponent);
             foreach ($customers as $customer) {
+                if (!$customer->travelling) { continue; }
                 $this->addComponent($customer, $travellers, 'transport', $component, $tourComponent);
             }
         }
@@ -990,6 +992,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $tourComponent = $component->repository->convertToTourComponent($tour);
             $this->addComponent($lead, $travellers, 'merchandise', $component, $tourComponent);
             foreach ($customers as $customer) {
+                if (!$customer->travelling) { continue; }
                 $this->addComponent($customer, $travellers, 'merchandise', $component, $tourComponent);
             }
         }
@@ -1003,10 +1006,10 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     private function addComponent(CustomerForConversion $customer, int $travellers, string $type, $component, InventoryTourRepository $tourComponent): void
     {
-        if ($component->quantity === null
-            || $component->quantity >= $travellers
-            || $customer->hasComponent($type, $component->id)) {
-            $tourComponent->grantToCustomer($customer->orderCustomer, true);
+        if ($component->quantity === null || $component->quantity >= $travellers || $customer->hasComponent($type, $component->id)) {
+            if ($customer->travelling) {
+                $tourComponent->grantToCustomer($customer->orderCustomer, true);
+            }
         }
     }
 

@@ -276,7 +276,7 @@
         </div>
     </div>
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;">
-    @if($orderCustomer->is_travelling)
+    @if($orderCustomer->is_travelling || $orderCustomer->repository->hasComponents())
         <div class="heading pt-2 pb-md-3 pb-2">
             <h2 class="fw-bold">Tour Components</h2>
         </div>
