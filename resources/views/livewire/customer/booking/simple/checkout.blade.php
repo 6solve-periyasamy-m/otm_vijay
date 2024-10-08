@@ -266,6 +266,7 @@
                             </div>
                         </div> -->
                         @endif
+                        {{--
                         <div class="card-field-box">
                             <div class="first-in active">
                                 {{ Icon::regular('credit-card') }}
@@ -276,6 +277,7 @@
                                 <p>Invoice – Direct Debit</p>
                             </div>
                         </div>
+                        --}}
                     </div>
                     <div class="wh-las-cls-con">
                         <div class="acc-tp-cond">
