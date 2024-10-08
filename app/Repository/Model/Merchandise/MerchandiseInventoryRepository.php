@@ -83,12 +83,12 @@ class MerchandiseInventoryRepository extends InventoryRepository
 
     public function getStartTime(): Carbon
     {
-        return now();
+        return now()->addYears(1000);
     }
 
     public function getEndTime(): Carbon
     {
-        return now();
+        return now()->addYears(1000);
     }
 
     /**
