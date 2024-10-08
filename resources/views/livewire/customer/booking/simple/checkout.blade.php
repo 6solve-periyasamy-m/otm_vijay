@@ -156,11 +156,11 @@
                                     @error('payer.last_name1') <label class="error-label">{{ $message }}</label> @enderror
                                 </div>
                                 <div class="form-field">
-                                    <input type="email"  {{-- wire:model="payer.email_address1" --}} placeholder="Email*" required>
+                                    <input type="email"  {{-- wire:model="payer.email_address1" --}} placeholder="Email" >
                                     @error('payer.email_address1') <label class="error-label">{{ $message }}</label> @enderror
                                 </div>
                                 <div class="form-field mobile_field">
-                                    <input type="tel" id="mobile_number1" {{-- wire:model="payer.mobile_number1" --}} placeholder="Mobile number*" required>
+                                    <input type="tel" id="mobile_number1" {{-- wire:model="payer.mobile_number1" --}} placeholder="Mobile number" >
                                     @error('payer.mobile_number1') <label class="error-label">{{ $message }}</label> @enderror
                                     <script type="text/javascript">
                                     jQuery(document).ready(function () {
