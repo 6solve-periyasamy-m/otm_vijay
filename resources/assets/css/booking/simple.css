@@ -2672,3 +2672,13 @@ input::-webkit-inner-spin-button {
 .ma-block .row .left-col .contain > h3.head-evnt{
     font-weight: 600 !important;
 }
+@media only screen and (min-width:768px) and (max-width:1023px) {
+    .top-head .row .col-one .img-contain img {
+        width:180px!important;
+    }
+}
+@media only screen and (max-width:767px) {
+    .top-head .row .col-one .img-contain img {
+        width:117px!important;
+    }
+}
