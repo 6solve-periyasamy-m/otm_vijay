@@ -2,6 +2,7 @@
 
 namespace App\View\Components\Livewire\Input\Select;
 
+use App\Http\Livewire\Abstract\LivewireForm;
 use App\Models\System\TaxBracket as TaxModel;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -11,6 +12,8 @@ use Illuminate\Support\Collection;
 
 class TaxBracket extends AbstractSelectComponent
 {
+    use LivewireForm;
+
     /**
      * Get the view / contents that represent the component.
      *
