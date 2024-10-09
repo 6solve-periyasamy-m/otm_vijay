@@ -32,7 +32,7 @@ class SettingsController extends Controller
             'currency_id' => 'required|exists:currencies,id',
             'stripe_key' => 'nullable',
             'date_format' => 'required',
-            'year_start' => 'required|date',        
+            'year_start' => 'required|date',
         ];
     }
 
