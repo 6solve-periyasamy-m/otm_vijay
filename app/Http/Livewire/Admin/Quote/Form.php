@@ -47,6 +47,7 @@ class Form extends Component
         $this->quote->lead_traveller_id = $this->prospect->id;
         $this->quote->save();
         $this->quote->reference = $this->quote->reference ?? $this->quote->repository->generateReference();
+        $this->quote->invoice_footer = $this->quote->invoice_footer ?? "";
         $this->quote->save();
         $this->pricePoint->quote_id = $this->quote->id;
         $this->pricePoint->save();
