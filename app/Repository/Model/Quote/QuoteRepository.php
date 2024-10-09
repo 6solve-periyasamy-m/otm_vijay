@@ -151,8 +151,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'organization_id' => $this->quote->organization_id,
             'commission' => $this->quote->commission,
             'consultant_id' => $this->quote->consultant_id,
-            'internal_notes' => $this->quote->internal_notes,
-            'external_notes' => $this->quote->external_notes . "\n Converted from Quote: {$this->quote->reference}",
+            'internal_notes' => $this->quote->internal_notes . "\n Converted from Quote: {$this->quote->reference}",
+            'external_notes' => $this->quote->external_notes,
             'invoice_footer' => $this->quote->invoice_footer,
         ];
         $order = OrderRepository::create($tour, $data, $lead, $travellers, $email);
