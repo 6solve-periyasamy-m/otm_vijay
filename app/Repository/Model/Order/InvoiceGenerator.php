@@ -23,8 +23,10 @@ class InvoiceGenerator
         $this->order = $order;
     }
 
-    public function generate(bool $save = false): Invoice
+    public function generate(bool $save = false): Invoice|null
     {
+        // If the booking reference is null, then the order isn't properly initialized
+        if ($this->order->booking_reference === null) { return null; }
         $invoice = new Invoice([
             'order_id' => $this->order->id,
             'name' => $this->order->tour->name,
