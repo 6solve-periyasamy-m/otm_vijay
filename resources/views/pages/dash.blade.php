@@ -1,42 +1,43 @@
 @extends('layout.master')
 
-@section('upcoming')
-    <div class="upcom-whol">
-        <div class="upcom-cent">
-            @if($event)
-                <span class="upcom-nam-txt">{{ $event->name }} Starts in:</span>
-                <span class="upcom-time-txt" id="countdown"></span>
-            @else
-                <span class="upcom-nam-txt">No upcoming events</span>
-            @endif
+@if(config('app.features.kpt', false) || config('app.features.bleeding-edge'))
+    @section('upcoming')
+        <div class="upcom-whol">
+            <div class="upcom-cent">
+                @if($event)
+                    <span class="upcom-nam-txt">{{ $event->name }} Starts in:</span>
+                    <span class="upcom-time-txt" id="countdown"></span>
+                @else
+                    <span class="upcom-nam-txt">No upcoming events</span>
+                @endif
+            </div>
         </div>
-    </div>
 
-    <script>
-        @if($event)
-        var eventDate = new Date("{{ $event->starts_at }}").getTime();
+        <script>
+            @if($event)
+            var eventDate = new Date("{{ $event->starts_at }}").getTime();
 
-        var x = setInterval(function() {
+            var x = setInterval(function() {
 
-            var now = new Date().getTime();
-            
-            var distance = eventDate - now;
-            
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            document.getElementById("countdown").innerHTML = days + " days: " + hours + " hrs: " + minutes + " mins: " + seconds + " secs";
-            
-            if (distance < 0) {
-                clearInterval(x);
-                document.getElementById("countdown").innerHTML = "Event has started!";
-            }
-        }, 1000);
-        @endif
-    </script>
-@endsection
+                var now = new Date().getTime();
+
+                var distance = eventDate - now;
+
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("countdown").innerHTML = days + " days: " + hours + " hrs: " + minutes + " mins: " + seconds + " secs";
+
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById("countdown").innerHTML = "Event has started!";
+                }
+            }, 1000);
+            @endif
+        </script>
+    @endsection
 
 @php
 $get_late = $monthsData;
@@ -192,6 +193,7 @@ $get_late = json_encode($monthsData);
     </div>
 </div>
 @endsection
+@endif
 
 @section('title', 'Dashboard')
 
