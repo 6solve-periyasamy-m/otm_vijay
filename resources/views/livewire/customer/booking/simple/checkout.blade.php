@@ -61,7 +61,7 @@
                     </div>
                     <div class="form-field rap-las-cls">
                         <div wire:ignore>
-                            <input type="text" id="custom-input-date" value="{{ isset($payer->date_of_birth) ? \Carbon\Carbon::parse($payer->date_of_birth)->format('d-m-Y') : '' }}" class="calendar hasDatepicker" data-picker name="upload-release" placeholder="DATE OF BIRTH">
+                            <input type="text" id="custom-input-date"  class="calendar hasDatepicker" data-picker name="upload-release" placeholder="DATE OF BIRTH">
                             <script type="text/javascript">
                                 document.addEventListener('DOMContentLoaded', function() {
                                     const initialDOB = @this.payer?.date_of_birth ? new Date(@this.payer.date_of_birth) : null;
