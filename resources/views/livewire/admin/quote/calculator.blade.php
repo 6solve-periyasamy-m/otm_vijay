@@ -29,7 +29,7 @@
                     </button>
                 </div>
             </div>
-            @if(flag('non-paying.travellers.enabled', true))
+            @if(flag('non-paying.travellers.enabled', true) || $travelling > 0)
                 <div class="col-12 col-xl-6 row">
                     <div class="col-12 text-center">
                         <abbr title="Free-of-Charge (FOC) Travellers will be granted components, but will not be charged any fees">{{ __('quotes.view.cards.quick.calculator.travelling') }}</abbr>
