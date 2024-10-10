@@ -782,7 +782,7 @@ figure.table tr td:nth-child(2) {display:none;}
         <tr>
           <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
           <td>{{ f_currency($installment->amount) }}</td>
-          <td>{{ optional($installment->due)->format('d M Y') ?? 'Now' }}</td>
+          <td>{{ $installment->paid ? 'PAID' : optional($installment->due)->format('d M Y')}}</td>
         </tr>
       @endforeach
     </tbody>
