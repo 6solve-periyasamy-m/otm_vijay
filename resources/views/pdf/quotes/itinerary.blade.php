@@ -610,7 +610,8 @@ figure.table tr td:nth-child(2) {display:none;}
                         @endphp
                     @endif
                     <h4>   
-                        <span class="text">{!! $item->name ?? $evename !!}</span>
+                        <!-- <span class="text">{!! $item->name ?? $evename !!}</span> -->
+                        <span class="text">{!! $evename !!}</span>
                         <span class="mark"></span>
                     </h4> 
                     <div class="details-module">
