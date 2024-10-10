@@ -64,7 +64,7 @@
 @endphp
 <?php 
   //var_dump(generateFontFaceCSS($fonts));
-  //var_dump($itinerary);
+  var_dump($itinerary->finances);
   //var_dump(setting('customization.documentation.colors'));
 ?>
 
