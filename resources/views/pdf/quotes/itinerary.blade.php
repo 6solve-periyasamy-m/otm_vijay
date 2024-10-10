@@ -783,7 +783,12 @@ figure.table tr td:nth-child(2) {display:none;}
           <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
           <td>{{ f_currency($installment->amount) }}</td>
           <td>{{$installment->paid}}--{{optional($installment->due)->format('d M Y')}}</td>
-          <td>{{ $installment->paid ? 'PAID' : optional($installment->due)->format('d M Y')}}</td>
+          <td>@if($installment->paid)
+                  PAID
+              @elseif(!is_null(optional($installment->due)))
+                  {{ optional($installment->due)->format('d M Y') }}
+              @endif
+            </td>
         </tr>
       @endforeach
     </tbody>
