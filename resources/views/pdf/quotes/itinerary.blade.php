@@ -780,10 +780,9 @@ figure.table tr td:nth-child(2) {display:none;}
     </thead>
     <tbody>
       @foreach ($itinerary->finances->schedule as $installment)
-        <>
           <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
           <td>{{ f_currency($installment->amount) }}</td>
-          <p>{{$installment->paid}}</p>
+          <p>{{$installment->paid}}--{{optional($installment->due)->format('d M Y')}}</p>
           <td>{{ $installment->paid ? 'PAID' : optional($installment->due)->format('d M Y')}}</td>
         </tr>
       @endforeach

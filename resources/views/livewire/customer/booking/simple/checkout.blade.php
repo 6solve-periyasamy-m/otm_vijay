@@ -65,7 +65,7 @@
                             <script type="text/javascript">
                                 document.addEventListener('DOMContentLoaded', function() {
                                     const initialDOB = @this.payer?.date_of_birth ? new Date(@this.payer.date_of_birth) : null;
-                                    console.log(initialDOB)
+                                    console.log(@this.payer?.date_of_birth)
                                     const datePickerElement = document.querySelector('[data-picker]');
                                     if (datePickerElement) {
                                         const picker = new Pikaday({
