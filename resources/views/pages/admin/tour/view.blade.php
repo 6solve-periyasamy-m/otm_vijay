@@ -151,9 +151,10 @@
                                 <th scope="col">Name</th>
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Stock</th>
+                                <th scope="col">Ordered</th>
                                 <th scope="col">Purchase Price</th>
                                 <th scope="col">Sales Price</th>
-                                <th scope="col">Actions>
+                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -168,6 +169,7 @@
                                         /{{ $component->getTotalStock() }}<br/>
                                         ({{$component->getAvailableStock()}} Available)
                                     </td>
+                                    <td>{{ $component->getOrderedCount() }} Ordered, {{ $component->getBookedCount() }} <abbr title="Bookings created through the form. Will include ones converted to orders">Booked</abbr></td>
                                     <td>{{ $component->getInventory()->getPurchasePriceString() }}</td>
                                     <td>{{ f_currency($component->getSalesPrice()) }}</td>
                                     <td class="actions">
@@ -228,6 +230,7 @@
                             <th scope="col">Template?</th>
                             <th scope="col">Component Type</th>
                             <th scope="col">Stock</th>
+                            <th scope="col">Ordered</th>
                             <th scope="col">Bookable?</th>
                             <th scope="col">Stock Controlled?</th>
                             <th scope="col">Actions</th>
@@ -262,6 +265,7 @@
                                     /{{ $tourComponent->repository->getTotalStock() }}<br/>
                                     ({{$tourComponent->repository->getAvailableStock()}} Available)
                                 </td>
+                                <td>{{ $tourComponent->repository->getOrderedCount() }} Ordered, {{ $tourComponent->repository->getBookedCount() }} <abbr title="Bookings created through the form. Will include ones converted to orders">Booked</abbr></td>
                                 <td>{{ f_bool($tourComponent->is_bookable) }}</td>
                                 <td>{{ f_bool($tourComponent->stock_control_active) }}</td>
                                 <td class="actions-3">
@@ -328,6 +332,7 @@
                             <th scope="col">Ticket Type</th>
                             <th scope="col">Component Type</th>
                             <th scope="col">Stock</th>
+                            <th scope="col">Ordered</th>
                             <th scope="col">Bookable?</th>
                             <th scope="col">Stock Controlled?</th>
                             <th scope="col">Actions</th>
@@ -355,6 +360,7 @@
                                     /{{ $tourComponent->repository->getTotalStock() }}<br/>
                                     ({{$tourComponent->repository->getAvailableStock()}} Available)
                                 </td>
+                                <td>{{ $tourComponent->repository->getOrderedCount() }} Ordered, {{ $tourComponent->repository->getBookedCount() }} <abbr title="Bookings created through the form. Will include ones converted to orders">Booked</abbr></td>
                                 <td>{{ f_bool($tourComponent->is_bookable) }}</td>
                                 <td>{{ f_bool($tourComponent->stock_control_active) }}</td>
                                 <td class="actions-3">
@@ -419,6 +425,7 @@
                             <th scope="col">Flight Type</th>
                             <th scope="col">Component Type</th>
                             <th scope="col">Stock</th>
+                            <th scope="col">Ordered</th>
                             <th scope="col">Bookable?</th>
                             <th scope="col">Stock Controlled?</th>
                             <th scope="col">Actions</th>
@@ -447,6 +454,7 @@
                                     /{{ $tourComponent->repository->getTotalStock() }}<br/>
                                     ({{$tourComponent->repository->getAvailableStock()}} Available)
                                 </td>
+                                <td>{{ $tourComponent->repository->getOrderedCount() }} Ordered, {{ $tourComponent->repository->getBookedCount() }} <abbr title="Bookings created through the form. Will include ones converted to orders">Booked</abbr></td>
                                 <td>{{ f_bool($tourComponent->is_bookable) }}</td>
                                 <td>{{ f_bool($tourComponent->stock_control_active) }}</td>
                                 <td class="actions-3">
@@ -510,6 +518,7 @@
                             <th scope="col">Travel Class</th>
                             <th scope="col">Component Type</th>
                             <th scope="col">Stock</th>
+                            <th scope="col">Ordered</th>
                             <th scope="col">Bookable?</th>
                             <th scope="col">Stock Controlled?</th>
                             <th scope="col">Actions</th>
@@ -537,6 +546,7 @@
                                     /{{ $tourComponent->repository->getTotalStock() }}<br/>
                                     ({{$tourComponent->repository->getAvailableStock()}} Available)
                                 </td>
+                                <td>{{ $tourComponent->repository->getOrderedCount() }} Ordered, {{ $tourComponent->repository->getBookedCount() }} <abbr title="Bookings created through the form. Will include ones converted to orders">Booked</abbr></td>
                                 <td>{{ f_bool($tourComponent->is_bookable) }}</td>
                                 <td>{{ f_bool($tourComponent->stock_control_active) }}</td>
                                 <td class="actions-3">
@@ -602,6 +612,7 @@
                                 <th scope="col">Stock Controlled?</th>
                                 <th scope="col">Sales Price</th>
                                 <th scope="col">Stock</th>
+                                <th scope="col">Ordered</th>
                                 <th scope="col">Notes</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -619,6 +630,7 @@
                                     /{{ $merchandise->repository->getTotalStock() }}<br/>
                                     ({{$merchandise->repository->getAvailableStock()}} Available)
                                 </td>
+                                <td>{{ $merchandise->repository->getOrderedCount() }} Ordered, {{ $merchandise->repository->getBookedCount() }} <abbr title="Bookings created through the form. Will include ones converted to orders">Booked</abbr></td>
                                 <td>{{ $merchandise->internal_notes }}</td>
                                 <td class="actions">
                                     @can('update', Merchandise::class)
