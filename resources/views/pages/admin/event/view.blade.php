@@ -96,7 +96,7 @@ $hideNoCategory = $hideNoCategory ?? false;
                             <td>
                                 <a href="{{route('tours.view', ['tour' => $tour,])}}" class="link link-primary">{{ $tour->name }}</a>
                             </td>
-                            <td>{{ $tour->category?->name ?? 'None' }}</td>
+                            <td>{{ $tour->category === null ? 'None' : $tour->category->getDisplay() }}</td>
                             <td>{{ $tour->orders()->count() }}</td>
                             <td>
                                 @if(!empty($tour->getBookingFormUrl()))
