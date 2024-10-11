@@ -693,6 +693,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         $this->order->payments()->forceDelete();
         $this->order->installments()->forceDelete();
         $this->order->reminders()->forceDelete();
+        $this->order->forceDelete();
     }
 
     public static function generateGenericCustomer(string $first, string $last): Customer
