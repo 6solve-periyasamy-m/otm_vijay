@@ -166,4 +166,13 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
             return $tourComponent->getBookingComponent($traveller);
         }
     }
+
+    /**
+     * Can this component be deleted. Returns true if there are no dependants (bookings or orders)
+     * @return bool
+     */
+    public function canDelete(): bool
+    {
+        return !($this->getOrderedCount() > 0 || $this->getBookedCount() > 0);
+    }
 }
