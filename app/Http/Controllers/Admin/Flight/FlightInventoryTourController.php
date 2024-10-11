@@ -60,12 +60,10 @@ class FlightInventoryTourController extends Controller
 
     public function destroy(Tour $tour, FlightInventoryTour $flightInventoryTour)
     {
-        if ($tour->orders()->count() > 0) {
-            $flightInventoryTour->is_bookable = false;
-            $flightInventoryTour->save();
-        } else {
-            $flightInventoryTour->delete();
+        $deleted = $flightInventoryTour->delete();
+        if (!$deleted) {
+            return back()->withErrors(['msg' => 'Could not successfully delete the component, as it has dependants']);
         }
-        return redirect()->route('tours.view', ['tour' => $tour,]);
+        return redirect()->route('tours.view', ['tour' => $tour,])->with('success', 'Component Deleted Successfully');
     }
 }
