@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Tour;
 
 use App\Http\Livewire\Abstract\ActionColumn;
 use App\Http\Livewire\Abstract\CurrencyColumn;
+use App\Http\Livewire\Abstract\DisplayModeColumn;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Models\Tour\TourCategory;
@@ -45,7 +46,7 @@ class Table extends LivewireDatatable
                 ->sortable()
                 ->searchable()
                 ->filterable(Event::pluck('name')),
-            Column::name('tour_categories.name')
+            DisplayModeColumn::table('tour_categories')
                 ->label('Category')
                 ->searchable()
                 ->sortable()

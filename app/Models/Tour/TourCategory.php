@@ -3,8 +3,11 @@
 namespace App\Models\Tour;
 
 use App\Models\Helper\SimpleModel;
+use App\Models\Traits\HasDisplayMode;
 use App\Models\Traits\HasRepository;
 use App\Repository\Model\Tour\TourCategoryRepository;
+use App\View\Helper\DisplayModeColor;
+use App\View\Helper\DisplayModeType;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -40,9 +43,10 @@ use Illuminate\Support\Carbon;
  */
 class TourCategory extends SimpleModel
 {
-    use HasRepository, SoftDeletes;
+    use HasRepository, SoftDeletes, HasDisplayMode;
 
     protected $fillable = ['name',];
+    protected $casts = ['displayModeType' => DisplayModeType::class, 'displayModeColor' => DisplayModeColor::class];
 
     public static function getValidationRules(): array
     {
