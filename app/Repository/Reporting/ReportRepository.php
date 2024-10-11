@@ -327,7 +327,14 @@ class ReportRepository
         $data = [];
         $bookings = Booking::whereNull('order_id')->with('tour', 'leadTraveller', 'leadTraveller.customer');
         if ($limit !== null) {
-            $bookings = $bookings->where('updated_at', '>', now()->subDays($limit));
+            $bookings = $bookings->where('bookings.updated_at', '>', now()->subDays($limit));
+        }
+        if ($hideUnknown) {
+            $bookings = $bookings
+                ->join('booking_travellers as lt', 'lt.id', '=', 'bookings.lead_traveller_id')
+                ->whereNotNull('lt.email_address')
+                ->orWhereNotNull('lt.mobile_number')
+                ->orWhereNotNull('lt.customer_id');
         }
         foreach ($bookings->get() as $booking) {
             $row = collect();
