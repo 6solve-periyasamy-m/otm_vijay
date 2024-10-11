@@ -37,36 +37,19 @@
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">{{ Icon::edit() }}</span>
                             @endif
-                            @if($component->isBookable())
-                                @if($component->getDeleteLink() !== null)
-                                    <a href="#"
-                                       onclick="$('#component-{{$component->getComponentType()}}-{{$component->get()->id}}-delete').submit()"
-                                       class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete() }}</a>
-                                    <form action="{{ $component->getDeleteLink() }}"
-                                          method="post"
-                                          id="component-{{$component->getComponentType()}}-{{$component->get()->id}}-delete">
-                                        @csrf
-                                    </form>
-                                @else
-                                    <span class="btn btn-outline-dark btn-sm mb-1">
-                                                    {{ Icon::delete() }}
-                                                </span>
-                                @endif
+                            @if($component->getDeleteLink() !== null && $component->canDelete())
+                                <a href="#"
+                                   onclick="$('#component-{{$component->getComponentType()}}-{{$component->get()->id}}-delete').submit()"
+                                   class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete() }}</a>
+                                <form action="{{ $component->getDeleteLink() }}"
+                                      method="post"
+                                      id="component-{{$component->getComponentType()}}-{{$component->get()->id}}-delete">
+                                    @csrf
+                                </form>
                             @else
-                                @if($component->getRestoreLink() !== null)
-                                    <a href="#"
-                                       onclick="$('#component-{{$component->getComponentType()}}-{{$component->get()->id}}-restore').submit()"
-                                       class="btn btn-outline-danger btn-sm mb-1" title="Restore">{{ Icon::wand() }}</a>
-                                    <form action="{{ $component->getRestoreLink() }}"
-                                          method="post"
-                                          id="component-{{$component->getComponentType()}}-{{$component->get()->id}}-restore">
-                                        @csrf
-                                    </form>
-                                @else
-                                    <span class="btn btn-outline-dark btn-sm mb-1">
-                                                    {{ Icon::wand() }}
-                                                </span>
-                                @endif
+                                <span class="btn btn-outline-dark btn-sm mb-1" title="{{ $component->getDeleteLink() !== null ? 'Has Dependants' : 'Insufficient Permissions' }}">
+                                    {{ Icon::delete() }}
+                                </span>
                             @endif
                         </td>
                     </tr>
