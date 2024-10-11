@@ -22,9 +22,13 @@
             <div class="col-12">
                 <h4 class="fw-bold">{{ $tour->name }}</h4>
             </div>
-            <div class="col-12 col-xl-6">
+            <div class="col-12 col-xl-3">
                 <p>Event</p>
                 <h6 class="fw-bold">{{ isset($tour->event) ? $tour->event->name : "None" }}</h6>
+            </div>
+            <div class="col-12 col-xl-3">
+                <p>Category</p>
+                <h6 class="fw-bold">{{ $tour->category === null ? 'None' : $tour->category->getDisplay() }}</h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>Booking URL</p>

@@ -101,6 +101,25 @@ class ReportController extends Controller
         return Excel::download(new AbandonedBookingsReportExport(), 'abandoned-bookings.' . $extension);
     }
 
+    /**
+     * Abandoned bookings report where the lead booker has at least one piece of contact information
+     */
+    public function getAbandonedBookingsHiddenReport()
+    {
+        return view('pages.reports.view', ['tableView' => 'partials.reports.tables.abandoned-bookings',
+            'data' => ReportRepository::getAbandonedBookingsReport(null,  true),'title' => 'Abandoned Bookings',
+            'xlsxExport' => route('reports.abandoned-bookings-hidden.export', ['extension' => 'xlsx']),
+            'csvExport' => route('reports.abandoned-bookings-hidden.export', ['extension' => 'csv']),]);
+    }
+
+    /**
+     * Export for abandoned bookings report where the lead booker has at least one piece of contact information
+     */
+    public function exportAbandonedBookingsHiddenReport(string $extension = 'xlsx')
+    {
+        return Excel::download(new AbandonedBookingsReportExport(true), 'abandoned-bookings.' . $extension);
+    }
+
     public function getOrderRemindersReport(int $max = 7, int $min = -1000) {
         return view('pages.reports.reminders', ['tableView' => 'partials.reports.tables.reminders',
             'data' => ReportRepository::getRemindersReport($max, $min),'title' => 'Order Reminders',
