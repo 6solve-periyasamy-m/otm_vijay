@@ -17,24 +17,24 @@
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
-            @foreach($tour->merchandise as $merchandise)
+            @foreach($tour->merchandise as $tourComponent)
                 <tr>
-                    <td><img src="{{ $merchandise->inventory->asset }}" class="image tiny"/></td>
-                    <td style="min-width: 100px">{{ $merchandise->inventory->component->name }}</td>
-                    <td>{{ $merchandise->inventory->variant->name }}</td>
-                    <td>{{ $merchandise->inventory->size?->name ?? 'No Size'  }}</td>
-                    <td>{{ $merchandise->stock_control_active }}</td>
-                    <td>{{ f_currency($merchandise->tour_sales_price) }}</td>
+                    <td><img src="{{ $tourComponent->inventory->asset }}" class="image tiny"/></td>
+                    <td style="min-width: 100px">{{ $tourComponent->inventory->component->name }}</td>
+                    <td>{{ $tourComponent->inventory->variant->name }}</td>
+                    <td>{{ $tourComponent->inventory->size?->name ?? 'No Size'  }}</td>
+                    <td>{{ $tourComponent->stock_control_active }}</td>
+                    <td>{{ f_currency($tourComponent->tour_sales_price) }}</td>
                     <td>
-                        {{ $merchandise->repository->getUsedStock() }}
-                        /{{ $merchandise->repository->getTotalStock() }}<br/>
-                        ({{$merchandise->repository->getAvailableStock()}} Available)
+                        {{ $tourComponent->repository->getUsedStock() }}
+                        /{{ $tourComponent->repository->getTotalStock() }}<br/>
+                        ({{$tourComponent->repository->getAvailableStock()}} Available)
                     </td>
-                    <td>{{ $merchandise->repository->getOrderedCount() }} Ordered, {{ $merchandise->repository->getBookedCount() }} <abbr title="Bookings created through the form. Will include ones converted to orders">Booked</abbr></td>
-                    <td>{{ $merchandise->internal_notes }}</td>
+                    <td>{{ $tourComponent->repository->getOrderedCount() }} Ordered, {{ $tourComponent->repository->getBookedCount() }} <abbr title="Bookings created through the form. Will include ones converted to orders">Booked</abbr></td>
+                    <td>{{ $tourComponent->internal_notes }}</td>
                     <td class="actions">
                         @can('update', Merchandise::class)
-                            <a href="{{ route('merchandise.inventory.tour.edit', ['tour' => $tour, 'inventoryTour' => $merchandise,]) }}"
+                            <a href="{{ route('merchandise.inventory.tour.edit', ['tour' => $tour, 'inventoryTour' => $tourComponent,]) }}"
                                class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
@@ -42,12 +42,12 @@
                                         </span>
                         @endcan
                         @can('delete', Merchandise::class)
-                            <a href="#" title="Delete" onclick="$('#merchandise-{{$merchandise->id}}-delete').submit()"
-                               class="btn btn-outline-{{ $merchandise->is_bookable ? 'danger' : 'warning' }} btn-sm mb-1">
-                                {{ $merchandise->is_bookable ? Icon::delete() : Icon::enable() }}
+                            <a href="#" title="Delete" onclick="$('#merchandise-{{$tourComponent->id}}-delete').submit()"
+                               class="btn btn-outline-{{ $tourComponent->is_bookable ? 'danger' : 'warning' }} btn-sm mb-1">
+                                {{ $tourComponent->is_bookable ? Icon::delete() : Icon::enable() }}
                             </a>
-                            <form action="{{ route($merchandise->is_bookable ? 'merchandise.inventory.tour.delete' : 'merchandise.inventory.tour.restore',['tour' => $tour, 'inventoryTour' => $merchandise,]) }}"
-                                  method="post" id="merchandise-{{$merchandise->id}}-delete">
+                            <form action="{{ route($tourComponent->is_bookable ? 'merchandise.inventory.tour.delete' : 'merchandise.inventory.tour.restore',['tour' => $tour, 'inventoryTour' => $tourComponent,]) }}"
+                                  method="post" id="merchandise-{{$tourComponent->id}}-delete">
                                 @csrf
                             </form>
                         @else
