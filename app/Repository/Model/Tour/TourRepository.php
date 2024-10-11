@@ -382,7 +382,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         foreach ($this->tour->activityInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', true)->get() as $component) {
             $components[] = OrderActivity::make([
                 'activity_inventory_tour_id' => $component->id,
-                'cost' => $component->tour_sales_price,
+                'cost' => $component->tour_sales_price ?? 0.0,
                 'estimated_purchase_price' => $component->inventory->local_purchase_price,
             ]);
         }
@@ -398,7 +398,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         foreach ($this->tour->flightInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
             $components[] = OrderFlight::make([
                 'flight_inventory_tour_id' => $component->id,
-                'cost' => $component->tour_sales_price,
+                'cost' => $component->tour_sales_price ?? 0.0,
                 'estimated_purchase_price' => $component->inventory->local_purchase_price,
             ]);
         }
@@ -414,7 +414,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         foreach ($this->tour->transportInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
             $components[] = OrderTransport::make([
                 'transport_inventory_tour_id' => $component->id,
-                'cost' => $component->tour_sales_price,
+                'cost' => $component->tour_sales_price ?? 0.0,
                 'estimated_purchase_price' => $component->inventory->local_purchase_price,
             ]);
         }
@@ -430,7 +430,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         foreach ($this->tour->merchandise()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
             $components[] = OrderMerchandise::make([
                 'merchandise_inventory_tour_id' => $component->id,
-                'cost' => $component->tour_sales_price,
+                'cost' => $component->tour_sales_price ?? 0.0,
                 'estimated_purchase_price' => $component->inventory->local_purchase_price,
             ]);
         }
