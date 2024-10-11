@@ -89,7 +89,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     /**
      * @param ComponentUpgradeRepository $upgradeRepository Expected AccommodationInventoryTourUpgradeRepository
-     * @return bool
+     * @return boolAccommodationInventoryTourCon
      */
     public function onUpgradeTree(ComponentUpgradeRepository $upgradeRepository): bool
     {
@@ -353,5 +353,15 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             ]);
         }
         return null;
+    }
+
+    public function getOrderedCount(): int
+    {
+        return $this->tourComponent->orders()->count();
+    }
+
+    public function getBookedCount(): int
+    {
+        return $this->tourComponent->bookings()->count();
     }
 }

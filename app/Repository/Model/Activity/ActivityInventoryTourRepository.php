@@ -351,4 +351,14 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
         }
         return null;
     }
+
+    public function getOrderedCount(): int
+    {
+        return $this->tourComponent->orders()->count();
+    }
+
+    public function getBookedCount(): int
+    {
+        return $this->tourComponent->bookings()->count();
+    }
 }

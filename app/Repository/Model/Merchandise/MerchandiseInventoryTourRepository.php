@@ -279,4 +279,14 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
         }
         return null;
     }
+
+    public function getOrderedCount(): int
+    {
+        return $this->tourComponent->orderComponents()->count();
+    }
+
+    public function getBookedCount(): int
+    {
+        return $this->tourComponent->bookingComponents()->count();
+    }
 }

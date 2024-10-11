@@ -57,6 +57,18 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
 
     public abstract function getOverview(): string;
 
+    /**
+     * Returns the amount of order-components the inventory has
+     * @return int
+     */
+    abstract public function getOrderedCount(): int;
+
+    /**
+     * Returns the amount of booking-components the inventory has
+     * @return int
+     */
+    abstract public function getBookedCount(): int;
+
     public function getCostToCustomer(): float|int
     {
         return $this->getTourComponentType() === 'Included' ? 0 : ($this->get()?->tour_sales_price ?? 0);

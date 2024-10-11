@@ -2,6 +2,7 @@
 
 namespace App\Models\Merchandise;
 
+use App\Models\Booking\Component\BookingMerchandise;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Repository\Model\Merchandise\MerchandiseInventoryTourRepository;
 use Database\Factories\Merchandise\MerchandiseInventoryTourFactory;
@@ -76,6 +77,11 @@ class MerchandiseInventoryTour extends Model
     public function orderComponents(): HasMany
     {
         return $this->hasMany(OrderMerchandise::class, 'merchandise_inventory_tour_id');
+    }
+
+    public function bookingComponents(): HasMany
+    {
+        return $this->hasMany(BookingMerchandise::class, 'merchandise_inventory_tour_id');
     }
 
     public function getRepositoryAttribute(): MerchandiseInventoryTourRepository
