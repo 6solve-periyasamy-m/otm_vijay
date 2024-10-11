@@ -2,10 +2,12 @@
 
 namespace App\View\Helper;
 
-use App\View\Components\DisplayModeComponent;
+use App\Models\Helper\Enum\Trait\ConvertsToArray;
 
 enum DisplayModeColor: string
 {
+    use ConvertsToArray;
+
     case DARK = 'dark';
     case GRAY = 'secondary';
     case WHITE = 'white';

@@ -2,8 +2,12 @@
 
 namespace App\View\Helper;
 
+use App\Models\Helper\Enum\Trait\ConvertsToArray;
+
 enum DisplayModeType: int
 {
+    use ConvertsToArray;
+
     case TEXT = 0;
     case BADGE = 1;
 

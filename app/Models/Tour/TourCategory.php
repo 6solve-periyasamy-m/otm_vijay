@@ -45,8 +45,8 @@ class TourCategory extends SimpleModel
 {
     use HasRepository, SoftDeletes, HasDisplayMode;
 
-    protected $fillable = ['name',];
-    protected $casts = ['displayModeType' => DisplayModeType::class, 'displayModeColor' => DisplayModeColor::class];
+    protected $guarded = [];
+    protected $casts = ['display_mode_type' => DisplayModeType::class, 'display_mode_color' => DisplayModeColor::class];
 
     public static function getValidationRules(): array
     {
