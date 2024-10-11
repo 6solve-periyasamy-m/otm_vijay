@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Flight;
 
+use App\Exceptions\CannotDeleteException;
 use App\Http\Controllers\Controller;
 use App\Models\Flight\Flight;
 use App\Models\Flight\FlightInventory;
@@ -71,10 +72,11 @@ class FlightInventoryController extends Controller
 
     public function destroy(Flight $flight, FlightInventory $inventory)
     {
-        if ($inventory->flightInventoryTour()->count() > 0) {
-            return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Flight Inventory']));
+        try {
+            $inventory->repository->delete();
+        } catch (CannotDeleteException $e) {
+            return back()->withErrors($e->getMessage());
         }
-        $inventory->delete();
         return redirect()->route('flights.view', ['flight' => $flight,]);
     }
 
