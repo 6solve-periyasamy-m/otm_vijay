@@ -96,7 +96,7 @@ class Form extends Component
             'quote.commission' => 'nullable|numeric|between:0,100',
             'quote.deposit' => 'nullable|numeric',
             'quote.is_deposit_percentage' => 'nullable|boolean',
-            'pricePoint.price_per_person' => 'required|numeric|gte:0',
+            'pricePoint.price_per_person' => 'required|numeric|gte:0|regex:/^[0-9]+(\.[0-9]{1,5})?$/',
             'quote.single_occupancy_surcharge' => 'required|numeric|gte:0',
             'quote.description' => 'nullable|string|min:3',
             'prospect.customer_id' => 'required|integer|exists:customers,id',

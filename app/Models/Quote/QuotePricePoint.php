@@ -46,7 +46,6 @@ class QuotePricePoint extends Model
     protected $guarded = [];
     protected $casts = [
         'quantity' => 'integer',
-        'price_per_person' => 'double'
     ];
 
     public function quote(): BelongsTo
