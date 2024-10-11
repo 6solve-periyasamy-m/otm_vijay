@@ -7,7 +7,7 @@
     $title = __('flight.inventory.tour.form.title.' . ($inventoryTour === null ? 'create' : 'update'));
     $route = $inventoryTour === null ?
         route('flight-inventory-tours.store', ['tour' => $tour, ]) :
-        route('flight-inventory-tours.update', ['tour' => $tour, 'flightInventoryTour' => $inventoryTour,]);
+        route('flight-inventory-tours.update', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
 @endphp
 
 @extends('layout.form', ['action' => $route,])

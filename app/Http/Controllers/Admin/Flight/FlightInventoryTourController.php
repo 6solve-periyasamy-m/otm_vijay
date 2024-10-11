@@ -28,15 +28,15 @@ class FlightInventoryTourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
-    public function edit(Tour $tour, FlightInventoryTour $flightInventoryTour)
+    public function edit(Tour $tour, FlightInventoryTour $inventoryTour)
     {
-        return view('pages.admin.flight.inventory.tour.form', ['tour' => $tour, 'inventoryTour' => $flightInventoryTour,]);
+        return view('pages.admin.flight.inventory.tour.form', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
     }
 
-    public function update(Request $request, Tour $tour, FlightInventoryTour $flightInventoryTour)
+    public function update(Request $request, Tour $tour, FlightInventoryTour $inventoryTour)
     {
         $request->validate(FlightInventoryTour::getValidationRules());
-        $flightInventoryTour->update([
+        $inventoryTour->update([
             'flight_inventory_id' => $request->input('flight_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),
             'flight_type' => $request->input('flight_type'),
@@ -46,9 +46,9 @@ class FlightInventoryTourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
-    public function restore(Tour $tour, $flightInventoryTour)
+    public function restore(Tour $tour, $inventoryTour)
     {
-        $inventoryTour = FlightInventoryTour::withTrashed()->find($flightInventoryTour);
+        $inventoryTour = FlightInventoryTour::withTrashed()->find($inventoryTour);
         if ($inventoryTour->trashed()) {
             $inventoryTour->restore();
         } else {
@@ -58,9 +58,9 @@ class FlightInventoryTourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
-    public function destroy(Tour $tour, FlightInventoryTour $flightInventoryTour)
+    public function destroy(Tour $tour, FlightInventoryTour $inventoryTour)
     {
-        $deleted = $flightInventoryTour->delete();
+        $deleted = $inventoryTour->delete();
         if (!$deleted) {
             return back()->withErrors(['msg' => 'Could not successfully delete the component, as it has dependants']);
         }

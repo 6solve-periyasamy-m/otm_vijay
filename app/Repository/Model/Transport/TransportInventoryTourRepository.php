@@ -301,7 +301,7 @@ class TransportInventoryTourRepository extends InventoryTourRepository
         if (Auth::user()?->can('update', $this->tourComponent)) {
             return route('transport-inventory-tours.edit', [
                 'tour' => $this->tourComponent->tour_id,
-                'transportInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;
@@ -312,7 +312,7 @@ class TransportInventoryTourRepository extends InventoryTourRepository
         if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('transport-inventory-tours.delete', [
                 'tour' => $this->tourComponent->tour_id,
-                'transportInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;
@@ -323,7 +323,7 @@ class TransportInventoryTourRepository extends InventoryTourRepository
         if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('transport-inventory-tours.restore', [
                 'tour' => $this->tourComponent->tour_id,
-                'transportInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;

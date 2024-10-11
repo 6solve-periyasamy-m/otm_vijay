@@ -331,7 +331,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         if (Auth::user()?->can('update', $this->tourComponent)) {
             return route('accommodation-inventory-tours.edit', [
                 'tour' => $this->tourComponent->tour_id,
-                'accommodationInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;
@@ -342,7 +342,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('accommodation-inventory-tours.delete', [
                 'tour' => $this->tourComponent->tour_id,
-                'accommodationInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;
@@ -353,7 +353,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('accommodation-inventory-tours.restore', [
                 'tour' => $this->tourComponent->tour_id,
-                'accommodationInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;

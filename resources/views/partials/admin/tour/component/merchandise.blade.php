@@ -33,28 +33,27 @@
                     <td>{{ $tourComponent->repository->getOrderedCount() }} Ordered, {{ $tourComponent->repository->getBookedCount() }} <abbr title="Bookings created through the form. Will include ones converted to orders">Booked</abbr></td>
                     <td>{{ $tourComponent->internal_notes }}</td>
                     <td class="actions">
-                        @can('update', Merchandise::class)
+                        @can('update', \App\Models\Merchandise\MerchandiseInventoryTour::class)
                             <a href="{{ route('merchandise.inventory.tour.edit', ['tour' => $tour, 'inventoryTour' => $tourComponent,]) }}"
                                class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
-                                            {{ Icon::delete() }}
-                                        </span>
+                                {{ Icon::edit() }}
+                            </span>
                         @endcan
-                        @can('delete', Merchandise::class)
+                        @if(Bouncer::can('delete', \App\Models\Merchandise\MerchandiseInventoryTour::class) && $tourComponent->repository->canDelete())
                             <a href="#" title="Delete" onclick="$('#merchandise-{{$tourComponent->id}}-delete').submit()"
-                               class="btn btn-outline-{{ $tourComponent->is_bookable ? 'danger' : 'warning' }} btn-sm mb-1">
-                                {{ $tourComponent->is_bookable ? Icon::delete() : Icon::enable() }}
+                               class="btn btn-outline-danger btn-sm mb-1">
+                                {{ Icon::delete() }}
                             </a>
-                            <form action="{{ route($tourComponent->is_bookable ? 'merchandise.inventory.tour.delete' : 'merchandise.inventory.tour.restore',['tour' => $tour, 'inventoryTour' => $tourComponent,]) }}"
-                                  method="post" id="merchandise-{{$tourComponent->id}}-delete">
+                            <form action="{{ route('merchandise.inventory.tour.delete', ['tour' => $tour, 'inventoryTour' => $tourComponent,]) }}" method="post" id="merchandise-{{$tourComponent->id}}-delete">
                                 @csrf
                             </form>
                         @else
-                            <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
+                            <span class="btn btn-outline-dark btn-sm mb-1" title="{{ Bouncer::can('delete', \App\Models\Merchandise\MerchandiseInventoryTour::class) ? 'Has Dependants' : 'Insufficient Permissions' }}">
                                     {{ Icon::delete() }}
-                                </span>
-                        @endcan
+                            </span>
+                        @endif
                     </td>
                 </tr>
             @endforeach

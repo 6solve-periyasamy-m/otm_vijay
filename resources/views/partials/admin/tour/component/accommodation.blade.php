@@ -50,51 +50,38 @@
                     <td>{{ f_bool($tourComponent->is_bookable) }}</td>
                     <td>{{ f_bool($tourComponent->stock_control_active) }}</td>
                     <td class="actions-3">
-                        @can('update', AccommodationInventoryTour::class)
+                        @can('update', \App\Models\Accommodation\AccommodationInventoryTour::class)
                             @if($tourComponent->tour_component_type !== 'Add-on')
                                 <a href="{{ route('accommodation-upgrade.view', ['tour' => $tour, 'inventoryTour' => $tourComponent->tour_component_type == 'Upgrade' ? $tourComponent->parent() : $tourComponent,]) }}"
                                    class="btn btn-outline-success btn-sm mb-1" title="Upgrade">{{ Icon::upgrade() }}</a>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
-                                                    {{ Icon::upgrade() }}
-                                                </span>
+                                    {{ Icon::upgrade() }}
+                                </span>
                             @endif
-                            <a href="{{ route('accommodation-inventory-tours.edit', ['tour' => $tour, 'accommodationInventoryTour' => $tourComponent,]) }}"
+                            <a href="{{ route('accommodation-inventory-tours.edit', ['tour' => $tour, 'inventoryTour' => $tourComponent,]) }}"
                                class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                                {{ Icon::upgrade() }}
-                                            </span>
+                                {{ Icon::upgrade() }}
+                            </span>
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                                {{ Icon::edit() }}
-                                            </span>
+                                {{ Icon::edit() }}
+                            </span>
                         @endcan
-                        @can('delete', AccommodationInventoryTour::class)
-                            @if($tourComponent->is_bookable)
-                                <a href="#"
-                                   onclick="$('#accommodation-{{$tourComponent->id}}-delete').submit()"
-                                   class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete() }}</a>
-                                <form action="{{ route('accommodation-inventory-tours.delete', ['tour' => $tour, 'accommodationInventoryTour' => $tourComponent,]) }}"
-                                      method="post"
-                                      id="accommodation-{{$tourComponent->id}}-delete">
-                                    @csrf
-                                </form>
-                            @else
-                                <a href="#"
-                                   onclick="$('#accommodation-{{$tourComponent->id}}-restore').submit()"
-                                   class="btn btn-outline-warning btn-sm mb-1">
-                                    {{ Icon::bookable() }}</a>
-                                <form action="{{ route('accommodation-inventory-tours.restore', ['tour' => $tour, 'accommodationInventoryTour' => $tourComponent,]) }}"
-                                      method="post"
-                                      id="accommodation-{{$tourComponent->id}}-restore">
-                                    @csrf
-                                </form>
-                            @endif
+                        @if(Bouncer::can('delete', \App\Models\Accommodation\AccommodationInventoryTour::class) && $tourComponent->repository->canDelete())
+                            <a href="#" title="Delete" onclick="$('#accommodation-{{$tourComponent->id}}-delete').submit()"
+                               class="btn btn-outline-danger btn-sm mb-1">
+                                {{ Icon::delete() }}
+                            </a>
+                            <form action="{{ route('accommodation-inventory-tours.delete', ['tour' => $tour, 'inventoryTour' => $tourComponent,]) }}" method="post" id="accommodation-{{$tourComponent->id}}-delete">
+                                @csrf
+                            </form>
                         @else
-                            <span class="btn btn-outline-dark btn-sm mb-1">
-                                                {{ Icon::delete() }}
-                                            </span>
-                        @endcan
+                            <span class="btn btn-outline-dark btn-sm mb-1" title="{{ Bouncer::can('delete', \App\Models\Accommodation\AccommodationInventoryTour::class) ? 'Has Dependants' : 'Insufficient Permissions' }}">
+                                {{ Icon::delete() }}
+                            </span>
+                        @endif
                     </td>
                 </tr>
             @endforeach

@@ -318,7 +318,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
         if (Auth::user()?->can('update', $this->tourComponent)) {
             return route('flight-inventory-tours.edit', [
                 'tour' => $this->tourComponent->tour_id,
-                'flightInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;
@@ -329,7 +329,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
         if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('flight-inventory-tours.delete', [
                 'tour' => $this->tourComponent->tour_id,
-                'flightInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;
@@ -340,7 +340,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
         if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('flight-inventory-tours.restore', [
                 'tour' => $this->tourComponent->tour_id,
-                'flightInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;

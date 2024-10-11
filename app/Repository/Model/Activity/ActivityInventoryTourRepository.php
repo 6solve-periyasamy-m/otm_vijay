@@ -328,7 +328,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
         if (Auth::user()?->can('update', $this->tourComponent)) {
             return route('activity-inventory-tours.edit', [
                 'tour' => $this->tourComponent->tour_id,
-                'activityInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;
@@ -339,7 +339,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
         if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('activity-inventory-tours.delete', [
                 'tour' => $this->tourComponent->tour_id,
-                'activityInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;
@@ -350,7 +350,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
         if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('activity-inventory-tours.restore', [
                 'tour' => $this->tourComponent->tour_id,
-                'activityInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;

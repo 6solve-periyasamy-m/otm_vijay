@@ -44,7 +44,7 @@
                     <td>{{ f_bool($tourComponent->is_bookable) }}</td>
                     <td>{{ f_bool($tourComponent->stock_control_active) }}</td>
                     <td class="actions-3">
-                        @can('update', FlightInventoryTour::class)
+                        @can('update', \App\Models\Flight\FlightInventoryTour::class)
                             @if($tourComponent->tour_component_type !== 'Add-on')
                                 <a href="{{ route('flight-upgrade.view', ['tour' => $tour, 'inventoryTour' => $tourComponent->tour_component_type == 'Upgrade' ? $tourComponent->parent() : $tourComponent,]) }}"
                                    class="btn btn-outline-success btn-sm mb-1" title="Upgrade">{{ Icon::upgrade() }}</a>
@@ -53,7 +53,7 @@
                                                     {{ Icon::upgrade() }}
                                                 </span>
                             @endif
-                            <a href="{{ route('flight-inventory-tours.edit', ['tour' => $tour, 'flightInventoryTour' => $tourComponent,]) }}"
+                            <a href="{{ route('flight-inventory-tours.edit', ['tour' => $tour, 'inventoryTour' => $tourComponent,]) }}"
                                class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
@@ -63,29 +63,19 @@
                                                 {{ Icon::edit() }}
                                             </span>
                         @endcan
-                        @can('delete', FlightInventoryTour::class)
-                            @if($tourComponent->is_bookable)
-                                <a href="#"
-                                   onclick="$('#flight-{{$tourComponent->id}}-delete').submit()"
-                                   class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete() }}</a>
-                                <form action="{{ route('flight-inventory-tours.delete', ['tour' => $tour, 'flightInventoryTour' => $tourComponent,]) }}"
-                                      method="post" id="flight-{{$tourComponent->id}}-delete">
-                                    @csrf
-                                </form>
-                            @else
-                                <a href="#"
-                                   onclick="$('#flight-{{$tourComponent->id}}-restore').submit()"
-                                   class="btn btn-outline-warning btn-sm mb-1">{{ Icon::bookable() }}</a>
-                                <form action="{{ route('flight-inventory-tours.restore', ['tour' => $tour, 'flightInventoryTour' => $tourComponent,]) }}"
-                                      method="post" id="flight-{{$tourComponent->id}}-restore">
-                                    @csrf
-                                </form>
-                            @endif
+                        @if(Bouncer::can('delete', \App\Models\Flight\FlightInventoryTour::class) && $tourComponent->repository->canDelete())
+                            <a href="#" title="Delete" onclick="$('#flight-{{$tourComponent->id}}-delete').submit()"
+                               class="btn btn-outline-danger btn-sm mb-1">
+                                {{ Icon::delete() }}
+                            </a>
+                            <form action="{{ route('flight-inventory-tours.delete', ['tour' => $tour, 'inventoryTour' => $tourComponent,]) }}" method="post" id="flight-{{$tourComponent->id}}-delete">
+                                @csrf
+                            </form>
                         @else
-                            <span class="btn btn-outline-dark btn-sm mb-1">
-                                                {{ Icon::delete() }}
-                                            </span>
-                        @endcan
+                            <span class="btn btn-outline-dark btn-sm mb-1" title="{{ Bouncer::can('delete', \App\Models\Flight\FlightInventoryTour::class) ? 'Has Dependants' : 'Insufficient Permissions' }}">
+                            {{ Icon::delete() }}
+                            </span>
+                        @endif
                     </td>
                 </tr>
             @endforeach
