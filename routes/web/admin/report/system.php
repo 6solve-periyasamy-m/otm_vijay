@@ -18,6 +18,8 @@ Route::get('/activities', [ReportController::class, 'getActivitiesReport'])->nam
 Route::get('/activities/{extension}', [ReportController::class, 'exportActivitiesReport'])->name('reports.activities.export');
 Route::get('/abandoned-bookings', [ReportController::class, 'getAbandonedBookingsReport'])->name('reports.abandoned-bookings');
 Route::get('/abandoned-bookings/{extension}', [ReportController::class, 'exportAbandonedBookingsReport'])->name('reports.abandoned-bookings.export');
+Route::get('/abandoned-bookings-hidden', [ReportController::class, 'getAbandonedBookingsHiddenReport'])->name('reports.abandoned-bookings-hidden');
+Route::get('/abandoned-bookings-hidden/{extension}', [ReportController::class, 'exportAbandonedBookingsHiddenReport'])->name('reports.abandoned-bookings-hidden.export');
 Route::get('/reminders/export/{extension}/{max?}/{min?}', [ReportController::class, 'exportOrderRemindersReport'])->name('reports.reminders.export');
 Route::get('/reminders/{max?}/{min?}', [ReportController::class, 'getOrderRemindersReport'])->name('reports.reminders');
 Route::get('/merchandise', [ReportController::class, 'getOrderMerchandiseReport'])->name('reports.merchandise');

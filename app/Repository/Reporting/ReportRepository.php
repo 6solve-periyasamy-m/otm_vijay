@@ -66,6 +66,12 @@ class ReportRepository
                 'export' => 'reports.abandoned-bookings.export',
             ],
             [
+                'name' => 'Abandoned Bookings (Unknown Hidden)',
+                'details' => 'List of all abandoned bookings where at least one contact detail is filled in',
+                'view' => 'reports.abandoned-bookings-hidden',
+                'export' => 'reports.abandoned-bookings-hidden.export',
+            ],
+            [
                 'name' => 'Order Reminders',
                 'details' => 'Payments due to be reminded',
                 'view' => 'reports.reminders',
@@ -316,16 +322,24 @@ class ReportRepository
         return $data;
     }
 
-    public static function getAbandonedBookingsReport(int|null $limit = null): array
+    public static function getAbandonedBookingsReport(int|null $limit = null, bool $hideUnknown = false): array
     {
         $data = [];
-        $bookings = Booking::whereNull('order_id')->with('tour', 'leadTraveller', 'leadTraveller.customer');
+        $bookings = Booking::whereNull('order_id')->with(['tour', 'leadTraveller', 'leadTraveller.customer']);
         if ($limit !== null) {
-            $bookings = $bookings->where('updated_at', '>', now()->subDays($limit));
+            $bookings = $bookings->where('bookings.updated_at', '>', now()->subDays($limit));
+        }
+        if ($hideUnknown) {
+            $bookings = $bookings
+                ->join('booking_travellers as lt', 'lt.id', '=', 'bookings.lead_traveller_id')
+                ->whereNotNull('lt.email_address')
+                ->orWhereNotNull('lt.mobile_number')
+                ->orWhereNotNull('lt.customer_id');
         }
         foreach ($bookings->get() as $booking) {
             $row = collect();
             $cDetailsSource = $booking->leadTraveller->customer ?? $booking->leadTraveller;
+            if (empty($cDetailsSource->email_address) && empty($cDetailsSource->mobile_number)) { continue; }
             $row->name = $cDetailsSource?->title . ' ' . $cDetailsSource?->first_name . ' ' . $cDetailsSource?->last_name;
             $row->tour = $booking->tour?->name ?? 'Deleted Tour';
             $row->event = $booking->tour?->event?->name ?? 'No Event';
