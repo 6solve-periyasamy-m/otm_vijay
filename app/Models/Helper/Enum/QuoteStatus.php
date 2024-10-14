@@ -2,6 +2,7 @@
 
 namespace App\Models\Helper\Enum;
 
+use App\Models\Helper\Enum\Trait\ConvertsToArray;
 use App\View\Components\Badge\Quote as QuoteBadge;
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -10,6 +11,7 @@ use Illuminate\Contracts\View\View;
 
 enum QuoteStatus: int
 {
+    use ConvertsToArray;
 
     case EXPIRED = -1;
     case NOT_SENT = 0;
@@ -19,6 +21,11 @@ enum QuoteStatus: int
     case CONVERTED = 4;
     case CLOSED = 5;
     case UNKNOWN = 999;
+
+    public function label(): string
+    {
+        return $this->description();
+    }
 
     public function description(): string
     {

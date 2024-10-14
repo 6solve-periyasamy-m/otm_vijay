@@ -241,6 +241,7 @@ class Quote extends Model
 
     public function getStatusAttribute(): QuoteStatus
     {
+        // SQL: (IF(quotes.order_id IS NULL, IF(NOW() < quotes.expires, quotes.quote_status, IF(quotes.quote_status < 2, -1, quotes.quote_status)), 4))
         if (isset($this->order_id)) {
             return QuoteStatus::CONVERTED;
         }
