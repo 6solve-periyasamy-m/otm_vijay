@@ -24,9 +24,11 @@ class TourCostingRepository extends CostingRepository
     {
         $cost = 0;
         foreach ($this->tour->repository->getComponents(false, true, true, true, $merchandise, $filter) as $component) {
+            if ($component->get()->is_bookable === false) { continue; }
             $cost += $component->getLocalPurchasePrice();
         }
         foreach ($this->tour->templates as $template) {
+            if ($template->is_bookable === false) { continue; }
             $cost += $template->inventory->repository->getLocalPurchasePrice();
         }
         foreach ($this->tour->costs()->where('per_customer', '=', '1')->get() as $tourCost) {
@@ -39,6 +41,7 @@ class TourCostingRepository extends CostingRepository
     {
         $cost = 0;
         foreach ($this->tour->repository->getComponents(false, true, true, true, false, ['Included', 'Add-on']) as $component) {
+            if ($component->get()->is_bookable === false) { continue; }
             $max = null;
             foreach ($component->get()->upgrades as $upgrade) {
                 if ($max === null || $max->tour_sales_price < $upgrade->upgrade->tour_sales_price) {
@@ -48,6 +51,7 @@ class TourCostingRepository extends CostingRepository
             $cost += $max?->repository?->getLocalPurchasePrice() ?? $component->getLocalPurchasePrice();
         }
         foreach ($this->tour->templates as $template) {
+            if ($template->is_bookable === false) { continue; }
             $max = null;
             foreach ($template->upgrades as $upgrade) {
                 if ($max === null || $max->tour_sales_price < $upgrade->upgrade->tour_sales_price) {
@@ -66,6 +70,7 @@ class TourCostingRepository extends CostingRepository
     {
         $cost = $this->tour->base_price_per_person;
         foreach ($this->tour->repository->getComponents(false, true, true, true, false, ['Included', 'Add-on']) as $component) {
+            if ($component->get()->is_bookable === false) { continue; }
             $max = null;
             foreach ($component->get()->upgrades as $upgrade) {
                 if ($max === null || $max->tour_sales_price < $upgrade->upgrade->tour_sales_price) {
@@ -75,6 +80,7 @@ class TourCostingRepository extends CostingRepository
             $cost += $max?->tour_sales_price ?? $component->get()->tour_sales_price;
         }
         foreach ($this->tour->templates as $template) {
+            if ($template->is_bookable === false) { continue; }
             $max = null;
             foreach ($template->upgrades as $upgrade) {
                 if ($max === null || $max->tour_sales_price < $upgrade->upgrade->tour_sales_price) {
