@@ -423,7 +423,7 @@ class SettingsTableSeeder extends Seeder
             67 => 
             array (
                 'key' => 'non-paying.travellers.enabled',
-                'value' => '0',
+                'value' => '1',
             ),  
         ));
         

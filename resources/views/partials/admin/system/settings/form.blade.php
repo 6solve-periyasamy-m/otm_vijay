@@ -144,7 +144,7 @@
                 @include('partials.fields.checkbox', ['name' => 'BCC Emails to Consultant', 'field' => 'bcc_consultant', 'value' => flag('mail.bcc-consultant', false),])
                 @include('partials.fields.checkbox', ['name' => 'Maintain quote reference on conversion where possible', 'field' => 'quote_reference', 'value' => flag('quote.convert.reference', false),])                
                 @include('partials.fields.checkbox', ['name' => 'Should Booking Deposit Percentage Include Additional Costs', 'field' => 'deposit_full', 'value' => flag('booking.deposit.full', false),])
-                @include('partials.fields.checkbox', ['name' => 'Show Non-Paying travellers', 'field' => 'nonpaying_travellers_enabled', 'value' => flag('non-paying.travellers.enabled', false),])                
+                @include('partials.fields.checkbox', ['name' => 'Show Non-Paying travellers', 'field' => 'nonpaying_travellers_enabled', 'value' => flag('non-paying.travellers.enabled', true),])
             </div>
     </x-admin.section.card>
     </div>
