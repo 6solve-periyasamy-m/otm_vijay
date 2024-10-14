@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin\Tour;
 
+use App\Exceptions\CannotDeleteException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TableRequest;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\AtolRepository;
 use App\Repository\Reporting\RoomingReportRepository;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class TourController extends Controller
@@ -140,12 +142,13 @@ class TourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
-    public function destroy(Tour $tour)
+    public function destroy(Tour $tour): RedirectResponse
     {
-        if ($tour->orders()->count() > 0) {
-            return back()->withErrors(trans('custom.used-elsewhere', ['model' => 'Tour', 'parent' => 'Order']));
+        try {
+            $tour->repository->delete();
+        } catch (CannotDeleteException $e) {
+            return back()->withErrors(['msg' => $e->getMessage()]);
         }
-        $tour->delete();
         return redirect()->route('tours.all');
     }
 

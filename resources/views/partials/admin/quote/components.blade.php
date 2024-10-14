@@ -57,9 +57,9 @@
                             @if ($componentRepository->getComponentType() == 'merchandise')
                                 {{ __('quotes.view.cards.components.common.na') }}
                             @else
-                                {{ f_datetime($componentRepository->getInventory()->getStartTime()) }}
+                                {{ f_datetime($componentRepository->getInventory()?->getStartTime()) }}
                                 to
-                                {{ f_datetime($componentRepository->getInventory()->getEndTime()) }}
+                                {{ f_datetime($componentRepository->getInventory()?->getEndTime()) }}
                             @endif
                         </td>
                         <td>
@@ -69,12 +69,12 @@
                             {{ $componentRepository->getQuantity() ?? "All Travellers" }}
                         </td>
                         <td>
-                            {{ $componentRepository->getInventory()->getAvailableStock() }} / {{ $componentRepository->getInventory()->getTotalStock() }}
+                            {{ $componentRepository->getInventory()?->getAvailableStock() }} / {{ $componentRepository->getInventory()?->getTotalStock() }}
                             <br />
-                            ({{ $componentRepository->getInventory()->getUsedStock() }} used)
+                            ({{ $componentRepository->getInventory()?->getUsedStock() }} used)
                         </td>
                         <td>
-                            {{ $componentRepository->getPurchasePrice() !== null ? $componentRepository->getInventory()->getPurchasePriceString() : 'Not Set' }}
+                            {{ $componentRepository->getPurchasePrice() !== null ? $componentRepository->getInventory()?->getPurchasePriceString() : 'Not Set' }}
                         </td>
                         <td>
                             {{ f_currency($componentRepository->getSalesPrice()) }} {{ $componentRepository->priceShown() ? '(Shown)' : '' }}
@@ -123,9 +123,9 @@
                 @foreach($quote->accommodation()->with('inventory')->get() as $component)
                     <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
                         <td>
-                            {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
+                            {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}
                             to
-                            {{ f_datetime($component->repository->getInventory()->getEndTime()) }}
+                            {{ f_datetime($component->repository->getInventory()?->getEndTime()) }}
                         </td>
                         <td>
                             {{ $component->repository->__toString() }}
@@ -134,9 +134,9 @@
                             {{ $component->repository->getQuantity() ?? "All Travellers" }}
                         </td>
                         <td>
-                            {{ $component->repository->getInventory()->getAvailableStock() }} / {{ $component->repository->getInventory()->getTotalStock() }}
+                            {{ $component->repository->getInventory()?->getAvailableStock() }} / {{ $component->repository->getInventory()?->getTotalStock() }}
                             <br />
-                            ({{ $component->repository->getInventory()->getUsedStock() }} used)
+                            ({{ $component->repository->getInventory()?->getUsedStock() }} used)
                         </td>
                         <td>
                             {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
@@ -188,9 +188,9 @@
                 @foreach($quote->activities()->with('inventory')->get() as $component)
                     <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
                         <td>
-                            {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
+                            {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}
                             to
-                            {{ f_datetime($component->repository->getInventory()->getEndTime()) }}
+                            {{ f_datetime($component->repository->getInventory()?->getEndTime()) }}
                         </td>
                         <td>
                             {{ $component->repository->__toString() }}
@@ -199,9 +199,9 @@
                             {{ $component->repository->getQuantity() ?? "All Travellers" }}
                         </td>
                         <td>
-                            {{ $component->repository->getInventory()->getAvailableStock() }} / {{ $component->repository->getInventory()->getTotalStock() }}
+                            {{ $component->repository->getInventory()?->getAvailableStock() }} / {{ $component->repository->getInventory()?->getTotalStock() }}
                             <br />
-                            ({{ $component->repository->getInventory()->getUsedStock() }} used)
+                            ({{ $component->repository->getInventory()?->getUsedStock() }} used)
                         </td>
                         <td>
                             {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
@@ -253,9 +253,9 @@
                 @foreach($quote->flights()->with('inventory')->get() as $component)
                     <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
                         <td>
-                            {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
+                            {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}
                             to
-                            {{ f_datetime($component->repository->getInventory()->getEndTime()) }}
+                            {{ f_datetime($component->repository->getInventory()?->getEndTime()) }}
                         </td>
                         <td>
                             {{ $component->repository->__toString() }}
@@ -264,9 +264,9 @@
                             {{ $component->repository->getQuantity() ?? "All Travellers" }}
                         </td>
                         <td>
-                            {{ $component->repository->getInventory()->getAvailableStock() }} / {{ $component->repository->getInventory()->getTotalStock() }}
+                            {{ $component->repository->getInventory()?->getAvailableStock() }} / {{ $component->repository->getInventory()?->getTotalStock() }}
                             <br />
-                            ({{ $component->repository->getInventory()->getUsedStock() }} used)
+                            ({{ $component->repository->getInventory()?->getUsedStock() }} used)
                         </td>
                         <td>
                             {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
@@ -318,9 +318,9 @@
                 @foreach($quote->transport()->with('inventory')->get() as $component)
                     <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
                         <td>
-                            {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
+                            {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}
                             to
-                            {{ f_datetime($component->repository->getInventory()->getEndTime()) }}
+                            {{ f_datetime($component->repository->getInventory()?->getEndTime()) }}
                         </td>
                         <td>
                             {{ $component->repository->__toString() }}
@@ -329,9 +329,9 @@
                             {{ $component->repository->getQuantity() ?? "All Travellers" }}
                         </td>
                         <td>
-                            {{ $component->repository->getInventory()->getAvailableStock() }} / {{ $component->repository->getInventory()->getTotalStock() }}
+                            {{ $component->repository->getInventory()?->getAvailableStock() }} / {{ $component->repository->getInventory()?->getTotalStock() }}
                             <br />
-                            ({{ $component->repository->getInventory()->getUsedStock() }} used)
+                            ({{ $component->repository->getInventory()?->getUsedStock() }} used)
                         </td>
                         <td>
                             {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}
@@ -388,9 +388,9 @@
                             {{ $component->repository->getQuantity() ?? "All Travellers" }}
                         </td>
                         <td>
-                            {{ $component->repository->getInventory()->getAvailableStock() }} / {{ $component->repository->getInventory()->getTotalStock() }}
+                            {{ $component->repository->getInventory()?->getAvailableStock() }} / {{ $component->repository->getInventory()?->getTotalStock() }}
                             <br />
-                            ({{ $component->repository->getInventory()->getUsedStock() }} used)
+                            ({{ $component->repository->getInventory()?->getUsedStock() }} used)
                         </td>
                         <td>
                             {{ $component->repository->getPurchasePrice() !== null ? $component->inventory->repository->getPurchasePriceString() : 'Not Set' }}

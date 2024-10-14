@@ -4,6 +4,7 @@ namespace App\Models\Accommodation;
 
 use App\Models\Helper\Model;
 use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Quote\Component\QuoteAccommodation;
 use App\Models\Supplier\SupplierContractComponent;
 use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
 use Database\Factories\Accommodation\AccommodationInventoryFactory;
@@ -183,6 +184,11 @@ class AccommodationInventory extends Model
     public function tourComponents(): HasMany
     {
         return $this->hasMany(AccommodationInventoryTour::class, 'accommodation_inventory_id');
+    }
+
+    public function quoteComponents(): HasMany
+    {
+        return $this->hasMany(QuoteAccommodation::class, 'accommodation_inventory_id');
     }
 
     public function orderComponents(): HasManyThrough

@@ -2,6 +2,7 @@
 
 namespace App\Models\Activity;
 
+use App\Models\Booking\Component\BookingActivity;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
@@ -99,6 +100,11 @@ class ActivityInventoryTour extends Model
     public function orders(): HasMany
     {
         return $this->hasMany(OrderActivity::class, 'activity_inventory_tour_id');
+    }
+
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(BookingActivity::class, 'activity_inventory_tour_id');
     }
 
     public function upgrades(): HasMany

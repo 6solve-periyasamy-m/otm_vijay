@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Merchandise;
 
+use App\Exceptions\CannotDeleteException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Merchandise\MerchandiseInventoryRequest;
 use App\Models\Merchandise\Merchandise;
@@ -43,8 +44,10 @@ class MerchandiseInventoryController extends Controller
 
     public function delete(Merchandise $merchandise, MerchandiseInventory $inventory, string $view = 'overview')
     {
-        if (!$inventory->repository->delete()) {
-            return back()->withErrors(['msg' => 'Component is used on tours']);
+        try {
+            $inventory->repository->delete();
+        } catch (CannotDeleteException $e) {
+            return back()->withErrors($e->getMessage());
         }
         if ($view === 'detailed') {
             return redirect()->route('merchandise.detailed', ['merchandise' => $merchandise,]);

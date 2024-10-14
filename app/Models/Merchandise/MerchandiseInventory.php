@@ -2,6 +2,8 @@
 
 namespace App\Models\Merchandise;
 
+use App\Models\Quote\Component\QuoteAccommodation;
+use App\Models\Quote\Component\QuoteMerchandise;
 use App\Models\Supplier\SupplierContractComponent;
 use App\Repository\Model\Merchandise\MerchandiseInventoryRepository;
 use Database\Factories\Merchandise\MerchandiseInventoryFactory;
@@ -98,6 +100,11 @@ class MerchandiseInventory extends Model
     public function tourComponents(): HasMany
     {
         return $this->hasMany(MerchandiseInventoryTour::class, 'merchandise_inventory_id');
+    }
+
+    public function quoteComponents(): HasMany
+    {
+        return $this->hasMany(QuoteMerchandise::class, 'merchandise_inventory_id');
     }
 
     public function variant(): BelongsTo
