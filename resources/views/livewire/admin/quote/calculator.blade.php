@@ -29,24 +29,26 @@
                     </button>
                 </div>
             </div>
-            <div class="col-12 col-xl-6 row">
-                <div class="col-12 text-center">
-                    <abbr title="Free-of-Charge (FOC) Travellers will be granted components, but will not be charged any fees">{{ __('quotes.view.cards.quick.calculator.travelling') }}</abbr>
+            @if(flag('non-paying.travellers.enabled', true) || $travelling > 0)
+                <div class="col-12 col-xl-6 row">
+                    <div class="col-12 text-center">
+                        <abbr title="Free-of-Charge (FOC) Travellers will be granted components, but will not be charged any fees">{{ __('quotes.view.cards.quick.calculator.travelling') }}</abbr>
+                    </div>
+                    <div class="col-12 col-xl-3">
+                        <button wire:click="incrementTravelling(-1)" class="btn btn-outline-danger btn-sm mb-1">
+                            {{ Icon::minus() }}
+                        </button>
+                    </div>
+                    <div class="col-12 col-xl-6">
+                        <x-livewire.input name="travelling" wire:model="travelling" nofloat></x-livewire.input>
+                    </div>
+                    <div class="col-12 col-xl-3">
+                        <button wire:click="incrementTravelling(1)" class="btn btn-outline-success btn-sm mb-1">
+                            {{ Icon::plus() }}
+                        </button>
+                    </div>
                 </div>
-                <div class="col-12 col-xl-3">
-                    <button wire:click="incrementTravelling(-1)" class="btn btn-outline-danger btn-sm mb-1">
-                        {{ Icon::minus() }}
-                    </button>
-                </div>
-                <div class="col-12 col-xl-6">
-                    <x-livewire.input name="travelling" wire:model="travelling" nofloat></x-livewire.input>
-                </div>
-                <div class="col-12 col-xl-3">
-                    <button wire:click="incrementTravelling(1)" class="btn btn-outline-success btn-sm mb-1">
-                        {{ Icon::plus() }}
-                    </button>
-                </div>
-            </div>
+            @endif
         </div>
     </x-admin.section.card>
     {{-- Actions --}}
