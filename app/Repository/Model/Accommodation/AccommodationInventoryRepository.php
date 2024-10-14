@@ -132,24 +132,30 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         return $this->inventory->save();
     }
 
+    public function getDependants(): int
+    {
+        return $this->inventory->tourComponents()->count() + $this->inventory->quoteComponents()->count();
+    }
+
     /**
      * @throws CannotDeleteException
      */
-    public function delete(): bool
+    public function delete(bool $unlink = false): bool
     {
         if ($this->inventory->tourComponents()->count() > 0) {
-            throw new CannotDeleteException(trans('custom.used-in-tour', ['model' => 'Accommodation Inventory']));
+            throw new CannotDeleteException('Cannot delete inventory as it has dependants');
         }
         $children = $this->inventory->stockChildren()->count();
         if ($children > 0) {
             throw new CannotDeleteException("This inventory has {$children} stock children, and cannot be deleted");
         }
-        if ($unlinkChildren ?? false) {
+        if ($unlink) {
             foreach ($this->inventory->stockChildren as $child) {
                 $child->stock_parent_id = null;
                 $child->save();
             }
         }
+        $this->inventory->contractComponents()->forceDelete();
         return $this->inventory->delete();
     }
 

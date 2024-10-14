@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Transport;
 
+use App\Exceptions\CannotDeleteException;
 use App\Http\Controllers\Controller;
 use App\Models\Transport\Transport;
 use App\Models\Transport\TransportInventory;
@@ -74,10 +75,11 @@ class TransportInventoryController extends Controller
 
     public function destroy(Transport $transport, TransportInventory $inventory)
     {
-        if ($inventory->tourComponents()->count() > 0) {
-            return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Transport Inventory']));
+        try {
+            $inventory->repository->delete();
+        } catch (CannotDeleteException $e) {
+            return back()->withErrors($e->getMessage());
         }
-        $inventory->delete();
         return redirect()->route('transports.view', ['transport' => $transport,]);
     }
 

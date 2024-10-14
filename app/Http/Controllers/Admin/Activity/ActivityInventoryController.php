@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Activity;
 
+use App\Exceptions\CannotDeleteException;
 use App\Http\Controllers\Controller;
 use App\Models\Activity\Activity;
 use App\Models\Activity\ActivityInventory;
@@ -67,10 +68,11 @@ class ActivityInventoryController extends Controller
 
     public function destroy(Activity $activity, ActivityInventory $inventory)
     {
-        if ($inventory->tourComponents()->count() > 0) {
-            return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Activity Inventory']));
+        try {
+            $inventory->repository->delete();
+        } catch (CannotDeleteException $e) {
+            return back()->withErrors($e->getMessage());
         }
-        $inventory->delete();
         return redirect()->route('activities.view', ['activity' => $activity,]);
     }
 

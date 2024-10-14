@@ -3,6 +3,7 @@
 namespace App\Models\Activity;
 
 use App\Models\Order\Component\OrderActivity;
+use App\Models\Quote\Component\QuoteActivity;
 use App\Models\Supplier\SupplierContractComponent;
 use App\Repository\Model\Activity\ActivityInventoryRepository;
 use Database\Factories\Activity\ActivityInventoryFactory;
@@ -160,6 +161,11 @@ class ActivityInventory extends Model
     public function tourComponents(): HasMany
     {
         return $this->hasMany(ActivityInventoryTour::class, 'activity_inventory_id');
+    }
+
+    public function quoteComponents(): HasMany
+    {
+        return $this->hasMany(QuoteActivity::class, 'activity_inventory_id');
     }
 
     public function __toString(): string
