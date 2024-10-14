@@ -894,9 +894,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
                 if (in_array($key, $seen, true)) { continue; }
                 $seen[] = $key;
                 $item = $component->repository->getItineraryItem($this->order);
-                $start = "Accommodation";
-                if (!array_key_exists($start, $items)) { $items[$start] = []; }
-                $items[$start][] = $item;
+                $header = "Accommodation";
+                if (!array_key_exists($header, $items)) { $items[$header] = []; }
+                $items[$header][] = $item;
             }
         }
 
@@ -905,10 +905,10 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($this->order);
-            $start =
+            $header =
                 $component->tourComponent->inventory->component->activity_category === ActivityCategory::MAIN ? 'Event' : 'Inclusion';
-            if (!array_key_exists($start, $items)) { $items[$start] = []; }
-            $items[$start][] = $item;
+            if (!array_key_exists($header, $items)) { $items[$header] = []; }
+            $items[$header][] = $item;
         }
 
         foreach ($this->order->orderFlights()->groupBy('flight_inventory_tour_id')->get() as  $component) {
@@ -916,9 +916,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($this->order);
-            $start = "Flights";
-            if (!array_key_exists($start, $items)) { $items[$start] = []; }
-            $items[$start][] = $item;
+            $header = "Flights";
+            if (!array_key_exists($header, $items)) { $items[$header] = []; }
+            $items[$header][] = $item;
         }
 
         foreach ($this->order->orderTransport()->groupBy('transport_inventory_tour_id')->get() as  $component) {
@@ -926,9 +926,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($this->order);
-            $start = "Transfers";
-            if (!array_key_exists($start, $items)) { $items[$start] = []; }
-            $items[$start][] = $item;
+            $header = "Transfers";
+            if (!array_key_exists($header, $items)) { $items[$header] = []; }
+            $items[$header][] = $item;
         }
 
         foreach ($this->order->orderMerchandise()->groupBy('merchandise_inventory_tour_id')->get() as  $component) {
@@ -936,9 +936,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($this->order);
-            $start = "Inclusion";
-            if (!array_key_exists($start, $items)) { $items[$start] = []; }
-            $items[$start][] = $item;
+            $header = "Inclusion";
+            if (!array_key_exists($header, $items)) { $items[$header] = []; }
+            $items[$header][] = $item;
         }
         return $items;
     }
