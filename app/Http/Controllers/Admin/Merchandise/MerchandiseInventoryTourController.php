@@ -21,10 +21,11 @@ class MerchandiseInventoryTourController
 
     public function delete(Tour $tour, MerchandiseInventoryTour $inventoryTour)
     {
-        if (!$inventoryTour->repository->delete()) {
-            $inventoryTour->repository->update(['is_bookable' => false,]);
+        $deleted = $inventoryTour->delete();
+        if (!$deleted) {
+            return back()->withErrors(['msg' => 'Could not successfully delete the component, as it has dependants']);
         }
-        return redirect()->route('tours.view', ['tour' => $tour,]);
+        return redirect()->route('tours.view', ['tour' => $tour,])->with('success', 'Component Deleted Successfully');
     }
 
     public function restore(Tour $tour, $inventoryTour)

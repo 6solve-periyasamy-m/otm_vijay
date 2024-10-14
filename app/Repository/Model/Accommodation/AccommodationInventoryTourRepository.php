@@ -89,7 +89,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     /**
      * @param ComponentUpgradeRepository $upgradeRepository Expected AccommodationInventoryTourUpgradeRepository
-     * @return bool
+     * @return boolAccommodationInventoryTourCon
      */
     public function onUpgradeTree(ComponentUpgradeRepository $upgradeRepository): bool
     {
@@ -116,12 +116,16 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function delete(): bool
     {
-        return $this->tourComponent->delete();
+        if ($this->canDelete()) {
+            // Will eventually move away from soft-deletes. TODO: Switch to delete when occurs
+            return $this->tourComponent->forceDelete();
+        }
+        return false;
     }
 
     public function isDeleted(): bool
     {
-        return $this->tourComponent->trashed();
+        return $this->tourComponent->id === null || $this->tourComponent->trashed();
     }
 
     public function __toString(): string
@@ -327,7 +331,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         if (Auth::user()?->can('update', $this->tourComponent)) {
             return route('accommodation-inventory-tours.edit', [
                 'tour' => $this->tourComponent->tour_id,
-                'accommodationInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;
@@ -338,7 +342,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('accommodation-inventory-tours.delete', [
                 'tour' => $this->tourComponent->tour_id,
-                'accommodationInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;
@@ -349,9 +353,19 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('accommodation-inventory-tours.restore', [
                 'tour' => $this->tourComponent->tour_id,
-                'accommodationInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;
+    }
+
+    public function getOrderedCount(): int
+    {
+        return $this->tourComponent->orders()->count();
+    }
+
+    public function getBookedCount(): int
+    {
+        return $this->tourComponent->bookings()->count();
     }
 }

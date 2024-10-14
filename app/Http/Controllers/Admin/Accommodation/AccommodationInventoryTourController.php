@@ -28,15 +28,15 @@ class AccommodationInventoryTourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
-    public function edit(Tour $tour, AccommodationInventoryTour $accommodationInventoryTour)
+    public function edit(Tour $tour, AccommodationInventoryTour $inventoryTour)
     {
-        return view('pages.admin.accommodation.inventory.tour.form', ['tour' => $tour, 'inventoryTour' => $accommodationInventoryTour,]);
+        return view('pages.admin.accommodation.inventory.tour.form', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
     }
 
-    public function update(Request $request, Tour $tour, AccommodationInventoryTour $accommodationInventoryTour)
+    public function update(Request $request, Tour $tour, AccommodationInventoryTour $inventoryTour)
     {
         $request->validate(AccommodationInventoryTour::getValidationRules());
-        $accommodationInventoryTour->update([
+        $inventoryTour->update([
             'accommodation_inventory_id' => $request->input('accommodation_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),
             'tour_sales_price' => $request->input('tour_sales_price') ?? 0,
@@ -46,9 +46,9 @@ class AccommodationInventoryTourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
-    public function restore(Tour $tour, $accommodationInventoryTour)
+    public function restore(Tour $tour, $inventoryTour)
     {
-        $inventoryTour = AccommodationInventoryTour::withTrashed()->find($accommodationInventoryTour);
+        $inventoryTour = AccommodationInventoryTour::withTrashed()->find($inventoryTour);
         if ($inventoryTour->trashed()) {
             $inventoryTour->restore();
         } else {
@@ -58,14 +58,12 @@ class AccommodationInventoryTourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
-    public function destroy(Tour $tour, AccommodationInventoryTour $accommodationInventoryTour)
+    public function destroy(Tour $tour, AccommodationInventoryTour $inventoryTour)
     {
-        if ($tour->orders()->count() > 0) {
-            $accommodationInventoryTour->is_bookable = false;
-            $accommodationInventoryTour->save();
-        } else {
-            $accommodationInventoryTour->delete();
+        $deleted = $inventoryTour->delete();
+        if (!$deleted) {
+            return back()->withErrors(['msg' => 'Could not successfully delete the component, as it has dependants']);
         }
-        return redirect()->route('tours.view', ['tour' => $tour,]);
+        return redirect()->route('tours.view', ['tour' => $tour,])->with('success', 'Component Deleted Successfully');
     }
 }
