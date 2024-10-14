@@ -2,6 +2,7 @@
 
 namespace App\Repository\Model\Tour;
 
+use App\Exceptions\CannotDeleteException;
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
@@ -78,8 +79,25 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         return $this->tour;
     }
 
+    /**
+     * @throws CannotDeleteException
+     */
     public function delete(): bool
     {
+        if ($this->tour->orders()->count() > 0) {
+            throw new CannotDeleteException('This tour has orders and cannot be deleted.');
+        }
+        if ($this->tour->bookings()->count() > 0) {
+            throw new CannotDeleteException('This tour has bookings and cannot be deleted.');
+        }
+        foreach ($this->tour->accommodationInventoryTours as $model) { $model->repository->delete(); }
+        foreach ($this->tour->activityInventoryTours as $model) { $model->repository->delete(); }
+        foreach ($this->tour->flightInventoryTours as $model) { $model->repository->delete(); }
+        foreach ($this->tour->transportInventoryTours as $model) { $model->repository->delete(); }
+        foreach ($this->tour->merchandise as $model) { $model->repository->delete(); }
+        foreach ($this->tour->costs as $model) { $model->forceDelete(); }
+        foreach ($this->tour->paymentInstallments as $model) { $model->forceDelete(); }
+        $this->tour->voucherPivot()->delete();
         return $this->tour->delete();
     }
 
@@ -382,7 +400,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         foreach ($this->tour->activityInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', true)->get() as $component) {
             $components[] = OrderActivity::make([
                 'activity_inventory_tour_id' => $component->id,
-                'cost' => $component->tour_sales_price,
+                'cost' => $component->tour_sales_price ?? 0.0,
                 'estimated_purchase_price' => $component->inventory->local_purchase_price,
             ]);
         }
@@ -398,7 +416,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         foreach ($this->tour->flightInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
             $components[] = OrderFlight::make([
                 'flight_inventory_tour_id' => $component->id,
-                'cost' => $component->tour_sales_price,
+                'cost' => $component->tour_sales_price ?? 0.0,
                 'estimated_purchase_price' => $component->inventory->local_purchase_price,
             ]);
         }
@@ -414,7 +432,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         foreach ($this->tour->transportInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
             $components[] = OrderTransport::make([
                 'transport_inventory_tour_id' => $component->id,
-                'cost' => $component->tour_sales_price,
+                'cost' => $component->tour_sales_price ?? 0.0,
                 'estimated_purchase_price' => $component->inventory->local_purchase_price,
             ]);
         }
@@ -430,7 +448,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         foreach ($this->tour->merchandise()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
             $components[] = OrderMerchandise::make([
                 'merchandise_inventory_tour_id' => $component->id,
-                'cost' => $component->tour_sales_price,
+                'cost' => $component->tour_sales_price ?? 0.0,
                 'estimated_purchase_price' => $component->inventory->local_purchase_price,
             ]);
         }

@@ -27,15 +27,15 @@ class TransportInventoryTourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
-    public function edit(Tour $tour, TransportInventoryTour $transportInventoryTour)
+    public function edit(Tour $tour, TransportInventoryTour $inventoryTour)
     {
-        return view('pages.admin.transport.inventory.tour.form', ['tour' => $tour, 'inventoryTour' => $transportInventoryTour,]);
+        return view('pages.admin.transport.inventory.tour.form', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
     }
 
-    public function update(Request $request, Tour $tour, TransportInventoryTour $transportInventoryTour)
+    public function update(Request $request, Tour $tour, TransportInventoryTour $inventoryTour)
     {
         $request->validate(TransportInventoryTour::getValidationRules());
-        $transportInventoryTour->update([
+        $inventoryTour->update([
             'transport_inventory_id' => $request->input('transport_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),
             'tour_sales_price' => $request->input('tour_sales_price') ?? 0,
@@ -44,9 +44,9 @@ class TransportInventoryTourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
-    public function restore(Tour $tour, $transportInventoryTour)
+    public function restore(Tour $tour, $inventoryTour)
     {
-        $inventoryTour = TransportInventoryTour::withTrashed()->find($transportInventoryTour);
+        $inventoryTour = TransportInventoryTour::withTrashed()->find($inventoryTour);
         if ($inventoryTour->trashed()) {
             $inventoryTour->restore();
         } else {
@@ -56,14 +56,12 @@ class TransportInventoryTourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
-    public function destroy(Tour $tour, TransportInventoryTour $transportInventoryTour)
+    public function destroy(Tour $tour, TransportInventoryTour $inventoryTour)
     {
-        if ($tour->orders()->count() > 0) {
-            $transportInventoryTour->is_bookable = false;
-            $transportInventoryTour->save();
-        } else {
-            $transportInventoryTour->delete();
+        $deleted = $inventoryTour->delete();
+        if (!$deleted) {
+            return back()->withErrors(['msg' => 'Could not successfully delete the component, as it has dependants']);
         }
-        return redirect()->route('tours.view', ['tour' => $tour,]);
+        return redirect()->route('tours.view', ['tour' => $tour,])->with('success', 'Component Deleted Successfully');
     }
 }

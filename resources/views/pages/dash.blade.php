@@ -316,7 +316,7 @@ $get_late = json_encode($monthsData);
                 <x-slot:title>
                     Abandoned Bookings
                 </x-slot:title>
-                @include('partials.reports.tables.abandoned-bookings', ['data' => \App\Repository\Reporting\ReportRepository::getAbandonedBookingsReport(7)])
+                @include('partials.reports.tables.abandoned-bookings', ['data' => \App\Repository\Reporting\ReportRepository::getAbandonedBookingsReport(7, true)])
             </x-admin.section.card>
         </div>
     </div>

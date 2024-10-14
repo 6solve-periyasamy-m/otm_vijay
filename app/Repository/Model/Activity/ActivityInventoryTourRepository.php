@@ -112,12 +112,16 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
 
     public function delete(): bool
     {
-        return $this->tourComponent->delete();
+        if ($this->canDelete()) {
+            // Will eventually move away from soft-deletes. TODO: Switch to delete when occurs
+            return $this->tourComponent->forceDelete();
+        }
+        return false;
     }
 
     public function isDeleted(): bool
     {
-        return $this->tourComponent->trashed();
+        return $this->tourComponent->id === null || $this->tourComponent->trashed();
     }
 
     public function __toString(): string
@@ -324,7 +328,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
         if (Auth::user()?->can('update', $this->tourComponent)) {
             return route('activity-inventory-tours.edit', [
                 'tour' => $this->tourComponent->tour_id,
-                'activityInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;
@@ -335,7 +339,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
         if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('activity-inventory-tours.delete', [
                 'tour' => $this->tourComponent->tour_id,
-                'activityInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;
@@ -346,9 +350,19 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
         if (Auth::user()?->can('delete', $this->tourComponent)) {
             return route('activity-inventory-tours.restore', [
                 'tour' => $this->tourComponent->tour_id,
-                'activityInventoryTour' => $this->tourComponent
+                'inventoryTour' => $this->tourComponent
             ]);
         }
         return null;
+    }
+
+    public function getOrderedCount(): int
+    {
+        return $this->tourComponent->orders()->count();
+    }
+
+    public function getBookedCount(): int
+    {
+        return $this->tourComponent->bookings()->count();
     }
 }

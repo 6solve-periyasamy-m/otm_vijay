@@ -2,6 +2,7 @@
 
 namespace App\Models\Accommodation;
 
+use App\Models\Booking\Component\BookingAccommodation;
 use App\Models\Customer\Group;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Tour\Tour;
@@ -108,6 +109,11 @@ class AccommodationInventoryTour extends Model
     public function orders(): HasMany
     {
         return $this->hasMany(OrderAccommodation::class, 'accommodation_inventory_tour_id');
+    }
+
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(BookingAccommodation::class, 'accommodation_inventory_tour_id');
     }
 
     public function upgrades(): HasMany

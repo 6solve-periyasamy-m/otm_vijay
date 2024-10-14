@@ -385,7 +385,7 @@ class BookingTravellerRepository extends ModelRepository
 
     public function getBaseCost(): float
     {
-        return $this->traveller->booking->tour?->base_price_per_person;
+        return $this->traveller->booking->tour?->base_price_per_person ?? 0.0;
     }
 
     public function getAdditionalCost(): float

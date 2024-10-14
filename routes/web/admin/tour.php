@@ -40,8 +40,7 @@ Route::prefix('{tour}')->group(function () {
         Route::prefix('accommodation')->group(function () {
             Route::get('/create', [AccommodationInventoryTourController::class, 'create'])->name('accommodation-inventory-tours.create')->middleware('bouncer:Accommodation\AccommodationInventoryTour,create');
             Route::post('/create', [AccommodationInventoryTourController::class, 'store'])->name('accommodation-inventory-tours.store')->middleware('bouncer:Accommodation\AccommodationInventoryTour,create');
-            Route::prefix('{accommodationInventoryTour}')->group(function () {
-                Route::get('/', [AccommodationInventoryTourController::class, 'view'])->name('accommodation-inventory-tours.view')->middleware('bouncer:Accommodation\AccommodationInventoryTour,read');
+            Route::prefix('{inventoryTour}')->group(function () {
                 Route::get('/update', [AccommodationInventoryTourController::class, 'edit'])->name('accommodation-inventory-tours.edit')->middleware('bouncer:Accommodation\AccommodationInventoryTour,update');
                 Route::post('/update', [AccommodationInventoryTourController::class, 'update'])->name('accommodation-inventory-tours.update')->middleware('bouncer:Accommodation\AccommodationInventoryTour,update');
                 Route::post('/delete', [AccommodationInventoryTourController::class, 'destroy'])->name('accommodation-inventory-tours.delete')->middleware('bouncer:Accommodation\AccommodationInventoryTour,delete');
@@ -61,8 +60,7 @@ Route::prefix('{tour}')->group(function () {
         Route::prefix('activity')->group(function () {
             Route::get('/create', [ActivityInventoryTourController::class, 'create'])->name('activity-inventory-tours.create')->middleware('bouncer:Activity\ActivityInventoryTour,create');
             Route::post('/create', [ActivityInventoryTourController::class, 'store'])->name('activity-inventory-tours.store')->middleware('bouncer:Activity\ActivityInventoryTour,create');
-            Route::prefix('{activityInventoryTour}')->group(function () {
-                Route::get('/', [ActivityInventoryTourController::class, 'view'])->name('activity-inventory-tours.view')->middleware('bouncer:Activity\ActivityInventoryTour,read');
+            Route::prefix('{inventoryTour}')->group(function () {
                 Route::get('/update', [ActivityInventoryTourController::class, 'edit'])->name('activity-inventory-tours.edit')->middleware('bouncer:Activity\ActivityInventoryTour,update');
                 Route::post('/update', [ActivityInventoryTourController::class, 'update'])->name('activity-inventory-tours.update')->middleware('bouncer:Activity\ActivityInventoryTour,update');
                 Route::post('/delete', [ActivityInventoryTourController::class, 'destroy'])->name('activity-inventory-tours.delete')->middleware('bouncer:Activity\ActivityInventoryTour,delete');
@@ -90,8 +88,7 @@ Route::prefix('{tour}')->group(function () {
         Route::prefix('flight')->group(function () {
             Route::get('/create', [FlightInventoryTourController::class, 'create'])->name('flight-inventory-tours.create')->middleware('bouncer:Flight\FlightInventoryTour,create');
             Route::post('/create', [FlightInventoryTourController::class, 'store'])->name('flight-inventory-tours.store')->middleware('bouncer:Flight\FlightInventoryTour,create');
-            Route::prefix('{flightInventoryTour}')->group(function () {
-                Route::get('/', [FlightInventoryTourController::class, 'view'])->name('flight-inventory-tours.view')->middleware('bouncer:Flight\FlightInventoryTour,read');
+            Route::prefix('{inventoryTour}')->group(function () {
                 Route::get('/update', [FlightInventoryTourController::class, 'edit'])->name('flight-inventory-tours.edit')->middleware('bouncer:Flight\FlightInventoryTour,update');
                 Route::post('/update', [FlightInventoryTourController::class, 'update'])->name('flight-inventory-tours.update')->middleware('bouncer:Flight\FlightInventoryTour,update');
                 Route::post('/delete', [FlightInventoryTourController::class, 'destroy'])->name('flight-inventory-tours.delete')->middleware('bouncer:Flight\FlightInventoryTour,delete');
@@ -111,8 +108,7 @@ Route::prefix('{tour}')->group(function () {
         Route::prefix('transport')->group(function () {
             Route::get('/create', [TransportInventoryTourController::class, 'create'])->name('transport-inventory-tours.create')->middleware('bouncer:Transport\TransportInventoryTour,create');
             Route::post('/create', [TransportInventoryTourController::class, 'store'])->name('transport-inventory-tours.store')->middleware('bouncer:Transport\TransportInventoryTour,create');
-            Route::prefix('{transportInventoryTour}')->group(function () {
-                Route::get('/', [TransportInventoryTourController::class, 'view'])->name('transport-inventory-tours.view')->middleware('bouncer:Transport\TransportInventoryTour,read');
+            Route::prefix('{inventoryTour}')->group(function () {
                 Route::get('/update', [TransportInventoryTourController::class, 'edit'])->name('transport-inventory-tours.edit')->middleware('bouncer:Transport\TransportInventoryTour,update');
                 Route::post('/update', [TransportInventoryTourController::class, 'update'])->name('transport-inventory-tours.update')->middleware('bouncer:Transport\TransportInventoryTour,update');
                 Route::post('/delete', [TransportInventoryTourController::class, 'destroy'])->name('transport-inventory-tours.delete')->middleware('bouncer:Transport\TransportInventoryTour,delete');

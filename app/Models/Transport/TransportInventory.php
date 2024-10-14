@@ -3,6 +3,7 @@
 namespace App\Models\Transport;
 
 use App\Models\Order\Component\OrderTransport;
+use App\Models\Quote\Component\QuoteTransport;
 use App\Models\Supplier\SupplierContractComponent;
 use App\Models\Tour\Tour;
 use App\Models\TravelClass;
@@ -178,6 +179,11 @@ class TransportInventory extends Model
     public function tourComponents(): HasMany
     {
         return $this->hasMany(TransportInventoryTour::class, 'transport_inventory_id');
+    }
+
+    public function quoteComponents(): HasMany
+    {
+        return $this->hasMany(QuoteTransport::class, 'transport_inventory_id');
     }
 
     public function __toString(): string

@@ -290,9 +290,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         return (new InvoiceGenerator($this->order))->generate()->repository;
     }
 
-    public function generateInvoice(): InvoiceRepository
+    public function generateInvoice(): InvoiceRepository|null
     {
-        return (new InvoiceGenerator($this->order))->generate(true)->repository;
+        return (new InvoiceGenerator($this->order))->generate(true)?->repository;
     }
 
     /**
@@ -693,6 +693,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         $this->order->payments()->forceDelete();
         $this->order->installments()->forceDelete();
         $this->order->reminders()->forceDelete();
+        $this->order->forceDelete();
     }
 
     public static function generateGenericCustomer(string $first, string $last): Customer
