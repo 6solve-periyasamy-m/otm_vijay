@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire\Admin\Tour;
 
+use App\Exceptions\CannotDeleteException;
 use App\Http\Livewire\Abstract\ActionColumn;
 use App\Http\Livewire\Abstract\CurrencyColumn;
 use App\Http\Livewire\Abstract\DisplayModeColumn;
+use App\Http\Livewire\SendsEvents;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Models\Tour\TourCategory;
@@ -15,6 +17,8 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class Table extends LivewireDatatable
 {
+    use SendsEvents;
+
     public bool $hideNoCategory = false;
     public function builder()
     {
@@ -77,5 +81,16 @@ class Table extends LivewireDatatable
                 ->filterable(),
             ActionColumn::view('tour', 'tours.edit', 'tours.view', 'partials.admin.livewire.table.tour-actions'),
         ];
+    }
+
+    public function delete($id)
+    {
+        $tour = Tour::find($id);
+        try {
+            $tour->repository->delete();
+        } catch (CannotDeleteException $e) {
+            $this->toast('Cannot Delete Tour', $e->getMessage(), 'danger');
+        }
+
     }
 }

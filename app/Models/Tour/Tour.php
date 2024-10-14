@@ -340,7 +340,7 @@ class Tour extends Model
         return $this->hasManyThrough(OrderInstallment::class, Order::class, 'tour_id', 'order_id')->where('cancelled', '=', false);
     }
 
-    private function voucherPivot(): HasMany
+    public function voucherPivot(): HasMany
     {
         return $this->hasMany(VoucherTour::class, 'tour_id');
     }

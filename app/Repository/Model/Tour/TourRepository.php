@@ -2,6 +2,7 @@
 
 namespace App\Repository\Model\Tour;
 
+use App\Exceptions\CannotDeleteException;
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
@@ -78,8 +79,25 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         return $this->tour;
     }
 
+    /**
+     * @throws CannotDeleteException
+     */
     public function delete(): bool
     {
+        if ($this->tour->orders()->count() > 0) {
+            throw new CannotDeleteException('This tour has orders and cannot be deleted.');
+        }
+        if ($this->tour->bookings()->count() > 0) {
+            throw new CannotDeleteException('This tour has bookings and cannot be deleted.');
+        }
+        foreach ($this->tour->accommodationInventoryTours as $model) { $model->repository->delete(); }
+        foreach ($this->tour->activityInventoryTours as $model) { $model->repository->delete(); }
+        foreach ($this->tour->flightInventoryTours as $model) { $model->repository->delete(); }
+        foreach ($this->tour->transportInventoryTours as $model) { $model->repository->delete(); }
+        foreach ($this->tour->merchandise as $model) { $model->repository->delete(); }
+        foreach ($this->tour->costs as $model) { $model->forceDelete(); }
+        foreach ($this->tour->paymentInstallments as $model) { $model->forceDelete(); }
+        $this->tour->voucherPivot()->delete();
         return $this->tour->delete();
     }
 
