@@ -35,7 +35,7 @@ class Room {
     }
 
     public containsDate(date: DateTime): boolean {
-        let interval = Interval.fromDateTimes(this.start, this.end);
+        let interval = Interval.fromDateTimes(this.start, this.end.set({hour: 0, minute:0, second: 0}));
         return interval.contains(date);
     }
 }
@@ -136,9 +136,13 @@ class RoomingData {
     }
 
     public getOrphanedCustomers(date: DateTime|null): Customer[] {
+        let validatorDate = date?.set({hour: 2, minute: 0, second: 0,});
         let groups = this.getGroups(date);
         let owned = [];
         for (const group of groups) {
+            if (group.room.end.set({hour: 0, minute: 0, second: 0}).toUnixInteger() < (validatorDate?.toUnixInteger() ?? 0)) {
+                continue;
+            }
             for (const customer of group.customers) {
                 owned.push(customer.id);
             }

@@ -2,6 +2,7 @@
 
 namespace App\Repository\Model\Accommodation;
 
+use App\Exceptions\CannotDeleteException;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Quote\Component\QuoteAccommodation;
@@ -131,8 +132,30 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         return $this->inventory->save();
     }
 
-    public function delete(): bool
+    public function getDependants(): int
     {
+        return $this->inventory->tourComponents()->count() + $this->inventory->quoteComponents()->count();
+    }
+
+    /**
+     * @throws CannotDeleteException
+     */
+    public function delete(bool $unlink = false): bool
+    {
+        if ($this->inventory->tourComponents()->count() > 0) {
+            throw new CannotDeleteException('Cannot delete inventory as it has dependants');
+        }
+        $children = $this->inventory->stockChildren()->count();
+        if ($children > 0) {
+            throw new CannotDeleteException("This inventory has {$children} stock children, and cannot be deleted");
+        }
+        if ($unlink) {
+            foreach ($this->inventory->stockChildren as $child) {
+                $child->stock_parent_id = null;
+                $child->save();
+            }
+        }
+        $this->inventory->contractComponents()->forceDelete();
         return $this->inventory->delete();
     }
 
@@ -237,6 +260,7 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         return new ItineraryItem(
             $this->inventory->component->name,
             'Hotel',
+            $this->inventory->check_in->unix(),
             $details,
         );
     }

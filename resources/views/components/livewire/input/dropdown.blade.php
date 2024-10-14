@@ -4,7 +4,7 @@
     @endif
     <select class="form-select" {{ $attributes->except(['width', 'label',]) }}>
         @foreach($items as $key => $value)
-            <option value="{{ $key }}">{{ $value }}</option>
+            <option value="{{ $key }}" @if((int)$attributes->get('value', null) === $key) selected @endif>{{ $value }}</option>
         @endforeach
     </select>
 </div>

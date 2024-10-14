@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Tour;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Tour\EventRequest;
 use App\Http\Requests\Admin\TableRequest;
 use App\Models\Tour\Event;
 use Illuminate\Http\Request;
@@ -20,23 +21,16 @@ class EventController extends Controller
         return view('pages.admin.event.form');
     }
 
-    public function store(Request $request)
+    public function store(EventRequest $request)
     {
-        $request->validate(Event::getValidationRules());
-        $event = Event::create([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'starts_at' => $request->input('starts_at'),
-            'ends_at' => $request->input('ends_at'),
-            'booking_url' => $request->input('booking_url'),
-            'tax_bracket_id' => $request->input('tax_bracket_id'),
-            'brand_id' => $request->input('brand_id'),
-            'notes' => $request->input('notes'),
-            'event_category' => $request->input('event_category'),
-        ]);
+        $parent = Event::find($request->parent_id);
+        if ($parent?->parent_event_id !== null) {
+            return back()->withErrors(['msg' => 'Cannot use a parent that is a child of another event',]);
+        }
+        $event = Event::create($request->getData());
 
-        if ($request->has('image') && $request->file('image') != null) {
-            $event->image_url = $request->file('image')->storePublicly('uploads/images');
+        if ($request->image !== null) {
+            $event->image_url = store_file($request->image);
         }
         $event->save();
         return redirect()->route('events.view', ['event' => $event,]);
@@ -52,26 +46,16 @@ class EventController extends Controller
         return view('pages.admin.event.form', ['event' => $event,]);
     }
 
-    public function update(Request $request, Event $event)
+    public function update(EventRequest $request, Event $event)
     {
-        $request->validate(Event::getValidationRules());
-        $event->update([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'starts_at' => $request->input('starts_at'),
-            'ends_at' => $request->input('ends_at'),
-            'booking_url' => $request->input('booking_url'),
-            'tax_bracket_id' => $request->input('tax_bracket_id'),
-            'brand_id' => $request->input('brand_id'),
-            'notes' => $request->input('notes'),
-            'event_category' => $request->input('event_category'),
-        ]);
+        $parent = Event::find($request->parent_id);
+        if ($parent?->parent_event_id !== null) {
+            return back()->withErrors(['msg' => 'Cannot use a parent that is a child of another event',]);
+        }
+        $event->update($request->getData());
 
-        if ($request->has('image') && $request->file('image') != null) {
-            /*if (isset($event->image_url)) {
-                File::delete(public_path($event->image_url));
-            }*/
-            $event->image_url = $request->file('image')->storePublicly('uploads/images');
+        if ($request->image !== null) {
+            $event->image_url = store_file($request->image, $event->image_url);
         }
         $event->save();
         return redirect()->route('events.view', ['event' => $event,]);

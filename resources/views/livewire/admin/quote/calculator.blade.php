@@ -86,54 +86,48 @@
         </x-admin.section.otm-text>
     </x-admin.section.card>
     {{-- Component Costs --}}
-        <x-admin.section.card width="6">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col" class="fw-bold py-1">Type</th>
-                        <th scope="col" class="fw-bold py-1">Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.accommodation') }}<span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span></th>
-                        <td class="py-1">{{ f_currency($quote->repository->getAccommodationCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.activities') }}</th>
-                        <td class="py-1">{{ f_currency($quote->repository->getActivityCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.flights') }}</th>
-                        <td class="py-1">{{ f_currency($quote->repository->getFlightCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.transport') }}</th>
-                        <td class="py-1">{{ f_currency($quote->repository->getTransportCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.merchandise') }}</th>
-                        <td class="py-1">{{ f_currency($quote->repository->getMerchandiseCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.per-customer') }}</th>
-                        <td class="py-1">{{ f_currency($quote->repository->getPerCustomerAdditionals(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.overall') }}</th>
-                        <td class="py-1">{{ f_currency($quote->repository->getWholeOrderAdditionals(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th scope="col" class="fw-bold py-1">{{ __('quotes.view.cards.quick.calculator.components.total') }}</th>
-                        <th scope="col" class="fw-bold py-1">{{ f_currency($quote->repository->getPurchaseTotal()) }}</th>
-                    </tr>
-                </tfoot>
-            </table>
-        </x-admin.section.card>
+    <x-admin.section.card width="3">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" class="fw-bold py-1">Type</th>
+                    <th scope="col" class="fw-bold py-1">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.accommodation') }}<span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span></th>
+                    <td class="py-1">{{ f_currency($quote->repository->getAccommodationCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.activities') }}</th>
+                    <td class="py-1">{{ f_currency($quote->repository->getActivityCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.flights') }}</th>
+                    <td class="py-1">{{ f_currency($quote->repository->getFlightCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.transport') }}</th>
+                    <td class="py-1">{{ f_currency($quote->repository->getTransportCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.merchandise') }}</th>
+                    <td class="py-1">{{ f_currency($quote->repository->getMerchandiseCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.per-customer') }}</th>
+                    <td class="py-1">{{ f_currency($quote->repository->getPerCustomerAdditionals(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.overall') }}</th>
+                    <td class="py-1">{{ f_currency($quote->repository->getWholeOrderAdditionals(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </x-admin.section.card>
     {{-- Quote Costs --}}
-    <x-admin.section.card width="6">
+    <x-admin.section.card width="9">
         <div class="row">
             <div class="col-6">
                 <x-admin.section.otm-text class="ctc-updater">
@@ -142,14 +136,14 @@
                 </x-admin.section.otm-text>
             </div>
             <div class="col-6">
-                <button class="btn btn-info" wire:click="calculate">Calculate</button>
+                <button class="btn btn-info" wire:click="calculate">{{ Icon::refresh() }} Refresh Data</button>
             </div>
             <div class="col-6">
                 <div class="row">
                     <div class="col-6">
                         <x-admin.section.otm-text class="profit-updater">
                             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.profit') }} <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span></x-slot:header>
-                            {{ f_currency($profit) }} ({{ sigfig($margin) }}%)
+                            {{ f_currency($profit) }}
                         </x-admin.section.otm-text>
                     </div>
                     @if($taxes !== null)
@@ -196,11 +190,11 @@
                 <x-livewire.input wire:model.debounce.300ms="marked_up_price" key="marked_up_price" label="Price per Person" width="4" />
                 <div class="col-4">
                     <label></label>
-                    <button class="btn-warning" wire:click="updatePricePoint()">Update Single Price Point</button>
+                    <button class="btn-warning" wire:click="updatePricePoint()" title="Update the price point for a single traveller, and leave the others unaffected">Update Single Price Point</button>
                 </div>
                 <div class="col-4">
                     <label></label>
-                    <button class="btn-danger" wire:click="updatePricePoint(true)">Update All Price Points</button>
+                    <button class="btn-danger" wire:click="updatePricePoint(true)" title="Update the price point for a single traveller, and update the others to have the same percentage difference">Update All Price Points</button>
                 </div>
             </div>
         </div>

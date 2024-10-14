@@ -11,6 +11,7 @@ use App\Models\Booking\Component\BookingTransport;
 use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Helper\Enum\AddressParent;
+use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
@@ -209,8 +210,8 @@ class BookingTravellerRepository extends ModelRepository
         }
         $orderCustomer = OrderCustomer::make([
             'customer_id' => $customer->id,
-            'tour_cost' => $this->traveller->booking->tour->base_price_per_person,
-            'single_occupancy_surcharge' => $this->traveller->booking->tour->single_occupancy_surcharge,
+            'tour_cost' => $this->traveller->booking->tour?->base_price_per_person,
+            'single_occupancy_surcharge' => $this->traveller->booking->tour?->single_occupancy_surcharge,
         ]);
         $order->orderCustomers()->saveQuietly($orderCustomer);
         foreach ($this->getComponents(false) as $componentRepository) {
@@ -239,11 +240,17 @@ class BookingTravellerRepository extends ModelRepository
             if ($lookup !== null) {
                 if (strtolower($this->traveller->first_name) === strtolower($lookup)
                     && strtolower($this->traveller->last_name) === strtolower($lookup->last_name)) {
-                    $this->traveller->customer_id === $lookup->id;
+                    $this->traveller->customer_id = $lookup->id;
                     $this->traveller->save();
                     return $lookup;
                 } else {
-                    $this->traveller->email_address === null;
+                    $count = 0;
+                    $prefix = strtolower(strip_non_alphanumeric($this->traveller->booking->tour?->brand->name));
+                    do {
+                        $count++;
+                        $email = add_email_alias($this->traveller->email_address, "{$prefix}{$count}");
+                    } while (Customer::where('email_address', '=', $email)->exists());
+                    $this->traveller->email_address = $email;
                     $this->traveller->save();
                 }
             }
@@ -378,7 +385,7 @@ class BookingTravellerRepository extends ModelRepository
 
     public function getBaseCost(): float
     {
-        return $this->traveller->booking->tour->base_price_per_person;
+        return $this->traveller->booking->tour?->base_price_per_person ?? 0.0;
     }
 
     public function getAdditionalCost(): float
@@ -392,7 +399,7 @@ class BookingTravellerRepository extends ModelRepository
 
     public function getSingleOccupancy(): float
     {
-        return $this->hasSingleOccupancy() ? ($this->traveller->booking->tour->single_occupancy_surcharge ?? 0.0) : 0;
+        return $this->hasSingleOccupancy() ? ($this->traveller->booking->tour?->single_occupancy_surcharge ?? 0.0) : 0;
     }
 
     public function hasSingleOccupancy(): bool
@@ -440,7 +447,7 @@ class BookingTravellerRepository extends ModelRepository
          * @var BookingComponent[] $components
          */
         $components = [];
-        foreach ($this->traveller->booking->tour->repository->getComponents(false, true, true, true, false, ['Included', 'Add-on']) as $component) {
+        foreach ($this->traveller->booking->tour?->repository->getComponents(false, true, true, true, false, ['Included', 'Add-on']) as $component) {
             $active = $component->getActiveUpgrade($this->traveller);
             if ($active !== null) {
                 $components[] = $active->getAbstractBookingComponent($this->traveller);
@@ -497,7 +504,7 @@ class BookingTravellerRepository extends ModelRepository
         if ($this->traveller->has_single_occupancy) {
             $data[] = [
                 'name' => 'Single Occupancy Surcharge',
-                'cost' => $this->traveller->booking->tour->single_occupancy_surcharge,
+                'cost' => $this->traveller->booking->tour?->single_occupancy_surcharge,
             ];
         }
         foreach ($this->traveller->vouchers as $voucher) {
@@ -523,5 +530,58 @@ class BookingTravellerRepository extends ModelRepository
     public static function find($id): BookingTraveller|null
     {
         return BookingTraveller::find($id);
+    }
+
+    public function getData()
+    {
+        $source = $this->traveller->customer ?? $this->traveller;
+        return [
+            'first_name' => $source->first_name,
+            'last_name' => $source->last_name,
+            'email' => $source->email_address,
+            'telephone' => $source->mobile_number,
+            'unknown' => $this->traveller->role === BookingTravellerRole::UNKNOWN,
+            'paying' => $this->traveller->role !== BookingTravellerRole::NOT_TRAVELLING,
+            'is_lead' => $this->traveller->id === $this->traveller->booking->lead_traveller_id,
+        ];
+    }
+
+    /**
+     * Validate that a booking traveller
+     * @return void
+     */
+    public function validateIncluded(): void
+    {
+        if ($this->traveller->role === BookingTravellerRole::NOT_TRAVELLING) {
+            return;
+        }
+        foreach ($this->traveller->booking->tour->activityInventoryTours as $component) {
+            if ($component->tour_component_type !== 'Included') { continue; }
+            $found = $this->traveller->activities()->where('activity_inventory_tour_id', '=', $component->id)->first();
+            if ($found === null) {
+                $component->repository->grantToBookingTraveller($this->traveller);
+            }
+        }
+        foreach ($this->traveller->booking->tour->flightInventoryTours as $component) {
+            if ($component->tour_component_type !== 'Included') { continue; }
+            $found = $this->traveller->flights()->where('flight_inventory_tour_id', '=', $component->id)->first();
+            if ($found === null) {
+                $component->repository->grantToBookingTraveller($this->traveller);
+            }
+        }
+        foreach ($this->traveller->booking->tour->transportInventoryTours as $component) {
+            if ($component->tour_component_type !== 'Included') { continue; }
+            $found = $this->traveller->transport()->where('transport_inventory_tour_id', '=', $component->id)->first();
+            if ($found === null) {
+                $component->repository->grantToBookingTraveller($this->traveller);
+            }
+        }
+        foreach ($this->traveller->booking->tour->merchandise as $component) {
+            if ($component->tour_component_type !== 'Included') { continue; }
+            $found = $this->traveller->merchandise()->where('merchandise_inventory_tour_id', '=', $component->id)->first();
+            if ($found === null) {
+                $component->repository->grantToBookingTraveller($this->traveller);
+            }
+        }
     }
 }

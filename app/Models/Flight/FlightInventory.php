@@ -3,6 +3,7 @@
 namespace App\Models\Flight;
 
 use App\Models\Order\Component\OrderFlight;
+use App\Models\Quote\Component\QuoteFlight;
 use App\Models\Supplier\SupplierContractComponent;
 use App\Models\TravelClass;
 use App\Repository\Model\Flight\FlightInventoryRepository;
@@ -186,6 +187,11 @@ class FlightInventory extends Model
     public function tourComponents(): HasMany
     {
         return $this->hasMany(FlightInventoryTour::class, 'flight_inventory_id');
+    }
+
+    public function quoteComponents(): HasMany
+    {
+        return $this->hasMany(QuoteFlight::class, 'flight_inventory_id');
     }
 
     public function __toString(): string

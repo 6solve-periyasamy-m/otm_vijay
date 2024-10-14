@@ -2,6 +2,7 @@
 
 namespace App\Repository\Model\Merchandise;
 
+use App\Exceptions\CannotDeleteException;
 use App\Models\Merchandise\Merchandise;
 use App\Models\Merchandise\MerchandiseInventory;
 use App\Models\Merchandise\MerchandiseInventoryTour;
@@ -83,12 +84,12 @@ class MerchandiseInventoryRepository extends InventoryRepository
 
     public function getStartTime(): Carbon
     {
-        return now();
+        return now()->addYears(1000);
     }
 
     public function getEndTime(): Carbon
     {
-        return now();
+        return now()->addYears(1000);
     }
 
     /**
@@ -134,9 +135,30 @@ class MerchandiseInventoryRepository extends InventoryRepository
         return $this->inventory->save();
     }
 
-    public function delete(): bool
+    public function getDependants(): int
     {
-        if ($this->inventory->tourComponents()->count() > 0) return false;
+        return $this->inventory->tourComponents()->count() + $this->inventory->quoteComponents()->count();
+    }
+
+    /**
+     * @throws CannotDeleteException
+     */
+    public function delete(bool $unlink = false): bool
+    {
+        if ($this->inventory->tourComponents()->count() > 0) {
+            throw new CannotDeleteException('Cannot delete inventory as it has dependants');
+        }
+        $children = $this->inventory->stockChildren()->count();
+        if ($children > 0) {
+            throw new CannotDeleteException("This inventory has {$children} stock children, and cannot be deleted");
+        }
+        if ($unlink) {
+            foreach ($this->inventory->stockChildren as $child) {
+                $child->stock_parent_id = null;
+                $child->save();
+            }
+        }
+        $this->inventory->contractComponents()->forceDelete();
         return $this->inventory->delete();
     }
 
@@ -231,6 +253,7 @@ class MerchandiseInventoryRepository extends InventoryRepository
         return new ItineraryItem(
             $this->inventory->component->name,
             'Merchandise',
+            1,
             $details
         );
     }

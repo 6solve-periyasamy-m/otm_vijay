@@ -33,6 +33,7 @@ use App\Repository\Storage\Itinerary\ItineraryPaymentDetails;
 use App\Repository\Storage\Itinerary\ItinerarySchedule;
 use App\Repository\Storage\Itinerary\ItineraryScheduleType;
 use App\Repository\Storage\Itinerary\ItineraryTraveller;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
@@ -289,9 +290,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         return (new InvoiceGenerator($this->order))->generate()->repository;
     }
 
-    public function generateInvoice(): InvoiceRepository
+    public function generateInvoice(): InvoiceRepository|null
     {
-        return (new InvoiceGenerator($this->order))->generate(true)->repository;
+        return (new InvoiceGenerator($this->order))->generate(true)?->repository;
     }
 
     /**
@@ -692,6 +693,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         $this->order->payments()->forceDelete();
         $this->order->installments()->forceDelete();
         $this->order->reminders()->forceDelete();
+        $this->order->forceDelete();
     }
 
     public static function generateGenericCustomer(string $first, string $last): Customer
@@ -859,8 +861,10 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $this->order->tour->event?->image_url,
             $this->order->booking_reference,
             $this->order->organization,
+            $this->order->consultant ?? Auth::user(),
             $this->order->tour->date_from,
             $this->order->tour->date_to,
+            $this->order->ordered_on,
             new ItineraryTraveller($this->order->leadBooker->customer, $this->order->leadBooker->is_charged, $this->order->leadBooker->is_travelling),
             $this->order->tour->brand,
             $this->getTravellerItineraryArray(),
@@ -902,7 +906,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($this->order);
             $start =
-                $component->tourComponent->inventory->component->activity_category === ActivityCategory::MAIN ? 'Headliner' : 'Inclusion';
+                $component->tourComponent->inventory->component->activity_category === ActivityCategory::MAIN ? 'Event' : 'Inclusion';
             if (!array_key_exists($start, $items)) { $items[$start] = []; }
             $items[$start][] = $item;
         }
@@ -923,6 +927,16 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($this->order);
             $start = "Transfers";
+            if (!array_key_exists($start, $items)) { $items[$start] = []; }
+            $items[$start][] = $item;
+        }
+
+        foreach ($this->order->orderMerchandise()->groupBy('merchandise_inventory_tour_id')->get() as  $component) {
+            $key = "merchandise-{$component->merchandise_inventory_tour_id}";
+            if (in_array($key, $seen, true)) { continue; }
+            $seen[] = $key;
+            $item = $component->repository->getItineraryItem($this->order);
+            $start = "Inclusion";
             if (!array_key_exists($start, $items)) { $items[$start] = []; }
             $items[$start][] = $item;
         }

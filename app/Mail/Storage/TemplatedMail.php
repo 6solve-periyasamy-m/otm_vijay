@@ -34,11 +34,11 @@ abstract class TemplatedMail
             if ($user !== null) {
                 $this->name = "{$user->name} - " . $defaultName;
             } else {
-                $this->name = $defaultName;
+                $this->name = $defaultName ?? 'Octopus Travel Matrix';
             }
         } else {
-            $this->email = $defaultEmail;
-            $this->name = $defaultName;
+            $this->email = $defaultEmail ?? 'info@octopustravelmatrix.com';
+            $this->name = $defaultName ?? 'Octopus Travel Matrix';
         }
     }
 

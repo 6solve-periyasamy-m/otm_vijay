@@ -31,4 +31,13 @@ trait ConvertsToArray
         }
         return $data;
     }
+
+    public static function keys(): array
+    {
+        $data = [];
+        foreach (self::cases() as $case) {
+            $data[] = $case->value;
+        }
+        return $data;
+    }
 }

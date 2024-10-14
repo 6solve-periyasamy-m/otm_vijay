@@ -28,7 +28,7 @@ class TourCategoryController extends Controller
      */
     public function store(TourCategoryRequest $request): RedirectResponse
     {
-        $tourCategory = TourCategory::create(['name' => $request->name,]);
+        $tourCategory = TourCategory::create(['name' => $request->name, 'display_mode_type' => $request->display_mode_type, 'display_mode_color' => $request->display_mode_color,]);
         return $tourCategory->repository->getReturnURL();
     }
 
@@ -49,7 +49,7 @@ class TourCategoryController extends Controller
 
     public function update(TourCategoryRequest $request, TourCategory $category): RedirectResponse
     {
-        $category->update(['name' => $request->name,]);
+        $category->update(['name' => $request->name, 'display_mode_type' => $request->display_mode_type, 'display_mode_color' => $request->display_mode_color,]);
         return $category->repository->getReturnURL();
     }
 

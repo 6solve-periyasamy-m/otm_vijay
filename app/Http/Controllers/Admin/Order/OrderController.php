@@ -82,7 +82,7 @@ class OrderController extends Controller
 
     public function reservation(Order $order)
     {
-        return dompdf(view('pdf.quotes.itinerary', ['itinerary' => $order->repository->getReservationDocument(),]));
+        return dompdf(view('pdf.quotes.itinerary', ['itinerary' => $order->repository->getReservationDocument(), 'type' => 'Reservation']));
 
     }
 

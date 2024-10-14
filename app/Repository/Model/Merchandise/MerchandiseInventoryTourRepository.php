@@ -93,12 +93,16 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
 
     public function delete(): bool
     {
-        return $this->tourComponent->delete();
+        if ($this->canDelete()) {
+            // Will eventually move away from soft-deletes. TODO: Switch to delete when occurs
+            return $this->tourComponent->forceDelete();
+        }
+        return false;
     }
 
     public function isDeleted(): bool
     {
-        return $this->tourComponent->trashed();
+        return $this->tourComponent->id === null || $this->tourComponent->trashed();
     }
 
     public function __toString(): string
@@ -190,6 +194,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
             'merchandise_inventory_id' => $this->tourComponent->merchandise_inventory_id,
             'tour_sales_price' => $this->tourComponent->tour_sales_price,
             'tour_component_type' => $this->tourComponent->tour_component_type,
+            'quantity' => null,
         ]);
         return $component->repository;
     }
@@ -277,5 +282,15 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
             ]);
         }
         return null;
+    }
+
+    public function getOrderedCount(): int
+    {
+        return $this->tourComponent->orderComponents()->count();
+    }
+
+    public function getBookedCount(): int
+    {
+        return $this->tourComponent->bookingComponents()->count();
     }
 }

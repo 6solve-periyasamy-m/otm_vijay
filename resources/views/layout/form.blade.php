@@ -1,4 +1,4 @@
-@extends('layout.master')
+@extends('layout.master', ['showErrors' => $showErrors ?? true,])
 
 @section('content')
     <x-admin.section.card>

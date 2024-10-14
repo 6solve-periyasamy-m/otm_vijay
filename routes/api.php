@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\Admin\MerchandiseController;
 use App\Http\Controllers\Api\Admin\QuoteController;
 use App\Http\Controllers\Api\Admin\RevenueController;
+use App\Http\Controllers\Api\Customer\SimpleBookingController;
 use App\Http\Controllers\Api\CustomerBookingController;
 use App\Http\Controllers\Api\CustomerComponentController;
 use App\Http\Controllers\Api\DataTablesController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\Api\TransportController;
 use App\Http\Gateways\AirwallexGateway;
 use App\Http\Gateways\FellohGateway;
 use App\Http\Gateways\OpayoGateway;
+use App\Http\Middleware\ExpectsJson;
 use App\View\Components\Livewire\Input\Select\Country;
 use Illuminate\Support\Facades\Route;
 
@@ -163,4 +165,8 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::post('bespoke/save', [BespokeReportController::class, 'store'])->name('bespoke.save');
         Route::post('bespoke/export', [BespokeReportController::class, 'apiExport'])->name('bespoke.export');
     });
+});
+
+Route::prefix('booking')->middleware([ExpectsJson::class,])->name('booking.')->group(function () {
+    Route::post('setup', [SimpleBookingController::class, 'setup'])->name('setup');
 });

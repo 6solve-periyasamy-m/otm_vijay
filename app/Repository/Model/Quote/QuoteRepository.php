@@ -27,6 +27,7 @@ use App\Models\Quote\QuoteSection;
 use App\Models\Quote\SentQuote;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
+use App\Models\User;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
@@ -36,11 +37,13 @@ use App\Repository\Model\Tour\TourRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
 use App\Repository\Storage\Itinerary\Itinerary;
+use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Storage\Itinerary\ItineraryPaymentDetails;
 use App\Repository\Storage\Itinerary\ItinerarySchedule;
 use App\Repository\Storage\Itinerary\ItineraryScheduleType;
 use App\Repository\Storage\Itinerary\ItineraryTraveller;
 use App\Repository\Storage\Quote\CustomerForConversion;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Settings;
@@ -148,8 +151,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'organization_id' => $this->quote->organization_id,
             'commission' => $this->quote->commission,
             'consultant_id' => $this->quote->consultant_id,
-            'internal_notes' => $this->quote->internal_notes,
-            'external_notes' => $this->quote->external_notes . "\n Converted from Quote: {$this->quote->reference}",
+            'internal_notes' => $this->quote->internal_notes . "\n Converted from Quote: {$this->quote->reference}",
+            'external_notes' => $this->quote->external_notes,
             'invoice_footer' => $this->quote->invoice_footer,
         ];
         $order = OrderRepository::create($tour, $data, $lead, $travellers, $email);
@@ -169,7 +172,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         foreach ($this->quote->installments as $installment) {
             $price -= $installment->getAmount($paying, $ppp);
         }
-        return $price - $this->quote->getDepositAmount($paying);
+        return $price - $this->quote->getDepositAmount($paying) - $this->getCommission($paying);
     }
 
     public function convertToTour(int $customerCount = 1, bool $components = true): Tour
@@ -599,7 +602,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $data = [];
         foreach ($this->getAccommodationForInvoice(false) as $component) {
-            $time = $component->getInventory()->getStartTime()?->unix();
+            $time = $component->getInventory()?->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -607,7 +610,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $data[$time] = $component;
         }
         foreach ($this->getActivitiesForInvoice(false) as $component) {
-            $time = $component->getInventory()->getStartTime()?->unix();
+            $time = $component->getInventory()?->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -615,7 +618,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $data[$time] = $component;
         }
         foreach ($this->getFlightsForInvoice(false) as $component) {
-            $time = $component->getInventory()->getStartTime()?->unix();
+            $time = $component->getInventory()?->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -623,14 +626,14 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $data[$time] = $component;
         }
         foreach ($this->getTransportForInvoice(false) as $component) {
-            $time = $component->getInventory()->getStartTime()?->unix();
+            $time = $component->getInventory()?->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
             } while ($exists);
             $data[$time] = $component;
         }
-        ksort($data);
+        ksort($data, SORT_ASC);
         return $data;
     }
 
@@ -642,7 +645,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         foreach ($this->getComponents() as $component) {
             $data = [
                 'quantity' => $component->get()?->quantity,
-                'inventory' => $component->getInventory()->get()->id,
+                'inventory' => $component->getInventory()?->get()->id,
                 'tour_component_type' => $component->getTourComponentType(),
                 'tour_sales_price' => $component->get()->tour_sales_price,
                 'price_shown' => $component->priceShown(),
@@ -1068,6 +1071,10 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             if (!array_key_exists($heading, $items)) { $items[$heading] = []; }
             $items[$heading][] = $item;
         }
+        foreach ($items as $key => $data) {
+            usort($data, static function (ItineraryItem $a, ItineraryItem $b) { return $a->sortKey >= $b->sortKey ? 1 : -1; });
+            $items[$key] = $data;
+        }
         return $items;
     }
 
@@ -1123,8 +1130,10 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $event?->image_url,
             $this->quote->reference,
             $this->quote->organization,
+            (is_array($this->quote->consultant) ? new User($this->quote->consultant) : $this->quote->consultant) ?? Auth::user(),
             $this->quote->date_from,
             $this->quote->date_to,
+            $this->quote->created_at ?? now(), // TODO: Actually implement Quote Created At as a settable field
             new ItineraryTraveller($this->quote->leadTraveller->customer, $this->quote->leadTraveller->paying, $this->quote->leadTraveller->travelling),
             $this->quote->brand,
             $this->getTravellerArray($paying, $travelling),

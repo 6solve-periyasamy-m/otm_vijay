@@ -23,8 +23,10 @@ class InvoiceGenerator
         $this->order = $order;
     }
 
-    public function generate(bool $save = false): Invoice
+    public function generate(bool $save = false): Invoice|null
     {
+        // If the booking reference is null, then the order isn't properly initialized
+        if ($this->order->booking_reference === null) { return null; }
         $invoice = new Invoice([
             'order_id' => $this->order->id,
             'name' => $this->order->tour->name,
@@ -211,46 +213,50 @@ class InvoiceGenerator
                 'region' => $orderCustomer->customer->billingAddress->region,
                 'country' => $orderCustomer->customer->billingAddress->country?->name,
                 'postcode' => $orderCustomer->customer->billingAddress->postcode,
+                'paying' => $orderCustomer->is_charged,
+                'travelling' => $orderCustomer->is_travelling,
             ]);
-            $total = $orderCustomer->tour_cost;
-            $billables = [
-                new InvoiceBillable([
-                    'description' => __('invoice.customer.billable.base'),
-                    'amount' => $orderCustomer->tour_cost ?? 0.0,
-                    'shared_key' => static::BASE_KEY,
-                    'is_base' => false,
-                ]),
-            ];
-            if ($orderCustomer->has_surcharge) {
-                $billables[] = new InvoiceBillable([
-                    'description' => __('invoice.customer.billable.surcharge'),
-                    'amount' => $orderCustomer->single_occupancy_surcharge ?? 0.0,
-                    'shared_key' => "surcharge",
-                    'is_base' => false,
-                ]);
-                $total += $orderCustomer->single_occupancy_surcharge;
-            }
-            foreach ($orderCustomer->repository->getComponents(false, true, true, true, true) as $component) {
-                $billable = $component->getInvoiceBillable();
-                $total += $billable->amount;
-                $billables[] = $billable;
+            if ($orderCustomer->is_travelling) {
+                $total = $orderCustomer->tour_cost;
+                $billables = [
+                    new InvoiceBillable([
+                        'description' => __('invoice.customer.billable.base'),
+                        'amount' => $orderCustomer->tour_cost ?? 0.0,
+                        'shared_key' => static::BASE_KEY,
+                        'is_base' => false,
+                    ]),
+                ];
+                if ($orderCustomer->has_surcharge) {
+                    $billables[] = new InvoiceBillable([
+                        'description' => __('invoice.customer.billable.surcharge'),
+                        'amount' => $orderCustomer->single_occupancy_surcharge ?? 0.0,
+                        'shared_key' => "surcharge",
+                        'is_base' => false,
+                    ]);
+                    $total += $orderCustomer->single_occupancy_surcharge;
+                }
+                foreach ($orderCustomer->repository->getComponents(false, true, true, true, true) as $component) {
+                    $billable = $component->getInvoiceBillable();
+                    $total += $billable->amount;
+                    $billables[] = $billable;
 
+                }
+                foreach ($orderCustomer->adjustments as $adjustment) {
+                    $billables[] = new InvoiceBillable([
+                        'description' => $adjustment->reason,
+                        'amount' => $adjustment->amount ?? 0.0,
+                        'shared_key' => "adjustment-{$adjustment->id}",
+                        'is_base' => false,
+                    ]);
+                    $total += $adjustment->amount;
+                }
+                $customer->total_cost = $total;
             }
-            foreach ($orderCustomer->adjustments as $adjustment) {
-                $billables[] = new InvoiceBillable([
-                    'description' => $adjustment->reason,
-                    'amount' => $adjustment->amount ?? 0.0,
-                    'shared_key' => "adjustment-{$adjustment->id}",
-                    'is_base' => false,
-                ]);
-                $total += $adjustment->amount;
-            }
-            $customer->total_cost = $total;
             if ($invoice !== null) {
                 $customer->save();
-                $customer->billables()->saveMany($billables);
+                $customer->billables()->saveMany($billables ?? []);
             } else {
-                $customer->setRelation('billables', $billables);
+                $customer->setRelation('billables', $billables ?? []);
             }
             $data[] = $customer;
         }

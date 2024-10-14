@@ -39,6 +39,16 @@
             background: #f8fafc;
             border-right-color: #ced4da;
         }
+        .upcom-whol{
+            width: 100%;
+            background: #000000;
+            color: #fff;
+        }
+        .upcom-cent{
+            padding: 18px;
+            text-align: center;
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
@@ -48,7 +58,7 @@
             @include('partials.sidebar')
             <div id="container" class=' py-md-3 px-md-4 otm-content'>
                 <div id="content" class="w-100">
-                    @if ($errors->any())
+                    @if (($showErrors ?? true) && $errors->any())
                         @foreach ($errors->all() as $error)
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 {{ $error }}
@@ -66,10 +76,12 @@
                             </button>
                         </div>
                     @endif
+                    @yield('upcoming')
                     <div class="heading pt-md-4 pb-md-3 pt-3">
                         <h2 class="fw-bold">@yield('title')</h2>
                         <img src="{{ asset(setting('company.logo')) }}" alt="{{ setting('company.name') }}" class="iconLogo hide" height="40px" width="100px" />
                     </div>
+                    @yield('bookings')
                     @yield('content')
                 </div>
             </div>

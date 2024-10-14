@@ -2,6 +2,8 @@
 
 namespace App\Repository\Model\Tour;
 
+use App\Exceptions\CannotDeleteException;
+use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\Activity\ActivityInventoryTour;
@@ -22,6 +24,7 @@ use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Repository\Abstracts\ComponentPackageRepository;
+use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Costing\Tour\TourCostingRepository;
 use App\Repository\Interfaces\HasStockControl;
@@ -29,6 +32,10 @@ use App\Repository\Interfaces\Manifest\HasActivityManifest;
 use App\Repository\Interfaces\Manifest\HasFlightManifest;
 use App\Repository\Interfaces\Manifest\HasRoomingList;
 use App\Repository\Interfaces\Manifest\HasTransportManifest;
+use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
+use App\Repository\Model\Activity\ActivityInventoryRepository;
+use App\Repository\Model\Merchandise\MerchandiseInventoryRepository;
+use App\Repository\Model\Merchandise\MerchandiseInventoryTourRepository;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use App\Repository\Reporting\Manifest\FlightManifestRepository;
 use App\Repository\Reporting\Manifest\TransportManifestRepository;
@@ -72,8 +79,25 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         return $this->tour;
     }
 
+    /**
+     * @throws CannotDeleteException
+     */
     public function delete(): bool
     {
+        if ($this->tour->orders()->count() > 0) {
+            throw new CannotDeleteException('This tour has orders and cannot be deleted.');
+        }
+        if ($this->tour->bookings()->count() > 0) {
+            throw new CannotDeleteException('This tour has bookings and cannot be deleted.');
+        }
+        foreach ($this->tour->accommodationInventoryTours as $model) { $model->repository->delete(); }
+        foreach ($this->tour->activityInventoryTours as $model) { $model->repository->delete(); }
+        foreach ($this->tour->flightInventoryTours as $model) { $model->repository->delete(); }
+        foreach ($this->tour->transportInventoryTours as $model) { $model->repository->delete(); }
+        foreach ($this->tour->merchandise as $model) { $model->repository->delete(); }
+        foreach ($this->tour->costs as $model) { $model->forceDelete(); }
+        foreach ($this->tour->paymentInstallments as $model) { $model->forceDelete(); }
+        $this->tour->voucherPivot()->delete();
         return $this->tour->delete();
     }
 
@@ -109,6 +133,9 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
     public function duplicate(): Tour
     {
         $newTour = $this->tour->replicate();
+        $newTour->name = "{$newTour->name} ({$this->tour->id} Duplicate)";
+        $newTour->booking_form_url = null;
+        $newTour->is_active = false;
         $newTour->save();
         foreach ($this->getComponents(true, true, true, true, false, ['Included', 'Add-on']) as $inventoryTourRepository) {
             $inventoryTour = $inventoryTourRepository->get();
@@ -373,7 +400,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         foreach ($this->tour->activityInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', true)->get() as $component) {
             $components[] = OrderActivity::make([
                 'activity_inventory_tour_id' => $component->id,
-                'cost' => $component->tour_sales_price,
+                'cost' => $component->tour_sales_price ?? 0.0,
                 'estimated_purchase_price' => $component->inventory->local_purchase_price,
             ]);
         }
@@ -389,7 +416,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         foreach ($this->tour->flightInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
             $components[] = OrderFlight::make([
                 'flight_inventory_tour_id' => $component->id,
-                'cost' => $component->tour_sales_price,
+                'cost' => $component->tour_sales_price ?? 0.0,
                 'estimated_purchase_price' => $component->inventory->local_purchase_price,
             ]);
         }
@@ -405,7 +432,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         foreach ($this->tour->transportInventoryTours()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
             $components[] = OrderTransport::make([
                 'transport_inventory_tour_id' => $component->id,
-                'cost' => $component->tour_sales_price,
+                'cost' => $component->tour_sales_price ?? 0.0,
                 'estimated_purchase_price' => $component->inventory->local_purchase_price,
             ]);
         }
@@ -421,7 +448,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         foreach ($this->tour->merchandise()->where('tour_component_type', '=', 'Included')->where('is_bookable', '=', 1)->get() as $component) {
             $components[] = OrderMerchandise::make([
                 'merchandise_inventory_tour_id' => $component->id,
-                'cost' => $component->tour_sales_price,
+                'cost' => $component->tour_sales_price ?? 0.0,
                 'estimated_purchase_price' => $component->inventory->local_purchase_price,
             ]);
         }
@@ -587,5 +614,118 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 $this->tour->paymentInstallments()->save(new PaymentInstallment(['due_on' => $this->tour->date_from->subDays($days), 'amount' => $percentage, 'is_percentage' => true,]));
             }
         }
+    }
+
+    public function getInclusions(int $limit = -1): array
+    {
+        /** @var InventoryRepository[] $components */
+        $components = [];
+        $seen = [];
+        foreach ($this->tour->accommodationInventoryTours as $component) {
+            $key = 'accommodation-' .  $component->inventory->component->id;
+            if (in_array($key, $seen)) { continue; }
+            $seen[] = $key;
+            if ($component->tour_component_type === 'Included') {
+                $components[] = $component->inventory->repository;
+            }
+        }
+        foreach ($this->tour->activityInventoryTours as $component) {
+            $key = 'activity-' .  $component->inventory->component->id;
+            if (in_array($key, $seen)) { continue; }
+            $seen[] = $key;
+            if ($component->tour_component_type === 'Included') {
+                $components[] = $component->inventory->repository;
+            }
+        }
+        foreach ($this->tour->merchandise as $component) {
+            $key = 'merchandise-' .  $component->inventory->component->id;
+            if (in_array($key, $seen)) { continue; }
+            $seen[] = $key;
+            if ($component->tour_component_type === 'Included') {
+                $components[] = $component->inventory->repository;
+            }
+        }
+        usort($components, function (InventoryRepository $a, InventoryRepository $b) {
+            return $a->getStartTime()?->unix() <=> $b->getStartTime()?->unix();
+        });
+        $inclusions = [];
+        foreach ($components as $component) {
+            if ($limit === 0) {
+                break;
+            }
+            $inclusion = match (true) {
+                $component instanceof AccommodationInventoryRepository =>
+                    $component->get()->accommodation->name . ' - ' . diff_in_nights($component->getStartTime(), $component->getEndTime()) . ' Nights',
+                $component instanceof ActivityInventoryRepository =>
+                    $component->getStartTime()?->format('d M Y') . " - " . $component->get()->activity->name,
+                $component instanceof MerchandiseInventoryRepository =>
+                    $component->get()->component->name,
+                default => null,
+            };
+            // TODO: Implement Flights, Transport
+            if ($inclusion !== null) {
+                $inclusions[] = $inclusion;
+                $limit--;
+            }
+        }
+        return $inclusions;
+    }
+
+    /**
+     * @return array<int, Accommodation>
+     */
+    public function getHotels(): array
+    {
+        // TODO: Optimize
+        $hotels = [];
+        foreach ($this->tour->accommodationInventory()->groupBy('accommodation_id')->get() as $inventory) {
+            $hotels[$inventory->accommodation_id] = $inventory->accommodation;
+        }
+        return $hotels;
+    }
+
+    public function getRooms(): array
+    {
+        $rooms = [];
+        foreach ($this->tour->accommodationInventoryTours as $inventoryTour) {
+            $name = $inventoryTour->inventory->component->name . ' - ' . $inventoryTour->inventory->boardType . ' - ' . $inventoryTour->inventory->roomType->name;
+            if ($inventoryTour->tour_component_type !== 'Included') {
+                $cost = $inventoryTour->tour_sales_price;
+                if ($cost > 0) {
+                    $name .= ' (+' . f_currency($cost) . ')';
+                }
+                if ($cost < 0) {
+                    $name .= ' (-' . f_currency($cost*-1) . ')';
+                }
+            }
+            $rooms[$inventoryTour->id] = $name;
+        }
+        return $rooms;
+    }
+
+    public function getDefaultRoom(): int|null
+    {
+        foreach ($this->getRooms() as $key => $name) {
+            return $key;
+        }
+        return null;
+    }
+
+    public function getDataForBooking(): array
+    {
+        return [
+            'name' => $this->tour->name,
+            'event' => [
+                'name' => $this->tour->event?->name,
+                'description' => $this->tour->event?->description,
+                'image' => $this->tour->event?->image_url !== null ? asset($this->tour->event?->image_url) : null,
+            ],
+            'start' => $this->tour->date_from,
+            'end' => $this->tour->date_to,
+            'description' => $this->tour->description,
+            'image' => $this->tour->event?->image_url !== null ? asset($this->tour->event?->image_url) : null,
+            'inclusions' => $this->getInclusions(),
+            'rooms' => $this->getRooms(),
+        ];
     }
 }

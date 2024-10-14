@@ -2,6 +2,7 @@
 
 namespace App\Models\Flight;
 
+use App\Models\Booking\Component\BookingFlight;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
@@ -108,6 +109,11 @@ class FlightInventoryTour extends Model
     public function orders(): HasMany
     {
         return $this->hasMany(OrderFlight::class, 'flight_inventory_tour_id');
+    }
+
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(BookingFlight::class, 'flight_inventory_tour_id');
     }
 
     public function upgrades(): HasMany

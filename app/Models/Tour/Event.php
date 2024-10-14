@@ -2,10 +2,14 @@
 
 namespace App\Models\Tour;
 
+use App\Models\Activity\Activity;
+use App\Models\Activity\ActivityInventory;
 use App\Models\Helper\Enum\EventType;
 use App\Models\Order\Order;
 use App\Models\System\Brand;
 use App\Models\System\TaxBracket;
+use App\Models\Traits\HasRepository;
+use App\Repository\Model\Tour\EventRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -26,6 +30,7 @@ use Settings;
  * @property string $name
  * @property int|null $brand_id
  * @property int|null $tax_bracket_id
+ * @property int|null $parent_event_id
  * @property string|null $description
  * @property Carbon $starts_at
  * @property Carbon $ends_at
@@ -40,6 +45,7 @@ use Settings;
  * @property-read Collection|Tour[] $tours
  * @property-read Collection|Order[] $orders
  * @property-read int|null $tours_count
+ * @property-read EventRepository $repository
  * @method static Builder|Event newModelQuery()
  * @method static Builder|Event newQuery()
  * @method static QueryBuilder|Event onlyTrashed()
@@ -60,29 +66,41 @@ use Settings;
  */
 class Event extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasRepository;
 
     protected $guarded = [];
     protected $casts = ['starts_at' => 'date', 'ends_at' => 'date', 'event_category' => EventType::class,];
 
-    public static function getValidationRules(): array
+    public function parent(): BelongsTo
     {
-        return [
-            'name' => 'required',
-            'image' => 'nullable|image',
-            'starts_at' => 'required|date',
-            'ends_at' => 'required|date',
-        ];
+        return $this->belongsTo(__CLASS__, 'parent_event_id');
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(__CLASS__, 'parent_event_id');
+    }
+
+    public function activities(): HasMany
+    {
+        return $this->hasMany(Activity::class, 'event_id');
+    }
+
+    public function activityInventories(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            ActivityInventory::class,
+            Activity::class,
+            'event_id',
+            'activity_id',
+            'id',
+            'id'
+        );
     }
 
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class, 'brand_id');
-    }
-
-    function getEventDetailsAttribute(): string
-    {
-        return $this->name . ' - ' . Carbon::parse($this->starts_at)->format('d/m/Y') . ' : ' . Carbon::parse($this->ends_at)->format('d/m/Y');
     }
 
     public function bracket(): BelongsTo
@@ -125,6 +143,6 @@ class Event extends Model
 
     public function __toString()
     {
-        return $this->name;
+        return $this->repository->__toString();
     }
 }

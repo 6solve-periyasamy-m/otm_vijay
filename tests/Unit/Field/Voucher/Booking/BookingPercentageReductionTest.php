@@ -22,6 +22,6 @@ class BookingPercentageReductionTest extends DatabaseTestCase
         if (!$booking->repository->applyVoucher($voucher)) {
             $this->fail('Voucher Failed to Apply');
         }
-        $this->assertEquals($cost - ($booking->tour->base_price_per_person * 0.1), $booking->repository->getTotalCost());
+        $this->assertEquals($cost - ($booking->tour?->base_price_per_person * 0.1), $booking->repository->getTotalCost());
     }
 }

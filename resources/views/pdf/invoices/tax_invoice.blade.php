@@ -1,5 +1,17 @@
 @php
     /** @var \App\Models\Order\Invoice\Invoice $invoice */
+   //var_dump($invoice);
+    
+   //if (!sizeof($invoice->installments) === 0)
+   $due_date = 'PAID';
+    foreach($invoice->installments as $installment) {
+        $due_date = date('d M Y', strtotime($invoice->installments[0]->due));
+        if ($installment->paid) {
+            $due_date = date('d M Y', strtotime($installment->due));
+            break;
+        }
+        //$due_date = date('d M Y', strtotime($installment->due));
+    }
 @endphp
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -147,477 +159,415 @@
         .oc_right {
             text-align: right;
         }
+         
+        .container {
+            width: 100%;
+            max-width: 796px;
+            margin: 0 auto;
+            padding: 0px;
+        }
+        .header, .footer {
+            width: 100%;
+            margin-bottom: 0px;
+        }
+        .header td {
+            vertical-align: top;
+        }
+        .header .left-column {
+            padding: 32px 20px 32px 20px;
+        }
+        .header .right-column  {
+            padding: 20px 28px 0px 20px;
+        }
+        .header .right-column p {
+            text-align: right;
+            font-family: 'Lato', sans-serif;
+            font-weight: 500;
+            font-size: 10px;
+            line-height: 12px;
+        }
+        .invoice-title h1 {
+            text-align: left;
+            font-size: 40px;
+            margin: 0px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 600;
+            line-height: 53.8px;
+            padding-left:20px;
+        }
+        .items, .payment-options, .totals {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+        .details {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            padding-left:20px;
+        }
+        .details tr h6{
+            font-family: 'Lato', sans-serif;
+            font-weight: 400;
+            text-align: left;
+            color: #F35B15;
+            font-size: 9px;
+            line-height: 10.18px;
+            padding: 0px 0px 0px 20px;
+            margin-top:0px;
+            margin-bottom:8px;
+        }
+        .details tr td  {
+            max-width: 112px;
+            padding-right: 32px;
+        }
+        .details tr td:first-child p, .details tr td:nth-child(2) p {
+            font-family: 'Lato', sans-serif;
+            font-weight: 400;
+            font-size: 10px;
+            line-height: 17px;
+            padding: 0px 0px 0px 20px !important;
+            vertical-align: top;
+        }
+        .details tr td {
+            font-family: 'Lato', sans-serif;
+            font-weight: 400;
+            font-size: 10px;
+            line-height: 17px;
+            vertical-align: top;
+        }
+        .details tr td span {font-weight:500;}
+        .details tr td:last-child {
+            background-color: #F9F4EE;
+            padding: 0px 0px 0px 30px; 
+            position:relative;  
+            border-right: 10px solid #f35b15;   
+        }
+        .details tr p.bg-box-contain.f-1 {
+            padding-top:15px!important;
+        }
+        .details tr p.bg-box-contain.f-3 {
+            padding-bottom:15px!important;
+        }
+        .bg-box-contain
+        /* .details tr .bg-box-contain:after {
+            content:"";
+            height:100%;
+            width:10px;
+            background-color:#f35b15;
+            display:inline-block;
+            position:absolute;
+            right:0px;
+            top:0px;
+        } */
+        .items th {
+            background-color: #f35b15;
+            padding:4px 30px;
+            
+        }
+        .items th h2 {
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 21.33px;
+            color: #fff;
+            text-align: center;
+            padding: 4px 0px 6px 0px;
+        }
+        .items td {
+            padding:4px 30px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 400;
+            font-size: 10px;
+            line-height: 12px;
+            color:#000000;
+            padding-top:18px;
+            padding-bottom:18px;
+            text-align:center;
+        }
+        .items tr:nth-child(even) td  {
+            background-color: #F9F4EE;     
+        }       
+        .items tr td:nth-child(2)  {
+            text-align:left;
+        }
+        .payment-options {
+            margin-top:10px;
+            border-top: 1px solid #f35b15;
+            border-bottom: 1px solid #f35b15;
+        }
+        .payment-options th {padding:0;}
+        .payment-options th h3 {
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 21.33px;
+            color: #ffffff;
+            border-right: 1px solid #f35b15;
+            padding: 5px;
+            background: #f35b15;
+       }
+       .payment-options tr td:first-child {
+            padding:25px 0px 25px 20px;
+       }
+       .payment-options th:last-child, .payment-options td:last-child {
+            border-left: 1px solid #f35b15;
+            line-height: 23px;
+            position: relative;
+            vertical-align: top;
+       }
+       .payment-options tr h4 {
+            font-family: 'Lato', sans-serif;
+            font-weight: 500;
+            text-align: left;
+            color: #F35B15;
+            font-size: 10px;
+            line-height: 12px;
+            margin-bottom: 12px;
+        }
+       .payment-options tr td {
+            font-family: 'Lato', sans-serif;
+            font-weight: 400;
+            text-align: left;
+            color: #000000;
+            font-size: 10px;
+            line-height: 12px;
+        }
+       .payment-options tr td p.terms-conditions {
+            margin-top: 30px!important;
+         }
+         .payment-options tr td p.terms-conditions.upd {
+            margin-top: 0px!important;
+         }
+       .payment-options td:last-child p {
+           padding-left:15px!important; 
+        }
+       .payment-options td span:first-child {
+            width:200px;
+            display:inline-block;
+        }
+       .payment-options td:last-child h3 {
+            background: #F9F4EE;
+            width: 100%;
+            margin-top:20px;
+            height:68px;    
+        }
+       .details tr td p span:last-child {
+           font-weight:400!important;
+        }       
+       .payment-options td:last-child h3 span:first-child {padding-left:15px;}
+       .payment-options td:last-child h3 span {
+            padding-top: 0px;
+            padding-bottom: 0px;
+            top: 25px;
+            position: relative;
+       }
+       .payment-options td:last-child h3 span {
+            font-family: 'Lato', sans-serif;
+            font-size: 16px;
+            line-height: 20px;
+            font-weight: 700;
+            color: #f35b15;
+            height: 20px;
+            display: inline-block;
+       }
+       .footer > div {
+            float: left;
+            width: 22%;
+            padding: 0px 0px;
+            margin: 30px 0px;
+       }
+       .footer div:first-child {
+        width: 29%;
+        margin-top: 40px;
+       }
+       .footer div:nth-child(2) {
+        border-left: 2px solid #f35b15;
+        padding-left: 4%;
+       }
+       .footer p {
+        color: #f35b15;
+        font-family: 'Lato', sans-serif;
+        font-size: 9px;
+        line-height: 10.8px;
+        font-weight: 500;
+        margin-bottom: 6px !important;
+        text-transform:uppercase;
+       }
+       .footer a  {
+        color: #000000;
+        font-family: 'Lato', sans-serif;
+        font-size: 10px;
+        line-height: 12px;
+        font-weight: 400;
+       }
+       .footer img {padding-left:20px;}
+       .whole-items-cls {min-height:610px;}
+       .payment-options tr td figure.table {margin:0;} 
+       .payment-options tr td figure.table table tbody tr td:nth-child(2) {display:none;}
+       .payment-options tr td figure.table table tbody tr td {
+        border: 0px !important;
+        padding: 0;
+        width: 120px;
+       }
+       .payment-options tr td figure.table table tbody tr td:nth-child(3) br {display:none;}
+       .payment-options tr td figure.table table tbody tr td:nth-child(3) strong {display:block;line-height:10px;}
+       .payment-options tr td:first-child > p {display:none;}
+       .payment-options tr td:first-child > p.terms-conditions {display:block;}
+       .payment-options tr td:first-child > p.terms-conditions {
+        margin-top:20px!important
+       }
+       .payment-options tr td:first-child > p.terms-conditions.upd {
+        margin-top:5px!important
+       }
+       .payment-options { 
+        position: fixed;
+        bottom: 0cm;
+        height: 228px; 
+        }
+        .full-btm-cls-mod p span {
+        font-family: 'Lato', sans-serif!important;
+        font-weight: 400!important;
+        text-align: left!important;
+        color: #000000!important;
+        font-size: 10px!important;
+        line-height: 12px!important;
+        }
     </style>
     <title>Invoice - {{ $invoice->booking_reference }}</title>
 </head>
 
-<body class="body"
-    style="padding:0; margin:0 auto !important; display:block !important; min-width:100% !important; width:100% !important; background:#ffffff; -webkit-text-size-adjust:none">
-    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="background-color:#ffffff;"
-        class="full-wrap">
+<body class="body" style="padding:0; margin:0 auto !important; display:block !important; min-width:100% !important; width:100% !important; background:#ffffff; -webkit-text-size-adjust:none">
+<div class="container">
+    <!-- Header Section -->
+  <div class="head-dv-cls">
+    <table class="header">
         <tr>
-            <td align="center" valign="top">
-                <table align="center" border="0" cellpadding="0" cellspacing="0" width="670"
-                    style="width: 794px; background-color: #fff">
-                    <tr>
-                        <td align="center" valign="top" style="padding: 35px 35px; border-top: 10px solid #f35b15;">
-                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                <tr>
-                                    <td align="left" valign="top" style="padding-bottom: 10px;">
-                                        <table width="100%" border="0" cellspacing="0">
-                                            <tr>
-                                                <td align="left" valign="top">
-                                                    <table align="left" width="100%" border="0" cellspacing="0">
-                                                        <tr>
-                                                            <td align="left" valign="top">
-                                                                <img src="{{img_to_b64($invoice->brand->logo)}}" alt="logo" width="200"
-                                                                    style="display: block;">
-                                                            </td>
-                                                        </tr>
-
-                                                    </table>
-                                                </td>
-                                                <td width="310" align="right" valign="top">
-                                                    <table width="100%" align="right" border="0" cellspacing="0"
-                                                        cellpadding="0">
-                                                        <tr>
-                                                            <td align="right" valign="top" class="oc_f14 oc_black"
-                                                                style="padding: 10px 0 5px; font-weight: 700; ">{{$invoice->brand->name}}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="right" valign="top" class="oc_f12 oc_lblack"
-                                                                style="padding-bottom: 0; font-weight: 700;">VAT / ABN: {{$invoice->brand->vat_code}}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="right" valign="top" class="oc_f12 oc_lblack"
-                                                                style="padding-bottom: 0; font-weight: 700;">{{$invoice->brand->address_line_1}}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="right" valign="top" class="oc_f12 oc_lblack"
-                                                                style="padding-bottom: 0; font-weight: 700;">{{$invoice->brand->address_line_2}}, {{$invoice->brand->town}}, {{$invoice->brand->region}}, {{$invoice->brand->postcode}}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="right" valign="top" class="oc_f12 oc_lblack"
-                                                                style="padding-bottom: 5px; font-weight: 700;">{{$invoice->brand->country}}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="right" valign="top" class="oc_f12 oc_lblack"
-                                                                style="padding-bottom: 0; font-weight: 700;">Phone:
-                                                                {{$invoice->brand->telephone}}</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="left" valign="top">
-                                        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th align="center" valign="top"
-                                                        style="border-bottom: 2px solid #f35b15; padding: 5px 15px; color: #f35b15; "
-                                                        class="oc_f18">
-                                                        TAX&nbsp;INVOICE @if($invoice->cancelled) (Cancelled) @endif</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="left" valign="top">
-                                        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                            <tr>
-                                                <td width="50%" align="left" valign="top">
-                                                    <table align="left" border="0" cellspacing="0" cellpadding="0">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td width="40" align="left" valign="top"
-                                                                    style="padding: 2px 15px; font-weight: 700;"
-                                                                    class="oc_f12 oc_lblack">
-                                                                    To:
-                                                                </td>
-                                                                <td align="left" valign="top" style="padding: 2px 15px;"
-                                                                    class="oc_f12 oc_lblack">
-                                                                    {{ $invoice->lead->full_name }}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="40" align="left" valign="top"
-                                                                    style="padding: 2px 15px; font-weight: 700;"
-                                                                    class="oc_f12 oc_lblack">
-                                                                    Email:
-                                                                </td>
-                                                                <td align="left" valign="top" style="padding: 2px 15px;"
-                                                                    class="oc_f12 oc_lblack">
-                                                                    <a href="@if($invoice->lead->email) mailto:{{ $invoice->lead->email}} @endif">
-                                                                    {{ $invoice->lead->email}} 
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="40" align="left" valign="top"
-                                                                    style="padding: 2px 15px; font-weight: 700;"
-                                                                    class="oc_f12 oc_lblack">
-                                                                    For:
-                                                                </td>
-                                                                <td align="left" valign="top" style="padding: 2px 15px;"
-                                                                    class="oc_f12 oc_lblack">
-                                                                    {{$invoice->event ?? $invoice->name}}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="40" align="left" valign="top"
-                                                                    style="padding: 2px 15px; font-weight: 700;"
-                                                                    class="oc_f12 oc_lblack">
-                                                                    &nbsp;
-                                                                </td>
-                                                                <td align="left" valign="top" style="padding: 2px 15px;"
-                                                                    class="oc_f12 oc_lblack">
-                                                                    &nbsp;</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                                <td width="50%" align="right" valign="top">
-                                                    <table align="right" border="0" cellspacing="0" cellpadding="0">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td width="180" align="left" valign="top"
-                                                                    style="padding: 2px 15px; font-weight: 700;"
-                                                                    class="oc_f12 oc_lblack">
-                                                                    Booking Number:
-                                                                </td>
-                                                                <td align="right" valign="top"
-                                                                    style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                                                    {{ $invoice->booking_reference }}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="180" align="left" valign="top"
-                                                                    style="padding: 2px 15px; font-weight: 700;"
-                                                                    class="oc_f12 oc_lblack">
-                                                                    Invoice Date:
-                                                                </td>
-                                                                <td align="right" valign="top"
-                                                                    style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                                                    {{ date('d M Y', strtotime($invoice->generated)) }}</td>
-                                                            </tr>
-                                                            <!--<tr>
-                                                                <td width="180" align="left" valign="top"
-                                                                    style="padding: 2px 15px; font-weight: 700;"
-                                                                    class="oc_f12 oc_lblack">
-                                                                    Payment Reference:
-                                                                </td>
-                                                                <td align="right" valign="top"
-                                                                    style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                                                    N/A</td>
-                                                            </tr>-->
-                                                            <tr>
-                                                                <td width="180" align="left" valign="top"
-                                                                    style="padding: 2px 15px; font-weight: 700;"
-                                                                    class="oc_f12 oc_lblack">
-                                                                    Number of Pax:
-                                                                </td>
-                                                                <td align="right" valign="top"
-                                                                    style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                                                    {{count($invoice->customers)}}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="180" align="left" valign="top"
-                                                                    style="padding: 2px 15px; font-weight: 700;"
-                                                                    class="oc_f12 oc_lblack">
-                                                                    &nbsp;
-                                                                </td>
-                                                                <td align="right" valign="top"
-                                                                    style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                                                    &nbsp;</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                <tr>
-                                    <td align="left" valign="top" style="">
-                                        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                            <tr>
-                                                <td align="left" valign="top">
-                                                    <table align="left" border="0" cellspacing="0" cellpadding="0"
-                                                        width="100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th align="left" valign="top"
-                                                                    style="border-bottom: 2px solid #f35b15; padding: 2px 15px; color: #f35b15;"
-                                                                    class="oc_f16">
-                                                                    DESCRIPTION</th>
-                                                                <th width="180" align="left" valign="top"
-                                                                    style="border-bottom: 2px solid #f35b15; padding: 2px 15px; color: #f35b15;"
-                                                                    class="oc_f16">QUANTITY
-                                                                </th>
-
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @php
-                                                                $billables = $invoice->repository->getItemsByQuantity(); 
-                                                                $counter = 0;
-                                                            @endphp
-
-                                                            @foreach($billables as $b_index => $billable)
-                                                                @continue($billable->isGroupedBase())
-                                                                <tr style="background-color: {{ $counter % 2 == 0 ? '#f5f5f5' : '#ffffff' }};">
-                                                                    <td align="left" valign="top" style="padding: 2px 15px;"
-                                                                        class="oc_f12 oc_lblack">{{$billable->description}}
-                                                                    </td>
-                                                                    <td width="180" align="left" valign="top"
-                                                                        style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                                                        {{$billable->getQuantity()}}
-                                                                    </td>
-                                                                </tr>
-                                                                @php $counter++; @endphp
-                                                            @endforeach
-                                                            <tr>
-                                                                <td align="left" valign="top" style="padding: 2px 15px;"
-                                                                    class="oc_f14 oc_lblack">&nbsp;
-                                                                </td>
-                                                                <td width="180" align="center" valign="top"
-                                                                    style="padding: 2px 15px;" class="oc_f14 oc_lblack">
-                                                                    &nbsp;</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="right" valign="top">
-                                                    <table align="left" width="100%" cellspacing="0" cellpadding="0">
-                                                        <thead>
-                                                            <tr
-                                                                style=" border-bottom: 2px solid #f35b15; padding: 2px 15px;">
-                                                                <th align="right" valign="top"
-                                                                    style="padding: 2px 15px; color: #f35b15; font-weight: 700;"
-                                                                    class="oc_f16 ">PAYMENT DETAILS</th>
-                                                            </tr>
-                                                        </thead>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="right" valign="top">
-                                                    <table align="left" width="40%" cellspacing="0" cellpadding="0">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td align="left" valign="top" style="padding: 2px 15px;"
-                                                                    class="oc_f14 oc_lblack">&nbsp;
-                                                                </td>
-                                                                <td width="180" align="center" valign="top"
-                                                                    style="padding: 2px 15px;" class="oc_f14 oc_lblack">
-                                                                    &nbsp;</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                    <table align="right" width="60%" cellspacing="0" cellpadding="0">
-                                                        <tr>
-                                                            <td align="right" style="padding: 2px 15px;"
-                                                                class="oc_f12 oc_lblack">Invoice Total:</td>
-                                                            <td width="150" align="right" valign="top"
-                                                                style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                                                {{f_currency($invoice->total_cost)}}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="right" style="padding: 2px 15px;"
-                                                                class="oc_f12 oc_lblack">GST (included):</td>
-                                                            <td width="150" align="right" valign="top"
-                                                                style="padding: 2px 15px; " class="oc_f12 oc_lblack">
-                                                                {{f_currency($invoice->tax_amount)}}
-                                                            </td>
-                                                        </tr>
-                                                        @if($invoice->total_fees > 0)
-                                                        <tr>
-                                                            <td align="right" style="padding: 2px 15px;"
-                                                                class="oc_f12 oc_lblack">Fees Paid:</td>
-                                                            <td width="150" align="right" valign="top"
-                                                                style="padding: 2px 15px; " class="oc_f12 oc_lblack">
-                                                                {{f_currency($invoice->total_fees)}}
-                                                            </td>
-                                                        </tr>
-                                                        @endif
-
-                                                        <tr>
-                                                            <td align="right" style="padding: 2px 15px;"
-                                                                class="oc_f12 oc_lblack">Received:</td>
-                                                            <td width="150" align="right" valign="top"
-                                                                style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                                                {{f_currency($invoice->total_paid)}}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="right" style="padding: 2px 15px;"
-                                                                class="oc_f12 oc_lblack">Final Amount Remaining:</td>
-                                                            <td width="150" align="right" valign="top"
-                                                                style="padding: 2px 15px; border-top: 1px solid #f35b15; "
-                                                                class="oc_f12 oc_lblack">{{f_currency($invoice->total_cost - $invoice->total_paid)}}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="right" style="padding: 2px 15px;"
-                                                                class="oc_f14 oc_lblack">&nbsp;</td>
-                                                            <td width="150" align="right" valign="top"
-                                                                style="padding: 2px 15px; border-top: 1px solid #f35b15; "
-                                                                class="oc_f14 oc_lblack">&nbsp;</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td align="left" valign="top">
-                                                    <table align="left" border="0" cellspacing="0" cellpadding="0"
-                                                        width="100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th width="25%" align="left" valign="top"
-                                                                    style="border-bottom: 2px solid #f35b15; padding: 2px 15px; color: #f35b15;"
-                                                                    class="oc_f16">
-                                                                    DUE DATE</th>
-                                                                <th width="25%" align="left" valign="top"
-                                                                    style="border-bottom: 2px solid #f35b15; padding: 2px 15px; color: #f35b15;"
-                                                                    class="oc_f16">AMOUNT
-                                                                </th>
-                                                                <th width="25%" align="left" valign="top"
-                                                                    style="border-bottom: 2px solid #f35b15; padding: 2px 15px; color: #f35b15;"
-                                                                    class="oc_f16">
-                                                                    PAID</th>
-                                                                <th width="25%" align="left" valign="top"
-                                                                    style="border-bottom: 2px solid #f35b15; padding: 2px 15px; color: #f35b15;"
-                                                                    class="oc_f16">RECEIVED
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @if (sizeof($invoice->installments) === 0)
-                                                                <tr>
-                                                                    <td colspan="4" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">No Installments recorded.</td>
-                                                                </tr>
-                                                            @else
-                                                                @foreach($invoice->installments as $index => $installment)
-                                                                    <tr style="background-color: {{ $index % 2 == 0 ? '#f5f5f5' : '#ffffff' }};"> 
-                                                                        <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">{{ date('d M Y', strtotime($installment->due)) }}</td>
-                                                                        <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">{{ $installment->description }}</td>
-                                                                        <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">{{ f_bool($installment->paid) }}</td>
-                                                                        <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">@if($installment->paid) {{date('d M Y', strtotime($installment->due))}} @else Pending  @endif</td>
-                                                                    </tr>
-                                                                @endforeach
-                                                            @endif
-
-                                                            <tr>
-                                                                <td width="25%" align="center" valign="top"
-                                                                    style="padding: 2px 15px;">
-                                                                    &nbsp;
-                                                                </td>
-                                                                <td width="25%" align="center" valign="top"
-                                                                    style="padding: 2px 15px;">
-                                                                    &nbsp;
-                                                                </td>
-                                                                <td width="25%" align="center" valign="top"
-                                                                    style="padding: 2px 15px;">
-                                                                    &nbsp;
-                                                                </td>
-                                                                <td width="25%" align="center" valign="top"
-                                                                    style="padding: 2px 15px;">
-                                                                    &nbsp;
-                                                                </td>
-
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="">
-                                <tr>
-                                    <td align="left" valign="top">
-                                        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th align="left" valign="top"
-                                                        style=" border-bottom: 2px solid #f35b15; padding: 2px 15px; color: #f35b15; "
-                                                        class="oc_f16">
-                                                        PAYMENT OPTIONS
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="left" valign="top">
-                                        <table align="left" border="0" cellspacing="0" cellpadding="0" width="400">
-                                            <tbody>
-                                                <tr>
-                                                    <td width="80" align="left" valign="top"
-                                                        style="padding: 2px 15px; color: #f35b15; font-weight: 700;"
-                                                        class="oc_f12">BANK TRANSFER
-                                                    </td>
-                                                    <td width="180" align="left" valign="top" style="padding: 2px 15px;"
-                                                        class="oc_f12 oc_lblack">
-                                                        {!! setting('company.bank_transfer', '-')  !!}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td align="left" valign="top" style="padding: 2px 15px;"
-                                                        class="oc_f14 oc_lblack">&nbsp;
-                                                    </td>
-                                                    <td width="180" align="center" valign="top"
-                                                        style="padding: 2px 15px;" class="oc_f14 oc_lblack">
-                                                        &nbsp;</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="left" valign="top">
-                                        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th align="left" valign="top"
-                                                        style=" border-bottom: 2px solid #f35b15; padding: 20px 15px 2px; color: #f35b15; "
-                                                        class="oc_f16">
-                                                        TERMS AND CONDITIONS
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="left" valign="top">
-                                        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%">
-                                            <tbody>
-                                                <tr>
-
-                                                    <td align="left" valign="top" style="padding: 2px 15px;"
-                                                        class="oc_f12 oc_lblack">
-                                                        {!! $invoice->invoice_footer !!}
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
+            <td class="left-column"> <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('images/pdf_assets/images/KeithProwse-Travel-Logo.png'))?>"  alt="logo-ch"></td>
+            <td class="right-column">
+                <p><span>Address:</span><span style="font-weight:400;margin-left:5px;">{{$invoice->brand->address_line_1}}, {{$invoice->brand->address_line_2}} <br /> {{$invoice->brand->town}}, {{$invoice->brand->region}}, {{$invoice->brand->postcode}}<br>
+                </span></p>
+                <p><span>Company ABN:</span><span style="font-weight:400;margin-left:5px;">{{$invoice->brand->vat_code}}</span></p>               
+                <p><span>Email:</span><span style="font-weight:400;margin-left:5px;">{{$invoice->brand->email}}</span></p>
+                <p><span>Phone:</span><span style="font-weight:400;margin-left:5px;">{{$invoice->brand->telephone}}</span></p>
             </td>
         </tr>
     </table>
-</body>
+  </div>
+    <!-- Invoice Title -->
+    <div class="invoice-title">
+        <h1>Tax Invoice</h1>
+       
+    </div>
 
+    <!-- Details Table -->
+    <table class="details">
+        <!-- <tr>
+            <th><h6>Invoice To</h6></th>
+            <th><h6>Details</h6></th>
+        </tr> -->
+        <tr>
+            <td>
+            <h6>Invoice To</h6>
+            <p class="name">{{ $invoice->lead->full_name }}</p>
+            <p class="name">{{$invoice->lead->email}}</p>
+            <p class="address">
+                {{ implode(', ', array_filter([$invoice->lead->address_line_1, $invoice->lead->address_line_2, $invoice->lead->town, $invoice->lead->region, $invoice->lead->country, $invoice->lead->postcode])) }}
+            </p>
+            </td>
+            <td>
+            <h6>Details</h6>
+            <p class="event-name"><span>Reference:</span> <span>{{$invoice->booking_reference}}</span></p>
+            <p class="event-name"><span>Event Name:</span> <span>{{ $invoice->event }}</span></p>
+            <p class="no-of-pax"><span>Number of Pax:</span> <span>{{$invoice->getTravellingTravellersAtribute()}}</span></p>
+            </td>
+            <td>
+            <p class="bg-box-contain f-1"><span>Invoice No:</span> <span>{{ $invoice->invoice_number }}</span></p>
+            <p class="bg-box-contain"><span>Invoice Date:</span> <span>{{ date('d M Y', strtotime($invoice->generated)) }}</span></p>
+            <p class="bg-box-contain f-3"><span>Due Date:</span> <span>{{$due_date}}</span></p>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Items Table -->
+    <div class="whole-items-cls"> 
+    <table class="items">
+        <tr style="background-color: #f35b15;">
+            <th><h2>No</h2></th>
+            <th><h2>Description</h2></th>
+            <th><h2>Qty</h2></th>
+        </tr>
+        @php
+            $billables = $invoice->repository->getItemsByQuantity(); 
+            $counter = 1;
+        @endphp
+
+        @foreach($billables as $b_index => $billable)
+            @continue($billable->shared_key === 'surcharge')
+            @continue($billable->isGroupedBase())
+            <tr>
+                <td>{{$counter}}</td>
+                <td>{{$billable->description}}</td>
+                <td>{{$billable->getQuantity()}}</td>
+            </tr>
+            @php $counter++; @endphp
+        @endforeach
+    </table>
+    </div>
+
+    <!-- Payment Options Table -->
+    <table class="payment-options">
+        <tr>
+            <th><h3>Payment Options</h3></th>
+            <th></th>
+        </tr>
+        <tr>
+            <td>
+                {!! setting('company.bank_transfer', '-')  !!}
+                <p class="terms-conditions" style="margin-top:30px; font-weight: bold">
+                   Terms and conditions apply
+                </p>
+                <p class="terms-conditions upd" style="margin-top:0px;">
+                Please see our website for a copy or view them <a style="color: blue !important; text-decoration: underline !important;" href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">here</a>
+                </p>
+            </td>
+            <td>
+               <div class="full-btm-cls-mod" style="height:106px;">
+                        <p style="font-size:16px;font-weight:800;"><span>Invoice Total:</span> <span>{{f_currency($invoice->total_cost + $invoice->commission_amount)}}</span></p>
+                    @if($invoice->commission_amount > 0)
+                        <p><span>Commission ({{$invoice->commission_percentage}}%):</span> <span>{{f_currency($invoice->commission_amount)}}</span></p>
+                        <p><span>Booking Total: </span> <span>{{f_currency($invoice->total_cost)}}</span></p>
+                    @endif
+                        <p><span>GST (included):</span> <span>{{f_currency($invoice->tax_amount)}}</span></p>
+                        <p><span>Received:</span> <span>{{f_currency($invoice->total_paid)}}</span></p>
+                        @if($invoice->total_fees > 0)
+                            <p><span>Fees Paid:</span> <span>{{f_currency($invoice->total_fees)}}</span></p>
+                        @endif
+                        <!-- <p><span>Balance Due:</span> <span>{{f_currency($invoice->total_cost - $invoice->total_paid)}}</span></p> -->
+                    </div>
+                    <h3><span>BALANCE DUE:</span> <span>{{f_currency($invoice->total_cost - $invoice->total_paid)}}</span></h3>
+                
+            </td>
+        </tr>
+    </table>
+    <!-- Footer Section -->
+    <!-- <div class="footer">
+        <div class="logo">
+          <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('https://qa.octopustravelmatrix.com/images/pdf_assets/images/KeithProwse_Logo.png'))?>"  alt="logo-ch">
+        </div>
+        <div class="phone">
+           <p>Phone</p>
+           <a href="tel:+{{$invoice->brand->telephone}}">{{$invoice->brand->telephone}}</a>
+        </div>
+        <div class="email">
+           <p>email</p>
+           <a href="mailto:{{$invoice->brand->email}}">{{$invoice->brand->email}}</a>
+        </div>
+        <div class="phone">
+           <p>website</p>
+           <a target="_blank" href="{{$invoice->brand->website}}">{{$invoice->brand->website}}</a>
+        </div>
+    </div>
+   </div> -->
+</body>
 </html>

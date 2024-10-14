@@ -52,7 +52,7 @@ return [
                         'merchandise' => 'Merchandise',
                         'per-customer' => 'Per Customer',
                         'overall' => 'Whole Order',
-                        'total' => 'Total Per Person',
+                        'total' => 'Total Cost',
                         'approximate' => 'Amount is based on the purchase price of template accommodation and may differ',
                     ],
                     'lead' => [
@@ -65,7 +65,7 @@ return [
                     'description' => 'Calculate cost for X travellers',
                     'purchase' => 'Purchase Price of Components (Approximate)',
                     'ctc' => 'Cost to Company',
-                    'profit' => 'Current Profit (Margin)',
+                    'profit' => 'Current Profit',
                     'cost' => 'Total Price',
                     'commission' => 'Commission',
                     'taxes' => 'Taxes',

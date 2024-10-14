@@ -2,7 +2,7 @@
     <div style="width: max-content; height: max-content;">
         <x-admin.section.card>
             <div class="panel-grid panel-grid-5-5 custom-panel p-0 relative bg-transparent" style="border-radius: 0">
-                <x-admin.popup-button wire:click="viewTour" class="color-info row-1">
+                <x-admin.popup-button href="{{ route('tours.view', ['tour' => $order->tour_id]) }}" class="color-info row-1">
                     <x-slot:icon>{{ Icon::tour() }}</x-slot:icon>
                     View Tour
                 </x-admin.popup-button>

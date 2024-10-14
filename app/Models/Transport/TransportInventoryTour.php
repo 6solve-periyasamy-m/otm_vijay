@@ -2,6 +2,7 @@
 
 namespace App\Models\Transport;
 
+use App\Models\Booking\Component\BookingTransport;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
@@ -100,6 +101,11 @@ class TransportInventoryTour extends Model
     public function orders(): HasMany
     {
         return $this->hasMany(OrderTransport::class, 'transport_inventory_tour_id');
+    }
+
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(BookingTransport::class, 'transport_inventory_tour_id');
     }
 
     public function upgrades(): HasMany
