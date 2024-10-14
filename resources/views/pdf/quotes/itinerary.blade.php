@@ -782,7 +782,6 @@ figure.table tr td:nth-child(2) {display:none;}
       @foreach ($itinerary->finances->schedule as $installment)
           <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
           <td>{{ f_currency($installment->amount) }}</td>
-          <td>{{$installment->paid}}--{{optional($installment->due)->format('d M Y')}}</td>
           <td>@if($installment->paid)
                   PAID
               @elseif(!is_null(optional($installment->due)))
