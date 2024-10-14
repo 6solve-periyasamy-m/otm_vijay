@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Order;
 
 use App\Models\Order\Invoice\Invoice;
+use App\Models\Order\Invoice\InvoiceBrand;
 use App\Repository\Storage\Invoice\QuantityBillable;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -81,10 +82,11 @@ class InvoiceRepository
             $group->billables()->forceDelete();
             $group->delete();
         }
-        $this->invoice->brand()->delete();
+        $id = $this->invoice->invoice_brand_id;
         $this->invoice->adjustments()->delete();
         $this->invoice->installments()->delete();
         $this->invoice->payments()->delete();
         $this->invoice->delete();
+        InvoiceBrand::find($id)?->delete();
     }
 }
