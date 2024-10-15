@@ -156,4 +156,9 @@ class QuoteAccommodationRepository extends QuoteComponentRepository
     {
         return $this->getInventory()?->getItineraryItem($this->quoteComponent->quantity ?? $travelling);
     }
+
+    public function getTourComponent(Tour $tour): AccommodationInventoryTour|null
+    {
+        return $tour->accommodationInventoryTours()->where('accommodation_inventory_id', '=', $this->quoteComponent->accommodation_inventory_id)->first();
+    }
 }

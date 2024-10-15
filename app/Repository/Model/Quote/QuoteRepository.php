@@ -8,6 +8,7 @@ use App\Mail\Storage\Attachment;
 use App\Mail\Storage\QuoteMail;
 use App\Mail\Storage\SettingsMail;
 use App\Models\Customer\Customer;
+use App\Models\Customer\Group;
 use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Helper\Enum\QuoteStatus;
@@ -1000,11 +1001,68 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             }
         }
 
-        OrderAccommodation::withoutEvents(static function () use ($order)  {
-            RoomingRepository::assignDefaultSharedRooms($order);
+        OrderAccommodation::withoutEvents(function () use ($order)  {
+            $this->convertAssignedRooming($order);
         });
+
         $order->repository->resetInstallments();
         return $order;
+    }
+
+    /**
+     * Converts the rooming with quantity to order occupancy.
+     *
+     * Method functions by iterating through the list of rooms, adding customers that don't have a room by this date
+     *
+     * @param Order $order The order converted to
+     * @return void
+     */
+    private function convertAssignedRooming(Order $order): void
+    {
+        /** @var array<int, Carbon> $lastDates List of order-customer ids and their last active room */
+        $lastDates = [];
+        foreach ($this->getRoomsByStartDate() as $room) {
+            $used = 1;
+            // Skip any rooms with 0 Quantity
+            if ($used > $room->quantity) { continue; }
+            // Verify a tour component exists for this quote component
+            $tourComponent = $room->repository->getTourComponent($order->tour);
+            if ($tourComponent === null) { continue; }
+            // Create the initial group
+            $group = Group::create();
+            $group->repository->addRoomToGroup($tourComponent, true);
+            // Start adding customers to the group
+            foreach ($order->orderCustomers as $customer) {
+                // If the customer isn't travelling, then skip them
+                if (!$customer->is_travelling) { continue; }
+                // If the customer is already in a room, and that room ends after this one starts, skip them
+                if (array_key_exists($customer->id, $lastDates)
+                    && $lastDates[$customer->id]->isAfter($tourComponent->repository->getStartTime())) {
+                    continue;
+                }
+                // If there are enough customers in the group, check the quantity, and continue
+                if ($group->orderCustomers()->count() >= $room->inventory->roomType->maximum_occupancy) {
+                    $used++;
+                    if ($used > $room->quantity) { break; }
+                    $group = Group::create();
+                    $group->repository->addRoomToGroup($tourComponent, true);
+                }
+                // Add the customer to the group and update the tracked list
+                $group->repository->addCustomerToGroup($customer);
+                $lastDates[$customer->id] = $room->inventory->repository->getEndTime()->setTime(0, 0, 0);
+            }
+        }
+    }
+
+    /**
+     * Get a list of rooms on the order, sorted by their start time
+     * @return Collection<QuoteAccommodation>
+     */
+    private function getRoomsByStartDate(): Collection
+    {
+        return $this->quote->accommodation->sort(function (QuoteAccommodation $a, QuoteAccommodation $b) {
+            return $a->repository->getStartTime() <=> $b->repository->getStartTime();
+        });
     }
 
     private function addComponent(CustomerForConversion $customer, int $travellers, string $type, $component, InventoryTourRepository $tourComponent): void
