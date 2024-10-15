@@ -135,7 +135,7 @@ class Form extends Component
             'tour.final_payment' => 'required|date|date_format:Y-m-d',
             'tour.date_from' => 'required|date|date_format:Y-m-d',
             'tour.date_to' => 'required|date|date_format:Y-m-d',
-            'tour.base_price_per_person' => 'required|numeric|gte:0',
+            'tour.base_price_per_person' => 'required|numeric|gt:0',
             'tour.deposit' => 'nullable|numeric|gte:0',
             'tour.is_deposit_percentage' => 'nullable|boolean',
             'tour.booking_fee' => 'nullable|numeric|gte:0',
