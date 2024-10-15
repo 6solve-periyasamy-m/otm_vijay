@@ -782,6 +782,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $item = $component->repository->getItineraryItem($this->order);
             $start = $component->tourComponent->inventory->departs_at->clone()->setTime(0,0)->unix();
             if (!array_key_exists($start, $items)) { $items[$start] = []; }
+            if ($component->tourComponent->inventory->component->activity_category === ActivityCategory::MAIN) {
+                $item->name = $this->order->tour?->event?->name ?? $item->name;
+            }
             $items[$start][] = $item;
         }
 
