@@ -2,8 +2,6 @@
 
 namespace App\Models\Helper\Enum\Trait;
 
-use App\Models\Helper\Enum\OrderStatus;
-
 /**
  * @method static self[] cases()
  */
