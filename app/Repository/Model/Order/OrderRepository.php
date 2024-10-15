@@ -908,9 +908,12 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($this->order);
-            $header =
-                $component->tourComponent->inventory->component->activity_category === ActivityCategory::MAIN ? 'Event' : 'Inclusion';
+            $isMain = $component->tourComponent->inventory->component->activity_category === ActivityCategory::MAIN;
+            $header = $isMain ? 'Event' : 'Inclusion';
             if (!array_key_exists($header, $items)) { $items[$header] = []; }
+            if ($isMain) {
+                $item->name = $component->orderCustomer->order?->tour?->event->name ?? $item->name;
+            }
             $items[$header][] = $item;
         }
 
