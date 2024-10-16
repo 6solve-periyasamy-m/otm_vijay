@@ -34,7 +34,8 @@ class OrderReport extends TourReport
             ->leftJoin('countries as lead_billing_country', 'lead_billing.country_id', '=', 'lead_billing_country.id')
             ->leftJoin('tours', 'tours.id', '=', 'orders.tour_id')
             ->leftJoin('tour_categories', 'tours.tour_category_id', '=', 'tour_categories.id')
-            ->leftJoin('events', 'events.id', '=', 'tours.event_id');
+            ->leftJoin('events', 'events.id', '=', 'tours.event_id')
+            ->groupBy('orders.id');
     }
 
     /**
