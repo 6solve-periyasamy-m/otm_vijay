@@ -41,32 +41,32 @@ class TourReport extends EventReport
             'tour_base_price' =>
                 new ColumnDefinition(
                     "$base.base_price",
-                    CurrencyColumn::name('tours.base_price_per_person')
+                    CurrencyColumn::name('tours.base_price_per_person')->filterable()
                 ),
             'tour_margin' =>
                 new ColumnDefinition(
                     "$base.margin",
-                    NumberColumn::name('tours.margin')
+                    NumberColumn::name('tours.margin')->filterable()
                 ),
             'tour_single_occupancy' =>
                 new ColumnDefinition(
                     "$base.single_occupancy",
-                    CurrencyColumn::name('tours.single_occupancy_surcharge')
+                    CurrencyColumn::name('tours.single_occupancy_surcharge')->filterable()
                 ),
             'tour_deposit' =>
                 new ColumnDefinition(
                     "$base.deposit",
-                    CurrencyColumn::name('tours.deposit')
+                    CurrencyColumn::name('tours.deposit')->filterable()
                 ),
             'tour_booking_fee' =>
                 new ColumnDefinition(
                     "$base.booking_fee",
-                    CurrencyColumn::name('tours.booking_fee')
+                    CurrencyColumn::name('tours.booking_fee')->filterable()
                 ),
             'tour_total_stock' =>
                 new ColumnDefinition(
                     "$base.total_stock",
-                    NumberColumn::name('tours.stock')
+                    NumberColumn::name('tours.stock')->filterable()
                 ),
             'tour_used_stock' =>
                 new ColumnDefinition(
@@ -82,7 +82,7 @@ class TourReport extends EventReport
             'tour_active' =>
                 new ColumnDefinition(
                     "$base.active",
-                    BooleanColumn::name('tours.is_active')
+                    BooleanColumn::name('tours.is_active')->filterable()
                 ),
             'tour_from' =>
                 new ColumnDefinition(

@@ -193,6 +193,14 @@ return [
                     'name' => 'Lead Booker Billing Address',
                     'description' => 'Billing address of the lead booker'
                 ],
+                'email_address' => [
+                    'name' => 'Lead Booker Email',
+                    'description' => 'Email address of the lead booker'
+                ],
+                'mobile_number' => [
+                    'name' => 'Lead Booker Mobile Number',
+                    'description' => 'Mobile number of the lead booker'
+                ],
             ],
         ],
     ],

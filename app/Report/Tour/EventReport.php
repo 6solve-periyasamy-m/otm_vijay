@@ -25,7 +25,7 @@ class EventReport extends BespokeReport
             'event_name' =>
                 new ColumnDefinition(
                     'reports.event.column.name',
-                    Column::name('events.name')
+                    Column::name('events.name')->filterable(Event::pluck('name')),
                 ),
             'event_description' =>
                 new ColumnDefinition(

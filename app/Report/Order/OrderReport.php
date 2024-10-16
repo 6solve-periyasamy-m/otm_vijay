@@ -54,16 +54,19 @@ class OrderReport extends TourReport
                 new ColumnDefinition(
                     'reports.order.column.travellers',
                     NumberColumn::raw('(SELECT COUNT(*) FROM order_customers WHERE order_customers.order_id = orders.id AND order_customers.deleted_at IS NULL)')
+                        ->filterable()
                 ),
             'order_deposit' =>
                 new ColumnDefinition(
                     'reports.order.column.deposit',
                     CurrencyColumn::raw('(orders.deposit * (SELECT COUNT(*) FROM order_customers WHERE order_customers.order_id = orders.id AND order_customers.deleted_at IS NULL))')
+                        ->filterable()
                 ),
             'order_booking_fee' =>
                 new ColumnDefinition(
                     'reports.order.column.booking_fee',
                     CurrencyColumn::name('orders.booking_fee')
+                        ->filterable()
                 ),
             'order_status' =>
                 new ColumnDefinition(
@@ -74,11 +77,13 @@ class OrderReport extends TourReport
                 new ColumnDefinition(
                     'reports.order.column.ordered',
                     DatetimeColumn::name('orders.ordered_on')
+                        ->filterable()
                 ),
             'order_cancelled' =>
                 new ColumnDefinition(
                     'reports.order.column.cancelled',
                     BooleanColumn::name('orders.cancelled')
+                        ->filterable()
                 ),
             'order_internal_notes' =>
                 new ColumnDefinition(
@@ -99,21 +104,25 @@ class OrderReport extends TourReport
                 new ColumnDefinition(
                     'reports.order.column.paid',
                     CurrencyColumn::raw('(SELECT SUM(payments.amount) FROM payments WHERE payments.order_id = orders.id AND payments.deleted_at IS NULL)')
+                        ->filterable()
                 ),
             'order_cost' =>
                 new ColumnDefinition(
                     'reports.order.column.cost',
                     CurrencyColumn::name('order_caches.cost')
+                        ->filterable()
                 ),
             'order_total' =>
                 new ColumnDefinition(
                     'reports.order.column.total_owed',
                     CurrencyColumn::name('order_caches.total_owed')
+                        ->filterable()
                 ),
             'order_remaining' =>
                 new ColumnDefinition(
                     'reports.order.column.remaining',
                     CurrencyColumn::raw('order_caches.cost - (SELECT SUM(payments.amount) FROM payments WHERE payments.order_id = orders.id AND payments.deleted_at IS NULL)')
+                        ->filterable()
                 ),
             'order_commission_percentage' =>
                 new ColumnDefinition(
@@ -126,21 +135,25 @@ class OrderReport extends TourReport
                 new ColumnDefinition(
                     'reports.order.column.commission.amount',
                     CurrencyColumn::name('order_caches.commission_amount')
+                        ->filterable()
                 ),
             'order_next_amount' =>
                 new ColumnDefinition(
                     'reports.order.column.next_payment.amount',
                     CurrencyColumn::name('order_caches.next_payment_amount')
+                        ->filterable()
                 ),
             'order_next_remaining' =>
                 new ColumnDefinition(
                     'reports.order.column.next_payment.remaining',
                     CurrencyColumn::name('order_caches.next_payment_remaining')
+                        ->filterable()
                 ),
             'order_next_due' =>
                 new ColumnDefinition(
                     'reports.order.column.next_payment.due',
                     DateColumn::name('order_caches.next_payment_date')
+                        ->filterable()
                 ),
             'order_lead_first_name' =>
                 new ColumnDefinition(
@@ -166,6 +179,16 @@ class OrderReport extends TourReport
                 new ColumnDefinition(
                     'reports.order.column.lead_booker.billing_address',
                     AddressColumn::table('lead_billing')
+                ),
+            'order_lead_email_address' =>
+                new ColumnDefinition(
+                    'reports.order.column.lead_booker.email_address',
+                    Column::name('lead.email_address')
+                ),
+            'order_lead_mobile_number' =>
+                new ColumnDefinition(
+                    'reports.order.column.lead_booker.mobile_number',
+                    Column::name('lead.mobile_number')
                 ),
         ];
     }
