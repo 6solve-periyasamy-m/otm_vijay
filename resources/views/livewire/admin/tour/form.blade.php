@@ -32,8 +32,8 @@ $atol = [
     <div class="col-xl-4">
         <x-admin.section.card>
             <div class="row">
-                <x-livewire.input wire:model="tour.base_price_per_person" label="Price per Person" required />
-                <x-livewire.input wire:model="tour.deposit" label="Deposit" width="6" />
+                <x-livewire.input wire:model="tour.base_price_per_person" label="Price per Person" required type="number" step="0.01" />
+                <x-livewire.input wire:model="tour.deposit" label="Deposit" width="6" type="number" step="0.01" />
                 <x-livewire.input.checkbox wire:model="tour.is_deposit_percentage" label="Percentage?" width="6" />
                 <x-livewire.input wire:model="tour.booking_fee" label="Booking Fee" width="6" />
                 <x-livewire.input wire:model="tour.single_occupancy_surcharge" label="Single Occupancy Surcharge" width="6" />
