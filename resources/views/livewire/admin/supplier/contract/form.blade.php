@@ -7,9 +7,9 @@
         <x-livewire.input wire:model="contract.reference_number" required width="5" label="{{__('supplier.contract.form.fields.reference_number')}}" />
         <x-livewire.input.checkbox wire:model="contract.confirmed" width="2" label="{{__('supplier.contract.form.fields.confirmed')}}" />
 
-        <x-livewire.input wire:model="local_cost" wire:change="changeLocal" width="4" label="{{__('supplier.contract.form.fields.net_cost')}}" />
-        <x-livewire.input wire:model="contract.agreed_exchange" wire:change="changeExchange" required width="4" label="{{__('supplier.contract.form.fields.exchange')}}" />
-        <x-livewire.input wire:model="contract.total_cost" wire:change="changeGross" required width="4" label="{{__('supplier.contract.form.fields.total_cost')}}" />
+        <x-livewire.input wire:model="local_cost" wire:change="changeLocal" width="4" label="{{__('supplier.contract.form.fields.net_cost')}}" type="number" step="0.01" />
+        <x-livewire.input wire:model="contract.agreed_exchange" wire:change="changeExchange" required width="4" label="{{__('supplier.contract.form.fields.exchange')}}" type="number" step="0.01" />
+        <x-livewire.input wire:model="contract.total_cost" wire:change="changeGross" required width="4" label="{{__('supplier.contract.form.fields.total_cost')}}" type="number" step="0.01" />
 
         <x-livewire.input wire:model="contract.tax_rate" wire:change="changeTax" required width="6" label="{{__('supplier.contract.form.fields.tax_rate')}}" />
         <x-livewire.input wire:model="before_tax" disabled width="6" label="{{__('supplier.contract.form.fields.before_tax')}}" />
