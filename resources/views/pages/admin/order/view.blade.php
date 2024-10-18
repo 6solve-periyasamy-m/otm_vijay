@@ -310,6 +310,7 @@
                             <th scope="col">Type</th>
                             <th scope="col">Due</th>
                             <th scope="col">Amount</th>
+                            <th scope="col">Received</th>
                             <th scope="col">Outstanding</th>
                             <th scope="col">Paid On</th>
                             <th scope="col" class="actions">Actions</th>
@@ -320,6 +321,9 @@
                                 <th scope="row">Booking Fee</th>
                                 <td>With Order</td>
                                 <td>{{ f_currency($order->booking_fee) }}</td>
+                                <td>
+                                    {{ f_currency(min($order->booking_fee, $order->paid)) }}
+                                </td>
                                 <td>
                                     @if($order->booking_fee <= $order->paid)
                                         Paid
@@ -346,6 +350,14 @@
                                 <td>
                                     @php $amount = $order->calculated_deposit - min(($order->paid - ($order->booking_fee ?? 0)), $order->calculated_deposit); @endphp
                                     @if($amount <= 0)
+                                        {{ f_currency($order->calculated_deposit) }}
+                                    @else
+                                        {{ f_currency($order->paid) }}
+                                    @endif
+                                </td>
+                                <td>
+                                    <!-- @php $amount = $order->calculated_deposit - min(($order->paid - ($order->booking_fee ?? 0)), $order->calculated_deposit); @endphp -->
+                                    @if($amount <= 0)
                                         Paid
                                     @else
                                         {{ f_currency($amount) }}
@@ -364,12 +376,20 @@
                         @endif
                         @foreach($order->installments as $installment)
                             @php $paid = $installment->repository->getAmountPaid(); @endphp
+                            @php $amount = $installment->calculated_amount - $installment->repository->getAmountPaid(); @endphp
+                            {{ $installment->repository->getAmountPaid() }}
                             <tr>
                                 <th scope="row">Installment</th>
                                 <td>{{ f_date($installment->due_on) }}</td>
                                 <td>{{ f_currency($installment->calculated_amount) }} ({{ $installment->percentage }}%)</td>
                                 <td>
-                                    @php $amount = $installment->calculated_amount - $installment->repository->getAmountPaid(); @endphp
+                                    @if($amount <= 0)
+                                        {{ f_currency($installment->calculated_amount) }}
+                                    @else
+                                        {{ f_currency($installment->repository->getAmountPaid()) }}
+                                    @endif
+                                </td>
+                                <td>
                                     @if($amount <= 0)
                                         Paid
                                     @else
@@ -398,6 +418,7 @@
                             <th scope="row">Remaining Balance</th>
                             <td>{{ f_date($order->tour->final_payment) }}</td>
                             <td>{{ f_currency($order->remaining_installment) }} ({{ $order->remaining_percentage }}%)</td>
+                            <td> {{ f_currency($order->paid) }} </td>
                             <td>
                                 @php $amount = min($order->remaining, $order->remaining_installment); @endphp
                                 @if($amount <= 0)
