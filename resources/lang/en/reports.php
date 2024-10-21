@@ -158,6 +158,10 @@ return [
                 'name' => 'Remaining',
                 'description' => 'The amount remaining to be paid on the order'
             ],
+            'cost_to_company' => [
+                'name' => 'Cost to Company',
+                'description' => 'The total cost to company for the order'
+            ],
             'next_payment' => [
                 'due' => [
                     'name' => 'Next Installment Due',
