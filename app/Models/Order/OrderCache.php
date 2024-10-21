@@ -21,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $next_payment_date
  * @property float|null $next_payment_amount
  * @property float|null $next_payment_remaining
+ * @property float|null $cost_to_company
  * @property Carbon $cached
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at

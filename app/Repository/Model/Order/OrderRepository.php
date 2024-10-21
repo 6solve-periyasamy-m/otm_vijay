@@ -568,6 +568,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             'next_payment_amount' => $nextPayment?->amount,
             'next_payment_remaining' => $nextPayment?->remaining,
             'commission_amount' => $this->order->commission_amount,
+            'cost_to_company' => $this->getCostToCompany(true),
             'cached' => now(),
         ]);
         $cache->save();
@@ -652,8 +653,11 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         }
     }
 
-    public function getCostToCompany(): float
+    public function getCostToCompany(bool $recache = false): float
     {
+        if (!$recache && $this->order->cache->cost_to_company !== null) {
+            return $this->order->cache->cost_to_company;
+        }
         $cost = 0;
         foreach ($this->order->orderCustomers as $orderCustomer) {
             $cost += $orderCustomer->repository->getCostToCompany();
