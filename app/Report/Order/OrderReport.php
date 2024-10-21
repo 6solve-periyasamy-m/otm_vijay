@@ -6,6 +6,7 @@ use App\Http\Livewire\Abstract\AddressColumn;
 use App\Http\Livewire\Abstract\CurrencyColumn;
 use App\Http\Livewire\Abstract\OrderBadgeColumn;
 use App\Models\Order\Order;
+use App\Models\User;
 use App\Report\ColumnDefinition;
 use App\Report\HasPriority;
 use App\Report\Tour\TourReport;
@@ -35,6 +36,7 @@ class OrderReport extends TourReport
             ->leftJoin('tours', 'tours.id', '=', 'orders.tour_id')
             ->leftJoin('tour_categories', 'tours.tour_category_id', '=', 'tour_categories.id')
             ->leftJoin('events', 'events.id', '=', 'tours.event_id')
+            ->leftJoin('users as consultant', 'consultant.id', '=', 'orders.consultant_id')
             ->groupBy('orders.id');
     }
 
@@ -189,6 +191,18 @@ class OrderReport extends TourReport
                 new ColumnDefinition(
                     'reports.order.column.lead_booker.mobile_number',
                     Column::name('lead.mobile_number')
+                ),
+            'order_consultant_name' =>
+                new ColumnDefinition(
+                    'reports.order.column.consultant.name',
+                    Column::name('consultant.name')
+                        ->filterable(User::pluck('name')),
+                ),
+            'order_consultant_email' =>
+                new ColumnDefinition(
+                    'reports.order.column.consultant.email',
+                    Column::name('consultant.email')
+                        ->filterable(User::pluck('email')),
                 ),
         ];
     }

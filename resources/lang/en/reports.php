@@ -202,6 +202,16 @@ return [
                     'description' => 'Mobile number of the lead booker'
                 ],
             ],
+            'consultant' => [
+                'name' => [
+                    'name' => 'Consultant Name',
+                    'description' => 'The name of the consultant for the order'
+                ],
+                'email' => [
+                    'name' => 'Consultant Email',
+                    'description' => 'The email address of the consultant'
+                ],
+            ]
         ],
     ],
 ];
