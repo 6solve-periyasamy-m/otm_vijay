@@ -33,7 +33,8 @@ class AccommodationByDate
 
     public function getInventoryOnNight(Carbon $night): AccommodationInventory|null
     {
-        $night = $night->setTime(0, 0, 0);
+        // Date needs to be at basically midnight
+        $night = $night->setTime(23, 59, 59);
         foreach ($this->inventory as $inventory) {
             if ($inventory->check_in->isBefore($night) && $inventory->check_out->isAfter($night)) {
                 return $inventory;

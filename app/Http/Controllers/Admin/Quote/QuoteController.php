@@ -58,6 +58,11 @@ class QuoteController extends Controller
         return view('pages.admin.quote.convert', ['quote' => $quote, 'travelling' => $request->travelling, 'paying' => $request->paying, 'email' => $request->doEmail()]);
     }
 
+    public function accommodation(Quote $quote)
+    {
+        return view('pages.admin.quote.accommodation', ['quote' => $quote]);
+    }
+
     public function document(Quote $quote, SentQuote $sent): StreamedResponse
     {
         return $quote->repository->getResponseStream($sent);

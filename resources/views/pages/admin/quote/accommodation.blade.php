@@ -1,0 +1,9 @@
+@php /** @var \App\Models\Quote\Quote|null $quote */ $quote = $quote ?? null; @endphp
+
+@extends('layout.master')
+
+@section('title', 'Accommodation Selector')
+
+@section('content')
+    <livewire:admin.quote.accommodation-by-date :start="$quote?->date_from" :end="$quote?->date_to" />
+@endsection
