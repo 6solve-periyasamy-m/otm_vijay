@@ -356,7 +356,6 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <!-- @php $amount = $order->calculated_deposit - min(($order->paid - ($order->booking_fee ?? 0)), $order->calculated_deposit); @endphp -->
                                     @if($amount <= 0)
                                         Paid
                                     @else
@@ -377,7 +376,6 @@
                         @foreach($order->installments as $installment)
                             @php $paid = $installment->repository->getAmountPaid(); @endphp
                             @php $amount = $installment->calculated_amount - $installment->repository->getAmountPaid(); @endphp
-                            {{ $installment->repository->getAmountPaid() }}
                             <tr>
                                 <th scope="row">Installment</th>
                                 <td>{{ f_date($installment->due_on) }}</td>
