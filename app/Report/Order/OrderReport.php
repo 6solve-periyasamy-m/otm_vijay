@@ -6,6 +6,7 @@ use App\Http\Livewire\Abstract\AddressColumn;
 use App\Http\Livewire\Abstract\CurrencyColumn;
 use App\Http\Livewire\Abstract\OrderBadgeColumn;
 use App\Models\Order\Order;
+use App\Models\User;
 use App\Report\ColumnDefinition;
 use App\Report\HasPriority;
 use App\Report\Tour\TourReport;
@@ -35,6 +36,7 @@ class OrderReport extends TourReport
             ->leftJoin('tours', 'tours.id', '=', 'orders.tour_id')
             ->leftJoin('tour_categories', 'tours.tour_category_id', '=', 'tour_categories.id')
             ->leftJoin('events', 'events.id', '=', 'tours.event_id')
+            ->leftJoin('users', 'users.id', '=', 'orders.consultant_id')
             ->groupBy('orders.id');
     }
 
@@ -118,6 +120,12 @@ class OrderReport extends TourReport
                     CurrencyColumn::name('order_caches.total_owed')
                         ->filterable()
                 ),
+            'order_cost_to_company' =>
+                new ColumnDefinition(
+                    'reports.order.column.cost_to_company',
+                    CurrencyColumn::name('order_caches.cost_to_company')
+                        ->filterable()
+                ),
             'order_remaining' =>
                 new ColumnDefinition(
                     'reports.order.column.remaining',
@@ -189,6 +197,20 @@ class OrderReport extends TourReport
                 new ColumnDefinition(
                     'reports.order.column.lead_booker.mobile_number',
                     Column::name('lead.mobile_number')
+                ),
+            'order_consultant_name' =>
+                new ColumnDefinition(
+                    'reports.order.column.consultant.name',
+                    Column::name('users.name')
+                        ->filterOn('users.name')
+                        ->filterable(User::pluck('name')),
+                ),
+            'order_consultant_email' =>
+                new ColumnDefinition(
+                    'reports.order.column.consultant.email',
+                    Column::name('users.email')
+                        ->filterOn('users.email')
+                        ->filterable(User::pluck('email')),
                 ),
         ];
     }
