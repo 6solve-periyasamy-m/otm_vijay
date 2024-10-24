@@ -44,7 +44,7 @@ use App\Repository\Storage\Itinerary\ItinerarySchedule;
 use App\Repository\Storage\Itinerary\ItineraryScheduleType;
 use App\Repository\Storage\Itinerary\ItineraryTraveller;
 use App\Repository\Storage\Quote\CustomerForConversion;
-use App\Repository\Storage\Rooming\AccommodationByDate;
+use App\Repository\Storage\Rooming\AccommodationByDateStorage;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -1235,7 +1235,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function getAccommodationForItinerary(): array
     {
         $data = [];
-        /** @var AccommodationByDate[] $byDate */
+        /** @var AccommodationByDateStorage[] $byDate */
         $byDate = [];
         foreach ($this->quote->accommodation as $component) {
             $found = false;
@@ -1246,7 +1246,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 }
             }
             if (!$found) {
-                $byDate[] = AccommodationByDate::createFromInventory($component->inventory);
+                $byDate[] = AccommodationByDateStorage::createFromInventory($component->inventory);
             }
         }
         foreach ($byDate as $item) {

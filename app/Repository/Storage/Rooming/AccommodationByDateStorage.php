@@ -12,7 +12,7 @@ use App\Models\Quote\Quote;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use Carbon\Carbon;
 
-class AccommodationByDate
+class AccommodationByDateStorage
 {
     /** @var array<int, AccommodationInventory> */
     public array $inventory;

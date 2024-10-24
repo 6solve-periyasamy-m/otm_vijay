@@ -5,7 +5,7 @@ namespace App\Repository\Model\Accommodation;
 use App\Models\Accommodation\Accommodation;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Interfaces\Manifest\HasRoomingList;
-use App\Repository\Storage\Rooming\AccommodationByDate;
+use App\Repository\Storage\Rooming\AccommodationByDateStorage;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
@@ -75,7 +75,7 @@ class AccommodationRepository extends ModelRepository implements HasRoomingList
     /**
      * @param Carbon $start
      * @param Carbon $end
-     * @return AccommodationByDate[]
+     * @return AccommodationByDateStorage[]
      */
     public static function getAllRoomsInRange(Carbon $start, Carbon $end): array
     {
@@ -92,11 +92,11 @@ class AccommodationRepository extends ModelRepository implements HasRoomingList
     /**
      * @param Carbon $start Start date for range
      * @param Carbon $end End date for range
-     * @return AccommodationByDate[]
+     * @return AccommodationByDateStorage[]
      */
     public function getTypesByRange(Carbon $start, Carbon $end): array
     {
-        /** @var AccommodationByDate[] $data */
+        /** @var AccommodationByDateStorage[] $data */
         $data = [];
         foreach ($this->accommodation->inventory()->whereDate('check_in', '>=', $start)->whereDate('check_out', '<=', $end)->get() as $inventory)
         {
@@ -110,7 +110,7 @@ class AccommodationRepository extends ModelRepository implements HasRoomingList
                 }
             }
 
-            $found = $found ?? AccommodationByDate::createFromInventory($inventory);
+            $found = $found ?? AccommodationByDateStorage::createFromInventory($inventory);
             $found->addRoom($inventory);
 
             if ($foundKey === null) { $data[] = $found; }

@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Admin\Quote;
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Models\Accommodation\Accommodation;
 use App\Repository\Model\Accommodation\AccommodationRepository;
-use App\Repository\Storage\Rooming\AccommodationByDate as AccommodationStorage;
+use App\Repository\Storage\Rooming\AccommodationByDateStorage as AccommodationStorage;
 use Carbon\Carbon;
 use Livewire\Component;
 

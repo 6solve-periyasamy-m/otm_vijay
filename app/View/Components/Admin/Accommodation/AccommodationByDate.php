@@ -2,7 +2,7 @@
 
 namespace App\View\Components\Admin\Accommodation;
 
-use App\Repository\Storage\Rooming\AccommodationByDate as Storage;
+use App\Repository\Storage\Rooming\AccommodationByDateStorage as Storage;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Closure;
