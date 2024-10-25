@@ -1011,6 +1011,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         });
 
         $order->repository->resetInstallments();
+
+        $this->update(['quote_status' => QuoteStatus::CONVERTED->value, 'order_id' => $order->id]);
         return $order;
     }
 
