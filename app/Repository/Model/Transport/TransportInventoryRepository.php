@@ -203,8 +203,8 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
     public function getItineraryItem(int|null $quantity = null): ItineraryItem
     {
         $component = $this->inventory->component;
-        $departure_address = "{$component->departureAddress->region}, {$component->departureAddress->country}";
-        $arrival_address =  "{$component->arrivalAddress->region}, {$component->arrivalAddress->country}";
+        $departure_address = "{$component->departureAddress->name}";
+        $arrival_address =  "{$component->arrivalAddress->name}";
         $departs_at = $this->inventory->departs_at;
         $arrives_at = $this->inventory->arrives_at;
         if ($departs_at->isSameDay($arrives_at)) {
