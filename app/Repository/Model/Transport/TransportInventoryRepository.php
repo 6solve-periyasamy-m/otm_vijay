@@ -221,7 +221,7 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
             'Transport' => $this->inventory->component->transportType->name,
             'Travel Class' => $this->inventory->travelClass->name,
             'Quantity' => $quantity,
-            'Description' => $this->inventory->component->description,            
+            'Description' => $this->inventory->component->description,
         ];
         if ($quantity === null) { unset($details['Quantity']); }
         return new ItineraryItem(
