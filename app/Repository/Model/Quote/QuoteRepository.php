@@ -955,7 +955,12 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $lead->orderCustomer = $leadTraveller;
         $order->updateQuietly(['lead_booker_id' => $leadTraveller->id,]);
         $order->saveQuietly();
-        $order->updateQuietly(['booking_reference' => Order::generateBookingReference($order)]);
+        if (flag('quote.convert.reference', false) &&
+            Order::where('booking_reference', '=', $this->quote->reference)->first() === null) {
+            $order->updateQuietly(['booking_reference' => $this->quote->reference]);
+        } else {
+            $order->updateQuietly(['booking_reference' => Order::generateBookingReference($order)]);
+        }
         $order->saveQuietly();
         foreach ($customers as $key => $customer) {
             $traveller = $order->repository->addCustomer($customer->getConvertedCustomer($this->quote), true, false, true);

@@ -77,7 +77,7 @@
 
 @section('content')
     <x-admin.section.header>
-        @include('partials.admin.quote.details', ['quote' => $quote])
+        <livewire:admin.quote.details :quote="$quote" />
         <div class="col-12">
             @if(isset($quote->order))
                 <a href="{{ route('orders.view', ['order' => $quote->order,]) }}" class="btn btn-warning">
