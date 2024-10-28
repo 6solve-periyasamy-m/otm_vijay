@@ -7,6 +7,8 @@ use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\BoardType;
 use App\Models\Accommodation\RoomCategory;
 use App\Models\Accommodation\RoomType;
+use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;
 use App\Models\Quote\Quote;
 use App\Repository\Storage\Itinerary\ItineraryItem;
@@ -101,6 +103,28 @@ class AccommodationByDateStorage
         return $items;
     }
 
+    public function getItineraryLinesForOrder(Order $order): array
+    {
+        $this->sort();
+        $items = [];
+        $start = null;
+        $prev = null;
+        foreach ($this->inventory as $inventory) {
+            if ($start === null) { $start = $inventory; }
+            if ($prev !== null && abs($inventory->check_in->diffInDays($prev->check_out)) > 1) {
+                $itinerary = $start->repository->getItineraryItem($this->getOrderQuantity($order, $start));
+                $itinerary->details['Check Out'] = $prev->check_out->format('d M Y');
+                $items[] = $itinerary;
+                $start = $inventory;
+            }
+            $prev = $inventory;
+        }
+        $itinerary = $start->repository->getItineraryItem($this->getOrderQuantity($order, $start));
+        $itinerary->details['Check Out'] = $prev->check_out->format('d M Y');
+        $items[] = $itinerary;
+        return $items;
+    }
+
     /**
      * Find a specific Quote inventory line for an inventory
      *
@@ -119,5 +143,25 @@ class AccommodationByDateStorage
             }
         }
         return null;
+    }
+
+    /**
+     * Get the quantity of a specific inventory on an order
+     *
+     * @param Order $order
+     * @param AccommodationInventory $inventory
+     * @return int
+     */
+    private function getOrderQuantity(Order $order, AccommodationInventory $inventory): int
+    {
+        $quantity = 0;
+        foreach ($order->orderCustomers as $customer) {
+            foreach ($customer->orderAccommodation as $room) {
+                if ($room->tourComponent->accommodation_inventory_id === $inventory->id) {
+                    $quantity++;
+                }
+            }
+        }
+        return $quantity;
     }
 }
