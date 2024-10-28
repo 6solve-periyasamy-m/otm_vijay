@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\Quote;
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Models\Accommodation\Accommodation;
 use App\Repository\Model\Accommodation\AccommodationRepository;
+use App\Repository\Storage\Rooming\AccommodationByDateStorage;
 use App\Repository\Storage\Rooming\AccommodationByDateStorage as AccommodationStorage;
 use Carbon\Carbon;
 use Livewire\Component;
@@ -16,6 +17,7 @@ class AccommodationByDate extends Component
     public int|null $accommodation = null;
     public string|null $start = null;
     public string|null $end = null;
+    public array $selected = [];
     
     public function mount(Accommodation|int|null $accommodation = null, Carbon|string|null $start = null, Carbon|string|null $end = null)
     {
@@ -38,6 +40,11 @@ class AccommodationByDate extends Component
         }
     }
 
+    public function save()
+    {
+        // TODO: Implement
+    }
+
     public function render()
     {
         return view('livewire.admin.quote.accommodation-by-date');
@@ -58,6 +65,40 @@ class AccommodationByDate extends Component
     public function getEnd(): Carbon|null
     {
         return Carbon::createFromFormat('Y-m-d', $this->end);
+    }
+
+    public function select(int $accommodation, int $room, int $board, int|null $category): void
+    {
+        $key = $this->internalSelected($accommodation, $room, $board, $category);
+        if ($key !== null) {
+            unset($this->selected[$key]);
+        } else {
+            $this->selected[] = [
+                'id' => $accommodation,
+                'room' => $room,
+                'board' => $board,
+                'category' => $category,
+            ];
+        }
+    }
+
+    public function selected(AccommodationStorage $storage): bool
+    {
+        return $this->internalSelected($storage->accommodation->id, $storage->room->id, $storage->board->id, $storage->category?->id) !== null;
+    }
+
+    private function internalSelected(int $accommodation, int $room, int $board, int|null $category): int|null
+    {
+        foreach ($this->selected as $key => $data) {
+            if (($data['id'] ?? null) === $accommodation
+                && ($data['room'] ?? null) === $room
+                && ($data['board'] ?? null) === $board
+                && ($data['category'] ?? null) === $category)
+            {
+                return $key;
+            }
+        }
+        return null;
     }
 
     /**

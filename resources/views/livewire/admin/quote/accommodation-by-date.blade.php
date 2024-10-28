@@ -25,7 +25,7 @@
     </div>
     <div class="row">
         @foreach($this->fetchData() as $data)
-            <div class="col-3">
+            <div class="col-3 @if($this->selected($data)) selected @endif" wire:click="select({{$data->accommodation->id}}, {{$data->room->id}}, {{ $data->board->id }}, {{ $data->category?->id ?? "null" }})">
                 <x-admin.accommodation.accommodation-by-date :storage="$data" :start="$this->getStart()" :end="$this->getEnd()" />
             </div>
         @endforeach
