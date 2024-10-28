@@ -8,7 +8,7 @@
         @endif
 
         <div class="row">
-            <div class="col-11">
+            <div class="col-10">
                 <h3 class="font-bold">
                     {{ $storage->accommodation->name }}
                 </h3>
@@ -17,6 +17,17 @@
                 <a href="{{ route('accommodations.view', ['accommodation' => $storage->accommodation]) }}" target="_blank" class="btn btn-sm mb-1 btn-outline-info">
                     {{ Icon::eye() }}
                 </a>
+            </div>
+            <div class="col-1">
+                @if($selected)
+                    <button title="Remove Accommodation" wire:click="select({{$storage->accommodation->id}}, {{$storage->room->id}}, {{ $storage->board->id }}, {{ $storage->category?->id ?? "null" }})" class="btn btn-sm mb-1 btn-outline-danger">
+                        {{ Icon::minus() }}
+                    </button>
+                @else
+                    <button title="Add Accommodation" wire:click="select({{$storage->accommodation->id}}, {{$storage->room->id}}, {{ $storage->board->id }}, {{ $storage->category?->id ?? "null" }})" class="btn btn-sm mb-1 btn-outline-success">
+                        {{ Icon::plus() }}
+                    </button>
+                @endif
             </div>
         </div>
 

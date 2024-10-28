@@ -5,5 +5,5 @@
 @section('title', 'Accommodation Selector')
 
 @section('content')
-    <livewire:admin.quote.accommodation-by-date :start="$quote?->date_from" :end="$quote?->date_to" />
+    <livewire:admin.quote.accommodation-by-date :start="$quote?->date_from" :end="$quote?->date_to" :quote="$quote->id" />
 @endsection

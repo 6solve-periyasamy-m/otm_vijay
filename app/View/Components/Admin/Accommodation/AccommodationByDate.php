@@ -13,11 +13,13 @@ class AccommodationByDate extends Component
 {
     public Storage $storage;
     public CarbonPeriod $period;
+    public bool $selected;
 
-    public function __construct(Storage $storage, Carbon $start, Carbon $end)
+    public function __construct(Storage $storage, Carbon $start, Carbon $end, $selected)
     {
         $this->storage = $storage;
         $this->period = CarbonPeriod::create($start, '1 day', $end->subDay());
+        $this->selected = $selected;
     }
 
     /**

@@ -14,6 +14,7 @@
                 <div style="min-width: 25%">
                     <div class="flex justify-center" style="max-height: 100%">
                         <div class="my-auto">
+                            <label class="text-danger">Warning: Will remove all accommodation from the quote</label>
                             <button wire:click="save" class="btn btn-success">
                                 Save Changes
                             </button>
@@ -25,8 +26,9 @@
     </div>
     <div class="row">
         @foreach($this->fetchData() as $data)
-            <div class="col-3 @if($this->selected($data)) selected @endif" wire:click="select({{$data->accommodation->id}}, {{$data->room->id}}, {{ $data->board->id }}, {{ $data->category?->id ?? "null" }})">
-                <x-admin.accommodation.accommodation-by-date :storage="$data" :start="$this->getStart()" :end="$this->getEnd()" />
+            @php $selected = $this->selected($data); @endphp
+            <div class="col-3 @if($selected) selected @endif">
+                <x-admin.accommodation.accommodation-by-date :key="now()" :storage="$data" :start="$this->getStart()" :end="$this->getEnd()" :selected="$selected" />
             </div>
         @endforeach
     </div>

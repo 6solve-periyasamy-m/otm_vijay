@@ -3,23 +3,25 @@
 namespace App\Http\Livewire\Admin\Quote;
 
 use App\Http\Livewire\Abstract\LivewireForm;
+use App\Http\Livewire\SendsEvents;
 use App\Models\Accommodation\Accommodation;
+use App\Models\Quote\Quote;
 use App\Repository\Model\Accommodation\AccommodationRepository;
-use App\Repository\Storage\Rooming\AccommodationByDateStorage;
 use App\Repository\Storage\Rooming\AccommodationByDateStorage as AccommodationStorage;
 use Carbon\Carbon;
 use Livewire\Component;
 
 class AccommodationByDate extends Component
 {
-    use LivewireForm;
+    use LivewireForm, SendsEvents;
 
+    public int $quote;
     public int|null $accommodation = null;
     public string|null $start = null;
     public string|null $end = null;
     public array $selected = [];
     
-    public function mount(Accommodation|int|null $accommodation = null, Carbon|string|null $start = null, Carbon|string|null $end = null)
+    public function mount(Quote|int $quote, Accommodation|int|null $accommodation = null, Carbon|string|null $start = null, Carbon|string|null $end = null)
     {
         if ($start instanceof Carbon) {
             $this->start = $start->format('Y-m-d');
@@ -38,11 +40,25 @@ class AccommodationByDate extends Component
         } else {
             $this->accommodation = $accommodation;
         }
+
+        if ($quote instanceof Quote) {
+            $this->quote = $quote->id;
+        } else {
+            $this->quote = $quote;
+        }
     }
 
-    public function save()
+    public function save(): void
     {
-        // TODO: Implement
+        $quote = Quote::find($this->quote);
+        if ($quote === null) { return; }
+        $quote->accommodation()->delete();
+        foreach ($this->fetchData() as $data) {
+            if ($this->selected($data)) {
+                $data->addToQuote($quote);
+            }
+        }
+        $this->toast('Accommodation Saved Successfully', 'Successfully removed accommodation and added new ones to the quote', 'success');
     }
 
     public function render()
@@ -60,7 +76,6 @@ class AccommodationByDate extends Component
     {
         return Carbon::createFromFormat('Y-m-d', $this->start);
     }
-
 
     public function getEnd(): Carbon|null
     {
