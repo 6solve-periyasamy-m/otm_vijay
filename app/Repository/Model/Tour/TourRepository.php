@@ -647,7 +647,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             }
         }
         foreach ($this->tour->transportInventoryTours as $component) {
-            $key = 'accommodation-' .  $component->inventory->component->id;
+            $key = 'transport-' .  $component->inventory->component->id;
             if (in_array($key, $seen)) { continue; }
             $seen[] = $key;
             if ($component->tour_component_type === 'Included') {
