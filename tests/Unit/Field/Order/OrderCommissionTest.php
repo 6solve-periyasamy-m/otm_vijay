@@ -46,15 +46,17 @@ class OrderCommissionTest extends DatabaseTestCase
 
     public function test10PercentCommissionWithPositiveAdjustments()
     {
+        // Adjustments no longer affect commission. This should verify that
         $order = $this->getOrder(10);
         ManualAdjustment::create(['order_id' => $order->id, 'reason' => 'test', 'amount' => 100]);
-        $this->assertEquals(110, $order->commission_amount);
+        $this->assertEquals(100, $order->commission_amount);
     }
 
     public function test10PercentCommissionWithNegativeAdjustments()
     {
+        // Adjustments no longer affect commission. This should verify that
         $order = $this->getOrder(10);
         ManualAdjustment::create(['order_id' => $order->id, 'reason' => 'test', 'amount' => -100]);
-        $this->assertEquals(90, $order->commission_amount);
+        $this->assertEquals(100, $order->commission_amount);
     }
 }
