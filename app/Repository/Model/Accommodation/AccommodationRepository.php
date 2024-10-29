@@ -5,6 +5,8 @@ namespace App\Repository\Model\Accommodation;
 use App\Models\Accommodation\Accommodation;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Interfaces\Manifest\HasRoomingList;
+use App\Repository\Storage\Rooming\AccommodationByDateStorage;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class AccommodationRepository extends ModelRepository implements HasRoomingList
@@ -17,7 +19,7 @@ class AccommodationRepository extends ModelRepository implements HasRoomingList
     }
 
     /**
-     * @inheritDoc
+     * @inheritDocOrder Report
      */
     public function getRoomingList(): Collection|array
     {
@@ -68,5 +70,53 @@ class AccommodationRepository extends ModelRepository implements HasRoomingList
     public static function find($id): Accommodation|null
     {
         return Accommodation::find($id);
+    }
+
+    /**
+     * @param Carbon $start
+     * @param Carbon $end
+     * @return AccommodationByDateStorage[]
+     */
+    public static function getAllRoomsInRange(Carbon $start, Carbon $end): array
+    {
+        $data = [];
+        foreach (Accommodation::all() as $accommodation) {
+            $data = [
+                ...$data,
+                ...$accommodation->repository->getTypesByRange($start, $end),
+            ];
+        }
+        return $data;
+    }
+
+    /**
+     * @param Carbon $start Start date for range
+     * @param Carbon $end End date for range
+     * @return AccommodationByDateStorage[]
+     */
+    public function getTypesByRange(Carbon $start, Carbon $end): array
+    {
+        /** @var AccommodationByDateStorage[] $data */
+        $data = [];
+        foreach ($this->accommodation->inventory()->whereDate('check_in', '>=', $start)->whereDate('check_out', '<=', $end)->get() as $inventory)
+        {
+            $foundKey = null;
+            $found = null;
+
+            foreach ($data as $key => $datum) {
+                if ($datum->matches($inventory)) {
+                    $found = $datum;
+                    $foundKey = $key;
+                }
+            }
+
+            $found = $found ?? AccommodationByDateStorage::createFromInventory($inventory);
+            $found->addRoom($inventory);
+
+            if ($foundKey === null) { $data[] = $found; }
+            else { $data[$foundKey] = $found; }
+        }
+
+        return $data;
     }
 }

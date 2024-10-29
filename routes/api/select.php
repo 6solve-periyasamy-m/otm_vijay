@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\SelectController;
+use App\View\Components\Livewire\Input\Select\Accommodation;
 use App\View\Components\Livewire\Input\Select\Accommodation\BoardType;
 use App\View\Components\Livewire\Input\Select\Accommodation\RoomCategory;
 use App\View\Components\Livewire\Input\Select\Accommodation\RoomType;
@@ -18,6 +19,11 @@ use App\View\Components\Livewire\Input\Select\Organization;
 use App\View\Components\Livewire\Input\Select\TaxBracket;
 use App\View\Components\Livewire\Input\Select\TourCategory;
 use App\View\Components\Livewire\Input\Select\User;
+
+Route::prefix('accommodation')->name('accommodation.')->group(function () {
+    Route::post('/', [Accommodation::class, 'getAll'])->name('select');
+    Route::post('/{id}', [Accommodation::class, 'getOne'])->name('selected');
+});
 
 Route::prefix('organizations')->name('organizations.')->group(function () {
     Route::post('/', [Organization::class, 'getAll'])->name('select');

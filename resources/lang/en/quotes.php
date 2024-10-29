@@ -39,6 +39,7 @@ return [
             'close' => 'Close Quote',
             'change' => 'Changes Required',
             'approve' => 'Approved',
+            'accommodation' => 'Adjust Hotels',
         ],
         'cards' => [
             'quick' => [
