@@ -254,10 +254,18 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     public function convertToOrder(?Carbon $orderedOn = null): Order
     {
         $tour = $this->booking->tour;
+        $travellers = $this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count();
+        if (flag('booking.deposit.full')) {
+            // Since deposit on the order is per-person, if the full cost should be taken into account
+            // Then get the total deposit, then divide by paying travellers
+            $deposit = ((($this->booking->tour?->deposit_percentage ?? 0.0)/100) * ($this->getTotalCost())) / $travellers;
+        } else {
+            $deposit = (($this->booking->tour?->deposit_amount ?? 0.0));
+        }
         $order = Order::make([
             'tour_id' => $this->booking->tour_id,
             'token' => $this->booking->token,
-            'deposit' => $tour->deposit_amount,
+            'deposit' => $deposit,
             'invoice_footer' => $tour->invoice_footer,
             'ordered_on' => $orderedOn ?? now(),
             'booking_fee' => $tour->booking_fee,
