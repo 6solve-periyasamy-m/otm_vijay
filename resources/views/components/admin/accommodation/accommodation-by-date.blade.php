@@ -76,8 +76,12 @@
         @foreach($period as $date)
             @php $onNight = $storage->getInventoryOnNight($date) @endphp
             <div class="col-4">
-                @if($storage->getInventoryOnNight($date) !== null && $onNight->repository->getAvailableStock() > 0)
-                    <h4 class="badge badge-pill badge-success">{{ f_date($date) }}: {{ $onNight->repository->getAvailableStock() }}</h4>
+                @if($storage->getInventoryOnNight($date) !== null)
+                    @if($onNight->repository->getAvailableStock() > 0)
+                        <h4 class="badge badge-pill badge-success">{{ f_date($date) }}: {{ $onNight->repository->getAvailableStock() }}</h4>
+                    @else
+                        <h4 class="badge badge-pill badge-danger">{{ f_date($date) }}: {{ $onNight->repository->getAvailableStock() }}</h4>
+                    @endif
                 @else
                     <h4 class="badge badge-pill badge-danger">{{ f_date($date) }}: {{ Icon::cross() }}</h4>
                 @endif
