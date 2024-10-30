@@ -51,7 +51,7 @@
             @continue(!$this->shouldShow($data))
             @php $selected = $this->selected($data); @endphp
             <div class="col-3 @if($selected) selected @endif">
-                <x-admin.accommodation.accommodation-by-date :key="now()" :storage="$data" :start="$this->getStart()" :end="$this->getEnd()" :selected="$selected" :travellers="$travellers"/>
+                <x-admin.accommodation.accommodation-selector-card :key="now()" :storage="$data" :start="$this->getStart()" :end="$this->getEnd()" :selected="$selected" :travellers="$travellers"/>
             </div>
         @endforeach
     </div>

@@ -68,6 +68,11 @@ class TourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
+    public function accommodation(Tour $tour)
+    {
+        return view('pages.admin.tour.accommodation', ['tour' => $tour,]);
+    }
+
     public function view($tour)
     {
         $tour = Tour::with(

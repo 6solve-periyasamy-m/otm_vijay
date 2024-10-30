@@ -18,6 +18,7 @@ Route::post('/create', [TourController::class, 'store'])->name('tours.store')->m
 Route::prefix('{tour}')->group(function () {
     Route::get('/', [TourController::class, 'view'])->name('tours.view')->middleware('bouncer:Tour\Tour,read');
     Route::get('/costing', [TourController::class, 'costing'])->name('tours.costing')->middleware('bouncer:Tour\Tour,costing');
+    Route::get('/accommodation', [TourController::class, 'accommodation'])->name('tours.accommodation')->middleware('bouncer:Tour\Tour,update');
     Route::get('/update', [TourController::class, 'edit'])->name('tours.edit')->middleware('bouncer:Tour\Tour,update');
     Route::post('/update', [TourController::class, 'update'])->name('tours.update')->middleware('bouncer:Tour\Tour,update');
     Route::get('/duplicate', [TourController::class, 'duplicate'])->name('tours.duplicate')->middleware('bouncer:Tour\Tour,create');
