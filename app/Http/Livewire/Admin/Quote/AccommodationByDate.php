@@ -17,6 +17,9 @@ class AccommodationByDate extends Component
 
     public int $quote;
     public int|null $accommodation = null;
+    public int|null $room = null;
+    public int|null $board = null;
+    public int|null $category = null;
     public string|null $start = null;
     public string|null $end = null;
     public array $selected = [];
@@ -59,6 +62,13 @@ class AccommodationByDate extends Component
             }
         }
         $this->toast('Accommodation Saved Successfully', 'Successfully removed accommodation and added new ones to the quote', 'success');
+    }
+
+    public function shouldShow(AccommodationStorage $storage): bool
+    {
+        return ($this->room === null || $this->room === $storage->room->id) &&
+            ($this->board === null || $this->board === $storage->board->id) &&
+            ($this->category === null || $this->category === $storage->category->id);
     }
 
     public function render()
