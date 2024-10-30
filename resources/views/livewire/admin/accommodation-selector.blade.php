@@ -18,7 +18,7 @@
                 <div style="min-width: 25%" class="mx-1">
                     <div class="flex" style="max-height: 100%">
                         <div class="my-auto">
-                            <label class="block text-danger">Warning: This will remove all accommodation from the quote</label>
+                            <label class="block text-danger">Warning: This will remove all accommodation from the package</label>
                             <button wire:click="save" class="btn btn-success">
                                 Save Changes
                             </button>

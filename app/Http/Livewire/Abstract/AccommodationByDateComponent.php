@@ -1,21 +1,18 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Quote;
+namespace App\Http\Livewire\Abstract;
 
-use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Accommodation\Accommodation;
-use App\Models\Quote\Quote;
 use App\Repository\Model\Accommodation\AccommodationRepository;
 use App\Repository\Storage\Rooming\AccommodationByDateStorage as AccommodationStorage;
 use Carbon\Carbon;
 use Livewire\Component;
 
-class AccommodationByDate extends Component
+abstract class AccommodationByDateComponent extends Component
 {
     use LivewireForm, SendsEvents;
 
-    public int $quote;
     public int|null $accommodation = null;
     public int|null $room = null;
     public int|null $board = null;
@@ -23,8 +20,8 @@ class AccommodationByDate extends Component
     public string|null $start = null;
     public string|null $end = null;
     public array $selected = [];
-    
-    public function mount(Quote|int $quote, Accommodation|int|null $accommodation = null, Carbon|string|null $start = null, Carbon|string|null $end = null)
+
+    public function mount(Accommodation|int|null $accommodation = null, Carbon|string|null $start = null, Carbon|string|null $end = null)
     {
         if ($start instanceof Carbon) {
             $this->start = $start->format('Y-m-d');
@@ -43,26 +40,9 @@ class AccommodationByDate extends Component
         } else {
             $this->accommodation = $accommodation;
         }
-
-        if ($quote instanceof Quote) {
-            $this->quote = $quote->id;
-        } else {
-            $this->quote = $quote;
-        }
     }
 
-    public function save(): void
-    {
-        $quote = Quote::find($this->quote);
-        if ($quote === null) { return; }
-        $quote->accommodation()->delete();
-        foreach ($this->fetchData() as $data) {
-            if ($this->selected($data)) {
-                $data->addToQuote($quote);
-            }
-        }
-        $this->toast('Accommodation Saved Successfully', 'Successfully removed accommodation and added new ones to the quote', 'success');
-    }
+    abstract public function save(): void;
 
     public function shouldShow(AccommodationStorage $storage): bool
     {
@@ -73,7 +53,7 @@ class AccommodationByDate extends Component
 
     public function render()
     {
-        return view('livewire.admin.quote.accommodation-by-date');
+        return view('livewire.admin.accommodation-selector');
     }
 
     public function updated($key, $value): void
