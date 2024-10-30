@@ -9,7 +9,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class AccommodationByDate extends Component
+class AccommodationSelectorCard extends Component
 {
     public Storage $storage;
     public CarbonPeriod $period;
@@ -29,6 +29,6 @@ class AccommodationByDate extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.admin.accommodation.accommodation-by-date');
+        return view('components.admin.accommodation.selector-card');
     }
 }
