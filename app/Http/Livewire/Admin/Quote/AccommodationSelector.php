@@ -10,17 +10,19 @@ use Carbon\Carbon;
 class AccommodationSelector extends AccommodationByDateComponent
 {
     public int $quote;
+    public int $travellers;
 
-    public function mount(Accommodation|int|null $accommodation = null, Carbon|string|null $start = null, Carbon|string|null $end = null, Quote|int|null $quote = null)
+    public function mount(Accommodation|int|null $accommodation = null, Carbon|string|null $start = null, Carbon|string|null $end = null, Quote|int|null $quote = null, int|null $travellers = 0)
     {
         parent::mount($accommodation, $start, $end);
-
 
         if ($quote instanceof Quote) {
             $this->quote = $quote->id;
         } else {
             $this->quote = $quote;
         }
+
+        $this->travellers = $travellers;
     }
 
     public function save(): void

@@ -14,6 +14,7 @@ abstract class AccommodationByDateComponent extends Component
     use LivewireForm, SendsEvents;
 
     public int|null $accommodation = null;
+    public int $travellers = 0;
     public int|null $room = null;
     public int|null $board = null;
     public int|null $category = null;
