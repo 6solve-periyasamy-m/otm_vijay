@@ -92,6 +92,7 @@ class AccommodationByDateStorage
             if ($prev !== null && abs($inventory->check_in->diffInDays($prev->check_out)) > 1) {
                 $itinerary = $start->repository->getItineraryItem($this->findQuoteAccommodation($quote, $start)?->quantity);
                 $itinerary->details['Check Out'] = $prev->check_out->format('d M Y');
+                $itinerary->details['No of Nights'] = diff_in_nights($start->check_in, $prev->check_out);
                 $items[] = $itinerary;
                 $start = $inventory;
             }
@@ -99,6 +100,7 @@ class AccommodationByDateStorage
         }
         $itinerary = $start->repository->getItineraryItem($this->findQuoteAccommodation($quote, $start)?->quantity);
         $itinerary->details['Check Out'] = $prev->check_out->format('d M Y');
+        $itinerary->details['No of Nights'] = diff_in_nights($start->check_in, $prev->check_out);
         $items[] = $itinerary;
         return $items;
     }
@@ -114,6 +116,7 @@ class AccommodationByDateStorage
             if ($prev !== null && abs($inventory->check_in->diffInDays($prev->check_out)) > 1) {
                 $itinerary = $start->repository->getItineraryItem($this->getOrderQuantity($order, $start));
                 $itinerary->details['Check Out'] = $prev->check_out->format('d M Y');
+                $itinerary->details['No of Nights'] = diff_in_nights($start->check_in, $prev->check_out);
                 $items[] = $itinerary;
                 $start = $inventory;
             }
@@ -121,6 +124,7 @@ class AccommodationByDateStorage
         }
         $itinerary = $start->repository->getItineraryItem($this->getOrderQuantity($order, $start));
         $itinerary->details['Check Out'] = $prev->check_out->format('d M Y');
+        $itinerary->details['No of Nights'] = diff_in_nights($start->check_in, $prev->check_out);
         $items[] = $itinerary;
         return $items;
     }
