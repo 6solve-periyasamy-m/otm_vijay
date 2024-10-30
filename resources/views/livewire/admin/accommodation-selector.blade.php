@@ -2,23 +2,23 @@
     <div class="col-12">
         <x-admin.section.card>
             <div class="flex justify-between">
-                <div style="min-width: 5%" class="mx-1">
+                <div style="min-width: 10%" class="mx-1">
                     <div class="flex" style="max-height: 100%">
                         <div class="my-auto">
-                            <a class="btn btn-primary" href="{{ url()->previous(route('dash')) }}">Back</a>
+                            <a class="btn btn-primary" href="{{ $this->getReturnUrl() }}">Return to {{ $this->getPackageType() }}</a>
                         </div>
                     </div>
                 </div>
-                <div style="min-width: 35%" class="mx-1">
+                <div style="min-width: 30%" class="mx-1">
                     <x-livewire.input type="date" wire:model="start" label="Start Date" />
                 </div>
-                <div style="min-width: 35%" class="mx-1">
+                <div style="min-width: 30%" class="mx-1">
                     <x-livewire.input type="date" wire:model="end" label="End Date" />
                 </div>
-                <div style="min-width: 25%" class="mx-1">
+                <div style="min-width: 30%" class="mx-1">
                     <div class="flex" style="max-height: 100%">
                         <div class="my-auto">
-                            <label class="block text-danger">Warning: This will remove all accommodation from the package</label>
+                            <label class="block text-danger">Warning: This will remove all accommodation from the {{ strtolower($this->getPackageType()) }}</label>
                             <button wire:click="save" class="btn btn-success">
                                 Save Changes
                             </button>

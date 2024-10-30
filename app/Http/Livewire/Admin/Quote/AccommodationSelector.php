@@ -35,4 +35,14 @@ class AccommodationSelector extends AccommodationByDateComponent
         }
         $this->toast('Accommodation Saved Successfully', 'Successfully removed accommodation and added new ones to the quote', 'success');
     }
+
+    public function getPackageType(): string
+    {
+        return 'Quote';
+    }
+
+    public function getReturnUrl(): string
+    {
+        return route('quotes.view', ['quote' => $this->quote]);
+    }
 }
