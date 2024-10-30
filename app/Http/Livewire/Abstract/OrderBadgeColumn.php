@@ -13,5 +13,7 @@ class OrderBadgeColumn extends Column
         parent::__construct();
         $this->callback = function ($value) {  return (new OrderBadge(OrderStatus::from($value)))->render(); };
         $this->exportCallback = function ($value) { return OrderStatus::from($value)->description(); };
+        $this->filterable(OrderStatus::asFilter());
+        $this->filterOn = $this->name;
     }
 }

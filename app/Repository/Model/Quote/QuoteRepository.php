@@ -44,6 +44,7 @@ use App\Repository\Storage\Itinerary\ItinerarySchedule;
 use App\Repository\Storage\Itinerary\ItineraryScheduleType;
 use App\Repository\Storage\Itinerary\ItineraryTraveller;
 use App\Repository\Storage\Quote\CustomerForConversion;
+use App\Repository\Storage\Rooming\AccommodationByDateStorage;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -954,7 +955,12 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $lead->orderCustomer = $leadTraveller;
         $order->updateQuietly(['lead_booker_id' => $leadTraveller->id,]);
         $order->saveQuietly();
-        $order->updateQuietly(['booking_reference' => Order::generateBookingReference($order)]);
+        if (flag('quote.convert.reference', false) &&
+            Order::where('booking_reference', '=', $this->quote->reference)->first() === null) {
+            $order->updateQuietly(['booking_reference' => $this->quote->reference]);
+        } else {
+            $order->updateQuietly(['booking_reference' => Order::generateBookingReference($order)]);
+        }
         $order->saveQuietly();
         foreach ($customers as $key => $customer) {
             $traveller = $order->repository->addCustomer($customer->getConvertedCustomer($this->quote), true, false, true);
@@ -1006,6 +1012,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         });
 
         $order->repository->resetInstallments();
+
+        $this->update(['quote_status' => QuoteStatus::CONVERTED->value, 'order_id' => $order->id]);
         return $order;
     }
 
@@ -1079,11 +1087,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $items = [];
         $seen = [];
 
-        foreach ($this->quote->accommodation as $component) {
-            $key = "activity-{$component->accommodation_inventory_id}";
-            if (in_array($key, $seen, true)) { continue; }
-            $seen[] = $key;
-            $item = $component->repository->getItineraryItem($travelling);
+        foreach ($this->getAccommodationForItinerary() as $item) {
             $heading = "Accommodation";
             if (!array_key_exists($heading, $items)) { $items[$heading] = []; }
             $items[$heading][] = $item;
@@ -1230,5 +1234,34 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'merchandise' => QuoteMerchandise::find($id)?->repository,
             default => null,
         };
+    }
+
+    /**
+     * @return ItineraryItem[]
+     */
+    public function getAccommodationForItinerary(): array
+    {
+        $data = [];
+        /** @var AccommodationByDateStorage[] $byDate */
+        $byDate = [];
+        foreach ($this->quote->accommodation as $component) {
+            $found = false;
+            foreach ($byDate as $storage) {
+                if ($storage->matches($component->inventory)) {
+                    $storage->addRoom($component->inventory);
+                    $found = true;
+                }
+            }
+            if (!$found) {
+                $byDate[] = AccommodationByDateStorage::createFromInventory($component->inventory);
+            }
+        }
+        foreach ($byDate as $item) {
+            $data = [
+                ...$data,
+                ...$item->getItineraryLinesForQuote($this->quote),
+            ];
+        }
+        return $data;
     }
 }

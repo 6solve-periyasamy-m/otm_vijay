@@ -4,8 +4,8 @@
             <x-livewire.input.select.customer name="payment.customer_id" value="{{ $payment?->customer_id }}" label="Customer" required width="4" />
             <x-livewire.input.select.order.payment-method name="payment.payment_method_id" value="{{ $payment?->payment_method_id }}" label="Payment Method" required width="4" />
             <x-livewire.input wire:model="payment.paid_on" type="datetime-local" label="Paid On" required width="4" />
-            <x-livewire.input wire:model="payment.amount" label="Amount" required width="6" />
-            <x-livewire.input wire:model="payment.payment_fee" label="Payment Fee" width="3" />
+            <x-livewire.input wire:model="payment.amount" label="Amount" required width="5" type="number" step="0.01" />
+            <x-livewire.input wire:model="payment.payment_fee" label="Payment Fee" width="3" type="number" step="0.01" />
             <div class="col-xl-3 flex justify-between content-center">
                 <div class="my-auto">
                     <button wire:click="deposit" class="btn btn-warning">Deposit</button>

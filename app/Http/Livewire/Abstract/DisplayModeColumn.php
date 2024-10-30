@@ -20,6 +20,6 @@ class DisplayModeColumn extends Column
                     return "";
                 }
                 return (new DisplayModeComponent($content, $type, $color))->render();
-        })->sortBy("$table.$content");
+        })->sortBy("$table.$content")->filterOn("$table.$content");
     }
 }

@@ -27,3 +27,7 @@ npm run dev creates the files in public that the website can use
   color: #833AB4 !important;
   border-color: #833AB4 !important;
 }
+
+.selected {
+  filter: brightness(80%);
+}

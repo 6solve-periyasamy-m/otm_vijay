@@ -77,7 +77,7 @@
 
 @section('content')
     <x-admin.section.header>
-        @include('partials.admin.quote.details', ['quote' => $quote])
+        <livewire:admin.quote.details :quote="$quote" />
         <div class="col-12">
             @if(isset($quote->order))
                 <a href="{{ route('orders.view', ['order' => $quote->order,]) }}" class="btn btn-warning">
@@ -89,6 +89,13 @@
                 {{ Icon::edit() }}
                 {{ __('quotes.view.buttons.edit') }}
             </a>
+            {{-- BLEEDING-EDGE: Awaiting approval --}}
+            @if(config('app.features.bleeding-edge'))
+            <a href="{{ route('quotes.accommodation', ['quote' => $quote]) }}" class="btn btn-secondary">
+                {{ Icon::accommodation() }}
+                {{ __('quotes.view.buttons.accommodation') }}
+            </a>
+            @endif
             @if($quote->status == \App\Models\Helper\Enum\QuoteStatus::AWAITING)
                 <a href="{{ route('quotes.status.approve', ['quote' => $quote,]) }}" class="btn btn-success">
                     {{ Icon::approve() }}

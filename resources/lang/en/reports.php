@@ -158,6 +158,10 @@ return [
                 'name' => 'Remaining',
                 'description' => 'The amount remaining to be paid on the order'
             ],
+            'cost_to_company' => [
+                'name' => 'Cost to Company',
+                'description' => 'The total cost to company for the order'
+            ],
             'next_payment' => [
                 'due' => [
                     'name' => 'Next Installment Due',
@@ -193,7 +197,25 @@ return [
                     'name' => 'Lead Booker Billing Address',
                     'description' => 'Billing address of the lead booker'
                 ],
+                'email_address' => [
+                    'name' => 'Lead Booker Email',
+                    'description' => 'Email address of the lead booker'
+                ],
+                'mobile_number' => [
+                    'name' => 'Lead Booker Mobile Number',
+                    'description' => 'Mobile number of the lead booker'
+                ],
             ],
+            'consultant' => [
+                'name' => [
+                    'name' => 'Consultant Name',
+                    'description' => 'The name of the consultant for the order'
+                ],
+                'email' => [
+                    'name' => 'Consultant Email',
+                    'description' => 'The email address of the consultant'
+                ],
+            ]
         ],
     ],
 ];

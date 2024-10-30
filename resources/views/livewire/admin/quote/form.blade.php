@@ -13,12 +13,12 @@
             <!-- -->
             <x-livewire.input.select.event.normal name="quote.event_id" value="{{$quote->event_id}}" label="Event" width="4" />
             <x-livewire.input.select.organization name="quote.organization_id" value="{{$quote->organization_id}}" label="Organization" width="4" />
-            <x-livewire.input wire:model="quote.commission" label="Commission" width="4" />
+            <x-livewire.input wire:model="quote.commission" label="Commission (%)" width="4" />
             <!-- -->
-            <x-livewire.input wire:model="quote.deposit" label="Deposit" width="3" />
+            <x-livewire.input wire:model="quote.deposit" label="Deposit" width="3" type="number" step="0.01" />
             <x-livewire.input.checkbox wire:model="quote.is_deposit_percentage" label="Percentage?" width="1" />
-            <x-livewire.input wire:model="pricePoint.price_per_person" label="Base Price" width="4" required />
-            <x-livewire.input wire:model="quote.single_occupancy_surcharge" label="Single Occupancy Surcharge" width="4" required />
+            <x-livewire.input wire:model="pricePoint.price_per_person" label="Base Price" width="4" required type="number" step="0.01" />
+            <x-livewire.input wire:model="quote.single_occupancy_surcharge" label="Single Occupancy Surcharge" width="4" required type="number" step="0.01" />
             <!-- -->
             <x-livewire.input.text-area wire:model="quote.description" label="Description" />
         </div>
@@ -35,7 +35,7 @@
             <x-livewire.input type="date" wire:model="quote.date_from" label="Date From" width="3" required />
             <x-livewire.input type="date" wire:model="quote.date_to" label="Date To" width="3" required />
             <x-livewire.input type="date" wire:model="quote.final_payment" label="Final Payment" width="3" required />
-            <x-livewire.input type="date" wire:model="quote.expires" label="Expires" width="3" required />
+            <x-livewire.input type="date" wire:model="quote.expires" label="Quote Expiry Date" width="3" required />
         </div>
     </x-admin.section.card>
     <x-admin.section.card>

@@ -4,7 +4,7 @@
 
 @section('content')
     <x-admin.section.header>
-        @include('partials.admin.quote.details', ['quote' => $quote])
+        <livewire:admin.quote.details :quote="$quote" />
     </x-admin.section.header>
     
     <hr class="splitter"/>

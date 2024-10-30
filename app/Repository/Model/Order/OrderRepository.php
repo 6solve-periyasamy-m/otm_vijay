@@ -33,6 +33,7 @@ use App\Repository\Storage\Itinerary\ItineraryPaymentDetails;
 use App\Repository\Storage\Itinerary\ItinerarySchedule;
 use App\Repository\Storage\Itinerary\ItineraryScheduleType;
 use App\Repository\Storage\Itinerary\ItineraryTraveller;
+use App\Repository\Storage\Rooming\AccommodationByDateStorage;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -568,6 +569,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             'next_payment_amount' => $nextPayment?->amount,
             'next_payment_remaining' => $nextPayment?->remaining,
             'commission_amount' => $this->order->commission_amount,
+            'cost_to_company' => $this->getCostToCompany(true),
             'cached' => now(),
         ]);
         $cache->save();
@@ -652,8 +654,11 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         }
     }
 
-    public function getCostToCompany(): float
+    public function getCostToCompany(bool $recache = false): float
     {
+        if (!$recache && $this->order->cache->cost_to_company !== null) {
+            return $this->order->cache->cost_to_company;
+        }
         $cost = 0;
         foreach ($this->order->orderCustomers as $orderCustomer) {
             $cost += $orderCustomer->repository->getCostToCompany();
@@ -753,16 +758,11 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     {
         $items = [];
         $seen = [];
-        foreach ($this->order->groups as $group) {
-            foreach ($group->rooms as $component) {
-                $key = "accommodation-{$component->accommodation_inventory_tour_id}";
-                if (in_array($key, $seen, true)) { continue; }
-                $seen[] = $key;
-                $item = $component->repository->getItineraryItem($this->order);
-                $start = $component->tourComponent->inventory->check_in->clone()->setTime(0,0)->unix();
-                if (!array_key_exists($start, $items)) { $items[$start] = []; }
-                $items[$start][] = $item;
-            }
+
+        foreach ($this->getAccommodationForItinerary() as $item) {
+            $heading = "Accommodation";
+            if (!array_key_exists($heading, $items)) { $items[$heading] = []; }
+            $items[$heading][] = $item;
         }
 
         foreach ($this->order->orderActivities()->groupBy('activity_inventory_tour_id')->get() as  $component) {
@@ -891,16 +891,11 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     {
         $items = [];
         $seen = [];
-        foreach ($this->order->groups as $group) {
-            foreach ($group->rooms as $component) {
-                $key = "accommodation-{$component->accommodation_inventory_tour_id}";
-                if (in_array($key, $seen, true)) { continue; }
-                $seen[] = $key;
-                $item = $component->repository->getItineraryItem($this->order);
-                $header = "Accommodation";
-                if (!array_key_exists($header, $items)) { $items[$header] = []; }
-                $items[$header][] = $item;
-            }
+
+        foreach ($this->getAccommodationForItinerary() as $item) {
+            $heading = "Accommodation";
+            if (!array_key_exists($heading, $items)) { $items[$heading] = []; }
+            $items[$heading][] = $item;
         }
 
         foreach ($this->order->orderActivities()->groupBy('activity_inventory_tour_id')->get() as  $component) {
@@ -959,5 +954,37 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         $itinerary->package = null;
         $itinerary->items = $this->getReservationComponents();
         return $itinerary;
+    }
+
+    /**
+     * @return ItineraryItem[]
+     */
+    public function getAccommodationForItinerary(): array
+    {
+        $data = [];
+        /** @var AccommodationByDateStorage[] $byDate */
+        $byDate = [];
+        foreach ($this->order->groups as $group) {
+            foreach ($group->rooms as $component) {
+                $found = false;
+                foreach ($byDate as $storage) {
+                    if ($storage->matches($component->tourComponent->inventory)) {
+                        $storage->addRoom($component->tourComponent->inventory);
+                        $found = true;
+                    }
+                }
+                if (!$found) {
+                    $byDate[] = AccommodationByDateStorage::createFromInventory($component->tourComponent->inventory);
+                }
+            }
+        }
+
+        foreach ($byDate as $item) {
+            $data = [
+                ...$data,
+                ...$item->getItineraryLinesForOrder($this->order),
+            ];
+        }
+        return $data;
     }
 }

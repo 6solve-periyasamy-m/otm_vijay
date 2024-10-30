@@ -13,6 +13,7 @@ Route::get('/create/{tour?}', [QuoteController::class, 'create'])->name('create'
 Route::post('/create/{tour}', [QuoteController::class, 'storeBasic'])->name('store-basic')->middleware('bouncer:Quote\Quote,create');
 Route::prefix('{quote}')->group(function () {
     Route::get('/', [QuoteController::class, 'view'])->name('view')->middleware('bouncer:Quote\Quote,read');
+    Route::get('/accommodation', [QuoteController::class, 'accommodation'])->name('accommodation')->middleware('bouncer:Quote\Quote,update');
     Route::get('/update', [QuoteController::class, 'edit'])->name('edit')->middleware('bouncer:Quote\Quote,update');
     Route::post('/update', [QuoteController::class, 'update'])->name('update')->middleware('bouncer:Quote\Quote,update');
     Route::get('/unlink', [QuoteComponentController::class, 'unlink'])->name('unlink')->middleware('bouncer:Quote\Quote,update');
