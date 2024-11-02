@@ -160,9 +160,12 @@ class AccommodationByDateStorage
     private function getOrderQuantity(Order $order, AccommodationInventory $inventory): int
     {
         $quantity = 0;
+        $seen = [];
         foreach ($order->orderCustomers as $customer) {
             foreach ($customer->orderAccommodation as $room) {
                 if ($room->tourComponent->accommodation_inventory_id === $inventory->id) {
+                    if (in_array($room->id, $seen)) { continue; }
+                    $seen[] = $room->id;
                     $quantity++;
                 }
             }
