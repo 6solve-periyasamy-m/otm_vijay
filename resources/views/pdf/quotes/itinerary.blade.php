@@ -638,9 +638,7 @@ figure.table tr td:nth-child(2) {display:none;}
             </table>
         </div>
     </div>
-  @endforeach
-  
-   
+  @endforeach 
   @endif
   </div>
   <!-- </section> -->
