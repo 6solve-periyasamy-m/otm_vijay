@@ -537,52 +537,53 @@ figure.table tr td:nth-child(2) {display:none;}
     @endphp
     
   @foreach($itinerary->items['Transfers'] as $transport)
-
-    <div class="single-module"  style="margin-bottom:-15px;">
-      @if($firstLoop)
-          <div class="heading-module">
-              <h3   style="margin-top:10px;">
-                  <span class="mark"></span>
-                  <span class="text">TRANSPORT</span>
-              </h3>
+    @if(isset($transfers->details['Quantity']) && $transfers->details['Quantity'] > 0)
+      <div class="single-module"  style="margin-bottom:-15px;">
+        @if($firstLoop)
+            <div class="heading-module">
+                <h3   style="margin-top:10px;">
+                    <span class="mark"></span>
+                    <span class="text">TRANSPORT</span>
+                </h3>
+            </div>
+            @php
+                $firstLoop = false;
+            @endphp
+        @endif
+          <div class="details-module">
+              <table>
+                  <tbody>
+                    <tr>
+                      <td class="item-header" style="width: 125px">
+                        <strong> Service: </strong>
+                      </td>
+                      <td class="item-detail">
+                        {{ $transport->name }}
+                      </td>
+                    </tr>
+                      @php
+                        $disable_items = ['Description', 'Transport', 'Travel Class'];
+                      @endphp
+                      @foreach($transport->details as $key => $value)
+                      @php
+                        $classch = $key == 'Description' ? 'posclas' : '';
+                      @endphp
+                          @if (!in_array($key, $disable_items))
+                            <tr>
+                                <td class="item-header" style="width: 125px">
+                                    <strong>{{ $key }}:</strong>
+                                </td>
+                                <td class="item-detail <?php echo $classch;?>">
+                                  {{ $value }}
+                                </td>
+                            </tr>
+                          @endif
+                      @endforeach
+                  </tbody>
+              </table>
           </div>
-          @php
-              $firstLoop = false;
-          @endphp
-      @endif
-        <div class="details-module">
-            <table>
-                <tbody>
-                  <tr>
-                    <td class="item-header" style="width: 125px">
-                      <strong> Service: </strong>
-                    </td>
-                    <td class="item-detail">
-                      {{ $transport->name }}
-                    </td>
-                  </tr>
-                    @php
-                      $disable_items = ['Description', 'Transport', 'Travel Class'];
-                    @endphp
-                    @foreach($transport->details as $key => $value)
-                    @php
-                      $classch = $key == 'Description' ? 'posclas' : '';
-                    @endphp
-                        @if (!in_array($key, $disable_items))
-                          <tr>
-                              <td class="item-header" style="width: 125px">
-                                  <strong>{{ $key }}:</strong>
-                              </td>
-                              <td class="item-detail <?php echo $classch;?>">
-                                {{ $value }}
-                              </td>
-                          </tr>
-                        @endif
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
+      </div>
+    @endif
   @endforeach
 @endif  
 @if(!empty($itinerary->items['Accommodation']))
