@@ -950,6 +950,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'deposit' => $this->quote->getDepositAmount(),
             'commission' => $lead->getCustomer()->organization?->commission,
             'ordered_on' => now(),
+            'internal_notes' => $this->quote->internal_notes,
+            'external_notes' => $this->quote->external_notes,
         ]);
         $leadTraveller = $order->repository->addCustomer($lead->getConvertedCustomer($this->quote), true, false, true);
         $lead->orderCustomer = $leadTraveller;
