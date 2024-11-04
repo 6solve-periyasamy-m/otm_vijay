@@ -284,9 +284,9 @@ class TransportInventoryTourRepository extends InventoryTourRepository
         return TransportInventoryTour::find($id);
     }
 
-    public function getItineraryItem(): ItineraryItem
+    public function getItineraryItem(int|null $quantity = null): ItineraryItem
     {
-        return $this->getInventory()?->getItineraryItem();
+        return $this->getInventory()?->getItineraryItem($quantity);
     }
 
     public function getOverview(): string
