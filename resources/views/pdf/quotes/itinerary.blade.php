@@ -536,7 +536,7 @@ figure.table tr td:nth-child(2) {display:none;}
       $firstLoop = true;
     @endphp
     
-  @foreach($itinerary->items['Transfers'] as $transfers)
+  @foreach($itinerary->items['Transfers'] as $transport)
 
     <div class="single-module"  style="margin-bottom:-15px;">
       @if($firstLoop)
@@ -558,17 +558,17 @@ figure.table tr td:nth-child(2) {display:none;}
                       <strong> Service: </strong>
                     </td>
                     <td class="item-detail">
-                      {{ $transfers->name }}
+                      {{ $transport->name }}
                     </td>
                   </tr>
                     @php
-                      $hide_items = ['Description', 'Transport', 'Travel Class'];
+                      $disable_items = ['Description', 'Transport', 'Travel Class'];
                     @endphp
-                    @foreach($transfers->details as $key => $value)
+                    @foreach($transport->details as $key => $value)
                     @php
                       $classch = $key == 'Description' ? 'posclas' : '';
                     @endphp
-                        @if (!in_array($key, $hide_items))
+                        @if (!in_array($key, $disable_items))
                           <tr>
                               <td class="item-header" style="width: 125px">
                                   <strong>{{ $key }}:</strong>
