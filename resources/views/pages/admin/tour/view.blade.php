@@ -79,12 +79,19 @@
                         <span>Edit Tour</span>
                     </a>
                 @endcan
-                @can('create', \App\Models\Quote\Quote::class)
-                    <a class="btn btn-primary" href="{{route('quotes.create', ['tour' => $tour,])}}">
-                        {{ Icon::quote() }}
-                        <span>Create Quote</span>
+                @can('create', \App\Models\Tour\Tour::class)
+                    <a class="btn btn-primary" href="{{route('tours.create', ['tour' => $tour,])}}">
+                        {{ Icon::tour() }}
+                        <span>Create Tour</span>
                     </a>
                 @endcan
+                    {{-- BLEEDING-EDGE: Awaiting approval --}}
+                    @if(config('app.features.bleeding-edge'))
+                        <a href="{{ route('tours.accommodation', ['tour' => $tour]) }}" class="btn btn-secondary">
+                            {{ Icon::accommodation() }}
+                            {{ __('tours.view.buttons.accommodation') }}
+                        </a>
+                    @endif
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#optionTour">
                     {{ Icon::options() }}
                     <span>Options</span>
