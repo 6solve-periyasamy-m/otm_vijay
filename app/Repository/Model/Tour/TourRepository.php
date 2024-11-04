@@ -36,6 +36,7 @@ use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
 use App\Repository\Model\Activity\ActivityInventoryRepository;
 use App\Repository\Model\Merchandise\MerchandiseInventoryRepository;
 use App\Repository\Model\Merchandise\MerchandiseInventoryTourRepository;
+use App\Repository\Model\Transport\TransportInventoryRepository;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use App\Repository\Reporting\Manifest\FlightManifestRepository;
 use App\Repository\Reporting\Manifest\TransportManifestRepository;
@@ -645,7 +646,15 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 $components[] = $component->inventory->repository;
             }
         }
-        usort($components, function (InventoryRepository $a, InventoryRepository $b) {
+        foreach ($this->tour->transportInventoryTours as $component) {
+            $key = 'transport-' .  $component->inventory->component->id;
+            if (in_array($key, $seen)) { continue; }
+            $seen[] = $key;
+            if ($component->tour_component_type === 'Included') {
+                $components[] = $component->inventory->repository;
+            }
+        }
+        usort($components, static function (InventoryRepository $a, InventoryRepository $b) {
             return $a->getStartTime()?->unix() <=> $b->getStartTime()?->unix();
         });
         $inclusions = [];
@@ -660,9 +669,11 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                     $component->getStartTime()?->format('d M Y') . " - " . $component->get()->activity->name,
                 $component instanceof MerchandiseInventoryRepository =>
                     $component->get()->component->name,
+                $component instanceof TransportInventoryRepository =>
+                    $component->get()->component->name,
                 default => null,
             };
-            // TODO: Implement Flights, Transport
+            // TODO: Implement Flights
             if ($inclusion !== null) {
                 $inclusions[] = $inclusion;
                 $limit--;

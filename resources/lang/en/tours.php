@@ -8,6 +8,11 @@ return [
             'update' => 'Update Tour',
         ],
     ],
+    'view' => [
+        'buttons' => [
+            'accommodation' => 'Edit Hotels',
+        ],
+    ],
     'costing' => [
         'view' => [
             'cards' => [

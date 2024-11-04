@@ -68,16 +68,20 @@ class TourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
+    public function accommodation(Tour $tour)
+    {
+        return view('pages.admin.tour.accommodation', ['tour' => $tour,]);
+    }
+
     public function view($tour)
     {
-        $tour = Tour::with(
+        $tour = Tour::with([
             'accommodationInventoryTours', 'accommodationInventoryTours.inventory','accommodationInventoryTours.inventory.roomType','accommodationInventoryTours.inventory.boardType', 'accommodationInventoryTours.inventory.component',
             'activityInventoryTours', 'activityInventoryTours.inventory','activityInventoryTours.inventory.ticketType', 'activityInventoryTours.inventory.component', 'activityInventoryTours.inventory.component.activityType',
             'flightInventoryTours', 'flightInventoryTours.inventory', 'flightInventoryTours.inventory.component', 'flightInventoryTours.inventory.component.airline', 'flightInventoryTours.inventory.component.departureAirport', 'transportInventoryTours.inventory.component.arrivalAddress',
             'transportInventoryTours', 'transportInventoryTours.inventory', 'transportInventoryTours.inventory.travelClass', 'transportInventoryTours.inventory.component', 'transportInventoryTours.inventory.component.operator', 'transportInventoryTours.inventory.component.departureAddress', 'transportInventoryTours.inventory.component.arrivalAddress',
             'merchandise', 'merchandise.inventory', 'merchandise.inventory.size', 'merchandise.inventory.variant', 'merchandise.inventory.component', 'merchandise.inventory.component.type',
-            'paymentInstallments', 'orders', 'orders.leadBooker'
-        )->find($tour);
+            'paymentInstallments', 'orders', 'orders.leadBooker'])->find($tour);
         if (!isset($tour)) abort(404);
         return view('pages.admin.tour.view', ['tour' => $tour,]);
     }

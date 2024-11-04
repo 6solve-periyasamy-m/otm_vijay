@@ -89,6 +89,13 @@
                 {{ Icon::edit() }}
                 {{ __('quotes.view.buttons.edit') }}
             </a>
+            {{-- BLEEDING-EDGE: Awaiting approval --}}
+            @if(config('app.features.bleeding-edge'))
+            <a href="{{ route('quotes.accommodation', ['quote' => $quote]) }}" class="btn btn-secondary">
+                {{ Icon::accommodation() }}
+                {{ __('quotes.view.buttons.accommodation') }}
+            </a>
+            @endif
             @if($quote->status == \App\Models\Helper\Enum\QuoteStatus::AWAITING)
                 <a href="{{ route('quotes.status.approve', ['quote' => $quote,]) }}" class="btn btn-success">
                     {{ Icon::approve() }}
