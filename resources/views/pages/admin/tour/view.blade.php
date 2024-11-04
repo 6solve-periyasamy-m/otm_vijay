@@ -79,10 +79,10 @@
                         <span>Edit Tour</span>
                     </a>
                 @endcan
-                @can('create', \App\Models\Tour\Tour::class)
-                    <a class="btn btn-primary" href="{{route('tours.create', ['tour' => $tour,])}}">
-                        {{ Icon::tour() }}
-                        <span>Create Tour</span>
+                @can('create', \App\Models\Quote\Quote::class)
+                    <a class="btn btn-primary" href="{{route('quotes.create', ['tour' => $tour,])}}">
+                        {{ Icon::quote() }}
+                        <span>Create Quote</span>
                     </a>
                 @endcan
                     {{-- BLEEDING-EDGE: Awaiting approval --}}
