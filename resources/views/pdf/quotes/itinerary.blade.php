@@ -309,7 +309,7 @@ h4 span.mark {
     position:relative;
     top:5px;
 }
-.single-module table td.item-detail.posclas strong{
+.single-module table td.item-detail.desc-pos-top strong{
   top:5px;
 }
 .customer-agent-details {position:relative;}
@@ -566,14 +566,14 @@ figure.table tr td:nth-child(2) {display:none;}
                       @endphp
                       @foreach($transport->details as $key => $value)
                       @php
-                        $classch = $key == 'Description' ? 'posclas' : '';
+                        $class_desc_pos = $key == 'Description' ? 'desc-pos-top' : '';
                       @endphp
                           @if (!in_array($key, $disable_items))
                             <tr>
                                 <td class="item-header" style="width: 125px">
                                     <strong>{{ $key }}:</strong>
                                 </td>
-                                <td class="item-detail <?php echo $classch;?>">
+                                <td class="item-detail <?php echo $class_desc_pos;?>">
                                   {{ $value }}
                                 </td>
                             </tr>
@@ -614,14 +614,14 @@ figure.table tr td:nth-child(2) {display:none;}
                 <tbody>
                     @foreach($accommodation->details as $key => $value)
                     @php
-                      $classch = $key == 'Description' ? 'posclas' : '';
+                      $class_desc_pos = $key == 'Description' ? 'desc-pos-top' : '';
                     @endphp
                         @continue(empty($value))
                         <tr>
                             <td class="item-header" style="width: 125px">
                                 <strong>{{ $key }}:</strong>
                             </td>
-                            <td class="item-detail <?php echo $classch;?>">
+                            <td class="item-detail <?php echo $class_desc_pos;?>">
                                 @if(is_array($value))
                                     @if(isset($value['attributes']['address_line_1']))
                                         {{ $value['attributes']['address_line_1'] }}
