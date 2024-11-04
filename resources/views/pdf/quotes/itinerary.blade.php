@@ -458,6 +458,12 @@ figure.table tr td:nth-child(2) {display:none;}
         page-break-inside: avoid;
     }  */
       /* #static-pages {page-break-inside: avoid;} */
+.mb-n15{
+  margin-bottom:-15px;
+}
+.w-125{
+  width: 125px;
+}
 </style>
 
    
@@ -538,7 +544,7 @@ figure.table tr td:nth-child(2) {display:none;}
     
   @foreach($itinerary->items['Transfers'] as $transport)
     @if(isset($transfers->details['Quantity']) && $transfers->details['Quantity'] > 0)
-      <div class="single-module"  style="margin-bottom:-15px;">
+      <div class="single-module mb-n15">
         @if($firstLoop)
             <div class="heading-module">
                 <h3   style="margin-top:10px;">
@@ -554,7 +560,7 @@ figure.table tr td:nth-child(2) {display:none;}
               <table>
                   <tbody>
                     <tr>
-                      <td class="item-header" style="width: 125px">
+                      <td class="item-header w-125">
                         <strong> Service: </strong>
                       </td>
                       <td class="item-detail">
@@ -570,7 +576,7 @@ figure.table tr td:nth-child(2) {display:none;}
                       @endphp
                           @if (!in_array($key, $disable_items))
                             <tr>
-                                <td class="item-header" style="width: 125px">
+                                <td class="item-header w-125">
                                     <strong>{{ $key }}:</strong>
                                 </td>
                                 <td class="item-detail <?php echo $class_desc_pos;?>">
@@ -593,7 +599,7 @@ figure.table tr td:nth-child(2) {display:none;}
     
   @foreach($itinerary->items['Accommodation'] as $accommodation)
 
-    <div class="single-module"  style="margin-bottom:-15px;">
+    <div class="single-module mb-n15">
       @if($firstLoop)
           <div class="heading-module">
               <h3   style="margin-top:10px;">
@@ -618,7 +624,7 @@ figure.table tr td:nth-child(2) {display:none;}
                     @endphp
                         @continue(empty($value))
                         <tr>
-                            <td class="item-header" style="width: 125px">
+                            <td class="item-header w-125">
                                 <strong>{{ $key }}:</strong>
                             </td>
                             <td class="item-detail <?php echo $class_desc_pos;?>">
