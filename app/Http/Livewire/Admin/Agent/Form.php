@@ -1,0 +1,57 @@
+<?php
+
+namespace App\Http\Livewire\Admin\Agent;
+use App\Models\Customer\Agent;
+use LivewireUI\Modal\ModalComponent;
+
+use App\Http\Livewire\Abstract\LivewireForm;
+use App\Http\Livewire\SendsEvents;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+
+class AgentFormComponent extends ModalComponent
+{
+    use SendsEvents;
+    use LivewireForm;
+
+    /**
+     * @var Agent $agent
+     */
+    public $agent;
+
+
+    public function mount(Agent|int|null $agent = null): void
+    {
+        if (is_int($agent)) {
+            $agent = Agent::find($agent);
+        }
+        if ($agent === null) {
+            $agent = new Agent();
+        }
+        $this->agent = $agent;
+    }
+
+    public function save(): void
+    {
+        $this->agent->organization()->associate($this->organization);
+        $this->agent->organization->save();
+        $this->agent->save();
+        $this->refreshTables();
+        $this->closeModal();
+    }
+
+    public function render(): Factory|View|Application
+    {
+        return view('livewire.admin.organization.agent.form');
+    }
+
+    public function rules(): array
+    {
+        return [
+            'agent.first_name' => 'required',
+            'agent.last_name' => 'required',
+            'agent.email' => 'nullable',
+        ];
+    }
+}
