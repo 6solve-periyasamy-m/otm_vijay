@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->foreignId('organization_id')->nullable()->constrained()->onDelete('set null');
-            $table->decimal('commission', 5, 2)->nullable();
         });
     }
 
