@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdditionalCostController;
 use App\Http\Controllers\Admin\AuthenticationController;
 use App\Http\Controllers\Admin\OrganizationController;
+use App\Http\Controllers\Admin\AgentController;
 use App\Http\Controllers\Admin\Reporting\BespokeReportController;
 use App\Http\Controllers\Admin\System\ImportController;
 use App\Http\Controllers\Admin\System\MailController;
@@ -124,6 +126,17 @@ Route::middleware('auth:web')->group(function () {
             Route::get('/update', [OrganizationController::class, 'edit'])->name('organizations.edit')->middleware('bouncer:Customer\Customer,update');
             Route::post('/update', [OrganizationController::class, 'update'])->name('organizations.update')->middleware('bouncer:Customer\Customer,update');
             Route::post('/delete', [OrganizationController::class, 'destroy'])->name('organizations.delete')->middleware('bouncer:Customer\Customer,delete');
+        });
+    });
+    Route::prefix('agents')->group(function () {
+        Route::get('/', [AgentController::class, 'index'])->name('agents.all');
+        Route::get('/create', [AgentController::class, 'create'])->name('agents.create');
+        Route::post('/create', [AgentController::class, 'store'])->name('agents.store');
+        Route::prefix('{agent}')->group(function () {
+            Route::get('/', [AgentController::class, 'view'])->name('agents.view');
+            Route::get('/update', [AgentController::class, 'edit'])->name('agents.edit');
+            Route::post('/update', [AgentController::class, 'update'])->name('agents.update');
+            Route::post('/delete', [AgentController::class, 'destroy'])->name('agents.delete');
         });
     });
 

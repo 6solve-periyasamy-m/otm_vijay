@@ -3,6 +3,7 @@
 namespace App\Models\Quote;
 
 use App\Models\Customer\Organization;
+use App\Models\Customer\Agent;
 use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Helper\Model;
 use App\Models\Helper\Traits\HasAdditionalCosts;
@@ -182,6 +183,11 @@ class Quote extends Model
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class, 'organization_id');
+    }
+
+    public function agent(): BelongsTo
+    {
+        return $this->belongsTo(Agent::class, 'agent_id');
     }
 
     public function leadTraveller(): BelongsTo

@@ -12,8 +12,13 @@
             <x-livewire.input.select.user name="quote.consultant_id" value="{{$quote->consultant_id ?? get_current_admin()?->id}}" label="Consultant" width="3" />
             <!-- -->
             <x-livewire.input.select.event.normal name="quote.event_id" value="{{$quote->event_id}}" label="Event" width="4" />
+        </div>
+        <div class="row">
             <x-livewire.input.select.organization name="quote.organization_id" value="{{$quote->organization_id}}" label="Organization" width="4" />
             <x-livewire.input wire:model="quote.commission" label="Commission (%)" width="4" />
+            <x-livewire.input.select.agent name="quote.agent_id" value="{{$quote->agent_id}}" label="Agent" width="4" />
+        </div>
+        <div class="row">
             <!-- -->
             <x-livewire.input wire:model="quote.deposit" label="Deposit" width="3" type="number" step="0.01" />
             <x-livewire.input.checkbox wire:model="quote.is_deposit_percentage" label="Percentage?" width="1" />

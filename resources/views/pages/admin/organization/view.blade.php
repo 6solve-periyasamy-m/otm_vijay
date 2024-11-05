@@ -67,10 +67,100 @@
             </x-admin.section.card>
         </div>
         <hr class="splitter" />
+        @if($organization->agents)
         <div class="col-xl-12">
             <x-admin.section.card>
                 <x-slot:title>
-                    Organization Members
+                    Organization Agents
+                </x-slot:title>
+                <table class="table datatable table-striped order-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Contact</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Orders</th>
+                        <th scope="col">Quotes</th>
+                    </tr>
+                    </thead>
+                    @foreach($organization->agents as $agent)
+                        <tr>
+                            <th scope="row"><a href="{{ route('agents.view', ['agent' => $agent,]) }}">{{ $agent->first_name . ' ' . $agent->last_name }}</a></th>
+                            <td>{{ $agent->first_name . ' ' . $agent->last_name }}</td>
+                            <td>{{ $agent->email }}</td>
+                            <td>:CHECK:{{ $agent->organization->orders()->count() }}</td>
+                            <td>:CHECK:{{ $agent->organization->quotes()->count() }}</td>
+                        </tr>
+                    @endforeach
+                </table>
+            </x-admin.section.card>
+        </div>
+        @endif
+        @if($organization->agentOrders) 
+        <div class="col-xl-6">
+            <x-admin.section.card>
+                <x-slot:title>
+                    Agent Orders
+                </x-slot:title>
+                <table class="table datatable table-striped order-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Booking Reference</th>
+                        <th scope="col">Tour Name</th>
+                        <th scope="col">Lead</th>
+                        <th scope="col">Ordered On</th>
+                        <th scope="col">Tour Cost</th>
+                        <th scope="col">Order Status</th>
+                    </tr>
+                    </thead>
+                    @foreach($organization->agentOrders as $order)
+                        <tr>
+                            <th scope="row"><a href="{{ route('orders.view', ['order' => $order,]) }}">{{ $order->booking_reference }}</a></th>
+                            <td>{{ $order->tour->name }}</td>
+                            <td>{{ $order->leadBooker->customer_name }}</td>
+                            <td>{{ f_datetime($order->ordered_on) }}</td>
+                            <td>{{ f_currency($order->total) }}</td>
+                            <td><h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6></td>
+                        </tr>
+                    @endforeach
+                </table>
+            </x-admin.section.card>
+        </div>
+        @endif
+        @if($organization->agentQuotes)
+        <div class="col-xl-6">
+            <x-admin.section.card>
+                <x-slot:title>
+                    Agent Quotes
+                </x-slot:title>
+                <table class="table datatable table-striped order-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Quote Reference</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Lead</th>
+                        <th scope="col">Expiry Date</th>
+                        <th scope="col">Quote Status</th>
+                    </tr>
+                    </thead>
+                    @foreach($organization->agentQuotes as $quote)
+                        <tr>
+                            <th scope="row"><a href="{{ route('quotes.view', ['quote' => $quote,]) }}">{{ $quote->ref }}</a></th>
+                            <td>{{ $quote->name }}</td>
+                            <td>{{ $quote->leadTraveller->name }}</td>
+                            <td>{{ f_date($quote->expires) }}</td>
+                            <td>{{ $quote->status->badge() }}</td>
+                        </tr>
+                    @endforeach
+                </table>
+            </x-admin.section.card>
+        </div>
+        @endif
+        <hr class="splitter" />
+        <div class="col-xl-12">
+            <x-admin.section.card>
+                <x-slot:title>
+                    Organization Members (agents as non-travelling lead booker)
                 </x-slot:title>
                 <table class="table datatable table-striped order-table">
                     <thead>

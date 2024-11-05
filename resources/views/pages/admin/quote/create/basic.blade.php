@@ -14,6 +14,8 @@
     </div>
     <x-livewire.input name="single_occupancy_surcharge" width="4" label="Single Occupancy Surcharge" value="{{ $tour->single_occupancy_surcharge }}"/>
     <x-livewire.input.select.organization name="organization_id" label="Organization (Optional)" width="4"/>
+    <x-livewire.input.select.agent name="agent_id" label="Agent (Optional)" width="4"/>
+    
     <x-livewire.input.select.tax-bracket name="tax_bracket_id" value="{{ $tour->tax_bracket_id }}" label="Tax Bracket" width="4"/>
     <hr class="splitter">
     <x-livewire.input.text-area name="internal_notes" width="6" label="Internal Notes" />
