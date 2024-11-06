@@ -35,14 +35,14 @@
         "ts-loader": "^9.4.4"
     },
     "__comments": {
-        "puppeteer": "Do not update beyond 17.x, browsershot breaks for now, as of Sept 2023"
+        "puppeteer": "Puppeteer 17.x, which we maintained as browsershot broke, no longer supported, test with current version"
     },
     "dependencies": {
         "chart.js": "^4.3.3",
         "ckeditor5": "^42.0.1",
         "luxon": "^3.5.0",
         "pretty-checkbox": "^3.0.3",
-        "puppeteer": "^17.0.0",
+        "puppeteer": "^23.7.0",
         "select2": "^4.1.0-rc.0"
     }
 }
