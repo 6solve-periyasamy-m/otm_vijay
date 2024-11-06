@@ -1110,7 +1110,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $key = "flight-{$component->flight_inventory_id}";
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
-            $item = $component->repository->getItineraryItem($travelling);
+            $item = $component->repository->getItineraryItem($component->quantity ?? $travelling);
             $heading = "Flights";
             if (!array_key_exists($heading, $items)) { $items[$heading] = []; }
             $items[$heading][] = $item;
@@ -1120,7 +1120,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $key = "transport-{$component->transport_inventory_id}";
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
-            $item = $component->repository->getItineraryItem($travelling);
+            $item = $component->repository->getItineraryItem($component->quantity ?? $travelling);
             $heading = "Transfers";
             if (!array_key_exists($heading, $items)) { $items[$heading] = []; }
             $items[$heading][] = $item;
