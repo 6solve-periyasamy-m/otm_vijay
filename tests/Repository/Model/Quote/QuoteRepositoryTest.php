@@ -151,10 +151,14 @@ class QuoteRepositoryTest extends AuthenticationTestCase
         $quantities = [];
         
         // Accommodation
+        $seen = [];
         foreach ($order->orderCustomers as $traveller) {
             foreach ($traveller->orderAccommodation as $room) {
                 $inventory = $room->accommodationInventoryTour->accommodation_inventory_id;
-                $quantities[$inventory] = ($quantities[$inventory] ?? 0) + 1;
+                if (!in_array($room->id, $seen)) {
+                    $quantities[$inventory] = ($quantities[$inventory] ?? 0) + 1;
+                    $seen[] = $room->id;
+                }
             }
         }
         foreach ($quote->accommodation as $accommodation) {
