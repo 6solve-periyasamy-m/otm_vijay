@@ -1010,6 +1010,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             }
         }
 
+        $order->refresh();
+
         OrderAccommodation::withoutEvents(function () use ($order)  {
             $this->convertAssignedRooming($order);
         });
@@ -1030,6 +1032,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
      */
     private function convertAssignedRooming(Order $order): void
     {
+        $order = $order->refresh(); // Validate you have correct information
         /** @var array<int, Carbon> $lastDates List of order-customer ids and their last active room */
         $lastDates = [];
         foreach ($this->getRoomsByStartDate() as $room) {
