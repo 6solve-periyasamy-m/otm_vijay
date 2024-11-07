@@ -4,12 +4,12 @@
 We have a docker-compose setup ready for use, if you wish to use that. However, if you wish to run it locally, you will need, at a bare minimum:
 
 - MySQL (Due to optimizations, the system is currently incompatible with Sqlite or Postgres)
-- PHP 8.1 (Requires the following extensions be enabled)
-  - php8.1-intl
-  - php8.1-json
-  - php8.1-pdo
-  - php8.1-zip
-  - php8.1-gd
+- PHP 8.3 (Requires the following extensions be enabled)
+  - php8.3-intl
+  - php8.3-json
+  - php8.3-pdo
+  - php8.3-zip
+  - php8.3-gd
 - NPM and NodeJS (latest)
 - PDFTK (Optional, required for working with ATOL certificates)
 
