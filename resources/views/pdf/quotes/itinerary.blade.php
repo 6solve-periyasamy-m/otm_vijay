@@ -64,7 +64,7 @@
 @endphp
 <?php 
   //var_dump(generateFontFaceCSS($fonts));
-  //var_dump($itinerary);
+  //var_dump($itinerary->finances);
   //var_dump(setting('customization.documentation.colors'));
 ?>
 
@@ -669,7 +669,8 @@ figure.table tr td:nth-child(2) {display:none;}
                         @endphp
                     @endif
                     <h4>   
-                        <span class="text">{!! $item->name ?? $evename !!}</span>
+                        <!-- <span class="text">{!! $item->name ?? $evename !!}</span> -->
+                        <span class="text">{!! $evename !!}</span>
                         <span class="mark"></span>
                     </h4> 
                     <div class="details-module">
@@ -838,10 +839,15 @@ figure.table tr td:nth-child(2) {display:none;}
     </thead>
     <tbody>
       @foreach ($itinerary->finances->schedule as $installment)
-        <tr>
+      <tr>
           <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
           <td>{{ f_currency($installment->amount) }}</td>
-          <td>{{ optional($installment->due)->format('d M Y') ?? 'Now' }}</td>
+          <td>@if($installment->paid)
+                  PAID
+              @elseif(!is_null(optional($installment->due)))
+                  {{ optional($installment->due)->format('d M Y') }}
+              @endif
+            </td>
         </tr>
       @endforeach
     </tbody>
