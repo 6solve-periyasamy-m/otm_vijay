@@ -500,7 +500,6 @@
         @php
             $billables = $invoice->repository->getItemsByQuantity(); 
             $counter = 1;
-            $billable_description  = '';
         @endphp
 
         @foreach($billables as $b_index => $billable)
@@ -508,23 +507,7 @@
             @continue($billable->isGroupedBase())
             <tr>
                 <td>{{$counter}}</td>
-                <td>
-                    @if (strpos($billable->shared_key, "transport") !== false)
-                        @php
-                            $billable_description = preg_replace('/\([^)]+ to [^)]+\)/', '', $billable->description, 1);
-                            preg_match('/\((\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2})\)/', $billable_description, $matches);
-                            if (preg_match('/\((\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2})\)/', $billable_description, $matches)) {
-                                $start_date = $matches[1];
-                                $end_date = $matches[3];
-                                $invoice_date = ($start_date === $end_date) ? $start_date : "$start_date to $end_date";
-                                $billable_description = preg_replace('/\((\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2})\)/', "($invoice_date)", $billable_description);
-                            }
-                        @endphp
-                        {{ $billable_description }}
-                    @else
-                        {{$billable->description}}
-                    @endif
-                </td>
+                <td>{{$billable->description}}</td>
                 <td>{{$billable->getQuantity()}}</td>
             </tr>
             @php $counter++; @endphp
