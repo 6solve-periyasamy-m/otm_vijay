@@ -77,7 +77,6 @@
                     <thead>
                     <tr>
                         <th scope="col">Name</th>
-                        <th scope="col">Contact</th>
                         <th scope="col">Email</th>
                         <th scope="col">Orders</th>
                         <th scope="col">Quotes</th>
@@ -85,7 +84,6 @@
                     </thead>
                     @foreach($organization->agents as $agent)
                         <tr>
-                            <th scope="row"><a href="{{ route('agents.view', ['agent' => $agent,]) }}">{{ $agent->first_name . ' ' . $agent->last_name }}</a></th>
                             <td>{{ $agent->first_name . ' ' . $agent->last_name }}</td>
                             <td>{{ $agent->email }}</td>
                             <td>:CHECK:{{ $agent->organization->orders()->count() }}</td>

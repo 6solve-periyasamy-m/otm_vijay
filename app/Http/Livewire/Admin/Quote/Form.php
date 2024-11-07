@@ -8,6 +8,7 @@ use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
 use App\Models\Quote\QuoteProspect;
 use App\Models\System\LargeTextTemplate;
+use App\Models\Customer\Agent;
 use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 
@@ -59,7 +60,9 @@ class Form extends Component
     public function inputChanged(string|null $key = null)
     {
         if ($key === 'quote.organization_id') {
-            $this->quote->commission = $this->quote->organization?->commission ?? $this->quote->commission;
+            $this->quote->commission = $this->quote->organization?->commission ? $this->quote->organization?->commission : null;
+            $this->quote->agents = Agent::where('organization_id', $this->quote->organization->id)->get();
+            \Log::info('inputChanged!', [$key, $this->quote->agents]);
         }
 
         if ($key === 'quote.commission') {
