@@ -543,7 +543,7 @@ figure.table tr td:nth-child(2) {display:none;}
     @endphp
     
   @foreach($itinerary->items['Transfers'] as $transport)
-    @if(isset($transfers->details['Quantity']) && $transfers->details['Quantity'] > 0)
+    @if(isset($transport->details['Quantity']) && $transport->details['Quantity'] > 0)
       <div class="single-module mb-n15">
         @if($firstLoop)
             <div class="heading-module">
