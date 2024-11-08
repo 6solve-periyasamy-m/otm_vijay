@@ -33,7 +33,7 @@ class AccommodationSelector extends AccommodationByDateComponent
         $quote->accommodation()->delete();
         foreach ($this->fetchData() as $data) {
             if ($this->selected($data)) {
-                $data->addToQuote($quote);
+                $data->addToQuote($quote, $this->getQuantity($data));
             }
         }
         $this->toast('Accommodation Saved Successfully', 'Successfully removed accommodation and added new ones to the quote', 'success');
@@ -84,7 +84,7 @@ class AccommodationSelector extends AccommodationByDateComponent
                 if ($quantity < 1) {
                     unset($this->selected[$key]);
                 } else {
-                    $data[$quantity] = $quantity;
+                    $data['quantity'] = $quantity;
                     $this->selected[$key] = $data;
                 }
             }

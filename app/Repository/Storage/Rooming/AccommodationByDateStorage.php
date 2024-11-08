@@ -173,10 +173,11 @@ class AccommodationByDateStorage
         return $quantity;
     }
 
-    public function addToQuote(Quote $quote): void
+    public function addToQuote(Quote $quote, int|null $quantity = null): void
     {
         foreach ($this->inventory as $inventory) {
-            $inventory->repository->addToQuote($quote, 'Included');
+            $item = $inventory->repository->addToQuote($quote, 'Included');
+            $item?->update(['quantity' => $quantity]);
         }
     }
 
