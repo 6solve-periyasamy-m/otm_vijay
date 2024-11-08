@@ -48,11 +48,11 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Tour</p>
-            <h6 class="fw-bold">{{ $order->tour->name }}</h6>
+            <h6 class="fw-bold">{{ $order->tour?->name ?? "Tour Deleted" }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Tour Date</p>
-            <h6 class="fw-bold">{{ f_date($order->tour->date_from) . " to " . f_date($order->tour->date_to) }}</h6>
+            <h6 class="fw-bold">{{ $order->tour !== null ? f_date($order->tour->date_from) . " to " . f_date($order->tour->date_to) : "Tour Deleted" }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Order Status</p>
@@ -414,7 +414,7 @@
                         @endforeach
                         <tr>
                             <th scope="row">Remaining Balance</th>
-                            <td>{{ f_date($order->tour->final_payment) }}</td>
+                            <td>{{ f_date($order->tour?->final_payment) }}</td>
                             <td>{{ f_currency($order->remaining_installment) }} ({{ $order->remaining_percentage }}%)</td>
                             <td> {{ f_currency($order->paid) }} </td>
                             <td>
@@ -430,9 +430,11 @@
                                 {{ $covering !== null ? f_datetime($covering->paid_on) : "Not Paid" }}
                             </td>
                             <td class="actions">
+                                @if($order->tour !== null)
                                 <a href="{{route('tours.edit', ['tour' => $order->tour,])}}" title="Edit" class="btn btn-outline-success btn-sm mb-1">
                                     {{ Icon::edit() }}
                                 </a>
+                                @endif
                             </td>
                         </tr>
                     </table>
