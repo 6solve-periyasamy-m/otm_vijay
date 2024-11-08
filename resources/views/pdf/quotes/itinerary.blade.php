@@ -549,7 +549,7 @@ figure.table tr td:nth-child(2) {display:none;}
             <div class="heading-module">
                 <h3   style="margin-top:10px;">
                     <span class="mark"></span>
-                    <span class="text">TRANSPORT</span>
+                    <span class="text">Transport</span>
                 </h3>
             </div>
             @php
