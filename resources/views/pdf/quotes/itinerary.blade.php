@@ -537,61 +537,7 @@ figure.table tr td:nth-child(2) {display:none;}
 <div class="heading-2">
 	  <h2>Package inclusions</h2> 
   </div>
-@if(!empty($itinerary->items['Accommodation']))
-  @php
-      $firstLoop = true;
-  @endphp
-    
-  @foreach($itinerary->items['Accommodation'] as $accommodation)
-
-    <div class="single-module mb-n15">
-      @if($firstLoop)
-          <div class="heading-module">
-              <h3   style="margin-top:10px;">
-                  <span class="mark"></span>
-                  <span class="text">Accommodation</span>
-              </h3>
-          </div>
-          @php
-              $firstLoop = false;
-          @endphp
-      @endif
-        <h4>   
-            <span class="text">{{ $accommodation->name }}</span>
-            <span class="mark"></span>
-        </h4> 
-        <div class="details-module">
-            <table>
-                <tbody>
-                    @foreach($accommodation->details as $key => $value)
-                    @php
-                      $class_desc_pos = $key == 'Description' ? 'desc-pos-top' : '';
-                    @endphp
-                        @continue(empty($value))
-                        <tr>
-                            <td class="item-header w-125">
-                                <strong>{{ $key }}:</strong>
-                            </td>
-                            <td class="item-detail <?php echo $class_desc_pos;?>">
-                                @if(is_array($value))
-                                    @if(isset($value['attributes']['address_line_1']))
-                                        {{ $value['attributes']['address_line_1'] }}
-                                    @else
-                                        Address not available
-                                    @endif
-                                @else
-                                    {!! $value !!}
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
-  @endforeach 
-  @endif
-  @if(!empty($itinerary->items['Transfers']))
+@if(!empty($itinerary->items['Transfers']))
     @php
       $firstLoop = true;
     @endphp
@@ -646,6 +592,60 @@ figure.table tr td:nth-child(2) {display:none;}
     @endif
   @endforeach
 @endif  
+@if(!empty($itinerary->items['Accommodation']))
+  @php
+      $firstLoop = true;
+  @endphp
+    
+  @foreach($itinerary->items['Accommodation'] as $accommodation)
+
+    <div class="single-module mb-n15">
+      @if($firstLoop)
+          <div class="heading-module">
+              <h3   style="margin-top:10px;">
+                  <span class="mark"></span>
+                  <span class="text">Accommodation</span>
+              </h3>
+          </div>
+          @php
+              $firstLoop = false;
+          @endphp
+      @endif
+        <h4>
+            <span class="text">{{ $accommodation->name }}</span>
+            <span class="mark"></span>
+        </h4>
+        <div class="details-module">
+            <table>
+                <tbody>
+                    @foreach($accommodation->details as $key => $value)
+                    @php
+                      $class_desc_pos = $key == 'Description' ? 'desc-pos-top' : '';
+                    @endphp
+                        @continue(empty($value))
+                        <tr>
+                            <td class="item-header w-125">
+                                <strong>{{ $key }}:</strong>
+                            </td>
+                            <td class="item-detail <?php echo $class_desc_pos;?>">
+                                @if(is_array($value))
+                                    @if(isset($value['attributes']['address_line_1']))
+                                        {{ $value['attributes']['address_line_1'] }}
+                                    @else
+                                        Address not available
+                                    @endif
+                                @else
+                                    {!! $value !!}
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+  @endforeach
+  @endif
   </div>
   <!-- </section> -->
 
