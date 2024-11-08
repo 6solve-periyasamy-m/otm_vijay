@@ -9,11 +9,18 @@
                 <div class="panel-grid panel-grid-3-3 custom-panel p-0 relative bg-transparent">
                     <button type="button" class="absolute right-0 top-0" data-bs-dismiss="modal" aria-label="Close">
                         {{ Icon::xmark() }}
-                        </button>
+                    </button>
+                    @if($order->tour !== null)
                     <x-admin.popup-button href="{{ route('tours.view', ['tour' => $order->tour,]) }}" class="color-info row-1">
                         <x-slot:icon>{{ Icon::tour() }}</x-slot:icon>
                         View Tour
                     </x-admin.popup-button>
+                    @else
+                        <x-admin.popup-button class="color-danger row-1">
+                            <x-slot:icon>{{ Icon::tour() }}</x-slot:icon>
+                            Tour Deleted
+                        </x-admin.popup-button>
+                    @endif
                     @if(config('app.features.kpt') || config('app.features.bleeding-edge'))
                     <x-admin.popup-button href="{{ route('orders.reservation', ['order' => $order,]) }}" class="color-info row-1">
                         <x-slot:icon>{{ Icon::view() }}</x-slot:icon>
