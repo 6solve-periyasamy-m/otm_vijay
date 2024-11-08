@@ -42,8 +42,7 @@
                     </button>
                 </div>
                 <div class="col-8">
-                    <label>Quantity</label>
-                    <input type="text" disabled value="{{ $quantity }}" />
+                    <x-livewire.input disabled value="{{ $quantity ?? 0 }}" label="Quantity" />
                 </div>
                 <div class="col-2">
                     <button title="Add Quantity" wire:click="addQuantity({{$storage->accommodation->id}}, {{$storage->room->id}}, {{ $storage->board->id }}, {{ $storage->category?->id ?? "null" }})" class="btn btn-sm mb-1 btn-outline-success">
