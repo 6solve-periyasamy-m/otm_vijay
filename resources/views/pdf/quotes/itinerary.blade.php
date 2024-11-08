@@ -549,7 +549,7 @@ figure.table tr td:nth-child(2) {display:none;}
             <div class="heading-module">
                 <h3   style="margin-top:10px;">
                     <span class="mark"></span>
-                    <span class="text">TRANSPORT</span>
+                    <span class="text">Transport</span>
                 </h3>
             </div>
             @php
@@ -611,10 +611,10 @@ figure.table tr td:nth-child(2) {display:none;}
               $firstLoop = false;
           @endphp
       @endif
-        <h4>   
+        <h4>
             <span class="text">{{ $accommodation->name }}</span>
             <span class="mark"></span>
-        </h4> 
+        </h4>
         <div class="details-module">
             <table>
                 <tbody>
@@ -644,7 +644,7 @@ figure.table tr td:nth-child(2) {display:none;}
             </table>
         </div>
     </div>
-  @endforeach 
+  @endforeach
   @endif
   </div>
   <!-- </section> -->
