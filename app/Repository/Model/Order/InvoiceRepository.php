@@ -61,15 +61,33 @@ class InvoiceRepository
             foreach ($customer->billables as $billable) {
                 $qBillable = $data->get($billable->shared_key, new QuantityBillable($billable->description, $billable->shared_key, $billable->amount, $billable->is_base));
                 $data->put($billable->shared_key, $qBillable->addQuantity());
+                if (strpos($billable->shared_key, "transport") !== false) {
+                    $billable->description = $this->transportDescriptionFormat($billable->description);
+                }
             }
         }
         foreach ($this->invoice->groups as $group) {
             foreach ($group->billables as $billable) {
                 $qBillable = $data->get($billable->shared_key, new QuantityBillable($billable->description, $billable->shared_key, $billable->amount, $billable->is_base));
                 $data->put($billable->shared_key, $qBillable->addQuantity());
+                if (strpos($billable->shared_key, "transport") !== false) {
+                    $billable->description = $this->transportDescriptionFormat($billable->description);
+                }
             }
         }
         return $data;
+    }
+
+    public function transportDescriptionFormat($invoice_description)
+    {
+        $description = preg_replace('/\([^)]+ to [^)]+\)/', '', $invoice_description, 1);
+        if (preg_match('/\((\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2})\)/', $description, $matches)) {
+            $start_date = $matches[1];
+            $end_date = $matches[3];
+            $invoice_date = ($start_date === $end_date) ? f_date($start_date) : f_date($start_date) ." to ". f_date($end_date);
+            $description = preg_replace('/\((\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2})\)/', "($invoice_date)", $description);
+        }
+        return $description;
     }
 
     public function forceDelete(): void
