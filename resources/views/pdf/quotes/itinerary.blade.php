@@ -537,61 +537,6 @@ figure.table tr td:nth-child(2) {display:none;}
 <div class="heading-2">
 	  <h2>Package inclusions</h2> 
   </div>
-@if(!empty($itinerary->items['Transfers']))
-    @php
-      $firstLoop = true;
-    @endphp
-    
-  @foreach($itinerary->items['Transfers'] as $transport)
-    @if(isset($transport->details['Quantity']) && $transport->details['Quantity'] > 0)
-      <div class="single-module mb-n15">
-        @if($firstLoop)
-            <div class="heading-module">
-                <h3   style="margin-top:10px;">
-                    <span class="mark"></span>
-                    <span class="text">Transport</span>
-                </h3>
-            </div>
-            @php
-                $firstLoop = false;
-            @endphp
-        @endif
-          <div class="details-module">
-              <table>
-                  <tbody>
-                    <tr>
-                      <td class="item-header w-125">
-                        <strong> Service: </strong>
-                      </td>
-                      <td class="item-detail">
-                        {{ $transport->name }}
-                      </td>
-                    </tr>
-                      @php
-                        $disable_items = ['Description', 'Transport', 'Travel Class'];
-                      @endphp
-                      @foreach($transport->details as $key => $value)
-                      @php
-                        $class_desc_pos = $key == 'Description' ? 'desc-pos-top' : '';
-                      @endphp
-                          @if (!in_array($key, $disable_items))
-                            <tr>
-                                <td class="item-header w-125">
-                                    <strong>{{ $key }}:</strong>
-                                </td>
-                                <td class="item-detail <?php echo $class_desc_pos;?>">
-                                  {{ $value }}
-                                </td>
-                            </tr>
-                          @endif
-                      @endforeach
-                  </tbody>
-              </table>
-          </div>
-      </div>
-    @endif
-  @endforeach
-@endif  
 @if(!empty($itinerary->items['Accommodation']))
   @php
       $firstLoop = true;
@@ -646,6 +591,61 @@ figure.table tr td:nth-child(2) {display:none;}
     </div>
   @endforeach 
   @endif
+  @if(!empty($itinerary->items['Transfers']))
+    @php
+      $firstLoop = true;
+    @endphp
+    
+  @foreach($itinerary->items['Transfers'] as $transport)
+    @if(isset($transport->details['Quantity']) && $transport->details['Quantity'] > 0)
+      <div class="single-module mb-n15">
+        @if($firstLoop)
+            <div class="heading-module">
+                <h3   style="margin-top:10px;">
+                    <span class="mark"></span>
+                    <span class="text">Transport</span>
+                </h3>
+            </div>
+            @php
+                $firstLoop = false;
+            @endphp
+        @endif
+          <div class="details-module">
+              <table>
+                  <tbody>
+                    <tr>
+                      <td class="item-header w-125">
+                        <strong> Service: </strong>
+                      </td>
+                      <td class="item-detail">
+                        {{ $transport->name }}
+                      </td>
+                    </tr>
+                      @php
+                        $disable_items = ['Description', 'Transport', 'Travel Class'];
+                      @endphp
+                      @foreach($transport->details as $key => $value)
+                      @php
+                        $class_desc_pos = $key == 'Description' ? 'desc-pos-top' : '';
+                      @endphp
+                          @if (!in_array($key, $disable_items))
+                            <tr>
+                                <td class="item-header w-125">
+                                    <strong>{{ $key }}:</strong>
+                                </td>
+                                <td class="item-detail <?php echo $class_desc_pos;?>">
+                                  {{ $value }}
+                                </td>
+                            </tr>
+                          @endif
+                      @endforeach
+                  </tbody>
+              </table>
+          </div>
+      </div>
+    @endif
+  @endforeach
+@endif  
   </div>
   <!-- </section> -->
 
