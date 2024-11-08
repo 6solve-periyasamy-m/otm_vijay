@@ -950,6 +950,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'deposit' => $this->quote->getDepositAmount(),
             'commission' => $lead->getCustomer()->organization?->commission,
             'ordered_on' => now(),
+            'invoice_footer' => $this->quote->invoice_footer,
             'internal_notes' => $this->quote->internal_notes,
             'external_notes' => $this->quote->external_notes,
         ]);
@@ -1009,6 +1010,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             }
         }
 
+        $order->refresh();
+
         OrderAccommodation::withoutEvents(function () use ($order)  {
             $this->convertAssignedRooming($order);
         });
@@ -1029,6 +1032,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
      */
     private function convertAssignedRooming(Order $order): void
     {
+        $order = $order->refresh(); // Validate you have correct information
         /** @var array<int, Carbon> $lastDates List of order-customer ids and their last active room */
         $lastDates = [];
         foreach ($this->getRoomsByStartDate() as $room) {
