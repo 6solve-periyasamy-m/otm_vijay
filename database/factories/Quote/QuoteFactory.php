@@ -37,6 +37,7 @@ class QuoteFactory extends Factory
             'terms' => "",
             'invoice_footer' => "",
             'revision' => 1,
+            'is_deposit_percentage' => true,
         ];
     }
 }
