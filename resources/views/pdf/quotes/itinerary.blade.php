@@ -829,30 +829,96 @@ figure.table tr td:nth-child(2) {display:none;}
     </h3>
   </div>
   <div class="payment-detail">
-  <table>
-    <thead>
-      <tr>
-        <th>INSTALLMENTS</th>
-        <th>AMOUNT DUE</th>
-        <th>DATE DUE</th>
-      </tr>
-    </thead>
-    <tbody>
-      @foreach ($itinerary->finances->schedule as $installment)
-      <tr>
-          <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
-          <td>{{ f_currency($installment->amount) }}</td>
-          <td>@if($installment->paid)
-                  PAID
-              @elseif(!is_null(optional($installment->due)))
-                  {{ optional($installment->due)->format('d M Y') }}
-              @endif
-            </td>
+    <table>
+      <thead>
+        <tr>
+          <th>Installments</th>
+          <th>Amount due</th>
+          <th>Amount Paid</th>
+          <th>Outstanding</th>
+          <th>Date Due</th>
+          <th>Paid On</th>
         </tr>
-      @endforeach
-    </tbody>
-  </table>
-    </div>
+      </thead>
+      <tbody>
+        @foreach ($itinerary->finances->schedule as $installment)
+
+          @if($installment->type->name === 'BOOKING_FEE')
+            <tr>
+              <td>Booking Fee</td>
+              <td>{{ f_currency($installment->amount) }}</td>
+              <td>{{ f_currency(min($installment->amount, $installment->received)) }}</td>
+              <td>
+                @if($installment->amount <= $installment->received)
+                  Paid
+                @else
+                    {{ f_currency($installment->amount - min($installment->amount, $installment->received)) }}
+                @endif
+              </td>
+              <td>
+                @if($installment->paid)
+                  With Order
+                @elseif(!is_null(optional($installment->due)))
+                    {{ optional($installment->due)->format('d/m/Y') }}
+                @endif
+              </td>
+              <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
+            </tr>
+          @endif
+          @if ($installment->type->name === 'DEPOSIT')
+            <tr>
+              <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
+              <td>{{ f_currency($installment->amount) }} <p>({{ $installment->percentage }}%)</p></td>
+              <td>
+                @php $amount = $installment->amount - min(($installment->received - ($installment->balance ?? 0)), $installment->amount); @endphp
+                @if($amount <= 0)
+                    {{ f_currency($installment->amount) }}
+                @else
+                    {{ f_currency($installment->received) }}
+                @endif
+              </td>
+              <td>
+                @if($amount <= 0)
+                  Paid
+                @else
+                    {{ f_currency($amount) }}
+                @endif
+              </td>
+              <td>With Order</td>
+              <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
+          </tr>
+          @endif
+          @if ($installment->type->name === 'INSTALLMENT')
+            @php $amount = $installment->amount - $installment->received; @endphp
+            <tr>
+              <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
+              <td>{{ f_currency($installment->amount) }} <p>({{ $installment->percentage }}%)</p></td>
+              <td>
+                @if($amount <= 0)
+                    {{ f_currency($installment->amount) }}
+                @else
+                    {{ f_currency($installment->received) }}
+                @endif
+              </td>
+              <td>
+                @if($amount <= 0)
+                    Paid
+                @else
+                    {{ f_currency($amount) }}
+                @endif
+              </td>
+              <td>
+                @if(!is_null(optional($installment->due)))
+                    {{ optional($installment->due)->format('d/m/Y') }}
+                @endif
+              </td>
+              <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
+            </tr>
+          @endif          
+        @endforeach
+      </tbody>
+    </table>
+  </div>
 </div>
   </div>
    
