@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Abstract;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Accommodation\Accommodation;
 use App\Repository\Model\Accommodation\AccommodationRepository;
+use App\Repository\Storage\Rooming\AccommodationByDateStorage;
 use App\Repository\Storage\Rooming\AccommodationByDateStorage as AccommodationStorage;
 use Carbon\Carbon;
 use Livewire\Component;
@@ -106,6 +107,11 @@ abstract class AccommodationByDateComponent extends Component
                 return $key;
             }
         }
+        return null;
+    }
+
+    public function getQuantity(AccommodationByDateStorage $storage): int|null
+    {
         return null;
     }
 
