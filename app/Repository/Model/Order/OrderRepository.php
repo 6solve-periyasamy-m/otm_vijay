@@ -833,12 +833,17 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $schedule[] = new ItinerarySchedule(ItineraryScheduleType::BOOKING_FEE, null, $this->order->booking_fee, null, $this->order->booking_fee <= $this->order->paid, $paid_on,  $this->order->paid);
         }
         if ($this->order->calculated_deposit > 0) {
+            $covering = $this->order->repository->getDepositPayment();
+            $paid_on = ($covering !== null) ? $covering->paid_on : null;
             $schedule[] = new ItinerarySchedule(ItineraryScheduleType::DEPOSIT, null, $this->order->calculated_deposit, $this->order->deposit_percentage, $this->order->deposit_paid, $paid_on, $this->order->paid, $this->order->booking_fee);
         }
         foreach ($this->getInstallments() as $installment) {
+            $received = $installment->repository->getAmountPaid();
             $schedule[] = new ItinerarySchedule(ItineraryScheduleType::INSTALLMENT, $installment->due_on, $installment->calculated_amount, $installment->percentage, $installment->paid, $installment->paid_on, $received);
         }
         if ($this->order->remaining_installment > 0) {
+            $covering = $this->order->repository->getRemainingPayment();
+            $paid_on = ($covering !== null) ? $covering->paid_on : null;
             $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->order->tour->final_payment, $this->order->remaining_installment, $this->order->remaining_percentage, $this->order->remaining <= 0, $paid_on, $this->order->paid, $this->order->remaining);
         }
         return $schedule;
