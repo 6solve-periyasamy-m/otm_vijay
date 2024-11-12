@@ -933,10 +933,8 @@ figure.table tr td:nth-child(2) {display:none;}
 
             @if(is_array($installment) && isset($installment['type']))
             <tr>
-                <th colspan=2>TOTAL Payments Received</th>
-                <th>{{ f_currency($installment['total_received']) }}</th>
-                <th>Due</th>
-                <th colspan=2>{{ f_currency($installment['total_due']) }}</th>
+                <td colspan=3><b>Total Payments Received: </b> {{ f_currency($installment['total_received']) }}</td>
+                <td colspan=3><b>Due:</b> {{ f_currency($installment['total_due']) }}</td>
               </tr>
             @endif
           @endforeach
