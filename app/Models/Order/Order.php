@@ -391,7 +391,7 @@ class Order extends Model implements NotificationSubject
      */
     public function getTotalAttribute(): float
     {
-        return $this->cancelled ? $this->paid : (($this->cost + $this->total_adjustments) - ($this->getCommissionAmountAttribute()));
+        return sigfig($this->cancelled ? $this->paid : (($this->cost + $this->total_adjustments) - ($this->getCommissionAmountAttribute())));
     }
 
     /**
@@ -399,7 +399,7 @@ class Order extends Model implements NotificationSubject
      */
     public function getCostAttribute(): float
     {
-        return $this->repository->getCost();
+        return sigfig($this->repository->getCost());
     }
 
     /**
@@ -407,7 +407,7 @@ class Order extends Model implements NotificationSubject
      */
     public function getRemainingAttribute(): float
     {
-        return $this->cancelled ? 0 : $this->repository->getRemaining();
+        return sigfig($this->cancelled ? 0 : $this->repository->getRemaining());
     }
 
     /**
@@ -419,7 +419,7 @@ class Order extends Model implements NotificationSubject
         foreach ($this->installments as $installment) {
             $cost -= $installment->calculated_amount;
         }
-        return $cost;
+        return sigfig($cost);
     }
 
     /**
@@ -451,7 +451,7 @@ class Order extends Model implements NotificationSubject
      */
     public function getCalculatedDepositAttribute(): float
     {
-        return $this->deposit * $this->paying_customers;
+        return sigfig($this->deposit * $this->paying_customers);
     }
 
     /**
@@ -554,7 +554,7 @@ class Order extends Model implements NotificationSubject
 
     public function getTaxes(): float|null
     {
-        return $this->taxBracket()->calculate($this->getCostAttribute());
+        return sigfig($this->taxBracket()->calculate($this->getCostAttribute()));
     }
 
     public function getLink(): string
