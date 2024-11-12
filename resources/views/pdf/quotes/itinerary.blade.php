@@ -430,7 +430,7 @@ h5 span {
 }
 .payment-detail table th {
     font-family: "PPNeueMontreal-Medium";
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     line-height: 20px;
     background-color: #F9F4EE;
