@@ -842,10 +842,13 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $schedule[] = new ItinerarySchedule(ItineraryScheduleType::INSTALLMENT, $installment->due_on, $installment->calculated_amount, $installment->percentage, $installment->paid, $installment->paid_on, $received);
         }
         if ($this->order->remaining_installment > 0) {
+            $latest_payment = $this->order->payments()->latest()->first();
+            $payment = ($latest_payment !== null) ?  $latest_payment->amount : 0;
             $covering = $this->order->repository->getRemainingPayment();
             $paid_on = ($covering !== null) ? $covering->paid_on : null;
-            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->order->tour->final_payment, $this->order->remaining_installment, $this->order->remaining_percentage, $this->order->remaining <= 0, $paid_on, $this->order->paid, $this->order->remaining);
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->order->tour->final_payment, $this->order->remaining_installment, $this->order->remaining_percentage, $this->order->remaining <= 0, $paid_on, $payment, $this->order->remaining);
         }
+        $schedule[] = ['type' => 'Total', 'total_received' => $this->order->paid, 'total_due' => $this->order->remaining];
         return $schedule;
     }
 
