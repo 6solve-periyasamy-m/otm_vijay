@@ -1,6 +1,7 @@
 @php
     use Illuminate\Support\Facades\File;
     use Illuminate\Support\Facades\DB;
+    use App\Repository\Storage\Itinerary\ItineraryScheduleType;
     /**
      * @var \App\Repository\Storage\Itinerary\Itinerary $itinerary
      * @var string $type
@@ -843,7 +844,7 @@ figure.table tr td:nth-child(2) {display:none;}
         </thead>
         <tbody>
           @foreach ($itinerary->finances->schedule as $installment)
-            @if(isset($installment->type) && $installment->type->name === 'BOOKING_FEE')
+            @if($installment->type === ItineraryScheduleType::BOOKING_FEE)
               <tr>
                 <td>Booking Fee</td>
                 <td>{{ f_currency($installment->amount) }}</td>
@@ -859,7 +860,7 @@ figure.table tr td:nth-child(2) {display:none;}
                 <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
               </tr>
             @endif
-            @if (isset($installment->type) && $installment->type->name === 'DEPOSIT')
+            @if ($installment->type === ItineraryScheduleType::DEPOSIT)
               <tr>
                 <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
                 <td>{{ f_currency($installment->amount) }} <p>({{ $installment->percentage }}%)</p></td>
@@ -882,7 +883,7 @@ figure.table tr td:nth-child(2) {display:none;}
                 <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
             </tr>
             @endif
-            @if (isset($installment->type) && $installment->type->name === 'INSTALLMENT')
+            @if ($installment->type === ItineraryScheduleType::INSTALLMENT)
               @php $amount = $installment->amount - $installment->received; @endphp
               <tr>
                 <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
@@ -909,7 +910,7 @@ figure.table tr td:nth-child(2) {display:none;}
                 <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
               </tr>
             @endif
-            @if (isset($installment->type) && $installment->type->name === 'REMAINING')
+            @if ($installment->type === ItineraryScheduleType::REMAINING)
               <tr>
                 <td>Remaining Balance</td>
                 <td>{{ f_currency($installment->amount) }} <p>({{ $installment->percentage }}%)</p></td>
@@ -931,10 +932,10 @@ figure.table tr td:nth-child(2) {display:none;}
               </tr>
             @endif
 
-            @if(is_array($installment) && isset($installment['type']))
+            @if($installment->type === ItineraryScheduleType::TOTAL)
             <tr>
-                <td colspan=3><b>Total Payments Received: </b> {{ f_currency($installment['total_received']) }}</td>
-                <td colspan=3><b>Due:</b> {{ f_currency($installment['total_due']) }}</td>
+                <td colspan=3><b>Total Payments Received: </b> {{ f_currency($installment->amount) }}</td>
+                <td colspan=3><b>Due:</b> {{ f_currency($installment->percentage) }}</td>
               </tr>
             @endif
           @endforeach

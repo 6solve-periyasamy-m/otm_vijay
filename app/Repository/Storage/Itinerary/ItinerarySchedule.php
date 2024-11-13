@@ -12,7 +12,7 @@ class ItinerarySchedule
         public float $amount,
         public float|null $percentage,
         public bool|null $paid = null,
-        public Carbon|null $paid_on,
+        public Carbon|null $paid_on = null,
         public float|null $received = null,
         public float|null $balance = null,
     ) {}
