@@ -5,6 +5,7 @@ namespace App\Models\Tour;
 use App\Models\Activity\Activity;
 use App\Models\Activity\ActivityInventory;
 use App\Models\Helper\Enum\EventType;
+use App\Models\Helper\Model;
 use App\Models\Order\Order;
 use App\Models\System\Brand;
 use App\Models\System\TaxBracket;
@@ -14,7 +15,6 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -38,6 +38,10 @@ use Settings;
  * @property string|null $image_url Asset link for image
  * @property string|null $booking_url
  * @property string|null $notes
+ * @property string|null $onsite_name
+ * @property string|null $onsite_email
+ * @property string|null $onsite_phone
+ * @property string|null $final_terms
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -69,7 +73,7 @@ class Event extends Model
     use HasFactory, SoftDeletes, HasRepository;
 
     protected $guarded = [];
-    protected $casts = ['starts_at' => 'date', 'ends_at' => 'date', 'event_category' => EventType::class,];
+    protected $casts = ['starts_at' => 'date:Y-m-d', 'ends_at' => 'date:Y-m-d', 'event_category' => EventType::class,];
 
     public function parent(): BelongsTo
     {
