@@ -950,6 +950,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'deposit' => $this->quote->getDepositAmount(),
             'commission' => $lead->getCustomer()->organization?->commission,
             'ordered_on' => now(),
+            'invoice_footer' => $this->quote->invoice_footer,
+            'internal_notes' => $this->quote->internal_notes,
+            'external_notes' => $this->quote->external_notes,
         ]);
         $leadTraveller = $order->repository->addCustomer($lead->getConvertedCustomer($this->quote), true, false, true);
         $lead->orderCustomer = $leadTraveller;
@@ -1007,6 +1010,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             }
         }
 
+        $order->refresh();
+
         OrderAccommodation::withoutEvents(function () use ($order)  {
             $this->convertAssignedRooming($order);
         });
@@ -1027,6 +1032,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
      */
     private function convertAssignedRooming(Order $order): void
     {
+        $order = $order->refresh(); // Validate you have correct information
         /** @var array<int, Carbon> $lastDates List of order-customer ids and their last active room */
         $lastDates = [];
         foreach ($this->getRoomsByStartDate() as $room) {
@@ -1108,7 +1114,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $key = "flight-{$component->flight_inventory_id}";
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
-            $item = $component->repository->getItineraryItem($travelling);
+            $item = $component->repository->getItineraryItem($component->quantity ?? $travelling);
             $heading = "Flights";
             if (!array_key_exists($heading, $items)) { $items[$heading] = []; }
             $items[$heading][] = $item;
@@ -1118,7 +1124,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $key = "transport-{$component->transport_inventory_id}";
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
-            $item = $component->repository->getItineraryItem($travelling);
+            $item = $component->repository->getItineraryItem($component->quantity ?? $travelling);
             $heading = "Transfers";
             if (!array_key_exists($heading, $items)) { $items[$heading] = []; }
             $items[$heading][] = $item;

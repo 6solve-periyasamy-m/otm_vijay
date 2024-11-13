@@ -47,8 +47,9 @@ class AttachComponentTest extends DatabaseTestCase
         $attached = $contract->repository->linkToComponent($inventory->repository);
         $this->assertTrue($attached, 'Attachment Failed');
         $class = $inventory::class;
+        // Data caching causes failures if run multiple times
+        $contract->refresh();
         foreach ($contract->components as $component) {
-            \Log::info($component->toJson());
             if ($component->component_id === $inventory->id && $component->component_type === $class) {
                 $found = true;
                 break;

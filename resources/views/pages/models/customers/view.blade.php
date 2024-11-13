@@ -41,7 +41,7 @@
                             <p>Home Address</p>
                             <h6 class="fw-bold">{{ $customer->homeAddress }}</h6>
                             <p>Billing Address</p>
-                            <h6 class="fw-bold">{{ $customer->billingAddress }}</h6>                    
+                            <h6 class="fw-bold">{{ $customer->billingAddress }}</h6>
                         @else
                             <p>Address</p>
                             <h6 class="fw-bold">{{ $customer->homeAddress }}</h6>                    
@@ -111,7 +111,7 @@
             @foreach($customer->orderCustomers as $orderCustomer)
                 <tr>
                     <th scope="row"><a href="{{ route('orders.view', ['order' => $orderCustomer->order,]) }}">{{ $orderCustomer->order->booking_reference }}</a></th>
-                    <td>{{ $orderCustomer->order->tour->name }}</td>
+                    <td>{{ $orderCustomer->order->tour?->name ?? "Tour Deleted" }}</td>
                     <td>{{ f_datetime($orderCustomer->order->ordered_on) }}</td>
                     <td>{{ f_currency($orderCustomer->tour_cost) }}</td>
                     <td><h6 class="badge badge-{{ $orderCustomer->order->status->color() }} fw-bold">{{ $orderCustomer->order->status->description() }}</h6></td>

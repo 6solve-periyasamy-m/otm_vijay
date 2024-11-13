@@ -61,11 +61,10 @@
                     </div>
                     <div class="form-field rap-las-cls">
                         <div wire:ignore>
-                            <input type="text" id="custom-input-date" class="calendar hasDatepicker" data-picker name="upload-release" placeholder="DATE OF BIRTH">
+                            <input type="text" id="custom-input-date"  class="calendar hasDatepicker" data-picker name="upload-release" placeholder="DATE OF BIRTH">
                             <script type="text/javascript">
                                 document.addEventListener('DOMContentLoaded', function() {
                                     const initialDOB = @this.payer?.date_of_birth ? new Date(@this.payer.date_of_birth) : null;
-                                    
                                     const datePickerElement = document.querySelector('[data-picker]');
                                     if (datePickerElement) {
                                         const picker = new Pikaday({
@@ -89,10 +88,10 @@
                                             return `${day}-${month}-${year}`;
                                         }
 
-                                        if (initialDOB) {
-                                        picker.setDate(initialDOB);
-                                        datePickerElement.value = formatDate(initialDOB);
-                                    }
+                                        // if (initialDOB) {
+                                        //     picker.setDate(initialDOB);
+                                        //     datePickerElement.value = formatDate(initialDOB);
+                                        // }
                                     }
                                 });
                             </script>

@@ -18,6 +18,7 @@
                     {{ Icon::eye() }}
                 </a>
             </div>
+            @if(($quantity ?? null) === null)
             <div class="col-1">
                 @if($selected)
                     <button title="Remove Accommodation" wire:click="select({{$storage->accommodation->id}}, {{$storage->room->id}}, {{ $storage->board->id }}, {{ $storage->category?->id ?? "null" }})" class="btn btn-sm mb-1 btn-outline-danger">
@@ -29,8 +30,27 @@
                     </button>
                 @endif
             </div>
+            @endif
         </div>
+        @if(($quantity ?? null) !== null)
+            <hr class="splitter" />
 
+            <div class="row">
+                <div class="col-2">
+                    <button title="Remove Quantity" wire:click="removeQuantity({{$storage->accommodation->id}}, {{$storage->room->id}}, {{ $storage->board->id }}, {{ $storage->category?->id ?? "null" }})" class="btn btn-sm mb-1 btn-outline-danger">
+                        {{ Icon::minus() }}
+                    </button>
+                </div>
+                <div class="col-8">
+                    <x-livewire.input disabled value="{{ $quantity ?? 0 }}" label="Quantity" />
+                </div>
+                <div class="col-2">
+                    <button title="Add Quantity" wire:click="addQuantity({{$storage->accommodation->id}}, {{$storage->room->id}}, {{ $storage->board->id }}, {{ $storage->category?->id ?? "null" }})" class="btn btn-sm mb-1 btn-outline-success">
+                        {{ Icon::plus() }}
+                    </button>
+                </div>
+            </div>
+        @endif
         <hr class="splitter" />
 
         <div class="col-6">
@@ -77,7 +97,7 @@
             @php $onNight = $storage->getInventoryOnNight($date) @endphp
             <div class="col-4">
                 @if($storage->getInventoryOnNight($date) !== null)
-                    @if($onNight->repository->getAvailableStock() > 0)
+                    @if($onNight->repository->getAvailableStock() >= ($travellers ?? 1))
                         <h4 class="badge badge-pill badge-success">{{ f_date($date) }}: {{ $onNight->repository->getAvailableStock() }}</h4>
                     @else
                         <h4 class="badge badge-pill badge-danger">{{ f_date($date) }}: {{ $onNight->repository->getAvailableStock() }}</h4>

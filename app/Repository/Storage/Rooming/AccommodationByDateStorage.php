@@ -11,6 +11,7 @@ use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;
 use App\Models\Quote\Quote;
+use App\Models\Tour\Tour;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use Carbon\Carbon;
 
@@ -172,10 +173,18 @@ class AccommodationByDateStorage
         return $quantity;
     }
 
-    public function addToQuote(Quote $quote): void
+    public function addToQuote(Quote $quote, int|null $quantity = null): void
     {
         foreach ($this->inventory as $inventory) {
-            $inventory->repository->addToQuote($quote, 'Included');
+            $item = $inventory->repository->addToQuote($quote, 'Included');
+            $item?->update(['quantity' => $quantity]);
+        }
+    }
+
+    public function addToTour(Tour $tour): void
+    {
+        foreach ($this->inventory as $inventory) {
+            $inventory->repository->addToTour($tour, 'Included');
         }
     }
 }

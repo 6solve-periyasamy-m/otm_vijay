@@ -1,27 +1,29 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Quote;
+namespace App\Http\Livewire\Abstract;
 
-use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Accommodation\Accommodation;
-use App\Models\Quote\Quote;
 use App\Repository\Model\Accommodation\AccommodationRepository;
+use App\Repository\Storage\Rooming\AccommodationByDateStorage;
 use App\Repository\Storage\Rooming\AccommodationByDateStorage as AccommodationStorage;
 use Carbon\Carbon;
 use Livewire\Component;
 
-class AccommodationByDate extends Component
+abstract class AccommodationByDateComponent extends Component
 {
     use LivewireForm, SendsEvents;
 
-    public int $quote;
     public int|null $accommodation = null;
+    public int $travellers = 0;
+    public int|null $room = null;
+    public int|null $board = null;
+    public int|null $category = null;
     public string|null $start = null;
     public string|null $end = null;
     public array $selected = [];
-    
-    public function mount(Quote|int $quote, Accommodation|int|null $accommodation = null, Carbon|string|null $start = null, Carbon|string|null $end = null)
+
+    public function mount(Accommodation|int|null $accommodation = null, Carbon|string|null $start = null, Carbon|string|null $end = null)
     {
         if ($start instanceof Carbon) {
             $this->start = $start->format('Y-m-d');
@@ -40,30 +42,22 @@ class AccommodationByDate extends Component
         } else {
             $this->accommodation = $accommodation;
         }
-
-        if ($quote instanceof Quote) {
-            $this->quote = $quote->id;
-        } else {
-            $this->quote = $quote;
-        }
     }
 
-    public function save(): void
+    abstract public function save(): void;
+    abstract public function getPackageType(): string;
+    abstract public function getReturnUrl(): string;
+
+    public function shouldShow(AccommodationStorage $storage): bool
     {
-        $quote = Quote::find($this->quote);
-        if ($quote === null) { return; }
-        $quote->accommodation()->delete();
-        foreach ($this->fetchData() as $data) {
-            if ($this->selected($data)) {
-                $data->addToQuote($quote);
-            }
-        }
-        $this->toast('Accommodation Saved Successfully', 'Successfully removed accommodation and added new ones to the quote', 'success');
+        return ($this->room === null || $this->room === $storage->room->id) &&
+            ($this->board === null || $this->board === $storage->board->id) &&
+            ($this->category === null || $this->category === $storage->category->id);
     }
 
     public function render()
     {
-        return view('livewire.admin.quote.accommodation-by-date');
+        return view('livewire.admin.accommodation-selector');
     }
 
     public function updated($key, $value): void
@@ -113,6 +107,11 @@ class AccommodationByDate extends Component
                 return $key;
             }
         }
+        return null;
+    }
+
+    public function getQuantity(AccommodationByDateStorage $storage): int|null
+    {
         return null;
     }
 
