@@ -38,6 +38,10 @@ use Settings;
  * @property string|null $image_url Asset link for image
  * @property string|null $booking_url
  * @property string|null $notes
+ * @property string|null $onsite_name
+ * @property string|null $onsite_email
+ * @property string|null $onsite_phone
+ * @property string|null $final_terms
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at

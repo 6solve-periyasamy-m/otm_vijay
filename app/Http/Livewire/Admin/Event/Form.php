@@ -3,8 +3,12 @@
 namespace App\Http\Livewire\Admin\Event;
 
 use App\Http\Livewire\Abstract\LivewireForm;
+use App\Http\Livewire\SendsEvents;
 use App\Models\Helper\Enum\EventType;
+use App\Models\Helper\Enum\LargeTextType;
+use App\Models\System\LargeTextTemplate;
 use App\Models\Tour\Event;
+use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -12,21 +16,53 @@ use Livewire\WithFileUploads;
 
 class Form extends Component
 {
-    use LivewireForm, WithFileUploads;
+    use LivewireForm, WithFileUploads, SendsEvents;
 
     public Event|int|null $event;
+    public $termsTemplate;
+    public $user;
     public UploadedFile|null $image = null;
 
     public function mount(Event|int|null $event = null)
     {
         $this->event = Event::getForMount($event);
+        if ($event === null) {
+            $terms = LargeTextTemplate::where('default', '=', true)->where('type', '=', LargeTextType::TERMS)->first();
+            $this->event->final_terms = $terms?->content;
+            $this->termsTemplate = $terms?->id;
+        }
         $this->event->event_category = $this->event->event_category ?? EventType::NORMAL;
     }
 
     public function updated($key, $value): void
     {
         $this->validateOnly($key);
+        if ($key === 'termsTemplate') {
+            $this->refreshTermsTemplate();
+        }
+        if ($key === 'user') {
+            $this->refreshUser();
+        }
         $this->render();
+    }
+
+    private function refreshTermsTemplate(): void
+    {
+        $template = LargeTextTemplate::find($this->termsTemplate);
+        if ($template !== null) {
+            $this->event->final_terms = $template->content;
+            $this->updateValue('event.final_terms', $template->content);
+        }
+    }
+
+    private function refreshUser(): void
+    {
+        $user = User::find($this->user);
+        if ($user !== null) {
+            $this->event->onsite_name = $user->name;
+            $this->event->onsite_email = $user->email;
+            $this->event->onsite_phone = $user->phone ?? null;
+        }
     }
 
     public function save()
@@ -58,6 +94,10 @@ class Form extends Component
             'event.notes' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:8192',
             'event.booking_url' => 'nullable|string',
+            'event.onsite_name' => 'nullable|string',
+            'event.onsite_email' => 'nullable|string',
+            'event.onsite_phone' => 'nullable|string',
+            'event.final_terms' => 'nullable|string',
         ];
     }
 }
