@@ -544,7 +544,7 @@ figure.table tr td:nth-child(2) {display:none;}
     
   @foreach($itinerary->items['Transfers'] as $transport)
     @if(isset($transport->details['Quantity']) && $transport->details['Quantity'] > 0)
-      <div class="single-module mb-n15">
+      <div class="single-module mb-n15 <?php echo $firstLoop?'':'add-on-cls'?>">
         @if($firstLoop)
             <div class="heading-module">
                 <h3   style="margin-top:10px;">
@@ -599,7 +599,7 @@ figure.table tr td:nth-child(2) {display:none;}
     
   @foreach($itinerary->items['Accommodation'] as $accommodation)
 
-    <div class="single-module mb-n15">
+    <div class="single-module mb-n15 <?php echo $firstLoop?'':'add-on-cls'?>">
       @if($firstLoop)
           <div class="heading-module">
               <h3   style="margin-top:10px;">
@@ -656,7 +656,7 @@ figure.table tr td:nth-child(2) {display:none;}
     <!-- <section class="pdf-individual-block"> -->
         <div class="row">
             @foreach($itinerary->items['Event'] as $item)
-                <div class="single-module" style="margin-bottom:0px;">
+                <div class="single-module <?php echo $firstLoop?'':'add-on-cls'?>" style="margin-bottom:0px;">
                     @if($firstLoop)
                         <div class="heading-module">
                             <h3>
@@ -731,7 +731,7 @@ figure.table tr td:nth-child(2) {display:none;}
    <div class="row">
    
       @foreach($itinerary->items['Inclusion'] as $item)
-      <div class="single-module">
+      <div class="single-module <?php echo $firstLoop?'':'add-on-cls'?>">
       @if($firstLoop)
         <div class="heading-module">
             <h3>
@@ -785,7 +785,7 @@ figure.table tr td:nth-child(2) {display:none;}
    <div class="row">
    
    
-   <div class="single-module">
+   <div class="single-module heading-2">
    <h2 style="margin-left:-32px;">Payment summary</h2> 
    
    <div class="heading-module">
@@ -857,7 +857,7 @@ figure.table tr td:nth-child(2) {display:none;}
   </div>
    
    
-   <div class="custom-details-module">  
+   <div class="custom-details-module heading-2">  
    <h2 style="margin-left:-32px;">Payment Details</h2>    
        <h6>Keith Prowse Travel PTY LTD</h6>      
   <table>
