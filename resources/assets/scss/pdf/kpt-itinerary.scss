@@ -592,3 +592,18 @@ table.cell-padding-0 td, th {
     }
   }
 }
+.details-module tr td{padding-bottom: 5px !important;}
+.single-module h3,.single-module {margin-top: 0px !important;margin-bottom: 0px !important;}
+.single-module .heading-module{margin-top: 30px !important;}
+.single-module .heading-module,.single-module.add-on-cls{margin-bottom: 0px !important;}
+.single-module .heading-module{margin-bottom: 0px !important;}
+.single-module .details-module,.single-module h4{margin-top: 15px !important;}
+.single-module.add-on-cls:last-of-type table tr:last-of-type .item-detail.desc-pos-top,.details-module tr:last-of-type td{padding-bottom: 0px !important;}
+.details-module tr:last-of-type td.item-detail.desc-pos-top{padding-bottom: 30px !important;}
+.single-module.add-on-cls:last-of-type table tr:last-of-type td:last-child{padding-bottom: 30px !important;}
+.payment-detail,.custom-details-module{margin-top: 30px !important;}
+.single-module h2{margin-bottom: 30px !important;}
+.pdf-individual-block .row:first-of-type .single-module:nth-child(5) .heading-module{margin-top: 40px !important;}
+.pdf-individual-block .row:first-of-type .single-module:nth-child(5) .details-module{margin-top: 10px !important;}
+.pdf-individual-block .row:first-of-type .single-module:nth-child(6) .heading-module{margin-top: 30px !important;margin-bottom: 20px !important;}
+.heading-2 .heading-module{margin-top: 40px !important;}
