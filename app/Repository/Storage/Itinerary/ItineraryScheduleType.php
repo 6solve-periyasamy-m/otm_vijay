@@ -12,4 +12,5 @@ enum ItineraryScheduleType: int
     case BOOKING_FEE = 2;
     case INSTALLMENT = 3;
     case REMAINING = 4;
+    case TOTAL = 5;
 }
