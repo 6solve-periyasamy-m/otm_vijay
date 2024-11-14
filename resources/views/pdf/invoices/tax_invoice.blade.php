@@ -1,12 +1,7 @@
 @php
     /** @var \App\Models\Order\Invoice\Invoice $invoice */
-   $due_date = date('d M Y', strtotime($invoice->installments[0]->due));
-    foreach($invoice->installments as $installment) {
-        if (strpos($installment->description, "Remaining") !== false){
-            $due_date = date('d M Y', strtotime($installment->due));
-            break;
-        }
-    }
+    $installments = collect($invoice->installments);
+    $due_date = $installments->isNotEmpty() ? date('d M Y', strtotime($installments->last()->due)) : 'PAID';
 @endphp
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
