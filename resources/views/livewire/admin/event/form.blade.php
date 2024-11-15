@@ -10,7 +10,7 @@
                 <x-livewire.input wire:model="event.name" label="Name" width="4" />
                 <x-livewire.input.select.tax-bracket name="event.tax_bracket_id" label="Tax Bracket" value="{{ $event?->tax_bracket_id }}" width="2"/>
                 <x-livewire.input.select.brand name="event.brand_id" label="Brand" value="{{ $event?->brand_id }}" width="2" />
-                <x-livewire.input.select.event.main name="event.parent_id" label="Parent Event" value="{{ $event?->parent_event_id }}" width="2" />
+                <x-livewire.input.select.event.main name="event.parent_event_id" label="Parent Event" value="{{ $event?->parent_event_id }}" width="2" />
                 <x-livewire.input.dropdown wire:model="event.event_category" label="Event Category" :items="\App\Models\Helper\Enum\EventType::toArray()" width="2" />
                 <x-livewire.input wire:model="event.description" label="Description" value="{{ $event?->description }}" />
                 <x-livewire.input type="date" wire:model="event.starts_at" label="Starts At" width="5" />
