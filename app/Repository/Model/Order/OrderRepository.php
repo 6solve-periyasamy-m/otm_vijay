@@ -546,8 +546,10 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
     public function shouldRemind(int $days, int $minDays = -1000): bool
     {
-        $daysUntil = $this->order->days_until_next_payment;
-        return isset($daysUntil) && ($daysUntil <= $days && $daysUntil >= $minDays);
+        $next = $this->getNextPaymentDetails(false);
+        if ($next === null) { return false; }
+        $daysUntil = days_until($next->due_on);
+        return isset($daysUntil) && ($daysUntil <= $days && $daysUntil >= $minDays) && $next->amount >= setting('order.reminders.minimum');
     }
 
     public function shouldRemindForFinal(int $days, int $minDays = -1000, OrderInstallment $installment = null): bool
@@ -555,7 +557,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         $installment = $installment ?? $this->generateRemainingOrderInstallment();
         if ($installment === null) { return false; }
         $daysUntil = days_until($installment->due_on);
-        return $installment->remaining > 0 && (isset($daysUntil) && ($daysUntil <= $days && $daysUntil >= $minDays));
+        return $installment->remaining > 0
+            && (isset($daysUntil) && ($daysUntil <= $days && $daysUntil >= $minDays))
+            && $installment->amount >= setting('order.reminders.minimum');
     }
 
     public function refresh(): void
