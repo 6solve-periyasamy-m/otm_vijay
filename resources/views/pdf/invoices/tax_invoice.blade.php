@@ -402,7 +402,7 @@
         font-weight: 400;
        }
        .footer img {padding-left:20px;}
-       .whole-items-cls {min-height:610px;}
+       /* .whole-items-cls {min-height:610px;} */
        .payment-options tr td figure.table {margin:0;} 
        .payment-options tr td figure.table table tbody tr td:nth-child(2) {display:none;}
        .payment-options tr td figure.table table tbody tr td {
@@ -421,9 +421,9 @@
         margin-top:5px!important
        }
        .payment-options { 
-        position: fixed;
         bottom: 0cm;
         height: 228px; 
+        page-break-inside: avoid;
         }
         .full-btm-cls-mod p span {
         font-family: 'Lato', sans-serif!important;
