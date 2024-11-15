@@ -250,12 +250,14 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
      */
     public function getInstallments(bool $final = false): Collection|array
     {
-        $customers = $this->order->orderCustomers()->count();
+        $customers = $this->order->paying_customers;
         $paid = $this->order->paid - (($this->order->deposit ?? 0.0) * $customers) - ($this->order->booking_fee ?? 0.0);
         DB::statement("SET @total:={$paid};");
         $installments = OrderInstallment::where('order_id', '=', $this->order->id)
             ->orderBy('due_on')
-            ->selectRaw("*, GREATEST((GREATEST(@total,0)-(amount*{$customers}))*-1,0) as remaining, (@total := @total - (amount*{$customers})) AS rt");
+            // max((max(total, 0) - (amount * customers)) * -1), 0) is remaining
+            //
+            ->selectRaw("*, GREATEST((GREATEST(@total,0)-(amount*{$customers}))*-1,0) as remaining, (@total := @total - (amount*{$customers})) AS running_total");
         $collection = $installments->get();
         if ($final) {
             $collection->add($this->generateRemainingOrderInstallment());
@@ -265,11 +267,11 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
     public function generateRemainingOrderInstallment(): ?OrderInstallment
     {
-        if ($this->order->orderCustomers()->count() < 1) { return null; }
+        if ($this->order->paying_customers < 1) { return null; }
         return new OrderInstallment([
             'id' => 0,
             'order_id' => $this->order->id,
-            'amount' => $this->order->remaining_installment / $this->order->orderCustomers()->count(),
+            'amount' => $this->order->remaining_installment / $this->order->paying_customers,
             'remaining' => min($this->order->remaining, $this->order->remaining_installment),
             'due_on' => $this->order->tour?->final_payment,
         ]);
@@ -828,17 +830,27 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     {
         $schedule = [];
         if ($this->order->booking_fee > 0) {
-            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::BOOKING_FEE, null, $this->order->booking_fee, null, $this->order->booking_fee <= $this->order->paid);
+            $covering = $this->order->repository->getBookingFeePayment();
+            $paid_on = ($covering !== null) ? $covering->paid_on : null;
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::BOOKING_FEE, null, $this->order->booking_fee, null, $this->order->booking_fee <= $this->order->paid, $paid_on,  $this->order->paid);
         }
         if ($this->order->calculated_deposit > 0) {
-            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::DEPOSIT, null, $this->order->calculated_deposit, $this->order->deposit_percentage, $this->order->deposit_paid);
+            $covering = $this->order->repository->getDepositPayment();
+            $paid_on = ($covering !== null) ? $covering->paid_on : null;
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::DEPOSIT, null, $this->order->calculated_deposit, $this->order->deposit_percentage, $this->order->deposit_paid, $paid_on, $this->order->paid, $this->order->booking_fee);
         }
         foreach ($this->getInstallments() as $installment) {
-            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::INSTALLMENT, $installment->due_on, $installment->calculated_amount, $installment->percentage, $installment->paid);
+            $received = $installment->repository->getAmountPaid();
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::INSTALLMENT, $installment->due_on, $installment->calculated_amount, $installment->percentage, $installment->paid, $installment->paid_on, $received);
         }
         if ($this->order->remaining_installment > 0) {
-            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->order->tour->final_payment, $this->order->remaining_installment, $this->order->remaining_percentage, $this->order->remaining <= 0);
+            $latest_payment = $this->order->payments()->latest()->first();
+            $payment = ($latest_payment !== null) ?  $latest_payment->amount : 0;
+            $covering = $this->order->repository->getRemainingPayment();
+            $paid_on = ($covering !== null) ? $covering->paid_on : null;
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->order->tour->final_payment, $this->order->remaining_installment, $this->order->remaining_percentage, $this->order->remaining <= 0, $paid_on, $payment, $this->order->remaining);
         }
+        $schedule[] = new ItinerarySchedule(ItineraryScheduleType::TOTAL, null, $this->order->paid, $this->order->remaining);
         return $schedule;
     }
 

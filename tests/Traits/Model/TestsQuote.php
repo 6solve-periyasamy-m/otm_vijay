@@ -4,10 +4,14 @@ namespace Tests\Traits\Model;
 
 use App\Models\Customer\Customer;
 use App\Models\Quote\Quote;
+use Tests\Traits\Model\Prefab\BuildsQuote;
 
+/**
+ * Uses factories to build a quote
+ */
 trait TestsQuote
 {
-    use TestsTour;
+    use TestsTour, BuildsQuote;
 
     public function generateQuote(): Quote
     {

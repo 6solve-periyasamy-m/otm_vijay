@@ -1,17 +1,5 @@
 @php
     /** @var \App\Models\Order\Invoice\Invoice $invoice */
-   //var_dump($invoice);
-    
-   //if (!sizeof($invoice->installments) === 0)
-   $due_date = 'PAID';
-    foreach($invoice->installments as $installment) {
-        $due_date = date('d M Y', strtotime($invoice->installments[0]->due));
-        if ($installment->paid) {
-            $due_date = date('d M Y', strtotime($installment->due));
-            break;
-        }
-        //$due_date = date('d M Y', strtotime($installment->due));
-    }
 @endphp
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -352,6 +340,9 @@
             margin-top:20px;
             height:68px;    
         }
+        .details tr td:last-child {
+            vertical-align: middle;
+        }
        .details tr td p span:last-child {
            font-weight:400!important;
         }       
@@ -402,7 +393,6 @@
         font-weight: 400;
        }
        .footer img {padding-left:20px;}
-       .whole-items-cls {min-height:610px;}
        .payment-options tr td figure.table {margin:0;} 
        .payment-options tr td figure.table table tbody tr td:nth-child(2) {display:none;}
        .payment-options tr td figure.table table tbody tr td {
@@ -421,9 +411,9 @@
         margin-top:5px!important
        }
        .payment-options { 
-        position: fixed;
         bottom: 0cm;
         height: 228px; 
+        page-break-inside: avoid;
         }
         .full-btm-cls-mod p span {
         font-family: 'Lato', sans-serif!important;
@@ -462,29 +452,24 @@
 
     <!-- Details Table -->
     <table class="details">
-        <!-- <tr>
-            <th><h6>Invoice To</h6></th>
-            <th><h6>Details</h6></th>
-        </tr> -->
         <tr>
             <td>
-            <h6>Invoice To</h6>
-            <p class="name">{{ $invoice->lead->full_name }}</p>
-            <p class="name">{{$invoice->lead->email}}</p>
-            <p class="address">
-                {{ implode(', ', array_filter([$invoice->lead->address_line_1, $invoice->lead->address_line_2, $invoice->lead->town, $invoice->lead->region, $invoice->lead->country, $invoice->lead->postcode])) }}
-            </p>
+                <h6>Invoice To</h6>
+                <p class="name">{{ $invoice->lead->full_name }}</p>
+                <p class="name">{{$invoice->lead->email}}</p>
+                <p class="address">
+                    {{ implode(', ', array_filter([$invoice->lead->address_line_1, $invoice->lead->address_line_2, $invoice->lead->town, $invoice->lead->region, $invoice->lead->country, $invoice->lead->postcode])) }}
+                </p>
             </td>
             <td>
             <h6>Details</h6>
-            <p class="event-name"><span>Reference:</span> <span>{{$invoice->booking_reference}}</span></p>
-            <p class="event-name"><span>Event Name:</span> <span>{{ $invoice->event }}</span></p>
-            <p class="no-of-pax"><span>Number of Pax:</span> <span>{{$invoice->getTravellingTravellersAtribute()}}</span></p>
+                <p class="event-name"><span>Reference:</span> <span>{{$invoice->booking_reference}}</span></p>
+                <p class="event-name"><span>Event Name:</span> <span>{{ $invoice->event }}</span></p>
+                <p class="no-of-pax"><span>Number of Pax:</span> <span>{{$invoice->getTravellingTravellersAtribute()}}</span></p>
             </td>
             <td>
-            <p class="bg-box-contain f-1"><span>Invoice No:</span> <span>{{ $invoice->invoice_number }}</span></p>
-            <p class="bg-box-contain"><span>Invoice Date:</span> <span>{{ date('d M Y', strtotime($invoice->generated)) }}</span></p>
-            <p class="bg-box-contain f-3"><span>Due Date:</span> <span>{{$due_date}}</span></p>
+                <p class="bg-box-contain"><span>Invoice No:</span> <span>{{ $invoice->invoice_number }}</span></p>
+                <p class="bg-box-contain"><span>Invoice Date:</span> <span>{{ date('d M Y', strtotime($invoice->generated)) }}</span></p>
             </td>
         </tr>
     </table>

@@ -15,13 +15,15 @@ class AccommodationSelectorCard extends Component
     public CarbonPeriod $period;
     public bool $selected;
     public int $travellers;
+    public int|null $quantity = null;
 
-    public function __construct(Storage $storage, Carbon $start, Carbon $end, $selected, int $travellers = 0)
+    public function __construct(Storage $storage, Carbon $start, Carbon $end, $selected, int $travellers = 0, int|null $quantity = null)
     {
         $this->storage = $storage;
         $this->period = CarbonPeriod::create($start, '1 day', $end->subDay());
         $this->selected = $selected;
         $this->travellers = $travellers;
+        $this->quantity = $quantity;
     }
 
     /**

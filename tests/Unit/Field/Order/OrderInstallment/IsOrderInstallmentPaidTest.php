@@ -1,6 +1,6 @@
 <?php
 
-namespace Field\Order;
+namespace Tests\Unit\Field\Order\OrderInstallment;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Bases\DatabaseTestCase;

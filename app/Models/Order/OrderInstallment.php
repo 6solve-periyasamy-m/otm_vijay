@@ -16,14 +16,14 @@ use Illuminate\Support\Carbon;
  * App\Models\Order\OrderInstallment
  *
  * @property int $id
- * @property int $order_id
- * @property float $amount
- * @property Carbon|null $due_on
+ * @property int $order_id ID for connected order
+ * @property float $amount Amount per traveller
+ * @property Carbon|null $due_on Due date for installment
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read float $calculated_amount Calculated installment amount based on customer count
- * @property-read Carbon|null $paid_on
+ * @property-read Carbon|null $paid_on What date the installment was paid_on
  * @property-read bool $cancelled Is the order cancelled?
  * @property-read bool $paid Is the installment paid?
  * @property-read float $percentage Percentage of the order amount
