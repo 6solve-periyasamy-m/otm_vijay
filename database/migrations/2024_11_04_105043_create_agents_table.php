@@ -16,8 +16,9 @@ return new class extends Migration
             $table->timestamps();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->foreignId('organization_id')->nullable()->constrained()->onDelete('set null');
+            $table->unique(['email', 'organization_id']);
         });
     }
 

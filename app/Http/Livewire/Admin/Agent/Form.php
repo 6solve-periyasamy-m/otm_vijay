@@ -38,9 +38,11 @@ class Form extends ModalComponent
     {
         $this->agent->organization()->associate($this->organization);
         $this->agent->organization->save();
-        $this->agent->save();
+        $this->agent->updateOrCreate(['first_name' => $this->agent->first_name, 'last_name' => $this->agent->last_name, 'email' => $this->agent->email, 'organization_id' => $this->organization]);
+
         $this->refreshTables();
         $this->closeModal();
+
         $this->redirect('/admin/organizations/' . $this->agent->organization_id);
     }
 

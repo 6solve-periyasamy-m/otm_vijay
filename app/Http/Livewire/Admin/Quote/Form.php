@@ -60,9 +60,8 @@ class Form extends Component
     public function inputChanged(string|null $key = null)
     {
         if ($key === 'quote.organization_id') {
-            $this->quote->commission = $this->quote->organization?->commission ? $this->quote->organization?->commission : null;
+            $this->quote->commission = $this->quote->organization?->commission ?? $this->quote->commission;
             $this->quote->agents = Agent::where('organization_id', $this->quote->organization->id)->get();
-            \Log::info('inputChanged!', [$key, $this->quote->agents]);
         }
 
         if ($key === 'quote.commission') {
@@ -83,6 +82,21 @@ class Form extends Component
             $this->quote->invoice_footer = $template->content;
             $this->updateValue('quote.invoice_footer', $template->content);
         }
+    }
+
+    public static function getSelectAgencies($organization_id)
+    {
+        if ($organization_id == 0) return null;
+        $agents = Agent::where('organization_id', $organization_id)->get();
+        $data = [];
+        foreach ($agents as $agent) {
+            $option = [];
+            $option['id'] = $agent->id;
+            $option['text'] = $agent->first_name . ' ' . $agent->last_name;
+            $data['results'][] = $option;
+        }
+        \Log::info('CustomerTransforms: selecting Agencies', $data);
+        return $data;
     }
 
     public function render()
