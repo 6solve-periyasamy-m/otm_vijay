@@ -1,7 +1,5 @@
 @php
     /** @var \App\Models\Order\Invoice\Invoice $invoice */
-    $installments = collect($invoice->installments);
-    $due_date = $installments->isNotEmpty() ? date('d M Y', strtotime($installments->last()->due)) : 'PAID';
 @endphp
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -471,10 +469,9 @@
             <p class="event-name"><span>Event Name:</span> <span>{{ $invoice->event }}</span></p>
             <p class="no-of-pax"><span>Number of Pax:</span> <span>{{$invoice->getTravellingTravellersAtribute()}}</span></p>
             </td>
-            <td>
-            <p class="bg-box-contain f-1"><span>Invoice No:</span> <span>{{ $invoice->invoice_number }}</span></p>
+            <td style="vertical-align: middle;">
+            <p class="bg-box-contain"><span>Invoice No:</span> <span>{{ $invoice->invoice_number }}</span></p>
             <p class="bg-box-contain"><span>Invoice Date:</span> <span>{{ date('d M Y', strtotime($invoice->generated)) }}</span></p>
-            <p class="bg-box-contain f-3"><span>Due Date:</span> <span>{{$due_date}}</span></p>
             </td>
         </tr>
     </table>
