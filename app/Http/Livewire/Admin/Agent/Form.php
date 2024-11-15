@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Livewire\Admin\Agent;
+
 use App\Models\Customer\Agent;
 use LivewireUI\Modal\ModalComponent;
 
@@ -10,7 +11,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 
-class AgentFormComponent extends ModalComponent
+class Form extends ModalComponent
 {
     use SendsEvents;
     use LivewireForm;
@@ -19,6 +20,7 @@ class AgentFormComponent extends ModalComponent
      * @var Agent $agent
      */
     public $agent;
+    public $organization;
 
 
     public function mount(Agent|int|null $agent = null): void
@@ -39,11 +41,12 @@ class AgentFormComponent extends ModalComponent
         $this->agent->save();
         $this->refreshTables();
         $this->closeModal();
+        $this->redirect('/admin/organizations/' . $this->agent->organization_id);
     }
 
     public function render(): Factory|View|Application
     {
-        return view('livewire.admin.organization.agent.form');
+        return view('livewire.admin.agent.form');
     }
 
     public function rules(): array

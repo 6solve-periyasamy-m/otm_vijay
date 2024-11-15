@@ -86,11 +86,15 @@
                         <tr>
                             <td>{{ $agent->first_name . ' ' . $agent->last_name }}</td>
                             <td>{{ $agent->email }}</td>
-                            <td>:CHECK:{{ $agent->organization->orders()->count() }}</td>
-                            <td>:CHECK:{{ $agent->organization->quotes()->count() }}</td>
+                            <td>{{ $agent->organization->orders()->count() }}</td>
+                            <td>{{ $agent->organization->quotes()->count() }}</td>
                         </tr>
                     @endforeach
                 </table>
+                <button onclick="openModal('admin.agent.form', {'organization': {{$organization->id}},})" class="btn btn-success">
+                    {{ Icon::edit() }}
+                    Add Agent
+                </button> 
             </x-admin.section.card>
         </div>
         @endif
