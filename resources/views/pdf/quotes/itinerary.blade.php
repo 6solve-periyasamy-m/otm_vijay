@@ -531,7 +531,7 @@ figure.table tr td:nth-child(2) {display:none;}
                 {{ !empty($itinerary->end) ? date('d M Y', strtotime($itinerary->end)) : '' }}
             </td>
             <td><strong>Lead Guest:</strong></td>
-            <td>{{ !empty($cusname) ? $cusname : '' }}</td>
+            <td class="tbl-td-no-text-wrap">{{ !empty($cusname) ? $cusname : '' }}</td>
         </tr>
     </table>
 </div>
