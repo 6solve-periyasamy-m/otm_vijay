@@ -24,7 +24,7 @@
     <div class="col-xl-6">
         <x-admin.section.card>
             <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" value="{{ $termsTemplate }}" />
-            <x-livewire.ckeditor name="event.final_terms" value="{{ $event?->final_terms }}" label="Final Terms and Conditions" required />
+            <x-livewire.ckeditor name="event.final_terms" value="{{ $event?->final_terms }}" label="Final Terms and Conditions" />
         </x-admin.section.card>
     </div>
     <div class="col-xl-6">
