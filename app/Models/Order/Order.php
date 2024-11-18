@@ -351,7 +351,7 @@ class Order extends Model implements NotificationSubject
      */
     public function getTotalAdjustmentsAttribute(): float
     {
-        return $this->customerAdjustments()->sum('amount') + $this->adjustments()->sum('amount');
+        return sigfig($this->customerAdjustments()->sum('amount') + $this->adjustments()->sum('amount'));
     }
 
     /**
@@ -383,7 +383,7 @@ class Order extends Model implements NotificationSubject
      */
     public function getPaidAttribute(): float
     {
-        return $this->payments()->sum('amount');
+        return sigfig($this->payments()->sum('amount'));
     }
 
     /**

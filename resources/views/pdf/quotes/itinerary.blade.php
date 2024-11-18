@@ -1,6 +1,7 @@
 @php
     use Illuminate\Support\Facades\File;
     use Illuminate\Support\Facades\DB;
+    use App\Repository\Storage\Itinerary\ItineraryScheduleType;
     /**
      * @var \App\Repository\Storage\Itinerary\Itinerary $itinerary
      * @var string $type
@@ -291,7 +292,7 @@ h4 span.mark {
     font-family: "PPNeueMontreal-Regular";
     font-size: 14px;
     font-weight: 400;
-    line-height: 24px;
+    line-height: 20px;
     color: var(--text-color);
     margin: 0px 0px 0px 0px;
     padding:0px;
@@ -329,8 +330,9 @@ h4 span.mark {
     line-height: 18px;
     color: var(--text-color);
     margin: 0;
-    width:190px;
+    width:100px;
 }
+.information-block table td.tbl-td-no-text-wrap {width:300px;}
 .information-block table td strong {
   font-family: "PPNeueMontreal-Medium";
   font-weight: 500;
@@ -504,7 +506,7 @@ figure.table tr td:nth-child(2) {display:none;}
                     <h6>AGENT DETAILS</h6>
                     <p>Name: <span>{{$itinerary->consultant?->name}}</span></p>
                     <p>Email: <span>{{$itinerary->consultant?->email}}</span><p>
-                    <p>Quote date: <span>{{ $itinerary->created->format('d M Y') }}</span><p>
+                    <p>{{ $type === 'Quote' ? "Quote" : "Order"}} Date: <span>{{ $itinerary->created->format('d M Y') }}</span><p>
                 </div>
             </div>  
         </div>
@@ -518,18 +520,18 @@ figure.table tr td:nth-child(2) {display:none;}
     <table>
         <tr>
             <td><strong>Event:</strong></td>
-            <td>{!! !empty($evename) ? $evename : '' !!}</td>
-            <td><strong>No. of guests:</strong></td>
-            <td>{{ !empty($evatra) ? $evatra : '0' }} Adult(s)</td> 
+            <td class="tbl-td-no-text-wrap">{!! !empty($evename) ? $evename : '' !!}</td>
+            <td><strong>No. of Guests:</strong></td>
+            <td class="tbl-td-no-text-wrap">{{ !empty($evatra) ? $evatra : '0' }} Adult(s)</td> 
         </tr>
         <tr>
-            <td><strong>Travel dates:</strong></td>
+            <td><strong>Travel Dates:</strong></td>
             <td>
                 {{ !empty($itinerary->start) ? date('d M Y', strtotime($itinerary->start)) : '' }} - 
                 {{ !empty($itinerary->end) ? date('d M Y', strtotime($itinerary->end)) : '' }}
             </td>
-            <td><strong>Lead guest:</strong></td>
-            <td>{{ !empty($cusname) ? $cusname : '' }}</td>
+            <td><strong>Lead Guest:</strong></td>
+            <td class="tbl-td-no-text-wrap">{{ !empty($cusname) ? $cusname : '' }}</td>
         </tr>
     </table>
 </div>
@@ -544,7 +546,7 @@ figure.table tr td:nth-child(2) {display:none;}
     
   @foreach($itinerary->items['Transfers'] as $transport)
     @if(isset($transport->details['Quantity']) && $transport->details['Quantity'] > 0)
-      <div class="single-module mb-n15">
+      <div class="single-module mb-n15 <?php echo $firstLoop?'':'add-on-cls'?>">
         @if($firstLoop)
             <div class="heading-module">
                 <h3   style="margin-top:10px;">
@@ -599,10 +601,10 @@ figure.table tr td:nth-child(2) {display:none;}
     
   @foreach($itinerary->items['Accommodation'] as $accommodation)
 
-    <div class="single-module mb-n15">
+    <div class="single-module mb-n15 <?php echo $firstLoop?'':'add-on-cls'?>">
       @if($firstLoop)
           <div class="heading-module">
-              <h3   style="margin-top:10px;">
+              <h3 style="margin-top:10px;">
                   <span class="mark"></span>
                   <span class="text">Accommodation</span>
               </h3>
@@ -656,7 +658,7 @@ figure.table tr td:nth-child(2) {display:none;}
     <!-- <section class="pdf-individual-block"> -->
         <div class="row">
             @foreach($itinerary->items['Event'] as $item)
-                <div class="single-module" style="margin-bottom:0px;">
+                <div class="single-module <?php echo $firstLoop?'':'add-on-cls'?>" style="margin-bottom:0px;">
                     @if($firstLoop)
                         <div class="heading-module">
                             <h3>
@@ -731,7 +733,7 @@ figure.table tr td:nth-child(2) {display:none;}
    <div class="row">
    
       @foreach($itinerary->items['Inclusion'] as $item)
-      <div class="single-module">
+      <div class="single-module <?php echo $firstLoop?'':'add-on-cls'?>">
       @if($firstLoop)
         <div class="heading-module">
             <h3>
@@ -785,7 +787,7 @@ figure.table tr td:nth-child(2) {display:none;}
    <div class="row">
    
    
-   <div class="single-module">
+   <div class="single-module heading-2">
    <h2 style="margin-left:-32px;">Payment summary</h2> 
    
    <div class="heading-module">
@@ -829,35 +831,148 @@ figure.table tr td:nth-child(2) {display:none;}
     </h3>
   </div>
   <div class="payment-detail">
-  <table>
-    <thead>
-      <tr>
-        <th>INSTALLMENTS</th>
-        <th>AMOUNT DUE</th>
-        <th>DATE DUE</th>
-      </tr>
-    </thead>
-    <tbody>
-      @foreach ($itinerary->finances->schedule as $installment)
-      <tr>
-          <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
-          <td>{{ f_currency($installment->amount) }}</td>
-          <td>@if($installment->paid)
-                  PAID
-              @elseif(!is_null(optional($installment->due)))
-                  {{ optional($installment->due)->format('d M Y') }}
-              @endif
-            </td>
-        </tr>
-      @endforeach
-    </tbody>
-  </table>
-    </div>
+    @if($type === 'Reservation' )
+      <table>
+        <thead>
+          <tr>
+            <th>INSTALLMENTS</th>
+            <th>AMOUNT DUE</th>
+            <th>AMOUNT PAID</th>
+            <th>OUTSTANDING</th>
+            <th>DATE DUE</th>
+            <th>PAID ON</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($itinerary->finances->schedule as $installment)
+            @if($installment->type === ItineraryScheduleType::BOOKING_FEE)
+              <tr>
+                <td>Booking Fee</td>
+                <td>{{ f_currency($installment->amount) }}</td>
+                <td>{{ f_currency(min($installment->amount, $installment->received)) }}</td>
+                <td>
+                  @if($installment->amount <= $installment->received)
+                    Paid
+                  @else
+                      {{ f_currency($installment->amount - min($installment->amount, $installment->received)) }}
+                  @endif
+                </td>
+                <td>With Order</td>
+                <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
+              </tr>
+            @endif
+            @if ($installment->type === ItineraryScheduleType::DEPOSIT)
+              <tr>
+                <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
+                <td>{{ f_currency($installment->amount) }} <p>({{ $installment->percentage }}%)</p></td>
+                <td>
+                  @php $amount = $installment->amount - min(($installment->received - ($installment->balance ?? 0)), $installment->amount); @endphp
+                  @if($amount <= 0)
+                      {{ f_currency($installment->amount) }}
+                  @else
+                      {{ f_currency($installment->received) }}
+                  @endif
+                </td>
+                <td>
+                  @if($amount <= 0)
+                    Paid
+                  @else
+                      {{ f_currency($amount) }}
+                  @endif
+                </td>
+                <td>With Order</td>
+                <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
+            </tr>
+            @endif
+            @if ($installment->type === ItineraryScheduleType::INSTALLMENT)
+              @php $amount = $installment->amount - $installment->received; @endphp
+              <tr>
+                <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
+                <td>{{ f_currency($installment->amount) }} <p>({{ $installment->percentage }}%)</p></td>
+                <td>
+                  @if($amount <= 0)
+                      {{ f_currency($installment->amount) }}
+                  @else
+                      {{ f_currency($installment->received) }}
+                  @endif
+                </td>
+                <td>
+                  @if($amount <= 0)
+                      Paid
+                  @else
+                      {{ f_currency($amount) }}
+                  @endif
+                </td>
+                <td>
+                  @if(!is_null(optional($installment->due)))
+                      {{ optional($installment->due)->format('d/m/Y') }}
+                  @endif
+                </td>
+                <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
+              </tr>
+            @endif
+            @if ($installment->type === ItineraryScheduleType::REMAINING)
+              <tr>
+                <td>Remaining Balance</td>
+                <td>{{ f_currency($installment->amount) }} <p>({{ $installment->percentage }}%)</p></td>
+                <td>{{ f_currency($installment->received) }}</td>
+                <td>
+                  @php $amount = min($installment->balance, $installment->amount); @endphp
+                  @if($amount <= 0)
+                      Paid
+                  @else
+                      {{ f_currency($amount) }}
+                  @endif
+                </td>
+                <td>
+                  @if(!is_null(optional($installment->due)))
+                      {{ optional($installment->due)->format('d/m/Y') }}
+                  @endif
+                </td>
+                <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
+              </tr>
+            @endif
+
+            @if($installment->type === ItineraryScheduleType::TOTAL)
+            <tr>
+                <td colspan=3><b>Total Payments Received: </b> {{ f_currency($installment->amount) }}</td>
+                <td colspan=3><b>Due:</b> {{ f_currency($installment->percentage) }}</td>
+              </tr>
+            @endif
+          @endforeach
+        </tbody>
+      </table>
+    @else
+      <table>
+        <thead>
+          <tr>
+            <th>INSTALLMENTS</th>
+            <th>AMOUNT DUE</th>
+            <th>DATE DUE</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($itinerary->finances->schedule as $installment)
+          <tr>
+              <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
+              <td>{{ f_currency($installment->amount) }}</td>
+              <td>@if($installment->paid)
+                      PAID
+                  @elseif(!is_null(optional($installment->due)))
+                      {{ optional($installment->due)->format('d M Y') }}
+                  @endif
+                </td>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
+    @endif
+  </div>
 </div>
   </div>
    
    
-   <div class="custom-details-module">  
+   <div class="custom-details-module heading-2">  
    <h2 style="margin-left:-32px;">Payment Details</h2>    
        <h6>Keith Prowse Travel PTY LTD</h6>      
   <table>
