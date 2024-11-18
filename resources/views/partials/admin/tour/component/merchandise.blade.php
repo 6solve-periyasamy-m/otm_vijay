@@ -23,7 +23,8 @@
                     <td style="min-width: 100px">{{ $tourComponent->inventory->component->name }}</td>
                     <td>{{ $tourComponent->inventory->variant->name }}</td>
                     <td>{{ $tourComponent->inventory->size?->name ?? 'No Size'  }}</td>
-                    <td>{{ $tourComponent->stock_control_active }}</td>
+                    <td>{{ $tourComponent->tour_component_type }}</td>
+                    <td>{{ f_bool($tourComponent->stock_control_active) }}</td>
                     <td>{{ f_currency($tourComponent->tour_sales_price) }}</td>
                     <td>
                         {{ $tourComponent->repository->getUsedStock() }}
@@ -31,7 +32,7 @@
                         ({{$tourComponent->repository->getAvailableStock()}} Available)
                     </td>
                     <td>{{ $tourComponent->repository->getOrderedCount() }} Ordered, {{ $tourComponent->repository->getBookedCount() }} <abbr title="Bookings created through the form. Will include ones converted to orders">Booked</abbr></td>
-                    <td>{{ $tourComponent->internal_notes }}</td>
+                    <td>{{ $tourComponent->inventory->component->internal_notes }}</td>
                     <td class="actions">
                         @can('update', \App\Models\Merchandise\MerchandiseInventoryTour::class)
                             <a href="{{ route('merchandise.inventory.tour.edit', ['tour' => $tour, 'inventoryTour' => $tourComponent,]) }}"
