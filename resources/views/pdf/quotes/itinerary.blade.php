@@ -506,7 +506,7 @@ figure.table tr td:nth-child(2) {display:none;}
                     <h6>AGENT DETAILS</h6>
                     <p>Name: <span>{{$itinerary->consultant?->name}}</span></p>
                     <p>Email: <span>{{$itinerary->consultant?->email}}</span><p>
-                    <p>{{ $type === 'Quote' ? "Quote" : "Order"}} date: <span>{{ $itinerary->created->format('d M Y') }}</span><p>
+                    <p>{{ $type === 'Quote' ? "Quote" : "Order"}} Date: <span>{{ $itinerary->created->format('d M Y') }}</span><p>
                 </div>
             </div>  
         </div>
@@ -522,7 +522,7 @@ figure.table tr td:nth-child(2) {display:none;}
             <td><strong>Event:</strong></td>
             <td class="tbl-td-no-text-wrap">{!! !empty($evename) ? $evename : '' !!}</td>
             <td><strong>No. Of Guests:</strong></td>
-            <td>{{ !empty($evatra) ? $evatra : '0' }} Adult(s)</td> 
+            <td class="tbl-td-no-text-wrap">{{ !empty($evatra) ? $evatra : '0' }} Adult(s)</td> 
         </tr>
         <tr>
             <td><strong>Travel Dates:</strong></td>
