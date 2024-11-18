@@ -5,6 +5,7 @@ namespace App\Repository\Storage\Itinerary;
 use App\Models\Customer\Customer;
 use App\Models\Customer\Organization;
 use App\Models\System\Brand;
+use App\Models\Tour\Event;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -15,7 +16,7 @@ class Itinerary
 {
     /**
      * @param string|null $package
-     * @param string|null $event
+     * @param Event|null $event
      * @param string|null $description
      * @param string|null $image
      * @param string|null $reference
@@ -23,6 +24,7 @@ class Itinerary
      * @param User|null $consultant
      * @param Carbon $start
      * @param Carbon $end
+     * @param Carbon $created
      * @param ItineraryTraveller $booker
      * @param Brand $brand
      * @param ItineraryTraveller[] $travellers
@@ -34,7 +36,7 @@ class Itinerary
      */
     public function __construct(
         public string|null $package,
-        public string|null $event,
+        public Event|null $event,
         public string|null $description,
         public string|null $image,
         public string|null $reference,

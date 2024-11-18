@@ -113,18 +113,8 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
         if ($this->inventory->tourComponents()->count() > 0) {
             throw new CannotDeleteException('Cannot delete inventory as it has dependants');
         }
-        $children = $this->inventory->stockChildren()->count();
-        if ($children > 0) {
-            throw new CannotDeleteException("This inventory has {$children} stock children, and cannot be deleted");
-        }
-        if ($unlink) {
-            foreach ($this->inventory->stockChildren as $child) {
-                $child->stock_parent_id = null;
-                $child->save();
-            }
-        }
         $this->inventory->contractComponents()->forceDelete();
-        return $this->inventory->delete();
+        return $this->inventory->forceDelete();
     }
 
     public function isDeleted(): bool

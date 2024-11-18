@@ -161,4 +161,14 @@ class QuoteAccommodationRepository extends QuoteComponentRepository
     {
         return $tour->accommodationInventoryTours()->where('accommodation_inventory_id', '=', $this->quoteComponent->accommodation_inventory_id)->first();
     }
+
+    public function getComponentInternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->component->internal_notes;
+    }
+
+    public function getComponentExternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->component->external_notes;
+    }
 }

@@ -63,14 +63,14 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2" class="new header-detail-data">
-                                        NAME: {{ $itinerary->brand->name }}
+                                        NAME: {{ $itinerary->event->onsite_name ?? $itinerary->consultant->name ?? $itinerary->brand->name }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="2" class="new header-detail-data">
                                         EMAIL:
-                                        <a href="mailto:{{ $itinerary->brand->email ?? setting('company.contact.email', 'Email not set') }}">
-                                            {{ $itinerary->brand->email ??  setting('company.contact.email', 'Email not set') }}
+                                        <a href="mailto:{{ $itinerary->event->onsite_email ?? $itinerary->consultant->email ?? $itinerary->brand->email  }}">
+                                            {{ $itinerary->event->onsite_email ?? $itinerary->consultant->email ?? $itinerary->brand->email  }}
                                         </a>
                                     </td>
                                 </tr>
@@ -108,7 +108,7 @@
                                 EVENT:
                             </td>
                             <td class="lower-header-detail">
-                                {{ $itinerary->event }}
+                                {{ $itinerary->event->name }}
                             </td>
                         </tr>
                     @endif

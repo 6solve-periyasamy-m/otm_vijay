@@ -146,4 +146,14 @@ class QuoteFlightRepository extends QuoteComponentRepository
         else { $item->type = 'Mid-Package Flight'; }
         return $item;
     }
+
+    public function getComponentInternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->component->internal_notes;
+    }
+
+    public function getComponentExternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->component->external_notes;
+    }
 }

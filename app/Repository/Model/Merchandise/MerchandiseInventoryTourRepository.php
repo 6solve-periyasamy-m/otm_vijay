@@ -293,4 +293,14 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
     {
         return $this->tourComponent->bookingComponents()->count();
     }
+
+    public function getComponentInternalNotes(): string|null
+    {
+        return $this->tourComponent->inventory->component->internal_notes;
+    }
+
+    public function getComponentExternalNotes(): string|null
+    {
+        return $this->tourComponent->inventory->component->external_notes;
+    }
 }

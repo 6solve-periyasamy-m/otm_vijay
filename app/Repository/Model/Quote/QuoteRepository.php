@@ -1193,7 +1193,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $event = is_array($this->quote->event) ? new Event($this->quote->event) : $this->quote->event;
         return new Itinerary(
             null,
-            $event?->name,
+            $event,
             $this->quote->description ?? $event?->description,
             $event?->image_url,
             $this->quote->reference,
