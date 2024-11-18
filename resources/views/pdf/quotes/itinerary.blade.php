@@ -521,7 +521,7 @@ figure.table tr td:nth-child(2) {display:none;}
         <tr>
             <td><strong>Event:</strong></td>
             <td class="tbl-td-no-text-wrap">{!! !empty($evename) ? $evename : '' !!}</td>
-            <td><strong>No. Of Guests:</strong></td>
+            <td><strong>No. of Guests:</strong></td>
             <td class="tbl-td-no-text-wrap">{{ !empty($evatra) ? $evatra : '0' }} Adult(s)</td> 
         </tr>
         <tr>
