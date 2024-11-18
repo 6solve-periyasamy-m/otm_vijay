@@ -36,10 +36,10 @@ class Form extends ModalComponent
 
     public function save(): void
     {
-        $this->agent->organization()->associate($this->organization);
-        $this->agent->organization->save();
-        $this->agent->updateOrCreate(['first_name' => $this->agent->first_name, 'last_name' => $this->agent->last_name, 'email' => $this->agent->email, 'organization_id' => $this->organization]);
-
+        if (!isset($this->agent->organization_id)) {
+            $this->agent->organization()->associate($this->organization);
+        }
+        $this->agent->save();
         $this->refreshTables();
         $this->closeModal();
 
