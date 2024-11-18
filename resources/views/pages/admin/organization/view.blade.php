@@ -88,6 +88,9 @@
                             <td>{{ $agent->email }}</td>
                             <td>{{ $agent->organization->orders()->count() }}</td>
                             <td>{{ $agent->organization->quotes()->count() }}</td>
+                            <td style="width: 10px">
+                                <button onclick="openModal('admin.agent.form', {'agent': {{$agent->id}},})">{{Icon::edit()}}</button>
+                            </td>
                         </tr>
                     @endforeach
                 </table>
