@@ -91,6 +91,11 @@
                             <td style="width: 10px">
                                 <button onclick="openModal('admin.agent.form', {'agent': {{$agent->id}},})">{{Icon::edit()}}</button>
                             </td>
+                            <td style="width: 10px">
+                                <button wire:click="$emit('agent-delete', {{ $agent->id }})">
+                                    {{Icon::delete()}}
+                                </button>
+                            </td>
                         </tr>
                     @endforeach
                 </table>

@@ -49,10 +49,4 @@ class Table extends LivewireDatatable
                 ->unsortable(),
         ];
     }
-
-    public function delete($id): void
-    {
-        Agent::find($id)?->delete();
-        $this->refreshLivewireDatatable();
-    }
 }
