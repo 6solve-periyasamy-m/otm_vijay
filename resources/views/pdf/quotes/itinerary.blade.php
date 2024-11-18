@@ -292,7 +292,7 @@ h4 span.mark {
     font-family: "PPNeueMontreal-Regular";
     font-size: 14px;
     font-weight: 400;
-    line-height: 24px;
+    line-height: 20px;
     color: var(--text-color);
     margin: 0px 0px 0px 0px;
     padding:0px;
@@ -330,8 +330,9 @@ h4 span.mark {
     line-height: 18px;
     color: var(--text-color);
     margin: 0;
-    width:190px;
+    width:100px;
 }
+.information-block table td.tbl-td-no-text-wrap {width:300px;}
 .information-block table td strong {
   font-family: "PPNeueMontreal-Medium";
   font-weight: 500;
@@ -427,11 +428,11 @@ h5 span {
 .customer-agent-details {clear:both;}
 .payment-detail table {
   width: 90%;
-  max-width: 736px;
+  max-width: 716px;
 }
 .payment-detail table th {
     font-family: "PPNeueMontreal-Medium";
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 500;
     line-height: 20px;
     background-color: #F9F4EE;
@@ -505,7 +506,7 @@ figure.table tr td:nth-child(2) {display:none;}
                     <h6>AGENT DETAILS</h6>
                     <p>Name: <span>{{$itinerary->consultant?->name}}</span></p>
                     <p>Email: <span>{{$itinerary->consultant?->email}}</span><p>
-                    <p>Quote date: <span>{{ $itinerary->created->format('d M Y') }}</span><p>
+                    <p>{{ $type === 'Quote' ? "Quote" : "Order"}} Date: <span>{{ $itinerary->created->format('d M Y') }}</span><p>
                 </div>
             </div>  
         </div>
@@ -519,18 +520,18 @@ figure.table tr td:nth-child(2) {display:none;}
     <table>
         <tr>
             <td><strong>Event:</strong></td>
-            <td>{!! !empty($evename) ? $evename : '' !!}</td>
-            <td><strong>No. of guests:</strong></td>
-            <td>{{ !empty($evatra) ? $evatra : '0' }} Adult(s)</td> 
+            <td class="tbl-td-no-text-wrap">{!! !empty($evename) ? $evename : '' !!}</td>
+            <td><strong>No. of Guests:</strong></td>
+            <td class="tbl-td-no-text-wrap">{{ !empty($evatra) ? $evatra : '0' }} Adult(s)</td> 
         </tr>
         <tr>
-            <td><strong>Travel dates:</strong></td>
+            <td><strong>Travel Dates:</strong></td>
             <td>
                 {{ !empty($itinerary->start) ? date('d M Y', strtotime($itinerary->start)) : '' }} - 
                 {{ !empty($itinerary->end) ? date('d M Y', strtotime($itinerary->end)) : '' }}
             </td>
-            <td><strong>Lead guest:</strong></td>
-            <td>{{ !empty($cusname) ? $cusname : '' }}</td>
+            <td><strong>Lead Guest:</strong></td>
+            <td class="tbl-td-no-text-wrap">{{ !empty($cusname) ? $cusname : '' }}</td>
         </tr>
     </table>
 </div>
@@ -603,7 +604,7 @@ figure.table tr td:nth-child(2) {display:none;}
     <div class="single-module mb-n15 <?php echo $firstLoop?'':'add-on-cls'?>">
       @if($firstLoop)
           <div class="heading-module">
-              <h3   style="margin-top:10px;">
+              <h3 style="margin-top:10px;">
                   <span class="mark"></span>
                   <span class="text">Accommodation</span>
               </h3>
