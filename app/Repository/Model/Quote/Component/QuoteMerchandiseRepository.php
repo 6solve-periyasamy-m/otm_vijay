@@ -152,4 +152,14 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
     {
         return $this->getInventory()?->getItineraryItem($this->quoteComponent->quantity ?? $travelling);
     }
+
+    public function getComponentInternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->component->internal_notes;
+    }
+
+    public function getComponentExternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->component->external_notes;
+    }
 }
