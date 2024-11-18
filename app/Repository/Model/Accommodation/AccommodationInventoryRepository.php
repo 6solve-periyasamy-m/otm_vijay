@@ -156,7 +156,7 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
             }
         }
         $this->inventory->contractComponents()->forceDelete();
-        return $this->inventory->delete();
+        return $this->inventory->forceDelete();
     }
 
     public function isDeleted(): bool
