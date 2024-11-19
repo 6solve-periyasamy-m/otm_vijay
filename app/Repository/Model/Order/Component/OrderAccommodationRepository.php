@@ -9,7 +9,6 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsAccommodation;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderAccommodationRepository extends OrderComponentRepository
@@ -112,15 +111,5 @@ class OrderAccommodationRepository extends OrderComponentRepository
     public function getItineraryItem(Order $order = null): ItineraryItem
     {
         return $this->getTourComponent()?->getItineraryItem($this->getQuantity($order)); // @phpstan-ignore
-    }
-
-    public function getStartTime(): Carbon
-    {
-        return $this->orderComponent->tourComponent->inventory->check_in;
-    }
-
-    public function getEndTime(): Carbon
-    {
-        return $this->orderComponent->tourComponent->inventory->check_out;
     }
 }

@@ -483,7 +483,7 @@
                             @foreach($orderCustomer->orderFlights as $orderFlight)
                                 <tr component="{{ $orderFlight->id }}">
                                     <td style="min-width: 200px">{{ f_datetime($orderFlight->flight_inventory->departs_at) }} to {{ f_datetime($orderFlight->flight_inventory->arrives_at) }}</td>
-                                    <td>{{ $orderFlight->flight_number }}</td>
+                                    <td>{{ $orderFlight->flight_inventory->flight_number }}</td>
                                     <td>{{ $orderFlight->flight->departureAirport->name }} to {{ $orderFlight->flight->arrivalAirport->name }}</td>
                                     <td>{{ $orderFlight->flight_inventory->travelClass->name }}</td>
                                     <td>{{ $orderFlight->flightInventoryTour->tour_component_type }}</td>
@@ -509,11 +509,8 @@
                                             @endif
                                         @endif
                                     </td>
-                                    <td class="actions">
-                                        <button onclick="openModal('admin.order.component.order-flight-form', {'component': {{$orderFlight->id}}})" class="btn btn-sm btn-outline-warning">
-                                            {{ Icon::edit() }}
-                                        </button>
-                                        <form style="display:inline-block;" action="{{ route('orderFlightDelete', ['id' => $orderFlight->id,]) }}"
+                                    <td>
+                                        <form action="{{ route('orderFlightDelete', ['id' => $orderFlight->id,]) }}"
                                               method="post">
                                             @csrf
                                             <input type="hidden" name="redirect"
@@ -560,7 +557,7 @@
                             </thead>
                             @foreach($orderCustomer->orderTransports as $orderTransport)
                                 <tr component="{{ $orderTransport->id }}">
-                                    <td style="min-width: 200px">{{ f_datetime($orderTransport->repository->getStartTime()) }} to {{ f_datetime($orderTransport->repository->getEndTime()) }}</td>
+                                    <td style="min-width: 200px">{{ f_datetime($orderTransport->transport_inventory->departs_at) }} to {{ f_datetime($orderTransport->transport_inventory->arrives_at) }}</td>
                                     <td>{{ $orderTransport->transport->name }}</td>
                                     <td>{{ $orderTransport->transport->transportType->name }}</td>
                                     <td>{{ $orderTransport->transport->departureAddress->name }} to {{ $orderTransport->transport->arrivalAddress->name }}</td>
@@ -588,11 +585,8 @@
                                             @endif
                                         @endif
                                     </td>
-                                    <td class="actions">
-                                        <button onclick="openModal('admin.order.component.order-transport-form', {'component': {{$orderTransport->id}}})" class="btn btn-sm btn-outline-warning">
-                                            {{ Icon::edit() }}
-                                        </button>
-                                        <form style="display:inline-block;" action="{{ route('orderTransportDelete', ['id' => $orderTransport->id,]) }}"
+                                    <td>
+                                        <form action="{{ route('orderTransportDelete', ['id' => $orderTransport->id,]) }}"
                                               method="post">
                                             @csrf
                                             <input type="hidden" name="redirect"

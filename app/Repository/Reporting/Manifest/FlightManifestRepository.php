@@ -62,7 +62,7 @@ class FlightManifestRepository implements HasFlightManifest
             $row->customer = $orderComponent->orderCustomer->customer_name;
             $row->passport = $orderComponent->orderCustomer->customer->passport_first_name . ' ' . $orderComponent->orderCustomer->customer->passport_middle_name . ' ' . $orderComponent->orderCustomer->customer->passport_last_name;
             $row->airline = $orderComponent->tourComponent->inventory->component->airline->name;
-            $row->number = $orderComponent->flight_number;
+            $row->number = $orderComponent->tourComponent->inventory->flight_number;
             $row->departure = $orderComponent->tourComponent->inventory->component->departureAirport;
             $row->arrival = $orderComponent->tourComponent->inventory->component->arrivalAirport;
             $row->ticket = $orderComponent->tourComponent->inventory->travelClass->name;

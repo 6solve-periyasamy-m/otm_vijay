@@ -320,7 +320,7 @@
                                         @foreach($flights as $orderComponent)
                                             <tr component="{{ $orderComponent->id }}">
                                                 <td style="min-width: 200px" data-content="Date">{{ f_datetime($orderComponent->flight_inventory->departs_at) }} to {{ f_datetime($orderComponent->flight_inventory->arrives_at) }}</td>
-                                                <td data-content="Flight Number">{{ $orderComponent->flight_number }}</td>
+                                                <td data-content="Flight Number">{{ $orderComponent->flight_inventory->flight_number }}</td>
                                                 <td data-content="Flight Details">{{ $orderComponent->flight->departureAirport->name }} to {{ $orderComponent->flight->arrivalAirport->name }}</td>
                                                 <td data-content="Travel Class">{{ $orderComponent->flight_inventory->travelClass->name }}</td>
                                                 @if($orderComponent->tourComponent->tour_component_type === 'Included')
