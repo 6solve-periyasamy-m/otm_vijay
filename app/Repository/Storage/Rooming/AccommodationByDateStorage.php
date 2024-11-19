@@ -168,7 +168,6 @@ class AccommodationByDateStorage
             foreach ($blocks as $key => $block) {
                 // Clear all blocks that are no longer continuous
                 if (abs($block['end']->diffInDays($item['start'])) > 1) {
-                    dd($block, $item, $block['end']->diffInDays($item['start']));
                     $itineraryItems[] = $this->cloneItineraryItem($baseItineraryItem, $block['start'], $block['end'], $block['quantity']);
                     unset($blocks[$key]);
                     continue;
