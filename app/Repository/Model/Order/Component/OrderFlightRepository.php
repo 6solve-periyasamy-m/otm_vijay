@@ -76,11 +76,11 @@ class OrderFlightRepository extends OrderComponentRepository
         $component = $inventory->component;
         $data = [];
         $data[] = ['start' => $inventory->check_in, 'activity' => 'Flight Check In',
-            'description' => "{$component->departureAirport->name} to {$component->arrivalAirport->name} (Check In) ({$inventory->flight_number}) ({$inventory->travelClass})"];
+            'description' => "{$component->departureAirport->name} to {$component->arrivalAirport->name} (Check In) ({$this->orderComponent->flight_number}) ({$inventory->travelClass})"];
         $data[] = ['start' => $inventory->departs_at, 'activity' => 'Flight Departure',
-            'description' => "{$component->departureAirport->name} to {$component->arrivalAirport->name} (Departure) ({$inventory->flight_number}) ({$inventory->travelClass})"];
+            'description' => "{$component->departureAirport->name} to {$component->arrivalAirport->name} (Departure) ({$this->orderComponent->flight_number}) ({$inventory->travelClass})"];
         $data[] = ['start' => $inventory->arrives_at, 'activity' => 'Flight Arrival',
-            'description' => "{$component->departureAirport->name} to {$component->arrivalAirport->name} (Arrival) ({$inventory->flight_number}) ({$inventory->travelClass})"];
+            'description' => "{$component->departureAirport->name} to {$component->arrivalAirport->name} (Arrival) ({$this->orderComponent->flight_number}) ({$inventory->travelClass})"];
         return $data;
     }
 

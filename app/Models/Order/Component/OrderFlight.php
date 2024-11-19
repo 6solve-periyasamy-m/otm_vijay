@@ -30,6 +30,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property float|null $estimated_purchase_price
+ * @property string|null $flight_number_override
  * @property-read float $purchase_price
  * @property-read Airport|null $arrivalAirport
  * @property-read Airport|null $departureAirport
@@ -38,6 +39,7 @@ use Illuminate\Support\Carbon;
  * @property-read bool $cancelled Is the order cancelled?
  * @property-read string $details
  * @property-read Flight $flight
+ * @property-read string|null $flight_number
  * @property-read FlightInventory $flight_inventory
  * @property-read string $tour_component_type
  * @property-read float $tour_sales_price
@@ -141,6 +143,11 @@ class OrderFlight extends Model
     public function getAtolStringAttribute(): string
     {
         return $this->tourComponent->atol_string;
+    }
+
+    public function getFlightNumberAttribute(): string
+    {
+        return $this->flight_number_override ?? $this->tourComponent->inventory->flight_number;
     }
 
     public function getRepositoryAttribute(): OrderFlightRepository

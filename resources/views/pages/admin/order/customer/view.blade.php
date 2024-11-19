@@ -483,7 +483,7 @@
                             @foreach($orderCustomer->orderFlights as $orderFlight)
                                 <tr component="{{ $orderFlight->id }}">
                                     <td style="min-width: 200px">{{ f_datetime($orderFlight->flight_inventory->departs_at) }} to {{ f_datetime($orderFlight->flight_inventory->arrives_at) }}</td>
-                                    <td>{{ $orderFlight->flight_inventory->flight_number }}</td>
+                                    <td>{{ $orderFlight->flight_number }}</td>
                                     <td>{{ $orderFlight->flight->departureAirport->name }} to {{ $orderFlight->flight->arrivalAirport->name }}</td>
                                     <td>{{ $orderFlight->flight_inventory->travelClass->name }}</td>
                                     <td>{{ $orderFlight->flightInventoryTour->tour_component_type }}</td>
