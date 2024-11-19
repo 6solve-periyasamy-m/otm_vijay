@@ -12,6 +12,7 @@ use App\Models\Order\Order;
 use App\Repository\Interfaces\HasComponentType;
 use App\Repository\Storage\Customer\Component\OrderComponent;
 use App\Repository\Storage\Itinerary\ItineraryItem;
+use Carbon\Carbon;
 
 abstract class OrderComponentRepository extends ModelRepository implements HasComponentType
 {
@@ -22,6 +23,8 @@ abstract class OrderComponentRepository extends ModelRepository implements HasCo
     abstract public function getInvoiceBillable(): InvoiceBillable;
     abstract public function getQuantity(Order $order = null): int;
     abstract public function getItineraryItem(Order $order = null): ItineraryItem;
+    abstract public function getStartTime(): Carbon|null;
+    abstract public function getEndTime(): Carbon|null;
 
     public function getAbstractOrderComponent(): OrderComponent
     {

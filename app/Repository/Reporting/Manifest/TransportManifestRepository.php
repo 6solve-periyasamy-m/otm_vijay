@@ -68,8 +68,8 @@ class TransportManifestRepository implements HasTransportManifest
             $row->number = $orderComponent->tourComponent->inventory->transport_number;
             $row->ticket = $orderComponent->tourComponent->inventory->travelClass->name;
             $row->component = $orderComponent->tourComponent->tour_component_type;
-            $row->start = $orderComponent->tourComponent->inventory->departs_at;
-            $row->end = $orderComponent->tourComponent->inventory->arrives_at;
+            $row->start = $orderComponent->repository->getStartTime();
+            $row->end = $orderComponent->repository->getEndTime();
             $row->notes = $orderComponent->orderCustomer->transport_notes;
             $data[] = $row;
         }
