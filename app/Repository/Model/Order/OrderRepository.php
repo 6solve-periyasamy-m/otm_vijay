@@ -440,9 +440,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
         if (!isset($status)) {
             $paidAmount = $this->order->paid;
-            $cost = sigfig($this->cost ?? $this->order->cost);
-            $adjustments = $this->order->total_adjustments;
-            $total = sigfig($cost + $adjustments);
+            $total = ((($this->cost ?? $this->order->cost) + $this->order->total_adjustments) - ($this->order->commission_amount ?? 0.0));
             if ($this->order->cancelled || $this->order->trashed()) {
                 if ($paidAmount <= sigfig($this->order->booking_fee ?? 0.0)) {
                     $status = $paidAmount < 0 ? OrderStatus::CANCELLED_OVER_REFUNDED : OrderStatus::CANCELLED_FULL_REFUND;
