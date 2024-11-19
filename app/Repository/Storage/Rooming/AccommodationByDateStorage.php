@@ -82,52 +82,141 @@ class AccommodationByDateStorage
      * @param Quote $quote The quote the itinerary is generated for. Used for getting quantities
      * @return ItineraryItem[]
      */
-    public function getItineraryLinesForQuote(Quote $quote): array
+    private function getItineraryLinesForQuote(Quote $quote): array
     {
         $this->sort();
         $items = [];
-        $start = null;
-        $prev = null;
         foreach ($this->inventory as $inventory) {
-            if ($start === null) { $start = $inventory; }
-            if ($prev !== null && abs($inventory->check_in->diffInDays($prev->check_out)) > 1) {
-                $itinerary = $start->repository->getItineraryItem($this->findQuoteAccommodation($quote, $start)?->quantity);
-                $itinerary->details['Check Out'] = $prev->check_out->format('d M Y');
-                $itinerary->details['No of Nights'] = diff_in_nights($start->check_in, $prev->check_out);
-                $items[] = $itinerary;
-                $start = $inventory;
+            $quantity = $this->findQuoteAccommodation($quote, $inventory)?->quantity;
+            $key = null;
+            $data = [];
+            foreach ($items as $key => $item) {
+                if ($item['start']->isSameDay($inventory->check_in)
+                    && $item['end']->isSameDay($inventory->check_out))
+                {
+                    $data = $item;
+                    break;
+                }
             }
-            $prev = $inventory;
+            if (!empty($key) && !empty($data)) {
+                $data['quantity'] += $quantity;
+                $items[$key] = $data;
+            } else {
+                $items[] = [
+                    'start' => $inventory->check_in,
+                    'end' => $inventory->check_out,
+                    'quantity' => $quantity,
+                ];
+            }
         }
-        $itinerary = $start->repository->getItineraryItem($this->findQuoteAccommodation($quote, $start)?->quantity);
-        $itinerary->details['Check Out'] = $prev->check_out->format('d M Y');
-        $itinerary->details['No of Nights'] = diff_in_nights($start->check_in, $prev->check_out);
-        $items[] = $itinerary;
         return $items;
     }
 
-    public function getItineraryLinesForOrder(Order $order): array
+    private function getItineraryLinesForOrder(Order $order): array
     {
         $this->sort();
         $items = [];
-        $start = null;
-        $prev = null;
         foreach ($this->inventory as $inventory) {
-            if ($start === null) { $start = $inventory; }
-            if ($prev !== null && abs($inventory->check_in->diffInDays($prev->check_out)) > 1) {
-                $itinerary = $start->repository->getItineraryItem($this->getOrderQuantity($order, $start));
-                $itinerary->details['Check Out'] = $prev->check_out->format('d M Y');
-                $itinerary->details['No of Nights'] = diff_in_nights($start->check_in, $prev->check_out);
-                $items[] = $itinerary;
-                $start = $inventory;
+            $quantity = $this->getOrderQuantity($order, $inventory);
+            $key = null;
+            $data = [];
+            foreach ($items as $key => $item) {
+                if ($item['start']->isSameDay($inventory->check_in)
+                    && $item['end']->isSameDay($inventory->check_out))
+                {
+                    $data = $item;
+                    break;
+                }
             }
-            $prev = $inventory;
+            if (!empty($key) && !empty($data)) {
+                $data['quantity'] += $quantity;
+                $items[$key] = $data;
+            } else {
+                $items[] = [
+                    'start' => $inventory->check_in,
+                    'end' => $inventory->check_out,
+                    'quantity' => $quantity,
+                ];
+            }
         }
-        $itinerary = $start->repository->getItineraryItem($this->getOrderQuantity($order, $start));
-        $itinerary->details['Check Out'] = $prev->check_out->format('d M Y');
-        $itinerary->details['No of Nights'] = diff_in_nights($start->check_in, $prev->check_out);
-        $items[] = $itinerary;
         return $items;
+    }
+
+    public function getItineraryLines(Quote|Order $model): array
+    {
+        $first = reset($this->inventory);
+        if (!($first instanceof AccommodationInventory)) {
+            return [];
+        }
+        $baseItineraryItem = $first->repository->getItineraryItem();
+        if ($model instanceof Order) {
+            $items = $this->getItineraryLinesForOrder($model);
+        } else {
+            $items = $this->getItineraryLinesForQuote($model);
+        }
+        uasort($items, static function ($a, $b) {
+            return $a['start'] <=> $b['start'];
+        });
+        $itineraryItems = [];
+        $blocks = [];
+        foreach ($items as $item) {
+            if (empty($blocks)) {
+                $blocks[] = $item;
+                continue;
+            }
+            $quantity = $item['quantity'];
+            foreach ($blocks as $key => $block) {
+                // Clear all blocks that are no longer continuous
+                if (abs($block['end']->diffInDays($item['start'])) > 1) {
+                    dd($block, $item, $block['end']->diffInDays($item['start']));
+                    $itineraryItems[] = $this->cloneItineraryItem($baseItineraryItem, $block['start'], $block['end'], $block['quantity']);
+                    unset($blocks[$key]);
+                    continue;
+                }
+
+
+                // If block has equal quantity, update end time
+                if ($block['quantity'] === $quantity) {
+                    $block['end'] = $item['end'];
+                    $blocks[$key] = $block;
+                }
+                // If block has more quantity, clear amount above quantity
+                else if ($block['quantity'] > $quantity) {
+                    $itineraryItems[] = $this->cloneItineraryItem($baseItineraryItem, $block['start'], $block['end'], $block['quantity'] - $quantity);
+                    $block['quantity'] = $quantity;
+                    $block['end'] = $item['end'];
+                    $blocks[$key] = $block;
+                }
+                // If block has less quantity, make new block
+                else if ($block['quantity'] < $quantity) {
+                    $block['end'] = $item['end'];
+                    $blocks[$key] = $block;
+                    $item['quantity'] = $quantity - $block['quantity'];
+                    $blocks[] = $item;
+                }
+            }
+
+            // If the blocks are now empty, make a new block with this item
+            if (empty($blocks)) {
+                $blocks[] = $item;
+            }
+        }
+        // Finalize all remaining blocks
+        foreach ($blocks as $block) {
+            $itineraryItems[] = $this->cloneItineraryItem($baseItineraryItem, $block['start'], $block['end'], $block['quantity']);
+        }
+        return $itineraryItems;
+    }
+
+    private function cloneItineraryItem(ItineraryItem $item, Carbon $start, Carbon $end, int $quantity): ItineraryItem
+    {
+        $item = $item->clone();
+        $item->sortKey = $start->unix();
+        $item->details['Check In'] = $start->format('d M Y');
+        $item->details['Check Out'] = $end->format('d M Y');
+        $item->details['No of Nights'] = diff_in_nights($start, $end);
+        $item->details['Quantity'] = $quantity;
+        return $item;
     }
 
     /**
