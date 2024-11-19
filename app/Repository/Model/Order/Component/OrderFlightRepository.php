@@ -9,6 +9,7 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsFlight;
+use Carbon\Carbon;
 
 class OrderFlightRepository extends OrderComponentRepository
 {
@@ -50,7 +51,12 @@ class OrderFlightRepository extends OrderComponentRepository
 
     public function __toString(): string
     {
-        return "{$this->orderComponent->tourComponent}";
+        $tourComponent = $this->orderComponent->tourComponent;
+        $inventory = $tourComponent->flightInventory;
+        $component = $inventory->flight;
+        return $component->airline->name . ' (' . ($this->orderComponent->flight_number_override ?? $inventory->flight_number) . ') ' . $component->departureAirport->name . ' to ' . $component->arrivalAirport->name .
+            ' (' . f_datetime($inventory->departs_at) . ' to ' . f_datetime($inventory->arrives_at) . ')' .
+            ' (' . $inventory->travelClass->name . ')';
     }
 
     public function getTourComponentType(): string
@@ -76,11 +82,11 @@ class OrderFlightRepository extends OrderComponentRepository
         $component = $inventory->component;
         $data = [];
         $data[] = ['start' => $inventory->check_in, 'activity' => 'Flight Check In',
-            'description' => "{$component->departureAirport->name} to {$component->arrivalAirport->name} (Check In) ({$inventory->flight_number}) ({$inventory->travelClass})"];
+            'description' => "{$component->departureAirport->name} to {$component->arrivalAirport->name} (Check In) ({$this->orderComponent->flight_number}) ({$inventory->travelClass})"];
         $data[] = ['start' => $inventory->departs_at, 'activity' => 'Flight Departure',
-            'description' => "{$component->departureAirport->name} to {$component->arrivalAirport->name} (Departure) ({$inventory->flight_number}) ({$inventory->travelClass})"];
+            'description' => "{$component->departureAirport->name} to {$component->arrivalAirport->name} (Departure) ({$this->orderComponent->flight_number}) ({$inventory->travelClass})"];
         $data[] = ['start' => $inventory->arrives_at, 'activity' => 'Flight Arrival',
-            'description' => "{$component->departureAirport->name} to {$component->arrivalAirport->name} (Arrival) ({$inventory->flight_number}) ({$inventory->travelClass})"];
+            'description' => "{$component->departureAirport->name} to {$component->arrivalAirport->name} (Arrival) ({$this->orderComponent->flight_number}) ({$inventory->travelClass})"];
         return $data;
     }
 
@@ -108,5 +114,15 @@ class OrderFlightRepository extends OrderComponentRepository
     public function getItineraryItem(Order $order = null): ItineraryItem
     {
         return $this->getTourComponent()?->getItineraryItem($this->getQuantity($order));
+    }
+
+    public function getStartTime(): Carbon
+    {
+        return $this->orderComponent->tourComponent->inventory->departs_at;
+    }
+
+    public function getEndTime(): Carbon
+    {
+        return $this->orderComponent->tourComponent->inventory->arrives_at;
     }
 }
