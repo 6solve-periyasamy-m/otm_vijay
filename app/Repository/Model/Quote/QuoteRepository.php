@@ -1265,7 +1265,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         foreach ($byDate as $item) {
             $data = [
                 ...$data,
-                ...$item->getItineraryLinesForQuote($this->quote),
+                ...$item->getItineraryLines($this->quote),
             ];
         }
         return $data;

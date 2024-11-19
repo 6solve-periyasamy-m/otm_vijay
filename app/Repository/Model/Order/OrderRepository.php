@@ -996,7 +996,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         foreach ($byDate as $item) {
             $data = [
                 ...$data,
-                ...$item->getItineraryLinesForOrder($this->order),
+                ...$item->getItineraryLines($this->order),
             ];
         }
         return $data;

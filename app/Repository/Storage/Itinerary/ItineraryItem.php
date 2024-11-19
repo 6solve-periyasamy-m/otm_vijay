@@ -2,8 +2,6 @@
 
 namespace App\Repository\Storage\Itinerary;
 
-use Carbon\Carbon;
-
 class ItineraryItem
 {
 
@@ -19,4 +17,14 @@ class ItineraryItem
         public int|null $sortKey,
         public array $details
     ) {}
+
+    public function clone(): self
+    {
+        return new self(
+            $this->name,
+            $this->type,
+            $this->sortKey,
+            $this->details
+        );
+    }
 }
