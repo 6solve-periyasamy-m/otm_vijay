@@ -9,7 +9,6 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsMerchandise;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderMerchandiseRepository extends OrderComponentRepository
@@ -99,15 +98,5 @@ class OrderMerchandiseRepository extends OrderComponentRepository
     public function getItineraryItem(Order $order = null): ItineraryItem
     {
         return $this->getTourComponent()?->getItineraryItem($this->getQuantity($order));
-    }
-
-    public function getStartTime(): Carbon|null
-    {
-        return null;
-    }
-
-    public function getEndTime(): Carbon|null
-    {
-        return null;
     }
 }
