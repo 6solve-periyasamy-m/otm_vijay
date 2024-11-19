@@ -835,20 +835,19 @@ figure.table tr td:nth-child(2) {display:none;}
       <table>
         <thead>
           <tr>
-            <th>INSTALLMENTS</th>
-            <th>AMOUNT DUE</th>
-            <th>AMOUNT PAID</th>
+            <th>#</th>
+            <th>INSTALMENT</th>
+            <th>RECEIVED</th>
             <th>OUTSTANDING</th>
             <th>DATE DUE</th>
-            <th>PAID ON</th>
           </tr>
         </thead>
         <tbody>
-          @foreach ($itinerary->finances->schedule as $installment)
+          @foreach ($itinerary->finances->schedule as $key => $installment)
             @if($installment->type === ItineraryScheduleType::BOOKING_FEE)
               <tr>
+                <td>{{ $loop->iteration }}</td>
                 <td>Booking Fee</td>
-                <td>{{ f_currency($installment->amount) }}</td>
                 <td>{{ f_currency(min($installment->amount, $installment->received)) }}</td>
                 <td>
                   @if($installment->amount <= $installment->received)
@@ -858,13 +857,12 @@ figure.table tr td:nth-child(2) {display:none;}
                   @endif
                 </td>
                 <td>With Order</td>
-                <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
               </tr>
             @endif
             @if ($installment->type === ItineraryScheduleType::DEPOSIT)
               <tr>
+                <td>{{ $loop->iteration }}</td>
                 <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
-                <td>{{ f_currency($installment->amount) }} <p>({{ $installment->percentage }}%)</p></td>
                 <td>
                   @php $amount = $installment->amount - min(($installment->received - ($installment->balance ?? 0)), $installment->amount); @endphp
                   @if($amount <= 0)
@@ -881,14 +879,13 @@ figure.table tr td:nth-child(2) {display:none;}
                   @endif
                 </td>
                 <td>With Order</td>
-                <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
             </tr>
             @endif
             @if ($installment->type === ItineraryScheduleType::INSTALLMENT)
               @php $amount = $installment->amount - $installment->received; @endphp
               <tr>
+                <td>{{ $loop->iteration }}</td>
                 <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
-                <td>{{ f_currency($installment->amount) }} <p>({{ $installment->percentage }}%)</p></td>
                 <td>
                   @if($amount <= 0)
                       {{ f_currency($installment->amount) }}
@@ -908,13 +905,12 @@ figure.table tr td:nth-child(2) {display:none;}
                       {{ optional($installment->due)->format('d/m/Y') }}
                   @endif
                 </td>
-                <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
               </tr>
             @endif
             @if ($installment->type === ItineraryScheduleType::REMAINING)
               <tr>
+                <td>{{ $loop->iteration }}</td>
                 <td>Remaining Balance</td>
-                <td>{{ f_currency($installment->amount) }} <p>({{ $installment->percentage }}%)</p></td>
                 <td>{{ f_currency($installment->received) }}</td>
                 <td>
                   @php $amount = min($installment->balance, $installment->amount); @endphp
@@ -929,14 +925,6 @@ figure.table tr td:nth-child(2) {display:none;}
                       {{ optional($installment->due)->format('d/m/Y') }}
                   @endif
                 </td>
-                <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
-              </tr>
-            @endif
-
-            @if($installment->type === ItineraryScheduleType::TOTAL)
-            <tr>
-                <td colspan=3><b>Total Payments Received: </b> {{ f_currency($installment->amount) }}</td>
-                <td colspan=3><b>Due:</b> {{ f_currency($installment->percentage) }}</td>
               </tr>
             @endif
           @endforeach
@@ -946,7 +934,7 @@ figure.table tr td:nth-child(2) {display:none;}
       <table>
         <thead>
           <tr>
-            <th>INSTALLMENTS</th>
+            <th>INSTALMENT</th>
             <th>AMOUNT DUE</th>
             <th>DATE DUE</th>
           </tr>
