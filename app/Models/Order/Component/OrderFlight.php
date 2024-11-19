@@ -6,13 +6,13 @@ use App\Models\Flight\Airport;
 use App\Models\Flight\Flight;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
+use App\Models\Helper\Model;
 use App\Models\Order\OrderCustomer;
 use App\Repository\Model\Order\Component\OrderFlightRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -70,11 +70,6 @@ class OrderFlight extends Model
     protected $casts = ['cost' => 'double',];
 
     private OrderFlightRepository $internal_repository;
-
-    public static function findByOrderCustomer($orderCustomerId): Collection|array
-    {
-        return self::where('order_customer_id', $orderCustomerId)->with('arrivalAirport')->with('departureAirport')->get();
-    }
 
     public static function compare(OrderFlight $a, OrderFlight $b): int
     {

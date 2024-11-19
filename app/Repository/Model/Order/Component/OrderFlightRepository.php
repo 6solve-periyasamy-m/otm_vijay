@@ -51,7 +51,12 @@ class OrderFlightRepository extends OrderComponentRepository
 
     public function __toString(): string
     {
-        return "{$this->orderComponent->tourComponent}";
+        $tourComponent = $this->orderComponent->tourComponent;
+        $inventory = $tourComponent->flightInventory;
+        $component = $inventory->flight;
+        return $component->airline->name . ' (' . ($this->orderComponent->flight_number_override ?? $inventory->flight_number) . ') ' . $component->departureAirport->name . ' to ' . $component->arrivalAirport->name .
+            ' (' . f_datetime($inventory->departs_at) . ' to ' . f_datetime($inventory->arrives_at) . ')' .
+            ' (' . $inventory->travelClass->name . ')';
     }
 
     public function getTourComponentType(): string

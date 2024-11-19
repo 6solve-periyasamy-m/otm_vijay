@@ -509,8 +509,11 @@
                                             @endif
                                         @endif
                                     </td>
-                                    <td>
-                                        <form action="{{ route('orderFlightDelete', ['id' => $orderFlight->id,]) }}"
+                                    <td class="actions">
+                                        <button onclick="openModal('admin.order.component.order-flight-form', {'component': {{$orderFlight->id}}})" class="btn btn-sm btn-outline-warning">
+                                            {{ Icon::edit() }}
+                                        </button>
+                                        <form style="display:inline-block;" action="{{ route('orderFlightDelete', ['id' => $orderFlight->id,]) }}"
                                               method="post">
                                             @csrf
                                             <input type="hidden" name="redirect"
@@ -585,8 +588,11 @@
                                             @endif
                                         @endif
                                     </td>
-                                    <td>
-                                        <form action="{{ route('orderTransportDelete', ['id' => $orderTransport->id,]) }}"
+                                    <td class="actions">
+                                        <button onclick="openModal('admin.order.component.order-transport-form', {'component': {{$orderTransport->id}}})" class="btn btn-sm btn-outline-warning">
+                                            {{ Icon::edit() }}
+                                        </button>
+                                        <form style="display:inline-block;" action="{{ route('orderTransportDelete', ['id' => $orderTransport->id,]) }}"
                                               method="post">
                                             @csrf
                                             <input type="hidden" name="redirect"
