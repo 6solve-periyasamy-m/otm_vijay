@@ -557,7 +557,7 @@
                             </thead>
                             @foreach($orderCustomer->orderTransports as $orderTransport)
                                 <tr component="{{ $orderTransport->id }}">
-                                    <td style="min-width: 200px">{{ f_datetime($orderTransport->transport_inventory->departs_at) }} to {{ f_datetime($orderTransport->transport_inventory->arrives_at) }}</td>
+                                    <td style="min-width: 200px">{{ f_datetime($orderTransport->repository->getStartTime()) }} to {{ f_datetime($orderTransport->repository->getEndTime()) }}</td>
                                     <td>{{ $orderTransport->transport->name }}</td>
                                     <td>{{ $orderTransport->transport->transportType->name }}</td>
                                     <td>{{ $orderTransport->transport->departureAddress->name }} to {{ $orderTransport->transport->arrivalAddress->name }}</td>

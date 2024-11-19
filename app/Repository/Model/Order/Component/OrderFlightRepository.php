@@ -9,6 +9,7 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsFlight;
+use Carbon\Carbon;
 
 class OrderFlightRepository extends OrderComponentRepository
 {
@@ -108,5 +109,15 @@ class OrderFlightRepository extends OrderComponentRepository
     public function getItineraryItem(Order $order = null): ItineraryItem
     {
         return $this->getTourComponent()?->getItineraryItem($this->getQuantity($order));
+    }
+
+    public function getStartTime(): Carbon
+    {
+        return $this->orderComponent->tourComponent->inventory->departs_at;
+    }
+
+    public function getEndTime(): Carbon
+    {
+        return $this->orderComponent->tourComponent->inventory->arrives_at;
     }
 }

@@ -24,6 +24,8 @@ use Illuminate\Support\Carbon;
  * @property int|null $order_customer_id
  * @property int|null $transport_inventory_tour_id
  * @property float $cost
+ * @property Carbon $departs_at_time_override Time to be used as an override for departs at
+ * @property Carbon $arrives_at_time_override Time to be used as an override for departs at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -60,7 +62,7 @@ class OrderTransport extends Model
     use SoftDeletes;
 
     protected $guarded = [];
-    protected $casts = ['cost' => 'double',];
+    protected $casts = ['cost' => 'double', 'departs_at_time_override' => 'datetime:H:i', 'arrives_at_time_override' => 'datetime:H:i'];
 
     private OrderTransportRepository $internal_repository;
 
@@ -71,8 +73,8 @@ class OrderTransport extends Model
 
     public static function compare(OrderTransport $a, OrderTransport $b): int
     {
-        $aStart = $a->tourComponent->inventory->departs_at;
-        $bStart = $b->tourComponent->inventory->departs_at;
+        $aStart = $a->repository->getStartTime();
+        $bStart = $b->repository->getEndTime();
         if ($aStart->gt($bStart)) return 1;
         if ($aStart->lt($bStart)) return -1;
         return 0;
