@@ -843,13 +843,10 @@ figure.table tr td:nth-child(2) {display:none;}
           </tr>
         </thead>
         <tbody>
-          @php
-            $counter = 1;
-          @endphp
           @foreach ($itinerary->finances->schedule as $key => $installment)
             @if($installment->type === ItineraryScheduleType::BOOKING_FEE)
               <tr>
-                <td>{{$counter}}</td>
+                <td>{{ $loop->iteration }}</td>
                 <td>Booking Fee</td>
                 <td>{{ f_currency(min($installment->amount, $installment->received)) }}</td>
                 <td>
@@ -864,7 +861,7 @@ figure.table tr td:nth-child(2) {display:none;}
             @endif
             @if ($installment->type === ItineraryScheduleType::DEPOSIT)
               <tr>
-                <td>{{$counter}}</td>
+                <td>{{ $loop->iteration }}</td>
                 <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
                 <td>
                   @php $amount = $installment->amount - min(($installment->received - ($installment->balance ?? 0)), $installment->amount); @endphp
@@ -887,7 +884,7 @@ figure.table tr td:nth-child(2) {display:none;}
             @if ($installment->type === ItineraryScheduleType::INSTALLMENT)
               @php $amount = $installment->amount - $installment->received; @endphp
               <tr>
-                <td>{{$counter}}</td>
+                <td>{{ $loop->iteration }}</td>
                 <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
                 <td>
                   @if($amount <= 0)
@@ -912,7 +909,7 @@ figure.table tr td:nth-child(2) {display:none;}
             @endif
             @if ($installment->type === ItineraryScheduleType::REMAINING)
               <tr>
-                <td>{{$counter}}</td>
+                <td>{{ $loop->iteration }}</td>
                 <td>Remaining Balance</td>
                 <td>{{ f_currency($installment->received) }}</td>
                 <td>
@@ -930,7 +927,6 @@ figure.table tr td:nth-child(2) {display:none;}
                 </td>
               </tr>
             @endif
-            @php $counter++; @endphp
           @endforeach
         </tbody>
       </table>
