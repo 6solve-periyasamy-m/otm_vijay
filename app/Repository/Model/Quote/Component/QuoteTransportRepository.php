@@ -149,4 +149,14 @@ class QuoteTransportRepository extends QuoteComponentRepository
     {
         return $this->quoteComponent->inventory->component->external_notes;
     }
+
+    public function getInventoryInternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->internal_notes;
+    }
+
+    public function getInventoryExternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->external_notes;
+    }
 }
