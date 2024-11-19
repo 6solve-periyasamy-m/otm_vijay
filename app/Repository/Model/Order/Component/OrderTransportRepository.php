@@ -9,6 +9,7 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsTransport;
+use Carbon\Carbon;
 
 class OrderTransportRepository extends OrderComponentRepository
 {
@@ -50,7 +51,13 @@ class OrderTransportRepository extends OrderComponentRepository
 
     public function __toString(): string
     {
-        return "{$this->orderComponent->tourComponent}";
+        $tourComponent = $this->orderComponent->tourComponent;
+        $inventory = $tourComponent->transportInventory;
+        $component = $inventory->transport;
+        return $component->name . ' (' . $component->departureAddress->name . ' to ' . $component->arrivalAddress->name . ')' .
+            ' (' . $component->transportType->name . ') ' .
+            ' (' . f_datetime($this->getStartTime()) . ' to ' . f_datetime($this->getEndTime()) . ')' .
+            ' (' . $inventory->travelClass->name . ')';
     }
 
     public function getTourComponentType(): string
@@ -74,7 +81,7 @@ class OrderTransportRepository extends OrderComponentRepository
         $inventory = $tourComponent->inventory;
         $component = $inventory->component;
         $data = [];
-        $data[] = ['start' => $inventory->departs_at, 'activity' => 'Transport Departure',
+        $data[] = ['start' => $this->orderComponent->repository->getStartTime(), 'activity' => 'Transport Departure',
             'description' => "{$component->name} ({$component->departureAddress->name} to {$component->arrivalAddress->name}) ({$inventory->travelClass})" . (isset($inventory->transport_number) ? " ($inventory->transport_number)" : ""),];
         $data[] = ['start' => $inventory->arrives_at, 'activity' => 'Transport Arrival',
             'description' => "{$component->name} ({$component->departureAddress->name} to {$component->arrivalAddress->name}) ({$inventory->travelClass})" . (isset($inventory->transport_number) ? " ($inventory->transport_number)" : ""),];
@@ -104,6 +111,37 @@ class OrderTransportRepository extends OrderComponentRepository
 
     public function getItineraryItem(Order $order = null): ItineraryItem
     {
-        return $this->getTourComponent()?->getItineraryItem($this->getQuantity($order));
+
+
+        $item = $this->getTourComponent()?->getItineraryItem($this->getQuantity($order));
+        if ($this->getStartTime()->isSameDay($this->getEndTime())) {
+            $dates = $this->getStartTime()->format('d M Y');
+            $lbl_dates = 'Date';
+        } else {
+            $dates = $this->getStartTime()->format('d M Y') . ' to ' . $this->getEndTime()->format('d M Y');
+            $lbl_dates = 'Dates';
+        }
+        $item->details[$lbl_dates] = $dates;
+        return $item;
+    }
+
+    public function getStartTime(): Carbon
+    {
+        $date = $this->orderComponent->tourComponent->inventory->departs_at;
+        $override = $this->orderComponent->departs_at_time_override;
+        if ($override !== null) {
+            $date->setTime($override->hour, $override->minute);
+        }
+        return $date;
+    }
+
+    public function getEndTime(): Carbon
+    {
+        $date = $this->orderComponent->tourComponent->inventory->arrives_at;
+        $override = $this->orderComponent->arrives_at_time_override;
+        if ($override !== null) {
+            $date->setTime($override->hour, $override->minute);
+        }
+        return $date;
     }
 }
