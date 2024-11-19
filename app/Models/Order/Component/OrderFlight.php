@@ -6,13 +6,13 @@ use App\Models\Flight\Airport;
 use App\Models\Flight\Flight;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
-use App\Models\Helper\Model;
 use App\Models\Order\OrderCustomer;
 use App\Repository\Model\Order\Component\OrderFlightRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -30,7 +30,6 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property float|null $estimated_purchase_price
- * @property string|null $flight_number_override
  * @property-read float $purchase_price
  * @property-read Airport|null $arrivalAirport
  * @property-read Airport|null $departureAirport
@@ -39,7 +38,6 @@ use Illuminate\Support\Carbon;
  * @property-read bool $cancelled Is the order cancelled?
  * @property-read string $details
  * @property-read Flight $flight
- * @property-read string|null $flight_number
  * @property-read FlightInventory $flight_inventory
  * @property-read string $tour_component_type
  * @property-read float $tour_sales_price
@@ -70,6 +68,11 @@ class OrderFlight extends Model
     protected $casts = ['cost' => 'double',];
 
     private OrderFlightRepository $internal_repository;
+
+    public static function findByOrderCustomer($orderCustomerId): Collection|array
+    {
+        return self::where('order_customer_id', $orderCustomerId)->with('arrivalAirport')->with('departureAirport')->get();
+    }
 
     public static function compare(OrderFlight $a, OrderFlight $b): int
     {
@@ -138,11 +141,6 @@ class OrderFlight extends Model
     public function getAtolStringAttribute(): string
     {
         return $this->tourComponent->atol_string;
-    }
-
-    public function getFlightNumberAttribute(): string
-    {
-        return $this->flight_number_override ?? $this->tourComponent->inventory->flight_number;
     }
 
     public function getRepositoryAttribute(): OrderFlightRepository

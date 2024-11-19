@@ -2,7 +2,6 @@
 
 namespace App\Models\Order\Component;
 
-use App\Models\Helper\Model;
 use App\Models\Order\OrderCustomer;
 use App\Models\Transport\Transport;
 use App\Models\Transport\TransportInventory;
@@ -12,6 +11,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -24,8 +24,6 @@ use Illuminate\Support\Carbon;
  * @property int|null $order_customer_id
  * @property int|null $transport_inventory_tour_id
  * @property float $cost
- * @property Carbon $departs_at_time_override Time to be used as an override for departs at
- * @property Carbon $arrives_at_time_override Time to be used as an override for departs at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -62,7 +60,7 @@ class OrderTransport extends Model
     use SoftDeletes;
 
     protected $guarded = [];
-    protected $casts = ['cost' => 'double', 'departs_at_time_override' => 'datetime:H:i', 'arrives_at_time_override' => 'datetime:H:i'];
+    protected $casts = ['cost' => 'double',];
 
     private OrderTransportRepository $internal_repository;
 
@@ -73,8 +71,8 @@ class OrderTransport extends Model
 
     public static function compare(OrderTransport $a, OrderTransport $b): int
     {
-        $aStart = $a->repository->getStartTime();
-        $bStart = $b->repository->getEndTime();
+        $aStart = $a->tourComponent->inventory->departs_at;
+        $bStart = $b->tourComponent->inventory->departs_at;
         if ($aStart->gt($bStart)) return 1;
         if ($aStart->lt($bStart)) return -1;
         return 0;
