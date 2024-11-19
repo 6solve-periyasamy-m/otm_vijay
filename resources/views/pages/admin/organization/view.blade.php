@@ -80,8 +80,11 @@
                         <th scope="col">Email</th>
                         <th scope="col">Orders</th>
                         <th scope="col">Quotes</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     </thead>
+                    <tbody>
                     @foreach($organization->agents as $agent)
                         <tr>
                             <td>{{ $agent->first_name . ' ' . $agent->last_name }}</td>
@@ -98,6 +101,7 @@
                             </td>
                         </tr>
                     @endforeach
+                    </tbody>
                 </table>
                 <button onclick="openModal('admin.agent.form', {'organization': {{$organization->id}},})" class="btn btn-success">
                     {{ Icon::edit() }}
