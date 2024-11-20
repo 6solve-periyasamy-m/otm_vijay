@@ -12,15 +12,14 @@ use App\Models\Tour\Tour;
 
 abstract class QuoteComponentRepository extends InventoryContainerRepository
 {
-    public abstract function getShortDescription(): string;
-    public abstract function getQuantity(): int|null;
-    public abstract function getItineraryTitle(): string;
-    public abstract function getItineraryDescription(): string;
-    public abstract function getItineraryAsset(): string;
-    public abstract function convertToTourComponent(Tour $tour): InventoryTourRepository;
-    public abstract function convertToQuoteSection(): QuoteSection;
-    public abstract function priceShown(): bool;
-
+    abstract public function getShortDescription(): string;
+    abstract public function getQuantity(): int|null;
+    abstract public function getItineraryTitle(): string;
+    abstract public function getItineraryDescription(): string;
+    abstract public function getItineraryAsset(): string;
+    abstract public function convertToTourComponent(Tour $tour): InventoryTourRepository;
+    abstract public function convertToQuoteSection(): QuoteSection;
+    abstract public function priceShown(): bool;
     public function getEditUrl(): string
     {
         return route('quotes.components.edit', ['type' => $this->getComponentType(), 'id' => (int)$this->get()->id, 'quote' => $this->get()->quote]);

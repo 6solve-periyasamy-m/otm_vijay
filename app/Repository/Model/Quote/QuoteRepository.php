@@ -1195,7 +1195,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $event = is_array($this->quote->event) ? new Event($this->quote->event) : $this->quote->event;
         return new Itinerary(
             null,
-            $event?->name,
+            $event,
             $this->quote->description ?? $event?->description,
             $event?->image_url,
             $this->quote->reference,
@@ -1268,7 +1268,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         foreach ($byDate as $item) {
             $data = [
                 ...$data,
-                ...$item->getItineraryLinesForQuote($this->quote),
+                ...$item->getItineraryLines($this->quote),
             ];
         }
         return $data;

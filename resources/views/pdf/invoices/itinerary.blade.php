@@ -292,6 +292,23 @@ $type = $type ?? "Travel Itinerary"
         </div>
     @endif
 
+    @if(!empty($itinerary->event?->final_terms) || !empty($itinerary->terms))
+        <div class="avoid-break">
+            <table class="divider">
+                <thead>
+                    <tr>
+                        <th class="text">
+                            TERMS & CONDITIONS
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+            <div class="text-section">
+                <p>{!! $itinerary->event?->final_terms ?? $itinerary->terms !!}</p>
+            </div>
+        </div>
+    @endif
+
     @if(!empty($itinerary->footer))
         <div class="avoid-break">
             <table class="divider">

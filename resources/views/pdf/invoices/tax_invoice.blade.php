@@ -272,6 +272,7 @@
             padding-top:18px;
             padding-bottom:18px;
             text-align:center;
+            height: 25px;
         }
         .items tr:nth-child(even) td  {
             background-color: #F9F4EE;     
@@ -414,6 +415,7 @@
         bottom: 0cm;
         height: 228px; 
         page-break-inside: avoid;
+        margin-top: 100px;
         }
         .full-btm-cls-mod p span {
         font-family: 'Lato', sans-serif!important;

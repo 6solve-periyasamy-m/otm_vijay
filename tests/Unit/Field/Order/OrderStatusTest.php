@@ -135,4 +135,14 @@ class OrderStatusTest extends DatabaseTestCase
         $order->repository->refresh();
         $this->assertEquals(OrderStatus::OVERPAID, $order->status);
     }
+
+    public function testPaidInFullWithCommission()
+    {
+        $order = $this->generateOrder(true, false, 300, 0);
+        $order->update(['commission' => 10]);
+        $this->generatepayment($order, 270); // £300 - 10% = £270
+        $order->repository->refresh();
+        $this->assertEquals(OrderStatus::PAID_IN_FULL, $order->status);
+
+    }
 }

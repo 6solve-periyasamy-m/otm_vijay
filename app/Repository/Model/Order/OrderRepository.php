@@ -440,9 +440,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
         if (!isset($status)) {
             $paidAmount = $this->order->paid;
-            $cost = sigfig($this->cost ?? $this->order->cost);
-            $adjustments = $this->order->total_adjustments;
-            $total = sigfig($cost + $adjustments);
+            $total = sigfig((($this->cost ?? $this->order->cost) + $this->order->total_adjustments) - ($this->order->commission_amount ?? 0.0));
             if ($this->order->cancelled || $this->order->trashed()) {
                 if ($paidAmount <= sigfig($this->order->booking_fee ?? 0.0)) {
                     $status = $paidAmount < 0 ? OrderStatus::CANCELLED_OVER_REFUNDED : OrderStatus::CANCELLED_FULL_REFUND;
@@ -875,7 +873,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     {
         return new Itinerary(
             $this->order->tour->name,
-            $this->order->tour->event?->name,
+            $this->order->tour->event,
             $this->order->tour->event?->description ?? $this->order->tour->description,
             $this->order->tour->event?->image_url,
             $this->order->booking_reference,
@@ -999,7 +997,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         foreach ($byDate as $item) {
             $data = [
                 ...$data,
-                ...$item->getItineraryLinesForOrder($this->order),
+                ...$item->getItineraryLines($this->order),
             ];
         }
         return $data;

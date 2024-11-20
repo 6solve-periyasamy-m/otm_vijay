@@ -44,6 +44,7 @@
                     <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
+                    <th scope="col">{{ __('quotes.view.cards.components.common.notes') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                 </tr>
                 </thead>
@@ -75,6 +76,9 @@
                         </td>
                         <td>
                             {{ $componentRepository->getPurchasePrice() !== null ? $componentRepository->getInventory()?->getPurchasePriceString() : 'Not Set' }}
+                        </td>
+                        <td>
+                            {{ $componentRepository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             {{ f_currency($componentRepository->getSalesPrice()) }} {{ $componentRepository->priceShown() ? '(Shown)' : '' }}
@@ -116,6 +120,7 @@
                     <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
+                    <th scope="col">{{ __('quotes.view.cards.components.common.notes') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                 </tr>
                 </thead>
@@ -143,6 +148,9 @@
                         </td>
                         <td>
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
+                        </td>
+                        <td>
+                            {{ $component->repository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
@@ -181,6 +189,7 @@
                     <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
+                    <th scope="col">{{ __('quotes.view.cards.components.common.notes') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                 </tr>
                 </thead>
@@ -208,6 +217,9 @@
                         </td>
                         <td>
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
+                        </td>
+                        <td>
+                            {{ $component->repository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
@@ -246,6 +258,7 @@
                     <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
+                    <th scope="col">{{ __('quotes.view.cards.components.common.notes') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                 </tr>
                 </thead>
@@ -273,6 +286,9 @@
                         </td>
                         <td>
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
+                        </td>
+                        <td>
+                            {{ $component->repository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
@@ -311,6 +327,7 @@
                     <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
+                    <th scope="col">{{ __('quotes.view.cards.components.common.notes') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                 </tr>
                 </thead>
@@ -338,6 +355,9 @@
                         </td>
                         <td>
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
+                        </td>
+                        <td>
+                            {{ $component->repository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
@@ -375,6 +395,7 @@
                     <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
+                    <th scope="col">{{ __('quotes.view.cards.components.common.notes') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                 </tr>
                 </thead>
@@ -397,6 +418,9 @@
                         </td>
                         <td>
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
+                        </td>
+                        <td>
+                            {{ $component->repository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)

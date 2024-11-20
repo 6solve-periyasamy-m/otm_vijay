@@ -55,7 +55,7 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
 
     abstract public function getRestoreLink(): string|null;
 
-    public abstract function getOverview(): string;
+    abstract public function getOverview(): string;
 
     /**
      * Returns the amount of order-components the inventory has

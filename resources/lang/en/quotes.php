@@ -122,6 +122,7 @@ return [
                     'details' => 'Description',
                     'price' => 'Purchase Price',
                     'sales_price' => 'Sales Price',
+                    'notes' => 'Notes',
                     'na' => 'Not Applicable',
                 ],
                 'tabs' => [
