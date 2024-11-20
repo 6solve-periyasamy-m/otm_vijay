@@ -852,7 +852,10 @@ figure.table tr td:nth-child(2) {display:none;}
               <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ f_currency($installment->amount) }}</td>
-                <td>{{ f_currency(min($installment->amount, $installment->received)) }}</td>
+                <td>
+                    {{ f_currency(min($installment->amount, $installment->received)) }}
+                    @php $received_balance = $received_balance + min($installment->amount, $installment->received) @endphp
+                </td>
                 <td>
                   @if($installment->amount <= $installment->received)
                     Paid
