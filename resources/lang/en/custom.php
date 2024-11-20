@@ -74,6 +74,7 @@ return [
             'generic' => 'Generic',
             'terms' => 'Terms and Conditions',
             'invoice_footer' => 'Invoice Footer',
+            'quote_template' => 'Quote Template',
         ],
     ],
 ];
