@@ -348,4 +348,14 @@ class TransportInventoryTourRepository extends InventoryTourRepository
     {
         return $this->tourComponent->inventory->component->external_notes;
     }
+
+    public function getInventoryInternalNotes(): string|null
+    {
+        return $this->tourComponent->inventory->internal_notes;
+    }
+
+    public function getInventoryExternalNotes(): string|null
+    {
+        return $this->tourComponent->inventory->external_notes;
+    }
 }

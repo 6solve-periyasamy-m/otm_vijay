@@ -44,7 +44,7 @@
                     <td>{{ $tourComponent->repository->getOrderedCount() }} Ordered, {{ $tourComponent->repository->getBookedCount() }} <abbr title="Bookings created through the form. Will include ones converted to orders">Booked</abbr></td>
                     <td>{{ f_bool($tourComponent->is_bookable) }}</td>
                     <td>{{ f_bool($tourComponent->stock_control_active) }}</td>
-                    <td>{{ $tourComponent->inventory->component->internal_notes }}</td>
+                    <td>{{ $tourComponent->repository->getInventoryInternalNotes() }}</td>
                     <td class="actions-3">
                         @can('update', \App\Models\Flight\FlightInventoryTour::class)
                             @if($tourComponent->tour_component_type !== 'Add-on')
