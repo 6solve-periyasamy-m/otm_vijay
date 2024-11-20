@@ -11,6 +11,7 @@ enum LargeTextType: int
     case GENERIC = 0;
     case TERMS = 1;
     case INVOICE_FOOTER = 2;
+    case QUOTE_TEMPLATE = 3;
 
     public function label()
     {
@@ -18,6 +19,7 @@ enum LargeTextType: int
             self::GENERIC => __('custom.text.type.generic'),
             self::TERMS => __('custom.text.type.terms'),
             self::INVOICE_FOOTER => __('custom.text.type.invoice_footer'),
+            self::QUOTE_TEMPLATE => __('custom.text.type.quote_template'),
         };
     }
 }
