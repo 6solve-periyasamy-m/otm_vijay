@@ -53,4 +53,28 @@ abstract class InventoryContainerRepository extends ModelRepository implements H
     {
         return $this->getInventory()?->getEndTime();
     }
+
+    /**
+     * Returns the internal notes for the component
+     * @return string|null
+     */
+    abstract public function getComponentInternalNotes(): string|null;
+
+    /**
+     * Returns the external notes for the component
+     * @return string|null
+     */
+    abstract public function getComponentExternalNotes(): string|null;
+
+    /**
+     * Returns the internal notes for the inventory
+     * @return string|null
+     */
+    abstract public function getInventoryInternalNotes(): string|null;
+
+    /**
+     * Returns the external notes for the inventory
+     * @return string|null
+     */
+    abstract public function getInventoryExternalNotes(): string|null;
 }

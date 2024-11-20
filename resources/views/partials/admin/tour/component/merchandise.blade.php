@@ -32,7 +32,7 @@
                         ({{$tourComponent->repository->getAvailableStock()}} Available)
                     </td>
                     <td>{{ $tourComponent->repository->getOrderedCount() }} Ordered, {{ $tourComponent->repository->getBookedCount() }} <abbr title="Bookings created through the form. Will include ones converted to orders">Booked</abbr></td>
-                    <td>{{ $tourComponent->inventory->component->internal_notes }}</td>
+                    <td>{{ $tourComponent->repository->getInventoryInternalNotes() }}</td>
                     <td class="actions">
                         @can('update', \App\Models\Merchandise\MerchandiseInventoryTour::class)
                             <a href="{{ route('merchandise.inventory.tour.edit', ['tour' => $tour, 'inventoryTour' => $tourComponent,]) }}"

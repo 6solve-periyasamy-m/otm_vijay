@@ -58,18 +58,6 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
     abstract public function getOverview(): string;
 
     /**
-     * Returns the internal notes for the component
-     * @return string|null
-     */
-    abstract public function getComponentInternalNotes(): string|null;
-
-    /**
-     * Returns the external notes for the component
-     * @return string|null
-     */
-    abstract public function getComponentExternalNotes(): string|null;
-
-    /**
      * Returns the amount of order-components the inventory has
      * @return int
      */

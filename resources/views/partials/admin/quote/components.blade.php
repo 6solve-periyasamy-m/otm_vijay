@@ -78,7 +78,7 @@
                             {{ $componentRepository->getPurchasePrice() !== null ? $componentRepository->getInventory()?->getPurchasePriceString() : 'Not Set' }}
                         </td>
                         <td>
-                            {{ $componentRepository->getComponentInternalNotes() }}
+                            {{ $componentRepository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             {{ f_currency($componentRepository->getSalesPrice()) }} {{ $componentRepository->priceShown() ? '(Shown)' : '' }}
@@ -150,7 +150,7 @@
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
                         </td>
                         <td>
-                            {{ $component->repository->getComponentInternalNotes() }}
+                            {{ $component->repository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
@@ -219,7 +219,7 @@
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
                         </td>
                         <td>
-                            {{ $component->repository->getComponentInternalNotes() }}
+                            {{ $component->repository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
@@ -288,7 +288,7 @@
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
                         </td>
                         <td>
-                            {{ $component->repository->getComponentInternalNotes() }}
+                            {{ $component->repository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
@@ -357,7 +357,7 @@
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
                         </td>
                         <td>
-                            {{ $component->repository->getComponentInternalNotes() }}
+                            {{ $component->repository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
@@ -420,7 +420,7 @@
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
                         </td>
                         <td>
-                            {{ $component->repository->getComponentInternalNotes() }}
+                            {{ $component->repository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)

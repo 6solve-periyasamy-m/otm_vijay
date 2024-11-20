@@ -20,11 +20,6 @@ abstract class QuoteComponentRepository extends InventoryContainerRepository
     abstract public function convertToTourComponent(Tour $tour): InventoryTourRepository;
     abstract public function convertToQuoteSection(): QuoteSection;
     abstract public function priceShown(): bool;
-
-    abstract public function getComponentInternalNotes(): string|null;
-
-    abstract public function getComponentExternalNotes(): string|null;
-
     public function getEditUrl(): string
     {
         return route('quotes.components.edit', ['type' => $this->getComponentType(), 'id' => (int)$this->get()->id, 'quote' => $this->get()->quote]);
