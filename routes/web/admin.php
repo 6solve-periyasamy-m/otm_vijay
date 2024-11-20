@@ -136,6 +136,7 @@ Route::middleware('auth:web')->group(function () {
                     Route::get('/update', [AgentController::class, 'edit'])->name('agents.edit');
                     Route::post('/update', [AgentController::class, 'update'])->name('agents.update');
                     Route::post('/delete', [AgentController::class, 'destroy'])->name('agents.delete');
+                    Route::post('/delete-agent', [AgentController::class, 'deleteAgent'])->name('agents.deleteAgent');
                 });
             });
         });

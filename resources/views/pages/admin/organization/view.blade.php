@@ -92,12 +92,15 @@
                             <td>{{ $agent->organization->orders()->count() }}</td>
                             <td>{{ $agent->organization->quotes()->count() }}</td>
                             <td style="width: 10px">
-                                <button onclick="openModal('admin.agent.form', {'agent': {{$agent->id}},})">{{Icon::edit()}}</button>
+                                <button style="color:#38c172" onclick="openModal('admin.agent.form', {'agent': {{$agent->id}},})">{{Icon::edit()}}</button>
                             </td>
                             <td style="width: 10px">
-                                <button wire:click="deleteAgent({{ $agent->id }})">
-                                    {{Icon::delete()}}
-                                </button>
+                                <form method="post" action="/admin/organizations/{{$organization->id}}/agents/{{$agent->id}}/delete-agent">
+                                    @csrf
+                                    <button style="color:#ff3547" type="submit">
+                                        {{Icon::delete()}}
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach

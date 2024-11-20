@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AgentRequest;
 use App\Models\Customer\Agent;
+use App\Models\Customer\Organization;
 
 class AgentController extends Controller
 {
@@ -41,6 +42,20 @@ class AgentController extends Controller
         $agent->update($request->getData());
         $agent->save();
         return redirect()->route('agents.view', ['agent' => $agent,]);
+    }
+
+    /**
+     * Removes an agent from the organization screen
+     * @params Organization $organization
+     * @params Agent $agent
+     */
+    public function deleteAgent(Organization $organization, Agent $agent)
+    {
+        // sanity check
+        if ($organization->id === $agent->organization_id) {
+            Agent::find($agent->id)?->delete();
+        }
+        return redirect()->route('organizations.view' , [$organization->id]);
     }
 
     public function destroy(Agent $agent)
