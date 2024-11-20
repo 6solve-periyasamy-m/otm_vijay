@@ -35,6 +35,7 @@ class OrderFlightForm extends ModalComponent
     {
         return [
             'component.cost' => 'nullable|numeric|gte:0',
+            'component.estimated_purchase_price' => 'nullable|numeric|gte:0',
             'component.flight_number_override' => 'nullable|string',
         ];
     }

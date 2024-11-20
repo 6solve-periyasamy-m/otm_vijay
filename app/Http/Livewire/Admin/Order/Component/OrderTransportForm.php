@@ -35,6 +35,7 @@ class OrderTransportForm extends ModalComponent
     {
         return [
             'component.cost' => 'nullable|numeric|gte:0',
+            'component.estimated_purchase_price' => 'nullable|numeric|gte:0',
             'component.departs_at_time_override' => 'nullable|date_format:H:i',
             'component.arrives_at_time_override' => 'nullable|date_format:H:i',
         ];
