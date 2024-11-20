@@ -14,9 +14,9 @@
             <x-livewire.input.select.event.normal name="quote.event_id" value="{{$quote->event_id}}" label="Event" width="4" />
         </div>
         <div class="row">
-            <x-livewire.input.select.organization name="quote.organization_id" value="{{$quote->organization_id}}" label="Organization" width="4" />
+            <x-livewire.input.select.organization name="quote.organization_id" value="{{$quote->organization_id}}" label="Organization" width="4" wire:change="$emit('organization-selected', selectedOrganization)"/>
             <x-livewire.input wire:model="quote.commission" label="Commission (%)" width="4" />
-            <x-livewire.input.select.agent name="quote.agent_id" value="{{$quote->agent_id}}" label="Agent" width="4" />
+            <x-livewire.input.select.agent name="quote.agent_id" table="organizations" find="{{$quote->organization_id}}" value="{{$quote->agent_id}}" label="Agent" width="4" />
         </div>
         <div class="row">
             <!-- -->

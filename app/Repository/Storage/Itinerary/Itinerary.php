@@ -4,6 +4,7 @@ namespace App\Repository\Storage\Itinerary;
 
 use App\Models\Customer\Customer;
 use App\Models\Customer\Organization;
+use App\Models\Customer\Agent;
 use App\Models\System\Brand;
 use App\Models\User;
 use Carbon\Carbon;
@@ -20,6 +21,7 @@ class Itinerary
      * @param string|null $image
      * @param string|null $reference
      * @param Organization|null $organization
+     * @param Agent|null $agent
      * @param User|null $consultant
      * @param Carbon $start
      * @param Carbon $end
@@ -39,6 +41,7 @@ class Itinerary
         public string|null $image,
         public string|null $reference,
         public Organization|null $organization,
+        public Agent|null $agent,
         public User|null $consultant,
         public Carbon $start,
         public Carbon $end,
