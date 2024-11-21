@@ -219,7 +219,7 @@ class AccommodationByDateStorage
         return $itineraryItems;
     }
 
-    private function cloneItineraryItem(ItineraryItem $item, Carbon $start, Carbon $end, int $quantity): ItineraryItem
+    private function cloneItineraryItem(ItineraryItem $item, Carbon $start, Carbon $end, int|null $quantity): ItineraryItem
     {
         $item = $item->clone();
         $item->sortKey = $start->unix();
