@@ -36,6 +36,7 @@ class Form extends ModalComponent
 
     public function save(): void
     {
+        $this->validate();
         if (!isset($this->agent->organization_id)) {
             $this->agent->organization()->associate($this->organization);
         }
