@@ -173,11 +173,11 @@ class AccommodationByDateStorage
                     continue;
                 }
 
-
                 // If block has equal quantity, update end time
                 if ($block['quantity'] === $quantity) {
                     $block['end'] = $item['end'];
                     $blocks[$key] = $block;
+                    $quantity -= $block['quantity'];
                 }
                 // If block has more quantity, clear amount above quantity
                 else if ($block['quantity'] > $quantity) {
@@ -185,6 +185,7 @@ class AccommodationByDateStorage
                     $block['quantity'] = $quantity;
                     $block['end'] = $item['end'];
                     $blocks[$key] = $block;
+                    $quantity -= $block['quantity'];
                 }
                 // If block has less quantity, make new block
                 else if ($block['quantity'] < $quantity) {
@@ -205,6 +206,8 @@ class AccommodationByDateStorage
                         $blocks[] = $item;
                     }
                 }
+
+                if ($quantity <= 0) { break; }
             }
 
             // If the blocks are now empty, make a new block with this item
