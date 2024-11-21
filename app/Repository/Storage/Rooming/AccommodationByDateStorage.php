@@ -190,8 +190,20 @@ class AccommodationByDateStorage
                 else if ($block['quantity'] < $quantity) {
                     $block['end'] = $item['end'];
                     $blocks[$key] = $block;
-                    $item['quantity'] = $quantity - $block['quantity'];
-                    $blocks[] = $item;
+                    $quantity -= $block['quantity'];
+                    $tmpQuantity = $quantity;
+                    // Iterate through items to see if a future block matches
+                    foreach ($blocks as $iKey => $iBlock) {
+                        // Array uses sequential numerical keys, so skip any ones earlier in the loop
+                        if ($iKey <= $key) { continue; }
+                        if (abs($block['end']->diffInDays($item['start'])) > 1) { continue; }
+                        $tmpQuantity -= $iBlock['quantity'];
+                    }
+                    // if, after checking ahead, there is still quantity that needs setting, add a new item to the list
+                    if ($tmpQuantity > 0) {
+                        $item['quantity'] = $quantity;
+                        $blocks[] = $item;
+                    }
                 }
             }
 
