@@ -13,7 +13,7 @@
     <x-livewire.input.select.organization name="organization_id" value="{{ $order?->organization_id }}"
                                           label="Organization (Optional)" width="4"/>
     <x-livewire.input.select.agent name="agent_id" value="{{ $order?->agent_id }}"
-                                          label="agent (Optional)" width="4"/>
+                                          label="Agent (Optional)" width="4"/>
     <x-livewire.input.select.tax-bracket name="tax_bracket_id" value="{{ $order?->tax_bracket_id }}" label="Tax Bracket"
                                          width="4"/>
     <x-livewire.input.select.user name="consultant_id" value="{{ $order?->consultant_id  }}"

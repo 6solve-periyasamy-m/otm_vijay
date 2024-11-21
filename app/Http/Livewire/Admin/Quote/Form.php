@@ -25,7 +25,6 @@ class Form extends Component
     public function mount(Quote|int|null $quote): void
     {
         $this->quote = Quote::getForMount($quote);
-        \Log::info('quote mount', [$this->quote]);
         $this->prospect = $quote->leadTraveller ?? new QuoteProspect();
         if ($this->quote->id !== null) {
             $this->pricePoint = $this->quote->pricePoints()->where('quantity', '=', 1)->first();
@@ -63,7 +62,6 @@ class Form extends Component
         if ($key === 'quote.organization_id') {
             $this->quote->commission = $this->quote->organization?->commission ?? $this->quote->commission;
             $this->quote->agents = Agent::where('organization_id', $this->quote->organization?->id)->get();
-            // $this->dispatchBrowserEvent('updateSelector', [ 'table' => 'agents', 'lookup' => 'organization','id' => $this->quote->organization->id]);
         }
 
         if ($key === 'quote.commission') {

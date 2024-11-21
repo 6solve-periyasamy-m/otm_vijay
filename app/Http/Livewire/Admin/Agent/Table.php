@@ -27,7 +27,7 @@ class Table extends LivewireDatatable
                 ->label(__('agent.table.columns.first_name') . ' ' . __('agent.table.columns.last_name'))
                 ->searchable()
                 ->sortable(),
-            Column::name('agent_email')
+            Column::name('email')
                 ->label(__('agent.table.columns.email'))
                 ->searchable()
                 ->sortable(),

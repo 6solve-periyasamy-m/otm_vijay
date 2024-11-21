@@ -112,13 +112,13 @@
         @if($order->organization_id)
         <div class="col-12 col-xl-6">
             <p>Organization</p>
-            <h6 class="fw-bold">{!! nl2br($order->organization->name ) !!}</h6>
+            <h6 class="fw-bold">{!! $order->organization->name !!}</h6>
         </div>
         @endif
         @if($order->agent_id)
         <div class="col-12 col-xl-6">
             <p>Agent</p>
-            <h6 class="fw-bold">{!! nl2br($order->agent->first_name . ' ' . $order->agent->last_name ) !!}</h6>
+            <h6 class="fw-bold">{!! $order->agent->first_name . ' ' . $order->agent->last_name !!}</h6>
         </div>
         @endif
         <div class="col-12">

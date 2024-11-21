@@ -20,12 +20,6 @@ class AgentController extends Controller
         return view('pages.admin.agent.form');
     }
 
-    public function store(AgentRequest $request)
-    {
-        $agent = Agent::create($request->getData());
-        return redirect()->route('agents.view', ['agent' => $agent,]);
-    }
-
     public function view(Agent $agent)
     {
         $agent->load('organizations');
@@ -35,13 +29,6 @@ class AgentController extends Controller
     public function edit(Agent $agent)
     {
         return view('pages.admin.agent.form', ['agent' => $agent,]);
-    }
-
-    public function update(AgentRequest $request, Agent $agent)
-    {
-        $agent->update($request->getData());
-        $agent->save();
-        return redirect()->route('agents.view', ['agent' => $agent,]);
     }
 
     /**
