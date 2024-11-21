@@ -101,7 +101,6 @@ class CustomerTransforms implements CustomerTransformsInterface
             $option['text'] = $agent->first_name . ' ' . $agent->last_name;
             $data['results'][] = $option;
         }
-        \Log::info('CustomerTransforms: selecting Agencies', $data);
         return $data;
     }
 }

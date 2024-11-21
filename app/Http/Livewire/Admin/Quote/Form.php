@@ -87,7 +87,7 @@ class Form extends Component
     public static function getSelectAgencies($organization_id)
     {
         if ($organization_id == 0) return null;
-        $agents = Agent::where('organization_id', $organization_id)->get();
+        $agents = Agent::where('organization_id', '=', $organization_id)->get();
         $data = [];
         foreach ($agents as $agent) {
             $option = [];
@@ -95,7 +95,6 @@ class Form extends Component
             $option['text'] = $agent->first_name . ' ' . $agent->last_name;
             $data['results'][] = $option;
         }
-        \Log::info('CustomerTransforms: selecting Agencies', $data);
         return $data;
     }
 

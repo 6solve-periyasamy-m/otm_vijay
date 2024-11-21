@@ -32,13 +32,13 @@ class Agent extends AbstractSelectComponent
     protected function getModels(?int $id = null): Collection
     {
         if ($id !== null) {
-            return OrgAgent::where('id', '=', $id)->get();
+            return OrgAgent::with('organization')->where('id', '=', $id)->get();
         }
-        return OrgAgent::all();
+        return OrgAgent::with('organization')->get();
     }
 
     protected function format(OrgAgent|Model $model): string
     {
-        return $model->first_name . ' ' . $model->last_name;
+        return $model->first_name . ' ' . $model->last_name . ' - ' . $model->organization->name;
     }
 }
