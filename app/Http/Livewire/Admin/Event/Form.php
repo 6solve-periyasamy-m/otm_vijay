@@ -21,7 +21,7 @@ class Form extends Component
     public Event|int|null $event;
     public $termsTemplate;
     public $user;
-    public UploadedFile|null $image = null;
+    public UploadedFile|string|null $image = null;
 
     public function mount(Event|int|null $event = null)
     {
