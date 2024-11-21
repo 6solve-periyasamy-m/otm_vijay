@@ -120,7 +120,6 @@ class AccommodationByDateStorageTest extends DatabaseTestCase
         $quote->refresh();
         $items = $quote->repository->getAccommodationForItinerary();
         $this->assertCount(3, $items);
-        //dd($items);
         // First row only covers 2 quantity, since it has a lower quantity
         $this->assertEquals(1, $items[0]->details['Quantity']);
         $this->assertEquals($this->getNow()->format('d M Y'), $items[0]->details['Check In']);
