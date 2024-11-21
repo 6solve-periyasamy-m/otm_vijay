@@ -40,6 +40,8 @@ class Form extends ModalComponent
 
     public function save(): void
     {
+        $this->validate();
+
         if ($this->billingIsDelivery) {
             $billingId = $this->billing->id;
             $this->billing = $this->delivery->replicate(['id']);

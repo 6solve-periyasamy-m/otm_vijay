@@ -73,6 +73,11 @@ class Organization extends Model
         return $this->hasMany(Customer::class, 'organization_id');
     }
 
+    public function agents(): HasMany
+    {
+        return $this->hasMany(Agent::class, 'organization_id');
+    }
+
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class, 'organization_id');

@@ -7,6 +7,7 @@ use App\Models\Customer\Customer;
 use App\Models\Customer\Group;
 use App\Models\Customer\OrderCustomerGroup;
 use App\Models\Customer\Organization;
+use App\Models\Customer\Agent;
 use App\Models\Helper\Enum\OrderStatus;
 use App\Models\Helper\Model;
 use App\Models\Helper\NotificationSubject;
@@ -53,6 +54,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int $tour_id
  * @property int|null $lead_booker_id
  * @property int|null $organization_id
+ * @property int|mull $agent_id
  * @property int|null $consultant_id
  * @property int|null $tax_bracket_id
  * @property string|null $booking_reference Unique reference for the booking
@@ -257,6 +259,11 @@ class Order extends Model implements NotificationSubject
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class, 'organization_id');
+    }
+
+    public function agent(): BelongsTo
+    {
+        return $this->belongsTo(Agent::class, 'agent_id');
     }
 
     public function consultant(): BelongsTo

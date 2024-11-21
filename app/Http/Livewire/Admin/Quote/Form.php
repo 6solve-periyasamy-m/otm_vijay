@@ -8,6 +8,7 @@ use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
 use App\Models\Quote\QuoteProspect;
 use App\Models\System\LargeTextTemplate;
+use App\Models\Customer\Agent;
 use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 
@@ -60,7 +61,9 @@ class Form extends Component
     {
         if ($key === 'quote.organization_id') {
             $this->quote->commission = $this->quote->organization?->commission ?? $this->quote->commission;
+            $this->quote->agents = Agent::where('organization_id', $this->quote->organization?->id)->get();
         }
+
         if ($key === 'quote.commission') {
             /** @noinspection NestedPositiveIfStatementsInspection */
             if ($this->quote->commission !== 0 && empty($this->quote->commission)) {
@@ -81,6 +84,20 @@ class Form extends Component
         }
     }
 
+    public static function getSelectAgencies($organization_id)
+    {
+        if ($organization_id == 0) return null;
+        $agents = Agent::where('organization_id', '=', $organization_id)->get();
+        $data = [];
+        foreach ($agents as $agent) {
+            $option = [];
+            $option['id'] = $agent->id;
+            $option['text'] = $agent->first_name . ' ' . $agent->last_name;
+            $data['results'][] = $option;
+        }
+        return $data;
+    }
+
     public function render()
     {
         return view('livewire.admin.quote.form');
@@ -94,6 +111,7 @@ class Form extends Component
             'quote.tax_bracket_id' => 'nullable|integer|exists:tax_brackets,id',
             'quote.consultant_id' => 'nullable|integer|exists:users,id',
             'quote.organization_id' => 'nullable|integer|exists:organizations,id',
+            'quote.agent_id' => 'nullable|integer|exists:agents,id',
             'quote.event_id' => 'nullable|integer|exists:events,id',
             'quote.commission' => 'nullable|numeric|between:0,100',
             'quote.deposit' => 'nullable|numeric',

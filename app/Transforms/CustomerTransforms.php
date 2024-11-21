@@ -4,6 +4,7 @@ namespace App\Transforms;
 
 use App\Models\Customer\HatSize;
 use App\Models\Customer\Organization;
+use App\Models\Customer\Agent;
 use App\Models\Customer\TShirtSize;
 
 interface CustomerTransformsInterface
@@ -86,6 +87,20 @@ class CustomerTransforms implements CustomerTransformsInterface
         $data = [];
         $data['id'] = $organization->id;
         $data['text'] = $organization->name;
+        return $data;
+    }
+
+    public static function getSelectAgencies($organization_id)
+    {
+        if ($organization_id == 0) return null;
+        $agents = Agent::where('organization_id', $organization_id)->get();
+        $data = [];
+        foreach ($agents as $agent) {
+            $option = [];
+            $option['id'] = $agent->id;
+            $option['text'] = $agent->first_name . ' ' . $agent->last_name;
+            $data['results'][] = $option;
+        }
         return $data;
     }
 }

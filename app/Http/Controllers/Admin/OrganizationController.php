@@ -26,7 +26,7 @@ class OrganizationController extends Controller
 
     public function view(Organization $organization)
     {
-        $organization->load('customers', 'memberOrders', 'memberQuotes', 'quotes', 'orders');
+        $organization->load('customers', 'memberOrders', 'memberQuotes', 'quotes', 'orders', 'agents');
         return view('pages.admin.organization.view', ['organization' => $organization,]);
     }
 

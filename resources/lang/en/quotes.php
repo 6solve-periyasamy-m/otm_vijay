@@ -20,6 +20,8 @@ return [
         'starts' => 'Starts Date',
         'ends' => 'Ends Date',
         'description' => 'Description',
+        'organization' => 'Organization',
+        'agent' => 'Agent',
         'notes' => [
             'internal' => 'Internal Note',
             'external' => 'External Note',
