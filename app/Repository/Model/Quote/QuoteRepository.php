@@ -1038,7 +1038,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         foreach ($this->getRoomsByStartDate() as $room) {
             $used = 1;
             // Skip any rooms with 0 Quantity
-            if ($used > $room->quantity) { continue; }
+            if ($room->quantity !== null && $used > $room->quantity) { continue; }
             // Verify a tour component exists for this quote component
             $tourComponent = $room->repository->getTourComponent($order->tour);
             if ($tourComponent === null) { continue; }
@@ -1057,7 +1057,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 // If there are enough customers in the group, check the quantity, and continue
                 if ($group->orderCustomers()->count() >= $room->inventory->roomType->maximum_occupancy) {
                     $used++;
-                    if ($used > $room->quantity) { break; }
+                    if ($room->quantity !== null && $used > $room->quantity) { break; }
                     $group = Group::create();
                     $group->repository->addRoomToGroup($tourComponent, true);
                 }
