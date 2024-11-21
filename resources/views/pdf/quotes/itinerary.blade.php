@@ -620,6 +620,13 @@ figure.table tr td:nth-child(2) {display:none;}
         <div class="details-module">
             <table>
                 <tbody>
+                    @php
+                      if (isset($accommodation->details['Description'], $accommodation->details['Quantity'])) {
+                        $temp_desc = $accommodation->details['Description'];
+                        unset($accommodation->details['Description']);
+                        $accommodation->details['Description'] = $temp_desc;
+                    }
+                    @endphp
                     @foreach($accommodation->details as $key => $value)
                     @php
                       $class_desc_pos = $key == 'Description' ? 'desc-pos-top' : '';
