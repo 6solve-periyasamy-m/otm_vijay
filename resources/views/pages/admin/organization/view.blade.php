@@ -89,8 +89,8 @@
                         <tr wire:key="{{$agent->id}}">
                             <td>{{ $agent->first_name . ' ' . $agent->last_name }}</td>
                             <td>{{ $agent->email }}</td>
-                            <td>{{ $agent->organization->orders()->count() }}</td>
-                            <td>{{ $agent->organization->quotes()->count() }}</td>
+                            <td>{{ $agent->orders()->count() }}</td>
+                            <td>{{ $agent->quotes()->count() }}</td>
                             <td style="width: 10px">
                                 <button class="edit-button" onclick="openModal('admin.agent.form', {'agent': {{$agent->id}},})">{{Icon::edit()}}</button>
                             </td>
