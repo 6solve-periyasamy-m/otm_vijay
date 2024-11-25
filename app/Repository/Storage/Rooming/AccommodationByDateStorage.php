@@ -173,11 +173,11 @@ class AccommodationByDateStorage
                     continue;
                 }
 
-
                 // If block has equal quantity, update end time
                 if ($block['quantity'] === $quantity) {
                     $block['end'] = $item['end'];
                     $blocks[$key] = $block;
+                    $quantity -= $block['quantity'];
                 }
                 // If block has more quantity, clear amount above quantity
                 else if ($block['quantity'] > $quantity) {
@@ -185,14 +185,29 @@ class AccommodationByDateStorage
                     $block['quantity'] = $quantity;
                     $block['end'] = $item['end'];
                     $blocks[$key] = $block;
+                    $quantity -= $block['quantity'];
                 }
                 // If block has less quantity, make new block
                 else if ($block['quantity'] < $quantity) {
                     $block['end'] = $item['end'];
                     $blocks[$key] = $block;
-                    $item['quantity'] = $quantity - $block['quantity'];
-                    $blocks[] = $item;
+                    $quantity -= $block['quantity'];
+                    $tmpQuantity = $quantity;
+                    // Iterate through items to see if a future block matches
+                    foreach ($blocks as $iKey => $iBlock) {
+                        // Array uses sequential numerical keys, so skip any ones earlier in the loop
+                        if ($iKey <= $key) { continue; }
+                        if (abs($block['end']->diffInDays($item['start'])) > 1) { continue; }
+                        $tmpQuantity -= $iBlock['quantity'];
+                    }
+                    // if, after checking ahead, there is still quantity that needs setting, add a new item to the list
+                    if ($tmpQuantity > 0) {
+                        $item['quantity'] = $quantity;
+                        $blocks[] = $item;
+                    }
                 }
+
+                if ($quantity <= 0) { break; }
             }
 
             // If the blocks are now empty, make a new block with this item
@@ -207,7 +222,7 @@ class AccommodationByDateStorage
         return $itineraryItems;
     }
 
-    private function cloneItineraryItem(ItineraryItem $item, Carbon $start, Carbon $end, int $quantity): ItineraryItem
+    private function cloneItineraryItem(ItineraryItem $item, Carbon $start, Carbon $end, int|null $quantity): ItineraryItem
     {
         $item = $item->clone();
         $item->sortKey = $start->unix();
