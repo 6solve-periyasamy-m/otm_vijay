@@ -18,18 +18,29 @@ class Calculator extends Component
 
     public $listeners = ['refreshLivewireDatatable' => 'calculate','sendEmail' => 'send'];
 
-    public int $paying = 0;
-    public int $travelling = 0;
+    public Quote $quote;
+
+    /** @var string|int $paying The number of paying travellers. Is converted to int when saved */
+    public string|int $paying = 0;
+
+    /** @var string|int $travelling The number of non-paying travellers. Is converted to int when saved */
+    public string|int $travelling = 0;
+
+    /** @var float $costToCompany Cost of the package to the company */
     public float $costToCompany = 0;
+
+    /** @var float $total Total Cost to Customers */
     public float $total = 0;
+
+    /** @var float $profit Raw profit amount (total - cost to company) */
     public float $profit = 0;
+    /** @var float $margin Percentage profit margin for package ((total - cost to company) / total)*/
     public float $margin = 0;
+    /** @var string|float|null $markup Percentage markup for package ((total - cost to company) / cost to company) */
     public string|float|null $markup = null;
     public float|null $commission = null;
     public float $toBePaid;
     public float|string $marked_up_price = 0;
-
-    public Quote $quote;
     public float|null $taxes = null;
 
     public function mount(Quote $quote)
@@ -45,21 +56,31 @@ class Calculator extends Component
         if ($validate) {
             $this->validate();
             $this->markup = (float)$this->markup;
+            $this->travelling = (int)$this->travelling;
+            $this->paying = (int)$this->paying;
         }
-        $companyCostTravellers = ($this->paying + $this->travelling + ($this->leadTravelling()));
-        $this->costToCompany = $this->quote->repository->getTotalCostToCompany($companyCostTravellers);
-        $costPerPerson = $companyCostTravellers > 0 ? sigfig($this->costToCompany / $companyCostTravellers) : 0;
+
+        /** @var int $totalTravellerCount Total number of travellers */
+        $totalTravellerCount = ($this->paying + $this->travelling + ($this->leadTravelling()));
+        $this->costToCompany = $this->quote->repository->getTotalCostToCompany($totalTravellerCount);
+
+        /** @var float $costPerPerson Cost to the company per person (average) */
+        $costPerPerson = $totalTravellerCount > 0 ? sigfig($this->costToCompany / $totalTravellerCount) : 0;
         $this->total = $this->quote->repository->getTotalCost($this->paying + ($this->quote->leadTraveller->paying ? 1 : 0));
         $this->profit = sigfig($this->total - $this->costToCompany);
-        $this->margin = $this->costToCompany == 0 ? 100 : sigfig(($this->total / $this->costToCompany) * 100);
-        $this->markup = sigfig($this->markup ?? $this->margin - 100, 6);
+        $this->margin = $this->costToCompany == 0 ? 100 : sigfig((($this->total - $this->costToCompany) / $this->total) * 100);
+
+        $this->markup = sigfig($this->markup ?? ($this->costToCompany == 0 ? 100 : ((($this->total - $this->costToCompany) / $this->costToCompany) * 100)), 6);
         $this->marked_up_price = sigfig($costPerPerson + ($costPerPerson * ($this->markup / 100)));
+
         if ($this->quote->commission !== null) {
             $this->commission = sigfig($this->total * ($this->quote->commission / 100));
         }
+
         if ($this->quote->taxBracket()?->rate !== null) {
             $this->taxes = sigfig($this->quote->taxBracket()?->calculate($this->total));
         }
+
         $this->profit -= $this->commission;
         $this->toBePaid = $this->total - ($this->commission ?? 0.0);
         $this->save();
@@ -67,10 +88,12 @@ class Calculator extends Component
 
     public function inputChanged(?string $key = null): void
     {
+        if ($key === 'paying') { $this->paying = (int)$this->paying; }
+        if ($key === 'travelling') { $this->paying = (int)$this->travelling; }
         if ($key === 'marked_up_price') {
             $companyCostTravellers = ($this->paying + $this->travelling + ($this->leadTravelling()));
             $costPerPerson = $companyCostTravellers > 0 ? sigfig($this->costToCompany / $companyCostTravellers) : 0;
-            $this->markup = sigfig(((($this->marked_up_price - $costPerPerson)/$costPerPerson) * 100), 6, true);
+            $this->markup = $costPerPerson == 0 ? 100 : sigfig(((($this->marked_up_price - $costPerPerson)/$costPerPerson) * 100), 6, true);
         }
         $this->calculate();
     }
