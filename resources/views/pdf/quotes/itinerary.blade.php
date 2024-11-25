@@ -963,12 +963,17 @@ figure.table tr td:nth-child(2) {display:none;}
           <tr>
               <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
               <td>{{ f_currency($installment->amount) }}</td>
-              <td>@if($installment->paid)
+              <td>
+                @if ($installment->type === ItineraryScheduleType::DEPOSIT)
+                  NOW
+                @else
+                  @if($installment->paid)
                       PAID
                   @elseif(!is_null(optional($installment->due)))
                       {{ optional($installment->due)->format('d M Y') }}
                   @endif
-                </td>
+                @endif
+              </td>
             </tr>
           @endforeach
         </tbody>
