@@ -682,15 +682,14 @@ figure.table tr td:nth-child(2) {display:none;}
                             $firstLoop = false;
                         @endphp
                     @endif
-                    <h4>   
-                        <!-- <span class="text">{!! $item->name ?? $evename !!}</span> -->
-                        <span class="text">{!! $evename !!}</span>
-                        <span class="mark"></span>
-                    </h4> 
                     <div class="details-module">
                         <table>
                             <tbody>
-                            @if(array_key_exists('Ticket', $item->details) && !empty($item->details['Ticket']))
+                                <tr>
+                                  <td><strong>Event:</strong></td>
+                                  <td>{{ $evename }}</td>
+                                </tr>
+                                @if(array_key_exists('Ticket', $item->details) && !empty($item->details['Ticket']))
                                     <tr>
                                         <td><strong>Ticket:</strong></td>
                                         <td>{{ $item->details['Ticket'] }}</td>
@@ -772,21 +771,26 @@ figure.table tr td:nth-child(2) {display:none;}
                           <td>{{ $item->name }}</td>
                       @endif
                   </tr>
+                    @php
+                        $disable_items = ['Ticket'];
+                    @endphp
                    @foreach($item->details as $key => $value)
                       @php
                         $class_desc_pos = $key == 'Description' ? 'text-wrap' : '';
                       @endphp
                        @continue(empty($value))
-                       <tr>
-                           <td><strong>{{ $key }}:</strong></td>
-                           <td class="<?php echo $class_desc_pos;?>">
-                               @if($key === 'Dates')
-                                   {{ trim(explode('to', $value)[0]) }}
-                               @else
-                                   {!! $value !!}
-                               @endif
-                           </td>
-                       </tr>
+                        @if (!in_array($key, $disable_items))
+                          <tr>
+                            <td><strong>{{ $key }}:</strong></td>
+                            <td class="<?php echo $class_desc_pos;?>">
+                                @if($key === 'Dates')
+                                    {{ trim(explode('to', $value)[0]) }}
+                                @else
+                                    {!! $value !!}
+                                @endif
+                            </td>
+                          </tr>
+                        @endif
                    @endforeach
                </tbody>
             </table>
