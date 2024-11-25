@@ -863,8 +863,8 @@ figure.table tr td:nth-child(2) {display:none;}
         </thead>
         <tbody>
           @php
-            $received_balance = 0;
-            $tot_received_balance = 0;
+            $balance_received = 0;
+            $balance_received_total = 0;
           @endphp
           @foreach ($itinerary->finances->schedule as $key => $installment)
             @if($installment->type === ItineraryScheduleType::BOOKING_FEE)
@@ -873,7 +873,7 @@ figure.table tr td:nth-child(2) {display:none;}
                 <td>{{ f_currency($installment->amount) }}</td>
                 <td>
                     {{ f_currency(min($installment->amount, $installment->received)) }}
-                    @php $received_balance = $received_balance + min($installment->amount, $installment->received) @endphp
+                    @php $balance_received = $balance_received + min($installment->amount, $installment->received) @endphp
                 </td>
                 <td>
                   @if($installment->amount <= $installment->received)
@@ -893,10 +893,10 @@ figure.table tr td:nth-child(2) {display:none;}
                   @php $amount = $installment->amount - min(($installment->received - ($installment->balance ?? 0)), $installment->amount); @endphp
                   @if($amount <= 0)
                       {{ f_currency($installment->amount) }}
-                      @php $received_balance = $received_balance + $installment->amount @endphp
+                      @php $balance_received = $balance_received + $installment->amount @endphp
                   @else
                       {{ f_currency($installment->received) }}
-                      @php $received_balance = $received_balance + $installment->received @endphp
+                      @php $balance_received = $balance_received + $installment->received @endphp
                   @endif
                 </td>
                 <td>
@@ -917,10 +917,10 @@ figure.table tr td:nth-child(2) {display:none;}
                 <td>
                   @if($amount <= 0)
                       {{ f_currency($installment->amount) }}
-                      @php $received_balance = $received_balance + $installment->amount @endphp
+                      @php $balance_received = $balance_received + $installment->amount @endphp
                   @else
                       {{ f_currency($installment->received) }}
-                      @php $received_balance = $received_balance + $installment->received @endphp
+                      @php $balance_received = $balance_received + $installment->received @endphp
                   @endif
                 </td>
                 <td>
@@ -942,8 +942,8 @@ figure.table tr td:nth-child(2) {display:none;}
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ f_currency($installment->amount) }}</td>
                 <td>
-                  @php $tot_received_balance = $installment->received - $received_balance; @endphp
-                  {{ f_currency($tot_received_balance) }}
+                  @php $balance_received_total = $installment->received - $balance_received; @endphp
+                  {{ f_currency($balance_received_total) }}
                 </td>
                 <td>
                   @php $amount = min($installment->balance, $installment->amount); @endphp
