@@ -135,7 +135,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
 
     public function getCost(): float
     {
-        return $this->tourComponent->tour_sales_price ?? 0;
+        return $this->tourComponent->tour_sales_price ?? 0.0;
     }
 
     public function getTourComponentType(): string
