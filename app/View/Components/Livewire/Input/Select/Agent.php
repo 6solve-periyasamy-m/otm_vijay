@@ -39,6 +39,10 @@ class Agent extends AbstractSelectComponent
 
     protected function format(OrgAgent|Model $model): string
     {
-        return $model->first_name . ' ' . $model->last_name . ' - ' . $model->organization->name;
+        $option = $model->first_name . ' ' . $model->last_name;
+        if ($model->organization) {
+            $option .= ' - ' . $model->organization->name;
+        }
+        return $option;
     }
 }

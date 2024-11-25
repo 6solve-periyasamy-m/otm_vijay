@@ -5,6 +5,8 @@ namespace App\Models\Customer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Customer\Organization;
+use App\Models\Order\Order;
+use App\Models\Quote\Quote;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -28,8 +30,33 @@ class Agent extends Model
 
     protected $guarded = [];
 
+    /**
+     * Get the organization that the agent belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class, 'organization_id');
+    }
+
+    /**
+     * Get the agent has quotes
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function quotes()
+    {
+        return $this->hasMany(Quote::class, 'agent_id');
+    }
+
+    /**
+     * Get the agent has orders
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'agent_id');
     }
 }

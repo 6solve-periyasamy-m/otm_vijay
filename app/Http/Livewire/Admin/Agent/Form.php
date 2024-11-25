@@ -44,7 +44,10 @@ class Form extends ModalComponent
         $this->refreshTables();
         $this->closeModal();
 
-        $this->redirect('/admin/organizations/' . $this->agent->organization_id);
+        if ($this->agent->organization_id) {
+            $this->redirect('/admin/organizations/' . $this->agent->organization_id);
+        }
+        $this->refreshPage();
     }
 
     public function render(): Factory|View|Application
