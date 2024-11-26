@@ -436,6 +436,225 @@
                 <p class="event_txt">{!! $itinerary->description !!}</p>
             </div>
         @endif
+
+        @if($itinerary->finances !== null)
+            <div id="finances" class="avoid-break">
+                <table class="divider">
+                    <thead>
+                        <tr>
+                            <th class="text">
+                                PAYMENT SUMMARY
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+
+                @if(count($itinerary->finances->payments) > 0)
+                    <table class="date-header">
+                        <tr>
+                            <td colspan="2" class="text-left">
+                                <div class="date-content">
+                                    PAYMENTS MADE
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="schedule-table">
+                        <tr>
+                            <td class="schedule-td">
+                                <table class="schedule-table">
+                                    <thead>
+                                        <tr>
+                                            <th>MADE ON</th>
+                                            <th>AMOUNT PAID</th>
+                                            <th>PAYMENT TYPE</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($itinerary->finances->payments as $payment)
+                                            <tr>
+                                                <td>{{ $payment->made->format('d F Y') }}</td>
+                                                <td>{{ f_currency($payment->amount) }}</td>
+                                                <td>{{ $payment->type }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                @endif
+
+                <div class="avoid-break">
+                    <table class="date-header">
+                        <tr>
+                            <td colspan="2" class="text-left">
+                                <div class="date-content">
+                                    ORDER TOTAL
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="payment-details">
+                        @if($itinerary->finances->cost !== $itinerary->finances->total || $itinerary->finances->tax !== null)
+                            <tr>
+                                <td class="payment-details-title">
+                                    BOOKING TOTAL
+                                </td>
+                                <td class="payment-details-content">
+                                    {{ f_currency($itinerary->finances->total) }}
+                                </td>
+                            </tr>
+                            @if($itinerary->finances->tax !== null)
+                                <tr>
+                                    <td class="payment-details-title">
+                                        GST (included)
+                                    </td>
+                                    <td class="payment-details-content">
+                                        {{ $itinerary->finances->tax > 0 ? f_currency($itinerary->finances->tax) : 'No Taxes Due' }}
+                                    </td>
+                                </tr>
+                            @endif
+                            @if($itinerary->finances->commission !== null)
+                                <tr>
+                                    <td class="payment-details-title">
+                                        COMMISSION
+                                    </td>
+                                    <td class="payment-details-content">
+                                        {{ f_currency($itinerary->finances->commission) }} ({{ $itinerary->finances->commissionPercent }}%)
+                                    </td>
+                                </tr>
+                            @endif
+                            <tr>
+                                <td colspan="2" class="payment-details-blank">&nbsp;</td>
+                            </tr>
+                        @endif
+                        <tr>
+                            <td class="payment-details-title">
+                                FINAL COST
+                            </td>
+                            <td class="payment-details-content">
+                                {{ f_currency($itinerary->finances->cost) }}
+                            </td>
+                        </tr>
+                        @if($itinerary->finances->paid() > 0)
+                            <tr>
+                                <td class="payment-details-title">
+                                    TOTAL PAID
+                                </td>
+                                <td class="payment-details-content">
+                                    {{ f_currency($itinerary->finances->paid()) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="payment-details-title">
+                                    REMAINING
+                                </td>
+                                <td class="payment-details-content">
+                                    {{ f_currency($itinerary->finances->cost - $itinerary->finances->paid()) }}
+                                </td>
+                            </tr>
+                        @endif
+                    </table>
+                </div>
+
+                @if(count($itinerary->finances->schedule) > 0)
+                    <table class="date-header">
+                        <tr>
+                            <td colspan="2" class="text-left">
+                                <div class="date-content">
+                                    PAYMENT SCHEDULE
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="schedule-table">
+                        <tr>
+                            <td class="schedule-td">
+                                <table class="schedule-table">
+                                    <thead>
+                                        <tr>
+                                            <th>INSTALMENTS</th>
+                                            <th>AMOUNT DUE</th>
+                                            <th>DATE DUE</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($itinerary->finances->schedule as $installment)
+                                            <tr>
+                                                <td>{{ $installment->type->label() }}</td>
+                                                <td>{{ f_currency($installment->amount) }} ({{$installment->percentage}}%)</td>
+                                                <td>
+                                                    @if($installment->due === null)
+                                                        With Order
+                                                    @else
+                                                        {{ $installment->due->format('d F Y') }}
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                @endif
+
+            </div>
+        @endif
+        
+
+        @if(!empty($itinerary->notes))
+            <div class="avoid-break">
+                <table class="divider">
+                    <thead>
+                        <tr>
+                            <th class="text">
+                                NOTES
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="text-section">
+                    <p>{!! $itinerary->notes !!}</p>
+                </div>
+            </div>
+        @endif
+
+
+        @if(!empty($itinerary->event?->final_terms) || !empty($itinerary->terms))
+            <div class="avoid-break">
+                <table class="divider">
+                    <thead>
+                        <tr>
+                            <th class="text">
+                                TERMS & CONDITIONS
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="text-section">
+                    <p>{!! $itinerary->event?->final_terms ?? $itinerary->terms !!}</p>
+                </div>
+            </div>
+        @endif
+
+        @if(!empty($itinerary->footer))
+            <div class="avoid-break">
+                <table class="divider">
+                    <thead>
+                        <tr>
+                            <th class="text">
+                                FINAL DETAILS
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+                <div  class="text-section">
+                    <p>{!! $itinerary->footer !!}</p>
+                </div>
+            </div>
+        @endif
     </section>
 </body>
 </html>
