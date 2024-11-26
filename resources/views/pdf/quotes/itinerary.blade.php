@@ -820,7 +820,7 @@ figure.table tr td:nth-child(2) {display:none;}
            <tbody>
                   <tr>            
                    <td style="font-weight:400;min-width:128px;">Booking Total:</td>
-                   <td>{{ f_currency($itinerary->finances->total) }}</td>
+                   <td>{{ f_currency($itinerary->finances->cost) }}</td>
                   </tr>
                   <tr>
                       <td style="font-weight:400;min-width:128px;">GST (included):</td>
@@ -862,12 +862,19 @@ figure.table tr td:nth-child(2) {display:none;}
           </tr>
         </thead>
         <tbody>
+          @php
+            $balance_received = 0;
+            $balance_received_total = 0;
+          @endphp
           @foreach ($itinerary->finances->schedule as $key => $installment)
             @if($installment->type === ItineraryScheduleType::BOOKING_FEE)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>Booking Fee</td>
-                <td>{{ f_currency(min($installment->amount, $installment->received)) }}</td>
+                <td>{{ f_currency($installment->amount) }}</td>
+                <td>
+                    {{ f_currency(min($installment->amount, $installment->received)) }}
+                    @php $balance_received = $balance_received + min($installment->amount, $installment->received) @endphp
+                </td>
                 <td>
                   @if($installment->amount <= $installment->received)
                     Paid
@@ -881,13 +888,15 @@ figure.table tr td:nth-child(2) {display:none;}
             @if ($installment->type === ItineraryScheduleType::DEPOSIT)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
+                <td>{{ f_currency($installment->amount) }}</td>
                 <td>
                   @php $amount = $installment->amount - min(($installment->received - ($installment->balance ?? 0)), $installment->amount); @endphp
                   @if($amount <= 0)
                       {{ f_currency($installment->amount) }}
+                      @php $balance_received = $balance_received + $installment->amount @endphp
                   @else
                       {{ f_currency($installment->received) }}
+                      @php $balance_received = $balance_received + $installment->received @endphp
                   @endif
                 </td>
                 <td>
@@ -904,12 +913,14 @@ figure.table tr td:nth-child(2) {display:none;}
               @php $amount = $installment->amount - $installment->received; @endphp
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
+                <td>{{ f_currency($installment->amount) }}</td>
                 <td>
                   @if($amount <= 0)
                       {{ f_currency($installment->amount) }}
+                      @php $balance_received = $balance_received + $installment->amount @endphp
                   @else
                       {{ f_currency($installment->received) }}
+                      @php $balance_received = $balance_received + $installment->received @endphp
                   @endif
                 </td>
                 <td>
@@ -929,8 +940,11 @@ figure.table tr td:nth-child(2) {display:none;}
             @if ($installment->type === ItineraryScheduleType::REMAINING)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>Remaining Balance</td>
-                <td>{{ f_currency($installment->received) }}</td>
+                <td>{{ f_currency($installment->amount) }}</td>
+                <td>
+                  @php $balance_received_total = $installment->received - $balance_received; @endphp
+                  {{ f_currency($balance_received_total) }}
+                </td>
                 <td>
                   @php $amount = min($installment->balance, $installment->amount); @endphp
                   @if($amount <= 0)
