@@ -885,7 +885,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             new ItineraryTraveller($this->order->leadBooker->customer, $this->order->leadBooker->is_charged, $this->order->leadBooker->is_travelling),
             $this->order->tour->brand,
             $this->getTravellerItineraryArray(),
-            $this->getItineraryItems(),
+            $this->getReservationComponents(),
             $this->getItineraryFinances(),
             $this->order->tour->terms,
             $this->order->invoice_footer,
