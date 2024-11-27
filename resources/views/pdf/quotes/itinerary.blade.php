@@ -310,6 +310,11 @@ h4 span.mark {
     position:relative;
     top:5px;
 }
+.text-wrap {
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+}
 .single-module table td.item-detail.desc-pos-top strong{
   top:5px;
 }
@@ -584,7 +589,7 @@ figure.table tr td:nth-child(2) {display:none;}
                       @endphp
                       @foreach($transport->details as $key => $value)
                       @php
-                        $class_desc_pos = $key == 'Description' ? 'desc-pos-top' : '';
+                        $class_desc_pos = $key == 'Description' ? 'desc-pos-top text-wrap' : '';
                       @endphp
                           @if (!in_array($key, $disable_items))
                             <tr>
@@ -630,9 +635,16 @@ figure.table tr td:nth-child(2) {display:none;}
         <div class="details-module">
             <table>
                 <tbody>
+                    @php
+                      if (isset($accommodation->details['Description'], $accommodation->details['Quantity'])) {
+                        $temp_desc = $accommodation->details['Description'];
+                        unset($accommodation->details['Description']);
+                        $accommodation->details['Description'] = $temp_desc;
+                    }
+                    @endphp
                     @foreach($accommodation->details as $key => $value)
                     @php
-                      $class_desc_pos = $key == 'Description' ? 'desc-pos-top' : '';
+                      $class_desc_pos = $key == 'Description' ? 'desc-pos-top text-wrap' : '';
                     @endphp
                         @continue(empty($value))
                         <tr>
@@ -680,15 +692,14 @@ figure.table tr td:nth-child(2) {display:none;}
                             $firstLoop = false;
                         @endphp
                     @endif
-                    <h4>   
-                        <!-- <span class="text">{!! $item->name ?? $evename !!}</span> -->
-                        <span class="text">{!! $evename !!}</span>
-                        <span class="mark"></span>
-                    </h4> 
                     <div class="details-module">
                         <table>
                             <tbody>
-                            @if(array_key_exists('Ticket', $item->details) && !empty($item->details['Ticket']))
+                                <tr>
+                                  <td><strong>Event:</strong></td>
+                                  <td>{{ $evename }}</td>
+                                </tr>
+                                @if(array_key_exists('Ticket', $item->details) && !empty($item->details['Ticket']))
                                     <tr>
                                         <td><strong>Ticket:</strong></td>
                                         <td>{{ $item->details['Ticket'] }}</td>
@@ -723,7 +734,7 @@ figure.table tr td:nth-child(2) {display:none;}
                                 @if(!empty($item->details['Description']))
                                     <tr>
                                         <td><strong>Description:</strong></td>
-                                        <td>{!! $item->details['Description'] !!}</td>
+                                        <td class="text-wrap">{!! $item->details['Description'] !!}</td>
                                     </tr>
                                 @endif                 
                             </tbody>
@@ -770,18 +781,26 @@ figure.table tr td:nth-child(2) {display:none;}
                           <td>{{ $item->name }}</td>
                       @endif
                   </tr>
+                    @php
+                        $disable_items = ['Ticket'];
+                    @endphp
                    @foreach($item->details as $key => $value)
+                      @php
+                        $class_desc_pos = $key == 'Description' ? 'text-wrap' : '';
+                      @endphp
                        @continue(empty($value))
-                       <tr>
-                           <td><strong>{{ $key }}:</strong></td>
-                           <td>
-                               @if($key === 'Dates')
-                                   {{ trim(explode('to', $value)[0]) }}
-                               @else
-                                   {!! $value !!}
-                               @endif
-                           </td>
-                       </tr>
+                        @if (!in_array($key, $disable_items))
+                          <tr>
+                            <td><strong>{{ $key }}:</strong></td>
+                            <td class="<?php echo $class_desc_pos;?>">
+                                @if($key === 'Dates')
+                                    {{ trim(explode('to', $value)[0]) }}
+                                @else
+                                    {!! $value !!}
+                                @endif
+                            </td>
+                          </tr>
+                        @endif
                    @endforeach
                </tbody>
             </table>
@@ -811,7 +830,7 @@ figure.table tr td:nth-child(2) {display:none;}
            <tbody>
                   <tr>            
                    <td style="font-weight:400;min-width:128px;">Booking Total:</td>
-                   <td>{{ f_currency($itinerary->finances->total) }}</td>
+                   <td>{{ f_currency($itinerary->finances->cost) }}</td>
                   </tr>
                   <tr>
                       <td style="font-weight:400;min-width:128px;">GST (included):</td>
@@ -853,12 +872,19 @@ figure.table tr td:nth-child(2) {display:none;}
           </tr>
         </thead>
         <tbody>
+          @php
+            $balance_received = 0;
+            $balance_received_total = 0;
+          @endphp
           @foreach ($itinerary->finances->schedule as $key => $installment)
             @if($installment->type === ItineraryScheduleType::BOOKING_FEE)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>Booking Fee</td>
-                <td>{{ f_currency(min($installment->amount, $installment->received)) }}</td>
+                <td>{{ f_currency($installment->amount) }}</td>
+                <td>
+                    {{ f_currency(min($installment->amount, $installment->received)) }}
+                    @php $balance_received = $balance_received + min($installment->amount, $installment->received) @endphp
+                </td>
                 <td>
                   @if($installment->amount <= $installment->received)
                     Paid
@@ -872,13 +898,15 @@ figure.table tr td:nth-child(2) {display:none;}
             @if ($installment->type === ItineraryScheduleType::DEPOSIT)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
+                <td>{{ f_currency($installment->amount) }}</td>
                 <td>
                   @php $amount = $installment->amount - min(($installment->received - ($installment->balance ?? 0)), $installment->amount); @endphp
                   @if($amount <= 0)
                       {{ f_currency($installment->amount) }}
+                      @php $balance_received = $balance_received + $installment->amount @endphp
                   @else
                       {{ f_currency($installment->received) }}
+                      @php $balance_received = $balance_received + $installment->received @endphp
                   @endif
                 </td>
                 <td>
@@ -895,12 +923,14 @@ figure.table tr td:nth-child(2) {display:none;}
               @php $amount = $installment->amount - $installment->received; @endphp
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
+                <td>{{ f_currency($installment->amount) }}</td>
                 <td>
                   @if($amount <= 0)
                       {{ f_currency($installment->amount) }}
+                      @php $balance_received = $balance_received + $installment->amount @endphp
                   @else
                       {{ f_currency($installment->received) }}
+                      @php $balance_received = $balance_received + $installment->received @endphp
                   @endif
                 </td>
                 <td>
@@ -920,8 +950,11 @@ figure.table tr td:nth-child(2) {display:none;}
             @if ($installment->type === ItineraryScheduleType::REMAINING)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>Remaining Balance</td>
-                <td>{{ f_currency($installment->received) }}</td>
+                <td>{{ f_currency($installment->amount) }}</td>
+                <td>
+                  @php $balance_received_total = $installment->received - $balance_received; @endphp
+                  {{ f_currency($balance_received_total) }}
+                </td>
                 <td>
                   @php $amount = min($installment->balance, $installment->amount); @endphp
                   @if($amount <= 0)
@@ -954,12 +987,17 @@ figure.table tr td:nth-child(2) {display:none;}
           <tr>
               <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
               <td>{{ f_currency($installment->amount) }}</td>
-              <td>@if($installment->paid)
+              <td>
+                @if ($installment->type === ItineraryScheduleType::DEPOSIT)
+                  NOW
+                @else
+                  @if($installment->paid)
                       PAID
                   @elseif(!is_null(optional($installment->due)))
                       {{ optional($installment->due)->format('d M Y') }}
                   @endif
-                </td>
+                @endif
+              </td>
             </tr>
           @endforeach
         </tbody>

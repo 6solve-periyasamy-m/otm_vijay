@@ -54,7 +54,7 @@
                         <td>
                             {{ ucwords($componentRepository->getComponentType()) }}
                         </td>
-                        <td>
+                        <td data-sort="{{ $componentRepository->getStartTime()?->unix() }}">
                             @if ($componentRepository->getComponentType() == 'merchandise')
                                 {{ __('quotes.view.cards.components.common.na') }}
                             @else
@@ -127,7 +127,7 @@
                 <tbody>
                 @foreach($quote->accommodation()->with('inventory')->get() as $component)
                     <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
-                        <td>
+                        <td data-sort="{{ $component->repository->getStartTime()?->unix() }}">
                             {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}
                             to
                             {{ f_datetime($component->repository->getInventory()?->getEndTime()) }}
@@ -196,7 +196,7 @@
                 <tbody>
                 @foreach($quote->activities()->with('inventory')->get() as $component)
                     <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
-                        <td>
+                        <td data-sort="{{ $component->repository->getStartTime()?->unix() }}">
                             {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}
                             to
                             {{ f_datetime($component->repository->getInventory()?->getEndTime()) }}
@@ -265,7 +265,7 @@
                 <tbody>
                 @foreach($quote->flights()->with('inventory')->get() as $component)
                     <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
-                        <td>
+                        <td data-sort="{{ $component->repository->getStartTime()?->unix() }}">
                             {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}
                             to
                             {{ f_datetime($component->repository->getInventory()?->getEndTime()) }}
@@ -334,7 +334,7 @@
                 <tbody>
                 @foreach($quote->transport()->with('inventory')->get() as $component)
                     <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
-                        <td>
+                        <td data-sort="{{ $component->repository->getStartTime()?->unix() }}">
                             {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}
                             to
                             {{ f_datetime($component->repository->getInventory()?->getEndTime()) }}
@@ -402,7 +402,7 @@
                 <tbody>
                 @foreach($quote->merchandise()->with('inventory')->get() as $component)
                     <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
-                        <td>
+                        <td data-sort="{{ $component->repository->getStartTime()?->unix() }}">
                             {{ $component->repository->__toString() }}
                         </td>
                         <td>

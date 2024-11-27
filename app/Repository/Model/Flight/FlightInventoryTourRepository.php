@@ -178,7 +178,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
 
     public function getCost(): float
     {
-        return $this->tourComponent->tour_sales_price;
+        return $this->tourComponent->tour_sales_price ?? 0.0;
     }
 
     public function getTourComponentType(): string
