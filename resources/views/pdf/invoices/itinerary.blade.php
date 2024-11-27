@@ -4,7 +4,6 @@
  * @var string $type
  */
     $type = $type ?? "Travel Itinerary";
-    $header_logo = svg_to_b64('images/pdf_assets/images/KPTravel_Logo_RGB_White.png') ;
     $event_name = $itinerary->event;
 @endphp
 
@@ -26,18 +25,17 @@
             --head-text-background:rgba(243, 91, 21, 1);
             --table-border-color:#EAEAEA;
         }
-
         .pdf-header { padding:30px 32px;position: relative; }
-        .pdf-individual-block { width: 796px;position: relative; height:200px !important;}
+        .pdf-individual-block { width: 796px;position: relative; }
         .travel_itinerary_block{padding: 0px 30px 25px 30px;margin-top: -30px;}
-        .header-logo{position: absolute; top: -180px;}
+        .header-logo{position: absolute; top: -130px;}
         .travel_title{
             color: #fff;
             font-family: "PlayfairDisplay-Medium";
-            font-size: 58px;
-            font-weight: 400;
-            line-height: 64px;
-            margin-top: -115px;
+            font-size: 40px;
+            font-weight: 600;
+            line-height: 20px;
+            margin-top: -70px;
             text-align: center;
         }
         .travel_itinerary_title h3{
@@ -47,6 +45,7 @@
             font-weight: 500;
             line-height: 28px;
             margin-bottom: 0px;
+            text-align: left;
         }
         .travel_itinerary_title h4{
             font-family: "PP Neue Montreal";
@@ -56,6 +55,7 @@
             color: #F35B15;
             text-underline-position: from-font;
             text-decoration-skip-ink: none;
+            text-align: left;
         }
         .travel_itinerary_title h6,.event_txt{
             font-family: "PP Neue Montreal";
@@ -111,7 +111,7 @@
         .single-module {padding-left: 32px;}
         .pdf-individual-block .single-module .heading-module {margin-left: -32px;}
         .single-module h4{
-            font-family: "PPNeueMontreal-Regular";
+        font-family: "PPNeueMontreal-Regular"text-align: left;;
             font-size: 18px;
             font-weight: 500;
             line-height: 20px;
@@ -153,29 +153,31 @@
         .item-detail { max-width: 100%;}
         .event_info_div{padding: 45px 35px;}
         .event_descrp{padding-bottom: 15px;}
+        .banner_header{ background-color: rgba(0, 0, 0, 0.6);display: inline-block;width: 796px; height: 147px;margin-top: -10px; }
         .text-wrap {
             word-wrap: break-word;
             word-break: break-word;
             white-space: normal;
+            width:650px;
         }
-        .banner_header{ background-color: rgba(0, 0, 0, 0.6);display: inline-block;width: 796px; height: 195px;margin-top: -10px; }
+        .travellers table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .travellers th, td {
+            padding: 5px 10px 5px 5px;
+            text-align: left;
+        }
+        .travellers th {
+            background-color: #f4f4f4;
+        }
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
 
 <body class="body">
     <section class="pdf-individual-block">
-        @if(!empty($itinerary->image))
-            <img src="{{ $itinerary->image }}" alt="{{ $itinerary->package }}" style="width:100%;margin-top: -10px;" >
-        @else
-            <div class="banner_header"></div>
-        @endif
-        <h1 class="travel_title"> {{ $type }} </h1>
-        <div class="pdf-header" >
-            <div class="header-logo">
-                <img src="{{ $header_logo }}" alt="{{ $itinerary->brand->name }}">   
-            </div>     
-        </div>
+        @include('partials.pdf.kpt.header.new', ['type' => $type,])
         <div class="travel_itinerary_block">
             <div class="travel_itinerary_title">
                 <table style="width: 100%;">
@@ -184,26 +186,38 @@
                             <td style="float:left;padding-bottom: 25px;"><h3>{{ $event_name }}</h3></td>
                             <td style="text-align:right;width: 50%;direction: rtl;padding-bottom: 25px;"><h5><strong>Reference:</strong> {{ $itinerary->reference }} </h5></td>
                         </tr>
+                        @if(!empty($itinerary->travellers))
                         <tr>
-                            <td style="padding-left: 10px;padding-bottom: 12px;"><h4>Guest Names</h4></td>
+                            <td colspan=2 style="padding-left: 10px;padding-bottom: 12px;"><h4>Guest Names</h4></td>
                         </tr>                        
                         <tr>
-                            <td style="padding-left: 10px;padding-bottom: 6px;"><h6>{{ $itinerary->booker->customer->full_name }}</h6></td>
-                        </tr>
-                        @if(!empty($itinerary->booker->customer->mobile_number))
-                        <tr>
-                            <td style="padding-left: 10px;"><h6>{{ $itinerary->booker->customer->mobile_number }}</h6></td>
-                        </tr>
-                        @endif
-                        @if(!empty($itinerary->booker->customer->email_address))
-                        <tr>
-                            <td style="padding-left: 10px;"><h6>{{ $itinerary->booker->customer->email_address }}</h6></td>
-                        </tr>
-                        @endif
+                            <td colspan=2 >
+                                <!-- List of travellers -->
+                                <table class="travellers">
+                                    @php
+                                        $traveller_name = '';
+                                    @endphp
+                                    @foreach($itinerary->travellers as $key => $traveller)
+                                        @php $traveller_name = $traveller->customer?->first_name . " " . $traveller->customer?->last_name; @endphp
+                                        @if ($key % 5 == 0)
+                                        <tr>
+                                        @endif
+
+                                            <td>{{ $traveller_name }}</td>
+
+                                        @if (($key + 1) % 5 == 0) 
+                                        </tr>
+                                        @endif                                      
+                                    @endforeach
+                                </table>
+                                <!-- end of List of travellers -->
+                            </td>
+                        </tr> 
+                        @endif                   
                     </tbody>
                 </table>        
             </div>            
-        </div>
+        </div>     
 
         <div class="heading-2">
             <h2>Trip Itinerary & inclusions</h2> 
@@ -312,7 +326,6 @@
             @endforeach
         @endif
 
-
         @if(!empty($itinerary->items['Event'])) 
             @php  $firstLoop = true; @endphp
             <div class="row">
@@ -382,7 +395,6 @@
             </div>
         @endif        
 
-
         @if(!empty($itinerary->items['Inclusion']))
             @php  $firstLoop = true; @endphp
             @foreach($itinerary->items['Inclusion'] as $item)
@@ -433,218 +445,47 @@
             @endforeach
         @endif
 
-        @if(!empty($itinerary->description))
-            <div class="heading-2" style="margin-top: 60px;">
-                <h2>Event information</h2> 
-            </div>
-            <div class="event_info_div">
-                <p class="event_txt">{!! $itinerary->description !!}</p>
-            </div>
-        @endif
+        <div class="heading-2" style="margin-top: 60px;">
+            <h2>Event information</h2> 
+        </div>
+        <div class="event_info_div">
+            <p class="event_txt">If you require any assistance during your trip, please don't hesitate to reach out to us our friendly team is always happy to help ensure your journey is smooth and stress free.</p>
 
-        @if($itinerary->finances !== null)
-            <div id="finances" class="avoid-break">
-                <table class="divider">
-                    <thead>
+            @if(!empty($itinerary->event?->onsite_name) || !empty($itinerary->event->onsite_email) || !empty($itinerary->event->onsite_phone))
+                <table>
+                    <tbody>
                         <tr>
-                            <th class="text">
-                                PAYMENT SUMMARY
-                            </th>
-                        </tr>
-                    </thead>
-                </table>
-
-                @if(count($itinerary->finances->payments) > 0)
-                    <table class="date-header">
-                        <tr>
-                            <td colspan="2" class="text-left">
-                                <div class="date-content">
-                                    PAYMENTS MADE
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                    <table class="schedule-table">
-                        <tr>
-                            <td class="schedule-td">
-                                <table class="schedule-table">
-                                    <thead>
-                                        <tr>
-                                            <th>MADE ON</th>
-                                            <th>AMOUNT PAID</th>
-                                            <th>PAYMENT TYPE</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($itinerary->finances->payments as $payment)
-                                            <tr>
-                                                <td>{{ $payment->made->format('d F Y') }}</td>
-                                                <td>{{ f_currency($payment->amount) }}</td>
-                                                <td>{{ $payment->type }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                @endif
-
-                <div class="avoid-break">
-                    <table class="date-header">
-                        <tr>
-                            <td colspan="2" class="text-left">
-                                <div class="date-content">
-                                    ORDER TOTAL
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                    <table class="payment-details">
-                        @if($itinerary->finances->cost !== $itinerary->finances->total || $itinerary->finances->tax !== null)
-                            <tr>
-                                <td class="payment-details-title">
-                                    BOOKING TOTAL
+                            @if(!empty($itinerary->event?->onsite_name))
+                                <td style="width: 245px;padding-top: 35px;padding-bottom: 50px;">
+                                <strong>Name:</strong><span>{{ $itinerary->event?->onsite_name }}</span>
                                 </td>
-                                <td class="payment-details-content">
-                                    {{ f_currency($itinerary->finances->total) }}
-                                </td>
-                            </tr>
-                            @if($itinerary->finances->tax !== null)
-                                <tr>
-                                    <td class="payment-details-title">
-                                        GST (included)
-                                    </td>
-                                    <td class="payment-details-content">
-                                        {{ $itinerary->finances->tax > 0 ? f_currency($itinerary->finances->tax) : 'No Taxes Due' }}
-                                    </td>
-                                </tr>
                             @endif
-                            @if($itinerary->finances->commission !== null)
-                                <tr>
-                                    <td class="payment-details-title">
-                                        COMMISSION
-                                    </td>
-                                    <td class="payment-details-content">
-                                        {{ f_currency($itinerary->finances->commission) }} ({{ $itinerary->finances->commissionPercent }}%)
-                                    </td>
-                                </tr>
+                            @if(!empty($itinerary->event?->onsite_email))
+                                <td style="width: 245px;padding-top: 35px;padding-bottom: 50px;">
+                                <strong>Email:</strong><span>{{ $itinerary->event?->onsite_email }}</span>
+                                </td>
                             @endif
-                            <tr>
-                                <td colspan="2" class="payment-details-blank">&nbsp;</td>
-                            </tr>
-                        @endif
-                        <tr>
-                            <td class="payment-details-title">
-                                FINAL COST
-                            </td>
-                            <td class="payment-details-content">
-                                {{ f_currency($itinerary->finances->cost) }}
-                            </td>
-                        </tr>
-                        @if($itinerary->finances->paid() > 0)
-                            <tr>
-                                <td class="payment-details-title">
-                                    TOTAL PAID
+                            @if(!empty($itinerary->event?->onsite_phone))
+                                <td style="width: 260px;padding-top: 35px;padding-bottom: 50px;">
+                                <strong>Phone:</strong><span>{{ $itinerary->event?->onsite_phone }}</span>
                                 </td>
-                                <td class="payment-details-content">
-                                    {{ f_currency($itinerary->finances->paid()) }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="payment-details-title">
-                                    REMAINING
-                                </td>
-                                <td class="payment-details-content">
-                                    {{ f_currency($itinerary->finances->cost - $itinerary->finances->paid()) }}
-                                </td>
-                            </tr>
-                        @endif
-                    </table>
-                </div>
-
-                @if(count($itinerary->finances->schedule) > 0)
-                    <table class="date-header">
-                        <tr>
-                            <td colspan="2" class="text-left">
-                                <div class="date-content">
-                                    PAYMENT SCHEDULE
-                                </div>
-                            </td>
+                            @endif
                         </tr>
-                    </table>
-                    <table class="schedule-table">
-                        <tr>
-                            <td class="schedule-td">
-                                <table class="schedule-table">
-                                    <thead>
-                                        <tr>
-                                            <th>INSTALMENTS</th>
-                                            <th>AMOUNT DUE</th>
-                                            <th>DATE DUE</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($itinerary->finances->schedule as $installment)
-                                            <tr>
-                                                <td>{{ $installment->type->label() }}</td>
-                                                <td>{{ f_currency($installment->amount) }} ({{$installment->percentage}}%)</td>
-                                                <td>
-                                                    @if($installment->due === null)
-                                                        With Order
-                                                    @else
-                                                        {{ $installment->due->format('d F Y') }}
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                @endif
-
-            </div>
-        @endif
-        
-
-        @if(!empty($itinerary->notes))
-            <div class="avoid-break">
-                <table class="divider">
-                    <thead>
-                        <tr>
-                            <th class="text">
-                                NOTES
-                            </th>
-                        </tr>
-                    </thead>
+                    </tbody>
                 </table>
-                <div class="text-section">
-                    <p>{!! $itinerary->notes !!}</p>
-                </div>
-            </div>
-        @endif
-
-
-        @if(!empty($itinerary->event?->final_terms) || !empty($itinerary->terms))
-            <div class="heading-2" style="margin-top: 60px;">
-                <h2>Terms & Conditions</h2> 
-            </div>
-            <div class="event_info_div">
-                <p class="event_txt">{!! $itinerary->event?->final_terms ?? $itinerary->terms !!}</p>
-            </div>
-        @endif
-
-        @if(!empty($itinerary->footer))
-            
-            <div class="heading-2" style="margin-top: 60px;">
-                <h2>Final Details</h2> 
-            </div>
-            <div class="event_info_div">
-                <p class="event_txt">{!! $itinerary->footer !!}</p>
-            </div>
-        @endif
+            @endif
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            @if(!empty($itinerary->event?->final_terms) || !empty($itinerary->terms))
+                                <p class="event_txt">{!! $itinerary->event?->final_terms ?? $itinerary->terms !!}</p>
+                            @endif
+                        </td>
+                    </tr>
+                </tbody>
+            </table>                
+        </div>
     </section>
 </body>
 </html>
