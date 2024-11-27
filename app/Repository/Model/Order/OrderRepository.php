@@ -871,6 +871,10 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
     private function getGenericItinerary(): Itinerary
     {
+        // If the agent is not set, but the organization is, then the agent is loaded from the organization
+        if ($this->order->agent === null && $this->order->organization !== null) {
+            $this->order->agent = $this->order->organization->agent;
+        }
         return new Itinerary(
             $this->order->tour->name,
             $this->order->tour->event,
