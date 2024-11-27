@@ -14,7 +14,10 @@ if(!function_exists('puppeteer')) {
      */
     function puppeteer(\Illuminate\Contracts\View\View|Factory $view, bool $response = true): StreamedResponse|string
     {
-        $invoice = Browsershot::html($view->render());
+        $invoice = Browsershot::html($view->render())
+                    ->setEnvironmentOptions([
+                        'CHROME_CONFIG_HOME' => config('browsershot.chrome.config'),
+                    ]);
         $invoice->showBackground()->margins(10, 2, 10, 2);
         if (!$response) return $invoice->pdf();
         return response()->stream(function () use ($invoice) { echo $invoice->pdf(); }, 200, ['Content-Type' => 'application/pdf']);
