@@ -16,7 +16,7 @@ if(!function_exists('puppeteer')) {
     {
         $invoice = Browsershot::html($view->render())
                     ->setEnvironmentOptions([
-                        'CHROME_CONFIG_HOME' => config('browsershot.chrome.config'),
+                        'CHROME_CONFIG_HOME' => storage_path('.cache/chrome/'),
                     ]);
         $invoice->showBackground()->margins(10, 2, 10, 2);
         if (!$response) return $invoice->pdf();
