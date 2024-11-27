@@ -942,7 +942,7 @@ figure.table tr td:nth-child(2) {display:none;}
                 </td>
                 <td>
                   @if(!is_null(optional($installment->due)))
-                      {{ optional($installment->due)->format('d/m/Y') }}
+                      {{ optional($installment->due)->format('d M Y') }}
                   @endif
                 </td>
               </tr>
@@ -965,7 +965,7 @@ figure.table tr td:nth-child(2) {display:none;}
                 </td>
                 <td>
                   @if(!is_null(optional($installment->due)))
-                      {{ optional($installment->due)->format('d/m/Y') }}
+                      {{ optional($installment->due)->format('d M Y') }}
                   @endif
                 </td>
               </tr>
@@ -985,14 +985,16 @@ figure.table tr td:nth-child(2) {display:none;}
         <tbody>
           @foreach ($itinerary->finances->schedule as $installment)
           <tr>
-              <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
+              <td>
+                {{ ($installment->type === ItineraryScheduleType::INSTALLMENT) ? "Instalment" : ucfirst(strtolower($installment->type->name)) }}
+              </td>
               <td>{{ f_currency($installment->amount) }}</td>
               <td>
                 @if ($installment->type === ItineraryScheduleType::DEPOSIT)
-                  NOW
+                  Now
                 @else
                   @if($installment->paid)
-                      PAID
+                    Paid
                   @elseif(!is_null(optional($installment->due)))
                       {{ optional($installment->due)->format('d M Y') }}
                   @endif
