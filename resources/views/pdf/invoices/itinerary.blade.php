@@ -5,7 +5,7 @@
  */
     $type = $type ?? "Travel Itinerary";
     $header_logo = svg_to_b64('images/pdf_assets/images/KPTravel_Logo_RGB_White.png') ;
-    $event_image = svg_to_b64('images/pdf_assets/images/header_bg_1.png') ;
+    $event_name = $itinerary->event;
 @endphp
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -28,7 +28,7 @@
         }
 
         .pdf-header { padding:30px 32px;position: relative; }
-        .pdf-individual-block { width: 796px;position: relative; }
+        .pdf-individual-block { width: 796px;position: relative; height:200px !important;}
         .travel_itinerary_block{padding: 0px 30px 25px 30px;margin-top: -30px;}
         .header-logo{position: absolute; top: -180px;}
         .travel_title{
@@ -158,13 +158,18 @@
             word-break: break-word;
             white-space: normal;
         }
+        .banner_header{ background-color: rgba(0, 0, 0, 0.6);display: inline-block;width: 796px; height: 195px;margin-top: -10px; }
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
 
 <body class="body">
     <section class="pdf-individual-block">
-        <img src="{{ $itinerary->image }}" alt="{{ $itinerary->package }}" style="width:100%;margin-top: -10px;" >  
+        @if(!empty($itinerary->image))
+            <img src="{{ $itinerary->image }}" alt="{{ $itinerary->package }}" style="width:100%;margin-top: -10px;" >
+        @else
+            <div class="banner_header"></div>
+        @endif
         <h1 class="travel_title"> {{ $type }} </h1>
         <div class="pdf-header" >
             <div class="header-logo">
@@ -176,7 +181,7 @@
                 <table style="width: 100%;">
                     <tbody>
                         <tr>
-                            <td style="float:left;padding-bottom: 25px;"><h3>The British and Irish Lions Tour 2025</h3></td>
+                            <td style="float:left;padding-bottom: 25px;"><h3>{{ $event_name }}</h3></td>
                             <td style="text-align:right;width: 50%;direction: rtl;padding-bottom: 25px;"><h5><strong>Reference:</strong> {{ $itinerary->reference }} </h5></td>
                         </tr>
                         <tr>
@@ -329,7 +334,7 @@
                                 <tbody>
                                     <tr>
                                     <td><strong>Event:</strong></td>
-                                    <td>{{ $evename }}</td>
+                                    <td>{{ $event_name }}</td>
                                     </tr>
                                     @if(array_key_exists('Ticket', $item->details) && !empty($item->details['Ticket']))
                                         <tr>
@@ -623,36 +628,21 @@
 
 
         @if(!empty($itinerary->event?->final_terms) || !empty($itinerary->terms))
-            <div class="avoid-break">
-                <table class="divider">
-                    <thead>
-                        <tr>
-                            <th class="text">
-                                TERMS & CONDITIONS
-                            </th>
-                        </tr>
-                    </thead>
-                </table>
-                <div class="text-section">
-                    <p>{!! $itinerary->event?->final_terms ?? $itinerary->terms !!}</p>
-                </div>
+            <div class="heading-2" style="margin-top: 60px;">
+                <h2>Terms & Conditions</h2> 
+            </div>
+            <div class="event_info_div">
+                <p class="event_txt">{!! $itinerary->event?->final_terms ?? $itinerary->terms !!}</p>
             </div>
         @endif
 
         @if(!empty($itinerary->footer))
-            <div class="avoid-break">
-                <table class="divider">
-                    <thead>
-                        <tr>
-                            <th class="text">
-                                FINAL DETAILS
-                            </th>
-                        </tr>
-                    </thead>
-                </table>
-                <div  class="text-section">
-                    <p>{!! $itinerary->footer !!}</p>
-                </div>
+            
+            <div class="heading-2" style="margin-top: 60px;">
+                <h2>Final Details</h2> 
+            </div>
+            <div class="event_info_div">
+                <p class="event_txt">{!! $itinerary->footer !!}</p>
             </div>
         @endif
     </section>
