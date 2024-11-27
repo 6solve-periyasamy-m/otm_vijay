@@ -1,5 +1,7 @@
 @extends('layout.master')
 
+@php($minimum = setting('order.reminders.minimum', 1.0) ?? 1.0)
+
 @section('title', 'Due Reminders')
 
 @push('footer-stack')
@@ -43,31 +45,38 @@
     <x-admin.section.card>
         <ul class="scroll-list">
             @foreach($orders as $row)
-                <li @if ($row->days < 0) class="overdue"
-                    @endif onclick="window.location='{{ route('orders.view', ['order' => $row->order,]) }}';">
+                <li @if ($row->days < 0) class="overdue" @endif onclick="window.location='{{ route('orders.view', ['order' => $row->order,]) }}';">
                     <div class="row">
                         <div class="col-2 text-center">{{ $row->order->booking_reference }}</div>
                         <div class="col-2 text-center">{{ $row->order->lead_booker_name }}</div>
                         <div class="col-3 text-center">{{ $row->order->leadBooker->customer->email_address }}</div>
                         <div class="col-1 text-center">{{ $row->next?->id === 0 ? 'Remaining' : 'Installment' }}</div>
+                        <div class="col-4 text-center">
                         @if($row->days  > 0)
-                            <div class="col-4 text-center">{{ f_currency($row->next?->amount) }} is due
-                                in {{ $row->days }} days ({{ f_date($row->next?->due_on) }})
-                                @elseif($row->days === 0)
-                                    <div class="col-4 text-center">{{ f_currency($row->next?->amount) }} is due today
-                                        ({{ f_date($row->next?->due_on) }})
-                                        @else
-                                            <div class="col-4 text-center">{{ f_currency($row->next?->amount) }} was
-                                                due {{ $row->days * -1 }} days ago ({{ f_date($row->next?->due_on) }})
-                                                @endif
-                                                @if($row->reminded)
-                                                    &nbsp;(Reminded)
-                                                @endif
-                                            </div>
-                                    </div>
+                            {{ f_currency($row->next?->amount) }} is due in {{ $row->days }} days ({{ f_date($row->next?->due_on) }})
+                        @elseif($row->days === 0)
+                            {{ f_currency($row->next?->amount) }} is due today ({{ f_date($row->next?->due_on) }})
+                        @else
+                            {{ f_currency($row->next?->amount) }} was due {{ $row->days * -1 }} days ago ({{ f_date($row->next?->due_on) }})
+                        @endif
+                        @if($row->next?->amount < $minimum)
+                            (Below Minimum)
+                        @endif
+                        @if($row->reminded)
+                            &nbsp;(Reminded)
+                        @endif
+                        </div>
+                    </div>
                 </li>
             @endforeach
         </ul>
+    </x-admin.section.card>
+    <x-admin.section.card>
+        <form action="{{ route('orders.reminders.minimum') }}" method="POST">
+            @csrf
+            <x-livewire.input label="Minimum Amount to Remind" name="minimum" value="{{ $minimum }}" />
+            @include('partials.fields.submit')
+        </form>
     </x-admin.section.card>
     @include('partials.orders.reminder.authorize')
 @endsection

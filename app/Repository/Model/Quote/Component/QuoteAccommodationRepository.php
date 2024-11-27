@@ -35,7 +35,7 @@ class QuoteAccommodationRepository extends QuoteComponentRepository
 
     public function getCost(): float
     {
-        return $this->quoteComponent->tour_sales_price;
+        return $this->quoteComponent->tour_sales_price ?? 0.0;
     }
 
     public function getInventory(): ?AccommodationInventoryRepository
@@ -160,5 +160,25 @@ class QuoteAccommodationRepository extends QuoteComponentRepository
     public function getTourComponent(Tour $tour): AccommodationInventoryTour|null
     {
         return $tour->accommodationInventoryTours()->where('accommodation_inventory_id', '=', $this->quoteComponent->accommodation_inventory_id)->first();
+    }
+
+    public function getComponentInternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->component->internal_notes;
+    }
+
+    public function getComponentExternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->component->external_notes;
+    }
+
+    public function getInventoryInternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->internal_notes;
+    }
+
+    public function getInventoryExternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->external_notes;
     }
 }

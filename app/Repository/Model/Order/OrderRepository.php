@@ -440,11 +440,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
         if (!isset($status)) {
             $paidAmount = $this->order->paid;
-            $cost = $this->cost ?? $this->order->cost;
-            $adjustments = $this->order->total_adjustments;
-            $total = $cost + $adjustments;
+            $total = sigfig((($this->cost ?? $this->order->cost) + $this->order->total_adjustments) - ($this->order->commission_amount ?? 0.0));
             if ($this->order->cancelled || $this->order->trashed()) {
-                if ($paidAmount <= ($this->order->booking_fee ?? 0.0)) {
+                if ($paidAmount <= sigfig($this->order->booking_fee ?? 0.0)) {
                     $status = $paidAmount < 0 ? OrderStatus::CANCELLED_OVER_REFUNDED : OrderStatus::CANCELLED_FULL_REFUND;
                 }  else if ($paidAmount <= $this->order->calculated_deposit) {
                     $status = OrderStatus::CANCELLED_DEPOSIT_HELD;
@@ -546,8 +544,10 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
     public function shouldRemind(int $days, int $minDays = -1000): bool
     {
-        $daysUntil = $this->order->days_until_next_payment;
-        return isset($daysUntil) && ($daysUntil <= $days && $daysUntil >= $minDays);
+        $next = $this->getNextPaymentDetails(false);
+        if ($next === null) { return false; }
+        $daysUntil = days_until($next->due_on);
+        return isset($daysUntil) && ($daysUntil <= $days && $daysUntil >= $minDays) && $next->amount >= setting('order.reminders.minimum');
     }
 
     public function shouldRemindForFinal(int $days, int $minDays = -1000, OrderInstallment $installment = null): bool
@@ -555,7 +555,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         $installment = $installment ?? $this->generateRemainingOrderInstallment();
         if ($installment === null) { return false; }
         $daysUntil = days_until($installment->due_on);
-        return $installment->remaining > 0 && (isset($daysUntil) && ($daysUntil <= $days && $daysUntil >= $minDays));
+        return $installment->remaining > 0
+            && (isset($daysUntil) && ($daysUntil <= $days && $daysUntil >= $minDays))
+            && $installment->amount >= setting('order.reminders.minimum');
     }
 
     public function refresh(): void
@@ -795,7 +797,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($this->order);
-            $start = $component->tourComponent->inventory->departs_at->clone()->setTime(0,0)->unix();
+            $start = $component->repository->getStartTime()->clone()->setTime(0,0)->unix();
             if (!array_key_exists($start, $items)) { $items[$start] = []; }
             $items[$start][] = $item;
         }
@@ -844,11 +846,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $schedule[] = new ItinerarySchedule(ItineraryScheduleType::INSTALLMENT, $installment->due_on, $installment->calculated_amount, $installment->percentage, $installment->paid, $installment->paid_on, $received);
         }
         if ($this->order->remaining_installment > 0) {
-            $latest_payment = $this->order->payments()->latest()->first();
-            $payment = ($latest_payment !== null) ?  $latest_payment->amount : 0;
             $covering = $this->order->repository->getRemainingPayment();
             $paid_on = ($covering !== null) ? $covering->paid_on : null;
-            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->order->tour->final_payment, $this->order->remaining_installment, $this->order->remaining_percentage, $this->order->remaining <= 0, $paid_on, $payment, $this->order->remaining);
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->order->tour->final_payment, $this->order->remaining_installment, $this->order->remaining_percentage, $this->order->remaining <= 0, $paid_on, $this->order->paid, $this->order->remaining);
         }
         $schedule[] = new ItinerarySchedule(ItineraryScheduleType::TOTAL, null, $this->order->paid, $this->order->remaining);
         return $schedule;
@@ -871,7 +871,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     {
         return new Itinerary(
             $this->order->tour->name,
-            $this->order->tour->event?->name,
+            $this->order->tour->event,
             $this->order->tour->event?->description ?? $this->order->tour->description,
             $this->order->tour->event?->image_url,
             $this->order->booking_reference,
@@ -994,7 +994,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         foreach ($byDate as $item) {
             $data = [
                 ...$data,
-                ...$item->getItineraryLinesForOrder($this->order),
+                ...$item->getItineraryLines($this->order),
             ];
         }
         return $data;

@@ -187,7 +187,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function getCost(): float
     {
-        return $this->tourComponent->tour_sales_price;
+        return $this->tourComponent->tour_sales_price ?? 0.0;
     }
 
     public function getTourComponentType(): string
@@ -367,5 +367,25 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     public function getBookedCount(): int
     {
         return $this->tourComponent->bookings()->count();
+    }
+
+    public function getComponentInternalNotes(): string|null
+    {
+        return $this->tourComponent->inventory->component->internal_notes;
+    }
+
+    public function getComponentExternalNotes(): string|null
+    {
+        return $this->tourComponent->inventory->component->external_notes;
+    }
+
+    public function getInventoryInternalNotes(): string|null
+    {
+        return $this->tourComponent->inventory->internal_notes;
+    }
+
+    public function getInventoryExternalNotes(): string|null
+    {
+        return $this->tourComponent->inventory->external_notes;
     }
 }

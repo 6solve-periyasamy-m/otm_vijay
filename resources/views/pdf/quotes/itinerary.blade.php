@@ -292,7 +292,7 @@ h4 span.mark {
     font-family: "PPNeueMontreal-Regular";
     font-size: 14px;
     font-weight: 400;
-    line-height: 24px;
+    line-height: 20px;
     color: var(--text-color);
     margin: 0px 0px 0px 0px;
     padding:0px;
@@ -309,6 +309,11 @@ h4 span.mark {
 .single-module table td.item-detail strong  {
     position:relative;
     top:5px;
+}
+.text-wrap {
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
 }
 .single-module table td.item-detail.desc-pos-top strong{
   top:5px;
@@ -330,8 +335,9 @@ h4 span.mark {
     line-height: 18px;
     color: var(--text-color);
     margin: 0;
-    width:190px;
+    width:100px;
 }
+.information-block table td.tbl-td-no-text-wrap {width:300px;}
 .information-block table td strong {
   font-family: "PPNeueMontreal-Medium";
   font-weight: 500;
@@ -427,11 +433,11 @@ h5 span {
 .customer-agent-details {clear:both;}
 .payment-detail table {
   width: 90%;
-  max-width: 736px;
+  max-width: 716px;
 }
 .payment-detail table th {
     font-family: "PPNeueMontreal-Medium";
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 500;
     line-height: 20px;
     background-color: #F9F4EE;
@@ -505,7 +511,7 @@ figure.table tr td:nth-child(2) {display:none;}
                     <h6>AGENT DETAILS</h6>
                     <p>Name: <span>{{$itinerary->consultant?->name}}</span></p>
                     <p>Email: <span>{{$itinerary->consultant?->email}}</span><p>
-                    <p>Quote date: <span>{{ $itinerary->created->format('d M Y') }}</span><p>
+                    <p>{{ $type === 'Quote' ? "Quote" : "Order"}} Date: <span>{{ $itinerary->created->format('d M Y') }}</span><p>
                 </div>
             </div>  
         </div>
@@ -519,18 +525,18 @@ figure.table tr td:nth-child(2) {display:none;}
     <table>
         <tr>
             <td><strong>Event:</strong></td>
-            <td>{!! !empty($evename) ? $evename : '' !!}</td>
-            <td><strong>No. of guests:</strong></td>
-            <td>{{ !empty($evatra) ? $evatra : '0' }} Adult(s)</td> 
+            <td class="tbl-td-no-text-wrap">{!! !empty($evename) ? $evename : '' !!}</td>
+            <td><strong>No. of Guests:</strong></td>
+            <td class="tbl-td-no-text-wrap">{{ !empty($evatra) ? $evatra : '0' }} Adult(s)</td> 
         </tr>
         <tr>
-            <td><strong>Travel dates:</strong></td>
+            <td><strong>Travel Dates:</strong></td>
             <td>
                 {{ !empty($itinerary->start) ? date('d M Y', strtotime($itinerary->start)) : '' }} - 
                 {{ !empty($itinerary->end) ? date('d M Y', strtotime($itinerary->end)) : '' }}
             </td>
-            <td><strong>Lead guest:</strong></td>
-            <td>{{ !empty($cusname) ? $cusname : '' }}</td>
+            <td><strong>Lead Guest:</strong></td>
+            <td class="tbl-td-no-text-wrap">{{ !empty($cusname) ? $cusname : '' }}</td>
         </tr>
     </table>
 </div>
@@ -573,7 +579,7 @@ figure.table tr td:nth-child(2) {display:none;}
                       @endphp
                       @foreach($transport->details as $key => $value)
                       @php
-                        $class_desc_pos = $key == 'Description' ? 'desc-pos-top' : '';
+                        $class_desc_pos = $key == 'Description' ? 'desc-pos-top text-wrap' : '';
                       @endphp
                           @if (!in_array($key, $disable_items))
                             <tr>
@@ -603,7 +609,7 @@ figure.table tr td:nth-child(2) {display:none;}
     <div class="single-module mb-n15 <?php echo $firstLoop?'':'add-on-cls'?>">
       @if($firstLoop)
           <div class="heading-module">
-              <h3   style="margin-top:10px;">
+              <h3 style="margin-top:10px;">
                   <span class="mark"></span>
                   <span class="text">Accommodation</span>
               </h3>
@@ -619,9 +625,16 @@ figure.table tr td:nth-child(2) {display:none;}
         <div class="details-module">
             <table>
                 <tbody>
+                    @php
+                      if (isset($accommodation->details['Description'], $accommodation->details['Quantity'])) {
+                        $temp_desc = $accommodation->details['Description'];
+                        unset($accommodation->details['Description']);
+                        $accommodation->details['Description'] = $temp_desc;
+                    }
+                    @endphp
                     @foreach($accommodation->details as $key => $value)
                     @php
-                      $class_desc_pos = $key == 'Description' ? 'desc-pos-top' : '';
+                      $class_desc_pos = $key == 'Description' ? 'desc-pos-top text-wrap' : '';
                     @endphp
                         @continue(empty($value))
                         <tr>
@@ -669,15 +682,14 @@ figure.table tr td:nth-child(2) {display:none;}
                             $firstLoop = false;
                         @endphp
                     @endif
-                    <h4>   
-                        <!-- <span class="text">{!! $item->name ?? $evename !!}</span> -->
-                        <span class="text">{!! $evename !!}</span>
-                        <span class="mark"></span>
-                    </h4> 
                     <div class="details-module">
                         <table>
                             <tbody>
-                            @if(array_key_exists('Ticket', $item->details) && !empty($item->details['Ticket']))
+                                <tr>
+                                  <td><strong>Event:</strong></td>
+                                  <td>{{ $evename }}</td>
+                                </tr>
+                                @if(array_key_exists('Ticket', $item->details) && !empty($item->details['Ticket']))
                                     <tr>
                                         <td><strong>Ticket:</strong></td>
                                         <td>{{ $item->details['Ticket'] }}</td>
@@ -712,7 +724,7 @@ figure.table tr td:nth-child(2) {display:none;}
                                 @if(!empty($item->details['Description']))
                                     <tr>
                                         <td><strong>Description:</strong></td>
-                                        <td>{!! $item->details['Description'] !!}</td>
+                                        <td class="text-wrap">{!! $item->details['Description'] !!}</td>
                                     </tr>
                                 @endif                 
                             </tbody>
@@ -759,18 +771,26 @@ figure.table tr td:nth-child(2) {display:none;}
                           <td>{{ $item->name }}</td>
                       @endif
                   </tr>
+                    @php
+                        $disable_items = ['Ticket'];
+                    @endphp
                    @foreach($item->details as $key => $value)
+                      @php
+                        $class_desc_pos = $key == 'Description' ? 'text-wrap' : '';
+                      @endphp
                        @continue(empty($value))
-                       <tr>
-                           <td><strong>{{ $key }}:</strong></td>
-                           <td>
-                               @if($key === 'Dates')
-                                   {{ trim(explode('to', $value)[0]) }}
-                               @else
-                                   {!! $value !!}
-                               @endif
-                           </td>
-                       </tr>
+                        @if (!in_array($key, $disable_items))
+                          <tr>
+                            <td><strong>{{ $key }}:</strong></td>
+                            <td class="<?php echo $class_desc_pos;?>">
+                                @if($key === 'Dates')
+                                    {{ trim(explode('to', $value)[0]) }}
+                                @else
+                                    {!! $value !!}
+                                @endif
+                            </td>
+                          </tr>
+                        @endif
                    @endforeach
                </tbody>
             </table>
@@ -800,7 +820,7 @@ figure.table tr td:nth-child(2) {display:none;}
            <tbody>
                   <tr>            
                    <td style="font-weight:400;min-width:128px;">Booking Total:</td>
-                   <td>{{ f_currency($itinerary->finances->total) }}</td>
+                   <td>{{ f_currency($itinerary->finances->cost) }}</td>
                   </tr>
                   <tr>
                       <td style="font-weight:400;min-width:128px;">GST (included):</td>
@@ -834,21 +854,27 @@ figure.table tr td:nth-child(2) {display:none;}
       <table>
         <thead>
           <tr>
-            <th>INSTALLMENTS</th>
-            <th>AMOUNT DUE</th>
-            <th>AMOUNT PAID</th>
+            <th>#</th>
+            <th>INSTALMENT</th>
+            <th>RECEIVED</th>
             <th>OUTSTANDING</th>
             <th>DATE DUE</th>
-            <th>PAID ON</th>
           </tr>
         </thead>
         <tbody>
-          @foreach ($itinerary->finances->schedule as $installment)
+          @php
+            $balance_received = 0;
+            $balance_received_total = 0;
+          @endphp
+          @foreach ($itinerary->finances->schedule as $key => $installment)
             @if($installment->type === ItineraryScheduleType::BOOKING_FEE)
               <tr>
-                <td>Booking Fee</td>
+                <td>{{ $loop->iteration }}</td>
                 <td>{{ f_currency($installment->amount) }}</td>
-                <td>{{ f_currency(min($installment->amount, $installment->received)) }}</td>
+                <td>
+                    {{ f_currency(min($installment->amount, $installment->received)) }}
+                    @php $balance_received = $balance_received + min($installment->amount, $installment->received) @endphp
+                </td>
                 <td>
                   @if($installment->amount <= $installment->received)
                     Paid
@@ -857,19 +883,20 @@ figure.table tr td:nth-child(2) {display:none;}
                   @endif
                 </td>
                 <td>With Order</td>
-                <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
               </tr>
             @endif
             @if ($installment->type === ItineraryScheduleType::DEPOSIT)
               <tr>
-                <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
-                <td>{{ f_currency($installment->amount) }} <p>({{ $installment->percentage }}%)</p></td>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ f_currency($installment->amount) }}</td>
                 <td>
                   @php $amount = $installment->amount - min(($installment->received - ($installment->balance ?? 0)), $installment->amount); @endphp
                   @if($amount <= 0)
                       {{ f_currency($installment->amount) }}
+                      @php $balance_received = $balance_received + $installment->amount @endphp
                   @else
                       {{ f_currency($installment->received) }}
+                      @php $balance_received = $balance_received + $installment->received @endphp
                   @endif
                 </td>
                 <td>
@@ -880,19 +907,20 @@ figure.table tr td:nth-child(2) {display:none;}
                   @endif
                 </td>
                 <td>With Order</td>
-                <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
             </tr>
             @endif
             @if ($installment->type === ItineraryScheduleType::INSTALLMENT)
               @php $amount = $installment->amount - $installment->received; @endphp
               <tr>
-                <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
-                <td>{{ f_currency($installment->amount) }} <p>({{ $installment->percentage }}%)</p></td>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ f_currency($installment->amount) }}</td>
                 <td>
                   @if($amount <= 0)
                       {{ f_currency($installment->amount) }}
+                      @php $balance_received = $balance_received + $installment->amount @endphp
                   @else
                       {{ f_currency($installment->received) }}
+                      @php $balance_received = $balance_received + $installment->received @endphp
                   @endif
                 </td>
                 <td>
@@ -904,17 +932,19 @@ figure.table tr td:nth-child(2) {display:none;}
                 </td>
                 <td>
                   @if(!is_null(optional($installment->due)))
-                      {{ optional($installment->due)->format('d/m/Y') }}
+                      {{ optional($installment->due)->format('d M Y') }}
                   @endif
                 </td>
-                <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
               </tr>
             @endif
             @if ($installment->type === ItineraryScheduleType::REMAINING)
               <tr>
-                <td>Remaining Balance</td>
-                <td>{{ f_currency($installment->amount) }} <p>({{ $installment->percentage }}%)</p></td>
-                <td>{{ f_currency($installment->received) }}</td>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ f_currency($installment->amount) }}</td>
+                <td>
+                  @php $balance_received_total = $installment->received - $balance_received; @endphp
+                  {{ f_currency($balance_received_total) }}
+                </td>
                 <td>
                   @php $amount = min($installment->balance, $installment->amount); @endphp
                   @if($amount <= 0)
@@ -925,17 +955,9 @@ figure.table tr td:nth-child(2) {display:none;}
                 </td>
                 <td>
                   @if(!is_null(optional($installment->due)))
-                      {{ optional($installment->due)->format('d/m/Y') }}
+                      {{ optional($installment->due)->format('d M Y') }}
                   @endif
                 </td>
-                <td>{{ $installment->paid_on !== null ? f_datetime($installment->paid_on) : "Not Paid" }}</td>
-              </tr>
-            @endif
-
-            @if($installment->type === ItineraryScheduleType::TOTAL)
-            <tr>
-                <td colspan=3><b>Total Payments Received: </b> {{ f_currency($installment->amount) }}</td>
-                <td colspan=3><b>Due:</b> {{ f_currency($installment->percentage) }}</td>
               </tr>
             @endif
           @endforeach
@@ -945,7 +967,7 @@ figure.table tr td:nth-child(2) {display:none;}
       <table>
         <thead>
           <tr>
-            <th>INSTALLMENTS</th>
+            <th>INSTALMENT</th>
             <th>AMOUNT DUE</th>
             <th>DATE DUE</th>
           </tr>
@@ -953,14 +975,21 @@ figure.table tr td:nth-child(2) {display:none;}
         <tbody>
           @foreach ($itinerary->finances->schedule as $installment)
           <tr>
-              <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
+              <td>
+                {{ ($installment->type === ItineraryScheduleType::INSTALLMENT) ? "Instalment" : ucfirst(strtolower($installment->type->name)) }}
+              </td>
               <td>{{ f_currency($installment->amount) }}</td>
-              <td>@if($installment->paid)
-                      PAID
+              <td>
+                @if ($installment->type === ItineraryScheduleType::DEPOSIT)
+                  Now
+                @else
+                  @if($installment->paid)
+                    Paid
                   @elseif(!is_null(optional($installment->due)))
                       {{ optional($installment->due)->format('d M Y') }}
                   @endif
-                </td>
+                @endif
+              </td>
             </tr>
           @endforeach
         </tbody>

@@ -44,6 +44,7 @@
                     <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
+                    <th scope="col">{{ __('quotes.view.cards.components.common.notes') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                 </tr>
                 </thead>
@@ -53,7 +54,7 @@
                         <td>
                             {{ ucwords($componentRepository->getComponentType()) }}
                         </td>
-                        <td>
+                        <td data-sort="{{ $componentRepository->getStartTime()?->unix() }}">
                             @if ($componentRepository->getComponentType() == 'merchandise')
                                 {{ __('quotes.view.cards.components.common.na') }}
                             @else
@@ -75,6 +76,9 @@
                         </td>
                         <td>
                             {{ $componentRepository->getPurchasePrice() !== null ? $componentRepository->getInventory()?->getPurchasePriceString() : 'Not Set' }}
+                        </td>
+                        <td>
+                            {{ $componentRepository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             {{ f_currency($componentRepository->getSalesPrice()) }} {{ $componentRepository->priceShown() ? '(Shown)' : '' }}
@@ -116,13 +120,14 @@
                     <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
+                    <th scope="col">{{ __('quotes.view.cards.components.common.notes') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($quote->accommodation()->with('inventory')->get() as $component)
                     <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
-                        <td>
+                        <td data-sort="{{ $component->repository->getStartTime()?->unix() }}">
                             {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}
                             to
                             {{ f_datetime($component->repository->getInventory()?->getEndTime()) }}
@@ -143,6 +148,9 @@
                         </td>
                         <td>
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
+                        </td>
+                        <td>
+                            {{ $component->repository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
@@ -181,13 +189,14 @@
                     <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
+                    <th scope="col">{{ __('quotes.view.cards.components.common.notes') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($quote->activities()->with('inventory')->get() as $component)
                     <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
-                        <td>
+                        <td data-sort="{{ $component->repository->getStartTime()?->unix() }}">
                             {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}
                             to
                             {{ f_datetime($component->repository->getInventory()?->getEndTime()) }}
@@ -208,6 +217,9 @@
                         </td>
                         <td>
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
+                        </td>
+                        <td>
+                            {{ $component->repository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
@@ -246,13 +258,14 @@
                     <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
+                    <th scope="col">{{ __('quotes.view.cards.components.common.notes') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($quote->flights()->with('inventory')->get() as $component)
                     <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
-                        <td>
+                        <td data-sort="{{ $component->repository->getStartTime()?->unix() }}">
                             {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}
                             to
                             {{ f_datetime($component->repository->getInventory()?->getEndTime()) }}
@@ -273,6 +286,9 @@
                         </td>
                         <td>
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
+                        </td>
+                        <td>
+                            {{ $component->repository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
@@ -311,13 +327,14 @@
                     <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
+                    <th scope="col">{{ __('quotes.view.cards.components.common.notes') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($quote->transport()->with('inventory')->get() as $component)
                     <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
-                        <td>
+                        <td data-sort="{{ $component->repository->getStartTime()?->unix() }}">
                             {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}
                             to
                             {{ f_datetime($component->repository->getInventory()?->getEndTime()) }}
@@ -338,6 +355,9 @@
                         </td>
                         <td>
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
+                        </td>
+                        <td>
+                            {{ $component->repository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
@@ -375,13 +395,14 @@
                     <th scope="col">Stock</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
                     <th scope="col">{{ __('quotes.view.cards.components.common.sales_price') }}</th>
+                    <th scope="col">{{ __('quotes.view.cards.components.common.notes') }}</th>
                     <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($quote->merchandise()->with('inventory')->get() as $component)
                     <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
-                        <td>
+                        <td data-sort="{{ $component->repository->getStartTime()?->unix() }}">
                             {{ $component->repository->__toString() }}
                         </td>
                         <td>
@@ -397,6 +418,9 @@
                         </td>
                         <td>
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
+                        </td>
+                        <td>
+                            {{ $component->repository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)

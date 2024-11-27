@@ -78,7 +78,7 @@
             </td>
             <td>{{ f_currency($inventory->purchase_price) }}</td>
             <td>{{ f_currency($inventory->sales_price) }}</td>
-            <td>{{ $inventory->notes }}</td>
+            <td>{{ $inventory->internal_notes }}</td>
         </tr>
     @endforeach
     </tbody>

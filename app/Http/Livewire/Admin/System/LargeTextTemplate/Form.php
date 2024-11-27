@@ -25,6 +25,7 @@ class Form extends Component
     public function save(): void
     {
         $this->validate();
+        $this->template->default = $this->template->default ?? false;
         $this->template->save();
         $this->redirect(route('settings.template'));
     }

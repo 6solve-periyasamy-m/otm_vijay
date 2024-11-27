@@ -142,6 +142,13 @@ class SettingsController extends Controller
         return back();
     }
 
+    public function setMinimumForReminders(Request $request): RedirectResponse
+    {
+        $request->validate(['minimum' => 'required|numeric|gte:0']);
+        Settings::set('order.reminders.minimum', $request->minimum ?? 1.0);
+        return back();
+    }
+
     private function saveImage($file)
     {
         return $file->storePublicly('uploads/images');

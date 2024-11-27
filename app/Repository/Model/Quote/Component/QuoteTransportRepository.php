@@ -35,7 +35,7 @@ class QuoteTransportRepository extends QuoteComponentRepository
 
     public function getCost(): float
     {
-        return $this->quoteComponent->tour_sales_price;
+        return $this->quoteComponent->tour_sales_price ?? 0.0;
     }
 
     public function getInventory(): ?TransportInventoryRepository
@@ -138,5 +138,25 @@ class QuoteTransportRepository extends QuoteComponentRepository
     public function getItineraryItem(int $travelling = 1): ItineraryItem
     {
         return $this->getInventory()?->getItineraryItem($this->quoteComponent->quantity ?? $travelling);
+    }
+
+    public function getComponentInternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->component->internal_notes;
+    }
+
+    public function getComponentExternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->component->external_notes;
+    }
+
+    public function getInventoryInternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->internal_notes;
+    }
+
+    public function getInventoryExternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->external_notes;
     }
 }

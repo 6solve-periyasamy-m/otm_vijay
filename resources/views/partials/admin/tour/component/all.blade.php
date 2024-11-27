@@ -12,6 +12,7 @@
                     <th scope="col">Ordered</th>
                     <th scope="col">Purchase Price</th>
                     <th scope="col">Sales Price</th>
+                    <th scope="col">Notes</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
@@ -30,6 +31,7 @@
                         <td>{{ $component->getOrderedCount() }} Ordered, {{ $component->getBookedCount() }} <abbr title="Bookings created through the form. Will include ones converted to orders">Booked</abbr></td>
                         <td>{{ $component->getInventory()->getPurchasePriceString() }}</td>
                         <td>{{ f_currency($component->getCostToCustomer()) }}</td>
+                        <td>{{ $component->getInventoryInternalNotes() }}</td>
                         <td class="actions">
                             @if($component->getUpdateLink() !== null)
                                 <a href="{{ $component->getUpdateLink() }}"

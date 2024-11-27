@@ -37,7 +37,7 @@ class QuoteActivityRepository extends QuoteComponentRepository
 
     public function getCost(): float
     {
-        return $this->quoteComponent->tour_sales_price;
+        return $this->quoteComponent->tour_sales_price ?? 0.0;
     }
 
     public function getInventory(): ?ActivityInventoryRepository
@@ -74,21 +74,21 @@ class QuoteActivityRepository extends QuoteComponentRepository
 
     public function __toString(): string
     {
-        $inventory = $this->getInventory()->get();
+        $inventory = $this->getInventory()?->get();
         $component = $inventory->component;
-        return "{$component->name} ({$component->activityType}) ({$component->address->region}, {$component->address->country}) - {$inventory->ticketType}";
+        return "{$component->name} ({$component->activityType}) ({$component->address->region}, {$component->address->country}) - {$inventory?->ticketType}";
     }
 
     public function getShortDescription(): string
     {
-        $inventory = $this->getInventory()->get();
+        $inventory = $this->getInventory()?->get();
         $component = $inventory->component;
-        return "{$component->name} ({$component->activityType}) ({$inventory->ticketType})";
+        return "{$component->name} ({$component->activityType}) ({$inventory?->ticketType})";
     }
 
     public function getActivityData()
     {
-        $inventory = $this->getInventory()->get();
+        $inventory = $this->getInventory()?->get();
         return $component = $inventory->component;
         // return "{$component->name} ({$component->activityType}) ({$inventory->ticketType})";
         
@@ -101,12 +101,12 @@ class QuoteActivityRepository extends QuoteComponentRepository
 
     public function getItineraryDescription(): string
     {
-        return $this->getInventory()->get()->component->description;
+        return $this->getInventory()?->get()->component->description;
     }
 
     public function getItineraryAsset(): string
     {
-        return asset($this->getInventory()->get()->component->image_url);
+        return asset($this->getInventory()?->get()->component->image_url);
     }
 
     public function convertToTourComponent(Tour $tour): InventoryTourRepository
@@ -152,5 +152,25 @@ class QuoteActivityRepository extends QuoteComponentRepository
         $event = is_array($quote->event) ? new Event($quote->event) : $quote->event;
         $item->name =  $event?->name;
         return $item;
+    }
+
+    public function getComponentInternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->component->internal_notes;
+    }
+
+    public function getComponentExternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->component->external_notes;
+    }
+
+    public function getInventoryInternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->internal_notes;
+    }
+
+    public function getInventoryExternalNotes(): string|null
+    {
+        return $this->quoteComponent->inventory->external_notes;
     }
 }
