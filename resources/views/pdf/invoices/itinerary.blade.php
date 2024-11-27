@@ -158,7 +158,7 @@
             word-wrap: break-word;
             word-break: break-word;
             white-space: normal;
-            width:650px;
+            width:600px;
         }
         .travellers table {
             width: 100%;
@@ -171,6 +171,8 @@
         .travellers th {
             background-color: #f4f4f4;
         }
+        .traveller-name-space {width: 245px;padding-top: 5px;padding-bottom: 10px;}
+        .event-field-space {width: 245px;padding-top: 35px;padding-bottom: 50px;}
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
@@ -203,7 +205,7 @@
                                         <tr>
                                         @endif
 
-                                            <td>{{ $traveller_name }}</td>
+                                            <td class="traveller-name-space">{{ $traveller_name }}</td>
 
                                         @if (($key + 1) % 5 == 0) 
                                         </tr>
@@ -451,40 +453,38 @@
         <div class="event_info_div">
             <p class="event_txt">If you require any assistance during your trip, please don't hesitate to reach out to us our friendly team is always happy to help ensure your journey is smooth and stress free.</p>
 
-            @if(!empty($itinerary->event?->onsite_name) || !empty($itinerary->event->onsite_email) || !empty($itinerary->event->onsite_phone))
+            @if(!empty($itinerary->event->onsite_name) || !empty($itinerary->event->onsite_email) || !empty($itinerary->event->onsite_phone))
                 <table>
                     <tbody>
                         <tr>
-                            @if(!empty($itinerary->event?->onsite_name))
-                                <td style="width: 245px;padding-top: 35px;padding-bottom: 50px;">
-                                <strong>Name:</strong><span>{{ $itinerary->event?->onsite_name }}</span>
+                            @if(!empty($itinerary->event->onsite_name))
+                                <td class="event-field-space">
+                                <strong>Name:</strong><span>{{ $itinerary->event->onsite_name }}</span>
                                 </td>
                             @endif
-                            @if(!empty($itinerary->event?->onsite_email))
-                                <td style="width: 245px;padding-top: 35px;padding-bottom: 50px;">
-                                <strong>Email:</strong><span>{{ $itinerary->event?->onsite_email }}</span>
+                            @if(!empty($itinerary->event->onsite_email))
+                                <td class="event-field-space">
+                                <strong>Email:</strong><span>{{ $itinerary->event->onsite_email }}</span>
                                 </td>
                             @endif
-                            @if(!empty($itinerary->event?->onsite_phone))
-                                <td style="width: 260px;padding-top: 35px;padding-bottom: 50px;">
-                                <strong>Phone:</strong><span>{{ $itinerary->event?->onsite_phone }}</span>
+                            @if(!empty($itinerary->event->onsite_phone))
+                                <td class="event-field-space">
+                                <strong>Phone:</strong><span>{{ $itinerary->event->onsite_phone }}</span>
                                 </td>
                             @endif
                         </tr>
                     </tbody>
                 </table>
             @endif
-            <table>
-                <tbody>
-                    <tr>
-                        <td>
-                            @if(!empty($itinerary->event?->final_terms) || !empty($itinerary->terms))
-                                <p class="event_txt">{!! $itinerary->event?->final_terms ?? $itinerary->terms !!}</p>
-                            @endif
-                        </td>
-                    </tr>
-                </tbody>
-            </table>                
+            @if(!empty($itinerary->event?->final_terms) || !empty($itinerary->terms))
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><p class="event_txt">{!! $itinerary->event?->final_terms ?? $itinerary->terms !!}</p></td>
+                        </tr>
+                    </tbody>
+                </table>
+            @endif             
         </div>
     </section>
 </body>
