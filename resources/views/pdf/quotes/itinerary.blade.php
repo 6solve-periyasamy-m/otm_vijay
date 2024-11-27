@@ -492,17 +492,14 @@ figure.table tr td:nth-child(2) {display:none;}
                 <div class="customer-details">
                 <!-- the organization is shown as customer, with agent shown as name/email if set -->
                 @if (!is_null($itinerary->organization))
-                    <!-- TODO: remove (Organization) -->
                     <h6>CUSTOMER DETAILS</h6>
                     <p>Customer: <span>{{ $itinerary->organization->name }}</span></p>
                     <p>Name: <span>{{ $itinerary->agent ? $itinerary->agent->first_name . ' ' . $itinerary->agent->last_name : $itinerary->organization->name }}</span></p>
                     <p>Email: <span>{{ $itinerary->agent?->email ?? $itinerary->organization->contact_email }}</span></p>
                 @elseif (!is_null($itinerary->organization) || !is_null($itinerary->agent))
-                    <!-- TODO: remove (Bought on behalf) -->
                     <h6>CUSTOMER DETAILS</h6>
-                    <!-- NB: bought on behalf should use organization but if the agent field is used, prefer it -->
-                    <p>Customer: <span>{{ $itinerary->agent ? $itinerary->agent->first_name . ' ' . $itinerary->agent->last_name : $itinerary->organization->name }}</span></p>
-                    <p>Email: <span>{{ $itinerary->agent?->email ?? $itinerary->organization->contact_email }}</span></p>
+                    <p>Customer: <span>{{ $itinerary->agent->first_name . ' ' . $itinerary->agent->last_name }}</span></p>
+                    <p>Email: <span>{{ $itinerary->agent->email ?? $itinerary->organization->contact_email }}</span></p>
                 @else
                     <h6>CUSTOMER DETAILS</h6>
                     <p>Name: <span>{{ $cusname }}</span></p>
