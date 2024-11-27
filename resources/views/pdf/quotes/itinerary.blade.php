@@ -491,7 +491,7 @@ figure.table tr td:nth-child(2) {display:none;}
             <div class="customer-agent-details">
                 <div class="customer-details">
                 <!-- the organization is shown as customer, with agent shown as name/email if set -->
-                @if (!is_null($itinerary->organization) && !is_null($itinerary->organization?->commission))
+                @if (!is_null($itinerary->organization))
                     <!-- TODO: remove (Organization) -->
                     <h6>CUSTOMER DETAILS</h6>
                     <p>Customer: <span>{{ $itinerary->organization->name }}</span></p>
@@ -544,11 +544,6 @@ figure.table tr td:nth-child(2) {display:none;}
         <tr>
             <td><strong>Agent:</strong></td>
             <td class="tbl-td-no-text-wrap">{{ $itinerary->agent ? $itinerary->agent->first_name . ' ' . $itinerary->agent->last_name : ''}}</td>
-        </tr>
-        @else
-        <tr>
-            <td><strong>Agent:</strong></td>
-            <td class="tbl-td-no-text-wrap">{{ $itinerary->organization->name}}</td>
         </tr>
         @endif
     </table>
