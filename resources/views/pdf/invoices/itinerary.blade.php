@@ -197,17 +197,19 @@
                                 <!-- List of travellers -->
                                 <table class="travellers">
                                     @php
-                                        $traveller_name = '';
+                                        $limited_travellers = array_slice($itinerary->travellers, 0, 20);
+                                        $total_travellers = count($limited_travellers);
                                     @endphp
-                                    @foreach($itinerary->travellers as $key => $traveller)
-                                        @php $traveller_name = $traveller->customer?->first_name . " " . $traveller->customer?->last_name; @endphp
+                                    @foreach($limited_travellers as $key => $traveller)
                                         @if ($key % 5 == 0)
                                         <tr>
                                         @endif
 
-                                            <td class="traveller-name-space">{{ $traveller_name }}</td>
+                                            <td class="traveller-name-space">
+                                                {{ $traveller->customer->first_name ?? '' }} {{ $traveller->customer->last_name ?? '' }}
+                                            </td>
 
-                                        @if (($key + 1) % 5 == 0) 
+                                        @if (($key + 1) % 5 == 0 || $key + 1 == $total_travellers)
                                         </tr>
                                         @endif                                      
                                     @endforeach
