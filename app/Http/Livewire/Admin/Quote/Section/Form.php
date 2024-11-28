@@ -64,6 +64,7 @@ class Form extends Component
     {
         return [
             'section.title' => 'required|string|max:255',
+            'section.quote_section_type_id' => 'nullable|integer|exists:quote_section_types,id',
             'section.body' => 'required|string',
             'section.order' => 'nullable|integer',
             'image' => 'nullable|file|mimes:jpg,jpeg,png|max:4096',

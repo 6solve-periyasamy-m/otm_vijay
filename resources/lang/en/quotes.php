@@ -142,6 +142,7 @@ return [
             ],
             'sections' => [
                 'header' => 'Quote Sections',
+                'type' => 'Type',
                 'title' => 'Title',
                 'body' => 'Body',
                 'image' => 'Has Image?',

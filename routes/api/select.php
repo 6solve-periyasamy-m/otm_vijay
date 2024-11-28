@@ -16,6 +16,7 @@ use App\View\Components\Livewire\Input\Select\Event\Normal as NormalEvent;
 use App\View\Components\Livewire\Input\Select\LargeTextTemplate;
 use App\View\Components\Livewire\Input\Select\Order\PaymentMethod;
 use App\View\Components\Livewire\Input\Select\Organization;
+use App\View\Components\Livewire\Input\Select\Quote\QuoteSectionType;
 use App\View\Components\Livewire\Input\Select\TaxBracket;
 use App\View\Components\Livewire\Input\Select\TourCategory;
 use App\View\Components\Livewire\Input\Select\User;
@@ -63,6 +64,11 @@ Route::prefix('board-types')->name('board-types.')->group(function () {
 Route::prefix('currencies')->name('currencies.')->group(function () {
     Route::post('/', [Currency::class, 'getAll'])->name('select');
     Route::post('/{id}', [Country::class, 'getOne'])->name('selected');
+});
+
+Route::prefix('quote-section-types')->name('quote-section-types.')->group(function () {
+    Route::post('/', [QuoteSectionType::class, 'getAll'])->name('select');
+    Route::post('/{id}', [QuoteSectionType::class, 'getOne'])->name('selected');
 });
 
 Route::prefix('inventory')->name('inventory.')->group(function () {
