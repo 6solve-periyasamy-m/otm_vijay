@@ -34,9 +34,6 @@
         "tailwindcss": "^3.3.3",
         "ts-loader": "^9.4.4"
     },
-    "__comments": {
-        "puppeteer": "Puppeteer 17.x, which we maintained as browsershot broke, no longer supported, test with current version"
-    },
     "dependencies": {
         "chart.js": "^4.3.3",
         "ckeditor5": "^43.1.1",
