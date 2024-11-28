@@ -19,7 +19,7 @@
         "@types/luxon": "^3.4.2",
         "@types/node": "^20.5.4",
         "autoprefixer": "^10.4.15",
-        "axios": "^1.4.0",
+        "axios": "^1.7.4",
         "bootstrap": "^5.3.1",
         "date-fns": "^2.30.0",
         "jquery": "^3.7.0",
@@ -34,15 +34,12 @@
         "tailwindcss": "^3.3.3",
         "ts-loader": "^9.4.4"
     },
-    "__comments": {
-        "puppeteer": "Do not update beyond 17.x, browsershot breaks for now, as of Sept 2023"
-    },
     "dependencies": {
         "chart.js": "^4.3.3",
-        "ckeditor5": "^42.0.1",
+        "ckeditor5": "^43.1.1",
         "luxon": "^3.5.0",
         "pretty-checkbox": "^3.0.3",
-        "puppeteer": "^17.0.0",
+        "puppeteer": "^23.9.0",
         "select2": "^4.1.0-rc.0"
     }
 }

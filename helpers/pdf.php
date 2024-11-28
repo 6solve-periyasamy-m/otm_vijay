@@ -14,12 +14,10 @@ if(!function_exists('puppeteer')) {
      */
     function puppeteer(\Illuminate\Contracts\View\View|Factory $view, bool $response = true): StreamedResponse|string
     {
-        $html = $view->render();
-        
-        if (!$response) return $html;
-
-        return response()->stream(function () use ($html) { echo $html; }, 200, ['Content-Type' => 'text/html']);
-        $invoice = Browsershot::html($view->render())->noSandbox();
+        $invoice = Browsershot::html($view->render())
+                    ->setEnvironmentOptions([
+                        'CHROME_CONFIG_HOME' => storage_path('.cache/chrome/'),
+                    ]);
         $invoice->showBackground()->margins(10, 2, 10, 2);
         if (!$response) return $invoice->pdf();
         return response()->stream(function () use ($invoice) { echo $invoice->pdf(); }, 200, ['Content-Type' => 'application/pdf']);
