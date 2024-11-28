@@ -17,10 +17,12 @@ use Illuminate\Support\Carbon;
  * @property string|null $body
  * @property float $order
  * @property string|null $image_url
+ * @property int|null $quote_section_type_id
  * @property bool $hidden
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Quote $quote
+ * @property-read QuoteSectionType|null $type
  * @property-read string|null $asset
  * @method static Builder|QuoteSection newModelQuery()
  * @method static Builder|QuoteSection newQuery()
