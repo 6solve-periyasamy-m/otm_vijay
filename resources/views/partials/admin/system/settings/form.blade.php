@@ -65,6 +65,7 @@
                         'selected' => (int)setting('itinerary.style', 1),
                         'width' => 4,
                     ])
+                    @include('partials.fields.text', ['name' => 'Itinerary Heading', 'field' => 'itinerary_heading', 'value' => setting('itinerary.heading', ''), 'width' => 6])
                 </div>
             </div>
         </x-admin.section.card>

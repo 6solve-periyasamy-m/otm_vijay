@@ -3,7 +3,7 @@
  * @var \App\Repository\Storage\Itinerary\Itinerary $itinerary
  * @var string $type
  */
-    $type = $type ?? "Travel Itinerary";
+    $type = setting('itinerary.heading');
     $event_name = $itinerary->event;
 @endphp
 
@@ -198,20 +198,20 @@
                                 <table class="travellers">
                                     @php
                                         $limited_travellers = array_slice($itinerary->travellers, 0, 20);
-                                        $total_travellers = count($limited_travellers);
+                                        $chunks = array_chunk($limited_travellers, 3);
                                     @endphp
-                                    @foreach($limited_travellers as $key => $traveller)
-                                        @if ($key % 5 == 0)
+                                    @foreach($chunks as $chunk)
                                         <tr>
-                                        @endif
+                                            @foreach($chunk as $traveller)
+                                                <td class="traveller-name-space">
+                                                    {{ $traveller->customer->first_name ?? '' }} {{ $traveller->customer->last_name ?? '' }}
+                                                </td>
+                                            @endforeach
 
-                                            <td class="traveller-name-space">
-                                                {{ $traveller->customer->first_name ?? '' }} {{ $traveller->customer->last_name ?? '' }}
-                                            </td>
-
-                                        @if (($key + 1) % 5 == 0 || $key + 1 == $total_travellers)
+                                            @for($i = count($chunk); $i <= 3; $i++)
+                                                <td></td>
+                                            @endfor
                                         </tr>
-                                        @endif                                      
                                     @endforeach
                                 </table>
                                 <!-- end of List of travellers -->
