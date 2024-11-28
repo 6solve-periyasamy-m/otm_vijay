@@ -3,7 +3,7 @@
  * @var \App\Repository\Storage\Itinerary\Itinerary $itinerary
  * @var string $type
  */
-    $type = setting('itinerary.heading');
+    $type = setting('itinerary.heading') ?? 'Travel Itinerary';
     $event_name = $itinerary->event;
 @endphp
 
@@ -28,14 +28,15 @@
         .pdf-header { padding:30px 32px;position: relative; }
         .pdf-individual-block { width: 796px;position: relative; }
         .travel_itinerary_block{padding: 0px 30px 25px 30px;margin-top: -30px;}
-        .header-logo{position: absolute; top: -130px;}
+        .header-logo{width: 160px; height: 30px;position: absolute; top: -130px;}
+        .header-logo img{width: 100%; height: 100%;}
         .travel_title{
             color: #fff;
             font-family: "PlayfairDisplay-Medium";
             font-size: 40px;
             font-weight: 600;
-            line-height: 20px;
-            margin-top: -70px;
+            line-height: 38px;
+            margin-top: -80px;
             text-align: center;
         }
         .travel_itinerary_title h3{
