@@ -24,10 +24,11 @@ if [[ $* == *--apt* ]]; then
   sudo apt install -y lsb-release ca-certificates apt-transport-https software-properties-common
   sudo add-apt-repository -y ppa:ondrej/php
   sudo apt update
-  sudo apt install -y unzip nginx php8.1 php8.1-intl php8.1-fpm php8.1-pdo php8.1-xml php8.1-bcmath php8.1-gd php8.1-curl php8.1-zip  php8.1-mbstring php8.1-mysql mysql-server certbot
+  sudo apt install -y unzip nginx php8.3 php8.3-{fpm,intl,pdo,xml,bcmath,gd,curl,zip,mbstring,mysql} mysql-server certbot
   # Install NPM and Node
   curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - && sudo apt-get install -y nodejs
-  sudo npm install -g npm@9.1.2
+  sudo npm install -g pnpm # We now use PNPM, as it uses symlinks for dependencies, reducing disk usage
+  sudo npm install -g webpack
   # Install composer
   if ! command -v composer &> /dev/null; then
     cd ~ || exit
@@ -36,6 +37,7 @@ if [[ $* == *--apt* ]]; then
   fi
   # Install Puppeteer
   sudo apt install -y gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
+  export PUPPETEER_CACHE_DIR="/var/www/.cache/puppeteer"
 fi
 
 git clone git@github.com:Octopus-Travel-Matrix/octopustravelmatrix.git "$directory"
