@@ -112,8 +112,9 @@
     @yield('footer-script')
     @livewireScripts
     @livewire('livewire-ui-modal')
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+    <!-- Modals completely brick in 3.14.3. TODO: Re-evaluate -->
+    <script defer src="https://unpkg.com/alpinejs@3.14.3/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/@alpinejs/focus@3.14.3/dist/cdn.min.js"></script>
     @stack('footer-stack')
     <script type="text/javascript">
         $(document).ready(function () {
@@ -123,10 +124,6 @@
             $(document).on('scroll', function (event) { onScrollEvent(); })
             onScrollEvent();
             @stack('footer-ready')
-            if (window.Livewire) {
-                window.Livewire.start();
-            }
-            Alpine.start();
         });
 
         function onScrollEvent() {
@@ -146,6 +143,8 @@
 
         function openModal(modal, options = {}) {
             Livewire.emit('openModal', modal, options);
+            setTimeout(() => {$('.sized-modal').show();}, 100)
+
         }
         function sysFormatDate(date) {
             return formatDate(date, '{{ setting('system.format.date') }}');
