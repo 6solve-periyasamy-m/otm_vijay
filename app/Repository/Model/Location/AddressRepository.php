@@ -34,11 +34,19 @@ class AddressRepository extends ModelRepository
 
     public function cloneToNew(AddressParent|int|string $parent, ?Address $to = null): Address
     {
-        if (isset($toAddress)) {
-            $data = $this->address->toArray();
-            unset($data['id']);
-            $data['parent'] = $parent;
-            $to->update($data);
+        if (isset($to)) {
+            $to->update([
+                'name' => $this->address->name,
+                'parent' => $parent,
+                'location_type_id' => $this->address->location_type_id,
+                'address_line_1' => $this->address->address_line_1,
+                'address_line_2' => $this->address->address_line_2,
+                'address_line_3' => $this->address->address_line_3,
+                'town' => $this->address->town,
+                'region' => $this->address->region,
+                'country_id' => $this->address->country_id,
+                'postcode' => $this->address->postcode,
+            ]);
         } else {
             $to = $this->address->replicate();
             $to->parent = $parent;
