@@ -483,7 +483,7 @@
                 <table>
                     <tbody>
                         <tr>
-                            <td><p class="event_txt">{!! $itinerary->event?->final_terms ?? $itinerary->terms !!}</p></td>
+                            <td><p class="event_txt text-wrap">{!! $itinerary->event?->final_terms ?? $itinerary->terms !!}</p></td>
                         </tr>
                     </tbody>
                 </table>
