@@ -12,6 +12,8 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class Table extends LivewireDatatable
 {
+    public $name = "activity-table";
+
     public function builder()
     {
         return Activity::query()

@@ -8,6 +8,7 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class Table extends LivewireDatatable
 {
+    public $name = 'supplier-table';
     public function builder()
     {
         return Supplier::query()

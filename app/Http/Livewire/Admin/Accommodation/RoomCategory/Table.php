@@ -13,6 +13,8 @@ class Table extends LivewireDatatable
 {
     use SendsEvents;
 
+    public $name = "room-category-table";
+
     public function builder()
     {
         return RoomCategory::query();

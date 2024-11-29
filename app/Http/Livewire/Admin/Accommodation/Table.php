@@ -11,6 +11,9 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class Table extends LivewireDatatable
 {
+
+    public $name = "accommodation-table";
+
     public function builder()
     {
         return Accommodation::query()

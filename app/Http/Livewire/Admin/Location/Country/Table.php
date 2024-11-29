@@ -10,6 +10,8 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class Table extends LivewireDatatable
 {
+    public $name = "country-table";
+
     public function builder()
     {
         return Country::query();

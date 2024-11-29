@@ -8,6 +8,8 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class Table extends LivewireDatatable
 {
+    public $name = 'supplier-associate-table';
+
     public $supplier;
 
     public function builder()

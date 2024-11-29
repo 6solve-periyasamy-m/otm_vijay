@@ -12,6 +12,8 @@ use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class Table extends LivewireDatatable
 {
+    public $name = "order-table";
+
     public function builder()
     {
         return Order::query()

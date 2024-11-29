@@ -68,7 +68,7 @@ class Calculator extends Component
         $costPerPerson = $totalTravellerCount > 0 ? sigfig($this->costToCompany / $totalTravellerCount) : 0;
         $this->total = $this->quote->repository->getTotalCost($this->paying + ($this->quote->leadTraveller->paying ? 1 : 0));
         $this->profit = sigfig($this->total - $this->costToCompany);
-        $this->margin = $this->costToCompany == 0 ? 100 : sigfig((($this->total - $this->costToCompany) / $this->total) * 100);
+        $this->margin = $this->total == 0 ? 100 : sigfig((($this->total - $this->costToCompany) / $this->total) * 100);
 
         $this->markup = sigfig($this->markup ?? ($this->costToCompany == 0 ? 100 : ((($this->total - $this->costToCompany) / $this->costToCompany) * 100)), 6);
         $this->marked_up_price = sigfig($costPerPerson + ($costPerPerson * ($this->markup / 100)));
@@ -88,8 +88,9 @@ class Calculator extends Component
 
     public function inputChanged(?string $key = null): void
     {
+        $this->validateOnly($key);
         if ($key === 'paying') { $this->paying = (int)$this->paying; }
-        if ($key === 'travelling') { $this->paying = (int)$this->travelling; }
+        if ($key === 'travelling') { $this->travelling = (int)$this->travelling; }
         if ($key === 'marked_up_price') {
             $companyCostTravellers = ($this->paying + $this->travelling + ($this->leadTravelling()));
             $costPerPerson = $companyCostTravellers > 0 ? sigfig($this->costToCompany / $companyCostTravellers) : 0;
