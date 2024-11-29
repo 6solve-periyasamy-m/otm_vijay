@@ -75,7 +75,6 @@ class FlightController extends ApiController
                             'tour_sales_price' => $inventory->sales_price,
                             'flight_type' => $request->input('direction'),
                         ]);
-                        $this->debug && Log::info('addFlightInventoryToTour -> save', [$inventoryTour]);
                         $tour->flightInventoryTours()->save($inventoryTour);
                     }
                 }
