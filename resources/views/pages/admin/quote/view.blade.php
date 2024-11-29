@@ -262,6 +262,8 @@
                         <th scope="col">{{ __('quotes.view.cards.sections.type') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.sections.title') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.sections.body') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.sections.quantity') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.sections.cost') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.sections.image') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.sections.hidden') }}</th>
                         <th scope="col">{{ __('custom.table.actions') }}</th>
@@ -274,6 +276,10 @@
                             <td>{{ $section->type?->name ?? 'None' }}</td>
                             <td>{{ $section->title }}</td>
                             <td>{!! $section->body !!}</td>
+                            <td>{{ $section->quantity ?? "All Travellers" }}</td>
+                            <td>
+                                {{ f_currency($section->purchase_price, $section->currency) }}
+                            </td>
                             <td>{{ f_bool(isset($section->image_url)) }}</td>
                             <td>{{ f_bool($section->hidden) }}</td>
                             <td class="actions">

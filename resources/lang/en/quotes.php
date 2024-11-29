@@ -53,6 +53,7 @@ return [
                         'flights' => 'Flights',
                         'transport' => 'Transport',
                         'merchandise' => 'Merchandise',
+                        'section' => 'Section',
                         'per-customer' => 'Per Customer',
                         'overall' => 'Whole Order',
                         'total' => 'Total Cost',
@@ -147,6 +148,8 @@ return [
                 'type' => 'Type',
                 'title' => 'Title',
                 'body' => 'Body',
+                'quantity' => 'Quantity',
+                'cost' => 'Purchase Price',
                 'image' => 'Has Image?',
                 'hidden' => 'Hidden?',
                 'order' => 'Order'

@@ -13,6 +13,9 @@
             <x-livewire.input type="file" width="4" wire:model="image" label="Image" />
             <x-livewire.input type="number" width="4" wire:model="section.order" label="Order" />
             <x-livewire.input.checkbox wire:model="section.hidden" label="Hide on document?" width="4" />
+            <x-livewire.input.select.currency name="section.currency_id" value="{{ $section?->currency_id }}" label="Currency" width="4" />
+            <x-livewire.input wire:model="section.purchase_price" label="Purchase Price" width="4" />
+            <x-livewire.input wire:model="section.quantity" label="Quantity" width="4" />
         </div>
     </x-admin.section.card>
 </div>

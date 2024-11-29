@@ -116,6 +116,10 @@
                     <td class="py-1">{{ f_currency($quote->repository->getMerchandiseCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
                 </tr>
                 <tr>
+                    <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.section') }}</th>
+                    <td class="py-1">{{ f_currency($quote->repository->getSectionCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
+                </tr>
+                <tr>
                     <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.per-customer') }}</th>
                     <td class="py-1">{{ f_currency($quote->repository->getPerCustomerAdditionals(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
                 </tr>

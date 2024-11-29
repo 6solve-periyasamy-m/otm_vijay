@@ -69,6 +69,9 @@ class Form extends Component
             'section.order' => 'nullable|integer',
             'image' => 'nullable|file|mimes:jpg,jpeg,png|max:4096',
             'section.hidden' => 'nullable|boolean',
+            'section.currency_id' => 'nullable|integer|exists:currencies,id',
+            'section.purchase_price' => 'nullable|numeric|gte:0',
+            'section.quantity' => 'nullable|integer|gte:0',
         ];
     }
 }

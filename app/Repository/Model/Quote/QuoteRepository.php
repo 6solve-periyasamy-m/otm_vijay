@@ -489,6 +489,17 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         return $cost;
     }
 
+    public function getSectionCost(int $travellers = 1): float
+    {
+        $cost = 0;
+        foreach ($this->quote->sections as $section) {
+            if ($section->purchase_price > 0) {
+                $cost += $section->local_purchase_price * ($section->quantity ?? $travellers);
+            }
+        }
+        return $cost;
+    }
+
     public function getPerCustomerAdditionals(int $travellers = 1): float
     {
         $cost = 0;
@@ -867,7 +878,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 + $this->getActivityCost($travellers)
                 + $this->getFlightCost($travellers)
                 + $this->getTransportCost($travellers)
-                + $this->getMerchandiseCost($travellers);
+                + $this->getMerchandiseCost($travellers)
+                + $this->getSectionCost($travellers);
         foreach ($this->quote->costs()->get() as $additional) {
             if ($additional->per_customer) {
                 $cost += ($additional->amount * $travellers);
