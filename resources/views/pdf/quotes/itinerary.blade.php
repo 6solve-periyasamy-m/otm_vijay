@@ -495,12 +495,16 @@ figure.table tr td:nth-child(2) {display:none;}
           </div>
             <div class="customer-agent-details">
                 <div class="customer-details">
-                @if (!is_null($itinerary->organization) && !is_null($itinerary->organization->commission))
-                    <h6>Organisation DETAILS</h6>
-                    <p>Organisation: <span>{{ $itinerary->organization->name }}</span></p>
-                    <!-- <p>Organization Email: <span>{{ $itinerary->organization->contact_email }}</span></p> -->
-                    <p>Travel Agent Name: <span>{{ $cusname }}</span></p>
-                    <p>Travel Agent Email: <span>{{ $cusmail }}</span></p>
+                <!-- the organization is shown as customer, with agent shown as name/email if set -->
+                @if (!is_null($itinerary->organization))
+                    <h6>CUSTOMER DETAILS</h6>
+                    <p>Customer: <span>{{ $itinerary->organization->name }}</span></p>
+                    <p>Name: <span>{{ $itinerary->agent ? $itinerary->agent->first_name . ' ' . $itinerary->agent->last_name : $itinerary->organization->name }}</span></p>
+                    <p>Email: <span>{{ $itinerary->agent?->email ?? $itinerary->organization->contact_email }}</span></p>
+                @elseif (!is_null($itinerary->organization) || !is_null($itinerary->agent))
+                    <h6>CUSTOMER DETAILS</h6>
+                    <p>Customer: <span>{{ $itinerary->agent->first_name . ' ' . $itinerary->agent->last_name }}</span></p>
+                    <p>Email: <span>{{ $itinerary->agent->email ?? $itinerary->organization->contact_email }}</span></p>
                 @else
                     <h6>CUSTOMER DETAILS</h6>
                     <p>Name: <span>{{ $cusname }}</span></p>
