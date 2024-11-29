@@ -542,12 +542,6 @@ figure.table tr td:nth-child(2) {display:none;}
             <td><strong>Lead Guest:</strong></td>
             <td class="tbl-td-no-text-wrap">{{ !empty($cusname) ? $cusname : '' }}</td>
         </tr>
-        @if ($itinerary->agent)
-        <tr>
-            <td><strong>Agent:</strong></td>
-            <td class="tbl-td-no-text-wrap">{{ $itinerary->agent ? $itinerary->agent->first_name . ' ' . $itinerary->agent->last_name : ''}}</td>
-        </tr>
-        @endif
     </table>
 </div>
 
