@@ -17,6 +17,8 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class Table extends LivewireDatatable
 {
+    public $name = 'tour-table';
+
     use SendsEvents;
 
     public bool $hideNoCategory = false;

@@ -12,6 +12,8 @@ class Table extends LivewireDatatable
 {
     use LivewireForm;
 
+    public $name = 'quote-price-point-table';
+
     public int $quote;
 
     public function builder()

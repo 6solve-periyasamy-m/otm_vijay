@@ -11,6 +11,8 @@ use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class Table extends LivewireDatatable
 {
+    public $name = 'voucher-table';
+
     public function builder()
     {
         return VoucherCode::query();

@@ -696,18 +696,18 @@ figure.table tr td:nth-child(2) {display:none;}
                         <table>
                             <tbody>
                                 <tr>
-                                  <td><strong>Event:</strong></td>
+                                  <td class="w-125"><strong>Event:</strong></td>
                                   <td>{{ $evename }}</td>
                                 </tr>
                                 @if(array_key_exists('Ticket', $item->details) && !empty($item->details['Ticket']))
                                     <tr>
-                                        <td><strong>Ticket:</strong></td>
+                                        <td class="w-125"><strong>Ticket:</strong></td>
                                         <td>{{ $item->details['Ticket'] }}</td>
                                     </tr>
                                 @endif
                                 @if(!empty($item->details['Dates']))
                                     <tr>
-                                        <td><strong>Dates:</strong></td>
+                                        <td class="w-125"><strong>Dates:</strong></td>
                                         <td> <?php
                                                 $dates = explode('to', $item->details['Dates']); 
                                                 echo trim($dates[0]); 
@@ -718,7 +718,7 @@ figure.table tr td:nth-child(2) {display:none;}
 
                                 @if(!empty($item->details['Venue']))
                                     <tr>
-                                        <td><strong>Venue:</strong></td>
+                                        <td class="w-125"><strong>Venue:</strong></td>
                                         <td>{{ $item->details['Venue'] }}</td>
                                     </tr>
                                 @endif
@@ -726,14 +726,14 @@ figure.table tr td:nth-child(2) {display:none;}
 
                                 @if(!empty($item->details['Quantity']) && $item->details['Quantity'] > 0)
                                     <tr>
-                                        <td><strong>Quantity:</strong></td>
+                                        <td class="w-125"><strong>Quantity:</strong></td>
                                         <td>{{ $item->details['Quantity'] }}</td>
                                     </tr>
                                 @endif
 
                                 @if(!empty($item->details['Description']))
                                     <tr>
-                                        <td><strong>Description:</strong></td>
+                                        <td class="w-125"><strong>Description:</strong></td>
                                         <td class="text-wrap">{!! $item->details['Description'] !!}</td>
                                     </tr>
                                 @endif                 
@@ -774,7 +774,7 @@ figure.table tr td:nth-child(2) {display:none;}
             <table>
                <tbody>
                   <tr>
-                     <td><strong>Inclusion:</strong></td>
+                     <td class="w-125"><strong>Inclusion:</strong></td>
                       @if(array_key_exists('Ticket', $item->details))
                         <td>{{ $item->details['Ticket'] }}</td>
                       @else
@@ -791,7 +791,7 @@ figure.table tr td:nth-child(2) {display:none;}
                        @continue(empty($value))
                         @if (!in_array($key, $disable_items))
                           <tr>
-                            <td><strong>{{ $key }}:</strong></td>
+                            <td class="w-125"><strong>{{ $key }}:</strong></td>
                             <td class="<?php echo $class_desc_pos;?>">
                                 @if($key === 'Dates')
                                     {{ trim(explode('to', $value)[0]) }}
@@ -817,7 +817,7 @@ figure.table tr td:nth-child(2) {display:none;}
    
    
    <div class="single-module heading-2">
-   <h2 style="margin-left:-32px;">Payment summary</h2> 
+   <h2 style="margin-left:-32px;margin-top:20px;">Payment summary</h2> 
    
    <div class="heading-module">
     <h3>

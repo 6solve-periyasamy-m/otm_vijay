@@ -11,6 +11,8 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class Table extends LivewireDatatable
 {
+    public $name = 'voucher-result-table';
+
     use SendsEvents;
 
     public $voucher;
