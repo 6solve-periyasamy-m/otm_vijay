@@ -11,6 +11,8 @@ use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class StandaloneTable extends StandaloneDatatable
 {
+    public $name = 'flight-standalone-table';
+
     public Carbon|string|null $from = null;
     public Carbon|string|null $to = null;
     

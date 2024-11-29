@@ -14,6 +14,8 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class EventLog extends LivewireDatatable
 {
+    public $name = 'event-log-table';
+
     public User $user;
     public function builder()
     {

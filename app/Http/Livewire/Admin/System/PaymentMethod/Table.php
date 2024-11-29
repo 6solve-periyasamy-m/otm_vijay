@@ -13,6 +13,8 @@ class Table extends LivewireDatatable
 {
     use SendsEvents;
 
+    public $name = "payment-method-table";
+
     public function builder()
     {
         return PaymentMethod::query();

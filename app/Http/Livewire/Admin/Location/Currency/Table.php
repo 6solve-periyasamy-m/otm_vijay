@@ -10,6 +10,8 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class Table extends LivewireDatatable
 {
+    public $name = "currency-table";
+
     public function builder()
     {
         return Currency::query();
