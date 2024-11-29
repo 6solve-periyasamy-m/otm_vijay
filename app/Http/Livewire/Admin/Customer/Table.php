@@ -15,6 +15,8 @@ class Table extends LivewireDatatable
 {
     use SendsEvents;
 
+    public $name = "customer-table";
+
     public function builder()
     {
         return Customer::query()

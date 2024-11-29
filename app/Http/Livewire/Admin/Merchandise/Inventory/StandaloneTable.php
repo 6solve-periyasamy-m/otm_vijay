@@ -9,6 +9,7 @@ use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class StandaloneTable extends StandaloneDatatable
 {
+    public $name = 'merchandise-standalone-table';
     public function builder()
     {
         $query = MerchandiseInventory::query()

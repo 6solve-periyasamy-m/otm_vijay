@@ -6,6 +6,8 @@ use App\Http\Livewire\Abstract\ExportableDatatable;
 
 class BespokeReport extends ExportableDatatable
 {
+    public $name = 'bespoke-report';
+
     public \App\Models\System\BespokeReport $report;
 
     public function builder()

@@ -12,6 +12,8 @@ use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class Table extends LivewireDatatable
 {
+    public $name = 'contract-installment-table';
+
     public SupplierContract $contract;
 
     public function builder()

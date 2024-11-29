@@ -9,6 +9,7 @@ use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class Table extends LivewireDatatable
 {
+    public $name = 'organization-table';
     public function builder()
     {
         return Organization::query()
