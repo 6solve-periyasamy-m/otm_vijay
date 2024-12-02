@@ -23,9 +23,14 @@ use App\Http\Controllers\Api\TransportController;
 use App\Http\Gateways\AirwallexGateway;
 use App\Http\Gateways\FellohGateway;
 use App\Http\Gateways\OpayoGateway;
+use App\Http\Middleware\ApiAuthenticate;
 use App\Http\Middleware\ExpectsJson;
 use App\View\Components\Livewire\Input\Select\Country;
 use Illuminate\Support\Facades\Route;
+
+Route::prefix('/admin')->middleware([ExpectsJson::class, ApiAuthenticate::class])->name('api.admin.')->group(function () {
+   Route::prefix('/activity')->name('activity.')->group(__DIR__ . '/api/admin/activity.php');
+});
 
 Route::prefix('/orders')->group(function () {
     // existing components
