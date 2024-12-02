@@ -214,10 +214,10 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
         $tourComponent = $this->tourComponent;
         $inventory = $tourComponent->inventory;
         $component = $inventory->component;
-        $name = "{$component->name} ({$inventory->variant}) ({$inventory->size})";
+        $name = "{$component->name} ({$inventory->variant}) ({$inventory?->size})";
         return new ComponentInformation(
             $name,
-            "A {$inventory->size} {$inventory->variant} {$component->type}",
+            "A {$inventory?->size} {$inventory->variant} {$component->type}",
             $component->image_url,
             null,
             null
@@ -248,7 +248,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
     {
         $inventory = $this->tourComponent->inventory;
         $component = $inventory->component;
-        return $component->name . ' - ' . $inventory->size . ' - ' . $inventory->variant;
+        return $component->name . ' - ' . $inventory?->size . ' - ' . $inventory->variant;
     }
 
     public function getUpdateLink(): string|null

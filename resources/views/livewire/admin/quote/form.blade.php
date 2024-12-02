@@ -11,19 +11,15 @@
             <x-livewire.input.select.tax-bracket name="quote.tax_bracket_id" value="{{$quote->tax_bracket_id}}" label="Tax Bracket" width="3" />
             <x-livewire.input.select.user name="quote.consultant_id" value="{{$quote->consultant_id ?? get_current_admin()?->id}}" label="Consultant" width="3" />
             <!-- -->
-            <x-livewire.input.select.event.normal name="quote.event_id" value="{{$quote->event_id}}" label="Event" width="4" />
-        </div>
-        <div class="row">
-            <x-livewire.input.select.organization name="quote.organization_id" value="{{$quote->organization_id}}" label="Organization" width="4" wire:change="$emit('organization-selected', selectedOrganization)"/>
-            <x-livewire.input wire:model="quote.commission" label="Commission (%)" width="4" />
-            <x-livewire.input.select.agent name="quote.agent_id" table="organizations" find="{{$quote->organization_id}}" value="{{$quote->agent_id}}" label="Agent" width="4" />
-        </div>
-        <div class="row">
+            <x-livewire.input.select.event.normal name="quote.event_id" value="{{$quote->event_id}}" label="Event" width="3" />
+            <x-livewire.input.select.organization name="quote.organization_id" value="{{$quote->organization_id}}" label="Organization" width="3" wire:change="$emit('organization-selected', selectedOrganization)"/>
+            <x-livewire.input wire:model="quote.commission" label="Commission (%)" width="3" />
+            <x-livewire.input.select.agent name="quote.agent_id" table="organizations" find="{{$quote->organization_id}}" value="{{$quote->agent_id}}" label="Agent" width="3" />
             <!-- -->
-            <x-livewire.input wire:model="quote.deposit" label="Deposit" width="3" type="number" step="0.01" />
+            <x-livewire.input wire:model="quote.deposit" label="Deposit" width="3"  />
             <x-livewire.input.checkbox wire:model="quote.is_deposit_percentage" label="Percentage?" width="1" />
-            <x-livewire.input wire:model="pricePoint.price_per_person" label="Base Price" width="4" required type="number" step="0.01" />
-            <x-livewire.input wire:model="quote.single_occupancy_surcharge" label="Single Occupancy Surcharge" width="4" required type="number" step="0.01" />
+            <x-livewire.input wire:model="price" label="Base Price" width="4" required  />
+            <x-livewire.input wire:model="quote.single_occupancy_surcharge" label="Single Occupancy Surcharge" width="4" required />
             <!-- -->
             <x-livewire.input.text-area wire:model="quote.description" label="Description" />
         </div>

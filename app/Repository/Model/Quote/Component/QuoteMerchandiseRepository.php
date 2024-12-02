@@ -104,7 +104,7 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
     {
         $inventory = $this->getInventory()?->get();
         $component = $inventory->component;
-        return "A {$inventory->variant->name} {$component->name}, in {$inventory->size->name}";
+        return "A {$inventory->variant->name} {$component->name}, in {$inventory->size?->name}";
     }
 
     public function getItineraryAsset(): string
