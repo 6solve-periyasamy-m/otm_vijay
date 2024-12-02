@@ -199,7 +199,7 @@ class ReportRepository
             $row->id = $orderMerchandise->id;
             $row->name = "{$component->name} ({$component->type->name})";
             $row->variant = $inventory->variant->name;
-            $row->size = $inventory->size->name;
+            $row->size = $inventory->size?->name;
             $row->tour = $orderMerchandise->orderCustomer->order->tour->name;
             $row->event = $orderMerchandise->orderCustomer->order->tour->event?->name;
             $row->fulfilled = $orderMerchandise->fulfilled;
