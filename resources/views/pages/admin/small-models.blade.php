@@ -130,6 +130,21 @@
         </div>
     </div>
     <div class="card">
+        <div class="card-body" data-target="#quote" onclick="toggleAccordion(this)">
+            <h4 class="fw-bold">
+                {{ Icon::minimize() }} Quote
+            </h4>
+        </div>
+    </div>
+    <div class="row collapse show" id="quote">
+        <div class="col-6">
+            <x-admin.section.card>
+                <x-slot:title>Quote Section types</x-slot:title>
+                <livewire:admin.quote.section.type.table />
+            </x-admin.section.card>
+        </div>
+    </div>
+    <div class="card">
         <div class="card-body" data-target="#system" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">
                 {{ Icon::minimize() }} System
