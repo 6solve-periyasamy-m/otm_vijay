@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/admin')->middleware([ExpectsJson::class, ApiAuthenticate::class])->name('api.admin.')->group(function () {
    Route::prefix('/activity')->name('activity.')->group(__DIR__ . '/api/admin/activity.php');
+   Route::prefix('/accommodation')->name('accommodation.')->group(__DIR__ . '/api/admin/accommodation.php');
 });
 
 Route::prefix('/orders')->group(function () {
