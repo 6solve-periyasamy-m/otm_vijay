@@ -139,7 +139,7 @@
     <div class="row collapse show" id="quote">
         <div class="col-6">
             <x-admin.section.card>
-                <x-slot:title>Quote Section types</x-slot:title>
+                <x-slot:title>Quote Section Types</x-slot:title>
                 <livewire:admin.quote.section.type.table />
             </x-admin.section.card>
         </div>
