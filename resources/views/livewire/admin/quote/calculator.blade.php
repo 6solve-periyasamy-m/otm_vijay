@@ -194,7 +194,7 @@
                 <x-livewire.input wire:model.debounce.300ms="marked_up_price" key="marked_up_price" label="Price per Person" width="8" />
                 <div class="col-4">
                     <label></label>
-                    <button class="btn-danger" wire:click="updatePricePoint(true)" title="Update the price point for a single traveller, and update the others to have the same percentage difference">Save Changes</button>
+                    <button class="btn btn-warning" wire:click="updatePricePoint(true)" title="Update the price point for a single traveller, and update the others to have the same percentage difference">Save Changes</button>
                 </div>
             </div>
         </div>

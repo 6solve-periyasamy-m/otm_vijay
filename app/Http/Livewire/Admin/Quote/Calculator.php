@@ -144,8 +144,8 @@ class Calculator extends Component
                 if ($point->quantity === 1) continue;
                 $diff = $oldPrice - $point->price_per_person;
                 // Calculate the percentage difference (i.e 10% reduction = 0.9) then multiply by marked up price
-                if ($diff == 0) {
-                    continue;
+                if ($diff === 0) {
+                    $diffPercent = 1;
                 } elseif ($diff > 0) {
                     $diffPercent = 1 - ($diff / $oldPrice);
                 } else  {
