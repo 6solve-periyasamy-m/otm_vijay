@@ -86,17 +86,6 @@ class TransportController extends Controller
         return redirect()->route('transports.view', ['transport' => $transport,]);
     }
 
-    public function destroy(Transport $transport)
-    {
-        foreach ($transport->transportInventory as $inventory) {
-            if ($inventory->tourComponents()->count() > 0) {
-                return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Transport']));
-            }
-        }
-        $transport->delete();
-        return redirect()->route('transports.all');
-    }
-
     public function createReturn(Transport $transport)
     {
         $return = $transport->replicate();
