@@ -67,6 +67,7 @@ class OrderController extends Controller
         $invoice =
             $order->invoices()->where('invoice_number', '=', $version)->first()
             ?? $order->repository->getInvoiceRepository()->invoice;
+        $invoice->payment_schedule = $order->repository->getScheduleItineraryArray();
         return (new InvoiceRepository($invoice))->getResponseStream();
     }
 
