@@ -15,8 +15,8 @@ class Table extends LivewireDatatable
 
     public function builder()
     {
-        return QuoteSectionType::query();
-            //->leftJoin('large_text_templates', 'large_text_templates.id', '=', 'quote_section_types.large_text_template_id');
+        return QuoteSectionType::query()
+            ->leftJoin('large_text_templates', 'large_text_templates.id', '=', 'quote_section_types.large_text_template_id');
     }
 
     public function columns()
@@ -26,10 +26,10 @@ class Table extends LivewireDatatable
                 ->label('Name')
                 ->searchable()
                 ->sortable(),
-            //Column::name('large_text_templates.name')
-            //    ->label('Template')
-            //    ->searchable()
-            //    ->sortable(),
+            Column::raw('COALESCE(large_text_templates.name, "None")')
+                ->label('Template')
+                ->searchable()
+                ->sortable(),
             NumberColumn::raw('(select COUNT(*) from quote_sections where quote_section_type_id = quote_section_types.id) AS related')
                 ->label('Related')
                 ->searchable()
@@ -51,5 +51,6 @@ class Table extends LivewireDatatable
             return;
         }
         $type->delete();
+        $this->toast('Type Deleted Successfully', 'Successfully deleted quote section type', 'success');
     }
 }

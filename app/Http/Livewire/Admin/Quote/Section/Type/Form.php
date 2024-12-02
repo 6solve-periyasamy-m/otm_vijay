@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\Quote\Section\Type;
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Quote\QuoteSectionType;
+use Illuminate\Validation\Rule;
 use LivewireUI\Modal\ModalComponent;
 
 class Form extends ModalComponent
@@ -23,6 +24,7 @@ class Form extends ModalComponent
         $this->validate();
         $this->type->save();
         $this->closeModal();
+        $this->refreshTables();
         $this->toast('Successfully Saved', 'Successfully saved Quote Section Type', 'success');
     }
 
@@ -34,7 +36,12 @@ class Form extends ModalComponent
     public function rules(): array
     {
         return [
-            'type.name' => 'required|string|unique:quote_section_types,name',
+            'type.name' => [
+                'required',
+                'string',
+                Rule::unique('quote_section_types', 'name')->ignore($this->type),
+            ],
+            'type.large_text_template_id' => 'nullable|integer|exists:large_text_templates,id',
         ];
     }
 }
