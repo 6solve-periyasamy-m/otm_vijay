@@ -8,7 +8,6 @@ use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
-use Exception;
 use Livewire\Component;
 
 class Calculator extends Component
@@ -134,6 +133,7 @@ class Calculator extends Component
 
     public function updatePricePoint(bool $all = false): void
     {
+        $this->quote->refresh();
         $point = $this->quote->repository->getPricePerPerson(1)
             ?? $this->quote->pricePoints()->save(QuotePricePoint::make(['quantity' => 1, 'price_per_person' => 0]));
         $oldPrice = $point->price_per_person;
