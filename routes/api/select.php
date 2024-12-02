@@ -16,6 +16,7 @@ use App\View\Components\Livewire\Input\Select\Event\Normal as NormalEvent;
 use App\View\Components\Livewire\Input\Select\LargeTextTemplate;
 use App\View\Components\Livewire\Input\Select\Order\PaymentMethod;
 use App\View\Components\Livewire\Input\Select\Organization;
+use App\View\Components\Livewire\Input\Select\Agent;
 use App\View\Components\Livewire\Input\Select\TaxBracket;
 use App\View\Components\Livewire\Input\Select\TourCategory;
 use App\View\Components\Livewire\Input\Select\User;
@@ -28,6 +29,11 @@ Route::prefix('accommodation')->name('accommodation.')->group(function () {
 Route::prefix('organizations')->name('organizations.')->group(function () {
     Route::post('/', [Organization::class, 'getAll'])->name('select');
     Route::post('/{id}', [Organization::class, 'getOne'])->name('selected');
+});
+
+Route::prefix('agents')->name('agents.')->group(function () {
+    Route::post('/', [Agent::class, 'getAll'])->name('select');
+    Route::post('/{id}', [Agent::class, 'getOne'])->name('selected');
 });
 
 Route::prefix('users')->name('users.')->group(function () {

@@ -156,6 +156,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'internal_notes' => $this->quote->internal_notes . "\n Converted from Quote: {$this->quote->reference}",
             'external_notes' => $this->quote->external_notes,
             'invoice_footer' => $this->quote->invoice_footer,
+            'organization_id' => $this->quote->organization_id,
+            'agent_id' => $this->quote->agent_id,
         ];
         $order = OrderRepository::create($tour, $data, $lead, $travellers, $email);
         if (flag('quote.convert.reference', false) &&
@@ -1198,6 +1200,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $event?->image_url,
             $this->quote->reference,
             $this->quote->organization,
+            $this->quote->agent,
             (is_array($this->quote->consultant) ? new User($this->quote->consultant) : $this->quote->consultant) ?? Auth::user(),
             $this->quote->date_from,
             $this->quote->date_to,

@@ -9,6 +9,8 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class Table extends LivewireDatatable
 {
+    public $name = 'supplier-payment-table';
+
     public Supplier $supplier;
 
     public function builder()

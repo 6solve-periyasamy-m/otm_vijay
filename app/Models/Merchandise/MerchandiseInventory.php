@@ -145,7 +145,7 @@ class MerchandiseInventory extends Model
 
     public function __toString(): string
     {
-        return "{$this->component} ({$this->variant->name}) ({$this->size->name})";
+        return "{$this->component} ({$this->variant->name}) ({$this->size?->name})";
     }
 
     public function getLocalPurchasePriceAttribute(): float|null

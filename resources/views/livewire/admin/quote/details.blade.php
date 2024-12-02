@@ -60,7 +60,21 @@
         {{ $quote->external_notes }}
     </x-admin.section.header.detail>
 
-    <x-admin.section.header.detail width="12">
+    @if($quote->organization)
+    <x-admin.section.header.detail width="60">
+        <x-slot:title>{{ __('quotes.view.organization') }}</x-slot:title>
+        {{ $quote->organization->name }}
+    </x-admin.section.header.detail>
+    @endif
+
+    @if($quote->agent)
+    <x-admin.section.header.detail width="60">
+        <x-slot:title>{{ __('quotes.view.agent') }}</x-slot:title>
+        {{ $quote->agent->first_name }} {{ $quote->agent->last_name }}
+    </x-admin.section.header.detail>
+    @endif
+
+    <x-admin.section.header.detail width="60">
         <x-slot:title>{{ __('quotes.view.description') }}</x-slot:title>
         {{ $quote->description }}
     </x-admin.section.header.detail>

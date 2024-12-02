@@ -495,12 +495,16 @@ figure.table tr td:nth-child(2) {display:none;}
           </div>
             <div class="customer-agent-details">
                 <div class="customer-details">
-                @if (!is_null($itinerary->organization) && !is_null($itinerary->organization->commission))
-                    <h6>Organisation DETAILS</h6>
-                    <p>Organisation: <span>{{ $itinerary->organization->name }}</span></p>
-                    <!-- <p>Organization Email: <span>{{ $itinerary->organization->contact_email }}</span></p> -->
-                    <p>Travel Agent Name: <span>{{ $cusname }}</span></p>
-                    <p>Travel Agent Email: <span>{{ $cusmail }}</span></p>
+                <!-- the organization is shown as customer, with agent shown as name/email if set -->
+                @if (!is_null($itinerary->organization))
+                    <h6>CUSTOMER DETAILS</h6>
+                    <p>Customer: <span>{{ $itinerary->organization->name }}</span></p>
+                    <p>Name: <span>{{ $itinerary->agent ? $itinerary->agent->first_name . ' ' . $itinerary->agent->last_name : $itinerary->organization->name }}</span></p>
+                    <p>Email: <span>{{ $itinerary->agent?->email ?? $itinerary->organization->contact_email }}</span></p>
+                @elseif (!is_null($itinerary->organization) || !is_null($itinerary->agent))
+                    <h6>CUSTOMER DETAILS</h6>
+                    <p>Customer: <span>{{ $itinerary->agent->first_name . ' ' . $itinerary->agent->last_name }}</span></p>
+                    <p>Email: <span>{{ $itinerary->agent->email ?? $itinerary->organization->contact_email }}</span></p>
                 @else
                     <h6>CUSTOMER DETAILS</h6>
                     <p>Name: <span>{{ $cusname }}</span></p>
@@ -686,18 +690,18 @@ figure.table tr td:nth-child(2) {display:none;}
                         <table>
                             <tbody>
                                 <tr>
-                                  <td><strong>Event:</strong></td>
+                                  <td class="w-125"><strong>Event:</strong></td>
                                   <td>{{ $evename }}</td>
                                 </tr>
                                 @if(array_key_exists('Ticket', $item->details) && !empty($item->details['Ticket']))
                                     <tr>
-                                        <td><strong>Ticket:</strong></td>
+                                        <td class="w-125"><strong>Ticket:</strong></td>
                                         <td>{{ $item->details['Ticket'] }}</td>
                                     </tr>
                                 @endif
                                 @if(!empty($item->details['Dates']))
                                     <tr>
-                                        <td><strong>Dates:</strong></td>
+                                        <td class="w-125"><strong>Dates:</strong></td>
                                         <td> <?php
                                                 $dates = explode('to', $item->details['Dates']); 
                                                 echo trim($dates[0]); 
@@ -708,7 +712,7 @@ figure.table tr td:nth-child(2) {display:none;}
 
                                 @if(!empty($item->details['Venue']))
                                     <tr>
-                                        <td><strong>Venue:</strong></td>
+                                        <td class="w-125"><strong>Venue:</strong></td>
                                         <td>{{ $item->details['Venue'] }}</td>
                                     </tr>
                                 @endif
@@ -716,14 +720,14 @@ figure.table tr td:nth-child(2) {display:none;}
 
                                 @if(!empty($item->details['Quantity']) && $item->details['Quantity'] > 0)
                                     <tr>
-                                        <td><strong>Quantity:</strong></td>
+                                        <td class="w-125"><strong>Quantity:</strong></td>
                                         <td>{{ $item->details['Quantity'] }}</td>
                                     </tr>
                                 @endif
 
                                 @if(!empty($item->details['Description']))
                                     <tr>
-                                        <td><strong>Description:</strong></td>
+                                        <td class="w-125"><strong>Description:</strong></td>
                                         <td class="text-wrap">{!! $item->details['Description'] !!}</td>
                                     </tr>
                                 @endif                 
@@ -764,7 +768,7 @@ figure.table tr td:nth-child(2) {display:none;}
             <table>
                <tbody>
                   <tr>
-                     <td><strong>Inclusion:</strong></td>
+                     <td class="w-125"><strong>Inclusion:</strong></td>
                       @if(array_key_exists('Ticket', $item->details))
                         <td>{{ $item->details['Ticket'] }}</td>
                       @else
@@ -781,7 +785,7 @@ figure.table tr td:nth-child(2) {display:none;}
                        @continue(empty($value))
                         @if (!in_array($key, $disable_items))
                           <tr>
-                            <td><strong>{{ $key }}:</strong></td>
+                            <td class="w-125"><strong>{{ $key }}:</strong></td>
                             <td class="<?php echo $class_desc_pos;?>">
                                 @if($key === 'Dates')
                                     {{ trim(explode('to', $value)[0]) }}
@@ -807,7 +811,7 @@ figure.table tr td:nth-child(2) {display:none;}
    
    
    <div class="single-module heading-2">
-   <h2 style="margin-left:-32px;">Payment summary</h2> 
+   <h2 style="margin-left:-32px;margin-top:20px;">Payment summary</h2> 
    
    <div class="heading-module">
     <h3>
@@ -932,7 +936,7 @@ figure.table tr td:nth-child(2) {display:none;}
                 </td>
                 <td>
                   @if(!is_null(optional($installment->due)))
-                      {{ optional($installment->due)->format('d/m/Y') }}
+                      {{ optional($installment->due)->format('d M Y') }}
                   @endif
                 </td>
               </tr>
@@ -955,7 +959,7 @@ figure.table tr td:nth-child(2) {display:none;}
                 </td>
                 <td>
                   @if(!is_null(optional($installment->due)))
-                      {{ optional($installment->due)->format('d/m/Y') }}
+                      {{ optional($installment->due)->format('d M Y') }}
                   @endif
                 </td>
               </tr>
@@ -975,14 +979,16 @@ figure.table tr td:nth-child(2) {display:none;}
         <tbody>
           @foreach ($itinerary->finances->schedule as $installment)
           <tr>
-              <td>{{ ucfirst(strtolower($installment->type->name)) }}</td>
+              <td>
+                {{ ($installment->type === ItineraryScheduleType::INSTALLMENT) ? "Instalment" : ucfirst(strtolower($installment->type->name)) }}
+              </td>
               <td>{{ f_currency($installment->amount) }}</td>
               <td>
                 @if ($installment->type === ItineraryScheduleType::DEPOSIT)
-                  NOW
+                  Now
                 @else
                   @if($installment->paid)
-                      PAID
+                    Paid
                   @elseif(!is_null(optional($installment->due)))
                       {{ optional($installment->due)->format('d M Y') }}
                   @endif

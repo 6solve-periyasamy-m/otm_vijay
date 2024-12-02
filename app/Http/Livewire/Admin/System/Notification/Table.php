@@ -16,6 +16,8 @@ use Throwable;
 
 class Table extends LivewireDatatable
 {
+    public $name = 'notification-table';
+
     use SendsEvents;
 
     public function builder()

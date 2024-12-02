@@ -16,6 +16,8 @@ use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class OrderReport extends ExportableDatatable
 {
+    public $name = 'order-report';
+
     public function builder()
     {
         return Order::query()

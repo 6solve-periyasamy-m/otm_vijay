@@ -10,6 +10,8 @@ use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class Table extends LivewireDatatable
 {
+    public $name = 'conversion-table';
+
     public function builder()
     {
         return ConversionRate::query()
