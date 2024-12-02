@@ -56,12 +56,14 @@
                            onclick="event.preventDefault();document.getElementById('flight-{{ $flight->id }}-delete').submit();">
                             {{ Icon::delete() }}
                         </a>
-                        <form id="flight-{{ $flight->id }}-delete" action="{{ route('flights.delete', ['flight' => $flight,]) }}"
-                              method="POST" style="display: none;">{{ csrf_field() }}</form>
+                        <form id="flight-{{ $flight->id }}-delete" action="{{ route('flights.delete') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                            <input type="hidden" name="id" value="{{ $flight->id }}" />
+                        </form>
                     @else
                         <span class="btn btn-outline-dark btn-sm mb-1">
-                                {{ Icon::delete() }}
-                            </span>
+                            {{ Icon::delete() }}
+                        </span>
                     @endcan
                 </td>
             </tr>
