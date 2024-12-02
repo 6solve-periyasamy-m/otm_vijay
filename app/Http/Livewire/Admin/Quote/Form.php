@@ -18,7 +18,7 @@ class Form extends Component
 
     public Quote|int|null $quote;
     public QuoteProspect|null $prospect = null;
-    public QuotePricePoint|null $pricePoint = null;
+    public float|null $price = null;
     public int|null $footerTemplate = null;
     public int|null $termsTemplate = null;
 
@@ -27,12 +27,9 @@ class Form extends Component
         $this->quote = Quote::getForMount($quote);
         $this->prospect = $quote->leadTraveller ?? new QuoteProspect();
         if ($this->quote->id !== null) {
-            $this->pricePoint = $this->quote->pricePoints()->where('quantity', '=', 1)->first();
+            $this->price = $this->quote->pricePoints()->where('quantity', '=', 1)->first()?->price_per_person;
         }
-        if ($this->pricePoint === null) {
-            $this->pricePoint = new QuotePricePoint(['quantity' => 1, 'price_per_person' => 0,]);
-        }
-        $this->quote->expires = $this->quote->expires ?? now()->addDays(setting('system.quote.expiry', null));
+        $this->quote->expires = $this->quote->expires ?? now()->addDays((int)setting('system.quote.expiry', null));
         $this->prospect->travelling = $this->prospect->travelling ?? true;
         $this->prospect->paying = $this->prospect->paying ?? true;
     }
@@ -52,8 +49,11 @@ class Form extends Component
         $this->quote->reference = $this->quote->reference ?? $this->quote->repository->generateReference();
         $this->quote->invoice_footer = $this->quote->invoice_footer ?? "";
         $this->quote->save();
-        $this->pricePoint->quote_id = $this->quote->id;
-        $this->pricePoint->save();
+
+        $pricePoint = $this->quote->pricePoints()->where('quantity', '=', 1)->first() ?? QuotePricePoint::make(['quantity' => 1,]);
+        $pricePoint->price_per_person = $this->price;
+        $this->quote->pricePoints()->save($pricePoint);
+
         return redirect()->route('quotes.view', ['quote' => $this->quote]);
     }
 
@@ -116,7 +116,7 @@ class Form extends Component
             'quote.commission' => 'nullable|numeric|between:0,100',
             'quote.deposit' => 'nullable|numeric',
             'quote.is_deposit_percentage' => 'nullable|boolean',
-            'pricePoint.price_per_person' => 'required|numeric|gte:0|regex:/^[0-9]+(\.[0-9]{1,2})?$/',
+            'price' => 'required|numeric|gte:0|regex:/^[0-9]+(\.[0-9]{1,2})?$/',
             'quote.single_occupancy_surcharge' => 'required|numeric|gte:0',
             'quote.description' => 'nullable|string|min:3',
             'prospect.customer_id' => 'required|integer|exists:customers,id',

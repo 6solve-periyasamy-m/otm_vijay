@@ -828,7 +828,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         return $payments;
     }
 
-    private function getScheduleItineraryArray(): array
+    public function getScheduleItineraryArray(): array
     {
         $schedule = [];
         if ($this->order->booking_fee > 0) {
