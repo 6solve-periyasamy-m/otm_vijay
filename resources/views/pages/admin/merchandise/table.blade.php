@@ -68,9 +68,10 @@
                             <a href="javascript:$('#merchandise-{{ $merch->id }}-delete').submit()" title="Delete" class="btn btn-outline-danger btn-sm mb-1">
                                 {{ Icon::delete() }}
                             </a>
-                            <form id="merchandise-{{ $merch->id }}-delete"
-                                  action="{{ route('merchandise.delete', ['merchandise' => $merch,]) }}" method="POST"
-                                  style="display: none;">{{ csrf_field() }}</form>
+                            <form id="merchandise-{{ $merch->id }}-delete" action="{{ route('merchandise.delete') }}" method="POST" style="display: none;">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="id" value="{{ $merch->id }}" />
+                            </form>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1" title="Delete">
                                     {{ Icon::delete() }}

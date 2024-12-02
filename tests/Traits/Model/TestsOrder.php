@@ -25,6 +25,7 @@ trait TestsOrder
                 $this->generateActivityInventoryTour($tour);
                 $this->generateFlightInventoryTour($tour);
                 $this->generateTransportInventoryTour($tour);
+                $this->generateMerchandiseInventoryTour($tour);
             }
         } else {
             $tour = Tour::find(1) ?? $this->generateTour($withIncluded, ['base_price_per_person' => $tour_cost, 'single_occupancy_surcharge' => $surcharge, 'deposit' => $deposit]);
@@ -55,6 +56,12 @@ trait TestsOrder
 
         RoomingRepository::assignDefaultRooming($orderCustomer);
         $withIncluded && $orderCustomer->repository->addAllIncluded(true);
+
+        if ($withIncluded) {
+            foreach ($order->tour->merchandise()->where('tour_component_type', '=', 'Included')->get() as $component) {
+                $component->repository->grantToCustomer($orderCustomer, true);
+            }
+        }
 
         $order->repository->refresh();
 

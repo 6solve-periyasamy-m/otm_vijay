@@ -35,6 +35,7 @@ trait TestsTour
                 $this->generateActivityInventoryTour($tour);
                 $this->generateFlightInventoryTour($tour);
                 $this->generateTransportInventoryTour($tour);
+                $this->generateMerchandiseInventoryTour($tour);
             }
         }
         return $tour;
