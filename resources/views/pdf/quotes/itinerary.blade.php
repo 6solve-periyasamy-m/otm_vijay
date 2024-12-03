@@ -824,7 +824,7 @@ figure.table tr td:nth-child(2) {display:none;}
            <tbody>
                   <tr>            
                    <td style="font-weight:400;min-width:128px;">Booking Total:</td>
-                   <td>{{ f_currency($itinerary->finances->cost) }}</td>
+                   <td>{{ f_currency($itinerary->finances->total) }}</td>
                   </tr>
                   <tr>
                       <td style="font-weight:400;min-width:128px;">GST (included):</td>
