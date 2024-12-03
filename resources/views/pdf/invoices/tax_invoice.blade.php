@@ -213,7 +213,7 @@
         .details tr td:first-child p, .details tr td:nth-child(2) p {
             font-family: 'Lato', sans-serif;
             font-weight: 400;
-            font-size: 10px;
+            font-size: 12px;
             line-height: 17px;
             padding: 0px 0px 0px 20px !important;
             vertical-align: top;
@@ -221,34 +221,17 @@
         .details tr td {
             font-family: 'Lato', sans-serif;
             font-weight: 400;
-            font-size: 10px;
+            font-size: 12px;
             line-height: 17px;
             vertical-align: top;
         }
         .details tr td span {font-weight:600;}
-        .details tr td:last-child {
-            background-color: #F9F4EE;
-            padding: 0px 0px 0px 30px; 
-            position:relative;  
-            border-right: 10px solid #f35b15;   
-        }
         .details tr p.bg-box-contain.f-1 {
             padding-top:15px!important;
         }
         .details tr p.bg-box-contain.f-3 {
             padding-bottom:15px!important;
         }
-        .bg-box-contain
-        /* .details tr .bg-box-contain:after {
-            content:"";
-            height:100%;
-            width:10px;
-            background-color:#f35b15;
-            display:inline-block;
-            position:absolute;
-            right:0px;
-            top:0px;
-        } */
         .items th {
             background-color: #f35b15;
             padding:4px 30px;
@@ -274,9 +257,6 @@
             height: 30px;
         }
         .whole-items-cls .items tr:nth-child(2) td {padding-top:10px;}
-        /* .items tr:nth-child(even) td  {
-            background-color: #F9F4EE;     
-        }        */
         .items tr td:nth-child(2)  {
             text-align:left;
         }
@@ -439,9 +419,8 @@
             line-height: 21.33px;
             color: #000;
             background-color: #F9F4EE;
-            padding: 10px;
+            padding: 10px 10px 10px 5px;
             text-align: left;
-            text-transform: uppercase;
             display: flex;
             justify-content: space-between;
             position: relative;
@@ -452,11 +431,10 @@
             font-family: 'Lato', sans-serif;
             font-weight: 600;
             font-size: 13px;
-            line-height: 20px;
+            line-height: 10px;
             color: #000;
-            padding: 10px;
+            padding: 5px 10px 10px 10px;
             text-align: center;
-            text-transform: uppercase;
         }
         .payment-options tr td figure{float: left;}
         .payment-options tr td figure.table table tbody tr td:nth-child(1){width: 300px;}
@@ -464,6 +442,19 @@
         .payment_mode div{width: 200px;margin-top: -12px;float:left; margin-left: 40px;}
         .payment-options tr td figure.table table tbody tr td:nth-child(1) strong{margin-bottom: 20px;}
         .text-weight{ font-weight: 600; }
+        .tbl-bg-style{
+            background-color: #F9F4EE;
+            padding: 0px 0px 0px 30px;
+            position:relative; 
+            border-right: 10px solid #f35b15;
+        }
+        .order-total-inner {margin-left: 5px;}
+        .tbl-font-style{
+            font-family: 'Lato', sans-serif;
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 17px;
+        }
     </style>
     <title>Invoice - {{ $invoice->booking_reference }}</title>
 </head>
@@ -494,8 +485,12 @@
     <!-- Details Table -->
     <table class="details">
         <tr>
+            <td><h6>Invoice To</h6></td>
+            <td><h6>Details</h6></td>
+            <td></td>
+        </tr>
+        <tr>
             <td>
-                <h6>Invoice To</h6>
                 <p class="name">{{ $invoice->lead->full_name }}</p>
                 <p class="name">{{$invoice->lead->email}}</p>
                 <p class="address">
@@ -503,12 +498,11 @@
                 </p>
             </td>
             <td>
-            <h6>Details</h6>
                 <p class="event-name"><span>Reference:</span> <span>{{$invoice->booking_reference}}</span></p>
                 <p class="event-name"><span>Event Name:</span> <span>{{ $invoice->event }}</span></p>
                 <p class="no-of-pax"><span>Number of Pax:</span> <span>{{$invoice->getTravellingTravellersAtribute()}}</span></p>
             </td>
-            <td>
+            <td class="tbl-bg-style">
                 <p class="bg-box-contain"><span>Invoice No:</span> <span>{{ $invoice->invoice_number }}</span></p>
                 <p class="bg-box-contain"><span>Invoice Date:</span> <span>{{ date('d M Y', strtotime($invoice->generated)) }}</span></p>
             </td>
@@ -519,7 +513,7 @@
     <div class="whole-items-cls"> 
     <table class="items">
         <tr style="background-color: #f35b15;">
-            <th><h2>No</h2></th>
+            <th><h2>No.</h2></th>
             <th><h2>Description</h2></th>
             <th><h2>Qty</h2></th>
         </tr>
@@ -547,10 +541,10 @@
                 <h3>Payment Schedule</h3>
                 <table>
                     <tr>
-                        <th>INSTALMENT</th>
-                        <th>RECEIVED</th>
-                        <th>OUTSTANDING</th>
-                        <th>DATE DUE</th>
+                        <th>Instalment</th>
+                        <th>Received</th>
+                        <th>Outstanding</th>
+                        <th>Date Due</th>
                     </tr>
                     @php
                         $balance_received = 0;
@@ -651,7 +645,7 @@
             </td>
             <td class="order_total"> 
                 <h3>Order Total</h3>
-                <table>
+                <table class="order-total-inner">
                     <tr>
                         <td>
                             <div class="full-btm-cls-mod" style="">
@@ -666,7 +660,7 @@
                                     <p><span>Fees Paid:</span> <span>{{f_currency($invoice->total_fees)}}</span></p>
                                 @endif
                             </div>
-                            <h4><span>BALANCE DUE:</span> <span>{{f_currency($invoice->total_cost - $invoice->total_paid)}}</span></h4>
+                            <h4><span>Balance Due:</span> <span>{{f_currency($invoice->total_cost - $invoice->total_paid)}}</span></h4>
                         </td>
                     </tr>
                 </table>
@@ -676,17 +670,16 @@
     <table class="payment-options">
         <tr>
             <th><h3>Payment Options</h3></th>
-            <th></th>
         </tr>
         <tr>
         <td class="payment_mode">
                 {!! setting('company.bank_transfer', '-')  !!}
                 <div>
                     <p class="terms-conditions" style="font-weight: bold">
-                    T&C Apply
+                    Terms & Conditions
                     </p>
                     <p class="terms-conditions upd">
-                    Visit our website for full detailsor view them <a style="color: blue !important; text-decoration: underline !important;" href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">here</a>
+                    Visit our website for full details or view them <a style="color: blue !important; text-decoration: underline !important;" target="_blank" href="https://www.kpt.com.au/terms-and-conditions/">here.</a>
                     </p>
                 </div>
             </td>
