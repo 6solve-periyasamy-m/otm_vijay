@@ -116,6 +116,10 @@
                     <td class="py-1">{{ f_currency($quote->repository->getMerchandiseCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
                 </tr>
                 <tr>
+                    <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.section') }}</th>
+                    <td class="py-1">{{ f_currency($quote->repository->getSectionCost(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
+                </tr>
+                <tr>
                     <th scope="row" class="py-1">{{ __('quotes.view.cards.quick.calculator.components.per-customer') }}</th>
                     <td class="py-1">{{ f_currency($quote->repository->getPerCustomerAdditionals(($quote->leadTraveller->travelling) + $paying + $travelling)) }}</td>
                 </tr>
@@ -187,14 +191,10 @@
                 </div>
             </div>
             <div class="col-6 row">
-                <x-livewire.input wire:model.debounce.300ms="marked_up_price" key="marked_up_price" label="Price per Person" width="4" />
+                <x-livewire.input wire:model.debounce.300ms="marked_up_price" key="marked_up_price" label="Price per Person" width="8" />
                 <div class="col-4">
                     <label></label>
-                    <button class="btn-warning" wire:click="updatePricePoint()" title="Update the price point for a single traveller, and leave the others unaffected">Update Single Price Point</button>
-                </div>
-                <div class="col-4">
-                    <label></label>
-                    <button class="btn-danger" wire:click="updatePricePoint(true)" title="Update the price point for a single traveller, and update the others to have the same percentage difference">Update All Price Points</button>
+                    <button class="btn btn-warning" wire:click="updatePricePoint(true)" title="Update the price point for a single traveller, and update the others to have the same percentage difference">Save Changes</button>
                 </div>
             </div>
         </div>

@@ -37,6 +37,7 @@ use Illuminate\Support\Carbon;
  */
 class ConversionRate extends Model
 {
+    protected $guarded = [];
     protected $casts = ['changed' => 'datetime', 'rate' => 'float', 'automatic' => 'boolean'];
     protected $with = ['from', 'to'];
 

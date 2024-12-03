@@ -6,6 +6,7 @@ use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuoteSection;
+use App\Models\Quote\QuoteSectionType;
 use App\Models\System\LargeTextTemplate;
 use Illuminate\Http\UploadedFile;
 use Livewire\Component;
@@ -32,6 +33,14 @@ class Form extends Component
     public function updated($key, $value): void
     {
         $this->validateOnly($key);
+        if ($key === 'section.quote_section_type_id') {
+            /** @var QuoteSectionType|null $type */
+            $type = QuoteSectionType::find($this->section->quote_section_type_id);
+            if ($type !== null) {
+                $this->section->body = $type->template?->content ?? $this->section->body;
+                $this->updateValue('section.body', $this->section->body);
+            }
+        }
         if ($key === 'bodyTemplate') {
             $template = LargeTextTemplate::find($this->bodyTemplate);
             if ($template !== null) {
@@ -64,10 +73,14 @@ class Form extends Component
     {
         return [
             'section.title' => 'required|string|max:255',
+            'section.quote_section_type_id' => 'nullable|integer|exists:quote_section_types,id',
             'section.body' => 'required|string',
             'section.order' => 'nullable|integer',
             'image' => 'nullable|file|mimes:jpg,jpeg,png|max:4096',
             'section.hidden' => 'nullable|boolean',
+            'section.currency_id' => 'nullable|integer|exists:currencies,id',
+            'section.purchase_price' => 'nullable|numeric|gte:0',
+            'section.quantity' => 'nullable|integer|gte:0',
         ];
     }
 }

@@ -8,7 +8,6 @@ use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
-use Exception;
 use Livewire\Component;
 
 class Calculator extends Component
@@ -134,6 +133,7 @@ class Calculator extends Component
 
     public function updatePricePoint(bool $all = false): void
     {
+        $this->quote->refresh();
         $point = $this->quote->repository->getPricePerPerson(1)
             ?? $this->quote->pricePoints()->save(QuotePricePoint::make(['quantity' => 1, 'price_per_person' => 0]));
         $oldPrice = $point->price_per_person;
@@ -144,14 +144,14 @@ class Calculator extends Component
                 if ($point->quantity === 1) continue;
                 $diff = $oldPrice - $point->price_per_person;
                 // Calculate the percentage difference (i.e 10% reduction = 0.9) then multiply by marked up price
-                if ($diff == 0) {
-                    continue;
+                if ($diff === 0) {
+                    $multiplier = 1;
                 } elseif ($diff > 0) {
-                    $diffPercent = 1 - ($diff / $oldPrice);
+                    $multiplier = 1 - ($diff / $oldPrice);
                 } else  {
-                    $diffPercent = 1 + (($diff * -1) / $oldPrice);
+                    $multiplier = 1 + (($diff * -1) / $oldPrice);
                 }
-                $point->price_per_person = ($this->marked_up_price * $diffPercent);
+                $point->price_per_person = ($this->marked_up_price * $multiplier);
                 $point->save();
             }
         }
