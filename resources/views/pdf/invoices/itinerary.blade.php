@@ -58,7 +58,7 @@
             text-decoration-skip-ink: none;
             text-align: left;
         }
-        .travel_itinerary_title h6,.event_txt{
+        .travel_itinerary_title h6{
             font-family: "PP Neue Montreal";
             font-size: 15px;
             font-weight: 400;
@@ -110,16 +110,7 @@
             top: -10px;
         }
         .single-module {padding-left: 32px;}
-        .pdf-individual-block .single-module .heading-module {margin-left: -32px;}
-        .single-module h4{
-        font-family: "PPNeueMontreal-Regular"text-align: left;;
-            font-size: 18px;
-            font-weight: 500;
-            line-height: 20px;
-            color: var(--text-color);
-            margin: 0px 0px 24px 0px;
-            text-transform: capitalize;
-        }
+        .pdf-individual-block .single-module .heading-module { margin-left: -32px; }
         h4 span.mark {
             width: 88px;
             height: 1px;
@@ -127,6 +118,15 @@
             margin: 0;
             margin-top: 5px;
             background-color: var(--head-text-background);
+        }
+        .single-module h4{
+            font-family: "PPNeueMontreal-Regular";
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 20px;
+            color: var(--text-color);
+            margin: 0px 0px 24px 0px;
+            text-transform: capitalize;
         }
         .single-module table td {
             font-family: "PPNeueMontreal-Regular";
@@ -172,8 +172,10 @@
         .travellers th {
             background-color: #f4f4f4;
         }
-        .traveller-name-space {width: 245px;padding-top: 5px;padding-bottom: 10px;}
+        .traveller-name-space {width: 245px;padding-top: 5px;padding-bottom: 10px; font-family: "PPNeueMontreal-Regular";font-size: 14px;}
         .event-field-space {width: 245px;padding-top: 35px;padding-bottom: 50px;}
+        .event_txt{ font-family: "PPNeueMontreal-Regular";font-size: 15px;font-weight: 400;line-height: 21px;color: #000;}
+        .event_txt a { border:1px solid red;}
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
@@ -225,7 +227,7 @@
         </div>     
 
         <div class="heading-2">
-            <h2>Trip Itinerary & inclusions</h2> 
+            <h2>Itinerary & inclusions</h2>
         </div>
 
         @if(!empty($itinerary->items['Transfers']))
@@ -351,18 +353,18 @@
                             <table>
                                 <tbody>
                                     <tr>
-                                    <td><strong>Event:</strong></td>
+                                    <td class="w-125"><strong>Event:</strong></td>
                                     <td>{{ $event_name }}</td>
                                     </tr>
                                     @if(array_key_exists('Ticket', $item->details) && !empty($item->details['Ticket']))
                                         <tr>
-                                            <td><strong>Ticket:</strong></td>
+                                            <td class="w-125"><strong>Ticket:</strong></td>
                                             <td>{{ $item->details['Ticket'] }}</td>
                                         </tr>
                                     @endif
                                     @if(!empty($item->details['Dates']))
                                         <tr>
-                                            <td><strong>Dates:</strong></td>
+                                            <td class="w-125"><strong>Dates:</strong></td>
                                             <td> <?php
                                                     $dates = explode('to', $item->details['Dates']); 
                                                     echo trim($dates[0]); 
@@ -373,7 +375,7 @@
 
                                     @if(!empty($item->details['Venue']))
                                         <tr>
-                                            <td><strong>Venue:</strong></td>
+                                            <td class="w-125"><strong>Venue:</strong></td>
                                             <td>{{ $item->details['Venue'] }}</td>
                                         </tr>
                                     @endif
@@ -381,14 +383,14 @@
 
                                     @if(!empty($item->details['Quantity']) && $item->details['Quantity'] > 0)
                                         <tr>
-                                            <td><strong>Quantity:</strong></td>
+                                            <td class="w-125"><strong>Quantity:</strong></td>
                                             <td>{{ $item->details['Quantity'] }}</td>
                                         </tr>
                                     @endif
 
                                     @if(!empty($item->details['Description']))
                                         <tr>
-                                            <td><strong>Description:</strong></td>
+                                            <td class="w-125"><strong>Description:</strong></td>
                                             <td class="text-wrap">{!! $item->details['Description'] !!}</td>
                                         </tr>
                                     @endif                 
@@ -417,7 +419,7 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td><strong>Inclusion:</strong></td>
+                                    <td class="w-125"><strong>Inclusion:</strong></td>
                                     @if(array_key_exists('Ticket', $item->details))
                                         <td>{{ $item->details['Ticket'] }}</td>
                                     @else
@@ -432,7 +434,7 @@
                                     @continue(empty($value))
                                     @if (!in_array($key, $disable_items))
                                     <tr>
-                                        <td><strong>{{ $key }}:</strong></td>
+                                        <td class="w-125"><strong>{{ $key }}:</strong></td>
                                         <td class="<?php echo $class_desc_pos;?>">
                                             @if($key === 'Dates')
                                                 {{ trim(explode('to', $value)[0]) }}
@@ -454,7 +456,7 @@
             <h2>Event information</h2> 
         </div>
         <div class="event_info_div">
-            <p class="event_txt">If you require any assistance during your trip, please don't hesitate to reach out to us our friendly team is always happy to help ensure your journey is smooth and stress free.</p>
+            <p class="event_txt">If you require any assistance during your trip, please don't hesitate to reach out to us. Our friendly team is always happy to help ensure your journey is smooth and stress free.</p>
 
             @if(!empty($itinerary->event->onsite_name) || !empty($itinerary->event->onsite_email) || !empty($itinerary->event->onsite_phone))
                 <table>
@@ -462,17 +464,17 @@
                         <tr>
                             @if(!empty($itinerary->event->onsite_name))
                                 <td class="event-field-space">
-                                <strong>Name:</strong><span>{{ $itinerary->event->onsite_name }}</span>
+                                <strong>Name:&nbsp;&nbsp;</strong><span>{{ $itinerary->event->onsite_name }}</span>
                                 </td>
                             @endif
                             @if(!empty($itinerary->event->onsite_email))
                                 <td class="event-field-space">
-                                <strong>Email:</strong><span>{{ $itinerary->event->onsite_email }}</span>
+                                <strong>Email:&nbsp;&nbsp;</strong><span>{{ $itinerary->event->onsite_email }}</span>
                                 </td>
                             @endif
                             @if(!empty($itinerary->event->onsite_phone))
                                 <td class="event-field-space">
-                                <strong>Phone:</strong><span>{{ $itinerary->event->onsite_phone }}</span>
+                                <strong>Phone:&nbsp;&nbsp;</strong><span>{{ $itinerary->event->onsite_phone }}</span>
                                 </td>
                             @endif
                         </tr>
@@ -480,13 +482,7 @@
                 </table>
             @endif
             @if(!empty($itinerary->event?->final_terms) || !empty($itinerary->terms))
-                <table>
-                    <tbody>
-                        <tr>
-                            <td><p class="event_txt text-wrap">{!! $itinerary->event?->final_terms ?? $itinerary->terms !!}</p></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div><p class="event_txt text-wrap">{!! $itinerary->event?->final_terms ?? $itinerary->terms !!}</p></div>
             @endif             
         </div>
     </section>
