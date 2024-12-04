@@ -169,14 +169,13 @@
         .travellers th, td {padding: 5px 10px 5px 5px;text-align: left;}
         .travellers th { background-color: #f4f4f4; }
         .traveller-name-space {width: 245px;padding-top: 5px;padding-bottom: 10px; font-family: "PPNeueMontreal-Regular";font-size: 14px;}
-        .event-field-space {width: 245px;padding-top: 35px;padding-bottom: 50px;}
-        .event_terms{ font-family: "PPNeueMontreal-Regular";font-size: 15px;font-weight: 400;line-height: 21px;}
+        .event-field-space {padding-top: 35px;padding-bottom: 50px;}
+        .event_terms{ font-family: "PPNeueMontreal-Regular";font-size: 15px;font-weight: 400;line-height: 21px;padding-top:15px;}
         .text-full-wrap { word-wrap: break-word; word-break: break-word; white-space: normal; width:720px; line-height: 30px;}
         .event-profile {width: 100%; table-layout: fixed; padding-top:20px;}
         .event-profile td {padding: 8px 8px 8px 8px;}
         .event-profile td:first-child {text-align: left;padding-left: 0px;}
         .event-profile td:not(:first-child) {text-align: center;}
-        .event-field-space {width: 33.33%;}
         .bg-line-color h5::before{content:"";margin-top: 20px; position: absolute; display: block; height: 4px; width: 80px; background-color: var(--head-text-background);}
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
@@ -471,17 +470,17 @@
                     <tbody>
                         <tr>
                             @if(!empty($itinerary->event->onsite_name))
-                                <td class="event-field-space">
+                                <td class="event-field-space" style="width: 33.33%;">
                                 <strong>Name:&nbsp;&nbsp;</strong><span>{{ $itinerary->event->onsite_name }}</span>
                                 </td>
                             @endif
                             @if(!empty($itinerary->event->onsite_email))
-                                <td class="event-field-space">
+                                <td class="event-field-space" style="width: 36.33%;">
                                 <strong>Email:&nbsp;&nbsp;</strong><span>{{ $itinerary->event->onsite_email }}</span>
                                 </td>
                             @endif
                             @if(!empty($itinerary->event->onsite_phone))
-                                <td class="event-field-space" style="text-align: right;">
+                                <td class="event-field-space" style="text-align: right; width: 30.33%;">
                                 <strong>Phone:&nbsp;&nbsp;</strong><span>{{ $itinerary->event->onsite_phone }}</span>
                                 </td>
                             @endif
