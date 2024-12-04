@@ -25,6 +25,15 @@
             --head-text-background:rgba(243, 91, 21, 1);
             --table-border-color:#EAEAEA;
         }
+        @page:first {
+            margin-top: 0px;
+        }
+        @page {
+            margin-top: 50px;
+            margin-left: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+        }
         .pdf-header { padding:30px 32px;position: relative; }
         .pdf-individual-block { width: 796px;position: relative; }
         .travel_itinerary_block{padding: 0px 30px 25px 30px;margin-top: -30px;}
@@ -66,16 +75,16 @@
             color: #000;
         }
         .travel_itinerary_title h5{font-weight: normal;font-family: "PP Neue Montreal";}
-        .travel_itinerary_title h5::after{
+        /* .travel_itinerary_title h5::after{
             content:"";
             margin-top: 20px;
             position: absolute;
-            right: 11.5%;
+            left: 1.0%;
             display: block;
             height: 4px;
             width: 80px;
             background-color: var(--head-text-background);
-        }
+        } */
         h2{
             font-family: 'Lato', sans-serif;
             font-size: 22px;
@@ -155,27 +164,20 @@
         .event_info_div{padding: 45px 35px;}
         .event_descrp{padding-bottom: 15px;}
         .banner_header{ background-color: rgba(0, 0, 0, 0.6);display: inline-block;width: 796px; height: 147px;margin-top: -10px; }
-        .text-wrap {
-            word-wrap: break-word;
-            word-break: break-word;
-            white-space: normal;
-            width:600px;
-        }
-        .travellers table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .travellers th, td {
-            padding: 5px 10px 5px 5px;
-            text-align: left;
-        }
-        .travellers th {
-            background-color: #f4f4f4;
-        }
+        .text-wrap { word-wrap: break-word; word-break: break-word; white-space: normal; width:600px; }
+        .travellers table { width: 100%;  border-collapse: collapse; }
+        .travellers th, td {padding: 5px 10px 5px 5px;text-align: left;}
+        .travellers th { background-color: #f4f4f4; }
         .traveller-name-space {width: 245px;padding-top: 5px;padding-bottom: 10px; font-family: "PPNeueMontreal-Regular";font-size: 14px;}
         .event-field-space {width: 245px;padding-top: 35px;padding-bottom: 50px;}
         .event_terms{ font-family: "PPNeueMontreal-Regular";font-size: 15px;font-weight: 400;line-height: 21px;}
         .text-full-wrap { word-wrap: break-word; word-break: break-word; white-space: normal; width:720px; line-height: 30px;}
+        .event-profile {width: 100%; table-layout: fixed; padding-top:20px;}
+        .event-profile td {padding: 8px 8px 8px 8px;}
+        .event-profile td:first-child {text-align: left;padding-left: 0px;}
+        .event-profile td:not(:first-child) {text-align: center;}
+        .event-field-space {width: 33.33%;}
+        .bg-line-color h5::before{content:"";margin-top: 20px; position: absolute; display: block; height: 4px; width: 80px; background-color: var(--head-text-background);}
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
@@ -188,8 +190,8 @@
                 <table style="width: 100%;">
                     <tbody>
                         <tr>
-                            <td style="float:left;padding-bottom: 25px;"><h3>{{ $event_name }}</h3></td>
-                            <td style="text-align:right;width: 50%;direction: rtl;padding-bottom: 25px;"><h5><strong>Reference:</strong> {{ $itinerary->reference }} </h5></td>
+                            <td style="width:78%; float:left;padding-bottom: 25px;"><h3>{{ $event_name }}</h3></td>
+                            <td class="bg-line-color" style="text-align:left;padding-bottom: 25px;"><h5><strong>Reference:</strong> {{ $itinerary->reference }} </h5></td>
                         </tr>
                         @if(!empty($itinerary->travellers))
                         <tr>
@@ -206,8 +208,14 @@
                                     @foreach($chunks as $chunk)
                                         <tr>
                                             @foreach($chunk as $traveller)
+                                                @php
+                                                    $traveller_name = $traveller->customer->first_name . " " . $traveller->customer->last_name;
+                                                    if (strpos($traveller_name, 'Unknown') !== false) {
+                                                        $traveller_name = 'TBC';
+                                                    }
+                                                @endphp
                                                 <td class="traveller-name-space">
-                                                    {{ $traveller->customer->first_name ?? '' }} {{ $traveller->customer->last_name ?? '' }}
+                                                    {{ $traveller_name }}
                                                 </td>
                                             @endforeach
 
@@ -257,7 +265,7 @@
                                 @endphp
                                 @foreach($transport->details as $key => $value)
                                 @php
-                                    $class_desc_pos = $key == 'Description' ? 'desc-pos-top text-wrap' : '';
+                                    $class_desc_pos = $key == 'Description' ? 'text-wrap' : '';
                                 @endphp
                                     @if (!in_array($key, $disable_items))
                                         <tr>
@@ -307,7 +315,7 @@
                                 }
                                 @endphp
                                 @foreach($accommodation->details as $key => $value)
-                                    @php  $class_desc_pos = $key == 'Description' ? 'desc-pos-top text-wrap' : '';  @endphp
+                                    @php  $class_desc_pos = $key == 'Description' ? 'text-wrap' : '';  @endphp
                                     @continue(empty($value))
                                     <tr>
                                         <td class="item-header w-125">
@@ -459,7 +467,7 @@
             <p class="event_txt">If you require any assistance during your trip, please don't hesitate to reach out to us. Our friendly team is always happy to help ensure your journey is smooth and stress free.</p>
 
             @if(!empty($itinerary->event->onsite_name) || !empty($itinerary->event->onsite_email) || !empty($itinerary->event->onsite_phone))
-                <table>
+                <table class="event-profile">
                     <tbody>
                         <tr>
                             @if(!empty($itinerary->event->onsite_name))
@@ -473,7 +481,7 @@
                                 </td>
                             @endif
                             @if(!empty($itinerary->event->onsite_phone))
-                                <td class="event-field-space">
+                                <td class="event-field-space" style="text-align: right;">
                                 <strong>Phone:&nbsp;&nbsp;</strong><span>{{ $itinerary->event->onsite_phone }}</span>
                                 </td>
                             @endif
