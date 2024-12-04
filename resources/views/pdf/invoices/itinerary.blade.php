@@ -58,7 +58,7 @@
             text-decoration-skip-ink: none;
             text-align: left;
         }
-        .travel_itinerary_title h6{
+        .travel_itinerary_title h6,.event_txt{
             font-family: "PP Neue Montreal";
             font-size: 15px;
             font-weight: 400;
@@ -174,8 +174,8 @@
         }
         .traveller-name-space {width: 245px;padding-top: 5px;padding-bottom: 10px; font-family: "PPNeueMontreal-Regular";font-size: 14px;}
         .event-field-space {width: 245px;padding-top: 35px;padding-bottom: 50px;}
-        .event_txt{ font-family: "PPNeueMontreal-Regular";font-size: 15px;font-weight: 400;line-height: 21px;color: #000;}
-        .event_txt a { border:1px solid red;}
+        .event_terms{ font-family: "PPNeueMontreal-Regular";font-size: 15px;font-weight: 400;line-height: 21px;}
+        .text-full-wrap { word-wrap: break-word; word-break: break-word; white-space: normal; width:720px; line-height: 30px;}
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
@@ -482,7 +482,7 @@
                 </table>
             @endif
             @if(!empty($itinerary->event?->final_terms) || !empty($itinerary->terms))
-                <div><p class="event_txt text-wrap">{!! $itinerary->event?->final_terms ?? $itinerary->terms !!}</p></div>
+                <div class="event_terms text-full-wrap"><p >{!! $itinerary->event?->final_terms ?? $itinerary->terms !!}</p></div>
             @endif             
         </div>
     </section>
