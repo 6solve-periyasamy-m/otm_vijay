@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Merchandise\DeleteMerchandise;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseInventoryController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseSizeController;
@@ -9,12 +10,12 @@ use App\Http\Controllers\Admin\Merchandise\VariantController;
 Route::get('/', [MerchandiseController::class, 'index'])->name('all');
 Route::get('/create', [MerchandiseController::class, 'create'])->name('create');
 Route::post('/create', [MerchandiseController::class, 'store'])->name('store');
+Route::post('/delete', DeleteMerchandise::class)->name('delete');
 Route::prefix('{merchandise}')->group(function () {
     Route::get('/', [MerchandiseController::class, 'show'])->name('view');
     Route::get('/detailed', [MerchandiseController::class, 'detailed'])->name('detailed');
     Route::get('/update/{view?}', [MerchandiseController::class, 'edit'])->name('edit');
     Route::post('/update/{view?}', [MerchandiseController::class, 'update'])->name('update');
-    Route::post('/delete', [MerchandiseController::class, 'destroy'])->name('delete');
     Route::prefix('inventory')->name('inventory.')->group(function () {
         Route::get('/create/{view?}', [MerchandiseInventoryController::class, 'create'])->name('create');
         Route::post('/create/{view?}', [MerchandiseInventoryController::class, 'store'])->name('store');

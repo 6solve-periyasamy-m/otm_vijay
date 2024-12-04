@@ -101,15 +101,4 @@ class AccommodationController extends Controller
         $accommodation->save();
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
-
-    public function destroy(Accommodation $accommodation)
-    {
-        foreach ($accommodation->inventory as $inventory) {
-            if ($inventory->tourComponents()->count() > 0) {
-                return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Accommodation']));
-            }
-        }
-        $accommodation->delete();
-        return redirect()->route('accommodations.all');
-    }
 }

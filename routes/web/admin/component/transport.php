@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Actions\Transport\DeleteTransport;
 use App\Http\Controllers\Admin\Transport\OperatorController;
 use App\Http\Controllers\Admin\Transport\TransportController;
 use App\Http\Controllers\Admin\Transport\TransportInventoryController;
@@ -9,13 +10,13 @@ use App\Http\Controllers\Admin\Transport\TransportTypeController;
 Route::get('/', [TransportController::class, 'index'])->name('transports.all')->middleware('bouncer:Transport\Transport,read');
 Route::get('/create', [TransportController::class, 'create'])->name('transports.create')->middleware('bouncer:Transport\Transport,create');
 Route::post('/create', [TransportController::class, 'store'])->name('transports.store')->middleware('bouncer:Transport\Transport,create');
+Route::post('/delete', DeleteTransport::class)->name('transports.delete');
 Route::prefix('{transport}')->group(function () {
     Route::get('/', [TransportController::class, 'view'])->name('transports.view')->middleware('bouncer:Transport\Transport,read');
     Route::get('/manifest', [TransportController::class, 'manifest'])->name('transports.manifest.view')->middleware('bouncer:Transport\Transport,read');
     Route::get('/manifest/export/{extension?}', [TransportController::class, 'export'])->name('transports.manifest.export')->middleware('bouncer:Transport\Transport,read');
     Route::get('/update', [TransportController::class, 'edit'])->name('transports.edit')->middleware('bouncer:Transport\Transport,update');
     Route::post('/update', [TransportController::class, 'update'])->name('transports.update')->middleware('bouncer:Transport\Transport,update');
-    Route::post('/delete', [TransportController::class, 'destroy'])->name('transports.delete')->middleware('bouncer:Transport\Transport,delete');
     Route::get('/replicate', [TransportController::class, 'createReturn'])->name('transports.return');
     Route::prefix('inventory')->group(function () {
         Route::get('/create', [TransportInventoryController::class, 'create'])->name('transport-inventories.create')->middleware('bouncer:Transport\TransportInventory,create');

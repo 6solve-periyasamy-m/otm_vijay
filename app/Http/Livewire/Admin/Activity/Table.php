@@ -2,16 +2,20 @@
 
 namespace App\Http\Livewire\Admin\Activity;
 
+use App\Actions\Activity\DeleteActivity;
+use App\Exceptions\CannotDeleteException;
 use App\Http\Livewire\Abstract\AddressColumn;
+use App\Http\Livewire\SendsEvents;
 use App\Models\Activity\Activity;
 use App\Models\Activity\ActivityType;
 use App\Models\Helper\Enum\ActivityCategory;
-use App\Models\Location\Country;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class Table extends LivewireDatatable
 {
+    use SendsEvents;
+
     public $name = "activity-table";
 
     public function builder()
@@ -59,5 +63,19 @@ class Table extends LivewireDatatable
                 ->width('15rem')
                 ->unsortable(),
         ];
+    }
+
+    public function delete($id): void
+    {
+        $activity = Activity::find($id);
+        if ($activity === null) {
+            $this->toast('Cannot Delete Activity', 'The requested activity was not found.', 'danger');
+        }
+        try {
+            DeleteActivity::run(Activity::find($id));
+            $this->toast('Activity Deleted Successfully', 'Successfully deleted the requested activity.', 'success');
+        } catch (CannotDeleteException $e) {
+            $this->toast('Cannot Delete Activity', $e->getMessage(), 'danger');
+        }
     }
 }

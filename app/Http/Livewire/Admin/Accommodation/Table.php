@@ -2,8 +2,11 @@
 
 namespace App\Http\Livewire\Admin\Accommodation;
 
+use App\Actions\Accommodation\DeleteAccommodation;
+use App\Exceptions\CannotDeleteException;
 use App\Http\Livewire\Abstract\ActionColumn;
 use App\Http\Livewire\Abstract\AddressColumn;
+use App\Http\Livewire\SendsEvents;
 use App\Models\Accommodation\Accommodation;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
@@ -11,6 +14,7 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class Table extends LivewireDatatable
 {
+    use SendsEvents;
 
     public $name = "accommodation-table";
 
@@ -48,5 +52,19 @@ class Table extends LivewireDatatable
                 ->sortable(),
             ActionColumn::view('accommodation', 'accommodations.edit', 'accommodations.view'),
         ];
+    }
+
+    public function delete($id): void
+    {
+        $activity = Accommodation::find($id);
+        if ($activity === null) {
+            $this->toast('Cannot Delete Activity', 'The requested activity was not found.', 'danger');
+        }
+        try {
+            DeleteAccommodation::run(Accommodation::find($id));
+            $this->toast('Activity Deleted Successfully', 'Successfully deleted the requested activity.', 'success');
+        } catch (CannotDeleteException $e) {
+            $this->toast('Cannot Delete Activity', $e->getMessage(), 'danger');
+        }
     }
 }
