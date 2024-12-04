@@ -14,17 +14,23 @@ class Form extends Component
     use LivewireForm;
 
     public Quote $quote;
-    public QuotePricePoint|null $pricePoint = null;
+    public int|null $quantity = null;
+    public int|null $amount = null;
 
     public function mount(Quote $quote)
     {
-        $this->pricePoint = new QuotePricePoint(['quote_id' => $quote->id,]);
+        $this->quote = Quote::getForMount($quote);
     }
 
     public function save()
     {
         $this->validate();
-        $this->quote->pricePoints()->save($this->pricePoint);
+        $point = $this->quote->pricePoints()->where('quantity', '=', $this->quantity)->first();
+        if ($point === null) {
+            $point = new QuotePricePoint(['quantity' => $this->quantity,]);
+        }
+        $point->price_per_person = $this->amount;
+        $this->quote->pricePoints()->save($point);
         $this->refresh();
     }
 
@@ -41,8 +47,8 @@ class Form extends Component
     public function rules()
     {
         return [
-            'pricePoint.quantity' => 'required|integer|gt:0',
-            'pricePoint.price_per_person' => 'required|numeric|gt:0',
+            'quantity' => 'required|integer|gt:0',
+            'amount' => 'required|numeric|gt:0',
         ];
     }
 }
