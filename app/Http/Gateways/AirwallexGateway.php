@@ -151,7 +151,13 @@ class AirwallexGateway extends Gateway implements SupportsRedirect, SupportsApiK
             Log::error($e);
         }
         if ($request->json('name') === 'payment_link.paid' || $request->json('name') === 'payment_intent.succeeded') {
-            $this->process($request->json('data.object.metadata.intention_id'), $request->json('data.object.amount'), $request->json('data.object.created_at'));
+            try {
+                $this->process($request->json('data.object.metadata.intention_id'), $request->json('data.object.amount'), $request->json('data.object.created_at'));
+            } catch(Exception $e) {
+                Log::channel('webhook')->error($request->json());
+                // If fails, log the content and continue the error
+                throw $e;
+            }
         }
     }
 
