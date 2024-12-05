@@ -237,6 +237,62 @@
             <h2>Itinerary & inclusions</h2>
         </div>
 
+        @if(!empty($itinerary->items['Flights']))
+            @php $firstLoop = true; @endphp
+
+            @foreach($itinerary->items['Flights'] as $flight)
+                @if(isset($flight->details['Quantity']) && $flight->details['Quantity'] > 0)
+                <div class="single-module mb-n15">
+                    @if($firstLoop)
+                        <div class="heading-module">
+                            <h3>
+                                <span class="mark"></span>
+                                <span class="text">Flights</span>
+                            </h3>
+                        </div>
+                        @php $firstLoop = false; @endphp
+                    @endif
+                    <div class="details-module">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="item-header w-125"><strong> Airline: </strong></td>
+                                    <td class="item-detail">{{ $flight->name }}</td>
+                                </tr>
+                                @php
+                                    $disable_items = ['Check In', 'Quantity'];
+                                    $keyMappings = [
+                                        'Departure Date' => 'Date',
+                                        'Arrival Date' => 'Date',
+                                        'Departure Time' => 'Time',
+                                        'Arrival Time' => 'Time',
+                                    ];
+                                @endphp
+                                @foreach(collect($flight->details)->reject(fn($value, $key) => in_array($key, $disable_items)) as $key => $value)
+                                    @php
+                                        $key = $keyMappings[$key] ?? $key;
+                                    @endphp
+                                    <tr>
+                                        <td class="item-header w-125">
+                                            <strong>{{ $key }}:</strong>
+                                        </td>
+                                        <td class="item-detail {{ $key === 'Description' ? 'text-wrap' : '' }}">
+                                            @if ($key === 'Booking Reference' && empty($value))
+                                                {{ $itinerary->reference }}
+                                            @else
+                                                {{ $value }}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @endif
+            @endforeach
+        @endif
+
         @if(!empty($itinerary->items['Transfers']))
             @php $firstLoop = true; @endphp
             
