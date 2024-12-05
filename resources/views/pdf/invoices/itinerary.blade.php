@@ -268,22 +268,23 @@
                                         'Arrival Time' => 'Time',
                                     ];
                                 @endphp
-                                @foreach(collect($flight->details)->reject(fn($value, $key) => in_array($key, $disable_items)) as $key => $value)
+                                @foreach($flight->details as $key => $value)
                                     @php
                                         $key = $keyMappings[$key] ?? $key;
+                                        if ($key === 'Booking Reference' && empty($value)){
+                                            $value = $itinerary->reference;
+                                        }
                                     @endphp
-                                    <tr>
-                                        <td class="item-header w-125">
-                                            <strong>{{ $key }}:</strong>
-                                        </td>
-                                        <td class="item-detail {{ $key === 'Description' ? 'text-wrap' : '' }}">
-                                            @if ($key === 'Booking Reference' && empty($value))
-                                                {{ $itinerary->reference }}
-                                            @else
+                                    @if (!in_array($key, $disable_items) && !empty($value))
+                                        <tr>
+                                            <td class="item-header w-125">
+                                                <strong>{{ $key }}:</strong>
+                                            </td>
+                                            <td class="item-detail {{ $key === 'Description' ? 'text-wrap' : '' }}">
                                                 {{ $value }}
-                                            @endif
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
+                                    @endif
                                 @endforeach
                             </tbody>
                         </table>
