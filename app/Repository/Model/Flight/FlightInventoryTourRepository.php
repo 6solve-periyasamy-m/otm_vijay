@@ -289,7 +289,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
 
     public function getCostToCustomer(): float
     {
-        return $this->tourComponent->tour_component_type === 'Included' ? 0 : $this->tourComponent->tour_sales_price;
+        return $this->tourComponent->tour_component_type === 'Included' ? 0 : ($this->tourComponent->tour_sales_price ?? 0.0);
     }
 
     public static function find($id): FlightInventoryTour|null
