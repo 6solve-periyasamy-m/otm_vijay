@@ -2,8 +2,8 @@
 
 namespace App\Models\Quote;
 
-use App\Models\Customer\Organization;
 use App\Models\Customer\Agent;
+use App\Models\Customer\Organization;
 use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Helper\Model;
 use App\Models\Helper\Traits\HasAdditionalCosts;
@@ -70,6 +70,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|QuoteSection[] $sections
  * @property-read Brand|null $linkedBrand
  * @property-read User|null $consultant
+ * @property-read Agent|null $agent
  * @property-read Brand $brand
  * @property-read Organization|null $organization
  * @property-read int|null $accommodation_count
