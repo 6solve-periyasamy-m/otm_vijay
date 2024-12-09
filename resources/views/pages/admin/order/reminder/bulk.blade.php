@@ -43,7 +43,13 @@
                                 showToast('Reminders Sent Successfully', 'Reminders have been sent to all selected rows!', 'success');
                             }
                         } else {
-
+                            if (data.hasOwnProperty('errors') && data.errors.length > 0) {
+                                showToast('Reminders Failed To Send', 'Please check the errors above!', 'danger');
+                                for (let key in data.errors) {
+                                    displayError(data.errors[key].reference, data.errors[key].reason);
+                                }
+                                scrollToTop();
+                            }
                         }
                     },
                     400: function (data) {
