@@ -65,6 +65,10 @@ $hideNoCategory = $hideNoCategory ?? false;
                             <span>Edit Event</span>
                         </a>
                     @endcan
+                    <a class="btn btn-warning" href="{{ route('events.reminder.bulk', ['event' => $event,]) }}">
+                        {{ Icon::calendar() }}
+                        <span>Bulk Send Reminders</span>
+                    </a>
                 </div>
             </div>
         </div>

@@ -34,6 +34,7 @@ Route::prefix('/admin')->middleware([ExpectsJson::class, ApiAuthenticate::class]
    Route::prefix('/flight')->name('flight.')->group(__DIR__ . '/api/admin/flight.php');
    Route::prefix('/transport')->name('transport.')->group(__DIR__ . '/api/admin/transport.php');
    Route::prefix('/merchandise')->name('merchandise.')->group(__DIR__ . '/api/admin/merchandise.php');
+   Route::prefix('/order')->name('order.')->group(__DIR__ . '/api/admin/order.php');
 });
 
 Route::prefix('/orders')->group(function () {

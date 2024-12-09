@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Admin\Tour;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Tour\EventRequest;
 use App\Http\Requests\Admin\TableRequest;
+use App\Http\Requests\Admin\Tour\EventRequest;
 use App\Models\Tour\Event;
-use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
@@ -34,6 +33,11 @@ class EventController extends Controller
         }
         $event->save();
         return redirect()->route('events.view', ['event' => $event,]);
+    }
+
+    public function bulkRemind(Event $event)
+    {
+        return view('pages.admin.order.reminder.bulk', ['orders' => $event->orders,]);
     }
 
     public function view(TableRequest $request, Event $event)

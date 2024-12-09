@@ -33,7 +33,7 @@
                 </x-admin.popup-button>
 
                 @if($this->getInstallmentTitle() !== null)
-                    <x-admin.popup-button href="#" onclick="event.preventDefault(); if(confirm('Are you sure you want to send the {{ $this->getInstallmentTitle() }} email?')) { Livewire.emit('sendPaymentMail'); }" class="color-mint row-4">
+                    <x-admin.popup-button href="#" onclick="event.preventDefault(); if(confirm('Are you sure you want to send the {{ $this->getInstallmentTitle() }} email?')) { Livewire.emit('sendPaymentDueMail'); }" class="color-mint row-4">
                         <x-slot:icon>{{ Icon::email() }}</x-slot:icon>
                         Send {{ $this->getInstallmentTitle() }} Mail
                     </x-admin.popup-button>

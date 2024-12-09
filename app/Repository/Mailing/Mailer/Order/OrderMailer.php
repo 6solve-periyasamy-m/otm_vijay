@@ -6,6 +6,7 @@ use App\Exceptions\MailDisabledException;
 use App\Exceptions\MailFailedException;
 use App\Mail\Storage\OrderMail;
 use App\Models\Order\Order;
+use App\Models\Order\OrderInstallment;
 use Exception;
 use Log;
 
@@ -33,6 +34,31 @@ class OrderMailer
     public function sendBookingConfirmation(string $email = null): bool
     {
         return $this->sendMail('booking-confirmation', $email);
+    }
+
+    /**
+     * @param string|null $email Email to send to
+     * @param OrderInstallment|null $next Next Installment, if you've already fetched it
+     * @return bool Did the mail send successfully?
+     * @throws MailFailedException
+     */
+    public function sendReminderMail(string $email = null, OrderInstallment|null $next = null): bool
+    {
+        $next = $next ?? $this->order->repository->getNextPaymentDetails();
+
+        if (($next === null) || ($next->remaining < setting('order.reminders.minimum', 1.0))) { return false; }
+
+        if ($next->due_on->isAfter(now())) {
+            if ($next->id === null || $next->id === 0) {
+                return $this->sendFinalPaymentDue($email);
+            } else {
+                return $this->sendPaymentDue($email);
+            }
+        } else if ($next->id === null || $next->id === 0) {
+            return $this->sendFinalPaymentOverdue($email);
+        } else {
+            return $this->sendPaymentOverdue($email);
+        }
     }
 
     /**
