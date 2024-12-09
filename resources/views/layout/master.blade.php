@@ -58,24 +58,16 @@
             @include('partials.sidebar')
             <div id="container" class=' py-md-3 px-md-4 otm-content'>
                 <div id="content" class="w-100">
-                    @if (($showErrors ?? true) && $errors->any())
-                        @foreach ($errors->all() as $error)
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                {{ $error }}
-                                <button onclick="$(this).parent().remove()" type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <ion-icon name="close"></ion-icon>
-                                </button>
-                            </div>
-                        @endforeach
-                    @endif
-                    @if(\Session::has('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            {!! \Session::get('success') !!}
-                            <button onclick="$(this).parent().remove()" type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <ion-icon name="close"></ion-icon>
-                            </button>
-                        </div>
-                    @endif
+                    <div id="banners">
+                        @if (($showErrors ?? true) && $errors->any())
+                            @foreach ($errors->all() as $error)
+                                <x-admin.banner :content="$error" color="danger" />
+                            @endforeach
+                        @endif
+                        @if(\Session::has('success'))
+                            <x-admin.banner content="{!! \Session::get('success') !!}" color="success" />
+                        @endif
+                    </div>
                     @yield('upcoming')
                     <div class="heading pt-md-4 pb-md-3 pt-3">
                         <h2 class="fw-bold">@yield('title')</h2>
@@ -105,9 +97,15 @@
             $('.toast-container').append(render(template('toast'), {id: now, title: title, body: body, color: color}));
             bootstrap.Toast.getOrCreateInstance(document.getElementById(now.toString()), {'animation': true, 'autohide': autohide, 'delay': delay}).show();
         }
+        function showBanner(content, color = 'danger') {
+            $('#banners').append(render(template('banner-notification'), {'content': content, 'color': color}));
+        }
     </script>
     <script type="text/template" data-template="toast">
         @include('partials.toast')
+    </script>
+    <script type="text/template" data-template="banner-notification">
+        {{ \App\View\Components\Admin\Banner::getTemplate()->render() }}
     </script>
     @yield('footer-script')
     @livewireScripts
