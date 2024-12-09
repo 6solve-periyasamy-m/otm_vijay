@@ -36,7 +36,7 @@ class Form extends Component
         if ($key === 'section.quote_section_type_id') {
             /** @var QuoteSectionType|null $type */
             $type = QuoteSectionType::find($this->section->quote_section_type_id);
-            if ($type !== null) {
+            if ($type !== null && $type->template->content === $this->section->body) {
                 $this->section->body = $type->template?->content ?? $this->section->body;
                 $this->updateValue('section.body', $this->section->body);
             }
