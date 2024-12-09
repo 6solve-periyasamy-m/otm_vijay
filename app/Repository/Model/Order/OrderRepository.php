@@ -930,6 +930,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($this->order);
+            if (!empty($component->flight_number_override)){
+                $item->details['Booking Reference'] = $component->flight_number_override;
+            }
             $header = "Flights";
             if (!array_key_exists($header, $items)) { $items[$header] = []; }
             $items[$header][] = $item;
@@ -940,6 +943,9 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($this->order);
+            if (!empty($component->departs_at_time_override)){
+                $item->details['Time'] = $component->departs_at_time_override->format('H:i');
+            }
             $header = "Transfers";
             if (!array_key_exists($header, $items)) { $items[$header] = []; }
             $items[$header][] = $item;

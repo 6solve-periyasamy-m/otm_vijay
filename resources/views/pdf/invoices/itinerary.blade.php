@@ -156,7 +156,7 @@
             margin: 0px 0px 0px 0px;
             vertical-align: top;
         }
-        .w-125{width :125px;}
+        .w-125{width :135px;}
         .item-detail.desc-pos-top{padding-right: 30px;}
         .pdf-individual-block .details-module tr td{padding-bottom: 7px !important;}
         .single-module table tr { margin: 0px 0px 5px 0px;}
@@ -177,6 +177,8 @@
         .event-profile td:first-child {text-align: left;padding-left: 0px;}
         .event-profile td:not(:first-child) {text-align: center;}
         .bg-line-color h5::before{content:"";margin-top: 20px; position: absolute; display: block; height: 4px; width: 80px; background-color: var(--head-text-background);}
+        .event_terms table {margin-left: -45px;}
+        .event_terms table td:first-child {width: 120px;}
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
@@ -271,9 +273,6 @@
                                 @foreach($flight->details as $key => $value)
                                     @php
                                         $key = $keyMappings[$key] ?? $key;
-                                        if ($key === 'Booking Reference' && empty($value)){
-                                            $value = $itinerary->reference;
-                                        }
                                     @endphp
                                     @if (!in_array($key, $disable_items) && !empty($value))
                                         <tr>
