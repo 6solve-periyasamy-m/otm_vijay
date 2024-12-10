@@ -9,6 +9,7 @@ use App\Mail\Storage\QuoteMail;
 use App\Models\Customer\Agent;
 use App\Models\Customer\Customer;
 use App\Models\Customer\Group;
+use App\Models\Customer\Organization;
 use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Helper\Enum\QuoteStatus;
@@ -1210,7 +1211,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $this->quote->description ?? $event?->description,
             $event?->image_url,
             $this->quote->reference,
-            $this->quote->organization,
+            (is_array($this->quote->organization) ? new Organization($this->quote->organization) : $this->quote->organization),
             (is_array($this->quote->agent)) ? new Agent($this->quote->agent) : $this->quote->agent,
             (is_array($this->quote->consultant) ? new User($this->quote->consultant) : $this->quote->consultant) ?? Auth::user(),
             $this->quote->date_from,
