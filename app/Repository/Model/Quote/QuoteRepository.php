@@ -6,7 +6,7 @@ use App\Exceptions\MailDisabledException;
 use App\Exceptions\MailFailedException;
 use App\Mail\Storage\Attachment;
 use App\Mail\Storage\QuoteMail;
-use App\Mail\Storage\SettingsMail;
+use App\Models\Customer\Agent;
 use App\Models\Customer\Customer;
 use App\Models\Customer\Group;
 use App\Models\Helper\Enum\ActivityCategory;
@@ -35,7 +35,6 @@ use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Interfaces\SerializesToJson;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Model\Tour\TourRepository;
-use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
 use App\Repository\Storage\Itinerary\Itinerary;
 use App\Repository\Storage\Itinerary\ItineraryItem;
@@ -1212,7 +1211,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $event?->image_url,
             $this->quote->reference,
             $this->quote->organization,
-            $this->quote->agent,
+            (is_array($this->quote->agent)) ? new Agent($this->quote->agent) : $this->quote->agent,
             (is_array($this->quote->consultant) ? new User($this->quote->consultant) : $this->quote->consultant) ?? Auth::user(),
             $this->quote->date_from,
             $this->quote->date_to,

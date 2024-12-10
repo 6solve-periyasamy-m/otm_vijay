@@ -69,7 +69,7 @@ class OrderMailer
      */
     public function sendPaymentDue(string $email = null): bool
     {
-        return $this->sendMail('payment-due', $email);
+        return $this->sendMail('payment-due', $email, true);
     }
 
     /**
@@ -80,7 +80,7 @@ class OrderMailer
      */
     public function sendPaymentOverdue(string $email = null): bool
     {
-        return $this->sendMail('payment-overdue', $email);
+        return $this->sendMail('payment-overdue', $email, true);
     }
 
     /**
@@ -91,7 +91,7 @@ class OrderMailer
      */
     public function sendFinalPaymentDue(string $email = null): bool
     {
-        return $this->sendMail('final-payment-due', $email);
+        return $this->sendMail('final-payment-due', $email, true);
     }
 
     /**
@@ -102,7 +102,7 @@ class OrderMailer
      */
     public function sendFinalPaymentOverdue(string $email = null): bool
     {
-        return $this->sendMail('final-payment-overdue', $email);
+        return $this->sendMail('final-payment-overdue', $email, true);
     }
 
     /**
@@ -131,12 +131,13 @@ class OrderMailer
      * Send any coded mail related to the order. Refer to \App\Repository\Mailing\MailRepository::getAvailableMail for valid codes
      * @param string $code The mail code to use
      * @param string|null $email Email to send the mail to. Defaults to lead booker email if null
+     * @param bool $ignoreConsultantFlag Should the setting for bcc consultant be ignored. Defaults to false
      * @return bool Was the mail sent successfully
      * @throws MailFailedException
      */
-    public function sendMail(string $code, string|null $email = null): bool
+    public function sendMail(string $code, string|null $email = null, bool $ignoreConsultantFlag = false): bool
     {
-        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant->email : "";
+        $bcc = (!($ignoreConsultantFlag) && flag('mail.bcc-consultant', false)) ? $this->order->consultant->email : "";
         if ($email === null) {
             $email = $this->order->leadBooker->customer->email_address;
         }

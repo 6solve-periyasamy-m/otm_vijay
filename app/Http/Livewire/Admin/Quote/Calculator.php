@@ -8,6 +8,7 @@ use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
+use Exception;
 use Livewire\Component;
 
 class Calculator extends Component
@@ -175,16 +176,24 @@ class Calculator extends Component
             $this->toast('Failed to Send Quote', "No price point exists for $paying paying travellers", 'danger');
             return;
         }
+        $target = $this->quote->agent?->email ?? $this->quote->organization?->contact_email ?? $this->quote->leadTraveller->customer->email_address;
+        if ($target === null) {
+            $this->toast('Failed to Send Quote', 'Cannot send quote, no valid target email found', 'danger');
+            return;
+        }
         try {
-            $status = $this->quote->repository->resend($this->quote->repository->generateSent($this->quote->leadTraveller->email, $this->paying, $this->travelling));
+            $status = $this->quote->repository->resend($this->quote->repository->generateSent($target, $this->paying, $this->travelling));
         } catch (MailDisabledException) {
             $this->toast('Failed to Send Quote', 'Emails are not enabled on this system', 'danger');
             return;
         } catch (MailFailedException $e) {
             $status = false;
+        } catch (Exception $e) {
+            $this->toast('Failed to Send Quote', $e->getMessage(), 'danger');
+            return;
         }
         if ($status ?? false) {
-            $this->toast('Email Sent Successfully', 'The quote document has been successfully sent to the recipient', 'success');
+            $this->toast('Email Sent Successfully', "The quote document has been successfully sent to the recipient, {$target}", 'success');
         } else {
             $this->toast('Email Failed to Send', 'The quote document could not be sent to the recipient. Please double check the recipient email address and try again later.', 'danger');
         }
