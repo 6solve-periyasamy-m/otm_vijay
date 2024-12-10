@@ -176,7 +176,7 @@ class Calculator extends Component
             $this->toast('Failed to Send Quote', "No price point exists for $paying paying travellers", 'danger');
             return;
         }
-        $target = $this->quote->agent?->email ?? $this->quote->leadTraveller->customer->email_address;
+        $target = $this->quote->agent?->email ?? $this->quote->organization?->contact_email ?? $this->quote->leadTraveller->customer->email_address;
         if ($target === null) {
             $this->toast('Failed to Send Quote', 'Cannot send quote, no valid target email found', 'danger');
             return;
