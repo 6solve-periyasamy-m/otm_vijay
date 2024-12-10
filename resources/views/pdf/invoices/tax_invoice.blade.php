@@ -250,8 +250,8 @@
             padding:3px 30px;
             font-family: 'Lato', sans-serif;
             font-weight: 400;
-            font-size: 10px;
-            line-height: 12px;
+            font-size: 12px;
+            line-height: 18px;
             color:#000000;
             text-align:center;
             height: 30px;
@@ -279,12 +279,6 @@
             text-align: left;
             text-transform: uppercase;
        }
-       .payment-options tr td:first-child {padding:25px 0px 25px 0px;}
-       .payment-options th:last-child, .payment-options td:last-child {
-            line-height: 23px;
-            position: relative;
-            vertical-align: top;
-       }
        .payment-options tr h4 {
             font-family: 'Lato', sans-serif;
             font-weight: 500;
@@ -302,12 +296,6 @@
             font-size: 15px;
             line-height: 20px;
         }
-         .payment-options tr td p.terms-conditions.upd {
-            margin-top: 0px!important;
-            font-size: 13px;
-            line-height: 18px;
-            font-weight: 400;
-         }
        .payment-options td span:first-child {
             width:200px;
             display:inline-block;
@@ -378,19 +366,10 @@
         padding: 0;
         font-weight: 400;
        }
-       .payment-options tr td figure.table table tbody tr td:nth-child(3) br {display:none;}
-       .payment-options tr td figure.table table tbody tr td:nth-child(3) strong {display:block;line-height:10px;}
-       .payment-options tr td:first-child > p {display:none;}
-       .payment-options tr td:first-child > p.terms-conditions {display:block;}
-       .payment-options tr td:first-child > p.terms-conditions {
-        margin-top:20px!important
-       }
-       .payment-options tr td:first-child > p.terms-conditions.upd {
-        margin-top:5px!important
-       }
+       .bank-info-block table td:first-child { vertical-align: top;}
        .payment_schedule_order_total{
-        margin-top: 100px;
-        margin-bottom: 30px;
+            margin-top: 100px;
+            margin-bottom: 30px;
        }
        .payment-options { 
         bottom: 0cm;
@@ -398,12 +377,12 @@
         page-break-inside: avoid;
         }
         .full-btm-cls-mod p span {
-        font-family: 'Lato', sans-serif!important;
-        font-weight: 400!important;
-        text-align: left!important;
-        color: #000000!important;
-        font-size: 15px!important;
-        line-height: 16px!important;
+            font-family: 'Lato', sans-serif!important;
+            font-weight: 400!important;
+            text-align: left!important;
+            color: #000000!important;
+            font-size: 12px!important;
+            line-height: 16px!important;
         }
         .payment_schedule_order_total h3{margin-bottom: 15px;}
         .payment_schedule{width: 415px;padding-right: 25px;vertical-align: baseline;}
@@ -415,7 +394,7 @@
         .order_total h4{
             font-family: 'Lato', sans-serif;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 13px;
             line-height: 21.33px;
             color: #000;
             background-color: #F9F4EE;
@@ -442,19 +421,17 @@
         .payment_mode div{width: 200px;margin-top: -12px;float:left; margin-left: 40px;}
         .payment-options tr td figure.table table tbody tr td:nth-child(1) strong{margin-bottom: 20px;}
         .text-weight{ font-weight: 600; }
-        .tbl-bg-style{
-            background-color: #F9F4EE;
-            padding: 0px 0px 0px 30px;
-            position:relative; 
-            border-right: 10px solid #f35b15;
-        }
-        .order-total-inner {margin-left: 5px;}
-        .tbl-font-style{
-            font-family: 'Lato', sans-serif;
-            font-weight: 400;
-            font-size: 12px;
-            line-height: 17px;
-        }
+        .tbl-bg-style{ background-color: #F9F4EE; padding: 0px 0px 0px 20px; position:relative;  border-right: 10px solid #f35b15;}
+        .order-total-inner {margin-left: 5px; font-size: 12px; font-family: 'Lato', sans-serif;}
+        .tbl-font-style{ font-family: 'Lato', sans-serif; font-weight: 400;font-size: 12px;line-height: 17px;}
+        .event-name { white-space: nowrap; }
+        .payment-schedule-font, .terms-condition-block, .bank-info-block{ font-family: 'Lato', sans-serif; font-weight: 400; font-size: 12px;}
+        .terms-condition-block {padding-top: 13px;}
+        .title-heading {font-size: 16px; font-weight: 600; font-family: 'Lato', sans-serif;}
+        .vertical-align-top {vertical-align: top;}
+        .bank-details {padding-top:15px;}
+        .terms-condition{ font-family: 'Lato', sans-serif; font-weight: 400; font-size: 13px;}
+        .bank-info-block td:first-child { font-family: 'Lato', sans-serif; font-weight: 400; font-size: 13px;}
     </style>
     <title>Invoice - {{ $invoice->booking_reference }}</title>
 </head>
@@ -490,19 +467,19 @@
             <td></td>
         </tr>
         <tr>
-            <td>
+            <td style="width: 32%;">
                 <p class="name">{{ $invoice->lead->full_name }}</p>
                 <p class="name">{{$invoice->lead->email}}</p>
                 <p class="address">
                     {{ implode(', ', array_filter([$invoice->lead->address_line_1, $invoice->lead->address_line_2, $invoice->lead->town, $invoice->lead->region, $invoice->lead->country, $invoice->lead->postcode])) }}
                 </p>
             </td>
-            <td>
+            <td style="width: 32%;">
                 <p class="event-name"><span>Reference:</span> <span>{{$invoice->booking_reference}}</span></p>
                 <p class="event-name"><span>Event Name:</span> <span>{{ $invoice->event }}</span></p>
                 <p class="no-of-pax"><span>Number of Pax:</span> <span>{{$invoice->getTravellingTravellersAtribute()}}</span></p>
             </td>
-            <td class="tbl-bg-style">
+            <td class="tbl-bg-style" style="width: 23%;">
                 <p class="bg-box-contain"><span>Invoice No:</span> <span>{{ $invoice->invoice_number }}</span></p>
                 <p class="bg-box-contain"><span>Invoice Date:</span> <span>{{ date('d M Y', strtotime($invoice->generated)) }}</span></p>
             </td>
@@ -535,11 +512,11 @@
     </table>
     </div>
     <!-- Payment Options Table -->
-    <table class="payment_schedule_order_total">
+    <table class="payment_schedule_order_total" style="width:100%;">
         <tr>
-            <td class="payment_schedule"> 
+            <td class="payment_schedule" style="width:45%; padding-right:5%;">
                 <h3>Payment Schedule</h3>
-                <table>
+                <table class="payment-schedule-font" style="width:100%;">
                     <tr>
                         <th>Instalment</th>
                         <th>Received</th>
@@ -565,7 +542,7 @@
                                 {{ f_currency($installment->amount - min($installment->amount, $installment->received)) }}
                             @endif
                             </td>
-                            <td class="text-weight">With Order</td>
+                            <td class="text-weight"></td>
                         </tr>
                         @endif
                         @if ($installment->type === ItineraryScheduleType::DEPOSIT)
@@ -588,7 +565,7 @@
                                 {{ f_currency($amount) }}
                             @endif
                             </td>
-                            <td class="text-weight">With Order</td>
+                            <td class="text-weight"></td>
                         </tr>
                         @endif
                         @if ($installment->type === ItineraryScheduleType::INSTALLMENT)
@@ -641,9 +618,10 @@
                             </tr>
                         @endif
                     @endforeach
-                </table> 
+                </table>
             </td>
-            <td class="order_total"> 
+            <td style="width:10%;">&nbsp;</td>
+            <td class="order_total" style="width:35%; padding-left:5%;">
                 <h3>Order Total</h3>
                 <table class="order-total-inner">
                     <tr>
@@ -673,15 +651,18 @@
         </tr>
         <tr>
         <td class="payment_mode">
-                {!! setting('company.bank_transfer', '-')  !!}
-                <div>
-                    <p class="terms-conditions" style="font-weight: bold">
-                    Terms & Conditions
-                    </p>
-                    <p class="terms-conditions upd">
-                    Visit our website for full details or view them <a style="color: blue !important; text-decoration: underline !important;" target="_blank" href="https://www.kpt.com.au/terms-and-conditions/">here.</a>
-                    </p>
-                </div>
+                <table class="bank-details" style="width: 100%;">
+                    <tr>
+                        <td style="width:75%">{!! setting('company.bank_transfer', '-')  !!}</td>
+                        <td class="vertical-align-top"  style="width:25%">
+                            <div class="terms-condition-block"><p class="title-heading">Terms & Conditions</p>
+                                <p class="terms-condition">
+                                    Visit our website for full details or view them <a style="color: blue !important; text-decoration: underline !important;" target="_blank" href="https://www.kpt.com.au/terms-and-conditions/">here.</a>
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>
