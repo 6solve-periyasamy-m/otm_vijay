@@ -19,6 +19,11 @@ $hideNoCategory = $hideNoCategory ?? false;
 @endpush
 
 @section('content')
+    @if($event->banner_url !== null)
+    <div class="d-block" style="padding: 1rem;">
+        <img src="{{ asset($event->banner_url) }}" height="100" style="max-height: 100px; min-width: 100%;" alt="Event Banner" />
+    </div>
+    @endif
     <div class="otm-callout">
         <div class="row">
             @if(isset($event->image_url))
