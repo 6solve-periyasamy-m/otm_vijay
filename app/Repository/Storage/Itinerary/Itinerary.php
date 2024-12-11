@@ -2,9 +2,8 @@
 
 namespace App\Repository\Storage\Itinerary;
 
-use App\Models\Customer\Customer;
-use App\Models\Customer\Organization;
 use App\Models\Customer\Agent;
+use App\Models\Customer\Organization;
 use App\Models\System\Brand;
 use App\Models\Tour\Event;
 use App\Models\User;
@@ -20,6 +19,7 @@ class Itinerary
      * @param Event|null $event
      * @param string|null $description
      * @param string|null $image
+     * @param string|null $banner
      * @param string|null $reference
      * @param Organization|null $organization
      * @param Agent|null $agent
@@ -41,6 +41,7 @@ class Itinerary
         public Event|null $event,
         public string|null $description,
         public string|null $image,
+        public string|null $banner,
         public string|null $reference,
         public Organization|null $organization,
         public Agent|null $agent,
@@ -58,6 +59,7 @@ class Itinerary
         public string|null $notes,
     )
     {
+        $this->setBanner($banner ?? $this->image);
         $this->setImage($this->image);
     }
 
@@ -67,6 +69,16 @@ class Itinerary
             $this->image = img_to_b64($image);
         } else {
             $this->image = img_to_b64('images/default_image.png');
+        }
+        return $this;
+    }
+
+    public function setBanner(string|null $banner): Itinerary
+    {
+        if (isset($banner)) {
+            $this->banner = img_to_b64($banner);
+        } else {
+            $this->banner = img_to_b64('images/default_image.png');
         }
         return $this;
     }
