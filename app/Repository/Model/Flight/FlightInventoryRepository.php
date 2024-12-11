@@ -203,7 +203,7 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
             'Arrival Time' => $this->inventory->arrives_at->format('H:i'),
             'Check In' => f_datetime($this->inventory->check_in),
             'Quantity' => $quantity,
-            'Booking Reference' => $this->inventory->booking_reference,
+            'Booking Reference' => $this->inventory->flight_number,
             'Description' => $this->inventory->external_notes,
         ];
         if ($quantity === null) { unset($details['Quantity']); }

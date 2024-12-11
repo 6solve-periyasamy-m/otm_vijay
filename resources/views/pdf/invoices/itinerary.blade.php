@@ -37,7 +37,7 @@
         .pdf-header { padding:30px 32px;position: relative; }
         .pdf-individual-block { width: 796px;position: relative; }
         .travel_itinerary_block{padding: 0px 30px 25px 30px;margin-top: -30px;}
-        .header-logo{width: 160px; height: 30px;position: absolute; top: -130px;}
+        .header-logo{width: 180px; height: 30px;position: absolute; top: -130px;}
         .header-logo img{width: 100%; height: 100%;}
         .travel_title{
             color: #fff;
@@ -172,6 +172,7 @@
         .event-field-space {padding-top: 35px;padding-bottom: 50px;}
         .event_terms{ font-family: "PPNeueMontreal-Regular";font-size: 15px;font-weight: 400;line-height: 21px;padding-top:15px;}
         .text-full-wrap { word-wrap: break-word; word-break: break-word; white-space: normal; width:720px; line-height: 30px;}
+        .text-full-wrap a {color: #3293ed; text-decoration: underline; }
         .event-profile {width: 100%; table-layout: fixed; padding-top:20px;}
         .event-profile td {padding: 8px 8px 8px 8px;}
         .event-profile td:first-child {text-align: left;padding-left: 0px;}
@@ -186,15 +187,22 @@
 <body class="body">
     <section class="pdf-individual-block">
         @include('partials.pdf.kpt.header.new', ['type' => $type,])
+
+        @php
+            $all_customers = [];
+            $travellers = collect($itinerary->travellers);
+            $booker = collect([$itinerary->booker]);
+            $all_customers = $booker->merge($travellers);
+        @endphp
         <div class="travel_itinerary_block">
             <div class="travel_itinerary_title">
                 <table style="width: 100%;">
                     <tbody>
                         <tr>
-                            <td style="width:78%; float:left;padding-bottom: 25px;"><h3>{{ $event_name }}</h3></td>
+                            <td style="width:77%; float:left;padding-bottom: 25px;"><h3>{{ $event_name }}</h3></td>
                             <td class="bg-line-color" style="text-align:left;padding-bottom: 25px;"><h5><strong>Reference:</strong> {{ $itinerary->reference }} </h5></td>
                         </tr>
-                        @if(!empty($itinerary->travellers))
+                        @if($all_customers->isNotEmpty())
                         <tr>
                             <td colspan=2 style="padding-left: 10px;padding-bottom: 12px;"><h4>Guest Names</h4></td>
                         </tr>                        
@@ -203,8 +211,8 @@
                                 <!-- List of travellers -->
                                 <table class="travellers">
                                     @php
-                                        $limited_travellers = array_slice($itinerary->travellers, 0, 20);
-                                        $chunks = array_chunk($limited_travellers, 3);
+                                        $limited_travellers = $all_customers->take(20);
+                                        $chunks = $limited_travellers->chunk(3);
                                     @endphp
                                     @foreach($chunks as $chunk)
                                         <tr>
