@@ -206,8 +206,9 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
         }
         $details = [
             $lbl_dates => $dates,
-            'Pick-up' => $departure_address,
-            'Drop-off' => $arrival_address,
+            'Pick-Up' => $departure_address,
+            'Time' => $departs_at->format('H:i'),
+            'Drop-Off' => $arrival_address,
             'Transport' => $this->inventory->component->transportType->name,
             'Travel Class' => $this->inventory->travelClass->name,
             'Quantity' => $quantity,

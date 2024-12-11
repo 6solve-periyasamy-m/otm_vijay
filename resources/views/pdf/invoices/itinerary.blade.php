@@ -37,7 +37,7 @@
         .pdf-header { padding:30px 32px;position: relative; }
         .pdf-individual-block { width: 796px;position: relative; }
         .travel_itinerary_block{padding: 0px 30px 25px 30px;margin-top: -30px;}
-        .header-logo{width: 160px; height: 30px;position: absolute; top: -130px;}
+        .header-logo{width: 180px; height: 30px;position: absolute; top: -130px;}
         .header-logo img{width: 100%; height: 100%;}
         .travel_title{
             color: #fff;
@@ -156,7 +156,7 @@
             margin: 0px 0px 0px 0px;
             vertical-align: top;
         }
-        .w-125{width :125px;}
+        .w-125{width :135px;}
         .item-detail.desc-pos-top{padding-right: 30px;}
         .pdf-individual-block .details-module tr td{padding-bottom: 7px !important;}
         .single-module table tr { margin: 0px 0px 5px 0px;}
@@ -172,11 +172,14 @@
         .event-field-space {padding-top: 35px;padding-bottom: 50px;}
         .event_terms{ font-family: "PPNeueMontreal-Regular";font-size: 15px;font-weight: 400;line-height: 21px;padding-top:15px;}
         .text-full-wrap { word-wrap: break-word; word-break: break-word; white-space: normal; width:720px; line-height: 30px;}
+        .text-full-wrap a {color: #3293ed; text-decoration: underline; }
         .event-profile {width: 100%; table-layout: fixed; padding-top:20px;}
         .event-profile td {padding: 8px 8px 8px 8px;}
         .event-profile td:first-child {text-align: left;padding-left: 0px;}
         .event-profile td:not(:first-child) {text-align: center;}
         .bg-line-color h5::before{content:"";margin-top: 20px; position: absolute; display: block; height: 4px; width: 80px; background-color: var(--head-text-background);}
+        .event_terms table {margin-left: -45px;}
+        .event_terms table td:first-child {width: 120px;}
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
@@ -184,15 +187,22 @@
 <body class="body">
     <section class="pdf-individual-block">
         @include('partials.pdf.kpt.header.new', ['type' => $type,])
+
+        @php
+            $all_customers = [];
+            $travellers = collect($itinerary->travellers);
+            $booker = collect([$itinerary->booker]);
+            $all_customers = $booker->merge($travellers);
+        @endphp
         <div class="travel_itinerary_block">
             <div class="travel_itinerary_title">
                 <table style="width: 100%;">
                     <tbody>
                         <tr>
-                            <td style="width:78%; float:left;padding-bottom: 25px;"><h3>{{ $event_name }}</h3></td>
+                            <td style="width:77%; float:left;padding-bottom: 25px;"><h3>{{ $event_name }}</h3></td>
                             <td class="bg-line-color" style="text-align:left;padding-bottom: 25px;"><h5><strong>Reference:</strong> {{ $itinerary->reference }} </h5></td>
                         </tr>
-                        @if(!empty($itinerary->travellers))
+                        @if($all_customers->isNotEmpty())
                         <tr>
                             <td colspan=2 style="padding-left: 10px;padding-bottom: 12px;"><h4>Guest Names</h4></td>
                         </tr>                        
@@ -201,8 +211,8 @@
                                 <!-- List of travellers -->
                                 <table class="travellers">
                                     @php
-                                        $limited_travellers = array_slice($itinerary->travellers, 0, 20);
-                                        $chunks = array_chunk($limited_travellers, 3);
+                                        $limited_travellers = $all_customers->take(20);
+                                        $chunks = $limited_travellers->chunk(3);
                                     @endphp
                                     @foreach($chunks as $chunk)
                                         <tr>
@@ -236,6 +246,60 @@
         <div class="heading-2">
             <h2>Itinerary & inclusions</h2>
         </div>
+
+        @if(!empty($itinerary->items['Flights']))
+            @php $firstLoop = true; @endphp
+
+            @foreach($itinerary->items['Flights'] as $flight)
+                @if(isset($flight->details['Quantity']) && $flight->details['Quantity'] > 0)
+                <div class="single-module mb-n15">
+                    @if($firstLoop)
+                        <div class="heading-module">
+                            <h3>
+                                <span class="mark"></span>
+                                <span class="text">Flights</span>
+                            </h3>
+                        </div>
+                        @php $firstLoop = false; @endphp
+                    @endif
+                    <div class="details-module">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="item-header w-125"><strong> Airline: </strong></td>
+                                    <td class="item-detail">{{ $flight->name }}</td>
+                                </tr>
+                                @php
+                                    $disable_items = ['Check In', 'Quantity'];
+                                    $keyMappings = [
+                                        'Departure Date' => 'Date',
+                                        'Arrival Date' => 'Date',
+                                        'Departure Time' => 'Time',
+                                        'Arrival Time' => 'Time',
+                                    ];
+                                @endphp
+                                @foreach($flight->details as $key => $value)
+                                    @php
+                                        $key = $keyMappings[$key] ?? $key;
+                                    @endphp
+                                    @if (!in_array($key, $disable_items) && !empty($value))
+                                        <tr>
+                                            <td class="item-header w-125">
+                                                <strong>{{ $key }}:</strong>
+                                            </td>
+                                            <td class="item-detail {{ $key === 'Description' ? 'text-wrap' : '' }}">
+                                                {{ $value }}
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @endif
+            @endforeach
+        @endif
 
         @if(!empty($itinerary->items['Transfers']))
             @php $firstLoop = true; @endphp
