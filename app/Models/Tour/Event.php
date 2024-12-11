@@ -36,6 +36,7 @@ use Settings;
  * @property Carbon $ends_at
  * @property EventType $event_category
  * @property string|null $image_url Asset link for image
+ * @property string|null $banner_url Asset link for banner
  * @property string|null $booking_url
  * @property string|null $notes
  * @property string|null $onsite_name
