@@ -1209,6 +1209,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $event,
             $this->quote->description ?? $event?->description,
             $event?->image_url,
+            $event?->banner_url,
             $this->quote->reference,
             $this->quote->organization,
             (is_array($this->quote->agent)) ? new Agent($this->quote->agent) : $this->quote->agent,

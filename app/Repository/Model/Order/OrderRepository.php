@@ -5,7 +5,6 @@ namespace App\Repository\Model\Order;
 use App\Events\Order\Customer\OrderCustomerCreatedEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Exceptions\MailDisabledException;
-use App\Mail\Storage\OrderMail;
 use App\Models\Customer\Customer;
 use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Helper\Enum\AddressParent;
@@ -34,11 +33,11 @@ use App\Repository\Storage\Itinerary\ItinerarySchedule;
 use App\Repository\Storage\Itinerary\ItineraryScheduleType;
 use App\Repository\Storage\Itinerary\ItineraryTraveller;
 use App\Repository\Storage\Rooming\AccommodationByDateStorage;
-use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OrderRepository extends ModelRepository implements GeneratesFellohData
@@ -874,6 +873,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $this->order->tour->event,
             $this->order->tour->event?->description ?? $this->order->tour->description,
             $this->order->tour->event?->image_url,
+            $this->order->tour->event?->banner_url,
             $this->order->booking_reference,
             $this->order->organization,
             $this->order->agent,
