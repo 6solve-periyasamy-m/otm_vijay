@@ -3,11 +3,11 @@
 namespace App\Models\Order;
 
 use App\Models\Booking\Booking;
+use App\Models\Customer\Agent;
 use App\Models\Customer\Customer;
 use App\Models\Customer\Group;
 use App\Models\Customer\OrderCustomerGroup;
 use App\Models\Customer\Organization;
-use App\Models\Customer\Agent;
 use App\Models\Helper\Enum\OrderStatus;
 use App\Models\Helper\Model;
 use App\Models\Helper\NotificationSubject;
@@ -74,6 +74,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Collection|ManualAdjustment[] $adjustments The manual adjustments on the order
  * @property-read Collection|OrderVoucher[] $vouchers
  * @property-read Organization|null $organization
+ * @property-read Agent|null $agent
  * @property-read OrderCache|null $cache
  * @property-read int|null $adjustments_count The amount of manual adjustments on the order
  * @property-read int|null $days_until_next_payment The number of days until the next payment is due, or null if all installments are paid
