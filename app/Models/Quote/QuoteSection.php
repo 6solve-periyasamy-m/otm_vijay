@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $image_url
  * @property int|null $quote_section_type_id
  * @property int|null $currency_id
+ * @property Carbon|null $sort_date
  * @property bool $hidden
  * @property int|null $quantity
  * @property float|null $purchase_price
@@ -47,7 +48,7 @@ class QuoteSection extends Model
 {
     protected $guarded = [];
 
-    protected $casts = ['hidden' => 'boolean', 'purchase_price' => 'float'];
+    protected $casts = ['hidden' => 'boolean', 'purchase_price' => 'float', 'sort_date' => 'datetime:Y-m-d H:i'];
 
     public function quote(): BelongsTo
     {
