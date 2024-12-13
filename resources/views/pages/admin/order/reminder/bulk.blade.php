@@ -16,7 +16,7 @@
     function sendReminders() {
         if (sending) {
             showToast('Cannot Send Reminders', 'Reminders have already been sent!', 'danger');
-            //return;
+            return;
         }
         let ids = [];
         ordersTable.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
