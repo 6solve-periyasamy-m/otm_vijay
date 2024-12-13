@@ -472,7 +472,6 @@ figure.table tr td:nth-child(2) {display:none;}
   width: 125px;
 }
 .quote-payment-schedule tbody tr:last-child td {font-weight: bold;}
-
 </style>
 
    
