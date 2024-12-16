@@ -45,6 +45,7 @@ class CreateOrderRequest extends FormRequest
             'deposit' => $this->deposit ?? $this->getTour()->deposit_amount,
             'invoice_footer' => $this->getTour()->invoice_footer,
             'organization_id' => $this->organization_id,
+            'agent_id' => $this->agent_id,
         ];
     }
 

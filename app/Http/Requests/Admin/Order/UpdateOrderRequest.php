@@ -33,6 +33,7 @@ class UpdateOrderRequest extends FormRequest
             'invoice_footer' => $this->invoice_footer,
             'consultant_id' => $this->consultant_id,
             'tax_bracket_id' => $this->tax_bracket_id,
+            'agent_id' => $this->agent_id,
         ];
     }
 
