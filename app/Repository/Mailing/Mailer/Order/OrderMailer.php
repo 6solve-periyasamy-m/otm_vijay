@@ -51,14 +51,15 @@ class OrderMailer
         if ($next->due_on->isAfter(now())) {
             if ($next->id === null || $next->id === 0) {
                 return $this->sendFinalPaymentDue($email);
-            } else {
-                return $this->sendPaymentDue($email);
             }
-        } else if ($next->id === null || $next->id === 0) {
-            return $this->sendFinalPaymentOverdue($email);
-        } else {
-            return $this->sendPaymentOverdue($email);
+            return $this->sendPaymentDue($email);
         }
+
+        if ($next->id === null || $next->id === 0) {
+            return $this->sendFinalPaymentOverdue($email);
+        }
+
+        return $this->sendPaymentOverdue($email);
     }
 
     /**
