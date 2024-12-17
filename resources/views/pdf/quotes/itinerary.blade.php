@@ -471,6 +471,7 @@ figure.table tr td:nth-child(2) {display:none;}
 .w-125{
   width: 125px;
 }
+.quote-payment-schedule tbody tr:last-child td {font-weight: bold;}
 </style>
 
    
@@ -968,7 +969,7 @@ figure.table tr td:nth-child(2) {display:none;}
         </tbody>
       </table>
     @else
-      <table>
+      <table class="quote-payment-schedule">
         <thead>
           <tr>
             <th>INSTALMENT</th>
