@@ -235,7 +235,7 @@
         .items th {
             background-color: #f35b15;
             padding:4px 30px;
-            
+            font-family: 'Lato', sans-serif;
         }
         .items th h2 {
             font-family: 'Lato', sans-serif;
@@ -425,9 +425,11 @@
         .order-total-inner {margin-left: 5px; font-size: 12px; font-family: 'Lato', sans-serif;}
         .tbl-font-style{ font-family: 'Lato', sans-serif; font-weight: 400;font-size: 12px;line-height: 17px;}
         .event-name { white-space: nowrap; }
-        .payment-schedule-font, .terms-condition-block, .bank-info-block{ font-family: 'Lato', sans-serif; font-weight: 400; font-size: 12px;}
+        /* .payment-schedule-font, .terms-condition-block, .bank-info-block{ font-family: 'Lato', sans-serif; font-weight: 400; font-size: 12px;} */
+        .payment-schedule-font th {font-family: 'Lato', sans-serif; font-weight: 700; font-size: 12px; }
+        .payment-schedule-font td, .terms-condition-block p, .bank-info-block td p{ font-family: 'Lato', sans-serif; font-weight: 400; font-size: 12px;}
         .terms-condition-block {padding-top: 13px;}
-        .title-heading {font-size: 16px; font-weight: 600; font-family: 'Lato', sans-serif;}
+        p.title-heading {font-weight: 700;}
         .vertical-align-top {vertical-align: top;}
         .bank-details {padding-top:15px;}
         .terms-condition{ font-family: 'Lato', sans-serif; font-weight: 400; font-size: 13px;}
@@ -468,11 +470,22 @@
         </tr>
         <tr>
             <td style="width: 32%;">
-                <p class="name">{{ $invoice->lead->full_name }}</p>
-                <p class="name">{{$invoice->lead->email}}</p>
-                <p class="address">
-                    {{ implode(', ', array_filter([$invoice->lead->address_line_1, $invoice->lead->address_line_2, $invoice->lead->town, $invoice->lead->region, $invoice->lead->country, $invoice->lead->postcode])) }}
-                </p>
+                @if (!is_null($invoice->organization))
+                    <p class="name">{{ $invoice->organization->name }}</p>
+                    <p class="name">{{ $invoice->agent ? $invoice->agent->first_name . ' ' . $invoice->agent->last_name : $invoice->organization->name }}</p>
+                    <p class="address">
+                        {{ implode(', ', array_filter([$invoice->organization->deliveryAddress->address_line_1, $invoice->organization->deliveryAddress->address_line_2, $invoice->organization->deliveryAddress->town, $invoice->organization->deliveryAddress->region, $invoice->organization->deliveryAddress->country, $invoice->organization->deliveryAddress->postcode])) }}
+                    </p>
+                @elseif (!is_null($invoice->organization) || !is_null($invoice->agent))
+                    <p class="name">{{ $invoice->agent->first_name . ' ' . $invoice->agent->last_name }}</p>
+                    <p class="name">{{ $invoice->agent->email ?? $invoice->organization->contact_email }}</p>
+                @else
+                    <p class="name">{{ $invoice->lead->full_name }}</p>
+                    <p class="name">{{$invoice->lead->email}}</p>
+                    <p class="address">
+                        {{ implode(', ', array_filter([$invoice->lead->address_line_1, $invoice->lead->address_line_2, $invoice->lead->town, $invoice->lead->region, $invoice->lead->country, $invoice->lead->postcode])) }}
+                    </p>
+                @endif
             </td>
             <td style="width: 32%;">
                 <p class="event-name"><span>Reference:</span> <span>{{$invoice->booking_reference}}</span></p>
