@@ -294,7 +294,7 @@ class Quote extends Model
     public function getDepositAmount(int $count = 1): float|null
     {
         $price = $this->repository->getPricePerPerson($count)?->price_per_person;
-        return ($this->is_deposit_percentage ? sigfig(($price * ($this->deposit/100))) : $this->deposit) * $count;
+        return min($this->repository->getTotalCost($count), ($this->is_deposit_percentage ? sigfig(($price * ($this->deposit/100))) : $this->deposit) * $count);
     }
 
     public function getDepositPercentage(int $count = 1): float|null
