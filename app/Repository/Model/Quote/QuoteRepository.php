@@ -963,7 +963,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'consultant_id' => $this->quote->consultant_id,
             'tax_bracket_id' => $this->quote->tax_bracket_id,
             'deposit' => $this->quote->getDepositAmount(),
-            'commission' => $lead->getCustomer()->organization?->commission,
+            'commission' => $this->quote->commission,
             'ordered_on' => now(),
             'invoice_footer' => $this->quote->invoice_footer,
             'internal_notes' => $this->quote->internal_notes,
