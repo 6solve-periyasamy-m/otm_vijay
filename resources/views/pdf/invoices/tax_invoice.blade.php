@@ -470,21 +470,20 @@
         </tr>
         <tr>
             <td style="width: 32%;">
-                @if (!is_null($invoice->organization))
+                @if (!is_null($invoice->organization) && !is_null($invoice->agent))
                     <p class="name">{{ $invoice->organization->name }}</p>
-                    <p class="name">{{ $invoice->agent ? $invoice->agent->first_name . ' ' . $invoice->agent->last_name : $invoice->organization->name }}</p>
-                    <p class="address">
-                        {{ implode(', ', array_filter([$invoice->organization->deliveryAddress->address_line_1, $invoice->organization->deliveryAddress->address_line_2, $invoice->organization->deliveryAddress->town, $invoice->organization->deliveryAddress->region, $invoice->organization->deliveryAddress->country, $invoice->organization->deliveryAddress->postcode])) }}
-                    </p>
-                @elseif (!is_null($invoice->organization) || !is_null($invoice->agent))
                     <p class="name">{{ $invoice->agent->first_name . ' ' . $invoice->agent->last_name }}</p>
-                    <p class="name">{{ $invoice->agent->email ?? $invoice->organization->contact_email }}</p>
+                    <p class="address">{{ implode(', ', array_filter([$invoice->organization->deliveryAddress->address_line_1, $invoice->organization->deliveryAddress->address_line_2, $invoice->organization->deliveryAddress->town, $invoice->organization->deliveryAddress->region, $invoice->organization->deliveryAddress->country, $invoice->organization->deliveryAddress->postcode])) }}</p>
+                @elseif (!is_null($invoice->organization))
+                    <p class="name">{{ $invoice->organization->name }}</p>
+                    <p class="address">{{ implode(', ', array_filter([$invoice->organization->deliveryAddress->address_line_1, $invoice->organization->deliveryAddress->address_line_2, $invoice->organization->deliveryAddress->town, $invoice->organization->deliveryAddress->region, $invoice->organization->deliveryAddress->country, $invoice->organization->deliveryAddress->postcode])) }}</p>
+                @elseif (!is_null($invoice->agent))
+                    <p class="name">{{ $invoice->agent->first_name . ' ' . $invoice->agent->last_name }}</p>
+                    <p class="name">{{ $invoice->agent->email ?? '' }}</p>
                 @else
                     <p class="name">{{ $invoice->lead->full_name }}</p>
                     <p class="name">{{$invoice->lead->email}}</p>
-                    <p class="address">
-                        {{ implode(', ', array_filter([$invoice->lead->address_line_1, $invoice->lead->address_line_2, $invoice->lead->town, $invoice->lead->region, $invoice->lead->country, $invoice->lead->postcode])) }}
-                    </p>
+                    <p class="address">{{ implode(', ', array_filter([$invoice->lead->address_line_1, $invoice->lead->address_line_2, $invoice->lead->town, $invoice->lead->region, $invoice->lead->country, $invoice->lead->postcode])) }}</p>
                 @endif
             </td>
             <td style="width: 32%;">

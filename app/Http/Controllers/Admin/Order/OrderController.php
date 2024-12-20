@@ -68,8 +68,8 @@ class OrderController extends Controller
             $order->invoices()->where('invoice_number', '=', $version)->first()
             ?? $order->repository->getInvoiceRepository()->invoice;
         $invoice->payment_schedule = $order->repository->getScheduleItineraryArray();
-        $invoice->organization = $order->organization;
-        $invoice->agent = $order->agent;
+        $invoice->organization = $order->organization ?? null;
+        $invoice->agent = $order->agent ?? null;
         return (new InvoiceRepository($invoice))->getResponseStream();
     }
 
