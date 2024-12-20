@@ -74,7 +74,8 @@ class ActivityRepository extends ModelRepository implements HasActivityManifest
             $this->activity->name,
             $this->activity->activityType->name,
             $total,
-            $used
+            $used,
+            $this->activity,
         );
     }
 }
