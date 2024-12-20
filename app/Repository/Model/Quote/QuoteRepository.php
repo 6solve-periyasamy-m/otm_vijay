@@ -272,7 +272,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getTotalCost(int $paying): float
     {
-        return $this->getPricePerPerson($paying)?->price_per_person * $paying;
+        return ($this->getPricePerPerson($paying)?->price_per_person * $paying) - $this->getCommission($paying);
     }
 
     /**
@@ -1178,7 +1178,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getCommission(int $paying): ?float
     {
-        return $this->quote->commission !== null ? sigfig($this->getTotalCost($paying) * ($this->quote->commission / 100)) : null;
+        return $this->quote->commission !== null ? sigfig(($this->getPricePerPerson($paying)?->price_per_person * $paying) * ($this->quote->commission / 100)) : null;
     }
 
     public function getFinalCost(int $paying): ?float
