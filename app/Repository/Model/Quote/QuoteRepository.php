@@ -1169,10 +1169,10 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $schedule[] = new ItinerarySchedule(ItineraryScheduleType::DEPOSIT, null, $this->quote->getDepositAmount($paying), $this->quote->getDepositPercentage($paying));
         }
         foreach ($this->quote->installments as $installment) {
-            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::INSTALLMENT, $installment->due_on, $installment->getAmount($paying, $price), $installment->getPercentage($paying, $price));
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::INSTALLMENT, $installment->due_on, $installment->getAmount($paying), $installment->getPercentage($paying));
         }
-        $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->quote->final_payment, $this->getRemainingInstallment($paying, $price), $this->quote->getRemainingPercentage());
-        $schedule[] = new ItinerarySchedule(ItineraryScheduleType::TOTAL, null, $this->getFinalCost($paying), null);
+        $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->quote->final_payment, $this->getRemainingInstallment($paying), $this->quote->getRemainingPercentage());
+        $schedule[] = new ItinerarySchedule(ItineraryScheduleType::TOTAL, null, $this->getTotalCost($paying), null);
         return $schedule;
     }
 
