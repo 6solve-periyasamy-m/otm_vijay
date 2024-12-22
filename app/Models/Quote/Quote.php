@@ -294,7 +294,7 @@ class Quote extends Model
 
     public function getDepositAmount(int $count = 1): float|null
     {
-        $price = $this->repository->getTotalCost($count);
+        $price = ($this->repository->getTotalCost($count) / $count);
         return ($this->is_deposit_percentage ? sigfig(($price * ($this->deposit/100))) : $this->deposit) * $count;
     }
 
