@@ -1163,15 +1163,15 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     private function getScheduleItineraryArray(int $paying): array
     {
-        $price = $this->getPricePerPerson($paying)?->price_per_person;
+        $price = $this->getTotalCost($paying) / $paying;
         $schedule = [];
         if ($this->quote->getDepositAmount($paying) > 0) {
             $schedule[] = new ItinerarySchedule(ItineraryScheduleType::DEPOSIT, null, $this->quote->getDepositAmount($paying), $this->quote->getDepositPercentage($paying));
         }
         foreach ($this->quote->installments as $installment) {
-            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::INSTALLMENT, $installment->due_on, $installment->getAmount($paying), $installment->getPercentage($paying));
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::INSTALLMENT, $installment->due_on, $installment->getAmount($paying, $price), $installment->getPercentage($paying, $price));
         }
-        $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->quote->final_payment, $this->getRemainingInstallment($paying), $this->quote->getRemainingPercentage());
+        $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->quote->final_payment, $this->getRemainingInstallment($paying, $price), $this->quote->getRemainingPercentage());
         $schedule[] = new ItinerarySchedule(ItineraryScheduleType::TOTAL, null, $this->getTotalCost($paying), null);
         return $schedule;
     }
