@@ -979,6 +979,7 @@ figure.table tr td:nth-child(2) {display:none;}
         </thead>
         <tbody>
           @foreach ($itinerary->finances->schedule as $installment)
+          @continue(empty($installment->amount))
           <tr>
               <td>
                 {{ ($installment->type === ItineraryScheduleType::INSTALLMENT) ? "Instalment" : ucfirst(strtolower($installment->type->name)) }}
