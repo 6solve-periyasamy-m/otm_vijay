@@ -214,7 +214,7 @@
                         <tr>
                             <th scope="col">Type</th>
                             <th scope="col">Method</th>
-                            <th scope="col">Customer</th>
+                            <th scope="col">Payer</th>
                             <th scope="col">Value</th>
                             <th scope="col">Paid</th>
                             <th scope="col">Actions</th>

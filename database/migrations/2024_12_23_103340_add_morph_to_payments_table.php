@@ -13,8 +13,13 @@ return new class extends Migration
     {
         Schema::table('payments', static function (Blueprint $table) {
             $table->dropForeign('payments_customer_id_foreign');
-            $table->renameColumn('customer_id', 'payer_id');
-            $table->string('payer_type')->default('App\Models\Customer\Customer');
+            $table->renameColumn('customer_id', 'payer_i d');
+            $table->string('payer_type')->nullable();
+        });
+        // Any payments before this are assumed to be made by customers
+        DB::table('payments')->whereNotNull('payer_id')->update(['payer_type' => \App\Models\Customer\Customer::class]);
+        Schema::table('payments', static function (Blueprint $table) {
+            $table->string('payer_type')->nullable(false)->change();
         });
     }
 
