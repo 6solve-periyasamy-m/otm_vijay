@@ -822,7 +822,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     {
         $payments = [];
         foreach ($this->order->payments as $payment) {
-            $payments[] = new ItineraryPayment($payment->paid_on, $payment->amount, $payment->payment_type, $payment->customer?->full_name);
+            $payments[] = new ItineraryPayment($payment->paid_on, $payment->amount, $payment->payment_type, $payment->payer_name);
         }
         return $payments;
     }

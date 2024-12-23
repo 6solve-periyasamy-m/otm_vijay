@@ -167,7 +167,7 @@ class InvoiceGenerator
         foreach ($this->order->payments as $payment) {
             $data[] = new InvoicePayment([
                 'date' => $payment->paid_on,
-                'payee' => $payment->customer?->full_name,
+                'payee' => $payment->payer_name,
                 'amount' => $payment->amount,
                 'method' => $payment->paymentMethod->name,
             ]);

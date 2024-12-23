@@ -224,7 +224,7 @@
                             <tr>
                                 <td>{{ $payment->payment_type }}</td>
                                 <td>{{ $payment->paymentMethod->name }}</td>
-                                <td>{{ $payment->customer?->full_name ?? "No Customer Found" }}</td>
+                                <td>{{ $payment->payer_name ?? "No Customer Found" }}</td>
                                 <td>
                                     @if($payment->payment_fee !== null)
                                         <abbr title="{{ f_currency($payment->totalWithFee()) }} with payment fee">{{ f_currency($payment->amount) }}</abbr>
