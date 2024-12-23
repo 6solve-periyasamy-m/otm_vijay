@@ -39,7 +39,7 @@ class CreateOrderRequest extends FormRequest
 
     public function getData(): array
     {
-        $commission = $this->organization_id ? Organization::find($this->organization_id)->commission : null;
+        $commission = $this->organization_id ? Organization::find($this->organization_id)?->commission : null;
         return [
             'ordered_on' => $this->ordered_on,
             'internal_notes' => $this->internal_notes,
