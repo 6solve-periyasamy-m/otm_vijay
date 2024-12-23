@@ -856,11 +856,11 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     private function getItineraryFinances(): ItineraryPaymentDetails
     {
         return new ItineraryPaymentDetails(
-            $this->order->cost,
+            $this->order->total,
             $this->order->getTaxes(),
             $this->order->commission_amount,
             $this->order->commission,
-            $this->order->total,
+            $this->order->cost,
             $this->getScheduleItineraryArray(),
             $this->getPaymentItineraryArray(),
         );
