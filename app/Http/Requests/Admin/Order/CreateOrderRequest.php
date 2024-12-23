@@ -91,7 +91,9 @@ class CreateOrderRequest extends FormRequest
             'deposit' => 'nullable|numeric|min:0',
             'tour_id' => 'required|integer|exists:tours,id',
             'lead_booker.id' => 'required|integer|exists:customers,id',
-            'organization_id' => 'nullable|integer|exists:organizations,id'
+            'organization_id' => 'nullable|integer|exists:organizations,id',
+            'agent_id' => 'nullable|integer|exists:agents,id',
+            'commission' => 'nullable|numeric|min:0',
         ];
     }
 }
