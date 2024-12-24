@@ -22,6 +22,7 @@ class OrganizationSelector extends Component
     public function mount($quote = null)
     {
         $this->quote = $quote instanceof Quote ? $quote : null;
+        $this->commission = $this->quote?->commission;
     }
 
     public function inputChanged(?string $key = null)

@@ -39,7 +39,6 @@ class CreateOrderRequest extends FormRequest
 
     public function getData(): array
     {
-        $commission = $this->organization_id ? Organization::find($this->organization_id)?->commission : null;
         return [
             'ordered_on' => $this->ordered_on,
             'internal_notes' => $this->internal_notes,
@@ -48,7 +47,7 @@ class CreateOrderRequest extends FormRequest
             'invoice_footer' => $this->getTour()->invoice_footer,
             'organization_id' => $this->organization_id,
             'agent_id' => $this->agent_id,
-            'commission' => $commission,
+            'commission' => $this->commission,
         ];
     }
 
