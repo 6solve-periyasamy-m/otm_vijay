@@ -29,7 +29,6 @@ class CreateBasicQuoteRequest extends FormRequest
 
     public function getDataset(): array
     {
-        $commission = $this->organization_id ? Organization::find($this->organization_id)->commission : null;
         return [
             'expires' => $this->expires,
             'organization_id' => $this->organization_id,
@@ -39,7 +38,7 @@ class CreateBasicQuoteRequest extends FormRequest
             'brand_id' => $this->brand_id,
             'tax_bracket_id' => $this->tax_bracket_id,
             'agent_id' => $this->agent_id,
-            'commission' => $commission,
+            'commission' => $this->commission,
         ];
     }
 
