@@ -2,26 +2,45 @@
 
 namespace App\Models\Customer;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Customer\Organization;
 use App\Models\Order\Order;
 use App\Models\Quote\Quote;
+use Carbon\Carbon;
+use Database\Factories\Customer\AgentFactory;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * Class User
+ * Class Agent
  *
- * This class represents a User model in the application.
- * It is responsible for handling user-related data and operations.
- *
- * @package App\Models
+ * @package App\Models\Customer
  * @property int $id The unique identifier for the user.
- * @property string $name The name of the user.
- * @property string $email The email address of the user.
- * @property string $password The hashed password of the user.
- * @property \Carbon\Carbon $created_at The timestamp when the user was created.
- * @property \Carbon\Carbon $updated_at The timestamp when the user was last updated.
+ * @property string $first_name The first name of the agent.
+ * @property string $last_name The last name of the agent.
+ * @property string $email The email address of the agent.
+ * @property int|null $organization_id The id of the organization the agent is related to.
+ * @property Carbon $created_at The timestamp when the user was created.
+ * @property Carbon $updated_at The timestamp when the user was last updated.
+ * @property-read Collection<int, Order> $orders
+ * @property-read int|null $orders_count
+ * @property-read Organization|null $organization
+ * @property-read Collection<int, Quote> $quotes
+ * @property-read int|null $quotes_count
+ * @method static AgentFactory factory($count = null, $state = [])
+ * @method static Builder|Agent newModelQuery()
+ * @method static Builder|Agent newQuery()
+ * @method static Builder|Agent query()
+ * @method static Builder|Agent whereCreatedAt($value)
+ * @method static Builder|Agent whereEmail($value)
+ * @method static Builder|Agent whereFirstName($value)
+ * @method static Builder|Agent whereId($value)
+ * @method static Builder|Agent whereLastName($value)
+ * @method static Builder|Agent whereOrganizationId($value)
+ * @method static Builder|Agent whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 
 class Agent extends Model
@@ -33,7 +52,7 @@ class Agent extends Model
     /**
      * Get the organization that the agent belongs to.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function organization(): BelongsTo
     {
@@ -43,9 +62,9 @@ class Agent extends Model
     /**
      * Get the agent has quotes
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return HasMany
      */
-    public function quotes()
+    public function quotes(): HasMany
     {
         return $this->hasMany(Quote::class, 'agent_id');
     }
@@ -53,10 +72,15 @@ class Agent extends Model
     /**
      * Get the agent has orders
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return HasMany
      */
-    public function orders()
+    public function orders(): HasMany
     {
         return $this->hasMany(Order::class, 'agent_id');
+    }
+
+    public function getNameAttribute(): string
+    {
+        return $this->first_name . ' ' . $this->last_name;
     }
 }

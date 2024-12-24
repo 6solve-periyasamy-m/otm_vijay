@@ -70,7 +70,8 @@ class PaymentIntention extends Model
         return Payment::make([
             'payment_method_id' => $method->id,
             'paid_on' => Carbon::parse($created),
-            'customer_id' => $this->customer_id,
+            'payer_id' => $this->customer_id,
+            'payer_type' => Customer::class,
             'amount' => $amount,
         ]);
     }
