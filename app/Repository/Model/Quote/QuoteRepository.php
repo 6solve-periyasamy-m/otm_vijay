@@ -171,12 +171,12 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getRemainingInstallment(int $paying = 1, float|null $price = null): float|null
     {
-        $ppp = ($price ?? $this->getPricePerPerson($paying)?->price_per_person ?? 0);
+        $ppp = ($price ?? sigfig($this->getTotalCost($paying) / $paying) ?? 0);
         $price = ($ppp * $paying);
         foreach ($this->quote->installments as $installment) {
             $price -= $installment->getAmount($paying, $ppp);
         }
-        return $price - $this->quote->getDepositAmount($paying) - $this->getCommission($paying);
+        return $price - $this->quote->getDepositAmount($paying);
     }
 
     public function convertToTour(int $customerCount = 1, bool $components = true): Tour
@@ -272,7 +272,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getTotalCost(int $paying): float
     {
-        return $this->getPricePerPerson($paying)?->price_per_person * $paying;
+        return ($this->getPricePerPerson($paying)?->price_per_person * $paying) - $this->getCommission($paying);
     }
 
     /**
@@ -963,7 +963,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'consultant_id' => $this->quote->consultant_id,
             'tax_bracket_id' => $this->quote->tax_bracket_id,
             'deposit' => $this->quote->getDepositAmount(),
-            'commission' => $lead->getCustomer()->organization?->commission,
+            'commission' => $this->quote->commission,
             'ordered_on' => now(),
             'invoice_footer' => $this->quote->invoice_footer,
             'internal_notes' => $this->quote->internal_notes,
@@ -1163,7 +1163,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     private function getScheduleItineraryArray(int $paying): array
     {
-        $price = $this->getPricePerPerson($paying)?->price_per_person;
+        $price = sigfig($this->getTotalCost($paying) / $paying);
         $schedule = [];
         if ($this->quote->getDepositAmount($paying) > 0) {
             $schedule[] = new ItinerarySchedule(ItineraryScheduleType::DEPOSIT, null, $this->quote->getDepositAmount($paying), $this->quote->getDepositPercentage($paying));
@@ -1171,14 +1171,16 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         foreach ($this->quote->installments as $installment) {
             $schedule[] = new ItinerarySchedule(ItineraryScheduleType::INSTALLMENT, $installment->due_on, $installment->getAmount($paying, $price), $installment->getPercentage($paying, $price));
         }
-        $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->quote->final_payment, $this->getRemainingInstallment($paying, $price), $this->quote->getRemainingPercentage());
-        $schedule[] = new ItinerarySchedule(ItineraryScheduleType::TOTAL, null, $this->getFinalCost($paying), null);
+        if ($this->getRemainingInstallment($paying, $price) > 0) {
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->quote->final_payment, $this->getRemainingInstallment($paying, $price), $this->quote->getRemainingPercentage());
+        }
+        $schedule[] = new ItinerarySchedule(ItineraryScheduleType::TOTAL, null, $this->getTotalCost($paying), null);
         return $schedule;
     }
 
     public function getCommission(int $paying): ?float
     {
-        return $this->quote->commission !== null ? sigfig($this->getTotalCost($paying) * ($this->quote->commission / 100)) : null;
+        return $this->quote->commission !== null ? sigfig(($this->getPricePerPerson($paying)?->price_per_person * $paying) * ($this->quote->commission / 100)) : null;
     }
 
     public function getFinalCost(int $paying): ?float
