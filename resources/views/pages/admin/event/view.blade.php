@@ -176,7 +176,9 @@ $hideNoCategory = $hideNoCategory ?? false;
                     <tbody>
                         @foreach($event->repository->getActivityReport() as $row)
                             <tr>
-                                <th scope="row">{{ $row->activity }}</th>
+                                <th scope="row">
+                                    <a href="{{ route('activities.view', ['activity' => $row->component,]) }}">{{ $row->activity }}</a>
+                                </th>
                                 <td>{{ $row->type }}</td>
                                 <td>{{ $row->totalStock }}</td>
                                 <td>{{ $row->usedStock }}</td>

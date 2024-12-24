@@ -54,7 +54,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int $tour_id
  * @property int|null $lead_booker_id
  * @property int|null $organization_id
- * @property int|mull $agent_id
+ * @property int|null $agent_id
  * @property int|null $consultant_id
  * @property int|null $tax_bracket_id
  * @property string|null $booking_reference Unique reference for the booking

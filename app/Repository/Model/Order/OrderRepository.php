@@ -822,7 +822,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     {
         $payments = [];
         foreach ($this->order->payments as $payment) {
-            $payments[] = new ItineraryPayment($payment->paid_on, $payment->amount, $payment->payment_type, $payment->customer?->full_name);
+            $payments[] = new ItineraryPayment($payment->paid_on, $payment->amount, $payment->payment_type, $payment->payer_name);
         }
         return $payments;
     }
@@ -856,11 +856,11 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     private function getItineraryFinances(): ItineraryPaymentDetails
     {
         return new ItineraryPaymentDetails(
-            $this->order->cost,
+            $this->order->total,
             $this->order->getTaxes(),
             $this->order->commission_amount,
             $this->order->commission,
-            $this->order->total,
+            $this->order->cost,
             $this->getScheduleItineraryArray(),
             $this->getPaymentItineraryArray(),
         );

@@ -66,7 +66,8 @@ class Calculator extends Component
 
         /** @var float $costPerPerson Cost to the company per person (average) */
         $costPerPerson = $totalTravellerCount > 0 ? sigfig($this->costToCompany / $totalTravellerCount) : 0;
-        $this->total = $this->quote->repository->getTotalCost($this->paying + ($this->quote->leadTraveller->paying ? 1 : 0));
+        $paying = $this->paying + ($this->quote->leadTraveller->paying ? 1 : 0);
+        $this->total = ($this->quote->repository->getPricePerPerson($paying)?->price_per_person ?? 0) * $paying;
         $this->profit = sigfig($this->total - $this->costToCompany);
         $this->margin = $this->total == 0 ? 100 : sigfig((($this->total - $this->costToCompany) / $this->total) * 100);
 

@@ -3,6 +3,8 @@
 namespace App\Http\Livewire\Admin\Order\Payment;
 
 use App\Http\Livewire\Abstract\LivewireForm;
+use App\Models\Customer\Agent;
+use App\Models\Customer\Customer;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\Payment;
 use Livewire\Component;
@@ -13,6 +15,8 @@ class Form extends Component
 
     public Order|int|null $order;
     public Payment|int|null $payment;
+    public int|null $customer = null;
+    public int|null $agent = null;
     public bool $feeUpdated = false;
 
     public function mount(Order|int $order, Payment|int|null $payment = null)
@@ -20,6 +24,14 @@ class Form extends Component
         $this->order = Order::getForMount($order);
         $this->payment = Payment::getForMount($payment);
         $this->feeUpdated = $this->payment->id !== null;
+        $payer = $this->payment->payer;
+        if ($payer !== null) {
+            if ($payer instanceof Customer) {
+                $this->customer = $payer->id;
+            } elseif ($payer instanceof Agent) {
+                $this->agent = $payer->id;
+            }
+        }
     }
 
     public function render()
@@ -74,6 +86,18 @@ class Form extends Component
     public function save()
     {
         $this->validate();
+        if ($this->agent !== null) {
+            $agent = Agent::find($this->agent);
+            if ($agent !== null) {
+                $this->payment->payer()->associate($agent);
+            }
+        }
+        if ($this->customer !== null) {
+            $customer = Customer::find($this->customer);
+            if ($customer !== null) {
+                $this->payment->payer()->associate($customer);
+            }
+        }
         $this->order->payments()->save($this->payment);
         return redirect(route('orders.view', ['order' => $this->order]));
     }
@@ -81,7 +105,8 @@ class Form extends Component
     public function rules()
     {
         return [
-            'payment.customer_id' => 'required|int|exists:customers,id',
+            'customer' => 'required_without:agent|nullable|int|exists:customers,id',
+            'agent' => 'required_without:customer|nullable|int|exists:agents,id',
             'payment.payment_method_id' => 'required|int|exists:payment_methods,id',
             'payment.amount' => 'required|numeric',
             'payment.payment_fee' => 'nullable|numeric',

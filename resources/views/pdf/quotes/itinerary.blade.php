@@ -825,7 +825,7 @@ figure.table tr td:nth-child(2) {display:none;}
            <tbody>
                   <tr>            
                    <td style="font-weight:400;min-width:128px;">Booking Total:</td>
-                   <td>{{ f_currency($itinerary->finances->cost + $itinerary->finances->commission) }}</td>
+                   <td>{{ f_currency($itinerary->finances->total + $itinerary->finances->commission) }}</td>
                   </tr>
                   <tr>
                       <td style="font-weight:400;min-width:128px;">GST (included):</td>
@@ -841,7 +841,7 @@ figure.table tr td:nth-child(2) {display:none;}
                       <td style="font-weight:400;min-width:128px;"><strong style="margin-top:15px">FINAL PRICE:
                       <span style="width: 100%;height: 1px;display: block;margin: 0;margin-top: 2px;background-color: var(--head-text-background);"></span>
                       </strong></td>
-                      <td><strong style="margin-top:15px">{{ f_currency($itinerary->finances->cost) }}</strong></td>
+                      <td><strong style="margin-top:15px">{{ f_currency($itinerary->finances->total) }}</strong></td>
                   </tr>
                                     
            </tbody>
@@ -979,6 +979,7 @@ figure.table tr td:nth-child(2) {display:none;}
         </thead>
         <tbody>
           @foreach ($itinerary->finances->schedule as $installment)
+          @continue(empty($installment->amount))
           <tr>
               <td>
                 {{ ($installment->type === ItineraryScheduleType::INSTALLMENT) ? "Instalment" : ucfirst(strtolower($installment->type->name)) }}

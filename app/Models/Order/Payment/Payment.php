@@ -2,6 +2,7 @@
 
 namespace App\Models\Order\Payment;
 
+use App\Models\Customer\Agent;
 use App\Models\Customer\Customer;
 use App\Models\Helper\Model;
 use App\Models\Order\Order;
@@ -10,6 +11,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -22,13 +24,16 @@ use Illuminate\Validation\Rule;
  * @property int $order_id
  * @property int $payment_method_id
  * @property int|null $customer_id
+ * @property int|null $payer_id
+ * @property string|null $payer_type
  * @property float $amount
  * @property float|null $payment_fee
  * @property Carbon $paid_on Date when payment was made
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Customer|null $customer Customer who made the payment
+ * @property-read Agent|Customer|null $payer
+ * @property-read string|null $payer_name The name of the payer
  * @property-read Order $order Which order the payment is for
  * @property-read PaymentMethod $paymentMethod Which payment method was used
  * @property-read string $payment_type Payment Type. Will be payment or refund
@@ -82,9 +87,20 @@ class Payment extends Model
         return $this->belongsTo(PaymentMethod::class, 'payment_method_id');
     }
 
-    public function customer(): BelongsTo
+    public function payer(): MorphTo
     {
-        return $this->belongsTo(Customer::class, 'customer_id');
+        return $this->morphTo('payer', 'payer_type', 'payer_id', 'id');
+    }
+
+    public function getPayerNameAttribute(): string|null
+    {
+        if ($this->payer instanceof Agent) {
+            return $this->payer->name;
+        }
+        if ($this->payer instanceof Customer) {
+            return $this->payer->full_name;
+        }
+        return null;
     }
 
     public function totalWithFee(): float
