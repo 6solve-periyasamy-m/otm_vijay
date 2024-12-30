@@ -460,11 +460,7 @@ h5 span {
 figure.table {
      margin:-5px 0px -40px 0px;
 }
-figure.table tr td:nth-child(2) {display:none;}
-/* .single-module, .custom-details-module, .paragraph {
-        page-break-inside: avoid;
-    }  */
-      /* #static-pages {page-break-inside: avoid;} */
+/*figure.table tr td:nth-child(2) {display:none;} */
 .mb-n15{
   margin-bottom:-15px;
 }
@@ -472,6 +468,7 @@ figure.table tr td:nth-child(2) {display:none;}
   width: 125px;
 }
 .quote-payment-schedule tbody tr:last-child td {font-weight: bold;}
+.quote-section tbody tr td:first-child {width: 125px;}
 </style>
 
    
@@ -484,12 +481,7 @@ figure.table tr td:nth-child(2) {display:none;}
   <div class="row">
       <div class="pdf-header">
          <div class="header-logo">
-            <img src="{{ $headlogo }}" alt="logo-ch">
-         </div>
-      </div>
-	  
-      <div class="customer-details-block">
-        <div class="customer-details-text-block">
+            <img src="{{ $headlogo }}" alt="logo-ch">30 Jun 202
           <div class="top-heading-section">
             <h1>{{ $type ?? "Quote" }}</h1>
             <h5 style="margin-bottom:12px;">REFERENCE: {{ $reference }} <span></span></h5>         
@@ -552,13 +544,11 @@ figure.table tr td:nth-child(2) {display:none;}
 
 @php
   $sections = collect($itinerary->items['Sections'] ?? [])
-        ->filter(fn($item) => data_get($item->details, 'Type') === 'Transport')
-        ->map(fn($item) => group_by_date($item, 'Date'));
-
-  $transfers = collect($itinerary->items['Transfers'] ?? [])
-        ->map(fn($item) => group_by_date($item, 'Date'));
-
-  $section_transfers = $sections->merge($transfers)->sortBy('normalize_date');
+        ->filter(fn($item) => data_get($item->details, 'Type') === 'Transport');
+  $transfers = collect($itinerary->items['Transfers'] ?? []);
+  $section_transfers = $sections->merge($transfers)->sortBy(function ($item) {
+      return data_get($item->details, 'Date');
+  });
 @endphp
 
 @if(!empty($section_transfers))
@@ -582,29 +572,23 @@ figure.table tr td:nth-child(2) {display:none;}
         @endif
           <div class="details-module">
             @if ($transport->type === 'Section')
-              <table>
-                <tbody>
-                    @foreach($transport->details as $key => $value)
-                      @php
-                        $class_desc_pos = $key == 'Description' ? 'desc-pos-top text-wrap' : '';
-                      @endphp
-                      @if ($key === 'Body')
-                        <tr>
-                            <td class="item-detail <?php echo $class_desc_pos;?>">
-                            {!! $value !!}
-                            </td>
-                        </tr>
-                      @endif
-                      @if ($key === 'Quantity')
-                        <tr>
-                            <td class="item-detail <?php echo $class_desc_pos;?>">
-                            <p><strong>Quantity:</strong> : {{ $value }} </p>
-                            </td>
-                        </tr>
-                      @endif
-                    @endforeach
-                </tbody>
-              </table>
+              @foreach($transport->details as $key => $value)
+                <div class="section-body">
+                @if ($key === 'Body')
+                  {!! $value !!}
+                @endif
+                @if ($key === 'Quantity')
+                  <table style="padding-top: 46px;">
+                    <tbody>
+                      <tr>
+                        <td class="w-125 pt-10"><strong>Quantity:</strong></td>
+                        <td>{{ $value }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                @endif
+                </div>
+              @endforeach
             @else
               <table>
                   <tbody>
