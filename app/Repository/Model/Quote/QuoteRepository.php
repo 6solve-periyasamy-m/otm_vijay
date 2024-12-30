@@ -1158,7 +1158,30 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             usort($data, static function (ItineraryItem $a, ItineraryItem $b) { return $a->sortKey >= $b->sortKey ? 1 : -1; });
             $items[$key] = $data;
         }
+        if (isset($this->quote->sections) && !empty($this->quote->sections)){
+            $heading = "Sections";
+            foreach ($this->quote->sections as $section) {
+                $item = $this->getItinerarySectionItem($section);
+                $items[$heading][] = $item;
+            }
+        }
         return $items;
+    }
+
+    private function getItinerarySectionItem($section): ItineraryItem
+    {
+        $details = [
+            'Date' => $section->sort_date,
+            'Type' => $section->type,
+            'Body' => $section->body ?? null,
+            'Quantity' => $section->quantity ?? null,
+        ];
+        return new ItineraryItem(
+            $section->title,
+            'Section',
+            $section->sort_date?->unix(),
+            $details,
+        );
     }
 
     private function getScheduleItineraryArray(int $paying): array

@@ -547,14 +547,26 @@ figure.table tr td:nth-child(2) {display:none;}
 </div>
 
 <div class="heading-2">
-	  <h2>Package inclusions</h2> 
-  </div>
-@if(!empty($itinerary->items['Transfers']))
+  <h2>Package inclusions</h2> 
+</div>
+
+@php
+  $sections = collect($itinerary->items['Sections'] ?? [])
+        ->filter(fn($item) => data_get($item->details, 'Type') === 'Transport')
+        ->map(fn($item) => group_by_date($item, 'Date'));
+
+  $transfers = collect($itinerary->items['Transfers'] ?? [])
+        ->map(fn($item) => group_by_date($item, 'Date'));
+
+  $section_transfers = $sections->merge($transfers)->sortBy('normalize_date');
+@endphp
+
+@if(!empty($section_transfers))
     @php
       $firstLoop = true;
     @endphp
     
-  @foreach($itinerary->items['Transfers'] as $transport)
+  @foreach($section_transfers as $transport)
     @if(isset($transport->details['Quantity']) && $transport->details['Quantity'] > 0)
       <div class="single-module mb-n15 <?php echo $firstLoop?'':'add-on-cls'?>">
         @if($firstLoop)
@@ -569,6 +581,31 @@ figure.table tr td:nth-child(2) {display:none;}
             @endphp
         @endif
           <div class="details-module">
+            @if ($transport->type === 'Section')
+              <table>
+                <tbody>
+                    @foreach($transport->details as $key => $value)
+                      @php
+                        $class_desc_pos = $key == 'Description' ? 'desc-pos-top text-wrap' : '';
+                      @endphp
+                      @if ($key === 'Body')
+                        <tr>
+                            <td class="item-detail <?php echo $class_desc_pos;?>">
+                            {!! $value !!}
+                            </td>
+                        </tr>
+                      @endif
+                      @if ($key === 'Quantity')
+                        <tr>
+                            <td class="item-detail <?php echo $class_desc_pos;?>">
+                            <p><strong>Quantity:</strong> : {{ $value }} </p>
+                            </td>
+                        </tr>
+                      @endif
+                    @endforeach
+                </tbody>
+              </table>
+            @else
               <table>
                   <tbody>
                     <tr>
@@ -599,11 +636,12 @@ figure.table tr td:nth-child(2) {display:none;}
                       @endforeach
                   </tbody>
               </table>
+            @endif
           </div>
       </div>
     @endif
   @endforeach
-@endif  
+@endif
 @if(!empty($itinerary->items['Accommodation']))
   @php
       $firstLoop = true;
