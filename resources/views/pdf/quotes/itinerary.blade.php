@@ -542,150 +542,167 @@ figure.table {
   <h2>Package inclusions</h2> 
 </div>
 
-@php
-  $sections = collect($itinerary->items['Sections'] ?? [])
-        ->filter(fn($item) => data_get($item->details, 'Type') === 'Transport');
-  $transfers = collect($itinerary->items['Transfers'] ?? []);
-  $section_transfers = $sections->merge($transfers)->sortBy(function ($item) {
-      return data_get($item->details, 'Date');
-  });
-@endphp
+  @php
+    $sections = collect($itinerary->items['Sections'] ?? [])
+          ->filter(fn($item) => data_get($item->details, 'Type') === 'Transport');
+    $transfers = collect($itinerary->items['Transfers'] ?? []);
+    $section_transfers = $sections->merge($transfers)->sortBy(function ($item) {
+        return data_get($item->details, 'Date');
+    });
+  @endphp
 
-@if(!empty($section_transfers))
+  @if(!empty($section_transfers))
+      @php
+        $firstLoop = true;
+      @endphp
+    @foreach($section_transfers as $transport)
+      @if(isset($transport->details['Quantity']) && $transport->details['Quantity'] > 0)
+        <div class="single-module mb-n15 <?php echo $firstLoop?'':'add-on-cls'?>">
+          @if($firstLoop)
+              <div class="heading-module">
+                  <h3   style="margin-top:10px;">
+                      <span class="mark"></span>
+                      <span class="text">Transport</span>
+                  </h3>
+              </div>
+              @php
+                  $firstLoop = false;
+              @endphp
+          @endif
+            <div class="details-module">
+              @if ($transport->type === 'Section')
+                @foreach($transport->details as $key => $value)
+                  <div class="section-body">
+                  @if ($key === 'Body')
+                    {!! $value !!}
+                  @endif
+                  @if ($key === 'Quantity')
+                    <table style="padding-top: 46px;">
+                      <tbody>
+                        <tr>
+                          <td class="w-125 pt-10"><strong>Quantity:</strong></td>
+                          <td>{{ $value }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  @endif
+                  </div>
+                @endforeach
+              @else
+                <table>
+                    <tbody>
+                      <tr>
+                        <td class="item-header w-125">
+                          <strong> Service: </strong>
+                        </td>
+                        <td class="item-detail">
+                          {{ $transport->name }}
+                        </td>
+                      </tr>
+                        @php
+                          $disable_items = ['Description', 'Transport', 'Travel Class'];
+                        @endphp
+                        @foreach($transport->details as $key => $value)
+                        @php
+                          $class_desc_pos = $key == 'Description' ? 'desc-pos-top text-wrap' : '';
+                        @endphp
+                            @if (!in_array($key, $disable_items))
+                              <tr>
+                                  <td class="item-header w-125">
+                                      <strong>{{ $key }}:</strong>
+                                  </td>
+                                  <td class="item-detail <?php echo $class_desc_pos;?>">
+                                    {{ $value }}
+                                  </td>
+                              </tr>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+              @endif
+            </div>
+        </div>
+      @endif
+    @endforeach
+  @endif
+
+
+  @php
+    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Accommodation')->each(fn($item) => set_normalize_date($item, 'Date'));
+    $accommodation = collect($itinerary->items['Accommodation'] ?? [])->each(fn($item) => set_normalize_date($item, 'Check In'));
+    $section_accommodation = $sections->merge($accommodation)->sortBy(function ($item) {
+        return $item->normalize_date;
+    });
+  @endphp
+
+  @if(!empty($section_accommodation))
     @php
-      $firstLoop = true;
+        $firstLoop = true;
     @endphp
-    
-  @foreach($section_transfers as $transport)
-    @if(isset($transport->details['Quantity']) && $transport->details['Quantity'] > 0)
+    @foreach($section_accommodation as $accommodation)
       <div class="single-module mb-n15 <?php echo $firstLoop?'':'add-on-cls'?>">
         @if($firstLoop)
             <div class="heading-module">
-                <h3   style="margin-top:10px;">
+                <h3 style="margin-top:10px;">
                     <span class="mark"></span>
-                    <span class="text">Transport</span>
+                    <span class="text">Accommodation</span>
                 </h3>
             </div>
             @php
                 $firstLoop = false;
             @endphp
         @endif
+          <h4>
+              <span class="text">{{ $accommodation->name }}</span>
+              <span class="mark"></span>
+          </h4>
           <div class="details-module">
-            @if ($transport->type === 'Section')
-              @foreach($transport->details as $key => $value)
+            @if ($accommodation->type === 'Section')
+              @foreach($accommodation->details as $key => $value)
                 <div class="section-body">
                 @if ($key === 'Body')
                   {!! $value !!}
-                @endif
-                @if ($key === 'Quantity')
-                  <table style="padding-top: 46px;">
-                    <tbody>
-                      <tr>
-                        <td class="w-125 pt-10"><strong>Quantity:</strong></td>
-                        <td>{{ $value }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
                 @endif
                 </div>
               @endforeach
             @else
               <table>
                   <tbody>
-                    <tr>
-                      <td class="item-header w-125">
-                        <strong> Service: </strong>
-                      </td>
-                      <td class="item-detail">
-                        {{ $transport->name }}
-                      </td>
-                    </tr>
                       @php
-                        $disable_items = ['Description', 'Transport', 'Travel Class'];
+                        if (isset($accommodation->details['Description'], $accommodation->details['Quantity'])) {
+                          $temp_desc = $accommodation->details['Description'];
+                          unset($accommodation->details['Description']);
+                          $accommodation->details['Description'] = $temp_desc;
+                      }
                       @endphp
-                      @foreach($transport->details as $key => $value)
+                      @foreach($accommodation->details as $key => $value)
                       @php
                         $class_desc_pos = $key == 'Description' ? 'desc-pos-top text-wrap' : '';
                       @endphp
-                          @if (!in_array($key, $disable_items))
-                            <tr>
-                                <td class="item-header w-125">
-                                    <strong>{{ $key }}:</strong>
-                                </td>
-                                <td class="item-detail <?php echo $class_desc_pos;?>">
-                                  {{ $value }}
-                                </td>
-                            </tr>
-                          @endif
+                          @continue(empty($value))
+                          <tr>
+                              <td class="item-header w-125">
+                                  <strong>{{ $key }}:</strong>
+                              </td>
+                              <td class="item-detail <?php echo $class_desc_pos;?>">
+                                  @if(is_array($value))
+                                      @if(isset($value['attributes']['address_line_1']))
+                                          {{ $value['attributes']['address_line_1'] }}
+                                      @else
+                                          Address not available
+                                      @endif
+                                  @else
+                                      {!! $value !!}
+                                  @endif
+                              </td>
+                          </tr>
                       @endforeach
                   </tbody>
               </table>
             @endif
           </div>
       </div>
-    @endif
-  @endforeach
-@endif
-@if(!empty($itinerary->items['Accommodation']))
-  @php
-      $firstLoop = true;
-  @endphp
-    
-  @foreach($itinerary->items['Accommodation'] as $accommodation)
-
-    <div class="single-module mb-n15 <?php echo $firstLoop?'':'add-on-cls'?>">
-      @if($firstLoop)
-          <div class="heading-module">
-              <h3 style="margin-top:10px;">
-                  <span class="mark"></span>
-                  <span class="text">Accommodation</span>
-              </h3>
-          </div>
-          @php
-              $firstLoop = false;
-          @endphp
-      @endif
-        <h4>
-            <span class="text">{{ $accommodation->name }}</span>
-            <span class="mark"></span>
-        </h4>
-        <div class="details-module">
-            <table>
-                <tbody>
-                    @php
-                      if (isset($accommodation->details['Description'], $accommodation->details['Quantity'])) {
-                        $temp_desc = $accommodation->details['Description'];
-                        unset($accommodation->details['Description']);
-                        $accommodation->details['Description'] = $temp_desc;
-                    }
-                    @endphp
-                    @foreach($accommodation->details as $key => $value)
-                    @php
-                      $class_desc_pos = $key == 'Description' ? 'desc-pos-top text-wrap' : '';
-                    @endphp
-                        @continue(empty($value))
-                        <tr>
-                            <td class="item-header w-125">
-                                <strong>{{ $key }}:</strong>
-                            </td>
-                            <td class="item-detail <?php echo $class_desc_pos;?>">
-                                @if(is_array($value))
-                                    @if(isset($value['attributes']['address_line_1']))
-                                        {{ $value['attributes']['address_line_1'] }}
-                                    @else
-                                        Address not available
-                                    @endif
-                                @else
-                                    {!! $value !!}
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
-  @endforeach
+    @endforeach
   @endif
   </div>
   <!-- </section> -->
