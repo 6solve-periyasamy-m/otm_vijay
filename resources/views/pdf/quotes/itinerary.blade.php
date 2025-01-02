@@ -784,7 +784,7 @@ figure.table {
 
   @php
     $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Event')->each(fn($item) => set_normalize_date($item, 'Date'));
-    $events = collect($itinerary->items['Event'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Event')->each(fn($item) => set_normalize_date($item, 'Dates', 'range'));
+    $events = collect($itinerary->items['Event'] ?? [])->filter(fn($item) => $item->type === 'Event')->each(fn($item) => set_normalize_date($item, 'Dates', 'range'));
     $section_events = $sections->merge($events)->sortBy(function ($item) {
         return $item->normalize_date;
     });
@@ -868,7 +868,7 @@ figure.table {
 
   @php
     $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Activity')->each(fn($item) => set_normalize_date($item, 'Date'));
-    $inclusion = collect($itinerary->items['Inclusion'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Inclusions')->each(fn($item) => set_normalize_date($item, 'Dates', 'range'));
+    $inclusion = collect($itinerary->items['Inclusion'] ?? [])->filter(fn($item) => $item->type === 'Inclusions')->each(fn($item) => set_normalize_date($item, 'Dates', 'range'));
     $section_inclusion = $sections->merge($inclusion)->sortBy(function ($item) {
         return $item->normalize_date;
     });
