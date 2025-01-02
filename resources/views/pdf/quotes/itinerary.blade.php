@@ -469,6 +469,27 @@ figure.table {
 }
 .quote-payment-schedule tbody tr:last-child td {font-weight: bold;}
 .quote-section tbody tr td:first-child {width: 125px;}
+.component-body {width:"100%";}
+.component-body table th, .flight-block table th{
+    font-family: "PPNeueMontreal-Medium";
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    padding: 8px 0px;
+    border: 1px solid gray;
+}
+.component-body table td, .flight-block table td {
+    padding: 6.5px;
+    text-align: center;
+    border: 1px solid gray;
+}
+.tbl-td-width-80 {width:80px !important; }
+.tbl-td-width-85 {width:85px;}
+.tbl-td-width-95 {width:95px;}
+.tbl-td-width-130 {width:130px;}
+.tbl-td-width-60 {width:60px;}
+.flight-block {padding-bottom: 50px; font-family: "PPNeueMontreal-Regular";font-size: 14px; font-weight: 400;line-height: 18px; color: var(--text-color); margin: 0;}
+
 </style>
 
    
@@ -541,6 +562,71 @@ figure.table {
 <div class="heading-2">
   <h2>Package inclusions</h2> 
 </div>
+
+  @php
+    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Flights')->each(fn($item) => set_normalize_date($item, 'Date'));
+    $flights = collect($itinerary->items['Flights'] ?? [])->each(fn($item) => set_normalize_date($item, 'Departure Date'));
+    $section_flights = $sections->merge($flights)->sortBy(function ($item) {
+        return $item->normalize_date;
+    });
+  @endphp
+
+  @if(!empty($section_flights))
+      @php
+        $firstLoop = true;
+      @endphp
+    @foreach($section_flights as $flights)
+      @if(isset($flights->details['Quantity']) && $flights->details['Quantity'] > 0)
+        <div class="single-module mb-n15 <?php echo $firstLoop?'':'add-on-cls'?>">
+          @if($firstLoop)
+              <div class="heading-module">
+                  <h3   style="margin-top:10px;">
+                      <span class="mark"></span>
+                      <span class="text">Flights</span>
+                  </h3>
+              </div>
+              @php
+                  $firstLoop = false;
+              @endphp
+          @endif
+            <div class="details-module">
+              @if ($flights->type === 'Section')
+                @foreach($flights->details as $key => $value)
+                  <div class="section-body">
+                  @if ($key === 'Body')
+                    {!! $value !!}
+                  @endif
+                  </div>
+                @endforeach
+              @else
+                <div class="component-body">
+                  <table class="tbl-quote-section" style="width: 100%;">
+                      <tr>
+                          <th>Airline</th>
+                          <th>Flight Number</th>
+                          <th>Departure Date</th>
+                          <th>From Airport</th>
+                          <th>To Airport</th>
+                          <th>Departure Time</th>
+                          <th>Arrival Time</th>
+                      </tr>
+                      <tr>
+                        <td class="tbl-td-width-80">{{ $flights->name }}</td>
+                        <td class="tbl-td-width-85">{{ $flights->details['Flight Number'] }}</td>
+                        <td class="tbl-td-width-95">{{ $flights->details['Departure Date'] }}</td>
+                        <td class="tbl-td-width-130">{{ $flights->details['Departure Airport'] }}</td>
+                        <td class="tbl-td-width-130">{{ $flights->details['Arrival Airport'] }}</td>
+                        <td class="tbl-td-width-60">{{ $flights->details['Departure Time'] }}</td>
+                        <td class="tbl-td-width-60">{{ $flights->details['Arrival Time'] }}</td>
+                      </tr>
+                  </table>
+                </div>
+              @endif
+            </div>
+        </div>
+      @endif
+    @endforeach
+  @endif
 
   @php
     $sections = collect($itinerary->items['Sections'] ?? [])
