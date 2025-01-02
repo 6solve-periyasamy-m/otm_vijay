@@ -470,29 +470,17 @@ figure.table {
 .quote-payment-schedule tbody tr:last-child td {font-weight: bold;}
 .quote-section tbody tr td:first-child {width: 125px;}
 .component-body {width:"100%";}
-.component-body table th, .flight-block table th{
-    font-family: "PPNeueMontreal-Medium";
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 20px;
-    padding: 8px 0px;
-    border: 1px solid gray;
-}
-.component-body table td, .flight-block table td {
-    padding: 6.5px;
-    text-align: center;
-    border: 1px solid gray;
-}
+.component-body table th, .flight-block table th{ font-family: "PPNeueMontreal-Medium"; font-size: 14px; font-weight: 500; line-height: 20px; padding: 8px 0px; border: 1px solid gray;}
+.component-body table td, .flight-block table td { padding: 6.5px; text-align: center; border: 1px solid gray; }
 .tbl-td-width-80 {width:80px !important; }
 .tbl-td-width-85 {width:85px;}
 .tbl-td-width-95 {width:95px;}
 .tbl-td-width-130 {width:130px;}
 .tbl-td-width-60 {width:60px;}
 .flight-block {padding-bottom: 50px; font-family: "PPNeueMontreal-Regular";font-size: 14px; font-weight: 400;line-height: 18px; color: var(--text-color); margin: 0;}
-
+.pt-20 { padding-bottom: 45px; width:100%;}
+.quote-section-tbl tbody tr td:first-child{width: 125px; }
 </style>
-
-   
 </head>
 
 <body class="body" style="margin: 0;">
@@ -529,7 +517,7 @@ figure.table {
                     <h6>AGENT DETAILS</h6>
                     <p>Name: <span>{{$itinerary->consultant?->name}}</span></p>
                     <p>Email: <span>{{$itinerary->consultant?->email}}</span><p>
-                    <p>{{ $type === 'Quote' ? "Quote" : "Order"}} Date: <span>{{ $itinerary->created->format('d M Y') }}</span><p>
+                    quote-section tbody tr td:first-child {width: 125px;}       <p>{{ $type === 'Quote' ? "Quote" : "Order"}} Date: <span>{{ $itinerary->created->format('d M Y') }}</span><p>
                 </div>
             </div>  
         </div>
@@ -793,78 +781,90 @@ figure.table {
   </div>
   <!-- </section> -->
 
-  @if(!empty($itinerary->items['Event'])) 
+
+  @php
+    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Event')->each(fn($item) => set_normalize_date($item, 'Date'));
+    $events = collect($itinerary->items['Event'] ?? [])->each(fn($item) => set_normalize_date($item, 'Dates', 'range'));
+    $section_events = $sections->merge($events)->sortBy(function ($item) {
+        return $item->normalize_date;
+    });
+  @endphp
+  @if(!empty($section_events))
     @php
         $firstLoop = true;
     @endphp
-    <!-- <section class="pdf-individual-block"> -->
-        <div class="row">
-            @foreach($itinerary->items['Event'] as $item)
-                <div class="single-module <?php echo $firstLoop?'':'add-on-cls'?>" style="margin-bottom:0px;">
-                    @if($firstLoop)
-                        <div class="heading-module">
-                            <h3>
-                                <span class="mark"></span>
-                                <span class="text">Event</span>
-                            </h3>
-                        </div>
-                        @php
-                            $firstLoop = false;
-                        @endphp
+    <div class="row">
+        @foreach($section_events as $item)
+          <div class="single-module <?php echo $firstLoop?'':'add-on-cls'?>" style="margin-bottom:0px;">
+              @if($firstLoop)
+                  <div class="heading-module">
+                      <h3>
+                          <span class="mark"></span>
+                          <span class="text">Event</span>
+                      </h3>
+                  </div>
+                  @php
+                      $firstLoop = false;
+                  @endphp
+              @endif
+              <div class="details-module">
+                @if ($item->type === 'Section')
+                  @foreach($item->details as $key => $value)
+                    <div class="section-body">
+                    @if ($key === 'Body')
+                      {!! $value !!}
                     @endif
-                    <div class="details-module">
-                        <table>
-                            <tbody>
-                                <tr>
-                                  <td class="w-125"><strong>Event:</strong></td>
-                                  <td>{{ $evename }}</td>
-                                </tr>
-                                @if(array_key_exists('Ticket', $item->details) && !empty($item->details['Ticket']))
-                                    <tr>
-                                        <td class="w-125"><strong>Ticket:</strong></td>
-                                        <td>{{ $item->details['Ticket'] }}</td>
-                                    </tr>
-                                @endif
-                                @if(!empty($item->details['Dates']))
-                                    <tr>
-                                        <td class="w-125"><strong>Dates:</strong></td>
-                                        <td> <?php
-                                                $dates = explode('to', $item->details['Dates']); 
-                                                echo trim($dates[0]); 
-                                                ?>
-                                        </td>
-                                    </tr>
-                                @endif
-
-                                @if(!empty($item->details['Venue']))
-                                    <tr>
-                                        <td class="w-125"><strong>Venue:</strong></td>
-                                        <td>{{ $item->details['Venue'] }}</td>
-                                    </tr>
-                                @endif
-
-
-                                @if(!empty($item->details['Quantity']) && $item->details['Quantity'] > 0)
-                                    <tr>
-                                        <td class="w-125"><strong>Quantity:</strong></td>
-                                        <td>{{ $item->details['Quantity'] }}</td>
-                                    </tr>
-                                @endif
-
-                                @if(!empty($item->details['Description']))
-                                    <tr>
-                                        <td class="w-125"><strong>Description:</strong></td>
-                                        <td class="text-wrap">{!! $item->details['Description'] !!}</td>
-                                    </tr>
-                                @endif                 
-                            </tbody>
-                        </table>
                     </div>
-                </div>
-            @endforeach
-        </div>
-    <!-- </section> -->
-@endif
+                  @endforeach
+                @else
+                  <table>
+                    <tbody>
+                        <tr>
+                          <td class="w-125"><strong>Event:</strong></td>
+                          <td>{{ $evename }}</td>
+                        </tr>
+                        @if(array_key_exists('Ticket', $item->details) && !empty($item->details['Ticket']))
+                            <tr>
+                                <td class="w-125"><strong>Ticket:</strong></td>
+                                <td>{{ $item->details['Ticket'] }}</td>
+                            </tr>
+                        @endif
+                        @if(!empty($item->details['Dates']))
+                            <tr>
+                                <td class="w-125"><strong>Dates:</strong></td>
+                                <td> <?php
+                                        $dates = explode('to', $item->details['Dates']);
+                                        echo trim($dates[0]);
+                                        ?>
+                                </td>
+                            </tr>
+                        @endif
+                        @if(!empty($item->details['Venue']))
+                            <tr>
+                                <td class="w-125"><strong>Venue:</strong></td>
+                                <td>{{ $item->details['Venue'] }}</td>
+                            </tr>
+                        @endif
+                        @if(!empty($item->details['Quantity']) && $item->details['Quantity'] > 0)
+                            <tr>
+                                <td class="w-125"><strong>Quantity:</strong></td>
+                                <td>{{ $item->details['Quantity'] }}</td>
+                            </tr>
+                        @endif
+                        @if(!empty($item->details['Description']))
+                            <tr>
+                                <td class="w-125"><strong>Description:</strong></td>
+                                <td class="text-wrap">{!! $item->details['Description'] !!}</td>
+                            </tr>
+                        @endif
+                    </tbody>
+                  </table>
+                @endif
+              </div>
+          </div>
+        @endforeach
+    </div>
+  @endif
 
 @if(!empty($itinerary->items['Inclusion']))
   @php
