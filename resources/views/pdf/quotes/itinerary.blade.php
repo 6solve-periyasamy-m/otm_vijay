@@ -472,12 +472,13 @@ figure.table {
 .component-body {width:"100%";}
 .component-body table th, .flight-block table th{ font-family: "PPNeueMontreal-Medium"; font-size: 14px; font-weight: 500; line-height: 20px; padding: 8px 0px; border: 1px solid gray;}
 .component-body table td, .flight-block table td { padding: 6.5px; text-align: center; border: 1px solid gray; }
-.tbl-td-width-80 {width:80px !important; }
-.tbl-td-width-85 {width:85px;}
-.tbl-td-width-95 {width:95px;}
-.tbl-td-width-130 {width:130px;}
-.tbl-td-width-60 {width:60px;}
-.flight-block {padding-bottom: 50px; font-family: "PPNeueMontreal-Regular";font-size: 14px; font-weight: 400;line-height: 18px; color: var(--text-color); margin: 0;}
+.tbl-td-width-80 {width:80px!important;}
+.tbl-td-width-85 {width:85px}
+.tbl-td-width-95 {width:95px}
+.tbl-td-width-130 {width:120px}
+.tbl-td-width-60 {width:60px}
+.section-flight-info{font-family: "PPNeueMontreal-Regular";font-size: 14px; font-weight: 400;line-height: 18px; color: var(--text-color); margin: 0;}
+.flight-block {padding-bottom: 50px;}
 .pt-20 { padding-bottom: 45px; width:100%;}
 .quote-section-tbl tbody tr td:first-child{width: 125px; }
 </style>
@@ -517,7 +518,7 @@ figure.table {
                     <h6>AGENT DETAILS</h6>
                     <p>Name: <span>{{$itinerary->consultant?->name}}</span></p>
                     <p>Email: <span>{{$itinerary->consultant?->email}}</span><p>
-                    quote-section tbody tr td:first-child {width: 125px;}       <p>{{ $type === 'Quote' ? "Quote" : "Order"}} Date: <span>{{ $itinerary->created->format('d M Y') }}</span><p>
+                    <p>{{ $type === 'Quote' ? "Quote" : "Order"}} Date: <span>{{ $itinerary->created->format('d M Y') }}</span><p>
                 </div>
             </div>  
         </div>
@@ -600,7 +601,7 @@ figure.table {
                       </tr>
                       <tr>
                         <td class="tbl-td-width-80">{{ $flights->name }}</td>
-                        <td class="tbl-td-width-85">{{ $flights->details['Flight Number'] }}</td>
+                        <td class="tbl-td-width-95">{{ $flights->details['Flight Number'] }}</td>
                         <td class="tbl-td-width-95">{{ $flights->details['Departure Date'] }}</td>
                         <td class="tbl-td-width-130">{{ $flights->details['Departure Airport'] }}</td>
                         <td class="tbl-td-width-130">{{ $flights->details['Arrival Airport'] }}</td>
@@ -779,12 +780,11 @@ figure.table {
     @endforeach
   @endif
   </div>
-  <!-- </section> -->
 
 
   @php
     $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Event')->each(fn($item) => set_normalize_date($item, 'Date'));
-    $events = collect($itinerary->items['Event'] ?? [])->each(fn($item) => set_normalize_date($item, 'Dates', 'range'));
+    $events = collect($itinerary->items['Event'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Event')->each(fn($item) => set_normalize_date($item, 'Dates', 'range'));
     $section_events = $sections->merge($events)->sortBy(function ($item) {
         return $item->normalize_date;
     });
@@ -866,14 +866,21 @@ figure.table {
     </div>
   @endif
 
-@if(!empty($itinerary->items['Inclusion']))
+  @php
+    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Activity')->each(fn($item) => set_normalize_date($item, 'Date'));
+    $inclusion = collect($itinerary->items['Inclusion'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Inclusions')->each(fn($item) => set_normalize_date($item, 'Dates', 'range'));
+    $section_inclusion = $sections->merge($inclusion)->sortBy(function ($item) {
+        return $item->normalize_date;
+    });
+  @endphp
+
+
+@if(!empty($section_inclusion))
   @php
     $firstLoop = true;
   @endphp
-<!-- <section class="pdf-individual-block"> -->
    <div class="row">
-   
-      @foreach($itinerary->items['Inclusion'] as $item)
+      @foreach($section_inclusion as $item)
       <div class="single-module <?php echo $firstLoop?'':'add-on-cls'?>">
       @if($firstLoop)
         <div class="heading-module">
@@ -886,49 +893,54 @@ figure.table {
             $firstLoop = false;
           @endphp
         @endif
-         <!-- <h4>
-            <span class="text">{{ $item->name }}</span>
-            <span class="mark"></span>
-         </h4> -->
          <div class="details-module">
-            <table>
-               <tbody>
-                  <tr>
-                     <td class="w-125"><strong>Inclusion:</strong></td>
-                      @if(array_key_exists('Ticket', $item->details))
-                        <td>{{ $item->details['Ticket'] }}</td>
-                      @else
-                          <td>{{ $item->name }}</td>
-                      @endif
-                  </tr>
-                    @php
-                        $disable_items = ['Ticket'];
-                    @endphp
-                   @foreach($item->details as $key => $value)
-                      @php
-                        $class_desc_pos = $key == 'Description' ? 'text-wrap' : '';
-                      @endphp
-                       @continue(empty($value))
-                        @if (!in_array($key, $disable_items))
-                          <tr>
-                            <td class="w-125"><strong>{{ $key }}:</strong></td>
-                            <td class="<?php echo $class_desc_pos;?>">
-                                @if($key === 'Dates')
-                                    {{ trim(explode('to', $value)[0]) }}
-                                @else
-                                    {!! $value !!}
-                                @endif
-                            </td>
-                          </tr>
+          @if ($item->type === 'Section')
+              @foreach($item->details as $key => $value)
+                <div class="section-body">
+                @if ($key === 'Body')
+                  {!! $value !!}
+                @endif
+                </div>
+              @endforeach
+            @else
+              <table>
+                <tbody>
+                    <tr>
+                      <td class="w-125"><strong>Inclusion:</strong></td>
+                        @if(array_key_exists('Ticket', $item->details))
+                          <td>{{ $item->details['Ticket'] }}</td>
+                        @else
+                            <td>{{ $item->name }}</td>
                         @endif
-                   @endforeach
-               </tbody>
-            </table>
+                    </tr>
+                      @php
+                          $disable_items = ['Ticket'];
+                      @endphp
+                    @foreach($item->details as $key => $value)
+                        @php
+                          $class_desc_pos = $key == 'Description' ? 'text-wrap' : '';
+                        @endphp
+                        @continue(empty($value))
+                          @if (!in_array($key, $disable_items))
+                            <tr>
+                              <td class="w-125"><strong>{{ $key }}:</strong></td>
+                              <td class="<?php echo $class_desc_pos;?>">
+                                  @if($key === 'Dates')
+                                      {{ trim(explode('to', $value)[0]) }}
+                                  @else
+                                      {!! $value !!}
+                                  @endif
+                              </td>
+                            </tr>
+                          @endif
+                    @endforeach
+                </tbody>
+              </table>
+            @endif
          </div>
       </div>
       @endforeach
    </div>
-<!-- </section> -->
 @endif
 
 @if(!empty($itinerary->finances))
