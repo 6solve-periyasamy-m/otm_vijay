@@ -75,7 +75,7 @@ class Form extends Component
             'section.title' => 'required|string|max:255',
             'section.quote_section_type_id' => 'nullable|integer|exists:quote_section_types,id',
             'section.body' => 'required|string',
-            'section.sort_date' => 'nullable|date|date_format:Y-m-d H:i',
+            'section.sort_date' => 'required|date|date_format:Y-m-d H:i',
             'section.order' => 'nullable|integer',
             'image' => 'nullable|file|mimes:jpg,jpeg,png|max:4096',
             'section.hidden' => 'nullable|boolean',
