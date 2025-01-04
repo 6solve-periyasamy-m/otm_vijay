@@ -481,6 +481,7 @@ figure.table {
 .flight-block {padding-bottom: 50px;}
 .pt-20 { padding-bottom: 45px; width:100%;}
 .quote-section-tbl tbody tr td:first-child{width: 125px; }
+.pb20 table {padding-bottom: 35px;}
 </style>
 </head>
 
@@ -491,7 +492,7 @@ figure.table {
   <div class="row">
       <div class="pdf-header">
          <div class="header-logo">
-            <img src="{{ $headlogo }}" alt="logo-ch">30 Jun 202
+            <img src="{{ $headlogo }}" alt="logo-ch">
           <div class="top-heading-section">
             <h1>{{ $type ?? "Quote" }}</h1>
             <h5 style="margin-bottom:12px;">REFERENCE: {{ $reference }} <span></span></h5>         
@@ -553,10 +554,10 @@ figure.table {
 </div>
 
   @php
-    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Flights')->each(fn($item) => set_normalize_date($item, 'Date'));
-    $flights = collect($itinerary->items['Flights'] ?? [])->each(fn($item) => set_normalize_date($item, 'Departure Date'));
+    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Flights');
+    $flights = collect($itinerary->items['Flights'] ?? []);
     $section_flights = $sections->merge($flights)->sortBy(function ($item) {
-        return $item->normalize_date;
+      return $item->sortKey;
     });
   @endphp
 
@@ -618,11 +619,10 @@ figure.table {
   @endif
 
   @php
-    $sections = collect($itinerary->items['Sections'] ?? [])
-          ->filter(fn($item) => data_get($item->details, 'Type') === 'Transport');
+    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Transport');
     $transfers = collect($itinerary->items['Transfers'] ?? []);
     $section_transfers = $sections->merge($transfers)->sortBy(function ($item) {
-        return data_get($item->details, 'Date');
+        return $item->sortKey;
     });
   @endphp
 
@@ -703,10 +703,10 @@ figure.table {
 
 
   @php
-    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Accommodation')->each(fn($item) => set_normalize_date($item, 'Date'));
-    $accommodation = collect($itinerary->items['Accommodation'] ?? [])->each(fn($item) => set_normalize_date($item, 'Check In'));
+    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Accommodation');
+    $accommodation = collect($itinerary->items['Accommodation'] ?? []);
     $section_accommodation = $sections->merge($accommodation)->sortBy(function ($item) {
-        return $item->normalize_date;
+        return $item->sortKey;
     });
   @endphp
 
@@ -734,7 +734,7 @@ figure.table {
           <div class="details-module">
             @if ($accommodation->type === 'Section')
               @foreach($accommodation->details as $key => $value)
-                <div class="section-body">
+                <div class="section-body pb20">
                 @if ($key === 'Body')
                   {!! $value !!}
                 @endif
@@ -783,10 +783,10 @@ figure.table {
 
 
   @php
-    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Event')->each(fn($item) => set_normalize_date($item, 'Date'));
-    $events = collect($itinerary->items['Event'] ?? [])->filter(fn($item) => $item->type === 'Event')->each(fn($item) => set_normalize_date($item, 'Dates', 'range'));
+    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Event');
+    $events = collect($itinerary->items['Event'] ?? [])->filter(fn($item) => $item->type === 'Event');
     $section_events = $sections->merge($events)->sortBy(function ($item) {
-        return $item->normalize_date;
+        return $item->sortKey;
     });
   @endphp
   @if(!empty($section_events))
@@ -867,10 +867,10 @@ figure.table {
   @endif
 
   @php
-    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Activity')->each(fn($item) => set_normalize_date($item, 'Date'));
-    $inclusion = collect($itinerary->items['Inclusion'] ?? [])->filter(fn($item) => $item->type === 'Inclusions')->each(fn($item) => set_normalize_date($item, 'Dates', 'range'));
+    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Additional Inclusions');
+    $inclusion = collect($itinerary->items['Inclusion'] ?? [])->filter(fn($item) => $item->type === 'Inclusions');
     $section_inclusion = $sections->merge($inclusion)->sortBy(function ($item) {
-        return $item->normalize_date;
+        return $item->sortKey;
     });
   @endphp
 

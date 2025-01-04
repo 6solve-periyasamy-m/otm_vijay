@@ -1179,7 +1179,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         return new ItineraryItem(
             $section->title,
             'Section',
-            $section->sort_date?->unix(),
+            $section->sort_date?->unix() ?? $section->order,
             $details,
         );
     }
