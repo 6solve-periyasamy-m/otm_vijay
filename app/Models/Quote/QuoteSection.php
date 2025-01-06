@@ -82,7 +82,10 @@ class QuoteSection extends Model
             'body' => $this->body,
             'order' => $this->order,
             'hidden' => $this->getAttribute('hidden'),
-            'image_url' => $this->image_url
+            'image_url' => $this->image_url,
+            'sort_date' => $this->sort_date,
+            'quantity' => $this->quantity,
+            'type' => $this->getAttribute('type')?->name,
         ];
     }
 }
