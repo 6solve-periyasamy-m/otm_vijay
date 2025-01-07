@@ -12,6 +12,8 @@
             <th scope="col">Check In Time</th>
             <th scope="col">Check Out Date</th>
             <th scope="col">Check Out Time</th>
+            <th scope="col">Purchase Price</th>
+            <th scope="col">Sales Price</th>
             <th scope="col">Occupant Count</th>
             <th scope="col">Empty Beds</th>
             <th scope="col">Reference</th>
@@ -35,6 +37,8 @@
                 <td>{{ $row->from->format('H:i:s') }}</td>
                 <td>{{ $row->to->format('Y-m-d') }}</td>
                 <td>{{ $row->to->format('H:i:s') }}</td>
+                <td>{{ f_currency($row->purchase) }}</td>
+                <td>{{ f_currency($row->sales) }}</td>
                 {{-- Exporter strips 0 values for some reason, hence formatting with decimal place --}}
                 <td>{{ $row->occupants == 0 ? number_format(0, 2) : $row->occupants }}</td>
                 <td>{{ $row->empty_beds == 0 ? number_format(0, 2) : $row->empty_beds }}</td>

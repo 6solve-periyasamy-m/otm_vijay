@@ -66,6 +66,8 @@ class ActivityManifestRepository implements HasActivityManifest
             $row->component = $orderComponent->tourComponent->tour_component_type;
             $row->start = $orderComponent->tourComponent->inventory->starts_at;
             $row->end = $orderComponent->tourComponent->inventory->ends_at;
+            $row->purchase = $orderComponent->repository->getCostToCompany();
+            $row->sales = $orderComponent->cost ?? $orderComponent->tourComponent->inventory->sales_price;
             $row->notes = $orderComponent->orderCustomer->activity_notes;
             $data[] = $row;
         }
