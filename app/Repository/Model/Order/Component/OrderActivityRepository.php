@@ -116,4 +116,9 @@ class OrderActivityRepository extends OrderComponentRepository
     {
         return $this->orderComponent->tourComponent->inventory->ends_at;
     }
+
+    public function getCostToCompany(): float
+    {
+        return $this->orderComponent->purchase_price ?? $this->orderComponent->tourComponent->inventory->local_purchase_price;
+    }
 }

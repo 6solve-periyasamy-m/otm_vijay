@@ -664,7 +664,15 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         }
         $cost = 0;
         foreach ($this->order->orderCustomers as $orderCustomer) {
-            $cost += $orderCustomer->repository->getCostToCompany();
+            $cost += $orderCustomer->repository->getCostToCompany(true);
+        }
+        $seen = [];
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            foreach ($orderCustomer->orderAccommodation as $component) {
+                if (in_array($component->id, $seen)) { continue; }
+                $cost += $component->repository->getCostToCompany();
+                $seen[] = $component->id;
+            }
         }
         return $cost;
     }

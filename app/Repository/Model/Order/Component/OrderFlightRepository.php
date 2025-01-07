@@ -125,4 +125,9 @@ class OrderFlightRepository extends OrderComponentRepository
     {
         return $this->orderComponent->tourComponent->inventory->arrives_at;
     }
+
+    public function getCostToCompany(): float
+    {
+        return $this->orderComponent->purchase_price ?? $this->orderComponent->tourComponent->inventory->local_purchase_price;
+    }
 }
