@@ -493,6 +493,10 @@ figure.table {
       <div class="pdf-header">
          <div class="header-logo">
             <img src="{{ $headlogo }}" alt="logo-ch">
+          </div>
+      </div>
+      <div class="customer-details-block">
+        <div class="customer-details-text-block">            
           <div class="top-heading-section">
             <h1>{{ $type ?? "Quote" }}</h1>
             <h5 style="margin-bottom:12px;">REFERENCE: {{ $reference }} <span></span></h5>         
