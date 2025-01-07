@@ -110,4 +110,9 @@ class OrderMerchandiseRepository extends OrderComponentRepository
     {
         return null;
     }
+
+    public function getCostToCompany(): float
+    {
+        return $this->orderComponent->purchase_price ?? $this->orderComponent->tourComponent->inventory->local_purchase_price;
+    }
 }
