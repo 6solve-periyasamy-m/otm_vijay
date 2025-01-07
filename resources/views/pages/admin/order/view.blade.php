@@ -75,7 +75,7 @@
             <p>Total Paid</p>
             <h6 class="fw-bold">{{ f_currency($order->paid) }}</h6>
         </div>
-        <div class="col-12 col-xl-3">
+        <div class="col-12 col-xl-6">
             <p>Balance Outstanding</p>
             <h6 class="fw-bold">{{ f_currency($order->remaining) }}</h6>
         </div>
