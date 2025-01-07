@@ -6,6 +6,7 @@ use App\Models\Customer\Customer;
 use App\Models\Tour\Tour;
 use App\Repository\Storage\ConvertedCustomer;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Customer\Organization;
 
 /**
  * @property string $ordered_on
@@ -46,6 +47,7 @@ class CreateOrderRequest extends FormRequest
             'invoice_footer' => $this->getTour()->invoice_footer,
             'organization_id' => $this->organization_id,
             'agent_id' => $this->agent_id,
+            'commission' => $this->commission,
         ];
     }
 
@@ -88,7 +90,9 @@ class CreateOrderRequest extends FormRequest
             'deposit' => 'nullable|numeric|min:0',
             'tour_id' => 'required|integer|exists:tours,id',
             'lead_booker.id' => 'required|integer|exists:customers,id',
-            'organization_id' => 'nullable|integer|exists:organizations,id'
+            'organization_id' => 'nullable|integer|exists:organizations,id',
+            'agent_id' => 'nullable|integer|exists:agents,id',
+            'commission' => 'nullable|numeric|min:0',
         ];
     }
 }

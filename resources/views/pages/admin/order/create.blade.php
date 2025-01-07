@@ -120,8 +120,7 @@
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'width' => 6 ])
     @include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'width' => 6 ])
     @include('partials.fields.checkbox', ['name' => 'Send Booking Confirmation Email?', 'field' => 'should_invoice', 'value' => flag('order.manual.mail', false),])
-    <x-livewire.input.select.organization name="organization_id" label="Organization (Optional)" />
-    <x-livewire.input.select.agent name="agent_id" label="Agent (Optional)" />
+    <livewire:admin.order.organization-selector />
     <hr class="splitter">
     <div class="customers-section row form-group">
         <div class="col-12 col-xl-9">
