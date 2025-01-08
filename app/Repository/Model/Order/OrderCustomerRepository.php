@@ -309,7 +309,10 @@ class OrderCustomerRepository extends ModelRepository
         foreach ($this->getComponents(!$ignoreAccommodation) as $component) {
             $cost += $component->getCostToCompany();
         }
-        return $cost;
+        foreach ($this->orderCustomer->order->tour->costs()->where('per_customer', '=', true)->get() as $item) {
+            $cost += $item->amount;
+        }
+        return sigfig($cost);
     }
 
     public function forceDelete(): void
