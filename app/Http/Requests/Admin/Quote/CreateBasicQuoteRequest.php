@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin\Quote;
 
 use App\Models\Customer\Customer;
 use Illuminate\Foundation\Http\FormRequest;
-
+use App\Models\Customer\Organization;
 
 /**
  * @property int $customer_id
@@ -17,6 +17,8 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $external_notes
  * @property int|null $brand_id
  * @property int|null $tax_bracket_id
+ * @property int|null $agent_id
+ * @property float $commission
  */
 class CreateBasicQuoteRequest extends FormRequest
 {
@@ -35,6 +37,8 @@ class CreateBasicQuoteRequest extends FormRequest
             'external_notes' => $this->external_notes,
             'brand_id' => $this->brand_id,
             'tax_bracket_id' => $this->tax_bracket_id,
+            'agent_id' => $this->agent_id,
+            'commission' => $this->commission,
         ];
     }
 

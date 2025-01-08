@@ -69,6 +69,8 @@ class FlightManifestRepository implements HasFlightManifest
             $row->component = $orderComponent->tourComponent->tour_component_type;
             $row->start = $orderComponent->tourComponent->inventory->departs_at;
             $row->end = $orderComponent->tourComponent->inventory->arrives_at;
+            $row->purchase = $orderComponent->repository->getCostToCompany();
+            $row->sales = $orderComponent->cost ?? $orderComponent->tourComponent->inventory->sales_price;
             $row->notes = $orderComponent->orderCustomer->flight_notes;
             $data[] = $row;
         }

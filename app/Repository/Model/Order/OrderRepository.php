@@ -176,7 +176,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public static function create(Tour $tour, array $data, ConvertedCustomer $lead, array $customers = [], bool $shouldInvoice = true): Order
     {
         $order = Order::make(['consultant_id' => get_current_admin()?->id, 'tax_bracket_id' => $tour->tax_bracket_id, ...$data]);
-        $order->commission = $lead->customer->organization?->commission;
+        $order->commission = $data['commission'] ?? $lead->customer->organization?->commission;
         $tour->orders()->saveQuietly($order);
         $leadBooker = $order->repository->addCustomer($lead, false, false, true);
         $order->updateQuietly(['lead_booker_id' => $leadBooker->id,]);
@@ -664,7 +664,15 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         }
         $cost = 0;
         foreach ($this->order->orderCustomers as $orderCustomer) {
-            $cost += $orderCustomer->repository->getCostToCompany();
+            $cost += $orderCustomer->repository->getCostToCompany(true);
+        }
+        $seen = [];
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            foreach ($orderCustomer->orderAccommodation as $component) {
+                if (in_array($component->id, $seen)) { continue; }
+                $cost += $component->repository->getCostToCompany();
+                $seen[] = $component->id;
+            }
         }
         return $cost;
     }

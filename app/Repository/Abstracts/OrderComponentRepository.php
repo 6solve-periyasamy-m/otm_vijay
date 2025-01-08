@@ -25,6 +25,7 @@ abstract class OrderComponentRepository extends ModelRepository implements HasCo
     abstract public function getItineraryItem(Order $order = null): ItineraryItem;
     abstract public function getStartTime(): Carbon|null;
     abstract public function getEndTime(): Carbon|null;
+    abstract public function getCostToCompany(): float;
 
     public function getAbstractOrderComponent(): OrderComponent
     {

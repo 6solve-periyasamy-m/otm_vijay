@@ -303,11 +303,11 @@ class OrderCustomerRepository extends ModelRepository
         }
     }
 
-    public function getCostToCompany(): float
+    public function getCostToCompany(bool $ignoreAccommodation = true): float
     {
         $cost = 0;
-        foreach ($this->getComponents() as $component) {
-            $cost += $component->getTourComponent()->getPurchasePrice();
+        foreach ($this->getComponents(!$ignoreAccommodation) as $component) {
+            $cost += $component->getCostToCompany();
         }
         return $cost;
     }
