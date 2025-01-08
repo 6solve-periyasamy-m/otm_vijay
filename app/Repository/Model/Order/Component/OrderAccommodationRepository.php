@@ -123,4 +123,9 @@ class OrderAccommodationRepository extends OrderComponentRepository
     {
         return $this->orderComponent->tourComponent->inventory->check_out;
     }
+
+    public function getCostToCompany(): float
+    {
+        return $this->orderComponent->purchase_price ?? $this->orderComponent->tourComponent->inventory->local_purchase_price;
+    }
 }

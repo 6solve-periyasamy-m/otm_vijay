@@ -67,6 +67,8 @@ class RoomingReportRepository implements HasRoomingList
             $row->board = $orderAccommodation->accommodation_inventory->boardType->name;
             $row->reference = $orderAccommodation->group->orderCustomers[0]->order->booking_reference;
             $row->travellers = $orderAccommodation->group->orderCustomers()->with('customer')->get();
+            $row->purchase = $orderAccommodation->repository->getCostToCompany();
+            $row->sales = $orderAccommodation->cost ?? $orderAccommodation->accommodation_inventory->sales_price;
             $row->occupancy = $occupancy;
             $row->occupants = $orderAccommodation->group->orderCustomers()->count();
             $row->empty_beds = $occupancy - $row->occupants;
