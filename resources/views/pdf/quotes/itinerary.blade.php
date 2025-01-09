@@ -599,8 +599,8 @@ figure.table {
                           <th>Airline</th>
                           <th>Flight Number</th>
                           <th>Departure Date</th>
-                          <th>From Airport</th>
-                          <th>To Airport</th>
+                          <th>From</th>
+                          <th>To</th>
                           <th>Departure Time</th>
                           <th>Arrival Time</th>
                       </tr>
