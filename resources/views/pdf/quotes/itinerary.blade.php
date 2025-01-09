@@ -597,12 +597,12 @@ figure.table {
                   <table class="tbl-quote-section" style="width: 100%;">
                       <tr>
                           <th>Airline</th>
-                          <th>Flight Number</th>
-                          <th>Departure Date</th>
+                          <th>Flight No.</th>
+                          <th>Date</th>
                           <th>From</th>
                           <th>To</th>
-                          <th>Departure Time</th>
-                          <th>Arrival Time</th>
+                          <th>Departure</th>
+                          <th>Arrival</th>
                       </tr>
                       <tr>
                         <td class="tbl-td-width-80">{{ $flights->name }}</td>
