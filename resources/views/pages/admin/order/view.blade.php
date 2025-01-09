@@ -93,9 +93,13 @@
             <p>Tax Amount</p>
             <h6 class="fw-bold">{{ $order->getTaxes() !== null ? f_currency($order->getTaxes()) : 'No Taxes Due' }}</h6>
         </div>
-        <div class="col-12 col-xl-6">
+        <div class="col-12 col-xl-3">
             <p>Cost to Company</p>
             <h6 class="fw-bold">{{ f_currency($order->repository->getCostToCompany())}}</h6>
+        </div>
+        <div class="col-12 col-xl-3">
+            <p>Current Profit</p>
+            <h6 class="fw-bold">{{ f_currency($order->repository->getCurrentProfit())}}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Lead Booker</p>

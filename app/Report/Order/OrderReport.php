@@ -126,6 +126,11 @@ class OrderReport extends TourReport
                     CurrencyColumn::name('order_caches.cost_to_company')
                         ->filterable()
                 ),
+            'order_profit' =>
+                new ColumnDefinition(
+                    'reports.order.column.profit',
+                    CurrencyColumn::name('order_caches.profit')
+                ),
             'order_remaining' =>
                 new ColumnDefinition(
                     'reports.order.column.remaining',

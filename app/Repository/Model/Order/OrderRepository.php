@@ -573,6 +573,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             'next_payment_remaining' => $nextPayment?->remaining,
             'commission_amount' => $this->order->commission_amount,
             'cost_to_company' => $this->getCostToCompany(true),
+            'profit' => $this->getCurrentProfit(true),
             'cached' => now(),
         ]);
         $cache->save();
@@ -675,6 +676,16 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             }
         }
         return $cost;
+    }
+
+    public function getCurrentProfit(bool $recache = false): float
+    {
+        if (!$recache && $this->order->cache->profit !== null) {
+            return $this->order->cache->profit;
+        }
+        $profit = 0;
+        $profit = $this->order->total - $this->getCostToCompany(true);
+        return $profit;
     }
 
     public function getBeforeString(): string|null
