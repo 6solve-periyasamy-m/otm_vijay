@@ -947,6 +947,90 @@ figure.table {
    </div>
 @endif
 
+@php
+    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Merchandise');
+    $merchandise = collect($itinerary->items['Inclusion'] ?? [])->filter(fn($item) => $item->type === 'Merchandise');
+    $section_merchandise = $sections->merge($merchandise)->sortBy(function ($item) {
+        return $item->sortKey;
+    });
+  @endphp
+
+  @if(!empty($section_merchandise))
+      @php
+        $firstLoop = true;
+      @endphp
+    @foreach($section_merchandise as $merchandise)
+      @if(isset($merchandise->details['Quantity']) && $merchandise->details['Quantity'] > 0)
+        <div class="single-module mb-n15 <?php echo $firstLoop?'':'add-on-cls'?>">
+          @if($firstLoop)
+              <div class="heading-module">
+                  <h3   style="margin-top:10px;">
+                      <span class="mark"></span>
+                      <span class="text">Merchandise</span>
+                  </h3>
+              </div>
+              @php
+                  $firstLoop = false;
+              @endphp
+          @endif
+            <div class="details-module">
+              @if ($merchandise->type === 'Section')
+                @foreach($merchandise->details as $key => $value)
+                  <div class="section-body">
+                  @if ($key === 'Body')
+                    {!! $value !!}
+                  @endif
+                  @if ($key === 'Quantity')
+                    <table style="padding-top: 46px;">
+                      <tbody>
+                        <tr>
+                          <td class="w-125 pt-10"><strong>Quantity:</strong></td>
+                          <td>{{ $value }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  @endif
+                  </div>
+                @endforeach
+              @else
+                <table>
+                    <tbody>
+                      <tr>
+                        <td class="item-header w-125">
+                          <strong> Name: </strong>
+                        </td>
+                        <td class="item-detail">
+                          {{ $merchandise->name }}
+                        </td>
+                      </tr>
+                        @php
+                          $disable_items = ['Description'];
+                        @endphp
+                        @foreach($merchandise->details as $key => $value)
+                        @php
+                          $class_desc_pos = $key == 'Description' ? 'desc-pos-top text-wrap' : '';
+                        @endphp
+                            @if (!in_array($key, $disable_items))
+                              <tr>
+                                  <td class="item-header w-125">
+                                      <strong>{{ $key }}:</strong>
+                                  </td>
+                                  <td class="item-detail <?php echo $class_desc_pos;?>">
+                                    {{ $value }}
+                                  </td>
+                              </tr>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+              @endif
+            </div>
+        </div>
+      @endif
+    @endforeach
+  @endif
+
+
 @if(!empty($itinerary->finances))
 <!-- <section class="pdf-individual-block"> -->
    <div class="row">

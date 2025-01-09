@@ -46,15 +46,21 @@
             <p>Booking Reference</p>
             <h6 class="fw-bold">{{ $order->booking_reference }}</h6>
         </div>
+        @isset ($order->tour?->event?->name)
+            <div class="col-12 col-xl-6">
+                <p>Event</p>
+                <h6 class="fw-bold">{{ $order->tour->event->name }}</h6>
+            </div>
+        @endisset
         <div class="col-12 col-xl-6">
             <p>Tour</p>
             <h6 class="fw-bold">{{ $order->tour?->name ?? "Tour Deleted" }}</h6>
         </div>
-        <div class="col-12 col-xl-6">
+        <div class="col-12 col-xl-4">
             <p>Tour Date</p>
             <h6 class="fw-bold">{{ $order->tour !== null ? f_date($order->tour->date_from) . " to " . f_date($order->tour->date_to) : "Tour Deleted" }}</h6>
         </div>
-        <div class="col-12 col-xl-6">
+        <div class="col-12 col-xl-2">
             <p>Order Status</p>
             <h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6>
         </div>                
