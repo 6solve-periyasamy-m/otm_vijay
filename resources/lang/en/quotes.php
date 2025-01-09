@@ -22,6 +22,7 @@ return [
         'description' => 'Description',
         'organization' => 'Organization',
         'agent' => 'Agent',
+        'event' => 'Event',
         'notes' => [
             'internal' => 'Internal Note',
             'external' => 'External Note',
