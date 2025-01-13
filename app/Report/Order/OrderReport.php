@@ -129,7 +129,7 @@ class OrderReport extends TourReport
             'order_remaining' =>
                 new ColumnDefinition(
                     'reports.order.column.remaining',
-                    CurrencyColumn::raw('order_caches.cost - (SELECT SUM(payments.amount) FROM payments WHERE payments.order_id = orders.id AND payments.deleted_at IS NULL)')
+                    CurrencyColumn::raw('order_caches.total_owed - (SELECT COALESCE(SUM(payments.amount), 0) FROM payments WHERE payments.order_id = orders.id AND payments.deleted_at IS NULL)')
                         ->filterable()
                 ),
             'order_commission_percentage' =>
