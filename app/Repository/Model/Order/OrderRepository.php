@@ -675,7 +675,10 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
                 $seen[] = $component->id;
             }
         }
-        return $cost;
+        foreach ($this->order->tour->costs()->where('per_customer', '=', false)->get() as $item) {
+            $cost += $item->amount;
+        }
+        return sigfig($cost);
     }
 
     public function getCurrentProfit(bool $recache = false): float
