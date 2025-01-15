@@ -57,6 +57,7 @@ class InvoiceRepository
     public function getItemsByQuantity(): Collection
     {
         $data = collect();
+        $accom_data = collect();
         foreach ($this->invoice->customers as $customer) {
             foreach ($customer->billables as $billable) {
                 $qBillable = $data->get($billable->shared_key, new QuantityBillable($billable->description, $billable->shared_key, $billable->amount, $billable->is_base));
@@ -66,16 +67,50 @@ class InvoiceRepository
                 }
             }
         }
-        foreach ($this->invoice->groups as $group) {
-            foreach ($group->billables as $billable) {
-                $qBillable = $data->get($billable->shared_key, new QuantityBillable($billable->description, $billable->shared_key, $billable->amount, $billable->is_base));
-                $data->put($billable->shared_key, $qBillable->addQuantity());
-                if (strpos($billable->shared_key, "transport") !== false) {
-                    $billable->description = $this->transportDescriptionFormat($billable->description);
+        if ($this->invoice->groups) {
+            foreach ($this->invoice->groups as $group) {
+                foreach ($group->billables as $billable) {
+                    $qBillable = $accom_data->get($billable->shared_key, new QuantityBillable($billable->description, $billable->shared_key, $billable->amount, $billable->is_base));
+                    $accom_data->put($billable->shared_key, $qBillable->addQuantity());
+                    if (strpos($billable->shared_key, "transport") !== false) {
+                        $billable->description = $this->transportDescriptionFormat($billable->description);
+                    }
                 }
             }
+            $accom_data = $this->mergeBillablesByQuantity($accom_data);
         }
-        return $data;
+
+        $merged_data = $data->merge($accom_data);
+        return $merged_data;
+    }
+
+    public function mergeBillablesByQuantity(Collection $billables): Collection
+    {
+        $merged = collect();
+        $billables->each(function ($billable) use ($merged) {
+            preg_match('/^(.*?)\((.*? to .*?)\) \((.*)\)$/', $billable->description, $matches);
+            [$description, $hotel_name, $date_range, $room_details] = $matches;
+            $unique_key = "{$hotel_name}|{$room_details}";
+            if ($merged->has($unique_key)) {
+                $existing_billable = $merged->get($unique_key);
+
+                preg_match('/^(.*?) to (.*?)$/', $date_range, $new_dates);
+                preg_match('/(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2})\sto\s(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2})/', $existing_billable->description, $existing_dates);
+                $existing_start = \DateTime::createFromFormat('d/m/Y H:i', $existing_dates[1]);
+                $existing_end = \DateTime::createFromFormat('d/m/Y H:i', $existing_dates[2]);
+                $new_start = \DateTime::createFromFormat('d/m/Y H:i', $new_dates[1]);
+                $new_end = \DateTime::createFromFormat('d/m/Y H:i', $new_dates[2]);
+
+                $start_date = min($existing_start, $new_start);
+                $end_date = max($existing_end, $new_end);
+                $merged_description = "{$hotel_name}(" . $start_date->format('d/m/Y H:i') . " to " . $end_date->format('d/m/Y H:i') . ") ({$room_details})";
+                $existing_billable->setQuantity($existing_billable->getQuantity() + $billable->getQuantity());
+                $existing_billable->setDescription($merged_description);
+            } else {
+                $merged->put($unique_key, $billable);
+            }
+        });
+        return $merged;
     }
 
     public function transportDescriptionFormat($invoice_description)
