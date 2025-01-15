@@ -179,31 +179,31 @@ class OrderCustomerRepository extends ModelRepository
         $components = [];
         if ($accommodation) {
             foreach ($this->orderCustomer->orderAccommodation()->with('tourComponent')->get() as $orderComponent) {
-                if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+                if (!in_array($orderComponent?->tourComponent?->tour_component_type, $typeFilters)) continue;
                 $components[] = $orderComponent->repository;
             }
         }
         if ($activities) {
             foreach ($this->orderCustomer->orderActivities()->with('tourComponent')->get() as $orderComponent) {
-                if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+                if (!in_array($orderComponent?->tourComponent?->tour_component_type, $typeFilters)) continue;
                 $components[] = $orderComponent->repository;
             }
         }
         if ($flights) {
             foreach ($this->orderCustomer->orderFlights()->with('tourComponent')->get() as $orderComponent) {
-                if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+                if (!in_array($orderComponent?->tourComponent?->tour_component_type, $typeFilters)) continue;
                 $components[] = $orderComponent->repository;
             }
         }
         if ($transport) {
             foreach ($this->orderCustomer->orderTransports()->with('tourComponent')->get() as $orderComponent) {
-                if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+                if (!in_array($orderComponent?->tourComponent?->tour_component_type, $typeFilters)) continue;
                 $components[] = $orderComponent->repository;
             }
         }
         if ($extras){
             foreach ($this->orderCustomer->orderMerchandise()->with('tourComponent')->get() as $orderComponent) {
-                if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+                if (!in_array($orderComponent?->tourComponent?->tour_component_type, $typeFilters)) continue;
                 $components[] = $orderComponent->repository;
             }
         }
@@ -309,7 +309,10 @@ class OrderCustomerRepository extends ModelRepository
         foreach ($this->getComponents(!$ignoreAccommodation) as $component) {
             $cost += $component->getCostToCompany();
         }
-        return $cost;
+        foreach ($this->orderCustomer->order->tour->costs()->where('per_customer', '=', true)->get() as $item) {
+            $cost += $item->amount;
+        }
+        return sigfig($cost);
     }
 
     public function forceDelete(): void
