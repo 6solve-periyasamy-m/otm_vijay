@@ -472,16 +472,12 @@ figure.table {
 .component-body {width:"100%";}
 .component-body table th, .flight-block table th{ font-family: "PPNeueMontreal-Medium"; font-size: 14px; font-weight: 500; line-height: 20px; padding: 8px 0px; border: 1px solid gray;}
 .component-body table td, .flight-block table td { padding: 6.5px; text-align: center; border: 1px solid gray; }
-.tbl-td-width-80 {width:80px!important;}
-.tbl-td-width-85 {width:85px}
-.tbl-td-width-95 {width:95px}
-.tbl-td-width-130 {width:120px}
-.tbl-td-width-60 {width:60px}
 .section-flight-info{font-family: "PPNeueMontreal-Regular";font-size: 14px; font-weight: 400;line-height: 18px; color: var(--text-color); margin: 0;}
 .flight-block {padding-bottom: 50px;}
 .pt-20 { padding-bottom: 45px; width:100%;}
 .quote-section-tbl tbody tr td:first-child{width: 125px; }
 .pb20 table {padding-bottom: 35px;}
+.event-block table tr:last-of-type td:last-child{padding-bottom: 5px !important;}
 </style>
 </head>
 
@@ -598,6 +594,7 @@ figure.table {
                       <tr>
                           <th>Airline</th>
                           <th>Flight No.</th>
+                          <th>Class</th>
                           <th>Date</th>
                           <th>From</th>
                           <th>To</th>
@@ -605,13 +602,14 @@ figure.table {
                           <th>Arrival</th>
                       </tr>
                       <tr>
-                        <td class="tbl-td-width-80">{{ $flights->name }}</td>
-                        <td class="tbl-td-width-95">{{ $flights->details['Flight Number'] }}</td>
-                        <td class="tbl-td-width-95">{{ $flights->details['Departure Date'] }}</td>
-                        <td class="tbl-td-width-130">{{ $flights->details['Departure Airport'] }}</td>
-                        <td class="tbl-td-width-130">{{ $flights->details['Arrival Airport'] }}</td>
-                        <td class="tbl-td-width-60">{{ $flights->details['Departure Time'] }}</td>
-                        <td class="tbl-td-width-60">{{ $flights->details['Arrival Time'] }}</td>
+                        <td style="width:80px;">{{ $flights->name }}</td>
+                        <td style="width:100px;">{{ $flights->details['Flight Number'] }}</td>
+                        <td style="width:60px;">{{ $flights->details['Class'] }}</td>
+                        <td style="width:70px;">{{ $flights->details['Departure Date'] }}</td>
+                        <td style="width:100px;">{{ $flights->details['Departure Airport'] }}</td>
+                        <td style="width:100px;">{{ $flights->details['Arrival Airport'] }}</td>
+                        <td style="width:55px;">{{ $flights->details['Departure Time'] }}</td>
+                        <td style="width:55px;">{{ $flights->details['Arrival Time'] }}</td>
                       </tr>
                   </table>
                 </div>
@@ -811,7 +809,7 @@ figure.table {
                       $firstLoop = false;
                   @endphp
               @endif
-              <div class="details-module">
+              <div class="details-module event-block">
                 @if ($item->type === 'Section')
                   @foreach($item->details as $key => $value)
                     <div class="section-body">
