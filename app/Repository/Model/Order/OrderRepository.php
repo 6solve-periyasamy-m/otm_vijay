@@ -564,6 +564,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         $cache = $this->order->cache ?? new OrderCache(['order_id' => $this->order->id,]);
         $cache->save(); // If the cache isn't saved in the database, then it doesn't write properly for some reason
         $nextPayment = $this->getNextPaymentDetails();
+        $cost_to_company = $this->getCostToCompany(true);
         $cache->update([
             'cost' => $this->getCost(true),
             'status' => $this->getOrderStatus(true),
@@ -572,8 +573,8 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             'next_payment_amount' => $nextPayment?->amount,
             'next_payment_remaining' => $nextPayment?->remaining,
             'commission_amount' => $this->order->commission_amount,
-            'cost_to_company' => $this->getCostToCompany(true),
-            'profit' => $this->getCurrentProfit(true),
+            'cost_to_company' => $cost_to_company,
+            'profit' => $this->getCurrentProfit(true, $cost_to_company),
             'cached' => now(),
         ]);
         $cache->save();
@@ -678,13 +679,13 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         return $cost;
     }
 
-    public function getCurrentProfit(bool $recache = false): float
+    public function getCurrentProfit(bool $recache = false, float $cost_to_company): float
     {
         if (!$recache && $this->order->cache->profit !== null) {
             return $this->order->cache->profit;
         }
         $profit = 0;
-        $profit = $this->order->total - $this->getCostToCompany(true);
+        $profit = $this->order->total - $cost_to_company;
         return $profit;
     }
 

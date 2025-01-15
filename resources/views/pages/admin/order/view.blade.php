@@ -99,7 +99,7 @@
         </div>
         <div class="col-12 col-xl-3">
             <p>Current Profit</p>
-            <h6 class="fw-bold">{{ f_currency($order->repository->getCurrentProfit())}}</h6>
+            <h6 class="fw-bold">{{ f_currency($order->cache->profit)}}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Lead Booker</p>
