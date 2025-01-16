@@ -9,6 +9,7 @@
         <th scope="col">Type</th>
         <th scope="col">Variant</th>
         <th scope="col">Size</th>
+        <th scope="col">Fulfilled</th>
         <th scope="col">Component Type</th>
         <th scope="col">Purchase Price</th>
         <th scope="col">Sales Price</th>
@@ -25,6 +26,7 @@
             <td>{{ $row->type }}</td>
             <td>{{ $row->variant }}</td>
             <td>{{ $row->size }}</td>
+            <td>{{ f_bool($row->fulfilled) }}</td>
             <td>{{ $row->component }}</td>
             <td>{{ f_currency($row->purchase) }}</td>
             <td>{{ f_currency($row->sales) }}</td>
