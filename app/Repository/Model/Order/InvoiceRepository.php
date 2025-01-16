@@ -10,6 +10,8 @@ use Dompdf\Options;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
+use Carbon\Carbon;
+
 class InvoiceRepository
 {
     public readonly Invoice $invoice;
@@ -79,7 +81,6 @@ class InvoiceRepository
             }
             $accom_data = $this->mergeBillablesByQuantity($accom_data);
         }
-
         $merged_data = $data->merge($accom_data);
         return $merged_data;
     }
@@ -87,27 +88,32 @@ class InvoiceRepository
     public function mergeBillablesByQuantity(Collection $billables): Collection
     {
         $merged = collect();
-        $billables->each(function ($billable) use ($merged) {
+        $date_format = 'd/m/Y H:i';
+        $billables->each(function ($billable) use ($merged, $date_format) {
             preg_match('/^(.*?)\((.*? to .*?)\) \((.*)\)$/', $billable->description, $matches);
-            [$description, $hotel_name, $date_range, $room_details] = $matches;
-            $unique_key = "{$hotel_name}|{$room_details}";
-            if ($merged->has($unique_key)) {
-                $existing_billable = $merged->get($unique_key);
+            if (count($matches) === 4) {
+                [$description, $hotel_name, $date_range, $room_details] = $matches;
+                $unique_key = "{$hotel_name}|{$room_details}";
+                if ($merged->has($unique_key)) {
+                    $existing_billable = $merged->get($unique_key);
+                    preg_match('/^(.*?) to (.*?)$/', $date_range, $new_dates);
+                    preg_match('/(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2})\sto\s(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2})/', $existing_billable->description, $existing_dates);
 
-                preg_match('/^(.*?) to (.*?)$/', $date_range, $new_dates);
-                preg_match('/(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2})\sto\s(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2})/', $existing_billable->description, $existing_dates);
-                $existing_start = \DateTime::createFromFormat('d/m/Y H:i', $existing_dates[1]);
-                $existing_end = \DateTime::createFromFormat('d/m/Y H:i', $existing_dates[2]);
-                $new_start = \DateTime::createFromFormat('d/m/Y H:i', $new_dates[1]);
-                $new_end = \DateTime::createFromFormat('d/m/Y H:i', $new_dates[2]);
+                    $existing_start = Carbon::createFromFormat($date_format, $existing_dates[1]);
+                    $existing_end = Carbon::createFromFormat($date_format, $existing_dates[2]);
+                    $new_start = Carbon::createFromFormat($date_format, $new_dates[1]);
+                    $new_end = Carbon::createFromFormat($date_format, $new_dates[2]);
 
-                $start_date = min($existing_start, $new_start);
-                $end_date = max($existing_end, $new_end);
-                $merged_description = "{$hotel_name}(" . $start_date->format('d/m/Y H:i') . " to " . $end_date->format('d/m/Y H:i') . ") ({$room_details})";
-                $existing_billable->setQuantity($existing_billable->getQuantity() + $billable->getQuantity());
-                $existing_billable->setDescription($merged_description);
-            } else {
-                $merged->put($unique_key, $billable);
+                    $start_date = $existing_start->min($new_start);
+                    $end_date = $existing_end->max($new_end);
+
+                    $merged_description = "{$hotel_name}(" . $start_date->format($date_format) . " to " . $end_date->format($date_format) . ") ({$room_details})";
+
+                    $existing_billable->setQuantity($existing_billable->getQuantity() + $billable->getQuantity());
+                    $existing_billable->setDescription($merged_description);
+                } else {
+                    $merged->put($unique_key, $billable);
+                }
             }
         });
         return $merged;
