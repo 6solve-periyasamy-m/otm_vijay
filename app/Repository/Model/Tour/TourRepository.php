@@ -30,15 +30,16 @@ use App\Repository\Costing\Tour\TourCostingRepository;
 use App\Repository\Interfaces\HasStockControl;
 use App\Repository\Interfaces\Manifest\HasActivityManifest;
 use App\Repository\Interfaces\Manifest\HasFlightManifest;
+use App\Repository\Interfaces\Manifest\HasMerchandiseManifest;
 use App\Repository\Interfaces\Manifest\HasRoomingList;
 use App\Repository\Interfaces\Manifest\HasTransportManifest;
 use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
 use App\Repository\Model\Activity\ActivityInventoryRepository;
 use App\Repository\Model\Merchandise\MerchandiseInventoryRepository;
-use App\Repository\Model\Merchandise\MerchandiseInventoryTourRepository;
 use App\Repository\Model\Transport\TransportInventoryRepository;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
 use App\Repository\Reporting\Manifest\FlightManifestRepository;
+use App\Repository\Reporting\Manifest\MerchandiseManifestRepository;
 use App\Repository\Reporting\Manifest\TransportManifestRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\BookingComponentStorage;
@@ -47,7 +48,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Settings;
 
-class TourRepository extends ComponentPackageRepository implements HasStockControl, HasRoomingList, HasActivityManifest, HasFlightManifest, HasTransportManifest
+class TourRepository extends ComponentPackageRepository implements HasStockControl, HasRoomingList, HasActivityManifest, HasFlightManifest, HasTransportManifest, HasMerchandiseManifest
 {
     private Tour $tour;
     private TourCostingRepository $costing;
@@ -545,6 +546,11 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
     public function getTransportManifest(): Collection|array
     {
         return $this->tour->orderTransport()->with(TransportManifestRepository::getRelations())->get();
+    }
+
+    public function getMerchandiseManifest(): Collection|array
+    {
+        return $this->tour->orderMerchandise()->with(MerchandiseManifestRepository::getRelations())->get();
     }
 
     public function isStockControlActive(): bool

@@ -115,6 +115,12 @@ class ReportRepository
                 'export' => 'reports.manifest.transport.export',
             ],
             [
+                'name' => 'Merchandise Manifest',
+                'details' => 'Manifest of Ordered Merchandise',
+                'view' => 'reports.manifest.merchandise.view',
+                'export' => 'reports.manifest.merchandise.export',
+            ],
+            [
                 'name' => 'Installment Revenue',
                 'details' => 'Information about days revenue',
                 'view' => 'reports.installment-revenue',

@@ -16,6 +16,7 @@ use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
@@ -313,6 +314,11 @@ class Tour extends Model
     public function orderTransport(): HasManyThrough
     {
         return $this->hasManyThrough(OrderTransport::class, TransportInventoryTour::class, 'tour_id', 'transport_inventory_tour_id');
+    }
+
+    public function orderMerchandise(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderMerchandise::class, MerchandiseInventoryTour::class, 'tour_id', 'merchandise_inventory_tour_id');
     }
 
     public function transportInventoryTours(): HasMany
