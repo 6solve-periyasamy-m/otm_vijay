@@ -109,7 +109,7 @@ class InvoiceRepository
 
                     $merged_description = "{$hotel_name}(" . $start_date->format($date_format) . " to " . $end_date->format($date_format) . ") ({$room_details})";
 
-                    $existing_billable->setQuantity($existing_billable->getQuantity() + $billable->getQuantity());
+                    $existing_billable->setQuantity($existing_billable->getQuantity() );
                     $existing_billable->setDescription($merged_description);
                 } else {
                     $merged->put($unique_key, $billable);
