@@ -125,7 +125,7 @@ class InvoiceRepository
         if (preg_match('/\((\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2})\)/', $description, $matches)) {
             $start_date = $matches[1];
             $end_date = $matches[3];
-            $invoice_date = ($start_date === $end_date) ? f_date($start_date) : f_date($start_date) ." to ". f_date($end_date);
+            $invoice_date = ($start_date === $end_date) ? $start_date : $start_date ." to ". $end_date;
             $description = preg_replace('/\((\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2})\)/', "($invoice_date)", $description);
         }
         return $description;
