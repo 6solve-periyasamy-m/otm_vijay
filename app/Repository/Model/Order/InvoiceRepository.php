@@ -106,7 +106,6 @@ class InvoiceRepository
 
                     $start_date = $existing_start->min($new_start);
                     $end_date = $existing_end->max($new_end);
-
                     $merged_description = "{$hotel_name}(" . $start_date->format($date_format) . " to " . $end_date->format($date_format) . ") ({$room_details})";
 
                     $existing_billable->setQuantity($existing_billable->getQuantity() + $billable->getQuantity());
