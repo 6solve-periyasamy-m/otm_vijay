@@ -106,7 +106,6 @@ class InvoiceRepository
 
                     $start_date = $existing_start->min($new_start);
                     $end_date = $existing_end->max($new_end);
-
                     $merged_description = "{$hotel_name}(" . $start_date->format($date_format) . " to " . $end_date->format($date_format) . ") ({$room_details})";
 
                     $existing_billable->setQuantity($existing_billable->getQuantity() + $billable->getQuantity());
@@ -125,7 +124,7 @@ class InvoiceRepository
         if (preg_match('/\((\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2})\)/', $description, $matches)) {
             $start_date = $matches[1];
             $end_date = $matches[3];
-            $invoice_date = ($start_date === $end_date) ? f_date($start_date) : f_date($start_date) ." to ". f_date($end_date);
+            $invoice_date = ($start_date === $end_date) ? $start_date : $start_date ." to ". $end_date;
             $description = preg_replace('/\((\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2})\)/', "($invoice_date)", $description);
         }
         return $description;
