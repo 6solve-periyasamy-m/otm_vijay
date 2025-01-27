@@ -104,10 +104,10 @@ class Rooming extends Component
             $travellerExcess -= $room['travellers'];
         }
         if ($travellerExcess > 0) {
-            return $this->addError('common', 'Not all travellers have rooms');
+           // return $this->addError('common', 'Not all travellers have rooms');
         }
         if ($travellerExcess < 0) {
-            return $this->addError('common', 'More travellers have been added to rooms than are travelling');
+           // return $this->addError('common', 'More travellers have been added to rooms than are travelling');
         }
         return redirect()->route('booking.simple.checkout', [
             'token' => $this->booking->token,
@@ -182,7 +182,7 @@ class Rooming extends Component
         return [
             'lead.email_address' => 'required|email:rfc,dns',
             'rooms.*.room' => 'required|integer',
-            'rooms.*.travellers' => 'required|integer|min:1',
+            //'rooms.*.travellers' => 'required|integer|min:1',
         ];
     }
 }

@@ -306,13 +306,14 @@ jQuery(document).ready(function () {
         jQuery('.static-mobile-description').toggle();
         jQuery('.price-details-block').toggle();
         jQuery('.mob-trip-summary-block .submit-btn-cls').toggle();
+        jQuery('.Inner-container').toggleClass('open');
         
-        var currentText = jQuery('.mob-static-see-more p:first').text();
-        
+        var currentText = jQuery('.mob-static-see-more:visible').text().trim();
+        console.log(currentText)
         if (currentText === 'SEE MORE') {
-            jQuery('.mob-static-see-more p:first').text('SEE LESS');
+            jQuery('.mob-static-see-more').text('SEE LESS');
         } else {
-            jQuery('.mob-static-see-more p:first').text('SEE MORE');
+            jQuery('.mob-static-see-more').text('SEE MORE');
         }
     });
 
@@ -345,7 +346,7 @@ jQuery(document).ready(function () {
     });
 
     //jQuery('.second-form .left-col .evnt-name .head-evnt').text(jQuery('.second-form .right-col .snd-sec .right-col h4:first').text());
-    // jQuery('.second-form .left-col h3.event-name').text(jQuery('.second-form .right-col .snd-sec h4:first').text());
+    // jQuery('.second-form .left-col h3.event-name').text(jQuery('.second-form .right-col .snd-sec h4.hide-event:first').text());
     // console.log(jQuery('.second-form .left-col h3.event-name'))
     // jQuery('.lead-purchase-traveller-block input[type="checkbox"]').click(function() {
     //     jQuery('.lead-purchase-traveller-block input[type="checkbox"]').prop('checked', false);

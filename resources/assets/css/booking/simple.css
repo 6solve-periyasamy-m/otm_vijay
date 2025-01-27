@@ -21,6 +21,48 @@
     font-family: "PlayfairDisplay-Regular";
     src: url(./font/PlayfairDisplay-Regular.ttf);
 }
+
+.third-block .form-field.sng-cls::before{
+content: " ";
+background: url('../booking/icon/single_bed.svg');
+background-repeat: no-repeat;
+width: 24px;
+    height: 16px;
+    left: 15px;
+    display: inline-block;
+    position: absolute;
+    top: 17px;
+}
+.third-block .form-field{
+    position: relative;
+}
+.third-block .form-field.twn-cls::before{
+    content: " ";
+    background: url('../booking/icon/twin_bed.svg');
+    background-repeat: no-repeat;
+    width: 24px;
+        height: 16px;
+        left: 12px;
+        display: inline-block;
+        position: absolute;
+    top: 17px;
+}
+.third-block .form-field.dbl-cls::before{
+    content: " ";
+    background: url('../booking/icon/default_bed.svg');
+    background-repeat: no-repeat;
+    width: 24px;
+        height: 16px;
+        left: 12px;
+        display: inline-block;
+        position: absolute;
+    top: 17px;
+}
+.form-field.twn-cls select,
+.form-field.dbl-cls select,
+.form-field.sng-cls select{
+padding-left: 40px !important;
+}
 body .row {
     width: 90%;
     max-width: 1410px;
@@ -397,7 +439,7 @@ body {
     letter-spacing: 2.24px;
 }
 
-body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus, .ma-block .row .left-col .contain .third-block select:focus {
+body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus, .ma-block .row .left-col .contain .third-block select:focus,.ma-block .row .left-col .contain .second-block select:focus {
     background-color: var(--white) !important;
     border: 2px solid var(--primary-color) !important;
     outline: 0 !important;
@@ -410,11 +452,12 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .ma-block .row .left-col .contain .second-block .inner-block .left-col p {
-    font-size: 14px;
+    font-size: 12px;
     line-height: 20px;
     margin-bottom: 0;
     color: var(--text-dark);
     letter-spacing: 0;
+    font-weight: 500;
 }
 
 .ma-block .row .left-col .contain .second-block .inner-block {
@@ -473,6 +516,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     color: var(--text-dark);
     letter-spacing: 0;
     font-weight: 500;
+    line-height: 20px;
 }
 
 .ma-block .row .left-col .contain .second-block .contain p a {
@@ -505,7 +549,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     line-height: 24px;
     margin-bottom: 24px;
 }
-.ma-block .row .left-col .contain .third-block select {
+.ma-block .row .left-col .contain .third-block select,.ma-block .row .left-col .contain .second-block select {
     width: 100%;
     height: 53px;
     background: var(--secondary-color);
@@ -535,7 +579,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 .ma-block .row .left-col .contain .third-block .first-bl {
     margin-bottom: 24px;
 }
-.ma-block .row .left-col .contain .third-block select {
+.ma-block .row .left-col .contain .third-block select,.ma-block .row .left-col .contain .second-block select {
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance: none;
@@ -565,7 +609,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     font-weight: 500;
     color: var(--text-dark);
     font-size: 24px;
-    line-height: 28.8px;
+    line-height: 30px;
     padding-top:24px;
 }
 
@@ -627,7 +671,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 .ma-block .row .right-col .contain .snd-sec .right-col p {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 16.8px;
     color: var(--text-dark);
     text-transform: uppercase;
@@ -672,7 +716,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     text-decoration: none;
     text-transform: none;
     font-size: 16px;
-    line-height: 24px;
+    line-height: 19.2px;
     letter-spacing: 0;
     text-transform:uppercase;
     letter-spacing:2.24px;
@@ -701,7 +745,9 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     border-top: 1px solid #FAE8D3;
 }
 .ma-block .row .right-col .contain .third-col ul li p.total {
-    color: var(--primary-color);
+    /* color: var(--primary-color); */
+    color: #000;
+    font-weight: 700;
 }
 .submit-btn-cls {
     margin-top: 32px;
@@ -882,8 +928,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     position: relative;
 }
 
-.see-more-popup,
-.upgrades-popup {
+.see-more-popup{
     position: fixed;
     top: 0;
     left: 0;
@@ -898,13 +943,52 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     z-index: 1111 !important;
 }
 
-.see-more-popup .popup-inner-two,
+
+.upgrades-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    z-index: 1111 !important;
+  
+}
+@keyframes move-to-center {
+    0% {
+        bottom: -100px; /* Start position */
+    }
+    50% {
+        bottom: 50%; /* Midway for a smooth effect */
+        transform: translateY(50%);
+    }
+    100% {
+        bottom: 50%; /* Final position */
+        transform: translateY(50%);
+    }
+}
+
+.see-more-popup .popup-inner-two{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
 .upgrades-popup .popup-inner {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
     width: 100%;
+    position: absolute;
+    bottom: -100px; /* Start outside the viewport */
+    animation: move-to-center 1.5s ease-out forwards; /* Animation details */
 }
 
 .see-more-popup .convco-two,
@@ -2598,6 +2682,7 @@ input::-webkit-inner-spin-button {
         width: 280px !important;
     }
 }
+
 .upp-block-two .right-col p.date {padding-left:24px!important;}
 .package-details-heading-block .close-button {cursor:pointer;}
 .submit-btn-cls {
@@ -2670,7 +2755,7 @@ input::-webkit-inner-spin-button {
     }
 }
 .ma-block .row .left-col .contain > h3.head-evnt{
-    font-weight: 600 !important;
+    font-weight: 500 !important;
 }
 @media only screen and (min-width:768px) and (max-width:1023px) {
     .top-head .row .col-one .img-contain img {
@@ -2681,4 +2766,12 @@ input::-webkit-inner-spin-button {
     .top-head .row .col-one .img-contain img {
         width:117px!important;
     }
+}
+@media only screen and (min-width:767px){
+    .right-col .submit-btn-cls{
+        display: block;
+    }
+}
+.additional-block .card-field-box .first-in{
+    width: 50%;
 }
