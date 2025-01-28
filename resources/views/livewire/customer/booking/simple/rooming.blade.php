@@ -244,7 +244,7 @@
                     </div>
                 @endforeach
                 <div class="form-field">
-                    <select {{--wire:model="rooms.name" --}} name="rooming_configuration">
+                    <select wire:model="selectedHotel" name="rooming_configuration">
                         @foreach($this->tour->repository->getHotels() as $id => $name)
                             <option value="{{$id}}">{{ $name }}</option>
                         @endforeach
@@ -297,9 +297,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-field">
+                        <div class="form-field" wire:key="{{Str::random()}}">
                             <select wire:model="rooms.{{$x}}.room" name="bedding_configuration">
-                                @foreach($this->tour->repository->getRooms() as $id => $name)
+                                @foreach($this->tour->repository->getRooms($selectedHotel) as $id => $name)
                                     <option value="{{$id}}">{{ $name }}</option>
                                 @endforeach
                             </select>

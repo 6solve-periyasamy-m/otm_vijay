@@ -20,6 +20,7 @@ class Rooming extends Component
     ];
 
     public Tour|int $tour;
+    public int|null $selectedHotel;
     public Booking|int|null $booking;
     public BookingTraveller|null $lead = null;
     public array $rooms = [];
@@ -35,6 +36,10 @@ class Rooming extends Component
             $this->booking = BookingRepository::make($this->tour);
             $this->booking->save();
         }
+
+        $hotels = $this->tour->repository->getHotels();
+        if (count($hotels) > 0) { $this->selectedHotel = $hotels[array_key_first($hotels)]->id; }
+
 
         $this->lead = $this->booking->leadTraveller ?? BookingTravellerRepository::make([]);
 
@@ -182,6 +187,7 @@ class Rooming extends Component
         return [
             'lead.email_address' => 'required|email:rfc,dns',
             'rooms.*.room' => 'required|integer',
+            'selectedHotel' => 'required|integer',
             //'rooms.*.travellers' => 'required|integer|min:1',
         ];
     }

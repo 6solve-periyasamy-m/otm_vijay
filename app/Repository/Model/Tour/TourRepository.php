@@ -701,11 +701,23 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         return $hotels;
     }
 
-    public function getRooms(): array
+    public function getRooms(Accommodation|int|null $hotel = null): array
     {
         $rooms = [];
-        foreach ($this->tour->accommodationInventoryTours as $inventoryTour) {
-            $name = $inventoryTour->inventory->component->name . ' - ' . $inventoryTour->inventory->boardType . ' - ' . $inventoryTour->inventory->roomType->name;
+        if (is_int($hotel)) {
+            $hotel = Accommodation::find($hotel);
+        }
+        if ($hotel !== null) {
+            $tourComponents =
+                $this->tour->accommodationInventoryTours()
+                    ->join('accommodation_inventories', 'accommodation_inventories.id', '=', 'accommodation_inventory_tours.accommodation_inventory_id')
+                    ->where('accommodation_inventories.accommodation_id', '=', $hotel->id)
+                    ->get();
+        } else {
+            $tourComponents = $this->tour->accommodationInventoryTours;
+        }
+        foreach ($tourComponents as $inventoryTour) {
+            $name = $inventoryTour->inventory->roomType->name;
             if ($inventoryTour->tour_component_type !== 'Included') {
                 $cost = $inventoryTour->tour_sales_price;
                 if ($cost > 0) {
