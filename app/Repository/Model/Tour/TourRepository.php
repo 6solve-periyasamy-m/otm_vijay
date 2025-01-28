@@ -727,14 +727,14 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                     $name .= ' (-' . f_currency($cost*-1) . ')';
                 }
             }
-            $rooms[$inventoryTour->id] = $name;
+            $rooms[$inventoryTour->inventory->room_type_id] = $name;
         }
         return $rooms;
     }
 
-    public function getDefaultRoom(): int|null
+    public function getDefaultRoom(int|null $hotel = null): int|null
     {
-        foreach ($this->getRooms() as $key => $name) {
+        foreach ($this->getRooms($hotel) as $key => $name) {
             return $key;
         }
         return null;

@@ -95,7 +95,7 @@ class Rooming extends Component
 
     public function setupRooming(): void
     {
-        $this->booking->repository->setupSimpleRooming($this->rooms);
+        $this->booking->repository->setupSimpleRooming($this->selectedHotel, $this->rooms);
     }
 
     public function proceed()
@@ -133,7 +133,7 @@ class Rooming extends Component
     public function addRoom(): void
     {
         if (count($this->rooms) >= $this->getMaximumRooms()) { return; }
-        $this->rooms[] = ['room' => $this->tour->repository->getDefaultRoom(), 'travellers' => 2,];
+        $this->rooms[] = ['room' => $this->tour->repository->getDefaultRoom($this->selectedHotel), 'travellers' => 2,];
     }
 
     public function removeRoom(): void
@@ -148,7 +148,7 @@ class Rooming extends Component
             $this->rooms[$i]['travellers'] = (int)$iValue['travellers'];
         }
         for ($i = count($this->rooms); $i < $this->getMinimumRooms(); $i++) {
-            $this->rooms[] = ['room' => $this->tour->repository->getDefaultRoom(), 'travellers' => 2,];
+            $this->rooms[] = ['room' => $this->tour->repository->getDefaultRoom($this->selectedHotel), 'travellers' => 2,];
         }
         for ($i = count($this->rooms) - 1; $i >= $this->getMaximumRooms(); $i--) {
             unset($this->rooms[$i]);
