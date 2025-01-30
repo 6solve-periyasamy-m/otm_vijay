@@ -5,6 +5,7 @@ namespace App\Http\Requests\Admin\Quote;
 use App\Models\Customer\Customer;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Customer\Organization;
+use Carbon\Carbon;
 
 /**
  * @property int $customer_id
@@ -29,6 +30,8 @@ class CreateBasicQuoteRequest extends FormRequest
 
     public function getDataset(): array
     {
+        $final_payment_expired = strtotime($this->final_payment) < strtotime(now());
+
         return [
             'expires' => $this->expires,
             'organization_id' => $this->organization_id,
@@ -39,6 +42,9 @@ class CreateBasicQuoteRequest extends FormRequest
             'tax_bracket_id' => $this->tax_bracket_id,
             'agent_id' => $this->agent_id,
             'commission' => $this->commission,
+            'final_payment' => $this->final_payment,
+            'is_deposit_percentage' => $this->is_deposit_percentage,
+            'deposit' => $this->deposit,
         ];
     }
 
@@ -61,6 +67,26 @@ class CreateBasicQuoteRequest extends FormRequest
             'customer_id' => 'required|exists:customers,id',
             'expires' => 'required|date',
             'organization_id' => 'nullable|integer|exists:organizations,id',
+            'final_payment' => [
+            'required',
+            'date',
+            function ($attribute, $value, $fail) {
+                    if (Carbon::parse($value)->lt(Carbon::now())) {
+                        $fail('The final payment date has passed.');
+                    }
+                },
+            ],
+            'deposit' => [
+                'required',
+                'numeric',
+                'min:0',
+                function ($attribute, $value, $fail) {
+                    if (Carbon::parse($this->final_payment)->lt(Carbon::now()) && $this->is_deposit_percentage && $value != 100) {
+                        $fail('Deposit must be 100% when the final payment date has passed.');
+                    }
+                },
+            ],
+            'is_deposit_percentage' => 'nullable|boolean'
         ];
     }
 }
