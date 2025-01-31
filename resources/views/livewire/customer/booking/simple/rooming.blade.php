@@ -243,6 +243,8 @@
                         </div>
                     </div>
                 @endforeach
+                {{-- Hidden For Future Use --}}
+                {{--
                 <div class="form-field">
                     <select wire:model="selectedHotel" name="rooming_configuration">
                         @foreach($this->tour->repository->getHotels() as $id => $name)
@@ -250,6 +252,7 @@
                         @endforeach
                     </select>
                 </div>
+                --}}
                 <div class="inner-block">
                     <div class="left-col">
                         <h6>Number of rooms</h6>
