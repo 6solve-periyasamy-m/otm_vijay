@@ -670,7 +670,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             }
             $inclusion = match (true) {
                 $component instanceof AccommodationInventoryRepository =>
-                    $component->get()->accommodation->name . ' - ' . diff_in_nights($component->getStartTime(), $component->getEndTime()) . ' Nights',
+                    $component->get()->accommodation->name . ' - ' . $component->getNightsInTour($this->tour) . ' Nights',
                 $component instanceof ActivityInventoryRepository =>
                     $component->getStartTime()?->format('d M Y') . " - " . $component->get()->activity->name,
                 $component instanceof MerchandiseInventoryRepository =>
