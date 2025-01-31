@@ -54,7 +54,7 @@ class MerchandiseManifestRepository implements HasMerchandiseManifest
     {
         $data = [];
         foreach ($manifest->getMerchandiseManifest() as $orderComponent) {
-            if ($orderComponent->cancelled) continue;
+            if ($orderComponent->orderCustomer?->order === null || $orderComponent->orderCustomer?->order?->cancelled) continue;
             $row = collect();
             $row->reference = $orderComponent->orderCustomer->order->booking_reference;
             $row->customer = $orderComponent->orderCustomer->customer_name;
