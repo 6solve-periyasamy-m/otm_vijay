@@ -24,7 +24,7 @@
 </style>
 <div class="top-sec">
     <div class="head-txt"><h4>Package details</h4></div>
-    <div class="upgrade-cls" data-action="popup" data-target="upgrades-popup">UPGRADE</div>
+    <div class="upgrade-cls upgrade_hide_cta" data-action="popup" data-target="upgrades-popup">UPGRADE</div>
 </div>
 <div class="snd-sec">
     @if(isset($tour->event?->image_url))
@@ -34,7 +34,12 @@
     @endif
     <div class="right-col">
         <h4 class="hide-event" style="display:none!important;">{{ $tour->event?->name }}</h4>
-        <h4>{{$tour->name}}</h4>
+        <div class="name_price_div">
+            <h4>{{$tour->name}}</h4>
+            <div class="base-price-div">
+                {{ f_currency($tour->base_price_per_person) }}<span class="base-price-span"> / person </span>
+            </div>
+        </div>
         <!-- <h6>{{ $tour->name }}</h6> -->
         <!--<p class="location"></p> TODO: Implement Location on Event -->
         <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
@@ -68,7 +73,10 @@
         @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
         <li>
             <p class="txt">Single occupancy surcharge</p>
-            <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>s
+            <div class="single_occ_div">
+                <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>s
+            </div>
+            <!-- <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>s -->
         </li>
         @if($booking->repository->getTaxes() !== null)
             <li>

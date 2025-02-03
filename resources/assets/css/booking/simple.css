@@ -464,6 +464,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     display: flex;
     justify-content: space-between;
     margin-bottom: 24px;
+    align-items: center;
 }
 
 .ma-block .row .left-col .contain .second-block .inner-block .right .inn {
@@ -2774,4 +2775,58 @@ input::-webkit-inner-spin-button {
 }
 .additional-block .card-field-box .first-in{
     width: 50%;
+}
+
+/*feedbacks css*/
+
+.ma-block .row .left-col h3.ytd_bold_class{
+    font-weight: 600;
+}
+.ma-block .row .left-col h3.head-evnt.event_color_class{
+    color: #F35B15 !important;
+}
+
+.inner-block .left-col .age_limit{
+    display: none;
+}
+.mob-trip-summary-block_outerdiv{
+    bottom: 0;
+    background: #ffffff;
+    z-index: 999;
+    width: 100%;
+    position: fixed;
+    height: 250px;
+    box-shadow: 0px 0px 34px 0px #00000026;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.upgrade_hide_cta{
+    display: none !important;
+}
+.base-price-div{
+    color: #000000;
+    font-weight: 600;
+    text-align: right;
+    padding-top: 24px;
+    display: flex;
+    flex-direction: column;
+}
+.name_price_div{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.base-price-div .base-price-span{
+    font-weight: 500;
+}
+.ma-block .row .right-col .contain .third-col ul li .single_occ_div{
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+}
+.price-details-block ul li{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }

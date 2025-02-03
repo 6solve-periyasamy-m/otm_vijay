@@ -5,8 +5,8 @@
             <!-- <div class="evnt-name">
             </div> -->
             <!-- The event name mobile update -->
-            <h3>Your trip details</h3>
-            <h3 class="head-evnt">{{ $tour->event?->name }}</h3>
+            <h3 class="ytd_bold_class">Your trip details</h3>
+            <h3 class="head-evnt event_color_class">{{ $tour->event?->name }}</h3>
             <p class="psg-det">PASSENGER DETAILS</p>
 
             <div class="top-form-contain">
@@ -21,7 +21,7 @@
                 <div class="inner-block">
                     <div class="left-col">
                         <h6>Adults</h6>
-                        <p>Ages 13 or above</p>
+                        <p class="age_limit">Ages 13 or above</p>
                     </div>
                     <div class="right">
                         <div class="inn">
@@ -317,19 +317,6 @@
                         </div> -->
                     </div>
                 @endfor
-                <script>
-                    jQuery('select[name="bedding_configuration"]').each(function(){
-                        var comtext = jQuery(this).find('option:selected').text().trim().toLowerCase();
-                        if(comtext.includes('twin')){
-                            jQuery(this).closest('.form-field').addClass('twn-cls');
-                        } else if(comtext.includes('single')){
-                            jQuery(this).closest('.form-field').addClass('sng-cls');
-                        } else {
-                            jQuery(this).closest('.form-field').addClass('dbl-cls');
-                        }
-                    });
-                </script>
-
             </div>
             <div class="submit-btn-cls">
                 <div class="inner">
@@ -412,66 +399,67 @@
   </div>
 </div> -->
 
+<div class="mob-trip-summary-block_outerdiv">
+    <div class="mob-trip-summary-block">
+        <div class="block-container">
+            <div class="Inner-container">
+                <div class="mob-static-tip-sum">
+                    <h4>Trip Summary</h4>
+                    <p class="price">{{ f_currency($booking->repository->getTotalCost()) }}</p>
+                    <div class="mob-static-see-more mobile_seemore">
+                        <p>SEE MORE
+                        <p>
+                    </div>
+                </div>
+                <div class="static-mobile-description">
+                    <h3>{{ $tour->event?->name }}</h3>
+                    <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
+                    @foreach($tour->repository->getInclusions(4) as $inclusion)
+                        <p class="points">{{ $inclusion }}</p>
+                    @endforeach
+                </div>
+                <div class="mob-no-of-passengers-list">
+                    <p>{{ $this->getTravellerCount() }} Passengers</p>
+                </div>
+                <div class="price-details-block">
+                    <ul>
+                        <li>
+                            <p class="txt">Package Price</p>
+                            <p class="price">{{ f_currency($booking->repository->getBasePrice()) }}</p>
+                        </li>
+                        <li>
+                            @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
+                            <p class="txt">Single Supplement</p>
+                            <p class="price">{{ f_currency($singleOccupancy) }}</p>
+                        </li>
 
-<div class="mob-trip-summary-block">
-    <div class="block-container">
-        <div class="Inner-container">
-            <div class="mob-static-tip-sum">
-                <h4>Trip Summary</h4>
-                <p class="price">{{ f_currency($booking->repository->getTotalCost()) }}</p>
-                <div class="mob-static-see-more mobile_seemore">
+                        @if($booking->repository->getTaxes() !== null)
+                            <li>
+                                <p class="txt">{{ $tour->taxBracket()->name }}</p>
+                                <p class="price">{{ f_currency($booking->repository->getTaxes()) }}</p>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
+                <div class="total-block">
+                    <ul>
+                        <li>
+                            <p class="txt">Total</p>
+                            <p class="price">{{ f_currency($booking->repository->getTotalCost()) }}</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="mob-static-see-more desktop_seemore">
                     <p>SEE MORE
                     <p>
                 </div>
-            </div>
-            <div class="static-mobile-description">
-                <h3>{{ $tour->event?->name }}</h3>
-                <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
-                @foreach($tour->repository->getInclusions(4) as $inclusion)
-                    <p class="points">{{ $inclusion }}</p>
-                @endforeach
-            </div>
-            <div class="mob-no-of-passengers-list">
-                <p>{{ $this->getTravellerCount() }} Passengers</p>
-            </div>
-            <div class="price-details-block">
-                <ul>
-                    <li>
-                        <p class="txt">Package Price</p>
-                        <p class="price">{{ f_currency($booking->repository->getBasePrice()) }}</p>
-                    </li>
-                    <li>
-                        @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
-                        <p class="txt">Single Supplement</p>
-                        <p class="price">{{ f_currency($singleOccupancy) }}</p>
-                    </li>
-
-                    @if($booking->repository->getTaxes() !== null)
-                        <li>
-                            <p class="txt">{{ $tour->taxBracket()->name }}</p>
-                            <p class="price">{{ f_currency($booking->repository->getTaxes()) }}</p>
-                        </li>
-                    @endif
-                </ul>
-            </div>
-            <div class="total-block">
-                <ul>
-                    <li>
-                        <p class="txt">Total</p>
-                        <p class="price">{{ f_currency($booking->repository->getTotalCost()) }}</p>
-                    </li>
-                </ul>
-            </div>
-            <div class="mob-static-see-more desktop_seemore">
-                <p>SEE MORE
-                <p>
-            </div>
-            <div class="submit-btn-cls">
-                <div class="inner">
-                    <input type="submit" class="submit-btn" wire:click="proceed" value="Proceed">
+                <div class="submit-btn-cls">
+                    <div class="inner">
+                        <input type="submit" class="submit-btn" wire:click="proceed" value="Proceed">
+                    </div>
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
 </div>
@@ -489,5 +477,27 @@
             jQuery('.mob-no-of-passengers-list p:first').text(jQuery('.second-block.tra-det .right .No .text').text() + ' Passengers')
         }, 2000);
     })
+    document.addEventListener('livewire:load', function () {
+        runSelectClassUpdate();
+    });
+    
+    document.addEventListener('livewire:update', function () {
+        runSelectClassUpdate();
+    });
+    
+    function runSelectClassUpdate() {
+        console.log('inside');
+        jQuery('select[name="bedding_configuration"]').each(function(){
+            var comtext = jQuery(this).find('option:selected').text().trim().toLowerCase();
+            if(comtext.includes('twin')) {
+                jQuery(this).closest('.form-field').addClass('twn-cls');
+            } else if(comtext.includes('single')) {
+                jQuery(this).closest('.form-field').addClass('sng-cls');
+            } else {
+                jQuery(this).closest('.form-field').addClass('dbl-cls');
+            }
+        });
+    }
+
 
 </script>
