@@ -26,7 +26,7 @@
          <x-livewire.input type="date" name="final_payment" class="{{$is_final_payment_passed ? 'frm-field-box-border' : ''}}" value="{{ old('final_payment', $tour->final_payment?->format('Y-m-d')) }}"/>
     </div>
     <div class="col-xl-2">
-        <label for="final_payment" class="form-label">
+        <label for="deposit" class="form-label">
             @if($is_final_payment_passed)
                 Deposit <span class="text-danger">(Deposit must be 100% when the final payment date has passed)</span>
             @else
