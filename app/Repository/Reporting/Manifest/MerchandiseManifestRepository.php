@@ -68,6 +68,9 @@ class MerchandiseManifestRepository implements HasMerchandiseManifest
             $row->component = $orderComponent->tourComponent->tour_component_type;
             $row->purchase = $orderComponent->repository->getCostToCompany();
             $row->sales = $orderComponent->cost ?? $orderComponent->tourComponent->inventory->sales_price;
+            $row->status = $orderComponent->orderCustomer->order->status;
+            $row->event = $orderComponent->orderCustomer->order->tour?->event?->name;
+            $row->consultant = $orderComponent->orderCustomer->order->consultant?->name;
             $data[] = $row;
         }
         return $data;
