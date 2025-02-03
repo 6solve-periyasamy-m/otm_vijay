@@ -67,25 +67,8 @@ class CreateBasicQuoteRequest extends FormRequest
             'customer_id' => 'required|exists:customers,id',
             'expires' => 'required|date',
             'organization_id' => 'nullable|integer|exists:organizations,id',
-            'final_payment' => [
-            'required',
-            'date',
-            function ($attribute, $value, $fail) {
-                    if (Carbon::parse($value)->lt(Carbon::now())) {
-                        $fail('The final payment date has passed.');
-                    }
-                },
-            ],
-            'deposit' => [
-                'required',
-                'numeric',
-                'min:0',
-                function ($attribute, $value, $fail) {
-                    if (Carbon::parse($this->final_payment)->lt(Carbon::now()) && $this->is_deposit_percentage && $value != 100) {
-                        $fail('Deposit must be 100% when the final payment date has passed.');
-                    }
-                },
-            ],
+            'final_payment' => 'nullable|date',
+            'deposit' => 'nullable|numeric|min:0',
             'is_deposit_percentage' => 'nullable|boolean'
         ];
     }

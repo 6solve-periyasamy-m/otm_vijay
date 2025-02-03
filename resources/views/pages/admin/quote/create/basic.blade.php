@@ -14,8 +14,27 @@
     </div>
     <x-livewire.input name="single_occupancy_surcharge" width="4" label="Single Occupancy Surcharge" value="{{ $tour->single_occupancy_surcharge }}"/>
     <x-livewire.input.select.tax-bracket name="tax_bracket_id" value="{{ $tour->tax_bracket_id }}" label="Tax Bracket" width="3"/>
-    <x-livewire.input type="date" name="final_payment" label="Final Payment" width="2" value="{{ old('final_payment', $tour->final_payment?->format('Y-m-d')) }}"/>
-    <x-livewire.input name="deposit" label="Deposit" width="2" value="{{ old('deposit', $tour->deposit) }}"/>
+
+    <div class="col-xl-2">
+        <label for="final_payment" class="form-label">
+            @if($is_final_payment_passed)
+            Final Payment <span class="text-danger">(The final payment date has passed)</span>
+            @else
+                Final Payment
+            @endif
+        </label>
+         <x-livewire.input type="date" name="final_payment" class="{{$is_final_payment_passed ? 'frm-field-box-border' : ''}}" value="{{ old('final_payment', $tour->final_payment?->format('Y-m-d')) }}"/>
+    </div>
+    <div class="col-xl-2">
+        <label for="final_payment" class="form-label">
+            @if($is_final_payment_passed)
+                Deposit <span class="text-danger">(Deposit must be 100% when the final payment date has passed)</span>
+            @else
+                Deposit
+            @endif
+        </label>
+        <x-livewire.input name="deposit" class="{{$is_final_payment_passed ? 'frm-field-box-border' : ''}}" value="{{ old('deposit', $tour->deposit) }}"/>
+    </div>
     <input type="hidden" name="is_deposit_percentage" value="0">
     <x-livewire.input.checkbox name="is_deposit_percentage" label="Percentage?" width="1"  :checked="old('is_deposit_percentage', $tour->is_deposit_percentage) ? true : false"  value="1"/>
     <livewire:admin.quote.organization-selector />
