@@ -67,7 +67,7 @@ class Rooming extends Component
     private function renewRooming(): void
     {
         foreach ($this->booking->groups as $group) {
-            $this->rooms[] = ['room' => $group->accommodation()->first()?->accommodation_inventory_tour_id, 'travellers' => $group->travellers()->count(),];
+            $this->rooms[] = ['room' => $group->accommodation()->first()?->tourComponent->inventory->room_type_id, 'travellers' => $group->travellers()->count(),];
         }
     }
 
@@ -109,10 +109,10 @@ class Rooming extends Component
             $travellerExcess -= $room['travellers'];
         }
         if ($travellerExcess > 0) {
-           // return $this->addError('common', 'Not all travellers have rooms');
+           return $this->addError('common', 'Not all travellers have rooms');
         }
         if ($travellerExcess < 0) {
-           // return $this->addError('common', 'More travellers have been added to rooms than are travelling');
+           return $this->addError('common', 'More travellers have been added to rooms than are travelling');
         }
         return redirect()->route('booking.simple.checkout', [
             'token' => $this->booking->token,
