@@ -102,6 +102,7 @@ class SettingsController extends Controller
             'customization.documentation.colors' => $request->input('document_css'),
             'non-paying.travellers.enabled' => $request->input('nonpaying_travellers_enabled') === 'on' ? 1 : 0,
             'itinerary.heading' => $request->input('itinerary_heading'),
+            'reservation.invoice.mail.enabled' => $request->input('reservation_invoice_mail_enabled') === 'on' ? 1 : 0,
         ]);
         if ($request->has('company_logo')  && !empty($request->file('company_logo'))) {
             Settings::set('company.logo', $this->saveImage($request->file('company_logo')));
