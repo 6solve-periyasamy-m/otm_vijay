@@ -35,7 +35,7 @@ class MailRepository
             'order-changed' => new OrderMail('order-changed'),
             'order-cancelled' => new OrderMail('order-cancelled'),
             'quote' => new QuoteMail('quote'),
-            'reservation-invoice-doc' => new QuoteMail('reservation-invoice-doc'),
+            'reservation-invoice-document' => new QuoteMail('reservation-invoice-document'),
         ];
     }
 }

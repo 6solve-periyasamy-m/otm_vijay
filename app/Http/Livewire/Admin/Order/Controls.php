@@ -9,6 +9,12 @@ use App\Models\Order\OrderInstallment;
 use App\Models\Order\Payment\Payment;
 use LivewireUI\Modal\ModalComponent;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use App\Exceptions\MailDisabledException;
+use App\Mail\Storage\Attachment;
+use App\Mail\Storage\OrderMail;
+use Exception;
+use Log;
+
 
 /**
  * Popup menu used on the order screen
@@ -23,6 +29,7 @@ class Controls extends ModalComponent
         'sendBookingConfirmation' => 'sendBookingConfirmation',
         'sendPaymentDueMail' => 'sendPaymentDue',
         'sendPaymentMail' => 'sendPaymentMade',
+        'sendReservationToEmail' => 'sendReservationToEmail',
     ];
 
     public Order|int $order;
@@ -43,6 +50,39 @@ class Controls extends ModalComponent
     public function getReservation(): StreamedResponse
     {
         return dompdf(view('pdf.quotes.itinerary', ['itinerary' => $this->order->repository->getReservationDocument(),]));
+    }
+
+    /**
+     * Send the order reservation document to the email
+     */
+    public function sendReservationToEmail()
+    {
+        $email = $this->order->consultant?->email ?? $this->order->organization?->contact_email ?? $this->order->leadTraveller->customer->email_address;
+        if ($email === null) {
+            $this->toast('Failed to Send Reservation Document', 'Cannot send reservation document, no valid target email found', 'danger');
+            return false;
+        }
+        $reservation_data = dompdf(view('pdf.quotes.itinerary', [
+            'itinerary' => $this->order->repository->getReservationDocument(),
+            'type' => 'Reservation'
+        ]), false);
+        $attachment_reservation = new Attachment($reservation_data, 'Reservation_'.$this->order->booking_reference.'.pdf', ['mime' => 'application/pdf',]);
+        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant->email : "";
+        try {
+            (new OrderMail('reservation-invoice-document'))->send($email, $this->order, [$attachment_reservation], $bcc, true);
+            $this->toast('Mail Sent Successfully', 'Successfully sent the reservation document', 'success');
+            return true;
+        } catch (MailDisabledException) {
+            $this->toast('Mail Failed To Send', 'Sending Emails is disabled on this system', 'danger');
+            return false;
+        } catch (MailFailedException $e) {
+            $this->toast('Mail Failed To Send', $e->getMessage(), 'danger');
+            return false;
+        } catch (Exception $e) {
+            $this->toast('Mail Failed To Send', 'Please try again later', 'danger');
+            Log::error($e);
+            return false;
+        }
     }
 
     /**
