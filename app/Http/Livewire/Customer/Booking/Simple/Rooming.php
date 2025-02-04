@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Customer\Booking\Simple;
 
+use App\Models\Accommodation\RoomType;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Helper\Enum\BookingTravellerRole;
@@ -106,7 +107,7 @@ class Rooming extends Component
         $this->booking->save();
         $travellerExcess = $this->getTravellerCount();
         foreach ($this->rooms as $room) {
-            $travellerExcess -= $room['travellers'];
+            $travellerExcess -= RoomType::find($room['room'])?->maximum_occupancy;
         }
         if ($travellerExcess > 0) {
            return $this->addError('common', 'Not all travellers have rooms');
