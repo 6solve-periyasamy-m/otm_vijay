@@ -219,9 +219,10 @@
             <div class="second-block rme-det">
 
                 <p>ROOMS</p>
-                @foreach($tour->repository->getHotels() as $hotel)
+                @foreach($tour->repository->getHotels() as $hotelData)
+                    @php $hotel = $hotelData['hotel']; @endphp
                     <div wire:ignore class="hotel-details">
-                        <h6>{{ $hotel->name }}</h6>
+                        <h6>{{ $hotel->name }} @if($hotelData['type'] !== null) - {{ $hotelData['type'] }} @endif</h6>
                         <div class="information-hover" data-action="hover" data-target="accommodation-{{$hotel->id}}">
                             <img src="{{ asset('css/booking/icon/Icon.svg') }}" alt="tip-img">
                         </div>

@@ -689,14 +689,14 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
     }
 
     /**
-     * @return array<int, Accommodation>
+     * @return array<int, array{hotel: Accommodation, type: string}>
      */
     public function getHotels(): array
     {
         // TODO: Optimize
         $hotels = [];
         foreach ($this->tour->accommodationInventory()->groupBy('accommodation_id')->get() as $inventory) {
-            $hotels[$inventory->accommodation_id] = $inventory->accommodation;
+            $hotels[$inventory->accommodation_id] = ['hotel' => $inventory->accommodation, 'type' => $inventory->category?->name];
         }
         return $hotels;
     }

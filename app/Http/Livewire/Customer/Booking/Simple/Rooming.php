@@ -39,7 +39,7 @@ class Rooming extends Component
         }
 
         $hotels = $this->tour->repository->getHotels();
-        if (count($hotels) > 0) { $this->selectedHotel = $hotels[array_key_first($hotels)]->id; }
+        if (count($hotels) > 0) { $this->selectedHotel = $hotels[array_key_first($hotels)]['hotel']->id; }
 
 
         $this->lead = $this->booking->leadTraveller ?? BookingTravellerRepository::make([]);
