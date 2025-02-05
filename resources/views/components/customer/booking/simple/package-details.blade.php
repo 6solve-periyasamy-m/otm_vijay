@@ -99,7 +99,7 @@
     <div class="payable_txt">Payable today</div>
     <div class="payable_num">{{ f_currency($booking->repository->getDueTodayAmount()) }}</div>
     </div>
-      <div class="payable_fulltext">Full balance of {{ f_currency($booking->repository->getTotalCost()) }} payable by: {{ $tour->final_payment->format('d M Y') }}</div>
+      <div class="payable_fulltext">Remaining balance of {{ f_currency($booking->repository->getTotalCost() - $booking->repository->getDueTodayAmount() ) }} payable by: {{ $tour->final_payment->format('d M Y') }}</div>
     {{ $slot }}
     @error('common')
     <div class="submit-btn-cls add-on">
