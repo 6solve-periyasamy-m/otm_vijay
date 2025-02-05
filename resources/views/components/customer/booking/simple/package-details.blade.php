@@ -97,9 +97,9 @@
     </ul>
     <div class="payable_dflex">
     <div class="payable_txt">Payable today</div>
-    <div class="payable_num">A$499</div>
+    <div class="payable_num">{{ f_currency($booking->repository->getDueTodayAmount()) }}</div>
     </div>
-      <div class="payable_fulltext">Full balance of A$1,646 payable by: 14th Jan 2025</div>
+      <div class="payable_fulltext">Full balance of {{ f_currency($booking->repository->getTotalCost()) }} payable by: {{ $tour->final_payment->format('d M Y') }}</div>
     {{ $slot }}
     @error('common')
     <div class="submit-btn-cls add-on">
