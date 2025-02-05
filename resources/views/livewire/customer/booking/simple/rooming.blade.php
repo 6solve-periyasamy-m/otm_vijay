@@ -223,6 +223,8 @@
                     @php $hotel = $hotelData['hotel']; @endphp
                     <div wire:ignore class="hotel-details">
                         <h6>{{ $hotel->name }} @if($hotelData['type'] !== null) - {{ $hotelData['type'] }} @endif</h6>
+                        <br />
+                        {{ $hotelData['board'] }}
                         <div class="information-hover" data-action="hover" data-target="accommodation-{{$hotel->id}}">
                             <img src="{{ asset('css/booking/icon/Icon.svg') }}" alt="tip-img">
                         </div>
