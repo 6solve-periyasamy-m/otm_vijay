@@ -74,7 +74,7 @@
         <li>
             <p class="txt">Single occupancy surcharge</p>
             <div class="single_occ_div">
-                <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>s
+                <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>
             </div>
             <!-- <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>s -->
         </li>
