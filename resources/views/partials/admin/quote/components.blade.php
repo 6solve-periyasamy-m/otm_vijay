@@ -78,10 +78,10 @@
                             {{ $componentRepository->getPurchasePrice() !== null ? $componentRepository->getInventory()?->getPurchasePriceString() : 'Not Set' }}
                         </td>
                         <td>
-                            {{ $componentRepository->getInventoryInternalNotes() }}
+                            {{ f_currency($componentRepository->getSalesPrice()) }} {{ $componentRepository->priceShown() ? '(Shown)' : '' }}
                         </td>
                         <td>
-                            {{ f_currency($componentRepository->getSalesPrice()) }} {{ $componentRepository->priceShown() ? '(Shown)' : '' }}
+                            {{ $componentRepository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
