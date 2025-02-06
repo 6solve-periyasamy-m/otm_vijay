@@ -3,6 +3,9 @@
     <tr>
         <th scope="col">Booking Reference</th>
         <th scope="col">Customer Name</th>
+        <th scope="col">Event</th>
+        <th scope="col">Consultant</th>
+        <th scope="col">Status</th>
         <th scope="col">Passport Name</th>
         <th scope="col">Email Address</th>
         <th scope="col">Merchandise</th>
@@ -20,6 +23,9 @@
         <tr>
             <th scope="row">{{ $row->reference }}</th>
             <td>{{ $row->customer }}</td>
+            <td>{{ $row->event }}</td>
+            <td>{{ $row->consultant }}</td>
+            <td>{{ $row->status->name }}</td>
             <td>{{ $row->passport }}</td>
             <td>{{ $row->email }}</td>
             <td>{{ $row->merchandise }}</td>
