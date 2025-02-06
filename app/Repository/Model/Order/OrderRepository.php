@@ -12,6 +12,10 @@ use App\Models\Helper\Enum\OrderStatus;
 use App\Models\Location\Address;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderMerchandise;
+use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCache;
 use App\Models\Order\OrderCustomer;
@@ -1028,5 +1032,29 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             ];
         }
         return $data;
+    }
+
+    public function getQuantity(OrderAccommodation|OrderActivity|OrderFlight|OrderTransport|OrderMerchandise $component): int
+    {
+        return match (true) {
+            $component instanceof OrderAccommodation => $this->getAccommodationQuantity($component),
+            $component instanceof OrderActivity => $this->order->orderActivities()->where('activity_inventory_tour_id', '=', $component->activity_inventory_tour_id)->count(),
+            $component instanceof OrderFlight => $this->order->orderFlights()->where('flight_inventory_tour_id', '=', $component->flight_inventory_tour_id)->count(),
+            $component instanceof OrderTransport => $this->order->orderTransport()->where('transport_inventory_tour_id', '=', $component->transport_inventory_tour_id)->count(),
+            $component instanceof OrderMerchandise => $this->order->orderMerchandise()->where('merchandise_inventory_tour_id', '=', $component->merchandise_inventory_tour_id)->count(),
+        };
+    }
+
+    public function getAccommodationQuantity(OrderAccommodation $component): int
+    {
+        $count = 0;
+        foreach ($this->order->groups as $group) {
+            foreach ($group->rooms as $room) {
+                if ($room->accommodation_inventory_tour_id === $component->accommodation_inventory_tour_id) {
+                    ++$count;
+                }
+            }
+        }
+        return $count;
     }
 }
