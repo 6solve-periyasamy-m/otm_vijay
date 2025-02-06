@@ -43,7 +43,7 @@ class OrderManifestRepository implements HasOrderManifest
         return view('pages.reports.view', [
             'tableView' => 'partials.reports.tables.manifest.order',
             'data' => $this->getRows(),
-            'title' => 'Activity Manifest',
+            'title' => 'Order Manifest',
             'xlsxExport' => route($export, ['extension' => 'xlsx', ...$data]),
             'csvExport' => route($export, ['extension' => 'csv', ...$data]),
         ]);
