@@ -24,6 +24,8 @@
             <th scope="col">Currency</th>
             <th scope="col">Purchase Price</th>
             <th scope="col">Sales Price</th>
+            <th scope="col">Internal Notes</th>
+            <th scope="col">External Notes</th>
         </tr>
     </thead>
     <tbody>
@@ -51,6 +53,8 @@
                 <td>{{ $row->currency }}</td>
                 <td>{{ f_currency($row->purchasePrice) }}</td>
                 <td>{{ f_currency($row->salesPrice) }}</td>
+                <td>{{ $row->internalNotes }}</td>
+                <td>{{ $row->externalNotes }}</td>
             </tr>
         @endforeach
     </tbody>

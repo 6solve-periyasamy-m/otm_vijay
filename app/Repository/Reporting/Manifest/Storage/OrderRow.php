@@ -39,6 +39,8 @@ class OrderRow
      * @param string $currency Currency sold in
      * @param float $purchasePrice Cost to company for component
      * @param float $salesPrice Cost to customer for component
+     * @param string $internalNotes Internal notes for the inventory
+     * @param string $externalNotes External notes for the inventory
      */
     protected function __construct(
         public readonly string|null $event,
@@ -60,6 +62,8 @@ class OrderRow
         public readonly string      $currency,
         public readonly float       $purchasePrice,
         public readonly float       $salesPrice,
+        public readonly string      $internalNotes,
+        public readonly string      $externalNotes,
     )
     {
     }
@@ -127,6 +131,8 @@ class OrderRow
             setting('system.currency'),
             $inventory->local_purchase_price,
             $component->tourComponent?->tour_component_type === 'Included' ? 0 : $component->tourComponent?->tour_sales_price,
+            $inventory->internal_notes,
+            $inventory->external_notes,
         );
     }
 
@@ -154,6 +160,8 @@ class OrderRow
             setting('system.currency'),
             $inventory->local_purchase_price,
             $component->tourComponent?->tour_component_type === 'Included' ? 0 : $component->tourComponent?->tour_sales_price,
+            $inventory->internal_notes,
+            $inventory->external_notes,
         );
     }
 
@@ -181,6 +189,8 @@ class OrderRow
             setting('system.currency'),
             $inventory->local_purchase_price,
             $component->tourComponent?->tour_component_type === 'Included' ? 0 : $component->tourComponent?->tour_sales_price,
+            $inventory->internal_notes,
+            $inventory->external_notes,
         );
     }
 
@@ -208,6 +218,8 @@ class OrderRow
             setting('system.currency'),
             $inventory->local_purchase_price,
             $component->tourComponent?->tour_component_type === 'Included' ? 0 : $component->tourComponent?->tour_sales_price,
+            $inventory->internal_notes,
+            $inventory->external_notes,
         );
     }
 
@@ -235,6 +247,8 @@ class OrderRow
             setting('system.currency'),
             $inventory->local_purchase_price,
             $component->tourComponent?->tour_component_type === 'Included' ? 0 : $component->tourComponent?->tour_sales_price,
+            $inventory->internal_notes,
+            $inventory->external_notes,
         );
     }
 
