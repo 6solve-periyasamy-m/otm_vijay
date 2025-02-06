@@ -27,40 +27,28 @@
         @php $count = 1; @endphp
         @foreach($data->data as $row)
             <tr>
-                <td>{{ $count++ }}</td>
-                <td>{{ $row->tour }}</td>
-                <td>{{ $row->event }}</td>
-                <td>{{ $row->hotel }}</td>
-                <td>{{ $row->room }}</td>
-                <td>{{ $row->board }}</td>
-                <td>{{ $row->from->format('Y-m-d') }}</td>
-                <td>{{ $row->from->format('H:i:s') }}</td>
-                <td>{{ $row->to->format('Y-m-d') }}</td>
-                <td>{{ $row->to->format('H:i:s') }}</td>
-                <td>{{ f_currency($row->purchase) }}</td>
-                <td>{{ f_currency($row->sales) }}</td>
+            <td>{{ $count++ }}</td>
+                <td>{{ $row['tour'] }}</td>
+                <td>{{ $row['event'] }}</td>
+                <td>{{ $row['hotel'] }}</td>
+                <td>{{ $row['room'] }}</td>
+                <td>{{ $row['board'] }}</td>
+                <td>{{ $row['from']->format('Y-m-d') }}</td>
+                <td>{{ $row['from']->format('H:i:s') }}</td>
+                <td>{{ $row['to']->format('Y-m-d') }}</td>
+                <td>{{ $row['to']->format('H:i:s') }}</td>
+                <td>{{ f_currency($row['purchase']) }}</td>
+                <td>{{ f_currency($row['sales']) }}</td>
                 {{-- Exporter strips 0 values for some reason, hence formatting with decimal place --}}
-                <td>{{ $row->occupants == 0 ? number_format(0, 2) : $row->occupants }}</td>
-                <td>{{ $row->empty_beds == 0 ? number_format(0, 2) : $row->empty_beds }}</td>
-                <td>{{ $row->reference }}</td>
-
-                @for($x = 0; $x < $data->largest; $x++)
-                    @php
-                        /** @var \App\Models\Order\OrderCustomer $traveller */
-                        $traveller = $row->travellers->get($x);
-                    @endphp
-                    @isset($traveller)
-                        <td>{{ $traveller->customer?->first_name ?? 'Redacted' }} {{ $traveller->customer?->last_name ?? 'Redacted' }}</td>
-                    @else
-                        <td></td>
-                    @endisset
-                @endfor
-
+                <td>{{ $row['occupants'] == 0 ? number_format(0, 2) : $row['occupants'] }}</td>
+                <td>{{ $row['empty_beds'] == 0 ? number_format(0, 2) : $row['empty_beds'] }}</td>
+                <td>{{ $row['reference'] }}</td>
+                <td>{{ $row['travellers_groups'] }}</td>
                 @if($notes)
                     @for($x = 0; $x < $data->largest; $x++)
                         @php
                             /** @var \App\Models\Order\OrderCustomer $traveller */
-                            $traveller = $row->travellers->get($x);
+                            $traveller = $row['travellers']->get($x);
                         @endphp
                         @isset($traveller)
                             <td>

@@ -20,6 +20,6 @@ class RoomingReportExport implements FromView
 
     public function view(): View
     {
-        return view('partials.reports.tables.rooming-export', ['data' => RoomingReportRepository::generateRoomingList($this->roomingList), 'notes' => $this->showNotes,]);
+        return view('partials.reports.tables.rooming-export', ['data' => RoomingReportRepository::generateGroupRoomingList($this->roomingList), 'notes' => $this->showNotes,]);
     }
 }
