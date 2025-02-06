@@ -6,6 +6,8 @@ use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\Payment\Payment;
 
+use Auth;
+
 class OrderMail extends TemplatedMail
 {
     public function getShortcodes($model = null): array
@@ -43,6 +45,7 @@ class OrderMail extends TemplatedMail
             'FINAL_PAYMENT_DATE' => f_date(isset($order) ? $finalPayment?->due_on : $this->faker->date),
             'TOUR_NAME' => $tour?->name ?? implode(' ', $this->faker->words),
             'EVENT_NAME' => isset($tour) ? $tour->event?->name : implode(' ', $this->faker?->words),
+            'EVENT_TYPE' => $tour && $tour->event && $tour->event->event_category ? ($tour->event->event_category->name === 'NORMAL' ? 'Child Event' : 'Parent Event'): implode(' ', $this->faker?->words),
             'TOUR_DESCRIPTION' => $tour?->description ?? $this->faker?->sentence,
             'TOUR_START' => f_date($tour?->date_from ?? $this->faker->date),
             'TOUR_END' => f_date($tour?->date_to ?? $this->faker->date),
@@ -52,6 +55,18 @@ class OrderMail extends TemplatedMail
             'PORTAL_LINK' => route('customer.portal'),
             'ATOL_LINK' => route('customer.atol', ['reference' => $order?->booking_reference ?? 'reference',]),
             'DETAILS_LINK' => route('customer.edit'),
+            'SETTING_COMPANY_NAME' => setting('company.name'),
+            'SETTING_LOGO_URL' => asset(setting('company.logo')),
+            'SETTING_COMPANY_URL' => setting('company.url'),
+            'SETTING_COMPANY_ADDRESS_LINE_1' => setting('company.address.line_1'),
+            'SETTING_COMPANY_ADDRESS_LINE_2' => setting('company.address.line_2'),
+            'SETTING_COMPANY_ADDRESS_CITY' => setting('company.address.city'),
+            'SETTING_COMPANY_ADDRESS_REGION' => setting('company.address.region'),
+            'SETTING_COMPANY_ADDRESS_COUNTRY' => setting('company.address.country'),
+            'SETTING_COMPANY_CONTACT_EMAIL' => setting('company.contact.email'),
+            'SETTING_COMPANY_CONTACT_PHONE' => setting('company.contact.phone'),
+            'CURRENT_USER_NAME' => Auth::user()?->name ?? 'No User Found',
+            'CURRENT_USER_EMAIL' => Auth::user()?->email ?? 'No User Found',
             ...(new SettingsMail())->getShortcodes(),
         ];
     }
