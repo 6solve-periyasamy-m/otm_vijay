@@ -42,7 +42,7 @@ class OrderRow
      * @param string|null $internalNotes Internal notes for the inventory
      * @param string|null $externalNotes External notes for the inventory
      */
-    protected function __construct(
+    public function __construct(
         public readonly string|null $event,
         public readonly string      $reference,
         public readonly Carbon      $ordered,
@@ -77,15 +77,9 @@ class OrderRow
     public static function fromOrder(Order $order): array
     {
         $rows = [];
-        $seen = [];
-        foreach ($order->groups as $group) {
-            foreach ($group->rooms as $room) {
-                if (in_array($room->accommodation_inventory_tour_id, $seen)) {
-                    continue;
-                }
-                $rows[] = self::fromAccommodation($room);
-                $seen[] = $room->accommodation_inventory_tour_id;
-            }
+
+        foreach ($order->repository->getMergedAccommodation() as $merged) {
+            $rows[] = $merged->getOrderRow($order);
         }
 
         foreach ($order->orderActivities()->groupBy('activity_inventory_tour_id')->get() as $component) {

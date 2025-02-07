@@ -27,6 +27,7 @@ use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Interfaces\GeneratesFellohData;
 use App\Repository\Mailing\Mailer\Order\OrderMailer;
+use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
 use App\Repository\Storage\Itinerary\Itinerary;
@@ -36,6 +37,7 @@ use App\Repository\Storage\Itinerary\ItineraryPaymentDetails;
 use App\Repository\Storage\Itinerary\ItinerarySchedule;
 use App\Repository\Storage\Itinerary\ItineraryScheduleType;
 use App\Repository\Storage\Itinerary\ItineraryTraveller;
+use App\Repository\Storage\Order\MergedAccommodation;
 use App\Repository\Storage\Rooming\AccommodationByDateStorage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -1056,5 +1058,49 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             }
         }
         return $count;
+    }
+
+    /**
+     * Returns all OrderAccommodation on the order, sorted by check_in
+     *
+     * @return OrderAccommodation[]
+     */
+    public function getOrderAccommodationByStart(): array
+    {
+        $rooms = [];
+        foreach ($this->order->groups as $group) {
+            foreach ($group->rooms as $room) {
+                $rooms[] = $room;
+            }
+        }
+        usort($rooms, static function (OrderAccommodation $a, OrderAccommodation $b) {
+            return AccommodationInventoryRepository::compareTwo($a->tourComponent->inventory, $b->tourComponent->inventory);
+        });
+        return $rooms;
+    }
+
+    /**
+     * Return a list of merged accommodation
+     *
+     * @return MergedAccommodation[]
+     */
+    public function getMergedAccommodation(): array
+    {
+        /** @var MergedAccommodation[] $merged */
+        $merged = [];
+        foreach ($this->getOrderAccommodationByStart() as $room) {
+            $found = false;
+            foreach ($merged as $key => $merge) {
+                if ($merge->addToMerge($room)) {
+                    $found = true;
+                    $merged[$key] = $merge;
+                    break;
+                }
+            }
+            if (!$found) {
+                $merged[] = MergedAccommodation::make($room);
+            }
+        }
+        return $merged;
     }
 }
