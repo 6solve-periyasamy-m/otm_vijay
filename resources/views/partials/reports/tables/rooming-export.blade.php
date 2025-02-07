@@ -84,32 +84,32 @@
                             @endif
                             @if(!empty($traveller->order->internal_notes))
                                 @php
-                                    $internal_notes .= "<br />Order Internal Notes:<br />" . nl2br(e($traveller->order->internal_notes)) . "<br />";
+                                    $internal_notes .= "Order Internal Notes:<br />" . nl2br(e($traveller->order->internal_notes)) . "<br />";
                                 @endphp
                             @endif
                             @if(!empty($traveller->order->external_notes))
                                 @php
-                                    $external_notes .= "<br />Order External Notes:<br />" . nl2br(e($traveller->order->external_notes)) . "<br />";
+                                    $external_notes .= "Order External Notes:<br />" . nl2br(e($traveller->order->external_notes)) . "<br />";
                                 @endphp
                             @endif
                             @if(!empty($traveller->customer?->internal_notes))
                                 @php
-                                    $internal_notes .= "<br />Internal Customer Notes:<br />" . nl2br(e($traveller->customer?->internal_notes)) . "<br />";
+                                    $internal_notes .= ">Internal Customer Notes:<br />" . nl2br(e($traveller->customer?->internal_notes)) . "<br />";
                                 @endphp
                             @endif
                             @if(!empty($traveller->customer?->external_notes))
                                 @php
-                                    $external_notes .= "<br />External Customer Notes:<br />" . nl2br(e($traveller->customer?->external_notes)) . "<br />";
+                                    $external_notes .= "External Customer Notes:<br />" . nl2br(e($traveller->customer?->external_notes)) . "<br />";
                                 @endphp
                             @endif
                             @if(!empty($traveller->internal_notes))
                                 @php
-                                    $internal_notes .= "<br />Internal Order Customer Notes:<br />" . nl2br(e($traveller->internal_notes)) . "<br />";
+                                    $internal_notes .= "Internal Order Customer Notes:<br />" . nl2br(e($traveller->internal_notes)) . "<br />";
                                 @endphp
                             @endif
                             @if(!empty($traveller->external_notes))
                                 @php
-                                    $external_notes .= "<br />External Order Customer Notes:<br />" . nl2br(e($traveller->external_notes)) . "<br />";
+                                    $external_notes .= "External Order Customer Notes:<br />" . nl2br(e($traveller->external_notes)) . "<br />";
                                 @endphp
                             @endif
                         @endisset
