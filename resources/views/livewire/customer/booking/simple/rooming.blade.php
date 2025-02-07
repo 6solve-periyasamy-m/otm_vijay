@@ -337,8 +337,8 @@
     </div>
 
     <div class="right-col">
-        <h3>Your trip details</h3>
-        <h3 class="event-name">{{ $tour->event?->name }}</h3>
+        <h3 class="ytd_bold_class">Your trip details</h3>
+        <h3 class="event-name event_color_class">{{ $tour->event?->name }}</h3>
         <div class="contain">
             <x-customer.booking.simple.package-details :booking="$booking" :tour="$tour">
                 <div class="submit-btn-cls">
@@ -488,8 +488,8 @@
         runSelectClassUpdate();
     });
     
-    function runSelectClassUpdate() {
-        console.log('inside');
+    /*function runSelectClassUpdate() {
+        //console.log('inside');
         jQuery('select[name="bedding_configuration"]').each(function(){
             var comtext = jQuery(this).find('option:selected').text().trim().toLowerCase();
             if(comtext.includes('twin')) {
@@ -500,7 +500,22 @@
                 jQuery(this).closest('.form-field').addClass('dbl-cls');
             }
         });
+    }*/
+    function runSelectClassUpdate() {
+        jQuery('select[name="bedding_configuration"]').each(function(){
+            var selectedValue = jQuery(this).val(); 
+            if (selectedValue == 2) {
+                jQuery(this).closest('.form-field').addClass('dbl-cls');
+            } else if (selectedValue == 1) {
+                jQuery(this).closest('.form-field').addClass('sng-cls');
+            } else if (selectedValue == 'twin') {
+                jQuery(this).closest('.form-field').addClass('twn-cls');
+            }else{
+                jQuery(this).closest('.form-field').addClass('dbl-cls');
+            }
+        });
     }
+
 
 
 </script>

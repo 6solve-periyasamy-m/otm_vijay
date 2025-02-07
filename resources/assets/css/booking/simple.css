@@ -2779,10 +2779,10 @@ input::-webkit-inner-spin-button {
 
 /*feedbacks css*/
 
-.ma-block .row .left-col h3.ytd_bold_class{
+.ma-block .row .left-col h3.ytd_bold_class,.right-col h3.ytd_bold_class{
     font-weight: 600;
 }
-.ma-block .row .left-col h3.head-evnt.event_color_class{
+.ma-block .row .left-col h3.head-evnt.event_color_class,.event-name.event_color_class{
     color: #F35B15 !important;
 }
 
