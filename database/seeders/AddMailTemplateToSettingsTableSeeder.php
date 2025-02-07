@@ -23,9 +23,9 @@ class AddMailTemplateToSettingsTableSeeder extends Seeder
                 'value' => '<p>Greetings [LEAD_TITLE] [LEAD_FIRST_NAME] [LEAD_LAST_NAME],</p>
 <p>Congratulations on your order for the [EVENT_NAME] [EVENT_TYPE]. This order is referenced with the booking code [BOOKING_REFERENCE]. We are pleased to confirm that your order has been successfully received and processed. </p>
 <p>Please find your Booking Confirmation and Tax Invoice for your reference. <br></p>
-<p>Thank you, and enjoy your tour! <br><br></p>
+<p>Thank you, and enjoy your tour! <br><br>&nbsp;</p>
 <p>Kind regards,</p>
-<p>[CURRENT_USER_NAME] <br><br></p>
+<p>[CURRENT_USER_NAME]</p>
 <p style=""><strong>[SETTING_COMPANY_NAME]</strong></p>
 <p><span style="color:#f35b15"><strong>P</strong></span>: [SETTING_COMPANY_CONTACT_PHONE]</p>
 <p><span style="color:#f35b15"><strong>E</strong></span>: [CURRENT_USER_EMAIL]</p>
