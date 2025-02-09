@@ -1074,6 +1074,8 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             }
         }
         usort($rooms, static function (OrderAccommodation $a, OrderAccommodation $b) {
+            if ($a->tourComponent?->inventory === null) return -1;
+            if ($b->tourComponent?->inventory === null) return 1;
             return AccommodationInventoryRepository::compareTwo($a->tourComponent->inventory, $b->tourComponent->inventory);
         });
         return $rooms;
