@@ -43,8 +43,8 @@
                 <td>{{ $row->component }}</td>
                 <td>{{ $row->tourComponentType }}</td>
                 <td>{{ $row->description }}</td>
-                <td>{{ $row->start->format('Y-m-d') }}</td>
-                <td>{{ $row->end->format('Y-m-d') }}</td>
+                <td>{{ $row->start?->format('Y-m-d') }}</td>
+                <td>{{ $row->end?->format('Y-m-d') }}</td>
                 <td>{{ $row->travellers }}</td>
                 <td>{{ $row->quantity }}</td>
                 <td>TODO</td>
