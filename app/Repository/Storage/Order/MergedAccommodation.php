@@ -23,7 +23,7 @@ class MergedAccommodation
         public Carbon $end,
         public int $travellers,
         public float $purchase,
-        public float $sale,
+        public float|null $sale,
         public string $tourComponentType = 'Included',
         public string|null $internal = null,
         public string|null $external = null,
@@ -102,7 +102,7 @@ class MergedAccommodation
             1,
             setting('system.currency'),
             $this->purchase,
-            $this->tourComponentType === 'Included' ? 0 : $this->sale,
+            $this->tourComponentType === 'Included' ? 0 : ($this->sale ?? 0.0),
             $this->internal,
             $this->external,
         );
