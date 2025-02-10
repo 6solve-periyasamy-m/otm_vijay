@@ -307,7 +307,8 @@ jQuery(document).ready(function () {
         jQuery('.price-details-block').toggle();
         jQuery('.mob-trip-summary-block .submit-btn-cls').toggle();
         jQuery('.Inner-container').toggleClass('open');
-        
+        jQuery('.mob-trip-summary-block').toggleClass('open');
+                
         var currentText = jQuery('.mob-static-see-more:visible').text().trim();
         console.log(currentText)
         if (currentText === 'SEE MORE') {

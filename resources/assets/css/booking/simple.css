@@ -2830,3 +2830,56 @@ input::-webkit-inner-spin-button {
     align-items: center;
     justify-content: space-between;
 }
+
+.click_popup_div .event_name{
+    font-weight: 600;
+}
+.click_popup_div .date::before{
+    content: "";
+    background: url(icon/calendar.svg) no-repeat;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 0;
+    left: 0;
+}
+.click_popup_div .date{
+    position: relative;
+    padding-left: 24px;
+}
+.click_popup_div .points::before{
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    position: absolute;
+    background-color: #000000;
+    border-radius: 0%;
+    top: 6px;
+    left: 10px;
+}
+.click_popup_div .points{
+    padding-left: 24px;
+    position: relative;
+}
+.mob-trip-summary-block_outerdiv .price-details-block{
+    border-bottom: 1px solid #FAE8D3;
+    border-top: 1px solid #FAE8D3;
+    padding-top: 32px;
+    padding-bottom: 32px;
+    margin: 20px 0;
+}
+.mob-trip-summary-block.open{
+    bottom: 24px;
+}
+.ma-block .row .left-col .contain .second-block  h6.hover-h-cls{
+    margin-bottom: 4px;
+}
+.second-block.rme-det .hotel-board{
+    font-family: "PP Neue Montreal Medium";
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #000;
+    margin-bottom: 10px;
+}

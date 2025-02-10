@@ -159,7 +159,7 @@
                         border-radius: 8px;
                         padding: 16px;
                         /* position: sticky; */
-                        bottom: 24px;
+                        bottom: unset;
                         background: #ffffff;
                         /* padding: 16px 8px; */
                         z-index: 999;
@@ -222,9 +222,7 @@
                 @foreach($tour->repository->getHotels() as $hotelData)
                     @php $hotel = $hotelData['hotel']; @endphp
                     <div wire:ignore class="hotel-details">
-                        <h6>{{ $hotel->name }} @if($hotelData['type'] !== null) - {{ $hotelData['type'] }} @endif</h6>
-                        <br />
-                        {{ $hotelData['board'] }}
+                        <h6 class="hover-h-cls">{{ $hotel->name }} @if($hotelData['type'] !== null) - {{ $hotelData['type'] }} @endif</h6>
                         <div class="information-hover" data-action="hover" data-target="accommodation-{{$hotel->id}}">
                             <img src="{{ asset('css/booking/icon/Icon.svg') }}" alt="tip-img">
                         </div>
@@ -245,6 +243,7 @@
                             </div>
                         </div>
                     </div>
+                   <div class="hotel-board">{{ $hotelData['board'] }}</div>
                 @endforeach
                 {{-- Hidden For Future Use --}}
                 {{--
@@ -414,8 +413,8 @@
                         <p>
                     </div>
                 </div>
-                <div class="static-mobile-description">
-                    <h3>{{ $tour->event?->name }}</h3>
+                <div class="static-mobile-description click_popup_div">
+                    <h3 class="event_name">{{ $tour->name }}</h3>
                     <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
                     @foreach($tour->repository->getInclusions(4) as $inclusion)
                         <p class="points">{{ $inclusion }}</p>
