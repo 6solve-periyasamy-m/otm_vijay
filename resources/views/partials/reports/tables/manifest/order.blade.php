@@ -18,8 +18,6 @@
             <th scope="col">End</th>
             <th scope="col">Travellers</th>
             <th scope="col">Quantity</th>
-            <th scope="col">Total</th>
-            <th scope="col">Rooms</th>
             <th scope="col">Nights</th>
             <th scope="col">Currency</th>
             <th scope="col">Purchase Price</th>
@@ -33,7 +31,7 @@
             <tr>
                 <th scope="row">{{ $row->reference }}</th>
                 <td>{{ $row->event }}</td>
-                <td>{{ $row->ordered->format('Y-m-d') }}</td>
+                <td>{{ $row->ordered->format('d/m/Y') }}</td>
                 <td>{{ $row->status->description() }}</td>
                 <td>{{ $row->organization }}</td>
                 <td>{{ $row->agent }}</td>
@@ -43,12 +41,10 @@
                 <td>{{ $row->component }}</td>
                 <td>{{ $row->tourComponentType }}</td>
                 <td>{{ $row->description }}</td>
-                <td>{{ $row->start?->format('Y-m-d') }}</td>
-                <td>{{ $row->end?->format('Y-m-d') }}</td>
+                <td>{{ $row->start?->format('d/m/Y') }}</td>
+                <td>{{ $row->end?->format('d/m/Y') }}</td>
                 <td>{{ $row->travellers }}</td>
                 <td>{{ $row->quantity }}</td>
-                <td>TODO</td>
-                <td>TODO</td>
                 <td>{{ $row->nights }}</td>
                 <td>{{ $row->currency }}</td>
                 <td>{{ f_currency($row->purchasePrice) }}</td>

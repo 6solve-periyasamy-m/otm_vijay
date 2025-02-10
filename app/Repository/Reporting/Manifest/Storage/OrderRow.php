@@ -3,6 +3,7 @@
 namespace App\Repository\Reporting\Manifest\Storage;
 
 use App\Models\Helper\Enum\OrderStatus;
+use App\Models\Location\Address;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
@@ -114,7 +115,7 @@ class OrderRow
             $order->agent?->name,
             $order->consultant?->name,
             $order->leadBooker->lead_booker_name,
-            (string)($inventory?->component?->address),
+            self::formatAddress($inventory?->component?->address),
             "Accommodation",
             $component->tourComponent?->tour_component_type,
             $inventory?->component->name . ' - ' . $inventory?->category?->name,
@@ -143,7 +144,7 @@ class OrderRow
             $order->agent?->name,
             $order->consultant?->name,
             $order->leadBooker->lead_booker_name,
-            (string)($inventory?->component?->address),
+            self::formatAddress($inventory?->component?->address),
             "Activity",
             $component->tourComponent?->tour_component_type,
             $inventory?->component->name,
@@ -172,7 +173,7 @@ class OrderRow
             $order->agent?->name,
             $order->consultant?->name,
             $order->leadBooker->lead_booker_name,
-            (string)($inventory?->component?->departureAirport?->address),
+            self::formatAddress($inventory?->component?->departureAirport?->address),
             "Flight",
             $component->tourComponent?->tour_component_type,
             $inventory?->component->departureAirport?->name . ' to ' . $inventory?->component->arrivalAirport?->name,
@@ -201,7 +202,7 @@ class OrderRow
             $order->agent?->name,
             $order->consultant?->name,
             $order->leadBooker->lead_booker_name,
-            (string)($inventory?->component?->departureAddress),
+            self::formatAddress($inventory?->component?->departureAddress),
             "Transport",
             $component->tourComponent?->tour_component_type,
             $inventory?->component->name,
@@ -255,5 +256,10 @@ class OrderRow
             return 1;
         }
         return (int)diff_in_nights($this->start, $this->end);
+    }
+
+    private static function formatAddress(Address|null $address): string|null
+    {
+        return $address?->region;
     }
 }
