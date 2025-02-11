@@ -15,6 +15,7 @@ use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsAccommodation;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 use Settings;
 
@@ -263,6 +264,22 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
             $this->inventory->check_in->unix(),
             $details,
         );
+    }
+
+    public function getNightsInTour(Tour $tour): int
+    {
+        $nights = [];
+        foreach ($tour->accommodationInventoryTours as $component) {
+            if ($component->inventory->accommodation_id !== $this->inventory->accommodation_id) { continue; }
+            foreach (CarbonPeriod::create($component->inventory->check_in,'1 day', $component->inventory->check_out) as $date) {
+                $nights[$date->format('Y-m-d')] = true;
+            }
+        }
+        $count = 0;
+        foreach ($nights as $night => $active) {
+            if ($active) { $count++; }
+        }
+        return $count;
     }
 
     /**

@@ -3,6 +3,7 @@
      * @var \App\Models\Tour\Tour $tour
      * @var \App\Models\Booking\Booking|null $booking
      */
+    session(['eventnamechk' => $tour->event?->name]);
 @endphp
 @extends('layout.booking.simple', [
     'brand' => $tour->brand,
