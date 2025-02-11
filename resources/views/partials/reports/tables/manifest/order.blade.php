@@ -47,7 +47,7 @@
                 <td>{{ $row->quantity }}</td>
                 <td>{{ $row->nights }}</td>
                 <td>{{ $row->currency }}</td>
-                <td>{{ f_currency($row->purchasePrice) }}</td>
+                <td>{{ f_currency($row->purchasePrice, $row->currency) }}</td>
                 <td>{{ f_currency($row->salesPrice) }}</td>
                 <td>{{ $row->internalNotes }}</td>
                 <td>{{ $row->externalNotes }}</td>
