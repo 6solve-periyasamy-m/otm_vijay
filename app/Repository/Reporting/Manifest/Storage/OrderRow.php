@@ -258,7 +258,7 @@ class OrderRow
         return (int)diff_in_nights($this->start, $this->end);
     }
 
-    private static function formatAddress(Address|null $address): string|null
+    public static function formatAddress(Address|null $address): string|null
     {
         return $address?->region;
     }

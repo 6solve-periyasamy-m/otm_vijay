@@ -1091,7 +1091,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         /** @var MergedAccommodation[] $merged */
         $merged = [];
         foreach ($this->getOrderAccommodationByStart() as $room) {
-            if ($room->tourComponent?->inventory === null) continue;
+            if ($room->tourComponent?->inventory === null) { continue; }
             $found = false;
             foreach ($merged as $key => $merge) {
                 if ($merge->addToMerge($room)) {

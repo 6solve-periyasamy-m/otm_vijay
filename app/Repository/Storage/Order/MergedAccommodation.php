@@ -54,7 +54,7 @@ class MergedAccommodation
     {
         $inventory = $component->tourComponent->inventory;
         if ($this->matches($inventory) &&
-            diff_in_nights($this->end, $inventory->check_in) <= 1 &&
+            (int)diff_in_nights($this->end, $inventory->check_in) === 1 &&
             $component->group->orderCustomers()->count() === $this->travellers
         ) {
             $this->end = $inventory->check_out;
@@ -92,7 +92,7 @@ class MergedAccommodation
             $order->agent?->name,
             $order->consultant?->name,
             $order->leadBooker->lead_booker_name,
-            (string)($this->hotel?->address),
+            OrderRow::formatAddress($this->hotel?->address),
             "Accommodation",
             $this->tourComponentType,
             $this->hotel->name . ' - ' . $this->category?->name,
