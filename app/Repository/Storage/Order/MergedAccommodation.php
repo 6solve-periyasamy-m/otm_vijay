@@ -54,7 +54,8 @@ class MergedAccommodation
     {
         $inventory = $component->tourComponent->inventory;
         if ($this->matches($inventory) &&
-            (int)diff_in_nights($this->end, $inventory->check_in) === 0 &&
+            $this->end->isSameDay($inventory->check_in) &&
+            !$this->start->isSameDay($inventory->check_in) &&
             $component->group->orderCustomers()->count() === $this->travellers
         ) {
             $this->end = $inventory->check_out;
