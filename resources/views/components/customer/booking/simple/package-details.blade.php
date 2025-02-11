@@ -4,11 +4,27 @@
  * @var \App\Models\Tour\Tour $tour
  */
 @endphp
+<style>
+    .payable_dflex{
+        display: flex;
+    align-items: center;
+    justify-content: space-between;
+    }
+    .payable_fulltext,
+    .payable_txt,
+    .payable_num{
+        font-family: "PP Neue Montreal Medium";
+        font-weight: 500;
+        font-size:16px;
+        line-height:24px;
+    }
+    .payable_fulltext{
+        margin-top:8px;
+    }
+</style>
 <div class="top-sec">
     <div class="head-txt"><h4>Package details</h4></div>
-    {{--
-    <div class="upgrade-cls" data-action="popup" data-target="upgrades-popup">UPGRADE</div>
-     --}}
+    <div class="upgrade-cls upgrade_hide_cta" data-action="popup" data-target="upgrades-popup">UPGRADE</div>
 </div>
 <div class="snd-sec">
     @if(isset($tour->event?->image_url))
@@ -17,8 +33,13 @@
         </div>
     @endif
     <div class="right-col">
-        <h4>{{$tour->name}}</h4>
-        <!-- <h4>{{ $tour->event?->name }}</h4> -->
+        <h4 class="hide-event" style="display:none!important;">{{ $tour->event?->name }}</h4>
+        <div class="name_price_div">
+            <h4>{{$tour->name}}</h4>
+            <div class="base-price-div">
+                {{ f_currency($tour->base_price_per_person) }}<span class="base-price-span"> / person </span>
+            </div>
+        </div>
         <!-- <h6>{{ $tour->name }}</h6> -->
         <!--<p class="location"></p> TODO: Implement Location on Event -->
         <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
@@ -50,10 +71,15 @@
             </li>
         @endif
         @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
+        @if($singleOccupancy > 0 || $singleOccupancy < 0)
         <li>
             <p class="txt">Single occupancy surcharge</p>
-            <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>
+            <div class="single_occ_div">
+                <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>
+            </div>
+            <!-- <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>s -->
         </li>
+        @endif
         @if($booking->repository->getTaxes() !== null)
             <li>
                 <p class="txt">{{ $tour->taxBracket()->name }} (Included)</p>
@@ -64,7 +90,16 @@
             <p class="total">Total</p>
             <p class="price tot-price">{{ f_currency($booking->repository->getTotalCost()) }}</p>
         </li>
+        <!-- <li>
+            <p class="total">Total</p>
+            <p class="price tot-price">{{ f_currency($booking->repository->getTotalCost()) }}</p>
+        </li> -->
     </ul>
+    <div class="payable_dflex">
+    <div class="payable_txt">Payable today</div>
+    <div class="payable_num">{{ f_currency($booking->repository->getDueTodayAmount()) }}</div>
+    </div>
+      <div class="payable_fulltext">Remaining balance of {{ f_currency($booking->repository->getTotalCost() - $booking->repository->getDueTodayAmount() ) }} payable by: {{ $tour->final_payment->format('d M Y') }}</div>
     {{ $slot }}
     @error('common')
     <div class="submit-btn-cls add-on">
