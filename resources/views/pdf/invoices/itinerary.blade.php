@@ -180,6 +180,9 @@
         .bg-line-color h5::before{content:"";margin-top: 20px; position: absolute; display: block; height: 4px; width: 80px; background-color: var(--head-text-background);}
         .event_terms table {margin-left: -45px;}
         .event_terms table td:first-child {width: 120px;}
+        .component-body {width:"100%"; padding-bottom: 15px; padding-top: 25px;}
+        .component-body table th, .flight-block table th{ font-family: "PPNeueMontreal-Medium"; font-size: 14px; font-weight: 500; line-height: 20px; padding: 8px 0px; border: 1px solid gray;}
+        .component-body table td, .flight-block table td { padding: 6.5px; text-align: center; border: 1px solid gray; }
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
@@ -262,38 +265,28 @@
                         </div>
                         @php $firstLoop = false; @endphp
                     @endif
-                    <div class="details-module">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td class="item-header w-125"><strong> Airline: </strong></td>
-                                    <td class="item-detail">{{ $flight->name }}</td>
-                                </tr>
-                                @php
-                                    $disable_items = ['Check In', 'Quantity'];
-                                    $keyMappings = [
-                                        'Departure Date' => 'Date',
-                                        'Arrival Date' => 'Date',
-                                        'Departure Time' => 'Time',
-                                        'Arrival Time' => 'Time',
-                                    ];
-                                @endphp
-                                @foreach($flight->details as $key => $value)
-                                    @php
-                                        $key = $keyMappings[$key] ?? $key;
-                                    @endphp
-                                    @if (!in_array($key, $disable_items) && !empty($value))
-                                        <tr>
-                                            <td class="item-header w-125">
-                                                <strong>{{ $key }}:</strong>
-                                            </td>
-                                            <td class="item-detail {{ $key === 'Description' ? 'text-wrap' : '' }}">
-                                                {{ $value }}
-                                            </td>
-                                        </tr>
-                                    @endif
-                                @endforeach
-                            </tbody>
+                    <div class="component-body">
+                        <table class="tbl-quote-section" style="width: 90%;">
+                            <tr>
+                                <th>Airline</th>
+                                <th>Flight No.</th>
+                                <th>Class</th>
+                                <th>Date</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Departure</th>
+                                <th>Arrival</th>
+                            </tr>
+                            <tr>
+                                <td style="width:80px;">{{ $flight->name }}</td>
+                                <td style="width:100px;">{{ $flight->details['Flight Number'] }}</td>
+                                <td style="width:60px;">{{ $flight->details['Class'] }}</td>
+                                <td style="width:70px;">{{ $flight->details['Departure Date'] }}</td>
+                                <td style="width:100px;">{{ $flight->details['Departure Airport'] }}</td>
+                                <td style="width:100px;">{{ $flight->details['Arrival Airport'] }}</td>
+                                <td style="width:55px;">{{ $flight->details['Departure Time'] }}</td>
+                                <td style="width:55px;">{{ $flight->details['Arrival Time'] }}</td>
+                            </tr>
                         </table>
                     </div>
                 </div>
