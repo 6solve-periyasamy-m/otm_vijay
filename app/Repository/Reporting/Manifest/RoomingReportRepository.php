@@ -84,63 +84,57 @@ class RoomingReportRepository implements HasRoomingList
      * @param HasRoomingList $roomingList
      * @return Collection
      */
-    public static function generateGroupRoomingList(HasRoomingList $roomingList): Collection
+    public static function generateCombineRoomingList(HasRoomingList $roomingList): Collection
     {
         $largest = 0;
-        $grouped_data = [];
+        $groupedData = [];
+
         foreach ($roomingList->getRoomingList() as $orderAccommodation) {
             if ($orderAccommodation->cancelled) continue;
 
             $occupancy = $orderAccommodation->accommodation_inventory->roomType->maximum_occupancy;
             if ($largest < $occupancy) $largest = $occupancy;
 
+            $travellers = $orderAccommodation->group->orderCustomers()->with('customer')->get();
+            $travellerNames = $travellers->map(fn($t) => $t->customer?->first_name . ' ' . $t->customer?->last_name)->sort()->toArray();
+            $travellerKey = implode('|', $travellerNames);
+
             $key = implode('|', [
+                $orderAccommodation->accommodationInventoryTour->tour->name,
+                $orderAccommodation->accommodationInventoryTour->tour->event?->name,
                 $orderAccommodation->accommodation->name,
                 $orderAccommodation->accommodation_inventory->roomType->name,
                 $orderAccommodation->accommodation_inventory->boardType->name,
                 $orderAccommodation->group->orderCustomers[0]->order->booking_reference,
+                $travellerKey
             ]);
 
-            if (!isset($grouped_data[$key])) {
-                $grouped_data[$key] = [
+            if (!isset($groupedData[$key])) {
+                $groupedData[$key] = [
                     'tour' => $orderAccommodation->accommodationInventoryTour->tour->name,
                     'event' => $orderAccommodation->accommodationInventoryTour->tour->event?->name,
                     'hotel' => $orderAccommodation->accommodation->name,
-                    'from' => $orderAccommodation->accommodation_inventory->check_in,
-                    'to' => $orderAccommodation->accommodation_inventory->check_out,
                     'room' => $orderAccommodation->accommodation_inventory->roomType->name,
                     'board' => $orderAccommodation->accommodation_inventory->boardType->name,
+                    'from' => $orderAccommodation->accommodation_inventory->check_in,
+                    'to' => $orderAccommodation->accommodation_inventory->check_out,
                     'reference' => $orderAccommodation->group->orderCustomers[0]->order->booking_reference,
-                    'travellers' => collect(),
-                    'purchase' => 0,
-                    'sales' => 0,
+                    'purchase' => $orderAccommodation->repository->getCostToCompany(),
+                    'sales' => $orderAccommodation->cost ?? $orderAccommodation->accommodation_inventory->sales_price,
                     'occupancy' => $occupancy,
-                    'occupants' => $orderAccommodation->group->orderCustomers()->count(),
-                    'empty_beds' => $occupancy - $orderAccommodation->group->orderCustomers()->count(),
-                    'travellers_groups' => [],
+                    'occupants' => $travellers->count(),
+                    'empty_beds' => $occupancy - $travellers->count(),
+                    'travellers' => $travellers,
                 ];
+            } else {
+                $groupedData[$key]['from'] = min($groupedData[$key]['from'], $orderAccommodation->accommodation_inventory->check_in);
+                $groupedData[$key]['to'] = max($groupedData[$key]['to'], $orderAccommodation->accommodation_inventory->check_out);
+                $groupedData[$key]['purchase'] += $orderAccommodation->repository->getCostToCompany();
+                $groupedData[$key]['sales'] += $orderAccommodation->cost ?? $orderAccommodation->accommodation_inventory->sales_price;
             }
-            $grouped_data[$key]['purchase'] += $orderAccommodation->repository->getCostToCompany();
-            $grouped_data[$key]['sales'] += $orderAccommodation->cost ?? $orderAccommodation->accommodation_inventory->sales_price;
-            $grouped_data[$key]['to'] = max($grouped_data[$key]['to'], $orderAccommodation->accommodation_inventory->check_out);
-
-            $travellers = $orderAccommodation->group->orderCustomers()->with('customer')->get();
-            $grouped_data[$key]['travellers'] = $grouped_data[$key]['travellers']->merge($travellers);
-
-            $travellers_group = $orderAccommodation->group->orderCustomers()->with('customer')->get()->map(function ($traveller) {
-                return ($traveller->customer?->first_name ?? 'Redacted') . ' ' . ($traveller->customer?->last_name ?? 'Redacted');
-            })->toArray();
-            $grouped_data[$key]['travellers_groups'][] = implode(", ", $travellers_group);
-            // $travellers = $orderAccommodation->group->orderCustomers()->with('customer')->get();
-            // $grouped_data[$key]['travellers'] = $grouped_data[$key]['travellers']->merge($travellers);
         }
-
-        foreach ($grouped_data as &$record) {
-            $record['travellers_groups'] = implode(' | ', $record['travellers_groups']);
-        }
-        $data = collect(array_values($grouped_data));
         $dCol = collect();
-        $dCol->data = $data;
+        $dCol->data = collect(array_values($groupedData));
         $dCol->largest = $largest;
         return $dCol;
     }

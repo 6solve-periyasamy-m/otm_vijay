@@ -1,10 +1,5 @@
 @php
     $notes = $notes ?? true;
-    $max_occupancies = 0;
-    foreach ($data->data as $row) {
-        $occupancies = explode('|', $row['travellers_groups']);
-        $max_occupancies = max($max_occupancies, count($occupancies));
-    }
 @endphp
 <table class="datatable table table-striped report-table">
     <thead>
@@ -24,13 +19,17 @@
             <th scope="col">Occupant Count</th>
             <th scope="col">Empty Beds</th>
             <th scope="col">Reference</th>
-            @for ($i = 1; $i <= $max_occupancies; $i++)
-                <th scope="col">Occupants {{ $i }}</th>
+            @for($x = 1; $x <= $data->largest; $x++)
+                <th scope="col">Occupant {{ $x }}</th>
             @endfor
             @if($notes)
                 <th scope="col">Accommodation Notes</th>
                 <th scope="col">Order Internal Notes</th>
                 <th scope="col">Order External Notes</th>
+                <th scope="col">Customer Internal Notes</th>
+                <th scope="col">Customer External Notes</th>
+                <th scope="col">Traveller Internal Notes</th>
+                <th scope="col">Traveller External Notes</th>
             @endif
         </tr>
     </thead>
@@ -44,31 +43,32 @@
                 <td>{{ $row['hotel'] }}</td>
                 <td>{{ $row['room'] }}</td>
                 <td>{{ $row['board'] }}</td>
-                <td>{{ $row['from']->format('d-m-Y') }}</td>
+                <td>{{ $row['from']->format('Y-m-d') }}</td>
                 <td>{{ $row['from']->format('H:i:s') }}</td>
-                <td>{{ $row['to']->format('d-m-Y') }}</td>
+                <td>{{ $row['to']->format('Y-m-d') }}</td>
                 <td>{{ $row['to']->format('H:i:s') }}</td>
                 <td>{{ f_currency($row['purchase']) }}</td>
                 <td>{{ f_currency($row['sales']) }}</td>
-                {{-- Exporter strips 0 values for some reason, hence formatting with decimal place --}}
                 <td>{{ $row['occupants'] == 0 ? number_format(0, 2) : $row['occupants'] }}</td>
                 <td>{{ $row['empty_beds'] == 0 ? number_format(0, 2) : $row['empty_beds'] }}</td>
                 <td>{{ $row['reference'] }}</td>
-                @php
-                    $occupancies = explode('|', $row['travellers_groups']);
-                @endphp
-                @foreach ($occupancies as $occupancy)
-                    <td>{{ trim($occupancy) }}</td>
-                @endforeach
-                @for ($i = count($occupancies); $i < $max_occupancies; $i++)
-                    <td></td>
+                @for($x = 0; $x < $data->largest; $x++)
+                    @php
+                        $traveller = $row['travellers'][$x] ?? null;
+                    @endphp
+                    <td>
+                        {{ $traveller ? ($traveller->customer?->first_name . ' ' . $traveller->customer?->last_name) : '' }}
+                    </td>
                 @endfor
                 @if($notes)
                     @php
-                        // Initialize variables to store notes
-                        $accommodation_notes = '';
-                        $internal_notes = '';
-                        $external_notes = '';
+                        $accommodation_notes = false;
+                        $order_internal_notes = false;
+                        $order_external_notes = false;
+                        $customer_internal_notes = false;
+                        $customer_external_notes = false;
+                        $order_customer_internal_notes = false;
+                        $order_customer_external_notes = false;
                     @endphp
                     @for($x = 0; $x < $data->largest; $x++)
                         @php
@@ -76,49 +76,55 @@
                             $traveller = $row['travellers']->get($x);
                         @endphp
                         @isset($traveller)
-                            {{-- Collecting Accommodation, Internal, and External notes --}}
-                            @if(!empty($traveller->accommodation_notes))
-                                @php
-                                    $accommodation_notes .= "Customer Accommodation Notes:<br />" . nl2br(e($traveller->accommodation_notes)) . "<br />";
-                                @endphp
-                            @endif
-                            @if(!empty($traveller->order->internal_notes))
-                                @php
-                                    $internal_notes .= "Order Internal Notes:<br />" . nl2br(e($traveller->order->internal_notes)) . "<br />";
-                                @endphp
-                            @endif
-                            @if(!empty($traveller->order->external_notes))
-                                @php
-                                    $external_notes .= "Order External Notes:<br />" . nl2br(e($traveller->order->external_notes)) . "<br />";
-                                @endphp
-                            @endif
-                            @if(!empty($traveller->customer?->internal_notes))
-                                @php
-                                    $internal_notes .= ">Internal Customer Notes:<br />" . nl2br(e($traveller->customer?->internal_notes)) . "<br />";
-                                @endphp
-                            @endif
-                            @if(!empty($traveller->customer?->external_notes))
-                                @php
-                                    $external_notes .= "External Customer Notes:<br />" . nl2br(e($traveller->customer?->external_notes)) . "<br />";
-                                @endphp
-                            @endif
-                            @if(!empty($traveller->internal_notes))
-                                @php
-                                    $internal_notes .= "Internal Order Customer Notes:<br />" . nl2br(e($traveller->internal_notes)) . "<br />";
-                                @endphp
-                            @endif
-                            @if(!empty($traveller->external_notes))
-                                @php
-                                    $external_notes .= "External Order Customer Notes:<br />" . nl2br(e($traveller->external_notes)) . "<br />";
-                                @endphp
-                            @endif
+                            <td>
+                                @if(!$accommodation_notes && !empty($traveller->accommodation_notes))
+                                    {{ $traveller->accommodation_notes }}
+                                    @php $accommodation_notes = true; @endphp
+                                    displayedOrderCustomerExternalNotes
+                                @endif
+                            </td>
+                            <td>
+                                @if(!$order_internal_notes && !empty($traveller->order->internal_notes))
+                                    {{ $traveller->order->internal_notes }}
+                                    @php $order_internal_notes = true; @endphp
+                                @endif
+                            </td>
+                            <td>
+                                @if(!$order_external_notes && !empty($traveller->order->external_notes))
+                                    {{ $traveller->order->external_notes }}
+                                    @php $order_external_notes = true; @endphp
+                                @endif
+                            </td>
+                            <td>
+                                @if(!$customer_internal_notes && !empty($traveller->customer?->internal_notes))
+                                    {{ $traveller->customer?->internal_notes }}
+                                    @php $customer_internal_notes = true; @endphp
+                                @endif
+                            </td>
+                            <td>
+                                @if(!$customer_external_notes && !empty($traveller->customer?->external_notes))
+                                    {{ $traveller->customer?->external_notes }}
+                                    @php $customer_external_notes = true; @endphp
+                                @endif
+                            </td>
+                            <td>
+                                @if(!$order_customer_internal_notes && !empty($traveller->internal_notes))
+                                    {{ $traveller->internal_notes }}
+                                    @php $order_customer_internal_notes = true; @endphp
+                                @endif
+                            </td>
+                            <td>
+                                @if(!$order_customer_external_notes && !empty($traveller->external_notes))
+                                    {{ $traveller->external_notes }}
+                                    @php $order_customer_external_notes = true; @endphp
+                                @endif
+                            </td>
+                        @else
+                            <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td>
                         @endisset
                     @endfor
-                    {{-- Render Notes under their respective columns --}}
-                    <td>{!! $accommodation_notes !!}</td>
-                    <td>{!! $internal_notes !!}</td>
-                    <td>{!! $external_notes !!}</td>
                 @endif
+
             </tr>
         @endforeach
     </tbody>
