@@ -27,7 +27,7 @@ class StringFormatter
 
     private function currency($value, $currency): string
     {
-        if (!is_string($currency)) $currency = $currency->code;
+        if (!is_string($currency)) $currency = $currency?->code;
         return (new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($value ?? 0, $currency);
     }
 
