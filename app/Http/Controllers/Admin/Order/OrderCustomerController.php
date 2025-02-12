@@ -45,7 +45,9 @@ class OrderCustomerController extends Controller
 
     public function destroy(Order $order, OrderCustomer $orderCustomer)
     {
-        $orderCustomer->repository->delete();
+        if ($orderCustomer->id !== $order->lead_booker_id) {
+            $orderCustomer->repository->forceDelete();
+        }
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 }
