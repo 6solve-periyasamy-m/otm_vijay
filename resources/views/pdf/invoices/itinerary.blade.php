@@ -180,9 +180,13 @@
         .bg-line-color h5::before{content:"";margin-top: 20px; position: absolute; display: block; height: 4px; width: 80px; background-color: var(--head-text-background);}
         .event_terms table {margin-left: -45px;}
         .event_terms table td:first-child {width: 120px;}
-        .component-body {width:"100%"; padding-bottom: 15px; padding-top: 25px;}
+        .component-body {width:"100%";}
         .component-body table th, .flight-block table th{ font-family: "PPNeueMontreal-Medium"; font-size: 14px; font-weight: 500; line-height: 20px; padding: 8px 0px; border: 1px solid gray;}
         .component-body table td, .flight-block table td { padding: 6.5px; text-align: center; border: 1px solid gray; }
+        .non-booking-ref-block {line-height:35px; border:0px solid red;}
+        .booking-ref-block {padding-top: 20px; padding-bottom: 0px;display: flex; justify-content: space-between; align-items: center;}
+        .booking-ref-lbl { margin-right: 10px; font-weight: 500; border: 1px solid #B538C4; background-color: #B538C4 !important; color: #FFFFFF; border-radius: 6px; padding: 10px 5px 10px 2px;}
+        .booking-ref { font-weight: 500; border: 1px solid #B538C4; background-color: #B538C4 !important; color: #FFFFFF; border-radius: 6px; padding: 10px 5px 10px 2px; font-size: 16px;}
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
@@ -264,6 +268,11 @@
                             </h3>
                         </div>
                         @php $firstLoop = false; @endphp
+                    @endif
+                    @if($flight->details['Flight Number'] !== $flight->details['Booking Reference'])
+                        <h4 class="booking-ref-block"><span class="booking-ref-lbl">Booking Reference: </span><span class="booking-ref">{{ $flight->details['Booking Reference'] }}</span></h4>
+                    @else
+                        <p class="non-booking-ref-block">&nbsp;</p>
                     @endif
                     <div class="component-body">
                         <table class="tbl-quote-section" style="width: 90%;">
