@@ -452,7 +452,8 @@ h5 span {
 }
 .payment-detail {margin: 0px 0px;}
 @page {
-    margin-top: 25px; 
+    margin-top: 25px;
+    margin-bottom: 50px;
 }
 @page:first {
     margin-top: 0px;
@@ -478,6 +479,7 @@ figure.table {
 .quote-section-tbl tbody tr td:first-child{width: 125px; }
 .pb20 table {padding-bottom: 35px;}
 .event-block table tr:last-of-type td:last-child{padding-bottom: 5px !important;}
+.extra-space-bottom { padding-bottom:20px;}
 </style>
 </head>
 
@@ -814,7 +816,9 @@ figure.table {
                   @foreach($item->details as $key => $value)
                     <div class="section-body">
                     @if ($key === 'Body')
-                      {!! $value !!}
+                      <div class="extra-space-bottom">
+                        {!! $value !!}
+                      </div>
                     @endif
                     </div>
                   @endforeach
@@ -1035,7 +1039,7 @@ figure.table {
    
    
    <div class="single-module heading-2">
-   <h2 style="margin-left:-32px;margin-top:20px;">Payment summary</h2> 
+   <h2 style="margin-left:-32px;margin-top:30px;">Payment summary</h2>
    
    <div class="heading-module">
     <h3>
