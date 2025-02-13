@@ -180,9 +180,10 @@
         .bg-line-color h5::before{content:"";margin-top: 20px; position: absolute; display: block; height: 4px; width: 80px; background-color: var(--head-text-background);}
         .event_terms table {margin-left: -45px;}
         .event_terms table td:first-child {width: 120px;}
-        .component-body {width:"100%"; padding-bottom: 15px; padding-top: 25px;}
+        .component-body {width:"100%";}
         .component-body table th, .flight-block table th{ font-family: "PPNeueMontreal-Medium"; font-size: 14px; font-weight: 500; line-height: 20px; padding: 8px 0px; border: 1px solid gray;}
         .component-body table td, .flight-block table td { padding: 6.5px; text-align: center; border: 1px solid gray; }
+        .non-booking-ref-block {line-height:20px;}
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
@@ -264,6 +265,20 @@
                             </h3>
                         </div>
                         @php $firstLoop = false; @endphp
+                    @endif
+                    @if($flight->details['Flight Number'] !== $flight->details['Booking Reference'])
+                        <div class="details-module">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="w-125"><strong>Booking Reference:</strong></td>
+                                        <td>{{ $flight->details['Booking Reference'] }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <p class="non-booking-ref-block">&nbsp;</p>
                     @endif
                     <div class="component-body">
                         <table class="tbl-quote-section" style="width: 90%;">
