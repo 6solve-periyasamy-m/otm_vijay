@@ -6,8 +6,6 @@ use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\Payment\Payment;
 
-use Auth;
-
 class OrderMail extends TemplatedMail
 {
     public function getShortcodes($model = null): array
@@ -55,18 +53,6 @@ class OrderMail extends TemplatedMail
             'PORTAL_LINK' => route('customer.portal'),
             'ATOL_LINK' => route('customer.atol', ['reference' => $order?->booking_reference ?? 'reference',]),
             'DETAILS_LINK' => route('customer.edit'),
-            'SETTING_COMPANY_NAME' => setting('company.name'),
-            'SETTING_LOGO_URL' => asset(setting('company.logo')),
-            'SETTING_COMPANY_URL' => setting('company.url'),
-            'SETTING_COMPANY_ADDRESS_LINE_1' => setting('company.address.line_1'),
-            'SETTING_COMPANY_ADDRESS_LINE_2' => setting('company.address.line_2'),
-            'SETTING_COMPANY_ADDRESS_CITY' => setting('company.address.city'),
-            'SETTING_COMPANY_ADDRESS_REGION' => setting('company.address.region'),
-            'SETTING_COMPANY_ADDRESS_COUNTRY' => setting('company.address.country'),
-            'SETTING_COMPANY_CONTACT_EMAIL' => setting('company.contact.email'),
-            'SETTING_COMPANY_CONTACT_PHONE' => setting('company.contact.phone'),
-            'CURRENT_USER_NAME' => Auth::user()?->name ?? 'No User Found',
-            'CURRENT_USER_EMAIL' => Auth::user()?->email ?? 'No User Found',
             ...(new SettingsMail())->getShortcodes(),
         ];
     }
