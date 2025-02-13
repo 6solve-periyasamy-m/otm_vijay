@@ -25,10 +25,11 @@ class OrderTaxesTest extends DatabaseTestCase
         return $order;
     }
 
+    // Null taxes adjusted to return 0 rather than null
     public function testNullTaxes(): void
     {
         $order = $this->getOrder(null, 1000, 0, 0);
-        $this->assertNull($order->getTaxes());
+        $this->assertEquals(0, $order->getTaxes());
     }
 
     // Tax is being calculated as an inclusive amount, i.e. £1000 with 10% tax is £909.09 + £90.91 tax

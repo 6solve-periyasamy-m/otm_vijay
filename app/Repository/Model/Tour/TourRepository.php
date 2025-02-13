@@ -670,9 +670,9 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             }
             $inclusion = match (true) {
                 $component instanceof AccommodationInventoryRepository =>
-                    $component->get()->accommodation->name . ' - ' . diff_in_nights($component->getStartTime(), $component->getEndTime()) . ' Nights',
+                $component->getStartTime()?->format('d F') . " - " . $component->get()->accommodation->name . ' - ' . $component->getNightsInTour($this->tour) . ' Nights',
                 $component instanceof ActivityInventoryRepository =>
-                    $component->getStartTime()?->format('d M Y') . " - " . $component->get()->activity->name,
+                    $component->getStartTime()?->format('d F') . " - " . $component->get()->activity->name,
                 $component instanceof MerchandiseInventoryRepository =>
                     $component->get()->component->name,
                 $component instanceof TransportInventoryRepository =>
@@ -689,23 +689,35 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
     }
 
     /**
-     * @return array<int, Accommodation>
+     * @return array<int, array{hotel: Accommodation, type: string}>
      */
     public function getHotels(): array
     {
         // TODO: Optimize
         $hotels = [];
         foreach ($this->tour->accommodationInventory()->groupBy('accommodation_id')->get() as $inventory) {
-            $hotels[$inventory->accommodation_id] = $inventory->accommodation;
+            $hotels[$inventory->accommodation_id] = ['hotel' => $inventory->accommodation, 'type' => $inventory->category?->name, 'board' => $inventory->boardType?->name];
         }
         return $hotels;
     }
 
-    public function getRooms(): array
+    public function getRooms(Accommodation|int|null $hotel = null): array
     {
         $rooms = [];
-        foreach ($this->tour->accommodationInventoryTours as $inventoryTour) {
-            $name = $inventoryTour->inventory->component->name . ' - ' . $inventoryTour->inventory->boardType . ' - ' . $inventoryTour->inventory->roomType->name;
+        if (is_int($hotel)) {
+            $hotel = Accommodation::find($hotel);
+        }
+        if ($hotel !== null) {
+            $tourComponents =
+                $this->tour->accommodationInventoryTours()
+                    ->join('accommodation_inventories', 'accommodation_inventories.id', '=', 'accommodation_inventory_tours.accommodation_inventory_id')
+                    ->where('accommodation_inventories.accommodation_id', '=', $hotel->id)
+                    ->get();
+        } else {
+            $tourComponents = $this->tour->accommodationInventoryTours;
+        }
+        foreach ($tourComponents as $inventoryTour) {
+            $name = $inventoryTour->inventory->roomType->name;
             if ($inventoryTour->tour_component_type !== 'Included') {
                 $cost = $inventoryTour->tour_sales_price;
                 if ($cost > 0) {
@@ -715,14 +727,14 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                     $name .= ' (-' . f_currency($cost*-1) . ')';
                 }
             }
-            $rooms[$inventoryTour->id] = $name;
+            $rooms[$inventoryTour->inventory->room_type_id] = $name;
         }
         return $rooms;
     }
 
-    public function getDefaultRoom(): int|null
+    public function getDefaultRoom(int|null $hotel = null): int|null
     {
-        foreach ($this->getRooms() as $key => $name) {
+        foreach ($this->getRooms($hotel) as $key => $name) {
             return $key;
         }
         return null;
