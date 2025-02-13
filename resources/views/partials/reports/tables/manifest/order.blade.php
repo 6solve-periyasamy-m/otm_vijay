@@ -21,6 +21,7 @@
             <th scope="col">Nights</th>
             <th scope="col">Currency</th>
             <th scope="col">Purchase Price</th>
+            <th scope="col">Currency</th>
             <th scope="col">Sales Price</th>
             <th scope="col">Internal Notes</th>
             <th scope="col">External Notes</th>
@@ -43,7 +44,7 @@
                 <td>{{ $row->description }}</td>
                 <td>{{ $row->start?->format('d/m/Y') }}</td>
                 <td>{{ $row->end?->format('d/m/Y') }}</td>
-                <td>{{ $row->travellers }}</td>
+                <td>{{ $row->travellers ?? '-' }}</td>
                 <td>{{ $row->quantity }}</td>
                 <td>{{ $row->nights }}</td>
                 <td>{{ $row->currency }}</td>
