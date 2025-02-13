@@ -183,10 +183,7 @@
         .component-body {width:"100%";}
         .component-body table th, .flight-block table th{ font-family: "PPNeueMontreal-Medium"; font-size: 14px; font-weight: 500; line-height: 20px; padding: 8px 0px; border: 1px solid gray;}
         .component-body table td, .flight-block table td { padding: 6.5px; text-align: center; border: 1px solid gray; }
-        .non-booking-ref-block {line-height:35px; border:0px solid red;}
-        .booking-ref-block {padding-top: 20px; padding-bottom: 0px;display: flex; justify-content: space-between; align-items: center;}
-        .booking-ref-lbl { margin-right: 10px; font-weight: 500; border: 1px solid #B538C4; background-color: #B538C4 !important; color: #FFFFFF; border-radius: 6px; padding: 10px 5px 10px 2px;}
-        .booking-ref { font-weight: 500; border: 1px solid #B538C4; background-color: #B538C4 !important; color: #FFFFFF; border-radius: 6px; padding: 10px 5px 10px 2px; font-size: 16px;}
+        .non-booking-ref-block {line-height:20px;}
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
@@ -270,7 +267,16 @@
                         @php $firstLoop = false; @endphp
                     @endif
                     @if($flight->details['Flight Number'] !== $flight->details['Booking Reference'])
-                        <h4 class="booking-ref-block"><span class="booking-ref-lbl">Booking Reference: </span><span class="booking-ref">{{ $flight->details['Booking Reference'] }}</span></h4>
+                        <div class="details-module">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="w-125"><strong>Booking Reference:</strong></td>
+                                        <td>{{ $flight->details['Booking Reference'] }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     @else
                         <p class="non-booking-ref-block">&nbsp;</p>
                     @endif
