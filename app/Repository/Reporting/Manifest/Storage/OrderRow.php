@@ -10,6 +10,7 @@ use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
+use App\Repository\Storage\Order\MergedAccommodation;
 use App\Repository\Traits\HasCustomAttributes;
 use Carbon\Carbon;
 
@@ -59,7 +60,7 @@ class OrderRow
         public readonly Carbon|null $start,
         public readonly Carbon|null $end,
         public readonly int|null         $travellers,
-        public readonly int         $quantity,
+        public          int         $quantity,
         public readonly string      $currency,
         public readonly float       $purchasePrice,
         public readonly float       $salesPrice,
@@ -78,9 +79,26 @@ class OrderRow
     public static function fromOrder(Order $order): array
     {
         $rows = [];
+        /** @var array{merged: MergedAccommodation, quantity: int}[] $accommodationData */
+        $accommodationData = [];
 
         foreach ($order->repository->getMergedAccommodation() as $merged) {
-            $rows[] = $merged->getOrderRow($order);
+            $found = false;
+            foreach ($accommodationData as $key => $data) {
+                if ($data['merged']->equals($merged)) {
+                    ++$data['quantity'];
+                    $accommodationData[$key] = $data;
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                $accommodationData[] = ['merged' => $merged, 'quantity' => 1];
+            }
+        }
+
+        foreach ($accommodationData as $data) {
+            $rows[] = $data['merged']->getOrderRow($order, $data['quantity']);
         }
 
         foreach ($order->orderActivities()->groupBy('activity_inventory_tour_id')->get() as $component) {

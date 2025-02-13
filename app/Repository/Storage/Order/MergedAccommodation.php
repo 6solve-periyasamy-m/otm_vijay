@@ -77,12 +77,12 @@ class MergedAccommodation
         return $this->hotel->id === $merged->hotel->id &&
                 $this->room->id === $merged->room->id &&
                 $this->board->id === $merged->board->id &&
-                $this->category->id === $merged->category->id &&
+                $this->category?->id === $merged->category?->id &&
                 $this->start->isSameDay($merged->start) &&
                 $this->end->isSameDay($merged->end);
     }
 
-    public function getOrderRow(Order $order): OrderRow
+    public function getOrderRow(Order $order, int $quantity = 1): OrderRow
     {
         return new OrderRow(
             $order->tour?->event?->name,
@@ -100,7 +100,7 @@ class MergedAccommodation
             $this->start,
             $this->end,
             $this->travellers,
-            1,
+            $quantity,
             $this->hotel?->currency?->code ?? setting('system.currency'),
             $this->purchase,
             $this->tourComponentType === 'Included' ? 0 : ($this->sale ?? 0.0),

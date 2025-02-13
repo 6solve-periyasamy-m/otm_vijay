@@ -49,7 +49,7 @@
                 <td>{{ $row->nights }}</td>
                 <td>{{ $row->currency }}</td>
                 <td>{{ $row->purchasePrice }}</td>
-                <td>{{ \Settings::currency() }}</td>
+                <td>{{ setting('system.currency') }}</td>
                 <td>{{ $row->salesPrice }}</td>
                 <td>{{ $row->internalNotes }}</td>
                 <td>{{ $row->externalNotes }}</td>
