@@ -18,6 +18,7 @@
             <th scope="col">End</th>
             <th scope="col">Travellers</th>
             <th scope="col">Quantity</th>
+            <th scope="col">Total PAX</th>
             <th scope="col">Nights</th>
             <th scope="col">Currency</th>
             <th scope="col">Purchase Price</th>
@@ -46,6 +47,7 @@
                 <td>{{ $row->end?->format('d/m/Y') }}</td>
                 <td>{{ $row->travellers ?? '-' }}</td>
                 <td>{{ $row->quantity }}</td>
+                <td>{{ $row->quantity * ($row->travellers ?? 1) }}</td>
                 <td>{{ $row->nights }}</td>
                 <td>{{ $row->currency }}</td>
                 <td>{{ $row->purchasePrice }}</td>
