@@ -487,8 +487,7 @@
         runSelectClassUpdate();
     });
     
-    /*function runSelectClassUpdate() {
-        //console.log('inside');
+    function runSelectClassUpdate() {
         jQuery('select[name="bedding_configuration"]').each(function(){
             var comtext = jQuery(this).find('option:selected').text().trim().toLowerCase();
             if(comtext.includes('twin')) {
@@ -499,8 +498,9 @@
                 jQuery(this).closest('.form-field').addClass('dbl-cls');
             }
         });
-    }*/
-    function runSelectClassUpdate() {
+    }
+
+    /*function runSelectClassUpdate() {
         jQuery('select[name="bedding_configuration"]').each(function(){
             var selectedValue = jQuery(this).val(); 
             if (selectedValue == 2) {
@@ -513,7 +513,7 @@
                 jQuery(this).closest('.form-field').addClass('dbl-cls');
             }
         });
-    }
+    }*/
 
 
 
