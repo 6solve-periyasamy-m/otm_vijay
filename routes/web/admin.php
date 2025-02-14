@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdditionalCostController;
-use App\Http\Controllers\Admin\AuthenticationController;
-use App\Http\Controllers\Admin\OrganizationController;
 use App\Http\Controllers\Admin\AgentController;
+use App\Http\Controllers\Admin\AuthenticationController;
+use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\OrganizationController;
 use App\Http\Controllers\Admin\Reporting\BespokeReportController;
 use App\Http\Controllers\Admin\System\ImportController;
 use App\Http\Controllers\Admin\System\MailController;
@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\User\UserProfileController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\Voucher\VoucherCodeController;
 use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('show-login');
 Route::post('/login', [AuthenticationController::class, 'login'])->name('login');
@@ -73,6 +74,13 @@ Route::middleware('auth:web')->group(function () {
         Route::prefix('{cost}')->group(function () {
             Route::post('/update', [AdditionalCostController::class, 'update'])->name('additional-cost.update');
             Route::post('/delete', [AdditionalCostController::class, 'destroy'])->name('additional-cost.delete');
+        });
+    });
+
+    Route::prefix('bookings')->name('admin.booking.')->group(function () {
+        Route::prefix('/{booking}')->group(function () {
+            Route::get('/', [BookingController::class, 'view'])->name('view');
+            Route::post('/convert', [BookingController::class, 'convert'])->name('convert');
         });
     });
 
