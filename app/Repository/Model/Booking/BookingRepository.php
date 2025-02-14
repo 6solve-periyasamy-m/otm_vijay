@@ -629,7 +629,8 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
                 if ($key >= count($rooming)) { break; }
                 $group = BookingGroup::create(['booking_id' => $this->booking->id,]);
                 foreach ($this->booking->tour->accommodationInventoryTours as $room) {
-                    if ($room->inventory->room_type_id === $rooming[$key]['room'] && $room->inventory->accommodation_id === $hotel) {
+                    /** @noinspection TypeUnsafeComparisonInspection Type unsafe required. IDs are int, and code returns string */
+                    if ($room->inventory->room_type_id == $rooming[$key]['room'] && $room->inventory->accommodation_id == $hotel) {
                         $group->repository->addRoomToGroup($room);
                     }
                 }
