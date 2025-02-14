@@ -623,6 +623,11 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         $this->wipeGroups();
         $key = -1;
         $group = null;
+        foreach ($rooming as $i => $room) {
+            $roomType = RoomType::find($room['room']);
+            $room['travellers'] = min($room['travellers'], $roomType?->maximum_occupancy);
+            $rooming[$i] = $room;
+        }
         foreach ($this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->get() as $traveller) {
             if ($group === null || $rooming[$key]['travellers'] === 0) {
                 $key++;
