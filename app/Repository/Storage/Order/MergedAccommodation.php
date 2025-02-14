@@ -59,6 +59,8 @@ class MergedAccommodation
             $component->group->orderCustomers()->count() === $this->travellers
         ) {
             $this->end = $inventory->check_out;
+            $this->purchase += $inventory->purchase_price;
+            $this->sale += $component->tourComponent->tour_sales_price;
             return true;
         }
         return false;
