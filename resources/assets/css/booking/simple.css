@@ -2795,7 +2795,8 @@ input::-webkit-inner-spin-button {
     z-index: 999;
     width: 100%;
     position: fixed;
-    height: 250px;
+    /* height: 250px; */
+    height: 175px;
     box-shadow: 0px 0px 34px 0px #00000026;
     display: flex;
     align-items: center;
