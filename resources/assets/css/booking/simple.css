@@ -2535,7 +2535,7 @@ input::-webkit-inner-spin-button {
         position: fixed;
         bottom: 0;
         background: #ffffff;
-        padding: 16px 8px;
+        padding: 8px;
         z-index:999;
         width: 100%;
     }
