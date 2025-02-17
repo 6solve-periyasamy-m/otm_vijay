@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdditionalCostController;
 use App\Http\Controllers\Admin\AgentController;
 use App\Http\Controllers\Admin\AuthenticationController;
+use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\OrganizationController;
 use App\Http\Controllers\Admin\Reporting\BespokeReportController;
 use App\Http\Controllers\Admin\System\ImportController;
@@ -73,6 +74,13 @@ Route::middleware('auth:web')->group(function () {
         Route::prefix('{cost}')->group(function () {
             Route::post('/update', [AdditionalCostController::class, 'update'])->name('additional-cost.update');
             Route::post('/delete', [AdditionalCostController::class, 'destroy'])->name('additional-cost.delete');
+        });
+    });
+
+    Route::prefix('bookings')->name('admin.booking.')->group(function () {
+        Route::prefix('/{booking}')->group(function () {
+            Route::get('/', [BookingController::class, 'view'])->name('view');
+            Route::post('/convert', [BookingController::class, 'convert'])->name('convert');
         });
     });
 
