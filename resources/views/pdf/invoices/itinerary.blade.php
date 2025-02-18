@@ -184,6 +184,7 @@
         .component-body table th, .flight-block table th{ font-family: "PPNeueMontreal-Medium"; font-size: 14px; font-weight: 500; line-height: 20px; padding: 8px 0px; border: 1px solid gray;}
         .component-body table td, .flight-block table td { padding: 6.5px; text-align: center; border: 1px solid gray; }
         .non-booking-ref-block {line-height:20px;}
+        .pn10 {padding:-10px;}
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
@@ -270,7 +271,7 @@
                         <div class="details-module">
                             <table>
                                 <tbody>
-                                    <tr><td colspan="2" style="padding:-10px;"></td></tr>
+                                    <tr><td colspan="2" class="pn10"></td></tr>
                                     <tr>
                                         <td class="w-125"><strong>Quantity:</strong></td>
                                         <td>{{ $flight->details['Quantity'] }}</td>
