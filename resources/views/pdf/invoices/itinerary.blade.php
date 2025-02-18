@@ -270,6 +270,11 @@
                         <div class="details-module">
                             <table>
                                 <tbody>
+                                    <tr><td colspan="2" style="padding:-10px;"></td></tr>
+                                    <tr>
+                                        <td class="w-125"><strong>Quantity:</strong></td>
+                                        <td>{{ $flight->details['Quantity'] }}</td>
+                                    </tr>
                                     <tr>
                                         <td class="w-125"><strong>Booking Reference:</strong></td>
                                         <td>{{ $flight->details['Booking Reference'] }}</td>
