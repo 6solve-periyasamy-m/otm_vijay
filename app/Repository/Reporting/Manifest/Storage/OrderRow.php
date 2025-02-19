@@ -2,6 +2,7 @@
 
 namespace App\Repository\Reporting\Manifest\Storage;
 
+use App\Models\AdditionalCost;
 use App\Models\Helper\Enum\OrderStatus;
 use App\Models\Location\Address;
 use App\Models\Order\Component\OrderAccommodation;
@@ -115,6 +116,10 @@ class OrderRow
 
         foreach ($order->orderMerchandise()->groupBy('merchandise_inventory_tour_id')->get() as $component) {
             $rows[] = self::fromMerchandise($component);
+        }
+
+        foreach ($order->tour->costs as $cost) {
+            $rows[] = self::fromCost($cost, $order);
         }
 
         return $rows;
@@ -262,6 +267,33 @@ class OrderRow
             $component->tourComponent?->tour_component_type === 'Included' ? 0 : $component->tourComponent?->tour_sales_price,
             $inventory->internal_notes,
             $inventory->external_notes,
+        );
+    }
+
+    public static function fromCost(AdditionalCost $cost, Order $order): self
+    {
+        return new self(
+            $order->tour?->event?->name,
+            $order->booking_reference,
+            $order->ordered_on,
+            $order->status,
+            $order->organization?->name,
+            $order->agent?->name,
+            $order->consultant?->name,
+            $order->leadBooker->lead_booker_name,
+            null,
+            "Cost",
+            $cost->per_customer ? 'Per-Customer' : 'Whole Package',
+            $cost->name,
+            null,
+            null,
+            $cost->per_customer ? $order->orderCustomers()->count() : 1,
+            1,
+            setting('system.currency'),
+            $cost->amount,
+            0,
+            null,
+            null,
         );
     }
 
