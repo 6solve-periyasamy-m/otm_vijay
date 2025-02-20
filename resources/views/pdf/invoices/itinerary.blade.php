@@ -135,7 +135,6 @@
             line-height: 20px;
             color: var(--text-color);
             margin: 0px 0px 24px 0px;
-            text-transform: capitalize;
         }
         .single-module table td {
             font-family: "PPNeueMontreal-Regular";
