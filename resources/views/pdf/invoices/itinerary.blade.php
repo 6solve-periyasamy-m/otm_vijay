@@ -185,8 +185,8 @@
         .component-body table td, .flight-block table td { padding: 6.5px; text-align: center; border: 1px solid gray; }
         .non-booking-ref-block {line-height:20px;}
         .pn10 {padding:-10px;}
-        /* .component-body table { page-break-inside: avoid; }
-        .component-break { page-break-inside: avoid; } */
+        .component-body table { page-break-inside: avoid; }
+        .component-break { page-break-inside: avoid; }
         .word-wrap { word-wrap: break-word; word-break: break-word; white-space: normal; }
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
