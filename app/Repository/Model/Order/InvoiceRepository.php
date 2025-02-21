@@ -98,7 +98,7 @@ class InvoiceRepository
                 if ($prev_matches && $curr_matches) {
                     $new_description = str_replace($prev_matches[0], "({$prev_matches[1]} {$prev_matches[2]} to {$curr_matches[3]} {$curr_matches[4]})", $previous_item->description);
                     $previous_item->description = $new_description;
-                    $previous_item->setQuantity($previous_item->getQuantity() + $item->getQuantity());
+                    //$previous_item->setQuantity($previous_item->getQuantity() + $item->getQuantity());
                 }
             } else {
                 if ($previous_item) {

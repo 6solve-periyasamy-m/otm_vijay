@@ -43,7 +43,7 @@ Route::middleware('auth:web')->group(function () {
 
     Route::prefix('tours')->group(__DIR__ . '/admin/tour.php');
 
-    Route::prefix('events')->group(__DIR__ . '/admin/event.php');
+    Route::prefix('events')->name('events.')->group(__DIR__ . '/admin/event.php');
 
     Route::prefix('accommodation')->group(__DIR__ . '/admin/component/accommodation.php');
 
