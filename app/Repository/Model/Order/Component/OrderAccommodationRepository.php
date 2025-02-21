@@ -126,6 +126,6 @@ class OrderAccommodationRepository extends OrderComponentRepository
 
     public function getCostToCompany(): float
     {
-        return $this->orderComponent->purchase_price ?? $this->orderComponent->tourComponent->inventory->local_purchase_price;
+        return $this->orderComponent->purchase_price ?? $this->orderComponent->tourComponent?->inventory?->local_purchase_price ?? 0.0;
     }
 }
