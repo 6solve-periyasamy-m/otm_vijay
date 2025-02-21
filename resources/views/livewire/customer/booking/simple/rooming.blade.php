@@ -401,7 +401,7 @@
   </div>
 </div> -->
 
-<div class="mob-trip-summary-block_outerdiv" wire:key="{{Str::random()}}">
+{{--<div class="mob-trip-summary-block_outerdiv" wire:key="{{Str::random()}}">
     <div class="mob-trip-summary-block">
         <div class="block-container">
             <div class="Inner-container">
@@ -464,7 +464,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>--}}
 <script>
     jQuery('.mob-trip-summary-block .submit-btn-cls .submit-btn').click(function () {
         jQuery('.third-col .submit-btn-cls .submit-btn').trigger('click')
