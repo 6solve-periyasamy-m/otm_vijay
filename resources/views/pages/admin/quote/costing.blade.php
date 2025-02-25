@@ -7,7 +7,7 @@
 $pricePerPerson = $quote->repository->getPricePerPerson($paying)->price_per_person;
 $basicCtC = $quote->repository->getCustomerCostToCompany();
 $remaining = $pricePerPerson * $paying;
-$costOfTour = $quote->repository->getTotalCostToCompany($paying + $travelling);
+$costOfTour = $quote->repository->getTotalCostToCompany($paying);
 $profit = $remaining - $costOfTour;
 $commission = $quote->repository->getCommission($paying);
 $profit -= ($commission ?? 0.0)
