@@ -219,7 +219,27 @@ return [
                     'name' => 'Consultant Email',
                     'description' => 'The email address of the consultant'
                 ],
-            ]
+            ],
+            'organization' => [
+                'name' => [
+                    'name' => 'Organization Name',
+                    'description' => 'The name of the organization for the order'
+                ],
+            ],
+            'agent' => [
+                'first_name' => [
+                    'name' => 'Agent First Name',
+                    'description' => 'First name of the agent'
+                ],
+                'last_name' => [
+                    'name' => 'Agent Last Name',
+                    'description' => 'Last name of the agent'
+                ],
+                'email' => [
+                    'name' => 'Agent Email',
+                    'description' => 'The email address of the agent'
+                ],
+            ],
         ],
     ],
 ];

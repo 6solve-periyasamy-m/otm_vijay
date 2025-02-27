@@ -7,6 +7,8 @@ use App\Http\Livewire\Abstract\CurrencyColumn;
 use App\Http\Livewire\Abstract\OrderBadgeColumn;
 use App\Models\Order\Order;
 use App\Models\User;
+use App\Models\Customer\Organization;
+use App\Models\Customer\Agent;
 use App\Report\ColumnDefinition;
 use App\Report\HasPriority;
 use App\Report\Tour\TourReport;
@@ -37,6 +39,8 @@ class OrderReport extends TourReport
             ->leftJoin('tour_categories', 'tours.tour_category_id', '=', 'tour_categories.id')
             ->leftJoin('events', 'events.id', '=', 'tours.event_id')
             ->leftJoin('users', 'users.id', '=', 'orders.consultant_id')
+            ->leftJoin('organizations', 'organizations.id', '=', 'orders.organization_id')
+            ->leftJoin('agents', 'agents.id', '=', 'orders.agent_id')
             ->groupBy('orders.id');
     }
 
@@ -216,6 +220,28 @@ class OrderReport extends TourReport
                     Column::name('users.email')
                         ->filterOn('users.email')
                         ->filterable(User::pluck('email')),
+                ),
+            'order_organization_name' =>
+                new ColumnDefinition(
+                    'reports.order.column.organization.name',
+                    Column::name('organizations.name')
+                        ->filterOn('organizations.name')
+                        ->filterable(Organization::pluck('name')),
+                ),
+            'order_agent_first_name' =>
+                new ColumnDefinition(
+                    'reports.order.column.agent.first_name',
+                    Column::name('agents.first_name')
+                ),
+            'order_agent_last_name' =>
+                new ColumnDefinition(
+                    'reports.order.column.agent.last_name',
+                    Column::name('agents.last_name')
+                ),
+            'order_agent_email' =>
+                new ColumnDefinition(
+                    'reports.order.column.agent.email',
+                    Column::name('agents.email')
                 ),
         ];
     }
