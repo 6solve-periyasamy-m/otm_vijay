@@ -79,46 +79,90 @@ class InvoiceRepository
                     }
                 }
             }
-            $accom_data = $this->mergeBillables($accom_data);
+            $accom_data = $this->mergeBillablesByQuantity($accom_data);
         }
         $merged_data = $data->merge($accom_data);
         return $merged_data;
     }
 
-    public function mergeBillables(Collection $billables): Collection
+    public function mergeBillablesByQuantity(Collection $items): Collection
     {
-        $merged = collect();
+        $merged_items = collect();
+        $previous_item = null;
 
-        $billables->each(function ($billable) use ($merged) {
-            preg_match('/^(.*?)\((.*? to .*?)\) \((.*)\)$/', $billable->description, $matches);
-            [$fullMatch, $hotelName, $dateRange, $roomDetails] = $matches;
+        foreach ($items->sortBy(fn($item) => $this->extractCheckInDate($item->description)) as $item) {
+            if ($previous_item && $this->canMerge($previous_item, $item)) {
+                preg_match('/\((\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2})\)/', $previous_item->description, $prev_matches);
+                preg_match('/\((\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2})\)/', $item->description, $curr_matches);
 
-            $uniqueKey = "{$hotelName}|{$roomDetails}";
-
-            if ($merged->has($uniqueKey)) {
-                $existingBillable = $merged->get($uniqueKey);
-
-                // Merge date ranges
-                preg_match('/^(.*?) to (.*?)$/', $dateRange, $newDates);
-                preg_match('/(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2})\sto\s(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2})/', $existingBillable->description, $existingDates);
-
-                $existingStart = \DateTime::createFromFormat('d/m/Y H:i', $existingDates[1]);
-                $existingEnd = \DateTime::createFromFormat('d/m/Y H:i', $existingDates[2]);
-                $newStart = \DateTime::createFromFormat('d/m/Y H:i', $newDates[1]);
-                $newEnd = \DateTime::createFromFormat('d/m/Y H:i', $newDates[2]);
-
-                $start = min($existingStart, $newStart);
-                $end = max($existingEnd, $newEnd);
-
-                $mergedDescription = "{$hotelName}(" . $start->format('d/m/Y H:i') . " to " . $end->format('d/m/Y H:i') . ") ({$roomDetails})";
-                $existingBillable->setQuantity($existingBillable->getQuantity());
-                $existingBillable->description = $mergedDescription;
+                if ($prev_matches && $curr_matches) {
+                    $new_description = str_replace($prev_matches[0], "({$prev_matches[1]} {$prev_matches[2]} to {$curr_matches[3]} {$curr_matches[4]})", $previous_item->description);
+                    $previous_item->description = $new_description;
+                    //$previous_item->setQuantity($previous_item->getQuantity() + $item->getQuantity());
+                }
             } else {
-                $merged->put($uniqueKey, $billable);
+                if ($previous_item) {
+                    $merged_items->push($previous_item);
+                }
+                $previous_item = clone $item;
             }
-        });
+        }
 
-        return $merged;
+        if ($previous_item) {
+            $merged_items->push($previous_item);
+        }
+        return $merged_items;
+    }
+
+    /**
+     * Checks if two billable items can be merged.
+     */
+    private function canMerge($item1, $item2): bool
+    {
+        return $this->extractHotelName($item1->description) === $this->extractHotelName($item2->description)
+            && $this->extractRoomType($item1->description) === $this->extractRoomType($item2->description)
+            && $this->extractCheckOutDate($item1->description) === $this->extractCheckInDate($item2->description);
+    }
+
+    /**
+     * Extract hotel name from description.
+     */
+    private function extractHotelName($description): string
+    {
+        return trim(explode("(", $description)[0]);
+    }
+
+    /**
+     * Extract check-in date from description.
+     */
+    private function extractCheckInDate($description): ?string
+    {
+        if (preg_match('/\((\d{2}\/\d{2}\/\d{4}) \d{2}:\d{2} to/', $description, $matches)) {
+            return $matches[1];
+        }
+        return null;
+    }
+
+    /**
+     * Extract check-out date from description.
+     */
+    private function extractCheckOutDate($description): ?string
+    {
+        if (preg_match('/to (\d{2}\/\d{2}\/\d{4}) \d{2}:\d{2}\)/', $description, $matches)) {
+            return $matches[1];
+        }
+        return null;
+    }
+
+    /**
+     * Extract room type from description.
+     */
+    private function extractRoomType($description): string
+    {
+        if (preg_match('/\)([^)]+)$/', $description, $matches)) {
+            return trim($matches[1]);
+        }
+        return '';
     }
 
     public function transportDescriptionFormat($invoice_description)
