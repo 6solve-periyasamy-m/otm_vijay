@@ -7,8 +7,10 @@
 $pricePerPerson = $quote->repository->getPricePerPerson($paying)->price_per_person;
 $basicCtC = $quote->repository->getCustomerCostToCompany();
 $remaining = $pricePerPerson * $paying;
-$costOfTour = $quote->repository->getTotalCostToCompany($paying + $travelling);
+$costOfTour = $quote->repository->getTotalCostToCompany($paying);
 $profit = $remaining - $costOfTour;
+$commission = $quote->repository->getCommission($paying);
+$profit -= ($commission ?? 0.0)
 @endphp
 @extends('layout.master')
 
@@ -174,13 +176,13 @@ $profit = $remaining - $costOfTour;
                         </x-slot:header>
                         {{ f_currency($remaining ?? 0) }}
                     </x-admin.section.otm-text>
-                    <x-admin.section.otm-text width="4">
+                    <x-admin.section.otm-text width="6">
                         <x-slot:header>
                             Cost to Company
                         </x-slot:header>
                         {{ f_currency($costOfTour ?? 0) }}
                     </x-admin.section.otm-text>
-                    <x-admin.section.otm-text width="6">
+                    <x-admin.section.otm-text width="4">
                         <x-slot:header>
                             Profit
                         </x-slot:header>
@@ -189,6 +191,12 @@ $profit = $remaining - $costOfTour;
                         @else
                             <span style="color: green">{{ f_currency($profit ?? 0) }}</span>
                         @endif
+                    </x-admin.section.otm-text>
+                    <x-admin.section.otm-text width="6">
+                        <x-slot:header>
+                            Commission
+                        </x-slot:header>
+                        {{ f_currency($commission ?? 0) }}
                     </x-admin.section.otm-text>
                 </div>
             </x-admin.section.card>
