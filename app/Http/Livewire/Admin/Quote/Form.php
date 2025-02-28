@@ -4,12 +4,11 @@ namespace App\Http\Livewire\Admin\Quote;
 
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
+use App\Models\Customer\Agent;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
 use App\Models\Quote\QuoteProspect;
 use App\Models\System\LargeTextTemplate;
-use App\Models\Customer\Agent;
-use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 
 class Form extends Component
@@ -40,6 +39,7 @@ class Form extends Component
         if ($this->quote->commission != 0 && empty($this->quote->commission)) { $this->quote->commission = null; }
         if ($this->quote->brand_id <= 0) { $this->quote->brand_id = null; }
         $this->quote->brand_id = $this->quote->brand_id ?? null;
+        $this->quote->currency_id = $this->quote->currency_id ?? null;
         $this->quote->is_deposit_percentage = $this->quote->is_deposit_percentage ?? false;
         $this->prospect->travelling = $this->prospect->travelling ?? false;
         $this->prospect->paying = $this->prospect->paying ?? false;
@@ -109,6 +109,7 @@ class Form extends Component
             'quote.name' => 'required|string|min:3',
             'quote.brand_id' => 'nullable|integer',
             'quote.tax_bracket_id' => 'nullable|integer|exists:tax_brackets,id',
+            'quote.currency_id' => 'nullable|integer|exists:currencies,id',
             'quote.consultant_id' => 'nullable|integer|exists:users,id',
             'quote.organization_id' => 'nullable|integer|exists:organizations,id',
             'quote.agent_id' => 'nullable|integer|exists:agents,id',
