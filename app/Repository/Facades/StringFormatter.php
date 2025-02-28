@@ -5,8 +5,6 @@ namespace App\Repository\Facades;
 use App\Models\Location\Currency;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
-use Illuminate\Support\Facades\App;
-use NumberFormatter;
 
 class StringFormatter
 {
@@ -27,8 +25,7 @@ class StringFormatter
 
     private function currency($value, $currency): string
     {
-        if (!is_string($currency)) $currency = $currency?->code;
-        return (new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($value ?? 0, $currency);
+        return fr_currency($value, $currency);
     }
 
     public function formatDate($date) : string {

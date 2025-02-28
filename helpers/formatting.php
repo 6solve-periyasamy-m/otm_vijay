@@ -16,6 +16,19 @@ if (!function_exists('f_currency')) {
         return StringFormatter::formatCurrency($amount, $currency, $conversion, $toCurrency);
     }
 }
+if (!function_exists('fr_currency')) {
+    /**
+     * Format a number as a specific currency. Does no conversion, just outputs a string
+     * @param float|null $amount The amount to be formatted
+     * @param Currency|string|null $currency The currency to format in
+     * @return string
+     */
+    function fr_currency(?float $amount, Currency|string|null $currency = null): string
+    {
+        if (!is_string($currency)) $currency = ($currency ?? Settings::currency())?->code;
+        return (new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($amount ?? 0.0, $currency);
+    }
+}
 if (!function_exists('f_date')) {
     /**
      * Alias for StringFormatter::formatDate
