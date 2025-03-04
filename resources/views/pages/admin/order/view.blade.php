@@ -276,7 +276,7 @@
             </x-admin.section.card>
             <x-admin.section.card>
                 <x-slot:title>
-                    Costs
+                    Sell Price per Person
                 </x-slot:title>
                 <div>
                     <table class="datatable table table-striped" id="cost-table">
