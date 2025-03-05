@@ -59,13 +59,13 @@ $profit -= ($commission ?? 0.0)
             <div class="col-12 col-xl-2">
                 <p>Price per Person</p>
                 <h6 class="fw-bold">
-                    {{ f_currency($pricePerPerson) }}
+                    {{ fr_currency($pricePerPerson, $quote->currency) }}
                 </h6>
             </div>
             <div class="col-12 col-xl-2">
                 <p>Surcharge</p>
                 <h6 class="fw-bold">
-                    {{ f_currency($quote->single_occupancy_surcharge) }}
+                    {{ fr_currency($quote->single_occupancy_surcharge, $quote->currency) }}
                 </h6>
             </div>
             <div class="col-12 col-xl-2">
@@ -107,7 +107,7 @@ $profit -= ($commission ?? 0.0)
                                 No Cost
                             @endif
                         </td>
-                        <td class="text-center base-price" style="width: 20%">{{ f_currency($pricePerPerson) }}</td>
+                        <td class="text-center base-price" style="width: 20%">{{ fr_currency($pricePerPerson, $quote->currency) }}</td>
                         <td class="text-center base-profit" style="width: 20%">{{ f_currency($pricePerPerson - $basicCtC) }}</td>
                     </tr>
                     </tbody>
@@ -174,7 +174,7 @@ $profit -= ($commission ?? 0.0)
                         <x-slot:header>
                             Expected
                         </x-slot:header>
-                        {{ f_currency($remaining ?? 0) }}
+                        {{ fr_currency($remaining ?? 0, $quote->currency) }}
                     </x-admin.section.otm-text>
                     <x-admin.section.otm-text width="6">
                         <x-slot:header>

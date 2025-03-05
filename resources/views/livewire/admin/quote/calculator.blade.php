@@ -147,14 +147,14 @@
                     <div class="col-6">
                         <x-admin.section.otm-text class="profit-updater">
                             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.profit') }} <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span></x-slot:header>
-                            {{ f_currency($profit) }}
+                            {{ fr_currency($profit) }}
                         </x-admin.section.otm-text>
                     </div>
                     @if($taxes !== null)
                     <div class="col-6">
                         <x-admin.section.otm-text class="cost-updater">
                             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.taxes') }}</x-slot:header>
-                            {{ f_currency($taxes) }}
+                            {{ fr_currency($taxes, $quote->currency) }}
                         </x-admin.section.otm-text>
                     </div>
                     @endif
@@ -170,7 +170,7 @@
                     <div class="col-3">
                         <x-admin.section.otm-text class="cost-updater">
                             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.cost') }}</x-slot:header>
-                            {{ f_currency($total) }}
+                            {{ fr_currency($total, $quote->currency) }}
                         </x-admin.section.otm-text>
                     </div>
                     @endif
@@ -178,20 +178,20 @@
                     <div class="col-3">
                         <x-admin.section.otm-text class="cost-updater">
                             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.commission') }}</x-slot:header>
-                            {{ f_currency($commission) }}
+                            {{ fr_currency($commission, $quote->currency) }}
                         </x-admin.section.otm-text>
                     </div>
                     @endif
                     <div class="col-3">
                         <x-admin.section.otm-text class="cost-updater">
                             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.final') }}</x-slot:header>
-                            {{ f_currency($toBePaid) }}
+                            {{ fr_currency($toBePaid, $quote->currency) }}
                         </x-admin.section.otm-text>
                     </div>
                 </div>
             </div>
             <div class="col-6 row">
-                <x-livewire.input wire:model.debounce.300ms="marked_up_price" key="marked_up_price" label="Price per Person" width="8" />
+                <x-livewire.input wire:model.debounce.300ms="marked_up_price" key="marked_up_price" label="Price per Person ({{ $quote->currency?->code ?? Settings::currency()?->code }})" width="8" />
                 <div class="col-4">
                     <label></label>
                     <button class="btn btn-warning" wire:click="updatePricePoint(true)" title="Update the price point for a single traveller, and update the others to have the same percentage difference">Save Changes</button>

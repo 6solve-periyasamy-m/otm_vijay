@@ -1221,6 +1221,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $this->getFinalCost($paying),
             $this->getScheduleItineraryArray($paying),
             [], // No Payments on Quotes
+            $this->quote->currency,
         );
     }
     

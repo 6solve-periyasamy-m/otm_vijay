@@ -16,7 +16,7 @@
             <x-livewire.input wire:model="quote.commission" label="Commission (%)" width="3" />
             <x-livewire.input.select.agent name="quote.agent_id" table="organizations" find="{{$quote->organization_id}}" value="{{$quote->agent_id}}" label="Agent" width="3" />
             <!-- -->
-            <x-livewire.input.select.currency name="quote.currency_id" label="Currency" clear />
+            <x-livewire.input.select.currency name="quote.currency_id" value="{{$quote->currency_id}}" label="Currency" clear />
             <x-livewire.input wire:model="quote.deposit" label="Deposit" width="2"  />
             <x-livewire.input.checkbox wire:model="quote.is_deposit_percentage" label="Percentage?" width="1" />
             <x-livewire.input wire:model="price" label="Base Price" width="3" required  />
