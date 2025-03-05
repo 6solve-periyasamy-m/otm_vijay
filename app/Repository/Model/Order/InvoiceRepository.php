@@ -84,85 +84,61 @@ class InvoiceRepository
         $merged_data = $data->merge($accom_data);
         return $merged_data;
     }
-
-    public function mergeBillablesByQuantity(Collection $items): Collection
+    
+    public function mergeBillablesByQuantity(Collection $billables): Collection
     {
-        $merged_items = collect();
-        $previous_item = null;
+        $merged = collect();
+        $billables = $billables->sortBy(function ($billable) {
+            preg_match('/(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2})/', $billable->description, $matches);
+            return \Carbon\Carbon::createFromFormat('d/m/Y H:i', $matches[1]);
+        });
+        $grouped_billables = $billables->groupBy(function ($billable) {
+            preg_match('/^(.*?)\((.*? to .*?)\) \((.*)\)$/', $billable->description, $matches);
+            return "{$matches[1]}|{$matches[3]}";
+        });
+        foreach ($grouped_billables as $groupKey => $items) {
+            $adjusted_items = collect();
+            $total_processed_quantity = 0;
 
-        foreach ($items->sortBy(fn($item) => $this->extractCheckInDate($item->description)) as $item) {
-            if ($previous_item && $this->canMerge($previous_item, $item)) {
-                preg_match('/\((\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2})\)/', $previous_item->description, $prev_matches);
-                preg_match('/\((\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2})\)/', $item->description, $curr_matches);
+            $dates = $items->map(function ($item) {
+                preg_match('/to (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2})/', $item->description, $matches);
+                return isset($matches[1]) ? \Carbon\Carbon::createFromFormat('d/m/Y H:i', $matches[1]) : null;
+            });
+            $max_end_date = $dates->filter()->max();
+            foreach ($items as $index => $billable) {
+                preg_match('/(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2})/', $billable->description, $matches);
+                $start_date = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $matches[1]);
+                $end_date = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $matches[2]);
 
-                if ($prev_matches && $curr_matches) {
-                    $new_description = str_replace($prev_matches[0], "({$prev_matches[1]} {$prev_matches[2]} to {$curr_matches[3]} {$curr_matches[4]})", $previous_item->description);
-                    $previous_item->description = $new_description;
-                    //$previous_item->setQuantity($previous_item->getQuantity() + $item->getQuantity());
+                $current_quantity = $billable->getQuantity() - $total_processed_quantity;
+                if ($current_quantity <= 0) continue;
+
+                if ($index === 0) {
+                    $new_start_date = $start_date;
+                } else {
+                    $new_start_date = $items[$index - 1]->description ? $start_date : $start_date;
                 }
-            } else {
-                if ($previous_item) {
-                    $merged_items->push($previous_item);
-                }
-                $previous_item = clone $item;
+
+                $formatted_start_date = $new_start_date->format('d/m/Y H:i');
+                $formatted_end_date = $max_end_date->format('d/m/Y H:i');
+
+                $new_description = preg_replace('/\(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2} to \d{2}\/\d{2}\/\d{4} \d{2}:\d{2}\)/',
+                    "($formatted_start_date to $formatted_end_date)",
+                    $billable->description
+                );
+
+                $newBillable = clone $billable;
+                $newBillable->setQuantity($current_quantity);
+                $newBillable->description = $new_description;
+
+                $adjusted_items->push($newBillable);
+                $total_processed_quantity += $current_quantity;
             }
+
+            $merged = $merged->merge($adjusted_items);
         }
 
-        if ($previous_item) {
-            $merged_items->push($previous_item);
-        }
-        return $merged_items;
-    }
-
-    /**
-     * Checks if two billable items can be merged.
-     */
-    private function canMerge($item1, $item2): bool
-    {
-        return $this->extractHotelName($item1->description) === $this->extractHotelName($item2->description)
-            && $this->extractRoomType($item1->description) === $this->extractRoomType($item2->description)
-            && $this->extractCheckOutDate($item1->description) === $this->extractCheckInDate($item2->description);
-    }
-
-    /**
-     * Extract hotel name from description.
-     */
-    private function extractHotelName($description): string
-    {
-        return trim(explode("(", $description)[0]);
-    }
-
-    /**
-     * Extract check-in date from description.
-     */
-    private function extractCheckInDate($description): ?string
-    {
-        if (preg_match('/\((\d{2}\/\d{2}\/\d{4}) \d{2}:\d{2} to/', $description, $matches)) {
-            return $matches[1];
-        }
-        return null;
-    }
-
-    /**
-     * Extract check-out date from description.
-     */
-    private function extractCheckOutDate($description): ?string
-    {
-        if (preg_match('/to (\d{2}\/\d{2}\/\d{4}) \d{2}:\d{2}\)/', $description, $matches)) {
-            return $matches[1];
-        }
-        return null;
-    }
-
-    /**
-     * Extract room type from description.
-     */
-    private function extractRoomType($description): string
-    {
-        if (preg_match('/\)([^)]+)$/', $description, $matches)) {
-            return trim($matches[1]);
-        }
-        return '';
+        return $merged->values();
     }
 
     public function transportDescriptionFormat($invoice_description)
