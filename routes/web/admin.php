@@ -111,6 +111,7 @@ Route::middleware('auth:web')->group(function () {
             Route::post('/accommodation/inventory', [ImportController::class, 'accommodationInventory'])->name('accommodation.inventory');
             Route::post('/activity', [ImportController::class, 'activity'])->name('activity');
             Route::post('/activity/inventory', [ImportController::class, 'activityInventory'])->name('activity.inventory');
+            Route::post('/operator', [ImportController::class, 'operator'])->name('operator');
         });
         Route::prefix('email/')->name('email.')->group(function () {
             Route::prefix('{mail}')->group(function () {
