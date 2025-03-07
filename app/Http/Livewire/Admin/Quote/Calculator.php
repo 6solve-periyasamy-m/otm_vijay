@@ -32,8 +32,8 @@ class Calculator extends Component
     /** @var float $total Total Cost to Customers */
     public float $total = 0;
 
-    /** @var float $profit Raw profit amount (total - cost to company) */
-    public float $profit = 0;
+    /** @var float|null $profit Raw profit amount (total - cost to company), or null if can't convert */
+    public float|null $profit = 0;
     /** @var float $margin Percentage profit margin for package ((total - cost to company) / total)*/
     public float $margin = 0;
     /** @var string|float|null $markup Percentage markup for package ((total - cost to company) / cost to company) */
@@ -68,7 +68,16 @@ class Calculator extends Component
         $costPerPerson = $totalTravellerCount > 0 ? sigfig($this->costToCompany / $totalTravellerCount) : 0;
         $paying = $this->paying + ($this->quote->leadTraveller->paying ? 1 : 0);
         $this->total = ($this->quote->repository->getPricePerPerson($paying)?->price_per_person ?? 0) * $paying;
-        $this->profit = sigfig($this->total - $this->costToCompany);
+        if ($this->quote->currency !== null && $this->quote->currency_id !== \Settings::currency()?->id) {
+            $conversion = \Settings::getConversionRate($this->quote->currency, \Settings::currency());
+            if ($conversion === null) {
+                $this->profit = null;
+            } else {
+                $this->profit = sigfig(sigfig($this->total * $conversion) - $this->costToCompany);
+            }
+        } else {
+            $this->profit = sigfig($this->total - $this->costToCompany);
+        }
         $this->margin = $this->total == 0 ? 100 : sigfig((($this->total - $this->costToCompany) / $this->total) * 100);
 
         $this->markup = sigfig($this->markup ?? ($this->costToCompany == 0 ? 100 : ((($this->total - $this->costToCompany) / $this->costToCompany) * 100)), 6);
