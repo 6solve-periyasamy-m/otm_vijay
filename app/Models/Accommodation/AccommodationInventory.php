@@ -44,6 +44,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property string|null $category_description
  * @property-read int $contracted Amount of contracted stock
  * @property-read float $local_purchase_price FX Converted Purchase Price
  * @property-read Accommodation $accommodation
