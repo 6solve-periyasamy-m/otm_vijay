@@ -20,7 +20,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
-
+use App\Models\Accommodation\AccommodationGallery;
 
 /**
  * App\Models\Accommodation\Accommodation
@@ -81,7 +81,8 @@ class Accommodation extends Model
             'currency_id' => 'nullable|exists:currencies,id',
             'image' => 'nullable|image',
             'address_name' => 'required_unless:use_existing,on',
-            'address_id' => 'required_if:use_existing,on'
+            'address_id' => 'required_if:use_existing,on',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 
@@ -114,5 +115,10 @@ class Accommodation extends Model
     public function __toString(): string
     {
         return $this->repository->__toString();
+    }
+
+    public function gallery()
+    {
+        return $this->hasMany(AccommodationGallery::class, 'accommodation_id');
     }
 }

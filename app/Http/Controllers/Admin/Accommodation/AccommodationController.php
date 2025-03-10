@@ -10,6 +10,8 @@ use App\Repository\Model\Location\AddressRepository;
 use App\Repository\Reporting\Manifest\RoomingReportRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use App\Models\Accommodation\AccommodationGallery;
+use Illuminate\Support\Facades\Storage;
 
 class AccommodationController extends Controller
 {
@@ -46,7 +48,15 @@ class AccommodationController extends Controller
         if ($request->has('image') && $request->file('image') != null) {
             $accommodation->image_url = $request->file('image')->storePublicly('uploads/images');
         }
-
+        if ($request->has('images') && $request->file('images') != null) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->storePublicly('uploads/images');
+                AccommodationGallery::create([
+                    'accommodation_id' => $accommodation->id,
+                    'image_url' => $path,
+                ]);
+            }
+        }
         $accommodation->address_id = $address->id;
         $accommodation->save();
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
@@ -54,6 +64,7 @@ class AccommodationController extends Controller
 
     public function view(Accommodation $accommodation)
     {
+        $accommodation->load('gallery');
         return view('pages.admin.accommodation.view', ['accommodation' => $accommodation,]);
     }
 
@@ -97,6 +108,15 @@ class AccommodationController extends Controller
                 File::delete(public_path($accommodation->image_url));
             }
             $accommodation->image_url = $request->file('image')->storePublicly('uploads/images');
+        }
+        if ($request->has('images') && $request->file('images') != null) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->storePublicly('uploads/images');
+                AccommodationGallery::create([
+                    'accommodation_id' => $accommodation->id,
+                    'image_url' => $path,
+                ]);
+            }
         }
         $accommodation->save();
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);

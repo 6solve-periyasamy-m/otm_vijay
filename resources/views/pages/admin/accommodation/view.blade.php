@@ -57,6 +57,22 @@
             </div>
         </div>
     </div>
+    @if($accommodation && $accommodation->gallery)
+        <x-admin.section.card>
+            <x-slot:title>
+                {{ $accommodation->name }} Gallery
+            </x-slot:title>
+            <div class="row">
+                @foreach($accommodation->gallery as $image)
+                    <div class="col-md-3 col-sm-4 col-6 mb-3">
+                        <div class="border rounded overflow-hidden h-200">
+                            <img src="{{ asset($image->image_url) }}" class="img-fluid rounded w-100 h-200 object-fit-cover" >
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </x-admin.section.card>
+    @endif
 @endsection
 
 @section('inventory')
