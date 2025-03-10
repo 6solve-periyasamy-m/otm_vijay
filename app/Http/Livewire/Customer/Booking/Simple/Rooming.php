@@ -97,7 +97,6 @@ class Rooming extends Component
 
     public function setupRooming(): void
     {
-        \Log::debug('Setting up rooming');
         $this->booking->repository->setupSimpleRooming($this->selectedHotel, $this->rooms);
     }
 
