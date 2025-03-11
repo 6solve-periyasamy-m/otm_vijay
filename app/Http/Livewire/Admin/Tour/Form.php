@@ -150,7 +150,7 @@ class Form extends Component
             'tour.terms' => 'required',
             'tour.invoice_footer' => 'nullable',
             'tour.notes' => 'nullable',
-            'tour.town' => 'nullable|string',
+            'tour.city' => 'nullable|string',
             'tour.country_id' => 'nullable|exists:countries,id',
         ];
     }
