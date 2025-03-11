@@ -19,6 +19,8 @@ $atol = [
                 <x-livewire.input.select.tour-category name="tour.tour_category_id" width="6" label="Tour Category" clear />
                 <x-livewire.input wire:model="tour.booking_form_url" width="10" label="Booking Form URL" />
                 <x-livewire.input.checkbox wire:model="tour.is_active" width="2" label="Is Active?" />
+                <x-livewire.input wire:model="tour.town" label="Town" width="6" />
+                <x-livewire.input.select2 name="tour.country_id" value="{{ $tour->country_id }}" route="countries" width="6" label="Country" />
             </div>
         </x-admin.section.card>
     </div>
