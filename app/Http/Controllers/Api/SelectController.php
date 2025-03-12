@@ -399,4 +399,13 @@ class SelectController extends ApiController
         $bank = Bank::findOrFail($id);
         return ['id' => $bank->id, 'text' => $bank->name];
     }
+
+    public function getSelectedAccommodationType($id) {
+        return AccommodationTransforms::getSelectedAccommodationType($id);
+    }
+
+    public function getAccommodationTypes(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return AccommodationTransforms::getSelectAccommodationTypes($filter);
+    }
 }
