@@ -2,6 +2,7 @@
 
 namespace App\Models\Order\Invoice;
 
+use App\Models\Location\Currency;
 use App\Models\Order\Order;
 use App\Repository\Model\Order\InvoiceRepository;
 use Eloquent;
@@ -31,6 +32,7 @@ use Illuminate\Support\Carbon;
  * @property float|null $commission_amount The amount of the commission on the order
  * @property float|null $commission_percentage The percentage of the order that is commission
  * @property int $invoice_brand_id
+ * @property int|null $currency_id
  * @property float $total_cost Total cost of the order
  * @property float $total_paid Total amount paid to date
  * @property float $total_fees Total fees for the order
@@ -48,6 +50,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, InvoiceInstallment> $installments
  * @property-read int|null $installments_count
  * @property-read InvoiceCustomer|null $lead The lead booker
+ * @property-read Currency|null $currency
  * @property-read int $paying_travellers
  * @property-read int $travelling_travellers
  * @property-read Order $order
@@ -88,6 +91,11 @@ class Invoice extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class, 'order_id');
+    }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
 
     public function brand(): BelongsTo
