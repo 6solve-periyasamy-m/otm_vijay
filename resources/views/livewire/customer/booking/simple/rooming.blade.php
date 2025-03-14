@@ -401,13 +401,13 @@
   </div>
 </div> -->
 
-<div class="mob-trip-summary-block_outerdiv">
+{{--<div class="mob-trip-summary-block_outerdiv" wire:key="{{Str::random()}}">
     <div class="mob-trip-summary-block">
         <div class="block-container">
             <div class="Inner-container">
                 <div class="mob-static-tip-sum">
                     <h4>Trip Summary</h4>
-                    <p class="price">{{ f_currency($booking->repository->getTotalCost()) }}</p>
+                    <p class="price" wire:key="{{Str::random()}}">{{ f_currency($booking->repository->getTotalCost()) }}</p>
                     <div class="mob-static-see-more mobile_seemore">
                         <p>SEE MORE
                         <p>
@@ -464,13 +464,14 @@
             </div>
         </div>
     </div>
-</div>
+</div>--}}
 <script>
     jQuery('.mob-trip-summary-block .submit-btn-cls .submit-btn').click(function () {
         jQuery('.third-col .submit-btn-cls .submit-btn').trigger('click')
     })
     jQuery('.second-block.tra-det .Min,.second-block.tra-det .Max').click(function () {
         setTimeout(() => {
+            jQuery('.mob-static-tip-sum .price').text(jQuery('.third-col .tot-price').text())
             jQuery('.mob-trip-summary-block li:eq(0) .price').text(jQuery('.third-col .pkg-price').text());
             jQuery('.mob-trip-summary-block li:eq(1) .price').text(jQuery('.third-col .sng-price').text());
             jQuery('.mob-trip-summary-block li:eq(2) .price').text(jQuery('.third-col .tax-price').text());
@@ -487,8 +488,7 @@
         runSelectClassUpdate();
     });
     
-    /*function runSelectClassUpdate() {
-        //console.log('inside');
+    function runSelectClassUpdate() {
         jQuery('select[name="bedding_configuration"]').each(function(){
             var comtext = jQuery(this).find('option:selected').text().trim().toLowerCase();
             if(comtext.includes('twin')) {
@@ -499,8 +499,9 @@
                 jQuery(this).closest('.form-field').addClass('dbl-cls');
             }
         });
-    }*/
-    function runSelectClassUpdate() {
+    }
+
+    /*function runSelectClassUpdate() {
         jQuery('select[name="bedding_configuration"]').each(function(){
             var selectedValue = jQuery(this).val(); 
             if (selectedValue == 2) {
@@ -513,7 +514,7 @@
                 jQuery(this).closest('.form-field').addClass('dbl-cls');
             }
         });
-    }
+    }*/
 
 
 

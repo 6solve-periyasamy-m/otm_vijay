@@ -135,7 +135,6 @@
             line-height: 20px;
             color: var(--text-color);
             margin: 0px 0px 24px 0px;
-            text-transform: capitalize;
         }
         .single-module table td {
             font-family: "PPNeueMontreal-Regular";
@@ -184,6 +183,10 @@
         .component-body table th, .flight-block table th{ font-family: "PPNeueMontreal-Medium"; font-size: 14px; font-weight: 500; line-height: 20px; padding: 8px 0px; border: 1px solid gray;}
         .component-body table td, .flight-block table td { padding: 6.5px; text-align: center; border: 1px solid gray; }
         .non-booking-ref-block {line-height:20px;}
+        .pn10 {padding:-10px;}
+        .component-body table { page-break-inside: avoid; }
+        .component-break { page-break-inside: avoid; }
+        .word-wrap { word-wrap: break-word; word-break: break-word; white-space: normal; }
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
@@ -256,7 +259,7 @@
 
             @foreach($itinerary->items['Flights'] as $flight)
                 @if(isset($flight->details['Quantity']) && $flight->details['Quantity'] > 0)
-                <div class="single-module mb-n15">
+                <div class="single-module mb-n15 component-break">
                     @if($firstLoop)
                         <div class="heading-module">
                             <h3>
@@ -270,6 +273,11 @@
                         <div class="details-module">
                             <table>
                                 <tbody>
+                                    <tr><td colspan="2" class="pn10"></td></tr>
+                                    <tr>
+                                        <td class="w-125"><strong>Quantity:</strong></td>
+                                        <td>{{ $flight->details['Quantity'] }}</td>
+                                    </tr>
                                     <tr>
                                         <td class="w-125"><strong>Booking Reference:</strong></td>
                                         <td>{{ $flight->details['Booking Reference'] }}</td>
@@ -293,12 +301,12 @@
                                 <th>Arrival</th>
                             </tr>
                             <tr>
-                                <td style="width:80px;">{{ $flight->name }}</td>
+                                <td class="word-wrap" style="width:80px;">{{ $flight->name }}</td>
                                 <td style="width:100px;">{{ $flight->details['Flight Number'] }}</td>
                                 <td style="width:60px;">{{ $flight->details['Class'] }}</td>
                                 <td style="width:70px;">{{ $flight->details['Departure Date'] }}</td>
-                                <td style="width:100px;">{{ $flight->details['Departure Airport'] }}</td>
-                                <td style="width:100px;">{{ $flight->details['Arrival Airport'] }}</td>
+                                <td class="word-wrap" style="width:100px;">{{ $flight->details['Departure Airport'] }}</td>
+                                <td class="word-wrap" style="width:100px;">{{ $flight->details['Arrival Airport'] }}</td>
                                 <td style="width:55px;">{{ $flight->details['Departure Time'] }}</td>
                                 <td style="width:55px;">{{ $flight->details['Arrival Time'] }}</td>
                             </tr>

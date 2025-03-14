@@ -275,7 +275,6 @@ h4 {
     line-height: 20px;
     color: var(--text-color);
     margin: 0px 0px 24px 0px;
-    text-transform: capitalize;
 }
 h4 span.mark {
   width:88px;

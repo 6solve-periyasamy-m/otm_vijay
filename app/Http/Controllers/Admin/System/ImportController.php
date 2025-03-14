@@ -9,6 +9,7 @@ use App\Imports\AccommodationInventoryImport;
 use App\Imports\ActivityImport;
 use App\Imports\ActivityInventoryImport;
 use App\Imports\CustomerImport;
+use App\Imports\OperatorImport;
 use App\Imports\OrganizationImport;
 use Exception;
 use Illuminate\Http\UploadedFile;
@@ -45,6 +46,11 @@ class ImportController extends Controller
     public function activityInventory(ImportRequest $request)
     {
         return $this->import((new ActivityInventoryImport()), $request->file);
+    }
+
+    public function operator(ImportRequest $request)
+    {
+        return $this->import((new OperatorImport()), $request->file);
     }
 
     private function import(ToCollection $import, UploadedFile $file)

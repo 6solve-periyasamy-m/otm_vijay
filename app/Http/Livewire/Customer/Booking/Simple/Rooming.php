@@ -68,7 +68,8 @@ class Rooming extends Component
     private function renewRooming(): void
     {
         foreach ($this->booking->groups as $group) {
-            $this->rooms[] = ['room' => $group->accommodation()->first()?->tourComponent->inventory->room_type_id, 'travellers' => $group->travellers()->count(),];
+            $type = $group->accommodation()->first()?->tourComponent->inventory->room_type_id ?? $this->tour->repository->getDefaultRoom($this->selectedHotel);
+            $this->rooms[] = ['room' => $type, 'travellers' => $group->travellers()->count(),];
         }
     }
 
@@ -134,7 +135,8 @@ class Rooming extends Component
     public function addRoom(): void
     {
         if (count($this->rooms) >= $this->getMaximumRooms()) { return; }
-        $this->rooms[] = ['room' => $this->tour->repository->getDefaultRoom($this->selectedHotel), 'travellers' => 2,];
+        $room = $this->tour->repository->getDefaultRoom($this->selectedHotel);
+        $this->rooms[] = ['room' => $room, 'travellers' => RoomType::find($room)?->maximum_occupancy,];
     }
 
     public function removeRoom(): void
