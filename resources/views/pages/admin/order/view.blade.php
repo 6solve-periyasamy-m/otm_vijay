@@ -247,9 +247,9 @@
                                 <td>{{ $payment->payer_name ?? "No Customer Found" }}</td>
                                 <td>
                                     @if($payment->payment_fee !== null)
-                                        <abbr title="{{ f_currency($payment->totalWithFee()) }} with payment fee">{{ f_currency($payment->amount) }}</abbr>
+                                        <abbr title="{{ fr_currency($payment->totalWithFee(), $payment->currency) }} with payment fee">{{ fr_currency($payment->amount, $payment->currency) }}</abbr>
                                     @else
-                                        {{ f_currency($payment->amount) }}
+                                        {{ fr_currency($payment->amount, $payment->currency) }}
                                     @endif
                                 </td>
                                 <td>{{ f_datetime($payment->paid_on) }}</td>

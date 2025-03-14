@@ -25,6 +25,9 @@ class Form extends Component
         $this->payment = Payment::getForMount($payment);
         $this->feeUpdated = $this->payment->id !== null;
         $payer = $this->payment->payer;
+        if ($this->payment->id === null) {
+            $this->payment->currency_id = $this->order->currency_id;
+        }
         if ($payer !== null) {
             if ($payer instanceof Customer) {
                 $this->customer = $payer->id;
@@ -111,6 +114,7 @@ class Form extends Component
             'payment.amount' => 'required|numeric',
             'payment.payment_fee' => 'nullable|numeric',
             'payment.paid_on' => 'required|date',
+            'payment.currency_id' => 'nullable|exists:currencies,id',
         ];
     }
 }

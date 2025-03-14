@@ -1,13 +1,14 @@
 <div>
     <x-admin.section.card>
         <div class="row">
-            <div class="row">
+            <div class="col-6 row">
                 <x-livewire.input.select.customer name="customer" value="{{ $customer }}" clear label="Customer" width="5" />
                 <div class="col-2 flex justify-center content-center">
                     OR
                 </div>
                 <x-livewire.input.select.agent name="agent" value="{{$agent}}" clear label="Agent" width="5" />
             </div>
+            <x-livewire.input.select.currency name="payment.currency_id" value="{{ $payment?->currency_id }}" label="Currency" clearable width="6" />
             <x-livewire.input.select.order.payment-method name="payment.payment_method_id" value="{{ $payment?->payment_method_id }}" label="Payment Method" required width="4" />
             <x-livewire.input wire:model="payment.paid_on" type="datetime-local" label="Paid On" required width="4" />
             <x-livewire.input wire:model="payment.payment_fee" label="Payment Fee" width="4" type="number" step="0.01" />
