@@ -645,7 +645,7 @@ if (!empty($order->tour->event->image_url)){
                 BOOKING TOTAL
             </td>
             <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                {{ f_currency($order->total) }}
+                {{ fr_currency($order->total, $order->currency) }}
             </td>
         </tr>
         <tr>
@@ -653,7 +653,7 @@ if (!empty($order->tour->event->image_url)){
                 GST (included)
             </td>
             <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                {{ $order->getTaxes() !== null ? f_currency($order->getTaxes()) : 'No Taxes Due' }}
+                {{ $order->getTaxes() !== null ? fr_currency($order->getTaxes(), $order->currency) : 'No Taxes Due' }}
             </td>
         </tr>
         @if(!empty($order->commission_amount)) 
@@ -662,7 +662,7 @@ if (!empty($order->tour->event->image_url)){
                 COMMISSION
             </td>
             <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                {{ f_currency($order->commission_amount) }} ({{ $order->commission }}%)
+                {{ fr_currency($order->commission_amount, $order->currency) }} ({{ $order->commission }}%)
             </td>
         </tr>
         @endif
@@ -675,7 +675,7 @@ if (!empty($order->tour->event->image_url)){
                 FINAL BOOKING AMOUNT    
             </td>
             <td align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                {{ f_currency($order->paid) }}
+                {{ fr_currency($order->paid, $order->currency) }}
             </td>
         </tr>
     </table>
@@ -707,7 +707,7 @@ if (!empty($order->tour->event->image_url)){
                                 Deposit
                             </td>
                             <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                               {{ f_currency($order->calculated_deposit) }} ({{ $order->deposit_percentage }}%)
+                               {{ fr_currency($order->calculated_deposit, $order->currency) }} ({{ $order->deposit_percentage }}%)
                             </td>
                             <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
                                 With Order
@@ -719,7 +719,7 @@ if (!empty($order->tour->event->image_url)){
                                 Instalment
                             </td>
                             <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                {{ f_currency($installment->calculated_amount) }} ({{ $installment->percentage }}%)
+                                {{ fr_currency($installment->calculated_amount, $order->currency) }} ({{ $installment->percentage }}%)
                             </td>
                             <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
                                 {{ \Carbon\Carbon::parse($installment->due_on)->format('d F Y') }}
@@ -731,7 +731,7 @@ if (!empty($order->tour->event->image_url)){
                                 Remaining
                             </td>
                             <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
-                                {{ f_currency($order->remaining_installment) }} ({{ $order->remaining_percentage }}%)
+                                {{ fr_currency($order->remaining_installment, $order->currency) }} ({{ $order->remaining_percentage }}%)
                             </td>
                             <td width="25%" align="left" valign="top" style="padding: 2px 15px;" class="oc_f12 oc_lblack">
                                 {{ \Carbon\Carbon::parse($order->tour->final_payment)->format('d F Y') }}
