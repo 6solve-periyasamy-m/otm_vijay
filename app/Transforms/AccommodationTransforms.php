@@ -7,6 +7,7 @@ use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\BoardType;
 use App\Models\Accommodation\RoomType;
 use App\Models\Order\OrderCustomer;
+use App\Models\Accommodation\AccommodationType;
 
 interface AccommodationTransformsInterface {
     public static function getSelectRoomTypes($filter);
@@ -15,10 +16,34 @@ interface AccommodationTransformsInterface {
     public static function getSelectedBoardType($id);
     public static function getSelectInventory($filter);
     public static function getSelectedInventory($filter);
+    public static function getSelectAccommodationTypes($filter);
+    public static function getSelectedAccommodationType($id);
 }
 
 class AccommodationTransforms implements AccommodationTransformsInterface
 {
+
+    public static function getSelectAccommodationTypes($filter)
+    {
+        $data = [];
+        foreach (AccommodationType::all() as $accommodationType) {
+            $subData = [];
+            $subData['id'] = $accommodationType->id;
+            $subData['text'] = $accommodationType->name;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        }
+        return $data;
+    }
+
+    public static function getSelectedAccommodationType($id)
+    {
+        if ($id == 0) return null;
+        $accommodationType = AccommodationType::findOrFail($id);
+        $data = [];
+        $data['id'] = $accommodationType->id;
+        $data['text'] = $accommodationType->name;
+        return $data;
+    }
 
     public static function getSelectRoomTypes($filter)
     {

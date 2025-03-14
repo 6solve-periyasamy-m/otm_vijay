@@ -35,6 +35,8 @@ class AccommodationController extends Controller
             'internal_notes' => $request->input('notes'),
             'check_in' => $request->input('check_in'),
             'check_out' => $request->input('check_out'),
+            'accommodation_type_id' => $request->input('accommodation_type_id'),
+            'additional_description' => $request->input('additional_description'),
         ]);
         if ($request->input('use_existing') == 'on') {
             $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::ACCOMMODATION);
@@ -85,6 +87,8 @@ class AccommodationController extends Controller
             'internal_notes' => $request->input('notes'),
             'check_in' => $request->input('check_in'),
             'check_out' => $request->input('check_out'),
+            'accommodation_type_id' => $request->input('accommodation_type_id'),
+            'additional_description' => $request->input('additional_description'),
         ]);
         if ($request->input('use_existing') == 'on') {
             Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::ACCOMMODATION, $accommodation->address);

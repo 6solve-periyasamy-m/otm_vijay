@@ -20,6 +20,20 @@
     @include('partials.fields.date', ['name' => 'Audit Date', 'field' => 'audit_date', 'value' => $accommodation?->audit_date,])
     @include('partials.fields.datetime', ['name' => 'Default Check In', 'field' => 'check_in', 'value' => $accommodation?->check_in, 'width' => 6 ])
     @include('partials.fields.datetime', ['name' => 'Default Check In', 'field' => 'check_out', 'value' => $accommodation?->check_out, 'width' => 6 ])
+    <div class="form-group col-xl-9">
+        @include('partials.fields.ckeditor', ['name' => 'Additional Description', 'field' => 'additional_description', 'value' => $accommodation?->additional_description,])
+    </div>
+    <div class="form-group col-xl-3">
+        @can('create', \App\Models\Accommodation\AccommodationType::class)
+            @include('partials.fields.selector.adder',
+                        ['name' => 'Accommodation Type', 'field' => 'accommodation_type_id', 'value' => $accommodation?->accommodation_type_id,
+                         'route' => 'accommodation-types', 'createRoute' => route('accommodation-types.create'),])
+        @else
+            @include('partials.fields.selector.default',
+                    ['name' => 'Accommodation Type', 'field' => 'accommodation_type_id', 'value' => $accommodation?->accommodation_type_id,
+                        'route' => 'accommodation-types',])
+        @endcan
+    </div>
     @include('partials.fields.prefab.addresses.switcher', ['address' => $accommodation?->address,])
     <x-livewire.input.select.currency name="currency_id" label="Currency" value="{{$accommodation?->currency_id}}" />
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'notes', 'value' => $accommodation?->internal_notes])
