@@ -44,6 +44,7 @@ class InvoiceGenerator
             'tax_amount' => $this->order->getTaxes(),
             'commission_percentage' => $this->order->commission,
             'commission_amount' => $this->order->commission_amount,
+            'currency' => $this->order->currency_id,
             'generator_version' => InvoiceUpgrader::LATEST_VERSION,
         ]);
         return $save ? $this->generateSaved($invoice) : $this->generateTemporary($invoice);
