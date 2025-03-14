@@ -15,7 +15,7 @@ class QuantityBillable
      * @param bool $included Is the component included by default
      */
     public function __construct(
-        public string $description,
+        public readonly string $description,
         public readonly string $shared_key,
         public readonly float $cost,
         public readonly bool $included,
@@ -39,13 +39,4 @@ class QuantityBillable
         return $this;
     }
 
-    public function setQuantity(int $quantity): void
-    {
-        $this->quantity = $quantity;
-    }
-
-    public function setDescription(string $description): void
-    {
-        $this->description = $description;
-    }
 }

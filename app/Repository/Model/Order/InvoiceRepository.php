@@ -72,73 +72,15 @@ class InvoiceRepository
         if ($this->invoice->groups) {
             foreach ($this->invoice->groups as $group) {
                 foreach ($group->billables as $billable) {
-                    $qBillable = $accom_data->get($billable->shared_key, new QuantityBillable($billable->description, $billable->shared_key, $billable->amount, $billable->is_base));
-                    $accom_data->put($billable->shared_key, $qBillable->addQuantity());
+                    $qBillable = $data->get($billable->shared_key, new QuantityBillable($billable->description, $billable->shared_key, $billable->amount, $billable->is_base));
+                    $data->put($billable->shared_key, $qBillable->addQuantity());
                     if (strpos($billable->shared_key, "transport") !== false) {
                         $billable->description = $this->transportDescriptionFormat($billable->description);
                     }
                 }
             }
-            $accom_data = $this->mergeBillablesByQuantity($accom_data);
         }
-        $merged_data = $data->merge($accom_data);
-        return $merged_data;
-    }
-    
-    public function mergeBillablesByQuantity(Collection $billables): Collection
-    {
-        $merged = collect();
-        $billables = $billables->sortBy(function ($billable) {
-            preg_match('/(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2})/', $billable->description, $matches);
-            return \Carbon\Carbon::createFromFormat('d/m/Y H:i', $matches[1]);
-        });
-        $grouped_billables = $billables->groupBy(function ($billable) {
-            preg_match('/^(.*?)\((.*? to .*?)\) \((.*)\)$/', $billable->description, $matches);
-            return "{$matches[1]}|{$matches[3]}";
-        });
-        foreach ($grouped_billables as $groupKey => $items) {
-            $adjusted_items = collect();
-            $total_processed_quantity = 0;
-
-            $dates = $items->map(function ($item) {
-                preg_match('/to (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2})/', $item->description, $matches);
-                return isset($matches[1]) ? \Carbon\Carbon::createFromFormat('d/m/Y H:i', $matches[1]) : null;
-            });
-            $max_end_date = $dates->filter()->max();
-            foreach ($items as $index => $billable) {
-                preg_match('/(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2})/', $billable->description, $matches);
-                $start_date = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $matches[1]);
-                $end_date = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $matches[2]);
-
-                $current_quantity = $billable->getQuantity() - $total_processed_quantity;
-                if ($current_quantity <= 0) continue;
-
-                if ($index === 0) {
-                    $new_start_date = $start_date;
-                } else {
-                    $new_start_date = $items[$index - 1]->description ? $start_date : $start_date;
-                }
-
-                $formatted_start_date = $new_start_date->format('d/m/Y H:i');
-                $formatted_end_date = $max_end_date->format('d/m/Y H:i');
-
-                $new_description = preg_replace('/\(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2} to \d{2}\/\d{2}\/\d{4} \d{2}:\d{2}\)/',
-                    "($formatted_start_date to $formatted_end_date)",
-                    $billable->description
-                );
-
-                $newBillable = clone $billable;
-                $newBillable->setQuantity($current_quantity);
-                $newBillable->description = $new_description;
-
-                $adjusted_items->push($newBillable);
-                $total_processed_quantity += $current_quantity;
-            }
-
-            $merged = $merged->merge($adjusted_items);
-        }
-
-        return $merged->values();
+        return $data;
     }
 
     public function transportDescriptionFormat($invoice_description)
