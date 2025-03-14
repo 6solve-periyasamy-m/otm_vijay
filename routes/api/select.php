@@ -138,6 +138,7 @@ Route::post('merchandise-types', [SelectController::class, 'getAvailableMerchand
 Route::post('variants', [SelectController::class, 'getAvailableVariants'])->name('variants.select');
 Route::post('sizes', [SelectController::class, 'getAvailableSizes'])->name('sizes.select');
 Route::post('banks', [SelectController::class, 'getAvailableBanks'])->name('banks.select');
+Route::post('accommodation-types', [SelectController::class, 'getAccommodationTypes'])->name('accommodation-types.select');
 Route::prefix('inventory')->group(function () {
     Route::post('activity', [SelectController::class, 'getActivityInventory'])->name('inventory.activity.select');
     Route::post('flight', [SelectController::class, 'getFlightInventory'])->name('inventory.flight.select');
@@ -171,6 +172,7 @@ Route::prefix('selected')->group(function () {
     Route::post('variants/{id}', [SelectController::class, 'getSelectedVariant'])->name('variants.selected');
     Route::post('sizes/{id}', [SelectController::class, 'getSelectedSize'])->name('sizes.selected');
     Route::post('banks/{id}', [SelectController::class, 'getSelectedBank'])->name('banks.selected');
+    Route::post('accommodation-type/{id}', [SelectController::class, 'getSelectedAccommodationType'])->name('accommodation-types.selected');
     Route::prefix('inventory/{id}')->group(function () {
         Route::post('activity', [SelectController::class, 'getSelectedActivityInventory'])->name('inventory.activity.selected');
         Route::post('flight', [SelectController::class, 'getSelectedFlightInventory'])->name('inventory.flight.selected');
