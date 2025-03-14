@@ -41,6 +41,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use App\Models\Location\Country;
 
 /**
  * App\Models\Tour\Tour
@@ -464,5 +465,10 @@ class Tour extends Model
     public function getDepositAmountAttribute(): ?float
     {
         return $this->is_deposit_percentage ? sigfig($this->base_price_per_person * ($this->deposit / 100)) : $this->deposit;
+    }
+
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'country_id');
     }
 }
