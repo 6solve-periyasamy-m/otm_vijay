@@ -3,12 +3,15 @@
 namespace App\Repository\Model\Tour;
 
 use App\Models\Activity\Activity;
+use App\Models\Order\Order;
 use App\Models\Tour\Event;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Interfaces\Manifest\HasOrderManifest;
+use App\Repository\Reporting\Manifest\OrderManifestRepository;
 use App\Repository\Storage\Report\EventActivityReportRow;
 use Illuminate\Support\Collection;
 
-class EventRepository extends ModelRepository
+class EventRepository extends ModelRepository implements HasOrderManifest
 {
     private Event $event;
 
@@ -71,5 +74,13 @@ class EventRepository extends ModelRepository
             $data[] = $activity->repository->getEventActivityReportRow($this->event->starts_at, $this->event->ends_at);
         }
         return $data;
+    }
+
+    /**
+     * @return Collection|Order[]
+     */
+    public function getOrderManifest(): Collection|array
+    {
+        return $this->event->orders()->with(OrderManifestRepository::getEagerLoads())->get();
     }
 }

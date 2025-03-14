@@ -76,7 +76,7 @@ class OrderMerchandise extends Model
 
     public function getCancelledAttribute(): bool
     {
-        return $this->orderCustomer->order->cancelled;
+        return $this->orderCustomer?->order?->cancelled ?? true;
     }
 
     public function getDetailsAttribute(): string

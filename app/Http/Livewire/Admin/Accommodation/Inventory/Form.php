@@ -62,6 +62,7 @@ class Form extends Component
             'inventory.sales_price' => 'nullable|numeric|gte:0',
             'inventory.internal_notes' => 'nullable|string',
             'inventory.external_notes' => 'nullable|string',
+            'inventory.category_description' => 'nullable|string',
         ];
     }
 }

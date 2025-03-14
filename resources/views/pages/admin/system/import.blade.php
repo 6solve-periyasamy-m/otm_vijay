@@ -154,6 +154,26 @@
                     </form>
                 </x-admin.section.card>
             </div>
+            <div class="col-xl-4">
+                <x-admin.section.card>
+                    <div class="card-title d-flex justify-content-between">
+                        <h4 class="fw-bold">Operator</h4>
+                        <div>
+                            <a class="btn btn-primary pr-2" href="{{ asset('import/operator.csv') }}" target="_blank">
+                                Get Template
+                            </a>
+                            <button class="btn btn-success" onclick="$('#operator-file-upload').click()">
+                                Upload File
+                            </button>
+                        </div>
+                    </div>
+                    The import must contain exactly one row: name
+                    <form action="{{ route('import.operator') }}" enctype="multipart/form-data" method="post" class="d-none">
+                        @csrf
+                        <input id="operator-file-upload" type="file" name="file" class="d-none" onchange="form.submit()">
+                    </form>
+                </x-admin.section.card>
+            </div>
         </div>
     </div>
 @endsection

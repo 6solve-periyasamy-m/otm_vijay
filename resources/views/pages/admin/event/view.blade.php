@@ -74,6 +74,10 @@ $hideNoCategory = $hideNoCategory ?? false;
                         {{ Icon::calendar() }}
                         <span>Bulk Send Reminders</span>
                     </a>
+                    <a class="btn btn-info" href="{{ route('events.manifest.order.view', ['event' => $event]) }}">
+                        {{ Icon::report() }}
+                        <span>View Order Manifest</span>
+                    </a>
                 </div>
             </div>
         </div>
