@@ -45,6 +45,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Settings;
 
 class OrderRepository extends ModelRepository implements GeneratesFellohData
 {
@@ -688,14 +689,26 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         return sigfig($cost);
     }
 
-    public function getCurrentProfit(bool $recache = false, float $cost_to_company): float
+    /**
+     * Get the current profit for the order. Estimated if using FX rates
+     *
+     * @param bool $recache Should this bypass the cache and recalculate anyway
+     * @param float|null $cost_to_company Cached cost to company value. Defaults to calculating if not provided
+     * @return float|null Returns the profit, or null if in foreign currency with no FX rate
+     */
+    public function getCurrentProfit(bool $recache = false, float|null $cost_to_company = null): float|null
     {
         if (!$recache && $this->order->cache->profit !== null) {
             return $this->order->cache->profit;
         }
-        $profit = 0;
-        $profit = $this->order->total - $cost_to_company;
-        return $profit;
+        $cost_to_company = $cost_to_company ?? $this->getCostToCompany($recache);
+        // If using conversion, then convert total
+        if ($this->order->currency !== null && $this->order->currency !== \Settings::currency()) {
+            $fx = Settings::getConversionRate($this->order->currency, Settings::currency());
+            if ($fx === null) { return null; }
+            return ($this->order->total * $fx) - $cost_to_company;
+        }
+        return $this->order->total - $cost_to_company;
     }
 
     public function getBeforeString(): string|null

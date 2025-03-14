@@ -99,7 +99,13 @@
         </div>
         <div class="col-12 col-xl-3">
             <p>Current Profit</p>
-            <h6 class="fw-bold">{{ f_currency($order->cache->profit)}}</h6>
+            <h6 class="fw-bold">
+                @if($order->cache->profit !== null)
+                    {{ f_currency($order->cache->profit)}}
+                @else
+                    No FX Rate Available for Conversion
+                @endif
+            </h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Lead Booker</p>
