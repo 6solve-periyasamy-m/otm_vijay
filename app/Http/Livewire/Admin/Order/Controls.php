@@ -82,7 +82,7 @@ class Controls extends ModalComponent
         $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant->email. ";" . (setting('system.bcc.mail') ?? "") : "";
         $cc = ($this->order->consultant?->email ?? "") . ";" . (setting('system.cc.mail') ?? "");
         try {
-            (new OrderMail('reservation-invoice-document'))->send($email, $this->order, [$attachment_reservation, $attachment_invoice], $bcc, $cc, true);
+            (new OrderMail('reservation-invoice-document'))->send($email, $this->order, [$attachment_reservation, $attachment_invoice], $bcc, true, $cc);
             $this->toast('Mail Sent Successfully', 'Successfully sent the reservation document', 'success');
             return true;
         } catch (MailDisabledException) {

@@ -107,7 +107,7 @@ abstract class TemplatedMail
      * @throws MailDisabledException
      * @throws MailFailedException
      */
-    final public function send(string|null $email, $model = null, array $attachments = [], string|array $bccTargets = "", string|array $ccTargets = "", bool $force = false): bool
+    final public function send(string|null $email, $model = null, array $attachments = [], string|array $bccTargets = "", bool $force = false, string|array $ccTargets = ""): bool
     {
         if (!$force && !flag('system.mail.enabled', true)) {
             throw new MailDisabledException('Sending Emails is disabled on this system');
