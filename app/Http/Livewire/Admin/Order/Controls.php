@@ -57,7 +57,7 @@ class Controls extends ModalComponent
      */
     public function sendReservationToEmail()
     {
-        $email = $this->order->consultant?->email ?? $this->order->organization?->contact_email ?? $this->order->leadTraveller->customer->email_address;
+        $email = $this->order->agent?->email ?? $this->order->leadBooker->customer->email_address ;
         if ($email === null) {
             $this->toast('Failed to Send Reservation Document', 'Cannot send reservation document, no valid target email found', 'danger');
             return false;
@@ -79,9 +79,10 @@ class Controls extends ModalComponent
         ]), false);
         $attachment_reservation = new Attachment($reservation_data, 'Reservation_'.$this->order->booking_reference.'.pdf', ['mime' => 'application/pdf',]);
         $attachment_invoice = new Attachment($invoice_data, 'Invoice_'.$this->order->booking_reference.'.pdf', ['mime' => 'application/pdf',]);
-        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant->email : "";
+        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant->email. ";" . (setting('system.bcc.mail') ?? "") : "";
+        $cc = ($this->order->consultant?->email ?? "") . ";" . (setting('system.cc.mail') ?? "");
         try {
-            (new OrderMail('reservation-invoice-document'))->send($email, $this->order, [$attachment_reservation, $attachment_invoice], $bcc, true);
+            (new OrderMail('reservation-invoice-document'))->send($email, $this->order, [$attachment_reservation, $attachment_invoice], $bcc, $cc, true);
             $this->toast('Mail Sent Successfully', 'Successfully sent the reservation document', 'success');
             return true;
         } catch (MailDisabledException) {

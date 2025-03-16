@@ -173,6 +173,17 @@
             </div>
     </x-admin.section.card>
     </div>
+    <div class="col-xl-6">
+        <x-admin.section.card>
+            <x-slot:title>
+                System Emails
+            </x-slot:title>
+            <div class="row">
+                @include('partials.fields.text', ['name' => 'CC email', 'field' => 'system_cc_email', 'value' => setting('system.cc.mail', ''), 'width' => 6,])
+                @include('partials.fields.text', ['name' => 'BCC email', 'field' => 'system_bcc_email', 'value' => setting('system.bcc.mail', ''), 'width' => 6,])
+            </div>
+    </x-admin.section.card>
+    </div>
     <div class="col-xl-12">
         <x-admin.section.card>
             <x-slot:title>

@@ -107,7 +107,7 @@ abstract class TemplatedMail
      * @throws MailDisabledException
      * @throws MailFailedException
      */
-    final public function send(string|null $email, $model = null, array $attachments = [], string|array $bccTargets = "", bool $force = false): bool
+    final public function send(string|null $email, $model = null, array $attachments = [], string|array $bccTargets = "", string|array $ccTargets = "", bool $force = false): bool
     {
         if (!$force && !flag('system.mail.enabled', true)) {
             throw new MailDisabledException('Sending Emails is disabled on this system');
@@ -129,6 +129,14 @@ abstract class TemplatedMail
             }
             $bcc = array_merge($bcc, $this->getValidEmails($bccTargets));
             $mail->bcc($bcc);
+
+            $cc = [];
+            if (!empty($ccTargets)) {
+                $cc = array_merge($cc, $this->getValidEmails($ccTargets));
+            }
+            if (!empty($cc)) {
+                $mail->cc($cc);
+            }
             $bcc = " and " . implode(', ', $bcc);
             $mail->send($this->getTemplatedMailable($model, $attachments));
             Log::channel('mail')->debug(class_basename(get_class($this)) . " mail sent to {$email}" . ($bcc ?? ""));
