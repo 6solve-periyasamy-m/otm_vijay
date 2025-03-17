@@ -3,6 +3,9 @@
         <x-livewire.input.select.accommodation.room-type name="inventory.room_type_id" label="Room Type" value="{{ $inventory?->room_type_id }}" width="2" />
         <x-livewire.input.select.accommodation.board-type name="inventory.board_type_id" label="Board Type" value="{{ $inventory?->board_type_id }}" width="2" />
         <x-livewire.input.select.accommodation.room-category name="inventory.room_category_id" label="Category" value="{{ $inventory?->room_category_id }}" width="2" clear />
+        <div class="col-xl-12 mb-3">
+            <x-livewire.ckeditor name="inventory.category_description" value="{{ $inventory?->category_description }}" label="Description" />
+        </div>
         <x-livewire.input.select.accommodation-inventory width="6" label="Stock Parent" name="inventory.stock_parent_id" value="{{ $inventory?->stock_parent_id }}" clear />
         <x-livewire.input type="datetime-local" wire:model="inventory.check_in" width="5" label="Check In" />
         <x-livewire.input.checkbox wire:model="inventory.check_in_time_confirmed" width="1" label="Confirmed?" />

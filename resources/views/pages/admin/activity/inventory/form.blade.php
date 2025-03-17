@@ -39,5 +39,6 @@
         ['name' => 'Sales Price', 'field' => 'sales_price', 'value' => $inventory?->sales_price, 'width' => 6, ])
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'value' => $inventory?->internal_notes,])
     @include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'value' => $inventory?->external_notes,])
+    @include('partials.fields.ckeditor', ['name' => 'Description', 'field' => 'description', 'value' => $inventory?->description, 'width' => 12])
     @include('partials.fields.submit')
 @endsection
