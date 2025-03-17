@@ -138,7 +138,7 @@ class OrderMailer
      */
     public function sendMail(string $code, string|null $email = null, bool $ignoreConsultantFlag = false): bool
     {
-        $bcc = (!($ignoreConsultantFlag) && flag('mail.bcc-consultant', false)) ? $this->order->consultant->email : "";
+        $bcc = (!($ignoreConsultantFlag) && flag('mail.bcc-consultant', false)) ? $this->order->consultant->email. ";" . (setting('system.bcc.mail') ?? "") : "";
         if ($email === null) {
             $email = $this->order->leadBooker->customer->email_address;
         }
