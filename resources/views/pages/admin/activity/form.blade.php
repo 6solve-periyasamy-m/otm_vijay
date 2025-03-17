@@ -32,8 +32,8 @@
         @include('partials.fields.dropdown', ['name' => 'Activity Category', 'field' => 'activity_category', 'selected' => $activity?->activity_category->value, 'values' => \App\Models\Helper\Enum\ActivityCategory::toArray(),])
     </div>
     @include('partials.fields.ckeditor', ['name' => 'Description', 'field' => 'description', 'value' => $activity?->description,])
-    @include('partials.fields.text', ['name' => 'Label 1', 'field' => 'ticket_type', 'value' => $activity?->ticket_type,'width' => 6,])
-    @include('partials.fields.text', ['name' => 'Label 2', 'field' => 'game_name', 'value' => $activity?->game_name,'width' => 6,])
+    @include('partials.fields.text', ['name' => 'Label 1', 'field' => 'field1', 'value' => $activity?->field1,'width' => 6,])
+    @include('partials.fields.text', ['name' => 'Label 2', 'field' => 'field1', 'value' => $activity?->field1,'width' => 6,])
     @include('partials.fields.prefab.addresses.switcher', ['address' => $activity?->address,])
     <x-livewire.input.select.currency name="currency_id" label="Currency" value="{{$activity?->currency_id}}" />
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'notes', 'value' => $activity?->internal_notes])

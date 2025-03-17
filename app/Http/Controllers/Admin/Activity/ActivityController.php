@@ -35,8 +35,8 @@ class ActivityController extends Controller
             'internal_notes' => $request->input('notes'),
             'activity_category' => $request->input('activity_category'),
             'event_id' => $request->input('event_id'),
-            'ticket_type' => $request->input('ticket_type'),
-            'game_name' => $request->input('game_name'),
+            'field1' => $request->input('field1'),
+            'field2' => $request->input('field2'),
         ]);
         if ($request->input('use_existing') == 'on') {
             $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::ACTIVITY);
@@ -84,8 +84,8 @@ class ActivityController extends Controller
             'internal_notes' => $request->input('notes'),
             'activity_category' => $request->input('activity_category'),
             'event_id' => $request->input('event_id'),
-            'ticket_type' => $request->input('ticket_type'),
-            'game_name' => $request->input('game_name'),
+            'field1' => $request->input('field1'),
+            'field2' => $request->input('field2'),
         ]);
         if ($request->input('use_existing') == 'on') {
             Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::ACTIVITY, $activity->address);
