@@ -112,6 +112,7 @@ Route::middleware('auth:web')->group(function () {
             Route::post('/activity', [ImportController::class, 'activity'])->name('activity');
             Route::post('/activity/inventory', [ImportController::class, 'activityInventory'])->name('activity.inventory');
             Route::post('/operator', [ImportController::class, 'operator'])->name('operator');
+            Route::post('/conversion-rate', [ImportController::class, 'conversionRate'])->name('conversion-rate');
         });
         Route::prefix('email/')->name('email.')->group(function () {
             Route::prefix('{mail}')->group(function () {
