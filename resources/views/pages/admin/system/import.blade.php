@@ -187,7 +187,7 @@
                             </button>
                         </div>
                     </div>
-                    The import must contain exactly one row: name
+                    The contents of the Conversion Rate field must exactly match an existing currency code in the system, and the rate must be a required numeric value. Each row must include the following: From Currency Code, To Currency Code, and Rate. If 'Automatic' is not provided, it will default to false.
                     <form action="{{ route('import.conversion-rate') }}" enctype="multipart/form-data" method="post" class="d-none">
                         @csrf
                         <input id="conversion-rate-file-upload" type="file" name="file" class="d-none" onchange="form.submit()">

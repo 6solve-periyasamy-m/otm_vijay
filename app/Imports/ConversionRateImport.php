@@ -16,7 +16,6 @@ class ConversionRateImport implements ToCollection, WithHeadingRow, WithValidati
 
     public function collection(Collection $collection)
     {
-        // Fetch currency ID mappings
         $currencies = Currency::pluck('id', 'code');
 
         $data = [];
