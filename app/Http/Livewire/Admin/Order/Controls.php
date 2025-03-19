@@ -2,13 +2,17 @@
 
 namespace App\Http\Livewire\Admin\Order;
 
+use App\Exceptions\MailDisabledException;
 use App\Exceptions\MailFailedException;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
 use App\Models\Order\Payment\Payment;
+use Exception;
 use LivewireUI\Modal\ModalComponent;
+use Log;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+
 
 /**
  * Popup menu used on the order screen
@@ -23,6 +27,7 @@ class Controls extends ModalComponent
         'sendBookingConfirmation' => 'sendBookingConfirmation',
         'sendPaymentDueMail' => 'sendPaymentDue',
         'sendPaymentMail' => 'sendPaymentMade',
+        'sendReservationToEmail' => 'sendReservationToEmail',
     ];
 
     public Order|int $order;
@@ -43,6 +48,28 @@ class Controls extends ModalComponent
     public function getReservation(): StreamedResponse
     {
         return dompdf(view('pdf.quotes.itinerary', ['itinerary' => $this->order->repository->getReservationDocument(),]));
+    }
+
+    /**
+     * Send the order reservation document to the email
+     */
+    public function sendReservationToEmail(): bool
+    {
+        try {
+            $this->order->repository->mailer(true)->sendReservationEmail();
+            $this->toast('Mail Sent Successfully', 'Successfully sent the reservation document', 'success');
+            return true;
+        } catch (MailDisabledException) {
+            $this->toast('Mail Failed To Send', 'Sending Emails is disabled on this system', 'danger');
+            return false;
+        } catch (MailFailedException $e) {
+            $this->toast('Mail Failed To Send', $e->getMessage(), 'danger');
+            return false;
+        } catch (Exception $e) {
+            $this->toast('Mail Failed To Send', 'Please try again later', 'danger');
+            Log::error($e);
+            return false;
+        }
     }
 
     /**

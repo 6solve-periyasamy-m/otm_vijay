@@ -5,11 +5,12 @@ namespace App\Mail\Storage;
 use App\Exceptions\MailDisabledException;
 use App\Exceptions\MailFailedException;
 use App\Mail\TemplatedMailable;
+use App\Models\User;
 use Exception;
 use Faker\Factory as Faker;
 use Faker\Generator;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Log;
 use Settings;
@@ -21,14 +22,14 @@ abstract class TemplatedMail
     protected string $email;
     protected string $name;
 
-    public function __construct(string|null $code = null)
+    public function __construct(string|null $code = null, User|null $sendAs = null)
     {
         $this->code = $code;
         $this->faker = Faker::create();
         $defaultEmail = config('mail.from.address', config('mail.mailers.smtp.username', 'info@octopustravelmatrix.com'));
         $defaultName = config('mail.from.name', setting('company.name', 'Octopus Travel Matrix'));
         if (config('mail.individual', false)) {
-            $user = Auth::user();
+            $user = $sendAs ?? Auth::user();
             $this->email = $user->email ?? $defaultEmail;
             // If sending as a user, prepend the users name
             if ($user !== null) {
@@ -102,12 +103,14 @@ abstract class TemplatedMail
      * @param string|null $email
      * @param null $model
      * @param Attachment[] $attachments
+     * @param string|array $bccTargets
      * @param bool $force
+     * @param string|array $ccTargets
      * @return bool
      * @throws MailDisabledException
      * @throws MailFailedException
      */
-    final public function send(string|null $email, $model = null, array $attachments = [], string|array $bccTargets = "", bool $force = false): bool
+    final public function send(string|null $email, $model = null, array $attachments = [], string|array $bccTargets = "", bool $force = false, string|array $ccTargets = ""): bool
     {
         if (!$force && !flag('system.mail.enabled', true)) {
             throw new MailDisabledException('Sending Emails is disabled on this system');
@@ -129,6 +132,14 @@ abstract class TemplatedMail
             }
             $bcc = array_merge($bcc, $this->getValidEmails($bccTargets));
             $mail->bcc($bcc);
+
+            $cc = [];
+            if (!empty($ccTargets)) {
+                $cc = array_merge($cc, $this->getValidEmails($ccTargets));
+            }
+            if (!empty($cc)) {
+                $mail->cc($cc);
+            }
             $bcc = " and " . implode(', ', $bcc);
             $mail->send($this->getTemplatedMailable($model, $attachments));
             Log::channel('mail')->debug(class_basename(get_class($this)) . " mail sent to {$email}" . ($bcc ?? ""));

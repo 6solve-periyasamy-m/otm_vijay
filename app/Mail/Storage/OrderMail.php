@@ -43,6 +43,7 @@ class OrderMail extends TemplatedMail
             'FINAL_PAYMENT_DATE' => f_date(isset($order) ? $finalPayment?->due_on : $this->faker->date),
             'TOUR_NAME' => $tour?->name ?? implode(' ', $this->faker->words),
             'EVENT_NAME' => isset($tour) ? $tour->event?->name : implode(' ', $this->faker?->words),
+            'EVENT_TYPE' => $tour && $tour->event && $tour->event->event_category ? ($tour->event->event_category->name === 'NORMAL' ? 'Child Event' : 'Parent Event'): implode(' ', $this->faker?->words),
             'TOUR_DESCRIPTION' => $tour?->description ?? $this->faker?->sentence,
             'TOUR_START' => f_date($tour?->date_from ?? $this->faker->date),
             'TOUR_END' => f_date($tour?->date_to ?? $this->faker->date),

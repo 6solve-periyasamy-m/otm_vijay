@@ -146,6 +146,9 @@
                 @include('partials.fields.checkbox', ['name' => 'Maintain quote reference on conversion where possible', 'field' => 'quote_reference', 'value' => flag('quote.convert.reference', false),])                
                 @include('partials.fields.checkbox', ['name' => 'Should Booking Deposit Percentage Include Additional Costs', 'field' => 'deposit_full', 'value' => flag('booking.deposit.full', false),])
                 @include('partials.fields.checkbox', ['name' => 'Show Non-Paying travellers', 'field' => 'nonpaying_travellers_enabled', 'value' => flag('non-paying.travellers.enabled', true),])
+                @if(config('app.features.kpt', false) || config('app.features.bleeding-edge'))
+                    @include('partials.fields.checkbox', ['name' => 'Enable sending reservation and invoice document emails.', 'field' => 'reservation_invoice_mail_enabled', 'value' => flag('reservation.invoice.mail.enabled', false),])
+                @endif
             </div>
     </x-admin.section.card>
     </div>
@@ -167,6 +170,17 @@
                 <div class="col-12 col-xl-6">
                     <img class="image tiny" src="{{ asset(setting('atol.stamp')) }}"/>
                 </div>
+            </div>
+    </x-admin.section.card>
+    </div>
+    <div class="col-xl-6">
+        <x-admin.section.card>
+            <x-slot:title>
+                System Emails
+            </x-slot:title>
+            <div class="row">
+                @include('partials.fields.text', ['name' => 'CC email', 'field' => 'system_cc_email', 'value' => setting('system.cc.mail', ''), 'width' => 6,])
+                @include('partials.fields.text', ['name' => 'BCC email', 'field' => 'system_bcc_email', 'value' => setting('system.bcc.mail', ''), 'width' => 6,])
             </div>
     </x-admin.section.card>
     </div>
