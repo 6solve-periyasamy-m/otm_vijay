@@ -4,6 +4,7 @@ namespace App\Repository\Mailing\Mailer\Order;
 
 use App\Exceptions\MailDisabledException;
 use App\Exceptions\MailFailedException;
+use App\Mail\Storage\Attachment;
 use App\Mail\Storage\OrderMail;
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
@@ -129,6 +130,46 @@ class OrderMailer
     }
 
     /**
+     * @throws MailFailedException
+     */
+    public function sendReservationEmail(string $email = null): bool
+    {
+        $email = $email ?? $this->order->agent?->email ?? $this->order->organization?->contact_email ?? $this->order->leadBooker->customer->email_address ;
+
+        $invoice = $this->order->repository->getInvoiceRepository()->invoice;
+        $invoice->payment_schedule = $this->order->repository->getScheduleItineraryArray();
+        $invoice->organization = $order->organization ?? null;
+        $invoice->agent = $order->agent ?? null;
+
+        $reservation_data = dompdf(view('pdf.quotes.itinerary', [
+            'itinerary' => $this->order->repository->getReservationDocument(),
+            'type' => 'Reservation'
+        ]), false);
+
+        $invoice_data = dompdf(view('pdf.invoices.tax_invoice', [
+            'invoice' => $invoice,
+            'type' => 'Invoice'
+        ]), false);
+        $attachment_reservation = new Attachment($reservation_data, 'Reservation_'.$this->order->booking_reference.'.pdf', ['mime' => 'application/pdf',]);
+        $attachment_invoice = new Attachment($invoice_data, 'Invoice_'.$this->order->booking_reference.'.pdf', ['mime' => 'application/pdf',]);
+
+        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant->email. ";" . (setting('system.bcc.mail') ?? "") : "";
+        $cc = ($this->order->consultant?->email ?? "") . ";" . (setting('system.cc.mail') ?? "");
+
+        try {
+            (new OrderMail('reservation-invoice-document'))->send($email, $this->order, [$attachment_reservation, $attachment_invoice], $bcc, true, $cc);
+            return true;
+        } catch (MailDisabledException) {
+            return false;
+        } catch (MailFailedException $e) {
+            throw $e;
+        } catch (Exception $e) {
+            Log::error($e);
+            return false;
+        }
+    }
+
+    /**
      * Send any coded mail related to the order. Refer to \App\Repository\Mailing\MailRepository::getAvailableMail for valid codes
      * @param string $code The mail code to use
      * @param string|null $email Email to send the mail to. Defaults to lead booker email if null
@@ -140,7 +181,9 @@ class OrderMailer
     {
         $bcc = (!($ignoreConsultantFlag) && flag('mail.bcc-consultant', false)) ? $this->order->consultant->email. ";" . (setting('system.bcc.mail') ?? "") : "";
         if ($email === null) {
-            $email = $this->order->leadBooker->customer->email_address;
+            $email = $this->order->agent?->email ??
+                        $this->order->organization?->contact_email ??
+                        $this->order->leadBooker->customer->email_address;
         }
         try {
             (new OrderMail($code))->send($email, $this->order, [], $bcc, $this->force);

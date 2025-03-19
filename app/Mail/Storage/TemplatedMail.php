@@ -8,8 +8,8 @@ use App\Mail\TemplatedMailable;
 use Exception;
 use Faker\Factory as Faker;
 use Faker\Generator;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Log;
 use Settings;
@@ -102,7 +102,9 @@ abstract class TemplatedMail
      * @param string|null $email
      * @param null $model
      * @param Attachment[] $attachments
+     * @param string|array $bccTargets
      * @param bool $force
+     * @param string|array $ccTargets
      * @return bool
      * @throws MailDisabledException
      * @throws MailFailedException

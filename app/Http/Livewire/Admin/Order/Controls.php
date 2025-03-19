@@ -2,18 +2,16 @@
 
 namespace App\Http\Livewire\Admin\Order;
 
+use App\Exceptions\MailDisabledException;
 use App\Exceptions\MailFailedException;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
 use App\Models\Order\Payment\Payment;
-use LivewireUI\Modal\ModalComponent;
-use Symfony\Component\HttpFoundation\StreamedResponse;
-use App\Exceptions\MailDisabledException;
-use App\Mail\Storage\Attachment;
-use App\Mail\Storage\OrderMail;
 use Exception;
+use LivewireUI\Modal\ModalComponent;
 use Log;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 
 /**
@@ -55,34 +53,10 @@ class Controls extends ModalComponent
     /**
      * Send the order reservation document to the email
      */
-    public function sendReservationToEmail()
+    public function sendReservationToEmail(): bool
     {
-        $email = $this->order->agent?->email ?? $this->order->leadBooker->customer->email_address ;
-        if ($email === null) {
-            $this->toast('Failed to Send Reservation Document', 'Cannot send reservation document, no valid target email found', 'danger');
-            return false;
-        }
-
-        $invoice = $this->order->repository->getInvoiceRepository()->invoice;
-        $invoice->payment_schedule = $this->order->repository->getScheduleItineraryArray();
-        $invoice->organization = $order->organization ?? null;
-        $invoice->agent = $order->agent ?? null;
-
-        $reservation_data = dompdf(view('pdf.quotes.itinerary', [
-            'itinerary' => $this->order->repository->getReservationDocument(),
-            'type' => 'Reservation'
-        ]), false);
-
-        $invoice_data = dompdf(view('pdf.invoices.tax_invoice', [
-            'invoice' => $invoice,
-            'type' => 'Invoice'
-        ]), false);
-        $attachment_reservation = new Attachment($reservation_data, 'Reservation_'.$this->order->booking_reference.'.pdf', ['mime' => 'application/pdf',]);
-        $attachment_invoice = new Attachment($invoice_data, 'Invoice_'.$this->order->booking_reference.'.pdf', ['mime' => 'application/pdf',]);
-        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant->email. ";" . (setting('system.bcc.mail') ?? "") : "";
-        $cc = ($this->order->consultant?->email ?? "") . ";" . (setting('system.cc.mail') ?? "");
         try {
-            (new OrderMail('reservation-invoice-document'))->send($email, $this->order, [$attachment_reservation, $attachment_invoice], $bcc, true, $cc);
+            $this->order->repository->mailer(true)->sendReservationEmail();
             $this->toast('Mail Sent Successfully', 'Successfully sent the reservation document', 'success');
             return true;
         } catch (MailDisabledException) {
