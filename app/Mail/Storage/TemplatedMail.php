@@ -5,6 +5,7 @@ namespace App\Mail\Storage;
 use App\Exceptions\MailDisabledException;
 use App\Exceptions\MailFailedException;
 use App\Mail\TemplatedMailable;
+use App\Models\User;
 use Exception;
 use Faker\Factory as Faker;
 use Faker\Generator;
@@ -21,14 +22,14 @@ abstract class TemplatedMail
     protected string $email;
     protected string $name;
 
-    public function __construct(string|null $code = null)
+    public function __construct(string|null $code = null, User|null $sendAs = null)
     {
         $this->code = $code;
         $this->faker = Faker::create();
         $defaultEmail = config('mail.from.address', config('mail.mailers.smtp.username', 'info@octopustravelmatrix.com'));
         $defaultName = config('mail.from.name', setting('company.name', 'Octopus Travel Matrix'));
         if (config('mail.individual', false)) {
-            $user = Auth::user();
+            $user = $sendAs ?? Auth::user();
             $this->email = $user->email ?? $defaultEmail;
             // If sending as a user, prepend the users name
             if ($user !== null) {

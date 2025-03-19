@@ -157,7 +157,7 @@ class OrderMailer
         $cc = ($this->order->consultant?->email ?? "") . ";" . (setting('system.cc.mail') ?? "");
 
         try {
-            (new OrderMail('reservation-invoice-document'))->send($email, $this->order, [$attachment_reservation, $attachment_invoice], $bcc, true, $cc);
+            (new OrderMail('reservation-invoice-document', $this->order->consultant))->send($email, $this->order, [$attachment_reservation, $attachment_invoice], $bcc, true, $cc);
             return true;
         } catch (MailDisabledException) {
             return false;
@@ -179,14 +179,14 @@ class OrderMailer
      */
     public function sendMail(string $code, string|null $email = null, bool $ignoreConsultantFlag = false): bool
     {
-        $bcc = (!($ignoreConsultantFlag) && flag('mail.bcc-consultant', false)) ? $this->order->consultant->email. ";" . (setting('system.bcc.mail') ?? "") : "";
+        $bcc = (!($ignoreConsultantFlag) && flag('mail.bcc-consultant', false)) ? $this->order->consultant->email . ";" . (setting('system.bcc.mail') ?? "") : "";
         if ($email === null) {
             $email = $this->order->agent?->email ??
                         $this->order->organization?->contact_email ??
                         $this->order->leadBooker->customer->email_address;
         }
         try {
-            (new OrderMail($code))->send($email, $this->order, [], $bcc, $this->force);
+            (new OrderMail($code, $this->order->consultant))->send($email, $this->order, [], $bcc, $this->force);
             return true;
         } catch (MailDisabledException) {
             return false;
