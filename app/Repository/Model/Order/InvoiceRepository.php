@@ -22,12 +22,12 @@ class InvoiceRepository
         $this->invoice = $invoice;
     }
 
-    private function getPuppeteerStream(bool $asStream = true): StreamedResponse
+    private function getPuppeteerStream(bool $asStream = true): StreamedResponse|string
     {
         return puppeteer(view('pdf.invoices.columns', ['invoice' => $this->invoice,]), $asStream);
     }
 
-     public function getResponseStream(bool $asStream = true): StreamedResponse
+     public function getResponseStream(bool $asStream = true): StreamedResponse|string
      {
          $style = (int)setting('invoice.style', 1);
          if ($style === 1) {
@@ -40,7 +40,7 @@ class InvoiceRepository
          }
      }
 
-    public function getDomPDFStream(bool $asStream = true, string $view = 'pdf.invoices.tax_invoice'): StreamedResponse
+    public function getDomPDFStream(bool $asStream = true, string $view = 'pdf.invoices.tax_invoice'): StreamedResponse|string
     {
         $dompdf = new Dompdf((new Options())->set('dpi', 96)->set('isHtml5ParserEnabled', true));
         $dompdf->setPaper('A4', 'portrait');
