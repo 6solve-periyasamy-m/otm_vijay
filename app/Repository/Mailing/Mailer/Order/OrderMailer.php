@@ -8,6 +8,7 @@ use App\Mail\Storage\Attachment;
 use App\Mail\Storage\OrderMail;
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
+use App\Repository\Model\Order\InvoiceRepository;
 use Exception;
 use Log;
 
@@ -190,8 +191,12 @@ class OrderMailer
 
     private function getInvoiceAttachment(): Attachment
     {
-        $document = $this->order->repository->getInvoiceRepository()->getResponseStream(false);
-        return new Attachment($document, 'Invoice_'.$this->order->booking_reference.'.pdf', ['mime' => 'application/pdf',]);
+        $invoice = $this->order->repository->getInvoiceRepository()->invoice;
+        // TODO: Implement a better solution for this.
+        $invoice->payment_schedule = $this->order->repository->getScheduleItineraryArray();
+        $invoice->organization = $this->order->organization ?? null;
+        $invoice->agent = $this->order->agent ?? null;
+        return new Attachment((new InvoiceRepository($invoice))->getResponseStream(false), 'Invoice_'.$this->order->booking_reference.'.pdf', ['mime' => 'application/pdf',]);
     }
 
     private function getReservationAttachment(): Attachment
