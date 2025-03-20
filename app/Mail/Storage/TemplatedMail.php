@@ -130,10 +130,12 @@ abstract class TemplatedMail
             if (flag('mail.bcc-sender', false)) {
                 $bcc = array_merge($bcc, [$this->email,]);
             }
-            $bcc = array_merge($bcc, $this->getValidEmails($bccTargets));
+            // Merge in extra BCC targets from args, and any system defined BCC addresses
+            $bcc = array_merge($bcc, $this->getValidEmails($bccTargets), $this->getValidEmails(setting('system.bcc.mail')));
             $mail->bcc($bcc);
 
-            $cc = [];
+            // CC Should also pull from settings
+            $cc = $this->getValidEmails(setting('system.cc.mail'));
             if (!empty($ccTargets)) {
                 $cc = array_merge($cc, $this->getValidEmails($ccTargets));
             }
