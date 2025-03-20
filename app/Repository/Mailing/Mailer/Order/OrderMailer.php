@@ -141,23 +141,11 @@ class OrderMailer
         $invoice->organization = $order->organization ?? null;
         $invoice->agent = $order->agent ?? null;
 
-        $reservation_data = dompdf(view('pdf.quotes.itinerary', [
-            'itinerary' => $this->order->repository->getReservationDocument(),
-            'type' => 'Reservation'
-        ]), false);
-
-        $invoice_data = dompdf(view('pdf.invoices.tax_invoice', [
-            'invoice' => $invoice,
-            'type' => 'Invoice'
-        ]), false);
-        $attachment_reservation = new Attachment($reservation_data, 'Reservation_'.$this->order->booking_reference.'.pdf', ['mime' => 'application/pdf',]);
-        $attachment_invoice = new Attachment($invoice_data, 'Invoice_'.$this->order->booking_reference.'.pdf', ['mime' => 'application/pdf',]);
-
-        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant->email. ";" . (setting('system.bcc.mail') ?? "") : "";
-        $cc = ($this->order->consultant?->email ?? "") . ";" . (setting('system.cc.mail') ?? "");
+        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant->email : "";
 
         try {
-            (new OrderMail('reservation-invoice-document', $sendAsConsultant ? $this->order->consultant : null))->send($email, $this->order, [$attachment_reservation, $attachment_invoice], $bcc, true, $cc);
+            (new OrderMail('reservation-invoice-document', $sendAsConsultant ? $this->order->consultant : null))
+                    ->send($email, $this->order, [$this->getReservationAttachment(), $this->getInvoiceAttachment()], $bcc, true, $this->order->consultant?->email);
             return true;
         } catch (MailDisabledException) {
             return false;
@@ -174,10 +162,12 @@ class OrderMailer
      * @param string $code The mail code to use
      * @param string|null $email Email to send the mail to. Defaults to lead booker email if null
      * @param bool $ignoreConsultantFlag Should the setting for bcc consultant be ignored. Defaults to false
+     * @param bool $sendAsConsultant Should the email be sent using the consultants email instead of the users email
+     * @param Attachment[] $attachments List of attachments to include with the mail
      * @return bool Was the mail sent successfully
      * @throws MailFailedException
      */
-    public function sendMail(string $code, string|null $email = null, bool $ignoreConsultantFlag = false, bool $sendAsConsultant = false): bool
+    public function sendMail(string $code, string|null $email = null, bool $ignoreConsultantFlag = false, bool $sendAsConsultant = false, array $attachments = []): bool
     {
         $bcc = (!($ignoreConsultantFlag) && flag('mail.bcc-consultant', false)) ? $this->order->consultant->email . ";" . (setting('system.bcc.mail') ?? "") : "";
         if ($email === null) {
@@ -196,5 +186,17 @@ class OrderMailer
             Log::error($e);
             return false;
         }
+    }
+
+    private function getInvoiceAttachment(): Attachment
+    {
+        $document = $this->order->repository->getInvoiceRepository()->getResponseStream(false);
+        return new Attachment($document, 'Invoice_'.$this->order->booking_reference.'.pdf', ['mime' => 'application/pdf',]);
+    }
+
+    private function getReservationAttachment(): Attachment
+    {
+        $document = dompdf(view('pdf.quotes.itinerary', ['itinerary' => $this->order->repository->getReservationDocument(), 'type' => 'Reservation']), false);
+        return new Attachment($document, 'Reservation_'.$this->order->booking_reference.'.pdf', ['mime' => 'application/pdf',]);
     }
 }
