@@ -23,13 +23,11 @@
                 <th scope="col">Occupant {{ $x }}</th>
             @endfor
             @if($notes)
-                <th scope="col">Accommodation Notes</th>
+                <th scope="col">Accommodation Internal Notes</th>
                 <th scope="col">Order Internal Notes</th>
                 <th scope="col">Order External Notes</th>
                 <th scope="col">Customer Internal Notes</th>
                 <th scope="col">Customer External Notes</th>
-                <th scope="col">Traveller Internal Notes</th>
-                <th scope="col">Traveller External Notes</th>
             @endif
         </tr>
     </thead>
@@ -67,8 +65,6 @@
                         $order_external_notes = false;
                         $customer_internal_notes = false;
                         $customer_external_notes = false;
-                        $order_customer_internal_notes = false;
-                        $order_customer_external_notes = false;
                     @endphp
                     @for($x = 0; $x < $data->largest; $x++)
                         @php
@@ -107,20 +103,8 @@
                                     @php $customer_external_notes = true; @endphp
                                 @endif
                             </td>
-                            <td>
-                                @if(!$order_customer_internal_notes && !empty($traveller->internal_notes))
-                                    {{ $traveller->internal_notes }}
-                                    @php $order_customer_internal_notes = true; @endphp
-                                @endif
-                            </td>
-                            <td>
-                                @if(!$order_customer_external_notes && !empty($traveller->external_notes))
-                                    {{ $traveller->external_notes }}
-                                    @php $order_customer_external_notes = true; @endphp
-                                @endif
-                            </td>
                         @else
-                            <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td>
+                            <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td>
                         @endisset
                     @endfor
                 @endif
