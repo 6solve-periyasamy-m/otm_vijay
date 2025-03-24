@@ -10,8 +10,6 @@ use Dompdf\Options;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-use Carbon\Carbon;
-
 class InvoiceRepository
 {
     public readonly Invoice $invoice;
@@ -24,25 +22,25 @@ class InvoiceRepository
         $this->invoice = $invoice;
     }
 
-    private function getPuppeteerStream(): StreamedResponse
+    private function getPuppeteerStream(bool $asStream = true): StreamedResponse|string
     {
-        return puppeteer(view('pdf.invoices.columns', ['invoice' => $this->invoice,]));
+        return puppeteer(view('pdf.invoices.columns', ['invoice' => $this->invoice,]), $asStream);
     }
 
-     public function getResponseStream(): StreamedResponse
+     public function getResponseStream(bool $asStream = true): StreamedResponse|string
      {
          $style = (int)setting('invoice.style', 1);
          if ($style === 1) {
-             return $this->getPuppeteerStream();
+             return $this->getPuppeteerStream($asStream);
          } else {
              /** @noinspection PhpMatchExpressionWithOnlyDefaultArmInspection Will have more expressions in future, but not at the moment */
              return match ($style) {
-                 default => $this->getDomPDFStream(),
+                 default => $this->getDomPDFStream($asStream),
              };
          }
      }
 
-    public function getDomPDFStream(string $view = 'pdf.invoices.tax_invoice'): StreamedResponse
+    public function getDomPDFStream(bool $asStream = true, string $view = 'pdf.invoices.tax_invoice'): StreamedResponse|string
     {
         $dompdf = new Dompdf((new Options())->set('dpi', 96)->set('isHtml5ParserEnabled', true));
         $dompdf->setPaper('A4', 'portrait');
@@ -50,7 +48,7 @@ class InvoiceRepository
         $dompdf->loadHtml(view($view, ['invoice' => $this->invoice,])->render());
         $dompdf->render();
 
-        return dompdf(view($view, ['invoice' => $this->invoice,]));
+        return dompdf(view($view, ['invoice' => $this->invoice,]), $asStream);
     }
 
     /**

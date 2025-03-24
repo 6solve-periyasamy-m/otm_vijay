@@ -23,6 +23,7 @@ class SettingsMail extends TemplatedMail
             'SETTING_ATOL_ISSUER' => setting('atol.issuer'),
             'SETTING_ATOL_NUMBER' => setting('atol.number'),
             'SETTING_ATOL_STAMP' => asset(setting('atol.stamp')),
+            'SETTING_COMPANY_URL' => setting('company.url'),
             'CURRENT_USER_NAME' => Auth::user()?->name ?? 'No User Found',
             'CURRENT_USER_EMAIL' => Auth::user()?->email ?? 'No User Found',
             'CURRENT_USER_IMAGE_URL' => Auth::user()?->avatar_url ?? 'No User Found',
