@@ -59,6 +59,10 @@
                     403: function (data) {
                         sending = false;
                         showToast('Access Denied', 'If you believe this is in error, please refresh the page and try again', 'danger');
+                    },
+                    500: function (data) {
+                        sending = false;
+                        showToast('An error occurred whilst sending.');
                     }
                 },
             });
