@@ -1,9 +1,9 @@
 <table class="datatable table table-striped report-table">
     <thead>
         <tr>
-            <th scope="col">From Currency Code</th>
-            <th scope="col">To Currency Code</th>
-            <th scope="col">Rate</th>
+            <th scope="col">from_currency_code</th>
+            <th scope="col">to_currency_code</th>
+            <th scope="col">rate</th>
         </tr>
     </thead>
     <tbody>
