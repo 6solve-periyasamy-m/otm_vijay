@@ -72,15 +72,26 @@ class InvoiceRepository
                 foreach ($group->billables as $billable) {
                     $qBillable = $data->get($billable->shared_key, new QuantityBillable($billable->description, $billable->shared_key, $billable->amount, $billable->is_base));
                     $data->put($billable->shared_key, $qBillable->addQuantity());
-                    if (strpos($billable->shared_key, "transport") !== false) {
-                        $billable->description = $this->transportDescriptionFormat($billable->description);
-                    }
+                    $billable->description = $this->accommodationDescriptionFormat($billable->description);
                 }
             }
+            $data = $data->sortBy(function ($billable) {
+                preg_match('/\((\d{2}\/\d{2}\/\d{4}) to (\d{2}\/\d{2}\/\d{4})\)/', $billable->description, $matches);
+                return $matches ? \Carbon\Carbon::createFromFormat('d/m/Y', $matches[1]) : null;
+            });
         }
         return $data;
     }
 
+    public function accommodationDescriptionFormat($description)
+    {
+        if (preg_match('/\((\d{2}\/\d{2}\/\d{4}) \d{2}:\d{2} to (\d{2}\/\d{2}\/\d{4}) \d{2}:\d{2}\)/', $description, $matches)) {
+            $startDate = $matches[1];
+            $endDate = $matches[2];
+            $description = preg_replace('/\(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2} to \d{2}\/\d{2}\/\d{4} \d{2}:\d{2}\)/', "($startDate to $endDate)", $description);
+        }
+        return $description;
+    }
     public function transportDescriptionFormat($invoice_description)
     {
         $description = preg_replace('/\([^)]+ to [^)]+\)/', '', $invoice_description, 1);
