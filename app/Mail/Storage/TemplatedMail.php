@@ -144,7 +144,7 @@ abstract class TemplatedMail
             }
             $bcc = " and " . implode(', ', $bcc);
             $mail->send($this->getTemplatedMailable($model, $attachments));
-            Log::channel('mail')->debug(class_basename(get_class($this)) . " mail sent to {$email}" . ($bcc ?? ""));
+            Log::channel('mail')->debug(class_basename(get_class($this)) . " {$this->code} mail sent to {$email}" . ($bcc ?? ""));
             return true;
         } catch (Exception $e) {
             Log::error($e);
@@ -152,7 +152,7 @@ abstract class TemplatedMail
         }
     }
 
-    final protected function validateEmail(string $email)
+    final protected function validateEmail(string|null $email)
     {
         return Validator::make(['email' => $email,], ['email' => 'required|email:rfc,dns'], [
             'email.required' => 'Recipient does not have an email address',
@@ -160,10 +160,10 @@ abstract class TemplatedMail
         ]);
     }
 
-    final protected function getValidEmails(string $emails): array
+    final protected function getValidEmails(string|null $emails): array
     {
         $valid = [];
-        foreach (explode(';', $emails) as $email) {
+        foreach (explode(';', $emails ?? "") as $email) {
             $validator = $this->validateEmail($email);
             if (!$validator->fails()) {
                 $valid[] = $email;
