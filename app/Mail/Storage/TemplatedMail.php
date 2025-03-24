@@ -152,7 +152,7 @@ abstract class TemplatedMail
         }
     }
 
-    final protected function validateEmail(string $email)
+    final protected function validateEmail(string|null $email)
     {
         return Validator::make(['email' => $email,], ['email' => 'required|email:rfc,dns'], [
             'email.required' => 'Recipient does not have an email address',
@@ -160,10 +160,10 @@ abstract class TemplatedMail
         ]);
     }
 
-    final protected function getValidEmails(string $emails): array
+    final protected function getValidEmails(string|null $emails): array
     {
         $valid = [];
-        foreach (explode(';', $emails) as $email) {
+        foreach (explode(';', $emails ?? "") as $email) {
             $validator = $this->validateEmail($email);
             if (!$validator->fails()) {
                 $valid[] = $email;
