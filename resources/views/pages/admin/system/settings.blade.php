@@ -108,6 +108,10 @@
     <div class="collapse mx-1" id="conversions">
         <x-admin.section.card>
             <div class="flex float-end">
+                <a class="btn btn-primary float-end" href="{{ route('export.conversion-rates', ['extension' => 'csv']) }}" style="margin-right: 5px">
+                    {{ Icon::csv() }}
+                    <span>Export to CSV</span>
+                </a>
                 <button class="btn btn-success" onclick="openModal('admin.system.conversion.form')">
                     {{ Icon::create() }}Create New
                 </button>

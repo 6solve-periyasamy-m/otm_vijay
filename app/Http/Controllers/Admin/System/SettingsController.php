@@ -8,6 +8,8 @@ use App\Models\System\LargeTextTemplate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Settings;
+use Excel;
+use App\Exports\ConversionRatesExport;
 
 class SettingsController extends Controller
 {
@@ -156,5 +158,9 @@ class SettingsController extends Controller
     private function saveImage($file)
     {
         return $file->storePublicly('uploads/images');
+    }
+
+    public function exportConversionRates(string $extension = 'csv') {
+        return Excel::download(new ConversionRatesExport(), 'conversion-rates.'. $extension);
     }
 }

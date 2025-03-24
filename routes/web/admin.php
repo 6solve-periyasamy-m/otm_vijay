@@ -104,6 +104,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/import', [SettingsController::class, 'import'])->name('settings.import');
         Route::get('/template', [SettingsController::class, 'template'])->name('settings.template');
         Route::get('/template/edit/{template?}', [SettingsController::class, 'editTemplate'])->name('settings.template.form');
+        Route::get('export/conversion-rates/{extension}', [SettingsController::class, 'exportConversionRates'])->name('export.conversion-rates');
         Route::prefix('import')->name('import.')->group(function () {
             Route::post('/customer', [ImportController::class, 'customer'])->name('customer');
             Route::post('/organization', [ImportController::class, 'organization'])->name('organization');
