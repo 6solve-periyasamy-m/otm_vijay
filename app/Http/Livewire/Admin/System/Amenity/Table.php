@@ -36,11 +36,6 @@ class Table extends LivewireDatatable
                     return $image_url;
                 })
                 ->label('Icon'),
-            // NumberColumn::raw('(select COUNT(*) from quote_sections where quote_section_type_id = quote_section_types.id) AS related')
-            //     ->label('Related')
-            //     ->searchable()
-            //     ->sortable()
-            //     ->filterable(),
             ActionColumn::modal('amenity', 'admin.system.amenity.form')
         ];
     }
@@ -49,15 +44,15 @@ class Table extends LivewireDatatable
     {
         $amenity = Amenity::find($id);
         if ($amenity === null) {
-            $this->toast('Unable to Delete', 'Cannot find requested payment method to delete', 'danger');
+            $this->toast('Unable to Delete', 'Cannot find requested amenity to delete', 'danger');
             return;
         }
         
         if ($amenity->accommodations()->exists()) {
             $this->toast('Unable to Delete', 'This amenity is assigned to accommodations and cannot be deleted.', 'danger');
             return;
-        }
-
+        }        
         $amenity->delete();
+        $this->toast('Success', 'Amenity deleted successfully.', 'success');
     }
 }
