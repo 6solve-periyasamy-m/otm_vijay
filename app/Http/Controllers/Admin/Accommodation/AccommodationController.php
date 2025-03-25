@@ -10,6 +10,7 @@ use App\Repository\Model\Location\AddressRepository;
 use App\Repository\Reporting\Manifest\RoomingReportRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use App\Models\Accommodation\Amenity;
 
 class AccommodationController extends Controller
 {
@@ -21,7 +22,8 @@ class AccommodationController extends Controller
 
     public function create()
     {
-        return view('pages.admin.accommodation.form');
+        $amenities = Amenity::select('id', 'name')->get();
+        return view('pages.admin.accommodation.form', compact('amenities'));
     }
 
     public function store(Request $request)
@@ -51,6 +53,7 @@ class AccommodationController extends Controller
 
         $accommodation->address_id = $address->id;
         $accommodation->save();
+        $accommodation->amenities()->sync($request->amenities ?? []);
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 
@@ -73,7 +76,9 @@ class AccommodationController extends Controller
 
     public function edit(Accommodation $accommodation)
     {
-        return view('pages.admin.accommodation.form', ['accommodation' => $accommodation,]);
+        $amenities = Amenity::select('id', 'name')->get();
+        $selected_amenities = $accommodation->amenities->pluck('id')->toArray();
+        return view('pages.admin.accommodation.form', compact('accommodation', 'amenities', 'selected_amenities'));
     }
 
     public function update(Request $request, Accommodation $accommodation)
@@ -103,6 +108,7 @@ class AccommodationController extends Controller
             $accommodation->image_url = $request->file('image')->storePublicly('uploads/images');
         }
         $accommodation->save();
+        $accommodation->amenities()->sync($request->amenities ?? []);
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 }
