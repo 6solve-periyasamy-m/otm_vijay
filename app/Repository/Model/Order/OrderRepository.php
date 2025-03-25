@@ -5,6 +5,7 @@ namespace App\Repository\Model\Order;
 use App\Events\Order\Customer\OrderCustomerCreatedEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Exceptions\MailDisabledException;
+use App\Exceptions\MailFailedException;
 use App\Models\Customer\Customer;
 use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Helper\Enum\AddressParent;
@@ -309,6 +310,17 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public function getAtolRepository(): AtolRepository
     {
         return $this->atolRepository;
+    }
+
+    /**
+     * @throws MailFailedException
+     */
+    public function sendManualReminder(OrderInstallment|null $next): bool
+    {
+        $sent = $this->order->repository->mailer(true)->sendReminderMail(null, $next);
+        if (!$sent) { return false; }
+        $this->update(['last_manual_reminder' => now(),]);
+        return true;
     }
 
     public function addAdjustment(float $amount, string $reason, Carbon|null $when = null): Model|bool
