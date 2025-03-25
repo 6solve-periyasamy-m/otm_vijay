@@ -309,7 +309,7 @@ class OrderCustomerRepository extends ModelRepository
         foreach ($this->getComponents(!$ignoreAccommodation) as $component) {
             $cost += $component->getCostToCompany();
         }
-        foreach ($this->orderCustomer->order->tour->costs()->where('per_customer', '=', true)->get() as $item) {
+        foreach ($this->orderCustomer->order->tour?->costs()->where('per_customer', '=', true)->get() ?? [] as $item) {
             $cost += $item->amount;
         }
         return sigfig($cost);

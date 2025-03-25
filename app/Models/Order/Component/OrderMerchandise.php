@@ -102,7 +102,7 @@ class OrderMerchandise extends Model
 
     public function getPurchasePriceAttribute(): float
     {
-        $inventory = $this->tourComponent->inventory;
-        return $this->estimated_purchase_price ?? $inventory->local_purchase_price;
+        $inventory = $this->tourComponent?->inventory;
+        return $this->estimated_purchase_price ?? $inventory?->local_purchase_price ?? 0.0;
     }
 }
