@@ -53,7 +53,9 @@ class AccommodationController extends Controller
 
         $accommodation->address_id = $address->id;
         $accommodation->save();
-        $accommodation->amenities()->sync($request->amenities ?? []);
+        if ($request->has('amenities')) {
+            $accommodation->amenities()->sync($request->amenities ?? []);
+        }
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 
@@ -108,7 +110,9 @@ class AccommodationController extends Controller
             $accommodation->image_url = $request->file('image')->storePublicly('uploads/images');
         }
         $accommodation->save();
-        $accommodation->amenities()->sync($request->amenities ?? []);
+        if ($request->has('amenities')) {
+            $accommodation->amenities()->sync($request->amenities ?? []);
+        }
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 }
