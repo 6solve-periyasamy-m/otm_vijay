@@ -11,6 +11,7 @@ use App\Imports\ActivityInventoryImport;
 use App\Imports\CustomerImport;
 use App\Imports\OperatorImport;
 use App\Imports\OrganizationImport;
+use App\Imports\ConversionRateImport;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Log;
@@ -51,6 +52,11 @@ class ImportController extends Controller
     public function operator(ImportRequest $request)
     {
         return $this->import((new OperatorImport()), $request->file);
+    }
+
+    public function conversionRate(ImportRequest $request)
+    {
+        return $this->import((new ConversionRateImport()), $request->file);
     }
 
     private function import(ToCollection $import, UploadedFile $file)

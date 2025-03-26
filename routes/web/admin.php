@@ -104,6 +104,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/import', [SettingsController::class, 'import'])->name('settings.import');
         Route::get('/template', [SettingsController::class, 'template'])->name('settings.template');
         Route::get('/template/edit/{template?}', [SettingsController::class, 'editTemplate'])->name('settings.template.form');
+        Route::get('export/conversion-rates/{extension}', [SettingsController::class, 'exportConversionRates'])->name('export.conversion-rates');
         Route::prefix('import')->name('import.')->group(function () {
             Route::post('/customer', [ImportController::class, 'customer'])->name('customer');
             Route::post('/organization', [ImportController::class, 'organization'])->name('organization');
@@ -112,6 +113,7 @@ Route::middleware('auth:web')->group(function () {
             Route::post('/activity', [ImportController::class, 'activity'])->name('activity');
             Route::post('/activity/inventory', [ImportController::class, 'activityInventory'])->name('activity.inventory');
             Route::post('/operator', [ImportController::class, 'operator'])->name('operator');
+            Route::post('/conversion-rate', [ImportController::class, 'conversionRate'])->name('conversion-rate');
         });
         Route::prefix('email/')->name('email.')->group(function () {
             Route::prefix('{mail}')->group(function () {

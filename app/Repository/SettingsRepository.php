@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Models\System\Setting;
+use App\Models\System\ConversionRate;
 use Carbon\Carbon;
 
 class SettingsRepository
@@ -94,5 +95,23 @@ class SettingsRepository
             }
         }
         return $this;
+    }
+
+    /**
+     * Get a currency of all conversion rates on the system
+     * @return array
+     */
+    public static function getConversionRates(): array
+    {
+        $data = [];
+        $data = ConversionRate::with(['from:id,code', 'to:id,code'])
+            ->get(['from_currency_id', 'to_currency_id', 'rate'])
+            ->map(fn($rate) => [
+                'from_currency_code' => $rate->from->code,
+                'to_currency_code'   => $rate->to->code,
+                'rate'               => (float) $rate->rate,
+            ])
+            ->toArray();
+        return $data;
     }
 }
