@@ -39,6 +39,8 @@ class Calculator extends Component
     /** @var string|float|null $markup Percentage markup for package ((total - cost to company) / cost to company) */
     public string|float|null $markup = null;
     public float|null $commission = null;
+    public bool $adjust = false;
+    public float|null $conversion = null;
     public float $toBePaid;
     public float|string $marked_up_price = 0;
     public float|null $taxes = null;
@@ -48,6 +50,7 @@ class Calculator extends Component
         $this->quote = $quote;
         $this->paying = $this->quote->paying ?? 0;
         $this->travelling = $this->quote->travelling ?? 0;
+        $this->conversion = $this->quote->conversion ?? \Settings::getConversionRate($this->quote->currency, \Settings::currency());
         $this->calculate(false);
     }
 
@@ -69,11 +72,10 @@ class Calculator extends Component
         $paying = $this->paying + ($this->quote->leadTraveller->paying ? 1 : 0);
         $this->total = ($this->quote->repository->getPricePerPerson($paying)?->price_per_person ?? 0) * $paying;
         if ($this->quote->currency !== null && $this->quote->currency_id !== \Settings::currency()?->id) {
-            $conversion = \Settings::getConversionRate($this->quote->currency, \Settings::currency());
-            if ($conversion === null) {
+            if ($this->conversion === null) {
                 $this->profit = null;
             } else {
-                $this->profit = sigfig(sigfig($this->total * $conversion) - $this->costToCompany);
+                $this->profit = sigfig(sigfig($this->total * $this->conversion) - $this->costToCompany);
             }
         } else {
             $this->profit = sigfig($this->total - $this->costToCompany);
@@ -107,6 +109,12 @@ class Calculator extends Component
             $this->markup = $costPerPerson == 0 ? 100 : sigfig(((($this->marked_up_price - $costPerPerson)/$costPerPerson) * 100), 6, true);
         }
         $this->calculate();
+    }
+
+    public function enableEditing(): void
+    {
+        $this->adjust = true;
+        $this->refresh();
     }
 
     public function incrementPaying(int $value): void
@@ -166,6 +174,13 @@ class Calculator extends Component
                 $point->save();
             }
         }
+        $this->refresh();
+    }
+
+    public function saveConversion(): void
+    {
+        $this->quote->conversion = $this->conversion;
+        $this->quote->save();
         $this->refresh();
     }
 

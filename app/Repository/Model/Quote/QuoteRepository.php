@@ -77,6 +77,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'description' => $tour->description,
             ...$data,
         ]);
+        if ($quote->currency !== null) {
+            $quote->conversion = Settings::getConversionRate($quote->currency, Settings::currency());
+        }
         $lead = $quote->repository->createProspect($customer, $leadData);
         $quote->lead_traveller_id = $lead->id;
         $quote->reference = $quote->repository->generateReference();

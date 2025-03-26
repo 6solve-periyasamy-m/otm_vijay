@@ -10,6 +10,7 @@ use App\Models\Quote\QuotePricePoint;
 use App\Models\Quote\QuoteProspect;
 use App\Models\System\LargeTextTemplate;
 use Livewire\Component;
+use Settings;
 
 class Form extends Component
 {
@@ -48,6 +49,12 @@ class Form extends Component
         $this->quote->save();
         $this->quote->reference = $this->quote->reference ?? $this->quote->repository->generateReference();
         $this->quote->invoice_footer = $this->quote->invoice_footer ?? "";
+        if ($this->quote->id === null ||
+            $this->quote->currency_id !== null ||
+            Quote::find($this->quote->id)?->currency_id !== $this->quote->currency_id)
+        {
+            $this->quote->conversion = Settings::getConversionRate($this->quote->currency, Settings::currency());
+        }
         $this->quote->save();
 
         $pricePoint = $this->quote->pricePoints()->where('quantity', '=', 1)->first() ?? QuotePricePoint::make(['quantity' => 1,]);

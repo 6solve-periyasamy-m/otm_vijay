@@ -139,8 +139,25 @@
                     {{ f_currency($costToCompany) }}
                 </x-admin.section.otm-text>
             </div>
-            <div class="col-6">
-                <button class="btn btn-info" wire:click="calculate">{{ Icon::refresh() }} Refresh Data</button>
+            <div class="col-6 row">
+                <div class="col-4">
+                    <button class="btn btn-info" wire:click="calculate">{{ Icon::refresh() }} Refresh Data</button>
+                </div>
+                @if(!($adjust ?? false))
+                <div class="col-8 row">
+                    <x-livewire.input width="8" wire:model="conversion" label="Conversion Rate" disabled />
+                    <div class="col-4">
+                        <button class="btn btn-warning" wire:click="enableEditing">Adjust</button>
+                    </div>
+                </div>
+                @else
+                    <div class="col-8 row">
+                        <x-livewire.input width="8" wire:model="conversion" label="Conversion Rate" />
+                        <div class="col-4">
+                            <button class="btn btn-success" wire:click="saveConversion">Save</button>
+                        </div>
+                    </div>
+                @endif
             </div>
             <div class="col-6">
                 <div class="row">
@@ -158,7 +175,7 @@
                     <div class="col-6">
                         <x-admin.section.otm-text class="cost-updater">
                             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.taxes') }}</x-slot:header>
-                            {{ fr_currency($taxes, $quote->currency) }}
+                            {{ f_currency($taxes, $quote->currency, $conversion, Settings::currency()) }}
                         </x-admin.section.otm-text>
                     </div>
                     @endif
@@ -174,7 +191,7 @@
                     <div class="col-3">
                         <x-admin.section.otm-text class="cost-updater">
                             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.cost') }}</x-slot:header>
-                            {{ fr_currency($total, $quote->currency) }}
+                            {{ f_currency($total, $quote->currency, $conversion, Settings::currency()) }}
                         </x-admin.section.otm-text>
                     </div>
                     @endif
@@ -182,14 +199,14 @@
                     <div class="col-3">
                         <x-admin.section.otm-text class="cost-updater">
                             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.commission') }}</x-slot:header>
-                            {{ fr_currency($commission, $quote->currency) }}
+                            {{ f_currency($commission, $quote->currency, $conversion, Settings::currency()) }}
                         </x-admin.section.otm-text>
                     </div>
                     @endif
                     <div class="col-3">
                         <x-admin.section.otm-text class="cost-updater">
                             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.final') }}</x-slot:header>
-                            {{ fr_currency($toBePaid, $quote->currency) }}
+                            {{ f_currency($toBePaid, $quote->currency, $conversion, Settings::currency()) }}
                         </x-admin.section.otm-text>
                     </div>
                 </div>
