@@ -21,6 +21,7 @@ use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
+
 /**
  * App\Models\Accommodation\Accommodation
  *
