@@ -8,6 +8,8 @@ use App\Models\System\LargeTextTemplate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Settings;
+use Excel;
+use App\Exports\ConversionRatesExport;
 
 class SettingsController extends Controller
 {
@@ -102,6 +104,9 @@ class SettingsController extends Controller
             'customization.documentation.colors' => $request->input('document_css'),
             'non-paying.travellers.enabled' => $request->input('nonpaying_travellers_enabled') === 'on' ? 1 : 0,
             'itinerary.heading' => $request->input('itinerary_heading'),
+            'reservation.invoice.mail.enabled' => $request->input('reservation_invoice_mail_enabled') === 'on' ? 1 : 0,
+            'system.cc.mail' => $request->input('system_cc_email'),
+            'system.bcc.mail' => $request->input('system_bcc_email'),
         ]);
         if ($request->has('company_logo')  && !empty($request->file('company_logo'))) {
             Settings::set('company.logo', $this->saveImage($request->file('company_logo')));
@@ -153,5 +158,9 @@ class SettingsController extends Controller
     private function saveImage($file)
     {
         return $file->storePublicly('uploads/images');
+    }
+
+    public function exportConversionRates(string $extension = 'csv') {
+        return Excel::download(new ConversionRatesExport(), 'conversion-rates.'. $extension);
     }
 }

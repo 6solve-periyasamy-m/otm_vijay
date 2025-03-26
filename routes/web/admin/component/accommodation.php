@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Accommodation\AccommodationController;
 use App\Http\Controllers\Admin\Accommodation\AccommodationInventoryController;
 use App\Http\Controllers\Admin\Accommodation\BoardTypeController;
 use App\Http\Controllers\Admin\Accommodation\RoomTypeController;
+use App\Http\Controllers\Admin\Accommodation\AccommodationTypeController;
 
 Route::get('/', [AccommodationController::class, 'index'])->name('accommodations.all')->middleware('bouncer:Accommodation\Accommodation,read');
 Route::get('/create', [AccommodationController::class, 'create'])->name('accommodations.create')->middleware('bouncer:Accommodation\Accommodation,create');
@@ -49,5 +50,14 @@ Route::prefix('board-types')->group(function () {
         Route::get('/update', [BoardTypeController::class, 'edit'])->name('board-types.edit')->middleware('bouncer:Accommodation\BoardType,update');
         Route::post('/update', [BoardTypeController::class, 'update'])->name('board-types.update')->middleware('bouncer:Accommodation\BoardType,update');
         Route::post('/delete', [BoardTypeController::class, 'destroy'])->name('board-types.delete')->middleware('bouncer:Accommodation\BoardType,delete');
+    });
+});
+Route::prefix('accommodation-types')->group(function () {
+    Route::get('/create', [AccommodationTypeController::class, 'create'])->name('accommodation-types.create')->middleware('bouncer:Accommodation\AccommodationType,create');
+    Route::post('/create', [AccommodationTypeController::class, 'store'])->name('accommodation-types.store')->middleware('bouncer:Accommodation\AccommodationType,create');
+    Route::prefix('{accommodationType}')->group(function () {
+        Route::get('/update', [AccommodationTypeController::class, 'edit'])->name('accommodation-types.edit')->middleware('bouncer:Accommodation\AccommodationType,update');
+        Route::post('/update', [AccommodationTypeController::class, 'update'])->name('accommodation-types.update')->middleware('bouncer:Accommodation\AccommodationType,update');
+        Route::post('/delete', [AccommodationTypeController::class, 'destroy'])->name('accommodation-types.delete')->middleware('bouncer:Accommodation\AccommodationType,delete');
     });
 });

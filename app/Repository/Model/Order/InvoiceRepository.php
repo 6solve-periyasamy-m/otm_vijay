@@ -10,8 +10,6 @@ use Dompdf\Options;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-use Carbon\Carbon;
-
 class InvoiceRepository
 {
     public readonly Invoice $invoice;
@@ -24,25 +22,25 @@ class InvoiceRepository
         $this->invoice = $invoice;
     }
 
-    private function getPuppeteerStream(): StreamedResponse
+    private function getPuppeteerStream(bool $asStream = true): StreamedResponse|string
     {
-        return puppeteer(view('pdf.invoices.columns', ['invoice' => $this->invoice,]));
+        return puppeteer(view('pdf.invoices.columns', ['invoice' => $this->invoice,]), $asStream);
     }
 
-     public function getResponseStream(): StreamedResponse
+     public function getResponseStream(bool $asStream = true): StreamedResponse|string
      {
          $style = (int)setting('invoice.style', 1);
          if ($style === 1) {
-             return $this->getPuppeteerStream();
+             return $this->getPuppeteerStream($asStream);
          } else {
              /** @noinspection PhpMatchExpressionWithOnlyDefaultArmInspection Will have more expressions in future, but not at the moment */
              return match ($style) {
-                 default => $this->getDomPDFStream(),
+                 default => $this->getDomPDFStream($asStream),
              };
          }
      }
 
-    public function getDomPDFStream(string $view = 'pdf.invoices.tax_invoice'): StreamedResponse
+    public function getDomPDFStream(bool $asStream = true, string $view = 'pdf.invoices.tax_invoice'): StreamedResponse|string
     {
         $dompdf = new Dompdf((new Options())->set('dpi', 96)->set('isHtml5ParserEnabled', true));
         $dompdf->setPaper('A4', 'portrait');
@@ -50,7 +48,7 @@ class InvoiceRepository
         $dompdf->loadHtml(view($view, ['invoice' => $this->invoice,])->render());
         $dompdf->render();
 
-        return dompdf(view($view, ['invoice' => $this->invoice,]));
+        return dompdf(view($view, ['invoice' => $this->invoice,]), $asStream);
     }
 
     /**
@@ -72,99 +70,28 @@ class InvoiceRepository
         if ($this->invoice->groups) {
             foreach ($this->invoice->groups as $group) {
                 foreach ($group->billables as $billable) {
-                    $qBillable = $accom_data->get($billable->shared_key, new QuantityBillable($billable->description, $billable->shared_key, $billable->amount, $billable->is_base));
-                    $accom_data->put($billable->shared_key, $qBillable->addQuantity());
-                    if (strpos($billable->shared_key, "transport") !== false) {
-                        $billable->description = $this->transportDescriptionFormat($billable->description);
-                    }
+                    $qBillable = $data->get($billable->shared_key, new QuantityBillable($billable->description, $billable->shared_key, $billable->amount, $billable->is_base));
+                    $data->put($billable->shared_key, $qBillable->addQuantity());
+                    $billable->description = $this->accommodationDescriptionFormat($billable->description);
                 }
             }
-            $accom_data = $this->mergeBillablesByQuantity($accom_data);
+            $data = $data->sortBy(function ($billable) {
+                preg_match('/\((\d{2}\/\d{2}\/\d{4}) to (\d{2}\/\d{2}\/\d{4})\)/', $billable->description, $matches);
+                return $matches ? \Carbon\Carbon::createFromFormat('d/m/Y', $matches[1]) : null;
+            });
         }
-        $merged_data = $data->merge($accom_data);
-        return $merged_data;
+        return $data;
     }
 
-    public function mergeBillablesByQuantity(Collection $items): Collection
+    public function accommodationDescriptionFormat($description)
     {
-        $merged_items = collect();
-        $previous_item = null;
-
-        foreach ($items->sortBy(fn($item) => $this->extractCheckInDate($item->description)) as $item) {
-            if ($previous_item && $this->canMerge($previous_item, $item)) {
-                preg_match('/\((\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2})\)/', $previous_item->description, $prev_matches);
-                preg_match('/\((\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}) to (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2})\)/', $item->description, $curr_matches);
-
-                if ($prev_matches && $curr_matches) {
-                    $new_description = str_replace($prev_matches[0], "({$prev_matches[1]} {$prev_matches[2]} to {$curr_matches[3]} {$curr_matches[4]})", $previous_item->description);
-                    $previous_item->description = $new_description;
-                    //$previous_item->setQuantity($previous_item->getQuantity() + $item->getQuantity());
-                }
-            } else {
-                if ($previous_item) {
-                    $merged_items->push($previous_item);
-                }
-                $previous_item = clone $item;
-            }
+        if (preg_match('/\((\d{2}\/\d{2}\/\d{4}) \d{2}:\d{2} to (\d{2}\/\d{2}\/\d{4}) \d{2}:\d{2}\)/', $description, $matches)) {
+            $startDate = $matches[1];
+            $endDate = $matches[2];
+            $description = preg_replace('/\(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2} to \d{2}\/\d{2}\/\d{4} \d{2}:\d{2}\)/', "($startDate to $endDate)", $description);
         }
-
-        if ($previous_item) {
-            $merged_items->push($previous_item);
-        }
-        return $merged_items;
+        return $description;
     }
-
-    /**
-     * Checks if two billable items can be merged.
-     */
-    private function canMerge($item1, $item2): bool
-    {
-        return $this->extractHotelName($item1->description) === $this->extractHotelName($item2->description)
-            && $this->extractRoomType($item1->description) === $this->extractRoomType($item2->description)
-            && $this->extractCheckOutDate($item1->description) === $this->extractCheckInDate($item2->description);
-    }
-
-    /**
-     * Extract hotel name from description.
-     */
-    private function extractHotelName($description): string
-    {
-        return trim(explode("(", $description)[0]);
-    }
-
-    /**
-     * Extract check-in date from description.
-     */
-    private function extractCheckInDate($description): ?string
-    {
-        if (preg_match('/\((\d{2}\/\d{2}\/\d{4}) \d{2}:\d{2} to/', $description, $matches)) {
-            return $matches[1];
-        }
-        return null;
-    }
-
-    /**
-     * Extract check-out date from description.
-     */
-    private function extractCheckOutDate($description): ?string
-    {
-        if (preg_match('/to (\d{2}\/\d{2}\/\d{4}) \d{2}:\d{2}\)/', $description, $matches)) {
-            return $matches[1];
-        }
-        return null;
-    }
-
-    /**
-     * Extract room type from description.
-     */
-    private function extractRoomType($description): string
-    {
-        if (preg_match('/\)([^)]+)$/', $description, $matches)) {
-            return trim($matches[1]);
-        }
-        return '';
-    }
-
     public function transportDescriptionFormat($invoice_description)
     {
         $description = preg_replace('/\([^)]+ to [^)]+\)/', '', $invoice_description, 1);

@@ -41,6 +41,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Address $address
  * @property-read Currency|null $currency
  * @property-read AccommodationRepository $repository
+ * @property-read AccommodationType $accommodationType
  * @property-read Collection|AccommodationInventory[] $inventory List of inventory items for this accommodation
  * @property-read int|null $inventory_count
  * @method static AccommodationFactory factory(...$parameters)
@@ -58,6 +59,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @method static Builder|Accommodation whereImageUrl($value)
  * @method static Builder|Accommodation whereName($value)
  * @method static Builder|Accommodation whereUpdatedAt($value)
+ * @method static Builder|Accommodation whereAccommodationTypeId($value)
  * @method static QueryBuilder|Accommodation withTrashed()
  * @method static QueryBuilder|Accommodation withoutTrashed()
  * @mixin Eloquent
@@ -113,5 +115,10 @@ class Accommodation extends Model
     public function __toString(): string
     {
         return $this->repository->__toString();
+    }
+
+    public function accommodationType(): BelongsTo
+    {
+        return $this->belongsTo(AccommodationType::class, 'accommodation_type_id');
     }
 }

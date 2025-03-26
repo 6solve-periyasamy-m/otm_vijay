@@ -57,6 +57,8 @@ class TourController extends Controller
             'transport_stock_control' => $request->input('transport_stock_control') === 'on' ? 1 : 0,
             'merchandise_stock_control' => $request->input('merchandise_stock_control') === 'on' ? 1 : 0,
             'terms' => $request->input('terms'),
+            'city' => $request->input('city'),
+            'country_id' => $request->input('country_id'),
         ]);
         $tour->repository->cloneFromDefaultInstallments();
         return redirect()->route('tours.view', ['tour' => $tour,]);
@@ -142,6 +144,8 @@ class TourController extends Controller
             'merchandise_stock_control' => $request->input('merchandise_stock_control') === 'on' ? 1 : 0,
             'terms' => $request->input('terms'),
             'final_payment' => $request->input('final_payment'),
+            'city' => $request->input('city'),
+            'country_id' => $request->input('country_id'),
         ]);
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }

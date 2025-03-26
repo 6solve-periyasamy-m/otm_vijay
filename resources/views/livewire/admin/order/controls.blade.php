@@ -27,6 +27,13 @@
                     </x-admin.popup-button>
                 @endif
                 {{-- Email Sending --}}
+                @if((config('app.features.kpt', false) || config('app.features.bleeding-edge')) && flag('reservation.invoice.mail.enabled', false))
+                    <x-admin.popup-button href="#" onclick="event.preventDefault(); if(confirm('Are you sure you want to send the Reservation document to email?')) { Livewire.emit('sendReservationToEmail'); }" class="color-mint row-4">
+                        <x-slot:icon>{{ Icon::email() }}</x-slot:icon>
+                        Send Reservation Document
+                    </x-admin.popup-button>
+                @endif
+
                 <x-admin.popup-button href="#" onclick="event.preventDefault(); if(confirm('Are you sure you want to send the booking confirmation email?')) { Livewire.emit('sendBookingConfirmation'); }" class="color-mint row-4">
                     <x-slot:icon>{{ Icon::email() }}</x-slot:icon>
                     Send Booking Confirmation

@@ -32,6 +32,9 @@
                 <livewire:admin.accommodation.room-category.table />
             </x-admin.section.card>
         </div>
+        <div class="col-xl-4">
+            @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Accommodation\AccommodationTypeRepository::class])
+        </div>
     </div>
     <div class="card">
         <div class="card-body" data-target="#activity" onclick="toggleAccordion(this)">
