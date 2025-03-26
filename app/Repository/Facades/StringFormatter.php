@@ -17,7 +17,7 @@ class StringFormatter
         if ($currentCurrency !== $toCurrency) {
             $rate = $conversion ?? \Settings::getConversionRate($currentCurrency, $toCurrency);
             if ($rate !== null && $rate != 1) {
-                return $this->currency($value, $currentCurrency)  . " (" . $this->currency(sigfig($value * $rate), $toCurrency) . ")";
+                return $this->currency(sigfig($value * $rate), $toCurrency)  . " (" . $this->currency($value, $currentCurrency) . ")";
             }
         }
         return $this->currency($value, $currentCurrency);

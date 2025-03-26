@@ -53,7 +53,8 @@ class Form extends Component
             $this->quote->currency_id !== null ||
             Quote::find($this->quote->id)?->currency_id !== $this->quote->currency_id)
         {
-            $this->quote->conversion = Settings::getConversionRate($this->quote->currency, Settings::currency());
+            $this->quote->from_rate = Settings::getConversionRate($this->quote->currency, Settings::currency());
+            $this->quote->to_rate = Settings::getConversionRate(Settings::currency(), $this->quote->currency);
         }
         $this->quote->save();
 

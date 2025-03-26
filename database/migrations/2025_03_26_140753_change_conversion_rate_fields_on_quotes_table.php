@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('quotes', static function (Blueprint $table) {
-            $table->decimal('conversion', 8, 2)->nullable();
+        Schema::table('quotes', function (Blueprint $table) {
+            $table->renameColumn('conversion', 'from_rate');
+            $table->decimal('to_rate', 8, 2)->nullable();
         });
     }
 
@@ -21,8 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('quotes', static function (Blueprint $table) {
-            $table->dropColumn('conversion');
+        Schema::table('quotes', function (Blueprint $table) {
+            $table->renameColumn('from_rate', 'conversion');
+            $table->dropColumn('to_rate');
         });
     }
 };

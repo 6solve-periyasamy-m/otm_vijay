@@ -78,7 +78,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             ...$data,
         ]);
         if ($quote->currency !== null) {
-            $quote->conversion = Settings::getConversionRate($quote->currency, Settings::currency());
+            $quote->from_rate = Settings::getConversionRate($quote->currency, Settings::currency());
+            $quote->to_rate = Settings::getConversionRate(Settings::currency(), $quote->currency);
         }
         $lead = $quote->repository->createProspect($customer, $leadData);
         $quote->lead_traveller_id = $lead->id;

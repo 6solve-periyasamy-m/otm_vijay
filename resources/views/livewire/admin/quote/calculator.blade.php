@@ -143,20 +143,24 @@
                 <div class="col-4">
                     <button class="btn btn-info" wire:click="calculate">{{ Icon::refresh() }} Refresh Data</button>
                 </div>
-                @if(!($adjust ?? false))
-                <div class="col-8 row">
-                    <x-livewire.input width="8" wire:model="conversion" label="Conversion Rate" disabled />
-                    <div class="col-4">
-                        <button class="btn btn-warning" wire:click="enableEditing">Adjust</button>
-                    </div>
-                </div>
-                @else
+                @if($quote->currency !== null)
+                    @if(!($adjust ?? false))
                     <div class="col-8 row">
-                        <x-livewire.input width="8" wire:model="conversion" label="Conversion Rate" />
+                        <x-livewire.input width="4" wire:model="fromRate" label="From {{$quote->currency?->code}}" disabled />
+                        <x-livewire.input width="4" wire:model="toRate" label="To {{$quote->currency?->code}}" disabled />
                         <div class="col-4">
-                            <button class="btn btn-success" wire:click="saveConversion">Save</button>
+                            <button class="btn btn-warning" wire:click="enableEditing">Adjust</button>
                         </div>
                     </div>
+                    @else
+                        <div class="col-8 row">
+                            <x-livewire.input width="4" wire:model="fromRate" label="From {{$quote->currency?->code}}" />
+                            <x-livewire.input width="4" wire:model="toRate" label="To {{$quote->currency?->code}}" />
+                            <div class="col-4">
+                                <button class="btn btn-success" wire:click="saveConversion">Save</button>
+                            </div>
+                        </div>
+                    @endif
                 @endif
             </div>
             <div class="col-6">
@@ -175,7 +179,7 @@
                     <div class="col-6">
                         <x-admin.section.otm-text class="cost-updater">
                             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.taxes') }}</x-slot:header>
-                            {{ f_currency($taxes, $quote->currency, $conversion, Settings::currency()) }}
+                            {{ f_currency($taxes, $quote->currency, $fromRate, Settings::currency()) }}
                         </x-admin.section.otm-text>
                     </div>
                     @endif
@@ -191,7 +195,7 @@
                     <div class="col-3">
                         <x-admin.section.otm-text class="cost-updater">
                             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.cost') }}</x-slot:header>
-                            {{ f_currency($total, $quote->currency, $conversion, Settings::currency()) }}
+                            {{ f_currency($total, $quote->currency, $fromRate, Settings::currency()) }}
                         </x-admin.section.otm-text>
                     </div>
                     @endif
@@ -199,14 +203,14 @@
                     <div class="col-3">
                         <x-admin.section.otm-text class="cost-updater">
                             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.commission') }}</x-slot:header>
-                            {{ f_currency($commission, $quote->currency, $conversion, Settings::currency()) }}
+                            {{ f_currency($commission, $quote->currency, $fromRate, Settings::currency()) }}
                         </x-admin.section.otm-text>
                     </div>
                     @endif
                     <div class="col-3">
                         <x-admin.section.otm-text class="cost-updater">
                             <x-slot:header>{{ __('quotes.view.cards.quick.calculator.final') }}</x-slot:header>
-                            {{ f_currency($toBePaid, $quote->currency, $conversion, Settings::currency()) }}
+                            {{ f_currency($toBePaid, $quote->currency, $fromRate, Settings::currency()) }}
                         </x-admin.section.otm-text>
                     </div>
                 </div>

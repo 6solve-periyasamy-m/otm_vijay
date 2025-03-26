@@ -58,7 +58,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon $date_from
  * @property Carbon $date_to
  * @property string $terms
- * @property float|null $conversion
+ * @property float|null $from_rate
+ * @property float|null $to_rate
  * @property string $invoice_footer
  * @property int $paying Cached paying value
  * @property int $travelling Cached travelling value
@@ -144,7 +145,8 @@ class Quote extends Model
         'final_payment' => 'date:Y-m-d',
         'sent' => 'datetime',
         'quote_status' => QuoteStatus::class,
-        'conversion' => 'float',
+        'from_rate' => 'float',
+        'to_rate' => 'float',
     ];
     private QuoteRepository $internal_repository;
     protected array $cascadeDeletes = ['sentQuotes', 'leadTraveller', 'pricePoints', 'installments', 'accommodation', 'activities', 'flights', 'transport', 'merchandise', 'costs'];
