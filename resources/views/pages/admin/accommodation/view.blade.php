@@ -57,6 +57,21 @@
             </div>
         </div>
     </div>
+
+    @if($accommodation && $accommodation->gallery && $accommodation->gallery->isNotEmpty())
+    <x-admin.section.card>
+        <x-slot:title>
+            Gallery
+        </x-slot:title>
+        <div class="row">
+            @foreach($accommodation->gallery as $image)
+                <div class="col-md-2 col-sm-4 col-6 mb-3">
+                    <img src="{{ asset($image->file_path) }}" class="img-thumbnail w-100 h-100 object-fit-cover" >
+                </div>
+            @endforeach
+        </div>
+    </x-admin.section.card>
+    @endif
 @endsection
 
 @section('inventory')

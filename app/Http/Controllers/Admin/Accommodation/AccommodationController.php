@@ -51,6 +51,15 @@ class AccommodationController extends Controller
 
         $accommodation->address_id = $address->id;
         $accommodation->save();
+        if ($request->hasFile('gallery')) {
+            foreach ($request->file('gallery') as $image) {
+                $path = $image->storePublicly('uploads/images');
+                $accommodation->media()->create([
+                    'file_path' => $path,
+                    'type' => 'gallery',
+                ]);
+            }
+        }
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 
@@ -103,6 +112,16 @@ class AccommodationController extends Controller
             $accommodation->image_url = $request->file('image')->storePublicly('uploads/images');
         }
         $accommodation->save();
+        if ($request->hasFile('gallery')) {
+            $accommodation->gallery()->delete();
+            foreach ($request->file('gallery') as $image) {
+                $path = $image->storePublicly('uploads/images');
+                $accommodation->media()->create([
+                    'file_path' => $path,
+                    'type' => 'gallery',
+                ]);
+            }
+        }
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 }
