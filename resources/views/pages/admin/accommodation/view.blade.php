@@ -67,7 +67,7 @@
                     <div class="col-md-3 col-sm-4 col-6 mb-3">
                         <div class="d-flex align-items-center border rounded overflow-hidden p-3">
                             @if($item->image_url && !empty($item->image_url))
-                                <img src="{{ asset($item->image_url) }}" class="img-fluid rounded me-3" style="max-width: 50px; max-height: 50px;" alt="{{ $item->name }}">
+                                <img src="{{ asset($item->image_url) }}" class="img-fluid rounded me-3" style="max-width: 24px; max-height: 24px;" alt="{{ $item->name }}">
                             @endif 
                             <div><h5 class="mb-0">{{ $item->name }}</h5></div>
                         </div>
