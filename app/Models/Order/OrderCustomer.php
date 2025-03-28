@@ -61,6 +61,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read string $booking_reference The booking reference of the order
  * @property-read string $customer_name The full name of the customer
  * @property-read string $tour_name The name of the tour the order is for
+ * @property-read string $event_name The name of the tour the order is for
  * @property-read bool $has_surcharge Whether the customer should be charged for single occupancy
  * @property-read bool $is_lead_booker Whether the customer is the lead booker
  * @property-read bool $cancelled Whether the customer is cancelled
@@ -191,19 +192,24 @@ class OrderCustomer extends Model
 
     public function getTourNameAttribute(): string
     {
-        return $this->order->tour->name;
+        return $this->order?->tour?->name;
+    }
+
+    public function getEventNameAttribute(): string
+    {
+        return $this->order?->tour?->event?->name;
     }
 
     public function getLeadBookerNameAttribute(): string
     {
         if ($this->order->leadBooker->customer === null) return "Lead Booker Unknown";
-        return "{$this->order->leadBooker->customer->first_name} {$this->order->leadBooker->customer->last_name}";
+        return "{$this->order->leadBooker?->customer?->first_name} {$this->order->leadBooker?->customer?->last_name}";
     }
 
     public function getCustomerNameAttribute(): string
     {
         if ($this->customer === null) return "Customer Unknown";
-        return "{$this->customer->first_name} {$this->customer->last_name}";
+        return "{$this->customer?->first_name} {$this->customer?->last_name}";
     }
 
     public function getIsLeadBookerAttribute(): bool
