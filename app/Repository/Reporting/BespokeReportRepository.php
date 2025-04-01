@@ -193,7 +193,7 @@ class BespokeReportRepository
     private static function processLower($row, $parent, array $used, array $available, bool $format = false): array
     {
         $data = [];
-        $objParent = $row->{$parent};
+        $objParent = $row?->{$parent};
         foreach ($available as $key => $info) {
             if (in_array($key, $used)) {
                 $field = 'Not Set';
