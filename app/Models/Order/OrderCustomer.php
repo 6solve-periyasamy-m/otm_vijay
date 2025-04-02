@@ -192,12 +192,12 @@ class OrderCustomer extends Model
 
     public function getTourNameAttribute(): string
     {
-        return $this->order?->tour?->name;
+        return $this->order?->tour?->name ?? "";
     }
 
     public function getEventNameAttribute(): string
     {
-        return $this->order?->tour?->event?->name;
+        return $this->order?->tour?->event?->name ?? "";
     }
 
     public function getLeadBookerNameAttribute(): string
