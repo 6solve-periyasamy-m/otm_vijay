@@ -38,18 +38,20 @@ class Form extends Component
 
         if ($this->quote->date_from) {
             $this->minToDate = Carbon::parse($this->quote->date_from)->subDay()->toDateString();
-            $this->maxFinalDate = Carbon::parse($this->quote->date_from)->toDateString();
+            $this->maxFinalDate = Carbon::parse($this->quote->date_from)->subDay()->toDateString();
         }
     }
 
     public function updatedQuoteDateFrom($value)
     {
         if ($value) {
+            $dateFrom = Carbon::parse($value);
+            $today = Carbon::today();
             $this->quote->date_to = $value;
-            $this->minToDate = Carbon::parse($value)->subDay()->toDateString();
-            $this->maxFinalDate = Carbon::parse($value)->toDateString();
-            $this->emit('toDateChanged', $this->minToDate, $value);
-            $this->emit('finalDateChanged', $this->maxFinalDate, $value);
+            $this->minToDate = $dateFrom->isAfter($today) ? $dateFrom->toDateString() : $today->toDateString();
+            $this->maxFinalDate = $dateFrom->subDay()->toDateString();
+            //$this->emit('toDateChanged', $this->minToDate, $value);
+            //$this->emit('finalDateChanged', $this->maxFinalDate, $value);
         }
     }
 

@@ -58,29 +58,3 @@
         </div>
     </x-admin.section.card>
 </div>
-<script>
-    document.addEventListener('livewire:load', function () {
-        Livewire.on('toDateChanged', (minDate, dateFrom) => {
-            const endDate = document.querySelector('input[wire\\:model\\.defer="quote.date_to"]');
-            if (endDate) {
-                endDate.min = minDate;
-                endDate.value = dateFrom;
-                const date = new Date(dateFrom);
-                endDate.focus();
-                endDate.setAttribute('value', date.toISOString().split('T')[0]);
-            }
-        });
-
-        Livewire.on('finalDateChanged', (maxDate, dateFrom) => {
-            const finalPaymentDate = document.querySelector('input[wire\\:model\\.defer="quote.final_payment"]');
-            if (finalPaymentDate) {
-                finalPaymentDate.max = maxDate;
-                finalPaymentDate.value = dateFrom;
-                const date = new Date(dateFrom);
-                finalPaymentDate.focus();
-                finalPaymentDate.setAttribute('value', date.toISOString().split('T')[0]);
-            }
-        });
-
-    });
-</script>
