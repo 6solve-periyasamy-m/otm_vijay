@@ -32,11 +32,11 @@
         </div>
     </x-admin.section.card>
     <x-admin.section.card>
-        <div class="row">
-            <x-livewire.input type="date" wire:model="quote.date_from" label="Date From" width="3" required />
-            <x-livewire.input type="date" wire:model="quote.date_to" label="Date To" width="3" required />
-            <x-livewire.input type="date" wire:model="quote.final_payment" label="Final Payment" width="3" required />
-            <x-livewire.input type="date" wire:model="quote.expires" label="Quote Expiry Date" width="3" required />
+        <div class="row">            
+            <x-livewire.input type="date" wire:model="quote.date_from" wire:change="updatedQuoteDateFrom" label="Date From" width="3" required id="date_from"  min="{{ now()->format('Y-m-d') }}" />            
+            <x-livewire.input type="date" wire:model="quote.date_to" label="Date To" width="3" required id="date_to" :min="$minToDate"  />
+            <x-livewire.input type="date" wire:model="quote.final_payment" label="Final Payment" width="3" required id="final_payment"  :max="$maxFinalDate"  />
+            <x-livewire.input type="date" wire:model="quote.expires" label="Quote Expiry Date" width="3" required min="{{ now()->format('Y-m-d') }}" />
         </div>
     </x-admin.section.card>
     <x-admin.section.card>
@@ -58,3 +58,29 @@
         </div>
     </x-admin.section.card>
 </div>
+<script>
+    document.addEventListener('livewire:load', function () {
+        Livewire.on('toDateChanged', (minDate, dateFrom) => {
+            const endDate = document.querySelector('input[wire\\:model\\.defer="quote.date_to"]');
+            if (endDate) {
+                endDate.min = minDate;
+                endDate.value = dateFrom;
+                const date = new Date(dateFrom);
+                endDate.focus();
+                endDate.setAttribute('value', date.toISOString().split('T')[0]);
+            }
+        });
+
+        Livewire.on('finalDateChanged', (maxDate, dateFrom) => {
+            const finalPaymentDate = document.querySelector('input[wire\\:model\\.defer="quote.final_payment"]');
+            if (finalPaymentDate) {
+                finalPaymentDate.max = maxDate;
+                finalPaymentDate.value = dateFrom;
+                const date = new Date(dateFrom);
+                finalPaymentDate.focus();
+                finalPaymentDate.setAttribute('value', date.toISOString().split('T')[0]);
+            }
+        });
+
+    });
+</script>

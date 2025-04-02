@@ -11,6 +11,7 @@ use App\Models\System\LargeTextTemplate;
 use App\Models\Customer\Agent;
 use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
+use Carbon\Carbon;
 
 class Form extends Component
 {
@@ -21,6 +22,8 @@ class Form extends Component
     public float|null $price = null;
     public int|null $footerTemplate = null;
     public int|null $termsTemplate = null;
+    public $minToDate;
+    public $maxFinalDate;
 
     public function mount(Quote|int|null $quote): void
     {
@@ -32,6 +35,22 @@ class Form extends Component
         $this->quote->expires = $this->quote->expires ?? now()->addDays((int)setting('system.quote.expiry', null));
         $this->prospect->travelling = $this->prospect->travelling ?? true;
         $this->prospect->paying = $this->prospect->paying ?? true;
+
+        if ($this->quote->date_from) {
+            $this->minToDate = Carbon::parse($this->quote->date_from)->subDay()->toDateString();
+            $this->maxFinalDate = Carbon::parse($this->quote->date_from)->toDateString();
+        }
+    }
+
+    public function updatedQuoteDateFrom($value)
+    {
+        if ($value) {
+            $this->quote->date_to = $value;
+            $this->minToDate = Carbon::parse($value)->subDay()->toDateString();
+            $this->maxFinalDate = Carbon::parse($value)->toDateString();
+            $this->emit('toDateChanged', $this->minToDate, $value);
+            $this->emit('finalDateChanged', $this->maxFinalDate, $value);
+        }
     }
 
     public function save()
@@ -124,7 +143,7 @@ class Form extends Component
             'prospect.travelling' => 'nullable|boolean',
             'quote.date_from' => 'required|date',
             'quote.date_to' => 'required|date|after:quote.date_from',
-            'quote.final_payment' => 'required|date',
+            'quote.final_payment' => 'required|date|before_or_equal:quote.date_from',
             'quote.expires' => 'required|date',
             'quote.internal_notes' => 'nullable|string|min:3',
             'quote.external_notes' => 'nullable|string|min:3',
