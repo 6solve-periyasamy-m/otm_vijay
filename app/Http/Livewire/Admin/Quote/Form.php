@@ -50,8 +50,6 @@ class Form extends Component
             $this->quote->date_to = $value;
             $this->minToDate = $dateFrom->isAfter($today) ? $dateFrom->toDateString() : $today->toDateString();
             $this->maxFinalDate = $dateFrom->subDay()->toDateString();
-            //$this->emit('toDateChanged', $this->minToDate, $value);
-            //$this->emit('finalDateChanged', $this->maxFinalDate, $value);
         }
     }
 
