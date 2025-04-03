@@ -144,7 +144,15 @@ class Form extends Component
             'quote.date_from' => 'required|date',
             'quote.date_to' => 'required|date|after:quote.date_from',
             'quote.final_payment' => 'required|date|before_or_equal:quote.date_from',
-            'quote.expires' => 'required|date',
+            'quote.expires' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) {
+                    if ($this->quote['date_from'] && strtotime($value) > strtotime($this->quote['date_from'])) {
+                        $fail('The expiration date must be before date from.');
+                    }
+                }
+            ],
             'quote.internal_notes' => 'nullable|string|min:3',
             'quote.external_notes' => 'nullable|string|min:3',
             'quote.terms' => 'required|string|min:3',
