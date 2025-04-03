@@ -57,6 +57,25 @@
             </div>
         </div>
     </div>
+    @if($accommodation && $accommodation->amenities && $accommodation->amenities->isNotEmpty())
+        <x-admin.section.card>
+            <x-slot:title>
+                Amenities
+            </x-slot:title>
+            <div class="row">
+                @foreach($accommodation->amenities as $item)
+                    <div class="col-md-3 col-sm-4 col-6 mb-3">
+                        <div class="d-flex align-items-center border rounded overflow-hidden p-3">
+                            @if($item->image_url && !empty($item->image_url))
+                                <img src="{{ asset($item->image_url) }}" class="img-fluid rounded me-3" style="max-width: 24px; max-height: 24px;" alt="{{ $item->name }}">
+                            @endif 
+                            <div><h5 class="mb-0">{{ $item->name }}</h5></div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </x-admin.section.card>
+    @endif
 @endsection
 
 @section('inventory')
