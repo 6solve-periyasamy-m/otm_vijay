@@ -4,7 +4,12 @@ use App\Models\Location\Currency;
 
 if (!function_exists('f_currency')) {
     /**
-     * Alias for StringFormatter::formatCurrency
+     * Alias for StringFormatter::formatCurrency.
+     *
+     * Formats a number as a specific currency, performing conversion where required, and displaying both the original and converted values
+     *
+     * ex. $100 (£75)
+     *
      * @param float|null $amount
      * @param Currency|string|null $currency
      * @param float|null $conversion
@@ -19,6 +24,9 @@ if (!function_exists('f_currency')) {
 if (!function_exists('fr_currency')) {
     /**
      * Format a number as a specific currency. Does no conversion, just outputs a string
+     *
+     * ex. $100
+     *
      * @param float|null $amount The amount to be formatted
      * @param Currency|string|null $currency The currency to format in
      * @return string
