@@ -20,6 +20,8 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Models\Media;
 use App\Models\Accommodation\Amenity;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -87,6 +89,8 @@ class Accommodation extends Model
             'image' => 'nullable|image',
             'address_name' => 'required_unless:use_existing,on',
             'address_id' => 'required_if:use_existing,on',
+            'gallery' => 'nullable|array',
+            'gallery.*' => 'image|max:2048',
             'amenities' => 'array',
             'amenities.*' => 'exists:amenities,id',
         ];
@@ -126,6 +130,16 @@ class Accommodation extends Model
     public function accommodationType(): BelongsTo
     {
         return $this->belongsTo(AccommodationType::class, 'accommodation_type_id');
+    }
+
+    public function media(): MorphMany
+    {
+        return $this->morphMany(Media::class, 'mediable');
+    }
+
+    public function gallery(): MorphMany
+    {
+        return $this->media()->where('type', 'gallery');
     }
 
     public function amenities()

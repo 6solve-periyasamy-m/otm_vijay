@@ -57,6 +57,21 @@
             </div>
         </div>
     </div>
+
+    @if($accommodation && $accommodation->gallery && $accommodation->gallery->isNotEmpty())
+    <x-admin.section.card>
+        <x-slot:title>
+            Gallery
+        </x-slot:title>
+        <div class="row">
+            @foreach($accommodation->gallery as $image)
+                <div class="col-md-2 col-sm-4 col-6 mb-3">
+                    <img src="{{ asset($image->file_path) }}" class="img-thumbnail w-100 h-100 object-fit-cover" >
+                </div>
+            @endforeach
+        </div>
+    </x-admin.section.card>
+    @endif
     @if($accommodation && $accommodation->amenities && $accommodation->amenities->isNotEmpty())
         <x-admin.section.card>
             <x-slot:title>
@@ -68,7 +83,7 @@
                         <div class="d-flex align-items-center border rounded overflow-hidden p-3">
                             @if($item->image_url && !empty($item->image_url))
                                 <img src="{{ asset($item->image_url) }}" class="img-fluid rounded me-3" style="max-width: 24px; max-height: 24px;" alt="{{ $item->name }}">
-                            @endif 
+                            @endif
                             <div><h5 class="mb-0">{{ $item->name }}</h5></div>
                         </div>
                     </div>

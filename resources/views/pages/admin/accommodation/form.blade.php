@@ -21,6 +21,20 @@
     @include('partials.fields.date', ['name' => 'Audit Date', 'field' => 'audit_date', 'value' => $accommodation?->audit_date,])
     @include('partials.fields.datetime', ['name' => 'Default Check In', 'field' => 'check_in', 'value' => $accommodation?->check_in, 'width' => 6 ])
     @include('partials.fields.datetime', ['name' => 'Default Check In', 'field' => 'check_out', 'value' => $accommodation?->check_out, 'width' => 6 ])
+    {{-- Gallery Upload --}}
+    <div class="form-group col-md-12">
+        <label for="gallery">Gallery Images</label>
+        <input type="file" name="gallery[]" id="gallery" class="form-control" multiple>
+        @if($accommodation && $accommodation->gallery->isNotEmpty())
+            <div class="row">
+                @foreach($accommodation->gallery as $image)
+                    <div class="col-md-2 col-sm-4 col-6 mb-3">
+                       <img src="{{ asset($image->file_path) }}" class="img-thumbnail w-100 h-100 object-fit-cover" >
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
     <div class="form-group col-xl-9">
         @include('partials.fields.ckeditor', ['name' => 'Additional Description', 'field' => 'additional_description', 'value' => $accommodation?->additional_description,])
     </div>
