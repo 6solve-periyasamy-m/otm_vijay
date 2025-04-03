@@ -13,7 +13,7 @@ if (!function_exists('store_file')) {
      * @param string|null $old The storage location of the old file (if it needs deleting)
      * @return string The location of the stored file
      */
-    function store_file(UploadedFile $file, string $old = null): string
+    function store_file(UploadedFile $file, string|null $old = null): string
     {
         $path = $file->storePublicly('uploads/images');
         isset($old) && Storage::delete($old);

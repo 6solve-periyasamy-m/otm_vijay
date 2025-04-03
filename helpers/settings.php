@@ -34,7 +34,7 @@ if (!function_exists('fx_convert')) {
      * @param float|null $rate The conversion rate (will lookup if null)
      * @return float|null The converted amount
      */
-    function fx_convert(float|int|null $value, Currency|string|null $from = null, Currency|string|null $to = null, float $rate = null): float|null
+    function fx_convert(float|int|null $value, Currency|string|null $from = null, Currency|string|null $to = null, float|null $rate = null): float|null
     {
         if ($value === null) { return null; }
         if ($from === null) { return $value * ($rate ?? 1.0); }
