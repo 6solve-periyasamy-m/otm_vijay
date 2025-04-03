@@ -715,7 +715,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         }
         $cost_to_company = $cost_to_company ?? $this->getCostToCompany($recache);
         // If using conversion, then convert total
-        if ($this->order->currency !== null && $this->order->currency !== \Settings::currency()) {
+        if ($this->order->currency !== null && $this->order->currency !== Settings::currency()) {
             $fx = Settings::getConversionRate($this->order->currency, Settings::currency());
             if ($fx === null) { return null; }
             return ($this->order->total * $fx) - $cost_to_company;
