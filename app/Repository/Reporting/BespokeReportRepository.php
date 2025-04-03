@@ -89,20 +89,21 @@ class BespokeReportRepository
     {
         $rows = [];
         foreach (OrderAccommodation::all() as $row) {
-            foreach ($row->group->orderCustomers as $objParent) {
-                $objGrandparent = $objParent->customer;
+            foreach ($row?->group?->orderCustomers as $objParent) {
+                if ($objParent === null) { continue; }
+                $objGrandparent = $objParent?->customer;
                 $data = [];
                 foreach ($available as $key => $info) {
                     if (in_array($key, $used)) {
                         $field = 'Not Set';
                         if ($info->depth == 0) {
-                            $field = $objGrandparent->{$info->accessor};
+                            $field = $objGrandparent?->{$info->accessor};
                         }
                         if ($info->depth == 1) {
-                            $field = $objParent->{$info->accessor};
+                            $field = $objParent?->{$info->accessor};
                         }
                         if ($info->depth == 2) {
-                            $field = $row->{$info->accessor};
+                            $field = $row?->{$info->accessor};
                         }
                         if ($format) {
                             $field = self::format($field, $info->format);
@@ -150,8 +151,8 @@ class BespokeReportRepository
     private static function processLowest($row, $grandparent, $parent, array $used, array $available, bool $format = false): array
     {
         $data = [];
-        $objParent = $row->{$parent};
-        $objGrandparent = $objParent->{$grandparent};
+        $objParent = $row?->{$parent};
+        $objGrandparent = $objParent?->{$grandparent};
         foreach ($available as $key => $info) {
             if (in_array($key, $used)) {
                 $field = 'Not Set';
@@ -179,7 +180,7 @@ class BespokeReportRepository
         $data = [];
         foreach ($available as $key => $info) {
             if (in_array($key, $used)) {
-                $field = $row->{$info->accessor};
+                $field = $row?->{$info->accessor};
                 if ($format) {
                     $field = self::format($field, $info->format);
                 }
@@ -193,15 +194,15 @@ class BespokeReportRepository
     private static function processLower($row, $parent, array $used, array $available, bool $format = false): array
     {
         $data = [];
-        $objParent = $row->{$parent};
+        $objParent = $row?->{$parent};
         foreach ($available as $key => $info) {
             if (in_array($key, $used)) {
                 $field = 'Not Set';
                 if ($info->depth == 0) {
-                    $field = $objParent->{$info->accessor};
+                    $field = $objParent?->{$info->accessor};
                 }
                 if ($info->depth == 1) {
-                    $field = $row->{$info->accessor};
+                    $field = $row?->{$info->accessor};
                 }
                 if ($format) {
                     $field = self::format($field, $info->format);

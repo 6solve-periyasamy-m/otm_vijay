@@ -10,8 +10,6 @@ use Dompdf\Options;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-use Carbon\Carbon;
-
 class InvoiceRepository
 {
     public readonly Invoice $invoice;
@@ -24,25 +22,25 @@ class InvoiceRepository
         $this->invoice = $invoice;
     }
 
-    private function getPuppeteerStream(): StreamedResponse
+    private function getPuppeteerStream(bool $asStream = true): StreamedResponse|string
     {
-        return puppeteer(view('pdf.invoices.columns', ['invoice' => $this->invoice,]));
+        return puppeteer(view('pdf.invoices.columns', ['invoice' => $this->invoice,]), $asStream);
     }
 
-     public function getResponseStream(): StreamedResponse
+     public function getResponseStream(bool $asStream = true): StreamedResponse|string
      {
          $style = (int)setting('invoice.style', 1);
          if ($style === 1) {
-             return $this->getPuppeteerStream();
+             return $this->getPuppeteerStream($asStream);
          } else {
              /** @noinspection PhpMatchExpressionWithOnlyDefaultArmInspection Will have more expressions in future, but not at the moment */
              return match ($style) {
-                 default => $this->getDomPDFStream(),
+                 default => $this->getDomPDFStream($asStream),
              };
          }
      }
 
-    public function getDomPDFStream(string $view = 'pdf.invoices.tax_invoice'): StreamedResponse
+    public function getDomPDFStream(bool $asStream = true, string $view = 'pdf.invoices.tax_invoice'): StreamedResponse|string
     {
         $dompdf = new Dompdf((new Options())->set('dpi', 96)->set('isHtml5ParserEnabled', true));
         $dompdf->setPaper('A4', 'portrait');
@@ -50,7 +48,7 @@ class InvoiceRepository
         $dompdf->loadHtml(view($view, ['invoice' => $this->invoice,])->render());
         $dompdf->render();
 
-        return dompdf(view($view, ['invoice' => $this->invoice,]));
+        return dompdf(view($view, ['invoice' => $this->invoice,]), $asStream);
     }
 
     /**
@@ -74,15 +72,26 @@ class InvoiceRepository
                 foreach ($group->billables as $billable) {
                     $qBillable = $data->get($billable->shared_key, new QuantityBillable($billable->description, $billable->shared_key, $billable->amount, $billable->is_base));
                     $data->put($billable->shared_key, $qBillable->addQuantity());
-                    if (strpos($billable->shared_key, "transport") !== false) {
-                        $billable->description = $this->transportDescriptionFormat($billable->description);
-                    }
+                    $billable->description = $this->accommodationDescriptionFormat($billable->description);
                 }
             }
+            $data = $data->sortBy(function ($billable) {
+                preg_match('/\((\d{2}\/\d{2}\/\d{4}) to (\d{2}\/\d{2}\/\d{4})\)/', $billable->description, $matches);
+                return $matches ? \Carbon\Carbon::createFromFormat('d/m/Y', $matches[1]) : null;
+            });
         }
         return $data;
     }
 
+    public function accommodationDescriptionFormat($description)
+    {
+        if (preg_match('/\((\d{2}\/\d{2}\/\d{4}) \d{2}:\d{2} to (\d{2}\/\d{2}\/\d{4}) \d{2}:\d{2}\)/', $description, $matches)) {
+            $startDate = $matches[1];
+            $endDate = $matches[2];
+            $description = preg_replace('/\(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2} to \d{2}\/\d{2}\/\d{4} \d{2}:\d{2}\)/', "($startDate to $endDate)", $description);
+        }
+        return $description;
+    }
     public function transportDescriptionFormat($invoice_description)
     {
         $description = preg_replace('/\([^)]+ to [^)]+\)/', '', $invoice_description, 1);
