@@ -119,6 +119,8 @@ class Controls extends ModalComponent
         }
         if ($success) {
             $title = $this->getInstallmentTitle($installment);
+            $this->order->last_manual_reminder = now();
+            $this->order->save();
             $this->toast('Mail Sent Successfully', "Successfully sent the {$title} mail", 'success');
         } else {
             $this->toast('Mail Failed To Send', 'Please try again later', 'danger');
