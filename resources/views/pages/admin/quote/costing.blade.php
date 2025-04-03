@@ -150,10 +150,10 @@ $profit -= ($commission ?? 0.0)
                                 <input type="hidden" name="per_customer" value="1" />
                             </form>
                             <td>
-                                <a href="javascript:$('.cost-edit-{{$cost->id}}').submit()" class="btn btn-outline-success btn-sm mb-1">
+                                <a href="javascript:$('.cost-edit-{{$cost->id}}').submit()" class="btn btn-outline-success btn-sm mb-1" title="Edit cost">
                                     {{ Icon::edit() }}
                                 </a>
-                                <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
+                                <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1" title="Delete cost">
                                     {{ Icon::delete() }}
                                 </a>
                                 <form id="cost-{{ $cost->id }}-delete" action="{{ route('additional-cost.delete', ['cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
@@ -237,10 +237,10 @@ $profit -= ($commission ?? 0.0)
                                 <input type="hidden" name="per_customer" value="0" />
                             </form>
                             <td>
-                                <a href="javascript:$('.cost-edit-{{$cost->id}}').submit()" class="btn btn-outline-success btn-sm mb-1">
+                                <a href="javascript:$('.cost-edit-{{$cost->id}}').submit()" class="btn btn-outline-success btn-sm mb-1" title="Edit cost">
                                     {{ Icon::edit() }}
                                 </a>
-                                <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
+                                <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1" title="Delete cost">
                                     {{ Icon::delete() }}
                                 </a>
                                 <form id="cost-{{ $cost->id }}-delete" action="{{ route('additional-cost.delete', ['cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
