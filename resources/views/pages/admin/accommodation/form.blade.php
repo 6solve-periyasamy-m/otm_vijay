@@ -7,6 +7,7 @@
     $route = $accommodation === null ?
         route('accommodations.store') :
         route('accommodations.update', ['accommodation' => $accommodation,]);
+        $selected_amenities = $accommodation ? $accommodation->amenities->pluck('id')->toArray() : [];
 @endphp
 
 @extends('layout.form', ['action' => $route, 'multipart' => true,])
@@ -48,6 +49,8 @@
                         'route' => 'accommodation-types',])
         @endcan
     </div>
+
+    @include('partials.fields.checkbox-multiselect', ['name' => 'Amenities', 'field' => 'amenities', 'options' => \App\Models\Accommodation\Amenity::pluck('name', 'id')->toArray(), 'selected' => $selected_amenities, ])
     @include('partials.fields.prefab.addresses.switcher', ['address' => $accommodation?->address,])
     <x-livewire.input.select.currency name="currency_id" label="Currency" value="{{$accommodation?->currency_id}}" />
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'notes', 'value' => $accommodation?->internal_notes])

@@ -22,6 +22,8 @@ use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Models\Media;
+use App\Models\Accommodation\Amenity;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Accommodation\Accommodation
@@ -45,6 +47,7 @@ use App\Models\Media;
  * @property-read AccommodationRepository $repository
  * @property-read AccommodationType $accommodationType
  * @property-read Collection|AccommodationInventory[] $inventory List of inventory items for this accommodation
+ * @property-read Collection|Amenity[] $amenities
  * @property-read int|null $inventory_count
  * @method static AccommodationFactory factory(...$parameters)
  * @method static Builder|Accommodation newModelQuery()
@@ -75,6 +78,7 @@ class Accommodation extends Model
     protected $casts = ['audit_date' => 'date','check_in' => 'datetime','check_out' => 'datetime',];
 
     private AccommodationRepository $internal_repository;
+    protected $with = ['amenities'];
 
     public static function getValidationRules(): array
     {
@@ -86,7 +90,9 @@ class Accommodation extends Model
             'address_name' => 'required_unless:use_existing,on',
             'address_id' => 'required_if:use_existing,on',
             'gallery' => 'nullable|array',
-            'gallery.*' => 'image|max:2048'
+            'gallery.*' => 'image|max:2048',
+            'amenities' => 'array',
+            'amenities.*' => 'exists:amenities,id',
         ];
     }
 
@@ -134,5 +140,10 @@ class Accommodation extends Model
     public function gallery(): MorphMany
     {
         return $this->media()->where('type', 'gallery');
+    }
+
+    public function amenities()
+    {
+        return $this->belongsToMany(Amenity::class, 'accommodation_amenities');
     }
 }
