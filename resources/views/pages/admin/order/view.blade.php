@@ -223,7 +223,7 @@
                     @endcan
                 </div>
                 <div class="pt-1">
-                    <table class="datatable table table-striped" id="payment-table" data-ordering="false">
+                    <table class="datatable table" id="payment-table" data-ordering="false">
                         <thead>
                         <tr>
                             <th scope="col">Type</th>
@@ -235,8 +235,11 @@
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
-                        @foreach($order->payments as $payment)
-                            <tr>
+                        @foreach($order->payments as $index => $payment)
+                            @php
+                                $row_class = $index % 2 == 0 ? 'odd-grp' : 'even-grp';
+                            @endphp
+                            <tr class="{{ $row_class }}">
                                 <td>{{ $payment->payment_type }}</td>
                                 <td>{{ $payment->paymentMethod->name }}</td>
                                 <td>{{ $payment->payer_name ?? "No Customer Found" }}</td>
@@ -248,7 +251,7 @@
                                     $fee = $payment->payment_fee ? f_currency($payment->payment_fee) : null;
                                 @endphp
 
-                                <td class="w-12 align-middle text-justify" rowspan="{{ $rowspan }}">
+                                <td class="w-15 align-middle text-justify" rowspan="{{ $rowspan }}">
                                     {{ $internalNotes }}
                                 </td>
 
@@ -276,7 +279,7 @@
                                 </td>
                             </tr>
                             @if($payment->payment_fee !== null)
-                                <tr>
+                                <tr class="{{ $row_class }}">
                                     <td>Payment Fee</td>
                                     <td>{{ $payment->paymentMethod->name }} Fee</td>
                                     <td>{{ $payment->payer_name ?? "No Customer Found" }}</td>
