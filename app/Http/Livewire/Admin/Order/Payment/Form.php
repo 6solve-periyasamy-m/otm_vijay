@@ -111,6 +111,7 @@ class Form extends Component
             'payment.amount' => 'required|numeric',
             'payment.payment_fee' => 'nullable|numeric',
             'payment.paid_on' => 'required|date',
+            'payment.internal_notes' => 'nullable|string',
         ];
     }
 }
