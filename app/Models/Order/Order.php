@@ -63,6 +63,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property OrderStatus|null $status_override Manually assigned order status
  * @property float|null $commission What percentage of the order is a commission (null if no commission)
  * @property Carbon $ordered_on When the order was placed
+ * @property Carbon|null $last_manual_reminder When was a reminder last manually sent
  * @property bool $cancelled Is the order cancelled?
  * @property string|null $internal_notes The notes shown only to the operator
  * @property string|null $external_notes The notes visible to the customer
@@ -172,7 +173,7 @@ class Order extends Model implements NotificationSubject
     use SoftDeletes, CascadeSoftDeletes, HasFactory, HasRelationships, HasPermissions, HasNotifications;
 
     protected $guarded = [];
-    protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double', 'status_override' => OrderStatus::class,];
+    protected $casts = ['ordered_on' => 'datetime','last_manual_reminder' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double', 'status_override' => OrderStatus::class,];
     protected $with = ['tour', 'cache'];
 
     protected array $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments', 'installments', 'invoices'];
