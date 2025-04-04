@@ -10,6 +10,7 @@ use App\Models\Quote\Quote;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
+use Mediconesystems\LivewireDatatables\DatetimeColumn;
 
 class Table extends LivewireDatatable
 {
@@ -19,7 +20,8 @@ class Table extends LivewireDatatable
     {
         return Quote::query()
             ->join('quote_prospects', 'quote_prospects.id', '=', 'quotes.lead_traveller_id')
-            ->join('customers', 'customers.id', '=', 'quote_prospects.customer_id');
+            ->join('customers', 'customers.id', '=', 'quote_prospects.customer_id')
+            ->join('events', 'events.id', '=', 'quotes.event_id');
     }
 
     public function getColumns(): array
@@ -40,10 +42,16 @@ class Table extends LivewireDatatable
                 ->sortable()
                 ->editable()
                 ->filterable(Quote::pluck('name')->unique()),
-            Column::name('quotes.description')
-                ->label('Description')
+            Column::name('events.name')
+                ->label('Event Name')
                 ->searchable()
                 ->sortable(),
+            DateColumn::name('quotes.created_at')
+                ->label('Quote Created')
+                ->sortable()
+                ->searchable()
+                ->filterable()
+                ->format('d/m/Y'),
             Column::callback(['customers.title', 'customers.first_name', 'customers.last_name'], static function (...$fields) { return implode(' ', $fields); })
                 ->label('Lead Traveller')
                 ->searchable()
