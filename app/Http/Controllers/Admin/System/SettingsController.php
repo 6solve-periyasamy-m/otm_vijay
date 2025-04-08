@@ -122,6 +122,7 @@ class SettingsController extends Controller
         }
         $currency = Currency::where('id', '=', $request->input('currency_id'))->first();
         Settings::set('system.currency', $currency?->code);
+        
         $this->saveCustomerFields($request);
         return redirect()->route('settings.edit');
     }
