@@ -200,6 +200,25 @@
             </div>
         </x-admin.section.card>
     </div>
+    <div class="col-xl-12">
+        <x-admin.section.card>
+            <x-slot:title>
+                Customer Data Toggles
+            </x-slot:title>
+            <div class="row">
+                <div class="checkbox-group">
+                    @foreach($customerFieldList['fields'] as $field => $info)
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" name="{{ $field }}"
+                                value="{{ $field }}"
+                                @if(in_array($field, $selectedFields) || in_array($field, default_customer_fields())) checked @endif>
+                                <label class="form-check-label lh-lg ps-2" for="{{ $field }}">{{ $info['name'] }}</label>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </x-admin.section.card>
+    </div>
     <div class="col-xl-6">
         <x-admin.section.card>
             <x-slot:title>Bank Transfer Details</x-slot:title>
