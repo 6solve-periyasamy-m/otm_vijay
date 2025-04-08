@@ -156,12 +156,10 @@
             <!-- Customer Details -->
             @php
                 $customer = $orderCustomer->customer;
-            @endphp
-            @if(in_array('full_name', $customerFields))
-                <div class="col-12">
-                    <h4 class="fw-bold">{{ $orderCustomer->customer->first_name }} {{ $orderCustomer->customer->middle_names ?? "" }} {{ $orderCustomer->customer->last_name }}</h4>
-                </div>
-            @endif
+            @endphp            
+            <div class="col-12">
+                <h4 class="fw-bold">{{ $orderCustomer->customer->first_name }} {{ $orderCustomer->customer->middle_names ?? "" }} {{ $orderCustomer->customer->last_name }}</h4>
+            </div>        
             <div class="col-xl-4">
                 @if(in_array('email', $customerFields))
                     @include('partials.fields.groupfields.field', ['label' => 'Email Address', 'value' => $customer->email_address, 'isLink' => true, 'linkPrefix' => 'mailto:', 'col' => 'col-4' ])
