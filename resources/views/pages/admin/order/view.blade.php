@@ -164,17 +164,21 @@
         </div>
         @endcan
         <div class="row">
-            @foreach($order->orderCustomers as $ordersCustomer)
+            @foreach($order->orderCustomers as $key => $ordersCustomer)
+            @php
+                $isTbcCustomer = (strpos($ordersCustomer->customer->first_name, 'Unknown') !== false || strpos($ordersCustomer->customer->last_name, 'Unknown') !== false);
+                $customerName = $isTbcCustomer ? "TBC". $key. " - Paying - " . $ordersCustomer->customer->last_name : $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name;
+            @endphp
             <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
                 <div class="otm-card">
                     <p>{{ ($order->lead_booker_id == $ordersCustomer->id) ? 'Lead Booker' : ' Additional Customer'}}</p>
                     <h6 class="fw-bold">
                         @can('read', \App\Models\Order\OrderCustomer::class)
                         <a href="{{ route('order-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer, ]) }}" class="link-info">
-                            {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
+                            {{ $customerName }}
                         </a>
                         @else
-                            {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
+                            {{ $customerName }}
                         @endcan
                     </h6>
                     <p>Born</p>
