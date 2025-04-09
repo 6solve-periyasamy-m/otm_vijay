@@ -237,7 +237,7 @@
                         </thead>
                         @foreach($order->payments as $index => $payment)
                             @php
-                                $row_class = $index % 2 == 0 ? 'odd-grp' : 'even-grp';
+                                $row_class = $index % 2 == 0 ? 'odd-row' : 'even-row';
                             @endphp
                             <tr class="{{ $row_class }}">
                                 <td>{{ $payment->payment_type }}</td>
