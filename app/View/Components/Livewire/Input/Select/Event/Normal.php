@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Carbon\Carbon;
 
 class Normal extends AbstractSelectComponent
 {
@@ -26,9 +27,17 @@ class Normal extends AbstractSelectComponent
     protected function getModels(?int $id = null): Collection
     {
         if ($id !== null) {
-            return DataModel::where('id', '=', $id)->get();
+            $event = DataModel::find($id);
+            if ($event) {
+                if (Carbon::parse($event->starts_at)->lt(Carbon::today())) {
+                    return collect([$event]);
+                }
+            }
         }
-        return DataModel::where('event_category', '=', EventType::NORMAL)->get();
+        return DataModel::where('event_category', EventType::NORMAL)
+            ->whereDate('starts_at', '>=', Carbon::today())
+            ->orderBy('starts_at')
+            ->get();
     }
 
     protected function format(DataModel|Model $model): string
