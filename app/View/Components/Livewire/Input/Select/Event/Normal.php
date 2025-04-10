@@ -35,8 +35,8 @@ class Normal extends AbstractSelectComponent
             }
         }
         return DataModel::where('event_category', EventType::NORMAL)
-            ->whereDate('starts_at', '>=', Carbon::today())
-            ->orderBy('starts_at')
+            ->whereDate('ends_at', '>=', Carbon::today())
+            ->orderBy('ends_at')
             ->get();
     }
 
