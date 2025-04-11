@@ -223,7 +223,7 @@
                     @endcan
                 </div>
                 <div class="pt-1">
-                    <table class="datatable table table-striped" id="payment-table">
+                    <table class="datatable table" id="payment-table" data-ordering="false">
                         <thead>
                         <tr>
                             <th scope="col">Type</th>
@@ -231,23 +231,31 @@
                             <th scope="col">Payer</th>
                             <th scope="col">Value</th>
                             <th scope="col">Paid</th>
+                            <th scope="col">Notes</th>
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
-                        @foreach($order->payments as $payment)
-                            <tr>
+                        @foreach($order->payments as $index => $payment)
+                            @php
+                                $row_class = $index % 2 == 0 ? 'odd-row' : 'even-row';
+                            @endphp
+                            <tr class="{{ $row_class }}">
                                 <td>{{ $payment->payment_type }}</td>
                                 <td>{{ $payment->paymentMethod->name }}</td>
                                 <td>{{ $payment->payer_name ?? "No Customer Found" }}</td>
-                                <td>
-                                    @if($payment->payment_fee !== null)
-                                        <abbr title="{{ f_currency($payment->totalWithFee()) }} with payment fee">{{ f_currency($payment->amount) }}</abbr>
-                                    @else
-                                        {{ f_currency($payment->amount) }}
-                                    @endif
-                                </td>
+                                <td>{{ f_currency($payment->amount) }}</td>
                                 <td>{{ f_datetime($payment->paid_on) }}</td>
-                                <td class="actions">
+                                @php
+                                    $rowspan = $payment->payment_fee ? 2 : 1;
+                                    $internalNotes = $payment->internal_notes ?? " -Nil- ";
+                                    $fee = $payment->payment_fee ? f_currency($payment->payment_fee) : null;
+                                @endphp
+
+                                <td class="w-15 align-top text-justify" rowspan="{{ $rowspan }}">
+                                    {{ $internalNotes }}
+                                </td>
+
+                                <td class="actions align-middle" rowspan="{{ $rowspan }}">
                                     @can('update', \App\Models\Order\Payment\Payment::class)
                                         <a href="{{ route('payments.edit', ['order' => $order, 'payment' => $payment,]) }}"
                                            class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
@@ -270,6 +278,17 @@
                                     @endcan
                                 </td>
                             </tr>
+                            @if($payment->payment_fee !== null)
+                                <tr class="{{ $row_class }}">
+                                    <td>Payment Fee</td>
+                                    <td>{{ $payment->paymentMethod->name }} Fee</td>
+                                    <td>{{ $payment->payer_name ?? "No Customer Found" }}</td>
+                                    <td>{{ $fee }}</td>
+                                    <td>{{ f_datetime($payment->paid_on) }}</td>
+                                    <td hidden></td>
+                                    <td hidden></td>
+                                </tr>
+                            @endif
                         @endforeach
                     </table>
                 </div>
