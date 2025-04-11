@@ -251,7 +251,7 @@
                                     $fee = $payment->payment_fee ? f_currency($payment->payment_fee) : null;
                                 @endphp
 
-                                <td class="w-15 align-middle text-justify" rowspan="{{ $rowspan }}">
+                                <td class="w-15 align-top text-justify" rowspan="{{ $rowspan }}">
                                     {{ $internalNotes }}
                                 </td>
 
