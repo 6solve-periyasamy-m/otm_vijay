@@ -59,6 +59,7 @@ use Illuminate\Support\Carbon;
  * @property string $invoice_footer
  * @property int $paying Cached paying value
  * @property int $travelling Cached travelling value
+ * @property string|null $payment_details Details for sending payment information. *Do not use*
  * @property Carbon|null $expires
  * @property QuoteStatus $quote_status
  * @property string|null $internal_notes
@@ -96,6 +97,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|QuoteTransport[] $transport
  * @property-read int|null $transport_count
  * @property-read float $remaining
+ * @property-read string $makePaymentDetails Details for documents to include about making a payment
  * @method static QuoteFactory factory(...$parameters)
  * @method static Builder|Quote newModelQuery()
  * @method static Builder|Quote newQuery()
@@ -303,5 +305,13 @@ class Quote extends Model
         $price = $this->repository->getTotalCost($count);
         if (empty($price) && !$this->is_deposit_percentage) { return 0; }
         return $this->is_deposit_percentage ? $this->deposit : (sigfig(($this->deposit / $price) * 100));
+    }
+
+    public function getMakePaymentDetailsAttribute(): string
+    {
+        if (empty($this->payment_details)) {
+            return setting('company.bank_transfer', "");
+        }
+        return $this->payment_details;
     }
 }
