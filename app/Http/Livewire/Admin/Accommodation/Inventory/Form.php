@@ -16,14 +16,14 @@ class Form extends Component
 
     public Accommodation|int $accommodation;
     public AccommodationInventory|int|null $inventory;
-    public $minToDate;
+    public $minEndDate;
 
     public function mount(Accommodation|int $accommodation, AccommodationInventory|int|null $inventory = null): void
     {
         $this->accommodation = Accommodation::getForMount($accommodation);
         $this->inventory = AccommodationInventory::getForMount($inventory);
         if ($this->inventory->check_in) {
-            $this->minToDate = Carbon::parse($this->inventory->check_in)->toDateTimeString();
+            $this->minEndDate = Carbon::parse($this->inventory->check_in)->toDateTimeString();
         }
     }
 
@@ -38,7 +38,7 @@ class Form extends Component
     {
         if ($value) {
             $startDateTime = Carbon::parse($value);
-            $this->minToDate = $startDateTime->toDateTimeString();
+            $this->minEndDate = $startDateTime->toDateTimeString();
             $this->inventory->check_out = $startDateTime->copy()->addHour()->toDateTimeString();
         }
     }

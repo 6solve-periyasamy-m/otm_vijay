@@ -24,7 +24,7 @@ class Form extends Component
     public $user;
     public UploadedFile|string|null $image = null;
     public UploadedFile|string|null $banner = null;
-    public $minToDate;
+    public $minEndDate;
 
     public function mount(Event|int|null $event = null)
     {
@@ -36,7 +36,7 @@ class Form extends Component
         }
         $this->event->event_category = $this->event->event_category ?? EventType::NORMAL;
         if ($this->event->starts_at) {
-            $this->minToDate = Carbon::parse($this->event->starts_at)->toDateString();
+            $this->minEndDate = Carbon::parse($this->event->starts_at)->toDateString();
         }
     }
 
@@ -61,7 +61,7 @@ class Form extends Component
             $startDate = Carbon::parse($value);
             $today = Carbon::today();
             $this->event->starts_at = $startDate->toDateString();
-            $this->minToDate = $startDate->isAfter($today) ? $startDate->toDateString() : $today->toDateString();
+            $this->minEndDate = $startDate->isAfter($today) ? $startDate->toDateString() : $today->toDateString();
             $this->event->ends_at = $value;
         }
     }
