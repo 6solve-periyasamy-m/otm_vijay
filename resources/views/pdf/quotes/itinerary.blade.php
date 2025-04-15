@@ -605,7 +605,7 @@ figure.table {
                       <tr>
                         <td class="text-wrap" style="width:80px;">{{ $flights->name }}</td>
                         <td class="text-wrap" style="width:100px;">{{ $flights->details['Flight Number'] }}</td>
-                        <td style="width:60px;">{{ $flights->details['Class'] }}</td>
+                        <td class="text-wrap" style="width:60px;">{{ $flights->details['Class'] }}</td>
                         <td style="width:70px;">{{ $flights->details['Departure Date'] }}</td>
                         <td class="text-wrap" style="width:100px;">{{ $flights->details['Departure Airport'] }}</td>
                         <td class="text-wrap" style="width:100px;">{{ $flights->details['Arrival Airport'] }}</td>
