@@ -36,7 +36,7 @@ class Form extends Component
         }
         $this->event->event_category = $this->event->event_category ?? EventType::NORMAL;
         if ($this->event->starts_at) {
-            $this->minToDate = Carbon::parse($this->event->starts_at)->subDay()->toDateString();
+            $this->minToDate = Carbon::parse($this->event->starts_at)->toDateString();
         }
     }
 
