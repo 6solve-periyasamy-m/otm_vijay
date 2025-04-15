@@ -13,6 +13,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Carbon\Carbon;
 
 class Form extends Component
 {
@@ -23,6 +24,7 @@ class Form extends Component
     public $user;
     public UploadedFile|string|null $image = null;
     public UploadedFile|string|null $banner = null;
+    public $minToDate;
 
     public function mount(Event|int|null $event = null)
     {
@@ -33,11 +35,17 @@ class Form extends Component
             $this->termsTemplate = $terms?->id;
         }
         $this->event->event_category = $this->event->event_category ?? EventType::NORMAL;
+        if ($this->event->starts_at) {
+            $this->minToDate = Carbon::parse($this->event->starts_at)->subDay()->toDateString();
+        }
     }
 
     public function updated($key, $value): void
     {
         $this->validateOnly($key);
+        if ($key === 'event.starts_at') {
+            $this->handleStartDateChange($value);
+        }
         if ($key === 'termsTemplate') {
             $this->refreshTermsTemplate();
         }
@@ -45,6 +53,17 @@ class Form extends Component
             $this->refreshUser();
         }
         $this->render();
+    }
+
+    private function handleStartDateChange($value)
+    {
+        if ($value) {
+            $startDate = Carbon::parse($value);
+            $today = Carbon::today();
+            $this->event->starts_at = $startDate->toDateString();
+            $this->minToDate = $startDate->isAfter($today) ? $startDate->toDateString() : $today->toDateString();
+            $this->event->ends_at = $value;
+        }
     }
 
     private function refreshTermsTemplate(): void
@@ -90,7 +109,7 @@ class Form extends Component
             'event.name' => 'required|string',
             'event.description' => 'nullable|string',
             'event.starts_at' => 'required|date|date_format:Y-m-d',
-            'event.ends_at' => 'required|date|date_format:Y-m-d',
+            'event.ends_at' => 'required|date|after:event.start_at|date_format:Y-m-d',
             'event.tax_bracket_id' => 'nullable|integer|exists:tax_brackets,id',
             'event.brand_id' => 'nullable|integer|exists:brands,id',
             'event.parent_event_id' => 'nullable|integer|exists:events,id',
