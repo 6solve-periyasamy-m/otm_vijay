@@ -7,9 +7,9 @@
             <x-livewire.ckeditor name="inventory.category_description" value="{{ $inventory?->category_description }}" label="Description" />
         </div>
         <x-livewire.input.select.accommodation-inventory width="6" label="Stock Parent" name="inventory.stock_parent_id" value="{{ $inventory?->stock_parent_id }}" clear />
-        <x-livewire.input type="datetime-local" wire:model="inventory.check_in" width="5" label="Check In" />
+        <x-livewire.input type="datetime-local" wire:model="inventory.check_in" wire:change="updatedInventoryCheckIn" width="5" label="Check In" id="check_in" min="{{ now()->format('Y-m-d\TH:i') }}"/>
         <x-livewire.input.checkbox wire:model="inventory.check_in_time_confirmed" width="1" label="Confirmed?" />
-        <x-livewire.input type="datetime-local" wire:model="inventory.check_out" width="5" label="Check Out" />
+        <x-livewire.input type="datetime-local" wire:model="inventory.check_out" width="5" label="Check Out" id="check_out" :min="$minToDate"/>
         <x-livewire.input.checkbox wire:model="inventory.check_out_time_confirmed" width="1" label="Confirmed?" />
         <x-livewire.input wire:model="inventory.stock" width="11" label="Stock" />
         <x-livewire.input.checkbox wire:model="inventory.fit_selectable" width="1" label="FIT Selectable" />
