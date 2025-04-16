@@ -50,6 +50,10 @@ Route::prefix('/booking/simple/{tour}')->group(function () {
     Route::get('/{token?}', [SimpleBookingController::class, 'index'])->name('booking.simple.index');
 });
 
+Route::prefix('/booking/v3/{tour}')->group(function () {
+    Route::get('/', function ($tour) { return view('layout.booking.v3'); });
+});
+
 
 Route::prefix('/booking/{bookingUrl}')->group(function () {
     Route::get('/{token?}', [CustomerBookingController::class, 'index'])->name('customer-booking.index');
