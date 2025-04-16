@@ -2,11 +2,11 @@
 
 namespace App\Models\Activity;
 
+use App\Models\Helper\SimpleModel;
 use Database\Factories\Activity\SeatingFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
@@ -29,7 +29,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Seating whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class Seating extends Model
+class Seating extends SimpleModel
 {
     use HasFactory;
 

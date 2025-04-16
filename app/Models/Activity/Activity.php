@@ -39,6 +39,8 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int|null $session_id
  * @property int|null $seating_id
  * @property string|null $name
+ * @property string|null $field1
+ * @property string|null $field2
  * @property string|null $internal_notes
  * @property string|null $external_notes
  * @property Carbon|null $created_at
@@ -88,7 +90,11 @@ class Activity extends Model
             'name' => 'required',
             'image' => 'nullable|image',
             'address_name' => 'required_unless:use_existing,on',
-            'address_id' => 'required_if:use_existing,on'
+            'address_id' => 'required_if:use_existing,on',
+            'session_id' => 'nullable|exists:sessions,id',
+            'currency_id' => 'nullable|exists:currencies,id',
+            'event_id' => 'nullable|exists:events,id',
+            'seating_id' => 'nullable|exists:seatings,id',
         ];
     }
 
