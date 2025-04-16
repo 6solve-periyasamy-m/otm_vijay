@@ -36,6 +36,8 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property ActivityCategory $activity_category
  * @property int|null $currency_id
  * @property int|null $event_id
+ * @property int|null $session_id
+ * @property int|null $seating_id
  * @property string|null $name
  * @property string|null $internal_notes
  * @property string|null $external_notes
@@ -49,6 +51,8 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Address $address
  * @property-read ActivityRepository $repository
  * @property-read Currency|null $currency
+ * @property-read Seating|null $seating
+ * @property-read Session|null $session
  * @method static ActivityFactory factory(...$parameters)
  * @method static Builder|Activity newModelQuery()
  * @method static Builder|Activity newQuery()
@@ -96,6 +100,16 @@ class Activity extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');
+    }
+
+    public function session(): BelongsTo
+    {
+        return $this->belongsTo(Session::class, 'session_id');
+    }
+
+    public function seating(): BelongsTo
+    {
+        return $this->belongsTo(Seating::class, 'seating_id');
     }
 
     public function orders(): HasManyDeep
