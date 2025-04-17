@@ -65,12 +65,9 @@
         
         if (!checkIn || !checkOut || !auditDate) return;
         
-        const pad = (n) => String(n).padStart(2, '0');
-        const formatDate = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-        const formatDatetimeLocal = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
         const now = new Date();
-        auditDate.min = formatDate(now);
-        checkIn.min = formatDatetimeLocal(now);
+        auditDate.min = appFormatDate(now);
+        checkIn.min = appFormatDateTime(now);
         checkIn.addEventListener('change', (e) => {
             const selected = new Date(e.target.value);
             if (isNaN(selected)) return;
@@ -79,7 +76,7 @@
 
             const nextDay = new Date(selected);
             nextDay.setDate(nextDay.getDate() + 1);
-            checkOut.value = formatDatetimeLocal(nextDay);
+            checkOut.value = appFormatDateTime(nextDay);
         });
     });
 </script>

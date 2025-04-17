@@ -145,9 +145,6 @@
     document.addEventListener('DOMContentLoaded', function () {
         const orderedOn = document.getElementById('ordered_on-input');
         if (!orderedOn) return;
-        const pad = (n) => String(n).padStart(2, '0');
-        const formatDatetimeLocal = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
-        const now = new Date();
-        orderedOn.min = formatDatetimeLocal(now);
+        orderedOn.min = appFormatDateTime(new Date());
     });
 </script>
