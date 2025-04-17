@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Customer\BookingV3Controller;
 use App\Http\Controllers\Customer\CustomerBookingController;
 use App\Http\Controllers\Customer\SimpleBookingController;
 use App\Http\Controllers\StripeController;
@@ -51,7 +52,8 @@ Route::prefix('/booking/simple/{tour}')->group(function () {
 });
 
 Route::prefix('/booking/v3/{tour}')->group(function () {
-    Route::get('/', function ($tour) { return view('layout.booking.v3'); });
+    Route::get('/{booking?}', [BookingV3Controller::class, 'guest'])->name('booking.v3.guest');
+    Route::get('/hotels/{booking?}', [BookingV3Controller::class, 'hotel'])->name('booking.v3.hotel');
 });
 
 
