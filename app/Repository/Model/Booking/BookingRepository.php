@@ -31,6 +31,8 @@ use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Interfaces\GeneratesFellohData;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\Rooming\RemoteBookingGroup;
+use App\Models\Quote\Quote;
+use App\Models\Customer\Customer;
 use Carbon\Carbon;
 use DB;
 use Gateway;
@@ -245,6 +247,80 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     public function __toString(): string
     {
         return "{{$this->booking->token}} - {$this->booking->tour?->name}";
+    }
+
+    public function convertToQuote(): ?Quote
+    {
+        $tour = $this->booking->tour;
+        $lead = $this->booking->leadTraveller;
+
+        if (!$lead || !$lead->email_address) {
+            \Log::warning("Cannot create quote: Missing lead email for booking ID {$this->booking->id}");
+            return null;
+        }
+
+        $existingQuote = Quote::where('tour_id', $tour->id)
+            ->where('lead_traveller_id', $lead->id)
+            ->latest()
+            ->first();
+
+        $customer = $lead->customer ?? (new BookingTravellerRepository($lead))->convertToCustomer();
+        dd($customer);
+        
+        $lead->customer_id = $customer->id;
+        $lead->save();
+        $travellers = $this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count();
+
+        if (!$existingQuote) {
+            $quote = Quote::create([
+                'consultant_id' => get_current_admin()?->id,
+                'event_id' => $tour->event_id,
+                'deposit' => $tour->deposit,
+                'is_deposit_percentage' => $tour->is_deposit_percentage,
+                'tax_bracket_id' => $tour->tax_bracket_id ?? $tour->event?->tax_bracket_id,
+                'final_payment' => $tour->final_payment,
+                'date_from' => $tour->date_from,
+                'date_to' => $tour->date_to,
+                'terms' => $tour->terms,
+                'invoice_footer' => $tour->invoice_footer ?? '',
+                'name' => $tour->name,
+                'description' => $tour->description,
+                'paying' => $travellers,
+                'tour_id' => $tour->id,
+            ]);
+    
+            $leadTraveller = $quote->repository->createProspect($customer, []);
+            $quote->lead_traveller_id = $leadTraveller?->id;
+            $quote->reference = $quote->repository->generateReference();
+            $quote->save();
+    
+            foreach ($tour->repository->getComponents(true, true, true, true, true, ['Included']) as $component) {
+                $component->addToQuote($quote);
+            }
+    
+            foreach ($tour->costs as $cost) {
+                $quote->costs()->save($cost->replicate());
+            }    
+            $quote->repository->cloneInstallments($tour);
+            $quote->repository->addPricePoint(1, $tour->base_price_per_person);
+        } else {
+            $quote = $existingQuote;
+            $quote->fill([
+                'consultant_id' => get_current_admin()?->id,
+                'deposit' => $tour->deposit,
+                'is_deposit_percentage' => $tour->is_deposit_percentage,
+                'tax_bracket_id' => $tour->tax_bracket_id ?? $tour->event?->tax_bracket_id,
+                'final_payment' => $tour->final_payment,
+                'date_from' => $tour->date_from,
+                'date_to' => $tour->date_to,
+                'terms' => $tour->terms,
+                'invoice_footer' => $tour->invoice_footer ?? '',
+                'name' => $tour->name,
+                'description' => $tour->description,
+                'paying' => $travellers,
+            ])->save();
+        }
+        return $quote;
     }
 
     public function convertToOrder(?Carbon $orderedOn = null): Order
