@@ -6,14 +6,14 @@
     <section class="package-container first">
         <div class="container">
             <div class="column left">
-                <x:customer.booking.v3.tour-info :tour="$tour"/>                           
+                <x:customer.booking.v3.tour-info :tour="$tour" :booking="$booking" :selectedCurrency="$selectedCurrency" />                           
                 <div class="top-form-contain">
                     <div class="email-quote">
                         <label for="email">Email</label>
                         <input type="email" wire:model.lazy="lead.email_address" id="email" name="email">
                         @error('lead.email_address') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
-                </div>
+                </div>                
                 <div class="no-of-travellers">
                     <h4 class="sub-heading-4">Number of Travellers</h4>
                     <div class="quantity">
@@ -30,7 +30,7 @@
                     <p class="phone">Domestic <a href="tel:1300 730 023">+1300 730 023</a></p>
                     <p class="phone">International <a href="tel:+61 2 7201 9353"> +61 2 7201 9353</a></p>
                     <p class="email">Email <a href="mailto:travel@kpt.com.au">travel@kpt.com.au</a></p>
-                </div>
+                </div>                
             </div>
             <div class="column right">
                 <div class="package-details">
@@ -55,29 +55,22 @@
                         <div class="additional-inclusions">
                             <h6 class="sub-heading-6  display-none">ADDITIONAL INCLUSIONS</h6>
                             <div class="select-currency">
+                                @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector'))
                                 <div class="single">
-                                    <p>Select Currency</p>
-                                    <select wire:model.lazy="selectedCurrency">
-                                        @foreach($availableCurrencies as $currency)
-                                            <option value="{{ $currency }}">{{ $currency }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="single">
-                                    <p>Package price</p>
-                                    <p>{{ f_currency($this->convertedBasePrice(), $selectedCurrency) }}</p>                                    
+                                    <p>Package price {{ $selectedCurrency }}</p>
+                                    <p>{{ f_currency($booking->repository->convertedBasePrice($selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
                                 @if($booking->repository->getTaxes() !== null)
                                     <div class="single">
                                         <p>{{ $tour->taxBracket()->name }} (Included)</p>
-                                        <p>{{ f_currency($booking->repository->getTaxes()) }}</p>
+                                        <p>{{f_currency($booking->repository->convertedTaxBracket($selectedCurrency), $selectedCurrency)}}</p>
                                     </div>
                                 @endif
                             </div>
                             <div class="total">
                                 <div class="single">
                                     <p>Total</p>
-                                    <p>{{ f_currency($booking->repository->getTotalCost()) }}</p>
+                                    <p>{{ f_currency($booking->repository->convertedTotalCost($selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
                             </div>
                         </div>
@@ -85,9 +78,9 @@
                             <div class="payable-now">
                                 <div class="single">
                                     <p>Payable now</p>
-                                    <p>A$3,425</p>
+                                    <p>{{ f_currency($booking->repository->convertedDueTodayAmount($selectedCurrency), $selectedCurrency) }}</p> 
                                 </div>
-                                <p>Balance A$13,700 payable by 14 Feb 2025</p>
+                                <p>Balance {{ f_currency(($booking->repository->convertedTotalCost($selectedCurrency) - $booking->repository->convertedDueTodayAmount($selectedCurrency)), $selectedCurrency ) }} payable by {{ $tour->final_payment->format('d M Y') }}</p>
                             </div>
 
                             <div class="email-quote">

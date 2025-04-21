@@ -260,13 +260,12 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         }
 
         $existingQuote = Quote::where('tour_id', $tour->id)
-            ->where('lead_traveller_id', $lead->id)
+            //->where('lead_traveller_id', $lead->id)
             ->latest()
             ->first();
 
         $customer = $lead->customer ?? (new BookingTravellerRepository($lead))->convertToCustomer();
-        dd($customer);
-        
+       
         $lead->customer_id = $customer->id;
         $lead->save();
         $travellers = $this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count();
@@ -321,6 +320,12 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             ])->save();
         }
         return $quote;
+    }
+
+    public function updateCurrency(string $currency): void
+    {
+        $this->booking->booking_currency = $currency;
+        $this->booking->save();
     }
 
     public function convertToOrder(?Carbon $orderedOn = null): Order
@@ -649,6 +654,26 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             }
         }
         return $cost;
+    }
+
+    public function convertedBasePrice(string $toCurrency): ?float
+    {
+        return fx_convert($this->getBasePrice(), setting('system.currency'), $toCurrency);
+    }
+
+    public function convertedTaxBracket(string $toCurrency): ?float
+    {
+        return fx_convert($this->getTaxes(), setting('system.currency'), $toCurrency);
+    }
+
+    public function convertedTotalCost(string $toCurrency): ?float
+    {
+        return fx_convert($this->getTotalCost(), setting('system.currency'), $toCurrency);
+    }
+
+    public function convertedDueTodayAmount(string $toCurrency): ?float
+    {
+        return fx_convert($this->getDueTodayAmount(), setting('system.currency'), $toCurrency);
     }
 
     private function getTaxBracket(): TaxBracket|null

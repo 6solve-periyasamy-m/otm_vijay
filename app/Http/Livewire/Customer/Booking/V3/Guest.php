@@ -17,8 +17,8 @@ use App\Mail\Storage\QuoteMail;
 class Guest extends V3BookingComponent
 {
     private const MAX_TRAVELLERS = 5;
+    protected $listeners = ['currencyUpdated' => 'updateCurrency'];
     public string $selectedCurrency;
-    public array $availableCurrencies = ['AUD', 'USD', 'GBP', 'SGD', 'INR', 'EUR'];
     public bool $quoteSent = false;    
     protected array $messages = [
         'lead.email_address.required' => 'Email is required.',
@@ -26,15 +26,31 @@ class Guest extends V3BookingComponent
     ];
 
     public function mount($tour = null, $booking = null)
-    {
+    {        
         parent::mount($tour, $booking);
-        $this->selectedCurrency = setting('system.currency');
+        $this->selectedCurrency = $this->booking->booking_currency ?? setting('system.currency', 'GBP');
     }
 
-    public function convertedBasePrice(): float|null
+    public function updateCurrency(string $currency)
     {
-        return fx_convert($this->booking->repository->getBasePrice(), setting('system.currency'), $this->selectedCurrency);
+        $this->selectedCurrency = $currency;
+        $this->booking->repository->updateCurrency($currency);
     }
+
+    // public function convertedBasePrice(): float|null
+    // {
+    //     return fx_convert($this->booking->repository->getBasePrice(), setting('system.currency'), $this->selectedCurrency);
+    // }
+
+    // public function convertedTaxes(): float|null
+    // {
+    //     return fx_convert($this->booking->repository->getTaxes(), setting('system.currency'), $this->selectedCurrency);
+    // }
+
+    // public function convertedTotal(): float|null
+    // {
+    //     return fx_convert($this->booking->repository->getTotalCost(), setting('system.currency'), $this->selectedCurrency);
+    // }
 
     public function render()
     {
