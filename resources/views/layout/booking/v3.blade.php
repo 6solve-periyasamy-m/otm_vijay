@@ -1859,23 +1859,6 @@
         .flatpickr-calendar:before, .flatpickr-calendar.arrowTop:after {
             display: none;
         }
-
-        .loader-container {
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .loader {
-            font-size: 14px;
-            color: #555;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.3; }
-            50% { opacity: 1; }
-            100% { opacity: 0.3; }
-        }
     </style>
 </head>
 <body>

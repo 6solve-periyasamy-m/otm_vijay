@@ -259,66 +259,43 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             return null;
         }
 
-        $existingQuote = Quote::where('tour_id', $tour->id)
-            //->where('lead_traveller_id', $lead->id)
-            ->latest()
-            ->first();
-
         $customer = $lead->customer ?? (new BookingTravellerRepository($lead))->convertToCustomer();
-       
+
         $lead->customer_id = $customer->id;
         $lead->save();
-        $travellers = $this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count();
+        $travellers = $this->booking->travellers()->where('role', '!=', BookingTravellerRole::NORMAL)->count();
 
-        if (!$existingQuote) {
-            $quote = Quote::create([
-                'consultant_id' => get_current_admin()?->id,
-                'event_id' => $tour->event_id,
-                'deposit' => $tour->deposit,
-                'is_deposit_percentage' => $tour->is_deposit_percentage,
-                'tax_bracket_id' => $tour->tax_bracket_id ?? $tour->event?->tax_bracket_id,
-                'final_payment' => $tour->final_payment,
-                'date_from' => $tour->date_from,
-                'date_to' => $tour->date_to,
-                'terms' => $tour->terms,
-                'invoice_footer' => $tour->invoice_footer ?? '',
-                'name' => $tour->name,
-                'description' => $tour->description,
-                'paying' => $travellers,
-                'tour_id' => $tour->id,
-            ]);
-    
-            $leadTraveller = $quote->repository->createProspect($customer, []);
-            $quote->lead_traveller_id = $leadTraveller?->id;
-            $quote->reference = $quote->repository->generateReference();
-            $quote->save();
-    
-            foreach ($tour->repository->getComponents(true, true, true, true, true, ['Included']) as $component) {
-                $component->addToQuote($quote);
-            }
-    
-            foreach ($tour->costs as $cost) {
-                $quote->costs()->save($cost->replicate());
-            }    
-            $quote->repository->cloneInstallments($tour);
-            $quote->repository->addPricePoint(1, $tour->base_price_per_person);
-        } else {
-            $quote = $existingQuote;
-            $quote->fill([
-                'consultant_id' => get_current_admin()?->id,
-                'deposit' => $tour->deposit,
-                'is_deposit_percentage' => $tour->is_deposit_percentage,
-                'tax_bracket_id' => $tour->tax_bracket_id ?? $tour->event?->tax_bracket_id,
-                'final_payment' => $tour->final_payment,
-                'date_from' => $tour->date_from,
-                'date_to' => $tour->date_to,
-                'terms' => $tour->terms,
-                'invoice_footer' => $tour->invoice_footer ?? '',
-                'name' => $tour->name,
-                'description' => $tour->description,
-                'paying' => $travellers,
-            ])->save();
+        $quote = Quote::create([
+            'consultant_id' => get_current_admin()?->id,
+            'event_id' => $tour->event_id,
+            'deposit' => $tour->deposit,
+            'is_deposit_percentage' => $tour->is_deposit_percentage,
+            'tax_bracket_id' => $tour->tax_bracket_id ?? $tour->event?->tax_bracket_id,
+            'final_payment' => $tour->final_payment,
+            'date_from' => $tour->date_from,
+            'date_to' => $tour->date_to,
+            'terms' => $tour->terms,
+            'invoice_footer' => $tour->invoice_footer ?? '',
+            'name' => $tour->name,
+            'description' => $tour->description,
+            'paying' => $travellers,
+            'tour_id' => $tour->id,
+        ]);
+
+        $leadTraveller = $quote->repository->createProspect($customer, []);
+        $quote->lead_traveller_id = $leadTraveller?->id;
+        $quote->reference = $quote->repository->generateReference();
+        $quote->save();
+
+        foreach ($tour->repository->getComponents(true, true, true, true, true, ['Included']) as $component) {
+            $component->addToQuote($quote);
         }
+
+        foreach ($tour->costs as $cost) {
+            $quote->costs()->save($cost->replicate());
+        }
+        $quote->repository->cloneInstallments($tour);
+        $quote->repository->addPricePoint(1, $tour->base_price_per_person);
         return $quote;
     }
 
@@ -675,6 +652,12 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     {
         return fx_convert($this->getDueTodayAmount(), setting('system.currency'), $toCurrency);
     }
+
+    public function convertBookingCurrency(float $cost, string $toCurrency): ?float
+    {
+        return fx_convert($cost, setting('system.currency'), $toCurrency);
+    }
+
 
     private function getTaxBracket(): TaxBracket|null
     {

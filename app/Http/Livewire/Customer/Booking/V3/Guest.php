@@ -13,22 +13,88 @@ use Exception;
 use App\Models\Quote\Quote;
 use App\Mail\Storage\Attachment;
 use App\Mail\Storage\QuoteMail;
+use App\Models\Booking\BookingTraveller;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\ValidationException;
 
 class Guest extends V3BookingComponent
 {
     private const MAX_TRAVELLERS = 5;
     protected $listeners = ['currencyUpdated' => 'updateCurrency'];
     public string $selectedCurrency;
-    public bool $quoteSent = false;    
+    public bool $quoteSent = false;
+    public bool $showCustomerForm = false;
     protected array $messages = [
         'lead.email_address.required' => 'Email is required.',
         'lead.email_address.email' => 'Please enter a valid email address.',
+        'lead.first_name.required' => 'First name is required.',
+        'lead.last_name.required' => 'Last name is required.',
     ];
+    public BookingTraveller|null $lead = null;
 
     public function mount($tour = null, $booking = null)
     {        
         parent::mount($tour, $booking);
+        $this->lead = $this->booking->leadTraveller ?? BookingTravellerRepository::make([]);
+
+        if ($this->lead->id === null) {
+            $this->lead->booking_id = $booking->id;
+            $this->lead->save();
+            $booking->lead_traveller_id = $this->lead->id;
+            $booking->save();
+            $this->addTraveller();
+        }
         $this->selectedCurrency = $this->booking->booking_currency ?? setting('system.currency', 'GBP');
+    }
+
+    public function toggleCustomerForm()
+    {
+        $this->showCustomerForm = !$this->showCustomerForm;
+        if (!$this->showCustomerForm) {
+            $this->resetErrorBag();
+        }
+    }
+
+    public function getCanSendQuoteProperty(): bool
+    {
+        return !empty($this->lead->first_name) && !empty($this->lead->last_name);
+    }
+
+    public function updated($property): void
+    {
+        if (str_starts_with($property, 'lead.')) {
+            $this->validateOnly($property);
+            $this->lead->save();
+        }
+    }
+
+    public function sendQuote(): void
+    {
+        $this->validate();
+        $this->lead->first_name = trim($this->lead->first_name);
+        $this->lead->last_name = trim($this->lead->last_name);
+        $this->lead->mobile_number = trim($this->lead->mobile_number ?? '');
+        $this->lead->save();
+
+        try {
+            if (RateLimiter::tooManyAttempts("send-quote-{$this->booking->id}", 5)) {
+                throw ValidationException::withMessages(['email' => 'Too many attempts. Please try again later.']);
+            }
+
+            RateLimiter::hit("send-quote-{$this->booking->id}");
+            $quote = $this->booking->repository->convertToQuote();
+            $sent = $quote->repository->generateSent($this->lead->email_address, $quote->paying?? 1, $quote->travelling?? 0);
+            $attachment = new Attachment($quote->repository->getStream($sent), $quote->reference . '.pdf', ['mime' => 'application/pdf',]);
+            $status = (new QuoteMail('quote', $quote->consultant))->send($target ?? $sent->recipient, $sent, [$attachment,], "", true);
+            $this->quoteSent = true;
+            $this->showCustomerForm = false;
+            session()->flash('success', 'Quote emailed successfully!');
+        } catch (MailDisabledException|MailFailedException $e) {
+            session()->flash('error', $e->getMessage());
+        } catch (\Throwable $e) {
+            Log::error('Quote email failed', ['booking_id' => $this->booking->id, 'error' => $e->getMessage()]);
+            session()->flash('error', 'Failed to send quote. Please try again later.');
+        }
     }
 
     public function updateCurrency(string $currency)
@@ -36,21 +102,6 @@ class Guest extends V3BookingComponent
         $this->selectedCurrency = $currency;
         $this->booking->repository->updateCurrency($currency);
     }
-
-    // public function convertedBasePrice(): float|null
-    // {
-    //     return fx_convert($this->booking->repository->getBasePrice(), setting('system.currency'), $this->selectedCurrency);
-    // }
-
-    // public function convertedTaxes(): float|null
-    // {
-    //     return fx_convert($this->booking->repository->getTaxes(), setting('system.currency'), $this->selectedCurrency);
-    // }
-
-    // public function convertedTotal(): float|null
-    // {
-    //     return fx_convert($this->booking->repository->getTotalCost(), setting('system.currency'), $this->selectedCurrency);
-    // }
 
     public function render()
     {
@@ -65,7 +116,6 @@ class Guest extends V3BookingComponent
     public function advance()
     {
         $this->validate();
-        $this->convertLeadToCustomer();
         return redirect()->route('booking.v3.hotel', ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]);
     }
     
@@ -86,57 +136,51 @@ class Guest extends V3BookingComponent
         $this->booking->repository->removeUnknownTraveller();
         $this->render();
     }
-  
-    public function updated($property): void
-    {
-        if (str_starts_with($property, 'lead.')) {
-            $this->validateOnly($property);
-    
-            // Only auto-convert if email is valid and set
-            if ($property === 'lead.email_address' && !empty($this->lead->email_address)) {
-                $this->convertLeadToCustomer();
-            }
-            $this->lead->save();
-        }
-    }
 
     public function convertLeadToCustomer(): ? Customer
     {
-        $lead = $this->lead;
-
-        if (empty($lead->email_address)) {
+        if (empty($this->lead->email_address)) {
             Log::warning("Lead traveller missing email for booking ID {$this->booking->id}");
             return null;
         }
 
         try {
-            $lead->first_name = $lead->first_name ?? 'Unset';
-            $lead->last_name = $lead->last_name ?? 'Unset';
-            $lead->save();
+            $this->lead->first_name = $this->lead->first_name ?? 'Unset';
+            $this->lead->last_name = $this->lead->last_name ?? 'Unset';
+            $this->lead->save();
 
-            $repository = new BookingTravellerRepository($lead);
+            $repository = new BookingTravellerRepository($this->lead);
             $customer = $repository->convertToCustomer();
-            if (!$lead->customer_id || $lead->customer_id !== $customer->id) {
-                $lead->customer_id = $customer->id;
-                $lead->save();
+
+            if (!$this->lead->customer_id) {
+                $this->lead->customer_id = $customer->id;
+                $this->lead->save();
             }
-
             return $customer;
-
         } catch (\Throwable $e) {
             Log::error("Failed to convert lead to customer", [
                 'booking_id' => $this->booking->id,
-                'lead_id' => $lead->id ?? null,
+                'lead_id' => $this->lead->id ?? null,
                 'error' => $e->getMessage(),
             ]);
             return null;
-        }       
+        }
     }
 
-    protected array $rules = [
-        'lead.email_address' => 'required|email',
-    ];
+    public function getRules()
+    {
+        $rules = [
+            'lead.email_address' => 'required|email',
+        ];
 
+        if ($this->showCustomerForm) {
+            $rules['lead.first_name'] = 'required|string|max:255';
+            $rules['lead.last_name'] = 'required|string|max:255';
+            $rules['lead.mobile_number'] = 'nullable|string|regex:/^[0-9+\-\s()]*$/|max:20';
+        }
+
+        return $rules;
+    }
 
     public function emailQuote(): void
     {
@@ -149,7 +193,6 @@ class Guest extends V3BookingComponent
         }
         try {
             $this->quoteSent = true;
-            //$quote = Quote::find(1529);
             $quote = $this->booking->repository->convertToQuote();
             $sent = $quote->repository->generateSent($target, $quote->paying?? 1, $quote->travelling?? 0);
             $attachment = new Attachment($quote->repository->getStream($sent), $quote->reference . '.pdf', ['mime' => 'application/pdf',]);

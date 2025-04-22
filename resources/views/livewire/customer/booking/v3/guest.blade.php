@@ -60,6 +60,15 @@
                                     <p>Package price {{ $selectedCurrency }}</p>
                                     <p>{{ f_currency($booking->repository->convertedBasePrice($selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
+                                @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
+                                @if($singleOccupancy > 0 || $singleOccupancy < 0)
+                                <li>
+                                    <p>Single occupancy surcharge</p>
+                                    <div class="single_occ_div">
+                                        <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>
+                                    </div>
+                                </li>
+                                @endif
                                 @if($booking->repository->getTaxes() !== null)
                                     <div class="single">
                                         <p>{{ $tour->taxBracket()->name }} (Included)</p>
@@ -83,7 +92,39 @@
                                 <p>Balance {{ f_currency(($booking->repository->convertedTotalCost($selectedCurrency) - $booking->repository->convertedDueTodayAmount($selectedCurrency)), $selectedCurrency ) }} payable by {{ $tour->final_payment->format('d M Y') }}</p>
                             </div>
 
+
                             <div class="email-quote">
+                                <h6 class="sub-heading-6" wire:click="toggleCustomerForm">EMAIL Quote</h6>
+                                @if ($showCustomerForm)
+                                    <div class="customer_profile">
+                                        <form wire:submit.prevent="sendQuote">
+                                            <p>
+                                                <label for="firstname">First Name*</label>
+                                                <input type="text" id="firstname" wire:model.lazy="lead.first_name">
+                                                @error('lead.first_name') <span class="text-danger">{{ $message }}</span> @enderror
+                                            </p>
+                                            <p>
+                                                <label for="lastname">Last Name*</label>
+                                                <input type="text" id="lastname" wire:model.lazy="lead.last_name">
+                                                @error('lead.last_name') <span class="text-danger">{{ $message }}</span> @enderror
+                                            </p>
+                                            <p>
+                                                <label for="mobileno">Mobile No</label>
+                                                <input type="text" id="mobileno" wire:model.lazy="lead.mobile_number">
+                                            </p>
+
+                                            <button wire:loading.attr="disabled" style="width:fit-content" wire:target="sendQuote"
+                                            type="submit" class="Go-next">
+                                                <span wire:loading.remove>Send Quote</span>
+                                                <span wire:loading>Sending...</span>
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </div>
+
+
+                            <!-- <div class="email-quote">
                                 <h6 class="sub-heading-6" wire:click="emailQuote" wire:loading.attr="disabled">
                                     EMAIL quote
                                 </h6>
@@ -96,7 +137,7 @@
                                 @if (session()->has('error'))
                                     <p class="error">{{ session('error') }}</p>
                                 @endif                            
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <button type="button" class="next-button">
