@@ -34,10 +34,10 @@
     </x-admin.section.card>
     <x-admin.section.card>
         <div class="row">
-            <x-livewire.input type="date" wire:model="quote.date_from" label="Date From" width="3" required />
-            <x-livewire.input type="date" wire:model="quote.date_to" label="Date To" width="3" required />
-            <x-livewire.input type="date" wire:model="quote.final_payment" label="Final Payment" width="3" required />
-            <x-livewire.input type="date" wire:model="quote.expires" label="Quote Expiry Date" width="3" required />
+            <x-livewire.input type="date" wire:model="quote.date_from" wire:change="updatedQuoteDateFrom" label="Date From" width="3" required id="date_from"  min="{{ now()->format('Y-m-d') }}" />
+            <x-livewire.input type="date" wire:model="quote.date_to" label="Date To" width="3" required id="date_to" :min="$minToDate"  />
+            <x-livewire.input type="date" wire:model="quote.final_payment" label="Final Payment" width="3" required id="final_payment"  :max="$maxFinalDate"  />
+            <x-livewire.input type="date" wire:model="quote.expires" label="Quote Expiry Date" width="3" required min="{{ now()->format('Y-m-d') }}" />
         </div>
     </x-admin.section.card>
     <x-admin.section.card>

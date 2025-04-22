@@ -115,6 +115,7 @@ class Form extends Component
             'payment.payment_fee' => 'nullable|numeric',
             'payment.paid_on' => 'required|date',
             'payment.currency_id' => 'nullable|exists:currencies,id',
+            'payment.internal_notes' => 'nullable|string',
         ];
     }
 }

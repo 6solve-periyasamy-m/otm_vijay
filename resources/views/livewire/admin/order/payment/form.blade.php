@@ -24,6 +24,7 @@
                     <button wire:click="remaining" class="btn btn-warning">Remaining</button>
                 </div>
             </div>
+            <x-livewire.input.text-area wire:model="payment.internal_notes" label="Internal Notes" width="12" />
         </div>
     </x-admin.section.card>
     <x-admin.section.card>

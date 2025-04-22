@@ -26,6 +26,7 @@ class PaymentController extends Controller
             'amount' => $value,
             'paid_on' => $request->input('paid_on'),
             'customer_id' => $request->input('customer_id'),
+            'internal_notes' => $request->input('notes'),
         ]);
         $order->payments()->save($payment);
         event(new PaymentCreatedEvent($payment));
@@ -46,6 +47,7 @@ class PaymentController extends Controller
             'amount' => $value,
             'paid_on' => $request->input('paid_on'),
             'customer_id' => $request->input('customer_id'),
+            'internal_notes' => $request->input('notes'),
         ]);
         event(new PaymentEditedEvent($payment));
         return redirect()->route('orders.view', ['order' => $order,]);
