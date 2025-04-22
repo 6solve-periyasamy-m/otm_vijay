@@ -243,7 +243,8 @@
                             <th scope="col">Type</th>
                             <th scope="col">Method</th>
                             <th scope="col">Payer</th>
-                            <th scope="col">Value</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Amount</th>
                             <th scope="col">Paid</th>
                             <th scope="col">Notes</th>
                             <th scope="col">Actions</th>
@@ -263,7 +264,7 @@
                                     @else
                                         {{ fr_currency($payment->amount, $payment->currency) }}
                                     @endif
-                                <td>{{ f_currency($payment->amount) }}</td>
+                                <td>{{ fr_currency($payment->amount, $payment->currency) }}</td>
                                 <td>{{ f_datetime($payment->paid_on) }}</td>
                                 @php
                                     $rowspan = $payment->payment_fee ? 2 : 1;
