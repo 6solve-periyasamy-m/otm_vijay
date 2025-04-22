@@ -95,7 +95,15 @@
         </div>
         <div class="col-12 col-xl-3">
             <p>Cost to Company</p>
-            <h6 class="fw-bold">{{ f_currency($order->repository->getCostToCompany())}}</h6>
+            <h6 class="fw-bold">
+                {{ f_currency($order->repository->getCostToCompany())}}
+                @php $rate = \Settings::getConversionRate($order->currency, \Settings::currency()); @endphp
+                @if($rate !== null)
+                    ({{ fr_currency($order->repository->getCostToCompany() * $rate, $order->currency) }})
+                @else
+                    No FX Rate for Conversion
+                @endif
+            </h6>
         </div>
         <div class="col-12 col-xl-3">
             <p>Current Profit</p>
@@ -103,7 +111,7 @@
                 @if($order->cache->profit !== null)
                     {{ f_currency($order->cache->profit)}}
                 @else
-                    No FX Rate Available for Conversion
+                    No FX Rate for Conversion
                 @endif
             </h6>
         </div>
