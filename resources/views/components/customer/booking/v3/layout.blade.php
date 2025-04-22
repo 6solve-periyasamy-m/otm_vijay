@@ -68,6 +68,9 @@
         {{ $slot }}
     </main>
 
+    @php
+        $selectedCurrency = $this->booking->booking_currency ?? setting('system.currency');
+    @endphp
     <footer>
         <div class="container">
             <div class="Go-back" wire:click="back">
@@ -75,13 +78,13 @@
             </div>
             <div class="value">
                 <div>
-                    <h6>A$2,995</h6>
+                    <h6>{{ f_currency($booking->repository->convertedBasePrice($selectedCurrency), $selectedCurrency) }}</h6>
                     <p>Per person, twin share</p>
                 </div>
                 <span></span>
                 <div>
-                    <h6>A$2,995</h6>
-                    <p>Per person, twin share</p>
+                    <h6>{{ f_currency($booking->repository->convertedTotalCost($selectedCurrency), $selectedCurrency) }}</h6>
+                    <p>Total package cost</p>
                 </div>
             </div>
             <div class="view-details">

@@ -113,8 +113,7 @@
                                                 <input type="text" id="mobileno" wire:model.lazy="lead.mobile_number">
                                             </p>
 
-                                            <button wire:loading.attr="disabled" style="width:fit-content" wire:target="sendQuote"
-                                            type="submit" class="Go-next">
+                                            <button wire:loading.attr="disabled" style="width:fit-content" wire:target="sendQuote" type="submit" class="Go-next">
                                                 <span wire:loading.remove>Send Quote</span>
                                                 <span wire:loading>Sending...</span>
                                             </button>
@@ -122,25 +121,9 @@
                                     </div>
                                 @endif
                             </div>
-
-
-                            <!-- <div class="email-quote">
-                                <h6 class="sub-heading-6" wire:click="emailQuote" wire:loading.attr="disabled">
-                                    EMAIL quote
-                                </h6>
-                                <div wire:loading wire:target="emailQuote" class="loader-container">
-                                    <p class="loader">Sending quote, please wait...</p>
-                                </div>
-                                @if (session()->has('message'))
-                                    <p class="success">{{ session('message') }}</p>
-                                @endif
-                                @if (session()->has('error'))
-                                    <p class="error">{{ session('error') }}</p>
-                                @endif                            
-                            </div> -->
                         </div>
                     </div>
-                    <button type="button" class="next-button">
+                    <button type="button" class="next-button" wire:click="advance">
                       <span>
                         <span>NEXT</span>
                         <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
