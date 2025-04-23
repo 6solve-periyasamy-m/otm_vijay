@@ -2,27 +2,27 @@
     <section class="package-container">
         <div class="container">
             <div class="column left">
-                <h2 class="sub-heading-2">QUARTER FINALS PACKAGE</h2>
-                <h3 class="sub-heading-3">Australian Open</h3>
-                <div class="location-dollar-value">
-                    <p class="location">Melbourne, Australia</p>
-                    <span></span>
-                    <p class="dollar">From A$2,995 / person twin share</p>
-                </div>
+                <x:customer.booking.v3.tour-info :tour="$tour" :booking="$booking" :selectedCurrency="$selectedCurrency" />
                 <div class="accommodation-detail ">
                     <h2 class="sub-heading-2-p">ACCOMMODATION DETAILS</h2>
-                    <p>Review and customise your accommodation details. Selecting a different hotel or room type may
-                        impact the total cost.</p>
+                    <p>Review and customise your accommodation details. Selecting a different hotel or room type may impact the total cost.</p>
                     <h6 class="sub-heading-6">DEFAULT HOTEL INCLUDED IN THIS PACKAGE</h6>
+                    @php //dd($defaultdHotel['hotel']->accommodationtype?->name); @endphp
                     <div class="locate">
-                        <div class="image">
-                            <img src="{{ asset('images/accommodation/hotel_1.jpg') }}" alt="melbourne">
-                        </div>
-                        <div class="text-block">
-                            <h6>Pan Pacific, Melbourne</h6>
-                            <p>3 star</p>
-                            <p>+A$0</p>
-                        </div>
+                        @if($defaultHotel)                            
+                            @php $imagePath = public_path($defaultHotel['hotel']->image_url ?? ''); @endphp
+                            @if(!empty($defaultHotel['hotel']->image_url) && file_exists($imagePath))
+                                <div class="image">
+                                    <img src="{{ asset($defaultHotel['hotel']->image_url) }}" alt="{{ $defaultHotel['hotel']->name }}" title="{{ $defaultHotel['hotel']->name }}">
+                                </div>
+                            @endif
+                            <div class="text-block">
+                                <h6>{{ $defaultHotel['hotel']->name }}</h6>
+                                <p>{{ $defaultHotel['hotel']->accommodationtype?->name }}</p>
+                                <p>{{ $defaultHotel['type'] ?? '' }} </p>
+                                <p>{{ $defaultHotel['board'] ?? '' }} </p>
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <div class="booking-dates">
@@ -36,11 +36,11 @@
                         <div class="first">
                             <div class="image-module">
                                 <img src="{{ asset('icons/checkin.svg') }}" alt="icon">
-                                <input type="text" id="dateRange" placeholder="Select Date Range">
+                                <input type="text" id="dateRange-hide" placeholder="Select Date Range">
                             </div>
                             <div class="text-block">
                                 <p>Check-in</p>
-                                <p>21 Jan 25</p>
+                                <p>{{ $tour->date_from?->format('d M y') }}</p>
                             </div>
                         </div>
                         <div>
@@ -49,11 +49,10 @@
                         <div class="second">
                             <div class="image-module">
                                 <img src="{{ asset('icons/checkin.svg') }}" alt="icon">
-                                <!-- <input type="date"> -->
                             </div>
                             <div class="text-block">
                                 <p>Check-out</p>
-                                <p>24 Jan 25</p>
+                                <p>{{ $tour->date_to?->format('d M y') }}</p>
                             </div>
                         </div>
                     </div>
@@ -67,37 +66,49 @@
                         <div class="quantity">
                             <span class="minus"><img src="{{ asset('icons/Minus.svg') }}" alt="minus"></span>
                             <span>|</span>
-                            <span class="value">5</span>
+                            <span class="value">{{ count($this->rooms) }}</span>
                             <span>|</span>
                             <span class="plus"><img src="{{ asset('icons/Plus.svg') }}" alt="plus"></span>
                         </div>
                     </div>
                 </div>
+                
                 <div class="room-selection">
                     <h6 class="sub-heading-6">ROOM SELECTION</h6>
                     <p>If you would like to upgrade, select from the upgrade options below.</p>
                     <p>Then, choose your preferred bedding configuration for each room.</p>
-
+                    @php //dd($tour->repository->getHotels()) @endphp 
                     <div class="showcase">
-                        <div class="single">
-                            <div><img src="{{ asset('icons/Bed.svg') }}" alt="bed"></div>
-                            <p>Double</p>
-                        </div>
-                        <div class="single">
-                            <div><img src="{{ asset('icons/Bed.svg') }}" alt="bed"><img
-                                        src="{{ asset('icons/Bed.svg') }}" alt="bed"></div>
-                            <p>Twin</p>
-                        </div>
-                        <div class="single">
-                            <div><img src="{{ asset('icons/Bed.svg') }}" alt="bed"><img
-                                        src="{{ asset('icons/Bed.svg') }}" alt="bed"><img
-                                        src="{{ asset('icons/Bed.svg') }}" alt="bed"></div>
-                            <p>Triple</p>
-                        </div>
+                        @foreach($this->tour->repository->getRooms($selectedHotel) as $id => $name)
+                            <div class="single">
+                                <div>
+                                    @for($i = 0; $i < $this->getBedCount($name); $i++)
+                                        <img src="{{ asset('icons/Bed.svg') }}" alt="bed">
+                                    @endfor
+                                </div>
+                                <p>{{ $name }} {{ $id }}</p>
+                            </div>
+                        @endforeach
                     </div>
-
+                    @php //dd($rooms); @endphp
                     <div class="room-listing-module">
-                        <div class="single-room">
+                        @for($x = 0, $xMax = count($rooms); $x < $xMax; $x++)
+                            <div class="single-room">
+                                <h6>Room {{ $x + 1 }}</h6>
+                                <p>Lorem Ipsum is simply dummy</p>
+                                <ul>
+                                    <li>Size of room: 52 sq m</li>
+                                    <li>Size of bed: 1 king bed</li>
+                                </ul>
+                                <p>Number of guests</p>
+                                <div class="guest-module">
+                                    <div>1</div>
+                                    <div class="active">2</div>
+                                    <div>3</div>
+                                </div>
+                            </div>
+                        @endfor
+                        <!-- <div class="single-room">
                             <h6>Room 1</h6>
                             <p>Lorem Ipsum is simply dummy</p>
                             <ul>
@@ -225,7 +236,7 @@
                                 </div>
                             </div>
                             <button type="button" class="include-button">INCLUDE</button>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="hotel">

@@ -21,9 +21,9 @@ class Guest extends V3BookingComponent
 {
     private const MAX_TRAVELLERS = 5;
     protected $listeners = ['currencyUpdated' => 'updateCurrency'];
-    public string $selectedCurrency;
     public bool $quoteSent = false;
     public bool $showCustomerForm = false;
+    
     protected array $messages = [
         'lead.email_address.required' => 'Email is required.',
         'lead.email_address.email' => 'Please enter a valid email address.',
@@ -41,10 +41,10 @@ class Guest extends V3BookingComponent
             $this->lead->booking_id = $booking->id;
             $this->lead->save();
             $booking->lead_traveller_id = $this->lead->id;
+            $booking->booking_accommodation_id = $this->selectedHotel;
             $booking->save();
             $this->addTraveller();
-        }
-        $this->selectedCurrency = $this->booking->booking_currency ?? setting('system.currency', 'GBP');
+        }        
     }
 
     public function toggleCustomerForm()

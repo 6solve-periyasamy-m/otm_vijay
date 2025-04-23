@@ -3,9 +3,18 @@
 namespace App\Http\Livewire\Customer\Booking\V3;
 
 use App\Http\Livewire\Abstract\V3BookingComponent;
+use Illuminate\Support\Str;
 
 class Hotel extends V3BookingComponent
 {
+    public array $roomTypeOrder = ['single', 'double', 'twin', 'triple'];
+
+    public function mount($tour = null, $booking = null)
+    {        
+        parent::mount($tour, $booking);
+        $this->validateRoomCount();
+    }
+
     public function render()
     {
         return view('livewire.customer.booking.v3.hotel');
@@ -20,4 +29,20 @@ class Hotel extends V3BookingComponent
     {
         return; // Final page right now
     }
+
+    public function getBedCount(string $roomName): int
+    {
+        $roomName = Str::lower($roomName);
+
+        return match (true) {
+            Str::contains($roomName, 'triple') => 3,
+            Str::contains($roomName, 'twin')   => 2,
+            Str::contains($roomName, 'double') => 1,
+            Str::contains($roomName, 'single') => 1,
+            default                            => 1,
+        };
+    }
+
+
+
 }
