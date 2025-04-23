@@ -633,31 +633,10 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         return $cost;
     }
 
-    public function convertedBasePrice(string $toCurrency): ?float
-    {
-        return fx_convert($this->getBasePrice(), setting('system.currency'), $toCurrency);
-    }
-
-    public function convertedTaxBracket(string $toCurrency): ?float
-    {
-        return fx_convert($this->getTaxes(), setting('system.currency'), $toCurrency);
-    }
-
-    public function convertedTotalCost(string $toCurrency): ?float
-    {
-        return fx_convert($this->getTotalCost(), setting('system.currency'), $toCurrency);
-    }
-
-    public function convertedDueTodayAmount(string $toCurrency): ?float
-    {
-        return fx_convert($this->getDueTodayAmount(), setting('system.currency'), $toCurrency);
-    }
-
     public function convertBookingCurrency(float $cost, string $toCurrency): ?float
     {
         return fx_convert($cost, setting('system.currency'), $toCurrency);
     }
-
 
     private function getTaxBracket(): TaxBracket|null
     {

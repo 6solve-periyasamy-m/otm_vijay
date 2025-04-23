@@ -77,20 +77,27 @@
                     <h6 class="sub-heading-6">ROOM SELECTION</h6>
                     <p>If you would like to upgrade, select from the upgrade options below.</p>
                     <p>Then, choose your preferred bedding configuration for each room.</p>
-                    @php //dd($tour->repository->getHotels()) @endphp 
+                    @php //dd($this->tour->repository->getRooms($selectedHotel)) @endphp 
+                    @php
+                        $bedTypes = [
+                            ['count' => 1, 'label' => 'Double'],
+                            ['count' => 2, 'label' => 'Twin'],
+                            ['count' => 3, 'label' => 'Triple'],
+                        ];
+                    @endphp
                     <div class="showcase">
-                        @foreach($this->tour->repository->getRooms($selectedHotel) as $id => $name)
+                        @foreach($bedTypes as $type)
                             <div class="single">
                                 <div>
-                                    @for($i = 0; $i < $this->getBedCount($name); $i++)
+                                    @for ($i = 0; $i < $type['count']; $i++)
                                         <img src="{{ asset('icons/Bed.svg') }}" alt="bed">
                                     @endfor
                                 </div>
-                                <p>{{ $name }} {{ $id }}</p>
+                                <p>{{ $type['label'] }}</p>
                             </div>
                         @endforeach
                     </div>
-                    @php //dd($rooms); @endphp
+                    @php dd(count($rooms)); @endphp
                     <div class="room-listing-module">
                         @for($x = 0, $xMax = count($rooms); $x < $xMax; $x++)
                             <div class="single-room">

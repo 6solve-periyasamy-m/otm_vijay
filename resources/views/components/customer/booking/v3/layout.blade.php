@@ -78,12 +78,12 @@
             </div>
             <div class="value">
                 <div>
-                    <h6>{{ f_currency($booking->repository->convertedBasePrice($selectedCurrency), $selectedCurrency) }}</h6>
+                    <h6>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</h6>
                     <p>Per person, twin share</p>
                 </div>
                 <span></span>
                 <div>
-                    <h6>{{ f_currency($booking->repository->convertedTotalCost($selectedCurrency), $selectedCurrency) }}</h6>
+                    <h6>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency), $selectedCurrency) }}</h6>
                     <p>Total package cost</p>
                 </div>
             </div>

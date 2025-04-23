@@ -57,29 +57,34 @@
                             <div class="select-currency">
                                 @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector'))
                                 <div class="single">
-                                    <p>Package price {{ $selectedCurrency }}</p>
-                                    <p>{{ f_currency($booking->repository->convertedBasePrice($selectedCurrency), $selectedCurrency) }}</p>
+                                    <p>Package price</p>
+                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
+                                @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
+                                @if($upgradePrice > 0 || $upgradePrice < 0)
+                                    <li>
+                                        <p class="txt">Upgrades Price</p>
+                                        <p class="price">{{ f_currency($booking->repository->convertBookingCurrency($upgradePrice, $selectedCurrency), $selectedCurrency) }}</p>
+                                    </li>
+                                @endif
                                 @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
                                 @if($singleOccupancy > 0 || $singleOccupancy < 0)
-                                <li>
-                                    <p>Single occupancy surcharge</p>
-                                    <div class="single_occ_div">
-                                        <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>
+                                    <div class="single">
+                                        <p>Single occupancy surcharge</p>
+                                        <p>{{ f_currency($booking->repository->convertBookingCurrency($singleOccupancy, $selectedCurrency), $selectedCurrency) }}</p>
                                     </div>
-                                </li>
                                 @endif
                                 @if($booking->repository->getTaxes() !== null)
                                     <div class="single">
                                         <p>{{ $tour->taxBracket()->name }} (Included)</p>
-                                        <p>{{f_currency($booking->repository->convertedTaxBracket($selectedCurrency), $selectedCurrency)}}</p>
+                                        <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTaxes(), $selectedCurrency), $selectedCurrency) }}</p>
                                     </div>
                                 @endif
                             </div>
                             <div class="total">
                                 <div class="single">
                                     <p>Total</p>
-                                    <p>{{ f_currency($booking->repository->convertedTotalCost($selectedCurrency), $selectedCurrency) }}</p>
+                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
                             </div>
                         </div>
@@ -87,9 +92,9 @@
                             <div class="payable-now">
                                 <div class="single">
                                     <p>Payable now</p>
-                                    <p>{{ f_currency($booking->repository->convertedDueTodayAmount($selectedCurrency), $selectedCurrency) }}</p> 
+                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency), $selectedCurrency)  }}</p> 
                                 </div>
-                                <p>Balance {{ f_currency(($booking->repository->convertedTotalCost($selectedCurrency) - $booking->repository->convertedDueTodayAmount($selectedCurrency)), $selectedCurrency ) }} payable by {{ $tour->final_payment->format('d M Y') }}</p>
+                                <p>Balance {{ f_currency(($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency) - $booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency)), $selectedCurrency ) }} payable by {{ $tour->final_payment->format('d M Y') }}</p>
                             </div>
 
 

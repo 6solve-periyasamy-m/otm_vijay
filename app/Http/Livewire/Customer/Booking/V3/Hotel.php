@@ -30,19 +30,4 @@ class Hotel extends V3BookingComponent
         return; // Final page right now
     }
 
-    public function getBedCount(string $roomName): int
-    {
-        $roomName = Str::lower($roomName);
-
-        return match (true) {
-            Str::contains($roomName, 'triple') => 3,
-            Str::contains($roomName, 'twin')   => 2,
-            Str::contains($roomName, 'double') => 1,
-            Str::contains($roomName, 'single') => 1,
-            default                            => 1,
-        };
-    }
-
-
-
 }
