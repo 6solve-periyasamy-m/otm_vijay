@@ -97,7 +97,7 @@
             <p>Cost to Company</p>
             <h6 class="fw-bold">
                 {{ f_currency($order->repository->getCostToCompany())}}
-                @php $rate = \Settings::getConversionRate($order->currency, \Settings::currency()); @endphp
+                @php $rate = \Settings::getConversionRate(\Settings::currency(), $order->currency); @endphp
                 @if($rate !== null)
                     ({{ fr_currency($order->repository->getCostToCompany() * $rate, $order->currency) }})
                 @else
