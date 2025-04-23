@@ -6,6 +6,9 @@ use App\Exceptions\CannotDeleteException;
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
+use App\Models\Accommodation\BoardType;
+use App\Models\Accommodation\RoomCategory;
+use App\Models\Accommodation\RoomType;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Booking\Component\BookingActivity;
@@ -44,6 +47,7 @@ use App\Repository\Reporting\Manifest\TransportManifestRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\BookingComponentStorage;
 use App\Repository\Storage\OrderComponentStorage;
+use App\Repository\Storage\Tour\GroupedHotelRooming;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Settings;
@@ -756,5 +760,59 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             'inclusions' => $this->getInclusions(),
             'rooms' => $this->getRooms(),
         ];
+    }
+
+    /**
+     * Get a list of GroupedHotelRooming, grouped into arrays based on hotel ID
+     *
+     * @return array<int, GroupedHotelRooming[]>
+     */
+    public function getHotelGroups(): array
+    {
+        /** @var array<int, GroupedHotelRooming[]> $hotelGroups */
+        $hotelGroups = [];
+        foreach ($this->tour->accommodationInventoryTours as $inventoryTour) {
+            $found = false;
+            $inventory = $inventoryTour->inventory;
+            if (array_key_exists($inventory->accommodation_id, $hotelGroups)) {
+                foreach ($hotelGroups[$inventory->accommodation_id] as $key => $hotelGroup) {
+                    if ($hotelGroup->add($inventoryTour)) {
+                        $found = true;
+                        $hotelGroups[$inventoryTour->accommodation_id][$key] = $hotelGroup;
+                        break;
+                    }
+                }
+            }
+            if (!$found) {
+                $hotelGroups[$inventoryTour->accommodation_id] = [GroupedHotelRooming::fromInventoryTour($inventoryTour),];
+            }
+        }
+        return $hotelGroups;
+    }
+
+    /**
+     * Get a flattened list of GroupedHotelRooming, not grouped by hotel id
+     *
+     * @return GroupedHotelRooming[]
+     */
+    public function getFlattenedGroups(): array
+    {
+        $array = [];
+        foreach ($this->getHotelGroups() as $key => $hotelGroups) {
+            $array = [...$array, ...$hotelGroups];
+        }
+        return $array;
+    }
+
+    public function getHotelGroup(Accommodation $hotel, RoomType $roomType, BoardType $boardType, RoomCategory|null $category): GroupedHotelRooming|null
+    {
+        foreach (($this->getHotelGroups()[$hotel->id] ?? []) as $hotelGroup) {
+            if ($hotelGroup->occupancy->id === $roomType->id
+                && $hotelGroup->board->id === $boardType->id
+                && $hotelGroup->category?->id === $category?->id) {
+                return $hotelGroup;
+            }
+        }
+        return null;
     }
 }
