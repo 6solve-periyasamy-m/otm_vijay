@@ -1239,7 +1239,8 @@ figure.table {
     <tr>
         <td style="vertical-align: top;">
             <!-- <strong>BANK TRANSFER</strong><br> -->
-            {!! $itinerary->finances->paymentDetails !!}
+             @php $payment_details = $itinerary->payment_details ?? $itinerary->finances->paymentDetails;  @endphp
+            {!! $payment_details !!}
         </td>
         <!-- <td style="vertical-align: top;">
             <strong>PAYMENT GATE</strong><br>

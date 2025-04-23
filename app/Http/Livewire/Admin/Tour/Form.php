@@ -154,6 +154,7 @@ class Form extends Component
             'tour.notes' => 'nullable',
             'tour.city' => 'nullable|string',
             'tour.country_id' => 'nullable|exists:countries,id',
+            'tour.payment_details' => 'nullable|string|min:3',
         ];
     }
 

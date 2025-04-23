@@ -52,7 +52,7 @@
                 <x-livewire.ckeditor name="quote.invoice_footer" value="{{ $quote?->invoice_footer }}" label="Invoice Footer" />
             </div>
             <div class="col-xl-4">
-                <x-livewire.input.select.large-text-template name="paymentDetails" label="Copy from Template" value="{{ $paymentTemplate }}" />
+                <x-livewire.input.select.large-text-template name="paymentTemplate" label="Copy from Template" value="{{ $paymentTemplate }}" />
                 <x-livewire.ckeditor name="quote.payment_details" value="{{ $quote?->payment_details }}" label="Payment Details" />
             </div>
             <div class="col-xl-4">

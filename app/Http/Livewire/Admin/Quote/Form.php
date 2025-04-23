@@ -163,6 +163,7 @@ class Form extends Component
             'quote.external_notes' => 'nullable|string|min:3',
             'quote.terms' => 'required|string|min:3',
             'quote.invoice_footer' => 'nullable|string|min:3',
+            'quote.payment_details' => 'nullable|string|min:3',
         ];
     }
 }
