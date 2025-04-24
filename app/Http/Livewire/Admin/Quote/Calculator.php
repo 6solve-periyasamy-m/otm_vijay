@@ -52,8 +52,8 @@ class Calculator extends Component
         $this->quote = $quote;
         $this->paying = $this->quote->paying ?? 0;
         $this->travelling = $this->quote->travelling ?? 0;
-        $this->fromRate = $this->quote->from_rate ?? Settings::getConversionRate($this->quote->currency, Settings::currency());
-        $this->toRate = $this->quote->to_rate ?? Settings::getConversionRate(Settings::currency(), $this->quote->currency);
+        $this->fromRate = $this->quote->from_rate ?? Settings::getConversionRate($this->quote->currency, Settings::currency()) ?? 1;
+        $this->toRate = $this->quote->to_rate ?? Settings::getConversionRate(Settings::currency(), $this->quote->currency) ?? 1;
         $this->calculate(false);
     }
 
