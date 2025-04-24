@@ -502,7 +502,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         $this->order->installments()->delete();
         foreach ($this->order->tour->paymentInstallments as $installment) {
             $oInstallment = OrderInstallment::make([
-                'amount' => $installment->cost,
+                'amount' => $installment->getCostAttribute($this->order->commission_amount / ($this->order->paying_customers ?? 1)),
                 'due_on' => $installment->due_on,
             ]);
             $this->order->installments()->save($oInstallment);
