@@ -432,7 +432,7 @@ class Order extends Model implements NotificationSubject
      */
     public function getRemainingInstallmentAttribute(): float
     {
-        $cost = ($this->total - $this->commission_amount) - $this->calculated_deposit;
+        $cost = $this->total - $this->calculated_deposit;
         foreach ($this->installments as $installment) {
             $cost -= $installment->calculated_amount;
         }
