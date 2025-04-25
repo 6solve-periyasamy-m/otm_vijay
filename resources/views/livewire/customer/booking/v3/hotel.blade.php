@@ -2,26 +2,25 @@
     <section class="package-container">
         <div class="container">
             <div class="column left">
-                <h2 class="sub-heading-2">QUARTER FINALS PACKAGE</h2>
-                <h3 class="sub-heading-3">Australian Open</h3>
-                <div class="location-dollar-value">
-                    <p class="location">Melbourne, Australia</p>
-                    <span></span>
-                    <p class="dollar">From A$2,995 / person twin share</p>
-                </div>
+                <x:customer.booking.v3.tour-info :tour="$tour" :booking="$booking" :selectedCurrency="$selectedCurrency" />
                 <div class="accommodation-detail ">
                     <h2 class="sub-heading-2-p">ACCOMMODATION DETAILS</h2>
                     <p>Review and customise your accommodation details. Selecting a different hotel or room type may
                         impact the total cost.</p>
                     <h6 class="sub-heading-6">DEFAULT HOTEL INCLUDED IN THIS PACKAGE</h6>
+                    @php $default = $this->getDefaultHotel(); @endphp
                     <div class="locate">
-                        <div class="image">
-                            <img src="{{ asset('images/accommodation/hotel_1.jpg') }}" alt="melbourne">
-                        </div>
+                        @php $imagePath = public_path($default->image_url ?? ''); @endphp
+                        @if(!empty($default->image_url) && file_exists($imagePath))
+                            <div class="image">
+                                <img src="{{ asset($default->image_url) }}" alt="{{ $default->name }}" title="{{ $default->name }}">
+                            </div>
+                        @endif
                         <div class="text-block">
-                            <h6>Pan Pacific, Melbourne</h6>
-                            <p>3 star</p>
-                            <p>+A$0</p>
+                            <h6>{{ $default->name }}</h6>
+                            <p>{{ $default->accommodationtype?->name }}</p>
+                            <p>{{ $default['type'] ?? '' }} </p>
+                            <p>{{ $default['board'] ?? '' }} </p>
                         </div>
                     </div>
                 </div>
@@ -36,11 +35,11 @@
                         <div class="first">
                             <div class="image-module">
                                 <img src="{{ asset('icons/checkin.svg') }}" alt="icon">
-                                <input type="text" id="dateRange" placeholder="Select Date Range">
+                                <input type="text" id="dateRange-hidden" placeholder="Select Date Range">
                             </div>
                             <div class="text-block">
                                 <p>Check-in</p>
-                                <p>21 Jan 25</p>
+                                <p>{{ $tour->date_from?->format('d M y') }}</p>
                             </div>
                         </div>
                         <div>
@@ -49,11 +48,10 @@
                         <div class="second">
                             <div class="image-module">
                                 <img src="{{ asset('icons/checkin.svg') }}" alt="icon">
-                                <!-- <input type="date"> -->
                             </div>
                             <div class="text-block">
                                 <p>Check-out</p>
-                                <p>24 Jan 25</p>
+                                <p>{{ $tour->date_to?->format('d M y') }}</p>
                             </div>
                         </div>
                     </div>
@@ -67,7 +65,7 @@
                         <div class="quantity">
                             <span class="minus"><img src="{{ asset('icons/Minus.svg') }}" alt="minus"></span>
                             <span>|</span>
-                            <span class="value">5</span>
+                            <span class="value">{{ count($this->rooms) }}</span>
                             <span>|</span>
                             <span class="plus"><img src="{{ asset('icons/Plus.svg') }}" alt="plus"></span>
                         </div>
@@ -77,300 +75,113 @@
                     <h6 class="sub-heading-6">ROOM SELECTION</h6>
                     <p>If you would like to upgrade, select from the upgrade options below.</p>
                     <p>Then, choose your preferred bedding configuration for each room.</p>
-
+                    @php
+                        $bedTypes = [
+                            ['count' => 1, 'label' => 'Double'],
+                            ['count' => 2, 'label' => 'Twin'],
+                            ['count' => 3, 'label' => 'Triple'],
+                        ];
+                    @endphp
                     <div class="showcase">
-                        <div class="single">
-                            <div><img src="{{ asset('icons/Bed.svg') }}" alt="bed"></div>
-                            <p>Double</p>
-                        </div>
-                        <div class="single">
-                            <div><img src="{{ asset('icons/Bed.svg') }}" alt="bed"><img
-                                        src="{{ asset('icons/Bed.svg') }}" alt="bed"></div>
-                            <p>Twin</p>
-                        </div>
-                        <div class="single">
-                            <div><img src="{{ asset('icons/Bed.svg') }}" alt="bed"><img
-                                        src="{{ asset('icons/Bed.svg') }}" alt="bed"><img
-                                        src="{{ asset('icons/Bed.svg') }}" alt="bed"></div>
-                            <p>Triple</p>
-                        </div>
+                        @foreach($bedTypes as $type)
+                            <div class="single">
+                                <div>
+                                    @for ($i = 0; $i < $type['count']; $i++)
+                                        <img src="{{ asset('icons/Bed.svg') }}" alt="bed">
+                                    @endfor
+                                </div>
+                                <p>{{ $type['label'] }}</p>
+                            </div>
+                        @endforeach
                     </div>
 
                     <div class="room-listing-module">
-                        <div class="single-room">
-                            <h6>Room 1</h6>
-                            <p>Lorem Ipsum is simply dummy</p>
-                            <ul>
-                                <li>Size of room: 52 sq m</li>
-                                <li>Size of bed: 1 king bed</li>
-                            </ul>
-                            <p>Number of guests</p>
-                            <div class="guest-module">
-                                <div>1</div>
-                                <div class="active">2</div>
-                                <div>3</div>
+                        @for($x = 0, $xMax = count($rooms); $x < $xMax; $x++)
+                            <div class="single-room">
+                                <h6>Room {{ $x + 1 }}</h6>
+                                <div class="roomdesc" data-room-index="{{ $x }}"></div>
+                                <p>Number of guests</p>
+                                <div class="guest-module">
+                                    @for($i = 1, $iMax = 3; $i <= $iMax; $i++)
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                class="guest-radio"
+                                                
+                                                name="rooms[{{ $x }}][travellers]"
+                                                value="{{ $i }}"
+                                                data-room-index="{{ $x }}"
+                                            >
+                                            {{ $i }}
+                                        </label>
+                                    @endfor
+                                    @error("rooms.$x.travellers") <label class="error-label">{{ $message }}</label> @enderror
+                                </div>
+                                <p>Bed configuration</p>
+                                <div class="form-field" wire:key="{{ Str::random() }}">
+                                    @php //dd($this->tour->repository->getBookingRooms($selectedHotel)); @endphp
+                                    
+                                    @foreach($this->tour->repository->getBookingRooms($selectedHotel) as $id => $item)
+                                        @php $bedType = $item['name']; @endphp
+                                        <label>
+                                            <input
+                                               
+                                                type="radio"
+                                                class="bed-radio disabled-bed"
+                                                name="rooms[{{ $x }}][room]"
+                                                value="{{ $id }}"
+                                                data-room-index="{{ $x }}"
+                                                data-room-id="{{ $id }}"
+                                                data-bed-type="{{ $bedType }}"
+                                                data-bed-occupancy="{{ $item['occupancy'] }}"
+                                                data-bed-desc="{!! htmlspecialchars($item['room_desc']) !!}"                                                
+                                                disabled
+                                            >
+                                            {{ $bedType }}
+                                        </label>
+                                    @endforeach
+                                </div>
+                                <button type="button" class="include-button">INCLUDE</button>
                             </div>
-                            <p>Bed configuration</p>
-                            <div class="bed-configuration active">
-                                <div class="bed-icon">
-                                    <img src="{{ asset('icons/Bed-double.svg') }}" alt="bed-icon" class="default">
-                                    <img src="{{ asset('icons/Bed-double.svg') }}" alt="bed-icon" class="hover">
-                                </div>
-                                <div class="twin">
-                                    Double
-                                </div>
-                            </div>
-                            <div class="bed-configuration">
-                                <div class="bed-icon">
-                                    <img src="{{ asset('icons/Twin-bed.svg') }}" alt="bed-icon" class="default">
-                                    <img src="{{ asset('icons/twin-bed-hover.svg') }}" alt="bed-icon" class="hover">
-                                </div>
-                                <div class="twin">
-                                    Twin
-                                </div>
-                            </div>
-                            <div class="bed-configuration">
-                                <div class="bed-icon">
-                                    <img src="{{ asset('icons/Triple-Bed.svg') }}" alt="bed-icon" class="default">
-                                    <img src="{{ asset('icons/Triple-Bed-hover.svg') }}" alt="bed-icon" class="hover">
-                                </div>
-                                <div class="twin">
-                                    Triple
-                                </div>
-                            </div>
-                            <button type="button" class="include-button">INCLUDE</button>
-                        </div>
-                        <div class="single-room">
-                            <h6>Room 2</h6>
-                            <p>Lorem Ipsum is simply dummy</p>
-                            <ul>
-                                <li>Size of room: 52 sq m</li>
-                                <li>Size of bed: 1 king bed</li>
-                            </ul>
-                            <p>Number of guests</p>
-                            <div class="guest-module">
-                                <div>1</div>
-                                <div class="active">2</div>
-                                <div>3</div>
-                            </div>
-                            <p>Bed configuration</p>
-                            <div class="bed-configuration active">
-                                <div class="bed-icon">
-                                    <img src="{{ asset('icons/Bed-double.svg') }}" alt="bed-icon" class="default">
-                                    <img src="{{ asset('icons/Bed-double.svg') }}" alt="bed-icon" class="hover">
-                                </div>
-                                <div class="twin">
-                                    Double
-                                </div>
-                            </div>
-                            <div class="bed-configuration">
-                                <div class="bed-icon">
-                                    <img src="{{ asset('icons/Twin-bed.svg') }}" alt="bed-icon" class="default">
-                                    <img src="{{ asset('icons/twin-bed-hover.svg') }}" alt="bed-icon" class="hover">
-                                </div>
-                                <div class="twin">
-                                    Twin
-                                </div>
-                            </div>
-                            <div class="bed-configuration">
-                                <div class="bed-icon">
-                                    <img src="{{ asset('icons/Triple-Bed.svg') }}" alt="bed-icon" class="default">
-                                    <img src="{{ asset('icons/Triple-Bed-hover.svg') }}" alt="bed-icon" class="hover">
-                                </div>
-                                <div class="twin">
-                                    Triple
-                                </div>
-                            </div>
-                            <button type="button" class="include-button">INCLUDE</button>
-                        </div>
-                        <div class="single-room">
-                            <h6>Room 3</h6>
-                            <p>Lorem Ipsum is simply dummy</p>
-                            <ul>
-                                <li>Size of room: 52 sq m</li>
-                                <li>Size of bed: 1 king bed</li>
-                            </ul>
-                            <p>Number of guests</p>
-                            <div class="guest-module">
-                                <div class="active">1</div>
-                                <div>2</div>
-                                <div>3</div>
-                            </div>
-                            <p>Bed configuration</p>
-                            <div class="bed-configuration active">
-                                <div class="bed-icon">
-                                    <img src="{{ asset('icons/Bed-double.svg') }}" alt="bed-icon" class="default">
-                                    <img src="{{ asset('icons/Bed-double.svg') }}" alt="bed-icon" class="hover">
-                                </div>
-                                <div class="twin">
-                                    Double
-                                </div>
-                            </div>
-                            <div class="bed-configuration">
-                                <div class="bed-icon">
-                                    <img src="{{ asset('icons/Twin-bed.svg') }}" alt="bed-icon" class="default">
-                                    <img src="{{ asset('icons/twin-bed-hover.svg') }}" alt="bed-icon" class="hover">
-                                </div>
-                                <div class="twin">
-                                    Twin
-                                </div>
-                            </div>
-                            <div class="bed-configuration">
-                                <div class="bed-icon">
-                                    <img src="{{ asset('icons/Triple-Bed.svg') }}" alt="bed-icon" class="default">
-                                    <img src="{{ asset('icons/Triple-Bed-hover.svg') }}" alt="bed-icon" class="hover">
-                                </div>
-                                <div class="twin">
-                                    Triple
-                                </div>
-                            </div>
-                            <button type="button" class="include-button">INCLUDE</button>
-                        </div>
+                            @error("rooms.$x.room") <label class="error-label">{{ $message }}</label> @enderror
+                            <label class="bed-error text-danger" style="display:none;"></label>
+                        @endfor
                     </div>
                 </div>
                 <div class="hotel">
-                    <h6 class="sub-heading-6">HOTEL</h6>
+                    <h6 class="sub-heading-6">HOTEL</h6>                   
                     <p>Your package includes a 3-night stay at Pan Pacific Melbourne, a 5-star hotel. If you’d like to
                         upgrade, please select from one of the other options below.</p>
 
                     <div class="hotel-listing">
-                        <div class="single-hotel">
-                            <div class="hotel-image-block">
-                                <div>
-                                    <img src="{{ asset('images/accommodation/accommodation_2.webp') }}"
-                                         alt="hotel-images">
+                        @foreach($this->tour->repository->getHotels() as $id => $arrHotel)
+                            @php $hotel = $arrHotel['hotel']; @endphp
+                            <div class="single-hotel">
+                                <div class="hotel-image-block">
+                                    @foreach($hotel->gallery as $photo)
+                                        <div><img src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}"></div>
+                                    @endforeach
                                 </div>
-                                <div>
-                                    <img src="{{ asset('images/accommodation/accommodation_3.jpg') }}"
-                                         alt="hotel-images">
-                                </div>
-                                <div>
-                                    <img src="{{ asset('images/accommodation/accommodation_4.jpg') }}"
-                                         alt="hotel-images">
-                                </div>
-                                <div>
-                                    <img src="{{ asset('images/accommodation/accommodation_5.jpg') }}"
-                                         alt="hotel-images">
-                                </div>
-                                <div>
-                                    <img src="{{ asset('images/accommodation/hotel_1.jpg') }}" alt="hotel-images">
+                                <div class="hotel-block">
+                                    <h6>{{ $hotel->name }}</h6>
+                                    <p>3 star</p>
+                                    <p>+A$0</p>
+
+                                    <div class="room-type">
+                                        <p>Room type</p>
+                                        <select>
+                                            <option>Deluxe room</option>
+                                            <option>Basic room</option>
+                                            <option>Deluxe room</option>
+                                        </select>
+                                        <p class="breakfast-note">Breakfast included daily</p>
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                        <button type="button" class="include-button">INCLUDED</button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="hotel-block">
-                                <h6>Pan Pacific, Melbourne</h6>
-                                <p>3 star</p>
-                                <p>+A$0</p>
-
-                                <div class="room-type">
-                                    <p>Room type</p>
-
-                                    <select>
-                                        <option>Deluxe room</option>
-                                        <option>Basic room</option>
-                                        <option>Deluxe room</option>
-                                    </select>
-
-                                    <p class="breakfast-note">Breakfast included daily</p>
-
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
-
-                                    <button type="button" class="include-button">INCLUDED</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-hotel">
-                            <div class="hotel-image-block">
-                                <div>
-                                    <img src="{{ asset('images/accommodation/accommodation_2.webp') }}"
-                                         alt="hotel-images">
-                                </div>
-                                <div>
-                                    <img src="{{ asset('images/accommodation/accommodation_3.jpg') }}"
-                                         alt="hotel-images">
-                                </div>
-                                <div>
-                                    <img src="{{ asset('images/accommodation/accommodation_4.jpg') }}"
-                                         alt="hotel-images">
-                                </div>
-                                <div>
-                                    <img src="{{ asset('images/accommodation/accommodation_5.jpg') }}"
-                                         alt="hotel-images">
-                                </div>
-                                <div>
-                                    <img src="{{ asset('images/accommodation/hotel_1.jpg') }}" alt="hotel-images">
-                                </div>
-                            </div>
-                            <div class="hotel-block">
-                                <h6>The Langham, Melbourne</h6>
-                                <p>5 star</p>
-                                <p>+ A$200</p>
-
-                                <div class="room-type">
-                                    <p>Room type</p>
-
-                                    <select>
-                                        <option>Deluxe room</option>
-                                        <option>Basic room</option>
-                                        <option>Deluxe room</option>
-                                    </select>
-
-                                    <p class="breakfast-note">Breakfast included daily</p>
-
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
-
-                                    <button type="button" class="include-button">NOT AVAILABLE</button>
-
-                                    <span class="not-available">Change travel dates above to check availability</span>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-hotel">
-                            <div class="hotel-image-block">
-                                <div>
-                                    <img src="{{ asset('images/accommodation/accommodation_2.webp') }}"
-                                         alt="hotel-images">
-                                </div>
-                                <div>
-                                    <img src="{{ asset('images/accommodation/accommodation_3.jpg') }}"
-                                         alt="hotel-images">
-                                </div>
-                                <div>
-                                    <img src="{{ asset('images/accommodation/accommodation_4.jpg') }}"
-                                         alt="hotel-images">
-                                </div>
-                                <div>
-                                    <img src="{{ asset('images/accommodation/accommodation_5.jpg') }}"
-                                         alt="hotel-images">
-                                </div>
-                                <div>
-                                    <img src="{{ asset('images/accommodation/hotel_1.jpg') }}" alt="hotel-images">
-                                </div>
-                            </div>
-                            <div class="hotel-block">
-                                <h6>The Westin, Melbourne</h6>
-                                <p>5 star</p>
-                                <p>+ A$300</p>
-
-                                <div class="room-type">
-                                    <p>Room type</p>
-
-                                    <select>
-                                        <option>Deluxe room</option>
-                                        <option>Basic room</option>
-                                        <option>Deluxe room</option>
-                                    </select>
-
-                                    <p class="breakfast-note">Breakfast included daily</p>
-
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
-
-                                    <button type="button" class="include-button active">Upgrade</button>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
-
                 </div>
             </div>
             <div class="column right">
@@ -385,25 +196,18 @@
                         </div>
                         <div class="base-package">
                             <h6 class="sub-heading-6">BASE PACKAGE</h6>
-                            <h2>QUARTER FINALS PACKAGE</h2>
+                            <h2>{{ $tour->name }}</h2>
                             <ul>
-                                <li>21 Jan 25 - 24 Jan 25</li>
-                                <li>Mens Semi Final Ticket</li>
-                                <li>3 Nights, 5-Star Accommodation</li>
-                                <li>Exclusive function & more</li>
+                                <li>{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</li>
+                                @foreach($tour->repository->getInclusions() as $inclusion)
+                                    <li>{{ $inclusion }}</li>
+                                @endforeach
                             </ul>
                         </div>
                         <div class="additional-inclusions">
                             <h6 class="sub-heading-6">ADDITIONAL INCLUSIONS</h6>
                             <div class="select-currency">
-                                <div class="single">
-                                    <p>Select-currency</p>
-                                    <select>
-                                        <option>AUD</option>
-                                        <option>GBP</option>
-                                        <option>USD</option>
-                                    </select>
-                                </div>
+                                @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector'))
                                 <div class="single">
                                     <p>Package price</p>
                                     <p>A$2,995</p>
@@ -531,7 +335,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="next-button">
+                    <button type="button" class="next-button" wire:click="advance">
               <span>
                 <span>NEXT</span>
                 <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
@@ -550,3 +354,69 @@
         </div>
     </section>
 </x-customer.booking.v3.layout>
+<script>
+    jQuery(document).ready(function () {
+        const No_of_Guests = parseInt("{{ $this->getTravellerCount() }}", 10);
+
+        function calculateTotalGuests() {
+            let total = 0;
+            $('.guest-radio:checked').each(function () {
+                total += parseInt($(this).val(), 10);
+            });
+            return total;
+        }
+
+        $('.guest-radio').on('change', function () {
+            const roomIndex = $(this).data('room-index');
+            const selectedGuests = parseInt($(this).val(), 10);
+            const totalGuests = calculateTotalGuests();
+
+            const $errorBlock = $('.accomodation-travel-date-error');
+            const $errorMsg = $errorBlock.find('.error-msg');
+            const error_text = 'Total number of travellers vs. the number of guests you have selected for rooms does not match - please update your room selection to proceed';
+            console.log(`Total selected guests: ${totalGuests} / Expected: ${No_of_Guests}`);
+
+            if (totalGuests > No_of_Guests) {
+                $errorMsg.html(error_text);
+                $errorBlock.fadeIn();
+                $(this).prop('checked', false);
+                return;
+            }
+
+            if (totalGuests !== No_of_Guests) {
+                $errorMsg.html(error_text);
+                $errorBlock.fadeIn();
+            } else {
+                $errorMsg.html('');
+                $errorBlock.fadeOut();
+            }
+
+            const $bedRadios = $(`.bed-radio[data-room-index="${roomIndex}"]`);
+            let matched = false;
+
+            $bedRadios.each(function () {
+                const occupancy = parseInt($(this).data('bed-occupancy'), 10);
+                if (occupancy === selectedGuests) {
+                    $(this).prop('disabled', false);
+                    if (!matched) {
+                        $(this).prop('checked', true).trigger('change');
+                        matched = true;
+                    }
+                } else {
+                    $(this).prop('disabled', true).prop('checked', false);
+                }
+            });
+        });
+
+        $('.bed-radio').on('change', function () {
+            const roomIndex = $(this).data('room-index');
+            const bedDesc = $(this).data('bed-desc');
+
+            $(`.roomdesc[data-room-index="${roomIndex}"]`)
+                .hide()
+                .html(bedDesc)
+                .fadeIn();
+        });
+        
+    });
+</script>

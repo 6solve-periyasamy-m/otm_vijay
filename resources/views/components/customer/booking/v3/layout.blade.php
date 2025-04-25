@@ -2,12 +2,17 @@
     <header>
         <div class="container">
             <div class="column">
-                <img src="{{ asset($brand->alt_logo ?? $brand->logo) }}" alt="logo">
+                @if(isset($this->brand))
+                    <img src="{{ asset($this->brand->alt_logo ?? $this->brand->logo) }}" alt="logo" title="{{ $this->brand->name }}">
+                @endif
             </div>
             <div class="column right">
                 <p>Require assistance?</p>
-                <a href="tel:{{$brand->phone}}"><span><img src="{{ asset('icons/Call-Icon.svg') }}"
-                                                           alt="logo"></span><span>{{$brand->phone}}</span></a>
+                @if(isset($this->brand))
+                    <a href="tel:{{$this->brand->phone}}">
+                        <span><img src="{{ asset('icons/Call-Icon.svg') }}" alt="logo"></span><span>{{$this->brand->phone}}</span>
+                    </a>
+                @endif
             </div>
         </div>
     </header>
@@ -16,7 +21,7 @@
         <section class="secure-booking">
             <div class="container">
                 <div class="heading">
-                    <div class="breadcrumbs"><span><img src="{{ asset('icons/Arrow-left.svg') }}"
+                    <div class="breadcrumbs" wire:click="back"><span><img src="{{ asset('icons/Arrow-left.svg') }}"
                                                         alt="left-arrow"></span><span>BACK</span></div>
                     <h1>Secure Booking</h1>
                 </div>
@@ -63,6 +68,9 @@
         {{ $slot }}
     </main>
 
+    @php
+        $selectedCurrency = $this->booking->booking_currency ?? setting('system.currency');
+    @endphp
     <footer>
         <div class="container">
             <div class="Go-back" wire:click="back">
@@ -70,13 +78,13 @@
             </div>
             <div class="value">
                 <div>
-                    <h6>A$2,995</h6>
+                    <h6>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</h6>
                     <p>Per person, twin share</p>
                 </div>
                 <span></span>
                 <div>
-                    <h6>A$2,995</h6>
-                    <p>Per person, twin share</p>
+                    <h6>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency), $selectedCurrency) }}</h6>
+                    <p>Total package cost</p>
                 </div>
             </div>
             <div class="view-details">

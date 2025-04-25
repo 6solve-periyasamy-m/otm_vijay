@@ -51,6 +51,7 @@ use App\Repository\Storage\Tour\GroupedHotelRooming;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Settings;
+use Illuminate\Support\Str;
 
 class TourRepository extends ComponentPackageRepository implements HasStockControl, HasRoomingList, HasActivityManifest, HasFlightManifest, HasTransportManifest, HasMerchandiseManifest
 {
@@ -732,6 +733,39 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 }
             }
             $rooms[$inventoryTour->inventory->room_type_id] = $name;
+        }
+        return $rooms;
+    }
+
+    public function getBookingRooms(Accommodation|int|null $hotel = null): array
+    {
+        $rooms = [];
+        if (is_int($hotel)) {
+            $hotel = Accommodation::find($hotel);
+        }
+        if ($hotel !== null) {
+            $tourComponents =
+                $this->tour->accommodationInventoryTours()
+                    ->join('accommodation_inventories', 'accommodation_inventories.id', '=', 'accommodation_inventory_tours.accommodation_inventory_id')
+                    ->where('accommodation_inventories.accommodation_id', '=', $hotel->id)
+                    ->get();
+        } else {
+            $tourComponents = $this->tour->accommodationInventoryTours;
+        }
+        foreach ($tourComponents as $inventoryTour) {
+            $name = $inventoryTour->inventory->roomType->name;
+            if ($inventoryTour->tour_component_type !== 'Included') {
+                $cost = $inventoryTour->tour_sales_price;
+                if ($cost > 0) {
+                    $name .= ' (+' . f_currency($cost) . ')';
+                }
+                if ($cost < 0) {
+                    $name .= ' (-' . f_currency($cost*-1) . ')';
+                }
+            }
+
+            $bedType = trim(Str::afterLast($name, '-'));
+            $rooms[$inventoryTour->inventory->room_type_id] = ['id'=> $inventoryTour->inventory->roomType->id, 'name' => $bedType, 'room_desc' => $inventoryTour->inventory->category_description, 'occupancy' => $inventoryTour->inventory->roomType->maximum_occupancy];
         }
         return $rooms;
     }
