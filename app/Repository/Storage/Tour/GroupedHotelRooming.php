@@ -78,7 +78,7 @@ class GroupedHotelRooming
      * @param Carbon $end
      * @return float Total cost of upgrades, will return 0.0 if the rooms are included
      */
-    public function getUpgradeCost(Carbon $start, Carbon $end): float
+    public function getUpgradeCost(Carbon|null $start = null, Carbon|null $end = null): float
     {
         $cost = 0;
         foreach ($this->roomsBetweenDates($start, $end) as $room) {
@@ -89,20 +89,23 @@ class GroupedHotelRooming
     }
 
     /**
-     * Get included rooms between two dates
+     * Get included rooms between two dates. Assumes no bound for either end if null
      *
-     * @param Carbon $start
-     * @param Carbon $end
+     * @param Carbon|null $start
+     * @param Carbon|null $end
      * @return AccommodationInventoryTour[] List of rooms between dates
      */
-    public function roomsBetweenDates(Carbon $start, Carbon $end): array
+    public function roomsBetweenDates(Carbon|null $start, Carbon|null $end): array
     {
+        if ($start === null && $end === null) { return $this->rooms; }
         $this->sortRooms();
         $start = $start->setTime(0,0,0);
         $end = $end->setTime(23,59,59);
         $array = [];
         foreach ($this->rooms as $room) {
-            if ($room->inventory->check_in->gte($start) && $room->inventory->check_out->lte($end)) {
+            if ((($start === null) || $room->inventory->check_in->gte($start)) &&
+                (($end === null) && $room->inventory->check_out->lte($end)))
+            {
                 $array[] = $room;
             }
         }
