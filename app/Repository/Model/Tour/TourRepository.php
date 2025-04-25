@@ -701,7 +701,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         // TODO: Optimize
         $hotels = [];
         foreach ($this->tour->accommodationInventory()->groupBy('accommodation_id')->get() as $inventory) {
-            $hotels[$inventory->accommodation_id] = ['hotel' => $inventory->accommodation, 'type' => $inventory->category?->name, 'board' => $inventory->boardType?->name];
+            $hotels[$inventory->accommodation_id] = ['hotel' => $inventory->accommodation, 'type' => $inventory->category?->name, 'board' => $inventory->boardType?->name, 'accommodationType' => $inventory->accommodation->accommodationtype?->name];
         }
         return $hotels;
     }
@@ -765,9 +765,49 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             }
 
             $bedType = trim(Str::afterLast($name, '-'));
-            $rooms[$inventoryTour->inventory->room_type_id] = ['id'=> $inventoryTour->inventory->roomType->id, 'name' => $bedType, 'room_desc' => $inventoryTour->inventory->category_description, 'occupancy' => $inventoryTour->inventory->roomType->maximum_occupancy];
+            $rooms[$inventoryTour->inventory->room_type_id] = ['id'=> $inventoryTour->inventory->roomType->id, 'name' => $bedType, 'room_desc' => $inventoryTour->inventory->category_description, 'occupancy' => $inventoryTour->inventory->roomType->maximum_occupancy, 'component_type' => $inventoryTour->tour_component_type, 'board_type' => $inventoryTour->inventory->boardType?->name];
         }
         return $rooms;
+    }
+
+
+    public function getNextAccommodationByRating(Collection|array $hotels, string $currentRating): ?array
+    {
+        $hotels = collect($hotels);
+
+        preg_match('/\d+/', $currentRating, $matches);
+        $currentRatingValue = isset($matches[0]) ? (int) $matches[0] : null;
+
+        if ($currentRatingValue === null) {
+            return null; 
+        }
+
+        $hotelsWithStars = $hotels->map(function ($hotel) {
+            $type = $hotel['accommodationType'] ?? '';
+            preg_match('/\d+/', $type, $matches);
+            $hotel['star_value'] = isset($matches[0]) ? (int) $matches[0] : null;
+            return $hotel;
+        })->filter(fn($hotel) => $hotel['star_value'] !== null);
+
+        $nextRating = $hotelsWithStars
+            ->pluck('star_value')
+            ->unique()
+            ->sort()
+            ->first(fn($val) => $val > $currentRatingValue);
+
+        if (!$nextRating) {
+            return null; 
+        }
+
+        return $hotelsWithStars
+            ->first(fn($hotel) => $hotel['star_value'] === $nextRating);
+    }
+
+    public function getTourNights(): int
+    {
+        $start = Carbon::parse($this->tour->date_from);
+        $end = Carbon::parse($this->tour->date_to);
+        return $start->diffInDays($end);
     }
 
     public function getDefaultRoom(int|null $hotel = null): int|null

@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-    <script src="{{ asset('css\booking\booking_new\js\script.js') }}"></script>
+    <script src="{{ asset('/js/booking/v3.js') }}"></script>
     @livewireStyles
 
     <style>

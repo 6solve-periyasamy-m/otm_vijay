@@ -149,34 +149,48 @@
                     </div>
                 </div>
                 <div class="hotel">
-                    <h6 class="sub-heading-6">HOTEL</h6>                   
-                    <p>Your package includes a 3-night stay at Pan Pacific Melbourne, a 5-star hotel. If you’d like to
-                        upgrade, please select from one of the other options below.</p>
-
+                    <h6 class="sub-heading-6">HOTEL</h6>
+                        @php $hotels = $this->tour->repository->getHotels();
+                            $currentRating = $default->accommodationtype?->name;
+                            $nextHotel = $this->tour->repository->getNextAccommodationByRating($hotels, $currentRating ?? '');
+                        @endphp
+                        @if ($nextHotel)
+                            @php
+                                $hotelName = $nextHotel['hotel']->name ?? '';
+                                $hotelType = $nextHotel['accommodationType'] ?? '';
+                                $noOfNights = $this->tour->repository->getTourNights();
+                            @endphp
+                            <p>Your package includes a {{ $noOfNights == 1 ? 'night' : $noOfNights.'-nights' }} stay at {{ $hotelName }}, a {{ $hotelType }} hotel. If you’d like to upgrade, please select from one of the other options below.</p>
+                        @endif
                     <div class="hotel-listing">
                         @foreach($this->tour->repository->getHotels() as $id => $arrHotel)
-                            @php $hotel = $arrHotel['hotel']; @endphp
+                            @php
+                                $hotel = $arrHotel['hotel'];
+                                $rooms = $this->tour->repository->getBookingRooms($hotel->id);
+                                $defaultRoom = reset($rooms);
+                            @endphp
                             <div class="single-hotel">
-                                <div class="hotel-image-block">
-                                    @foreach($hotel->gallery as $photo)
-                                        <div><img src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}"></div>
-                                    @endforeach
-                                </div>
+                                @if(!empty($hotel->gallery) && count($hotel->gallery))
+                                    <div class="hotel-image-block">
+                                        @foreach($hotel->gallery as $photo)
+                                            <div><img src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}"></div>
+                                        @endforeach
+                                    </div>
+                                @endif
                                 <div class="hotel-block">
                                     <h6>{{ $hotel->name }}</h6>
-                                    <p>3 star</p>
+                                    <p>{{ $hotel->accommodationtype?->name }}</p>
                                     <p>+A$0</p>
-
                                     <div class="room-type">
                                         <p>Room type</p>
                                         <select>
-                                            <option>Deluxe room</option>
-                                            <option>Basic room</option>
-                                            <option>Deluxe room</option>
+                                            @foreach($this->tour->repository->getBookingRooms($hotel->id) as $id => $item)
+                                                <option>{{$item['name']}}</option>
+                                            @endforeach
                                         </select>
-                                        <p class="breakfast-note">Breakfast included daily</p>
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
-                                        <button type="button" class="include-button">INCLUDED</button>
+                                        <p class="breakfast-note">{{ $defaultRoom['board_type'] ?? '' }} </p>
+                                        <p>{!! $defaultRoom['room_desc'] ?? '' !!}</p>
+                                        <button type="button" class="include-button">{{ $defaultRoom['component_type']}}</button>
                                     </div>
                                 </div>
                             </div>
