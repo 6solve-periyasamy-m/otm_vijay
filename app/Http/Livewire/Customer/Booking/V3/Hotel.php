@@ -8,6 +8,7 @@ use App\Http\Livewire\Abstract\V3BookingComponent;
 class Hotel extends V3BookingComponent
 {
     public array $rooms = [];
+    protected $listeners = ['currencyUpdated' => 'updateCurrency'];
     protected $messages = [
         'rooms.*.room.required' => "This field is required",
         'rooms.*.travellers.required' => "This field is required",

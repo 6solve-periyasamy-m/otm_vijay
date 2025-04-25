@@ -34,14 +34,6 @@ abstract class V3BookingComponent extends Component
     abstract public function back();
     abstract public function advance();
 
-
-    public function updateCurrency(string $currency)
-    {
-        $this->selectedCurrency = $currency;
-        $this->booking->repository->updateCurrency($currency);
-    }
-
-    
     public function getDefaultHotel()
     {
         foreach ($this->tour->repository->getHotels() as $hotel) {
@@ -86,5 +78,11 @@ abstract class V3BookingComponent extends Component
     public function getMaximumRooms(): int
     {
         return $this->getTravellerCount();
+    }
+
+    public function updateCurrency(string $currency)
+    {
+        $this->selectedCurrency = $currency;
+        $this->booking->repository->updateCurrency($currency);
     }
 }
