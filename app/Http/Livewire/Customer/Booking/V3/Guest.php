@@ -97,12 +97,6 @@ class Guest extends V3BookingComponent
         }
     }
 
-    public function updateCurrency(string $currency)
-    {
-        $this->selectedCurrency = $currency;
-        $this->booking->repository->updateCurrency($currency);
-    }
-
     public function render()
     {
         return view('livewire.customer.booking.v3.guest');

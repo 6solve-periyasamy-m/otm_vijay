@@ -15,8 +15,7 @@ abstract class V3BookingComponent extends Component
     public Brand $brand;
     public int|null $selectedHotel;
     public string $selectedCurrency;
-    public array $rooms = [];
-    public $defaultHotel;
+    //public array $rooms = [];
 
     public function mount(Tour|int|null $tour = null, Booking|int|null $booking = null)
     {
@@ -29,7 +28,6 @@ abstract class V3BookingComponent extends Component
         } else {
             $this->selectedHotel  = $this->booking->booking_accommodation_id;
         }
-        $this->defaultHotel = collect($this->tour->repository->getHotels())->firstWhere('hotel.id', $this->selectedHotel);
         $this->selectedCurrency = $this->booking->booking_currency ?? setting('system.currency');
     }
 
@@ -37,13 +35,19 @@ abstract class V3BookingComponent extends Component
     abstract public function advance();
 
 
-
-    public function renewRooming(): void
+    public function updateCurrency(string $currency)
     {
-        foreach ($this->booking->groups as $group) {
-            $type = $group->accommodation()->first()?->tourComponent->inventory->room_type_id ?? $this->tour->repository->getDefaultRoom($this->selectedHotel);
-            $this->rooms[] = ['room' => $type, 'travellers' => $group->travellers()->count(),];
+        $this->selectedCurrency = $currency;
+        $this->booking->repository->updateCurrency($currency);
+    }
+
+    
+    public function getDefaultHotel()
+    {
+        foreach ($this->tour->repository->getHotels() as $hotel) {
+            return $hotel['hotel'];
         }
+        return null;
     }
 
     public function validateRoomCount(): void
