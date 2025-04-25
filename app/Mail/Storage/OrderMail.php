@@ -27,7 +27,7 @@ class OrderMail extends TemplatedMail
             'LEAD_MIDDLE_NAMES' => $customer->middle_names ?? $this->faker->name,
             'LEAD_LAST_NAME' => $customer->last_name ?? $this->faker->lastName,
             'LEAD_PASSPORT_EXPIRY_DATE' => f_date($customer->passport_expiry_date ?? $this->faker->date),
-            'LEAD_CONTACT_NAME' => $order?->agent?->name ?? $order?->leadBooker?->customer?->first_name ?? $this->faker->name,
+            'LEAD_CONTACT_NAME' => $order?->agent?->first_name ?? $order?->leadBooker?->customer?->first_name ?? $this->faker->name,
             'BOOKING_REFERENCE' => $order?->booking_reference ?? $this->faker->regexify('OTM[0-9]{12}[A-Z]{4}'),
             'ORDERED_ON' => f_date($order?->ordered_on ?? $this->faker->date),
             'ORDER_COST' => f_currency($order?->cost ?? $this->faker->numberBetween(100, 1000)),
