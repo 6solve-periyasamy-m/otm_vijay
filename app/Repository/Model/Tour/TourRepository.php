@@ -838,6 +838,15 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         return $array;
     }
 
+    public function getDefaultHotelGroup(): GroupedHotelRooming|null
+    {
+        $groups = $this->getFlattenedGroups();
+        foreach ($groups as $key => $hotelGroup) {
+            if (!($hotelGroup->getUpgradeCost() > 0)) { return $hotelGroup; }
+        }
+        return $groups[0] ?? null;
+    }
+
     public function getHotelGroup(Accommodation $hotel, RoomType $roomType, BoardType $boardType, RoomCategory|null $category): GroupedHotelRooming|null
     {
         foreach (($this->getHotelGroups()[$hotel->id] ?? []) as $hotelGroup) {
