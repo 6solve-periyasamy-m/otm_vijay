@@ -63,11 +63,11 @@
                     <div class="no-of-travellers">
                         <p>Number of rooms you wish to book</p>
                         <div class="quantity">
-                            <span class="minus"><img src="{{ asset('icons/Minus.svg') }}" alt="minus"></span>
+                            <span class="minus" wire:click="removeRoom"><img src="{{ asset('icons/Minus.svg') }}" alt="minus"></span>
                             <span>|</span>
                             <span class="value">{{ count($this->rooms) }}</span>
                             <span>|</span>
-                            <span class="plus"><img src="{{ asset('icons/Plus.svg') }}" alt="plus"></span>
+                            <span class="plus" wire:click="addRoom"><img src="{{ asset('icons/Plus.svg') }}" alt="plus"></span>
                         </div>
                     </div>
                 </div>
@@ -107,7 +107,7 @@
                                             <input
                                                 type="radio"
                                                 class="guest-radio"
-                                                
+                                                wire:model.live="rooms.{{$x}}.travellers"
                                                 name="rooms[{{ $x }}][travellers]"
                                                 value="{{ $i }}"
                                                 data-room-index="{{ $x }}"
@@ -125,7 +125,7 @@
                                         @php $bedType = $item['name']; @endphp
                                         <label>
                                             <input
-                                               
+                                                wire:model="rooms.{{$x}}.room"
                                                 type="radio"
                                                 class="bed-radio disabled-bed"
                                                 name="rooms[{{ $x }}][room]"
@@ -210,7 +210,7 @@
                                 @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector'))
                                 <div class="single">
                                     <p>Package price</p>
-                                    <p>A$2,995</p>
+                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
                                 <div class="single">
                                     <p>Number of packages - 5</p>
@@ -249,28 +249,10 @@
                                     <p>Price included</p>
                                 </div>
                             </div>
-                            <div class="ticket-upgrades display-none">
-                                <h5>Ticket upgrades</h5>
-                                <div class="single">
-                                    <p>Ticket alterations</p>
-                                    <p>A$500</p>
-                                </div>
-                                <div class="single">
-                                    <p>Additional ticket/s</p>
-                                    <p>A$500</p>
-                                </div>
-                            </div>
-                            <div class="additional-upgrades display-none">
-                                <h5>Additional upgrades</h5>
-                                <div class="single">
-                                    <p>Melbourne Foodie Walking Tour</p>
-                                    <p>A$150</p>
-                                </div>
-                            </div>
                             <div class="total">
                                 <div class="single">
                                     <p>Total</p>
-                                    <p>A$17,125</p>
+                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
                                 <div class="single">
                                     <p>Starting package price</p>
@@ -281,59 +263,7 @@
                                     <p>$500</p>
                                 </div>
                             </div>
-                        </div>
-                        <div class="payment-method ">
-                            <h6 class="sub-heading-6 display-none">PAYMENT METHOD</h6>
-                            <div class="option-wrapper display-none">
-                                <label class="radio-option">
-                                    <input type="radio" name="payment" checked>
-                                    <span class="custom-radio"></span>
-                                    <span class="option-title">Pay in full</span>
-                                </label>
-                                <div class="price">A$17,125</div>
-                            </div>
-                            <div class="option-wrapper display-none">
-                                <div>
-                                    <label class="radio-option">
-                                        <input type="radio" name="payment">
-                                        <span class="custom-radio"></span>
-                                        <span class="option-title">Pay a 50% deposit now, and the rest later</span>
-                                    </label>
-                                    <div class="option-subtext">
-                                        The remaining balance of A$8,563 will be automatically charged to the same
-                                        payment method on 24 June 2024
-                                    </div>
-                                </div>
-                                <div class="price">A$8,563</div>
-                            </div>
-
-                            <div class="card-block display-none">
-                                <div class="card-type active">
-                                    <img src="{{ asset('icons/card.svg') }}" alt="Debit card">
-                                    <p>Credit / Debit card</p>
-                                </div>
-                                <div class="card-type">
-                                    <img src="{{ asset('icons/document-text.svg.svg') }}" alt="Direct Debit">
-                                    <p>Invoice - Direct Debit</p>
-                                </div>
-                            </div>
-
-                            <div class="payable-now">
-                                <div class="single">
-                                    <p>Payable now</p>
-                                    <p>A$3,425</p>
-                                </div>
-                                <p>Balance A$13,700 payable by 14 Feb 2025</p>
-                            </div>
-
-                            <div class="email-quote">
-                                <h6 class="sub-heading-6">EMAIL quote</h6>
-                                <form style="display:none;">
-                                    <label for="email">Email</label>
-                                    <input type="email" id="email" name="email">
-                                </form>
-                            </div>
-                        </div>
+                        </div>                        
                     </div>
                     <button type="button" class="next-button" wire:click="advance">
               <span>
@@ -357,66 +287,5 @@
 <script>
     jQuery(document).ready(function () {
         const No_of_Guests = parseInt("{{ $this->getTravellerCount() }}", 10);
-
-        function calculateTotalGuests() {
-            let total = 0;
-            $('.guest-radio:checked').each(function () {
-                total += parseInt($(this).val(), 10);
-            });
-            return total;
-        }
-
-        $('.guest-radio').on('change', function () {
-            const roomIndex = $(this).data('room-index');
-            const selectedGuests = parseInt($(this).val(), 10);
-            const totalGuests = calculateTotalGuests();
-
-            const $errorBlock = $('.accomodation-travel-date-error');
-            const $errorMsg = $errorBlock.find('.error-msg');
-            const error_text = 'Total number of travellers vs. the number of guests you have selected for rooms does not match - please update your room selection to proceed';
-            console.log(`Total selected guests: ${totalGuests} / Expected: ${No_of_Guests}`);
-
-            if (totalGuests > No_of_Guests) {
-                $errorMsg.html(error_text);
-                $errorBlock.fadeIn();
-                $(this).prop('checked', false);
-                return;
-            }
-
-            if (totalGuests !== No_of_Guests) {
-                $errorMsg.html(error_text);
-                $errorBlock.fadeIn();
-            } else {
-                $errorMsg.html('');
-                $errorBlock.fadeOut();
-            }
-
-            const $bedRadios = $(`.bed-radio[data-room-index="${roomIndex}"]`);
-            let matched = false;
-
-            $bedRadios.each(function () {
-                const occupancy = parseInt($(this).data('bed-occupancy'), 10);
-                if (occupancy === selectedGuests) {
-                    $(this).prop('disabled', false);
-                    if (!matched) {
-                        $(this).prop('checked', true).trigger('change');
-                        matched = true;
-                    }
-                } else {
-                    $(this).prop('disabled', true).prop('checked', false);
-                }
-            });
-        });
-
-        $('.bed-radio').on('change', function () {
-            const roomIndex = $(this).data('room-index');
-            const bedDesc = $(this).data('bed-desc');
-
-            $(`.roomdesc[data-room-index="${roomIndex}"]`)
-                .hide()
-                .html(bedDesc)
-                .fadeIn();
-        });
-        
     });
 </script>
