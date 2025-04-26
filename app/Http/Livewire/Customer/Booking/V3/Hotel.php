@@ -7,10 +7,8 @@ use App\Models\Accommodation\RoomType;
 use App\Models\Booking\BookingTraveller;
 
 class Hotel extends V3BookingComponent
-{
-    public array $rooms = [];
+{    
     protected $listeners = ['currencyUpdated' => 'updateCurrency', 'advance'];
-
     protected $messages = [
         'rooms.*.room.required' => "This field is required",
         'rooms.*.travellers.required' => "This field is required",
@@ -37,16 +35,20 @@ class Hotel extends V3BookingComponent
     public function advance()
     {
         $this->validate();
+        $this->lead->save();
+        $this->booking->lead_traveller_id = $this->lead->id;
+        $this->booking->save();
         $travellerExcess = $this->getTravellerCount();
         foreach ($this->rooms as $room) {
             $travellerExcess -= RoomType::find($room['room'])?->maximum_occupancy;
         }
         if ($travellerExcess > 0) {
-            dd('Not all travellers have rooms', $travellerExcess);
+           return $this->addError('common', 'Not all travellers have rooms');
         }
         if ($travellerExcess < 0) {
-            dd('More travellers have been added to rooms than are travelling', $travellerExcess);
+           return $this->addError('common', 'More travellers have been added to rooms than are travelling');
         }
+
         return redirect()->route('booking.v3.guest', ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]);
     }
 
@@ -72,14 +74,15 @@ class Hotel extends V3BookingComponent
         unset($this->rooms[count($this->rooms) - 1]);
     }
 
+
     public function updated($name, $value): void
     {
+        \Log::info('Hotel Form Mounted', ['Room' => $name, "Vald" => $value]);
         $this->validateOnly($name);
         $this->booking->save();
         $this->lead->save();
         $this->validateRoomCount();
-        //$this->renew();
+        $this->renew();
         $this->render();
     }
-
 }
