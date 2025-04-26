@@ -107,6 +107,7 @@
                                         <input
                                             type="radio"
                                             class="guest-radio"
+                                            wire:model="rooms.{{ $x }}.travellers"
                                             name="rooms[{{ $x }}][travellers]"
                                             value="{{ $i }}"
                                             data-room-index="{{ $x }}"
@@ -115,7 +116,7 @@
                                         >
                                         <label for="guest{{$i}}"> {{ $i }} </label>
                                     @endfor
-                                    @error("rooms.$x.travellers") <label class="error-label">{{ $message }}</label> @enderror
+                                    @error('rooms.' . $x . '.travellers') <label class="error-label">{{ $message }}</label> @enderror
                                 </div>
                                 <p>Bed configuration</p>
                                 <div class="form-field" id="bed-config-{{ $x }}">
@@ -136,7 +137,7 @@
                                             {{ $item['name'] }}
                                             </label>
                                     @endforeach
-                                    @error("rooms.$x.room") <label class="error-label">{{ $message }}</label> @enderror
+                                    @error('rooms.' . $x . '.room') <label class="error-label">{{ $message }}</label> @enderror
                                 </div>
                                 <button type="button" class="include-button">INCLUDE</button>
                             </div>
@@ -282,10 +283,9 @@
                         </span>
                     </button>
                     @error('common')
-                    <div class="submit-btn-cls add-on">
-                        <div class="inner">
-                            <span style="color: red">{{ $message }}</span>
-                        </div>
+                    <span class="accomodation-travel-date-error">
+                        <span><img src="{{ asset('icons/Noti-Icon.svg') }}" alt="icon"></span>
+                        <span>{{ $message }}</span>
                     </div>
                     @enderror
                     <span class="accomodation-travel-date-error" id="guest-distribution-error" style="display: none;">
@@ -300,70 +300,56 @@
     </section>
 </x-customer.booking.v3.layout>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    jQuery(document).ready(function () {
         const totalGuests = parseInt("{{ $this->getTravellerCount() }}");
 
-        window.handleBedSelection = function(input) {
-            const roomIndex = input.dataset.roomIndex;
-            const bedDesc = input.dataset.bedDesc;
-            const roomDescEl = document.querySelector(`.roomdesc[data-room-index="${roomIndex}"]`);
+        function validateRoom($room) {
+            const guestsSelected = parseInt($room.find('.guest-radio:checked').val() || 0);
+            const $bedSelected = $room.find('.bed-radio:checked');
 
-            if (roomDescEl && bedDesc) {
-                roomDescEl.innerText = bedDesc;
-            }
-        };
-
-        window.handleGuestChange = function (roomIndex, guestCount) {
-            const bedRadios = document.querySelectorAll(`[data-room-index="${roomIndex}"].bed-radio`);
-
-            bedRadios.forEach(radio => {
-                const occupancy = parseInt(radio.dataset.bedOccupancy);
-                const isMatching = occupancy === guestCount;
-                if (isMatching) {
-                    radio.removeAttribute('readonly');
-                    radio.dataset.readonly = "false";
-                    radio.closest('label').classList.remove('disabled');
-                } else {
-                    radio.setAttribute('readonly', true);
-                    radio.dataset.readonly = "true";
-                    radio.closest('label').classList.add('disabled');
+            if (guestsSelected > 0 && $bedSelected.length > 0) {
+                const bedOccupancy = parseInt($bedSelected.data('bed-occupancy'));
+                if (bedOccupancy !== guestsSelected) {
+                    errorMessage.textContent = 'Mismatch: Bed occupancy (' + bedOccupancy + ') must match number of guests (' + guestsSelected + ') in the room.'
+                    errorContainer.style.display = 'flex';
+                    $bedSelected.prop('checked', false);
                 }
-            });
-
-            validateGuestDistribution();
-        };
-
-        document.querySelectorAll('.bed-radio').forEach(radio => {
-            radio.addEventListener('click', function (e) {
-                if (radio.dataset.readonly === "true") {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return false;
-                }
-            });
-        });
-
-        function validateGuestDistribution() {
-            const errorContainer = document.getElementById('guest-distribution-error');
-            const errorMessage = document.getElementById('guest-distribution-error-message');
-            let distributedGuests = 0;
-
-            document.querySelectorAll('.guest-radio:checked').forEach(input => {
-                distributedGuests += parseInt(input.value);
-            });
-
-            if (distributedGuests > totalGuests) {
-                //alert(`Too many guests allocated! You only have ${totalGuests} guests.`);
-                errorMessage.textContent = `Too many guests allocated! You only have ${totalGuests} guests.`;
-                errorContainer.style.display = 'flex';
-            } else if (distributedGuests < totalGuests) {
-                errorMessage.textContent = `You have ${totalGuests - distributedGuests} guest(s) remaining to assign.`;
-                errorContainer.style.display = 'flex';
-            } else {
-                errorMessage.textContent = '';
-                errorContainer.style.display = 'none';
             }
         }
+
+        function validateTotalGuests() {
+            let assignedGuests = 0;
+
+            $('.single-room').each(function () {
+                const guestsSelected = parseInt($(this).find('.guest-radio:checked').val() || 0);
+                assignedGuests += guestsSelected;
+            });
+
+            if (assignedGuests > totalGuests) {
+                errorMessage.textContent = 'Assigned guests (' + assignedGuests + ') exceed total booking guests (' + totalGuests + ').'
+                errorContainer.style.display = 'flex';
+                return false;
+            }
+            if (assignedGuests < totalGuests) {
+                console.log('Still need to assign more guests.');
+            }
+            return true;
+        }
+
+        // When guest number is selected
+        $(document).on('change', '.guest-radio', function () {
+            const roomIndex = $(this).data('room-index');
+            const $room = $('[data-room-index="' + roomIndex + '"]').closest('.single-room');
+            validateRoom($room);
+            validateTotalGuests();
+        });
+
+        // When bed configuration is selected
+        $(document).on('change', '.bed-radio', function () {
+            const roomIndex = $(this).data('room-index');
+            const $room = $('[data-room-index="' + roomIndex + '"]').closest('.single-room');
+            validateRoom($room);
+        });
     });
 </script>
 
