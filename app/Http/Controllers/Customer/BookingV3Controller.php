@@ -30,4 +30,44 @@ class BookingV3Controller extends Controller
         }
         return view('pages.customer.booking.v3.hotel', ['tour' => $tour, 'booking' => $booking]);
     }
+
+    public function ticket(string $tour, string|null $token = null)
+    {
+        $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
+        $booking = Booking::where('tour_id', '=', $tour->id)->where('token', '=', $token)->firstOrFail();
+        if ($booking === null) {
+            return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
+        }
+        return view('pages.customer.booking.v3.ticket', ['tour' => $tour, 'booking' => $booking]);
+    }
+
+    public function inclusions(string $tour, string|null $token = null)
+    {
+        $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
+        $booking = Booking::where('tour_id', '=', $tour->id)->where('token', '=', $token)->firstOrFail();
+        if ($booking === null) {
+            return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
+        }
+        return view('pages.customer.booking.v3.inclusions', ['tour' => $tour, 'booking' => $booking]);
+    }
+
+    public function details(string $tour, string|null $token = null)
+    {
+        $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
+        $booking = Booking::where('tour_id', '=', $tour->id)->where('token', '=', $token)->firstOrFail();
+        if ($booking === null) {
+            return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
+        }
+        return view('pages.customer.booking.v3.details', ['tour' => $tour, 'booking' => $booking]);
+    }
+
+    public function confirmation(string $tour, string|null $token = null)
+    {
+        $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
+        $booking = Booking::where('tour_id', '=', $tour->id)->where('token', '=', $token)->firstOrFail();
+        if ($booking === null) {
+            return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
+        }
+        return view('pages.customer.booking.v3.confirmation', ['tour' => $tour, 'booking' => $booking]);
+    }
 }
