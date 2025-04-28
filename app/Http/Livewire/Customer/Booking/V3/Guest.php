@@ -122,12 +122,14 @@ class Guest extends V3BookingComponent
     {
         if ($this->booking->travellers()->count() >= self::MAX_TRAVELLERS) { return; }
         $this->booking->repository->addUnknownTraveller();
+        $this->renew();
         $this->render();
     }
 
     public function removeTraveller(): void
     {
         $this->booking->repository->removeUnknownTraveller();
+        $this->renew();
         $this->render();
     }
 

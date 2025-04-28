@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-    <script src="{{ asset('css\booking\booking_new\js\script.js') }}"></script>
+    <script src="{{ asset('/js/booking/v3.js') }}"></script>
     @livewireStyles
 
     <style>
@@ -1858,6 +1858,65 @@
 
         .flatpickr-calendar:before, .flatpickr-calendar.arrowTop:after {
             display: none;
+        }
+        .guest-module input[type="radio"]:checked + label {
+          background: var(--primary-color);
+          color: var(--white);
+        }
+        .guest-module label:last-child {
+          border-right:0;
+        }
+        .bed-configuration-module {
+          display: flex;
+          flex-direction: column;
+        }
+        .bed-configuration-module input[type="radio"] {
+          display: none;
+        }
+        .bed-configuration {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 15px 20px;
+          border: 1.5px solid var(--primary-color);
+          border-radius: 50px;
+          background: var(--white);
+          color: var(--primary-color);
+          cursor: pointer;
+          gap: 15px;
+          position: relative;
+          transition: all 0.3s ease;
+          height: 32px;
+        }
+        .bed-configuration .separator {
+          width: 1px;
+          height: 24px;
+          background: var(--primary-color);
+        }
+        .bed-configuration .bed-text {
+          width: 50%;
+          text-align: center;
+          font-family: "PP Neue Montreal Medium";
+          font-weight: 500;
+          font-size: 12px;
+          line-height: 14px;
+          color: var(--primary-color);
+        }
+        input[type="radio"]:checked + .bed-configuration {
+          background: var(--primary-color);
+          color: var(--white);
+        }
+        input[type="radio"]:checked + .bed-configuration .separator {
+          background: var(--white);
+        }
+        input[type="radio"]:checked + .bed-configuration  .bed-text {
+          color:var(--white);
+        }
+        input[type="radio"]:checked + .bed-configuration img.default {
+          display: none;
+        }
+        input[type="radio"]:checked + .bed-configuration img.hover {
+          display: block;
         }
     </style>
 </head>

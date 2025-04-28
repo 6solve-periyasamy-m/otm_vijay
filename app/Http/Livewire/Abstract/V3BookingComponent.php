@@ -7,6 +7,7 @@ use App\Models\System\Brand;
 use App\Models\Tour\Tour;
 use Livewire\Component;
 use App\Models\Helper\Enum\BookingTravellerRole;
+use App\Models\Booking\BookingTraveller;
 
 abstract class V3BookingComponent extends Component
 {
@@ -15,7 +16,8 @@ abstract class V3BookingComponent extends Component
     public Brand $brand;
     public int|null $selectedHotel;
     public string $selectedCurrency;
-    //public array $rooms = [];
+    public array $rooms = [];
+    public BookingTraveller|null $lead = null;
 
     public function mount(Tour|int|null $tour = null, Booking|int|null $booking = null)
     {
@@ -85,4 +87,14 @@ abstract class V3BookingComponent extends Component
         $this->selectedCurrency = $currency;
         $this->booking->repository->updateCurrency($currency);
     }
+
+    public function renew()
+    {
+        $this->booking = Booking::find($this->booking->id);
+        $this->lead = $this->booking->leadTraveller;
+        $this->tour = Tour::find($this->tour->id);
+        /** @noinspection PhpSillyAssignmentInspection Seems to fix an issue with rooming caching */
+        $this->rooms = $this->rooms;
+    }
+    
 }
