@@ -37,6 +37,8 @@ class ActivityController extends Controller
             'event_id' => $request->input('event_id'),
             'field1' => $request->input('field1'),
             'field2' => $request->input('field2'),
+            'seating_id' => $request->input('seating_id'),
+            'session_id' => $request->input('session_id'),
         ]);
         if ($request->input('use_existing') == 'on') {
             $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::ACTIVITY);
@@ -86,6 +88,8 @@ class ActivityController extends Controller
             'event_id' => $request->input('event_id'),
             'field1' => $request->input('field1'),
             'field2' => $request->input('field2'),
+            'seating_id' => $request->input('seating_id'),
+            'session_id' => $request->input('session_id'),
         ]);
         if ($request->input('use_existing') == 'on') {
             Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::ACTIVITY, $activity->address);

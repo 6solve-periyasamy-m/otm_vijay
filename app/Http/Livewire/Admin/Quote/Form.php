@@ -4,14 +4,13 @@ namespace App\Http\Livewire\Admin\Quote;
 
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
+use App\Models\Customer\Agent;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
 use App\Models\Quote\QuoteProspect;
 use App\Models\System\LargeTextTemplate;
-use App\Models\Customer\Agent;
-use Illuminate\Http\RedirectResponse;
-use Livewire\Component;
 use Carbon\Carbon;
+use Livewire\Component;
 
 class Form extends Component
 {
@@ -22,6 +21,7 @@ class Form extends Component
     public float|null $price = null;
     public int|null $footerTemplate = null;
     public int|null $termsTemplate = null;
+    public int|null $paymentTemplate = null;
     public $minToDate;
     public $maxFinalDate;
 
@@ -101,6 +101,12 @@ class Form extends Component
             $this->quote->invoice_footer = $template->content;
             $this->updateValue('quote.invoice_footer', $template->content);
         }
+        if ($key === 'paymentTemplate') {
+            $template = LargeTextTemplate::find($this->paymentTemplate);
+            if ($template === null) { return; }
+            $this->quote->payment_details = $template->content;
+            $this->updateValue('quote.payment_details', $template->content);
+        }
     }
 
     public static function getSelectAgencies($organization_id)
@@ -157,6 +163,7 @@ class Form extends Component
             'quote.external_notes' => 'nullable|string|min:3',
             'quote.terms' => 'required|string|min:3',
             'quote.invoice_footer' => 'nullable|string|min:3',
+            'quote.payment_details' => 'nullable|string|min:3',
         ];
     }
 }

@@ -11,9 +11,11 @@
         ClassicEditor
             .create(document.querySelector('#{{ $id }}'), ckConfig)
             .then(editor => {
+                @if(isset($_instance))
                 editor.model.document.on('change:data', () => {
                     @this.set('{{$attributes->get('name')}}', editor.getData());
                 });
+                @endif
                 window.addEventListener('updateValue', (data) => {
                     if (data.detail.key === '{{ $attributes->get('name') }}') {
                         editor.setData(data.detail.value);
