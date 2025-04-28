@@ -9,12 +9,12 @@ class Details extends V3BookingComponent
 
     public function back()
     {
-        // TODO: Implement back() method.
+        return redirect()->route('booking.v3.inclusions', ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]);
     }
 
     public function advance()
     {
-        // TODO: Implement advance() method.
+        return; // Final page at the moment
     }
 
     public function render()
