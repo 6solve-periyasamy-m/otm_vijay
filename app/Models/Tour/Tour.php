@@ -12,6 +12,7 @@ use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Helper\Model;
 use App\Models\Helper\Traits\HasAdditionalCosts;
+use App\Models\Location\Country;
 use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
@@ -41,7 +42,6 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
-use App\Models\Location\Country;
 
 /**
  * App\Models\Tour\Tour
@@ -427,6 +427,9 @@ class Tour extends Model
     {
         if ($this->booking_form_url === null) {
             return null;
+        }
+        if (config('app.features.bleeding-edge', false)) {
+            return route('booking.v3.guest', ['tour' => $this->booking_form_url, 'booking' => $booking?->token]);
         }
         if (config('app.features.kpt', false) || config('app.features.bleeding-edge')) {
             if ($checkout && $booking !== null) {
