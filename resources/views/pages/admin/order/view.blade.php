@@ -2,6 +2,12 @@
 /**
  * @param \App\Models\Order\Order $order;
  */
+/** @var bool $nonSystem Is the order using a non-system currency */
+$nonSystem = $order->currency !== null && $order->currency !== Settings::currency();
+/** @var float|null $fromSystem conversion rate from system currency */
+$fromSystem = \Settings::getConversionRate(\Settings::currency(), $order->currency);;
+/** @var float|null $toSystem conversion rate to system currency */
+$toSystem = \Settings::getConversionRate($order->currency, \Settings::currency());
 @endphp
 
 @extends('layout.master')
@@ -68,9 +74,13 @@
             <p>Order Value</p>
             <h6 class="fw-bold">
                 @if($order->cancelled)
-                    {{ fr_currency($order->total, $order->currency) }} ({{ fr_currency($order->cost, $order->currency) }} before cancellation)
-                @else
                     {{ fr_currency($order->total, $order->currency) }}
+                    @if($nonSystem) ({{ fr_currency($order->total * $toSystem, Settings::currency()) }}) @endif
+                    ({{ fr_currency($order->cost, $order->currency) }}
+                    @if($nonSystem) ({{ fr_currency($order->cost * $toSystem, Settings::currency()) }}) @endif
+                    before cancellation)
+                @else
+                    {{ fr_currency($order->total, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->total * $toSystem, Settings::currency()) }}) @endif
                     @if ($order->repository->getBeforeString() !== null)
                         ({{ $order->repository->getBeforeString() }})
                     @endif
@@ -79,27 +89,41 @@
         </div>
         <div class="col-12 col-xl-3">
             <p>Total Paid</p>
-            <h6 class="fw-bold">{{ fr_currency($order->paid, $order->currency) }}</h6>
+            <h6 class="fw-bold">{{ fr_currency($order->paid, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->paid * $toSystem, Settings::currency()) }}) @endif</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Balance Outstanding</p>
-            <h6 class="fw-bold">{{ fr_currency($order->remaining, $order->currency) }}</h6>
+            <h6 class="fw-bold">{{ fr_currency($order->remaining, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->remaining * $toSystem, Settings::currency()) }}) @endif</h6>
         </div>
         <div class="col-12 col-xl-3">
             <p>Next Payment Due</p>
-            <h6 class="fw-bold">{{ $order->next_installment !== null ? f_date($order->next_installment->due_on) . ' - ' . fr_currency($order->next_installment->remaining, $order->currency) : 'All installments paid' }}</h6>
+            <h6 class="fw-bold">
+                @if($order->next_installment !== null)
+                {{f_date($order->next_installment->due_on)}} - {{fr_currency($order->next_installment->remaining, $order->currency)}}
+                    @if($nonSystem) ({{ fr_currency($order->next_installment->remaining * $toSystem, Settings::currency()) }}) @endif
+                @else
+                    All installments paid
+                @endif
+            </h6>
         </div>
         <div class="col-12 col-xl-3">
             <p>Tax Amount</p>
-            <h6 class="fw-bold">{{ $order->getTaxes() !== null ? fr_currency($order->getTaxes(), $order->currency) : 'No Taxes Due' }}</h6>
+            <h6 class="fw-bold">
+                @if($order->getTaxes() !== null)
+                    {{fr_currency($order->getTaxes(), $order->currency)}}
+                    @if($nonSystem) ({{ fr_currency($order->getTaxes() * $toSystem, Settings::currency()) }}) @endif
+                @else
+                    No Taxes Due
+                @endif
+                {{ $order->getTaxes() !== null ? fr_currency($order->getTaxes(), $order->currency) : 'No Taxes Due' }}
+            </h6>
         </div>
         <div class="col-12 col-xl-3">
             <p>Cost to Company</p>
             <h6 class="fw-bold">
                 {{ f_currency($order->repository->getCostToCompany())}}
-                @php $rate = \Settings::getConversionRate(\Settings::currency(), $order->currency); @endphp
-                @if($rate !== null)
-                    ({{ fr_currency($order->repository->getCostToCompany() * $rate, $order->currency) }})
+                @if($nonSystem)
+                    ({{ fr_currency($order->repository->getCostToCompany() * $fromRate, $order->currency) }})
                 @else
                     No FX Rate for Conversion
                 @endif
@@ -110,6 +134,7 @@
             <h6 class="fw-bold">
                 @if($order->cache->profit !== null)
                     {{ f_currency($order->cache->profit)}}
+                    @if($nonSystem) ({{ fr_currency($order->cache->profit * $fromSystem, $order->currency) }}) @endif
                 @else
                     No FX Rate for Conversion
                 @endif
