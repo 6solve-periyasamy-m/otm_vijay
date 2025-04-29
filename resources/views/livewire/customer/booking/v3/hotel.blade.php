@@ -140,23 +140,15 @@
                                             tripleBed.prop('disabled', true);
                                                                                 
                                             -->
-                                            @if($item['name'] === "Single")
-                                                @php
-                                                    $bedClass = "singleBed";
-                                                @endphp
-                                            @elseif ($item['name'] === "Double")
-                                                @php
-                                                    $bedClass = "doubleBed";
-                                                @endphp
-                                            @elseif ($item['name'] === "Twin")
-                                                @php
-                                                    $bedClass = "twinBed";
-                                                @endphp
-                                            @elseif($item['name'] === "Triple")
-                                                @php
-                                                    $bedClass = "tripleBed";
-                                                @endphp
-                                            @endif
+                                            @php
+                                                $bedClass = match (true) {
+                                                    str_contains('single', strtolower($item['name'])) => 'singleBed',
+                                                    str_contains('twin', strtolower($item['name'])) => 'twinBed',
+                                                    str_contains('triple', strtolower($item['name'])) => 'tripleBed',
+                                                    str_contains('double', strtolower($item['name'])) => 'doubleBed',
+                                                    default => "singeBed",
+                                                }
+                                            @endphp
                                             <input type="radio" id="room-{{$x}}-bed-{{$id}}" name="room-{{$x}}-bed" value="{{$id}}" data-bed-occupancy="{{ $item['occupancy'] }}" class="room-${x}-bed {{ $bedClass }} single-bed">
                                             <label for="room-{{$x}}-bed-{{$id}}" class="bed-configuration">
                                             <div class="bed-icon">
