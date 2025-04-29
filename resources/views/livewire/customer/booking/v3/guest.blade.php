@@ -62,10 +62,10 @@
                                 </div>
                                 @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
                                 @if($upgradePrice > 0 || $upgradePrice < 0)
-                                    <li>
-                                        <p class="txt">Upgrades Price</p>
-                                        <p class="price">{{ f_currency($booking->repository->convertBookingCurrency($upgradePrice, $selectedCurrency), $selectedCurrency) }}</p>
-                                    </li>
+                                    <div class="single">
+                                        <p>Upgrades Price</p>
+                                        <p>{{ f_currency($booking->repository->convertBookingCurrency($upgradePrice, $selectedCurrency), $selectedCurrency) }}</p>
+                                    </div>
                                 @endif
                                 @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
                                 @if($singleOccupancy > 0 || $singleOccupancy < 0)

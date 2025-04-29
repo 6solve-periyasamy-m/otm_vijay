@@ -106,12 +106,10 @@
                                     @for($i = 1, $iMax = 3; $i <= $iMax; $i++)
                                         <input
                                             type="radio"
-                                            class="guest-radio"
-                                            wire:model="rooms.{{ $x }}.travellers"
+                                            class="guest-radio"                                            
                                             name="rooms[{{ $x }}][travellers]"
                                             value="{{ $i }}"
                                             data-room-index="{{ $x }}"
-                                            onchange="handleGuestChange({{ $x }}, {{ $i }})"
                                             id="guest{{$i}}"
                                         >
                                         <label for="guest{{$i}}"> {{ $i }} </label>
@@ -131,7 +129,6 @@
                                                 data-room-index="{{ $x }}"
                                                 data-bed-occupancy="{{ $item['occupancy'] }}"
                                                 data-bed-desc="{!! htmlspecialchars($item['room_desc']) !!}"
-                                                onchange="handleBedSelection(this)"
                                                 data-readonly="true" {{-- Custom attribute to simulate readonly --}}
                                             >
                                             {{ $item['name'] }}
@@ -223,6 +220,13 @@
                                     <p>Package price</p>
                                     <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
+                                @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
+                                @if($singleOccupancy > 0 || $singleOccupancy < 0)
+                                    <div class="single">
+                                        <p>Single occupancy surcharge</p>
+                                        <p>{{ f_currency($booking->repository->convertBookingCurrency($singleOccupancy, $selectedCurrency), $selectedCurrency) }}</p>
+                                    </div>
+                                @endif
                                 <div class="single">
                                     <p>Number of packages - 5</p>
                                     <p>A$14,975</p>
@@ -260,11 +264,18 @@
                                     <p>Price included</p>
                                 </div>
                             </div>
-                            <div class="total">
+                            
+                            <div class="total">                                
                                 <div class="single">
                                     <p>Total</p>
                                     <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
+                                @if($booking->repository->getTaxes() !== null)
+                                    <div class="single">
+                                        <p>{{ $tour->taxBracket()->name }} (Included)</p>
+                                        <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTaxes(), $selectedCurrency), $selectedCurrency) }}</p>
+                                    </div>
+                                @endif
                                 <div class="single">
                                     <p>Starting package price</p>
                                     <p>$14,975</p>
@@ -302,6 +313,13 @@
 <script>
     jQuery(document).ready(function () {
         const totalGuests = parseInt("{{ $this->getTravellerCount() }}");
+        const errorContainer = document.getElementById('guest-distribution-error');
+        const errorMessage = document.getElementById('guest-distribution-error-message');
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorContainer.style.display = 'flex';
+        }
 
         function validateRoom($room) {
             const guestsSelected = parseInt($room.find('.guest-radio:checked').val() || 0);
@@ -310,8 +328,7 @@
             if (guestsSelected > 0 && $bedSelected.length > 0) {
                 const bedOccupancy = parseInt($bedSelected.data('bed-occupancy'));
                 if (bedOccupancy !== guestsSelected) {
-                    errorMessage.textContent = 'Mismatch: Bed occupancy (' + bedOccupancy + ') must match number of guests (' + guestsSelected + ') in the room.'
-                    errorContainer.style.display = 'flex';
+                    showError('Mismatch: Bed occupancy (' + bedOccupancy + ') must match number of guests (' + guestsSelected + ') in the room.');
                     $bedSelected.prop('checked', false);
                 }
             }
@@ -326,13 +343,15 @@
             });
 
             if (assignedGuests > totalGuests) {
-                errorMessage.textContent = 'Assigned guests (' + assignedGuests + ') exceed total booking guests (' + totalGuests + ').'
-                errorContainer.style.display = 'flex';
+                showError('Assigned guests (' + assignedGuests + ') exceed total booking guests (' + totalGuests + ').');
                 return false;
             }
+
+            // Don't hide error container if guests are still unassigned
             if (assignedGuests < totalGuests) {
                 console.log('Still need to assign more guests.');
             }
+
             return true;
         }
 
