@@ -2,10 +2,10 @@
 
 namespace App\Http\Livewire\Admin\Report;
 
-use App\Http\Livewire\Abstract\CurrencyColumn;
 use App\Http\Livewire\Abstract\ExportableDatatable;
 use App\Http\Livewire\Abstract\OrderBadgeColumn;
 use App\Models\Helper\Enum\OrderStatus;
+use App\Models\Location\Currency;
 use App\Models\Order\Order;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
@@ -25,7 +25,8 @@ class OrderReport extends ExportableDatatable
             ->join('customers as lead_customer', 'lead.customer_id', '=', 'lead_customer.id')
             ->join('order_caches', 'order_caches.order_id', '=', 'orders.id')
             ->join('tours', 'orders.tour_id', '=', 'tours.id')
-            ->join('events', 'tours.event_id', '=', 'events.id');
+            ->join('events', 'tours.event_id', '=', 'events.id')
+            ->leftJoin('currencies', 'orders.currency_id', '=', 'currencies.id');
     }
 
     public function columns()
@@ -56,16 +57,21 @@ class OrderReport extends ExportableDatatable
                 ->sortable()
                 ->searchable()
                 ->filterable(Tour::pluck('name')),
+            Column::raw('(COALESCE(`currencies`.`code`, "' . \Settings::currency()->code . '")) AS currency')
+                ->label('Currency')
+                ->sortable()
+                ->searchable()
+                ->filterable(Currency::pluck('code')),
             Column::name('events.name')
                 ->label('Event')
                 ->sortable()
                 ->searchable()
                 ->filterable(Event::pluck('name')),
-            CurrencyColumn::name('order_caches.total_owed')
+            NumberColumn::name('order_caches.total_owed')
                 ->label('Total Cost')
                 ->sortable()
                 ->filterable(),
-            CurrencyColumn::raw("(SELECT SUM(amount) FROM payments WHERE order_id = orders.id)")
+            NumberColumn::raw("(SELECT SUM(amount) FROM payments WHERE order_id = orders.id)")
                 ->label('Total Paid')
                 ->sortable()
                 ->filterable(),
@@ -77,11 +83,11 @@ class OrderReport extends ExportableDatatable
                 ->label('Next Payment Due')
                 ->sortable()
                 ->filterable(),
-            CurrencyColumn::name('order_caches.next_payment_amount')
+            NumberColumn::name('order_caches.next_payment_amount')
                 ->label('Next Payment Total')
                 ->sortable()
                 ->filterable(),
-            CurrencyColumn::name('order_caches.next_payment_remaining')
+            NumberColumn::name('order_caches.next_payment_remaining')
                 ->label('Next Payment Remaining')
                 ->sortable()
                 ->filterable(),
