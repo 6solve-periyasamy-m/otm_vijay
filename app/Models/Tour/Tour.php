@@ -75,6 +75,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $date_to
  * @property string|null $invoice_footer
  * @property string $terms Terms and Conditions of purchasing this tour
+ * @property string|null $payment_details Details for sending payment information *do not use*
  * @property Carbon $final_payment
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -132,6 +133,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $order_flights_count
  * @property-read Collection<int, OrderTransport> $orderTransport
  * @property-read int|null $order_transport_count
+ * @property-read string $makePaymentDetails Details for documents to include about making a payment
  * @method static TourFactory factory(...$parameters)
  * @method static Builder|Tour newModelQuery()
  * @method static Builder|Tour newQuery()
@@ -473,5 +475,13 @@ class Tour extends Model
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class, 'country_id');
+    }
+
+    public function getMakePaymentDetailsAttribute(): string
+    {
+        if (empty($this->payment_details)) {
+            return setting('company.bank_transfer', "");
+        }
+        return $this->payment_details;
     }
 }
