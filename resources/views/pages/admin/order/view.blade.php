@@ -122,7 +122,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
             <h6 class="fw-bold">
                 {{ f_currency($order->repository->getCostToCompany())}}
                 @if($nonSystem)
-                    ({{ fr_currency($order->repository->getCostToCompany() * $fromRate, $order->currency) }})
+                    ({{ fr_currency($order->repository->getCostToCompany() * $fromSystem, $order->currency) }})
                 @else
                     No FX Rate for Conversion
                 @endif
