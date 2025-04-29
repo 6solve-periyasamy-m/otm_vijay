@@ -8,21 +8,24 @@ use App\Models\Tour\Tour;
 use Livewire\Component;
 use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Booking\BookingTraveller;
+use App\Models\Quote\Quote;
 
 abstract class V3BookingComponent extends Component
 {
     public Tour|int|null $tour;
     public Booking|int|null $booking;
+    public Quote|int|null $quote;
     public Brand $brand;
     public int|null $selectedHotel;
     public string $selectedCurrency;
     public array $rooms = [];
     public BookingTraveller|null $lead = null;
 
-    public function mount(Tour|int|null $tour = null, Booking|int|null $booking = null)
+    public function mount(Tour|int|null $tour = null, Booking|int|null $booking = null, Quote|int|null $quote = null)
     {
         $this->tour = Tour::getForMount($tour);
         $this->booking = Booking::getForMount($booking);
+        $this->quote = Quote::getForMount($booking->quote_id);
         $this->brand = $this->tour->brand ?? Brand::getSystemBrand();
         if ($this->booking->booking_accommodation_id  === null) {
             $hotels = $this->tour->repository->getHotels();

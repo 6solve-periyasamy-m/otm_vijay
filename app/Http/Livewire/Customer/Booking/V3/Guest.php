@@ -32,11 +32,10 @@ class Guest extends V3BookingComponent
     ];
     public BookingTraveller|null $lead = null;
 
-    public function mount($tour = null, $booking = null)
+    public function mount($tour = null, $booking = null, $quote = null)
     {        
         parent::mount($tour, $booking);
         $this->lead = $this->booking->leadTraveller ?? BookingTravellerRepository::make([]);
-
         if ($this->lead->id === null) {
             $this->lead->booking_id = $booking->id;
             $this->lead->save();
@@ -83,12 +82,15 @@ class Guest extends V3BookingComponent
 
             RateLimiter::hit("send-quote-{$this->booking->id}");
             $quote = $this->booking->repository->convertToQuote();
-            $sent = $quote->repository->generateSent($this->lead->email_address, $quote->paying?? 1, $quote->travelling?? 0);
-            $attachment = new Attachment($quote->repository->getStream($sent), $quote->reference . '.pdf', ['mime' => 'application/pdf',]);
-            $status = (new QuoteMail('quote', $quote->consultant))->send($target ?? $sent->recipient, $sent, [$attachment,], "", true);
-            $this->quoteSent = true;
-            $this->showCustomerForm = false;
-            session()->flash('success', 'Quote emailed successfully!');
+            $this->booking->quote_id = $quote->id;
+            $this->booking->save();
+
+            // $sent = $quote->repository->generateSent($this->lead->email_address, $quote->paying?? 1, $quote->travelling?? 0);
+            // $attachment = new Attachment($quote->repository->getStream($sent), $quote->reference . '.pdf', ['mime' => 'application/pdf',]);
+            // $status = (new QuoteMail('quote', $quote->consultant))->send($target ?? $sent->recipient, $sent, [$attachment,], "", true);
+            // $this->quoteSent = true;
+            // $this->showCustomerForm = false;
+            // session()->flash('success', 'Quote emailed successfully!');
         } catch (MailDisabledException|MailFailedException $e) {
             session()->flash('error', $e->getMessage());
         } catch (\Throwable $e) {
@@ -110,6 +112,14 @@ class Guest extends V3BookingComponent
     public function advance()
     {
         $this->validate();
+        if ($this->booking->quote_id === null) {
+            $this->sendQuote();
+        } else {
+            $quote = Quote::find($this->booking->quote_id);
+            $travellers = $this->booking->travellers()->where('role', '!=', BookingTravellerRole::NORMAL)->count();
+            $quote->paying = $travellers;
+            $quote->save();
+        }
         return redirect()->route('booking.v3.hotel', ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]);
     }
     
@@ -163,36 +173,30 @@ class Guest extends V3BookingComponent
         }
     }
 
-    public function getRules()
+    public function rules()
     {
-        $rules = [
+        return [
             'lead.email_address' => 'required|email',
+            'lead.first_name' => 'required|string|max:255',
+            'lead.last_name' => 'required|string|max:255',
+            'lead.mobile_number' => 'nullable|string|regex:/^[0-9+\-\s()]*$/|max:20',
         ];
-
-        if ($this->showCustomerForm) {
-            $rules['lead.first_name'] = 'required|string|max:255';
-            $rules['lead.last_name'] = 'required|string|max:255';
-            $rules['lead.mobile_number'] = 'nullable|string|regex:/^[0-9+\-\s()]*$/|max:20';
-        }
-
-        return $rules;
     }
 
-    public function emailQuote(): void
+    public function emailQuote()
     {
         $this->validateOnly('lead.email_address');
-        $leadTraveller = $this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->first();
-        $target = $leadTraveller?->email_address;
-
-        if ($target === null) {
+        if ($this->lead->email_address === null) {
             session()->flash('error', 'Cannot send quote, no valid target email found.');
         }
         try {
-            $this->quoteSent = true;
-            $quote = $this->booking->repository->convertToQuote();
-            $sent = $quote->repository->generateSent($target, $quote->paying?? 1, $quote->travelling?? 0);
+            $quote = Quote::find($this->booking->quote_id);
+            $sent = $quote->repository->generateSent($this->lead->email_address, $quote->paying?? 1, $quote->travelling?? 0);
             $attachment = new Attachment($quote->repository->getStream($sent), $quote->reference . '.pdf', ['mime' => 'application/pdf',]);
             $status = (new QuoteMail('quote', $quote->consultant))->send($target ?? $sent->recipient, $sent, [$attachment,], "", true);
+            $this->quoteSent = true;
+            $this->showCustomerForm = false;
+            session()->flash('success', 'Quote emailed successfully!');
         } catch (MailDisabledException) {
             session()->flash('error', 'Failed to Send Quote-Emails are not enabled on this system.');
             return;
@@ -202,8 +206,8 @@ class Guest extends V3BookingComponent
             session()->flash('error', 'Failed to Send Quote-'.$e->getMessage());
             return;
         }
-        if ($status ?? false) {
-            session()->flash('success', 'Quote emailed successfully.');
+        if ($status === true) {
+            session()->flash('error', 'Quote emailed successfully.');
         } else {
             session()->flash('error', 'Cannot send quote, no valid target email found.');
         }

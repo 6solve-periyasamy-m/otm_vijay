@@ -13,6 +13,22 @@
                         <input type="email" wire:model.lazy="lead.email_address" id="email" name="email">
                         @error('lead.email_address') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
+                    <div class="customer_profile">                        
+                        <p>
+                            <label for="firstname">First Name*</label>
+                            <input type="text" id="firstname" wire:model.lazy="lead.first_name">
+                            @error('lead.first_name') <span class="text-danger">{{ $message }}</span> @enderror
+                        </p>
+                        <p>
+                            <label for="lastname">Last Name*</label>
+                            <input type="text" id="lastname" wire:model.lazy="lead.last_name">
+                            @error('lead.last_name') <span class="text-danger">{{ $message }}</span> @enderror
+                        </p>
+                        <p>
+                            <label for="mobileno">Mobile No</label>
+                            <input type="text" id="mobileno" wire:model.lazy="lead.mobile_number">
+                        </p>
+                    </div>
                 </div>                
                 <div class="no-of-travellers">
                     <h4 class="sub-heading-4">Number of Travellers</h4>
@@ -102,27 +118,15 @@
                                 <h6 class="sub-heading-6" wire:click="toggleCustomerForm">EMAIL Quote</h6>
                                 @if ($showCustomerForm)
                                     <div class="customer_profile">
-                                        <form wire:submit.prevent="sendQuote">
-                                            <p>
-                                                <label for="firstname">First Name*</label>
-                                                <input type="text" id="firstname" wire:model.lazy="lead.first_name">
-                                                @error('lead.first_name') <span class="text-danger">{{ $message }}</span> @enderror
-                                            </p>
-                                            <p>
-                                                <label for="lastname">Last Name*</label>
-                                                <input type="text" id="lastname" wire:model.lazy="lead.last_name">
-                                                @error('lead.last_name') <span class="text-danger">{{ $message }}</span> @enderror
-                                            </p>
-                                            <p>
-                                                <label for="mobileno">Mobile No</label>
-                                                <input type="text" id="mobileno" wire:model.lazy="lead.mobile_number">
-                                            </p>
-
-                                            <button wire:loading.attr="disabled" style="width:fit-content" wire:target="sendQuote" type="submit" class="Go-next">
-                                                <span wire:loading.remove>Send Quote</span>
-                                                <span wire:loading>Sending...</span>
-                                            </button>
-                                        </form>
+                                        <button wire:loading.attr="disabled" style="width:fit-content" wire:click="emailQuote" type="button" class="Go-next">
+                                            <span wire:loading.remove>Send Quote</span>
+                                            <span wire:loading>Sending...</span>
+                                        </button>
+                                    </div>
+                                @endif
+                                @if (session()->has('error'))
+                                    <div class="alert alert-danger" aria-live="polite">
+                                        {{ session('error') }}
                                     </div>
                                 @endif
                             </div>

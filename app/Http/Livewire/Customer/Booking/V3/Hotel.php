@@ -15,7 +15,7 @@ class Hotel extends V3BookingComponent
     ];
     public BookingTraveller|null $lead = null;
 
-    public function mount($tour = null, $booking = null)
+    public function mount($tour = null, $booking = null, $quote = null)
     {
         parent::mount($tour, $booking);
         $this->validateRoomCount();
