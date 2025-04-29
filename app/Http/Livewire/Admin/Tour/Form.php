@@ -20,6 +20,7 @@ class Form extends Component
     public Tour|int|null $tour = null;
     public int|null $termsTemplate = null;
     public int|null $footerTemplate = null;
+    public int|null $paymentTemplate = null;
 
     public function mount(Tour|int|null $tour = null): void
     {
@@ -59,6 +60,7 @@ class Form extends Component
             },
             'termsTemplate' => $this->refreshTermsTemplate(),
             'footerTemplate' => $this->refreshFooterTemplate(),
+            'paymentTemplate' => $this->refreshPaymentDetailsTemplate(),
         };
     }
 
@@ -152,6 +154,7 @@ class Form extends Component
             'tour.notes' => 'nullable',
             'tour.city' => 'nullable|string',
             'tour.country_id' => 'nullable|exists:countries,id',
+            'tour.payment_details' => 'nullable|string|min:3',
         ];
     }
 
@@ -170,6 +173,15 @@ class Form extends Component
         if ($template !== null) {
             $this->tour->invoice_footer = $template->content;
             $this->updateValue('tour.invoice_footer', $template->content);
+        }
+    }
+
+    private function refreshPaymentDetailsTemplate(): void
+    {
+        $template = LargeTextTemplate::find($this->paymentTemplate);
+        if ($template !== null) {
+            $this->tour->payment_details = $template->content;
+            $this->updateValue('tour.payment_details', $template->content);
         }
     }
 }
