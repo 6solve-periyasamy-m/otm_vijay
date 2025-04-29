@@ -75,6 +75,7 @@ return [
             'terms' => 'Terms and Conditions',
             'invoice_footer' => 'Invoice Footer',
             'quote_template' => 'Quote Template',
+            'payment_details' => 'Payment Details',
         ],
     ],
 ];

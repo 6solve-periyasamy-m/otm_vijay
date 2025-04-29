@@ -35,6 +35,7 @@ class Itinerary
      * @param string|null $terms
      * @param string|null $footer
      * @param string|null $notes
+     * @param string|null $payment_details
      */
     public function __construct(
         public string|null $package,
@@ -57,6 +58,7 @@ class Itinerary
         public string|null $terms,
         public string|null $footer,
         public string|null $notes,
+        public string|null $payment_details,
     )
     {
         $this->setBanner($banner ?? $this->image);
