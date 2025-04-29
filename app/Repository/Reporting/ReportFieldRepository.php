@@ -706,6 +706,11 @@ class ReportFieldRepository
                     'name' => 'Status',
                     'method' => 'status',
                 ],
+                'currency' => [
+                    'name' => 'Currency',
+                    'method' => 'currency',
+                    'format' => 'coalesceSystemCurrency'
+                ],
                 'total' => [
                     'name' => 'Cost',
                     'method' => 'total',
