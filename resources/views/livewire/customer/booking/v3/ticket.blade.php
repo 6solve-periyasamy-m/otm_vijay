@@ -8,7 +8,6 @@
                     <h2 class="sub-heading-2-p">Tickets</h2>
                     <p>Review your included tickets or upgrade.</p>
                     <div class="tickets-listing">
-                        @php //dd($this->tour->activityInventoryTours); @endphp
                         @foreach ($tour->activityInventoryTours as $activityInventory) 
                             @continue($activityInventory->tour_component_type == 'Upgrade')
                             <div class="single-block">
@@ -35,11 +34,9 @@
                                         <p>Seating</p>
                                         <select>
                                             <option value="{{ $activityInventory->inventory->id }}">{{ $activityInventory->inventory->component->seating?->name }}</option>
-                                            @if ($activityInventory->upgrades)
-                                                @foreach ($activityInventory->upgrades as $upgrade)
-                                                    <option value="{{ $upgrade->upgrade->activityInventory->id }}">{{ $upgrade->upgrade->activityInventory->activity->name }}</option>
-                                                @endforeach
-                                            @endif
+                                            @foreach ($activityInventory->upgrades ?? [] as $upgrade)
+                                                <option value="{{ $upgrade->upgrade->activityInventory->id }}">{{ $upgrade->upgrade->activityInventory->activity->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     @endif
@@ -52,10 +49,12 @@
                                                 <span class="custom-radio"></span>
                                                 <span class="option-title">{{ $activityInventory->inventory->component->session?->name }}</span>
                                             </label>
-                                        </div>
-                                        <button type="button" class="include-button">{{$activityInventory->tour_component_type}}</button>
+                                        </div>                                                                            
                                     </div>
                                     @endif
+                                    <button type="button" class="include-button {{ $activityInventory->upgrades->isNotEmpty() ? 'active' : '' }}">
+                                        {{ $activityInventory->upgrades->isNotEmpty() ? 'Upgrade' : $activityInventory->tour_component_type }}
+                                    </button> 
                                 </div>
                             </div>
                         @endforeach
@@ -75,9 +74,9 @@
                                     <div class="ticket-heading">
                                         <div class="ticket-heading-module">
                                             <div class="content-module">
-                                                <h6>{{ $activityInventory->component->name }} {{ $activityInventory->id }}</h6>
+                                                <h6>{{ $activityInventory->component->name }}</h6>
                                                 <p>Rod Laver Arena</p>
-                                                <p>+{{ preg_replace('/\.00$/', '', f_currency($activityInventory->purchase_price))}}</p>
+                                                <p>+{{ preg_replace('/\.00$/', '', f_currency($booking->repository->convertBookingCurrency($activityInventory->purchase_price, $selectedCurrency) , $selectedCurrency)) }}</p>                                                                                                
                                             </div>
                                             <div class="ic-block">
                                                 <div><img src="/images/Ticket-Icon.svg" alt="ticket-icon"></div>
@@ -125,170 +124,169 @@
                 </div>
             </div>
             <div class="column right">
-            <div class="package-details">
-                <div class="top-module">
-                    <h4 class="sub-heading-4">Package details</h4>
-                    <div class="hide-package-detail">Hide package details</div>
-                </div>
-                <div class="image-block">
-                    <img src="{{ asset($tour->event->image_url) }}" class="package-image" alt="featured-img">
-                </div>
-                <div class="base-package">
-                    <h6 class="sub-heading-6">BASE PACKAGE</h6>
-                    <h2>{{ $tour->name }}</h2>
-                    <ul>
-                        <li>{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</li>
-                        @foreach($tour->repository->getInclusions() as $inclusion)
-                            <li>{{ $inclusion }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                <div class="additional-inclusions">
-                    <h6 class="sub-heading-6">ADDITIONAL INCLUSIONS</h6>
-                    <div class="select-currency">
-                        @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector'))
+                <div class="package-details">
+                <div class="contain">
+                    <div class="top-module">
+                        <h4 class="sub-heading-4">Package details</h4>
+                        <div class="hide-package-detail">Hide package details</div>
+                    </div>
+                    <div class="image-block" style="width:">
+                        <img src="{{ asset($tour->event->image_url) }}" class="package-image" alt="featured-img">
+                    </div>
+                    <div class="base-package">
+                        <h6 class="sub-heading-6">BASE PACKAGE</h6>
+                        <h2>{{ $tour->name }}</h2>
+                        <ul>
+                            <li>{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</li>
+                            @foreach($tour->repository->getInclusions() as $inclusion)
+                                <li>{{ $inclusion }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div class="additional-inclusions">
+                        <h6 class="sub-heading-6">ADDITIONAL INCLUSIONS</h6>
+                        <div class="select-currency">
+                            @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector'))
+                            <div class="single">
+                                <p>Package price</p>
+                                <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
+                            </div>
+                            <div class="single">
+                                <p>Number of packages - 5</p>
+                                <p>A$14,975</p>
+                            </div>
+                        </div>
+                        <div class="added-nights">
+                            <h5>Added nights</h5>
+                            <div class="single">
+                                <p>
+                                <span>2 x Additional nights</span>
+                                <span>20 Jan - 25 Jan 2025</span>
+                                </p>
+                                <p>A$1,500</p>
+                            </div>
+                        </div>
+                        <div class="room-upgrades">
+                        <h5>Room upgrades</h5>
                         <div class="single">
-                            <p>Package price</p>
-                            <p>A$2,995</p>
+                            <p>Deluxe (Double)</p>
+                            <p>A$500</p>
                         </div>
                         <div class="single">
-                            <p>Number of packages - 5</p>
-                            <p>A$14,975</p>
+                            <p>Deluxe (Twin)</p>
+                            <p>Price included</p>
                         </div>
-                    </div>
-                    <div class="added-nights">
-                        <h5>Added nights</h5>
                         <div class="single">
-                            <p>
-                            <span>2 x Additional nights</span>
-                            <span>20 Jan - 25 Jan 2025</span>
-                            </p>
-                            <p>A$1,500</p>
+                            <p>Deluxe (Double)</p>
+                            <p>Price included</p>
+                        </div>
+                        </div>
+                        <div class="Hotel">
+                        <h5>Hotel</h5>
+                        <div class="single">
+                            <p>Pan Pacific, Melbourne</p>
+                            <p>Price included</p>
+                        </div>
+                        </div>
+                        <div class="ticket-upgrades">
+                        <h5>Ticket upgrades</h5>
+                        <div class="single">
+                            <p>Ticket alterations</p>
+                            <p>A$500</p>
+                        </div>
+                        <div class="single">
+                            <p>Additional ticket/s</p>
+                            <p>A$500</p>
+                        </div>
+                        </div>
+                        <div class="additional-upgrades display-none">
+                        <h5>Additional upgrades</h5>
+                        <div class="single">
+                            <p>Melbourne Foodie Walking Tour</p>
+                            <p>A$0</p>
+                        </div>
+                        </div>
+                        <div class="total">
+                            <div class="single">
+                                <p>Total</p>
+                                <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency), $selectedCurrency) }}</p>
+                            </div>
+                        <div class="single">
+                            <p>Starting package price</p>
+                            <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
+                        </div>
+                        <div class="single">
+                            <p>Customisation cost</p>
+                            <p>$0</p>
+                        </div>
                         </div>
                     </div>
-                    <div class="room-upgrades">
-                    <h5>Room upgrades</h5>
-                    <div class="single">
-                        <p>Deluxe (Double)</p>
-                        <p>A$500</p>
-                    </div>
-                    <div class="single">
-                        <p>Deluxe (Twin)</p>
-                        <p>Price included</p>
-                    </div>
-                    <div class="single">
-                        <p>Deluxe (Double)</p>
-                        <p>Price included</p>
-                    </div>
-                    </div>
-                    <div class="Hotel">
-                    <h5>Hotel</h5>
-                    <div class="single">
-                        <p>Pan Pacific, Melbourne</p>
-                        <p>Price included</p>
-                    </div>
-                    </div>
-                    <div class="ticket-upgrades">
-                    <h5>Ticket upgrades</h5>
-                    <div class="single">
-                        <p>Ticket alterations</p>
-                        <p>A$500</p>
-                    </div>activityInventory
-                    <div class="single">
-                        <p>Additional ticket/s</p>
-                        <p>A$500</p>
-                    </div>
-                    </div>
-                    <div class="additional-upgrades display-none">
-                    <h5>Additional upgrades</h5>
-                    <div class="single">
-                        <p>Melbourne Foodie Walking Tour</p>
-                        <p>A$150</p>
-                    </div>
-                    </div>
-                    <div class="total">
-                    <div class="single">
-                        <p>Total</p>
-                        <p>A$17,125</p>
-                    </div>
-                    <div class="single">
-                        <p>Starting package price</p>
-                        <p>$14,975</p>
-                    </div>
-                    <div class="single">
-                        <p>Customisation cost</p>
-                        <p>$500</p>
-                    </div>
-                    </div>
-                </div>
-                <div class="payment-method ">
-                    <h6 class="sub-heading-6 display-none">PAYMENT METHOD</h6>
-                    <div class="option-wrapper display-none">
-                    <label class="radio-option">
-                        <input type="radio" name="payment" checked>
-                        <span class="custom-radio"></span>
-                        <span class="option-title">Pay in full</span>
-                    </label>
-                    <div class="price">A$17,125</div>
-                    </div>
-                    <div class="option-wrapper display-none">
-                    <div>
+                    <div class="payment-method ">
+                        <h6 class="sub-heading-6 display-none">PAYMENT METHOD</h6>
+                        <div class="option-wrapper display-none">
                         <label class="radio-option">
-                        <input type="radio" name="payment">
-                        <span class="custom-radio"></span>
-                        <span class="option-title">Pay a 50% deposit now, and the rest later</span>
+                            <input type="radio" name="payment" checked>
+                            <span class="custom-radio"></span>
+                            <span class="option-title">Pay in full</span>
                         </label>
-                        <div class="option-subtext">
-                        The remaining balance of A$8,563 will be automatically charged to the same payment method on 24
-                        June 2024
+                        <div class="price">A$17,125</div>
+                        </div>
+                        <div class="option-wrapper display-none">
+                        <div>
+                            <label class="radio-option">
+                            <input type="radio" name="payment">
+                            <span class="custom-radio"></span>
+                            <span class="option-title">Pay a 50% deposit now, and the rest later</span>
+                            </label>
+                            <div class="option-subtext">
+                            The remaining balance of A$8,563 will be automatically charged to the same payment method on 24
+                            June 2024
+                            </div>
+                        </div>
+                        <div class="price">A$8,563</div>
+                        </div>
+                        <div class="card-block display-none">
+                        <div class="card-type active">
+                            <img src="/images/card.svg" alt="Debit card">
+                            <p>Credit / Debit card</p>
+                        </div>
+                        <div class="card-type">
+                            <img src="/images/document-text.svg" alt="Direct Debit">
+                            <p>Invoice - Direct Debit</p>
+                        </div>
+                        </div>
+                            <div class="payable-now">
+                                <div class="single">
+                                    <p>Payable now</p>
+                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency), $selectedCurrency)  }}</p> 
+                                </div>
+                                <p>Balance {{ f_currency(($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency) - $booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency)), $selectedCurrency ) }} payable by {{ $tour->final_payment->format('d M Y') }}</p>
+                            </div>
+
+                        <div class="email-quote">
+                            <h6 class="sub-heading-6">EMAIL quote</h6>
                         </div>
                     </div>
-                    <div class="price">A$8,563</div>
                     </div>
-                    <div class="card-block display-none">
-                    <div class="card-type active">
-                        <img src="/images/card.svg" alt="Debit card">
-                        <p>Credit / Debit card</p>
-                    </div>
-                    <div class="card-type">
-                        <img src="/images/document-text.svg" alt="Direct Debit">
-                        <p>Invoice - Direct Debit</p>
-                    </div>
-                    </div>
-                    <div class="payable-now">
-                    <div class="single">
-                        <p>Payable now</p>
-                        <p>A$3,425</p>
-                    </div>
-                    <p>Balance A$13,700 payable by 14 Feb 2025</p>
                     </div>
 
-                    <div class="email-quote">
-                    <h6 class="sub-heading-6">EMAIL quote</h6>
-                    <!-- <form style="display:none;">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email">
-                    </form> -->
-                    </div>
+                    <button type="button" class="next-button" wire:click="advance">
+                    <span>
+                        <span>NEXT</span>
+                        <img src="/images/Right-arrow-mod.svg" alt="right-arrow">
+                    </span>
+                    </button>
+                    <!-- <span class="accomodation-travel-date-error">
+                    <span>
+                        <img src="/images/Noti-Icon.svg" alt="icon">
+                    </span>
+                    <span>
+                        Total number of travellers vs. the number of guests you have selected for rooms does not match -
+                        please
+                        update your room selection to proceed
+                    </span> -->
+                    </span>
                 </div>
-                </div>
-                <button type="button" class="next-button">
-                <span>
-                    <span>NEXT</span>
-                    <img src="/images/Right-arrow-mod.svg" alt="right-arrow">
-                </span>
-                </button>
-                <!-- <span class="accomodation-travel-date-error">
-                <span>
-                    <img src="/images/Noti-Icon.svg" alt="icon">
-                </span>
-                <span>
-                    Total number of travellers vs. the number of guests you have selected for rooms does not match -
-                    please
-                    update your room selection to proceed
-                </span> -->
-                </span>
-            </div>
             </div>
         </div>
         <div class="container">
@@ -330,7 +328,6 @@
                 feedback.html(`<div class="text-danger">No inventory ID found.</div>`);
                 return;
             }
-
             $.ajax({
                 type: "POST",
                 url: "{{ route('api.quote.components.add', ['quote' => $this->quote, 'type' => 'activity']) }}",
@@ -351,9 +348,5 @@
                 }
             });
         });
-        
-
-
-        
     });
 </script>

@@ -9,18 +9,18 @@
                 <x:customer.booking.v3.tour-info :tour="$tour" :booking="$booking" :selectedCurrency="$selectedCurrency" />                           
                 <div class="top-form-contain">
                     <div class="email-quote">
-                        <label for="email">Email</label>
+                        <label for="email">Email *</label>
                         <input type="email" wire:model.lazy="lead.email_address" id="email" name="email">
-                        @error('lead.email_address') <label class="error-label">{{ $message }}</label> @enderror
+                        @error('lead.email_address') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
-                    <div class="customer_profile">                        
+                    <div class="email-quote"> <!-- customer_profile -->
                         <p>
-                            <label for="firstname">First Name*</label>
+                            <label for="firstname">First Name *</label>
                             <input type="text" id="firstname" wire:model.lazy="lead.first_name">
                             @error('lead.first_name') <span class="text-danger">{{ $message }}</span> @enderror
                         </p>
                         <p>
-                            <label for="lastname">Last Name*</label>
+                            <label for="lastname">Last Name *</label>
                             <input type="text" id="lastname" wire:model.lazy="lead.last_name">
                             @error('lead.last_name') <span class="text-danger">{{ $message }}</span> @enderror
                         </p>

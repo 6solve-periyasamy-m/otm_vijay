@@ -98,29 +98,31 @@
 
                     <div class="room-listing-module">
                         @for($x = 0, $xMax = count($rooms); $x < $xMax; $x++)
-                            <div class="single-room" id="room-{{ $x }}">
+                            <!-- class="single-room" -->
+                            <div id="room-{{ $x }}" class="single-room room" id="room-${i}">
                                 <h6>Room {{ $x + 1 }}</h6>
                                 <div class="roomdesc" data-room-index="{{ $x }}"></div>
                                 <p>Number of guests</p>
                                 <div class="guest-module">
                                     @for($i = 1, $iMax = 3; $i <= $iMax; $i++)
-                                        <input
+
+                                        <!-- <input
                                             type="radio"
                                             class="guest-radio"                                            
                                             name="rooms[{{ $x }}][travellers]"
                                             value="{{ $i }}"
                                             data-room-index="{{ $x }}"
                                             id="guest{{$i}}"
-                                        >
-                                        <label for="guest{{$i}}"> {{ $i }} </label>
+                                        > -->
+                                        <input type="radio" id="guest{{$x}}-{{$i}}" name="room-{{$x}}-guests" value="{{ $i }}" class="room-${x}-guest">
+                                        <label for="guest{{$x}}-{{$i}}"> {{ $i }} </label>
                                     @endfor
                                     @error('rooms.' . $x . '.travellers') <label class="error-label">{{ $message }}</label> @enderror
                                 </div>
                                 <p>Bed configuration</p>
-                                <div class="form-field" id="bed-config-{{ $x }}">
-                                    @foreach($this->tour->repository->getBookingRooms($selectedHotel) as $id => $item)
-                                        <label class="bed-configuration-h">
-                                            <input
+                                <div class="bed-configuration-module form-field" id="bed-config-{{ $x }}">
+                                    @foreach($this->tour->repository->getBookingRooms($selectedHotel) as $id => $item)                                       
+                                            <!-- <input
                                                 type="radio"
                                                 wire:model="rooms.{{$x}}.room"
                                                 class="bed-radio"
@@ -130,9 +132,49 @@
                                                 data-bed-occupancy="{{ $item['occupancy'] }}"
                                                 data-bed-desc="{!! htmlspecialchars($item['room_desc']) !!}"
                                                 data-readonly="true" {{-- Custom attribute to simulate readonly --}}
-                                            >
-                                            {{ $item['name'] }}
-                                            </label>
+                                            > 
+
+                                            singleBed.prop('disabled', true);
+                                            doubleBed.prop('disabled', true);
+                                            twinBed.prop('disabled', true);
+                                            tripleBed.prop('disabled', true);
+                                                                                
+                                            -->
+                                            @if($item['name'] === "Single")
+                                                @php
+                                                    $bedClass = "singleBed";
+                                                @endphp
+                                            @elseif ($item['name'] === "Double")
+                                                @php
+                                                    $bedClass = "doubleBed";
+                                                @endphp
+                                            @elseif ($item['name'] === "Twin")
+                                                @php
+                                                    $bedClass = "twinBed";
+                                                @endphp
+                                            @elseif($item['name'] === "Triple")
+                                                @php
+                                                    $bedClass = "tripleBed";
+                                                @endphp
+                                            @endif
+                                            <input type="radio" id="room-{{$x}}-bed-{{$id}}" name="room-{{$x}}-bed" value="{{$id}}" data-bed-occupancy="{{ $item['occupancy'] }}" class="room-${x}-bed {{ $bedClass }} single-bed">
+                                            <label for="room-{{$x}}-bed-{{$id}}" class="bed-configuration">
+                                            <div class="bed-icon">
+                                                @php
+                                                 if ($item['occupancy'] == 2) {
+                                                    $bedIcon = '/images/Double-bed.svg';
+                                                 }
+                                                 if ($item['occupancy'] == 1) {
+                                                    $bedIcon = '/images/bed-double.svg';
+                                                 }
+                                                 if ($item['occupancy'] == 3) {
+                                                    $bedIcon = '/images/Triple-Bed-d.svg';
+                                                 }
+                                                @endphp
+                                                <img src="{{ asset($bedIcon) }}" alt="{{ $item['name'] }} Bed" class="default">                                                
+                                            </div>                                            
+                                            <div class="bed-text">{{ $item['name'] }}</div>
+                                            </label>                                            
                                     @endforeach
                                     @error('rooms.' . $x . '.room') <label class="error-label">{{ $message }}</label> @enderror
                                 </div>
@@ -260,7 +302,7 @@
                             <div class="Hotel">
                                 <h5>Hotel</h5>
                                 <div class="single">
-                                    <p>Pan Pacific, Melbourne</p>
+                                    <p>{{$default->name}}, {{ $default->address?->town }}</p>
                                     <p>Price included</p>
                                 </div>
                             </div>
@@ -310,7 +352,7 @@
         </div>
     </section>
 </x-customer.booking.v3.layout>
-<script>
+<!-- <script>
     jQuery(document).ready(function () {
         const totalGuests = parseInt("{{ $this->getTravellerCount() }}");
         const errorContainer = document.getElementById('guest-distribution-error');
@@ -370,6 +412,155 @@
             validateRoom($room);
         });
     });
+</script> -->
+<script>
+  $(document).ready(function() {
+  const maxGuestsPerRoom = 3;
+  const maxGuests = parseInt("{{ $this->getTravellerCount() }}"); 
+  const errorContainer = document.getElementById('guest-distribution-error');
+  const errorMessage = document.getElementById('guest-distribution-error-message');
+
+//   function generateRooms(totalGuests) {
+//     const neededRooms = Math.ceil(totalGuests / maxGuestsPerRoom);
+//     $('#rooms-container').empty();
+
+//     for (let i = 1; i <= neededRooms; i++) {
+//       const roomMarkup = `
+//         <div class="room" id="room-${i}">
+//           <h4>Room ${i}</h4>
+//           <div>
+//             Guests: 
+//             <input type="radio" name="room-${i}-guests" value="1" class="room-${i}-guest"> 1
+//             <input type="radio" name="room-${i}-guests" value="2" class="room-${i}-guest"> 2
+//             <input type="radio" name="room-${i}-guests" value="3" class="room-${i}-guest"> 3
+//           </div>
+//           <div>
+//             Bed Type: 
+//             <input type="radio" name="room-${i}-bed" value="1" class="room-${i}-bed single-bed"> Single
+//             <input type="radio" name="room-${i}-bed" value="2" class="room-${i}-bed double-bed"> Double
+//             <input type="radio" name="room-${i}-bed" value="2" class="room-${i}-bed twin-bed"> Twin
+//             <input type="radio" name="room-${i}-bed" value="3" class="room-${i}-bed triple-bed"> Triple
+//           </div>
+//         </div>
+//       `;
+//       $('#rooms-container').append(roomMarkup);
+//     }
+
+//     updateRoomAvailability();
+//   }
+
+//   $('#generate-rooms').click(function() {
+//     const totalGuests = parseInt($('#total-guests').val());
+//     if (totalGuests > 0) {
+//       generateRooms(totalGuests);
+//     }
+//   });
+
+  // Handle guest selection
+  $(document).on('change', 'input[type="radio"][name*="guests"]', function() {
+    const roomDiv = $(this).closest('.room');
+    roomDiv.find('input[type="radio"][name*="bed"]').prop('checked', false) 
+    updateRoomAvailability();
+  });
+
+  // Handle bed type selection with validation
+  $(document).on('change', 'input[type="radio"][name*="bed"]', function(e) {
+    const roomDiv = $(this).closest('.room');
+    const guestSelected = roomDiv.find('input[type="radio"][name*="guests"]:checked').val();
+
+    if (!guestSelected) {
+      // If guest not selected yet
+      alert('Please select number of guests first!');
+      $(this).prop('checked', false); // Uncheck the wrongly selected bed
+      e.preventDefault();
+      return false;
+    }
+
+    updateRoomAvailability();
+  });
+
+  function showError(message) {
+    errorMessage.textContent = message;
+    errorContainer.style.display = 'flex';
+  }
+
+  function updateRoomAvailability() {
+    let totalGuestsSelected = 0;
+    let selectedRooms = 0;
+    let bedOccupancy = 0;
+    //const maxGuests = parseInt($('#total-guests').val());
+
+    $('.room').each(function() {
+      const guestSelected = $(this).find('input[type="radio"][name*="guests"]:checked').val();      
+      if (guestSelected) {
+        bedOccupancy += parseInt($(this).find('input[type="radio"][name*="guests"]:checked').data('bed-occupancy'))      
+        totalGuestsSelected += parseInt(guestSelected);       
+        if (guestSelected > bedOccupancy) {
+            showError('Mismatch: Bed occupancy (' + bedOccupancy + ') must match number of guests (' + guestsSelected + ') in the room.');
+            return false;
+        }
+        selectedRooms++;
+      }
+    });
+
+    
+
+    // Disable all further guest selection once totalGuests is reached
+    // if (totalGuestsSelected >= maxGuests) {
+    //   $('.room input[type="radio"][name*="guests"]').each(function() {
+    //     if (!$(this).is(':checked')) {
+    //       $(this).prop('disabled', true);
+    //     }
+    //   });
+    // } else {
+    //   $('.room input[type="radio"][name*="guests"]').prop('disabled', false);
+    // }
+
+    // Update Bed Type enabling based on guests selected per room
+    $('.room').each(function() {
+      const guestSelected = $(this).find('input[type="radio"][name*="guests"]:checked').val();
+      const singleBed = $(this).find('.singleBed');
+      const doubleBed = $(this).find('.doubleBed');
+      const twinBed = $(this).find('.twinBed');
+      const tripleBed = $(this).find('.tripleBed');
+
+      if (guestSelected == 1) {
+        singleBed.prop('disabled', false);
+        doubleBed.prop('disabled', true);
+        twinBed.prop('disabled', true);
+        tripleBed.prop('disabled', true);
+      } else if (guestSelected == 2) {
+        singleBed.prop('disabled', true);
+        doubleBed.prop('disabled', false);
+        twinBed.prop('disabled', false);
+        tripleBed.prop('disabled', true);
+      } else if (guestSelected == 3) {
+        singleBed.prop('disabled', true);
+        doubleBed.prop('disabled', true);
+        twinBed.prop('disabled', true);
+        tripleBed.prop('disabled', false);
+      } else {
+        // No guest selected yet
+        singleBed.prop('disabled', true);
+        doubleBed.prop('disabled', true);
+        twinBed.prop('disabled', true);
+        tripleBed.prop('disabled', true);
+      }
+    });
+  }
+
+  // Reset everything
+//   $('#reset').click(function() {
+//     $('#total-guests').val(5);
+//     $('#rooms-container').empty();
+//     $('#validation').text('');
+//     $('#result').text('');
+//     generateRooms(5);
+//   });
+
+  // Initial page load
+  //generateRooms(5);
+});
 </script>
 
 
