@@ -49,7 +49,7 @@ class Hotel extends V3BookingComponent
            return $this->addError('common', 'More travellers have been added to rooms than are travelling');
         }
 
-        return redirect()->route('booking.v3.guest', ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]);
+        return redirect()->route('booking.v3.tickets', ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]);
     }
 
     public function rules()

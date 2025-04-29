@@ -54,6 +54,10 @@ Route::prefix('/booking/simple/{tour}')->group(function () {
 Route::prefix('/booking/v3/{tour}')->group(function () {
     Route::get('/{booking?}', [BookingV3Controller::class, 'guest'])->name('booking.v3.guest');
     Route::get('/hotels/{booking?}', [BookingV3Controller::class, 'hotel'])->name('booking.v3.hotel');
+    Route::get('/tickets/{booking?}', [BookingV3Controller::class, 'hotel'])->name('booking.v3.tickets');
+    Route::get('/inclusions/{booking?}', [BookingV3Controller::class, 'hotel'])->name('booking.v3.inclusions');
+    Route::get('/details/{booking?}', [BookingV3Controller::class, 'hotel'])->name('booking.v3.details');
+    Route::get('/confirmation/{booking?}', [BookingV3Controller::class, 'hotel'])->name('booking.v3.confirmation');
 });
 
 
