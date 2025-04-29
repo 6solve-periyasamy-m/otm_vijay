@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Report;
 
+use App\Http\Livewire\Abstract\CurrencyColumn;
 use App\Http\Livewire\Abstract\ExportableDatatable;
 use App\Http\Livewire\Abstract\OrderBadgeColumn;
 use App\Models\Helper\Enum\OrderStatus;
@@ -9,10 +10,12 @@ use App\Models\Location\Currency;
 use App\Models\Order\Order;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
+use Illuminate\Database\Query\JoinClause;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\DatetimeColumn;
 use Mediconesystems\LivewireDatatables\NumberColumn;
+use Settings;
 
 class OrderReport extends ExportableDatatable
 {
@@ -26,10 +29,18 @@ class OrderReport extends ExportableDatatable
             ->join('order_caches', 'order_caches.order_id', '=', 'orders.id')
             ->join('tours', 'orders.tour_id', '=', 'tours.id')
             ->join('events', 'tours.event_id', '=', 'events.id')
-            ->leftJoin('currencies', 'orders.currency_id', '=', 'currencies.id');
+            ->leftJoin('currencies', 'orders.currency_id', '=', 'currencies.id')
+            ->leftJoin('conversion_rates AS from_rate', function (JoinClause $join) {
+                $join->on('orders.currency_id', '=', 'from_rate.from_currency_id')
+                    ->where('from_rate.to_currency_id', '=', Settings::currency()->id);
+            })
+            ->leftJoin('conversion_rates AS to_rate', function (JoinClause $join) {
+                $join->on('orders.currency_id', '=', 'to_rate.to_currency_id')
+                    ->where('to_rate.from_currency_id', '=', Settings::currency()->id);
+            });
     }
 
-    public function columns()
+    public function columns(): array
     {
         return [
             DatetimeColumn::name('orders.ordered_on')
@@ -57,22 +68,30 @@ class OrderReport extends ExportableDatatable
                 ->sortable()
                 ->searchable()
                 ->filterable(Tour::pluck('name')),
-            Column::raw('(COALESCE(`currencies`.`code`, "' . \Settings::currency()->code . '")) AS currency')
-                ->label('Currency')
-                ->sortable()
-                ->searchable()
-                ->filterable(Currency::pluck('code')),
             Column::name('events.name')
                 ->label('Event')
                 ->sortable()
                 ->searchable()
                 ->filterable(Event::pluck('name')),
+            Column::raw('(COALESCE(`currencies`.`code`, "' . Settings::currency()->code . '")) AS currency')
+                ->label('Currency')
+                ->sortable()
+                ->searchable()
+                ->filterable(Currency::pluck('code')),
             NumberColumn::name('order_caches.total_owed')
                 ->label('Total Cost')
                 ->sortable()
                 ->filterable(),
+            CurrencyColumn::raw('(order_caches.total_owed * COALESCE(from_rate.rate, 1))')
+                ->label('Total Cost (System)')
+                ->sortable()
+                ->filterable(),
             NumberColumn::raw("(SELECT SUM(amount) FROM payments WHERE order_id = orders.id)")
                 ->label('Total Paid')
+                ->sortable()
+                ->filterable(),
+            CurrencyColumn::raw("((SELECT SUM(amount) FROM payments WHERE order_id = orders.id) * COALESCE(from_rate.rate, 1))")
+                ->label('Total Paid (System)')
                 ->sortable()
                 ->filterable(),
             OrderBadgeColumn::name('order_caches.status')
@@ -87,8 +106,16 @@ class OrderReport extends ExportableDatatable
                 ->label('Next Payment Total')
                 ->sortable()
                 ->filterable(),
+            CurrencyColumn::raw('(order_caches.next_payment_amount * COALESCE(from_rate.rate, 1))')
+                ->label('Next Payment Total (System)')
+                ->sortable()
+                ->filterable(),
             NumberColumn::name('order_caches.next_payment_remaining')
                 ->label('Next Payment Remaining')
+                ->sortable()
+                ->filterable(),
+            CurrencyColumn::raw('(order_caches.next_payment_remaining * COALESCE(from_rate.rate, 1))')
+                ->label('Next Payment Remaining (System)')
                 ->sortable()
                 ->filterable(),
             Column::name('orders.internal_notes')
