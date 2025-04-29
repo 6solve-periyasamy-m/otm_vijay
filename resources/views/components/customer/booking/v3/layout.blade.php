@@ -7,7 +7,12 @@
                 @endif
             </div>
             <div class="column right">
-                <p>Require assistance?</p>
+                {{-- TODO: Remove when complete --}}
+                @if(config('app.features.bleeding-edge', false) === true)
+                    <a href="{{ route('admin.booking.view', ['booking' => $this->booking]) }}">Preview Booking in Admin</a>
+                @else
+                    <p>Require assistance?</p>
+                @endif
                 @if(isset($this->brand))
                     <a href="tel:{{$this->brand->phone}}">
                         <span><img src="{{ asset('icons/Call-Icon.svg') }}" alt="logo"></span><span>{{$this->brand->phone}}</span>
