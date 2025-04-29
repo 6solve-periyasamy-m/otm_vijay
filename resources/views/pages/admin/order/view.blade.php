@@ -115,7 +115,6 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                 @else
                     No Taxes Due
                 @endif
-                {{ $order->getTaxes() !== null ? fr_currency($order->getTaxes(), $order->currency) : 'No Taxes Due' }}
             </h6>
         </div>
         <div class="col-12 col-xl-3">
