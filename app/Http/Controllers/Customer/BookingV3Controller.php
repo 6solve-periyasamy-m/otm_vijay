@@ -21,7 +21,7 @@ class BookingV3Controller extends Controller
             $booking = BookingRepository::make($tour);
             $booking->save();
             $this->setupCookie($tour, $booking);
-            return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, ]);
+            return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'token' => $token]);
         }
         $this->setupCookie($tour, $booking);
         return view('pages.customer.booking.v3.guest', ['tour' => $tour, 'booking' => $booking]);
@@ -54,6 +54,8 @@ class BookingV3Controller extends Controller
 
     private function setupCookie(Tour $tour, Booking $booking): void
     {
+        // Disabled for now. Consideration for later
+        return;
         // Place cookie for 12hrs
         Cookie::queue(Cookie::make($tour->booking_form_url, $booking->token, 12 * 60));
     }
