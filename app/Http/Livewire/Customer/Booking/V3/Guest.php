@@ -7,12 +7,8 @@ use App\Http\Livewire\Abstract\V3BookingComponent;
 use App\Models\Customer\Customer;
 use App\Repository\Model\Booking\BookingTravellerRepository;
 use Illuminate\Support\Facades\Log;
-use App\Exceptions\MailDisabledException;
-use App\Exceptions\MailFailedException;
 use Exception;
 use App\Models\Quote\Quote;
-use App\Mail\Storage\Attachment;
-use App\Mail\Storage\QuoteMail;
 use App\Models\Booking\BookingTraveller;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
@@ -20,10 +16,7 @@ use Illuminate\Validation\ValidationException;
 class Guest extends V3BookingComponent
 {
     private const MAX_TRAVELLERS = 5;
-    protected $listeners = ['currencyUpdated' => 'updateCurrency'];
-    public bool $quoteSent = false;
-    public bool $showCustomerForm = false;
-    
+    protected $listeners = ['currencyUpdated' => 'updateCurrency'];  
     protected array $messages = [
         'lead.email_address.required' => 'Email is required.',
         'lead.email_address.email' => 'Please enter a valid email address.',
@@ -44,14 +37,6 @@ class Guest extends V3BookingComponent
             $booking->save();
             $this->addTraveller();
         }        
-    }
-
-    public function toggleCustomerForm()
-    {
-        $this->showCustomerForm = !$this->showCustomerForm;
-        if (!$this->showCustomerForm) {
-            $this->resetErrorBag();
-        }
     }
 
     public function getCanSendQuoteProperty(): bool
@@ -79,20 +64,10 @@ class Guest extends V3BookingComponent
             if (RateLimiter::tooManyAttempts("send-quote-{$this->booking->id}", 5)) {
                 throw ValidationException::withMessages(['email' => 'Too many attempts. Please try again later.']);
             }
-
             RateLimiter::hit("send-quote-{$this->booking->id}");
             $quote = $this->booking->repository->convertToQuote();
             $this->booking->quote_id = $quote->id;
             $this->booking->save();
-
-            // $sent = $quote->repository->generateSent($this->lead->email_address, $quote->paying?? 1, $quote->travelling?? 0);
-            // $attachment = new Attachment($quote->repository->getStream($sent), $quote->reference . '.pdf', ['mime' => 'application/pdf',]);
-            // $status = (new QuoteMail('quote', $quote->consultant))->send($target ?? $sent->recipient, $sent, [$attachment,], "", true);
-            // $this->quoteSent = true;
-            // $this->showCustomerForm = false;
-            // session()->flash('success', 'Quote emailed successfully!');
-        } catch (MailDisabledException|MailFailedException $e) {
-            session()->flash('error', $e->getMessage());
         } catch (\Throwable $e) {
             Log::error('Quote email failed', ['booking_id' => $this->booking->id, 'error' => $e->getMessage()]);
             session()->flash('error', 'Failed to send quote. Please try again later.');
@@ -182,35 +157,4 @@ class Guest extends V3BookingComponent
             'lead.mobile_number' => 'nullable|string|regex:/^[0-9+\-\s()]*$/|max:20',
         ];
     }
-
-    public function emailQuote()
-    {
-        $this->validateOnly('lead.email_address');
-        if ($this->lead->email_address === null) {
-            session()->flash('error', 'Cannot send quote, no valid target email found.');
-        }
-        try {
-            $quote = Quote::find($this->booking->quote_id);
-            $sent = $quote->repository->generateSent($this->lead->email_address, $quote->paying?? 1, $quote->travelling?? 0);
-            $attachment = new Attachment($quote->repository->getStream($sent), $quote->reference . '.pdf', ['mime' => 'application/pdf',]);
-            $status = (new QuoteMail('quote', $quote->consultant))->send($target ?? $sent->recipient, $sent, [$attachment,], "", true);
-            $this->quoteSent = true;
-            $this->showCustomerForm = false;
-            session()->flash('success', 'Quote emailed successfully!');
-        } catch (MailDisabledException) {
-            session()->flash('error', 'Failed to Send Quote-Emails are not enabled on this system.');
-            return;
-        } catch (MailFailedException $e) {
-            $status = false;
-        } catch (Exception $e) {
-            session()->flash('error', 'Failed to Send Quote-'.$e->getMessage());
-            return;
-        }
-        if ($status === true) {
-            session()->flash('error', 'Quote emailed successfully.');
-        } else {
-            session()->flash('error', 'Cannot send quote, no valid target email found.');
-        }
-    }
-
 }

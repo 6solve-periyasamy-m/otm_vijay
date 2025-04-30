@@ -1926,7 +1926,7 @@
       border-radius: 50%;
     }
 
-    .single-block h6 {
+    .single-block h6{
       font-family: "PP Neue Montreal Bold";
       font-weight: 700;
       font-size: 14px;
