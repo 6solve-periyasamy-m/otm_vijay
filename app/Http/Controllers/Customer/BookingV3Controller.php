@@ -52,6 +52,13 @@ class BookingV3Controller extends Controller
         return view('pages.customer.booking.v3.ticket', ['tour' => $tour, 'booking' => $booking, 'quote' => $quote]);
     }
 
+    public function reset(string $tour, string|null $token = null)
+    {
+        $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
+        Booking::where('tour_id', '=', $tour->id)->where('token', '=', $token)->first()?->repository->forceDelete();
+        return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
+    }
+
     private function setupCookie(Tour $tour, Booking $booking): void
     {
         // Disabled for now. Consideration for later
