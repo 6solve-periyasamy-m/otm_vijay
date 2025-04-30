@@ -765,7 +765,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             }
 
             $bedType = trim(Str::afterLast($name, '-'));
-            $rooms[$inventoryTour->inventory->room_type_id] = ['id'=> $inventoryTour->inventory->roomType->id, 'name' => $bedType, 'room_desc' => $inventoryTour->inventory->category_description, 'occupancy' => $inventoryTour->inventory->roomType->maximum_occupancy, 'component_type' => $inventoryTour->tour_component_type, 'board_type' => $inventoryTour->inventory->boardType?->name];
+            $rooms[$inventoryTour->inventory->room_type_id] = ['id'=> $inventoryTour->inventory->roomType->id, 'name' => $bedType, 'room_desc' => $inventoryTour->inventory->category_description, 'occupancy' => $inventoryTour->inventory->roomType->maximum_occupancy, 'component_type' => $inventoryTour->tour_component_type, 'board_type' => $inventoryTour->inventory->boardType?->name, 'sales_price' => $inventoryTour->tour_sales_price];
         }
         return $rooms;
     }

@@ -9,6 +9,11 @@ use Livewire\Component;
 use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Quote\Quote;
+use App\Mail\Storage\Attachment;
+use App\Mail\Storage\QuoteMail;
+use App\Exceptions\MailDisabledException;
+use App\Exceptions\MailFailedException;
+use Exception;
 
 abstract class V3BookingComponent extends Component
 {
@@ -20,6 +25,7 @@ abstract class V3BookingComponent extends Component
     public string $selectedCurrency;
     public array $rooms = [];
     public BookingTraveller|null $lead = null;
+    public bool $showCustomerForm = false;
 
     public function mount(Tour|int|null $tour = null, Booking|int|null $booking = null, Quote|int|null $quote = null)
     {
@@ -100,4 +106,45 @@ abstract class V3BookingComponent extends Component
         $this->rooms = $this->rooms;
     }
     
+    public function toggleCustomerForm()
+    {
+        $this->showCustomerForm = !$this->showCustomerForm;
+        if (!$this->showCustomerForm) {
+            $this->resetErrorBag();
+        }
+    }
+
+    public function emailQuote()
+    {
+        if ($this->booking->leadTraveller->email_address === null) {
+            session()->flash('error', 'Cannot send quote, no valid target email found.');
+        }
+        try {
+            if ($this->booking->quote_id !== null) {
+                $quote = Quote::find($this->booking->quote_id);
+                $sent = $quote->repository->generateSent($this->booking->leadTraveller->email_address, $quote->paying?? 1, $quote->travelling?? 0);
+                $attachment = new Attachment($quote->repository->getStream($sent), $quote->reference . '.pdf', ['mime' => 'application/pdf',]);
+                $status = (new QuoteMail('quote', $quote->consultant))->send($target ?? $sent->recipient, $sent, [$attachment,], "", true);
+                $this->showCustomerForm = false;
+                session()->flash('success', 'Quote emailed successfully!');
+            } else {
+                session()->flash('error', 'Failed to Send Quote - Quote not found.');
+                return;
+            }            
+        } catch (MailDisabledException) {
+            session()->flash('error', 'Failed to Send Quote-Emails are not enabled on this system.');
+            return;
+        } catch (MailFailedException $e) {
+            $status = false;
+        } catch (Exception $e) {
+            session()->flash('error', 'Failed to Send Quote-'.$e->getMessage());
+            return;
+        }
+        if ($status === true) {
+            session()->flash('error', 'Quote emailed successfully.');
+        } else {
+            session()->flash('error', 'Cannot send quote, no valid target email found.');
+        }
+    }
+
 }

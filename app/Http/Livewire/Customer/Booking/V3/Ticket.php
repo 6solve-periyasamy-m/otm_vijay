@@ -13,12 +13,17 @@ class Ticket extends V3BookingComponent
     {
         parent::mount($tour, $booking, $quote);
 
-        // foreach(\App\Repository\Model\Activity\ActivityInventoryRepository::getBetweenDates($tour->date_from, $tour->date_to, $tour->repository) as $inventory){
-        //     if($inventory->component->activityType->name === 'Add On'){
-        //         dd($inventory->component->activityType, $inventory->component->session);
-        //         //dd($inventory->component->activityType)
+        // //d(\App\Repository\Model\Activity\ActivityInventoryRepository::getBetweenDates($tour->date_from, $tour->date_to, $tour->repository));
 
-        //     }
+        // foreach(\App\Repository\Model\Activity\ActivityInventoryRepository::getBetweenDates($tour->date_from, $tour->date_to, $tour->repository) as $inventory){
+        //     //dd($inventory);
+        //     dd($inventory->component?->field1);
+        //     //echo  $inventory->activity_id ."::::" . $inventory->ticketType->name . ":::::" .$inventory->id."<br>";
+        //     // if($inventory->component->activityType->name === 'Add On'){
+        //     //     dd($inventory->component->activityType, $inventory->component->session);
+        //     //     //dd($inventory->component->activityType)
+
+        //     // }
         //     //dd($inventory->component->activityType == 'Add On');
         // }
         // exit;
