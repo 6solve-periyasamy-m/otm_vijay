@@ -9,7 +9,7 @@
             <div class="column right">
                 {{-- TODO: Remove when complete --}}
                 @if(config('app.features.bleeding-edge', false) === true)
-                    <a href="{{ route('admin.booking.view', ['booking' => $this->booking]) }}">Preview Booking in Admin</a>
+                    <a target="_blank" href="{{ route('admin.booking.view', ['booking' => $this->booking]) }}">Preview Booking in Admin</a>
                 @else
                     <p>Require assistance?</p>
                 @endif

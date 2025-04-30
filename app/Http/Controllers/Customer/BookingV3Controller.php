@@ -12,16 +12,15 @@ use Illuminate\Http\Request;
 
 class BookingV3Controller extends Controller
 {
-    public function guest(Request $request, string $tour, string|null $token = null)
+    public function guest(Request $request, string $tour, string|null $booking = null)
     {
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
-        $token = $token ?? $request->cookie($tour->booking_form_url);
-        $booking = Booking::where('tour_id', '=', $tour->id)->where('token', '=', $token)->first();
+        $booking = Booking::where('tour_id', '=', $tour->id)->where('token', '=', $booking ?? $request->cookie($tour->booking_form_url))->first();
         if ($booking === null) {
             $booking = BookingRepository::make($tour);
             $booking->save();
             $this->setupCookie($tour, $booking);
-            return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'token' => $token]);
+            return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => $booking->token]);
         }
         $this->setupCookie($tour, $booking);
         return view('pages.customer.booking.v3.guest', ['tour' => $tour, 'booking' => $booking]);
