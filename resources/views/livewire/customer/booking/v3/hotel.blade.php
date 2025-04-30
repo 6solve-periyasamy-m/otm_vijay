@@ -343,74 +343,13 @@
             </div>
         </div>
     </section>
-</x-customer.booking.v3.layout>
-<!-- <script>
-    jQuery(document).ready(function () {
-        const totalGuests = parseInt("{{ $this->getTravellerCount() }}");
-        const errorContainer = document.getElementById('guest-distribution-error');
-        const errorMessage = document.getElementById('guest-distribution-error-message');
-
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorContainer.style.display = 'flex';
-        }
-
-        function validateRoom($room) {
-            const guestsSelected = parseInt($room.find('.guest-radio:checked').val() || 0);
-            const $bedSelected = $room.find('.bed-radio:checked');
-
-            if (guestsSelected > 0 && $bedSelected.length > 0) {
-                const bedOccupancy = parseInt($bedSelected.data('bed-occupancy'));
-                if (bedOccupancy !== guestsSelected) {
-                    showError('Mismatch: Bed occupancy (' + bedOccupancy + ') must match number of guests (' + guestsSelected + ') in the room.');
-                    $bedSelected.prop('checked', false);
-                }
-            }
-        }
-
-        function validateTotalGuests() {
-            let assignedGuests = 0;
-
-            $('.single-room').each(function () {
-                const guestsSelected = parseInt($(this).find('.guest-radio:checked').val() || 0);
-                assignedGuests += guestsSelected;
-            });
-
-            if (assignedGuests > totalGuests) {
-                showError('Assigned guests (' + assignedGuests + ') exceed total booking guests (' + totalGuests + ').');
-                return false;
-            }
-
-            // Don't hide error container if guests are still unassigned
-            if (assignedGuests < totalGuests) {
-                console.log('Still need to assign more guests.');
-            }
-
-            return true;
-        }
-
-        // When guest number is selected
-        $(document).on('change', '.guest-radio', function () {
-            const roomIndex = $(this).data('room-index');
-            const $room = $('[data-room-index="' + roomIndex + '"]').closest('.single-room');
-            validateRoom($room);
-            validateTotalGuests();
-        });
-
-        // When bed configuration is selected
-        $(document).on('change', '.bed-radio', function () {
-            const roomIndex = $(this).data('room-index');
-            const $room = $('[data-room-index="' + roomIndex + '"]').closest('.single-room');
-            validateRoom($room);
-        });
-    });
-</script> -->
-<script>
-  $(document).ready(function() {
-  const maxGuestsPerRoom = 3;
-  const maxGuests = parseInt("{{ $this->getTravellerCount() }}"); 
-  const errorContainer = document.getElementById('guest-distribution-error');
-  const errorMessage = document.getElementById('guest-distribution-error-message');
+    <div wire:ignore>
+        <script>
+            $(document).ready(function() {
+                const maxGuestsPerRoom = 3;
+                const maxGuests = parseInt("{{ $this->getTravellerCount() }}");
+                const errorContainer = document.getElementById('guest-distribution-error');
+                const errorMessage = document.getElementById('guest-distribution-error-message');
 
 //   function generateRooms(totalGuests) {
 //     const neededRooms = Math.ceil(totalGuests / maxGuestsPerRoom);
@@ -421,13 +360,13 @@
 //         <div class="room" id="room-${i}">
 //           <h4>Room ${i}</h4>
 //           <div>
-//             Guests: 
+//             Guests:
 //             <input type="radio" name="room-${i}-guests" value="1" class="room-${i}-guest"> 1
 //             <input type="radio" name="room-${i}-guests" value="2" class="room-${i}-guest"> 2
 //             <input type="radio" name="room-${i}-guests" value="3" class="room-${i}-guest"> 3
 //           </div>
 //           <div>
-//             Bed Type: 
+//             Bed Type:
 //             <input type="radio" name="room-${i}-bed" value="1" class="room-${i}-bed single-bed"> Single
 //             <input type="radio" name="room-${i}-bed" value="2" class="room-${i}-bed double-bed"> Double
 //             <input type="radio" name="room-${i}-bed" value="2" class="room-${i}-bed twin-bed"> Twin
@@ -448,100 +387,100 @@
 //     }
 //   });
 
-  // Handle guest selection
-  $(document).on('change', 'input[type="radio"][name*="guests"]', function() {
-    const roomDiv = $(this).closest('.room');
-    roomDiv.find('input[type="radio"][name*="bed"]').prop('checked', false) 
-    updateRoomAvailability();
-  });
+                // Handle guest selection
+                $(document).on('change', 'input[type="radio"][name*="guests"]', function() {
+                    const roomDiv = $(this).closest('.room');
+                    roomDiv.find('input[type="radio"][name*="bed"]').prop('checked', false)
+                    updateRoomAvailability();
+                });
 
-  // Handle bed type selection with validation
-  $(document).on('change', 'input[type="radio"][name*="bed"]', function(e) {
-    const roomDiv = $(this).closest('.room');
-    const guestSelected = roomDiv.find('input[type="radio"][name*="guests"]:checked').val();
+                // Handle bed type selection with validation
+                $(document).on('change', 'input[type="radio"][name*="bed"]', function(e) {
+                    const roomDiv = $(this).closest('.room');
+                    const guestSelected = roomDiv.find('input[type="radio"][name*="guests"]:checked').val();
 
-    if (!guestSelected) {
-      // If guest not selected yet
-      alert('Please select number of guests first!');
-      $(this).prop('checked', false); // Uncheck the wrongly selected bed
-      e.preventDefault();
-      return false;
-    }
+                    if (!guestSelected) {
+                        // If guest not selected yet
+                        alert('Please select number of guests first!');
+                        $(this).prop('checked', false); // Uncheck the wrongly selected bed
+                        e.preventDefault();
+                        return false;
+                    }
 
-    updateRoomAvailability();
-  });
+                    updateRoomAvailability();
+                });
 
-  function showError(message) {
-    errorMessage.textContent = message;
-    errorContainer.style.display = 'flex';
-  }
+                function showError(message) {
+                    errorMessage.textContent = message;
+                    errorContainer.style.display = 'flex';
+                }
 
-  function updateRoomAvailability() {
-    let totalGuestsSelected = 0;
-    let selectedRooms = 0;
-    let bedOccupancy = 0;
-    //const maxGuests = parseInt($('#total-guests').val());
+                function updateRoomAvailability() {
+                    let totalGuestsSelected = 0;
+                    let selectedRooms = 0;
+                    let bedOccupancy = 0;
+                    //const maxGuests = parseInt($('#total-guests').val());
 
-    $('.room').each(function() {
-      const guestSelected = $(this).find('input[type="radio"][name*="guests"]:checked').val();      
-      if (guestSelected) {
-        bedOccupancy += parseInt($(this).find('input[type="radio"][name*="guests"]:checked').data('bed-occupancy'))      
-        totalGuestsSelected += parseInt(guestSelected);       
-        if (guestSelected > bedOccupancy) {
-            showError('Mismatch: Bed occupancy (' + bedOccupancy + ') must match number of guests (' + guestsSelected + ') in the room.');
-            return false;
-        }
-        selectedRooms++;
-      }
-    });
+                    $('.room').each(function() {
+                        const guestSelected = $(this).find('input[type="radio"][name*="guests"]:checked').val();
+                        if (guestSelected) {
+                            bedOccupancy += parseInt($(this).find('input[type="radio"][name*="guests"]:checked').data('bed-occupancy'))
+                            totalGuestsSelected += parseInt(guestSelected);
+                            if (guestSelected > bedOccupancy) {
+                                showError('Mismatch: Bed occupancy (' + bedOccupancy + ') must match number of guests (' + guestsSelected + ') in the room.');
+                                return false;
+                            }
+                            selectedRooms++;
+                        }
+                    });
 
-    
 
-    // Disable all further guest selection once totalGuests is reached
-    // if (totalGuestsSelected >= maxGuests) {
-    //   $('.room input[type="radio"][name*="guests"]').each(function() {
-    //     if (!$(this).is(':checked')) {
-    //       $(this).prop('disabled', true);
-    //     }
-    //   });
-    // } else {
-    //   $('.room input[type="radio"][name*="guests"]').prop('disabled', false);
-    // }
 
-    // Update Bed Type enabling based on guests selected per room
-    $('.room').each(function() {
-      const guestSelected = $(this).find('input[type="radio"][name*="guests"]:checked').val();
-      const singleBed = $(this).find('.singleBed');
-      const doubleBed = $(this).find('.doubleBed');
-      const twinBed = $(this).find('.twinBed');
-      const tripleBed = $(this).find('.tripleBed');
+                    // Disable all further guest selection once totalGuests is reached
+                    // if (totalGuestsSelected >= maxGuests) {
+                    //   $('.room input[type="radio"][name*="guests"]').each(function() {
+                    //     if (!$(this).is(':checked')) {
+                    //       $(this).prop('disabled', true);
+                    //     }
+                    //   });
+                    // } else {
+                    //   $('.room input[type="radio"][name*="guests"]').prop('disabled', false);
+                    // }
 
-      if (guestSelected == 1) {
-        singleBed.prop('disabled', false);
-        doubleBed.prop('disabled', true);
-        twinBed.prop('disabled', true);
-        tripleBed.prop('disabled', true);
-      } else if (guestSelected == 2) {
-        singleBed.prop('disabled', true);
-        doubleBed.prop('disabled', false);
-        twinBed.prop('disabled', false);
-        tripleBed.prop('disabled', true);
-      } else if (guestSelected == 3) {
-        singleBed.prop('disabled', true);
-        doubleBed.prop('disabled', true);
-        twinBed.prop('disabled', true);
-        tripleBed.prop('disabled', false);
-      } else {
-        // No guest selected yet
-        singleBed.prop('disabled', true);
-        doubleBed.prop('disabled', true);
-        twinBed.prop('disabled', true);
-        tripleBed.prop('disabled', true);
-      }
-    });
-  }
+                    // Update Bed Type enabling based on guests selected per room
+                    $('.room').each(function() {
+                        const guestSelected = $(this).find('input[type="radio"][name*="guests"]:checked').val();
+                        const singleBed = $(this).find('.singleBed');
+                        const doubleBed = $(this).find('.doubleBed');
+                        const twinBed = $(this).find('.twinBed');
+                        const tripleBed = $(this).find('.tripleBed');
 
-  // Reset everything
+                        if (guestSelected == 1) {
+                            singleBed.prop('disabled', false);
+                            doubleBed.prop('disabled', true);
+                            twinBed.prop('disabled', true);
+                            tripleBed.prop('disabled', true);
+                        } else if (guestSelected == 2) {
+                            singleBed.prop('disabled', true);
+                            doubleBed.prop('disabled', false);
+                            twinBed.prop('disabled', false);
+                            tripleBed.prop('disabled', true);
+                        } else if (guestSelected == 3) {
+                            singleBed.prop('disabled', true);
+                            doubleBed.prop('disabled', true);
+                            twinBed.prop('disabled', true);
+                            tripleBed.prop('disabled', false);
+                        } else {
+                            // No guest selected yet
+                            singleBed.prop('disabled', true);
+                            doubleBed.prop('disabled', true);
+                            twinBed.prop('disabled', true);
+                            tripleBed.prop('disabled', true);
+                        }
+                    });
+                }
+
+                // Reset everything
 //   $('#reset').click(function() {
 //     $('#total-guests').val(5);
 //     $('#rooms-container').empty();
@@ -550,59 +489,61 @@
 //     generateRooms(5);
 //   });
 
-  // Initial page load
-  //generateRooms(5);
-});
-</script>
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const advanceBtn = document.getElementById('tocheckbedconfiguration');
-        const errorContainer = document.getElementById('guest-distribution-error');
-        const errorMessage = document.getElementById('guest-distribution-error-message');
-        if (advanceBtn) {
-            advanceBtn.addEventListener('click', function () {
-            const expectedGuests = parseInt("{{ $this->getTravellerCount() }}");
-            const roomCount = "{{ count($this->rooms) }}";
-            let totalGuests = 0;
-            let valid = true;
-            let messages = [];
-
-            for (let roomIndex = 0; roomIndex < roomCount; roomIndex++) {
-                const guestInput = document.querySelector(`input[name="rooms[${roomIndex}][travellers]"]:checked`);
-                const bedInput = document.querySelector(`input[name="rooms[${roomIndex}][room]"]:checked`);
-
-                if (!guestInput) {
-                    messages.push(`Room ${roomIndex + 1}: Please select number of guests.`);
-                    valid = false;
-                    continue;
-                }
-
-                const guestCount = parseInt(guestInput.value);
-                totalGuests += guestCount;
-
-                // Check for matching bed config
-                const matchingBedConfig = document.querySelectorAll(`#bed-config-${roomIndex} .bed-radio:not([disabled])`);
-                if (guestCount > 0 && (!bedInput || bedInput.disabled)) {
-                    messages.push(`Room ${roomIndex + 1}: Please select a valid bed configuration for ${guestCount} guest(s).`);
-                    valid = false;
-                }
-            }
-
-            if (totalGuests !== expectedGuests) {
-                messages.push(`Total number of guests selected (${totalGuests}) does not match expected (${expectedGuests}).`);
-                valid = false;
-            }
-
-            if (!valid) {
-                //alert(messages.join("\n"));
-                errorMessage.textContent = messages.join("\n");
-                errorContainer.style.display = 'flex';
-            } else {
-                Livewire.emit('advance');
-            }
+                // Initial page load
+                //generateRooms(5);
             });
-        }
-    });
-</script>
+        </script>
+
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const advanceBtn = document.getElementById('tocheckbedconfiguration');
+                const errorContainer = document.getElementById('guest-distribution-error');
+                const errorMessage = document.getElementById('guest-distribution-error-message');
+                if (advanceBtn) {
+                    advanceBtn.addEventListener('click', function () {
+                        const expectedGuests = parseInt("{{ $this->getTravellerCount() }}");
+                        const roomCount = "{{ count($this->rooms) }}";
+                        let totalGuests = 0;
+                        let valid = true;
+                        let messages = [];
+
+                        for (let roomIndex = 0; roomIndex < roomCount; roomIndex++) {
+                            const guestInput = document.querySelector(`input[name="rooms[${roomIndex}][travellers]"]:checked`);
+                            const bedInput = document.querySelector(`input[name="rooms[${roomIndex}][room]"]:checked`);
+
+                            if (!guestInput) {
+                                messages.push(`Room ${roomIndex + 1}: Please select number of guests.`);
+                                valid = false;
+                                continue;
+                            }
+
+                            const guestCount = parseInt(guestInput.value);
+                            totalGuests += guestCount;
+
+                            // Check for matching bed config
+                            const matchingBedConfig = document.querySelectorAll(`#bed-config-${roomIndex} .bed-radio:not([disabled])`);
+                            if (guestCount > 0 && (!bedInput || bedInput.disabled)) {
+                                messages.push(`Room ${roomIndex + 1}: Please select a valid bed configuration for ${guestCount} guest(s).`);
+                                valid = false;
+                            }
+                        }
+
+                        if (totalGuests !== expectedGuests) {
+                            messages.push(`Total number of guests selected (${totalGuests}) does not match expected (${expectedGuests}).`);
+                            valid = false;
+                        }
+
+                        if (!valid) {
+                            //alert(messages.join("\n"));
+                            errorMessage.textContent = messages.join("\n");
+                            errorContainer.style.display = 'flex';
+                        } else {
+                            Livewire.emit('advance');
+                        }
+                    });
+                }
+            });
+        </script>
+    </div>
+</x-customer.booking.v3.layout>
