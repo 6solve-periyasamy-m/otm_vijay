@@ -29,6 +29,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelations;
  * @property int $id
  * @property int $tour_id
  * @property int|null $lead_traveller_id
+ * @property int|null $booking_accommodation_id
  * @property int|null $order_id
  * @property string|null $token
  * @property string|null $notes

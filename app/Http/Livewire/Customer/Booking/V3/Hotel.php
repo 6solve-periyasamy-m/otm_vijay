@@ -25,6 +25,7 @@ class Hotel extends V3BookingComponent
 
     public function loadRoomings(): void
     {
+        $this->selectedHotel = $this->booking->booking_accommodation_id;
         foreach ($this->booking->groups as $group) {
             $this->rooms[] = ['room' => $group->accommodation()->first()->tourComponent->inventory->room_type_id, 'travellers' => $group?->travellers->count(),];
         }
@@ -92,5 +93,11 @@ class Hotel extends V3BookingComponent
         $this->validateRoomCount();
         $this->renew();
         $this->render();
+    }
+
+    public function setHotel($id): void
+    {
+        $this->selectedHotel = $id;
+        $this->setupRooming();
     }
 }

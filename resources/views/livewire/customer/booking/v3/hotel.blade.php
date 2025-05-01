@@ -161,7 +161,7 @@
                                 $rooms = $this->tour->repository->getBookingRooms($hotel->id);
                                 $defaultRoom = reset($rooms);
                             @endphp
-                            <div class="single-hotel">
+                            <div class="single-hotel" wire:click="setHotel({{$hotel->id}})">
                                 @if(!empty($hotel->gallery) && count($hotel->gallery))
                                     <div class="hotel-image-block">
                                         @foreach($hotel->gallery as $photo)
@@ -188,7 +188,7 @@
                                         </select>
                                         <p class="breakfast-note">{{ $defaultRoom['board_type'] ?? '' }} </p>
                                         <p>{!! $defaultRoom['room_desc'] ?? '' !!}</p>
-                                        <button type="button" class="include-button {{ $defaultRoom['component_type'] === 'Upgrade' ? 'active' : '' }}">{{ $defaultRoom['component_type']}}</button>
+                                        <button type="button" class="include-button {{ $booking->booking_accommodation_id === $hotel->id ? 'active' : '' }}">{{ $defaultRoom['component_type']}}</button>
                                     </div>
                                 </div>
                             </div>
