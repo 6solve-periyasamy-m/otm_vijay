@@ -5,6 +5,7 @@ namespace App\Models\Order\Payment;
 use App\Models\Customer\Agent;
 use App\Models\Customer\Customer;
 use App\Models\Helper\Model;
+use App\Models\Location\Currency;
 use App\Models\Order\Order;
 use Database\Factories\PaymentFactory;
 use Eloquent;
@@ -23,6 +24,7 @@ use Illuminate\Validation\Rule;
  * @property int $id
  * @property int $order_id
  * @property int $payment_method_id
+ * @property int|null $currency_id
  * @property int|null $customer_id
  * @property int|null $payer_id
  * @property string|null $payer_type
@@ -33,6 +35,7 @@ use Illuminate\Validation\Rule;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Agent|Customer|null $payer
+ * @property-read Currency|null $currency
  * @property-read string|null $payer_name The name of the payer
  * @property-read Order $order Which order the payment is for
  * @property-read PaymentMethod $paymentMethod Which payment method was used
@@ -80,6 +83,11 @@ class Payment extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class, 'order_id');
+    }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
 
     public function paymentMethod(): BelongsTo
