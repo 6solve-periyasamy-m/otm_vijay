@@ -107,6 +107,7 @@
                                             type="radio"
                                             class="guest-radio"
                                             name="rooms[{{ $x }}][travellers]"
+                                            wire:model="rooms.{{ $x }}.travellers"
                                             value="{{ $i }}"
                                             data-room-index="{{ $x }}"
                                             id="guest{{ $x }}_{{ $i }}"

@@ -18,8 +18,16 @@ class Hotel extends V3BookingComponent
     public function mount($tour = null, $booking = null, $quote = null)
     {
         parent::mount($tour, $booking);
+        $this->loadRoomings();
         $this->validateRoomCount();
         $this->lead = $this->booking->leadTraveller;
+    }
+
+    public function loadRoomings(): void
+    {
+        foreach ($this->booking->groups as $group) {
+            $this->rooms[] = ['room' => $group->accommodation()->first()->tourComponent->inventory->room_type_id, 'travellers' => $group?->travellers->count(),];
+        }
     }
 
     public function render()

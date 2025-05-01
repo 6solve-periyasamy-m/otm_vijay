@@ -24,10 +24,22 @@ class StripeGateway extends Gateway implements SupportsRedirect
      */
     public function getRedirect(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
     {
+        return $this->getCheckout($items, $intention, $customer, $success)->url;
+    }
+
+    public function getCheckoutSecret(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
+    {
+        $checkout = $this->getCheckout($items, $intention, $customer, $success, 'custom');
+        \Log::info($checkout);
+        return $checkout->client_secret;
+    }
+
+    private function getCheckout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string $ui = 'hosted'): Session
+    {
         $lineItems = [];
         foreach ($items as $item) { $lineItems[] = $item->toStripe(); }
 
-        $session = Session::create([
+        $data = [
             'line_items' => $lineItems,
             'mode' => 'payment',
             'payment_intent_data' => [
@@ -35,14 +47,27 @@ class StripeGateway extends Gateway implements SupportsRedirect
                     'intention_id' => $intention->id,
                 ],
             ],
+            'customer_email' => $customer?->email_address,
             'metadata' => [
                 'intention_id' => $intention->id,
             ],
-            'success_url' => $success ?? $this->success,
-            'cancel_url' => $this->cancelled,
-        ]);
+            'ui_mode' => $ui,
+        ];
 
-        return $session->url;
+        if ($ui === 'custom') {
+            $data = [
+                ...$data,
+                'return_url' => $success ?? $this->success,
+            ];
+        } else {
+            $data = [
+                ...$data,
+                'success_url' => $success ?? $this->success,
+                'cancel_url' => $this->cancelled,
+            ];
+        }
+
+        return Session::create($data);
     }
 
     public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
