@@ -2,17 +2,10 @@
     <section class="package-container">
         <div class="container">
             <div class="column left">
-                <h2 class="sub-heading-2">QUARTER FINALS PACKAGE</h2>
-                <h3 class="sub-heading-3">Australian Open</h3>
-                <div class="location-dollar-value">
-                    <p class="location">Melbourne, Australia</p>
-                    <span></span>
-                    <p class="dollar">From A$2,995 / person twin share</p>
-                </div>
+                <x:customer.booking.v3.tour-info :tour="$tour" :booking="$booking" :selectedCurrency="$selectedCurrency" />
                 <div class="details-book">
                     <h2 class="sub-heading-2-p">Details</h2>
                     <p>Tell us a little more about yourself. </p>
-
                     <div class="details-form-module">
                         <h6>Purchaser</h6>
                         <p>Your quote will be sent to the email address provided for Guest 1</p>

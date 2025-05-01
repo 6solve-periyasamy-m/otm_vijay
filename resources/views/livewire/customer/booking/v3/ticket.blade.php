@@ -73,7 +73,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                     <p>Want more tennis action? Add tickets now</p>
                     <div class="tickets-listing">
                     @foreach(\App\Repository\Model\Activity\ActivityInventoryRepository::getBetweenDates($tour->date_from, $tour->date_to, $tour->repository) as $activityInventory)
-                        @if($activityInventory->component->activity_category ===  ActivityCategory::MAIN) && (stripos(trim($activityInventory->ticketType?->name), 'add-on') !== false || stripos(trim($activityInventory->ticketType?->name), 'add on') !== false)
+                        @if(stripos(trim($activityInventory->ticketType?->name), 'add-on') !== false || stripos(trim($activityInventory->ticketType?->name), 'add on') !== false)
                             @php
                                 $available = $activityInventory->repository->getAvailableStock();
                                 $disabled = $available <= 0 ? 'element-disabled' : 'active';
