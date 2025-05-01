@@ -51,6 +51,19 @@ class BookingV3Controller extends Controller
         return view('pages.customer.booking.v3.ticket', ['tour' => $tour, 'booking' => $booking, 'quote' => $quote]);
     }
 
+    public function inclusion(Request $request, string $tour, string|null $token = null)
+    {
+        $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
+        $token = $token ?? $request->cookie($tour->booking_form_url);
+        $booking = Booking::where('tour_id', '=', $tour->id)->where('token', '=', $token)->firstOrFail();
+        $quote = Quote::find($booking->quote_id);
+        if ($booking === null) {
+            return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
+        }
+        $this->setupCookie($tour, $booking);
+        return view('pages.customer.booking.v3.inclusion', ['tour' => $tour, 'booking' => $booking, 'quote' => $quote]);
+    }
+
     public function reset(string $tour, string|null $token = null)
     {
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();

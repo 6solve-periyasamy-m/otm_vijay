@@ -6,6 +6,22 @@ use App\Http\Livewire\Abstract\V3BookingComponent;
 
 class Inclusion extends V3BookingComponent
 {
+    protected $listeners = ['currencyUpdated' => 'updateCurrency'];
+
+    public function mount($tour = null, $booking = null, $quote = null)
+    {
+        parent::mount($tour, $booking, $quote);
+    }
+
+    public function addGuest(): void
+    {
+       //TODO - find the guest and update the guest count
+    }
+
+    public function removeGuest(): void
+    {
+       //TODO - find the guest and removed the guest count
+    }
 
     public function back()
     {

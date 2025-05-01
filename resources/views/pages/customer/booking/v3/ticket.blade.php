@@ -3,6 +3,7 @@
  * @var \App\Models\Tour\Tour $tour
  * @var \App\Models\Booking\Booking $booking
  */
+use App\Models\Helper\Enum\ActivityCategory;
 @endphp
 
 @extends('layout.booking.v3')

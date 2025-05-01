@@ -1,3 +1,6 @@
+@php 
+use App\Models\Helper\Enum\ActivityCategory;
+@endphp
 <x-customer.booking.v3.layout :tour="$tour" :booking="$booking" :stage="3">
     <section class="package-container">
         <div class="container">
@@ -9,55 +12,59 @@
                     <p>Review your included tickets or upgrade.</p>
                     <div class="tickets-listing">
                         @foreach ($tour->activityInventoryTours as $activityInventory) 
-                             @php //dd($activityInventory->inventory->id); @endphp
-                            @continue($activityInventory->tour_component_type == 'Upgrade')
-                            <div class="single-block">
-                                <div class="quantity-show">
-                                    <span><img src="{{ asset('images/Ticket-Streamline-Core.svg') }}" alt="icon"></span>
-                                    <span><img src="{{ asset('images/Tickets-X-icon.svg') }}" alt="icon"></span>
-                                    <span>{{ $this->getTravellerCount() }}</span>
-                                </div>
-                                <div class="ticket-heading">
-                                    <div class="ticket-heading-module">
-                                        <div class="content-module">
-                                            <h6>{!! $activityInventory->inventory?->description !!}</h6>
-                                            <p>{{ $activityInventory->inventory->component?->field1}} </p>
+                            @php 
+                                //dd($activityInventory->inventory->component->activity_category, ActivityCategory::MAIN); 
+                            @endphp
+                            @if ($activityInventory->inventory->component->activity_category ===  ActivityCategory::MAIN)
+                                @continue($activityInventory->tour_component_type == 'Upgrade')
+                                <div class="single-block">
+                                    <div class="quantity-show">
+                                        <span><img src="{{ asset('images/Ticket-Streamline-Core.svg') }}" alt="icon"></span>
+                                        <span><img src="{{ asset('images/Tickets-X-icon.svg') }}" alt="icon"></span>
+                                        <span>{{ $this->getTravellerCount() }}</span>
+                                    </div>
+                                    <div class="ticket-heading">
+                                        <div class="ticket-heading-module">
+                                            <div class="content-module">
+                                                <h6>{!! $activityInventory->inventory?->description !!}</h6>
+                                                <p>{{ $activityInventory->inventory->component?->name}} </p>
+                                            </div>
+                                            <!-- <div class="ic-block">
+                                                <div><img src="/images/Ticket-Icon.svg" alt="ticket-icon"></div>
+                                            </div> -->
                                         </div>
-                                        <!-- <div class="ic-block">
-                                            <div><img src="/images/Ticket-Icon.svg" alt="ticket-icon"></div>
-                                        </div> -->
-                                    </div>
-                                    <select>
-                                        <option value="{{ $activityInventory->inventory->id }}">{{ $activityInventory->inventory->starts_at->format('d M Y') }}</option>
-                                    </select>
-                                    @if ($activityInventory->inventory->component->seating)
-                                    <div class="individual-module">
-                                        <p>Seating</p>
                                         <select>
-                                            <option value="{{ $activityInventory->inventory->id }}">{{ $activityInventory->inventory->component->seating?->name }}</option>
-                                            @foreach ($activityInventory->upgrades ?? [] as $upgrade)
-                                                <option value="{{ $upgrade->upgrade->activityInventory->id }}">{{ $upgrade->upgrade->activityInventory->activity->seating?->name }}</option>
-                                            @endforeach
+                                            <option value="{{ $activityInventory->inventory->id }}">{{ $activityInventory->inventory->starts_at->format('d M Y') }}</option>
                                         </select>
+                                        @if ($activityInventory->inventory->component->seating)
+                                        <div class="individual-module">
+                                            <p>Seating</p>
+                                            <select>
+                                                <option value="{{ $activityInventory->inventory->id }}">{{ $activityInventory->inventory->component->seating?->name }}</option>
+                                                @foreach ($activityInventory->upgrades ?? [] as $upgrade)
+                                                    <option value="{{ $upgrade->upgrade->activityInventory->id }}">{{ $upgrade->upgrade->activityInventory->activity->seating?->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @endif
+                                        @if($activityInventory->inventory->component->session)
+                                        <div class="individual-module">
+                                            <p>Session</p>
+                                            <div class="session-block">
+                                                <label class="radio-option">
+                                                    <input type="radio" checked name="session_{{$activityInventory->inventory->starts_at->timestamp}}" value="{{ $activityInventory->inventory->component->session?->name }}">
+                                                    <span class="custom-radio"></span>
+                                                    <span class="option-title">{{ $activityInventory->inventory->component->session?->name }}</span>
+                                                </label>
+                                            </div>                                                                            
+                                        </div>
+                                        @endif
+                                        <button type="button" class="include-button {{ $activityInventory->upgrades->isNotEmpty() ? 'active' : '' }}">
+                                            {{ $activityInventory->upgrades->isNotEmpty() ? 'Upgrade' : $activityInventory->tour_component_type }}
+                                        </button> 
                                     </div>
-                                    @endif
-                                    @if($activityInventory->inventory->component->session)
-                                    <div class="individual-module">
-                                        <p>Session</p>
-                                        <div class="session-block">
-                                            <label class="radio-option">
-                                                <input type="radio" checked name="session_{{$activityInventory->inventory->starts_at->timestamp}}" value="{{ $activityInventory->inventory->component->session?->name }}">
-                                                <span class="custom-radio"></span>
-                                                <span class="option-title">{{ $activityInventory->inventory->component->session?->name }}</span>
-                                            </label>
-                                        </div>                                                                            
-                                    </div>
-                                    @endif
-                                    <button type="button" class="include-button {{ $activityInventory->upgrades->isNotEmpty() ? 'active' : '' }}">
-                                        {{ $activityInventory->upgrades->isNotEmpty() ? 'Upgrade' : $activityInventory->tour_component_type }}
-                                    </button> 
-                                </div>
-                            </div>
+                                </div>                            
+                            @endif                                                        
                         @endforeach
                     </div>
                 </div>
@@ -65,8 +72,8 @@
                     <h2 class="sub-heading-2-p">ADD A TICKET</h2>
                     <p>Want more tennis action? Add tickets now</p>
                     <div class="tickets-listing">
-                    @foreach(\App\Repository\Model\Activity\ActivityInventoryRepository::getBetweenDates($tour->date_from, $tour->date_to, $tour->repository) as $activityInventory)                        
-                        @if(stripos(trim($activityInventory->ticketType?->name), 'add-on') !== false || stripos(trim($activityInventory->ticketType?->name), 'add on') !== false)
+                    @foreach(\App\Repository\Model\Activity\ActivityInventoryRepository::getBetweenDates($tour->date_from, $tour->date_to, $tour->repository) as $activityInventory)
+                        @if($activityInventory->component->activity_category ===  ActivityCategory::MAIN) && (stripos(trim($activityInventory->ticketType?->name), 'add-on') !== false || stripos(trim($activityInventory->ticketType?->name), 'add on') !== false)
                             @php
                                 $available = $activityInventory->repository->getAvailableStock();
                                 $disabled = $available <= 0 ? 'element-disabled' : 'active';
@@ -287,7 +294,6 @@
         $('.add-ticket-btn').on('click', function () {
             const parent = $(this).closest('.single-block');
             const inventoryId = $(this).data('inventory-id');
-            console.log("YESSSSSSSSSSSSS" + inventoryId);
             const feedback = parent.find('.feedback-message');
             if (!inventoryId) {
                 feedback.html(`<div class="text-danger">No inventory ID found.</div>`);
