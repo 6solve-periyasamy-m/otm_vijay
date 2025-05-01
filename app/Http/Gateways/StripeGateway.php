@@ -25,7 +25,7 @@ class StripeGateway extends Gateway implements SupportsRedirect
     public function getRedirect(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
     {
         $lineItems = [];
-        foreach ($items as $item) { $lineItems[] = $item->toStripe(); }
+        foreach ($items as $item) { $lineItems[] = $item->toStripe('EUR'); }
 
         $session = Session::create([
             'line_items' => $lineItems,
@@ -35,6 +35,7 @@ class StripeGateway extends Gateway implements SupportsRedirect
                     'intention_id' => $intention->id,
                 ],
             ],
+            'currency' => 'EUR',
             'metadata' => [
                 'intention_id' => $intention->id,
             ],
@@ -50,10 +51,11 @@ class StripeGateway extends Gateway implements SupportsRedirect
         return $this->getRedirect($items, $intention, $customer, $success);
     }
 
-    public function process(string $reference, float $amount, mixed $created = null): void
+    public function process(string $reference, float $amount, mixed $created = null, string|null $currency = null): void
     {
+        $currency = $currency ?? config('app.currency');
         $intention = PaymentIntention::fetch($reference);
         if (!isset($intention)) return;
-        $this->processIntention($intention, $amount, 'Stripe', $created);
+        $this->processIntention($intention, $amount, 'Stripe', $created, $currency);
     }
 }
