@@ -685,6 +685,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     {
         $this->wipeGroups();
         $this->booking->booking_accommodation_id = $hotel;
+        $this->booking->saveQuietly();
         $key = -1;
         $group = null;
         foreach ($rooming as $i => $room) {
