@@ -102,10 +102,9 @@ class Checkout extends Component
         $this->preCheckout();
         $amount = $this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount();
         try {
-            $stripeKey = $this->booking->repository->getStripeKey($amount);
             $keys = $this->booking->repository->getAirwallexKeys($amount);
-            if ($stripeKey !== null) {
-                $this->popupStripe($stripeKey);
+            if (\Gateway::getPaymentGateway('stripe') !== null) {
+                $this->popupStripe($this->payFull);
                 return null;
             } else if ($keys !== null && array_key_exists('id', $keys) && array_key_exists('secret', $keys)) {
                 $this->popupAirwallex($keys['id'], $keys['secret']);
@@ -167,8 +166,8 @@ class Checkout extends Component
         $this->dispatchBrowserEvent('popupCheckout', ['key' => $id, 'secret' => $secret]);
     }
 
-    private function popupStripe(string $checkout): void
+    private function popupStripe(bool $full = false): void
     {
-        $this->dispatchBrowserEvent('popupStripeCheckout', ['checkout' => $checkout,]);
+        $this->dispatchBrowserEvent('popupStripeCheckout', ['full' => $full,]);
     }
 }

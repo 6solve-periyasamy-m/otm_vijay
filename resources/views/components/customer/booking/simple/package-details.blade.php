@@ -110,7 +110,7 @@
     @enderror
 
     <div style="padding-top: 1rem;">
-        <div class="stripe-hidden" style="visibility: hidden">
+        <div id="stripe-hidden" style="visibility: hidden">
             <div id="stripe-container"></div>
             <button id="pay-button">Pay</button>
             <div id="confirm-errors"></div>

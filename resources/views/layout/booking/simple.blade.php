@@ -69,13 +69,24 @@
                 window.location = event.detail.intent.return_url;
             });
         });
+        const fetchClientSecretFull = () => {
+            return fetch('{{ route('api.stripe.checkout.secret.booking', ['token' => $booking->token, 'full' => true]) }}')
+                .then((response) => response.json())
+                .then((json) => json.checkoutSessionClientSecret)
+        }
+        const fetchClientSecretToday = () => {
+            return fetch('{{ route('api.stripe.checkout.secret.booking', ['token' => $booking->token, 'full' => false]) }}', {method: 'GET'})
+                .then((response) => response.json())
+                .then((json) => json.checkoutSessionClientSecret)
+        }
         window.addEventListener('popupStripeCheckout', (event) => {
             if (event.detail.checkout !== null) {
-                stripe.initCheckout(event.detail.checkout).then((checkout) => {
+                let fn = (event.detail.full ?? false) ? fetchClientSecretFull : fetchClientSecretToday;
+                stripe.initCheckout({fetchClientSecret: fn}).then((checkout) => {
                     let paymentElement = checkout.createPaymentElement();
                     paymentElement.mount('#stripe-container');
 
-                    $('.stripe-hidden').show();
+                    document.getElementById('stripe-hidden').style.visibility = 'inherit';
 
                     // Setup Buttons
                     const button = document.getElementById('pay-button');
@@ -89,9 +100,10 @@
                                 errors.textContent = result.error.message;
                             }
                         });
+                    });
                 });
             }
-        })
+        });
     </script>
 
     <link rel="stylesheet" href="{{ asset('css/fontawesome.css') }}"
