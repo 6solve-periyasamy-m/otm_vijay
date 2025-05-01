@@ -11,7 +11,6 @@ class CheckoutSuccessfulListener implements ShouldQueue
 {
     public function handle(WebhookCall $call)
     {
-        \Log::info($call);
         $payload = $call->payload;
         $data = $payload['data']['object'];
         $metadata = $data['metadata'];
