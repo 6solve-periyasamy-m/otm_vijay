@@ -30,9 +30,7 @@ class StripeGateway extends Gateway implements SupportsRedirect
 
     public function getCheckoutSecret(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
     {
-        $checkout = $this->getCheckout($items, $intention, $customer, $success, 'custom');
-        \Log::info($checkout);
-        return $checkout->client_secret;
+        return $this->getCheckout($items, $intention, $customer, $success, 'custom')->client_secret;
     }
 
     private function getCheckout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string $ui = 'hosted'): Session
