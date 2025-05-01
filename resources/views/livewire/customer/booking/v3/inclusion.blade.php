@@ -36,23 +36,24 @@ use App\Models\Helper\Enum\ActivityCategory;
                                                 <span class="plus" wire:click="addGuest()"><img src="{{ asset('icons/Plus.svg') }}" alt="plus"></span>
                                             </div>
                                         @endif
-                                        <a>More information</a>
-                                        <div class="additional-inclusion-popup">
-                                            <div class="additional-contain">
-                                                <div class="additional-block">
-                                                    {{ $activityInventory->tour_component_type === 'Upgrade' ? 'Upgrade' : $activityInventory->tour_component_type }}
-                                                    <h4>{{ $activityInventory->inventory->component->name }}</h4>
-                                                    {!! $activityInventory->inventory->component?->description !!}
-                                                    <div class="add-cta">
-                                                        <button type="button" class="cancel">Cancel</button>
-                                                        <button type="button" class="Proceed">Proceed</button>
-                                                    </div>
-                                                    <div class="add-close-button">
-                                                        <img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details">
+                                        @if (!empty($activityInventory->inventory->component?->description))
+                                            <a>More information</a>
+                                            <div class="additional-inclusion-popup">
+                                                <div class="additional-contain">
+                                                    <div class="additional-block">
+                                                        <h4>{{ $activityInventory->inventory->component->name }}</h4>
+                                                        {!! $activityInventory->inventory->component?->description !!}
+                                                        <div class="add-cta">
+                                                            <button type="button" class="cancel">Cancel</button>
+                                                            <button type="button" class="Proceed">Proceed</button>
+                                                        </div>
+                                                        <div class="add-close-button">
+                                                            <img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details">
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endif
                                         <button type="button" class="include-button {{ $activityInventory->tour_component_type === 'Upgrade' ? 'active' : '' }}">
                                             {{ $activityInventory->tour_component_type === 'Upgrade' ? 'Upgrade' : $activityInventory->tour_component_type }}
                                         </button>
@@ -81,23 +82,24 @@ use App\Models\Helper\Enum\ActivityCategory;
                                             <span>|</span>
                                             <span class="plus" wire:click="addGuest()"><img src="{{ asset('icons/Plus.svg') }}" alt="plus"></span>
                                         </div>
-                                        <a>More information</a>
-                                        <div class="additional-inclusion-popup">
-                                            <div class="additional-contain">
-                                                <div class="additional-block">
-                                                    {{ $activityInventory->tour_component_type === 'Upgrade' ? 'Upgrade' : $activityInventory->tour_component_type }}
-                                                    <h4>{{ $activityInventory->component->name }}</h4>
-                                                    {!! $activityInventory->component?->description !!}
-                                                    <div class="add-cta">
-                                                        <button type="button" class="cancel">Cancel</button>
-                                                        <button type="button" class="Proceed">Proceed</button>
-                                                    </div>
-                                                    <div class="add-close-button">
-                                                        <img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details">
+                                        @if (!empty($activityInventory->inventory->component?->description))
+                                            <a>More information</a>
+                                            <div class="additional-inclusion-popup">
+                                                <div class="additional-contain">
+                                                    <div class="additional-block">
+                                                        <h4>{{ $activityInventory->inventory->component->name }}</h4>
+                                                        {!! $activityInventory->inventory->component?->description !!}
+                                                        <div class="add-cta">
+                                                            <button type="button" class="cancel">Cancel</button>
+                                                            <button type="button" class="Proceed">Proceed</button>
+                                                        </div>
+                                                        <div class="add-close-button">
+                                                            <img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details">
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endif
                                         <button type="button" class="include-button active ">SELECT</button>
                                     </div>
                                 </div>
@@ -242,4 +244,13 @@ use App\Models\Helper\Enum\ActivityCategory;
             </div>
         </div>
     </section>
+
+<script>
+    jQuery(document).on('click', '.inclusion-single .content-block a', function () {
+        jQuery(this).closest('.content-block').find('.additional-inclusion-popup').css('display', 'flex')
+    })
+    jQuery(document).on('click', '.additional-inclusion-popup .add-close-button,.additional-inclusion-popup .cancel', function () {
+        jQuery(this).closest('.content-block').find('.additional-inclusion-popup').css('display', 'none')
+    })
+</script>
 </x-customer.booking.v3.layout>
