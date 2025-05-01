@@ -8,6 +8,7 @@ use App\Exceptions\RoomingFailedException;
 use App\Exceptions\UnauthorizedGatewayException;
 use App\Http\Gateways\AirwallexGateway;
 use App\Http\Gateways\Storage\LineItem;
+use App\Http\Gateways\StripeGateway;
 use App\Models\Accommodation\RoomType;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Booking\Booking;
@@ -20,6 +21,7 @@ use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
+use App\Models\Quote\Quote;
 use App\Models\System\FellohLink;
 use App\Models\System\TaxBracket;
 use App\Models\Tour\Tour;
@@ -31,8 +33,6 @@ use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Interfaces\GeneratesFellohData;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\Rooming\RemoteBookingGroup;
-use App\Models\Quote\Quote;
-use App\Models\Customer\Customer;
 use Carbon\Carbon;
 use DB;
 use Gateway;
@@ -739,6 +739,20 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
 
         return $gateway?->getApiKeys([$item,], $intention, $this->booking->leadTraveller, $redirect);
+    }
+
+    public function getStripeKey(float $amount): string|null
+    {
+        $gateway = Gateway::getPaymentGateway('stripe');
+        if (!($gateway instanceof StripeGateway)) {
+            return null;
+        }
+        $item = new LineItem("Deposit for Booking from {$this->booking->leadTraveller->full_name}", $amount);
+        $intention = PaymentIntention::build($this->booking->leadTraveller->customer, $this->booking->token, 'Deposit');
+
+        $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
+
+        return $gateway?->getCheckoutSecret([$item,], $intention, $this->booking->leadTraveller, $redirect);
     }
 
     public function getSimpleData(): array

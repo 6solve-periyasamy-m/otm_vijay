@@ -24,10 +24,20 @@ class StripeGateway extends Gateway implements SupportsRedirect
      */
     public function getRedirect(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
     {
+        return $this->getCheckout($items, $intention, $customer, $success)->url;
+    }
+
+    public function getCheckoutSecret(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
+    {
+        return $this->getCheckout($items, $intention, $customer, $success)->client_secret;
+    }
+
+    private function getCheckout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): Session
+    {
         $lineItems = [];
         foreach ($items as $item) { $lineItems[] = $item->toStripe(); }
 
-        $session = Session::create([
+        return Session::create([
             'line_items' => $lineItems,
             'mode' => 'payment',
             'payment_intent_data' => [
@@ -41,8 +51,6 @@ class StripeGateway extends Gateway implements SupportsRedirect
             'success_url' => $success ?? $this->success,
             'cancel_url' => $this->cancelled,
         ]);
-
-        return $session->url;
     }
 
     public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
