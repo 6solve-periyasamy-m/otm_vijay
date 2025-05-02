@@ -62,44 +62,48 @@
                         <h6>Lead passenger details</h6>
                         <div class="single-details-module">
                             <div>
-                                <label for="first-name">First name*</label>
-                                <input type="text" id="first-name" value="" placeholder="Enter guest’s first name" required>
+                                <label for="lead-first-name">First name*</label>
+                                <input type="text" id="lead-first-name" wire:model.lazy="lead.first_name">
                                 <small>Include middle names if applicable.</small>
+                                @error('lead.first_name') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label for="last-name">Last name*</label>
-                                <input type="text" id="last-name" value="" placeholder="Enter guest’s last name" required>
+                                <label for="lead-last-name">Last name*</label>
+                                <input type="text" id="lead-last-name" wire:model.lazy="lead.last_name">
+                                @error('lead.last_name') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label for="email">Email*</label>
-                                <input type="email" id="email" value="" placeholder="Enter email address" required>
+                                <label for="lead-email">Email*</label>
+                                <input type="email" wire:model.lazy="lead.email_address" id="lead-email" name="email" placeholder="Enter your email address">
+                                @error('lead.email_address') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label for="phone">Phone number*</label>
-                                <input type="tel" id="phone" value="" placeholder="Enter phone number" required>
+                                <label for="lead-mobile_number">Phone number*</label>
+                                <input type="text" id="lead-mobile_number" wire:model.lazy="lead.mobile_number">
+                                @error('lead.mobile_number') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label for="country">Country*</label>
-                                <select id="country" required>
-                                    <option>Select</option>
-                                    <option>Australia</option>
-                                    <option>Australia</option>
+                                <label for="lead-country">Country*</label>
+                                <select id="lead-country" wire:model.lazy="leadAddress.country_id" required>
+                                    <option value="">Select</option>
+                                    @foreach ($countries as $country)
+                                        <option value="{{ $country['id'] }}">{{ $country['name'] }}</option>
+                                    @endforeach
                                 </select>
+                                @error('lead.country_id') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="dob-input">
-                                <label for="dob">Date of birth</label>
-                                <input type="text" id="custom-input-dob-2" class="calendar hasDatepicker" data-picker
+                                <label for="lead-dob">Date of birth</label>
+                                <input type="text" id="lead-dob" wire:model.lazy="lead.date_of_birth" class="calendar hasDatepicker" data-picker
                                        name="upload-release" placeholder="Enter your date of birth">
                                 <img src="{{ asset('icons/checkin.svg') }}" alt="calendar">
                             </div>
-                            <div class="full-width">
+                            <div class="full-width" data-chk="{{$this->booking->notes}}" wire:ignore>
                                 <label for="summernote">Special requests</label>
-                                <div id="summernote"></div>
+                                <div id="summernote">{{$this->booking->notes}}</div>
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
             <div class="column right">
@@ -215,7 +219,43 @@
                                     <span class="custom-radio"></span>
                                     <span class="option-title">Pay in full</span>
                                 </label>
-                                <div class="price">A$17,125</div>
+                                <div class="single-details-module">
+                            <div>
+                                <label for="first-name">First name*</label>
+                                <input type="text" id="first-name" value="" placeholder="Enter guest’s first name" required>
+                                <small>Include middle names if applicable.</small>
+                            </div>
+                            <div>
+                                <label for="last-name">Last name*</label>
+                                <input type="text" id="last-name" value="" placeholder="Enter guest’s last name" required>
+                            </div>
+                            <div>
+                                <label for="email">Email*</label>
+                                <input type="email" id="email" value="" placeholder="Enter email address" required>
+                            </div>
+                            <div>
+                                <label for="phone">Phone number*</label>
+                                <input type="tel" id="phone" value="" placeholder="Enter phone number" required>
+                            </div>
+                            <div>
+                                <label for="country">Country*</label>
+                                <select id="country" required>
+                                    <option>Select</option>
+                                    <option>Australia</option>
+                                    <option>Australia</option>
+                                </select>
+                            </div>
+                            <div class="dob-input">
+                                <label for="dob">Date of birth</label>
+                                <input type="text" id="custom-input-dob-2" class="calendar hasDatepicker" data-picker
+                                       name="upload-release" placeholder="Enter your date of birth">
+                                <img src="{{ asset('icons/checkin.svg') }}" alt="calendar">
+                            </div>
+                            <div class="full-width">
+                                <label for="summernote">Special requests</label>
+                                <div id="summernote"></div>
+                            </div>
+                        </div>      <div class="price">A$17,125</div>
                             </div>
                             <div class="option-wrapper">
                                 <div>
@@ -296,4 +336,51 @@
                 </div>
             </div>
     </section>
+    <script>
+        jQuery(document).ready(function () {
+            const initialDOB = null;
+            const buyerDatePicker = document.querySelector('#buyer-dob[data-picker]');
+            const leadDatePicker = document.querySelector('#lead-dob[data-picker]');
+
+            function formatDate(date) {
+                const day = ('0' + date.getDate()).slice(-2);
+                const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                const month = monthNames[date.getMonth()];
+                const year = date.getFullYear();
+                return `${day} ${month} ${year}`;
+            }
+
+            if (buyerDatePicker) {
+                const buyerDOB = new Pikaday({
+                field: buyerDatePicker,
+                format: 'DD/MM/YYYY',
+                minDate: new Date(1900, 0, 1),
+                maxDate: new Date(),
+                yearRange: [1900, new Date().getFullYear()],
+                onSelect: function (date) {
+                    const formattedDate = formatDate(date);
+                    buyerDatePicker.value = formattedDate;
+                }
+                });
+            }
+
+            if (leadDatePicker) {
+                const leadDOB = new Pikaday({
+                    field: leadDatePicker,
+                    format: 'DD/MM/YYYY',
+                    minDate: new Date(1900, 0, 1),
+                    maxDate: new Date(),
+                    yearRange: [1900, new Date().getFullYear()],
+                    onSelect: function (date) {
+                        const formattedDate = formatDate(date);
+                        leadDatePicker.value = formattedDate;
+                    }
+                });
+            }
+        });
+        $(document).on('click','.dob-input img',function(){
+            console.log(">>>>>>>>>>>>>>");
+            $(this).closest('.dob-input').find('input').click();
+        })
+    </script>
 </x-customer.booking.v3.layout>
