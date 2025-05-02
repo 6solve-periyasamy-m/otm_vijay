@@ -10,11 +10,13 @@ use App\Models\Accommodation\Accommodation;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Helper\Enum\BookingTravellerRole;
+use App\Models\Location\Currency;
 use App\Models\Quote\Quote;
 use App\Models\System\Brand;
 use App\Models\Tour\Tour;
 use Exception;
 use Livewire\Component;
+use Settings;
 
 abstract class V3BookingComponent extends Component
 {
@@ -80,7 +82,6 @@ abstract class V3BookingComponent extends Component
     {
         $this->booking->repository->setupSimpleRooming($this->selectedHotel, $this->rooms);
     }
-
 
     public function getTravellerCount(): int
     {
@@ -151,6 +152,16 @@ abstract class V3BookingComponent extends Component
         } else {
             session()->flash('error', 'Cannot send quote, no valid target email found.');
         }
+    }
+
+    public function getCurrency(): Currency
+    {
+        return $this->booking->currency ?? Settings::currency();
+    }
+
+    public function getFXRate()
+    {
+        return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
     }
 
 }
