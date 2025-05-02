@@ -83,6 +83,16 @@ class Settings
         return $filter ?? 0;
     }
 
+    /**
+     * Returns the system currency
+     *
+     * @return Currency|null
+     */
+    public function currency(): Currency|null
+    {
+        return Currency::where('code', '=', $this->get('system.currency', ''))->first();
+    }
+
     public function getDefaultInstallments(): array
     {
         $installments = json_decode($this->get('system.installments.default', "{}"), true);

@@ -11,7 +11,7 @@
                     <h6 class="sub-heading-6">DEFAULT HOTEL INCLUDED IN THIS PACKAGE</h6>
                     @php $default = $this->getDefaultHotel(); @endphp
                     <div class="locate">
-                        @php $imagePath = public_path($default->image_url ?? ''); @endphp
+                        @php $imagePath = asset($default->image_url ?? ''); @endphp
                         @if(!empty($default->image_url) && file_exists($imagePath))
                             <div class="image">
                                 <img src="{{ asset($default->image_url) }}" alt="{{ $default->name }}" title="{{ $default->name }}">
@@ -161,7 +161,7 @@
                                 $rooms = $this->tour->repository->getBookingRooms($hotel->id);
                                 $defaultRoom = reset($rooms);
                             @endphp
-                            <div class="single-hotel">
+                            <div class="single-hotel" wire:click="setHotel({{$hotel->id}})">
                                 @if(!empty($hotel->gallery) && count($hotel->gallery))
                                     <div class="hotel-image-block">
                                         @foreach($hotel->gallery as $photo)
@@ -188,7 +188,8 @@
                                         </select>
                                         <p class="breakfast-note">{{ $defaultRoom['board_type'] ?? '' }} </p>
                                         <p>{!! $defaultRoom['room_desc'] ?? '' !!}</p>
-                                        <button type="button" class="include-button {{ $defaultRoom['component_type'] === 'Upgrade' ? 'active' : '' }}">{{ $defaultRoom['component_type']}}</button>
+                                        @php $selected = $booking->booking_accommodation_id === $hotel->id; @endphp
+                                        <button type="button" class="include-button {{ $selected ? '' : 'active' }}">{{ $selected ? 'Selected' : $defaultRoom['component_type'] }}</button>
                                     </div>
                                 </div>
                             </div>

@@ -278,46 +278,46 @@ use App\Models\Helper\Enum\ActivityCategory;
             <!-- End of inside container -->
         </div>
     </section>
-</x-customer.booking.v3.layout>
 
-<script type="text/javascript">
-    $(document).ready(function () {
+    <script type="text/javascript">
+        $(document).ready(function () {
 
-        $('.include-button').on('click', function () {
-            const parent = $(this).closest('.single-block');
-            parent.find('.action-controls').slideDown();
-        });
-        $('.cancel-ticket-btn').on('click', function () {
-            $(this).closest('.action-controls').slideUp();
-        });
+            $('.include-button').on('click', function () {
+                const parent = $(this).closest('.single-block');
+                parent.find('.action-controls').slideDown();
+            });
+            $('.cancel-ticket-btn').on('click', function () {
+                $(this).closest('.action-controls').slideUp();
+            });
 
-        $('.add-ticket-btn').on('click', function () {
-            const parent = $(this).closest('.single-block');
-            const inventoryId = $(this).data('inventory-id');
-            const feedback = parent.find('.feedback-message');
-            if (!inventoryId) {
-                feedback.html(`<div class="text-danger">No inventory ID found.</div>`);
-                return;
-            }
-            $.ajax({
-                type: "POST",
-                url: "{{ route('api.quote.components.add', ['quote' => $this->quote, 'type' => 'activity']) }}",
-                dataType: "json",
-                data: {
-                    "type": "Included",
-                    "ids": [inventoryId],
-                    "__api_token": '',
-                },
-                success: function () {
-                    feedback.html(`<div class="text-success">Component added successfully!</div>`);
-                },
-                error: function (xhr) {
-                    let msg = 'Error adding component';
-                    if (xhr.status === 400) msg = 'Invalid component type.';
-                    else if (xhr.status === 403) msg = 'Authentication expired. Please refresh.';
-                    feedback.html(`<div class="text-danger">${msg}</div>`);
+            $('.add-ticket-btn').on('click', function () {
+                const parent = $(this).closest('.single-block');
+                const inventoryId = $(this).data('inventory-id');
+                const feedback = parent.find('.feedback-message');
+                if (!inventoryId) {
+                    feedback.html(`<div class="text-danger">No inventory ID found.</div>`);
+                    return;
                 }
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('api.quote.components.add', ['quote' => $this->quote, 'type' => 'activity']) }}",
+                    dataType: "json",
+                    data: {
+                        "type": "Included",
+                        "ids": [inventoryId],
+                        "__api_token": '',
+                    },
+                    success: function () {
+                        feedback.html(`<div class="text-success">Component added successfully!</div>`);
+                    },
+                    error: function (xhr) {
+                        let msg = 'Error adding component';
+                        if (xhr.status === 400) msg = 'Invalid component type.';
+                        else if (xhr.status === 403) msg = 'Authentication expired. Please refresh.';
+                        feedback.html(`<div class="text-danger">${msg}</div>`);
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
+</x-customer.booking.v3.layout>

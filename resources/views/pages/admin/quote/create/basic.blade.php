@@ -5,8 +5,9 @@
 @section('title', 'Create Basic Quote for ' . $tour->name)
 
 @section('form-body')
-    <x-livewire.input.select.brand name="brand_id" value="{{$tour->brand_id}}" label="Quote Branding" width="3" />
-    <x-livewire.input type="date" name="expires" width="3" value="{{\Settings::defaultQuoteExpiry()}}" label="Expiry Date"/>
+    <x-livewire.input.select.brand name="brand_id" value="{{$tour->brand_id}}" label="Quote Branding" width="2" />
+    <x-livewire.input type="date" name="expires" width="2" value="{{\Settings::defaultQuoteExpiry()}}" label="Expiry Date"/>
+    <x-livewire.input.select.currency name="currency_id" label="Currency" clearable width="2" />
     <x-livewire.input.select.customer name="customer_id" width="3" label="Lead Traveller" />
     <div class="col-xl-3 row">
         <x-livewire.input.checkbox name="travelling" value="1" width="6" checked label="Lead Travelling?" />

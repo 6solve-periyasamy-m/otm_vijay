@@ -2,18 +2,19 @@
 
 namespace App\Http\Livewire\Abstract;
 
-use App\Models\Booking\Booking;
-use App\Models\System\Brand;
-use App\Models\Tour\Tour;
-use Livewire\Component;
-use App\Models\Helper\Enum\BookingTravellerRole;
-use App\Models\Booking\BookingTraveller;
-use App\Models\Quote\Quote;
-use App\Mail\Storage\Attachment;
-use App\Mail\Storage\QuoteMail;
 use App\Exceptions\MailDisabledException;
 use App\Exceptions\MailFailedException;
+use App\Mail\Storage\Attachment;
+use App\Mail\Storage\QuoteMail;
+use App\Models\Accommodation\Accommodation;
+use App\Models\Booking\Booking;
+use App\Models\Booking\BookingTraveller;
+use App\Models\Helper\Enum\BookingTravellerRole;
+use App\Models\Quote\Quote;
+use App\Models\System\Brand;
+use App\Models\Tour\Tour;
 use Exception;
+use Livewire\Component;
 
 abstract class V3BookingComponent extends Component
 {
@@ -53,7 +54,12 @@ abstract class V3BookingComponent extends Component
         return null;
     }
 
-    public function validateRoomCount(): void
+    public function getSelectedHotel(): Accommodation|null
+    {
+        return Accommodation::find($this->selectedHotel);
+    }
+
+    public function validateRoomCount(bool $runSetup = true): void
     {
         foreach ($this->rooms as $i => $iValue) {
             $this->rooms[$i]['travellers'] = (int)$iValue['travellers'];
@@ -67,7 +73,7 @@ abstract class V3BookingComponent extends Component
             unset($this->rooms[$i]);
         }
 
-        $this->setupRooming();
+        $runSetup && $this->setupRooming();
     }
 
     public function setupRooming(): void

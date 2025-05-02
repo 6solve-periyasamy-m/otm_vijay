@@ -5,13 +5,14 @@ namespace App\Report\Order;
 use App\Http\Livewire\Abstract\AddressColumn;
 use App\Http\Livewire\Abstract\CurrencyColumn;
 use App\Http\Livewire\Abstract\OrderBadgeColumn;
+use App\Models\Customer\Organization;
+use App\Models\Location\Currency;
 use App\Models\Order\Order;
 use App\Models\User;
-use App\Models\Customer\Organization;
-use App\Models\Customer\Agent;
 use App\Report\ColumnDefinition;
 use App\Report\HasPriority;
 use App\Report\Tour\TourReport;
+use Illuminate\Database\Query\JoinClause;
 use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
@@ -41,6 +42,15 @@ class OrderReport extends TourReport
             ->leftJoin('users', 'users.id', '=', 'orders.consultant_id')
             ->leftJoin('organizations', 'organizations.id', '=', 'orders.organization_id')
             ->leftJoin('agents', 'agents.id', '=', 'orders.agent_id')
+            ->leftJoin('currencies', 'orders.currency_id', '=', 'currencies.id')
+            ->leftJoin('conversion_rates AS from_rate', function (JoinClause $join) {
+                $join->on('orders.currency_id', '=', 'from_rate.from_currency_id')
+                    ->where('from_rate.to_currency_id', '=', \Settings::currency()->id);
+            })
+            ->leftJoin('conversion_rates AS to_rate', function (JoinClause $join) {
+                $join->on('orders.currency_id', '=', 'to_rate.to_currency_id')
+                    ->where('to_rate.from_currency_id', '=', \Settings::currency()->id);
+            })
             ->groupBy('orders.id');
     }
 
@@ -91,6 +101,11 @@ class OrderReport extends TourReport
                     BooleanColumn::name('orders.cancelled')
                         ->filterable()
                 ),
+            'order_currency' => new ColumnDefinition(
+                'reports.order.column.currency',
+                Column::raw('COALESCE(currencies.code, "' . \Settings::currency()->code . '")')
+                    ->filterable(Currency::pluck('code'))
+            ),
             'order_internal_notes' =>
                 new ColumnDefinition(
                     'reports.order.column.internal_notes',
@@ -108,37 +123,72 @@ class OrderReport extends TourReport
                 ),
             'order_paid' =>
                 new ColumnDefinition(
-                    'reports.order.column.paid',
-                    CurrencyColumn::raw('(SELECT SUM(payments.amount) FROM payments WHERE payments.order_id = orders.id AND payments.deleted_at IS NULL)')
+                    'reports.order.column.paid.foreign',
+                    NumberColumn::raw('(SELECT SUM(payments.amount) FROM payments WHERE payments.order_id = orders.id AND payments.deleted_at IS NULL)')
+                        ->filterable()
+                ),
+            'order_paid_system' =>
+                new ColumnDefinition(
+                    'reports.order.column.paid.system',
+                    CurrencyColumn::raw('((SELECT SUM(payments.amount) FROM payments WHERE payments.order_id = orders.id AND payments.deleted_at IS NULL) * COALESCE(from_rate.rate, 1))')
                         ->filterable()
                 ),
             'order_cost' =>
                 new ColumnDefinition(
-                    'reports.order.column.cost',
-                    CurrencyColumn::name('order_caches.cost')
+                    'reports.order.column.cost.foreign',
+                    NumberColumn::name('order_caches.cost')
+                        ->filterable()
+                ),
+            'order_cost_system' =>
+                new ColumnDefinition(
+                    'reports.order.column.cost.system',
+                    CurrencyColumn::raw('(order_caches.cost * COALESCE(from_rate.rate, 1))')
                         ->filterable()
                 ),
             'order_total' =>
                 new ColumnDefinition(
-                    'reports.order.column.total_owed',
-                    CurrencyColumn::name('order_caches.total_owed')
+                    'reports.order.column.total_owed.foreign',
+                    Column::name('order_caches.total_owed')
+                        ->filterable()
+                ),
+            'order_total_system' =>
+                new ColumnDefinition(
+                    'reports.order.column.total_owed.system',
+                    CurrencyColumn::raw('(order_caches.total_owed * COALESCE(from_rate.rate, 1))')
+                        ->filterable()
+                ),
+            'order_cost_to_company_foreign' =>
+                new ColumnDefinition(
+                    'reports.order.column.cost_to_company.foreign',
+                    NumberColumn::raw('(order_caches.cost_to_company * COALESCE(to_rate.rate, 1))')
                         ->filterable()
                 ),
             'order_cost_to_company' =>
                 new ColumnDefinition(
-                    'reports.order.column.cost_to_company',
+                    'reports.order.column.cost_to_company.system',
                     CurrencyColumn::name('order_caches.cost_to_company')
                         ->filterable()
                 ),
+            'order_profit_foreign' =>
+                new ColumnDefinition(
+                    'reports.order.column.profit.foreign',
+                    NumberColumn::raw('(order_caches.profit * COALESCE(to_rate.rate, 1))')
+                ),
             'order_profit' =>
                 new ColumnDefinition(
-                    'reports.order.column.profit',
+                    'reports.order.column.profit.system',
                     CurrencyColumn::name('order_caches.profit')
                 ),
             'order_remaining' =>
                 new ColumnDefinition(
-                    'reports.order.column.remaining',
-                    CurrencyColumn::raw('order_caches.total_owed - (SELECT COALESCE(SUM(payments.amount), 0) FROM payments WHERE payments.order_id = orders.id AND payments.deleted_at IS NULL)')
+                    'reports.order.column.remaining.foreign',
+                    NumberColumn::raw('order_caches.total_owed - (SELECT COALESCE(SUM(payments.amount), 0) FROM payments WHERE payments.order_id = orders.id AND payments.deleted_at IS NULL)')
+                        ->filterable()
+                ),
+            'order_remaining_system' =>
+                new ColumnDefinition(
+                    'reports.order.column.remaining.system',
+                    CurrencyColumn::raw('(order_caches.total_owed - (SELECT COALESCE(SUM(payments.amount), 0) FROM payments WHERE payments.order_id = orders.id AND payments.deleted_at IS NULL) * COALESCE(from_rate.rate, 1))')
                         ->filterable()
                 ),
             'order_commission_percentage' =>
@@ -150,20 +200,38 @@ class OrderReport extends TourReport
                 ),
             'order_commission_amount' =>
                 new ColumnDefinition(
-                    'reports.order.column.commission.amount',
-                    CurrencyColumn::name('order_caches.commission_amount')
+                    'reports.order.column.commission.amount.foreign',
+                    NumberColumn::name('order_caches.commission_amount')
+                        ->filterable()
+                ),
+            'order_commission_amount_system' =>
+                new ColumnDefinition(
+                    'reports.order.column.commission.amount.system',
+                    CurrencyColumn::raw('(order_caches.commission_amount * COALESCE(from_rate.rate, 1))')
                         ->filterable()
                 ),
             'order_next_amount' =>
                 new ColumnDefinition(
-                    'reports.order.column.next_payment.amount',
-                    CurrencyColumn::name('order_caches.next_payment_amount')
+                    'reports.order.column.next_payment.amount.foreign',
+                    NumberColumn::name('order_caches.next_payment_amount')
+                        ->filterable()
+                ),
+            'order_next_amount_system' =>
+                new ColumnDefinition(
+                    'reports.order.column.next_payment.amount.system',
+                    CurrencyColumn::raw('(order_caches.next_payment_amount * COALESCE(from_rate.rate, 1))')
                         ->filterable()
                 ),
             'order_next_remaining' =>
                 new ColumnDefinition(
-                    'reports.order.column.next_payment.remaining',
-                    CurrencyColumn::name('order_caches.next_payment_remaining')
+                    'reports.order.column.next_payment.remaining.foreign',
+                    CurrencyColumn::raw('(order_caches.next_payment_remaining)')
+                        ->filterable()
+                ),
+            'order_next_remaining_system' =>
+                new ColumnDefinition(
+                    'reports.order.column.next_payment.remaining.system',
+                    CurrencyColumn::raw('(order_caches.next_payment_remaining * COALESCE(from_rate.rate, 1))')
                         ->filterable()
                 ),
             'order_next_due' =>

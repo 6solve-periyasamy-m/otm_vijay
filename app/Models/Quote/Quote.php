@@ -7,6 +7,7 @@ use App\Models\Customer\Organization;
 use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Helper\Model;
 use App\Models\Helper\Traits\HasAdditionalCosts;
+use App\Models\Location\Currency;
 use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;
 use App\Models\Quote\Component\QuoteActivity;
@@ -41,6 +42,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $organization_id
  * @property int|null $lead_traveller_id
  * @property int|null $consultant_id
+ * @property int|null $currency_id
  * @property int|null $event_id
  * @property int|null $brand_id
  * @property int|null $agent_id
@@ -56,6 +58,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon $date_from
  * @property Carbon $date_to
  * @property string $terms
+ * @property float|null $from_rate
+ * @property float|null $to_rate
  * @property string $invoice_footer
  * @property int $paying Cached paying value
  * @property int $travelling Cached travelling value
@@ -74,6 +78,7 @@ use Illuminate\Support\Carbon;
  * @property-read User|null $consultant
  * @property-read Agent|null $agent
  * @property-read Brand $brand
+ * @property-read Currency|null $currency
  * @property-read Organization|null $organization
  * @property-read int|null $accommodation_count
  * @property-read Collection|QuoteActivity[] $activities
@@ -141,7 +146,9 @@ class Quote extends Model
         'date_to' => 'date:Y-m-d',
         'final_payment' => 'date:Y-m-d',
         'sent' => 'datetime',
-        'quote_status' => QuoteStatus::class
+        'quote_status' => QuoteStatus::class,
+        'from_rate' => 'float',
+        'to_rate' => 'float',
     ];
     private QuoteRepository $internal_repository;
     protected array $cascadeDeletes = ['sentQuotes', 'leadTraveller', 'pricePoints', 'installments', 'accommodation', 'activities', 'flights', 'transport', 'merchandise', 'costs'];
@@ -247,6 +254,11 @@ class Quote extends Model
     public function merchandise(): HasMany
     {
         return $this->hasMany(QuoteMerchandise::class, 'quote_id');
+    }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
 
     public function getStatusAttribute(): QuoteStatus
