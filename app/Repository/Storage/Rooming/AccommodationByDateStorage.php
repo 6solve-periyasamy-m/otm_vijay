@@ -7,7 +7,6 @@ use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\BoardType;
 use App\Models\Accommodation\RoomCategory;
 use App\Models\Accommodation\RoomType;
-use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;
 use App\Models\Quote\Quote;
@@ -284,10 +283,11 @@ class AccommodationByDateStorage
         }
     }
 
-    public function addToTour(Tour $tour): void
+    public function addToTour(Tour $tour, string $componentType = 'Included', float|null $price = null): void
     {
+        $pricePer = sigfig($price / count($this->inventory));
         foreach ($this->inventory as $inventory) {
-            $inventory->repository->addToTour($tour, 'Included');
+            $inventory->repository->addToTour($tour, $componentType, $pricePer);
         }
     }
 }
