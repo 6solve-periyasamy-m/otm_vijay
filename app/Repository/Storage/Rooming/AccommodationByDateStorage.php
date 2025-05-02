@@ -285,9 +285,16 @@ class AccommodationByDateStorage
 
     public function addToTour(Tour $tour, string $componentType = 'Included', float|null $price = null): void
     {
+        $runningPrice = 0;
+        $last = null;
         $pricePer = sigfig($price / count($this->inventory));
         foreach ($this->inventory as $inventory) {
-            $inventory->repository->addToTour($tour, $componentType, $pricePer);
+            $runningPrice += $pricePer;
+            $last = $inventory->repository->addToTour($tour, $componentType, $pricePer)?->get();
+        }
+        if ($runningPrice !== $price && $last !== null) {
+            $last->tour_sales_price += $price - $runningPrice;
+            $last->save();
         }
     }
 }
