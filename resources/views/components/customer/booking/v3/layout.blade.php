@@ -3,7 +3,7 @@
         <div class="container">
             <div class="column">
                 @if(isset($this->brand))
-                    <img src="{{ asset($this->brand->alt_logo ?? $this->brand->logo) }}" alt="logo" title="{{ $this->brand->name }}">
+                    <img src="{{ asset($this->brand->alt_logo ?? $this->brand->logo) }}" style="max-height: 75px" alt="logo" title="{{ $this->brand->name }}">
                 @endif
             </div>
             <div class="column right">
