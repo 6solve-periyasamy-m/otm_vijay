@@ -698,10 +698,21 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
      */
     public function getHotels(): array
     {
-        // TODO: Optimize
         $hotels = [];
-        foreach ($this->tour->accommodationInventory()->groupBy('accommodation_id')->get() as $inventory) {
-            $hotels[$inventory->accommodation_id] = ['hotel' => $inventory->accommodation, 'type' => $inventory->category?->name, 'board' => $inventory->boardType?->name, 'accommodationType' => $inventory->accommodation->accommodationtype?->name];
+
+        // Fetch and sort inventory items by check_in descending
+        $inventories = $this->tour->accommodationInventory()
+            ->with(['accommodation.accommodationtype', 'category', 'boardType']) // eager load to prevent N+1
+            ->orderBy('check_in')
+            ->get()
+            ->unique('accommodation_id'); // keep only the latest per accommodation_id
+        foreach ($inventories as $inventory) {
+            $hotels[$inventory->accommodation_id] = [
+                'hotel' => $inventory->accommodation,
+                'type' => $inventory->category?->name,
+                'board' => $inventory->boardType?->name,
+                'accommodationType' => $inventory->accommodation->accommodationtype?->name,
+            ];
         }
         return $hotels;
     }

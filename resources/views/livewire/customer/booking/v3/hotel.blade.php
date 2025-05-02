@@ -96,10 +96,16 @@
                         @endforeach
                     </div>
                     <div class="room-listing-module">
+                        @php
+                            $bookingRooms = $this->tour->repository->getBookingRooms($selectedHotel);
+                            //dd($bookingRooms);
+                            $firstRoom = reset($bookingRooms);
+                            //dd($firstRoom['room_desc']);
+                        @endphp
                         @for($x = 0, $xMax = count($rooms); $x < $xMax; $x++)
                             <div class="single-room" id="room-{{ $x }}">
                                 <h6>Room {{ $x + 1 }}</h6>
-                                <div class="roomdesc" data-room-index="{{ $x }}"></div>
+                                <div class="roomdesc" data-room-index="">{!! $firstRoom['room_desc'] !!}</div>
                                 <p>Number of guests</p>
                                 <div class="guest-module">
                                     @for($i = 1, $iMax = 3; $i <= $iMax; $i++)
@@ -205,7 +211,7 @@
                             <div class="hide-package-detail">Hide package details</div>
                         </div>
                         <div class="image-block">
-                            <img src="{{ asset('images/sportEvent.png') }}" alt="package-details">
+                            <img src="{{ asset($tour->event->image_url) }}" class="package-image" alt="featured-img">
                         </div>
                         <div class="base-package">
                             <h6 class="sub-heading-6">BASE PACKAGE</h6>
@@ -328,6 +334,18 @@
                     priceBlock.textContent = `+A$ ${parseFloat(newSalesPrice).toFixed(2)}`;
                 });
             });
+
+            document.querySelectorAll('.bed-radio').forEach(function (radio) {
+                radio.addEventListener('change', function () {
+                    const roomIndex = this.dataset.roomIndex;
+                    const roomDesc = this.dataset.bedDesc;
+                    const target = document.querySelector(`.roomdesc[data-room-index="${roomIndex}"]`);
+                    if (target) {
+                        target.innerHTML = roomDesc;
+                    }
+                });
+            });
+
         });
 
 
