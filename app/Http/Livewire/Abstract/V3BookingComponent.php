@@ -7,6 +7,7 @@ use App\Exceptions\MailFailedException;
 use App\Mail\Storage\Attachment;
 use App\Mail\Storage\QuoteMail;
 use App\Models\Accommodation\Accommodation;
+use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Helper\Enum\BookingTravellerRole;
@@ -48,12 +49,9 @@ abstract class V3BookingComponent extends Component
     abstract public function back();
     abstract public function advance();
 
-    public function getDefaultHotel()
+    public function getDefaultHotel(): AccommodationInventory|null
     {
-        foreach ($this->tour->repository->getHotels() as $hotel) {
-            return $hotel['hotel'];
-        }
-        return null;
+        return $this->tour->accommodationInventoryTours()->where('tour_component_type', '=', 'Included')->first()?->inventory;
     }
 
     public function getSelectedHotel(): Accommodation|null

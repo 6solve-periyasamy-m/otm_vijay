@@ -9,19 +9,19 @@
                     <p>Review and customise your accommodation details. Selecting a different hotel or room type may
                         impact the total cost.</p>
                     <h6 class="sub-heading-6">DEFAULT HOTEL INCLUDED IN THIS PACKAGE</h6>
-                    @php $default = $this->getDefaultHotel(); @endphp
+                    @php $default = $this->getDefaultHotel()->component; @endphp
                     <div class="locate">
-                        @php $imagePath = asset($default->image_url ?? ''); @endphp
-                        @if(!empty($default->image_url) && file_exists($imagePath))
+                        @php $imagePath = asset($default->image_url ?? $default->gallery()->first()?->file_path ?? ''); @endphp
+                        @if(!empty($imagePath))
                             <div class="image">
-                                <img src="{{ asset($default->image_url) }}" alt="{{ $default->name }}" title="{{ $default->name }}">
+                                <img src="{{ asset($imagePath) }}" alt="{{ $default->name }}" title="{{ $default->name }}">
                             </div>
                         @endif
                         <div class="text-block">
                             <h6>{{ $default->name }}</h6>
                             <p>{{ $default->accommodationtype?->name }}</p>
-                            <p>{{ $default['type'] ?? '' }} </p>
-                            <p>{{ $default['board'] ?? '' }} </p>
+                            <p>{{ $this->getDefaultHotel()->roomType->name ?? '' }} </p>
+                            <p>{{ $this->getDefaultHotel()->boardType->name ?? '' }} </p>
                         </div>
                     </div>
                 </div>
@@ -57,10 +57,9 @@
                         </div>
                     </div>
                 </div>
+<!-- BREAKPOINT: Room Quantity -->
                 <div class="room-configuration">
-
                     <h6 class="sub-heading-6">ROOM CONFIGURATION</h6>
-
                     <div class="no-of-travellers">
                         <p>Number of rooms you wish to book</p>
                         <div class="quantity">
@@ -72,6 +71,7 @@
                         </div>
                     </div>
                 </div>
+<!-- BREAKPOINT: Room Selection -->
                 <div class="room-selection">
                     <h6 class="sub-heading-6">ROOM SELECTION</h6>
                     <p>If you would like to upgrade, select from the upgrade options below.</p>
@@ -147,6 +147,7 @@
                         @endfor
                     </div>
                 </div>
+<!-- BREAKPOINT: Hotels Section -->
                 <div class="hotel">
                     <h6 class="sub-heading-6">HOTEL</h6>
                         @php $hotels = $this->tour->repository->getHotels();
@@ -161,7 +162,7 @@
                             <p>Your package includes a {{ $noOfNights == 1 ? 'night' : $noOfNights.'-nights' }} stay at {{ $hotelName }}, a {{ $hotelType }} hotel. If you’d like to upgrade, please select from one of the other options below.</p>
                         @endif
                     <div class="hotel-listing">
-                        @foreach($this->tour->repository->getHotels() as $id => $arrHotel)
+                        {{--@foreach($this->tour->repository->getHotels() as $id => $arrHotel)
                             @php
                                 $hotel = $arrHotel['hotel'];
                                 $rooms = $this->tour->repository->getBookingRooms($hotel->id);
@@ -199,10 +200,48 @@
                                     </div>
                                 </div>
                             </div>
+                        @endforeach--}}
+                        @foreach($this->tour->repository->getHotelGroups() as $hotel => $hotelGroups)
+                            @php $defaultGroup = $hotelGroups[array_key_first($hotelGroups)]; $hotel = $defaultGroup->hotel; @endphp
+                            <div class="single-hotel" wire:click="setHotel({{$hotel->id}})">
+                                    <div wire:ignore>
+                                        @if(!empty($hotel->gallery) && count($hotel->gallery))
+                                            <div class="hotel-image-block">
+                                                @foreach($hotel->gallery as $photo)
+                                                    <div><img src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}"></div>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="hotel-block">
+                                        <h6>{{ $hotel->name }}</h6>
+                                        <p>{{ $hotel->accommodationtype?->name }}</p>
+                                        {{--<p class="tour_sales_price" id="tour_sales_price_{{ $hotel->id }}">
+                                            @if ($defaultRoom['component_type'] === 'Upgrade')
+                                                +A$ {{ number_format($defaultRoom['sales_price'], 2) }}
+                                            @endif
+                                        </p>--}}
+                                        <div class="room-type">
+                                            <p>Room type</p>
+                                            <select class="room-selector" data-hotel-id="{{ $hotel->id }}">
+                                                @foreach($hotelGroups as $group)
+                                                    <option value="{{ $group->occupancy->id }}" data-sales_price="{{ $group->getUpgradeCost() }}" {{ $id == key($rooms) ? 'selected' : '' }}>
+                                                        {{ $group->occupancy->name }} ({{ fr_currency($group->getUpgradeCost() * $this->getFXRate(), $this->getCurrency()) }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <p class="breakfast-note">{{ $defaultGroup->board->name }} </p>
+                                            <p>{!! $hotel->description !!}</p>
+                                            @php $selected = $booking->booking_accommodation_id === $hotel->id; @endphp
+                                            <button type="button" class="include-button {{ $selected ? '' : 'active' }}">{{ $selected ? 'Selected' : $defaultGroup->rooms[0]->tour_component_type }}</button>
+                                        </div>
+                                    </div>
+                                </div>
                         @endforeach
                     </div>
                 </div>
             </div>
+<!-- BREAKPOINT: Sidebar -->
             <div class="column right">
                 <div class="package-details">
                     <div class="contain">
@@ -210,9 +249,11 @@
                             <h4 class="sub-heading-4">Package details</h4>
                             <div class="hide-package-detail">Hide package details</div>
                         </div>
+                        @if($tour?->event?->image_url !== null)
                         <div class="image-block">
                             <img src="{{ asset($tour->event->image_url) }}" class="package-image" alt="featured-img">
                         </div>
+                        @endif
                         <div class="base-package">
                             <h6 class="sub-heading-6">BASE PACKAGE</h6>
                             <h2>{{ $tour->name }}</h2>
@@ -308,7 +349,7 @@
                     <span class="accomodation-travel-date-error">
                         <span><img src="{{ asset('icons/Noti-Icon.svg') }}" alt="icon"></span>
                         <span>{{ $message }}</span>
-                    </div>
+                    </span>
                     @enderror
                     <span class="accomodation-travel-date-error" id="guest-distribution-error" style="display: none;">
                         <span>
