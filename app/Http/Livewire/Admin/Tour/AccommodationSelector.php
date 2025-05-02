@@ -30,7 +30,6 @@ class AccommodationSelector extends AccommodationByDateComponent
         $tour = Tour::find($this->tour);
         if ($tour === null) { return; }
         if (!in_array($this->component_type, $this->getAvailableTypes())) {
-            dd($this->component_type);
             $this->toast('Invalid Type', 'Invalid component type provided', 'danger');
             return;
         }
@@ -41,7 +40,7 @@ class AccommodationSelector extends AccommodationByDateComponent
             }
         }
         $tour->repository->autoAssignTemplating();
-        $this->toast('Accommodation Saved Successfully', 'Successfully removed accommodation and added new ones to the tour', 'success');
+        $this->toast('Accommodation Saved Successfully', 'Successfully added new accommodation to the tour', 'success');
     }
 
     public function getAvailableTypes(): array
