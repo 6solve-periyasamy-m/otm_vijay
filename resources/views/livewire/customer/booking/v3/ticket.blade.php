@@ -77,7 +77,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                         @php $activityInventory = $tourComponent->activityInventory @endphp
                             @php
                                 $available = $activityInventory->repository->getAvailableStock();
-                                $disabled = $available <= 0 ? 'element-disabled' : 'active';
+                                $disabled = $available <= $booking->travellers()->count() ? 'element-disabled' : 'active';
                                 $purchasePrice = round($booking->repository->convertBookingCurrency($activityInventory->purchase_price, $selectedCurrency), 2);
                             @endphp
                             <div class="single-block">
