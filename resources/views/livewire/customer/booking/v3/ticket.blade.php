@@ -84,7 +84,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                     <div class="ticket-heading">
                                         <div class="ticket-heading-module">
                                             <div class="content-module">
-                                                <h6>{!! $activityInventory->description !!}</h6>
+                                                <h6>{!! $activityInventory->component->name !!}</h6>
                                                 <p>{{ $activityInventory->component?->field1}}</p>
                                                 <p>+{{ f_currency($booking->repository->convertBookingCurrency($activityInventory->purchase_price, $selectedCurrency) , $selectedCurrency)  }}</p>
                                             </div>
