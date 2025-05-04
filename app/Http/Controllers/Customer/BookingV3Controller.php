@@ -18,6 +18,7 @@ class BookingV3Controller extends Controller
         $booking = Booking::where('tour_id', '=', $tour->id)->where('token', '=', $booking ?? $request->cookie($tour->booking_form_url))->first();
         if ($booking === null) {
             $booking = BookingRepository::make($tour);
+            $booking->save();
             $this->setupCookie($tour, $booking);
             return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => $booking->token]);
         }
