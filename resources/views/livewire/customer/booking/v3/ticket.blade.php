@@ -11,12 +11,12 @@ use App\Models\Helper\Enum\ActivityCategory;
                     <h2 class="sub-heading-2-p">Tickets</h2>
                     <p>Review your included tickets or upgrade.</p>
                     <div class="tickets-listing">
-                        @foreach ($tour->activityInventoryTours as $activityInventory) 
+                        @foreach ($tour->activityInventoryTours()->where('tour_component_type', '=', 'Included')->get() as $tourComponent)
+                            @continue($tourComponent->tour_component_type === 'Add-on' || $tourComponent->tour_component_type === 'Upgrade')
                             @php 
-                                //dd($activityInventory->inventory->component->activity_category, ActivityCategory::MAIN); 
+                                //dd($tourComponent->inventory->component->activity_category, ActivityCategory::MAIN); 
                             @endphp
-                            @if ($activityInventory->inventory->component->activity_category ===  ActivityCategory::MAIN)
-                                @continue($activityInventory->tour_component_type == 'Upgrade')
+                            @if ($tourComponent->inventory->component->activity_category ===  ActivityCategory::MAIN)
                                 <div class="single-block">
                                     <div class="quantity-show">
                                         <span><img src="{{ asset('images/Ticket-Streamline-Core.svg') }}" alt="icon"></span>
@@ -26,41 +26,41 @@ use App\Models\Helper\Enum\ActivityCategory;
                                     <div class="ticket-heading">
                                         <div class="ticket-heading-module">
                                             <div class="content-module">
-                                                <h6>{!! $activityInventory->inventory?->description !!}</h6>
-                                                <p>{{ $activityInventory->inventory->component?->name}} </p>
+                                                <h6>{!! $tourComponent->inventory?->description !!}</h6>
+                                                <p>{{ $tourComponent->inventory->component?->name}} </p>
                                             </div>
                                             <!-- <div class="ic-block">
                                                 <div><img src="/images/Ticket-Icon.svg" alt="ticket-icon"></div>
                                             </div> -->
                                         </div>
                                         <select>
-                                            <option value="{{ $activityInventory->inventory->id }}">{{ $activityInventory->inventory->starts_at->format('d M Y') }}</option>
+                                            <option value="{{ $tourComponent->inventory->id }}">{{ $tourComponent->inventory->starts_at->format('d M Y') }}</option>
                                         </select>
-                                        @if ($activityInventory->inventory->component->seating)
+                                        @if ($tourComponent->inventory->component->seating)
                                         <div class="individual-module">
                                             <p>Seating</p>
                                             <select>
-                                                <option value="{{ $activityInventory->inventory->id }}">{{ $activityInventory->inventory->component->seating?->name }}</option>
-                                                @foreach ($activityInventory->upgrades ?? [] as $upgrade)
-                                                    <option value="{{ $upgrade->upgrade->activityInventory->id }}">{{ $upgrade->upgrade->activityInventory->activity->seating?->name }}</option>
+                                                <option value="{{ $tourComponent->inventory->id }}">{{ $tourComponent->inventory->component->seating?->name }} (Included)</option>
+                                                @foreach ($tourComponent->upgrades ?? [] as $upgrade)
+                                                    <option value="{{ $upgrade->upgrade->activityInventory->id }}">{{ $upgrade->upgrade->activityInventory->activity->seating?->name }} (+{{ fr_currency($upgrade->upgrade->tour_sales_price, $selectedCurrency) }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         @endif
-                                        @if($activityInventory->inventory->component->session)
+                                        @if($tourComponent->inventory->component->session)
                                         <div class="individual-module">
                                             <p>Session</p>
                                             <div class="session-block">
                                                 <label class="radio-option">
-                                                    <input type="radio" checked name="session_{{$activityInventory->inventory->starts_at->timestamp}}" value="{{ $activityInventory->inventory->component->session?->name }}">
+                                                    <input type="radio" checked name="session_{{$tourComponent->inventory->starts_at->timestamp}}" value="{{ $tourComponent->inventory->component->session?->name }}">
                                                     <span class="custom-radio"></span>
-                                                    <span class="option-title">{{ $activityInventory->inventory->component->session?->name }}</span>
+                                                    <span class="option-title">{{ $tourComponent->inventory->component->session?->name }}</span>
                                                 </label>
                                             </div>                                                                            
                                         </div>
                                         @endif
-                                        <button type="button" class="include-button {{ $activityInventory->upgrades->isNotEmpty() ? 'active' : '' }}">
-                                            {{ $activityInventory->upgrades->isNotEmpty() ? 'Upgrade' : $activityInventory->tour_component_type }}
+                                        <button type="button" class="include-button {{ $tourComponent->upgrades->isNotEmpty() ? 'active' : '' }}">
+                                            {{ $tourComponent->upgrades->isNotEmpty() ? 'Upgrade' : $tourComponent->tour_component_type }}
                                         </button> 
                                     </div>
                                 </div>                            
@@ -72,7 +72,8 @@ use App\Models\Helper\Enum\ActivityCategory;
                     <h2 class="sub-heading-2-p">ADD A TICKET</h2>
                     <p>Want more tennis action? Add tickets now</p>
                     <div class="tickets-listing">
-                    @foreach(\App\Repository\Model\Activity\ActivityInventoryRepository::getBetweenDates($tour->date_from, $tour->date_to, $tour->repository) as $activityInventory)
+                    @foreach($tour->activityInventoryTours()->where('tour_component_type', '=', 'Add-on')->get() as $tourComponent)
+                        @php $activityInventory = $tourComponent->activityInventory @endphp
                         @if(stripos(trim($activityInventory->ticketType?->name), 'add-on') !== false || stripos(trim($activityInventory->ticketType?->name), 'add on') !== false)
                             @php
                                 $available = $activityInventory->repository->getAvailableStock();
@@ -255,7 +256,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                 <button type="button" class="next-button" wire:click="advance">
                     <span>
                         <span>NEXT</span>
-                        <img src="/images/Right-arrow-mod.svg" alt="right-arrow">
+                        <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
                     </span>
                 </button>
                 </div>
