@@ -42,7 +42,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                             <select>
                                                 <option value="{{ $tourComponent->inventory->id }}">{{ $tourComponent->inventory->component->seating?->name }} (Included)</option>
                                                 @foreach ($tourComponent->upgrades ?? [] as $upgrade)
-                                                    <option value="{{ $upgrade->upgrade->activityInventory->id }}">{{ $upgrade->upgrade->activityInventory->activity->seating?->name }} (+{{ fr_currency($upgrade->upgrade->tour_sales_price, $selectedCurrency) }}</option>
+                                                    <option value="{{ $upgrade->upgrade->activityInventory->id }}">{{ $upgrade->upgrade->activityInventory->activity->seating?->name }} (+{{ fr_currency($upgrade->upgrade->tour_sales_price, $selectedCurrency) }})</option>
                                                 @endforeach
                                             </select>
                                         </div>
