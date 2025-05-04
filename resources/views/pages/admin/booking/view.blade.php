@@ -106,7 +106,7 @@ $tour = $booking->tour;
                 <x-admin.section.card>
                     <x-slot:title>{{ $traveller->full_name }}</x-slot:title>
                     @foreach($traveller->repository->getComponents(false) as $component)
-                        {{ $component }}
+                        {{ $component }} {{ $component->getTourComponentType() === 'Included' ? "Included" : fr_currency($component->getCost()) }}
                         <br />
                     @endforeach
                 </x-admin.section.card>
