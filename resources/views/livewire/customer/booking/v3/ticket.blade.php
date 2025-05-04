@@ -75,7 +75,6 @@ use App\Models\Helper\Enum\ActivityCategory;
                     <div class="tickets-listing">
                     @foreach($tour->activityInventoryTours()->where('tour_component_type', '=', 'Add-on')->get() as $tourComponent)
                         @php $activityInventory = $tourComponent->activityInventory @endphp
-                        @if(stripos(trim($activityInventory->ticketType?->name), 'add-on') !== false || stripos(trim($activityInventory->ticketType?->name), 'add on') !== false)
                             @php
                                 $available = $activityInventory->repository->getAvailableStock();
                                 $disabled = $available <= 0 ? 'element-disabled' : 'active';
@@ -129,8 +128,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                     </div>                                    
                                 </div>
                             </div>
-                        @endif
-                    @endforeach
+                        @endforeach
                     </div> 
                 </div>
                 @endif
