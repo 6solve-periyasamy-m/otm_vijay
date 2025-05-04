@@ -107,6 +107,7 @@ $tour = $booking->tour;
                     <x-slot:title>{{ $traveller->full_name }}</x-slot:title>
                     @foreach($traveller->repository->getComponents(false) as $component)
                         {{ $component }}
+                        <br />
                     @endforeach
                 </x-admin.section.card>
             </div>
