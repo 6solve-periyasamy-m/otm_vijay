@@ -68,6 +68,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                         @endforeach
                     </div>
                 </div>
+                @if($tour->activityInventoryTours()->where('tour_component_type', '=', 'Add-on')->count() > 0)
                 <div class="tickets">
                     <h2 class="sub-heading-2-p">ADD A TICKET</h2>
                     <p>Want more tennis action? Add tickets now</p>
@@ -132,6 +133,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                     @endforeach
                     </div> 
                 </div>
+                @endif
             </div>
             <div class="column right">
                 <div class="package-details">
