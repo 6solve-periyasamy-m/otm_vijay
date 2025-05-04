@@ -25,6 +25,14 @@ class Ticket extends V3BookingComponent
         return redirect()->route('booking.v3.inclusions', ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]);
     }
 
+    public function hasComponent(ActivityInventoryTour $tourComponent): bool
+    {
+        foreach ($this->booking->leadTraveller->activities as $activity) {
+            if ($tourComponent->id === $activity->activity_inventory_tour_id) { return true; }
+        }
+        return false;
+    }
+
     public function adjustUpgrade(int $upgradeId): void
     {
         $upgrade = ActivityInventoryTour::find($upgradeId);
