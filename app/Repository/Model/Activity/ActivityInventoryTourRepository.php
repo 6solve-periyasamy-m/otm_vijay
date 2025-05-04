@@ -93,6 +93,14 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
         return false;
     }
 
+    public function hasAsUpgrade(ActivityInventoryTour $activityInventoryTour): bool
+    {
+        foreach ($this->tourComponent->upgrades as $upgrade) {
+            if ($upgrade->upgrade_id === $activityInventoryTour->id) return true;
+        }
+        return false;
+    }
+
     public function get(): ActivityInventoryTour
     {
         return $this->tourComponent;
