@@ -63,6 +63,8 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         $booking->save();
         $lead = $booking->repository->makeTraveller([]);
         $booking->travellers()->save($lead);
+        $booking->lead_traveller_id = $lead->id;
+        $booking->save();
         $lead->repository->addAllIncluded();
         return $booking;
     }
