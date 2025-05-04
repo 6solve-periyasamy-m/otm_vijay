@@ -286,6 +286,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                 $(this).closest('.action-controls').slideUp();
             });
             @if($this->quote !== null)
+            {{  dd($this->quote) }}
             $('.add-ticket-btn').on('click', function () {
                 const parent = $(this).closest('.single-block');
                 const inventoryId = $(this).data('inventory-id');
