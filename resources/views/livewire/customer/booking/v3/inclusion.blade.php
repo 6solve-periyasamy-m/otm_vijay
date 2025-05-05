@@ -41,14 +41,14 @@ use App\Models\Helper\Enum\ActivityCategory;
                                             </div>
                                         </div>
                                     @endif
-                                    <button type="button" class="include-button {{ $active ? 'active' : '' }}">
+                                    <button type="button" class="include-button {{ $active ? 'active' : '' }}" wire:click="toggleActivityAddon($tourComponent->id)">
                                         @if($tourComponent->tour_component_type === 'Included')
-                                            Included in package
+                                            Included
                                         @else
                                             @if($this->hasActivity($tourComponent))
                                                 Selected
                                             @else
-                                                {{ fr_currency($tourComponent->tour_sales_price * $this->getFXRate(), $this->getCurrency()) }}
+                                                +{{ fr_currency($tourComponent->tour_sales_price * $this->getFXRate(), $this->getCurrency()) }}
                                             @endif
                                         @endif
                                     </button>
