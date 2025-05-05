@@ -10,100 +10,50 @@ use App\Models\Helper\Enum\ActivityCategory;
                     <h2 class="sub-heading-2-p">ADDITIONAL INCLUSIONS</h2>
                     <p>Enhance your experience with optional extras. Select from a range of add-ons to customise your package to suit your needs.</p>
                     <div class="add-inclusion-block">
-                        @foreach ($tour->activityInventoryTours as $activityInventory)
-                            @if ($activityInventory->inventory->component->activity_category ===  ActivityCategory::NORMAL)
-                                <div class="inclusion-single">
-                                    @php $imagePath = public_path($activityInventory->inventory->component->image_url ?? ''); @endphp
-                                    @if(!empty($activityInventory->inventory->component->image_url) && file_exists($imagePath))
-                                        <div class="inclusion-image">
-                                            <img src="{{ asset($activityInventory->inventory->component->image_url) }}" alt="{{ $activityInventory->inventory->component->name }}" title="{{ $activityInventory->inventory->component->name }}">
-                                        </div>
-                                    @endif
-                                    <div class="content-block">
-                                        @if($activityInventory->tour_component_type === 'Upgrade')
-                                            <p>{{ $activityInventory->inventory?->starts_at->format('d M Y') }}</p>
-                                        @endif
-                                        <h6>{{ $activityInventory->inventory->component->name }}</h6>
-                                        <p>Included in package </p>
-                                        @if ($activityInventory->tour_component_type === 'Upgrade')
-                                            <p class="no-of-guests">Number of guests</p>
-                                            <p class="guest-value">+ {{ f_currency($booking->repository->convertBookingCurrency($activityInventory->inventory->purchase_price, $selectedCurrency) , $selectedCurrency) }} / Guest</p>
-                                            <div class="quantity">
-                                                <span class="minus" wire:click="removeGuest()"><img src="{{ asset('icons/Minus.svg') }}" alt="minus"></span>
-                                                <span>|</span>
-                                                <span class="value">{{ $this->getTravellerCount() }}</span>
-                                                <span>|</span>
-                                                <span class="plus" wire:click="addGuest()"><img src="{{ asset('icons/Plus.svg') }}" alt="plus"></span>
-                                            </div>
-                                        @endif
-                                        @if (!empty($activityInventory->inventory->component?->description))
-                                            <a>More information</a>
-                                            <div class="additional-inclusion-popup">
-                                                <div class="additional-contain">
-                                                    <div class="additional-block">
-                                                        <h4>{{ $activityInventory->inventory->component->name }}</h4>
-                                                        {!! $activityInventory->inventory->component?->description !!}
-                                                        <div class="add-cta">
-                                                            <button type="button" class="cancel">Cancel</button>
-                                                            <button type="button" class="Proceed">Proceed</button>
-                                                        </div>
-                                                        <div class="add-close-button">
-                                                            <img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details">
-                                                        </div>
+                        @foreach ($tour->activityInventoryTours as $tourComponent)
+                            @continue($tourComponent->inventory->component->activity_category !== ActivityCategory::NORMAL || $tourComponent->tour_component_type === 'Upgrade')
+                            @php $active = !($tourComponent->tour_component_type === 'Included' || $this->hasActivity($this->$tourComponent)); @endphp
+                            <div class="inclusion-single">
+                                @php $imagePath = public_path($tourComponent->inventory->component->image_url ?? ''); @endphp
+                                @if(!empty($tourComponent->inventory->component->image_url) && file_exists($imagePath))
+                                    <div class="inclusion-image">
+                                        <img src="{{ asset($tourComponent->inventory->component->image_url) }}" alt="{{ $tourComponent->inventory->component->name }}" title="{{ $tourComponent->inventory->component->name }}">
+                                    </div>
+                                @endif
+                                <div class="content-block">
+                                    <h6>{{ $tourComponent->inventory->component->name }}</h6>
+                                    <p>{{ $tourComponent->tour_component_type === 'Included' ? 'Included in package' : '+' . fr_currency($tourComponent->tour_sales_price * $this->getFXRate(), $this->getCurrency()) }}</p>
+                                    @if (!empty($tourComponent->inventory->component?->description))
+                                        <a>More information</a>
+                                        <div class="additional-inclusion-popup">
+                                            <div class="additional-contain">
+                                                <div class="additional-block">
+                                                    <h4>{{ $tourComponent->inventory->component->name }}</h4>
+                                                    {!! $tourComponent->inventory->component?->description !!}
+                                                    <div class="add-cta">
+                                                        <button type="button" class="cancel">Cancel</button>
+                                                        <button type="button" class="Proceed">Proceed</button>
+                                                    </div>
+                                                    <div class="add-close-button">
+                                                        <img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details">
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endif
-                                        <button type="button" class="include-button {{ $activityInventory->tour_component_type === 'Upgrade' ? 'active' : '' }}">
-                                            {{ $activityInventory->tour_component_type === 'Upgrade' ? 'Upgrade' : $activityInventory->tour_component_type }}
-                                        </button>
-                                    </div>
-                                </div>
-                            @endif
-                        @endforeach
-                        @foreach(\App\Repository\Model\Activity\ActivityInventoryRepository::getBetweenDates($tour->date_from, $tour->date_to, $tour->repository) as $activityInventory)
-                            @if ($activityInventory->component->activity_category ===  ActivityCategory::NORMAL && (stripos(trim($activityInventory->ticketType?->name), 'add-on') !== false || stripos(trim($activityInventory->ticketType?->name), 'add on') !== false))
-                                <div class="inclusion-single">
-                                    @php $imagePath = public_path($activityInventory->component->image_url ?? ''); @endphp
-                                    @if(!empty($activityInventory->component->image_url) && file_exists($imagePath))
-                                        <div class="inclusion-image">
-                                            <img src="{{ asset($activityInventory->component->image_url) }}" alt="{{ $activityInventory->component->name }}" title="{{ $activityInventory->component->name }}">
                                         </div>
                                     @endif
-                                    <div class="content-block">
-                                        <p>{{ $activityInventory->starts_at->format('d M Y') }}</p>
-                                        <h6>{{ $activityInventory->component->name }}</h6>
-                                        <p class="no-of-guests">Number of guests</p>
-                                        <p class="guest-value">+ {{ f_currency($booking->repository->convertBookingCurrency($activityInventory->purchase_price, $selectedCurrency) , $selectedCurrency) }} / Guest</p>
-                                        <div class="quantity">
-                                            <span class="minus" wire:click="removeGuest()"><img src="{{ asset('icons/Minus.svg') }}" alt="minus"></span>
-                                            <span>|</span>
-                                            <span class="value">{{ $this->getTravellerCount() }}</span>
-                                            <span>|</span>
-                                            <span class="plus" wire:click="addGuest()"><img src="{{ asset('icons/Plus.svg') }}" alt="plus"></span>
-                                        </div>
-                                        @if (!empty($activityInventory->inventory->component?->description))
-                                            <a>More information</a>
-                                            <div class="additional-inclusion-popup">
-                                                <div class="additional-contain">
-                                                    <div class="additional-block">
-                                                        <h4>{{ $activityInventory->inventory->component->name }}</h4>
-                                                        {!! $activityInventory->inventory->component?->description !!}
-                                                        <div class="add-cta">
-                                                            <button type="button" class="cancel">Cancel</button>
-                                                            <button type="button" class="Proceed">Proceed</button>
-                                                        </div>
-                                                        <div class="add-close-button">
-                                                            <img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    <button type="button" class="include-button {{ $active ? 'active' : '' }}">
+                                        @if($tourComponent->tour_component_type === 'Included')
+                                            Included in package
+                                        @else
+                                            @if($this->hasActivity($tourComponent))
+                                                Selected
+                                            @else
+                                                {{ fr_currency($tourComponent->tour_sales_price * $this->getFXRate(), $this->getCurrency()) }}
+                                            @endif
                                         @endif
-                                        <button type="button" class="include-button active ">SELECT</button>
-                                    </div>
+                                    </button>
                                 </div>
-                            @endif
+                            </div>
                         @endforeach
                     </div>
 
