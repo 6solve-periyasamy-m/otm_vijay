@@ -1,7 +1,7 @@
 @php 
 use App\Models\Helper\Enum\ActivityCategory;
 @endphp
-<x-customer.booking.v3.layout :tour="$tour" :booking="$booking" :stage="5">
+<x-customer.booking.v3.layout :tour="$tour" :booking="$booking" :stage="4">
     <section class="package-container">
         <div class="container">
             <div class="column left">
