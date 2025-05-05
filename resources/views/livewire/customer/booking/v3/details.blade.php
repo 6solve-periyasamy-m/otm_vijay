@@ -45,12 +45,12 @@
                                 <label>Is purchaser the same person as lead traveller</label>
                                 <div class="radio-group">
                                     <label class="radio-option">
-                                        <input type="radio" name="lead" value="day">
+                                        <input type="radio" wire:click="leadIsTravelling()" name="lead" value="day" @if($this->leadIsTravelling) checked="" @endif>
                                         <span class="custom-radio"></span>
                                         <span class="option-title">Yes</span>
                                     </label>
                                     <label class="radio-option">
-                                        <input type="radio" name="lead" value="night" checked="">
+                                        <input type="radio" name="lead" wire:click="leadIsNotTravelling()" value="night" @if(!$this->leadIsTravelling) checked="" @endif>
                                         <span class="custom-radio"></span>
                                         <span class="option-title">No</span>
                                     </label>
@@ -58,6 +58,7 @@
                             </div>
                         </div>
                     </div>
+                    @if(!$this->leadIsTravelling)
                     <div class="details-form-module">
                         <h6>Lead passenger details</h6>
                         <div class="single-details-module">
@@ -104,6 +105,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
             <div class="column right">
@@ -317,24 +319,22 @@
                         </div>
                     </div>
                     <button type="button" class="next-button">
-              <span>
-                <span>NEXT</span>
-                <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
-              </span>
+                      <span>
+                        <span>NEXT</span>
+                        <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
+                      </span>
                     </button>
-                    <!-- <span class="accomodation-travel-date-error">
-                  <span>
-                    <img src="{{ asset('icons/Noti-Icon.svg') }}" alt="icon">
-                  </span>
-                  <span>
-                    Total number of travellers vs. the number of guests you have selected for rooms does not match -
-                    please
-                    update your room selection to proceed
-                  </span>
-                </span>
-              </div> -->
+                    <div style="padding-top: 1rem;">
+                        <div id="stripe-hidden" style="visibility: hidden">
+                            <div id="stripe-container"></div>
+                            <button id="pay-button">Pay</button>
+                            <div id="confirm-errors"></div>
+                        </div>
+                        <div id="airwallex-container" class="airwallex-content"></div>
+                    </div>
                 </div>
             </div>
+        </div>
     </section>
     <script>
         jQuery(document).ready(function () {
