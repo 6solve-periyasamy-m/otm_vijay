@@ -12,6 +12,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                     <div class="add-inclusion-block">
                         @foreach ($tour->activityInventoryTours as $tourComponent)
                             @continue($tourComponent->inventory->component->activity_category !== ActivityCategory::NORMAL || $tourComponent->tour_component_type === 'Upgrade')
+                            @php $active = !($tourComponent->tour_component_type === 'Included' || $this->hasActivity($this->$tourComponent)); @endphp
                             <div class="inclusion-single">
                                 @php $imagePath = public_path($tourComponent->inventory->component->image_url ?? ''); @endphp
                                 @if(!empty($tourComponent->inventory->component->image_url) && file_exists($imagePath))
@@ -40,8 +41,16 @@ use App\Models\Helper\Enum\ActivityCategory;
                                             </div>
                                         </div>
                                     @endif
-                                    <button type="button" class="include-button {{ $tourComponent->tour_component_type === 'Upgrade' ? 'active' : '' }}">
-                                        {{ $tourComponent->tour_component_type === 'Included' ? 'Included' : fr_currency($tourComponent->tour_sales_price * $this->getFXRate(), $this->getCurrency()) }}
+                                    <button type="button" class="include-button {{ $active ? 'active' : '' }}">
+                                        @if($tourComponent->tour_component_type === 'Included')
+                                            Included in package
+                                        @else
+                                            @if($this->hasActivity($tourComponent))
+                                                Selected
+                                            @else
+                                                {{ fr_currency($tourComponent->tour_sales_price * $this->getFXRate(), $this->getCurrency()) }}
+                                            @endif
+                                        @endif
                                     </button>
                                 </div>
                             </div>
