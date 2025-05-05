@@ -23,7 +23,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                 <div class="content-block">
                                     <h6>{{ $tourComponent->inventory->component->name }}</h6>
                                     <p>{{ $tourComponent->tour_component_type === 'Included' ? 'Included in package' : '+' . fr_currency($tourComponent->tour_sales_price * $this->getFXRate(), $this->getCurrency()) }}</p>
-                                    <select wire:change="adjustActivityUpgrade($event.target.value)">
+                                    <select style="max-width: 100%" wire:change="adjustActivityUpgrade($event.target.value)">
                                         <option value="{{ $tourComponent->id }}"
                                                 @if($this->hasActivity($tourComponent)) selected @endif>{{ $tourComponent->inventory->component->name }}
                                             (Included)
