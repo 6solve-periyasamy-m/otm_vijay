@@ -41,7 +41,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                             </div>
                                         </div>
                                     @endif
-                                    <button type="button" class="include-button {{ $active ? 'active' : '' }}" wire:click="toggleActivityAddon($tourComponent->id)">
+                                    <button type="button" class="include-button {{ $active ? 'active' : '' }}" wire:click="toggleActivityAddon({{$tourComponent->id}})">
                                         @if($tourComponent->tour_component_type === 'Included')
                                             Included
                                         @else
