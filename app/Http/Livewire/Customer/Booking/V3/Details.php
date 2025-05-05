@@ -146,16 +146,15 @@ class Details extends V3BookingComponent
             $this->lead->leadBillingAddress->country_id = $this->leadAddress->country_id;
             $this->lead->leadAddress->save();
             $this->lead->leadBillingAddress->save();
-           $this->booking->purchaser_is_lead = '';
-            $this->booking->save();
-
+            $this->booking->purchaser_is_lead = '';
         } else {
             $this->booking->purchaser_is_lead = 1;
-            $this->booking->save();
             $this->quote->organization_id = null;
             $this->quote->save();
             $this->saveTravellerProfile();
         }
+        $this->booking->notes = $this->booking->notes;
+        $this->booking->save();
         // Proceed with other logic
         return redirect()->route('booking.v3.details', ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]);
     }
@@ -216,6 +215,7 @@ class Details extends V3BookingComponent
             'buyer.mobile_number' => 'required|string|regex:/^[0-9+\-\s()]*$/|max:20',
             'buyerAddress.country_id' => 'required|exists:countries,id',
             'buyer.date_of_birth' => 'nullable|date:d-m-Y',
+            'booking.notes' => 'nullable|string|max:1000',
         ];
 
         if (!$this->sameAsLeadTraveller) {
@@ -232,10 +232,3 @@ class Details extends V3BookingComponent
         return $rules;
     }
 }
-    //         //$this->saveTravellerProfile();
-    //         // // If organization_id is set, save to the organization, otherwise, save buyer's profile
-    //         // if ($this->quote->organization_id) {
-    //         //     $this->updateOrganization();
-    //         // } else {
-    //         //     $this->saveTravellerProfile();
-    //         // }

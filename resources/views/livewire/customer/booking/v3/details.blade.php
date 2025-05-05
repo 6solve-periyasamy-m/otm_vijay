@@ -117,7 +117,26 @@
                             </div>
                             <div class="full-width">
                                 <label for="summernote">Special requests</label>
-                                <div id="summernote"></div>
+                                <div data-chk="{{$this->booking->notes}}" class="form-field-full-width" wire:ignore>
+                                        <div id="summernote">{!! $this->booking->notes !!}</div>
+                                        <script type="text/javascript">
+                                            $('#summernote').summernote({
+                                                placeholder: 'Message',
+                                                tabsize: 2,
+                                                height: 120,
+                                                toolbar: [
+                                                    ['font', ['bold', 'italic', 'underline']],
+                                                    ['para', ['paragraph', 'ol']],
+                                                    ['insert', ['link', 'picture', 'emoji']],
+                                                ],
+                                                callbacks: {
+                                                    onChange: function (content, $editable) {
+                                                        @this.set('booking.notes', content)
+                                                    }
+                                                }
+                                            });
+                                        </script>
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -332,6 +351,17 @@
                     }
                 });
             }
+
+            jQuery('#summernote').summernote({
+                placeholder: 'Type here',
+                tabsize: 2,
+                height: 120,
+                toolbar: [
+                    ['font', ['bold', 'italic', 'underline']],
+                    ['para', ['paragraph', 'ol']],
+                    ['insert', ['link', 'picture', 'emoji']],
+                ],
+            });
         });
     </script>
 </x-customer.booking.v3.layout>

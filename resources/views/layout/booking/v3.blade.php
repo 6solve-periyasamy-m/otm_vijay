@@ -14,11 +14,19 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
-
-
-
+    <script src="https://use.fontawesome.com/52e183519a.js"></script>
+    <link href="{{ asset('external/summernote/emoji/css/emoji.css') }}" rel="stylesheet">
+    <script src="{{ asset('external/summernote/emoji/js/config.js') }}"></script>
+    <script src="{{ asset('external/summernote/emoji/js/tam-emoji.min.js') }}"></script>
     <script src="{{ asset('/js/booking/v3.js') }}"></script>
+    <script>
+        document.emojiSource = "{{ asset('external/summernote/emoji/img') }}";
+    </script>
     @livewireStyles
 
     <style>
