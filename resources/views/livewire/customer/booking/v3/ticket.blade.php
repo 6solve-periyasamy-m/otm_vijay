@@ -73,46 +73,47 @@ use App\Models\Helper\Enum\ActivityCategory;
                     @foreach($tour->activityInventoryTours()->where('tour_component_type', '=', 'Add-on')->get() as $tourComponent)
                         @continue($tourComponent->inventory->component->activity_category !== ActivityCategory::MAIN)
                         @php
-                            $activityInventory = $tourComponent->activityInventory;
-                            $available = $activityInventory->repository->getAvailableStock();
+                            $available = $tourComponent->inventory->repository->getAvailableStock();
                             $disabled = $available <= $booking->travellers()->count() ? 'element-disabled' : 'active';
-                            $purchasePrice = round($booking->repository->convertBookingCurrency($activityInventory->purchase_price, $selectedCurrency), 2);
+                            $purchasePrice = round($booking->repository->convertBookingCurrency($tourComponent->inventory->purchase_price, $selectedCurrency), 2);
                         @endphp
                         <div class="single-block">
                             <div class="ticket-heading">
                                 <div class="ticket-heading-module">
                                     <div class="content-module">
-                                        <h6>{!! $activityInventory->component->name !!}</h6>
-                                        <p>{{ $activityInventory->component?->field1}}</p>
-                                        <p>+{{ f_currency($booking->repository->convertBookingCurrency($activityInventory->purchase_price, $selectedCurrency) , $selectedCurrency)  }}</p>
+                                        <h6>{!! $tourComponent->inventory->component->name !!}</h6>
+                                        <p>{{ $tourComponent->inventory->component?->field1}}</p>
+                                        <p>+{{ f_currency($booking->repository->convertBookingCurrency($tourComponent->tour_sales_price, $selectedCurrency) , $selectedCurrency)  }}</p>
                                     </div>
                                 </div>
                                 <select>
-                                    <option value="{{$activityInventory->id }}">{{ $activityInventory->starts_at->format('d M Y') }}</option>
+                                    <option value="{{$tourComponent->inventory->id }}">{{ $tourComponent->inventory->starts_at->format('d M Y') }}</option>
                                 </select>
-                                @if ($activityInventory->component->seating)
+                                @if ($tourComponent->inventory->component->seating)
                                 <div class="individual-module">
                                     <p>Seating</p>
                                     <select>
-                                        <option value="{{$activityInventory->id }}">{{ $activityInventory->component->seating->name }}</option>
+                                        <option value="{{$tourComponent->inventory->id }}">{{ $tourComponent->inventory->component->seating->name }}</option>
                                     </select>
                                 </div>
                                 @endif
-                                @if($activityInventory->component->session)
+                                @if($tourComponent->inventory->component->session)
                                 <div class="individual-module">
                                     <p>Session</p>
                                     <div class="session-block">
                                         <label class="radio-option">
-                                            <input type="radio" checked id="{{ $activityInventory->id}}" name="session_{{$activityInventory->id}}" value="{{ $activityInventory->component->session?->name }}">
+                                            <input type="radio" checked id="{{ $tourComponent->inventory->id}}" name="session_{{$tourComponent->inventory->id}}" value="{{ $tourComponent->inventory->component->session?->name }}">
                                             <span class="custom-radio"></span>
-                                            <span class="option-title">{{ $activityInventory->component->session?->name }}</span>
+                                            <span class="option-title">{{ $tourComponent->inventory->component->session?->name }}</span>
                                         </label>
                                     </div>
                                 </div>
                                 @endif
-                                <button type="button" class="include-button {{ $disabled }}" wire:click="toggleAddon({{ $tourComponent->id }})">{{ $this->hasComponent($tourComponent) ? 'Owned' : '+' . fr_currency($tourComponent->tour_sales_price, $this->selectedCurrency) }}</button>
+                                <button type="button" class="include-button {{ $disabled }}" wire:click="toggleAddon({{ $tourComponent->id }})">
+                                    {{ $this->hasComponent($tourComponent) ? 'Owned' : '+' . fr_currency($tourComponent->tour_sales_price, $this->selectedCurrency) }}
+                                </button>
                                 <div class="individual-module">
-                                    <p class="out-of-stock">{{ $available <= 0 ? 'Out of stock' : $activityInventory->repository->getAvailableStock() . ' Available' }}</p>
+                                    <p class="out-of-stock">{{ $available <= 0 ? 'Out of stock' : $tourComponent->inventory->repository->getAvailableStock() . ' Available' }}</p>
                                 </div>
                             </div>
                         </div>

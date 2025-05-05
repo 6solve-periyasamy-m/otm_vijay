@@ -27,7 +27,7 @@ class Ticket extends V3BookingComponent
 
     public function hasComponent(ActivityInventoryTour $tourComponent): bool
     {
-        return $this->booking->leadTraveller->activities()->where('id', '=', $tourComponent->id)->count() > 0;
+        return $this->booking->leadTraveller->activities()->where('activity_inventory_tour_id', '=', $tourComponent->id)->count() > 0;
     }
 
     public function adjustUpgrade(int $upgradeId): void
