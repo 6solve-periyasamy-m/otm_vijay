@@ -27,10 +27,7 @@ class Ticket extends V3BookingComponent
 
     public function hasComponent(ActivityInventoryTour $tourComponent): bool
     {
-        foreach ($this->booking->leadTraveller->activities as $activity) {
-            if ($tourComponent->id === $activity->activity_inventory_tour_id) { return true; }
-        }
-        return false;
+        return $this->booking->leadTraveller->activities()->where('id', '=', $tourComponent->id)->count() > 0;
     }
 
     public function adjustUpgrade(int $upgradeId): void
@@ -53,6 +50,21 @@ class Ticket extends V3BookingComponent
             // If upgrade isn't found, then add it anyway
             if (!$found) {
                 $upgrade->repository->grantToBookingTraveller($traveller);
+            }
+        }
+    }
+
+    public function toggleAddon(int $id): void
+    {
+        $addon = ActivityInventoryTour::find($id);
+        if ($addon !== null && $addon->tour_id === $this->tour->id && $addon->tour_component_type === 'Add-on') {
+            $owned = $this->hasComponent($addon);
+            foreach ($this->booking->travellers as $traveller) {
+                if (!$owned) {
+                    $addon->repository->grantToBookingTraveller($traveller);
+                } else {
+                    $traveller->activities()->where('activity_inventory_tour_id', '=', $addon->id)->delete();
+                }
             }
         }
     }

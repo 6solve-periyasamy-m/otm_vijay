@@ -79,47 +79,40 @@ use App\Models\Helper\Enum\ActivityCategory;
                             $purchasePrice = round($booking->repository->convertBookingCurrency($activityInventory->purchase_price, $selectedCurrency), 2);
                         @endphp
                         <div class="single-block">
-                                <div class="ticket-heading">
-                                    <div class="ticket-heading-module">
-                                        <div class="content-module">
-                                            <h6>{!! $activityInventory->component->name !!}</h6>
-                                            <p>{{ $activityInventory->component?->field1}}</p>
-                                            <p>+{{ f_currency($booking->repository->convertBookingCurrency($activityInventory->purchase_price, $selectedCurrency) , $selectedCurrency)  }}</p>
-                                        </div>
+                            <div class="ticket-heading">
+                                <div class="ticket-heading-module">
+                                    <div class="content-module">
+                                        <h6>{!! $activityInventory->component->name !!}</h6>
+                                        <p>{{ $activityInventory->component?->field1}}</p>
+                                        <p>+{{ f_currency($booking->repository->convertBookingCurrency($activityInventory->purchase_price, $selectedCurrency) , $selectedCurrency)  }}</p>
                                     </div>
+                                </div>
+                                <select>
+                                    <option value="{{$activityInventory->id }}">{{ $activityInventory->starts_at->format('d M Y') }}</option>
+                                </select>
+                                @if ($activityInventory->component->seating)
+                                <div class="individual-module">
+                                    <p>Seating</p>
                                     <select>
-                                        <option value="{{$activityInventory->id }}">{{ $activityInventory->starts_at->format('d M Y') }}</option>
+                                        <option value="{{$activityInventory->id }}">{{ $activityInventory->component->seating->name }}</option>
                                     </select>
-                                    @if ($activityInventory->component->seating)
-                                    <div class="individual-module">
-                                        <p>Seating</p>
-                                        <select>
-                                            <option value="{{$activityInventory->id }}">{{ $activityInventory->component->seating->name }}</option>
-                                        </select>
+                                </div>
+                                @endif
+                                @if($activityInventory->component->session)
+                                <div class="individual-module">
+                                    <p>Session</p>
+                                    <div class="session-block">
+                                        <label class="radio-option">
+                                            <input type="radio" checked id="{{ $activityInventory->id}}" name="session_{{$activityInventory->id}}" value="{{ $activityInventory->component->session?->name }}">
+                                            <span class="custom-radio"></span>
+                                            <span class="option-title">{{ $activityInventory->component->session?->name }}</span>
+                                        </label>
                                     </div>
-                                    @endif
-                                    @if($activityInventory->component->session)
-                                    <div class="individual-module">
-                                        <p>Session</p>
-                                        <div class="session-block">
-                                            <label class="radio-option">
-                                                <input type="radio" checked id="{{ $activityInventory->id}}" name="session_{{$activityInventory->id}}" value="{{ $activityInventory->component->session?->name }}">
-                                                <span class="custom-radio"></span>
-                                                <span class="option-title">{{ $activityInventory->component->session?->name }}</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    @endif
-                                <button type="button" class="include-button {{ $disabled }}" >Select</button>
+                                </div>
+                                @endif
+                                <button type="button" class="include-button {{ $disabled }}" wire:click="toggleAddon({{ $tourComponent->id }})">{{ $this->hasComponent($tourComponent) ? 'Owned' : '+' . fr_currency($tourComponent->tour_sales_price, $this->selectedCurrency) }}</button>
                                 <div class="individual-module">
                                     <p class="out-of-stock">{{ $available <= 0 ? 'Out of stock' : $activityInventory->repository->getAvailableStock() . ' Available' }}</p>
-                                </div>
-                                <div class="action-controls" style="display: none;">
-                                    <div class="activity-action-block">
-                                        <a href="javascript:void(0);" data-inventory-id="{{ $activityInventory->id }}" class="add-ticket-btn text-success me-2">Add</a>
-                                        <a href="javascript:void(0);" class="cancel-ticket-btn text-danger">Cancel</a>
-                                        <div class="feedback-message mt-2"></div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
