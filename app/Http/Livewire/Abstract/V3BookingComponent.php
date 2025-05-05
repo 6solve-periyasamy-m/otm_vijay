@@ -8,6 +8,7 @@ use App\Mail\Storage\Attachment;
 use App\Mail\Storage\QuoteMail;
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
+use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Helper\Enum\BookingTravellerRole;
@@ -160,6 +161,52 @@ abstract class V3BookingComponent extends Component
     public function getFXRate()
     {
         return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
+    }
+
+    public function hasActivity(ActivityInventoryTour $tourComponent): bool
+    {
+        return $this->booking->leadTraveller->activities()->where('activity_inventory_tour_id', '=', $tourComponent->id)->count() > 0;
+    }
+
+    public function adjustActivityUpgrade(int $upgradeId): void
+    {
+        $upgrade = ActivityInventoryTour::find($upgradeId);
+        $parent = $upgrade->repository->getUpgradeParent();
+        foreach ($this->booking->travellers as $traveller) {
+            $found = false;
+            foreach ($traveller->activities as $activity) {
+                // already owns component
+                if ($activity->activity_inventory_tour_id === $upgrade->id) { $found = true; break; }
+                // Is already on tree
+                if ($parent->repository->hasAsUpgrade($activity->tourComponent)) {
+                    $activity->repository->delete();
+                    $upgrade->repository->grantToBookingTraveller($traveller);
+                    $found = true;
+                    break;
+                }
+            }
+            // If upgrade isn't found, then add it anyway
+            if (!$found) {
+                $upgrade->repository->grantToBookingTraveller($traveller);
+            }
+        }
+    }
+
+    public function toggleActivityAddon(int $id): void
+    {
+        $addon = ActivityInventoryTour::find($id);
+        if ($addon !== null && $addon->tour_id === $this->tour->id && $addon->tour_component_type === 'Add-on') {
+            $owned = $this->hasActivity($addon);
+            // Not enough stock
+            if (!$owned && $addon->available_stock < $this->booking->travellers()->count()) { return; }
+            foreach ($this->booking->travellers as $traveller) {
+                if (!$owned) {
+                    $addon->repository->grantToBookingTraveller($traveller);
+                } else {
+                    $traveller->activities()->where('activity_inventory_tour_id', '=', $addon->id)->delete();
+                }
+            }
+        }
     }
 
 }
