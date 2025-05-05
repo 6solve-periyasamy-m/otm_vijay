@@ -11,7 +11,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                     <p>Enhance your experience with optional extras. Select from a range of add-ons to customise your package to suit your needs.</p>
                     <div class="add-inclusion-block">
                         @foreach ($tour->activityInventoryTours as $tourComponent)
-                            @continue($tourComponent->inventory->component->activity_category !== ActivityCategory::NORMAL && $tourComponent->tour_component_type === 'Upgrade')
+                            @continue($tourComponent->inventory->component->activity_category !== ActivityCategory::NORMAL || $tourComponent->tour_component_type === 'Upgrade')
                             <div class="inclusion-single">
                                 @php $imagePath = public_path($tourComponent->inventory->component->image_url ?? ''); @endphp
                                 @if(!empty($tourComponent->inventory->component->image_url) && file_exists($imagePath))
