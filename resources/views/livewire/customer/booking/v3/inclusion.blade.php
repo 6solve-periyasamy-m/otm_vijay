@@ -22,17 +22,6 @@ use App\Models\Helper\Enum\ActivityCategory;
                                 <div class="content-block">
                                     <h6>{{ $tourComponent->inventory->component->name }}</h6>
                                     <p>{{ $tourComponent->tour_component_type === 'Included' ? 'Included in package' : '+' . fr_currency($tourComponent->tour_sales_price * $this->getFXRate(), $this->getCurrency()) }}</p>
-                                    @if ($tourComponent->tour_component_type === 'Upgrade')
-                                        <p class="no-of-guests">Number of guests</p>
-                                        <p class="guest-value">+ {{ f_currency($booking->repository->convertBookingCurrency($tourComponent->inventory->purchase_price, $selectedCurrency) , $selectedCurrency) }} / Guest</p>
-                                        <div class="quantity">
-                                            <span class="minus" wire:click="removeGuest()"><img src="{{ asset('icons/Minus.svg') }}" alt="minus"></span>
-                                            <span>|</span>
-                                            <span class="value">{{ $this->getTravellerCount() }}</span>
-                                            <span>|</span>
-                                            <span class="plus" wire:click="addGuest()"><img src="{{ asset('icons/Plus.svg') }}" alt="plus"></span>
-                                        </div>
-                                    @endif
                                     @if (!empty($tourComponent->inventory->component?->description))
                                         <a>More information</a>
                                         <div class="additional-inclusion-popup">
@@ -52,10 +41,10 @@ use App\Models\Helper\Enum\ActivityCategory;
                                         </div>
                                     @endif
                                     <button type="button" class="include-button {{ $tourComponent->tour_component_type === 'Upgrade' ? 'active' : '' }}">
-                                        {{ $tourComponent->tour_component_type === 'Upgrade' ? 'Upgrade' : $tourComponent->tour_component_type }}
+                                        {{ $tourComponent->tour_component_type === 'Included' ? 'Included' : fr_currency($tourComponent->tour_sales_price * $this->getFXRate(), $this->getCurrency()) }}
                                     </button>
                                 </div>
-                    </div>
+                            </div>
                         @endforeach
                     </div>
 
