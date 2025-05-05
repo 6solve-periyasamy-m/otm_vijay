@@ -59,6 +59,8 @@ class Ticket extends V3BookingComponent
         $addon = ActivityInventoryTour::find($id);
         if ($addon !== null && $addon->tour_id === $this->tour->id && $addon->tour_component_type === 'Add-on') {
             $owned = $this->hasComponent($addon);
+            // Not enough stock
+            if (!$owned && $addon->available_stock < $this->booking->travellers()->count()) { return; }
             foreach ($this->booking->travellers as $traveller) {
                 if (!$owned) {
                     $addon->repository->grantToBookingTraveller($traveller);
