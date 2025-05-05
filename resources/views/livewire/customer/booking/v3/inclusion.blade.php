@@ -43,7 +43,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                     @endif
                                     <button type="button" class="include-button {{ $active ? 'active' : '' }}">
                                         @if($tourComponent->tour_component_type === 'Included')
-                                            Included in package
+                                            Included
                                         @else
                                             @if($this->hasActivity($tourComponent))
                                                 Selected
