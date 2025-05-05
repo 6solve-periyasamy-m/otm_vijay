@@ -39,7 +39,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                             <select wire:change="adjustUpgrade($event.target.value)">
                                                 <option value="{{ $tourComponent->id }}" @if($this->hasComponent($tourComponent)) selected @endif>{{ $tourComponent->inventory->component->seating?->name }} (Included)</option>
                                                 @foreach ($tourComponent->upgrades ?? [] as $upgrade)
-                                                    <option value="{{ $upgrade->upgrade->id }}" @if($this->hasComponent($upgrade)) selected @endif>{{ $upgrade->upgrade->activityInventory->activity->seating?->name }} (+{{ fr_currency($upgrade->upgrade->tour_sales_price, $selectedCurrency) }})</option>
+                                                    <option value="{{ $upgrade->upgrade->id }}" @if($this->hasComponent($upgrade->upgrade)) selected @endif>{{ $upgrade->upgrade->activityInventory->activity->seating?->name }} (+{{ fr_currency($upgrade->upgrade->tour_sales_price, $selectedCurrency) }})</option>
                                                 @endforeach
                                             </select>
                                         </div>
