@@ -12,7 +12,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                     <div class="add-inclusion-block">
                         @foreach ($tour->activityInventoryTours as $tourComponent)
                             @continue($tourComponent->inventory->component->activity_category !== ActivityCategory::NORMAL || $tourComponent->tour_component_type === 'Upgrade')
-                            @php $active = !($tourComponent->tour_component_type === 'Included' || $this->hasActivity($this->tourComponent)); @endphp
+                            @php $active = !($tourComponent->tour_component_type === 'Included' || $this->hasActivity($tourComponent)); @endphp
                             <div class="inclusion-single">
                                 @php $imagePath = public_path($tourComponent->inventory->component->image_url ?? ''); @endphp
                                 @if(!empty($tourComponent->inventory->component->image_url) && file_exists($imagePath))
