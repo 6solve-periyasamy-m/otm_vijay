@@ -10,6 +10,8 @@ use Carbon\Carbon;
 class AccommodationSelector extends AccommodationByDateComponent
 {
     public int $tour;
+    public string $component_type = 'Included';
+    public float|null $price = 0;
 
     public function mount(Accommodation|int|null $accommodation = null, Carbon|string|null $start = null, Carbon|string|null $end = null, Tour|int|null $tour = null)
     {
@@ -27,13 +29,32 @@ class AccommodationSelector extends AccommodationByDateComponent
     {
         $tour = Tour::find($this->tour);
         if ($tour === null) { return; }
-        $tour->accommodationInventoryTours()->delete();
+        if (!in_array($this->component_type, $this->getAvailableTypes())) {
+            $this->toast('Invalid Type', 'Invalid component type provided', 'danger');
+            return;
+        }
+        //$tour->accommodationInventoryTours()->delete();
         foreach ($this->fetchData() as $data) {
             if ($this->selected($data)) {
-                $data->addToTour($tour);
+                $data->addToTour($tour, $this->component_type, $this->price);
             }
         }
-        $this->toast('Accommodation Saved Successfully', 'Successfully removed accommodation and added new ones to the tour', 'success');
+        $tour->repository->autoAssignTemplating();
+        $this->toast('Accommodation Saved Successfully', 'Successfully added new accommodation to the tour', 'success');
+    }
+
+    public function getAvailableTypes(): array
+    {
+        $types = ['Included' => 'Included', 'Add-on' => 'Add-on'];
+        if (config('app.features.kpt', false) || config('app.features.bleeding-edge', false)) {
+            $types['Upgrade'] = 'Upgrade';
+        }
+        return $types;
+    }
+
+    public function render()
+    {
+        return view('livewire.admin.tour.accommodation-selector');
     }
 
     public function getPackageType(): string

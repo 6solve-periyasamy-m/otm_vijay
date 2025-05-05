@@ -38,7 +38,7 @@ class GroupedHotelRooming
      */
     public static function fromInventory(AccommodationInventory $inventory): GroupedHotelRooming
     {
-        return new GroupedHotelRooming($inventory->accommodation, $inventory->roomType, $inventory->board, $inventory->category);
+        return new GroupedHotelRooming($inventory->accommodation, $inventory->roomType, $inventory->boardType, $inventory->category);
     }
 
     /**

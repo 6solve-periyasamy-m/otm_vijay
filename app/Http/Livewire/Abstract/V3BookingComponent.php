@@ -7,14 +7,17 @@ use App\Exceptions\MailFailedException;
 use App\Mail\Storage\Attachment;
 use App\Mail\Storage\QuoteMail;
 use App\Models\Accommodation\Accommodation;
+use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Helper\Enum\BookingTravellerRole;
+use App\Models\Location\Currency;
 use App\Models\Quote\Quote;
 use App\Models\System\Brand;
 use App\Models\Tour\Tour;
 use Exception;
 use Livewire\Component;
+use Settings;
 
 abstract class V3BookingComponent extends Component
 {
@@ -46,12 +49,9 @@ abstract class V3BookingComponent extends Component
     abstract public function back();
     abstract public function advance();
 
-    public function getDefaultHotel()
+    public function getDefaultHotel(): AccommodationInventory|null
     {
-        foreach ($this->tour->repository->getHotels() as $hotel) {
-            return $hotel['hotel'];
-        }
-        return null;
+        return $this->tour->accommodationInventoryTours()->where('tour_component_type', '=', 'Included')->first()?->inventory;
     }
 
     public function getSelectedHotel(): Accommodation|null
@@ -80,7 +80,6 @@ abstract class V3BookingComponent extends Component
     {
         $this->booking->repository->setupSimpleRooming($this->selectedHotel, $this->rooms);
     }
-
 
     public function getTravellerCount(): int
     {
@@ -151,6 +150,16 @@ abstract class V3BookingComponent extends Component
         } else {
             session()->flash('error', 'Cannot send quote, no valid target email found.');
         }
+    }
+
+    public function getCurrency(): Currency
+    {
+        return $this->booking->currency ?? Settings::currency();
+    }
+
+    public function getFXRate()
+    {
+        return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
     }
 
 }

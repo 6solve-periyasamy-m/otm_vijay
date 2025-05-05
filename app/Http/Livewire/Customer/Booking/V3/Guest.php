@@ -2,14 +2,13 @@
 
 namespace App\Http\Livewire\Customer\Booking\V3;
 
-use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Http\Livewire\Abstract\V3BookingComponent;
+use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
+use App\Models\Helper\Enum\BookingTravellerRole;
+use App\Models\Quote\Quote;
 use App\Repository\Model\Booking\BookingTravellerRepository;
 use Illuminate\Support\Facades\Log;
-use Exception;
-use App\Models\Quote\Quote;
-use App\Models\Booking\BookingTraveller;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 
@@ -32,6 +31,7 @@ class Guest extends V3BookingComponent
         if ($this->lead->id === null) {
             $this->lead->booking_id = $booking->id;
             $this->lead->save();
+            $this->lead->repository->addAllIncluded();
             $booking->lead_traveller_id = $this->lead->id;
             $booking->booking_accommodation_id = $this->selectedHotel;
             $booking->save();

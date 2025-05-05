@@ -50,8 +50,8 @@ use App\Repository\Storage\OrderComponentStorage;
 use App\Repository\Storage\Tour\GroupedHotelRooming;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use Settings;
 use Illuminate\Support\Str;
+use Settings;
 
 class TourRepository extends ComponentPackageRepository implements HasStockControl, HasRoomingList, HasActivityManifest, HasFlightManifest, HasTransportManifest, HasMerchandiseManifest
 {
@@ -863,13 +863,15 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 foreach ($hotelGroups[$inventory->accommodation_id] as $key => $hotelGroup) {
                     if ($hotelGroup->add($inventoryTour)) {
                         $found = true;
-                        $hotelGroups[$inventoryTour->accommodation_id][$key] = $hotelGroup;
+                        $hotelGroups[$inventoryTour->inventory->accommodation_id][$key] = $hotelGroup;
                         break;
                     }
                 }
-            }
-            if (!$found) {
-                $hotelGroups[$inventoryTour->accommodation_id] = [GroupedHotelRooming::fromInventoryTour($inventoryTour),];
+                if (!$found) {
+                    $hotelGroups[$inventoryTour->inventory->accommodation_id][] = GroupedHotelRooming::fromInventoryTour($inventoryTour);
+                }
+            } else {
+                $hotelGroups[$inventoryTour->inventory->accommodation_id] = [GroupedHotelRooming::fromInventoryTour($inventoryTour),];
             }
         }
         return $hotelGroups;

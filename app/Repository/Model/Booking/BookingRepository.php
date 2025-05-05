@@ -57,6 +57,18 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         return Booking::make(['token' => $token, 'tour_id' => $tour->id]);
     }
 
+    public static function setupBooking(Tour $tour): Booking
+    {
+        $booking = self::make($tour);
+        $booking->save();
+        $lead = $booking->repository->makeTraveller([]);
+        $booking->travellers()->save($lead);
+        $booking->lead_traveller_id = $lead->id;
+        $booking->save();
+        $lead->repository->addAllIncluded();
+        return $booking;
+    }
+
     public function makeTraveller(array $details): BookingTraveller
     {
         $homeAddress = Address::create(['name' => 'Booking Traveller - Home Address', 'parent' => AddressParent::CUSTOMER,]);

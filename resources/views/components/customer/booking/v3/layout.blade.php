@@ -3,7 +3,7 @@
         <div class="container">
             <div class="column">
                 @if(isset($this->brand))
-                    <img src="{{ asset($this->brand->alt_logo ?? $this->brand->logo) }}" alt="logo" title="{{ $this->brand->name }}">
+                    <img src="{{ asset($this->brand->alt_logo ?? $this->brand->logo) }}" style="max-height: 75px" alt="logo" title="{{ $this->brand->name }}">
                 @endif
             </div>
             <div class="column right">
@@ -83,7 +83,7 @@
             </div>
             <div class="value">
                 <div>
-                    <h6>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</h6>
+                    <h6>{{ f_currency($booking->repository->convertBookingCurrency($tour->base_price_per_person, $selectedCurrency), $selectedCurrency) }}</h6>
                     <p>Per person, twin share</p>
                 </div>
                 <span></span>
