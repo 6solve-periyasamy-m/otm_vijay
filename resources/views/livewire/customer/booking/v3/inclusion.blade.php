@@ -46,7 +46,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                             Included
                                         @else
                                             @if($this->hasActivity($tourComponent))
-                                                Selected
+                                                Remove
                                             @else
                                                 +{{ fr_currency($tourComponent->tour_sales_price * $this->getFXRate(), $this->getCurrency()) }}
                                             @endif
