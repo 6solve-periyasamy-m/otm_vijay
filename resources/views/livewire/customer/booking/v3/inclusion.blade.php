@@ -61,50 +61,6 @@ use App\Models\Helper\Enum\ActivityCategory;
                                 </div>
                             @endif
                         @endforeach
-                        @foreach(\App\Repository\Model\Activity\ActivityInventoryRepository::getBetweenDates($tour->date_from, $tour->date_to, $tour->repository) as $activityInventory)
-                            @if ($activityInventory->component->activity_category ===  ActivityCategory::NORMAL && (stripos(trim($activityInventory->ticketType?->name), 'add-on') !== false || stripos(trim($activityInventory->ticketType?->name), 'add on') !== false))
-                                <div class="inclusion-single">
-                                    @php $imagePath = public_path($activityInventory->component->image_url ?? ''); @endphp
-                                    @if(!empty($activityInventory->component->image_url) && file_exists($imagePath))
-                                        <div class="inclusion-image">
-                                            <img src="{{ asset($activityInventory->component->image_url) }}" alt="{{ $activityInventory->component->name }}" title="{{ $activityInventory->component->name }}">
-                                        </div>
-                                    @endif
-                                    <div class="content-block">
-                                        <p>{{ $activityInventory->starts_at->format('d M Y') }}</p>
-                                        <h6>{{ $activityInventory->component->name }}</h6>
-                                        <p class="no-of-guests">Number of guests</p>
-                                        <p class="guest-value">+ {{ f_currency($booking->repository->convertBookingCurrency($activityInventory->purchase_price, $selectedCurrency) , $selectedCurrency) }} / Guest</p>
-                                        <div class="quantity">
-                                            <span class="minus" wire:click="removeGuest()"><img src="{{ asset('icons/Minus.svg') }}" alt="minus"></span>
-                                            <span>|</span>
-                                            <span class="value">{{ $this->getTravellerCount() }}</span>
-                                            <span>|</span>
-                                            <span class="plus" wire:click="addGuest()"><img src="{{ asset('icons/Plus.svg') }}" alt="plus"></span>
-                                        </div>
-                                        @if (!empty($activityInventory->inventory->component?->description))
-                                            <a>More information</a>
-                                            <div class="additional-inclusion-popup">
-                                                <div class="additional-contain">
-                                                    <div class="additional-block">
-                                                        <h4>{{ $activityInventory->inventory->component->name }}</h4>
-                                                        {!! $activityInventory->inventory->component?->description !!}
-                                                        <div class="add-cta">
-                                                            <button type="button" class="cancel">Cancel</button>
-                                                            <button type="button" class="Proceed">Proceed</button>
-                                                        </div>
-                                                        <div class="add-close-button">
-                                                            <img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-                                        <button type="button" class="include-button active ">SELECT</button>
-                                    </div>
-                                </div>
-                            @endif
-                        @endforeach
                     </div>
 
                 </div>
