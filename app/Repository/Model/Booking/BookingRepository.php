@@ -19,6 +19,7 @@ use App\Models\Flight\FlightInventoryTour;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Location\Address;
+use App\Models\Location\Currency;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Quote\Quote;
@@ -313,7 +314,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
 
     public function updateCurrency(string $currency): void
     {
-        $this->booking->booking_currency = $currency;
+        $this->booking->currency_id = Currency::where('code', '=', $currency)->first()?->id;
         $this->booking->save();
     }
 

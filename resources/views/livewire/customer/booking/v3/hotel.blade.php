@@ -142,7 +142,7 @@
                                     @endforeach
                                     @error('rooms.' . $x . '.room') <label class="error-label">{{ $message }}</label> @enderror
                                 </div>
-                                <button type="button" class="include-button">INCLUDE</button>
+                                <button type="button" class="include-button">INCLUDED</button>
                             </div>
                         @endfor
                     </div>
@@ -270,13 +270,13 @@
                                 @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector'))
                                 <div class="single">
                                     <p>Package price</p>
-                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
+                                    <p>{{ fr_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
                                 @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
                                 @if($singleOccupancy > 0 || $singleOccupancy < 0)
                                     <div class="single">
                                         <p>Single occupancy surcharge</p>
-                                        <p>{{ f_currency($booking->repository->convertBookingCurrency($singleOccupancy, $selectedCurrency), $selectedCurrency) }}</p>
+                                        <p>{{ fr_currency($booking->repository->convertBookingCurrency($singleOccupancy, $selectedCurrency), $selectedCurrency) }}</p>
                                     </div>
                                 @endif
                                 <div class="single">
@@ -320,12 +320,12 @@
                             <div class="total">                                
                                 <div class="single">
                                     <p>Total</p>
-                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency), $selectedCurrency) }}</p>
+                                    <p>{{ fr_currency($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
                                 @if($booking->repository->getTaxes() !== null)
                                     <div class="single">
                                         <p>{{ $tour->taxBracket()->name }} (Included)</p>
-                                        <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTaxes(), $selectedCurrency), $selectedCurrency) }}</p>
+                                        <p>{{ fr_currency($booking->repository->convertBookingCurrency($booking->repository->getTaxes(), $selectedCurrency), $selectedCurrency) }}</p>
                                     </div>
                                 @endif
                                 <div class="single">

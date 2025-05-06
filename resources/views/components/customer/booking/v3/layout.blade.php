@@ -74,7 +74,7 @@
     </main>
 
     @php
-        $selectedCurrency = $this->booking->booking_currency ?? setting('system.currency');
+        $selectedCurrency = $this->booking->currency?->code ?? setting('system.currency');
     @endphp
     <footer>
         <div class="container">

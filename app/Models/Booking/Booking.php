@@ -8,6 +8,7 @@ use App\Models\Booking\Component\BookingFlight;
 use App\Models\Booking\Component\BookingMerchandise;
 use App\Models\Booking\Component\BookingTransport;
 use App\Models\Helper\Model;
+use App\Models\Location\Currency;
 use App\Models\System\FellohLink;
 use App\Models\Tour\Tour;
 use App\Models\Voucher\VoucherCode;
@@ -30,6 +31,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelations;
  * @property int $tour_id
  * @property int|null $lead_traveller_id
  * @property int|null $booking_accommodation_id
+ * @property int|null $currency_id
  * @property int|null $order_id
  * @property string|null $token
  * @property string|null $notes
@@ -38,6 +40,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelations;
  * @property string|null $deleted_at
  * @property-read BookingTraveller|null $leadTraveller
  * @property-read Tour $tour
+ * @property-read Currency|null $currency
  * @property-read Collection|BookingGroup[] $groups
  * @property-read Collection|VoucherCode[] $vouchers
  * @property-read int|null $groups_count
@@ -78,6 +81,11 @@ class Booking extends Model
     public function tour(): BelongsTo
     {
         return $this->belongsTo(Tour::class);
+    }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
 
     public function vouchers(): HasManyDeep

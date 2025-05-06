@@ -8,7 +8,7 @@ use App\Models\Booking\BookingTraveller;
 
 class Hotel extends V3BookingComponent
 {    
-    protected $listeners = ['currencyUpdated' => 'updateCurrency', 'advance'];
+    public $listeners = ['currencyUpdated' => 'updateCurrency', 'advance'];
     protected $messages = [
         'rooms.*.room.required' => "This field is required",
         'rooms.*.travellers.required' => "This field is required",

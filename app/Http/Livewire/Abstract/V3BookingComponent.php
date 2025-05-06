@@ -31,6 +31,7 @@ abstract class V3BookingComponent extends Component
     public array $rooms = [];
     public BookingTraveller|null $lead = null;
     public bool $showCustomerForm = false;
+    public $listeners = ['currencyUpdated' => 'updateCurrency'];
 
     public function mount(Tour|int|null $tour = null, Booking|int|null $booking = null, Quote|int|null $quote = null)
     {
@@ -44,7 +45,7 @@ abstract class V3BookingComponent extends Component
         } else {
             $this->selectedHotel  = $this->booking->booking_accommodation_id;
         }
-        $this->selectedCurrency = $this->booking->booking_currency ?? setting('system.currency');
+        $this->selectedCurrency = $this->booking->currency?->code ?? setting('system.currency');
     }
 
     abstract public function back();
@@ -97,9 +98,10 @@ abstract class V3BookingComponent extends Component
         return $this->getTravellerCount();
     }
 
-    public function updateCurrency(string $currency)
+    public function updateCurrency(string $currency): void
     {
         $this->selectedCurrency = $currency;
+        $this->booking->currency_id = Currency::where('code', $currency)->first()?->id ?? Settings::currency()?->id;
         $this->booking->repository->updateCurrency($currency);
     }
 
