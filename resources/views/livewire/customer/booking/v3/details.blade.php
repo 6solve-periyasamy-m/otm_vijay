@@ -154,7 +154,7 @@
                         </div>
                         <div class="single">
                             <p>Number of packages - {{ $this->getTravellerCount() }}</p>
-                            <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
+                            <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
                         </div>
                     </div>
                     <div class="added-nights" style="display:none;">
