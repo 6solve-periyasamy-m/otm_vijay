@@ -53,11 +53,9 @@ class Hotel extends V3BookingComponent
             $travellerExcess -= RoomType::find($room['room'])?->maximum_occupancy;
         }
         if ($travellerExcess > 0) {
-            //dd('Not all travellers have rooms');
-            return $this->addError('common', 'Not all travellers have rooms');
+            return $this->addError('common', 'Not all travellers have rooms. Please review number of travellers or the number of rooms selected');
         }
         if ($travellerExcess < 0) {
-            //dd('More travellers have been added to rooms than are travelling');
             return $this->addError('common', 'More travellers have been added to rooms than are travelling');
         }
 
