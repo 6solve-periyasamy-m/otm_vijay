@@ -236,10 +236,10 @@
                                 <div class="payable-now">
                                     <div class="single">
                                         <p>Payable now  ({{ $booking->tour?->deposit_percentage }}%)</p>
-                                        <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency), $selectedCurrency)  }}</p>
+                                        <p>{{ $this->formatCurrency($booking->repository->getDueTodayAmount())  }}</p>
                                     </div>
                                     <p>
-                                        Balance {{ f_currency(($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency) - $booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency)), $selectedCurrency ) }}
+                                        Balance {{ $this->formatCurrency($booking->repository->getTotalCost() - $booking->repository->getDueTodayAmount()) }}
                                         payable by {{ $tour->final_payment->format('d M Y') }}</p>
                                 </div>
 
@@ -254,20 +254,16 @@
                                             </button>
                                         </div>
                                     @endif
-                                    @if (session()->has('error'))
-                                        <div class="alert alert-danger" aria-live="polite">
-                                            {{ session('error') }}
-                                        </div>
-                                    @endif
                                 </div>
                             </div>
                         </div>
                         <button type="button" class="next-button">
-                      <span>
-                        <span>NEXT</span>
-                        <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
-                      </span>
+                          <span>
+                            <span>NEXT</span>
+                            <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
+                          </span>
                         </button>
+                        {{ $sidebar }}
                         <div style="padding-top: 1rem;">
                             <div id="stripe-hidden" style="visibility: hidden">
                                 <div id="stripe-container"></div>
