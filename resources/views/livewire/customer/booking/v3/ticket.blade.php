@@ -1,7 +1,7 @@
 @php 
 use App\Models\Helper\Enum\ActivityCategory;
 @endphp
-<x-customer.booking.v3.layout :tour="$tour" :booking="$booking" :stage="3">
+<x-customer.booking.v3.layout :tour="$tour" :booking="$booking" :stage="3" payFull="{{ $payFull }}">
     <x-slot:left>
         <div class="tickets">
             <h2 class="sub-heading-2-p">Tickets</h2>

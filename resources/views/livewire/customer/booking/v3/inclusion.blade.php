@@ -1,7 +1,7 @@
 @php 
 use App\Models\Helper\Enum\ActivityCategory;
 @endphp
-<x-customer.booking.v3.layout :tour="$tour" :booking="$booking" :stage="4">
+<x-customer.booking.v3.layout :tour="$tour" :booking="$booking" :stage="4" payFull="{{ $payFull }}">
     <x-slot:left>
         <div class="additional-inclusions-module">
             <h2 class="sub-heading-2-p">ADDITIONAL INCLUSIONS</h2>

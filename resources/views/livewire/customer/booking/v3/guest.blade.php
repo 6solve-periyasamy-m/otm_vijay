@@ -2,14 +2,14 @@
     $location = collect([$tour->city, $tour->country?->name])->filter()->implode(', ');
 @endphp
 
-<x-customer.booking.v3.layout :tour="$tour" :booking="$booking" :stage="1">
+<x-customer.booking.v3.layout :tour="$tour" :booking="$booking" :stage="1" payFull="{{ $payFull }}">
     <x-slot:left>
         <div class="top-form-contain">
             <div class="email-quote"> <!-- customer_profile -->
                 <p>
                     <label for="firstname">First Name *</label>
                     <input type="text" id="firstname" wire:model.lazy="lead.first_name">
-                    @error('lead.first_name') <span class="text-danger">{{ $message }}</span> @enderror
+                    @error('lead.first_name') <span class="text-danger">{{ $message }}</span>@enderror
                     <span class="mdle_nme">Include middle names if applicable.</span>
                 </p>
                 <p>

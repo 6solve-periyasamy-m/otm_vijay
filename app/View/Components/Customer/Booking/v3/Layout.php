@@ -20,6 +20,7 @@ class Layout extends Component
         public Tour $tour,
         public Booking $booking,
         public int $stage,
+        public bool $payFull,
     )
     { $this->brand = $this->tour->brand;}
 

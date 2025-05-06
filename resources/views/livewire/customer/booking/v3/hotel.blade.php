@@ -1,5 +1,5 @@
 @php $noOfNights = $this->tour->repository->getTourNights(); @endphp
-<x-customer.booking.v3.layout :tour="$tour" :booking="$booking" :stage="2">
+<x-customer.booking.v3.layout :tour="$tour" :booking="$booking" :stage="2" payFull="{{ $payFull }}">
     <x-slot:left>
         <div class="accommodation-detail ">
             <h2 class="sub-heading-2-p">ACCOMMODATION DETAILS</h2>

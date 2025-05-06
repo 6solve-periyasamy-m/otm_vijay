@@ -1,4 +1,4 @@
-<x-customer.booking.v3.layout :tour="$tour" :booking="$booking" :stage="5">
+<x-customer.booking.v3.layout :tour="$tour" :booking="$booking" :stage="5" payFull="{{ $payFull }}">
     <x-slot:left>
         <div class="details-book">
             <h2 class="sub-heading-2-p">Details</h2>
@@ -9,34 +9,40 @@
                 <div class="single-details-module">
                     <div>
                         <label for="first-name">First name*</label>
-                        <input type="text" id="first-name" value="" placeholder="Enter your first name" required>
+                        <input type="text" wire:model="lead.first_name" id="first-name" value="" placeholder="Enter your first name" required>
+                        @error('lead.first_name') <span class="text-danger">{{ $message }}</span>@enderror
                         <small>Include middle names if applicable.</small>
                     </div>
                     <div>
                         <label for="last-name">Last name*</label>
-                        <input type="text" id="last-name" value="" placeholder="Enter your last name" required>
+                        <input type="text" wire:model="lead.last_name" id="last-name" value="" placeholder="Enter your last name" required>
+                        @error('lead.last_name') <span class="text-danger">{{ $message }}</span>@enderror
                     </div>
                     <div>
                         <label for="email">Email*</label>
-                        <input type="email" id="email" value="" placeholder="Enter your email address" required>
+                        <input type="email" id="email" wire:model="lead.email_address" value="" placeholder="Enter your email address" required>
+                        @error('lead.email_address') <span class="text-danger">{{ $message }}</span>@enderror
                     </div>
                     <div>
                         <label for="phone">Phone number*</label>
                         <input type="tel" id="phone" value="" placeholder="Enter your phone number" required>
+                        @error('phone') <span class="text-danger">{{ $message }}</span>@enderror
                     </div>
                     <div>
-                        <label for="country">Country*</label>
-                        <select id="country" required>
-                            <option>Select</option>
-                            <option>Australia</option>
-                            <option>Australia</option>
+                        <label for="country">Country</label>
+                        <select id="country" wire:model="leadAddress.country_id">
+                            @foreach(\App\Models\Location\Country::orderBy('priority','asc')->orderBy('name', 'asc')->get() as $country)
+                                <option value="{{ $country->id }}">{{ $country->name }}</option>
+                            @endforeach
                         </select>
+                        @error('leadAddress.country_id') <span class="text-danger">{{ $message }}</span>@enderror
                     </div>
                     <div class="dob-input">
                         <label for="dob">Date of birth</label>
-                        <input type="text" id="custom-input-dob-1" class="calendar hasDatepicker" data-picker
+                        <input type="text" wire:model="lead.date_of_birth" id="custom-input-dob-1" class="calendar hasDatepicker" data-picker
                                name="upload-release" placeholder="Enter your date of birth">
                         <img src="{{ asset('icons/checkin.svg') }}" alt="calendar">
+                        @error('lead.date_of_birth')<span class="text-danger">{{ $message }}</span>@enderror
                     </div>
                     <div class="full-width">
                         <label>Is purchaser the same person as lead traveller</label>

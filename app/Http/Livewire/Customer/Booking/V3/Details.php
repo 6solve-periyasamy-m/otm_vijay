@@ -7,9 +7,6 @@ use App\Models\Booking\BookingTraveller;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Location\Address;
-use App\Models\Location\Country;
-use App\Models\Customer\Organization;
-use App\Models\Customer\Customer;
 use Carbon\Carbon;
 
 class Details extends V3BookingComponent
@@ -31,8 +28,8 @@ class Details extends V3BookingComponent
         parent::mount($tour, $booking, $quote);
         $this->lead = $this->booking->leadTraveller;
         $this->leadAddress = $this->lead->billingAddress ?? new Address();
-        $this->countries = Country::orderBy('priority', 'desc')->orderBy('name')->get(['id', 'name'])->toArray();
         $this->leadIsTravelling = $this->lead->role !== BookingTravellerRole::NOT_TRAVELLING;
+        $this->payer = $this->booking->leadTraveller;
     }
 
     public function back()
@@ -85,7 +82,7 @@ class Details extends V3BookingComponent
 
     public function checkout()
     {
-        if (!$this->terms) { return $this->addError('common', 'You must accept terms and conditions.'); }
+        //if (!$this->terms) { return $this->addError('common', 'You must accept terms and conditions.'); }
         $this->preCheckout();
         $amount = $this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount();
         try {
@@ -116,7 +113,7 @@ class Details extends V3BookingComponent
             $address = Address::create([
                 'name' => $this->payer->first_name . ' ' . $this->payer->last_name . ' Home Address',
                 'parent' => AddressParent::CUSTOMER,
-                'postcode' => $this->payerAddress->postcode,
+                'postcode' => $this->leadAddress->postcode,
             ]);
             $this->payer->homeAddress()->associate($address);
             $this->payer->save();
@@ -125,14 +122,14 @@ class Details extends V3BookingComponent
             $address = Address::create([
                 'name' => $this->payer->first_name . ' ' . $this->payer->last_name . ' Billing Address',
                 'parent' => AddressParent::CUSTOMER,
-                'postcode' => $this->payerAddress->postcode,
+                'postcode' => $this->leadAddress->postcode,
             ]);
             $this->payer->billingAddress()->associate($address);
             $this->payer->save();
         }
-        $this->payer->homeAddress->postcode = $this->payerAddress->postcode;
+        $this->payer->homeAddress->postcode = $this->leadAddress->postcode;
         $this->payer->homeAddress->save();
-        $this->payer->billingAddress->postcode = $this->payerAddress->postcode;
+        $this->payer->billingAddress->postcode = $this->leadAddress->postcode;
         $this->payer->billingAddress->save();
     }
 
@@ -143,25 +140,7 @@ class Details extends V3BookingComponent
         $this->lead->save();
         $this->booking->lead_traveller_id = $this->lead->id;
         $this->booking->save();
-        //dd($this->lead, $this->leadAddress);
-        // if ($this->lead->homeAddress === null) {
-        //     $address = Address::create([
-        //         'name' => $this->lead->first_name . ' ' . $this->lead->last_name . ' Home Address',
-        //         'parent' => AddressParent::CUSTOMER,
-        //         'postcode' => $this->leadAddress->postcode,
-        //     ]);
-        //     $this->lead->homeAddress()->associate($address);
-        //     $this->lead->save();
-        // }
-        // if ($this->lead->homeAddress === null) {
-        //     $address = Address::create([
-        //         'name' => $this->lead->first_name . ' ' . $this->lead->last_name . ' Billing Address',
-        //         'parent' => AddressParent::CUSTOMER,
-        //         'postcode' => $this->leadAddress->postcode,
-        //     ]);
-        //     $this->lead->billingAddress()->associate($address);
-        //     $this->lead->save();
-        // }
+
         $this->lead->homeAddress->country_id = $this->leadAddress->country_id;
         $this->lead->homeAddress->save();
         $this->lead->billingAddress->country_id = $this->leadAddress->country_id;
@@ -170,12 +149,6 @@ class Details extends V3BookingComponent
     public function rules()
     {
         return [
-            // 'traveller.email_address' => 'required|email',
-            // 'traveller.first_name' => 'required|string|max:255',
-            // 'traveller.last_name' => 'required|string|max:255',
-            // 'traveller.mobile_number' => 'required|string|regex:/^[0-9+\-\s()]*$/|max:20',
-            // 'travellerAddress.country_id' => 'required|exists:countries,id',
-            // 'traveller.date_of_birth' => 'nullable|date:d-m-Y',
             'lead.email_address' => 'required|email',
             'lead.first_name' => 'required|string|max:255',
             'lead.last_name' => 'required|string|max:255',
@@ -183,5 +156,15 @@ class Details extends V3BookingComponent
             'leadAddress.country_id' => 'required|exists:countries,id',
             'lead.date_of_birth' => 'nullable|date:d-m-Y',
         ];
+    }
+
+    private function popupAirwallex(string $id, string $secret): void
+    {
+        $this->dispatchBrowserEvent('popupCheckout', ['key' => $id, 'secret' => $secret]);
+    }
+
+    private function popupStripe(bool $full = false): void
+    {
+        $this->dispatchBrowserEvent('popupStripeCheckout', ['full' => $full,]);
     }
 }

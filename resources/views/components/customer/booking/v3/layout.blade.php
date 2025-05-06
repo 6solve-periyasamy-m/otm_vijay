@@ -202,8 +202,8 @@
                             <div class="payment-method ">
                                 <h6 class="sub-heading-6">PAYMENT METHOD</h6>
                                 <div class="option-wrapper">
-                                    <label class="radio-option">
-                                        <input type="radio" name="payment" checked>
+                                    <label class="radio-option" wire:click="payFull()">
+                                        <input type="radio" name="payment" @if($payFull) checked @endif>
                                         <span class="custom-radio"></span>
                                         <span class="option-title">Pay in full</span>
                                     </label>
@@ -211,8 +211,8 @@
                                 </div>
                                 <div class="option-wrapper">
                                     <div>
-                                        <label class="radio-option">
-                                            <input type="radio" name="payment">
+                                        <label class="radio-option" wire:click="payDueToday()">
+                                            <input type="radio" name="payment" @if(!$payFull) checked @endif>
                                             <span class="custom-radio"></span>
                                             <span class="option-title">Pay a 50% deposit now, and the rest later</span>
                                         </label>
@@ -235,12 +235,15 @@
                                 </div>
                                 <div class="payable-now">
                                     <div class="single">
-                                        <p>Payable now  ({{ $booking->tour?->deposit_percentage }}%)</p>
-                                        <p>{{ $this->formatCurrency($booking->repository->getDueTodayAmount())  }}</p>
+                                        <p>Payable now @if(!$payFull)({{ $booking->tour?->deposit_percentage }}%)@endif</p>
+                                        <p>{{ $this->formatCurrency($payFull ? $booking->repository->getTotalCost() : $booking->repository->getDueTodayAmount())  }}</p>
                                     </div>
+                                    @if(!$payFull)
                                     <p>
                                         Balance {{ $this->formatCurrency($booking->repository->getTotalCost() - $booking->repository->getDueTodayAmount()) }}
-                                        payable by {{ $tour->final_payment->format('d M Y') }}</p>
+                                        payable by {{ $tour->final_payment->format('d M Y') }}
+                                    </p>
+                                    @endif
                                 </div>
 
                                 <div class="email-quote">

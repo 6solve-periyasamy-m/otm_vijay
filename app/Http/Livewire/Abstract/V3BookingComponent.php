@@ -29,6 +29,7 @@ abstract class V3BookingComponent extends Component
     public int|null $selectedHotel;
     public string $selectedCurrency;
     public array $rooms = [];
+    public bool $payFull = false;
     public BookingTraveller|null $lead = null;
     public bool $showCustomerForm = false;
     public $listeners = ['currencyUpdated' => 'updateCurrency'];
@@ -39,6 +40,7 @@ abstract class V3BookingComponent extends Component
         $this->booking = Booking::getForMount($booking);
         $this->quote = Quote::getForMount($booking->quote_id);
         $this->brand = $this->tour->brand ?? Brand::getSystemBrand();
+        $this->payFull = $this->booking->pay_full ?? false;
         if ($this->booking->booking_accommodation_id  === null) {
             $hotels = $this->tour->repository->getHotels();
             if (count($hotels) > 0) { $this->selectedHotel = $hotels[array_key_first($hotels)]['hotel']->id; }
@@ -177,6 +179,20 @@ abstract class V3BookingComponent extends Component
     public function hasActivity(ActivityInventoryTour $tourComponent): bool
     {
         return $this->booking->leadTraveller->activities()->where('activity_inventory_tour_id', '=', $tourComponent->id)->count() > 0;
+    }
+
+    public function payFull()
+    {
+        $this->booking->pay_full = true;
+        $this->booking->save();
+        $this->payFull = true;
+    }
+
+    public function payDueToday()
+    {
+        $this->booking->pay_full = false;
+        $this->booking->save();
+        $this->payFull = false;
     }
 
     public function adjustActivityUpgrade(int $upgradeId): void

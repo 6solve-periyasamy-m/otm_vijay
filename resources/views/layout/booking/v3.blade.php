@@ -10,6 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+    <script src="https://js.stripe.com/basil/stripe.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
@@ -26,6 +27,60 @@
     <script src="{{ asset('/js/booking/v3.js') }}"></script>
     <script>
         document.emojiSource = "{{ asset('external/summernote/emoji/img') }}";
+    </script>
+
+    <script type="text/javascript">
+        const stripe = Stripe('{{ config('app.gateways.stripe.publishable') }}');
+        window.addEventListener('popupCheckout', (event) => {
+            Airwallex.init({
+                env: '{{ config('app.gateways.airwallex.live', false) ? 'prod' : 'demo' }}',
+                origin: window.location.origin,
+            });
+            const element = Airwallex.createElement('dropIn', {
+                intent_id: event.detail.key,
+                client_secret: event.detail.secret,
+                currency: '{{ setting('system.currency', 'GBP') }}',
+            });
+            let mount = element.mount('airwallex-container');
+            mount.addEventListener('onSuccess', (event) => {
+                window.location = event.detail.intent.return_url;
+            });
+        });
+        const fetchClientSecretFull = () => {
+            return fetch('{{ route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => true]) }}')
+                .then((response) => response.json())
+                .then((json) => json.checkoutSessionClientSecret)
+        }
+        const fetchClientSecretToday = () => {
+            return fetch('{{ route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => false]) }}', {method: 'GET'})
+                .then((response) => response.json())
+                .then((json) => json.checkoutSessionClientSecret)
+        }
+        window.addEventListener('popupStripeCheckout', (event) => {
+            if (event.detail.checkout !== null) {
+                let fn = (event.detail.full ?? false) ? fetchClientSecretFull : fetchClientSecretToday;
+                stripe.initCheckout({fetchClientSecret: fn}).then((checkout) => {
+                    let paymentElement = checkout.createPaymentElement();
+                    paymentElement.mount('#stripe-container');
+
+                    document.getElementById('stripe-hidden').style.visibility = 'inherit';
+
+                    // Setup Buttons
+                    const button = document.getElementById('pay-button');
+                    const errors = document.getElementById('confirm-errors');
+                    button.addEventListener('click', () => {
+                        // Clear any validation errors
+                        errors.textContent = '';
+
+                        checkout.confirm().then((result) => {
+                            if (result.type === 'error') {
+                                errors.textContent = result.error.message;
+                            }
+                        });
+                    });
+                });
+            }
+        });
     </script>
     @livewireStyles
 

@@ -35,9 +35,8 @@ class StripeGateway extends Gateway implements SupportsRedirect
 
     private function getCheckout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string $ui = 'hosted'): Session
     {
-        $currency =
-            (($intention->getRelatedModel() instanceof Order) ? $intention->getRelatedModel()?->currency?->code : null) ?? config('app.currency');
-        $currency = strtoupper($currency);
+        $currency = (($intention->getRelatedModel() instanceof Order) ? $intention->getRelatedModel()?->currency?->code : null);
+        $currency = strtolower(empty($currency) ? \Settings::currency()?->code : $currency);
         $lineItems = [];
         foreach ($items as $item) { $lineItems[] = $item->toStripe($currency); }
 

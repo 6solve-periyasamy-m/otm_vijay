@@ -33,6 +33,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelations;
  * @property int|null $booking_accommodation_id
  * @property int|null $currency_id
  * @property int|null $order_id
+ * @property bool $pay_full
  * @property string|null $token
  * @property string|null $notes
  * @property Carbon|null $created_at
@@ -77,6 +78,7 @@ class Booking extends Model
 
     protected $guarded = [];
     private BookingRepository $internal_repository;
+    protected $casts = ['pay_full' => 'boolean'];
 
     public function tour(): BelongsTo
     {
