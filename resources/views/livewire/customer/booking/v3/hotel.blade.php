@@ -224,11 +224,18 @@
                             <h6>{{ $hotel->name }}</h6>
                             <p>{{ $hotel->accommodationtype?->name }}</p>
                             <div class="room-type">
+                                @if ($defaultGroup->rooms[0]->tour_component_type === 'Upgrade')
+                                    <p class="tour_sales_price"> {{ $this->formatCurrency($defaultGroup->getUpgradeCost()) }}</p>
+                                @endif
                                 <p>Room type</p>
+                                @php
+                                    $isUpgrade = $group->rooms[0]->tour_component_type === 'Upgrade';
+                                    $upgradeCost = $isUpgrade ? '(' . $this->formatCurrency($group->getUpgradeCost()) . ')' : '';
+                                @endphp
                                 <select class="room-selector" data-hotel-id="{{ $hotel->id }}">
                                     @foreach($hotelGroups as $group)
                                         <option value="{{ $group->occupancy->id }}" data-sales_price="{{ $group->getUpgradeCost() }}" {{ $id == key($rooms) ? 'selected' : '' }}>
-                                            {{ $group->occupancy->name }} ({{ $this->formatCurrency($group->getUpgradeCost()) }})
+                                            {{ $group->occupancy->name }} {{ $upgradeCost }}
                                         </option>
                                     @endforeach
                                 </select>
