@@ -6,7 +6,7 @@
                 <x:customer.booking.v3.tour-info :tour="$tour" :booking="$booking" :selectedCurrency="$selectedCurrency" />
                 <div class="accommodation-detail ">
                     <h2 class="sub-heading-2-p">ACCOMMODATION DETAILS</h2>
-                    <p>Review and customise your accommodation details. Selecting a different hotel or room type may
+                    <p>Review and customise your accommodation details.Selecting a different hotel or room type may
                         impact the total cost.</p>
                     <h6 class="sub-heading-6">DEFAULT HOTEL INCLUDED IN THIS PACKAGE</h6>
                     @php $default = $this->getDefaultHotel()->component; @endphp
@@ -98,9 +98,7 @@
                     <div class="room-listing-module">
                         @php
                             $bookingRooms = $this->tour->repository->getBookingRooms($selectedHotel);
-                            //dd($bookingRooms);
                             $firstRoom = reset($bookingRooms);
-                            //dd($firstRoom['room_desc']);
                         @endphp
                         @for($x = 0, $xMax = count($rooms); $x < $xMax; $x++)
                             <div class="single-room" id="room-{{ $x }}">
@@ -125,7 +123,17 @@
                                 <p>Bed configuration</p>
                                 <div class="form-field" id="bed-config-{{ $x }}">
                                     @foreach($this->tour->repository->getBookingRooms($selectedHotel) as $id => $item)
-                                        <label class="bed-configuration-h">
+                                        @php 
+                                            $selectedRoomId = $rooms[$x]['room'] ?? null;
+                                            $isSelected = $selectedRoomId == $id;
+                                            $cls = $isSelected ? 'selected-bed' : '';
+                                            $img = match($item['occupancy']) {
+                                                1 => $isSelected ? 'icons/bed_1_selected.svg' : 'icons/bed_1.svg',
+                                                2 => $isSelected ? 'icons/twin-bed-hover.svg' : 'icons/bed_2.svg',
+                                                default => $isSelected ? 'icons/Triple-Bed-hover.svg' : 'icons/bed_3.svg',
+                                            };
+                                        @endphp
+                                        <label class="bed-configuration-h {{$cls}}">
                                             <input
                                                 type="radio"
                                                 wire:model="rooms.{{$x}}.room"
@@ -134,10 +142,12 @@
                                                 value="{{ $id }}"
                                                 data-room-index="{{ $x }}"
                                                 data-bed-occupancy="{{ $item['occupancy'] }}"
-                                                data-bed-desc="{!! htmlspecialchars($item['room_desc']) !!}"
+                                                data-desc-id="desc-{{ $id }}"
                                                 data-readonly="true" {{-- Custom attribute to simulate readonly --}}
-                                            >
-                                            {{ $item['name'] }}
+                                            >                                            
+                                            <p class="bed_imgs"> <img src="{{ asset($img) }}" alt="icon"></p>
+                                            <span class="midle_bar"></span>
+                                            <p class="radio_txt"> {{ $item['name'] }}</p>
                                         </label>
                                     @endforeach
                                     @error('rooms.' . $x . '.room') <label class="error-label">{{ $message }}</label> @enderror
@@ -226,7 +236,7 @@
                                             <select class="room-selector" data-hotel-id="{{ $hotel->id }}">
                                                 @foreach($hotelGroups as $group)
                                                     <option value="{{ $group->occupancy->id }}" data-sales_price="{{ $group->getUpgradeCost() }}" {{ $id == key($rooms) ? 'selected' : '' }}>
-                                                        {{ $group->occupancy->name }} ({{ fr_currency($group->getUpgradeCost() * $this->getFXRate(), $this->getCurrency()) }})
+                                                        {{ $group->category?->name }} ({{ fr_currency($group->getUpgradeCost() * $this->getFXRate(), $this->getCurrency()) }})
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -280,11 +290,11 @@
                                     </div>
                                 @endif
                                 <div class="single">
-                                    <p>Number of packages - 5</p>
-                                    <p>A$14,975</p>
+                                    <p>Number of packages - {{ $this->getTravellerCount() }}</p>
+                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
                             </div>
-                            <div class="added-nights">
+                            <div class="added-nights txt-org" style="display:none;">
                                 <h5>Added nights</h5>
                                 <div class="single">
                                     <p>
@@ -294,8 +304,8 @@
                                     <p>A$1,500</p>
                                 </div>
                             </div>
-                            <div class="room-upgrades">
-                                <h5>Room upgrades</h5>
+                            <div class="room-upgrades txt-org">
+                                <h5>Accommodation upgrade</h5>
                                 <div class="single">
                                     <p>Deluxe (Double)</p>
                                     <p>A$500</p>
@@ -309,7 +319,7 @@
                                     <p>Price included</p>
                                 </div>
                             </div>
-                            <div class="Hotel">
+                            <div class="Hotel" style="display:none;">
                                 <h5>Hotel</h5>
                                 <div class="single">
                                     <p>{{$default->name}}, {{ $default->address?->town }}</p>
@@ -329,15 +339,47 @@
                                     </div>
                                 @endif
                                 <div class="single">
-                                    <p>Starting package price</p>
-                                    <p>$14,975</p>
+                                    <p>Base Package Price</p>
+                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
-                                <div class="single">
-                                    <p>Customisation cost</p>
-                                    <p>$500</p>
+                                @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
+                                @if($upgradePrice > 0 || $upgradePrice < 0)
+                                    <div class="single">
+                                        <p>Upgardes & Add Ons</p>
+                                        <p>{{ f_currency($booking->repository->convertBookingCurrency($upgradePrice, $selectedCurrency), $selectedCurrency) }}</p>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="payment-method">
+                                <div class="payable-now">
+                                    <div class="single">
+                                        <p>Payable now ({{ $booking->tour?->deposit_percentage }}%)</p>
+                                        <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency), $selectedCurrency)  }}</p>
+                                    </div>
+                                    <p>
+                                        Balance {{ f_currency(($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency) - $booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency)), $selectedCurrency ) }}
+                                        payable by {{ $tour->final_payment->format('d M Y') }}</p>
+                                </div>
+
+                                <div class="email-quote">
+                                    <h6 class="sub-heading-6" wire:click="toggleCustomerForm">EMAIL Quote</h6>
+                                    @if ($showCustomerForm)
+                                        <div class="customer_profile">
+                                            <button wire:loading.attr="disabled" style="width:fit-content"
+                                                    wire:click="emailQuote" type="button" class="Go-next">
+                                                <span wire:loading.remove>Send Quote</span>
+                                                <span wire:loading>Sending...</span>
+                                            </button>
+                                        </div>
+                                    @endif
+                                    @if (session()->has('error'))
+                                        <div class="alert alert-danger" aria-live="polite">
+                                            {{ session('error') }}
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
-                        </div>                        
+                        </div>
                     </div>
                     <button type="button" class="next-button" id="tocheckbedconfiguration_lock" wire:click="advance">
                         <span>
@@ -375,20 +417,7 @@
                     priceBlock.textContent = `+A$ ${parseFloat(newSalesPrice).toFixed(2)}`;
                 });
             });
-
-            document.querySelectorAll('.bed-radio').forEach(function (radio) {
-                radio.addEventListener('change', function () {
-                    const roomIndex = this.dataset.roomIndex;
-                    const roomDesc = this.dataset.bedDesc;
-                    const target = document.querySelector(`.roomdesc[data-room-index="${roomIndex}"]`);
-                    if (target) {
-                        target.innerHTML = roomDesc;
-                    }
-                });
-            });
-
         });
-
 
         jQuery(document).ready(function () {
             const totalGuests = parseInt("{{ $this->getTravellerCount() }}");
@@ -433,7 +462,6 @@
                 if (assignedGuests < totalGuests) {
                     console.log('Still need to assign more guests.');
                 }
-
                 return true;
             }
 

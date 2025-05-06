@@ -43,6 +43,7 @@
             --error-message-color: #9F0A1A;
             --footer-color: #000000;
             --secondary-color: #FEEFE8;
+            --text-ligh-grey: #7A7A7A;
         }
 
         body {
@@ -529,6 +530,7 @@
             color: var(--primary-color);
             letter-spacing: 2.24px;
             margin: 0 0 16px 0px;
+            text-transform: uppercase;
         }
 
         .sub-heading-3 {
@@ -613,6 +615,7 @@
 
         .quantity .minus, .quantity .plus {
             cursor: pointer;
+            display: flex;
         }
 
         .sub-heading-4 {
@@ -745,7 +748,8 @@
             font-size: 32px;
             line-height: 44px;
             font-weight: 400;
-            color: var(--primary-color)
+            color: var(--primary-color);
+            text-transform: uppercase;
         }
 
         .base-package ul {
@@ -759,6 +763,7 @@
             font-size: 16px;
             line-height: 32px;
             color: var(--text-dark);
+            list-style-type: square;
         }
 
         .additional-inclusions > div {
@@ -1010,8 +1015,8 @@
             font-weight: 500;
         }
 
-        .email-quote input {
-            width: 100%;
+        .top-form-contain .email-quote input {
+            width: 82%;
             height: 46px;
             border: 2px solid #F35B15;
             outline: 0;
@@ -1019,8 +1024,22 @@
             line-height: 14px;
             padding-block: 0px;
             padding-inline: 0px;
+            border-radius: 50px;
+            padding: 0px 24px;
+            margin-bottom: 12px;
         }
-
+        .top-form-contain .email-quote{display: flex; gap: 24px;justify-content: space-between;}
+        .top-form-contain .email-quote p{width: 50%;margin-block-start: 0px;margin-block-end: 24px;}
+        .top-form-contain .mdle_nme{
+            font-family: "PP Neue Montreal Medium";
+            font-weight: 500;
+            font-size: 12px;
+            line-hight: 14px;
+            color: #7f7f7f;
+            display: block;
+        }
+        .top-form-contain{padding-top: 40px;}
+        .top-form-contain .email-quote .text-danger{display: block;}
         .next-button {
             margin-top: 24px;
             width: 100%;
@@ -1170,6 +1189,9 @@
             .package-container .container .column.right {
                 display: none;
             }
+            .email-quote input{width: 100%;}
+            .email-quote{flex-flow: column;}
+            .top-form-contain .email-quote p{width:60%;}
         }
 
         .sub-heading-2-p {
@@ -1184,7 +1206,7 @@
         .accommodation-detail > p {
             font-size: 20px;
             line-height: 28px;
-            color: var(--text-light-dark);
+            color: #605b5b;
             margin: 0px 0px 40px 0px;
         }
 
@@ -1206,7 +1228,7 @@
 
         .accommodation-detail .image {
             width: 125px;
-            height: 118px;
+            /* height: 118px; */
             display: flex;
         }
 
@@ -1281,6 +1303,7 @@
             line-height: 18px;
             color: var(--primary-color);
             margin: 0;
+            text-align: center;
         }
 
         .check-in-check-out .text-block p:last-child {
@@ -1301,7 +1324,7 @@
             margin: 0px 0px 24px 0px;
             font-size: 16px;
             line-height: 24px;
-            color: var(--text-light-dark);
+            color: var(--text-ligh-grey);
         }
 
         .booking-dates > p:last-child {
@@ -1336,7 +1359,7 @@
             margin: 0px 0px 16px 0px;
             font-size: 16px;
             line-height: 24px;
-            color: var(--text-light-dark);
+            color: var(--text-light-grey);
         }
 
         .room-selection .showcase {
@@ -1517,17 +1540,15 @@
             font-size: 16px;
             margin: 24px 0px;
             line-height: 24px;
-            color: var(--text-light-dark);
+            color: var(--text-light-grey);
         }
 
         .hotel-listing {
-            width: 100%;
-            display: flex;
+            width: 100%; display: flex; flex-flow: wrap; gap: 16px;
         }
 
         .hotel-listing .single-hotel {
-            width: 32%;
-            margin-right: 2%;
+            width: 31%;
             border: 2px solid #E2E2E2;
             box-shadow: 0px 0px 12px 0px #0000001A;
             border-radius: 24px;
@@ -1939,7 +1960,9 @@
       border-radius: 50%;
     }
 
-    .single-block h6{
+    .single-block .ticket-heading-module h6{margin: 0 0 4px 0px;}
+
+    .single-block .ticket-heading-module  h6 p{
       font-family: "PP Neue Montreal Bold";
       font-weight: 700;
       font-size: 14px;
@@ -2758,6 +2781,54 @@
     .individual-module .out-of-stock { color:#9F0A1A;  }
     .text-danger, .out-of-stock { color:#9F0A1A; }
     .in-stock { color:#4caf50}
+
+
+    .room-selection .room-listing-module .bed-configuration-h {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: 1.5px solid #F35B15;
+    border-radius: 50px;
+    padding: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: border 0.3s;
+    width: 209px;    
+    }
+    .room-selection .room-listing-module .bed-configuration-h .radio_txt{
+        font-family: "PP Neue Montreal Medium";
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 14px;
+        color: #F35B15;
+        margin-block-start: 0px; 
+        margin-block-end: 0px;    
+        width: 54px;
+        text-align: center;    
+    }
+
+    .bed-configuration-h input[type="radio"]:checked + .custom-radio {
+        background-color: #F35B15;
+    }
+    .bed-configuration-h input[type="radio"]:checked + .custom-radio p{
+        color: #fff;
+    }
+    .bed-configuration-h .midle_bar{
+        display: inline-block;
+        width: 2px;
+        height: 16px;
+        background-color: #F35B15;
+	}
+    .selected-bed .midle_bar{  background-color: #fff;}
+    .bed-configuration-h .bed_imgs{width: 55px;display: flex; justify-content: center; align-items: center;}
+    .bed-configuration-h .bed-radio {display: none;}
+    .selected-bed {
+        background: var(--primary-color);
+        color: var(--white);
+    }
+    .room-selection .room-listing-module .selected-bed .radio_txt { color: #fff;}
+    .customer_profile {text-align: center;}
+    .additional-inclusions > div.txt-org h5 {color: var(--primary-color);}
     </style>
 </head>
 <body>

@@ -8,26 +8,29 @@
             <div class="column left">
                 <x:customer.booking.v3.tour-info :tour="$tour" :booking="$booking" :selectedCurrency="$selectedCurrency" />                           
                 <div class="top-form-contain">
-                    <div class="email-quote">
-                        <label for="email">Email *</label>
-                        <input type="email" wire:model.lazy="lead.email_address" id="email" name="email">
-                        @error('lead.email_address') <span class="text-danger">{{ $message }}</span> @enderror
-                    </div>
                     <div class="email-quote"> <!-- customer_profile -->
                         <p>
                             <label for="firstname">First Name *</label>
                             <input type="text" id="firstname" wire:model.lazy="lead.first_name">
                             @error('lead.first_name') <span class="text-danger">{{ $message }}</span> @enderror
+                            <span class="mdle_nme">Include middle names if applicable.</span>
                         </p>
                         <p>
                             <label for="lastname">Last Name *</label>
                             <input type="text" id="lastname" wire:model.lazy="lead.last_name">
                             @error('lead.last_name') <span class="text-danger">{{ $message }}</span> @enderror
+                        </p>                        
+                    </div>
+                    <div class="email-quote">
+                        <p>
+                        <label for="email">Email *</label>
+                        <input type="email" wire:model.lazy="lead.email_address" id="email" name="email">
+                        @error('lead.email_address') <span class="text-danger">{{ $message }}</span> @enderror
                         </p>
                         <p>
                             <label for="mobileno">Mobile No</label>
                             <input type="text" id="mobileno" wire:model.lazy="lead.mobile_number">
-                        </p>
+                        </p>                        
                     </div>
                 </div>                
                 <div class="no-of-travellers">
@@ -79,7 +82,7 @@
                                 @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
                                 @if($upgradePrice > 0 || $upgradePrice < 0)
                                     <div class="single">
-                                        <p>Upgrades Price</p>
+                                        <p>Upgardes & Add Ons</p>
                                         <p>{{ f_currency($booking->repository->convertBookingCurrency($upgradePrice, $selectedCurrency), $selectedCurrency) }}</p>
                                     </div>
                                 @endif
@@ -107,13 +110,11 @@
                         <div class="payment-method ">
                             <div class="payable-now">
                                 <div class="single">
-                                    <p>Payable now</p>
+                                    <p>Payable now ({{ $booking->tour?->deposit_percentage }}%)</p>
                                     <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency), $selectedCurrency)  }}</p> 
                                 </div>
                                 <p>Balance {{ f_currency(($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency) - $booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency)), $selectedCurrency ) }} payable by {{ $tour->final_payment->format('d M Y') }}</p>
                             </div>
-
-
                             <div class="email-quote">
                                 <h6 class="sub-heading-6" wire:click="toggleCustomerForm">EMAIL Quote</h6>
                                 @if ($showCustomerForm)

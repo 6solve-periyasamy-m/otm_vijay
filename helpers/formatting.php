@@ -33,8 +33,13 @@ if (!function_exists('fr_currency')) {
      */
     function fr_currency(?float $amount, Currency|string|null $currency = null): string
     {
-        if (!is_string($currency)) $currency = ($currency ?? Settings::currency())?->code;
-        return (new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($amount ?? 0.0, $currency);
+        if (!is_string($currency)) {
+            $currency = ($currency ?? Settings::currency())?->code;
+        }
+        $roundedAmount = round($amount ?? 0.0); // Round to nearest whole number
+        $formatter = new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY);
+        $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, 0); // Hide decimals
+        return $formatter->formatCurrency($roundedAmount, $currency);
     }
 }
 if (!function_exists('f_date')) {

@@ -1,7 +1,7 @@
 @php 
 use App\Models\Helper\Enum\ActivityCategory;
 @endphp
-<x-customer.booking.v3.layout :tour="$tour" :booking="$booking" :stage="5">
+<x-customer.booking.v3.layout :tour="$tour" :booking="$booking" :stage="4">
     <section class="package-container">
         <div class="container">
             <div class="column left">
@@ -12,7 +12,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                     <div class="add-inclusion-block">
                         @foreach ($tour->activityInventoryTours as $tourComponent)
                             @continue($tourComponent->inventory->component->activity_category !== ActivityCategory::NORMAL || $tourComponent->tour_component_type === 'Upgrade')
-                            @php $active = !($tourComponent->tour_component_type === 'Included' || $this->hasActivity($this->$tourComponent)); @endphp
+                            @php $active = !($tourComponent->tour_component_type === 'Included' || $this->hasActivity($tourComponent)); @endphp
                             <div class="inclusion-single">
                                 @php $imagePath = public_path($tourComponent->inventory->component->image_url ?? ''); @endphp
                                 @if(!empty($tourComponent->inventory->component->image_url) && file_exists($imagePath))
@@ -23,6 +23,18 @@ use App\Models\Helper\Enum\ActivityCategory;
                                 <div class="content-block">
                                     <h6>{{ $tourComponent->inventory->component->name }}</h6>
                                     <p>{{ $tourComponent->tour_component_type === 'Included' ? 'Included in package' : '+' . fr_currency($tourComponent->tour_sales_price * $this->getFXRate(), $this->getCurrency()) }}</p>
+                                    <select style="max-width: 100%" wire:change="adjustActivityUpgrade($event.target.value)">
+                                        <option value="{{ $tourComponent->id }}"
+                                                @if($this->hasActivity($tourComponent)) selected @endif>{{ $tourComponent->inventory->component->name }}
+                                            (Included)
+                                        </option>
+                                        @foreach ($tourComponent->upgrades ?? [] as $upgrade)
+                                            <option value="{{ $upgrade->upgrade->id }}"
+                                                    @if($this->hasActivity($upgrade->upgrade)) selected @endif>{{ $upgrade->upgrade->inventory->component->name }}
+                                                (+{{ fr_currency($upgrade->upgrade->tour_sales_price, $selectedCurrency) }})
+                                            </option>
+                                        @endforeach
+                                    </select>
                                     @if (!empty($tourComponent->inventory->component?->description))
                                         <a>More information</a>
                                         <div class="additional-inclusion-popup">
@@ -41,14 +53,14 @@ use App\Models\Helper\Enum\ActivityCategory;
                                             </div>
                                         </div>
                                     @endif
-                                    <button type="button" class="include-button {{ $active ? 'active' : '' }}">
+                                    <button type="button" class="include-button {{ $active ? 'active' : '' }}" wire:click="toggleActivityAddon({{$tourComponent->id}})">
                                         @if($tourComponent->tour_component_type === 'Included')
-                                            Included in package
+                                            Included
                                         @else
                                             @if($this->hasActivity($tourComponent))
-                                                Selected
+                                                Remove
                                             @else
-                                                {{ fr_currency($tourComponent->tour_sales_price * $this->getFXRate(), $this->getCurrency()) }}
+                                                +{{ fr_currency($tourComponent->tour_sales_price * $this->getFXRate(), $this->getCurrency()) }}
                                             @endif
                                         @endif
                                     </button>
@@ -87,12 +99,19 @@ use App\Models\Helper\Enum\ActivityCategory;
                                     <p>Package price</p>
                                     <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
+                                @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
+                                @if($singleOccupancy > 0 || $singleOccupancy < 0)
+                                    <div class="single">
+                                        <p>Single occupancy surcharge</p>
+                                        <p>{{ f_currency($booking->repository->convertBookingCurrency($singleOccupancy, $selectedCurrency), $selectedCurrency) }}</p>
+                                    </div>
+                                @endif
                                 <div class="single">
-                                    <p>Number of packages - 5</p>
-                                    <p>A$14,975</p>
+                                    <p>Number of packages - {{ $this->getTravellerCount() }}</p>
+                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
                             </div>
-                            <div class="added-nights">
+                            <div class="added-nights" style="display:none;">
                                 <h5>Added nights</h5>
                                 <div class="single">
                                     <p>
@@ -103,7 +122,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                 </div>
                             </div>
                             <div class="room-upgrades">
-                                <h5>Room upgrades</h5>
+                                <h5>Accommodation upgrade</h5>
                                 <div class="single">
                                     <p>Deluxe (Double)</p>
                                     <p>A$500</p>
@@ -117,10 +136,11 @@ use App\Models\Helper\Enum\ActivityCategory;
                                     <p>Price included</p>
                                 </div>
                             </div>
-                            <div class="Hotel">
+                            @php $default = $this->getDefaultHotel()->component; @endphp
+                            <div class="Hotel" style="display:none;">
                                 <h5>Hotel</h5>
                                 <div class="single">
-                                    <p>Pan Pacific, Melbourne</p>
+                                    <p>{{$default->name}}, {{ $default->address?->town }}</p>
                                     <p>Price included</p>
                                 </div>
                             </div>
@@ -146,21 +166,30 @@ use App\Models\Helper\Enum\ActivityCategory;
                                 <div class="single">
                                     <p>Total</p>
                                     <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency), $selectedCurrency) }}</p>
+                                </div>
+                                @if($booking->repository->getTaxes() !== null)
+                                    <div class="single">
+                                        <p>{{ $tour->taxBracket()->name }} (Included)</p>
+                                        <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTaxes(), $selectedCurrency), $selectedCurrency) }}</p>
                                     </div>
+                                @endif
                                 <div class="single">
-                                    <p>Starting package price</p>
+                                    <p>Base Package Price</p>
                                     <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
-                                <div class="single">
-                                    <p>Customisation cost</p>
-                                    <p>$0</p>
-                                </div>
+                                @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
+                                @if($upgradePrice > 0 || $upgradePrice < 0)
+                                    <div class="single">
+                                        <p>Upgardes & Add Ons</p>
+                                        <p>{{ f_currency($booking->repository->convertBookingCurrency($upgradePrice, $selectedCurrency), $selectedCurrency) }}</p>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         <div class="payment-method ">
                             <div class="payable-now">
                                 <div class="single">
-                                    <p>Payable now</p>
+                                    <p>Payable now ({{ $booking->tour?->deposit_percentage }}%)</p>
                                     <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency), $selectedCurrency)  }}</p>
                                 </div>
                                 <p>Balance {{ f_currency(($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency) - $booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency)), $selectedCurrency ) }} payable by {{ $tour->final_payment->format('d M Y') }}</p>
