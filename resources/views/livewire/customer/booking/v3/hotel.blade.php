@@ -250,13 +250,6 @@
             </div>
         </div>
     </x-slot:left>
-    <x-slot:sidebar>
-        @error('common')
-        <div class="alert alert-danger" aria-live="polite">}
-            {{ $message }}
-        </div>
-        @enderror
-    </x-slot:sidebar>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const roomSelectors = document.querySelectorAll('.room-selector');

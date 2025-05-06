@@ -257,13 +257,18 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="next-button">
+                        <button type="button" class="next-button" wire:click="advance">
                           <span>
                             <span>NEXT</span>
                             <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
                           </span>
                         </button>
-                        {{ $sidebar }}
+                        @error('common')
+                        <div style="padding-top: 1rem; color: red;">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                        {{ $sidebar ?? '' }}
                         <div style="padding-top: 1rem;">
                             <div id="stripe-hidden" style="visibility: hidden">
                                 <div id="stripe-container"></div>
