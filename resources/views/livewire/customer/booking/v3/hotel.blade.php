@@ -228,12 +228,12 @@
                                     <p class="tour_sales_price"> {{ $this->formatCurrency($defaultGroup->getUpgradeCost()) }}</p>
                                 @endif
                                 <p>Room type</p>
-                                @php
-                                    $isUpgrade = $group->rooms[0]->tour_component_type === 'Upgrade';
-                                    $upgradeCost = $isUpgrade ? '(' . $this->formatCurrency($group->getUpgradeCost()) . ')' : '';
-                                @endphp
                                 <select class="room-selector" data-hotel-id="{{ $hotel->id }}">
                                     @foreach($hotelGroups as $group)
+                                        @php
+                                            $isUpgrade = $group->rooms[0]->tour_component_type === 'Upgrade';
+                                            $upgradeCost = $isUpgrade ? '(' . $this->formatCurrency($group->getUpgradeCost()) . ')' : '';
+                                        @endphp
                                         <option value="{{ $group->occupancy->id }}" data-sales_price="{{ $group->getUpgradeCost() }}" {{ $id == key($rooms) ? 'selected' : '' }}>
                                             {{ $group->occupancy->name }} {{ $upgradeCost }}
                                         </option>
