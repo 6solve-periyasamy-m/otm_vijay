@@ -1,3 +1,6 @@
+@php
+    $location = collect([$tour->city, $tour->country?->name])->filter()->implode(', ');
+@endphp
 <div>
     <header>
         <div class="container">
@@ -70,9 +73,29 @@
                 </div>
             </div>
         </section>
-        {{ $slot }}
+        <section class="package-container first">
+            <div class="container">
+                <div class="column left">
+                    <div class="tour-details">
+                        <h2 class="sub-heading-2">{{ $tour->name }}</h2>
+                        <h3 class="sub-heading-3">{{ $tour->event?->name }}</h3>
+                        <div class="location-dollar-value">
+                            @if($location)
+                                <p class="location">{{ $location }}</p>
+                                <span></span>
+                            @endif
+                            <p class="dollar">From {{ $this->formatCurrency($booking->repository->getBasePrice()) }} / person twin share</p>
+                        </div>
+                    </div>
+                    {{ $left }}
+                </div>
+                <div class="column right">
+                    {{ $sidebar }}
+                </div>
+            </div>
+        </section>
     </main>
-
+    {{ $slot }}
     @php
         $selectedCurrency = $this->booking->currency?->code ?? setting('system.currency');
     @endphp

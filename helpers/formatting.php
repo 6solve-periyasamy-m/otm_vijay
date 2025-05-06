@@ -31,15 +31,14 @@ if (!function_exists('fr_currency')) {
      * @param Currency|string|null $currency The currency to format in
      * @return string
      */
-    function fr_currency(?float $amount, Currency|string|null $currency = null): string
+    function fr_currency(?float $amount, Currency|string|null $currency = null, bool $strip = false): string
     {
-        if (!is_string($currency)) {
-            $currency = ($currency ?? Settings::currency())?->code;
+        if (!is_string($currency)) $currency = ($currency ?? Settings::currency())?->code;
+        $string = (new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($amount ?? 0.0, $currency);
+        if ($strip) {
+            $string = preg_replace('/\.00$/', '', $string);
         }
-        $roundedAmount = round($amount ?? 0.0); // Round to nearest whole number
-        $formatter = new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY);
-        $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, 0); // Hide decimals
-        return $formatter->formatCurrency($roundedAmount, $currency);
+        return $string;
     }
 }
 if (!function_exists('f_date')) {
