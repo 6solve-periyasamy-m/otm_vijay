@@ -178,7 +178,7 @@
                                 <div class="total">
                                     <div class="single">
                                         <p>Total</p>
-                                        <p>{{ $this->formatCurrency($booking->repository->getTotalCost()) }}</p>
+                                        <p>{{ $this->formatCurrency(round_to_nearest_five($booking->repository->getTotalCost())) }}</p>
                                     </div>
                                     @if($booking->repository->getTaxes() !== null)
                                         <div class="single">
