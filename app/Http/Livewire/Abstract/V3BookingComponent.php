@@ -103,6 +103,7 @@ abstract class V3BookingComponent extends Component
         $this->selectedCurrency = $currency;
         $this->booking->currency_id = Currency::where('code', $currency)->first()?->id ?? Settings::currency()?->id;
         $this->booking->repository->updateCurrency($currency);
+        $this->renew();
     }
 
     public function renew()
@@ -112,6 +113,7 @@ abstract class V3BookingComponent extends Component
         $this->tour = Tour::find($this->tour->id);
         /** @noinspection PhpSillyAssignmentInspection Seems to fix an issue with rooming caching */
         $this->rooms = $this->rooms;
+        $this->render();
     }
     
     public function toggleCustomerForm()
@@ -154,6 +156,8 @@ abstract class V3BookingComponent extends Component
             session()->flash('error', 'Cannot send quote, no valid target email found.');
         }
     }
+
+    abstract public function render();
 
     public function getCurrency(): Currency
     {
