@@ -10,6 +10,6 @@
             <p class="location">{{ $location }}</p>
             <span></span>
         @endif                    
-        <p class="dollar">From {{ preg_replace('/\.00$/', '', f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency) , $selectedCurrency)) }} / person twin share</p>
+        <p class="dollar">From {{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency) , $selectedCurrency) }} / person twin share</p>
     </div>
 </div>

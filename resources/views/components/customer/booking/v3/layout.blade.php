@@ -74,7 +74,7 @@
     </main>
 
     @php
-        $selectedCurrency = $this->booking->booking_currency ?? setting('system.currency');
+        $selectedCurrency = $this->booking->currency?->code ?? setting('system.currency');
     @endphp
     <footer>
         <div class="container">
@@ -83,12 +83,12 @@
             </div>
             <div class="value">
                 <div>
-                    <h6>{{ f_currency($booking->repository->convertBookingCurrency($tour->base_price_per_person, $selectedCurrency), $selectedCurrency) }}</h6>
+                    <h6>{{ $this->formatCurrency($tour->base_price_per_person) }}</h6>
                     <p>Per person, twin share</p>
                 </div>
                 <span></span>
                 <div>
-                    <h6>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency), $selectedCurrency) }}</h6>
+                    <h6>{{ $this->formatCurrency($booking->repository->getTotalCost()) }}</h6>
                     <p>Total package cost</p>
                 </div>
             </div>

@@ -7,8 +7,6 @@ use App\Http\Livewire\Abstract\V3BookingComponent;
 class Ticket extends V3BookingComponent
 {
 
-    protected $listeners = ['currencyUpdated' => 'updateCurrency'];
-
     public function mount($tour = null, $booking = null, $quote = null)
     {
         parent::mount($tour, $booking, $quote);

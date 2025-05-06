@@ -11,82 +11,66 @@
                         <p>Your quote will be sent to the email address provided for Guest 1</p>
                         <div class="single-details-module">
                             <div>
-                                <label for="buyer-firstname">First name*</label>
-                                <input type="text" id="buyer-firstname" wire:model.lazy="buyer.first_name"
-                                    value="{{ $organization ? $organization->name : $buyer->first_name }}">
+                                <label for="first-name">First name*</label>
+                                <input type="text" id="first-name" value="" placeholder="Enter your first name" required>
                                 <small>Include middle names if applicable.</small>
-                                @error('buyer.first_name') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label for="buyer-lastname">Last name*</label>
-                                <input type="text" id="buyer-lastname" wire:model.lazy="buyer.last_name"
-                                    value="{{ $organization ? $organization->name : $buyer->last_name }}">
-                                @error('buyer.last_name') <span class="text-danger">{{ $message }}</span> @enderror
+                                <label for="last-name">Last name*</label>
+                                <input type="text" id="last-name" value="" placeholder="Enter your last name" required>
                             </div>
                             <div>
-                                <label for="buyer-email">Email*</label>
-                                <input type="email" wire:model.lazy="buyer.email_address" id="buyer-email"
-                                    value="{{ $organization ? $organization->contact_email : $buyer->email_address }}">
-                                @error('buyer.email_address') <span class="text-danger">{{ $message }}</span> @enderror
+                                <label for="email">Email*</label>
+                                <input type="email" id="email" value="" placeholder="Enter your email address" required>
                             </div>
                             <div>
-                                <label for="buyer-mobile_number">Phone number*</label>
-                                <input type="text" id="buyer-mobile_number" wire:model.lazy="buyer.mobile_number"
-                                    value="{{ $organization ? $organization->contact_number : $buyer->mobile_number }}">
-                                @error('buyer.mobile_number') <span class="text-danger">{{ $message }}</span> @enderror
+                                <label for="phone">Phone number*</label>
+                                <input type="tel" id="phone" value="" placeholder="Enter your phone number" required>
                             </div>
                             <div>
-                                <label for="buyer-country">Country*</label>
-                                <select id="buyer-country" wire:model.lazy="buyerAddress.country_id" required>
-                                    <option value="">Select</option>
-                                    @foreach ($countries as $country)
-                                        <option value="{{ $country['id'] }}"
-                                                {{ $buyerAddress->country_id == $country['id'] ? 'selected' : '' }}>
-                                            {{ $country['name'] }}
-                                        </option>
-                                    @endforeach
+                                <label for="country">Country*</label>
+                                <select id="country" required>
+                                    <option>Select</option>
+                                    <option>Australia</option>
+                                    <option>Australia</option>
                                 </select>
-                                @error('buyerAddress.country_id') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="dob-input">
-                                <label for="buyer-dob">Date of birth</label>
-                                <input type="text" id="buyer-dob" wire:model.lazy="buyer.date_of_birth" class="calendar hasDatepicker"
-                                    placeholder="Enter your date of birth"
-                                    value="{{ $buyer->date_of_birth ? \Carbon\Carbon::parse($buyer->date_of_birth)->format('d-m-Y') : '' }}">
+                                <label for="dob">Date of birth</label>
+                                <input type="text" id="custom-input-dob-1" class="calendar hasDatepicker" data-picker
+                                       name="upload-release" placeholder="Enter your date of birth">
                                 <img src="{{ asset('icons/checkin.svg') }}" alt="calendar">
                             </div>
                             <div class="full-width">
-                                @php $checked = ($this->booking->purchaser_is_lead !== null) ? 'checked' : '' @endphp
-                                <label>Is purchaser the same person as lead traveller {{ $this->quote->organization_id }} {{ $checked }}</label>
+                                <label>Is purchaser the same person as lead traveller</label>
                                 <div class="radio-group">
                                     <label class="radio-option">
-                                        <input type="radio" name="lead" value="1" wire:model="sameAsLeadTraveller"  {{ $sameAsLeadTraveller ? 'checked' : '' }}>
+                                        <input type="radio" wire:click="leadIsTravelling()" name="lead" value="day" @if($this->leadIsTravelling) checked="" @endif>
                                         <span class="custom-radio"></span>
                                         <span class="option-title">Yes</span>
                                     </label>
                                     <label class="radio-option">
-                                        <input type="radio" name="lead" value="0" wire:model="sameAsLeadTraveller" {{ !$sameAsLeadTraveller ? 'checked' : '' }}>
+                                        <input type="radio" name="lead" wire:click="leadIsNotTravelling()" value="night" @if(!$this->leadIsTravelling) checked="" @endif>
                                         <span class="custom-radio"></span>
                                         <span class="option-title">No</span>
                                     </label>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-                    @if (!$sameAsLeadTraveller)
+                    @if(!$this->leadIsTravelling)
                     <div class="details-form-module">
                         <h6>Lead passenger details</h6>
                         <div class="single-details-module">
                             <div>
                                 <label for="lead-first-name">First name*</label>
-                                <input type="text" id="lead-first-name" wire:model.lazy="lead.first_name" placeholder="Enter guest's first name">
+                                <input type="text" id="lead-first-name" wire:model.lazy="lead.first_name">
                                 <small>Include middle names if applicable.</small>
                                 @error('lead.first_name') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div>
                                 <label for="lead-last-name">Last name*</label>
-                                <input type="text" id="lead-last-name" wire:model.lazy="lead.last_name" placeholder="Enter guest's last name">
+                                <input type="text" id="lead-last-name" wire:model.lazy="lead.last_name">
                                 @error('lead.last_name') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div>
@@ -96,7 +80,7 @@
                             </div>
                             <div>
                                 <label for="lead-mobile_number">Phone number*</label>
-                                <input type="text" id="lead-mobile_number" wire:model.lazy="lead.mobile_number" placeholder="Enter phone number">
+                                <input type="text" id="lead-mobile_number" wire:model.lazy="lead.mobile_number">
                                 @error('lead.mobile_number') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div>
@@ -107,7 +91,7 @@
                                         <option value="{{ $country['id'] }}">{{ $country['name'] }}</option>
                                     @endforeach
                                 </select>
-                                @error('leadAddress.country_id') <span class="text-danger">{{ $message }}</span> @enderror
+                                @error('lead.country_id') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="dob-input">
                                 <label for="lead-dob">Date of birth</label>
@@ -151,7 +135,7 @@
                             <div class="hide-package-detail">Hide package details</div>
                         </div>
                         <div class="image-block">
-                            <img src="{{ asset($tour->event->image_url) }}" class="package-image" alt="featured-img">
+                            <img src="{{ asset('images/sportEvent.png') }}" alt="package-details">
                         </div>
                         <div class="base-package">
                             <h6 class="sub-heading-6">BASE PACKAGE</h6>
@@ -169,14 +153,14 @@
                                 @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector'))
                                 <div class="single">
                                     <p>Package price</p>
-                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
+                                    <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
                                 </div>
                                 <div class="single">
                                     <p>Number of packages - {{ $this->getTravellerCount() }}</p>
-                                    <p>A$14,975</p>
+                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
                             </div>
-                            <div class="added-nights">
+                            <div class="added-nights" style="display:none;">
                                 <h5>Added nights</h5>
                                 <div class="single">
                                     <p>
@@ -201,14 +185,15 @@
                                     <p>Price included</p>
                                 </div>
                             </div>
-                            <div class="Hotel">
+                            @php $default = $this->getDefaultHotel()->component; @endphp
+                            <div class="Hotel" style="display:none;">
                                 <h5>Hotel</h5>
                                 <div class="single">
-                                    <p>Pan Pacific, Melbourne</p>
+                                    <p>{{$default->name}}, {{ $default->address?->town }}</p>
                                     <p>Price included</p>
                                 </div>
                             </div>
-                            <div class="ticket-upgrades">
+                            <div class="ticket-upgrades txt-org">
                                 <h5>Ticket upgrades</h5>
                                 <div class="single">
                                     <p>Ticket alterations</p>
@@ -226,19 +211,28 @@
                                     <p>A$150</p>
                                 </div>
                             </div>
-                            <div class="total">
+                            <div class="total">                                
                                 <div class="single">
                                     <p>Total</p>
-                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency), $selectedCurrency) }}</p>
+                                    <p>{{ $this->formatCurrency($booking->repository->getTotalCost()) }}</p>
+                                </div>
+                                @if($booking->repository->getTaxes() !== null)
+                                    <div class="single">
+                                        <p>{{ $tour->taxBracket()->name }} (Included)</p>
+                                        <p>{{ $this->formatCurrency($booking->repository->getTaxes()) }}</p>
                                     </div>
+                                @endif
                                 <div class="single">
-                                    <p>Starting package price</p>
+                                    <p>Base Package Price</p>
                                     <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
                                 </div>
-                                <div class="single">
-                                    <p>Customisation cost</p>
-                                    <p>$0</p>
-                                </div>
+                                @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
+                                @if($upgradePrice > 0 || $upgradePrice < 0)
+                                    <div class="single">
+                                        <p>Upgardes & Add Ons</p>
+                                        <p>{{ f_currency($booking->repository->convertBookingCurrency($upgradePrice, $selectedCurrency), $selectedCurrency) }}</p>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         <div class="payment-method ">
@@ -248,8 +242,8 @@
                                     <input type="radio" name="payment" checked>
                                     <span class="custom-radio"></span>
                                     <span class="option-title">Pay in full</span>
-                                </label>
-                                <div class="price">{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency), $selectedCurrency) }}</div>
+                                </label>    
+                                <div class="price">A$17,125</div>
                             </div>
                             <div class="option-wrapper">
                                 <div>
@@ -264,7 +258,7 @@
                                     </div>
                                 </div>
                                 <div class="price">A$8,563</div>
-                            </div>
+                            </div>                            
                             <div class="card-block">
                                 <div class="card-type active">
                                     <img src="{{ asset('icons/card.svg') }}" alt="Debit card">
@@ -277,17 +271,20 @@
                             </div>
                             <div class="payable-now">
                                 <div class="single">
-                                    <p>Payable now</p>
-                                    <p>A$3,425</p>
+                                    <p>Payable now  ({{ $booking->tour?->deposit_percentage }}%)</p>
+                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency), $selectedCurrency)  }}</p>
                                 </div>
-                                <p>Balance A$13,700 payable by 14 Feb 2025</p>
+                                <p>
+                                    Balance {{ f_currency(($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency) - $booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency)), $selectedCurrency ) }}
+                                    payable by {{ $tour->final_payment->format('d M Y') }}</p>
                             </div>
 
                             <div class="email-quote">
                                 <h6 class="sub-heading-6" wire:click="toggleCustomerForm">EMAIL Quote</h6>
                                 @if ($showCustomerForm)
                                     <div class="customer_profile">
-                                        <button wire:loading.attr="disabled" style="width:fit-content" wire:click="emailQuote" type="button" class="Go-next">
+                                        <button wire:loading.attr="disabled" style="width:fit-content"
+                                                wire:click="emailQuote" type="button" class="Go-next">
                                             <span wire:loading.remove>Send Quote</span>
                                             <span wire:loading>Sending...</span>
                                         </button>
@@ -301,14 +298,23 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="next-button" wire:click="advance">
-                        <span>
-                            <span>NEXT</span>
-                            <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
-                        </span>
+                    <button type="button" class="next-button">
+                      <span>
+                        <span>NEXT</span>
+                        <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
+                      </span>
                     </button>
+                    <div style="padding-top: 1rem;">
+                        <div id="stripe-hidden" style="visibility: hidden">
+                            <div id="stripe-container"></div>
+                            <button id="pay-button">Pay</button>
+                            <div id="confirm-errors"></div>
+                        </div>
+                        <div id="airwallex-container" class="airwallex-content"></div>
+                    </div>
                 </div>
             </div>
+        </div>
     </section>
     <script>
         jQuery(document).ready(function () {

@@ -15,7 +15,6 @@ use Illuminate\Validation\ValidationException;
 class Guest extends V3BookingComponent
 {
     private const MAX_TRAVELLERS = 5;
-    protected $listeners = ['currencyUpdated' => 'updateCurrency'];  
     protected array $messages = [
         'lead.email_address.required' => 'Email is required.',
         'lead.email_address.email' => 'Please enter a valid email address.',

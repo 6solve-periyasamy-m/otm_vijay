@@ -3,11 +3,13 @@
 namespace App\View\Components\Customer\Booking\v3;
 
 use App\Models\Booking\Booking;
+use App\Models\Location\Currency;
 use App\Models\System\Brand;
 use App\Models\Tour\Tour;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Settings;
 
 class Layout extends Component
 {
@@ -27,5 +29,20 @@ class Layout extends Component
     public function render(): View|Closure|string
     {
         return view('components.customer.booking.v3.layout');
+    }
+
+    public function getCurrency(): Currency
+    {
+        return $this->booking->currency ?? Settings::currency();
+    }
+
+    public function getFXRate()
+    {
+        return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
+    }
+
+    public function formatCurrency(float|int $value): string
+    {
+        return fr_currency($value * $this->getFXRate(), $this->getCurrency()) . " " . $this->getCurrency()->code;
     }
 }
