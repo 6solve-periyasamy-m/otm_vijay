@@ -16,6 +16,7 @@ use App\Models\Booking\BookingGroup;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Group;
 use App\Models\Flight\FlightInventoryTour;
+use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Location\Address;
@@ -809,5 +810,97 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             ],
             'travellers' => $travellers,
         ];
+    }
+
+    public function getUpgradesForPackageDetails(): array
+    {
+        return [
+            'rooms' => [
+                ...$this->getRoomUpgrades(),
+            ],
+            'tickets' => [
+                ...$this->getTicketUpgrades(),
+            ],
+            'inclusions' => [
+                ...$this->getInclusionUpgrades(),
+            ]
+        ];
+    }
+
+    private function getRoomUpgrades(): array
+    {
+        $items = [];
+        foreach ($this->booking->groups as $group) {
+            $first = true;
+            $cost = 0;
+            $description = "";
+            foreach ($group->accommodation as $room) {
+                if ($first) {
+                    $description = "{$room->tourComponent->inventory->component->name} ({$room->tourComponent->inventory->roomType->name})";
+                    $first = false;
+                }
+                $cost += $room->tourComponent->tour_component_type === 'Included' ? 0 : $room->tourComponent->tour_sales_price;
+            }
+            if ($cost > 0) {
+                $items[] = ['description' => $description, 'cost' => $cost];
+            }
+        }
+        return $items;
+    }
+
+    private function getTicketUpgrades(): array
+    {
+        $upgradeCost = 0;
+        $addonCost = 0;
+        foreach ($this->booking->travellers as $traveller) {
+            if ($traveller->role === BookingTravellerRole::NOT_TRAVELLING) { continue; }
+            foreach ($traveller->activities as $activity) {
+                if ($activity->tourComponent->inventory->component->activity_category !== ActivityCategory::MAIN) { continue; }
+                if ($activity->tourComponent->tour_component_type === 'Add-on') {
+                    $addonCost += $activity->tourComponent->tour_sales_price;
+                } elseif ($activity->tourComponent->tour_component_type === 'Upgrade') {
+                    $upgradeCost += $activity->tourComponent->tour_sales_price;
+                }
+            }
+        }
+        $items = [];
+        if ($upgradeCost > 0) {
+            $items[] = ['description' => 'Ticket Alterations', 'cost' => $upgradeCost];
+        }
+        if ($addonCost > 0) {
+            $items[] = ['description' => 'Additional Ticket/s', 'cost' => $addonCost];
+        }
+        return $items;
+    }
+
+    private function getInclusionUpgrades(): array
+    {
+        $items = [];
+        foreach ($this->booking->travellers as $traveller) {
+            if ($traveller->role === BookingTravellerRole::NOT_TRAVELLING) { continue; }
+            foreach ($traveller->activities as $activity) {
+                if ($activity->tourComponent->inventory->component->activity_category !== ActivityCategory::MAIN) { continue; }
+                if ($activity->tourComponent->tour_component_type === 'Included') { continue; }
+                $foundKey = null;
+                foreach ($items as $key => $item) {
+                    if ($item['id'] === $activity->activity_inventory_tour_id) {
+                        $foundKey = $key;
+                        break;
+                    }
+                }
+                if ($foundKey !== null) {
+                    $arr = $items[$foundKey];
+                    $arr['cost'] += $activity->tourComponent->tour_sales_price;
+                    $items[$foundKey] = $arr;
+                } else {
+                    $items[] = [
+                        'id' => $activity->activity_inventory_tour_id,
+                        'description' => $activity->tourComponent->inventory->component->name,
+                        'cost' => $activity->tourComponent->tour_sales_price,
+                    ];
+                }
+            }
+        }
+        return $items;
     }
 }
