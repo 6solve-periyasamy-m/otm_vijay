@@ -22,7 +22,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                 @endif
                                 <div class="content-block">
                                     <h6>{{ $tourComponent->inventory->component->name }}</h6>
-                                    <p>{{ $tourComponent->tour_component_type === 'Included' ? 'Included in package' : '+' . fr_currency($tourComponent->tour_sales_price * $this->getFXRate(), $this->getCurrency()) }}</p>
+                                    <p>{{ $tourComponent->tour_component_type === 'Included' ? 'Included in package' : '+' . $this->formatCurrency($tourComponent->tour_sales_price) }}</p>
                                     <select style="max-width: 100%" wire:change="adjustActivityUpgrade($event.target.value)">
                                         <option value="{{ $tourComponent->id }}"
                                                 @if($this->hasActivity($tourComponent)) selected @endif>{{ $tourComponent->inventory->component->name }}
@@ -31,7 +31,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                         @foreach ($tourComponent->upgrades ?? [] as $upgrade)
                                             <option value="{{ $upgrade->upgrade->id }}"
                                                     @if($this->hasActivity($upgrade->upgrade)) selected @endif>{{ $upgrade->upgrade->inventory->component->name }}
-                                                (+{{ fr_currency($upgrade->upgrade->tour_sales_price, $selectedCurrency) }})
+                                                (+{{ $this->formatCurrency($upgrade->upgrade->tour_sales_price) }})
                                             </option>
                                         @endforeach
                                     </select>
@@ -60,7 +60,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                             @if($this->hasActivity($tourComponent))
                                                 Remove
                                             @else
-                                                +{{ fr_currency($tourComponent->tour_sales_price * $this->getFXRate(), $this->getCurrency()) }}
+                                                +{{ $this->formatCurrency($tourComponent->tour_sales_price) }}
                                             @endif
                                         @endif
                                     </button>
@@ -97,7 +97,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                 @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector'))
                                 <div class="single">
                                     <p>Package price</p>
-                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
+                                    <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
                                 </div>
                                 <div class="single">
                                     <p>Number of packages - 5</p>
@@ -157,11 +157,11 @@ use App\Models\Helper\Enum\ActivityCategory;
                             <div class="total">
                                 <div class="single">
                                     <p>Total</p>
-                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency), $selectedCurrency) }}</p>
+                                    <p>{{ $this->formatCurrency($booking->repository->getTotalCost()) }}</p>
                                     </div>
                                 <div class="single">
                                     <p>Starting package price</p>
-                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
+                                    <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
                                 </div>
                                 <div class="single">
                                     <p>Customisation cost</p>
@@ -173,9 +173,9 @@ use App\Models\Helper\Enum\ActivityCategory;
                             <div class="payable-now">
                                 <div class="single">
                                     <p>Payable now</p>
-                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency), $selectedCurrency)  }}</p>
+                                    <p>{{ $this->formatCurrency($booking->repository->getDueTodayAmount())  }}</p>
                                 </div>
-                                <p>Balance {{ f_currency(($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency) - $booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency)), $selectedCurrency ) }} payable by {{ $tour->final_payment->format('d M Y') }}</p>
+                                <p>Balance {{ $this->formatCurrency($booking->repository->getTotalCost() - $booking->repository->getDueTodayAmount()) }} payable by {{ $tour->final_payment->format('d M Y') }}</p>
                             </div>
 
                             <div class="email-quote">

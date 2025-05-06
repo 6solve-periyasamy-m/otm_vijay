@@ -74,33 +74,33 @@
                                 @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector'))
                                 <div class="single">
                                     <p>Package price</p>
-                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency), $selectedCurrency) }}</p>
+                                    <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
                                 </div>
                                 @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
                                 @if($upgradePrice > 0 || $upgradePrice < 0)
                                     <div class="single">
                                         <p>Upgrades Price</p>
-                                        <p>{{ f_currency($booking->repository->convertBookingCurrency($upgradePrice, $selectedCurrency), $selectedCurrency) }}</p>
+                                        <p>{{ $this->formatCurrency($upgradePrice) }}</p>
                                     </div>
                                 @endif
                                 @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
                                 @if($singleOccupancy > 0 || $singleOccupancy < 0)
                                     <div class="single">
                                         <p>Single occupancy surcharge</p>
-                                        <p>{{ f_currency($booking->repository->convertBookingCurrency($singleOccupancy, $selectedCurrency), $selectedCurrency) }}</p>
+                                        <p>{{ $this->formatCurrency($singleOccupancy) }}</p>
                                     </div>
                                 @endif
                                 @if($booking->repository->getTaxes() !== null)
                                     <div class="single">
                                         <p>{{ $tour->taxBracket()->name }} (Included)</p>
-                                        <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTaxes(), $selectedCurrency), $selectedCurrency) }}</p>
+                                        <p>{{ $this->formatCurrency($booking->repository->getTaxes()) }}</p>
                                     </div>
                                 @endif
                             </div>
                             <div class="total">
                                 <div class="single">
                                     <p>Total</p>
-                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency), $selectedCurrency) }}</p>
+                                    <p>{{ $this->formatCurrency($booking->repository->getTotalCost()) }}</p>
                                 </div>
                             </div>
                         </div>
@@ -108,11 +108,10 @@
                             <div class="payable-now">
                                 <div class="single">
                                     <p>Payable now</p>
-                                    <p>{{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency), $selectedCurrency)  }}</p> 
+                                    <p>{{ $this->formatCurrency($booking->repository->getDueTodayAmount())  }}</p>
                                 </div>
-                                <p>Balance {{ f_currency(($booking->repository->convertBookingCurrency($booking->repository->getTotalCost(), $selectedCurrency) - $booking->repository->convertBookingCurrency($booking->repository->getDueTodayAmount(), $selectedCurrency)), $selectedCurrency ) }} payable by {{ $tour->final_payment->format('d M Y') }}</p>
+                                <p>Balance {{ $this->formatCurrency($booking->repository->getTotalCost()) }} payable by {{ $tour->final_payment->format('d M Y') }}</p>
                             </div>
-
 
                             <div class="email-quote">
                                 <h6 class="sub-heading-6" wire:click="toggleCustomerForm">EMAIL Quote</h6>

@@ -165,6 +165,11 @@ abstract class V3BookingComponent extends Component
         return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
     }
 
+    public function formatCurrency(float|int $value): string
+    {
+        return fr_currency($value * $this->getFXRate(), $this->getCurrency());
+    }
+
     public function hasActivity(ActivityInventoryTour $tourComponent): bool
     {
         return $this->booking->leadTraveller->activities()->where('activity_inventory_tour_id', '=', $tourComponent->id)->count() > 0;
@@ -210,5 +215,4 @@ abstract class V3BookingComponent extends Component
             }
         }
     }
-
 }
