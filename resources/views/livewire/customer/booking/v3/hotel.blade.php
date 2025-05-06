@@ -216,11 +216,6 @@
                                     <div class="hotel-block">
                                         <h6>{{ $hotel->name }}</h6>
                                         <p>{{ $hotel->accommodationtype?->name }}</p>
-                                        {{--<p class="tour_sales_price" id="tour_sales_price_{{ $hotel->id }}">
-                                            @if ($defaultRoom['component_type'] === 'Upgrade')
-                                                +A$ {{ number_format($defaultRoom['sales_price'], 2) }}
-                                            @endif
-                                        </p>--}}
                                         <div class="room-type">
                                             <p>Room type</p>
                                             <select class="room-selector" data-hotel-id="{{ $hotel->id }}">
