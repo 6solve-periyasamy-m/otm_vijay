@@ -23,6 +23,27 @@ class Hotel extends V3BookingComponent
         $this->lead = $this->booking->leadTraveller;
     }
 
+    public function checkRooms(): bool
+    {
+        $error = false;
+        foreach ($this->rooms as $key => $room) {
+            $type = RoomType::find($room['room']);
+            if ($type === null) {
+                $this->addError('rooms.' . $key, 'Invalid room type');
+                $error = true;
+            } else {
+                if ($type->maximum_occupancy < $room['travellers']) {
+                    $this->addError('rooms.' . $key, 'Too many travellers for room');
+                    $error = true;
+                } elseif ($type->maximum_occupancy > $room['travellers']) {
+                    $this->addError('rooms.' . $key, 'Too few travellers for room');
+                    $error = true;
+                }
+            }
+        }
+        return $error;
+    }
+
     public function loadRoomings(): void
     {
         $this->selectedHotel = $this->booking->booking_accommodation_id;
@@ -48,6 +69,9 @@ class Hotel extends V3BookingComponent
         $this->lead->save();
         $this->booking->lead_traveller_id = $this->lead->id;
         $this->booking->save();
+        if (!$this->checkRooms()) {
+            return $this->addError('common', 'There are issues with the room assignments, please double check them.');
+        }
         $travellerExcess = $this->getTravellerCount();
         foreach ($this->rooms as $room) {
             $travellerExcess -= RoomType::find($room['room'])?->maximum_occupancy;
