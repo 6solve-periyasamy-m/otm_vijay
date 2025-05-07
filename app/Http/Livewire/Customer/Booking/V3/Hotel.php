@@ -27,23 +27,23 @@ class Hotel extends V3BookingComponent
 
     public function checkRooms(): bool
     {
-        $error = false;
+        $valid = true;
         foreach ($this->rooms as $key => $room) {
             $type = RoomType::find($room['room']);
             if ($type === null) {
                 $this->addError('rooms.' . $key . '.travellers', 'Invalid room type');
-                $error = true;
+                $valid = false;
             } else {
                 if ($type->maximum_occupancy < $room['travellers']) {
                     $this->addError('rooms.' . $key . '.travellers', 'Too many travellers for room size');
-                    $error = true;
+                    $valid = false;
                 } elseif ($type->maximum_occupancy > $room['travellers']) {
                     $this->addError('rooms.' . $key . '.travellers', 'Too few travellers for room size');
-                    $error = true;
+                    $valid = false;
                 }
             }
         }
-        return $error;
+        return $valid;
     }
 
     public function loadRoomings(): void
