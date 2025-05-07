@@ -753,6 +753,13 @@
             max-width: 590px
         }
 
+        .package-container.first .container > .left .room-selection,
+        .package-container.first .container > .left .hotel, 
+        .package-container.first .container > .left .tickets,
+        .package-container.first .container > .left .additional-inclusions-module {
+            max-width: 100%;
+        }
+
         .breadcrumbs {
             width: 69px;
             cursor: pointer;
@@ -1441,12 +1448,13 @@
 
         .room-listing-module {
             display: flex;
+            flex-flow: wrap;
+            gap: 16px;
             width: 100%;
         }
 
         .room-listing-module .single-room {
-            width: 32%;
-            margin-right: 2%;
+            width: 31%;
         }
 
         .room-listing-module .single-room:nth-child(3n) {
@@ -1658,18 +1666,18 @@
             margin: 0 0 6px 0;
         }
 
-        .hotel-listing .single-hotel .hotel-block .room-type select {
+        .hotel-listing .single-hotel .hotel-block .room-type select, .inclusion-single select {
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
             background-image: url(/icons/Chevron-down.svg);
             background-repeat: no-repeat;
-            background-position: right 16px center;
+            background-position: right 10px center;
             background-size: 16px 16px;
             cursor: pointer;
             font-size: 12px;
             line-height: 14px;
-            padding: 4px 12px;
+            padding: 4px 22px;
             border: 1px solid var(--primary-color);
             border-radius: 999px;
             width: 100%;
@@ -1678,6 +1686,7 @@
             outline: 0;
             color: var(--primary-color);
             margin-bottom: 11px;
+            text-wrap: wrap;
         }
 
         .hotel-listing .single-hotel .hotel-block .room-type span {
@@ -2044,7 +2053,7 @@
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
-      background-image: url(/images/Chevron-down.svg);
+      background-image: url(/icons/Chevron-down.svg);
       background-repeat: no-repeat;
       background-position: right 16px center;
       background-size: 16px 16px;
@@ -2328,8 +2337,8 @@
 
     .additional-inclusion-popup .add-close-button {
       position: absolute;
-      top: 32px;
-      right: 32px;
+      top: 25px;
+      right: 25px;
       cursor: pointer;
     }
 
@@ -2510,10 +2519,8 @@
     }
 
     .single-details-module .radio-option .custom-radio {
-      background: rgba(192, 192, 200, 0.15);
-      border: 1px solid var(--radio-background-color);
-      width: 16px;
-      height: 16px;
+      width: 12px;
+      height: 12px;
     }
 
     .single-details-module .radio-option .custom-radio::after {
@@ -2882,7 +2889,7 @@
     .room-selection .room-listing-module .selected-bed .radio_txt { color: #fff;}
     .customer_profile {text-align: center;}
     .additional-inclusions > div.txt-org h5 {color: var(--primary-color);}
-    .date-align { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+    .date-align { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 16px;}
     .date-align img { height: 20px; }
     </style>
 </head>
