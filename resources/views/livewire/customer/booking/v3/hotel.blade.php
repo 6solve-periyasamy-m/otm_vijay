@@ -115,7 +115,6 @@
                                 >
                                 <label for="guest{{ $x }}_{{ $i }}"> {{ $i }} </label>
                             @endfor
-                            @error('rooms.' . $x . '.travellers') <label class="error-label">{{ $message }}</label> @enderror
                         </div>
                         <p>Bed configuration</p>
                         <div class="form-field" id="bed-config-{{ $x }}">
@@ -147,9 +146,10 @@
                                     <p class="radio_txt"> {{ $item['name'] }}</p>
                                 </label>
                             @endforeach
-                            @error('rooms.' . $x . '.room') <label class="error-label">{{ $message }}</label> @enderror
                         </div>
                         <button type="button" class="include-button">INCLUDED</button>
+                        @error('rooms.' . $x . '.room') <label class="error-label">{{ $message }}</label> @enderror
+                        @error('rooms.' . $x . '.travellers') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
                 @endfor
             </div>
