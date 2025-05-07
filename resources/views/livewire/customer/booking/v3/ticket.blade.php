@@ -126,7 +126,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                 @endif
                                 <button type="button" class="include-button {{ $disabled }}"
                                         wire:click="toggleActivityAddon({{ $tourComponent->id }})">
-                                    {{ $this->hasActivity($tourComponent) ? 'Owned' : '+' . $this->formatCurrency($tourComponent->tour_sales_price) }}
+                                    {{ $this->hasActivity($tourComponent) ? 'Added' : 'Add'}}
                                 </button>
                             </div>
                         </div>
