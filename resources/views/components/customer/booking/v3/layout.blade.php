@@ -255,7 +255,7 @@
 
                                 <div class="email-quote">
                                     <h6 class="sub-heading-6" wire:click="toggleCustomerForm">EMAIL Quote</h6>
-                                    @if ($showCustomerForm ?? false)
+                                    @if ($this->showCustomerForm ?? false)
                                         <div class="customer_profile">
                                             <button wire:loading.attr="disabled" style="width:fit-content"
                                                     wire:click="emailQuote" type="button" class="Go-next">
