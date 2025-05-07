@@ -53,6 +53,7 @@ class Hotel extends V3BookingComponent
             if ($group->accommodation()->count() === 0) { continue; }
             $this->rooms[] = ['room' => $group->accommodation()->first()->tourComponent->inventory->room_type_id, 'travellers' => $group?->travellers->count(),];
         }
+        $this->renew();
     }
 
     public function render()
@@ -102,12 +103,14 @@ class Hotel extends V3BookingComponent
         if (count($this->rooms) >= $this->getMaximumRooms()) { return; }
         $room = $this->tour->repository->getDefaultRoom($this->selectedHotel);
         $this->rooms[] = ['room' => $room, 'travellers' => RoomType::find($room)?->maximum_occupancy,];
+        $this->renew();
     }
 
     public function removeRoom(): void
     {
         if ((count($this->rooms) - 1) < $this->getMinimumRooms()) { return; }
         unset($this->rooms[count($this->rooms) - 1]);
+        $this->renew();
     }
 
 

@@ -78,11 +78,13 @@ abstract class V3BookingComponent extends Component
         }
 
         $runSetup && $this->setupRooming();
+        $this->renew();
     }
 
     public function setupRooming(): void
     {
         $this->booking->repository->setupSimpleRooming($this->selectedHotel, $this->rooms);
+        $this->renew();
     }
 
     public function getTravellerCount(): int
@@ -124,6 +126,7 @@ abstract class V3BookingComponent extends Component
         if (!$this->showCustomerForm) {
             $this->resetErrorBag();
         }
+        $this->renew();
     }
 
     public function emailQuote()
@@ -217,6 +220,7 @@ abstract class V3BookingComponent extends Component
                 $upgrade->repository->grantToBookingTraveller($traveller);
             }
         }
+        $this->renew();
     }
 
     public function toggleActivityAddon(int $id): void
@@ -234,5 +238,6 @@ abstract class V3BookingComponent extends Component
                 }
             }
         }
+        $this->renew();
     }
 }
