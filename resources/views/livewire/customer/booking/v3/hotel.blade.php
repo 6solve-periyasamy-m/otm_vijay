@@ -210,7 +210,7 @@
                 @endforeach--}}
                 @foreach($this->tour->repository->getHotelGroups() as $hotel => $hotelGroups)
                     @php $defaultGroup = $hotelGroups[array_key_first($hotelGroups)]; $hotel = $defaultGroup->hotel; @endphp
-                    <div class="single-hotel" wire:click="setHotel({{$hotel->id}})">
+                    <div class="single-hotel">
                         <div wire:ignore>
                             @if(!empty($hotel->gallery) && count($hotel->gallery))
                                 <div class="hotel-image-block">
@@ -242,7 +242,7 @@
                                 <p class="breakfast-note">{{ $defaultGroup->board->name }} </p>
                                 <p>{!! $hotel->description !!}</p>
                                 @php $selected = $booking->booking_accommodation_id === $hotel->id; @endphp
-                                <button type="button" class="include-button {{ $selected ? '' : 'active' }}">{{ $selected ? 'Selected' : $defaultGroup->rooms[0]->tour_component_type }}</button>
+                                <button type="button" wire:click="setHotel({{$hotel->id}})" class="include-button {{ $selected ? '' : 'active' }}">{{ $selected ? 'Selected' : $defaultGroup->rooms[0]->tour_component_type }}</button>
                             </div>
                         </div>
                     </div>
