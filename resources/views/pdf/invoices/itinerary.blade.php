@@ -187,6 +187,7 @@
         .component-body table { page-break-inside: avoid; }
         .component-break { page-break-inside: avoid; }
         .word-wrap { word-wrap: break-word; word-break: break-word; white-space: normal; }
+        .text-full-wrap table td {word-wrap: break-word; word-break: break-word; white-space: normal;}
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
@@ -211,7 +212,7 @@
                         </tr>
                         @if($all_customers->isNotEmpty())
                         <tr>
-                            <td colspan=2 style="padding-left: 10px;padding-bottom: 12px;"><h4>Guest Names</h4></td>
+                            <td colspan=2 style="padding-bottom: 12px;"><h4>Guest Names</h4></td>
                         </tr>                        
                         <tr>
                             <td colspan=2 >
