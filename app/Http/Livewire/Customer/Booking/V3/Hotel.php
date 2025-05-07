@@ -38,8 +38,9 @@ class Hotel extends V3BookingComponent
                     $this->addError('rooms.' . $key . '.travellers', 'Too many travellers for room size');
                     $valid = false;
                 } elseif ($type->maximum_occupancy > $room['travellers']) {
-                    $this->addError('rooms.' . $key . '.travellers', 'Too few travellers for room size');
-                    $valid = false;
+                    // Disabled for now. Too few travellers is fine.
+                    // $this->addError('rooms.' . $key . '.travellers', 'Too few travellers for room size');
+                    // $valid = false;
                 }
             }
         }
