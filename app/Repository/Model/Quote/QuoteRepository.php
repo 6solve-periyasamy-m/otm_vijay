@@ -162,6 +162,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'invoice_footer' => $this->quote->invoice_footer,
             'organization_id' => $this->quote->organization_id,
             'agent_id' => $this->quote->agent_id,
+            'payment_details' => $this->quote->payment_details,
         ];
         $order = OrderRepository::create($tour, $data, $lead, $travellers, $email);
         if (flag('quote.convert.reference', false) &&
@@ -1257,6 +1258,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $this->quote->terms,
             $this->quote->invoice_footer,
             $this->quote->external_notes,
+            $this->quote->payment_details,
         );
     }
 

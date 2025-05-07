@@ -142,7 +142,7 @@ class OrderMailer
         $invoice->organization = $order->organization ?? null;
         $invoice->agent = $order->agent ?? null;
 
-        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant->email : "";
+        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email : "";
 
         try {
             (new OrderMail('reservation-invoice-document', $sendAsConsultant ? $this->order->consultant : null))

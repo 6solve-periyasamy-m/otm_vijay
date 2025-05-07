@@ -48,11 +48,15 @@
     </x-admin.section.card>
     <x-admin.section.card>
         <div class="row">
-            <div class="col-xl-6">
+            <div class="col-xl-4">
                 <x-livewire.input.select.large-text-template name="footerTemplate" label="Copy from Template" value="{{ $footerTemplate }}" />
                 <x-livewire.ckeditor name="quote.invoice_footer" value="{{ $quote?->invoice_footer }}" label="Invoice Footer" />
             </div>
-            <div class="col-xl-6">
+            <div class="col-xl-4">
+                <x-livewire.input.select.large-text-template name="paymentTemplate" label="Copy from Template" value="{{ $paymentTemplate }}" />
+                <x-livewire.ckeditor name="quote.payment_details" value="{{ $quote?->payment_details }}" label="Payment Details" />
+            </div>
+            <div class="col-xl-4">
                 <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" value="{{ $termsTemplate }}" />
                 <x-livewire.ckeditor name="quote.terms" value="{{ $quote?->terms }}" label="Terms and Conditions" required />
             </div>
