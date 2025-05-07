@@ -2079,8 +2079,6 @@
     }
 
     .radio-option .custom-radio {
-      background: var(--radio-background-color);
-      border: 2px solid var(--radio-background-color);
       width: 20px;
       height: 20px;
     }
@@ -2884,6 +2882,8 @@
     .room-selection .room-listing-module .selected-bed .radio_txt { color: #fff;}
     .customer_profile {text-align: center;}
     .additional-inclusions > div.txt-org h5 {color: var(--primary-color);}
+    .date-align { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+    .date-align img { height: 20px; }
     </style>
 </head>
 <body>
