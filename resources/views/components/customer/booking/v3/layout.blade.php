@@ -122,6 +122,10 @@
                                         <p>Number of packages - {{ $this->getTravellerCount() }}</p>
                                         <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
                                     </div>
+                                    <div class="single">
+                                        <p>Single Occupancy - {{ $this->booking->repository->getSingleOccupancyCount() }}</p>
+                                        <p>{{ $this->formatCurrency($this->booking->repository->getSingleOccupancyAmount()) }}</p>
+                                    </div>
                                 </div>
                                 @php $upgrades = $this->booking->repository->getUpgradesForPackageDetails(); @endphp
                                 <div class="added-nights" style="display:none;">
