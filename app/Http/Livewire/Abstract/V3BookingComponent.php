@@ -42,8 +42,8 @@ abstract class V3BookingComponent extends Component
         $this->brand = $this->tour->brand ?? Brand::getSystemBrand();
         $this->payFull = $this->booking->pay_full ?? false;
         if ($this->booking->booking_accommodation_id  === null) {
-            $hotels = $this->tour->repository->getHotels();
-            if (count($hotels) > 0) { $this->selectedHotel = $hotels[array_key_first($hotels)]['hotel']->id; }
+            $groupedHotel = $this->tour->repository->getDefaultHotelGroup();
+            if ($groupedHotel !== null) { $this->selectedHotel = $groupedHotel->hotel->id; }
         } else {
             $this->selectedHotel  = $this->booking->booking_accommodation_id;
         }
