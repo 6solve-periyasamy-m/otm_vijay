@@ -6,10 +6,27 @@ use App\Http\Livewire\Abstract\V3BookingComponent;
 
 class Ticket extends V3BookingComponent
 {
+    public array $ticketUpgrades = [];
 
     public function mount($tour = null, $booking = null, $quote = null)
     {
         parent::mount($tour, $booking, $quote);
+        $this->setupTicketUpgrades();
+    }
+
+    public function setupTicketUpgrades(): void
+    {
+        foreach ($this->tour->activityInventoryTours()->where('tour_component_type', '=', 'Included')->get() as $tourComponent) {
+            $activeUpgrade = $tourComponent->repository->getActiveUpgrade($this->booking->leadTraveller)?->get() ?? $tourComponent;
+            $this->ticketUpgrades["{$tourComponent->id}"] = $activeUpgrade->id;
+        }
+    }
+
+    public function upgradeActivity($id)
+    {
+        if (array_key_exists($id, $this->ticketUpgrades)) {
+            $this->adjustActivityUpgrade($this->ticketUpgrades[$id]);
+        }
     }
 
     public function back()
