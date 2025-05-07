@@ -957,9 +957,6 @@
         .custom-radio::after {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             width: 18px;
             height: 18px;
             background-color: var(--primary-color);
@@ -2090,6 +2087,7 @@
     .radio-option .custom-radio {
       width: 20px;
       height: 20px;
+      display: flex; justify-content: center; align-items: center;
     }
 
     .radio-option .custom-radio::after {
@@ -2519,17 +2517,17 @@
     }
 
     .single-details-module .radio-option .custom-radio {
-      width: 12px;
-      height: 12px;
+      width: 16px;
+      height: 16px;
     }
 
     .single-details-module .radio-option .custom-radio::after {
-      width: 12px;
-      height: 12px;
+      width: 10px;
+      height: 10px;
     }
 
     .single-details-module .radio-option input[type="radio"]:checked+.custom-radio {
-      border: 1px solid rgba(243, 91, 21, 0.2);
+      border: 1px solid var(--primary-color);
       background: transparent;
     }
 
@@ -2891,6 +2889,7 @@
     .additional-inclusions > div.txt-org h5 {color: var(--primary-color);}
     .date-align { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 16px;}
     .date-align img { height: 20px; }
+    .breadcrumbs img {vertical-align: top;}
     </style>
 </head>
 <body>

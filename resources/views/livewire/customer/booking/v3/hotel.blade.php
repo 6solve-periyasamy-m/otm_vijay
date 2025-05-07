@@ -75,7 +75,7 @@
             <p>Then, choose your preferred bedding configuration for each room.</p>
             @php
                 $bedTypes = [
-                    ['count' => 1, 'label' => 'Double'],
+                    ['count' => 1, 'label' => 'Single/Double'],
                     ['count' => 2, 'label' => 'Twin'],
                     ['count' => 3, 'label' => 'Triple'],
                 ];
