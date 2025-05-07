@@ -22,7 +22,6 @@ if (!function_exists('round_to_five')) {
     function round_to_five(int|float|null $number): float
     {
         $number = sigfig($number ?? 0, 0);
-        echo $number . "\n";
         if ($number % 5 === 0) {
             return $number;
         }
