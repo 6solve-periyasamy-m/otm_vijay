@@ -14,6 +14,7 @@ class Hotel extends V3BookingComponent
         'rooms.*.travellers.required' => "This field is required",
     ];
     public BookingTraveller|null $lead = null;
+    public $roomDescriptions = [];
 
     public function mount($tour = null, $booking = null, $quote = null)
     {
@@ -21,6 +22,11 @@ class Hotel extends V3BookingComponent
         $this->loadRoomings();
         $this->validateRoomCount(false);
         $this->lead = $this->booking->leadTraveller;
+        $bookingRooms = $this->tour->repository->getBookingRooms($this->selectedHotel);
+        foreach ($this->rooms as $index => $room) {
+            $roomId = $room['room'] ?? array_key_first($bookingRooms);
+            $this->roomDescriptions[$index] = $bookingRooms[$roomId]['room_desc'] ?? '';
+        }
     }
 
     public function loadRoomings(): void
@@ -100,5 +106,15 @@ class Hotel extends V3BookingComponent
     {
         $this->selectedHotel = $id;
         $this->setupRooming();
+    }
+
+    public function updatedRooms($value, $key)
+    {
+        if (str_ends_with($key, '.room')) {
+            $index = explode('.', $key)[0];
+            $roomId = $value;
+            $bookingRooms = $this->tour->repository->getBookingRooms($this->selectedHotel);
+            $this->roomDescriptions[$index] = $bookingRooms[$roomId]['room_desc'] ?? '';
+        }
     }
 }

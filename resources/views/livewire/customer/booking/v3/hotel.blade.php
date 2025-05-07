@@ -100,7 +100,7 @@
                 @for($x = 0, $xMax = count($rooms); $x < $xMax; $x++)
                     <div class="single-room" id="room-{{ $x }}">
                         <h6>Room {{ $x + 1 }}</h6>
-                        <div class="roomdesc" data-room-index="">{!! $firstRoom['room_desc'] !!}</div>
+                        <div class="roomdesc" data-room-index="{{ $x }}">{!! $roomDescriptions[$x] ?? '' !!}</div>
                         <p>Number of guests</p>
                         <div class="guest-module">
                             @for($i = 1, $iMax = 3; $i <= $iMax; $i++)

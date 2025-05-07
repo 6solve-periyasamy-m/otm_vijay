@@ -85,7 +85,7 @@
                                 <p class="location">{{ $location }}</p>
                                 <span></span>
                             @endif
-                            <p class="dollar">From {{ $this->formatCurrency($booking->repository->getBasePrice()) }} / person twin share</p>
+                            <p class="dollar">From {{ $this->formatCurrency($tour->base_price_per_person) }} / person twin share</p>
                         </div>
                     </div>
                     {{ $left }}
@@ -103,8 +103,8 @@
                             <div class="base-package">
                                 <h6 class="sub-heading-6">BASE PACKAGE</h6>
                                 <h2>{{ $tour->name }}</h2>
+                                <p class="date-align"><img src="{{ asset('icons/checkin.svg') }}" alt="calendar"> {{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
                                 <ul>
-                                    <li>{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</li>
                                     @foreach($tour->repository->getInclusions() as $inclusion)
                                         <li>{{ $inclusion }}</li>
                                     @endforeach
@@ -180,16 +180,16 @@
                                         <p>Total</p>
                                         <p>{{ $this->formatCurrency(round_to_nearest_five($booking->repository->getTotalCost())) }}</p>
                                     </div>
+                                    <div class="single">
+                                        <p>Base Package Price</p>
+                                        <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
+                                    </div>
                                     @if($booking->repository->getTaxes() !== null)
                                         <div class="single">
                                             <p>{{ $tour->taxBracket()->name }} (Included)</p>
                                             <p>{{ $this->formatCurrency($booking->repository->getTaxes()) }}</p>
                                         </div>
                                     @endif
-                                    <div class="single">
-                                        <p>Base Package Price</p>
-                                        <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
-                                    </div>
                                     @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
                                     @if($upgradePrice > 0 || $upgradePrice < 0)
                                         <div class="single">
