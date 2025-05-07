@@ -42,7 +42,11 @@ if (!function_exists('fr_currency')) {
         $roundedAmount = round($amount ?? 0.0); // Round to nearest whole number
         $formatter = new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY);
         $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, 0); // Hide decimals
-        return $formatter->formatCurrency($roundedAmount, $currency);
+        $formatted = $formatter->formatCurrency($roundedAmount, $currency);
+        if ($currency === 'SGD') {
+            $formatted = preg_replace('/^SGD\s*/', '$', $formatted);
+        }
+        return $formatted;
     }
 }
 if (!function_exists('f_date')) {
