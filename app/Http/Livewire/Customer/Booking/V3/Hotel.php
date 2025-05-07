@@ -22,11 +22,7 @@ class Hotel extends V3BookingComponent
         $this->loadRoomings();
         $this->validateRoomCount(false);
         $this->lead = $this->booking->leadTraveller;
-        $bookingRooms = $this->tour->repository->getBookingRooms($this->selectedHotel);
-        foreach ($this->rooms as $index => $room) {
-            $roomId = $room['room'] ?? array_key_first($bookingRooms);
-            $this->roomDescriptions[$index] = $bookingRooms[$roomId]['room_desc'] ?? '';
-        }
+        $this->setRoomDescriptions($this->selectedHotel);
     }
 
     public function loadRoomings(): void
@@ -93,7 +89,6 @@ class Hotel extends V3BookingComponent
 
     public function updated($name, $value): void
     {
-        \Log::info('Hotel Form Mounted', ['Room' => $name, "Vald" => $value]);
         $this->validateOnly($name);
         $this->booking->save();
         $this->lead->save();
@@ -106,6 +101,7 @@ class Hotel extends V3BookingComponent
     {
         $this->selectedHotel = $id;
         $this->setupRooming();
+        $this->setRoomDescriptions($id);
     }
 
     public function updatedRooms($value, $key)
@@ -114,6 +110,15 @@ class Hotel extends V3BookingComponent
             $index = explode('.', $key)[0];
             $roomId = $value;
             $bookingRooms = $this->tour->repository->getBookingRooms($this->selectedHotel);
+            $this->roomDescriptions[$index] = $bookingRooms[$roomId]['room_desc'] ?? '';
+        }
+    }
+
+    private function setRoomDescriptions($hotelId)
+    {
+        $bookingRooms = $this->tour->repository->getBookingRooms($hotelId);
+        foreach ($this->rooms as $index => $room) {
+            $roomId = $room['room'] ?? array_key_first($bookingRooms);
             $this->roomDescriptions[$index] = $bookingRooms[$roomId]['room_desc'] ?? '';
         }
     }
