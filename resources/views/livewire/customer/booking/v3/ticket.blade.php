@@ -10,6 +10,9 @@ use App\Models\Helper\Enum\ActivityCategory;
                 @foreach ($tour->activityInventoryTours()->where('tour_component_type', '=', 'Included')->get() as $tourComponent)
                     @continue($tourComponent->tour_component_type === 'Add-on' || $tourComponent->tour_component_type === 'Upgrade')
                     @if ($tourComponent->inventory->component->activity_category ===  ActivityCategory::MAIN)
+                        @php
+                            $activeUpgrade = $tourComponent->repository->getActiveUpgrade($this->booking->leadTraveller)?->get() ?? $tourComponent;
+                        @endphp
                         <div class="single-block">
                             <div class="quantity-show">
                                 <span><img src="{{ asset('images/Ticket-Streamline-Core.svg') }}" alt="icon"></span>
@@ -21,6 +24,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                     <div class="content-module">
                                         <h6>{!! $tourComponent->inventory?->description !!}</h6>
                                         <p>{{ $tourComponent->inventory->component?->name}} </p>
+                                        <p>{{ $activeUpgrade->tour_component_type === 'Included' ? 'Included' : '+' . $this->formatCurrency($activeUpgrade->tour_sales_price * $this->getTravellerCount()) }}</p>
                                     </div>
                                     <!-- <div class="ic-block">
                                         <div><img src="/images/Ticket-Icon.svg" alt="ticket-icon"></div>
@@ -40,7 +44,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                             @foreach ($tourComponent->upgrades ?? [] as $upgrade)
                                                 <option value="{{ $upgrade->upgrade->id }}"
                                                         @if($this->hasActivity($upgrade->upgrade)) selected @endif>{{ $upgrade->upgrade->activityInventory->activity->seating?->name }}
-                                                    (+{{ $this->formatCurrency($upgrade->upgrade->tour_sales_price) }}
+                                                    (+{{ $this->formatCurrency($upgrade->upgrade->tour_sales_price * $this->getTravellerCount()) }}
                                                     )
                                                 </option>
                                             @endforeach
@@ -80,7 +84,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                         @continue($tourComponent->inventory->component->activity_category !== ActivityCategory::MAIN)
                         @php
                             $available = $tourComponent->inventory->repository->getAvailableStock();
-                            $disabled = $available <= $booking->travellers()->count() ? 'element-disabled' : 'active';
+                            $disabled = $available <= $this->getTravellerCount() ? 'element-disabled' : 'active';
                             $purchasePrice = round($booking->repository->convertBookingCurrency($tourComponent->inventory->purchase_price, $selectedCurrency), 2);
                         @endphp
                         <div class="single-block">
@@ -95,7 +99,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                         <h6>{!! $tourComponent->inventory->component->name !!}</h6>
                                         <p>{{ $tourComponent->inventory->component?->field1}}</p>
                                         <p>
-                                            +{{ $this->formatCurrency($tourComponent->tour_sales_price)  }}</p>
+                                            +{{ $this->formatCurrency($tourComponent->tour_sales_price * $this->getTravellerCount())  }}</p>
                                     </div>
                                 </div>
                                 <select>
