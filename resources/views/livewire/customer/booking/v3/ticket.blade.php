@@ -128,9 +128,6 @@ use App\Models\Helper\Enum\ActivityCategory;
                                         wire:click="toggleActivityAddon({{ $tourComponent->id }})">
                                     {{ $this->hasActivity($tourComponent) ? 'Owned' : '+' . $this->formatCurrency($tourComponent->tour_sales_price) }}
                                 </button>
-                                <div class="individual-module">
-                                    <p class="out-of-stock">{{ $available <= 0 ? 'Out of stock' : $tourComponent->inventory->repository->getAvailableStock() . ' Available' }}</p>
-                                </div>
                             </div>
                         </div>
                     @endforeach

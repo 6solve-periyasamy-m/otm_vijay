@@ -200,39 +200,40 @@
                                 </div>
                             </div>
                             <div class="payment-method ">
-                                <h6 class="sub-heading-6">PAYMENT METHOD</h6>
-                                <div class="option-wrapper">
-                                    <label class="radio-option" wire:click="payFull()">
-                                        <input type="radio" name="payment" @if($payFull) checked @endif>
-                                        <span class="custom-radio"></span>
-                                        <span class="option-title">Pay in full</span>
-                                    </label>
-                                    <div class="price">{{ $this->formatCurrency($this->booking->repository->getTotalCost()) }}</div>
-                                </div>
-                                <div class="option-wrapper">
-                                    <div>
-                                        <label class="radio-option" wire:click="payDueToday()">
-                                            <input type="radio" name="payment" @if(!$payFull) checked @endif>
+                                @if($stage === 5)
+                                    <h6 class="sub-heading-6">PAYMENT METHOD</h6>
+                                    <div class="option-wrapper">
+                                        <label class="radio-option" wire:click="payFull()">
+                                            <input type="radio" name="payment" @if($payFull) checked @endif>
                                             <span class="custom-radio"></span>
-                                            <span class="option-title">Pay a 50% deposit now, and the rest later</span>
+                                            <span class="option-title">Pay in full</span>
                                         </label>
-                                        <div class="option-subtext">
-                                            The remaining balance of {{ $this->formatCurrency($this->booking->repository->getTotalCost() - $this->booking->repository->getDueTodayAmount()) }} will be automatically charged to the same payment method on 24
-                                            June 2024
+                                        <div class="price">{{ $this->formatCurrency($this->booking->repository->getTotalCost()) }}</div>
+                                    </div>
+                                    <div class="option-wrapper">
+                                        <div>
+                                            <label class="radio-option" wire:click="payDueToday()">
+                                                <input type="radio" name="payment" @if(!$payFull) checked @endif>
+                                                <span class="custom-radio"></span>
+                                                <span class="option-title">Pay a {{ $booking->tour?->deposit_percentage }}% deposit now, and the rest later</span>
+                                            </label>
+                                            <div class="option-subtext">
+                                                You will receive a reminder to pay the remaining balance of {{ $this->formatCurrency($this->booking->repository->getTotalCost() - $this->booking->repository->getDueTodayAmount()) }} before {{ $tour->final_payment->format('d M Y') }}
+                                            </div>
+                                        </div>
+                                        <div class="price">{{ $this->formatCurrency($this->booking->repository->getDueTodayAmount()) }}</div>
+                                    </div>
+                                    <div class="card-block">
+                                        <div class="card-type active">
+                                            <img src="{{ asset('icons/card.svg') }}" alt="Debit card">
+                                            <p>Credit / Debit card</p>
+                                        </div>
+                                        <div class="card-type">
+                                            <img src="{{ asset('icons/document-text.svg') }}" alt="Direct Debit">
+                                            <p>Invoice - Direct Debit</p>
                                         </div>
                                     </div>
-                                    <div class="price">{{ $this->formatCurrency($this->booking->repository->getDueTodayAmount()) }}</div>
-                                </div>
-                                <div class="card-block">
-                                    <div class="card-type active">
-                                        <img src="{{ asset('icons/card.svg') }}" alt="Debit card">
-                                        <p>Credit / Debit card</p>
-                                    </div>
-                                    <div class="card-type">
-                                        <img src="{{ asset('icons/document-text.svg') }}" alt="Direct Debit">
-                                        <p>Invoice - Direct Debit</p>
-                                    </div>
-                                </div>
+                                @endif
                                 <div class="payable-now">
                                     <div class="single">
                                         <p>Payable now @if(!$payFull)({{ $booking->tour?->deposit_percentage }}%)@endif</p>

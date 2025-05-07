@@ -153,7 +153,7 @@ class Details extends V3BookingComponent
             'lead.first_name' => 'required|string|max:255',
             'lead.last_name' => 'required|string|max:255',
             'lead.mobile_number' => 'nullable|string|regex:/^[0-9+\-\s()]*$/|max:20',
-            'leadAddress.country_id' => 'required|exists:countries,id',
+            'leadAddress.country_id' => 'nullable|exists:countries,id',
             'lead.date_of_birth' => 'nullable|date:d-m-Y',
         ];
     }
