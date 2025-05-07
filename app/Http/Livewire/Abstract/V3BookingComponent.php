@@ -176,7 +176,7 @@ abstract class V3BookingComponent extends Component
 
     public function formatCurrency(float|int $value): string
     {
-        return fr_currency($value * $this->getFXRate(), $this->getCurrency(), true) . " " . $this->getCurrency()->code;
+        return fr_currency(round_to_five($value * $this->getFXRate()), $this->getCurrency(), true) . " " . $this->getCurrency()->code;
     }
 
     public function hasActivity(ActivityInventoryTour $tourComponent): bool
