@@ -6,6 +6,10 @@ use App\View\Components\Livewire\Input\Select\Accommodation\BoardType;
 use App\View\Components\Livewire\Input\Select\Accommodation\RoomCategory;
 use App\View\Components\Livewire\Input\Select\Accommodation\RoomType;
 use App\View\Components\Livewire\Input\Select\AccommodationInventory;
+use App\View\Components\Livewire\Input\Select\Activity\ActivityType;
+use App\View\Components\Livewire\Input\Select\Activity\Seating;
+use App\View\Components\Livewire\Input\Select\Activity\Session as ActivitySession;
+use App\View\Components\Livewire\Input\Select\Agent;
 use App\View\Components\Livewire\Input\Select\Brand;
 use App\View\Components\Livewire\Input\Select\Country;
 use App\View\Components\Livewire\Input\Select\Currency;
@@ -17,7 +21,6 @@ use App\View\Components\Livewire\Input\Select\LargeTextTemplate;
 use App\View\Components\Livewire\Input\Select\Order\PaymentMethod;
 use App\View\Components\Livewire\Input\Select\Organization;
 use App\View\Components\Livewire\Input\Select\Quote\QuoteSectionType;
-use App\View\Components\Livewire\Input\Select\Agent;
 use App\View\Components\Livewire\Input\Select\TaxBracket;
 use App\View\Components\Livewire\Input\Select\TourCategory;
 use App\View\Components\Livewire\Input\Select\User;
@@ -102,6 +105,21 @@ Route::prefix('large-text-template')->name('large-text-templates.')->group(funct
 Route::prefix('payment-method')->name('payment-method.')->group(function () {
     Route::post('/', [PaymentMethod::class, 'getAll'])->name('select');
     Route::post('/{id}', [PaymentMethod::class, 'getOne'])->name('selected');
+});
+
+Route::prefix('activity')->name('activity.')->group(function () {
+    Route::prefix('activity-type')->name('type.')->group(function () {
+        Route::post('/', [ActivityType::class, 'getAll'])->name('select');
+        Route::post('/{id}', [ActivityType::class, 'getOne'])->name('selected');
+    });
+    Route::prefix('session')->name('session.')->group(function () {
+        Route::post('/', [ActivitySession::class, 'getAll'])->name('select');
+        Route::post('/{id}', [ActivitySession::class, 'getOne'])->name('selected');
+    });
+    Route::prefix('seating')->name('seating.')->group(function () {
+        Route::post('/', [Seating::class, 'getAll'])->name('select');
+        Route::post('/{id}', [Seating::class, 'getOne'])->name('selected');
+    });
 });
 
 Route::prefix('events')->name('events.')->group(function () {

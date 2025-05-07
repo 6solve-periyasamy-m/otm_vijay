@@ -36,7 +36,11 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property ActivityCategory $activity_category
  * @property int|null $currency_id
  * @property int|null $event_id
+ * @property int|null $session_id
+ * @property int|null $seating_id
  * @property string|null $name
+ * @property string|null $field1
+ * @property string|null $field2
  * @property string|null $internal_notes
  * @property string|null $external_notes
  * @property Carbon|null $created_at
@@ -49,6 +53,8 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Address $address
  * @property-read ActivityRepository $repository
  * @property-read Currency|null $currency
+ * @property-read Seating|null $seating
+ * @property-read Session|null $session
  * @method static ActivityFactory factory(...$parameters)
  * @method static Builder|Activity newModelQuery()
  * @method static Builder|Activity newQuery()
@@ -84,7 +90,11 @@ class Activity extends Model
             'name' => 'required',
             'image' => 'nullable|image',
             'address_name' => 'required_unless:use_existing,on',
-            'address_id' => 'required_if:use_existing,on'
+            'address_id' => 'required_if:use_existing,on',
+            'session_id' => 'nullable|exists:sessions,id',
+            'currency_id' => 'nullable|exists:currencies,id',
+            'event_id' => 'nullable|exists:events,id',
+            'seating_id' => 'nullable|exists:seatings,id',
         ];
     }
 
@@ -96,6 +106,16 @@ class Activity extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');
+    }
+
+    public function session(): BelongsTo
+    {
+        return $this->belongsTo(Session::class, 'session_id');
+    }
+
+    public function seating(): BelongsTo
+    {
+        return $this->belongsTo(Seating::class, 'seating_id');
     }
 
     public function orders(): HasManyDeep
