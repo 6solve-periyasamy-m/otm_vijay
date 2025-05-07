@@ -159,6 +159,7 @@
                 @include('partials.fields.checkbox', ['name' => 'Show Non-Paying travellers', 'field' => 'nonpaying_travellers_enabled', 'value' => flag('non-paying.travellers.enabled', true),])
                 @if(config('app.features.kpt', false) || config('app.features.bleeding-edge'))
                     @include('partials.fields.checkbox', ['name' => 'Enable sending reservation and invoice document emails.', 'field' => 'reservation_invoice_mail_enabled', 'value' => flag('reservation.invoice.mail.enabled', false),])
+                    @include('partials.fields.checkbox', ['name' => 'Round booking values to nearest 5', 'field' => 'round_to_five', 'value' => flag('booking.round_to_five', false)])
                 @endif
             </div>
     </x-admin.section.card>

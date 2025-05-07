@@ -52,12 +52,16 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
         return $components;
     }
 
-    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderComponentRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false, float $rate = 1): ?OrderComponentRepository
     {
+        $cost = ($this->tourComponent->tour_sales_price ?? 0) * $rate;
+        if (flag('booking.round_to_five')) {
+            $cost = round_to_five($cost);
+        }
         $orderComponent = OrderMerchandise::make([
             'order_customer_id' => $orderCustomer->id,
             'merchandise_inventory_tour_id' => $this->tourComponent->id,
-            'cost' => $this->tourComponent->tour_sales_price ?? 0,
+            'cost' => $cost,
             'estimated_purchase_price' => $this->tourComponent->inventory->local_purchase_price,
         ]);
         $silent ? $orderComponent->saveQuietly() : $orderComponent->save();

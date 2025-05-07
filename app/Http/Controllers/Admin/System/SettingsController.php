@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Admin\System;
 
+use App\Exports\ConversionRatesExport;
 use App\Http\Controllers\Controller;
 use App\Models\Location\Currency;
 use App\Models\System\LargeTextTemplate;
+use App\Repository\Reporting\ReportFieldRepository;
+use Excel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Settings;
-use Excel;
-use App\Exports\ConversionRatesExport;
-use App\Repository\Reporting\ReportFieldRepository;
 
 class SettingsController extends Controller
 {
@@ -110,6 +110,7 @@ class SettingsController extends Controller
             'reservation.invoice.mail.enabled' => $request->input('reservation_invoice_mail_enabled') === 'on' ? 1 : 0,
             'system.cc.mail' => $request->input('system_cc_email'),
             'system.bcc.mail' => $request->input('system_bcc_email'),
+            'booking.round_to_five' => $request->input('round_to_five') === 'on' ? 1 : 0,
         ]);
         if ($request->has('company_logo')  && !empty($request->file('company_logo'))) {
             Settings::set('company.logo', $this->saveImage($request->file('company_logo')));

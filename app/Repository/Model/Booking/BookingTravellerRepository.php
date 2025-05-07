@@ -208,14 +208,20 @@ class BookingTravellerRepository extends ModelRepository
         } else {
             $customer = $this->traveller->customer;
         }
+        $cost = $this->traveller->booking->tour?->base_price_per_person * $this->traveller->booking->repository->getFXRate();
+        $singleOccupancy = $this->traveller->booking->tour?->single_occupancy_surcharge * $this->traveller->booking->repository->getFXRate();
+        if (flag('booking.round_to_five')) {
+            $cost = round_to_five($cost);
+            $singleOccupancy = round_to_five($singleOccupancy);
+        }
         $orderCustomer = OrderCustomer::make([
             'customer_id' => $customer->id,
-            'tour_cost' => $this->traveller->booking->tour?->base_price_per_person,
-            'single_occupancy_surcharge' => $this->traveller->booking->tour?->single_occupancy_surcharge,
+            'tour_cost' => $cost,
+            'single_occupancy_surcharge' => $singleOccupancy,
         ]);
         $order->orderCustomers()->saveQuietly($orderCustomer);
         foreach ($this->getComponents(false) as $componentRepository) {
-            $componentRepository->getTourComponent()->grantToCustomer($orderCustomer, true);
+            $componentRepository->getTourComponent()->grantToCustomer($orderCustomer, true, $this->traveller->booking->repository->getFXRate());
         }
         foreach ($this->traveller->vouchers as $voucher) {
             $orderCustomer->repository->applyVoucher($voucher);
