@@ -39,6 +39,7 @@ use Carbon\Carbon;
 use DB;
 use Gateway;
 use Log;
+use Settings;
 use Throwable;
 
 class BookingRepository extends ModelRepository implements GeneratesFellohData
@@ -323,12 +324,16 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     {
         $tour = $this->booking->tour;
         $travellers = $this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count();
+        $total = $this->getTotalCost() * $this->getFXRate();
+        if (flag('booking.round_to_five')) {
+            $total = round_to_five($total);
+        }
         if (flag('booking.deposit.full')) {
             // Since deposit on the order is per-person, if the full cost should be taken into account
             // Then get the total deposit, then divide by paying travellers
-            $deposit = ((($this->booking->tour?->deposit_percentage ?? 0.0)/100) * ($this->getTotalCost())) / $travellers;
+            $deposit = ((($this->booking->tour?->deposit_percentage ?? 0.0)/100) * ($total)) / $travellers;
         } else {
-            $deposit = (($this->booking->tour?->deposit_amount ?? 0.0));
+            $deposit = (($this->booking->tour?->deposit_amount ?? 0.0) * $this->getFXRate());
         }
         $order = Order::make([
             'tour_id' => $this->booking->tour_id,
@@ -338,6 +343,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             'ordered_on' => $orderedOn ?? now(),
             'booking_fee' => $tour->booking_fee,
             'external_notes' => $this->booking->notes,
+            'currency_id' => $this->booking->currency_id,
         ]);
         $order->saveQuietly();
         foreach ($this->booking->travellers as $traveller) {
@@ -902,5 +908,15 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             }
         }
         return $items;
+    }
+
+    public function getCurrency(): Currency
+    {
+        return $this->booking->currency ?? Settings::currency();
+    }
+
+    public function getFXRate()
+    {
+        return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
     }
 }

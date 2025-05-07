@@ -66,7 +66,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         return $this->tourComponent;
     }
 
-    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderComponentRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false, float $rate = 1): ?OrderComponentRepository
     {
         $orderComponent = $this->getOrderComponent($orderCustomer);
         if ($orderComponent !== null) return $orderComponent;
@@ -76,6 +76,11 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             $group->repository->addCustomerToGroup($orderCustomer);
         }
         $component = $group->repository->addRoomToGroup($this->tourComponent, $silent);
+        $component->cost *= $rate;
+        if (flag('booking.round_to_five')) {
+            $component->cost = round_to_five($component->cost);
+        }
+        $component->save();
         //event(new OrderCustomerAccommodationAddedEvent($orderComponent));
         return $component->repository;
     }
