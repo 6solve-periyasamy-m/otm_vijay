@@ -31,6 +31,7 @@
                     <div>
                         <label for="country">Country</label>
                         <select id="country" wire:model="leadAddress.country_id">
+                            <option value="">Select</option>
                             @foreach(\App\Models\Location\Country::orderBy('priority','asc')->orderBy('name', 'asc')->get() as $country)
                                 <option value="{{ $country->id }}">{{ $country->name }}</option>
                             @endforeach
@@ -38,8 +39,8 @@
                         @error('leadAddress.country_id') <span class="text-danger">{{ $message }}</span>@enderror
                     </div>
                     <div class="dob-input">
-                        <label for="dob">Date of birth</label>
-                        <input type="text" wire:model="lead.date_of_birth" id="custom-input-dob-1" class="calendar hasDatepicker" data-picker
+                        <label for="buyer-dob">Date of birth</label>
+                        <input type="text" wire:model="lead.date_of_birth" id="buyer-dob" class="calendar hasDatepicker" data-picker
                                name="upload-release" placeholder="Enter your date of birth">
                         <img src="{{ asset('icons/checkin.svg') }}" alt="calendar">
                         @error('lead.date_of_birth')<span class="text-danger">{{ $message }}</span>@enderror
@@ -87,10 +88,10 @@
                             @error('lead.mobile_number') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                         <div>
-                            <label for="lead-country">Country*</label>
+                            <label for="lead-country">Country</label>
                             <select id="lead-country" wire:model.lazy="leadAddress.country_id" required>
                                 <option value="">Select</option>
-                                @foreach ($countries as $country)
+                                @foreach(\App\Models\Location\Country::orderBy('priority','asc')->orderBy('name', 'asc')->get() as $country)
                                     <option value="{{ $country['id'] }}">{{ $country['name'] }}</option>
                                 @endforeach
                             </select>

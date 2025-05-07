@@ -184,17 +184,17 @@
                                         <p>Base Package Price</p>
                                         <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
                                     </div>
-                                    @if($booking->repository->getTaxes() !== null)
-                                        <div class="single">
-                                            <p>{{ $tour->taxBracket()->name }} (Included)</p>
-                                            <p>{{ $this->formatCurrency($booking->repository->getTaxes()) }}</p>
-                                        </div>
-                                    @endif
                                     @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
                                     @if($upgradePrice > 0 || $upgradePrice < 0)
                                         <div class="single">
                                             <p>Upgrades & Add Ons</p>
                                             <p>{{ $this->formatCurrency($upgradePrice) }}</p>
+                                        </div>
+                                    @endif
+                                    @if($booking->repository->getTaxes() !== null)
+                                        <div class="single">
+                                            <p>{{ $tour->taxBracket()->name }} (Included)</p>
+                                            <p>{{ $this->formatCurrency($booking->repository->getTaxes()) }}</p>
                                         </div>
                                     @endif
                                 </div>

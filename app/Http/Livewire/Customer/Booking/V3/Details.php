@@ -155,6 +155,7 @@ class Details extends V3BookingComponent
             'lead.mobile_number' => 'nullable|string|regex:/^[0-9+\-\s()]*$/|max:20',
             'leadAddress.country_id' => 'nullable|exists:countries,id',
             'lead.date_of_birth' => 'nullable|date:d-m-Y',
+            'booking.notes' => 'nullable|string|max:1000',
         ];
     }
 
