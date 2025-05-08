@@ -649,8 +649,15 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     {
         $cost = 0;
         foreach ($this->booking->travellers as $traveller) {
-            foreach ($traveller->repository->getComponents(true, ['Upgrade', 'Add-on']) as $component) {
+            foreach ($traveller->repository->getComponents(false, ['Upgrade', 'Add-on']) as $component) {
                 $cost += $component->getCost();
+            }
+        }
+        foreach ($this->booking->groups as $group) {
+            foreach ($group->accommodation as $room) {
+                if ($room->tourComponent->tour_component_type !== 'Included') {
+                    $cost += $room->tourComponent->tour_sales_price;
+                }
             }
         }
         return $cost;
