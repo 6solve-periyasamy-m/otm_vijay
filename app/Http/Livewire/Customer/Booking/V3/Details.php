@@ -94,9 +94,10 @@ class Details extends V3BookingComponent
     {
         $this->validate();
         $this->saveLeadTraveller();
-        foreach ($this->booking->travellers as $traveller) {
-            $traveller->repository->validateIncluded();
-        }
+        // Disabled due to logic error. Not required right now.
+        // foreach ($this->booking->travellers as $traveller) {
+        //    $traveller->repository->validateIncluded();
+        // }
     }
 
     public function saveLeadTraveller(): void
