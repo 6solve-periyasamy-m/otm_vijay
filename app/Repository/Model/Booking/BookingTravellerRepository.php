@@ -397,7 +397,7 @@ class BookingTravellerRepository extends ModelRepository
     public function getAdditionalCost(): float
     {
         $cost = 0;
-        foreach ($this->getComponents(true, ['Upgrade', 'Add-on']) as $componentRepository) {
+        foreach ($this->getComponents(false, ['Upgrade', 'Add-on']) as $componentRepository) {
             $cost += $componentRepository->getCost();
         }
         return $cost;

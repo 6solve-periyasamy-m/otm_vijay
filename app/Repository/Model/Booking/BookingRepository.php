@@ -146,6 +146,9 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         foreach ($this->booking->travellers as $traveller) {
             $cost += $traveller->total_cost;
         }
+        foreach ($this->booking->groups as $group) {
+            $cost += $group->repository->getTotalCost();
+        }
         /** @var VoucherCode $voucher */
         foreach ($this->booking->vouchers()->get() as $voucher) {
             foreach ($voucher->results as $result) {
