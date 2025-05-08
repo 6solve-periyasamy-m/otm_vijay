@@ -123,7 +123,8 @@ use App\Models\Helper\Enum\ActivityCategory;
                         @endif
                         <div class="content-block">
                             <h6>{{ $tourComponent->inventory->component->name }}</h6>
-                            <p>{{ $tourComponent->tour_component_type === 'Included' ? 'Included in package' : '+' . $this->formatCurrency($tourComponent->tour_sales_price) }}</p>
+                            <p>Number of guests</p>
+                            <p style="color: var(--primary-color) !important;">{{ $tourComponent->tour_component_type === 'Included' ? 'Included in package' : '+' . $this->formatCurrency($tourComponent->tour_sales_price) . ' / Guest' }}</p>
                             <div class="quantity">
                                 <span class="minus" wire:click="decreaseAddonCount('{{$tourComponent->repository->getComponentType()}}', {{$tourComponent->id}})"><img src="{{ asset('icons/Minus.svg') }}" alt="minus"></span>
                                 <span>|</span>
@@ -174,7 +175,8 @@ use App\Models\Helper\Enum\ActivityCategory;
                         @endif
                         <div class="content-block">
                             <h6>{{ $tourComponent->inventory->component->name }}</h6>
-                            <p>{{ $tourComponent->tour_component_type === 'Included' ? 'Included in package' : '+' . $this->formatCurrency($tourComponent->tour_sales_price) }}</p>
+                            <p>Number of guests</p>
+                            <p style="color: var(--primary-color) !important;">{{ $tourComponent->tour_component_type === 'Included' ? 'Included in package' : '+' . $this->formatCurrency($tourComponent->tour_sales_price) . ' / Guest' }}</p>
                             <div class="quantity">
                                 <span class="minus" wire:click="decreaseAddonCount('{{$tourComponent->repository->getComponentType()}}', {{$tourComponent->id}})"><img src="{{ asset('icons/Minus.svg') }}" alt="minus"></span>
                                 <span>|</span>
