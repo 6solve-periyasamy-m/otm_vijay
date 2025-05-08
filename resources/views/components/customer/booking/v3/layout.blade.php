@@ -131,6 +131,15 @@
                                         <p>{{ $this->formatCurrency($this->booking->repository->getSingleOccupancyAmount()) }}</p>
                                     </div>
                                     @endif
+                                    @if($this->booking->groups()->count() <= 0)
+                                        @php $singleCount = $this->booking->travellers()?->count() % 2; @endphp
+                                        @if($singleCount > 0)
+                                            <div class="single">
+                                                <p>Single Occupancy (est.) - {{ $singleCount }}</p>
+                                                <p>{{ $this->formatCurrency($this->tour->single_occupancy_surcharge * $singleCount) }}</p>
+                                            </div>
+                                        @endif
+                                    @endif
                                 </div>
                                 @php $upgrades = $this->booking->repository->getUpgradesForPackageDetails(); @endphp
                                 <div class="added-nights" style="display:none;">
