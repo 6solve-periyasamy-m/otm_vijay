@@ -767,12 +767,8 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             $name = $inventoryTour->inventory->roomType->name;
             if ($inventoryTour->tour_component_type !== 'Included') {
                 $cost = $inventoryTour->tour_sales_price;
-                if ($cost > 0) {
-                    $name .= ' (+' . f_currency($cost) . ')';
-                }
-                if ($cost < 0) {
-                    $name .= ' (-' . f_currency($cost*-1) . ')';
-                }
+                //if ($cost > 0) { $name .= ' (+' . f_currency($cost) . ')';  }
+                //if ($cost < 0) { $name .= ' (-' . f_currency($cost*-1) . ')'; }
             }
 
             $bedType = trim(Str::afterLast($name, '-'));
