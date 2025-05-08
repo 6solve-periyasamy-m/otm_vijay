@@ -43,8 +43,9 @@ class Layout extends Component
         return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
     }
 
-    public function formatCurrency(float|int $value): string
+    public function formatCurrency(float|int|null $value): string
     {
+        $value = $value ?? 0.0;
         $value *= $this->getFXRate();
         if (flag('booking.round_to_five')) {
             $value = round_to_five($value);
