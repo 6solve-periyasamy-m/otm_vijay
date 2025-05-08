@@ -110,6 +110,7 @@
                                     @endforeach
                                 </ul>
                             </div>
+                            @if($hidePrices ?? false)
                             <div class="additional-inclusions">
                                 @if($stage !== 1)
                                     <h6 class="sub-heading-6">ADDITIONAL INCLUSIONS</h6>
@@ -269,6 +270,7 @@
                                 </div>
                                 --}}
                             </div>
+                           @endif
                         </div>
                         <button type="button" class="next-button" wire:click="advance">
                           <span>

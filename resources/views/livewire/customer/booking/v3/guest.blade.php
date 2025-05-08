@@ -2,7 +2,7 @@
     $location = collect([$tour->city, $tour->country?->name])->filter()->implode(', ');
 @endphp
 
-<x-customer.booking.v3.layout :tour="$tour" :booking="$booking" :stage="1" payFull="{{ $payFull }}">
+<x-customer.booking.v3.layout :tour="$tour" :booking="$booking" :stage="1" payFull="{{ $payFull }}" :hide-price="true">
     <x-slot:left>
         <div class="top-form-contain">
             <div class="email-quote"> <!-- customer_profile -->
