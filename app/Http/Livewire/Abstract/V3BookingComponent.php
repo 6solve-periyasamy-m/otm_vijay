@@ -52,6 +52,14 @@ abstract class V3BookingComponent extends Component
         $this->selectedCurrency = $this->booking->currency?->code ?? setting('system.currency');
     }
 
+    /**
+     *  Get the number of passengers who are actually travelling
+     */
+    public function getTravellingCount(): int
+    {
+        return $this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count();
+    }
+
     abstract public function back();
     abstract public function advance();
 
@@ -215,6 +223,7 @@ abstract class V3BookingComponent extends Component
         $upgrade = ActivityInventoryTour::find($upgradeId);
         $parent = $upgrade->repository->getUpgradeParent();
         foreach ($this->booking->travellers as $traveller) {
+            if ($traveller->role === BookingTravellerRole::NOT_TRAVELLING) continue;
             $found = false;
             foreach ($traveller->activities as $activity) {
                 // already owns component
@@ -240,6 +249,7 @@ abstract class V3BookingComponent extends Component
         $upgrade = MerchandiseInventoryTour::find($upgradeId);
         $parent = $upgrade->repository->getUpgradeParent();
         foreach ($this->booking->travellers as $traveller) {
+            if ($traveller->role === BookingTravellerRole::NOT_TRAVELLING) continue;
             $found = false;
             foreach ($traveller->merchandise as $component) {
                 // already owns component
@@ -266,12 +276,32 @@ abstract class V3BookingComponent extends Component
         if ($addon !== null && $addon->tour_id === $this->tour->id && $addon->tour_component_type === 'Add-on') {
             $owned = $this->hasActivity($addon);
             // Not enough stock
-            if (!$owned && $addon->available_stock < $this->booking->travellers()->count()) { return; }
+            if (!$owned && !$addon->repository->hasEnoughStock($this->getTravellingCount())) { return; }
             foreach ($this->booking->travellers as $traveller) {
+                if ($traveller->role === BookingTravellerRole::NOT_TRAVELLING) continue;
                 if (!$owned) {
                     $addon->repository->grantToBookingTraveller($traveller);
                 } else {
                     $traveller->activities()->where('activity_inventory_tour_id', '=', $addon->id)->delete();
+                }
+            }
+        }
+        $this->renew();
+    }
+
+    public function toggleMerchandiseAddon(int $id): void
+    {
+        $addon = MerchandiseInventoryTour::find($id);
+        if ($addon !== null && $addon->tour_id === $this->tour->id && $addon->tour_component_type === 'Add-on') {
+            $owned = $this->hasMerchandise($addon);
+            // Not enough stock
+            if (!$owned && !$addon->repository->hasEnoughStock($this->getTravellingCount())) { return; }
+            foreach ($this->booking->travellers as $traveller) {
+                if ($traveller->role === BookingTravellerRole::NOT_TRAVELLING) continue;
+                if (!$owned) {
+                    $addon->repository->grantToBookingTraveller($traveller);
+                } else {
+                    $traveller->merchandise()->where('merchandise_inventory_tour_id', '=', $addon->id)->delete();
                 }
             }
         }
@@ -302,7 +332,11 @@ abstract class V3BookingComponent extends Component
     private function setAddonQuantity(InventoryTourRepository $repository, int $count): void
     {
         $repository->removeFromAllTravellers($this->booking);
+        if ($repository->isStockControlActive()) {
+            $count = min(max($repository->getAvailableStock(), 0), $count);
+        }
         foreach ($this->booking->travellers as $traveller) {
+            if ($traveller->role === BookingTravellerRole::NOT_TRAVELLING) { continue;}
             if ($count > 0) {
                 $repository->grantToBookingTraveller($traveller);
                 $count--;
