@@ -5,7 +5,7 @@
             <p>Tell us a little more about yourself. </p>
             <div class="details-form-module">
                 <h6>Purchaser</h6>
-                <p>Your quote will be sent to the email address provided for Guest 1</p>
+                {{--<p>Your quote will be sent to the email address provided for Guest 1</p>--}}
                 <div class="single-details-module">
                     <div>
                         <label for="payer-firstname">First name*</label>
