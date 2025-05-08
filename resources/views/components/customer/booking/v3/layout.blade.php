@@ -202,6 +202,21 @@
                                         <p>Base Package Price</p>
                                         <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
                                     </div>
+                                    @if($this->booking->repository->getSingleOccupancyAmount() > 0)
+                                        <div class="single">
+                                            <p>Single Occupancy - {{ $this->booking->repository->getSingleOccupancyCount() }}</p>
+                                            <p>{{ $this->formatCurrency($this->booking->repository->getSingleOccupancyAmount()) }}</p>
+                                        </div>
+                                    @endif
+                                    @if($this->booking->groups()->count() <= 0)
+                                        @php $singleCount = $this->booking->travellers()?->count() % 2; @endphp
+                                        @if($singleCount > 0)
+                                            <div class="single">
+                                                <p>Single Occupancy - {{ $singleCount }}</p>
+                                                <p>{{ $this->formatCurrency($this->tour->single_occupancy_surcharge * $singleCount) }}</p>
+                                            </div>
+                                        @endif
+                                    @endif
                                     @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
                                     @if($upgradePrice > 0 || $upgradePrice < 0)
                                         <div class="single">
