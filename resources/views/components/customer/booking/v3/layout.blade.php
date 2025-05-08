@@ -135,7 +135,7 @@
                                         @php $singleCount = $this->booking->travellers()?->count() % 2; @endphp
                                         @if($singleCount > 0)
                                             <div class="single">
-                                                <p>Single Occupancy (est.) - {{ $singleCount }}</p>
+                                                <p>Single Occupancy - {{ $singleCount }}</p>
                                                 <p>{{ $this->formatCurrency($this->tour->single_occupancy_surcharge * $singleCount) }}</p>
                                             </div>
                                         @endif
