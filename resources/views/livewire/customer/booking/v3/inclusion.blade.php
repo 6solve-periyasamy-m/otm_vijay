@@ -82,15 +82,13 @@ use App\Models\Helper\Enum\ActivityCategory;
                             <div class="content-block">
                                 <h6>{{ $tourComponent->inventory->component->name }}</h6>
                                 <p>{{ $tourComponent->tour_component_type === 'Included' ? 'Included in package' : '+' . $this->formatCurrency($tourComponent->tour_sales_price) }}</p>
-                                @if($tourComponent->inventory->ticketType?->name === 'Add-on')
-                                    <div class="quantity">
-                                        <span class="minus"><img src="{{ asset('icons/Minus.svg') }}" alt="minus"></span>
-                                        <span>|</span>
-                                        <span class="value">{{ $this->getTravellerCount() }}</span>
-                                        <span>|</span>
-                                        <span class="plus"><img src="{{ asset('icons/Plus.svg') }}" alt="plus"></span>
-                                    </div>
-                                @endif
+                                <div class="quantity">
+                                    <span class="minus"><img src="{{ asset('icons/Minus.svg') }}" alt="minus"></span>
+                                    <span>|</span>
+                                    <span class="value">{{ $this->getTravellerCount() }}</span>
+                                    <span>|</span>
+                                    <span class="plus"><img src="{{ asset('icons/Plus.svg') }}" alt="plus"></span>
+                                </div>
                                 @if (!empty($tourComponent->inventory->component?->description))
                                     <a>More information</a>
                                     <div class="additional-inclusion-popup">
