@@ -256,6 +256,7 @@
                                         </div>
                                         <div class="price">{{ $this->formatCurrency($this->booking->repository->getDueTodayAmount()) }}</div>
                                     </div>
+                                    {{--
                                     <div class="card-block">
                                         <div class="card-type active">
                                             <img src="{{ asset('icons/card.svg') }}" alt="Debit card">
@@ -266,6 +267,7 @@
                                             <p>Invoice - Direct Debit</p>
                                         </div>
                                     </div>
+                                    --}}
                                 @endif
                                 <div class="payable-now">
                                     <div class="single">
@@ -312,7 +314,7 @@
                             </div>
                             <button type="submit" class="next-button" wire:click="advance">
                                 <span>
-                                    <span>Checkout</span>
+                                    <span>CHECKOUT</span>
                                     <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
                                 </span>
                             </button>
