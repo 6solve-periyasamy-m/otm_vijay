@@ -94,9 +94,9 @@ class Details extends V3BookingComponent
     {
         $this->validate();
         $this->saveLeadTraveller();
-        // foreach ($this->booking->travellers as $traveller) {
-        //     $traveller->repository->validateIncluded();
-        // }
+        foreach ($this->booking->travellers as $traveller) {
+            $traveller->repository->validateIncluded();
+        }
     }
 
     public function saveLeadTraveller(): void
@@ -135,7 +135,7 @@ class Details extends V3BookingComponent
                 $leadTraveller->mobile_number = $this->lead->mobile_number;
                 $leadTraveller->email_address = $this->lead->email_address;
                 $leadTraveller->date_of_birth = $this->lead->date_of_birth;
-                $leadTraveller->country_id  = $this->leadAddress->country_id;
+                //$leadTraveller->country_id  = $this->leadAddress->country_id;
                 $leadTraveller->customer_id  = $customer->id;
                 $leadTraveller->save();
             }
