@@ -7,12 +7,18 @@ use App\Models\Booking\BookingTraveller;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Location\Address;
+use App\Models\Location\Country;
+use App\Models\Customer\Customer;
 use Carbon\Carbon;
 
 class Details extends V3BookingComponent
 {
     public $listeners = ['currencyUpdated' => 'updateCurrency'];
     protected array $messages = [
+        'payer.email_address.required' => 'Email is required.',
+        'payer.email_address.email' => 'Please enter a valid email address.',
+        'payer.first_name.required' => 'First name is required.',
+        'payer.last_name.required' => 'Last name is required.',
         'lead.email_address.required' => 'Email is required.',
         'lead.email_address.email' => 'Please enter a valid email address.',
         'lead.first_name.required' => 'First name is required.',
@@ -26,10 +32,21 @@ class Details extends V3BookingComponent
     public function mount($tour = null, $booking = null, $quote = null)
     {
         parent::mount($tour, $booking, $quote);
-        $this->lead = $this->booking->leadTraveller;
-        $this->leadAddress = $this->lead->billingAddress ?? new Address();
-        $this->leadIsTravelling = $this->lead->role !== BookingTravellerRole::NOT_TRAVELLING;
         $this->payer = $this->booking->leadTraveller;
+        $this->leadAddress = $this->lead->billingAddress ?? new Address();
+        $this->payerAddress = $this->buyer->homeAddress ?? new Address();
+        $this->countries = Country::orderBy('priority', 'desc')->orderBy('name')->get(['id', 'name'])->toArray(); 
+        $this->leadIsTravelling = $this->payer->role !== BookingTravellerRole::NOT_TRAVELLING;
+        if ($this->leadIsTravelling) {
+            $this->lead = new BookingTraveller();
+            $this->leadAddress = $this->lead->homeAddress ?? new Address();
+        } else {
+            $leadTraveller = BookingTraveller::where('booking_id', $this->booking->id)
+                        ->where('role', 1) // role 1 for lead traveller
+                        ->first();
+            $this->lead = $leadTraveller;
+            $this->leadAddress = $this->lead->homeAddress ?? new Address();
+        }
     }
 
     public function back()
@@ -52,11 +69,11 @@ class Details extends V3BookingComponent
     public function leadIsNotTravelling()
     {
         $this->leadIsTravelling = false;
-        if ($this->booking->leadTraveller->role === BookingTravellerRole::NOT_TRAVELLING) { return; }
-        $this->payer = $this->booking->travellers()->where('role', '=', BookingTravellerRole::NOT_TRAVELLING)->first() ??
-            $this->booking->repository->makeTraveller([
-                'role' => BookingTravellerRole::NOT_TRAVELLING,
-            ]);
+        // if ($this->booking->leadTraveller->role === BookingTravellerRole::NOT_TRAVELLING) { return; }
+        // $this->payer = $this->booking->travellers()->where('role', '=', BookingTravellerRole::NOT_TRAVELLING)->first() ??
+        //     $this->booking->repository->makeTraveller([
+        //         'role' => BookingTravellerRole::NOT_TRAVELLING,
+        //     ]);
     }
 
     public function render()
@@ -66,17 +83,68 @@ class Details extends V3BookingComponent
 
     public function updated($key, $value): void
     {
-        //dd($key, $value);
         $this->validateOnly($key);
-        $this->saveTravellerProfile();
+        if (str_starts_with($key, 'payer')) {
+            $this->saveTravellerProfile();
+        }
     }
 
     private function preCheckout(): void
     {
         $this->validate();
-        $this->saveAll();
+        $this->saveleadTraveller();
         foreach ($this->booking->travellers as $traveller) {
             $traveller->repository->validateIncluded();
+        }
+    }
+
+    public function saveleadTraveller(){
+        if (!$this->leadIsTravelling) {
+            $this->lead->first_name = trim($this->lead->first_name);
+            $this->lead->last_name = trim($this->lead->last_name);
+            $this->lead->mobile_number = trim($this->lead->mobile_number ?? '');
+            $this->lead->date_of_birth = $this->lead->date_of_birth ? Carbon::parse($this->lead->date_of_birth)->format('Y-m-d') : '';
+            $this->lead->email_address = trim($this->lead->email_address);
+            $customer = Customer::where('email_address', trim($this->lead->email_address))->first();
+            $customerData = [
+                'home_address_id' => isset($customer) ? $customer->home_address_id : $this->payer->home_address_id,
+                'billing_address_id' => isset($customer) ? $customer->billing_address_id : $this->payer->billing_address_id,
+                'email_address' => $this->lead->email_address,
+                'first_name' => $this->lead->first_name,
+                'last_name' => $this->lead->last_name,
+                'date_of_birth' => $this->lead->date_of_birth,
+                'mobile_number' => $this->lead->mobile_number
+            ];
+            if (isset($customer) && isset($customer->email_address)) {
+                $customer->update($customerData);
+                $customer->save();
+            } else {
+                $customer = Customer::make($customerData);
+                $customer->save();
+            }
+            $this->lead->customer_id = $customer->id;
+            $leadTraveller = BookingTraveller::where('booking_id', $this->booking->id)
+                        ->where('role', 1) // role 1 for lead traveller
+                        ->first();
+            if ($leadTraveller) {
+                // Update the lead traveller details
+                $leadTraveller->first_name = $this->lead->first_name;
+                $leadTraveller->last_name = $this->lead->last_name;
+                $leadTraveller->mobile_number = $this->lead->mobile_number;
+                $leadTraveller->email_address = $this->lead->email_address;
+                $leadTraveller->date_of_birth = $this->lead->date_of_birth;
+                $leadTraveller->country_id  = $this->leadAddress->country_id;
+                $leadTraveller->customer_id  = $customer->id;
+                $leadTraveller->save();
+            }
+            $this->lead->leadAddress = $this->payer->homeAddress;
+            $this->lead->leadBillingAddress = $this->payer->billingAddress;
+            $this->lead->leadAddress->country_id = $this->leadAddress->country_id;
+            $this->lead->leadBillingAddress->country_id = $this->leadAddress->country_id;
+            $this->lead->leadAddress->save();
+            $this->lead->leadBillingAddress->save();
+            $this->booking->notes = $this->booking->notes;
+            $this->booking->save();
         }
     }
 
@@ -135,28 +203,40 @@ class Details extends V3BookingComponent
 
     private function saveTravellerProfile()
     {
-
-        $this->lead->date_of_birth = Carbon::parse($this->lead->date_of_birth)->format('Y-m-d');
-        $this->lead->save();
-        $this->booking->lead_traveller_id = $this->lead->id;
+        $this->payer->date_of_birth = Carbon::parse($this->payer->date_of_birth)->format('Y-m-d');
+        $this->payer->save();
+        $this->booking->lead_traveller_id = $this->payer->id;
         $this->booking->save();
 
-        $this->lead->homeAddress->country_id = $this->leadAddress->country_id;
-        $this->lead->homeAddress->save();
-        $this->lead->billingAddress->country_id = $this->leadAddress->country_id;
-        $this->lead->billingAddress->save();
+        $this->payer->homeAddress->country_id = $this->payerAddress->country_id;
+        $this->payer->homeAddress->save();
+        $this->payer->billingAddress->country_id = $this->payerAddress->country_id;
+        $this->payer->billingAddress->save();
     }
     public function rules()
     {
-        return [
-            'lead.email_address' => 'required|email',
-            'lead.first_name' => 'required|string|max:255',
-            'lead.last_name' => 'required|string|max:255',
-            'lead.mobile_number' => 'nullable|string|regex:/^[0-9+\-\s()]*$/|max:20',
-            'leadAddress.country_id' => 'nullable|exists:countries,id',
-            'lead.date_of_birth' => 'nullable|date:d-m-Y',
-            'booking.notes' => 'nullable|string|max:1000',
+        $rules = [
+            'payer.email_address' => 'required|email',
+            'payer.first_name' => 'required|string|max:255',
+            'payer.last_name' => 'required|string|max:255',
+            'payer.mobile_number' => 'required|string|regex:/^[0-9+\-\s()]*$/|max:20',
+            'payerAddress.country_id' => 'nullable|exists:countries,id',
+            'payer.date_of_birth' => 'nullable|date:d-m-Y',
         ];
+
+        if (!$this->leadIsTravelling) {
+            $rules = array_merge($rules, [
+                'lead.email_address' => 'required|email',
+                'lead.first_name' => 'required|string|max:255',
+                'lead.last_name' => 'required|string|max:255',
+                'lead.mobile_number' => 'required|string|regex:/^[0-9+\-\s()]*$/|max:20',
+                'leadAddress.country_id' => 'nullable|exists:countries,id',
+                'lead.date_of_birth' => 'nullable|date:d-m-Y',
+                'booking.notes' => 'nullable|string|max:1000',
+            ]);
+        }
+
+        return $rules;
     }
 
     private function popupAirwallex(string $id, string $secret): void

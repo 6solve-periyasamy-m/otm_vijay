@@ -8,61 +8,119 @@ use App\Models\Helper\Enum\ActivityCategory;
             <p>Enhance your experience with optional extras. Select from a range of add-ons to customise your package to suit your needs.</p>
             <div class="add-inclusion-block">
                 @foreach ($tour->activityInventoryTours as $tourComponent)
-                    @continue($tourComponent->inventory->component->activity_category !== ActivityCategory::NORMAL || $tourComponent->tour_component_type === 'Upgrade')
-                    @php $active = !($tourComponent->tour_component_type === 'Included' || $this->hasActivity($tourComponent)); @endphp
-                    <div class="inclusion-single">
-                        @php $imagePath = public_path($tourComponent->inventory->component->image_url ?? ''); @endphp
-                        @if(!empty($tourComponent->inventory->component->image_url) && file_exists($imagePath))
-                            <div class="inclusion-image">
-                                <img src="{{ asset($tourComponent->inventory->component->image_url) }}" alt="{{ $tourComponent->inventory->component->name }}" title="{{ $tourComponent->inventory->component->name }}">
-                            </div>
-                        @endif
-                        <div class="content-block">
-                            <h6>{{ $tourComponent->inventory->component->name }}</h6>
-                            <p>{{ $tourComponent->tour_component_type === 'Included' ? 'Included in package' : '+' . $this->formatCurrency($tourComponent->tour_sales_price) }}</p>
-                            <select style="max-width: 100%" wire:change="adjustActivityUpgrade($event.target.value)">
-                                <option value="{{ $tourComponent->id }}"
-                                        @if($this->hasActivity($tourComponent)) selected @endif>{{ $tourComponent->inventory->component->name }}
-                                    (Included)
-                                </option>
-                                @foreach ($tourComponent->upgrades ?? [] as $upgrade)
-                                    <option value="{{ $upgrade->upgrade->id }}"
-                                            @if($this->hasActivity($upgrade->upgrade)) selected @endif>{{ $upgrade->upgrade->inventory->component->name }}
-                                        (+{{ $this->formatCurrency($upgrade->upgrade->tour_sales_price) }})
+                    @continue($tourComponent->inventory->component->activity_category !== ActivityCategory::NORMAL || ($tourComponent->tour_component_type === 'Upgrade'))
+                    @if ($tourComponent->inventory->ticketType?->name !== 'Add-On')
+                        @php $active = !($tourComponent->tour_component_type === 'Included' || $this->hasActivity($tourComponent)); @endphp
+                        <div class="inclusion-single">
+                            @php $imagePath = public_path($tourComponent->inventory->component->image_url ?? ''); @endphp
+                            @if(!empty($tourComponent->inventory->component->image_url) && file_exists($imagePath))
+                                <div class="inclusion-image">
+                                    <img src="{{ asset($tourComponent->inventory->component->image_url) }}" alt="{{ $tourComponent->inventory->component->name }}" title="{{ $tourComponent->inventory->component->name }}">
+                                </div>
+                            @endif
+                            <div class="content-block">
+                                <h6>{{ $tourComponent->inventory->component->name }}</h6>
+                                <p>{{ $tourComponent->tour_component_type === 'Included' ? 'Included in package' : '+' . $this->formatCurrency($tourComponent->tour_sales_price) }}</p>
+                                <select style="max-width: 100%" wire:change="adjustActivityUpgrade($event.target.value)">
+                                    <option value="{{ $tourComponent->id }}"
+                                            @if($this->hasActivity($tourComponent)) selected @endif>{{ $tourComponent->inventory->component->name }}
+                                        (Included)
                                     </option>
-                                @endforeach
-                            </select>
-                            @if (!empty($tourComponent->inventory->component?->description))
-                                <a>More information</a>
-                                <div class="additional-inclusion-popup">
-                                    <div class="additional-contain">
-                                        <div class="additional-block">
-                                            <h4>{{ $tourComponent->inventory->component->name }}</h4>
-                                            {!! $tourComponent->inventory->component?->description !!}
-                                            <div class="add-cta">
-                                                <button type="button" class="cancel">Cancel</button>
-                                                <button type="button" class="Proceed">Proceed</button>
-                                            </div>
-                                            <div class="add-close-button">
-                                                <img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details">
+                                    @foreach ($tourComponent->upgrades ?? [] as $upgrade)
+                                        <option value="{{ $upgrade->upgrade->id }}"
+                                                @if($this->hasActivity($upgrade->upgrade)) selected @endif>{{ $upgrade->upgrade->inventory->component->name }}
+                                            (+{{ $this->formatCurrency($upgrade->upgrade->tour_sales_price) }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @if (!empty($tourComponent->inventory->component?->description))
+                                    <a>More information</a>
+                                    <div class="additional-inclusion-popup">
+                                        <div class="additional-contain">
+                                            <div class="additional-block">
+                                                <h4>{{ $tourComponent->inventory->component->name }}</h4>
+                                                {!! $tourComponent->inventory->component?->description !!}
+                                                <div class="add-cta">
+                                                    <button type="button" class="cancel">Cancel</button>
+                                                    <button type="button" class="Proceed">Proceed</button>
+                                                </div>
+                                                <div class="add-close-button">
+                                                    <img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                @endif
+                                <button type="button" class="include-button {{ $active ? 'active' : '' }}" wire:click="toggleActivityAddon({{$tourComponent->id}})">
+                                    @if($tourComponent->tour_component_type === 'Included')
+                                        Included
+                                    @else
+                                        @if($this->hasActivity($tourComponent))
+                                            Remove
+                                        @else
+                                            +{{ $this->formatCurrency($tourComponent->tour_sales_price) }}
+                                        @endif
+                                    @endif
+                                </button>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+                @foreach ($tour->activityInventoryTours as $tourComponent)
+                    @continue($tourComponent->inventory->component->activity_category !== ActivityCategory::NORMAL || ($tourComponent->tour_component_type === 'Upgrade'))
+                    @if ($tourComponent->inventory->ticketType?->name === 'Add-On')
+                        @php $active = !($tourComponent->tour_component_type === 'Included' || $this->hasActivity($tourComponent)); @endphp
+                        <div class="inclusion-single">
+                            @php $imagePath = public_path($tourComponent->inventory->component->image_url ?? ''); @endphp
+                            @if(!empty($tourComponent->inventory->component->image_url) && file_exists($imagePath))
+                                <div class="inclusion-image">
+                                    <img src="{{ asset($tourComponent->inventory->component->image_url) }}" alt="{{ $tourComponent->inventory->component->name }}" title="{{ $tourComponent->inventory->component->name }}">
                                 </div>
                             @endif
-                            <button type="button" class="include-button {{ $active ? 'active' : '' }}" wire:click="toggleActivityAddon({{$tourComponent->id}})">
-                                @if($tourComponent->tour_component_type === 'Included')
-                                    Included
-                                @else
-                                    @if($this->hasActivity($tourComponent))
-                                        Remove
-                                    @else
-                                        +{{ $this->formatCurrency($tourComponent->tour_sales_price) }}
-                                    @endif
+                            <div class="content-block">
+                                <h6>{{ $tourComponent->inventory->component->name }}</h6>
+                                <p>{{ $tourComponent->tour_component_type === 'Included' ? 'Included in package' : '+' . $this->formatCurrency($tourComponent->tour_sales_price) }}</p>
+                                @if($tourComponent->tour_component_type === 'Included' && $tourComponent->inventory->ticketType?->name === 'Add-On')
+                                    <div class="quantity">
+                                        <span class="minus"><img src="{{ asset('icons/Minus.svg') }}" alt="minus"></span>
+                                        <span>|</span>
+                                        <span class="value">{{ $this->getTravellerCount() }}</span>
+                                        <span>|</span>
+                                        <span class="plus"><img src="{{ asset('icons/Plus.svg') }}" alt="plus"></span>
+                                    </div>
                                 @endif
-                            </button>
+                                @if (!empty($tourComponent->inventory->component?->description))
+                                    <a>More information</a>
+                                    <div class="additional-inclusion-popup">
+                                        <div class="additional-contain">
+                                            <div class="additional-block">
+                                                <h4>{{ $tourComponent->inventory->component->name }}</h4>
+                                                {!! $tourComponent->inventory->component?->description !!}
+                                                <div class="add-cta">
+                                                    <button type="button" class="cancel">Cancel</button>
+                                                    <button type="button" class="Proceed">Proceed</button>
+                                                </div>
+                                                <div class="add-close-button">
+                                                    <img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                                <button type="button" class="include-button active" wire:click="toggleActivityAddon({{$tourComponent->id}})">
+                                    @if($tourComponent->tour_component_type === 'Included')
+                                        Select
+                                    @else
+                                        @if($this->hasActivity($tourComponent))
+                                            Remove
+                                        @else
+                                            +{{ $this->formatCurrency($tourComponent->tour_sales_price) }}
+                                        @endif
+                                    @endif
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 @endforeach
             </div>
 

@@ -8,42 +8,49 @@
                 <p>Your quote will be sent to the email address provided for Guest 1</p>
                 <div class="single-details-module">
                     <div>
-                        <label for="first-name">First name*</label>
-                        <input type="text" wire:model="lead.first_name" id="first-name" value="" placeholder="Enter your first name" required>
-                        @error('lead.first_name') <span class="text-danger">{{ $message }}</span>@enderror
+                        <label for="payer-firstname">First name*</label>
+                        <input type="text" id="payer-firstname" wire:model.lazy="payer.first_name"
+                            value="{{ $payer->first_name }}">
                         <small>Include middle names if applicable.</small>
+                        @error('payer.first_name') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                     <div>
-                        <label for="last-name">Last name*</label>
-                        <input type="text" wire:model="lead.last_name" id="last-name" value="" placeholder="Enter your last name" required>
-                        @error('lead.last_name') <span class="text-danger">{{ $message }}</span>@enderror
+                        <label for="payer-lastname">Last name*</label>
+                        <input type="text" id="payer-lastname" wire:model.lazy="payer.last_name"
+                            value="{{ $payer->last_name }}">
+                        @error('payer.last_name') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                     <div>
-                        <label for="email">Email*</label>
-                        <input type="email" id="email" wire:model="lead.email_address" value="" placeholder="Enter your email address" required>
-                        @error('lead.email_address') <span class="text-danger">{{ $message }}</span>@enderror
+                        <label for="payer-email">Email*</label>
+                        <input type="email" wire:model.lazy="payer.email_address" id="payer-email"
+                            value="{{ $payer->email_address }}">
+                        @error('payer.email_address') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                     <div>
-                        <label for="phone">Phone number*</label>
-                        <input type="tel" id="phone" value="" placeholder="Enter your phone number" required>
-                        @error('phone') <span class="text-danger">{{ $message }}</span>@enderror
+                        <label for="payer-mobile_number">Phone number*</label>
+                        <input type="text" id="payer-mobile_number" wire:model.lazy="payer.mobile_number"
+                            value="{{ $payer->mobile_number }}">
+                        @error('payer.mobile_number') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                     <div>
-                        <label for="country">Country</label>
-                        <select id="country" wire:model="leadAddress.country_id">
+                        <label for="payer-country">Country</label>
+                        <select id="payer-country" wire:model.lazy="payerAddress.country_id" required>
                             <option value="">Select</option>
-                            @foreach(\App\Models\Location\Country::orderBy('priority','asc')->orderBy('name', 'asc')->get() as $country)
-                                <option value="{{ $country->id }}">{{ $country->name }}</option>
+                            @foreach ($countries as $country)
+                                <option value="{{ $country['id'] }}"
+                                        {{ $payerAddress->country_id == $country['id'] ? 'selected' : '' }}>
+                                    {{ $country['name'] }}
+                                </option>
                             @endforeach
                         </select>
-                        @error('leadAddress.country_id') <span class="text-danger">{{ $message }}</span>@enderror
+                        @error('payerAddress.country_id') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                     <div class="dob-input">
-                        <label for="buyer-dob">Date of birth</label>
-                        <input type="text" wire:model="lead.date_of_birth" id="buyer-dob" class="calendar hasDatepicker" data-picker
-                               name="upload-release" placeholder="Enter your date of birth">
+                        <label for="payer-dob">Date of birth</label>
+                        <input type="text" wire:model.lazy="payer.date_of_birth" id="payer-dob" class="calendar hasDatepicker" data-picker
+                               name="upload-release" placeholder="Enter your date of birth" value="{{ $payer->date_of_birth ? \Carbon\Carbon::parse($payer->date_of_birth)->format('d-m-Y') : '' }}">
                         <img src="{{ asset('icons/checkin.svg') }}" alt="calendar">
-                        @error('lead.date_of_birth')<span class="text-danger">{{ $message }}</span>@enderror
+                        @error('payer.date_of_birth')<span class="text-danger">{{ $message }}</span>@enderror
                     </div>
                     <div class="full-width">
                         <label>Is purchaser the same person as lead traveller</label>
@@ -91,16 +98,16 @@
                             <label for="lead-country">Country</label>
                             <select id="lead-country" wire:model.lazy="leadAddress.country_id" required>
                                 <option value="">Select</option>
-                                @foreach(\App\Models\Location\Country::orderBy('priority','asc')->orderBy('name', 'asc')->get() as $country)
+                                @foreach ($countries as $country)
                                     <option value="{{ $country['id'] }}">{{ $country['name'] }}</option>
                                 @endforeach
                             </select>
-                            @error('lead.country_id') <span class="text-danger">{{ $message }}</span> @enderror
+                            @error('leadAddress.country_id') <span class="text-danger">{{ $message }}</span> @enderror     
                         </div>
                         <div class="dob-input">
                             <label for="lead-dob">Date of birth</label>
                             <input type="text" id="lead-dob" wire:model.lazy="lead.date_of_birth" class="calendar hasDatepicker" data-picker
-                                   name="upload-release" placeholder="Enter your date of birth">
+                                   name="upload-release" placeholder="Enter your date of birth" value="{{ $lead->date_of_birth ? \Carbon\Carbon::parse($lead->date_of_birth)->format('d-m-Y') : '' }}">
                             <img src="{{ asset('icons/checkin.svg') }}" alt="calendar">
                         </div>
                         <div class="full-width">
@@ -134,7 +141,7 @@
     <script>
         jQuery(document).ready(function () {
             const initialDOB = null;
-            const buyerDatePicker = document.querySelector('#buyer-dob[data-picker]');
+            const payerDatePicker = document.querySelector('#payer-dob[data-picker]');
             const leadDatePicker = document.querySelector('#lead-dob[data-picker]');
 
             function formatDate(date) {
@@ -145,16 +152,16 @@
                 return `${day} ${month} ${year}`;
             }
 
-            if (buyerDatePicker) {
-                const buyerDOB = new Pikaday({
-                field: buyerDatePicker,
+            if (payerDatePicker) {
+                const payerDOB = new Pikaday({
+                field: payerDatePicker,
                 format: 'DD/MM/YYYY',
                 minDate: new Date(1900, 0, 1),
                 maxDate: new Date(),
                 yearRange: [1900, new Date().getFullYear()],
                 onSelect: function (date) {
                     const formattedDate = formatDate(date);
-                    buyerDatePicker.value = formattedDate;
+                    payerDatePicker.value = formattedDate;
                 }
                 });
             }
