@@ -3,6 +3,8 @@
 namespace App\Http\Livewire\Customer\Booking\V3;
 
 use App\Http\Livewire\Abstract\V3BookingComponent;
+use App\Models\Accommodation\Accommodation;
+use App\Models\Accommodation\RoomCategory;
 use App\Models\Accommodation\RoomType;
 use App\Models\Booking\BookingTraveller;
 
@@ -15,6 +17,7 @@ class Hotel extends V3BookingComponent
     ];
     public BookingTraveller|null $lead = null;
     public $roomDescriptions = [];
+    public $categories = [];
 
     public function mount($tour = null, $booking = null, $quote = null)
     {
@@ -23,6 +26,14 @@ class Hotel extends V3BookingComponent
         $this->validateRoomCount(false);
         $this->lead = $this->booking->leadTraveller;
         $this->setRoomDescriptions($this->selectedHotel);
+        $this->setupCategories();
+    }
+
+    private function setupCategories()
+    {
+        foreach ($this->tour->repository->getHotelGroups() as $hotel => $groups) {
+            $this->categories[$hotel] = $groups[array_key_first($groups)]?->category?->id;
+        }
     }
 
     public function checkRooms(): bool
@@ -98,6 +109,48 @@ class Hotel extends V3BookingComponent
         ];
     }
 
+    public function calculateUpgradeCost(int $hotel, int|null $category = null)
+    {
+        $groups = $this->tour->repository->getHotelGroups()[$hotel];
+        $hotel = Accommodation::find($hotel);
+        $category = RoomCategory::find($category ?? $this->categories[$hotel->id]);
+        $cost = 0;
+        foreach ($this->rooms as $room) {
+            $roomType = RoomType::find($room['room']);
+            $equivalent = $this->getEquivalentRoomType($hotel, $category, $roomType);
+            foreach ($groups as $group) {
+                if ($group->category?->id === $category->id &&
+                    $group->occupancy->id === $equivalent?->id)
+                {
+                    $cost += $group->getUpgradeCost();
+                    break;
+                }
+            }
+        }
+        return $cost;
+    }
+
+    protected function getEquivalentRoomType(Accommodation $hotel, RoomCategory|null $category, RoomType $roomType): RoomType|null
+    {
+        $hotelGroups = $this->tour->repository->getHotelGroups()[$hotel->id];
+        foreach ($hotelGroups as $hotelGroup) {
+            if ($category?->id !== $hotelGroup->category?->id) { continue; }
+            if ($roomType->id === $hotelGroup->occupancy->id) { return $hotelGroup->occupancy; }
+        }
+        $matchType = match (true) {
+            str_contains(strtolower($roomType->name), 'twin') => 'twin',
+            str_contains(strtolower($roomType->name), 'double') => 'double',
+            str_contains(strtolower($roomType->name), 'single') => 'single',
+            str_contains(strtolower($roomType->name), 'triple') => 'triple',
+            default => strtolower($roomType->name),
+        };
+        foreach ($hotelGroups as $hotelGroup) {
+            \Log::info("Checking {$hotelGroup->occupancy->name} against {$matchType}");
+            if ($category?->id !== $hotelGroup->category?->id) { continue; }
+            if (str_contains(strtolower($hotelGroup->occupancy->name), $matchType)) { return $hotelGroup->occupancy; }
+        }
+        return null;
+    }
 
     public function addRoom(): void
     {

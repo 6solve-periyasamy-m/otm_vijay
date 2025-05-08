@@ -231,18 +231,21 @@
                             <p>{{ $hotel->accommodationtype?->name }}</p>
                             <div class="room-type">
                                 @if ($defaultGroup->rooms[0]->tour_component_type === 'Upgrade')
-                                    <p class="tour_sales_price"> +{{ $this->formatCurrency($defaultGroup->getUpgradeCost() * count($this->rooms)) }}</p>
+                                    <p class="tour_sales_price"> +{{ $this->formatCurrency($this->calculateUpgradeCost($hotel->id)) }}</p>
                                 @elseif($defaultGroup->rooms[0]->tour_component_type === 'Included')
                                     <p class="tour_sales_price"> +{{ $this->formatCurrency(0) }}</p>
                                 @endif
                                 <p>Room type</p>
-                                <select class="room-selector" data-hotel-id="{{ $hotel->id }}">
+                                <select wire:model="categories.{{$hotel->id}}" class="room-selector" data-hotel-id="{{ $hotel->id }}">
+                                    @php $seen = []; @endphp
                                     @foreach($hotelGroups as $group)
+                                        @continue(in_array($group->category->id, $seen))
                                         @php
+                                            $seen[] = $group->category->id;
                                             $isUpgrade = $group->rooms[0]->tour_component_type === 'Upgrade';
                                             $upgradeCost = $isUpgrade ? '(' . $this->formatCurrency($group->getUpgradeCost() * count($this->rooms)) . ')' : '';
                                         @endphp
-                                        <option value="{{ $group->occupancy->id }}" data-sales_price="{{ $group->getUpgradeCost() * count($this->rooms) }}" {{ $id == key($rooms) ? 'selected' : '' }}>
+                                        <option value="{{ $group->category?->id }}" data-sales_price="{{ $this->calculateUpgradeCost($hotel->id, $group->category?->id) }}" {{ $id == key($rooms) ? 'selected' : '' }}>
                                             {{ $group->category?->name }} {{ $upgradeCost }}
                                         </option>
                                     @endforeach
