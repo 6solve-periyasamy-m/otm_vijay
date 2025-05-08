@@ -310,5 +310,6 @@ abstract class V3BookingComponent extends Component
                 break;
             }
         }
+        $this->renew();
     }
 }
