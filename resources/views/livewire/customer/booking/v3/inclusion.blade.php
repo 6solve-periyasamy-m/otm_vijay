@@ -152,7 +152,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                 </div>
                             @endif
                             <p>Available: {{ $tourComponent->repository->getAvailableStock() > 5 ? "5+" : max(0, $tourComponent->repository->getAvailableStock())  }}</p>
-                            @php $available = $this->hasActivity($tourComponent) || $tourComponent->repository->getAvailableStock() >= $booking->travellers()->where('role', '!=', \App\Models\Helper\Enum\BookingTravellerRole::NOT_TRAVELLING)->count(); @endphp
+                            @php $available = $this->hasActivity($tourComponent) || $tourComponent->repository->hasEnoughStock($booking->travellers()->where('role', '!=', \App\Models\Helper\Enum\BookingTravellerRole::NOT_TRAVELLING)->count()); @endphp
                             <button type="button" class="include-button {{ $available ? 'active' : '' }}" wire:click="toggleActivityAddon({{$tourComponent->id}})">
                                 @if($tourComponent->tour_component_type === 'Included')
                                     Select
@@ -172,7 +172,6 @@ use App\Models\Helper\Enum\ActivityCategory;
                     </div>
                 @endforeach
                 @foreach ($tour->merchandise()->where('tour_component_type', '=', 'Add-on')->get() as $tourComponent)
-                    @continue($tourComponent->repository->getAvailableStock() <= 0)
                     @php $active = !($tourComponent->tour_component_type === 'Included' || $this->hasMerchandise($tourComponent)); @endphp
                     <div class="inclusion-single">
                         @php $imagePath = public_path($tourComponent->inventory->component->image_url ?? ''); @endphp
@@ -209,20 +208,14 @@ use App\Models\Helper\Enum\ActivityCategory;
                                     </div>
                                 </div>
                             @endif
-                            <p>Available: {{ $tourComponent->repository->getAvailableStock() > 5 ? "5+" : max(0, $tourComponent->repository->getAvailableStock())  }}</p>
-                            @php $available = $tourComponent->repository->getAvailableStock() > $booking->travellers()->where('role', '!=', \App\Models\Helper\Enum\BookingTravellerRole::NOT_TRAVELLING)->count(); @endphp
-                            <button type="button" class="include-button {{ $available ? 'active' : '' }}" wire:click="toggleMerchandiseAddon({{$tourComponent->id}})">
+                            <button type="button" class="include-button active" wire:click="toggleMerchandiseAddon({{$tourComponent->id}})">
                                 @if($tourComponent->tour_component_type === 'Included')
                                     Select
                                 @else
                                     @if($this->hasMerchandise($tourComponent))
                                         Remove
                                     @else
-                                        @if($available)
-                                            +{{ $this->formatCurrency($tourComponent->tour_sales_price) }}
-                                        @else
-                                            Not Enough Stock
-                                        @endif
+                                        +{{ $this->formatCurrency($tourComponent->tour_sales_price) }}
                                     @endif
                                 @endif
                             </button>
