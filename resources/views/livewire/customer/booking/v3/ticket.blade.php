@@ -66,7 +66,11 @@ use App\Models\Helper\Enum\ActivityCategory;
                                     </div>
                                 @endif
                                 <button type="button" class="include-button {{ $tourComponent->upgrades->isNotEmpty() ? 'active' : '' }}" wire:click="upgradeActivity({{ $tourComponent->id }})">
-                                    {{ $tourComponent->upgrades->isNotEmpty() ? 'Upgrade' : $tourComponent->tour_component_type }}
+                                    @if($activeUpgrade->id !== $tourComponent->id)
+                                        Upgraded
+                                    @else
+                                        {{ $tourComponent->upgrades->isNotEmpty() ? 'Upgrade' : $tourComponent->tour_component_type }}
+                                    @endif
                                 </button>
                             </div>
                         </div>
