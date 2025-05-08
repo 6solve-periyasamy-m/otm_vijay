@@ -4,11 +4,11 @@ namespace App\Http\Livewire\Customer\Booking\V3;
 
 use App\Http\Livewire\Abstract\V3BookingComponent;
 use App\Models\Booking\BookingTraveller;
+use App\Models\Customer\Customer;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Location\Address;
 use App\Models\Location\Country;
-use App\Models\Customer\Customer;
 use Carbon\Carbon;
 
 class Details extends V3BookingComponent
@@ -28,6 +28,7 @@ class Details extends V3BookingComponent
     public Address $leadAddress;
     public bool $leadIsTravelling = true;
     public BookingTraveller $payer;
+    public bool $terms = false;
 
     public function mount($tour = null, $booking = null, $quote = null)
     {
@@ -150,7 +151,7 @@ class Details extends V3BookingComponent
 
     public function checkout()
     {
-        //if (!$this->terms) { return $this->addError('common', 'You must accept terms and conditions.'); }
+        if (!$this->terms) { return $this->addError('common', 'You must accept terms and conditions.'); }
         $this->preCheckout();
         $amount = $this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount();
         try {

@@ -281,12 +281,26 @@
                             </div>
                            @endif
                         </div>
+                        @if($stage < 5)
                         <button type="button" class="next-button" wire:click="advance">
                           <span>
                             <span>NEXT</span>
                             <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
                           </span>
                         </button>
+                        @else
+                            <div class="acc-tp-cond">
+                                <label class="contain-v"><span class="fnal-txt">I accept the <a href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">Terms & Conditions</a></span>
+                                    <input type="checkbox" wire:model="terms">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="submit-btn-cls">
+                                <div class="inner">
+                                    <input class="submit-btn" wire:click="advance" type="submit" value="Checkout">
+                                </div>
+                            </div>
+                        @endif
                         @error('common')
                         <div style="padding-top: 1rem; color: red;">
                             {{ $message }}
