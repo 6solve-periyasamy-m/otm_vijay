@@ -110,8 +110,8 @@ class BookingGroupRepository extends ModelRepository
     {
         $cost = 0;
         foreach ($this->group->accommodation as $room) {
-            if ($room->tourComponent->tour_component_type !== 'Included') {
-                $cost += $room->tourComponent->tour_sales_price;
+            if ($room->tourComponent?->tour_component_type !== 'Included') {
+                $cost += $room->tourComponent?->tour_sales_price;
             }
         }
         return $cost;
