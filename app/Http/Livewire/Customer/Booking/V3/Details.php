@@ -25,7 +25,7 @@ class Details extends V3BookingComponent
         'lead.last_name.required' => 'Last name is required.',
     ];
     public BookingTraveller|null $lead = null;
-    public Address $leadAddress;
+    public Address $leadAddress, $payerAddress;
     public bool $leadIsTravelling = true;
     public BookingTraveller $payer;
     public bool $terms = false;
