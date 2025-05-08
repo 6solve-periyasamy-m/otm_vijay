@@ -102,7 +102,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                         <h6>{!! $tourComponent->inventory->component->name !!}</h6>
                                         <p>{{ $tourComponent->inventory->component?->field1}}</p>
                                         <p>
-                                            +{{ $this->formatCurrency($tourComponent->tour_sales_price * $this->getTravellerCount())  }}</p>
+                                            +{{ $this->formatCurrency($tourComponent->tour_sales_price * $this->getTravellerCount()) }} Total</p>
                                     </div>
                                 </div>
                                 <select>
