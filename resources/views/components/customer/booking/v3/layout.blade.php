@@ -172,7 +172,7 @@
                                     </div>
                                 </div>
                                 @if(count($upgrades['tickets']) > 0)
-                                <div class="ticket-upgrades txt-org">
+                                <div class="ticket-upgrades">
                                     <h5>Ticket upgrades</h5>
                                     @foreach($upgrades['tickets'] as $room)
                                         <div class="single">
@@ -183,7 +183,7 @@
                                 </div>
                                 @endif
                                 @if(count($upgrades['inclusions']) > 0)
-                                <div class="additional-upgrades">
+                                <div class="additional-upgrades txt-org">
                                     <h5>Additional inclusions</h5>
                                     @foreach($upgrades['inclusions'] as $room)
                                         <div class="single">
