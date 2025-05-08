@@ -252,7 +252,7 @@
                                     </p>
                                     @endif
                                 </div>
-
+                                {{--
                                 <div class="email-quote">
                                     <h6 class="sub-heading-6" wire:click="toggleCustomerForm">EMAIL Quote</h6>
                                     @if ($showCustomerForm ?? false)
@@ -265,6 +265,7 @@
                                         </div>
                                     @endif
                                 </div>
+                                --}}
                             </div>
                         </div>
                         <button type="button" class="next-button" wire:click="advance">
