@@ -27,7 +27,7 @@
                         @error('payer.email_address') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                     <div>
-                        <label for="payer-mobile_number">Phone number*</label>
+                        <label for="payer-mobile_number">Phone number</label>
                         <input type="text" id="payer-mobile_number" wire:model.lazy="payer.mobile_number"
                             value="{{ $payer->mobile_number }}">
                         @error('payer.mobile_number') <span class="text-danger">{{ $message }}</span> @enderror
