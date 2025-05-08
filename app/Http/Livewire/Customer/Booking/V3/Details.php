@@ -206,7 +206,6 @@ class Details extends V3BookingComponent
     private function saveTravellerProfile()
     {
         $this->payer->date_of_birth = Carbon::parse($this->payer->date_of_birth)->format('Y-m-d');
-        $this->payer->country_id = $this->payerAddress->country_id;
         $this->payer->save();
         $this->booking->lead_traveller_id = $this->payer->id;
         $this->booking->save();
