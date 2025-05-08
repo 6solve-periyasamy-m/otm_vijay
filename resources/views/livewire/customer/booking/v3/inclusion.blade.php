@@ -19,7 +19,13 @@ use App\Models\Helper\Enum\ActivityCategory;
                         @endif
                         <div class="content-block">
                             <h6>{{ $tourComponent->inventory->component->name }}</h6>
-                            <p>{{ $tourComponent->tour_component_type === 'Included' ? 'Included in package' : '+' . $this->formatCurrency($tourComponent->tour_sales_price) }}</p>
+                            <p>
+                                @if($tourComponent->tour_component_type === 'Included')
+                                    Included in package
+                                @else
+                                    <span class="upgrade_tour_sales_price">+{{ $this->formatCurrency($tourComponent->tour_sales_price) }} </span>
+                                @endif
+                            </p>
                             @if($tourComponent->upgrades()->count() > 0)
                             <select style="max-width: 100%" wire:change="adjustActivityUpgrade($event.target.value)">
                                 <option value="{{ $tourComponent->id }}"
@@ -78,7 +84,13 @@ use App\Models\Helper\Enum\ActivityCategory;
                         @endif
                         <div class="content-block">
                             <h6>{{ $tourComponent->inventory->component->name }}</h6>
-                            <p>{{ $tourComponent->tour_component_type === 'Included' ? 'Included in package' : '+' . $this->formatCurrency($tourComponent->tour_sales_price) }}</p>
+                            <p>
+                                @if($tourComponent->tour_component_type === 'Included')
+                                    Included in package
+                                @else
+                                    <span class="upgrade_tour_sales_price">+{{ $this->formatCurrency($tourComponent->tour_sales_price) }} </span>
+                                @endif
+                            </p>
                             @if (!empty($tourComponent->inventory->component?->description))
                                 <a>More information</a>
                                 <div class="additional-inclusion-popup">

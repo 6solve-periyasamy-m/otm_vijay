@@ -35,7 +35,7 @@ class Details extends V3BookingComponent
         parent::mount($tour, $booking, $quote);
         $this->payer = $this->booking->leadTraveller;
         $this->leadAddress = $this->lead->billingAddress ?? new Address();
-        $this->payerAddress = $this->buyer->homeAddress ?? new Address();
+        $this->payerAddress = $this->payer->homeAddress ?? new Address();
         $this->countries = Country::orderBy('priority', 'desc')->orderBy('name')->get(['id', 'name'])->toArray(); 
         $this->leadIsTravelling = $this->payer->role !== BookingTravellerRole::NOT_TRAVELLING;
         if ($this->leadIsTravelling) {
@@ -206,14 +206,14 @@ class Details extends V3BookingComponent
     private function saveTravellerProfile()
     {
         $this->payer->date_of_birth = Carbon::parse($this->payer->date_of_birth)->format('Y-m-d');
+        $this->payer->country_id = $this->payerAddress->country_id;
         $this->payer->save();
         $this->booking->lead_traveller_id = $this->payer->id;
         $this->booking->save();
-
         $this->payer->homeAddress->country_id = $this->payerAddress->country_id;
         $this->payer->homeAddress->save();
         $this->payer->billingAddress->country_id = $this->payerAddress->country_id;
-        $this->payer->billingAddress->save();
+        $this->payer->billingAddress->save();        
     }
     public function rules()
     {

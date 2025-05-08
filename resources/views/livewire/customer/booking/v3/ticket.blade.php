@@ -24,7 +24,13 @@ use App\Models\Helper\Enum\ActivityCategory;
                                     <div class="content-module">
                                         <h6>{!! $tourComponent->inventory?->description !!}</h6>
                                         <p>{{ $tourComponent->inventory->component?->field1 }} </p>
-                                        <p>{{ $activeUpgrade->tour_component_type === 'Included' ? 'Included' : '+' . $this->formatCurrency($activeUpgrade->tour_sales_price * $this->getTravellerCount()) . ' Total' }}</p>
+                                        <p>
+                                            @if($activeUpgrade->tour_component_type === 'Included')
+                                                Included
+                                            @else
+                                                <span class="upgrade_tour_sales_price">+{{ $this->formatCurrency($activeUpgrade->tour_sales_price * $this->getTravellerCount()) }} </span>Total
+                                            @endif
+                                        </p>
                                     </div>
                                     <!-- <div class="ic-block">
                                         <div><img src="/images/Ticket-Icon.svg" alt="ticket-icon"></div>
@@ -102,7 +108,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                         <h6>{!! $tourComponent->inventory?->description !!}</h6>
                                         <p>{{ $tourComponent->inventory->component?->field1}}</p>
                                         <p>
-                                            +{{ $this->formatCurrency($tourComponent->tour_sales_price * $this->getTravellerCount()) }} Total</p>
+                                        <span class="upgrade_tour_sales_price">+{{ $this->formatCurrency($tourComponent->tour_sales_price * $this->getTravellerCount()) }} </span>Total</p>
                                     </div>
                                 </div>
                                 <select>

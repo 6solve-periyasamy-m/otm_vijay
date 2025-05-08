@@ -1406,6 +1406,9 @@
 
         .room-configuration .no-of-travellers p {
             margin: 0;
+            font-size: 16px;
+            line-height: 24px;
+            color: #000000;
         }
 
         .room-selection {
@@ -1419,7 +1422,7 @@
             margin: 0px 0px 16px 0px;
             font-size: 16px;
             line-height: 24px;
-            color: var(--text-light-grey);
+            color: var(--text-ligh-grey);
         }
 
         .room-selection .showcase {
@@ -2792,7 +2795,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 15px 20px;
+      padding: 15px 20px;submit-btn
       border: 1.5px solid var(--primary-color);
       border-radius: 50px;
       background: var(--white);
@@ -2891,6 +2894,48 @@
     .date-align { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 16px;}
     .date-align img { height: 20px; }
     .breadcrumbs img {vertical-align: top;}
+    .hotel-listing .single-hotel .hotel-block .room-type .tour_sales_price, .upgrade_tour_sales_price{ color: var(--primary-color);}
+    .acc-tp-cond{
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top:20px;
+    }
+    .acc-tp-cond input[type="checkbox"]{
+        appearance: none;
+        -webkit-appearance: none;
+        background-color: #fff;
+        border: 2px solid var(--primary-color);
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        position: relative;
+        border-radius: 4px;
+        outline-offset: unset;
+        outline: unset;
+        margin: 0px;
+    }
+    .acc-tp-cond input[type="checkbox"]:checked::after {
+        content: "";
+        position: absolute;
+        left: 6px;
+        top: -4px;
+        width: 6px;
+        height: 13px;
+        border: solid var(--primary-color);
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        }
+        .acc-tp-cond .fnal-txt{
+            font-family: "PP Neue Montreal Medium";
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 14px;
+            color: #000;
+        }
+        .acc-tp-cond .fnal-txt a{color: var(--primary-color);}
+        .acc-tp-cond .contain-v{margin-bottom: 0px;}
+
     </style>
 </head>
 <body>

@@ -290,16 +290,17 @@
                         </button>
                         @else
                             <div class="acc-tp-cond">
+                                <input type="checkbox" wire:model="terms">
                                 <label class="contain-v"><span class="fnal-txt">I accept the <a href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">Terms & Conditions</a></span>
-                                    <input type="checkbox" wire:model="terms">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
-                            <div class="submit-btn-cls">
-                                <div class="inner">
-                                    <input class="submit-btn" wire:click="advance" type="submit" value="Checkout">
-                                </div>
-                            </div>
+                            <button type="submit" class="next-button" wire:click="advance">
+                                <span>
+                                    <span>Checkout</span>
+                                    <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
+                                </span>
+                            </button>
                         @endif
                         @error('common')
                         <div style="padding-top: 1rem; color: red;">
