@@ -93,13 +93,14 @@ class Details extends V3BookingComponent
     private function preCheckout(): void
     {
         $this->validate();
-        $this->saveleadTraveller();
-        foreach ($this->booking->travellers as $traveller) {
-            $traveller->repository->validateIncluded();
-        }
+        $this->saveLeadTraveller();
+        // foreach ($this->booking->travellers as $traveller) {
+        //     $traveller->repository->validateIncluded();
+        // }
     }
 
-    public function saveleadTraveller(){
+    public function saveLeadTraveller(): void
+    {
         if (!$this->leadIsTravelling) {
             $this->lead->first_name = trim($this->lead->first_name);
             $this->lead->last_name = trim($this->lead->last_name);

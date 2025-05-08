@@ -278,7 +278,7 @@ abstract class V3BookingComponent extends Component
         $this->renew();
     }
 
-    public function increaseAddonCount(string $type, int $id)
+    public function increaseAddonCount(string $type, int $id): void
     {
         $component = InventoryTourRepository::getComponent($type, $id);
         if ($component !== null) {
@@ -286,7 +286,7 @@ abstract class V3BookingComponent extends Component
         }
     }
 
-    public function decreaseAddonCount(string $type, int $id)
+    public function decreaseAddonCount(string $type, int $id): void
     {
         $component = InventoryTourRepository::getComponent($type, $id);
         if ($component !== null) {
