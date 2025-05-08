@@ -899,7 +899,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
                 if ($activity->tourComponent->tour_component_type === 'Included') { continue; }
                 $foundKey = null;
                 foreach ($items as $key => $item) {
-                    if ($item['id'] === $activity->activity_inventory_tour_id) {
+                    if ($item['id'] === 'activity-' . $activity->activity_inventory_tour_id) {
                         $foundKey = $key;
                         break;
                     }
@@ -910,9 +910,30 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
                     $items[$foundKey] = $arr;
                 } else {
                     $items[] = [
-                        'id' => $activity->activity_inventory_tour_id,
+                        'id' => 'activity-' . $activity->activity_inventory_tour_id,
                         'description' => $activity->tourComponent->inventory->component->name,
                         'cost' => $activity->tourComponent->tour_sales_price,
+                    ];
+                }
+            }
+            foreach ($traveller->merchandise as $merchandise) {
+                if ($merchandise->tourComponent->tour_component_type === 'Included') { continue; }
+                $foundKey = null;
+                foreach ($items as $key => $item) {
+                    if ($item['id'] === 'merchandise-' . $merchandise->merchandise_inventory_tour_id) {
+                        $foundKey = $key;
+                        break;
+                    }
+                }
+                if ($foundKey !== null) {
+                    $arr = $items[$foundKey];
+                    $arr['cost'] += $merchandise->tourComponent->tour_sales_price;
+                    $items[$foundKey] = $arr;
+                } else {
+                    $items[] = [
+                        'id' => 'merchandise-' . $merchandise->merchandise_inventory_tour_id,
+                        'description' => $merchandise->tourComponent->inventory->component->name,
+                        'cost' => $merchandise->tourComponent->tour_sales_price,
                     ];
                 }
             }
