@@ -123,10 +123,16 @@
                                     $selectedRoomId = $rooms[$x]['room'] ?? null;
                                     $isSelected = $selectedRoomId == $id;
                                     $cls = $isSelected ? 'selected-bed' : '';
-                                    $img = match($item['occupancy']) {
-                                        1 => $isSelected ? 'icons/bed_1_selected.svg' : 'icons/bed_1.svg',
-                                        2 => $isSelected ? 'icons/twin-bed-hover.svg' : 'icons/bed_2.svg',
-                                        default => $isSelected ? 'icons/Triple-Bed-hover.svg' : 'icons/bed_3.svg',
+                                    $roomName = strtolower($item['name']);
+                                    $img = match(true) {
+                                        str_contains($roomName, 'single'), str_contains($roomName, 'double') =>
+                                            $isSelected ? 'icons/bed_1_selected.svg' : 'icons/bed_1.svg',
+                                        str_contains($roomName, 'twin') =>
+                                            $isSelected ? 'icons/twin-bed-hover.svg' : 'icons/bed_2.svg',
+                                        str_contains($roomName, 'triple') =>
+                                            $isSelected ? 'icons/Triple-Bed-hover.svg' : 'icons/bed_3.svg',
+                                        default =>
+                                            $isSelected ? 'icons/bed_1_selected.svg' : 'icons/bed_1.svg',
                                     };
                                 @endphp
                                 <label class="bed-configuration-h {{$cls}}">
@@ -139,7 +145,7 @@
                                             data-room-index="{{ $x }}"
                                             data-bed-occupancy="{{ $item['occupancy'] }}"
                                             data-desc-id="desc-{{ $id }}"
-                                            data-readonly="true" {{-- Custom attribute to simulate readoapp/Http/Livewire/Customer/Booking/V3/Details.phpnly --}}
+                                            data-readonly="true"
                                     >
                                     <p class="bed_imgs"> <img src="{{ asset($img) }}" alt="icon"></p>
                                     <span class="midle_bar"></span>
@@ -235,7 +241,7 @@
                                             $upgradeCost = $isUpgrade ? '(' . $this->formatCurrency($group->getUpgradeCost() * count($this->rooms)) . ')' : '';
                                         @endphp
                                         <option value="{{ $group->occupancy->id }}" data-sales_price="{{ $group->getUpgradeCost() * count($this->rooms) }}" {{ $id == key($rooms) ? 'selected' : '' }}>
-                                            {{ $group->category->name }} {{ $upgradeCost  }}
+                                            {{ $group->category?->name }} {{ $upgradeCost  }}
                                         </option>
                                     @endforeach
                                 </select>
