@@ -184,7 +184,7 @@
                                 @endif
                                 @if(count($upgrades['inclusions']) > 0)
                                 <div class="additional-upgrades">
-                                    <h5>Additional upgrades</h5>
+                                    <h5>Additional inclusions</h5>
                                     @foreach($upgrades['inclusions'] as $room)
                                         <div class="single">
                                             <p>{{ $room['description'] }}</p>
