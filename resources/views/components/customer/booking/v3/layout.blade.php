@@ -328,7 +328,11 @@
                         <div style="padding-top: 1rem;">
                             <div id="stripe-hidden" style="visibility: hidden">
                                 <div id="stripe-container"></div>
-                                <button id="pay-button">Pay</button>
+                                <button type="submit" class="next-button" id="pay-button">
+                                    <span>
+                                        <span>PAY</span>
+                                    </span>
+                                </button>
                                 <div id="confirm-errors"></div>
                             </div>
                             <div id="airwallex-container" class="airwallex-content"></div>
