@@ -349,11 +349,13 @@
                 BACK
             </div>
             <div class="value">
+                {{--
                 <div>
                     <h6>{{ $this->formatCurrency($tour->base_price_per_person) }}</h6>
                     <p>Per person</p>
                 </div>
                 <span></span>
+                --}}
                 <div>
                     <h6>{{ $this->formatCurrency($booking->repository->getTotalCost()) }}</h6>
                     <p>Total package cost</p>
