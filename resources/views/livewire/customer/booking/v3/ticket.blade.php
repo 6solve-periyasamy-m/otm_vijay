@@ -99,7 +99,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                             <div class="ticket-heading">
                                 <div class="ticket-heading-module">
                                     <div class="content-module">
-                                        <h6>{!! $tourComponent->inventory->component->name !!}</h6>
+                                        <h6>{!! $tourComponent->inventory?->description !!}</h6>
                                         <p>{{ $tourComponent->inventory->component?->field1}}</p>
                                         <p>
                                             +{{ $this->formatCurrency($tourComponent->tour_sales_price * $this->getTravellerCount()) }} Total</p>
