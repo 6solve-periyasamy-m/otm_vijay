@@ -278,6 +278,24 @@ abstract class V3BookingComponent extends Component
         $this->renew();
     }
 
+    public function toggleMerchandiseAddon(int $id): void
+    {
+        $addon = MerchandiseInventoryTour::find($id);
+        if ($addon !== null && $addon->tour_id === $this->tour->id && $addon->tour_component_type === 'Add-on') {
+            $owned = $this->hasMerchandise($addon);
+            // Not enough stock
+            if (!$owned && $addon->available_stock < $this->booking->travellers()->count()) { return; }
+            foreach ($this->booking->travellers as $traveller) {
+                if (!$owned) {
+                    $addon->repository->grantToBookingTraveller($traveller);
+                } else {
+                    $traveller->merchandise()->where('merchandise_inventory_tour_id', '=', $addon->id)->delete();
+                }
+            }
+        }
+        $this->renew();
+    }
+
     public function increaseAddonCount(string $type, int $id): void
     {
         $component = InventoryTourRepository::getComponent($type, $id);
@@ -302,6 +320,7 @@ abstract class V3BookingComponent extends Component
     private function setAddonQuantity(InventoryTourRepository $repository, int $count): void
     {
         $repository->removeFromAllTravellers($this->booking);
+        $count = min(max($repository->getAvailableStock(), 0), $count);
         foreach ($this->booking->travellers as $traveller) {
             if ($count > 0) {
                 $repository->grantToBookingTraveller($traveller);
