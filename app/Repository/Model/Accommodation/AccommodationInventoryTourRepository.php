@@ -393,4 +393,20 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     {
         return $this->tourComponent->inventory->external_notes;
     }
+
+    public function removeFromAllTravellers(Booking $booking): void
+    {
+        foreach ($booking->groups as $group) {
+            $group->accommodation()->where('accommodation_inventory_tour_id', '=', $this->tourComponent->id)->delete();
+        }
+    }
+
+    public function getQuantityOnBooking(Booking $booking): int
+    {
+        $count = 0;
+        foreach ($booking->groups as $group) {
+            $count += $group->accommodation()->where('accommodation_inventory_tour_id', '=', $this->tourComponent->id)->count();
+        }
+        return $count;
+    }
 }

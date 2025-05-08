@@ -69,6 +69,22 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
      */
     abstract public function getBookedCount(): int;
 
+    /**
+     * Remove the component from every traveller on a booking
+     *
+     * @param Booking $booking
+     * @return void
+     */
+    abstract public function removeFromAllTravellers(Booking $booking): void;
+
+    /**
+     * Get the count of the component on a booking
+     *
+     * @param Booking $booking
+     * @return int
+     */
+    abstract public function getQuantityOnBooking(Booking $booking): int;
+
     public function getCostToCustomer(): float|int
     {
         return $this->getTourComponentType() === 'Included' ? 0 : ($this->get()?->tour_sales_price ?? 0);

@@ -362,4 +362,20 @@ class TransportInventoryTourRepository extends InventoryTourRepository
     {
         return $this->tourComponent->inventory->external_notes;
     }
+
+    public function removeFromAllTravellers(Booking $booking): void
+    {
+        foreach ($booking->travellers as $traveller) {
+            $traveller->transport()->where('transport_inventory_tour_id', '=', $this->tourComponent->id)->delete();
+        }
+    }
+
+    public function getQuantityOnBooking(Booking $booking): int
+    {
+        $count = 0;
+        foreach ($booking->travellers as $traveller) {
+            $count += $traveller->transport()->where('transport_inventory_tour_id', '=', $this->tourComponent->id)->count();
+        }
+        return $count;
+    }
 }

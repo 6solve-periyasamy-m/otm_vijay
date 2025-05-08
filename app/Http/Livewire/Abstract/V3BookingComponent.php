@@ -13,9 +13,11 @@ use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Location\Currency;
+use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Quote\Quote;
 use App\Models\System\Brand;
 use App\Models\Tour\Tour;
+use App\Repository\Abstracts\InventoryTourRepository;
 use Exception;
 use Livewire\Component;
 use Settings;
@@ -188,6 +190,11 @@ abstract class V3BookingComponent extends Component
         return $this->booking->leadTraveller->activities()->where('activity_inventory_tour_id', '=', $tourComponent->id)->count() > 0;
     }
 
+    public function hasMerchandise(MerchandiseInventoryTour $tourComponent): bool
+    {
+        return $this->booking->leadTraveller->merchandise()->where('merchandise_inventory_tour_id', '=', $tourComponent->id)->count() > 0;
+    }
+
     public function payFull()
     {
         $this->booking->pay_full = true;
@@ -227,6 +234,31 @@ abstract class V3BookingComponent extends Component
         $this->renew();
     }
 
+    public function adjustMerchandiseUpgrade(int $upgradeId): void
+    {
+        $upgrade = MerchandiseInventoryTour::find($upgradeId);
+        $parent = $upgrade->repository->getUpgradeParent();
+        foreach ($this->booking->travellers as $traveller) {
+            $found = false;
+            foreach ($traveller->merchandise as $component) {
+                // already owns component
+                if ($component->merchandise_inventory_tour_id === $upgrade->id) { $found = true; break; }
+                // Is already on tree
+                if ($parent->repository->hasAsUpgrade($component->tourComponent)) {
+                    $component->repository->delete();
+                    $upgrade->repository->grantToBookingTraveller($traveller);
+                    $found = true;
+                    break;
+                }
+            }
+            // If upgrade isn't found, then add it anyway
+            if (!$found) {
+                $upgrade->repository->grantToBookingTraveller($traveller);
+            }
+        }
+        $this->renew();
+    }
+
     public function toggleActivityAddon(int $id): void
     {
         $addon = ActivityInventoryTour::find($id);
@@ -243,5 +275,39 @@ abstract class V3BookingComponent extends Component
             }
         }
         $this->renew();
+    }
+
+    public function increaseAddonCount(string $type, int $id)
+    {
+        $component = InventoryTourRepository::getComponent($type, $id);
+        if ($component !== null) {
+            $this->setAddonQuantity($component, $component->getQuantityOnBooking($this->booking) + 1);
+        }
+    }
+
+    public function decreaseAddonCount(string $type, int $id)
+    {
+        $component = InventoryTourRepository::getComponent($type, $id);
+        if ($component !== null) {
+            $this->setAddonQuantity($component, $component->getQuantityOnBooking($this->booking) - 1);
+        }
+    }
+
+    public function getAddonCount(string $type, int $id): int
+    {
+        return InventoryTourRepository::getComponent($type, $id)?->getQuantityOnBooking($this->booking) ?? 0;
+    }
+
+    private function setAddonQuantity(InventoryTourRepository $repository, int $count): void
+    {
+        $repository->removeFromAllTravellers($this->booking);
+        foreach ($this->booking->travellers as $traveller) {
+            if ($count > 0) {
+                $repository->grantToBookingTraveller($traveller);
+                $count--;
+            } else {
+                break;
+            }
+        }
     }
 }
