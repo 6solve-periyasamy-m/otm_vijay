@@ -36,7 +36,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                 @if ($tourComponent->inventory->component->seating)
                                     <div class="individual-module">
                                         <p>Seating</p>
-                                        <select wire:model="ticketUpgrades.{{$tourComponent->id}}">
+                                        <select wire:model="ticketUpgrades.{{$tourComponent->id}}" wire:change="adjustActivityUpgrade($event.target.value)">
                                             <option value="{{ $tourComponent->id }}"
                                                     @if($this->hasActivity($tourComponent)) selected @endif>{{ $tourComponent->inventory->component->seating?->name }}
                                                 (Included)
