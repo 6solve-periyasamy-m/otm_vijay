@@ -1260,6 +1260,7 @@
             line-height: 54px;
             color: var(--text-light-dark);
             margin: 40px 0px 24px 0px;
+            text-transform: uppercase;
         }
 
         .accommodation-detail > p {
@@ -2522,12 +2523,12 @@
     }
 
     .single-details-module .radio-option .custom-radio::after {
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
     }
 
     .single-details-module .radio-option input[type="radio"]:checked+.custom-radio {
-      border: 1px solid var(--primary-color);
+      border: 2px solid var(--primary-color);
       background: transparent;
     }
 

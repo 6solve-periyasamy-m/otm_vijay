@@ -111,7 +111,9 @@
                                 </ul>
                             </div>
                             <div class="additional-inclusions">
-                                <h6 class="sub-heading-6">ADDITIONAL INCLUSIONS</h6>
+                                @if($stage !== 1)
+                                    <h6 class="sub-heading-6">ADDITIONAL INCLUSIONS</h6>
+                                @endif
                                 <div class="select-currency">
                                     @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector'))
                                     <div class="single">
