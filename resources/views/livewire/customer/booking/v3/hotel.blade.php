@@ -89,6 +89,7 @@
                     </div>
                 @endforeach
             </div>
+            <p class="reselect_config">Please reselect your configuration</p>
             <div class="room-listing-module">
                 @php
                     $bookingRooms = $this->tour->repository->getBookingRooms($selectedHotel);
@@ -361,6 +362,16 @@
                 const $room = $(this);
                 updateBedConfigs($room);
             });
+
+
+            $('.reselect_config').hide();
+            $('.include-button').on('click', function () {
+                $('.reselect_config').show();
+                $('html, body').animate({
+                    scrollTop: $('.reselect_config').offset().top
+                }, 800);
+            });
+
         });
 
     </script>

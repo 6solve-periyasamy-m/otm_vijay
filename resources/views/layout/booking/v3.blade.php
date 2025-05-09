@@ -2935,7 +2935,7 @@
         }
         .acc-tp-cond .fnal-txt a{color: var(--primary-color);}
         .acc-tp-cond .contain-v{margin-bottom: 0px;}
-        .timeline a { color: #F35B15; }
+        .timeline a, .booking-dates a { color: #F35B15; }
         .disable-next {
             display: inline-block;
             padding: 11.5px 56px;
