@@ -220,20 +220,18 @@
                                 </div>
                             </div>
                             <div class="payment-method ">
-                                @if($stage < 5)
-                                    <div class="payable-now">
-                                        <div class="single">
-                                            <p>Payable now @if(!$payFull)({{ $booking->tour?->deposit_percentage }}%)@endif</p>
-                                            <p>{{ $this->formatCurrency($payFull ? $booking->repository->getTotalCost() + $estimateSingleOccupancy : $booking->repository->getDueTodayAmount(), 2)  }}</p>
-                                        </div>
-                                        @if(!$payFull)
-                                        <p>
-                                            Balance {{ $this->formatCurrency(($booking->repository->getTotalCost() + $estimateSingleOccupancy) - $booking->repository->getDueTodayAmount()) }}
-                                            payable by {{ $tour->final_payment->format('d M Y') }}
-                                        </p>
-                                        @endif
+                                <div class="payable-now">
+                                    <div class="single">
+                                        <p>Payable now @if(!$payFull)({{ $booking->tour?->deposit_percentage }}%)@endif</p>
+                                        <p>{{ $this->formatCurrency($payFull ? $booking->repository->getTotalCost() + $estimateSingleOccupancy : $booking->repository->getDueTodayAmount(), 2)  }}</p>
                                     </div>
-                                @endif
+                                    @if(!$payFull)
+                                    <p>
+                                        Balance {{ $this->formatCurrency(($booking->repository->getTotalCost() + $estimateSingleOccupancy) - $booking->repository->getDueTodayAmount()) }}
+                                        payable by {{ $tour->final_payment->format('d M Y') }}
+                                    </p>
+                                    @endif
+                                </div>
                                 {{--
                                 <div class="email-quote">
                                     <h6 class="sub-heading-6" wire:click="toggleCustomerForm">EMAIL Quote</h6>
