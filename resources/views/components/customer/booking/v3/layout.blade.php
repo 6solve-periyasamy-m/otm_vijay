@@ -222,7 +222,7 @@
                                     @if($booking->repository->getTaxes() !== null)
                                         <div class="single">
                                             <p>{{ $tour->taxBracket()->name }} (Included)</p>
-                                            <p>{{ $this->formatCurrency($booking->repository->getTaxes()) }}</p>
+                                            <p>{{ $this->formatCurrency($booking->repository->getTaxes(), false) }}</p>
                                         </div>
                                     @endif
                                 </div>
