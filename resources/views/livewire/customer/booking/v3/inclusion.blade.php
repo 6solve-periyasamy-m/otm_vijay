@@ -173,7 +173,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                         Remove
                                     @else
                                         @if($available)
-                                            +{{ $this->formatCurrency($tourComponent->tour_sales_price) }}
+                                            Add
                                         @else
                                             Not Enough Stock
                                         @endif
@@ -227,7 +227,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                     @if($this->hasMerchandise($tourComponent))
                                         Remove
                                     @else
-                                        +{{ $this->formatCurrency($tourComponent->tour_sales_price) }}
+                                        Add
                                     @endif
                                 @endif
                             </button>

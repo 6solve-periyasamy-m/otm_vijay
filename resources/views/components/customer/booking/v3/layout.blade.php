@@ -172,7 +172,7 @@
                                     </div>
                                 </div>
                                 @if(count($upgrades['tickets']) > 0)
-                                <div class="ticket-upgrades txt-org">
+                                <div class="ticket-upgrades">
                                     <h5>Ticket upgrades</h5>
                                     @foreach($upgrades['tickets'] as $room)
                                         <div class="single">
@@ -183,8 +183,8 @@
                                 </div>
                                 @endif
                                 @if(count($upgrades['inclusions']) > 0)
-                                <div class="additional-upgrades">
-                                    <h5>Additional upgrades</h5>
+                                <div class="additional-upgrades txt-org">
+                                    <h5>Additional inclusions</h5>
                                     @foreach($upgrades['inclusions'] as $room)
                                         <div class="single">
                                             <p>{{ $room['description'] }}</p>
@@ -202,6 +202,21 @@
                                         <p>Base Package Price</p>
                                         <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
                                     </div>
+                                    @if($this->booking->repository->getSingleOccupancyAmount() > 0)
+                                        <div class="single">
+                                            <p>Single Occupancy - {{ $this->booking->repository->getSingleOccupancyCount() }}</p>
+                                            <p>{{ $this->formatCurrency($this->booking->repository->getSingleOccupancyAmount()) }}</p>
+                                        </div>
+                                    @endif
+                                    @if($this->booking->groups()->count() <= 0)
+                                        @php $singleCount = $this->booking->travellers()?->count() % 2; @endphp
+                                        @if($singleCount > 0)
+                                            <div class="single">
+                                                <p>Single Occupancy - {{ $singleCount }}</p>
+                                                <p>{{ $this->formatCurrency($this->tour->single_occupancy_surcharge * $singleCount) }}</p>
+                                            </div>
+                                        @endif
+                                    @endif
                                     @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
                                     @if($upgradePrice > 0 || $upgradePrice < 0)
                                         <div class="single">
@@ -241,6 +256,7 @@
                                         </div>
                                         <div class="price">{{ $this->formatCurrency($this->booking->repository->getDueTodayAmount()) }}</div>
                                     </div>
+                                    {{--
                                     <div class="card-block">
                                         <div class="card-type active">
                                             <img src="{{ asset('icons/card.svg') }}" alt="Debit card">
@@ -251,6 +267,7 @@
                                             <p>Invoice - Direct Debit</p>
                                         </div>
                                     </div>
+                                    --}}
                                 @endif
                                 <div class="payable-now">
                                     <div class="single">
@@ -297,7 +314,7 @@
                             </div>
                             <button type="submit" class="next-button" wire:click="advance">
                                 <span>
-                                    <span>Checkout</span>
+                                    <span>CHECKOUT</span>
                                     <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
                                 </span>
                             </button>
@@ -311,7 +328,11 @@
                         <div style="padding-top: 1rem;">
                             <div id="stripe-hidden" style="visibility: hidden">
                                 <div id="stripe-container"></div>
-                                <button id="pay-button">Pay</button>
+                                <button type="submit" class="next-button" id="pay-button">
+                                    <span>
+                                        <span>PAY</span>
+                                    </span>
+                                </button>
                                 <div id="confirm-errors"></div>
                             </div>
                             <div id="airwallex-container" class="airwallex-content"></div>
@@ -328,11 +349,13 @@
                 BACK
             </div>
             <div class="value">
+                {{--
                 <div>
                     <h6>{{ $this->formatCurrency($tour->base_price_per_person) }}</h6>
                     <p>Per person</p>
                 </div>
                 <span></span>
+                --}}
                 <div>
                     <h6>{{ $this->formatCurrency($booking->repository->getTotalCost()) }}</h6>
                     <p>Total package cost</p>

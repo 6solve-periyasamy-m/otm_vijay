@@ -246,7 +246,7 @@
                                             $upgradeCost = $isUpgrade ? '(' . $this->formatCurrency($group->getUpgradeCost() * count($this->rooms)) . ')' : '';
                                         @endphp
                                         <option value="{{ $group->category?->id }}" data-sales_price="{{ $this->calculateUpgradeCost($hotel->id, $group->category?->id) }}" {{ $id == key($rooms) ? 'selected' : '' }}>
-                                            {{ $group->category?->name }} {{ $upgradeCost }}
+                                            {{ $group->category?->name }}
                                         </option>
                                     @endforeach
                                 </select>

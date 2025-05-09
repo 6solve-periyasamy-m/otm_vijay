@@ -94,9 +94,10 @@ class Details extends V3BookingComponent
     {
         $this->validate();
         $this->saveLeadTraveller();
-        foreach ($this->booking->travellers as $traveller) {
-            $traveller->repository->validateIncluded();
-        }
+        // Disabled due to logic error. Not required right now.
+        // foreach ($this->booking->travellers as $traveller) {
+        //    $traveller->repository->validateIncluded();
+        // }
     }
 
     public function saveLeadTraveller(): void
@@ -220,7 +221,7 @@ class Details extends V3BookingComponent
             'payer.email_address' => 'required|email',
             'payer.first_name' => 'required|string|max:255',
             'payer.last_name' => 'required|string|max:255',
-            'payer.mobile_number' => 'required|string|regex:/^[0-9+\-\s()]*$/|max:20',
+            'payer.mobile_number' => 'nullable|string|regex:/^[0-9+\-\s()]*$/|max:20',
             'payerAddress.country_id' => 'nullable|exists:countries,id',
             'payer.date_of_birth' => 'nullable|date:d-m-Y',
         ];
@@ -230,7 +231,7 @@ class Details extends V3BookingComponent
                 'lead.email_address' => 'required|email',
                 'lead.first_name' => 'required|string|max:255',
                 'lead.last_name' => 'required|string|max:255',
-                'lead.mobile_number' => 'required|string|regex:/^[0-9+\-\s()]*$/|max:20',
+                'lead.mobile_number' => 'nullable|string|regex:/^[0-9+\-\s()]*$/|max:20',
                 'leadAddress.country_id' => 'nullable|exists:countries,id',
                 'lead.date_of_birth' => 'nullable|date:d-m-Y',
                 'booking.notes' => 'nullable|string|max:1000',

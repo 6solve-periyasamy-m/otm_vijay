@@ -895,7 +895,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         foreach ($this->booking->travellers as $traveller) {
             if ($traveller->role === BookingTravellerRole::NOT_TRAVELLING) { continue; }
             foreach ($traveller->activities as $activity) {
-                if ($activity->tourComponent->inventory->component->activity_category !== ActivityCategory::MAIN) { continue; }
+                if ($activity->tourComponent->inventory->component->activity_category !== ActivityCategory::NORMAL) { continue; }
                 if ($activity->tourComponent->tour_component_type === 'Included') { continue; }
                 $foundKey = null;
                 foreach ($items as $key => $item) {
