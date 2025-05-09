@@ -119,8 +119,8 @@
                                     @php $estimateSingleOccupancy = 0; @endphp
                                     @if($this->booking->groups()->count() <= 0)
                                         @php $singleCount = $this->booking->travellers()?->count() % 2; @endphp
-                                        @php $estimateSingleOccupancy = $this->tour->single_occupancy_surcharge * $singleCount; @endphp
                                         @if($singleCount > 0)
+                                            @php $estimateSingleOccupancy = $this->tour->single_occupancy_surcharge * $singleCount; @endphp
                                             <div class="single">
                                                 <p>Single Occupancy - {{ $singleCount }}</p>
                                                 <p>{{ $this->formatCurrency($this->tour->single_occupancy_surcharge * $singleCount) }}</p>
