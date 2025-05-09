@@ -101,7 +101,7 @@
                         <div class="roomdesc" data-room-index="{{ $x }}">{!! $roomDescriptions[$x] ?? '' !!}</div>
                         <p>Number of guests</p>
                         <div class="guest-module">
-                            @for($i = 1, $iMax = 3; $i <= $iMax; $i++)
+                            @for($i = 1, $iMax = min($this->getTravellingCount(), 3); $i <= $iMax; $i++)
                                 <input
                                         type="radio"
                                         class="guest-radio"
