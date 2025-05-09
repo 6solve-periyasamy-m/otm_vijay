@@ -2764,7 +2764,6 @@
       display: none;
     }
     .guest-module label {
-      width: 33.3%;
       height: 32px;
       display: flex;
       align-items: center;
@@ -2776,6 +2775,7 @@
       cursor: pointer;
       border-right: 1.5px solid var(--primary-color);
       margin: 0;
+      flex-grow: 1;
     }
     .guest-module input[type="radio"]:checked + label {
       background: var(--primary-color);

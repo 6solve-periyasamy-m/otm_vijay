@@ -290,7 +290,7 @@
                 </div>
                 <span></span>
                 <div>
-                    <h6>{{ $this->formatCurrency($booking->repository->getTotalCost()) }}</h6>
+                    <h6>{{ $this->formatCurrency($booking->repository->getTotalCost() + $estimateSingleOccupancy) }}</h6>
                     <p>Total package cost</p>
                 </div>
             </div>

@@ -244,7 +244,7 @@ class BookingTravellerRepository extends ModelRepository
         if (!empty($this->traveller->email_address)) {
             $lookup = Customer::where('email_address', '=', $this->traveller->email_address)->first();
             if ($lookup !== null) {
-                if (strtolower($this->traveller->first_name) === strtolower($lookup)
+                if (strtolower($this->traveller->first_name) === strtolower($lookup->first_name)
                     && strtolower($this->traveller->last_name) === strtolower($lookup->last_name)) {
                     $this->traveller->customer_id = $lookup->id;
                     $this->traveller->save();

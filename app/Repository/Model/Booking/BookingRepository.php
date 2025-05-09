@@ -713,6 +713,9 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
      */
     public function setupSimpleRooming(int $hotel, array $rooming): void
     {
+        foreach ($rooming as $room) {
+            if ($room['room'] === null || $room['travellers'] === null) { return; }
+        }
         $this->wipeGroups();
         $this->booking->booking_accommodation_id = $hotel;
         $this->booking->saveQuietly();
