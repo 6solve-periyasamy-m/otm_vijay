@@ -131,8 +131,10 @@
                                         <p>{{ $this->formatCurrency($this->booking->repository->getSingleOccupancyAmount()) }}</p>
                                     </div>
                                     @endif
+                                    @php $estimateSingleOccupancy = 0; @endphp
                                     @if($this->booking->groups()->count() <= 0)
                                         @php $singleCount = $this->booking->travellers()?->count() % 2; @endphp
+                                        @php $estimateSingleOccupancy = $this->tour->single_occupancy_surcharge * $singleCount; @endphp
                                         @if($singleCount > 0)
                                             <div class="single">
                                                 <p>Single Occupancy - {{ $singleCount }}</p>
@@ -196,7 +198,7 @@
                                 <div class="total">
                                     <div class="single">
                                         <p>Total</p>
-                                        <p>{{ $this->formatCurrency($booking->repository->getTotalCost()) }}</p>
+                                        <p>{{ $this->formatCurrency($booking->repository->getTotalCost() + $estimateSingleOccupancy) }}</p>
                                     </div>
                                     <div class="single">
                                         <p>Base Package Price</p>
@@ -241,7 +243,7 @@
                                             <span class="custom-radio"></span>
                                             <span class="option-title">Pay in full</span>
                                         </label>
-                                        <div class="price">{{ $this->formatCurrency($this->booking->repository->getTotalCost()) }}</div>
+                                        <div class="price">{{ $this->formatCurrency($this->booking->repository->getTotalCost() + $estimateSingleOccupancy) }}</div>
                                     </div>
                                     <div class="option-wrapper">
                                         <div>
@@ -251,7 +253,7 @@
                                                 <span class="option-title">Pay a {{ $booking->tour?->deposit_percentage }}% deposit now, and the rest later</span>
                                             </label>
                                             <div class="option-subtext">
-                                                You will receive a reminder to pay the remaining balance of {{ $this->formatCurrency($this->booking->repository->getTotalCost() - $this->booking->repository->getDueTodayAmount()) }} before {{ $tour->final_payment->format('d M Y') }}
+                                                You will receive a reminder to pay the remaining balance of {{ $this->formatCurrency(($this->booking->repository->getTotalCost() + $estimateSingleOccupancy) - $this->booking->repository->getDueTodayAmount()) }} before {{ $tour->final_payment->format('d M Y') }}
                                             </div>
                                         </div>
                                         <div class="price">{{ $this->formatCurrency($this->booking->repository->getDueTodayAmount()) }}</div>
@@ -272,11 +274,11 @@
                                 <div class="payable-now">
                                     <div class="single">
                                         <p>Payable now @if(!$payFull)({{ $booking->tour?->deposit_percentage }}%)@endif</p>
-                                        <p>{{ $this->formatCurrency($payFull ? $booking->repository->getTotalCost() : $booking->repository->getDueTodayAmount())  }}</p>
+                                        <p>{{ $this->formatCurrency($payFull ? $booking->repository->getTotalCost() + $estimateSingleOccupancy : $booking->repository->getDueTodayAmount())  }}</p>
                                     </div>
                                     @if(!$payFull)
                                     <p>
-                                        Balance {{ $this->formatCurrency($booking->repository->getTotalCost() - $booking->repository->getDueTodayAmount()) }}
+                                        Balance {{ $this->formatCurrency(($booking->repository->getTotalCost() + $estimateSingleOccupancy) - $booking->repository->getDueTodayAmount()) }}
                                         payable by {{ $tour->final_payment->format('d M Y') }}
                                     </p>
                                     @endif
