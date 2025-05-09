@@ -37,11 +37,16 @@ use App\Models\Helper\Enum\ActivityCategory;
                                     </div> -->
                                 </div>
                                 <select>
-                                    <option value="{{ $tourComponent->inventory->id }}">{{ $tourComponent->inventory->starts_at->format('d M Y') }}</option>
+                                    <option value="{{ $tourComponent->inventory->id }}">
+                                        {{ $tourComponent->inventory->starts_at->format('d M Y') }}
+                                        @if(!$tourComponent->inventory->ends_at->isSameDay($tourComponent->inventory->starts_at))
+                                            - {{ $tourComponent->inventory->ends_at->format('d M Y') }}
+                                        @endif
+                                    </option>
                                 </select>
                                 @if ($tourComponent->inventory->component->seating)
                                     <div class="individual-module">
-                                        <p>Seating</p>
+                                        <p>Category</p>
                                         <select wire:model="ticketUpgrades.{{$tourComponent->id}}" wire:change="adjustActivityUpgrade($event.target.value)">
                                             <option value="{{ $tourComponent->id }}"
                                                     @if($this->hasActivity($tourComponent)) selected @endif>{{ $tourComponent->inventory->component->seating?->name }}
@@ -116,7 +121,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                 </select>
                                 @if ($tourComponent->inventory->component->seating)
                                     <div class="individual-module">
-                                        <p>Seating</p>
+                                        <p>Category</p>
                                         <select>
                                             <option value="{{$tourComponent->inventory->id }}">{{ $tourComponent->inventory->component->seating->name }}</option>
                                         </select>
