@@ -250,12 +250,17 @@
                            @endif
                         </div>
                         @if($stage < 5)
-                        <button type="button" class="next-button" wire:click="advance">
-                          <span>
-                            <span>NEXT</span>
-                            <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
-                          </span>
-                        </button>
+                            <button type="button" class="next-button" wire:click="advance">
+                            <span>
+                                <span>NEXT</span>
+                                <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
+                            </span>
+                            </button>
+                            @error('common')
+                            <div style="padding-top: 1rem; color: red;">
+                                {{ $message }}
+                            </div>
+                            @enderror
                         @endif                        
                         {{ $sidebar ?? '' }}
                         {{-- <div style="padding-top: 1rem;">
