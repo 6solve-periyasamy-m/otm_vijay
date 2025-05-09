@@ -134,6 +134,92 @@
                 </div>
             @endif
         </div>
+        @php $estimateSingleOccupancy = 0; @endphp
+        @if($this->booking->groups()->count() <= 0)
+            @php $singleCount = $this->booking->travellers()?->count() % 2; @endphp
+            @php $estimateSingleOccupancy = $this->tour->single_occupancy_surcharge * $singleCount; @endphp
+        @endif
+        <!-- Payment Section -->
+        <div class="payment-method ">
+            <h6 class="sub-heading-6">PAYMENT METHOD</h6>
+            <div class="option-wrapper">
+                <label class="radio-option" wire:click="payFull()">
+                    <input type="radio" name="payment" @if($payFull) checked @endif>
+                    <span class="custom-radio"></span>
+                    <span class="option-title">Pay in full</span>
+                </label>
+                <div class="price">{{ $this->formatCurrency($this->booking->repository->getTotalCost() + $estimateSingleOccupancy) }}</div>
+            </div>
+            <div class="option-wrapper">
+                <div>
+                    <label class="radio-option" wire:click="payDueToday()">
+                        <input type="radio" name="payment" @if(!$payFull) checked @endif>
+                        <span class="custom-radio"></span>
+                        <span class="option-title">Pay a {{ $booking->tour?->deposit_percentage }}% deposit now, and the rest later</span>
+                    </label>
+                    <div class="option-subtext">
+                        You will receive a reminder to pay the remaining balance of {{ $this->formatCurrency(($this->booking->repository->getTotalCost() + $estimateSingleOccupancy) - $this->booking->repository->getDueTodayAmount()) }} before {{ $tour->final_payment->format('d M Y') }}
+                    </div>
+                </div>
+                <div class="price">{{ $this->formatCurrency($this->booking->repository->getDueTodayAmount()) }}</div>
+            </div>
+            {{--
+            <div class="card-block">
+                <div class="card-type active">
+                    <img src="{{ asset('icons/card.svg') }}" alt="Debit card">
+                    <p>Credit / Debit card</p>
+                </div>
+                <div class="card-type">
+                    <img src="{{ asset('icons/document-text.svg') }}" alt="Direct Debit">
+                    <p>Invoice - Direct Debit</p>
+                </div>
+            </div>
+            --}}
+            <div class="payable-now">
+                <div class="single">
+                    <p>Payable now @if(!$payFull)({{ $booking->tour?->deposit_percentage }}%)@endif</p>
+                    <p>{{ $this->formatCurrency($payFull ? $booking->repository->getTotalCost() + $estimateSingleOccupancy : $booking->repository->getDueTodayAmount(), 2)  }}</p>
+                </div>
+                @if(!$payFull)
+                <p>
+                    Balance {{ $this->formatCurrency(($booking->repository->getTotalCost() + $estimateSingleOccupancy) - $booking->repository->getDueTodayAmount()) }}
+                    payable by {{ $tour->final_payment->format('d M Y') }}
+                </p>
+                @endif
+            </div></br>
+            <div class="acc-tp-cond">
+                <input type="checkbox" wire:model="terms">
+                <label class="contain-v"><span class="fnal-txt">I accept the <a href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">Terms & Conditions</a></span>
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            <button type="submit" class="next-button" wire:click="advance">
+                <span>
+                    <span>CHECKOUT</span>
+                    <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
+                </span>
+            </button>
+            @error('common')
+            <div style="padding-top: 1rem; color: red;">
+                {{ $message }}
+            </div>
+            @enderror
+
+            <div style="padding-top: 1rem;">
+                <div id="stripe-hidden" style="visibility: hidden">
+                    <div id="stripe-container"></div>
+                    <button type="submit" class="next-button" id="pay-button">
+                        <span>
+                            <span>PAY</span>
+                        </span>
+                    </button>
+                    <div id="confirm-errors"></div>
+                </div>
+                <div id="airwallex-container" class="airwallex-content"></div>
+            </div>
+
+        </div>
+        <!-- End of Payment Section -->
     </x-slot:left>
     <script>
         /*

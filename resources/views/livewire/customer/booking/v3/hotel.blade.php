@@ -89,7 +89,7 @@
                     </div>
                 @endforeach
             </div>
-            <span class="reselect_config">Please reselect your configuration</span>
+            <div class="reselect_config">Please reselect your configuration</div>
             <div class="room-listing-module">
                 @php
                     $bookingRooms = $this->tour->repository->getBookingRooms($selectedHotel);
