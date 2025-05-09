@@ -1749,7 +1749,6 @@
 
         .hotel-listing .single-hotel .hotel-image-block .slick-dots li.slick-active button:before {
             color: var(--primary-color);
-            left: -1px;
         }
 
         .hotel-listing .single-hotel .hotel-image-block {
