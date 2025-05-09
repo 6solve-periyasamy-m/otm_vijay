@@ -175,18 +175,7 @@
                 </div>
             </div>
             --}}
-            <div class="payable-now">
-                <div class="single">
-                    <p>Payable now @if(!$payFull)({{ $booking->tour?->deposit_percentage }}%)@endif</p>
-                    <p>{{ $this->formatCurrency($payFull ? $booking->repository->getTotalCost() + $estimateSingleOccupancy : $booking->repository->getDueTodayAmount(), 2)  }}</p>
-                </div>
-                @if(!$payFull)
-                <p>
-                    Balance {{ $this->formatCurrency(($booking->repository->getTotalCost() + $estimateSingleOccupancy) - $booking->repository->getDueTodayAmount()) }}
-                    payable by {{ $tour->final_payment->format('d M Y') }}
-                </p>
-                @endif
-            </div></br>
+            </br>
             <div class="acc-tp-cond">
                 <input type="checkbox" wire:model="terms">
                 <label class="contain-v"><span class="fnal-txt">I accept the <a href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">Terms & Conditions</a></span>
