@@ -229,7 +229,7 @@
         .Go-next {
             display: inline-block;
             padding: 11.5px 56px;
-            border: 1.5px solid #FF8F1C;
+            border: 1.5px solid #f35b15;
             border-radius: 999px;
             font-family: "PP Neue Montreal Medium";
             font-weight: 500;
@@ -237,7 +237,7 @@
             line-height: 20px;
             color: var(--white);
             cursor: pointer;
-            background: #FF8F1C;
+            background: var(--primary-color);
         }
 
         footer .value {
@@ -2935,7 +2935,19 @@
         }
         .acc-tp-cond .fnal-txt a{color: var(--primary-color);}
         .acc-tp-cond .contain-v{margin-bottom: 0px;}
-
+        .timeline a { color: #F35B15; }
+        .disable-next {
+            display: inline-block;
+            padding: 11.5px 56px;
+            border: 1.5px solid #c0c0c8;
+            border-radius: 999px;
+            font-family: "PP Neue Montreal Medium";
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 20px;
+            color: var(--white);
+            background-color: var(--include-cta-color);
+        }
     </style>
 </head>
 <body>

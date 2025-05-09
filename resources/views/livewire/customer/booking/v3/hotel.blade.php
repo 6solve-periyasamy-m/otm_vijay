@@ -3,7 +3,7 @@
     <x-slot:left>
         <div class="accommodation-detail ">
             <h2 class="sub-heading-2-p">ACCOMMODATION DETAILS</h2>
-            <p>Review and customise your accommodation details.Selecting a different hotel or room type may
+            <p>Review and customise your accommodation details. Selecting a different hotel or room type may
                 impact the total cost.</p>
             <h6 class="sub-heading-6">DEFAULT HOTEL INCLUDED IN THIS PACKAGE</h6>
             @php $default = $this->getDefaultHotel()->component; @endphp
@@ -24,11 +24,8 @@
         </div>
         <div class="booking-dates">
             <h6 class="sub-heading-6">BOOKING DATES</h6>
-            <p>Change your check-in and check-out dates to extend your stay by adding extra nights before or
-                after the included {{ $noOfNights == 1 ? 'night' : $noOfNights.'-nights' }} package.</p>
-
-            <p class="mod">Extend your stay</p>
-
+            <p>If you would like to extend your stay, please contact our Sales Team at <a href="mailto:travel@kpt.com.au">travel@kpt.com.au</a></p>
+            <!-- <p class="mod">Extend your stay</p> -->
             <div class="check-in-check-out">
                 <div class="first">
                     <div class="image-module">
