@@ -80,7 +80,7 @@ abstract class V3BookingComponent extends Component
         }
 
         for ($i = count($this->rooms); $i < $this->getMinimumRooms(); $i++) {
-            $this->rooms[] = ['room' => $this->tour->repository->getDefaultRoom($this->selectedHotel), 'travellers' => 2,];
+            $this->rooms[] = ['room' => null, 'travellers' => null,];
         }
        
         for ($i = count($this->rooms) - 1; $i >= $this->getMaximumRooms(); $i--) {

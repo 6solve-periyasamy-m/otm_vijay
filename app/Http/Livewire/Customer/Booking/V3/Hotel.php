@@ -80,13 +80,16 @@ class Hotel extends V3BookingComponent
 
     public function advance()
     {
+        foreach ($this->rooms as $i => $room) {
+            if ($room['room'] === null || $room['travellers'] === null) { return $this->addError('common', 'Please select rooming configuration'); }
+        }
+        if (!$this->checkRooms()) {
+            return $this->addError('common', 'There are issues with the room assignments, please double check them.');
+        }
         $this->validate();
         $this->lead->save();
         $this->booking->lead_traveller_id = $this->lead->id;
         $this->booking->save();
-        if (!$this->checkRooms()) {
-            return $this->addError('common', 'There are issues with the room assignments, please double check them.');
-        }
         $travellerExcess = $this->getTravellerCount();
         foreach ($this->rooms as $room) {
             $travellerExcess -= $room['travellers'];
@@ -130,8 +133,9 @@ class Hotel extends V3BookingComponent
         return $cost;
     }
 
-    protected function getEquivalentRoomType(Accommodation $hotel, RoomCategory|null $category, RoomType $roomType): RoomType|null
+    protected function getEquivalentRoomType(Accommodation $hotel, RoomCategory|null $category, RoomType|null $roomType): RoomType|null
     {
+        if ($roomType === null) { return null; }
         $hotelGroups = $this->tour->repository->getHotelGroups()[$hotel->id];
         foreach ($hotelGroups as $hotelGroup) {
             if ($category?->id !== $hotelGroup->category?->id) { continue; }
@@ -155,8 +159,13 @@ class Hotel extends V3BookingComponent
     public function addRoom(): void
     {
         if (count($this->rooms) >= $this->getMaximumRooms()) { return; }
-        $room = $this->tour->repository->getDefaultRoom($this->selectedHotel);
-        $this->rooms[] = ['room' => $room, 'travellers' => RoomType::find($room)?->maximum_occupancy,];
+        //$room = $this->tour->repository->getDefaultRoom($this->selectedHotel);
+        $this->rooms[] = ['room' => null, 'travellers' => null,];
+        if (count($this->rooms) === $this->getTravellingCount()) {
+            foreach ($this->rooms as $key => $room) {
+                $this->rooms[$key] = ['room' => $room['room'], 'travellers' => 1,];
+            }
+        }
         $this->renew();
     }
 
