@@ -189,6 +189,12 @@
                                         <p>Base Package Price</p>
                                         <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
                                     </div>
+                                    @if(($this->tour->booking_fee ?? 0.0) > 0)
+                                        <div class="single">
+                                            <p>Booking Fee</p>
+                                            <p>{{ $this->formatCurrency($this->tour->booking_fee) }}</p>
+                                        </div>
+                                    @endif
                                     @if($this->booking->repository->getSingleOccupancyAmount() > 0)
                                         <div class="single">
                                             <p>Single Occupancy - {{ $this->booking->repository->getSingleOccupancyCount() }}</p>
