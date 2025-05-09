@@ -86,7 +86,7 @@
                             <div class="image-block">
                                 <img src="{{ asset($tour->event?->image_url) }}" alt="package-details">
                             </div>
-                            @endig
+                            @endif
                             <div class="base-package">
                                 <h6 class="sub-heading-6">BASE PACKAGE</h6>
                                 <h2>{{ $tour->name }}</h2>
