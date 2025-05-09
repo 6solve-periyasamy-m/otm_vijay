@@ -11,12 +11,7 @@
                 @endif
             </div>
             <div class="column right">
-                {{-- TODO: Remove when complete --}}
-                @if(config('app.features.bleeding-edge', false) === true)
-                    <a target="_blank" href="{{ route('admin.booking.view', ['booking' => $this->booking]) }}">Preview Booking in Admin</a>
-                @else
-                    <p>Require assistance?</p>
-                @endif
+                <p>Require assistance?</p>
                 @if(isset($this->brand))
                     <a href="tel:{{$this->brand->phone}}">
                         <span><img src="{{ asset('icons/Call-Icon.svg') }}" alt="logo"></span><span>{{$this->brand->phone}}</span>
@@ -34,43 +29,33 @@
                                                         alt="left-arrow"></span><span>BACK</span></div>
                     <h1>Secure Booking</h1>
                 </div>
-                <div class="timeline">
-                    <div class="step @if($stage === 1) active @elseif($stage > 1) completed @endif">
-                        <div class="circle">
-                            <span>01</span>
+                <div class="timeline text-dark">
+                    @php
+                        $steps = [
+                            1 => ['label' => 'Guests', 'route' => 'booking.v3.guest'],
+                            2 => ['label' => 'Accommodation', 'route' => 'booking.v3.hotel'],
+                            3 => ['label' => 'Ticket(s)', 'route' => 'booking.v3.tickets'],
+                            4 => ['label' => 'Additional Inclusions', 'route' => 'booking.v3.inclusions'],
+                            5 => ['label' => 'Details', 'route' => 'booking.v3.details'],
+                            6 => ['label' => 'Confirmation', 'route' => 'booking.v3.confirmation'],
+                        ];
+                    @endphp
+                    @foreach($steps as $step => $data)
+                        <div class="step @if($stage === $step) active @elseif($stage > $step) completed @endif">
+                            <div class="circle">
+                                <span>{{ sprintf('%02d', $step) }}</span>
+                            </div>
+                            <div class="label">
+                                @if($stage >= $step)
+                                    <a class="text-dark" href="{{ route($data['route'], ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]) }}">
+                                        {{ $data['label'] }}
+                                    </a>
+                                @else
+                                    {{ $data['label'] }}
+                                @endif
+                            </div>
                         </div>
-                        <div class="label">Guests</div>
-                    </div>
-                    <div class="step @if($stage === 2) active @elseif($stage > 2) completed @endif">
-                        <div class="circle">
-                            <span>02</span>
-                        </div>
-                        <div class="label">Accommodation</div>
-                    </div>
-                    <div class="step @if($stage === 3) active @elseif($stage > 3) completed @endif">
-                        <div class="circle">
-                            <span>03</span>
-                        </div>
-                        <div class="label">Ticket(s)</div>
-                    </div>
-                    <div class="step @if($stage === 4) active @elseif($stage > 4) completed @endif">
-                        <div class="circle">
-                            <span>04</span>
-                        </div>
-                        <div class="label">Additional Inclusions</div>
-                    </div>
-                    <div class="step @if($stage === 5) active @elseif($stage > 5) completed @endif">
-                        <div class="circle">
-                            <span>05</span>
-                        </div>
-                        <div class="label">Details</div>
-                    </div>
-                    <div class="step @if($stage === 6) active @elseif($stage > 6) completed @endif">
-                        <div class="circle">
-                            <span>06</span>
-                        </div>
-                        <div class="label">Confirmation</div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </section>
@@ -155,7 +140,7 @@
                                     </div>
                                 </div>
                                 @if(count($upgrades['rooms']) > 0)
-                                <div class="room-upgrades">
+                                <div class="room-upgrades @if($stage === 2) txt-org @endif">
                                     <h5>Room upgrades</h5>
                                     @foreach($upgrades['rooms'] as $room)
                                         <div class="single">
@@ -174,7 +159,7 @@
                                     </div>
                                 </div>
                                 @if(count($upgrades['tickets']) > 0)
-                                <div class="ticket-upgrades">
+                                <div class="ticket-upgrades @if($stage === 3) txt-org @endif">
                                     <h5>Ticket upgrades</h5>
                                     @foreach($upgrades['tickets'] as $room)
                                         <div class="single">
@@ -185,7 +170,7 @@
                                 </div>
                                 @endif
                                 @if(count($upgrades['inclusions']) > 0)
-                                <div class="additional-upgrades txt-org">
+                                <div class="additional-upgrades @if($stage === 4) txt-org @endif">
                                     <h5>Additional inclusions</h5>
                                     @foreach($upgrades['inclusions'] as $room)
                                         <div class="single">
@@ -351,13 +336,11 @@
                 BACK
             </div>
             <div class="value">
-                {{--
                 <div>
-                    <h6>{{ $this->formatCurrency($tour->base_price_per_person) }}</h6>
-                    <p>Per person</p>
+                    <h6>Number of Travellers</h6>
+                    <p class="text-center">{{ $this->getTravellerCount() }}</p>
                 </div>
                 <span></span>
-                --}}
                 <div>
                     <h6>{{ $this->formatCurrency($booking->repository->getTotalCost()) }}</h6>
                     <p>Total package cost</p>
@@ -366,9 +349,7 @@
             <div class="view-details">
                 View package details
             </div>
-            <div class="Go-next" wire:click="advance">
-                NEXT
-            </div>
+            <div class="{{ $stage < 5 ? 'Go-next' : 'disable-next' }}"  @if($stage < 5) wire:click="advance" @endif>NEXT </div>
         </div>
     </footer>
 </div>

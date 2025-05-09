@@ -45,12 +45,10 @@
                         </select>
                         @error('payerAddress.country_id') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
-                    <div class="dob-input">
+                    <div>
                         <label for="payer-dob">Date of birth</label>
-                        <input type="hidden" id="payer-dob" >
-                        <input type="text" id="payer-dob-visible" wire:model.lazy="payer.date_of_birth" class="calendar hasDatepicker"  placeholder="Enter your date of birth" value="{{ !empty($payer->date_of_birth) ? \Carbon\Carbon::parse($payer->date_of_birth)->format('d-m-Y') : '' }}">
-                        <img src="{{ asset('icons/checkin.svg') }}" alt="calendar">
-                        @error('payer.date_of_birth')<span class="text-danger">{{ $message }}</span>@enderror
+                        <input type="text"  id="payer-dob" wire:model="payer_date_of_birth_formatted"  placeholder="DD-MM-YYYY"  class="form-control" />
+                        @error('payer_date_of_birth_formatted') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                     <div class="full-width">
                         <label>Is purchaser the same person as lead traveller</label>
@@ -104,11 +102,10 @@
                             </select>
                             @error('leadAddress.country_id') <span class="text-danger">{{ $message }}</span> @enderror     
                         </div>
-                        <div class="dob-input">
+                        <div>
                             <label for="lead-dob">Date of birth</label>
-                            <input type="hidden" id="lead-dob" wire:model.lazy="lead.date_of_birth">
-                            <input type="text" id="lead-dob-visible" class="calendar hasDatepicker" placeholder="Enter lead traveller's date of birth" value="{{ !empty($lead->date_of_birth) ? \Carbon\Carbon::parse($lead->date_of_birth)->format('d-m-Y') : '' }}">
-                            <img src="{{ asset('icons/checkin.svg') }}" alt="calendar">
+                            <input type="text"  id="lead-dob" wire:model="lead_date_of_birth_formatted"  placeholder="DD-MM-YYYY"  class="form-control" />
+                            @error('lead_date_of_birth_formatted') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                         <div class="full-width">
                             <label for="summernote">Special requests</label>
@@ -139,71 +136,74 @@
         </div>
     </x-slot:left>
     <script>
+        /*
+        const pikadayInstances = {};
 
-        jQuery(document).on('click','.dob-input img',function(){
-            jQuery(this).closest('.dob-input').find('input').click();
-        })
-
-        function setupPikadayDateField(visibleId, hiddenId) {
+        function initPikadayDatePicker(visibleId, hiddenId) {
             const visibleInput = document.getElementById(visibleId);
             const hiddenInput = document.getElementById(hiddenId);
 
             if (!visibleInput || !hiddenInput) return;
 
-            const formatDate = (date, format) => {
-                const day = String(date.getDate()).padStart(2, '0');
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const year = date.getFullYear();
-
-                switch (format) {
-                    case 'DD-MM-YYYY': return `${day}-${month}-${year}`;
-                    case 'YYYY-MM-DD': return `${year}-${month}-${day}`;
-                    default: return '';
-                }
-            };
+            if (pikadayInstances[visibleId]) {
+                pikadayInstances[visibleId].destroy();
+            }
 
             const picker = new Pikaday({
                 field: visibleInput,
                 format: 'DD-MM-YYYY',
-                minDate: new Date(1900, 0, 1),
-                maxDate: new Date(),
-                yearRange: [1900, new Date().getFullYear()],
-                setDefaultDate: false,
-                defaultDate: null,
-                showDefaultDate: false,
-                onSelect: function (date) {
-                    visibleInput.value = formatDate(date, 'DD-MM-YYYY');
-                    hiddenInput.value = formatDate(date, 'YYYY-MM-DD');
+                toString(date) {
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    return `${day}-${month}-${year}`;
+                },
+                parse(dateString) {
+                    const [day, month, year] = dateString.split('-');
+                    return new Date(year, month - 1, day);
+                },
+                onSelect(date) {
+                    const yyyy = date.getFullYear();
+                    const mm = String(date.getMonth() + 1).padStart(2, '0');
+                    const dd = String(date.getDate()).padStart(2, '0');
+
+                    visibleInput.value = `${dd}-${mm}-${yyyy}`;
+                    hiddenInput.value = `${yyyy}-${mm}-${dd}`;
                     hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
-                }
+                },
+                maxDate: new Date()
             });
 
-            // Pre-fill if a Livewire value exists
+            pikadayInstances[visibleId] = picker;
+
+            // Fix: Set visible input correctly on page load
             if (hiddenInput.value) {
-                const [year, month, day] = hiddenInput.value.split('-');
-                picker.setDate(new Date(year, month - 1, day), true);
-            } else {
-                visibleInput.value = ''; // Force clear on load
+                const [y, m, d] = hiddenInput.value.split('-');
+                const date = new Date(y, m - 1, d);
+                picker.setDate(date, true); // true => prevent onSelect firing
+                visibleInput.value = `${d.padStart(2, '0')}-${m.padStart(2, '0')}-${y}`;
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            setupPikadayDateField('payer-dob-visible', 'payer-dob');
-            //setupPikadayDateField('lead-dob-visible', 'lead-dob');
-            Livewire.hook('message.processed', () => {
-                setupPikadayDateField('lead-dob-visible', 'lead-dob');
-            });
+        function setupAllPickers() {
+            initPikadayDatePicker('payer-dob-visible', 'payer-dob');
+            initPikadayDatePicker('lead-dob-visible', 'lead-dob');
+        }
 
-            jQuery('#summernote').summernote({
-                placeholder: 'Type here',
-                tabsize: 2,
-                height: 120,
-                toolbar: [
-                    ['font', ['bold', 'italic', 'underline']],
-                    ['para', ['paragraph', 'ol']],
-                    ['insert', ['link', 'picture', 'emoji']],
-                ],
+        document.addEventListener("DOMContentLoaded", () => {
+            setupAllPickers();
+        });
+
+        document.addEventListener("livewire:load", () => {
+            // Safe hook with cleanup
+            Livewire.hook('message.processed', () => {
+                setupAllPickers();
             });
         });
-    </script>
+
+        jQuery(document).on('click','.dob-input img',function(){
+            jQuery(this).closest('.dob-input').find('input').click();
+        }) */
+</script>
+
 </x-customer.booking.v3.layout>

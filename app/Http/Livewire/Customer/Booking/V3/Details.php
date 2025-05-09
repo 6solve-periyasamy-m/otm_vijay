@@ -23,6 +23,7 @@ class Details extends V3BookingComponent
         'lead.email_address.email' => 'Please enter a valid email address.',
         'lead.first_name.required' => 'First name is required.',
         'lead.last_name.required' => 'Last name is required.',
+        'lead.mobile_number.required' => 'Mobile number name is required.',
     ];
     public BookingTraveller|null $lead = null;
     public Address $leadAddress, $payerAddress;
@@ -34,6 +35,8 @@ class Details extends V3BookingComponent
     {
         parent::mount($tour, $booking, $quote);
         $this->payer = $this->booking->leadTraveller;
+        $date = trim($this->payer->date_of_birth);
+        $this->payer_date_of_birth_formatted = optional($this->payer->date_of_birth)->format('d-m-Y');
         $this->leadAddress = $this->lead->billingAddress ?? new Address();
         $this->payerAddress = $this->payer->homeAddress ?? new Address();
         $this->countries = Country::orderBy('priority', 'desc')->orderBy('name')->get(['id', 'name'])->toArray(); 
@@ -41,11 +44,13 @@ class Details extends V3BookingComponent
         if ($this->leadIsTravelling) {
             $this->lead = new BookingTraveller();
             $this->leadAddress = $this->lead->homeAddress ?? new Address();
+            $this->lead_date_of_birth_formatted = '';
         } else {
             $leadTraveller = BookingTraveller::where('booking_id', $this->booking->id)
                         ->where('role', 1) // role 1 for lead traveller
                         ->first();
             $this->lead = $leadTraveller;
+            $this->lead_date_of_birth_formatted = optional($this->lead->date_of_birth)->format('d-m-Y');
             $this->leadAddress = $this->lead->homeAddress ?? new Address();
         }
     }
@@ -94,10 +99,6 @@ class Details extends V3BookingComponent
     {
         $this->validate();
         $this->saveLeadTraveller();
-        // Disabled due to logic error. Not required right now.
-        // foreach ($this->booking->travellers as $traveller) {
-        //    $traveller->repository->validateIncluded();
-        // }
     }
 
     public function saveLeadTraveller(): void
@@ -204,9 +205,35 @@ class Details extends V3BookingComponent
         $this->payer->billingAddress->save();
     }
 
+    public function updatedPayerDateOfBirthFormatted($value)
+    {
+        try {
+            $this->payer->date_of_birth = \Carbon\Carbon::createFromFormat('d-m-Y', $value)->format('Y-m-d');
+            $this->payer->save();
+        } catch (\Exception $e) {
+            $this->addError('payer_date_of_birth_formatted', 'Invalid date format. Use dd-mm-yyyy.');
+        }
+    }
+
+    public function updatedLeadDateOfBirthFormatted($value)
+    {
+        try {
+            $this->lead->date_of_birth = \Carbon\Carbon::createFromFormat('d-m-Y', $value)->format('Y-m-d');
+        } catch (\Exception $e) {
+            $this->addError('lead_date_of_birth_formatted', 'Invalid date format. Use dd-mm-yyyy.');
+        }
+    }
+
     private function saveTravellerProfile()
     {
-        $this->payer->date_of_birth = Carbon::parse($this->payer->date_of_birth)->format('Y-m-d');
+        if (!empty($this->payer->date_of_birth)) {
+            try {
+                $this->payer->date_of_birth = \Carbon\Carbon::parse($this->payer->date_of_birth)->format('Y-m-d');
+            } catch (\Exception $e) {
+                $this->addError('payer.date_of_birth', 'Invalid date format.');
+                return;
+            }
+        }
         $this->payer->save();
         $this->booking->lead_traveller_id = $this->payer->id;
         $this->booking->save();
@@ -215,6 +242,7 @@ class Details extends V3BookingComponent
         $this->payer->billingAddress->country_id = $this->payerAddress->country_id;
         $this->payer->billingAddress->save();        
     }
+
     public function rules()
     {
         $rules = [
@@ -223,7 +251,6 @@ class Details extends V3BookingComponent
             'payer.last_name' => 'required|string|max:255',
             'payer.mobile_number' => 'nullable|string|regex:/^[0-9+\-\s()]*$/|max:20',
             'payerAddress.country_id' => 'nullable|exists:countries,id',
-            'payer.date_of_birth' => 'nullable|date:d-m-Y',
         ];
 
         if (!$this->leadIsTravelling) {
@@ -231,9 +258,8 @@ class Details extends V3BookingComponent
                 'lead.email_address' => 'required|email',
                 'lead.first_name' => 'required|string|max:255',
                 'lead.last_name' => 'required|string|max:255',
-                'lead.mobile_number' => 'nullable|string|regex:/^[0-9+\-\s()]*$/|max:20',
+                'lead.mobile_number' => 'required|string|regex:/^[0-9+\-\s()]*$/|max:20',
                 'leadAddress.country_id' => 'nullable|exists:countries,id',
-                'lead.date_of_birth' => 'nullable|date:d-m-Y',
                 'booking.notes' => 'nullable|string|max:1000',
             ]);
         }
