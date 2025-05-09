@@ -82,9 +82,11 @@
                                 <h4 class="sub-heading-4">Package details</h4>
                                 <div class="hide-package-detail">Hide package details</div>
                             </div>
+                            @if($tour->event?->image_url !== null)
                             <div class="image-block">
-                                <img src="{{ asset('images/sportEvent.png') }}" alt="package-details">
+                                <img src="{{ asset($tour->event?->image_url) }}" alt="package-details">
                             </div>
+                            @endig
                             <div class="base-package">
                                 <h6 class="sub-heading-6">BASE PACKAGE</h6>
                                 <h2>{{ $tour->name }}</h2>
