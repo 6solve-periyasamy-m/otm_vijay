@@ -259,7 +259,7 @@
                                 <div class="payable-now">
                                     <div class="single">
                                         <p>Payable now @if(!$payFull)({{ $booking->tour?->deposit_percentage }}%)@endif</p>
-                                        <p>{{ $this->formatCurrency($payFull ? $booking->repository->getTotalCost() + $estimateSingleOccupancy : $booking->repository->getDueTodayAmount())  }}</p>
+                                        <p>{{ $this->formatCurrency($payFull ? $booking->repository->getTotalCost() + $estimateSingleOccupancy : $booking->repository->getDueTodayAmount(), 2)  }}</p>
                                     </div>
                                     @if(!$payFull)
                                     <p>
@@ -337,8 +337,8 @@
             </div>
             <div class="value">
                 <div>
-                    <h6>Number of Travellers</h6>
-                    <p class="text-center">{{ $this->getTravellerCount() }}</p>
+                    <h6 class="text-center">{{ $this->getTravellerCount() }}</h6>
+                    <p>No. of Travellers</p>                    
                 </div>
                 <span></span>
                 <div>

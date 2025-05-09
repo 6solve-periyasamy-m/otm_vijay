@@ -31,7 +31,7 @@ if (!function_exists('fr_currency')) {
      * @param Currency|string|null $currency The currency to format in
      * @return string
      */
-    function fr_currency(?float $amount, Currency|string|null $currency = null, bool $strip = false): string
+    function fr_currency(?float $amount, Currency|string|null $currency = null, bool $strip = false, ?int $decimalPrecision = 0): string
     {
         if (!is_string($currency)) $currency = ($currency ?? Settings::currency())?->code;
         // $string = (new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($amount ?? 0.0, $currency);
@@ -41,8 +41,9 @@ if (!function_exists('fr_currency')) {
         // return $string;
         $roundedAmount = round($amount ?? 0.0); // Round to nearest whole number
         $formatter = new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY);
-        $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, 0); // Hide decimals
-        $formatted = $formatter->formatCurrency($roundedAmount, $currency);
+        $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $decimalPrecision ?? 0); // Hide decimals
+        $amountToFormat = $decimalPrecision ? $amount : $roundedAmount;
+        $formatted = $formatter->formatCurrency($amountToFormat, $currency);
         if ($currency === 'SGD') {
             $formatted = preg_replace('/^SGD\s*/', '$', $formatted);
         }

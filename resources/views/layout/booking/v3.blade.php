@@ -2948,6 +2948,7 @@
             color: var(--white);
             background-color: var(--include-cta-color);
         }
+        .room-selection {margin: 0px 0px 16px 0px; font-size: 16px; line-height: 24px; color: #F35B15;}
     </style>
 </head>
 <body>
