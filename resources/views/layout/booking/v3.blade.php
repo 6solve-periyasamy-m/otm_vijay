@@ -1003,7 +1003,7 @@
             font-weight: 500;
             color: var(--primary-color);
             margin: 32px 0px 24px 0px;
-            font-size: 14px;
+            font-size: 18px;
             line-height: 20px;
             letter-spacing: 2.24px;
         }
@@ -2948,7 +2948,7 @@
             color: var(--white);
             background-color: var(--include-cta-color);
         }
-        .room-selection {margin: 0px 0px 16px 0px; font-size: 16px; line-height: 24px; color: #F35B15;}
+        .room-selection .payment-method h6 .reselect_config {margin: 0px 0px 16px 0px; font-size: 16px; line-height: 24px; color: #F35B15;}
     </style>
 </head>
 <body>
