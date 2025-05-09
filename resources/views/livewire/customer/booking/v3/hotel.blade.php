@@ -94,6 +94,11 @@
                 @if($reselectConfigMessage)
                     <p>{{ $reselectConfigMessage }}</p>
                 @endif
+                @error('common')
+                <div style="padding-top: 1rem; color: red;">
+                    {{ $message }}
+                </div>
+                @enderror
             </div>
 
             <div class="room-listing-module">
