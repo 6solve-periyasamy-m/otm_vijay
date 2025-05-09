@@ -124,9 +124,11 @@
                         <div class="form-field" id="bed-config-{{ $x }}">
                             @foreach($this->tour->repository->getBookingRooms($selectedHotel) as $id => $item)
                                 @php
+                                    $available = $item['availability'] > count($rooms);
                                     $selectedRoomId = $rooms[$x]['room'] ?? null;
                                     $isSelected = $selectedRoomId == $id;
                                     $cls = $isSelected ? 'selected-bed' : '';
+                                    if (!$available) { $cls .= ' disabled'; }
                                     $roomName = strtolower($item['name']);
                                     $img = match(true) {
                                         str_contains($roomName, 'single'), str_contains($roomName, 'double') =>
@@ -150,6 +152,7 @@
                                             data-bed-occupancy="{{ $item['occupancy'] }}"
                                             data-desc-id="desc-{{ $id }}"
                                             data-readonly="true"
+                                            @if(!$available) disabled @endif
                                     >
                                     <p class="bed_imgs"> <img src="{{ asset($img) }}" alt="icon"></p>
                                     <span class="midle_bar"></span>

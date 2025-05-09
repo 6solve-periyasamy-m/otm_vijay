@@ -763,6 +763,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         } else {
             $tourComponents = $this->tour->accommodationInventoryTours;
         }
+        $availability = [];
         foreach ($tourComponents as $inventoryTour) {
             $name = $inventoryTour->inventory->roomType->name;
             if ($inventoryTour->tour_component_type !== 'Included') {
@@ -773,6 +774,14 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
 
             $bedType = trim(Str::afterLast($name, '-'));
             $rooms[$inventoryTour->inventory->room_type_id] = ['id'=> $inventoryTour->inventory->roomType->id, 'name' => $bedType, 'room_desc' => $inventoryTour->inventory->category_description, 'occupancy' => $inventoryTour->inventory->roomType->maximum_occupancy, 'component_type' => $inventoryTour->tour_component_type, 'board_type' => $inventoryTour->inventory->boardType?->name, 'sales_price' => $inventoryTour->tour_sales_price];
+            $available = $inventoryTour->repository->isStockControlActive() ? $inventoryTour->repository->getAvailableStock() : 999_999;
+            $availability[$inventoryTour->inventory->room_type_id] = min($available, ($availablility[$inventoryTour->inventory->room_type_id] ?? 999_999));
+        }
+        foreach ($rooms as $key => $data) {
+            $rooms[$key] = [
+                ...$data,
+                'availability' => $availability[$key],
+            ];
         }
         return $rooms;
     }
