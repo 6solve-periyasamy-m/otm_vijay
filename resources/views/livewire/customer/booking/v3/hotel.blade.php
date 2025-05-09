@@ -24,7 +24,7 @@
         </div>
         <div class="booking-dates">
             <h6 class="sub-heading-6">BOOKING DATES</h6>
-            <p>If you would like to extend your stay, please contact our Sales Team at <a href="mailto:travel@kpt.com.au">travel@kpt.com.au</a></p>
+            <p>If you would like to extend your stay, please contact our Sales team at <a href="mailto:travel@kpt.com.au">travel@kpt.com.au</a></p>
             <!-- <p class="mod">Extend your stay</p> -->
             <div class="check-in-check-out">
                 <div class="first">
@@ -89,7 +89,7 @@
                     </div>
                 @endforeach
             </div>
-            <p class="reselect_config">Please reselect your configuration</p>
+            <span class="reselect_config">Please reselect your configuration</span>
             <div class="room-listing-module">
                 @php
                     $bookingRooms = $this->tour->repository->getBookingRooms($selectedHotel);
@@ -366,10 +366,14 @@
 
             $('.reselect_config').hide();
             $('.include-button').on('click', function () {
-                $('.reselect_config').show();
-                $('html, body').animate({
-                    scrollTop: $('.reselect_config').offset().top
-                }, 800);
+            $('.reselect_config').show();
+            $('html, body').animate({
+                scrollTop: $('.showcase').offset().top
+                }, 800, function() {
+                    setTimeout(function() {
+                    $('.reselect_config').fadeOut();
+                    }, 50000);
+                });
             });
 
         });

@@ -184,14 +184,14 @@ abstract class V3BookingComponent extends Component
         return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
     }
 
-    public function formatCurrency(float|int|null $value): string
+    public function formatCurrency(float|int|null $value, ?int $decimalPrecision = 0): string
     {
         $value = $value ?? 0.0;
         $value *= $this->getFXRate();
         if (flag('booking.round_to_five')) {
             $value = round_to_five($value);
         }
-        return fr_currency($value, $this->getCurrency(), true) . " " . $this->getCurrency()->code;
+        return fr_currency($value, $this->getCurrency(), true, $decimalPrecision) . " " . $this->getCurrency()->code;
     }
 
     public function hasActivity(ActivityInventoryTour $tourComponent): bool
