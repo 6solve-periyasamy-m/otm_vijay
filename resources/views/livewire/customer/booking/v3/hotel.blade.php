@@ -89,7 +89,13 @@
                     </div>
                 @endforeach
             </div>
-            <div class="reselect_config">Please reselect your configuration</div>
+            
+            <div class="reselect_config">
+                @if($reselectConfigMessage)
+                    <p>{{ $reselectConfigMessage }}</p>
+                @endif
+            </div>
+
             <div class="room-listing-module">
                 @php
                     $bookingRooms = $this->tour->repository->getBookingRooms($selectedHotel);
@@ -362,21 +368,18 @@
                 const $room = $(this);
                 updateBedConfigs($room);
             });
+       });
+    </script>
 
-
-            $('.reselect_config').hide();
-            $('.include-button').on('click', function () {
-            $('.reselect_config').show();
-            $('html, body').animate({
-                scrollTop: $('.showcase').offset().top
-                }, 800, function() {
-                    setTimeout(function() {
-                    $('.reselect_config').fadeOut();
-                    }, 50000);
+    <script>
+        window.addEventListener('scroll-to-reselect', event => {
+            const reselectConfigDiv = document.querySelector('.reselect_config');
+            if (reselectConfigDiv) {
+                window.scrollTo({
+                    top: reselectConfigDiv.offsetTop,
+                    behavior: 'smooth'
                 });
-            });
-
+            }
         });
-
     </script>
 </x-customer.booking.v3.layout>

@@ -2947,7 +2947,16 @@
             color: var(--white);
             background-color: var(--include-cta-color);
         }
-        .room-selection .payment-method h6 .reselect_config {margin: 0px 0px 16px 0px; font-size: 16px; line-height: 24px; color: #F35B15;}
+
+        .reselect_config {
+            color: #ff0000;
+            padding: 10px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .notice-message {
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>

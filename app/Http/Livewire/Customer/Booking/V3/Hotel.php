@@ -18,6 +18,7 @@ class Hotel extends V3BookingComponent
     public BookingTraveller|null $lead = null;
     public $roomDescriptions = [];
     public $categories = [];
+    public $reselectConfigMessage = '';
 
     public function mount($tour = null, $booking = null, $quote = null)
     {
@@ -27,6 +28,7 @@ class Hotel extends V3BookingComponent
         $this->lead = $this->booking->leadTraveller;
         $this->setRoomDescriptions($this->selectedHotel);
         $this->setupCategories();
+        $this->reselectConfigMessage = '';
     }
 
     private function setupCategories()
@@ -192,6 +194,9 @@ class Hotel extends V3BookingComponent
         $this->selectedHotel = $id;
         $this->setupRooming();
         $this->setRoomDescriptions($id);
+
+        $this->reselectConfigMessage = 'Please reselect your configuration.';
+        $this->dispatchBrowserEvent('scroll-to-reselect');
     }
 
     public function updatedRooms($value, $key)
