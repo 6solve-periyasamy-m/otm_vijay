@@ -92,7 +92,7 @@ use App\Models\Helper\Enum\ActivityCategory;
         @if($tour->activityInventoryTours()->where('tour_component_type', '=', 'Add-on')->count() > 0)
             <div class="tickets">
                 <h2 class="sub-heading-2-p">ADD A TICKET</h2>
-                <p>Want more tennis action? Add tickets now</p>
+                <p>Want more action? Add tickets now</p>
                 <div class="tickets-listing">
                     @foreach($tour->activityInventoryTours()->where('tour_component_type', '=', 'Add-on')->get() as $tourComponent)
                         @continue($tourComponent->inventory->component->activity_category !== ActivityCategory::MAIN)
