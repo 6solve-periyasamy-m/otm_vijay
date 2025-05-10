@@ -73,7 +73,6 @@ use App\Models\Helper\Enum\ActivityCategory;
                     </div>
                 @endforeach
                 @foreach ($tour->merchandise()->where('tour_component_type', '=', 'Included')->get() as $tourComponent)
-                    @continue($tourComponent->inventory->component->activity_category !== ActivityCategory::NORMAL)
                     @php $active = !($tourComponent->tour_component_type === 'Included' || $this->hasMerchandise($tourComponent)); @endphp
                     <div class="inclusion-single">
                         @php $imagePath = public_path($tourComponent->inventory->component->image_url ?? ''); @endphp
@@ -109,7 +108,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                     </div>
                                 </div>
                             @endif
-                            <button type="button" class="include-button {{ $active ? 'active' : '' }}" wire:click="toggleActivityAddon({{$tourComponent->id}})">
+                            <button type="button" class="include-button {{ $active ? 'active' : '' }}" wire:click="toggleMerchandiseAddon({{$tourComponent->id}})">
                                 @if($tourComponent->tour_component_type === 'Included')
                                     Included
                                 @else

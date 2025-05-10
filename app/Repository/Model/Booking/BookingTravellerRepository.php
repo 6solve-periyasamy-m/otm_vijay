@@ -593,7 +593,7 @@ class BookingTravellerRepository extends ModelRepository
 
     public function addAllIncluded()
     {
-        foreach ($this->traveller->booking->tour->repository->getComponents(false, true, true, true, false, ['Included',]) as $inventoryTourRepository) {
+        foreach ($this->traveller->booking->tour->repository->getComponents(false, true, true, true, true, ['Included',]) as $inventoryTourRepository) {
             if (!$inventoryTourRepository->isBookable()) continue;
             $inventoryTourRepository->grantToBookingTraveller($this->traveller);
         }
