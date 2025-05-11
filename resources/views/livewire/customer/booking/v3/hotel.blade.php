@@ -175,16 +175,17 @@
         <!-- BREAKPOINT: Hotels Section -->
         <div class="hotel">
             <h6 class="sub-heading-6">HOTEL</h6>
-            @php $hotels = $this->tour->repository->getHotels();
-                            $currentRating = $default->accommodationtype?->name;
-                            $nextHotel = $this->tour->repository->getNextAccommodationByRating($hotels, $currentRating ?? '');
+            @php
+                $hotels = $this->tour->repository->getHotels();
+                $currentRating = $default->accommodationtype?->name;
+                $nextHotel = $this->tour->repository->getNextAccommodationByRating($hotels, $currentRating ?? '');
             @endphp
             @if ($nextHotel)
                 @php
                     $hotelName = $nextHotel['hotel']->name ?? '';
                     $hotelType = $nextHotel['accommodationType'] ?? '';
                 @endphp
-                <p>Your package includes a {{ $noOfNights == 1 ? 'night' : $noOfNights.'-nights' }} stay at {{ $hotelName }}, a {{ $hotelType }} hotel. If you’d like to upgrade, please select from one of the other options below.</p>
+                <p>Your package includes a {{ $noOfNights == 1 ? 'night' : $noOfNights.'-nights' }} stay at {{ $default->name }}, a {{ $default->accommodationtype?->name }} hotel. If you’d like to upgrade, please select from one of the other options below.</p>
             @endif
             <div class="hotel-listing">
                 {{--@foreach($this->tour->repository->getHotels() as $id => $arrHotel)
