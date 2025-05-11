@@ -124,7 +124,7 @@ class Hotel extends V3BookingComponent
             $roomType = RoomType::find($room['room']);
             $equivalent = $this->getEquivalentRoomType($hotel, $category, $roomType);
             foreach ($groups as $group) {
-                if ($group->category?->id === $category->id &&
+                if ($group->category?->id === $category?->id &&
                     $group->occupancy->id === $equivalent?->id)
                 {
                     $cost += $group->getUpgradeCost();
