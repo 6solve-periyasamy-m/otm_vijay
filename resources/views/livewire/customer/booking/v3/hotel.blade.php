@@ -251,9 +251,9 @@
                                 <select wire:model="categories.{{$hotel->id}}" class="room-selector" data-hotel-id="{{ $hotel->id }}">
                                     @php $seen = []; @endphp
                                     @foreach($hotelGroups as $group)
-                                        @continue(in_array($group->category->id, $seen))
+                                        @continue(in_array($group->category?->id, $seen))
                                         @php
-                                            $seen[] = $group->category->id;
+                                            $seen[] = $group->category?->id;
                                             $isUpgrade = $group->rooms[0]->tour_component_type === 'Upgrade';
                                             $upgradeCost = $isUpgrade ? '(' . $this->formatCurrency($group->getUpgradeCost() * count($this->rooms)) . ')' : '';
                                         @endphp
