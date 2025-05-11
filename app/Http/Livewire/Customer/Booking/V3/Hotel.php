@@ -151,7 +151,6 @@ class Hotel extends V3BookingComponent
             default => strtolower($roomType->name),
         };
         foreach ($hotelGroups as $hotelGroup) {
-            \Log::info("Checking {$hotelGroup->occupancy->name} against {$matchType}");
             if ($category?->id !== $hotelGroup->category?->id) { continue; }
             if (str_contains(strtolower($hotelGroup->occupancy->name), $matchType)) { return $hotelGroup->occupancy; }
         }
