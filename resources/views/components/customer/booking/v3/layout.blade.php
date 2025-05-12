@@ -322,7 +322,7 @@
     <div class="more-package-contain">
         <div class="more-package-block">
             <div class="popup-package-details">
-                <div class="add-close-button"><img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details"></div>
+                <div class="info-close-button"><img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details"></div>
                 <div class="popup-top-module">
                     <h4 class="sub-heading-4">Package details</h4>
                     <div class="hide-package-detail">Hide package details</div>

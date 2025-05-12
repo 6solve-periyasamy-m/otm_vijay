@@ -177,7 +177,6 @@
                 </div>
             </div>
             --}}
-            </br>
             <div class="acc-tp-cond">
                 <input type="checkbox" wire:model="terms">
                 <label class="contain-v"><span class="fnal-txt">I accept the <a href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">Terms & Conditions</a></span>

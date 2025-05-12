@@ -24,13 +24,14 @@ use App\Models\Helper\Enum\ActivityCategory;
                                     <div class="content-module">
                                         <h6>{!! $tourComponent->inventory?->description !!}</h6>
                                         <p>{{ $tourComponent->inventory->component?->field1 }} </p>
-                                        <p>
+                                        <div>
                                             @if($activeUpgrade->tour_component_type === 'Included')
-                                                Included
+                                                <p>Included</p>
                                             @else
-                                                <span class="upgrade_tour_sales_price">+{{ $this->formatCurrency($activeUpgrade->tour_sales_price * $this->getTravellerCount()) }} </span>Total
+                                                <p><span class="upgrade_tour_sales_price">+{{ $this->formatCurrency($activeUpgrade->tour_sales_price) }} </span> per person price</p>
+                                                <p><span class="upgrade_tour_sales_price">+{{ $this->formatCurrency($activeUpgrade->tour_sales_price * $this->getTravellerCount()) }} </span>Total</p>
                                             @endif
-                                        </p>
+                                        </div>
                                     </div>
                                     <!-- <div class="ic-block">
                                         <div><img src="/images/Ticket-Icon.svg" alt="ticket-icon"></div>
@@ -55,8 +56,8 @@ use App\Models\Helper\Enum\ActivityCategory;
                                             @foreach ($tourComponent->upgrades ?? [] as $upgrade)
                                                 <option value="{{ $upgrade->upgrade->id }}"
                                                         @if($this->hasActivity($upgrade->upgrade)) selected @endif>{{ $upgrade->upgrade->activityInventory->activity->seating?->name }}
-                                                    (+{{ $this->formatCurrency($upgrade->upgrade->tour_sales_price) }}
-                                                    )
+                                                    {{-- (+{{ $this->formatCurrency($upgrade->upgrade->tour_sales_price) }}
+                                                    ) --}}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -112,8 +113,14 @@ use App\Models\Helper\Enum\ActivityCategory;
                                     <div class="content-module">
                                         <h6>{!! $tourComponent->inventory?->description !!}</h6>
                                         <p>{{ $tourComponent->inventory->component?->field1}}</p>
-                                        <p>
-                                        <span class="upgrade_tour_sales_price">+{{ $this->formatCurrency($tourComponent->tour_sales_price * $this->getTravellerCount()) }} </span>Total</p>
+                                        <div>
+                                            @if($activeUpgrade->tour_component_type === 'Included')
+                                                <p>Included</p>
+                                            @else
+                                                <p><span class="upgrade_tour_sales_price">+{{ $this->formatCurrency($activeUpgrade->tour_sales_price) }} </span> per person price</p>
+                                                <p><span class="upgrade_tour_sales_price">+{{ $this->formatCurrency($activeUpgrade->tour_sales_price * $this->getTravellerCount()) }} </span>Total</p>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                                 <select>

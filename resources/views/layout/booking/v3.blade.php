@@ -1681,6 +1681,12 @@
             border-top-right-radius: 22px;
         }
 
+        .hotel-more-info-popup .hotel-more-info-contain .hotel-image-block > div img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .hotel-listing .single-hotel .hotel-block {
             padding: 24px;
         }
@@ -2323,7 +2329,7 @@
       border-radius: 16px;
     }
 
-    .additional-inclusion-popup {
+    .additional-inclusion-popup, .hotel-more-info-popup {
       position: fixed;
       top: 0;
       left: 0;
@@ -2339,7 +2345,7 @@
       z-index: 1111 !important;
     }
 
-    .additional-inclusion-popup .additional-contain, .more-package-info-popup .more-package-contain {
+    .additional-inclusion-popup .additional-contain, .more-package-info-popup .more-package-contain, .hotel-more-info-popup .hotel-more-info-contain {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -2348,7 +2354,7 @@
       position: relative;
     }
 
-    .additional-inclusion-popup .additional-contain .additional-block,  {
+    .additional-inclusion-popup .additional-contain .additional-block, .hotel-more-info-popup .hotel-more-info-contain .hotel-more-info-block {
       max-width: 640px;
       width: 86%;
       padding: 58px 32px;
@@ -2358,7 +2364,7 @@
       border-radius: 16px;
     }
 
-    .additional-inclusion-popup h4 {
+    .additional-inclusion-popup h4, .hotel-more-info-contain h4 {
       font-family: "Begum-Medium";
       text-transform: uppercase;
       font-weight: 500;
@@ -2409,7 +2415,7 @@
       cursor: pointer;
     }
 
-    .additional-inclusion-popup .add-close-button, .more-package-info-popup  .add-close-button{
+    .additional-inclusion-popup .add-close-button, .more-package-info-popup  .info-close-button, .hotel-more-info-popup .add-close-button{
       position: absolute;
       top: 25px;
       right: 25px;
@@ -2473,7 +2479,7 @@
       }
     }
 
-    .additional-inclusion-popup {
+    .additional-inclusion-popup, .hotel-more-info-popup{
       display: none;
     }
 
@@ -2867,7 +2873,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 15px 20px;submit-btn
+      padding: 15px 20px;
       border: 1.5px solid var(--primary-color);
       border-radius: 50px;
       background: var(--white);
@@ -2938,7 +2944,7 @@
         margin-block-start: 0px; 
         margin-block-end: 0px;    
         width: 54px;
-        text-align: center; more-package-info
+        text-align: center;
     }
 
     .bed-configuration-h input[type="radio"]:checked + .custom-radio {
@@ -3007,7 +3013,7 @@
         }
         .acc-tp-cond .fnal-txt a{color: var(--primary-color);}
         .acc-tp-cond .contain-v{margin-bottom: 0px;}
-        .timeline a, .booking-dates a, .more-package-info a { color: #F35B15; }
+        .timeline a, .booking-dates a, .more-package-info a, .hotel-more-info a { color: #F35B15; }
         .disable-next {
             display: inline-block;
             padding: 11.5px 56px;
@@ -3031,6 +3037,10 @@
             font-weight: bold;
         }
         .more-package-info {margin: 10px 0px 0px 1px;}
+        .per-person-price {
+            display: flex;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -3067,8 +3077,8 @@
         document.addEventListener('DOMContentLoaded', function () {
             const moreInfoLink = document.querySelector('.moreinfo-href');
             const popup = document.querySelector('.more-package-info-popup');
-            const closeBtn = document.querySelector('.add-close-button');
-
+            const closeBtn = document.querySelector('.info-close-button');
+            console.log("asdsadsadsada");
             moreInfoLink?.addEventListener('click', function (e) {
                 e.preventDefault();
                 popup.style.display = 'flex';
@@ -3089,15 +3099,3 @@
     @livewireScripts
 </footer>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
