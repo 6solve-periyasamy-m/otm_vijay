@@ -251,6 +251,7 @@ class Details extends V3BookingComponent
             'payer.last_name' => 'required|string|max:255',
             'payer.mobile_number' => 'nullable|string|regex:/^[0-9+\-\s()]*$/|max:20',
             'payerAddress.country_id' => 'nullable|exists:countries,id',
+            'booking.notes' => 'nullable|string|max:1000',
         ];
 
         if (!$this->leadIsTravelling) {
@@ -260,7 +261,6 @@ class Details extends V3BookingComponent
                 'lead.last_name' => 'required|string|max:255',
                 'lead.mobile_number' => 'required|string|regex:/^[0-9+\-\s()]*$/|max:20',
                 'leadAddress.country_id' => 'nullable|exists:countries,id',
-                'booking.notes' => 'nullable|string|max:1000',
             ]);
         }
 

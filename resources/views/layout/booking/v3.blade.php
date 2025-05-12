@@ -776,13 +776,29 @@
             margin: 0px 0px 32px 0px;
         }
 
+        .more-package-block {
+            max-height: 563px !important;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .popup-tour-description ul li {
+            font-family: "PP Neue Montreal Medium";
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 32px;
+            color: var(--text-ligh-grey);
+        }
+
+        .popup-package-details .image-block { height: 293px; width: 100%; margin: 10px 0px 10px 0px; }
+
         .package-details .contain .image-block {
-            height: 293px;
+            height: 250px;
             width: 100%;
             margin-bottom: 32px;
         }
 
-        .package-details .contain .image-block img {
+        .package-details .contain .image-block img, .popup-package-details .image-block img{
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -799,27 +815,56 @@
 
         .base-package h6 {
             font-size: 14px;
-            line-height: 18px;
+            line-height: 16px;
             color: var(--primary-color);
             letter-spacing: 2.24px;
-            margin: 0px 0px 24px 0px;
+            margin: 0px 0px 14px 0px;
         }
 
         .base-package h2 {
             font-family: "PlayfairDisplay-Regular";
-            font-size: 32px;
-            line-height: 44px;
+            font-size: 30px;
+            line-height: 40px;
             font-weight: 400;
             color: var(--primary-color);
             text-transform: uppercase;
+            margin-top: 10px;
         }
 
-        .base-package ul {
+        .popup-base-package h2 {
+            font-family: "PlayfairDisplay-Regular";
+            font-size: 25px;
+            line-height: 30px;
+            font-weight: 350;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .popup-base-package h6 {
+            font-family: "PP Neue Montreal Medium";
+            font-size: 15px;
+            line-height: 30px;
+            font-weight: 350;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .popup-base-package p {
+            font-size: 16px;
+            line-height: 24px;
+            color: var(--text-dark);
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .base-package ul, .popup-base-package ul {
             padding-left: 30px;
             margin: 0;
         }
 
-        .base-package ul li {
+        .base-package ul li, .popup-base-package ul li {
             font-family: "PP Neue Montreal Medium";
             font-weight: 500;
             font-size: 16px;
@@ -924,7 +969,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 50px;
+            margin-bottom: 20px;
             column-gap: 8px;
         }
 
@@ -974,15 +1019,15 @@
             font-weight: 500;
             font-size: 16px;
             line-height: 24px;
+            color: var(--text-dark);
         }
 
         .option-subtext {
-            font-size: 14px;
+            font-size: 16px;
             color: #000;
             line-height: 1.5;
             margin-left: 38px;
             margin-top: 8px;
-            s
         }
 
         .price, .option-subtext {
@@ -994,8 +1039,8 @@
         }
 
         .option-subtext {
-            font-size: 14px;
-            line-height: 18px;
+            font-size: 17px;
+            line-height: 22px;
         }
 
         .payment-method h6 {
@@ -2059,8 +2104,8 @@
       background-size: 16px 16px;
       cursor: pointer;
       font-size: 12px;
-      line-height: 14px;
-      padding: 4px 12px;
+      line-height: 16px;
+      padding: 4px 22px;
       border: 1px solid var(--primary-color);
       border-radius: 999px;
       width: 100%;
@@ -2069,6 +2114,7 @@
       outline: 0;
       color: var(--primary-color);
       margin-bottom: 8px;
+      text-wrap: wrap;
     }
 
     .session-block {
@@ -2250,6 +2296,33 @@
       font-weight: 500;
     }
 
+    .more-package-info-popup  {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #000000BF;
+      width: 100%;
+      height: 100%;
+      padding: 0rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1111 !important;
+      display: none;
+    }
+
+    .more-package-info-popup .more-package-contain .more-package-block {
+      max-width: 563px;
+      width: 86%;
+      padding: 58px 32px;
+      background: var(--white);
+      position: relative;
+      box-sizing: border-box;
+      border-radius: 16px;
+    }
+
     .additional-inclusion-popup {
       position: fixed;
       top: 0;
@@ -2266,7 +2339,7 @@
       z-index: 1111 !important;
     }
 
-    .additional-inclusion-popup .additional-contain {
+    .additional-inclusion-popup .additional-contain, .more-package-info-popup .more-package-contain {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -2275,7 +2348,7 @@
       position: relative;
     }
 
-    .additional-inclusion-popup .additional-contain .additional-block {
+    .additional-inclusion-popup .additional-contain .additional-block,  {
       max-width: 640px;
       width: 86%;
       padding: 58px 32px;
@@ -2336,7 +2409,7 @@
       cursor: pointer;
     }
 
-    .additional-inclusion-popup .add-close-button {
+    .additional-inclusion-popup .add-close-button, .more-package-info-popup  .add-close-button{
       position: absolute;
       top: 25px;
       right: 25px;
@@ -2865,7 +2938,7 @@
         margin-block-start: 0px; 
         margin-block-end: 0px;    
         width: 54px;
-        text-align: center;    
+        text-align: center; more-package-info
     }
 
     .bed-configuration-h input[type="radio"]:checked + .custom-radio {
@@ -2928,13 +3001,13 @@
         .acc-tp-cond .fnal-txt{
             font-family: "PP Neue Montreal Medium";
             font-weight: 500;
-            font-size: 16px;
-            line-height: 14px;
+            font-size: 17px;
+            line-height: 15px;
             color: #000;
         }
         .acc-tp-cond .fnal-txt a{color: var(--primary-color);}
         .acc-tp-cond .contain-v{margin-bottom: 0px;}
-        .timeline a, .booking-dates a { color: #F35B15; }
+        .timeline a, .booking-dates a, .more-package-info a { color: #F35B15; }
         .disable-next {
             display: inline-block;
             padding: 11.5px 56px;
@@ -2957,6 +3030,7 @@
         .notice-message {
             font-weight: bold;
         }
+        .more-package-info {margin: 10px 0px 0px 1px;}
     </style>
 </head>
 <body>
@@ -2989,6 +3063,28 @@
         jQuery(document).on('click', '.check-in-check-out .second .image-module', function (params) {
             jQuery('.check-in-check-out .image-module .flatpickr-input').click();
         })
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const moreInfoLink = document.querySelector('.moreinfo-href');
+            const popup = document.querySelector('.more-package-info-popup');
+            const closeBtn = document.querySelector('.add-close-button');
+
+            moreInfoLink?.addEventListener('click', function (e) {
+                e.preventDefault();
+                popup.style.display = 'flex';
+            });
+
+            closeBtn?.addEventListener('click', function () {
+                popup.style.display = 'none';
+            });
+
+            // Optional: click outside the popup to close
+            popup?.addEventListener('click', function (e) {
+                if (e.target === popup) {
+                    popup.style.display = 'none';
+                }
+            });
+        });
     </script>
     @livewireScripts
 </footer>

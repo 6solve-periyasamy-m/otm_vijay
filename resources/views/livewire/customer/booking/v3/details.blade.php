@@ -107,33 +107,35 @@
                             <input type="text"  id="lead-dob" wire:model="lead_date_of_birth_formatted"  placeholder="DD-MM-YYYY"  class="form-control" />
                             @error('lead_date_of_birth_formatted') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
-                        <div class="full-width">
-                            <label for="summernote">Special requests</label>
-                            <div data-chk="{{$this->booking->notes}}" class="form-field-full-width" wire:ignore>
-                                <div id="summernote">{!! $this->booking->notes !!}</div>
-                                <script type="text/javascript">
-                                    $('#summernote').summernote({
-                                        placeholder: 'Message',
-                                        tabsize: 2,
-                                        height: 120,
-                                        toolbar: [
-                                            ['font', ['bold', 'italic', 'underline']],
-                                            ['para', ['paragraph', 'ol']],
-                                            ['insert', ['link', 'picture', 'emoji']],
-                                        ],
-                                        callbacks: {
-                                            onChange: function (content, $editable) {
-                                                @this.set('booking.notes', content)
-                                            }
-                                        }
-                                    });
-                                </script>
-                            </div>
-                        </div>
                     </div>
                 </div>
             @endif
         </div>
+
+        <div class="full-width">
+            <label for="summernote">Special requests</label>
+            <div data-chk="{{$this->booking->notes}}" class="form-field-full-width" wire:ignore>
+                <div id="summernote">{!! $this->booking->notes !!}</div>
+                <script type="text/javascript">
+                    $('#summernote').summernote({
+                        placeholder: 'Message',
+                        tabsize: 2,
+                        height: 120,
+                        toolbar: [
+                            ['font', ['bold', 'italic', 'underline']],
+                            ['para', ['paragraph', 'ol']],
+                            ['insert', ['link', 'picture', 'emoji']],
+                        ],
+                        callbacks: {
+                            onChange: function (content, $editable) {
+                                @this.set('booking.notes', content)
+                            }
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+
         @php $estimateSingleOccupancy = 0; @endphp
         @if($this->booking->groups()->count() <= 0)
             @php $singleCount = $this->booking->travellers()?->count() % 2; @endphp
@@ -158,7 +160,7 @@
                         <span class="option-title">Pay a {{ $booking->tour?->deposit_percentage }}% deposit now, and the rest later</span>
                     </label>
                     <div class="option-subtext">
-                        You will receive a reminder to pay the remaining balance of {{ $this->formatCurrency(($this->booking->repository->getTotalCost() + $estimateSingleOccupancy) - $this->booking->repository->getDueTodayAmount()) }} before {{ $tour->final_payment->format('d M Y') }}
+                        <p>You will receive a reminder to pay the remaining balance of {{ $this->formatCurrency(($this->booking->repository->getTotalCost() + $estimateSingleOccupancy) - $this->booking->repository->getDueTodayAmount()) }} before {{ $tour->final_payment->format('d M Y') }}</p>
                     </div>
                 </div>
                 <div class="price">{{ $this->formatCurrency($this->booking->repository->getDueTodayAmount()) }}</div>
