@@ -430,7 +430,7 @@ class Tour extends Model
         if ($this->booking_form_url === null) {
             return null;
         }
-        if (config('app.features.bleeding-edge', false)) {
+        if (config('app.features.bleeding-edge', false) || config('app.features.kpt', false)) {
             return route('booking.v3.guest', ['tour' => $this->booking_form_url, 'booking' => $booking?->token]);
         }
         if (config('app.features.kpt', false) || config('app.features.bleeding-edge')) {
