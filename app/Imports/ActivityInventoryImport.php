@@ -25,18 +25,18 @@ class ActivityInventoryImport implements ToCollection, WithHeadingRow, WithValid
     {
         $data = [];
         foreach ($collection as $row) {
-            $activity = Activity::where('name', 'like', trim($row['activity']))->first();
+            $activity = Activity::where('name', 'like', trim($row['activity'] ?? ''))->first();
             if ($activity == null) return null;
             $data[] = ActivityInventory::create([
                 'activity_id' => $activity->id,
-                'ticket_type_id' => TicketType::findOrCreate($row['ticket_type'])->id,
-                'starts_at' => !empty(trim($row['starts_at'])) ? Carbon::createFromFormat('d-m-Y H:i', trim($row['starts_at'])) : null,
-                'ends_at' => !empty(trim($row['ends_at'])) ? Carbon::createFromFormat('d-m-Y H:i', trim($row['ends_at'])) : null,
-                'fit_selectable' => trim($row['fit_selectable']) == 'YES',
-                'stock' => trim($row['stock']),
-                'purchase_price' => trim($row['purchase_price']),
-                'sales_price' => trim($row['sales_price']) != '' ? trim($row['sales_price']) : trim($row['purchase_price']),
-                'internal_notes' => trim($row['notes']),
+                'ticket_type_id' => TicketType::findOrCreate($row['ticket_type'] ?? '')->id,
+                'starts_at' => !empty(trim($row['starts_at'] ?? '')) ? Carbon::createFromFormat('d-m-Y H:i', trim($row['starts_at'])) : null,
+                'ends_at' => !empty(trim($row['ends_at'] ?? '')) ? Carbon::createFromFormat('d-m-Y H:i', trim($row['ends_at'])) : null,
+                'fit_selectable' => trim($row['fit_selectable'] ?? '') == 'YES',
+                'stock' => trim($row['stock'] ?? ''),
+                'purchase_price' => trim($row['purchase_price'] ?? ''),
+                'sales_price' => trim($row['sales_price'] ?? '') != '' ? trim($row['sales_price'] ?? '') : trim($row['purchase_price'] ?? ''),
+                'internal_notes' => trim($row['notes'] ?? ''),
             ]);
         }
         return $data;

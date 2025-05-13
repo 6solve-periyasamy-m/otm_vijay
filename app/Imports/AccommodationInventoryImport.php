@@ -27,24 +27,24 @@ class AccommodationInventoryImport implements ToCollection, WithHeadingRow, With
     {
         $data = [];
         foreach ($collection as $row) {
-            $accommodation = Accommodation::where('name', 'like', trim($row['accommodation']))->first();
+            $accommodation = Accommodation::where('name', 'like', trim($row['accommodation'] ?? ''))->first();
             $parent = AccommodationInventory::find($row['parent_id']);
-            $category = empty($row['category']) ? null : RoomCategory::findOrCreate($row['category']);
+            $category = empty($row['category'] ?? '') ? null : RoomCategory::findOrCreate($row['category'] ?? '');
             if ($accommodation == null) return null;
             $data[] = AccommodationInventory::create([
                 'accommodation_id' => $accommodation->id,
                 'stock_parent_id' => $parent?->id,
-                'room_type_id' => RoomType::findOrCreate(trim($row['room_type']), trim($row['size']))->id,
-                'board_type_id' => BoardType::findOrCreate(trim($row['board_type']))->id,
+                'room_type_id' => RoomType::findOrCreate(trim($row['room_type'] ?? ''), trim($row['size'] ?? ''))->id,
+                'board_type_id' => BoardType::findOrCreate(trim($row['board_type'] ?? ''))->id,
                 'room_category_id' => $category?->id,
-                'check_in' => Carbon::createFromFormat('d-m-Y H:i', trim($row['check_in'])),
+                'check_in' => Carbon::createFromFormat('d-m-Y H:i', trim($row['check_in'] ?? '')),
                 'check_in_time_confirmed' => true,
-                'check_out' => Carbon::createFromFormat('d-m-Y H:i', trim($row['check_out'])),
+                'check_out' => Carbon::createFromFormat('d-m-Y H:i', trim($row['check_out'] ?? '')),
                 'check_out_time_confirmed' => true,
-                'fit_selectable' => trim($row['fit_selectable']) == 'YES',
-                'stock' => trim($row['stock']) != '' ? trim($row['stock']) : 0,
-                'purchase_price' => trim($row['purchase_price']),
-                'sales_price' => trim($row['sales_price']) != '' ? trim($row['sales_price']) : trim($row['purchase_price']),
+                'fit_selectable' => trim($row['fit_selectable'] ?? '') == 'YES',
+                'stock' => trim($row['stock'] ?? '') != '' ? trim($row['stock'] ?? '') : 0,
+                'purchase_price' => trim($row['purchase_price'] ?? ''),
+                'sales_price' => trim($row['sales_price'] ?? '') != '' ? trim($row['sales_price'] ?? '') : trim($row['purchase_price'] ?? ''),
                 'internal_notes' => trim($row['notes']),
             ]);
         }
