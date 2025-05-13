@@ -187,7 +187,13 @@
                 @endphp
                 <p>Your package includes a {{ $noOfNights == 1 ? 'night' : $noOfNights.'-nights' }} stay at {{ $default->name }}, a {{ $default->accommodationtype?->name }} hotel. If you’d like to upgrade, please select from one of the other options below.</p>
             @endif --}}
-            <p>Your package includes a {{ $noOfNights == 1 ? 'night' : $noOfNights.'-nights' }} stay at {{ $default->name }}, a {{ $default->accommodationtype?->name }} hotel. If you’d like to upgrade, please select from one of the other options below.</p>
+            @if($this->hasHotelUpgrades())
+                <p>
+                    Your package includes a {{ $noOfNights == 1 ? 'night' : $noOfNights . '-nights' }} stay at
+                    {{ $default->name }}, a {{ $default->accommodationtype?->name }} hotel.
+                    If you’d like to upgrade, please select from one of the other options below.
+                </p>
+            @endif
             <div class="hotel-listing">
                 {{--@foreach($this->tour->repository->getHotels() as $id => $arrHotel)
                     @php
@@ -270,7 +276,7 @@
                                 @endphp
                                 <p class="breakfast-note">{{ $defaultGroup->board->name }} </p>
                                 <p>{!! $descTruncated !!}</p>
-                                <p class="hotel-more-info" style="display:none;"><a>More information</a></p>
+                                <p class="hotel-more-info"><a>More information</a></p>
                                 <div class="hotel-more-info-popup">
                                     <div class="hotel-more-info-contain">
                                         <div class="hotel-more-info-block">
