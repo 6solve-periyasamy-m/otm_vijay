@@ -21,21 +21,21 @@ class AirportImport implements ToModel
      */
     public function model(array $row)
     {
-        $country = Country::where('name', 'like', trim($row[6]))->first();
+        $country = Country::where('name', 'like', trim($row[6] ?? ''))->first();
         $address = Address::create([
             'name' => $row[0],
             'parent' => AddressParent::AIRPORT,
             'location_type_id' => LocationType::findOrCreate('Airport')->id,
-            'address_line_1' => trim($row[2]),
-            'address_line_2' => trim($row[3]),
-            'town' => trim($row[4]),
-            'region' => trim($row[5]),
+            'address_line_1' => trim($row[2] ?? ''),
+            'address_line_2' => trim($row[3] ?? ''),
+            'town' => trim($row[4] ?? ''),
+            'region' => trim($row[5] ?? ''),
             'country_id' => $country->id,
-            'postcode' => trim($row[7]),
+            'postcode' => trim($row[7] ?? ''),
         ]);
         return new Airport([
-            'name' => trim($row[0]),
-            'iata_code' => trim($row[1]),
+            'name' => trim($row[0] ?? ''),
+            'iata_code' => trim($row[1] ?? ''),
             'address_id' => $address->id,
         ]);
     }
