@@ -1,12 +1,5 @@
 <x-admin.section.card>
     <div class="row">
-        @if($storage->accommodation->image_url !== null)
-            <div class="col-12">
-                <img style="width: 100%; height: 100px; object-fit: cover;" src="{{ asset($storage->accommodation->image_url) }}" alt="{{ $storage->accommodation->name }}"/>
-            </div>
-            <hr class="splitter" />
-        @endif
-
         <div class="row">
             <div class="col-10">
                 <h3 class="font-bold">

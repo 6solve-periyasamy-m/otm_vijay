@@ -60,7 +60,7 @@
         @foreach($this->fetchData() as $data)
             @continue(!$this->shouldShow($data))
             @php $selected = $this->selected($data); @endphp
-            <div class="col-3 @if($selected) selected @endif">
+            <div class="col-2 @if($selected) selected @endif">
                 <x-admin.accommodation.accommodation-selector-card :key="now()" :storage="$data" :start="$this->getStart()" :end="$this->getEnd()" :selected="$selected" :travellers="$travellers" :quantity="$this->getQuantity($data)"/>
             </div>
         @endforeach
