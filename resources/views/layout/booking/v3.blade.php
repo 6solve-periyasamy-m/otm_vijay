@@ -1673,6 +1673,12 @@
             height: 200px;
         }
 
+        .hotel-more-info-popup .hotel-more-info-contain .hotel-image-popup-block > div, .hotel-more-info-popup .hotel-more-info-contain .hotel-image-popup-block > div > div > div,
+        .hotel-more-info-popup .hotel-more-info-contain .hotel-image-popup-block > div > div > div > div, .hotel-more-info-popup .hotel-more-info-contain .hotel-image-popup-block > div > div > div > div > div {
+            width: 100%;
+            height: 320px;
+        }
+
         .hotel-listing .single-hotel .hotel-image-block > div img {
             width: 100%;
             height: 100%;
@@ -1680,11 +1686,15 @@
             border-top-left-radius: 22px;
             border-top-right-radius: 22px;
         }
-
+        .hotel-more-info-popup .hotel-more-info-contain .hotel-image-block, .hotel-more-info-popup .hotel-more-info-contain .amenities-container {
+            margin-top: 20px;
+        }
         .hotel-more-info-popup .hotel-more-info-contain .hotel-image-block > div img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
         }
 
         .hotel-listing .single-hotel .hotel-block {
@@ -2086,7 +2096,7 @@
       color: var(--primary-color);
     }
 
-    .single-block .content-module p {
+    .single-block .content-module p, .tour_sales_price {
       margin: 0 0 8px 0px;
       font-size: 12px;
       line-height: 14px;
@@ -2354,7 +2364,35 @@
       position: relative;
     }
 
-    .additional-inclusion-popup .additional-contain .additional-block, .hotel-more-info-popup .hotel-more-info-contain .hotel-more-info-block {
+    .info-body {
+        max-height: 600px !important;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-top: 20px;
+    }
+
+    .info-body::-webkit-scrollbar {
+        width: 8px;
+    }
+    .info-body::-webkit-scrollbar-track {
+        border-radius: 16px;
+    }
+    .info-body::-webkit-scrollbar-thumb {
+        background: #FAE8D3; 
+        border-radius: 10px;
+    }
+    .hotel-more-info-popup .hotel-more-info-contain .hotel-more-info-block {
+        max-width: 740px;
+        width: 86%;
+        padding: 58px 32px;
+        background: var(--white);
+        position: relative;
+        box-sizing: border-box;
+        border-radius: 16px;
+    }
+
+
+    .additional-inclusion-popup .additional-contain .additional-block {
       max-width: 640px;
       width: 86%;
       padding: 58px 32px;
@@ -2372,6 +2410,10 @@
       line-height: 44px;
       color: var(--primary-color);
       margin: 0px 0px 20px 0px;
+    }
+
+    .hotel-more-info-contain h4 {
+        line-height: 10px;
     }
 
     .additional-inclusion-popup .additional-contain .additional-block p {
@@ -2415,7 +2457,7 @@
       cursor: pointer;
     }
 
-    .additional-inclusion-popup .add-close-button, .more-package-info-popup  .info-close-button, .hotel-more-info-popup .add-close-button{
+    .additional-inclusion-popup .add-close-button, .more-package-info-popup  .info-close-button, .hotel-more-info-popup .hotel-close-button{
       position: absolute;
       top: 25px;
       right: 25px;
@@ -3041,6 +3083,9 @@
             display: flex;
             margin-bottom: 5px;
         }
+        .hotel-more-info {cursor: pointer;}
+        .amenity-icon { display: flex; gap: 8px; align-items: center;}
+        .info-body p, .info-body h5, .info-body ul li {font-family: "PP Neue Montreal Medium"; font-weight: 500; color:#000; font-size: 16px; line-height: 24px;}
     </style>
 </head>
 <body>

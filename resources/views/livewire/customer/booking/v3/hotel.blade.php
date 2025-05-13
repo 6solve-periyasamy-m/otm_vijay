@@ -264,42 +264,47 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                @php
+                                    $cleanText = strip_tags($hotel->description);
+                                    $descTruncated = Str::limit($cleanText, 200, '...');
+                                @endphp
                                 <p class="breakfast-note">{{ $defaultGroup->board->name }} </p>
-                                <p>{!! $hotel->description !!}</p>
-                                <p class="hotel-more-info" style="display:none"><a>More information</a></p>
+                                <p>{!! $descTruncated !!}</p>
+                                <p class="hotel-more-info" style="display:none;"><a>More information</a></p>
                                 <div class="hotel-more-info-popup">
                                     <div class="hotel-more-info-contain">
                                         <div class="hotel-more-info-block">
                                             <div class="info-body">
+                                                <div class="hotel-close-button"><img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details"></div>
                                                 <h4>{{ $hotel->name }}</h4>
                                                 <p>{{ $hotel->address }}</p>
                                                 <div wire:ignore>
                                                     @if(!empty($hotel->gallery) && count($hotel->gallery))
                                                         <div class="hotel-image-block">
                                                             @foreach($hotel->gallery as $photo)
-                                                                <div><img src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}"></div>
+                                                                <div><img src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy"></div>
                                                             @endforeach
                                                         </div>
                                                     @endif
                                                 </div>
-                                                <div wire:ignore>
+                                                <div wire:ignore class="amenities-container">
                                                     @if(!empty($hotel->amenities) && count($hotel->amenities))
                                                         <div class="row">
                                                             @foreach($hotel->amenities as $item)
                                                                 <div class="col-md-3 col-sm-4 col-6 mb-3">
-                                                                    <div class="d-flex align-items-center border rounded overflow-hidden p-3">
+                                                                    <div class="amenity-icon d-flex align-items-center border rounded overflow-hidden p-3">
                                                                         @if($item->image_url && !empty($item->image_url))
                                                                             <img src="{{ asset($item->image_url) }}" class="img-fluid rounded me-3" style="max-width: 24px; max-height: 24px;" alt="{{ $item->name }}">
                                                                         @endif
-                                                                        <div><h5 class="mb-0">{{ $item->name }}</h5></div>
+                                                                        <h5 class="mb-0">{{ $item->name }}</h5>
                                                                     </div>
                                                                 </div>
                                                             @endforeach
                                                         </div>
                                                     @endif
                                                 </div>
+                                                <div class="hotel-description"><p>{!! $hotel->description !!}</p></div>
                                             </div>
-                                            <div class="add-close-button"><img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -420,7 +425,7 @@
        jQuery(document).on('click', '.single-hotel .hotel-block a', function () {
            jQuery(this).closest('.hotel-block').find('.hotel-more-info-popup').css('display', 'flex')
         })
-        jQuery(document).on('click', '.hotel-more-info-popup .add-close-button,.hotel-more-info-popup .cancel', function () {
+        jQuery(document).on('click', '.hotel-more-info-popup .hotel-close-button,.hotel-more-info-popup .cancel', function () {
             jQuery(this).closest('.hotel-block').find('.hotel-more-info-popup').css('display', 'none')
         })
     </script>
