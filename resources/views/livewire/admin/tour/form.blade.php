@@ -79,6 +79,36 @@ $atol = [
     </div>
     <div class="col-xl-12">
         <x-admin.section.card>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h4 class="fw-bold">
+                        Additional Costs
+                    </h4>
+                </div>
+                <div>
+                    <button wire:click="addCost" class="btn btn-success">{{ Icon::plus() }} Add Cost</button>
+                </div>
+            </div>
+        </x-admin.section.card>
+        <div class="row">
+            @foreach($costs as $key => $cost)
+                <div class="col-xl-4">
+                    <x-admin.section.card>
+                        <div class="row">
+                            <x-livewire.input wire:model="costs.{{$key}}.name" label="Name" width="3" />
+                            <x-livewire.input wire:model="costs.{{$key}}.amount" label="Amount" width="3" />
+                            <x-livewire.input.checkbox wire:model="costs.{{$key}}.per_customer" label="Per Customer" width="3" />
+                            <div class="col-3">
+                                <button class="btn btn-danger" wire:click="removeCost({{$key}})" title="Remove">{{Icon::trash()}}</button>
+                            </div>
+                        </div>
+                    </x-admin.section.card>
+                </div>
+            @endforeach
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <x-admin.section.card>
             <button class="btn btn-success" wire:click="save">Save Tour</button>
         </x-admin.section.card>
     </div>
