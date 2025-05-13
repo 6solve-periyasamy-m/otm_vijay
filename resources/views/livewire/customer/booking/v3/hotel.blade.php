@@ -175,7 +175,7 @@
         <!-- BREAKPOINT: Hotels Section -->
         <div class="hotel">
             <h6 class="sub-heading-6">HOTEL</h6>
-            @php
+            {{-- @php
                 $hotels = $this->tour->repository->getHotels();
                 $currentRating = $default->accommodationtype?->name;
                 $nextHotel = $this->tour->repository->getNextAccommodationByRating($hotels, $currentRating ?? '');
@@ -186,7 +186,8 @@
                     $hotelType = $nextHotel['accommodationType'] ?? '';
                 @endphp
                 <p>Your package includes a {{ $noOfNights == 1 ? 'night' : $noOfNights.'-nights' }} stay at {{ $default->name }}, a {{ $default->accommodationtype?->name }} hotel. If you’d like to upgrade, please select from one of the other options below.</p>
-            @endif
+            @endif --}}
+            <p>Your package includes a {{ $noOfNights == 1 ? 'night' : $noOfNights.'-nights' }} stay at {{ $default->name }}, a {{ $default->accommodationtype?->name }} hotel. If you’d like to upgrade, please select from one of the other options below.</p>
             <div class="hotel-listing">
                 {{--@foreach($this->tour->repository->getHotels() as $id => $arrHotel)
                     @php
@@ -265,6 +266,43 @@
                                 </select>
                                 <p class="breakfast-note">{{ $defaultGroup->board->name }} </p>
                                 <p>{!! $hotel->description !!}</p>
+                                <p class="hotel-more-info" style="display:none"><a>More information</a></p>
+                                <div class="hotel-more-info-popup">
+                                    <div class="hotel-more-info-contain">
+                                        <div class="hotel-more-info-block">
+                                            <div class="info-body">
+                                                <h4>{{ $hotel->name }}</h4>
+                                                <p>{{ $hotel->address }}</p>
+                                                <div wire:ignore>
+                                                    @if(!empty($hotel->gallery) && count($hotel->gallery))
+                                                        <div class="hotel-image-block">
+                                                            @foreach($hotel->gallery as $photo)
+                                                                <div><img src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}"></div>
+                                                            @endforeach
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div wire:ignore>
+                                                    @if(!empty($hotel->amenities) && count($hotel->amenities))
+                                                        <div class="row">
+                                                            @foreach($hotel->amenities as $item)
+                                                                <div class="col-md-3 col-sm-4 col-6 mb-3">
+                                                                    <div class="d-flex align-items-center border rounded overflow-hidden p-3">
+                                                                        @if($item->image_url && !empty($item->image_url))
+                                                                            <img src="{{ asset($item->image_url) }}" class="img-fluid rounded me-3" style="max-width: 24px; max-height: 24px;" alt="{{ $item->name }}">
+                                                                        @endif
+                                                                        <div><h5 class="mb-0">{{ $item->name }}</h5></div>
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="add-close-button"><img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details"></div>
+                                        </div>
+                                    </div>
+                                </div>
                                 @php $selected = $booking->booking_accommodation_id === $hotel->id; @endphp
                                 <button type="button" wire:click="setHotel({{$hotel->id}})" class="include-button {{ $selected ? '' : 'active' }}">{{ $selected ? 'Selected' : $defaultGroup->rooms[0]->tour_component_type }}</button>
                             </div>
@@ -378,6 +416,13 @@
                 updateBedConfigs($room);
             });
        });
+
+       jQuery(document).on('click', '.single-hotel .hotel-block a', function () {
+           jQuery(this).closest('.hotel-block').find('.hotel-more-info-popup').css('display', 'flex')
+        })
+        jQuery(document).on('click', '.hotel-more-info-popup .add-close-button,.hotel-more-info-popup .cancel', function () {
+            jQuery(this).closest('.hotel-block').find('.hotel-more-info-popup').css('display', 'none')
+        })
     </script>
 
     <script>

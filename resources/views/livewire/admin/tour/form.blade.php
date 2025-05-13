@@ -14,7 +14,7 @@ $atol = [
                 <x-livewire.input wire:model="tour.name" width="8" label="Name" required />
                 <x-livewire.input.select.brand name="tour.brand_id" label="Brand" value="{{ $tour?->brand_id }}" width="2" />
                 <x-livewire.input.select.tax-bracket name="tour.tax_bracket_id" label="Tax Bracket" value="{{ $tour?->tax_bracket_id }}" width="2" />
-                <x-livewire.input wire:model="tour.description" label="Description" />
+                <x-livewire.ckeditor name="tour.description" value="{{ $tour?->description }}" label="Description" />
                 <x-livewire.input.dropdown wire:model="tour.atol_protected" :items="$atol" width="6" label="ATOL Protection" />
                 <x-livewire.input.select.tour-category name="tour.tour_category_id" width="6" label="Tour Category" clear />
                 <x-livewire.input wire:model="tour.booking_form_url" width="10" label="Booking Form URL" />

@@ -92,11 +92,15 @@
                                 <h2>{{ $tour->name }}</h2>
                                 <p class="date-align"><img src="{{ asset('icons/checkin.svg') }}" alt="calendar"> {{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
                                 <ul>
-                                    @foreach($tour->repository->getInclusions() as $inclusion)
+                                    @foreach($tour->repository->getInclusions(4) as $inclusion)
                                         <li>{{ $inclusion }}</li>
                                     @endforeach
                                 </ul>
+                                <p class="more-package-info">
+                                    <a href="#" class="moreinfo-href" data-action="popup" data-target="more-popup-info">MORE INFORMATION</a>
+                                </p>
                             </div>
+
                             @if($hidePrices ?? true)
                             <div class="additional-inclusions">
                                 @if($stage !== 1)
@@ -312,3 +316,38 @@
         </div>
     </footer>
 </div>
+
+<!-- Package Popup more information -->
+<div class="more-package-info-popup">
+    <div class="more-package-contain">
+        <div class="more-package-block">
+            <div class="popup-package-details">
+                <div class="info-close-button"><img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details"></div>
+                <div class="popup-top-module">
+                    <h4 class="sub-heading-4">Package details</h4>
+                    <div class="hide-package-detail">Hide package details</div>
+                </div>
+                @if($tour->event?->image_url !== null)
+                <div class="image-block">
+                    <img src="{{ asset($tour->event?->image_url) }}" alt="package-details">
+                </div>
+                @endif
+                <div class="popup-base-package">
+                    <h2>{{ $tour->name }}</h2>
+                    <p class="date-align"><img src="{{ asset('icons/checkin.svg') }}" alt="calendar"> {{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
+                    @if ($tour->description !== null)
+                        <h6>Description</h6>
+                        <span class="popup-tour-description"><p class="description">{!! $tour->description !!}</p></span>
+                    @endif
+                    <h6>Inclusions</h6>
+                    <ul>
+                        @foreach($tour->repository->getInclusions() as $inclusion)
+                            <li>{{ $inclusion }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end of the Package popup more information -->

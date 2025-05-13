@@ -70,7 +70,7 @@
             </div>
             <div class="col-12 col-xl-6">
                 <p>Description</p>
-                <h6 class="fw-bold">{{ $tour->description }}</h6>
+                <h6 class="fw-bold">{!! $tour->description !!}</h6>
             </div>
             <div class="col-12">
                 @can('update', \App\Models\Tour\Tour::class)
