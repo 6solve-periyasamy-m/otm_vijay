@@ -19,6 +19,7 @@
                     <p>{{ $default->accommodationtype?->name }}</p>
                     <p>{{ $this->getDefaultHotel()->roomType->name ?? '' }} </p>
                     <p>{{ $this->getDefaultHotel()->boardType->name ?? '' }} </p>
+                    <p class="hotel-more-info"><a>>>More information</a></p>
                 </div>
             </div>
         </div>
