@@ -226,7 +226,7 @@
             line-height: 20px;
             color: var(--white);
             cursor: pointer;
-        }
+   }
 
         .Go-next {
             display: inline-block;
@@ -239,7 +239,7 @@
             line-height: 20px;
             color: var(--white);
             cursor: pointer;
-            background: var(--primary-color);
+       background: var(--primary-color);
         }
 
         footer .value {
@@ -3128,6 +3128,7 @@
             cursor: pointer;
             opacity: 1;
         }
+        .hotel-image-popup-block .slick-slide img,.default-hotel-image-popup-block .slick-slide img{width: 100%;}
     </style>
 </head>
 <body>

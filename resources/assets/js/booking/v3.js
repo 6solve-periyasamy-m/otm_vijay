@@ -15,7 +15,7 @@ jQuery(document).ready(function(){
     });
 
     $('.hotel-image-popup-block').slick({
-      dots: true,
+      dots: false,
       infinite: true,
       speed: 500,
       arrows: true,
@@ -30,18 +30,19 @@ jQuery(document).ready(function(){
     });
 
     $('.default-hotel-image-popup-block').slick({
-      dots: true,
+      dots: false,
       infinite: true,
       speed: 500,
       arrows: true,
       fade: true,
       cssEase: 'linear'
     });
-    $('.default-hotel-more-info-popup a').on('click', function(e) {
+    $('.default-hotel-more-info a').on('click', function(e) {
       setTimeout(function() {
         $('.default-hotel-image-popup-block').slick('setPosition');
       }, 100);
     });
+
     jQuery(document).on('click', '.email-quote .sub-heading-6', function() {
         jQuery(this).closest('.email-quote').find('form').slideToggle(400);
     });
