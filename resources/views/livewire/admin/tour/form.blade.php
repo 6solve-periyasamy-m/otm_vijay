@@ -42,6 +42,19 @@ $atol = [
             </div>
         </x-admin.section.card>
     </div>
+    <x-admin.section.card>
+        <div class="row">
+            <x-livewire.input wire:model="tour.stock" label="Stock" />
+            <span class="fw-bold">Stock Control (Warning: Updating this does not update existing components)</span>
+            <x-livewire.input.checkbox wire:model="tour.stock_control_active" label="Tour" width="6" />
+            <x-livewire.input.checkbox wire:model="tour.accommodation_stock_control" label="Accommodation" width="6" />
+            <x-livewire.input.checkbox wire:model="tour.activity_stock_control" label="Activity" width="6" />
+            <x-livewire.input.checkbox wire:model="tour.flight_stock_control" label="Flight" width="6" />
+            <x-livewire.input.checkbox wire:model="tour.transport_stock_control" label="Transport" width="6" />
+            <x-livewire.input.checkbox wire:model="tour.merchandise_stock_control" label="Merchandise" width="6" />
+        </div>
+    </x-admin.section.card>
+</div>
     <div class="col-xl-12">
         <x-admin.section.card>
             <div class="d-flex justify-content-between">
@@ -73,19 +86,6 @@ $atol = [
         </div>
     </div>
     <div class="col-xl-4">
-        <x-admin.section.card>
-            <div class="row">
-                <x-livewire.input wire:model="tour.stock" label="Stock" />
-                <span class="fw-bold">Stock Control (Warning: Updating this does not update existing components)</span>
-                <x-livewire.input.checkbox wire:model="tour.stock_control_active" label="Tour" width="6" />
-                <x-livewire.input.checkbox wire:model="tour.accommodation_stock_control" label="Accommodation" width="6" />
-                <x-livewire.input.checkbox wire:model="tour.activity_stock_control" label="Activity" width="6" />
-                <x-livewire.input.checkbox wire:model="tour.flight_stock_control" label="Flight" width="6" />
-                <x-livewire.input.checkbox wire:model="tour.transport_stock_control" label="Transport" width="6" />
-                <x-livewire.input.checkbox wire:model="tour.merchandise_stock_control" label="Merchandise" width="6" />
-            </div>
-        </x-admin.section.card>
-    </div>
     <div class="col-xl-12">
         <x-admin.section.card>
             <x-livewire.input.text-area wire:model="tour.notes" label="Tour Notes" />
