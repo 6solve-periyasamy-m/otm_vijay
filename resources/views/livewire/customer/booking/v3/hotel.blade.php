@@ -278,7 +278,7 @@
                                     $descTruncated = Str::limit($cleanText, 200, '...');
                                 @endphp
                                 <p class="breakfast-note">{{ $defaultGroup->board->name }} </p>
-                                <p>{!! $descTruncated !!}</p>
+                                <p>{!! $hotel->description !!}</p>
                                 <p class="hotel-more-info"  style="display:none;"><a>More information</a></p>
                                 <div class="hotel-more-info-popup">
                                     <div class="hotel-more-info-contain">
