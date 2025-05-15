@@ -4,12 +4,12 @@ namespace App\Http\Livewire\Admin\Quote;
 
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
+use App\Models\Customer\Agent;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
 use App\Models\Quote\QuoteProspect;
 use App\Models\System\LargeTextTemplate;
-use App\Models\Customer\Agent;
-use Illuminate\Http\RedirectResponse;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class Form extends Component
@@ -21,6 +21,9 @@ class Form extends Component
     public float|null $price = null;
     public int|null $footerTemplate = null;
     public int|null $termsTemplate = null;
+    public int|null $paymentTemplate = null;
+    public $minToDate;
+    public $maxFinalDate;
 
     public function mount(Quote|int|null $quote): void
     {
@@ -32,6 +35,22 @@ class Form extends Component
         $this->quote->expires = $this->quote->expires ?? now()->addDays((int)setting('system.quote.expiry', null));
         $this->prospect->travelling = $this->prospect->travelling ?? true;
         $this->prospect->paying = $this->prospect->paying ?? true;
+
+        if ($this->quote->date_from) {
+            $this->minToDate = Carbon::parse($this->quote->date_from)->subDay()->toDateString();
+            $this->maxFinalDate = Carbon::parse($this->quote->date_from)->subDay()->toDateString();
+        }
+    }
+
+    public function updatedQuoteDateFrom($value)
+    {
+        if ($value) {
+            $dateFrom = Carbon::parse($value);
+            $today = Carbon::today();
+            $this->quote->date_to = $value;
+            $this->minToDate = $dateFrom->isAfter($today) ? $dateFrom->toDateString() : $today->toDateString();
+            $this->maxFinalDate = $dateFrom->subDay()->toDateString();
+        }
     }
 
     public function save()
@@ -82,6 +101,12 @@ class Form extends Component
             $this->quote->invoice_footer = $template->content;
             $this->updateValue('quote.invoice_footer', $template->content);
         }
+        if ($key === 'paymentTemplate') {
+            $template = LargeTextTemplate::find($this->paymentTemplate);
+            if ($template === null) { return; }
+            $this->quote->payment_details = $template->content;
+            $this->updateValue('quote.payment_details', $template->content);
+        }
     }
 
     public static function getSelectAgencies($organization_id)
@@ -124,12 +149,21 @@ class Form extends Component
             'prospect.travelling' => 'nullable|boolean',
             'quote.date_from' => 'required|date',
             'quote.date_to' => 'required|date|after:quote.date_from',
-            'quote.final_payment' => 'required|date',
-            'quote.expires' => 'required|date',
+            'quote.final_payment' => 'required|date|before_or_equal:quote.date_from',
+            'quote.expires' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) {
+                    if ($this->quote['date_from'] && strtotime($value) > strtotime($this->quote['date_from'])) {
+                        $fail('The expiration date must be before date from.');
+                    }
+                }
+            ],
             'quote.internal_notes' => 'nullable|string|min:3',
             'quote.external_notes' => 'nullable|string|min:3',
             'quote.terms' => 'required|string|min:3',
             'quote.invoice_footer' => 'nullable|string|min:3',
+            'quote.payment_details' => 'nullable|string|min:3',
         ];
     }
 }

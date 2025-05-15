@@ -603,12 +603,12 @@ figure.table {
                           <th>Arrival</th>
                       </tr>
                       <tr>
-                        <td style="width:80px;">{{ $flights->name }}</td>
-                        <td style="width:100px;">{{ $flights->details['Flight Number'] }}</td>
-                        <td style="width:60px;">{{ $flights->details['Class'] }}</td>
+                        <td class="text-wrap" style="width:80px;">{{ $flights->name }}</td>
+                        <td class="text-wrap" style="width:100px;">{{ $flights->details['Flight Number'] }}</td>
+                        <td class="text-wrap" style="width:60px;">{{ $flights->details['Class'] }}</td>
                         <td style="width:70px;">{{ $flights->details['Departure Date'] }}</td>
-                        <td style="width:100px;">{{ $flights->details['Departure Airport'] }}</td>
-                        <td style="width:100px;">{{ $flights->details['Arrival Airport'] }}</td>
+                        <td class="text-wrap" style="width:100px;">{{ $flights->details['Departure Airport'] }}</td>
+                        <td class="text-wrap" style="width:100px;">{{ $flights->details['Arrival Airport'] }}</td>
                         <td style="width:55px;">{{ $flights->details['Departure Time'] }}</td>
                         <td style="width:55px;">{{ $flights->details['Arrival Time'] }}</td>
                       </tr>
@@ -1239,7 +1239,8 @@ figure.table {
     <tr>
         <td style="vertical-align: top;">
             <!-- <strong>BANK TRANSFER</strong><br> -->
-            {!! $itinerary->finances->paymentDetails !!}
+             @php $payment_details = $itinerary->payment_details ?? $itinerary->finances->paymentDetails;  @endphp
+            {!! $payment_details !!}
         </td>
         <!-- <td style="vertical-align: top;">
             <strong>PAYMENT GATE</strong><br>

@@ -60,3 +60,10 @@ if (!function_exists('fx_rate')) {
         return sigfig($value * $rate);
     }
 }
+
+if (!function_exists('default_customer_fields')) {
+    function default_customer_fields(): array
+    {
+        return ['email', 'mobile_number', 'internal_notes'];
+    }
+}

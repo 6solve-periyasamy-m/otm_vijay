@@ -33,10 +33,10 @@
     </x-admin.section.card>
     <x-admin.section.card>
         <div class="row">
-            <x-livewire.input type="date" wire:model="quote.date_from" label="Date From" width="3" required />
-            <x-livewire.input type="date" wire:model="quote.date_to" label="Date To" width="3" required />
-            <x-livewire.input type="date" wire:model="quote.final_payment" label="Final Payment" width="3" required />
-            <x-livewire.input type="date" wire:model="quote.expires" label="Quote Expiry Date" width="3" required />
+            <x-livewire.input type="date" wire:model="quote.date_from" wire:change="updatedQuoteDateFrom" label="Date From" width="3" required id="date_from"  min="{{ now()->format('Y-m-d') }}" />
+            <x-livewire.input type="date" wire:model="quote.date_to" label="Date To" width="3" required id="date_to" :min="$minToDate"  />
+            <x-livewire.input type="date" wire:model="quote.final_payment" label="Final Payment" width="3" required id="final_payment"  :max="$maxFinalDate"  />
+            <x-livewire.input type="date" wire:model="quote.expires" label="Quote Expiry Date" width="3" required min="{{ now()->format('Y-m-d') }}" />
         </div>
     </x-admin.section.card>
     <x-admin.section.card>
@@ -47,11 +47,15 @@
     </x-admin.section.card>
     <x-admin.section.card>
         <div class="row">
-            <div class="col-xl-6">
+            <div class="col-xl-4">
                 <x-livewire.input.select.large-text-template name="footerTemplate" label="Copy from Template" value="{{ $footerTemplate }}" />
                 <x-livewire.ckeditor name="quote.invoice_footer" value="{{ $quote?->invoice_footer }}" label="Invoice Footer" />
             </div>
-            <div class="col-xl-6">
+            <div class="col-xl-4">
+                <x-livewire.input.select.large-text-template name="paymentTemplate" label="Copy from Template" value="{{ $paymentTemplate }}" />
+                <x-livewire.ckeditor name="quote.payment_details" value="{{ $quote?->payment_details }}" label="Payment Details" />
+            </div>
+            <div class="col-xl-4">
                 <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" value="{{ $termsTemplate }}" />
                 <x-livewire.ckeditor name="quote.terms" value="{{ $quote?->terms }}" label="Terms and Conditions" required />
             </div>

@@ -930,6 +930,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $this->order->tour->terms,
             $this->order->invoice_footer,
             $this->order->external_notes,
+            $this->order->payment_details,
         );
     }
 
