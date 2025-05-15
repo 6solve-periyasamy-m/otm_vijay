@@ -82,6 +82,8 @@
             }
         });
     </script>
+    {!! setting('booking.head.tracking.code') !!}
+
     @livewireStyles
 
     <style>
@@ -3129,7 +3131,8 @@
     </style>
 </head>
 <body>
-@yield('content')
+    {!! setting('booking.body.tracking.code') !!}
+    @yield('content')
 </body>
 <footer>
     <script type="text/javascript">
