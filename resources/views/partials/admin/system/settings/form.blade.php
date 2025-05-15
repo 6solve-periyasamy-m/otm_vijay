@@ -94,6 +94,17 @@
             </div>
         </x-admin.section.card>
     </div>
+    <div class="col-xl-12">
+        <x-admin.section.card>
+            <x-slot:title>
+                Tracking Code
+            </x-slot:title>
+            <div class="row">
+                @include('partials.fields.textarea', ['name' => "Tracking code before the closing <head> tag:", 'field' => 'head_tracking_code', 'value' => setting('booking.head.tracking.code', ''), 'width' => 12, 'rows' => 5,])
+                @include('partials.fields.textarea', ['name' => 'Tracking code before the closing </body> tag:', 'field' => 'body_tracking_code', 'value' => setting('booking.body.tracking.code', ''), 'width' => 12, 'rows' => 5,])
+            </div>
+        </x-admin.section.card>
+    </div>
     <div class="col-xl-4">
         <x-admin.section.card>
             <x-slot:title>

@@ -216,4 +216,21 @@ class Hotel extends V3BookingComponent
             $this->roomDescriptions[$index] = $bookingRooms[$roomId]['room_desc'] ?? '';
         }
     }
+
+    public function hasHotelUpgrades(): bool
+    {
+        $hotelGroups = $this->tour->repository->getHotelGroups();
+
+        foreach ($hotelGroups as $groups) {
+            foreach ($groups as $group) {
+                foreach ($group->rooms as $room) {
+                    if ($room->tour_component_type === 'Upgrade') {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
 }

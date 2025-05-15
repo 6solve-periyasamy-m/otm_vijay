@@ -111,6 +111,8 @@ class SettingsController extends Controller
             'system.cc.mail' => $request->input('system_cc_email'),
             'system.bcc.mail' => $request->input('system_bcc_email'),
             'booking.round_to_five' => $request->input('round_to_five') === 'on' ? 1 : 0,
+            'booking.head.tracking.code' => $request->input('head_tracking_code'),
+            'booking.body.tracking.code' => $request->input('body_tracking_code'),
         ]);
         if ($request->has('company_logo')  && !empty($request->file('company_logo'))) {
             Settings::set('company.logo', $this->saveImage($request->file('company_logo')));
