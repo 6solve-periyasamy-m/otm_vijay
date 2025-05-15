@@ -19,7 +19,7 @@
                     <p>{{ $default->accommodationtype?->name }}</p>
                     <p>{{ $this->getDefaultHotel()->roomType->name ?? '' }} </p>
                     <p>{{ $this->getDefaultHotel()->boardType->name ?? '' }} </p>
-                    <p class="default-hotel-more-info">
+                    <p class="default-hotel-more-info" style="display:none;">
                         <a href="#" class="default-hotel-moreinfo-href" data-action="popup" data-target="default-hotel-more-popup-info">More information</a>
                     </p>
                 </div>                    
@@ -279,7 +279,7 @@
                                 @endphp
                                 <p class="breakfast-note">{{ $defaultGroup->board->name }} </p>
                                 <p>{!! $descTruncated !!}</p>
-                                <p class="hotel-more-info"><a>More information</a></p>
+                                <p class="hotel-more-info"  style="display:none;"><a>More information</a></p>
                                 <div class="hotel-more-info-popup">
                                     <div class="hotel-more-info-contain">
                                         <div class="hotel-more-info-block">
