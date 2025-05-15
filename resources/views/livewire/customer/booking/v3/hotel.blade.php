@@ -19,8 +19,10 @@
                     <p>{{ $default->accommodationtype?->name }}</p>
                     <p>{{ $this->getDefaultHotel()->roomType->name ?? '' }} </p>
                     <p>{{ $this->getDefaultHotel()->boardType->name ?? '' }} </p>
-                    <p class="hotel-more-info"><a>>>More information</a></p>
-                </div>
+                    <p class="default-hotel-more-info">
+                        <a href="#" class="default-hotel-moreinfo-href" data-action="popup" data-target="default-hotel-more-popup-info">More information</a>
+                    </p>
+                </div>                    
             </div>
         </div>
         <div class="booking-dates">
@@ -287,7 +289,7 @@
                                                 <p>{{ $hotel->address }}</p>
                                                 <div wire:ignore>
                                                     @if(!empty($hotel->gallery) && count($hotel->gallery))
-                                                        <div class="hotel-image-block">
+                                                        <div class="hotel-image-popup-block">
                                                             @foreach($hotel->gallery as $photo)
                                                                 <div><img src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy"></div>
                                                             @endforeach
@@ -324,6 +326,50 @@
             </div>
         </div>
     </x-slot:left>
+
+        <!-- Default hotel Popup more information -->
+        <div class="default-hotel-more-info-popup"> <!-- Ensure this is hidden by default -->
+            <div class="default-hotel-more-contain">
+                <div class="more-default-hotel-block">
+                    <div class="popup-default-hotel-details">
+                        <div class="default-info-body">
+                            <div class="default-hotel-close-button"><img src="{{ asset('icons/Close-Button.svg') }}" alt="package-details"></div>
+                            <h4>{{ $default->name }}</h4>
+                            <p>{{ $default->address }}</p>
+                            <div wire:ignore>
+                                @if(!empty($default->gallery) && count($default->gallery))
+                                    <div class="default-hotel-image-popup-block">
+                                        @foreach($default->gallery as $photo)
+                                            <div><img src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy"></div>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+                            <div wire:ignore class="default-amenities-container">
+                                @if(!empty($default->amenities) && count($default->amenities))
+                                    <div class="row">
+                                        @foreach($default->amenities as $item)
+                                            <div class="col-md-3 col-sm-4 col-6 mb-3">
+                                                <div class="amenity-icon d-flex align-items-center border rounded overflow-hidden p-3">
+                                                    @if($item->image_url && !empty($item->image_url))
+                                                        <img src="{{ asset($item->image_url) }}" class="img-fluid rounded me-3" style="max-width: 24px; max-height: 24px;" alt="{{ $item->name }}">
+                                                    @endif
+                                                    <h5 class="mb-0">{{ $item->name }}</h5>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="hotel-description"><p>{!! $default->description !!}</p></div>
+                        </div>
+                        <!-- Add any more details about the hotel here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end of the Default hotel popup more information -->
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const roomSelectors = document.querySelectorAll('.room-selector');
@@ -446,6 +492,31 @@
                     behavior: 'smooth'
                 });
             }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const moreInfoLink = document.querySelector('.default-hotel-moreinfo-href');
+            const popup = document.querySelector('.default-hotel-more-info-popup');
+            const closeBtn = document.querySelector('.default-hotel-close-button');
+            moreInfoLink?.addEventListener('click', function (e) {
+                e.preventDefault();
+                popup.style.display = 'flex';
+                popup.classList.add('active');
+            });
+
+            closeBtn?.addEventListener('click', function () {
+                // Hide the popup
+                popup.style.display = 'none';
+                popup.classList.remove('active');
+            });
+
+            // Optional: Click outside the popup to close
+            popup?.addEventListener('click', function (e) {
+                if (e.target === popup) {
+                    popup.style.display = 'none';
+                    popup.classList.remove('active');
+                }
+            });
         });
     </script>
 </x-customer.booking.v3.layout>

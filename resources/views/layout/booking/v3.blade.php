@@ -1679,6 +1679,12 @@
             height: 320px;
         }
 
+        .default-hotel-more-info-popup .default-hotel-more-contain .default-hotel-image-popup-block > div, .default-hotel-more-info-popup .default-hotel-more-contain .default-hotel-image-popup-block > div > div > div,
+        .default-hotel-more-info-popup .default-hotel-more-contain .default-hotel-image-popup-block > div > div > div > div, .default-hotel-more-info-popup .default-hotel-more-contain .default-hotel-image-popup-block > div > div > div > div > div {
+            width: 100%;
+            height: 320px;
+        }
+
         .hotel-listing .single-hotel .hotel-image-block > div img {
             width: 100%;
             height: 100%;
@@ -2312,7 +2318,7 @@
       font-weight: 500;
     }
 
-    .more-package-info-popup  {
+    .more-package-info-popup, .default-hotel-more-info-popup  {
       position: fixed;
       top: 0;
       left: 0;
@@ -2381,7 +2387,7 @@
         background: #FAE8D3; 
         border-radius: 10px;
     }
-    .hotel-more-info-popup .hotel-more-info-contain .hotel-more-info-block {
+    .hotel-more-info-popup .hotel-more-info-contain .hotel-more-info-block, .default-hotel-more-contain .more-default-hotel-block {
         max-width: 740px;
         width: 86%;
         padding: 58px 32px;
@@ -2402,7 +2408,7 @@
       border-radius: 16px;
     }
 
-    .additional-inclusion-popup h4, .hotel-more-info-contain h4 {
+    .additional-inclusion-popup h4, .hotel-more-info-contain h4, .default-hotel-more-contain h4 {
       font-family: "Begum-Medium";
       text-transform: uppercase;
       font-weight: 500;
@@ -2412,7 +2418,7 @@
       margin: 0px 0px 20px 0px;
     }
 
-    .hotel-more-info-contain h4 {
+    .hotel-more-info-contain h4, .default-hotel-more-contain h4 {
         line-height: 10px;
     }
 
@@ -2457,7 +2463,7 @@
       cursor: pointer;
     }
 
-    .additional-inclusion-popup .add-close-button, .more-package-info-popup  .info-close-button, .hotel-more-info-popup .hotel-close-button{
+    .additional-inclusion-popup .add-close-button, .more-package-info-popup  .info-close-button, .hotel-more-info-popup .hotel-close-button, .default-hotel-more-info-popup .default-hotel-close-button{
       position: absolute;
       top: 25px;
       right: 25px;
@@ -2521,7 +2527,7 @@
       }
     }
 
-    .additional-inclusion-popup, .hotel-more-info-popup{
+    .additional-inclusion-popup, .hotel-more-info-popup, .default-hotel-more-info-popup{
       display: none;
     }
 
@@ -3055,7 +3061,7 @@
         }
         .acc-tp-cond .fnal-txt a{color: var(--primary-color);}
         .acc-tp-cond .contain-v{margin-bottom: 0px;}
-        .timeline a, .booking-dates a, .more-package-info a, .hotel-more-info a { color: #F35B15; }
+        .timeline a, .booking-dates a, .more-package-info a, .default-hotel-more-info a, .hotel-more-info a { color: #F35B15; }
         .disable-next {
             display: inline-block;
             padding: 11.5px 56px;
@@ -3085,7 +3091,41 @@
         }
         .hotel-more-info {cursor: pointer;}
         .amenity-icon { display: flex; gap: 8px; align-items: center;}
-        .info-body p, .info-body h5, .info-body ul li {font-family: "PP Neue Montreal Medium"; font-weight: 500; color:#000; font-size: 16px; line-height: 24px;}
+        .info-body p, .info-body h5, .info-body ul li, .default-info-body p, .default-info-body h5, .default-info-body ul li {font-family: "PP Neue Montreal Medium"; font-weight: 500; color:#000; font-size: 16px; line-height: 24px;}
+        .single-hotel .hotel-image-popup-block .slick-dots button, .default-hotel-image-popup-block .slick-dots button{
+            border: none;
+        }
+        .single-hotel .hotel-image-popup-block .slick-next, .default-hotel-image-popup-block .slick-next {
+            right: 20px;
+            z-index: 9;
+        }
+
+        .single-hotel .hotel-image-popup-block .slick-next:before, .default-hotel-image-popup-block .slick-next:before {
+            content: "";
+            display: inline-block;
+            width: 12px;
+            height: 20px;
+            background: url(/icons/Slick-Right-Arrow.svg) no-repeat center center / cover;
+            position: relative;
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .single-hotel .hotel-image-popup-block .slick-prev, .default-hotel-image-popup-block .slick-prev {
+            left: 20px;
+            z-index: 9;
+        }
+
+        .single-hotel .hotel-image-popup-block .slick-prev:before, .default-hotel-image-popup-block .slick-prev:before {
+            content: "";
+            display: inline-block;
+            width: 12px;
+            height: 20px;
+            background: url(/icons/Left-Arrow-Slick.svg) no-repeat center center / cover;
+            position: relative;
+            cursor: pointer;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
