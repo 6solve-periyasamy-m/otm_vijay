@@ -9,7 +9,9 @@ $atol = [
 <div class="row">
     <div class="col-xl-12">
         <x-admin.section.card>
-            <button class="btn btn-success" wire:click="save">Save Tour</button>
+            <div class="float-right">
+                <button class="btn btn-success" wire:click="save">Save Tour</button>
+            </div>
         </x-admin.section.card>
     </div>
     <div class="col-xl-12">
