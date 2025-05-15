@@ -9,6 +9,11 @@ $atol = [
 <div class="row">
     <div class="col-xl-12">
         <x-admin.section.card>
+            <button class="btn btn-success" wire:click="save">Save Tour</button>
+        </x-admin.section.card>
+    </div>
+    <div class="col-xl-12">
+        <x-admin.section.card>
             <div class="row">
                 <x-livewire.input.select.event.normal name="tour.event_id" value="{{ $tour?->event_id }}" label="Associated Event" />
                 <x-livewire.input wire:model="tour.name" width="8" label="Name" required />
@@ -105,11 +110,6 @@ $atol = [
         <x-admin.section.card>
             <x-livewire.input.select.large-text-template name="footerTemplate" label="Copy from Template" value="{{ $footerTemplate }}" />
             <x-livewire.ckeditor name="tour.invoice_footer" value="{{ $tour?->invoice_footer }}" label="Invoice Footer" />
-        </x-admin.section.card>
-    </div>
-    <div class="col-xl-12">
-        <x-admin.section.card>
-            <button class="btn btn-success" wire:click="save">Save Tour</button>
         </x-admin.section.card>
     </div>
 </div>
