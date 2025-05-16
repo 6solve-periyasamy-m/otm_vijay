@@ -23,16 +23,16 @@ class CustomerImport implements ToCollection, WithHeadingRow, WithValidation
         $models = [];
         foreach ($collection as $row) {
             if (!empty(trim($row['organization']))) {
-                $organization = Organization::where('name', 'like', trim($row['organization']))->first();
+                $organization = Organization::where('name', 'like', trim($row['organization'] ?? ''))->first();
             }
-            $homeCountry = Country::where('name', 'like', trim($row['home_country']))->first();
-            $billingCountry = Country::where('name', 'like', trim($row['billing_country']))->first();
-            $addressName = "(" . trim($row['email']) . ")" . trim($row['first_name']) . " " . trim($row['last_name']);
+            $homeCountry = Country::where('name', 'like', trim($row['home_country'] ?? ''))->first();
+            $billingCountry = Country::where('name', 'like', trim($row['billing_country'] ?? ''))->first();
+            $addressName = "(" . trim($row['email'] ?? '') . ")" . trim($row['first_name'] ?? '') . " " . trim($row['last_name'] ?? '');
             $addressParent = AddressParent::CUSTOMER;
             $homeAddress = Address::create([
                 'name' => $addressName,
                 'parent' => $addressParent,
-                'address_line_1' => trim($row['home_line_1']),
+                'address_line_1' => trim($row['home_line_1'] ?? ''),
                 'address_line_2' => trim($row['home_line_2'] ?? ''),
                 'town' => trim($row['home_town'] ?? ''),
                 'region' => trim($row['home_region'] ?? ''),
@@ -42,7 +42,7 @@ class CustomerImport implements ToCollection, WithHeadingRow, WithValidation
             $billingAddress = Address::create([
                 'name' => $addressName,
                 'parent' => $addressParent,
-                'address_line_1' => trim($row['billing_line_1']),
+                'address_line_1' => trim($row['billing_line_1'] ?? ''),
                 'address_line_2' => trim($row['billing_line_2'] ?? ''),
                 'town' => trim($row['billing_town'] ?? ''),
                 'region' => trim($row['billing_region'] ?? ''),
@@ -50,14 +50,14 @@ class CustomerImport implements ToCollection, WithHeadingRow, WithValidation
                 'postcode' => trim($row['billing_postcode']),
             ]);
             $customer = Customer::create([
-                'email_address' => empty(trim($row['email'])) ? null : trim($row['email']),
-                'title' => trim($row['title']),
-                'first_name' => trim($row['first_name']),
+                'email_address' => empty(trim($row['email'] ?? '')) ? null : trim($row['email'] ?? ''),
+                'title' => trim($row['title'] ?? ''),
+                'first_name' => trim($row['first_name'] ?? ''),
                 'middle_names' => trim($row['middle_names'] ?? ''),
-                'last_name' => trim($row['last_name']),
-                'date_of_birth' => (isset($row['date_of_birth']) ? Carbon::createFromFormat('d/m/Y', trim($row['date_of_birth'])) : null),
-                'gender' => trim($row['gender']),
-                'mobile_number' => trim($row['mobile_number']),
+                'last_name' => trim($row['last_name'] ?? ''),
+                'date_of_birth' => (isset($row['date_of_birth']) ? Carbon::createFromFormat('d/m/Y', trim($row['date_of_birth'] ?? '')) : null),
+                'gender' => trim($row['gender'] ?? ''),
+                'mobile_number' => trim($row['mobile_number'] ?? ''),
                 'other_phone_number' => trim($row['other_number'] ?? ''),
                 'home_address_id' => $homeAddress->id,
                 'billing_address_id' => $billingAddress->id,
@@ -68,7 +68,7 @@ class CustomerImport implements ToCollection, WithHeadingRow, WithValidation
                 'passport_middle_name' => trim($row['passport_middle_name'] ?? ''),
                 'passport_last_name' => trim($row['passport_last_name'] ?? ''),
                 'passport_number' => trim($row['passport_number'] ?? ''),
-                'passport_expiry_date' => isset($row['passport_expiry_date']) ? Carbon::createFromFormat('d/m/Y', trim($row[28])) : null,
+                'passport_expiry_date' => isset($row['passport_expiry_date']) ? Carbon::createFromFormat('d/m/Y', trim($row['passport_expiry_date'] ?? '')) : null,
                 'passport_country_of_issue' => trim($row['passport_country_of_issue'] ?? ''),
                 'loyalty_number' => trim($row['loyalty_number'] ?? ''),
                 'organization_id' => ($organization ?? null)?->id,
