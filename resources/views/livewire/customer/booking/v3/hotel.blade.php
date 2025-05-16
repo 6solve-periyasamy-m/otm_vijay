@@ -291,8 +291,20 @@
                                                     @if(!empty($hotel->gallery) && count($hotel->gallery))
                                                         <div class="hotel-image-popup-block">
                                                             @foreach($hotel->gallery as $photo)
-                                                                <div><img src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy"></div>
+                                                                <div><img class="hotel-zoomable-image" src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy"></div>
                                                             @endforeach
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div wire:ignore>
+                                                    @if(!empty($hotel->gallery) && count($hotel->gallery))
+                                                        <div class="hotel-zoom-overlay">
+                                                            <div class="hotel-zoom-slider">
+                                                                @foreach($hotel->gallery as $photo)
+                                                                    <div><img src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy"></div>
+                                                                @endforeach
+                                                            </div>
+                                                            <span class="hotel-close-zoom">×</span>
                                                         </div>
                                                     @endif
                                                 </div>
