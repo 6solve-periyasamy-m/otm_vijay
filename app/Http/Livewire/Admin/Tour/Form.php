@@ -127,6 +127,7 @@ class Form extends Component
         return [
             'tour.event_id' => 'nullable|int|exists:events,id',
             'tour.name' => 'required|string|min:3',
+            'tour.package_name' => 'nullable|string|min:3',
             'tour.brand_id' => 'nullable|int',
             'tour.tax_bracket_id' => 'nullable|int',
             'tour.description' => 'nullable|string',

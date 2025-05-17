@@ -50,6 +50,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $event_id
  * @property int|null $tax_bracket_id
  * @property string $name
+ * @property string|null $package_name Raw package name. Use booking_package_name for display to customers
  * @property string|null $description
  * @property string|null $notes
  * @property float|null $base_price_per_person
@@ -98,6 +99,7 @@ use Illuminate\Support\Carbon;
  * @property-read float $deposit_amount
  * @property-read bool $has_atol_certificate
  * @property-read bool $protected
+ * @property-read string $booking_package_name Package name, or tour name if null
  * @property-read float $remaining_installment
  * @property-read float $remaining_percentage
  * @property-read TourRepository $repository
@@ -472,6 +474,11 @@ class Tour extends Model
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class, 'country_id');
+    }
+
+    public function getBookingPackageNameAttribute(): string
+    {
+        return $this->package_name ?? $this->name;
     }
 
     public function getMakePaymentDetailsAttribute(): string
