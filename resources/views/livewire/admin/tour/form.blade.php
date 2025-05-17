@@ -18,9 +18,10 @@ $atol = [
         <x-admin.section.card>
             <div class="row">
                 <x-livewire.input.select.event.normal name="tour.event_id" value="{{ $tour?->event_id }}" label="Associated Event" />
-                <x-livewire.input wire:model="tour.name" width="8" label="Name" required />
-                <x-livewire.input.select.brand name="tour.brand_id" label="Brand" value="{{ $tour?->brand_id }}" width="2" />
-                <x-livewire.input.select.tax-bracket name="tour.tax_bracket_id" label="Tax Bracket" value="{{ $tour?->tax_bracket_id }}" width="2" />
+                <x-livewire.input wire:model="tour.name" width="6" label="Tour Name" required />
+                <x-livewire.input wire:model="tour.package_name" width="6" label="Package Name" />
+                <x-livewire.input.select.brand name="tour.brand_id" label="Brand" value="{{ $tour?->brand_id }}" width="6" />
+                <x-livewire.input.select.tax-bracket name="tour.tax_bracket_id" label="Tax Bracket" value="{{ $tour?->tax_bracket_id }}" width="6" />
                 <x-livewire.ckeditor name="tour.description" value="{{ $tour?->description }}" label="Description" />
                 <x-livewire.input.dropdown wire:model="tour.atol_protected" :items="$atol" width="6" label="ATOL Protection" />
                 <x-livewire.input.select.tour-category name="tour.tour_category_id" width="6" label="Tour Category" clear />
