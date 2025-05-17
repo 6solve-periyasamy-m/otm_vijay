@@ -7,7 +7,7 @@
         <div class="container">
             <div class="column">
                 @if(isset($this->brand))
-                    <img src="{{ asset($this->brand->alt_logo ?? $this->brand->logo) }}" style="max-height: 75px" alt="logo" title="{{ $this->brand->name }}">
+                    <a href="https://www.keithprowsetravel.com/" target="_blank"><img src="{{ asset($this->brand->alt_logo ?? $this->brand->logo) }}" style="max-height: 75px" alt="logo" title="{{ $this->brand->name }}"></a>
                 @endif
             </div>
             <div class="column right">
@@ -25,8 +25,7 @@
         <section class="secure-booking">
             <div class="container">
                 <div class="heading">
-                    <div class="breadcrumbs" wire:click="back"><span><img src="{{ asset('icons/Arrow-left.svg') }}"
-                                                        alt="left-arrow"></span><span>BACK</span></div>
+                    <div class="breadcrumbs" wire:click="back"><span><img src="{{ asset('icons/Arrow-left.svg') }}" alt="left-arrow"></span><span>BACK</span></div>
                     <h1>Secure Booking</h1>
                 </div>
                 <div class="timeline text-dark">
@@ -42,9 +41,11 @@
                     @endphp
                     @foreach($steps as $step => $data)
                         <div class="step @if($stage === $step) active @elseif($stage > $step) completed @endif">
-                            <div class="circle">
-                                <span>{{ sprintf('%02d', $step) }}</span>
-                            </div>
+                            @if($stage >= $step)
+                                <a class="circle-completed" href="{{ route($data['route'], ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]) }}"><div class="circle"><span>{{ sprintf('%02d', $step) }}</span></div></a>
+                            @else
+                                <div class="circle"><span>{{ sprintf('%02d', $step) }}</span></div>
+                            @endif
                             <div class="label">
                                 @if($stage >= $step)
                                     <a class="text-dark" href="{{ route($data['route'], ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]) }}">

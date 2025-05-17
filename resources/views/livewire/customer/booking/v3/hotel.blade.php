@@ -19,7 +19,7 @@
                     <p>{{ $default->accommodationtype?->name }}</p>
                     <p>{{ $this->getDefaultHotel()->roomType->name ?? '' }} </p>
                     <p>{{ $this->getDefaultHotel()->boardType->name ?? '' }} </p>
-                    <p class="default-hotel-more-info" style="display:none;">
+                    <p class="default-hotel-more-info">
                         <a href="#" class="default-hotel-moreinfo-href" data-action="popup" data-target="default-hotel-more-popup-info">More information</a>
                     </p>
                 </div>                    
@@ -278,8 +278,8 @@
                                     $descTruncated = Str::limit($cleanText, 200, '...');
                                 @endphp
                                 <p class="breakfast-note">{{ $defaultGroup->board->name }} </p>
-                                <p>{!! $hotel->description !!}</p>
-                                <p class="hotel-more-info"  style="display:none;"><a>More information</a></p>
+                                <p>{!! $descTruncated !!}</p>
+                                <p class="hotel-more-info"><a>More information</a></p>
                                 <div class="hotel-more-info-popup">
                                     <div class="hotel-more-info-contain">
                                         <div class="hotel-more-info-block">
@@ -291,8 +291,20 @@
                                                     @if(!empty($hotel->gallery) && count($hotel->gallery))
                                                         <div class="hotel-image-popup-block">
                                                             @foreach($hotel->gallery as $photo)
-                                                                <div><img src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy"></div>
+                                                                <div><img class="hotel-zoomable-image" src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy"></div>
                                                             @endforeach
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div wire:ignore>
+                                                    @if(!empty($hotel->gallery) && count($hotel->gallery))
+                                                        <div class="hotel-zoom-overlay">
+                                                            <div class="hotel-zoom-slider">
+                                                                @foreach($hotel->gallery as $photo)
+                                                                    <div><img src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy"></div>
+                                                                @endforeach
+                                                            </div>
+                                                            <span class="hotel-close-zoom">×</span>
                                                         </div>
                                                     @endif
                                                 </div>

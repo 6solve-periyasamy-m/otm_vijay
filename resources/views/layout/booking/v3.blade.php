@@ -226,7 +226,7 @@
             line-height: 20px;
             color: var(--white);
             cursor: pointer;
-        }
+   }
 
         .Go-next {
             display: inline-block;
@@ -239,7 +239,7 @@
             line-height: 20px;
             color: var(--white);
             cursor: pointer;
-            background: var(--primary-color);
+       background: var(--primary-color);
         }
 
         footer .value {
@@ -340,6 +340,8 @@
             .Go-next {
                 order: 4;
             }
+
+            .timeline a { z-index: 1;}
         }
 
         .secure-booking {
@@ -409,7 +411,7 @@
         .step:not(:last-child)::after {
             content: '';
             position: absolute;
-            top: 19px;
+            top: 16px;
             height: 2px;
             background: var(--text-light-dark);
             z-index: 0;
@@ -499,7 +501,7 @@
             .step:not(:last-child)::after {
                 left: 50% !important;
                 width: 100% !important;
-                top: 13px;
+                top: 10px;
             }
 
             .step {
@@ -2471,6 +2473,7 @@
       right: 25px;
       cursor: pointer;
     }
+    
 
     @media only screen and (min-width:981px) and (max-width:1279px) {
       .tickets-listing {
@@ -3128,6 +3131,47 @@
             cursor: pointer;
             opacity: 1;
         }
+        .hotel-image-popup-block .slick-slide img,.default-hotel-image-popup-block .slick-slide img{width: 100%;}
+
+        .hotel-zoom-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .hotel-zoomable-image{cursor:pointer;}
+        .hotel-zoom-slider {
+            width: 80%;
+            height: 100%;
+        }
+        .hotel-zoom-slider .slick-list .slick-track{top: 25px;}
+        .hotel-zoom-overlay img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+        .hotel-zoom-slider .slick-next:before,.hotel-zoom-slider .slick-prev:before{font-size: 50px;}
+        .hotel-zoom-slider .slick-prev{left: -50px;}
+        .hotel-close-zoom {
+            position: absolute;
+            top: 20px;
+            right: 90px;
+            font-size: 30px;
+            color: var(--primary-color) !important;
+            cursor: pointer;
+            font-size: 60px !important;
+            width: 50px !important;
+            
+        }
+
+
+
     </style>
 </head>
 <body>
