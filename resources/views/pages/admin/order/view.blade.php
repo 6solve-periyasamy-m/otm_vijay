@@ -175,10 +175,10 @@
                     <h6 class="fw-bold">
                         @can('read', \App\Models\Order\OrderCustomer::class)
                         <a href="{{ route('order-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer, ]) }}" class="link-info">
-                            {{ $customerName }}
+                            {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
                         </a>
                         @else
-                            {{ $customerName }}
+                            {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
                         @endcan
                     </h6>
                     <p>Born</p>

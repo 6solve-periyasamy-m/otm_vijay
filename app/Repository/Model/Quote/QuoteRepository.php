@@ -50,6 +50,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Settings;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Str;
 
 class QuoteRepository extends ComponentPackageRepository implements SerializesToJson
 {
@@ -986,6 +987,17 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $customer->orderCustomer = $traveller;
             $customers[$key] = $customer;
         }
+
+        $tbcCounter = 1;
+        foreach ($order->customers as $customer) {
+            if (Str::startsWith($customer->first_name, 'Unknown Paying Traveller')) {
+                $customer->first_name = "TBC {$tbcCounter}";
+                $customer->last_name = "Paying - {$order->booking_reference}";
+                $customer->saveQuietly();
+                $tbcCounter++;
+            }
+        }
+
         foreach ($this->quote->accommodation as $component) {
             $component->repository->convertToTourComponent($tour);
         }
