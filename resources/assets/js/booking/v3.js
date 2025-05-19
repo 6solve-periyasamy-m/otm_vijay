@@ -57,7 +57,6 @@ jQuery(document).ready(function(){
 
     // On image click, open zoom view
     $('.hotel-image-popup-block .hotel-zoomable-image').on('click', function() {
-      console.log("YESSS")
       const index = $(this).closest('.slick-slide').attr('data-slick-index');
       $('.hotel-zoom-overlay').fadeIn().css({display:'flex'});
       $('.hotel-zoom-slider').slick('slickGoTo', index);

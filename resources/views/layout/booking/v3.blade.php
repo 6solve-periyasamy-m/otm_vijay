@@ -289,7 +289,7 @@
             display: none;
         }
 
-        @media only screen and (max-width: 767px) {
+        @media only screen and (max-width: 767.98px) {
             .container {
                 width: 94%;
             }
@@ -493,7 +493,7 @@
             display: inline !important;
         }
 
-        @media only screen and (max-width: 767px) {
+        @media only screen and (max-width: 767.98px) {
             .step:not(.active) .label {
                 display: none !important;
             }
@@ -560,6 +560,11 @@
             .timeline .step > .label {
                 height: 43px;
             }
+            .hotel-zoom-overlay .hotel-zoom-slider,.default-zoom-overlay .default-zoom-slider{height: auto;}
+            .default-zoom-overlay .default-zoom-slider .slick-slide > div > div,
+            .hotel-zoom-overlay .hotel-zoom-slider .slick-slide > div > div{height: 600px;}
+            .default-hotel-image-popup-block .slick-slide img,
+            .hotel-zoom-overlay .hotel-zoom-slider img, .default-zoom-overlay .default-zoom-slider img{height: 100%; object-fit: cover;}
         }
 
         /* timeline bar css end */
@@ -1190,7 +1195,7 @@
             display: none;
         }
 
-        @media only screen and (max-width: 767px) {
+        @media only screen and (max-width: 767.98px) {
             .package-container .container {
                 flex-wrap: wrap;
                 row-gap: 60px;
@@ -1872,7 +1877,7 @@
             color: var(--error-message-color);
         }
 
-        @media only screen and (min-width: 981px) and (max-width: 1279px) {
+        @media only screen and (min-width: 981px) and (max-width: 1279.98px) {
             .room-listing-module, .hotel-listing {
                 flex-wrap: wrap;
                 row-gap: 20px;
@@ -1886,9 +1891,13 @@
             .room-listing-module .single-room:nth-child(2n), .hotel-listing .single-hotel:nth-child(2n) {
                 margin-right: 0% !important;
             }
+            .default-zoom-overlay .default-zoom-slider .slick-slide > div > div,
+            .hotel-zoom-overlay .hotel-zoom-slider .slick-slide > div > div{height: 600px;}
+            .default-hotel-image-popup-block .slick-slide img,
+            .hotel-zoom-overlay .hotel-zoom-slider img, .default-zoom-overlay .default-zoom-slider img{height: 100%; object-fit: cover;}
         }
 
-        @media only screen and (max-width: 767px) {
+        @media only screen and (max-width: 767.98px) {
             .room-listing-module, .hotel-listing {
                 flex-wrap: wrap;
                 row-gap: 20px;
@@ -2365,7 +2374,7 @@
       z-index: 1111 !important;
     }
 
-    .additional-inclusion-popup .additional-contain, .more-package-info-popup .more-package-contain, .hotel-more-info-popup .hotel-more-info-contain {
+    .additional-inclusion-popup .additional-contain, .more-package-info-popup .more-package-contain, .hotel-more-info-popup .hotel-more-info-contain,.default-hotel-more-info-popup .default-hotel-more-contain {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -2374,20 +2383,20 @@
       position: relative;
     }
 
-    .info-body {
+    .info-body,.default-info-body {
         max-height: 600px !important;
         overflow-y: auto;
         overflow-x: hidden;
         padding-top: 20px;
     }
 
-    .info-body::-webkit-scrollbar {
+    .info-body::-webkit-scrollbar,.default-info-body::-webkit-scrollbar {
         width: 8px;
     }
-    .info-body::-webkit-scrollbar-track {
+    .info-body::-webkit-scrollbar-track,.default-info-body::-webkit-scrollbar-track {
         border-radius: 16px;
     }
-    .info-body::-webkit-scrollbar-thumb {
+    .info-body::-webkit-scrollbar-thumb,.default-info-body::-webkit-scrollbar-thumb {
         background: #FAE8D3; 
         border-radius: 10px;
     }
@@ -2493,7 +2502,7 @@
       }
     }
 
-    @media only screen and (max-width:767px) {
+    @media only screen and (max-width:767.98px) {
       .tickets-listing {
         flex-wrap: wrap;
         row-gap: 20px;
@@ -2830,7 +2839,7 @@
       margin: 24px 0px 50px 0px;
     }
     .single-details-module.payment > div {width:100%;}
-    @media only screen and (max-width:767px) {
+    @media only screen and (max-width:767.98px) {
       .single-details-module>div {width:100%;}
       .step.completed .circle::before {
         left:0px;
@@ -2846,6 +2855,15 @@
         row-gap: 20px;
       }
       .card-block .card-type {width:100%;}
+      .default-zoom-overlay .default-zoom-slider .slick-slide > div > div,
+      .hotel-zoom-overlay .hotel-zoom-slider .slick-slide > div > div{height: 400px;}
+      .default-hotel-image-popup-block .slick-slide img,
+      .hotel-zoom-overlay .hotel-zoom-slider img, .default-zoom-overlay .default-zoom-slider img{height: 100%; object-fit: cover;}
+    }
+     @media only screen and (max-width: 1024px) {
+         .hotel-zoom-overlay .hotel-zoom-slider,.default-zoom-overlay .default-zoom-slider{height: auto;}
+         .default-zoom-overlay .default-zoom-slider .slick-next:before, .default-zoom-overlay .default-zoom-slider .slick-prev:before,
+         .hotel-zoom-overlay .hotel-zoom-slider .slick-next:before, .hotel-zoom-overlay .hotel-zoom-slider .slick-prev:before{font-size:30px;}
     }
     .single-details-module > div.full-width img {
       position: unset;
@@ -3131,9 +3149,9 @@
             cursor: pointer;
             opacity: 1;
         }
-        .hotel-image-popup-block .slick-slide img,.default-hotel-image-popup-block .slick-slide img{width: 100%;}
+        .hotel-image-popup-block .slick-slide img,.default-hotel-image-popup-block .slick-slide img{width: 100%;height: 100%;object-fit:cover;}
 
-        .hotel-zoom-overlay {
+        .hotel-zoom-overlay,.default-zoom-overlay {
             display: none;
             position: fixed;
             top: 0;
@@ -3145,23 +3163,25 @@
             justify-content: center;
             align-items: center;
         }
-        .hotel-zoomable-image{cursor:pointer;}
-        .hotel-zoom-slider {
+        .hotel-zoomable-image,.default-zoomable-image{cursor:pointer;}
+        .hotel-zoom-slider,.default-zoom-slider {
             width: 80%;
             height: 100%;
         }
-        .hotel-zoom-slider .slick-list .slick-track{top: 25px;}
-        .hotel-zoom-overlay img {
+        .hotel-zoom-slider .slick-list,.default-zoom-slider .slick-list{max-height: 96vh;}
+        .hotel-zoom-slider .slick-list .slick-track,.default-zoom-slider .slick-list .slick-track{top: 25px;}
+        .hotel-zoom-overlay img,.default-zoom-overlay img {
             width: 100%;
             height: auto;
             object-fit: contain;
         }
-        .hotel-zoom-slider .slick-next:before,.hotel-zoom-slider .slick-prev:before{font-size: 50px;}
+        .hotel-zoom-slider .slick-next:before,.hotel-zoom-slider .slick-prev:before,.default-zoom-slider .slick-next:before,
+        .default-zoom-slider .slick-prev:before{font-size: 50px;}
         .hotel-zoom-slider .slick-prev, .default-zoom-slider .slick-prev {left: -50px;}
         .hotel-close-zoom, .default-close-zoom {
             position: absolute;
             top: 20px;
-            right: 90px;
+            right: 10px;
             font-size: 30px;
             color: var(--primary-color) !important;
             cursor: pointer;
