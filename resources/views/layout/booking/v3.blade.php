@@ -3163,7 +3163,7 @@
             justify-content: center;
             align-items: center;
         }
-        .hotel-zoomable-image,.default-zoomable-image{cursor:pointer;}
+        .zoom__img_icon{cursor:pointer;}
         .hotel-zoom-slider,.default-zoom-slider {
             width: 80%;
             height: 100%;
@@ -3189,9 +3189,25 @@
             width: 50px !important;
             
         }
-
-
-
+        header .container:before,header .container:after{content: unset;}
+        .default-hotel-more-info{position: relative; top: 12px;}
+        .default-hotel-more-info a:after {
+            content:  url('/icons/arrow-left-org.svg');
+            display: block;
+            position: absolute;
+            right: -16px;
+            top: -4px;
+            transform: rotate(180deg);
+        }
+        .default-hotel-more-info a{position: relative;}
+        .default-hotel-image-popup-block .slick-slide .zoom__img_icon img,.hotel-more-info-popup .slick-slide .zoom__img_icon img{width: 40px; height: 40px;}
+         .zoom__img_icon{
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            bottom: 4px;
+            right: 0px;
+        }
     </style>
 </head>
 <body>

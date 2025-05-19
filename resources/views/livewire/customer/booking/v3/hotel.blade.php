@@ -291,7 +291,9 @@
                                                     @if(!empty($hotel->gallery) && count($hotel->gallery))
                                                         <div class="hotel-image-popup-block">
                                                             @foreach($hotel->gallery as $photo)
-                                                                <div><img class="hotel-zoomable-image" src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy"></div>
+                                                                <div><img class="hotel-zoomable-image" src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy">
+                                                                 <div class="zoom__img_icon"><img src="{{ asset('icons/zoom-in-fixed-svgrepo-com.svg') }}" alt="zoom icon"></div>
+                                                                 </div>
                                                             @endforeach
                                                         </div>
                                                     @endif
@@ -304,7 +306,7 @@
                                                                     <div><img src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy"></div>
                                                                 @endforeach
                                                             </div>
-                                                            <span class="hotel-close-zoom">×</span>
+                                                            <span class="hotel-close-zoom"><img src="{{ asset('/icons/Close-Button.svg') }}" alt="zoom icon"></span>
                                                         </div>
                                                     @endif
                                                 </div>
@@ -352,7 +354,9 @@
                                 @if(!empty($default->gallery) && count($default->gallery))
                                     <div class="default-hotel-image-popup-block">
                                         @foreach($default->gallery as $photo)
-                                            <div><img class="default-zoomable-image" src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy"></div>
+                                            <div><img class="default-zoomable-image" src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy">
+                                                <div class="zoom__img_icon"><img src="{{ asset('icons/zoom-in-fixed-svgrepo-com.svg') }}" alt="zoom icon"></div>
+                                            </div>
                                         @endforeach
                                     </div>
                                 @endif
@@ -365,7 +369,7 @@
                                                 <div><img src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy"></div>
                                             @endforeach
                                         </div>
-                                        <span class="default-close-zoom">×</span>
+                                        <span class="default-close-zoom"><img src="{{ asset('/icons/Close-Button.svg') }}" alt="zoom icon"></span>
                                     </div>
                                 @endif
                             </div>
