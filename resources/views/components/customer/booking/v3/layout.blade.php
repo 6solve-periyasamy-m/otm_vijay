@@ -64,7 +64,7 @@
             <div class="container">
                 <div class="column left">
                     <div class="tour-details">
-                        <h2 class="sub-heading-2">{{ $tour->name }}</h2>
+                        <h2 class="sub-heading-2">{{ $tour->booking_package_name }}</h2>
                         <h3 class="sub-heading-3">{{ $tour->event?->name }}</h3>
                         <div class="location-dollar-value">
                             @if($location)
@@ -90,7 +90,7 @@
                             @endif
                             <div class="base-package">
                                 <h6 class="sub-heading-6">BASE PACKAGE</h6>
-                                <h2>{{ $tour->name }}</h2>
+                                <h2>{{ $tour->booking_package_name }}</h2>
                                 <p class="date-align"><img src="{{ asset('icons/checkin.svg') }}" alt="calendar"> {{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
                                 <ul>
                                     @foreach($tour->repository->getInclusions(4) as $inclusion)
