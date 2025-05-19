@@ -2423,7 +2423,7 @@
     }
 
     .hotel-more-info-contain h4, .default-hotel-more-contain h4 {
-        line-height: 10px;
+        line-height: 34px;
     }
 
     .additional-inclusion-popup .additional-contain .additional-block p {
@@ -3157,8 +3157,8 @@
             object-fit: contain;
         }
         .hotel-zoom-slider .slick-next:before,.hotel-zoom-slider .slick-prev:before{font-size: 50px;}
-        .hotel-zoom-slider .slick-prev{left: -50px;}
-        .hotel-close-zoom {
+        .hotel-zoom-slider .slick-prev, .default-zoom-slider .slick-prev {left: -50px;}
+        .hotel-close-zoom, .default-close-zoom {
             position: absolute;
             top: 20px;
             right: 90px;
