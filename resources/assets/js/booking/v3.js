@@ -56,7 +56,7 @@ jQuery(document).ready(function(){
     });
 
     // On image click, open zoom view
-    $('.hotel-image-popup-block .hotel-zoomable-image').on('click', function() {
+    $('.hotel-image-popup-block .zoom__img_icon').on('click', function() {
       const index = $(this).closest('.slick-slide').attr('data-slick-index');
       $('.hotel-zoom-overlay').fadeIn().css({display:'flex'});
       $('.hotel-zoom-slider').slick('slickGoTo', index);
@@ -73,13 +73,14 @@ jQuery(document).ready(function(){
       $('.default-zoom-overlay').fadeOut();
     });
     // On image click, open zoom view
-    $('.default-hotel-image-popup-block .default-zoomable-image').on('click', function() {
+    $('.default-hotel-image-popup-block .zoom__img_icon').on('click', function() {
       console.log("YESSS")
       const index = $(this).closest('.slick-slide').attr('data-slick-index');
       $('.default-zoom-overlay').fadeIn().css({display:'flex'});
       $('.default-zoom-slider').slick('slickGoTo', index);
     });
-
+    
+  
     jQuery(document).on('click', '.email-quote .sub-heading-6', function() {
         jQuery(this).closest('.email-quote').find('form').slideToggle(400);
     });
