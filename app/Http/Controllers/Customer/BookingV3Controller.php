@@ -15,7 +15,7 @@ class BookingV3Controller extends Controller
     public function guest(Request $request, string $tour, string|null $booking = null)
     {
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
-        $booking = Booking::where('tour_id', '=', $tour->id)->where('token', '=', $booking ?? $request->cookie($tour->booking_form_url))->first();
+        $booking = $this->getBooking($tour, $booking);
         if ($booking === null) {
             $booking = BookingRepository::make($tour);
             $booking->save();
@@ -30,7 +30,7 @@ class BookingV3Controller extends Controller
     {
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
         $token = $token ?? $request->cookie($tour->booking_form_url);
-        $booking = Booking::where('tour_id', '=', $tour->id)->where('token', '=', $token)->firstOrFail();
+        $booking = $this->getBooking($tour, $token);
         if ($booking === null) {
             return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
         }
@@ -42,7 +42,7 @@ class BookingV3Controller extends Controller
     {
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
         $token = $token ?? $request->cookie($tour->booking_form_url);
-        $booking = Booking::where('tour_id', '=', $tour->id)->where('token', '=', $token)->firstOrFail();
+        $booking = $this->getBooking($tour, $token);
         $quote = Quote::find($booking->quote_id);
         if ($booking === null) {
             return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
@@ -68,7 +68,7 @@ class BookingV3Controller extends Controller
     {
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
         $token = $token ?? $request->cookie($tour->booking_form_url);
-        $booking = Booking::where('tour_id', '=', $tour->id)->where('token', '=', $token)->firstOrFail();
+        $booking = $this->getBooking($tour, $token);
         $quote = Quote::find($booking->quote_id);
         if ($booking === null) {
             return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
@@ -90,5 +90,17 @@ class BookingV3Controller extends Controller
         return;
         // Place cookie for 12hrs
         Cookie::queue(Cookie::make($tour->booking_form_url, $booking->token, 12 * 60));
+    }
+
+    private function getBooking(Tour $tour, string $token): Booking|null
+    {
+        $booking = Booking::where('tour_id', '=', $tour->id)
+            ->where('token', '=', $token)
+            ->first();
+        if ($booking !== null &&
+            ($booking->last_renewed ?? $booking->created_at)->addMinutes(setting('booking.expiry', Booking::DEFAULT_EXPIRY))->lt(now())) {
+            return $booking;
+        }
+        return null;
     }
 }

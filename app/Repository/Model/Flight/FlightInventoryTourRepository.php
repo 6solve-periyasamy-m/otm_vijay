@@ -25,6 +25,7 @@ use App\Repository\Storage\ComponentInformation;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsFlight;
 use Auth;
+use DB;
 use Icon;
 use Illuminate\Support\Collection;
 
@@ -357,7 +358,11 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
 
     public function getBookedCount(): int
     {
-        return $this->tourComponent->bookings()->count();
+        return $this->tourComponent->bookings()
+            ->leftJoin('booking_travellers', 'booking_travellers.id', '=', 'booking_flights.booking_traveller_id')
+            ->leftJoin('bookings', 'bookings.id', '=', 'booking_travellers.booking_id')
+            ->where(DB::raw('COALESCE(`bookings`.`last_renewed`, `bookings`.`created_at`)'), '>', now()->subMinutes(setting('booking.expiry', Booking::DEFAULT_EXPIRY)))
+            ->count();
     }
 
     public function getComponentInternalNotes(): string|null

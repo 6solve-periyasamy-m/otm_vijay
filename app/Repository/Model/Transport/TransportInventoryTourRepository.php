@@ -23,6 +23,7 @@ use App\Repository\Storage\ComponentInformation;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsTransport;
 use Auth;
+use DB;
 use Icon;
 use Illuminate\Support\Collection;
 
@@ -340,7 +341,11 @@ class TransportInventoryTourRepository extends InventoryTourRepository
 
     public function getBookedCount(): int
     {
-        return $this->tourComponent->bookings()->count();
+        return $this->tourComponent->bookings()
+            ->leftJoin('booking_travellers', 'booking_travellers.id', '=', 'booking_transports.booking_traveller_id')
+            ->leftJoin('bookings', 'bookings.id', '=', 'booking_travellers.booking_id')
+            ->where(DB::raw('COALESCE(`bookings`.`last_renewed`, `bookings`.`created_at`)'), '>', now()->subMinutes(setting('booking.expiry', Booking::DEFAULT_EXPIRY)))
+            ->count();
     }
 
     public function getComponentInternalNotes(): string|null

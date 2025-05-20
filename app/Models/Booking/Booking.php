@@ -35,6 +35,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelations;
  * @property int|null $order_id
  * @property bool $pay_full
  * @property string|null $token
+ * @property Carbon|null $last_renewed
  * @property string|null $notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -76,9 +77,11 @@ class Booking extends Model
 {
     use HasDeepRelations;
 
+    public const DEFAULT_EXPIRY = 2 * 60;
+
     protected $guarded = [];
     private BookingRepository $internal_repository;
-    protected $casts = ['pay_full' => 'boolean'];
+    protected $casts = ['pay_full' => 'boolean', 'last_renewed' => 'datetime:Y-m-d H:i:s'];
 
     public function tour(): BelongsTo
     {
