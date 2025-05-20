@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Quote;
 
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
+use App\Models\AdditionalCost;
 use App\Models\Customer\Agent;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
@@ -25,6 +26,8 @@ class Form extends Component
     public int|null $paymentTemplate = null;
     public $minToDate;
     public $maxFinalDate;
+    /** @var array<array{id: int|null, name: string, per_customer: boolean, amount: float}> */
+    public array $costs = [];
 
     public function mount(Quote|int|null $quote): void
     {
@@ -40,6 +43,15 @@ class Form extends Component
         if ($this->quote->date_from) {
             $this->minToDate = Carbon::parse($this->quote->date_from)->subDay()->toDateString();
             $this->maxFinalDate = Carbon::parse($this->quote->date_from)->subDay()->toDateString();
+        }
+
+        foreach ($this->quote->costs as $cost) {
+            $this->costs[] = [
+                'id' => $cost->id,
+                'name' => $cost->name,
+                'amount' => $cost->amount,
+                'per_customer' => $cost->per_customer,
+            ];
         }
     }
 
@@ -81,6 +93,24 @@ class Form extends Component
         $pricePoint = $this->quote->pricePoints()->where('quantity', '=', 1)->first() ?? QuotePricePoint::make(['quantity' => 1,]);
         $pricePoint->price_per_person = $this->price;
         $this->quote->pricePoints()->save($pricePoint);
+
+        foreach ($this->costs as $cost) {
+            $model = AdditionalCost::find($cost['id'] ?? null);
+            if ($model !== null) {
+                $model->name = $cost['name'];
+                $model->amount = $cost['amount'];
+                $model->per_customer = $cost['per_customer'];
+                $model->save();
+            } else {
+                $model = new AdditionalCost([
+                    'name' => $cost['name'],
+                    'amount' => $cost['amount'],
+                    'per_customer' => $cost['per_customer'],
+                ]);
+                $this->quote->costs()->save($model);
+            }
+
+        }
 
         return redirect()->route('quotes.view', ['quote' => $this->quote]);
     }
@@ -130,6 +160,26 @@ class Form extends Component
             $data['results'][] = $option;
         }
         return $data;
+    }
+
+    public function addCost()
+    {
+        $this->costs[] = [
+            'id' => null,
+            'name' => null,
+            'amount' => null,
+            'per_customer' => false,
+        ];
+    }
+
+    public function removeCost($key)
+    {
+        if (array_key_exists($key, $this->costs)) {
+            if ($this->costs[$key]['id'] !== null) {
+                $this->tour->costs()->where('id', $this->costs[$key]['id'])->forceDelete();
+            }
+            unset($this->costs[$key]);
+        }
     }
 
     public function render()
