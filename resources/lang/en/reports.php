@@ -136,6 +136,10 @@ return [
                 'name' => 'Ordered',
                 'description' => 'When the order was placed'
             ],
+            'traveller-names' => [
+                'name' => 'Traveller Names',
+                'description' => 'Names of all travellers on the order'
+            ],
             'cancelled' => [
                 'name' => 'Cancelled',
                 'description' => 'Is the order currently cancelled'
