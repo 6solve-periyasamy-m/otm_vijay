@@ -62,6 +62,7 @@ class Details extends V3BookingComponent
 
     public function advance()
     {
+        $this->booking->updateBookingProgressNotification('Details');
         $this->checkout();
     }
 
