@@ -82,6 +82,7 @@ class SidebarLink extends Component
             new SidebarLink('Users', route('users.all'), Icon::user(), 'users', User::class, 'read'),
             new SidebarLink('Roles', route('roles.all'), Icon::role(), 'roles', User::class, 'read'),
             new SidebarLink('Reports', route('reports.all'), Icon::report(), 'reports', Report::class, 'read'),
+            new SidebarLink('e-Dashboard', route('edashboard'), Icon::dashboard()),
         ];
     }
 

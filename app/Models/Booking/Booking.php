@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelations;
+use App\Models\Helper\Traits\HasNotifications;
 
 /**
  * App\Models\Booking\Booking
@@ -75,7 +76,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelations;
  */
 class Booking extends Model
 {
-    use HasDeepRelations;
+    use HasDeepRelations, HasNotifications;
 
     public const DEFAULT_EXPIRY = 2 * 60;
 
@@ -172,5 +173,10 @@ class Booking extends Model
     public function getDueTodayAttribute(): float
     {
         return $this->repository->getDueTodayAmount();
+    }
+
+    public function getLink(): string
+    {
+        return route('admin.booking.view', ['booking' => $this->id]);
     }
 }

@@ -102,7 +102,7 @@ class Hotel extends V3BookingComponent
         if ($travellerExcess < 0) {
             return $this->addError('common', 'More travellers have been added to rooms than are travelling');
         }
-
+        $this->booking->updateBookingProgressNotification('Hotel');
         return redirect()->route('booking.v3.tickets', ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]);
     }
 
