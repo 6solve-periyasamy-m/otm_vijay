@@ -21,6 +21,7 @@ use App\Repository\Storage\ComponentInformation;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsMerchandise;
 use Auth;
+use DB;
 
 class MerchandiseInventoryTourRepository extends InventoryTourRepository
 {
@@ -295,7 +296,11 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
 
     public function getBookedCount(): int
     {
-        return $this->tourComponent->bookingComponents()->count();
+        return $this->tourComponent->bookingComponents()
+            ->leftJoin('booking_travellers', 'booking_travellers.id', '=', 'booking_merchandises.booking_traveller_id')
+            ->leftJoin('bookings', 'bookings.id', '=', 'booking_travellers.booking_id')
+            ->where(DB::raw('COALESCE(`bookings`.`last_renewed`, `bookings`.`created_at`)'), '>', now()->subMinutes(setting('booking.expiry', Booking::DEFAULT_EXPIRY)))
+            ->count();
     }
 
     public function getComponentInternalNotes(): string|null

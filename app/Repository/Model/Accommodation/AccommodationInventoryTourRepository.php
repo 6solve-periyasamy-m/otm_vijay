@@ -23,6 +23,7 @@ use App\Repository\Storage\ComponentInformation;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsAccommodation;
 use Auth;
+use DB;
 use Icon;
 use Illuminate\Support\Collection;
 
@@ -371,7 +372,11 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function getBookedCount(): int
     {
-        return $this->tourComponent->bookings()->count();
+        return $this->tourComponent->bookings()
+            ->leftJoin('booking_groups', 'booking_groups.id', '=', 'booking_accommodations.booking_group_id')
+            ->leftJoin('bookings', 'bookings.id', '=', 'booking_groups.booking_id')
+            ->where(DB::raw('COALESCE(`bookings`.`last_renewed`, `bookings`.`created_at`)'), '>', now()->subMinutes(setting('booking.expiry', Booking::DEFAULT_EXPIRY)))
+            ->count();
     }
 
     public function getComponentInternalNotes(): string|null
