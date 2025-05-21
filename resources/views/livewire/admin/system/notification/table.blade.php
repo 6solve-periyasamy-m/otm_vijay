@@ -27,10 +27,10 @@
                 <td>{!! $row->subject !!}</td>                
                 <td>{{ $row->eventName }}</td>
                 <td>{{ $row->PackageName }}</td>
-                <td>{{ $row->totalOrderValue }}</td>
                 <td>{{ $row->noOfTravellers }}</td>
+                <td>{{ $row->totalOrderValue }}</td>
                 <td>{{ $row->email }}</td>
-                <td>{{ $row->contact }}</td>                
+                <td>{{ $row->contact }}</td>
                 <td>
                     @php $active = $row->seen == 1 ? 'text-green-600' : 'text-red-600' @endphp
                     <div>
