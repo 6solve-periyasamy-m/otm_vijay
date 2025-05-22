@@ -26,7 +26,7 @@ class BookingV3Controller extends Controller
         return view('pages.customer.booking.v3.guest', ['tour' => $tour, 'booking' => $booking]);
     }
 
-    public function hotel(Request $request, string $tour, string|null $token = null)
+    public function hotel(Request $request, string $tour, string|null $booking = null)
     {
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
         $token = $token ?? $request->cookie($tour->booking_form_url);
@@ -38,7 +38,7 @@ class BookingV3Controller extends Controller
         return view('pages.customer.booking.v3.hotel', ['tour' => $tour, 'booking' => $booking]);
     }
 
-    public function ticket(Request $request, string $tour, string|null $token = null)
+    public function ticket(Request $request, string $tour, string|null $booking = null)
     {
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
         $token = $token ?? $request->cookie($tour->booking_form_url);
@@ -51,7 +51,7 @@ class BookingV3Controller extends Controller
         return view('pages.customer.booking.v3.ticket', ['tour' => $tour, 'booking' => $booking, 'quote' => $quote]);
     }
 
-    public function inclusion(Request $request, string $tour, string|null $token = null)
+    public function inclusion(Request $request, string $tour, string|null $booking = null)
     {
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
         $token = $token ?? $request->cookie($tour->booking_form_url);
@@ -64,7 +64,7 @@ class BookingV3Controller extends Controller
         return view('pages.customer.booking.v3.inclusion', ['tour' => $tour, 'booking' => $booking, 'quote' => $quote]);
     }
 
-    public function details(Request $request, string $tour, string|null $token = null)
+    public function details(Request $request, string $tour, string|null $booking = null)
     {
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
         $token = $token ?? $request->cookie($tour->booking_form_url);
@@ -77,7 +77,7 @@ class BookingV3Controller extends Controller
         return view('pages.customer.booking.v3.details', ['tour' => $tour, 'booking' => $booking, 'quote' => $quote]);
     }
 
-    public function reset(string $tour, string|null $token = null)
+    public function reset(string $tour, string|null $booking = null)
     {
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
         Booking::where('tour_id', '=', $tour->id)->where('token', '=', $token)->first()?->repository->forceDelete();
@@ -99,7 +99,7 @@ class BookingV3Controller extends Controller
             ->where('token', '=', $token)
             ->first();
         if ($booking !== null &&
-            ($booking->last_renewed ?? $booking->created_at)->addMinutes(setting('booking.expiry', Booking::DEFAULT_EXPIRY))->lt(now())) {
+            ($booking->last_renewed ?? $booking->created_at)->addMinutes(setting('booking.expiry', Booking::DEFAULT_EXPIRY))->gt(now())) {
             return $booking;
         }
         return null;
