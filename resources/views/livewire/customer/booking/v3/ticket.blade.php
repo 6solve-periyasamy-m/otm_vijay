@@ -142,6 +142,28 @@ use App\Models\Helper\Enum\ActivityCategory;
                                             @endif
                                         </div>
                                     </div>
+                                    @if (!empty($tourComponent->inventory->component->SeatingMap))
+                                        @php $seatingMap = $tourComponent->inventory->component->SeatingMap; @endphp
+                                        @if($seatingMap->image_url && !empty($seatingMap->image_url))
+                                            <div class="seating-map-wrapper">
+                                                <div>
+                                                    <img src="/images/Ticket-Icon.svg" alt="ticket-icon" class="seating-map-link">
+                                                </div>
+                                                <div class="ticket-pop-up-modal" style="display:none;">
+                                                    <div class="ticket-contain-module">
+                                                        <div class="ticket-block">
+                                                            <div class="ticket-image">
+                                                                <img src="{{ asset($seatingMap->image_url) }}" alt="{{ $seatingMap->name }}" title="{{ $seatingMap->name }}">
+                                                            </div>
+                                                            <div class="map-close-button">
+                                                                <img src="{{ asset('icons/Close-Button.svg') }}" alt="Close">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endif
                                 </div>
                                 <select>
                                     <option value="{{$tourComponent->inventory->id }}">{{ $tourComponent->inventory->starts_at->format('d M Y') }}</option>
