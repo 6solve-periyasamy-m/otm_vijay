@@ -92,8 +92,9 @@ class BookingV3Controller extends Controller
         Cookie::queue(Cookie::make($tour->booking_form_url, $booking->token, 12 * 60));
     }
 
-    private function getBooking(Tour $tour, string $token): Booking|null
+    private function getBooking(Tour $tour, string|null $token): Booking|null
     {
+        if ($token === null) { return null;}
         $booking = Booking::where('tour_id', '=', $tour->id)
             ->where('token', '=', $token)
             ->first();
