@@ -23,7 +23,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                 <div class="ticket-heading-module">
                                     <div class="content-module">
                                         <h6>{!! $tourComponent->inventory?->description !!}</h6>
-                                        <p>{{ $tourComponent->inventory->component?->name }} {{ $tourComponent->inventory->component->seating_map_id}} </p>
+                                        <p>{{ $tourComponent->inventory->component?->field1 }} </p>
                                         <div>
                                             @if($activeUpgrade->tour_component_type === 'Included')
                                                 <p>Included</p>
