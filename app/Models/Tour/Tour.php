@@ -390,9 +390,9 @@ class Tour extends Model
         return $this->hasMany(PaymentInstallment::class, 'tour_id')->orderBy('due_on');
     }
 
-    public function getDepositPercentageAttribute(): float
+    public function getDepositPercentageAttribute(): ?float
     {
-        return $this->is_deposit_percentage ? $this->deposit
+        return $this->is_deposit_percentage ? ($this->deposit ?? 0.0)
             : ($this->base_price_per_person == 0 ? 0 : round(($this->deposit / $this->base_price_per_person) * 100, 2));
     }
 
