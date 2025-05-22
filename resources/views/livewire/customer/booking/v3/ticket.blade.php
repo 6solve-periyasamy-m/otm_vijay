@@ -7,7 +7,7 @@ use App\Models\Helper\Enum\ActivityCategory;
             <h2 class="sub-heading-2-p">Tickets</h2>
             <p>Review your included tickets or upgrade.</p>
             <div class="tickets-listing">
-                @foreach ($tour->activityInventoryTours()->where('tour_component_type', '=', 'Included')->get() as $tourComponent)
+                @foreach ($tour->activityInventoryTours()->where('tour_component_type', '=', 'Included')->get() as $tourComponent)                    
                     @continue($tourComponent->tour_component_type === 'Add-on' || $tourComponent->tour_component_type === 'Upgrade')
                     @if ($tourComponent->inventory->component->activity_category ===  ActivityCategory::MAIN)
                         @php
@@ -33,9 +33,13 @@ use App\Models\Helper\Enum\ActivityCategory;
                                             @endif
                                         </div>
                                     </div>
-                                    <!-- <div class="ic-block">
-                                        <div><img src="/images/Ticket-Icon.svg" alt="ticket-icon"></div>
-                                    </div> -->
+                                    @if (!empty($tourComponent->inventory->component->SeatingMap))
+                                        <div class="ic-block">
+                                            <div>
+                                                <img src="/images/Ticket-Icon.svg" alt="ticket-icon">
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                                 <select>
                                     <option value="{{ $tourComponent->inventory->id }}">
