@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\FlightController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\TourComponentController;
+use App\Http\Controllers\Api\TourController;
 use App\Http\Controllers\Api\TransportController;
 use App\Http\Gateways\AirwallexGateway;
 use App\Http\Gateways\FellohGateway;
@@ -180,4 +181,8 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
 
 Route::prefix('booking')->middleware([ExpectsJson::class,])->name('booking.')->group(function () {
     Route::post('setup', [SimpleBookingController::class, 'setup'])->name('setup');
+});
+
+Route::prefix('tour')->middleware([ExpectsJson::class,])->name('tour.')->group(function () {
+    Route::get('cost', [TourController::class, 'getTourCost'])->name('cost');
 });
