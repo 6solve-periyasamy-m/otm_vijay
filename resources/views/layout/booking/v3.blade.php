@@ -2220,7 +2220,6 @@
 
     .ticket-pop-up-modal .ticket-contain-module .ticket-block {
       position: relative;
-      background: var(--error-message-color);
       max-width: 1266px;
       width: 90%;
       display: flex;
@@ -3207,6 +3206,12 @@
             position: absolute;
             bottom: 4px;
             right: 0px;
+        }
+        .ticket-pop-up-modal .ticket-contain-module .ticket-block .map-close-button img{
+            width: 44px;
+            height: 44px;
+            position: relative;
+            top: -40px;
         }
     </style>
 </head>

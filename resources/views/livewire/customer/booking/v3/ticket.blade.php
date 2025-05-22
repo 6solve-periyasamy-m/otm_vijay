@@ -23,7 +23,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                 <div class="ticket-heading-module">
                                     <div class="content-module">
                                         <h6>{!! $tourComponent->inventory?->description !!}</h6>
-                                        <p>{{ $tourComponent->inventory->component?->field1 }} </p>
+                                        <p>{{ $tourComponent->inventory->component?->name }} {{ $tourComponent->inventory->component->seating_map_id}} </p>
                                         <div>
                                             @if($activeUpgrade->tour_component_type === 'Included')
                                                 <p>Included</p>
@@ -34,11 +34,27 @@ use App\Models\Helper\Enum\ActivityCategory;
                                         </div>
                                     </div>
                                     @if (!empty($tourComponent->inventory->component->SeatingMap))
-                                        <div class="ic-block">
-                                            <div>
-                                                <img src="/images/Ticket-Icon.svg" alt="ticket-icon">
+                                    @php //dd($tourComponent->inventory->component); @endphp
+                                        @php $seatingMap = $tourComponent->inventory->component->SeatingMap; @endphp
+                                        @if($seatingMap->image_url && !empty($seatingMap->image_url))
+                                            <div class="seating-map-wrapper">
+                                                <div>
+                                                    <img src="/images/Ticket-Icon.svg" alt="ticket-icon" class="seating-map-link">
+                                                </div>
+                                                <div class="ticket-pop-up-modal" style="display:none;">
+                                                    <div class="ticket-contain-module">
+                                                        <div class="ticket-block">
+                                                            <div class="ticket-image">
+                                                                <img src="{{ asset($seatingMap->image_url) }}" alt="{{ $seatingMap->name }}" title="{{ $seatingMap->name }}">
+                                                            </div>
+                                                            <div class="map-close-button">
+                                                                <img src="{{ asset('icons/Close-Button.svg') }}" alt="Close">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                        @endif
                                     @endif
                                 </div>
                                 <select>
@@ -165,6 +181,14 @@ use App\Models\Helper\Enum\ActivityCategory;
         @endif
     </x-slot:left>
     <script type="text/javascript">
+
+        jQuery(document).on('click', '.ticket-heading-module .seating-map-wrapper img', function () {
+           jQuery(this).closest('.seating-map-wrapper').find('.ticket-pop-up-modal').css('display', 'flex')
+        })
+        jQuery(document).on('click', '.ticket-pop-up-modal .map-close-button', function () {
+            jQuery(this).closest('.ticket-heading-module').find('.ticket-pop-up-modal').css('display', 'none')
+        })
+
         $(document).ready(function () {
 
             $('.include-button').on('click', function () {
