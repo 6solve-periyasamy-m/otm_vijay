@@ -10,7 +10,7 @@
             <th scope="col"><strong>Passengers</strong></th>
             <th scope="col"><strong>Order Total</strong></th>
             <th scope="col"><strong>Balance Paid</strong></th>
-            <th scope="col"><strong>Order Status</strong></th>
+            <th scope="col"><strong>Profit</strong></th>
         </tr>
     </thead>
     <tbody>
@@ -26,7 +26,7 @@
                 <td>{{ $row->customer_count }}</td>
                 <td>{{ f_currency($row->total_order_value) }}</td>
                 <td>{{ f_currency($row->balance_paid) }}</td>
-                <td><h6 class="badge badge-{{ $row->orderStatus->color() }} fw-bold">{{ $row->orderStatus->description() }}</h6></td>
+                <td>{{ f_currency($row->profit) }}</td>
             </tr>
         @endforeach
     </tbody>

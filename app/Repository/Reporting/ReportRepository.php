@@ -456,6 +456,7 @@ class ReportRepository
             $row->internal_notes = $order->internal_notes;
             $row->external_notes = $order->external_notes;
             $row->orderStatus = $order->status;
+            $row->profit = $order->cache?->profit;
             $data[$order->id] = $row;
         }
         return $data;
