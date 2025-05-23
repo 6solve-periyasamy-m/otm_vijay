@@ -24,6 +24,7 @@ Artisan::command('inspire', function () {
 Artisan::command('order:recache', function () {
     $orders = Order::all();
     $bar = $this->output->createProgressBar($orders->count());
+    $errors = "";
     $bar->start();
     foreach ($orders as $order) {
         try {
@@ -32,13 +33,16 @@ Artisan::command('order:recache', function () {
             try {
                 \Log::error($e);
             } catch (Exception $e) {
-                echo "Failed to log error: " . $e->getMessage() . PHP_EOL;
+                $errors .= "Failed to log error: " . $e->getMessage() . PHP_EOL;
             }
-            echo "Failed to refresh order: " . $order->booking_reference . PHP_EOL;
+            $errors .=  "Failed to refresh order: " . $order->booking_reference . PHP_EOL;
         }
         $bar->advance();
     }
     $bar->finish();
+    if (!empty($errors)) {
+        echo PHP_EOL . $errors;
+    }
 })->purpose('Refresh the cache on all orders');
 
 

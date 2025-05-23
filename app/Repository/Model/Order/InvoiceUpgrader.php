@@ -16,6 +16,7 @@ class InvoiceUpgrader
     {
         $invoices = Invoice::where('generator_version', '<', self::LATEST_VERSION)->get();
         $bar = $style?->createProgressBar($invoices->count());
+        $errors = "";
         foreach ($invoices as $invoice) {
             try {
                 $invoice = self::version_1_to_2($invoice);
@@ -25,13 +26,16 @@ class InvoiceUpgrader
                 try {
                     Log::error($e);
                 } catch (Exception $e) {
-                    echo "Failed to log error: " . $e->getMessage() . PHP_EOL;
+                    $errors .= "Failed to log error: " . $e->getMessage() . PHP_EOL;
                 }
-                echo "Failed to refresh order: " . $invoice->booking_reference . PHP_EOL;
+                $errors .= "Failed to refresh invoice: " . $invoice->booking_reference . PHP_EOL;
             }
             $bar->advance();
         }
         $bar->finish();
+        if (!empty($errors)) {
+            echo PHP_EOL . $errors;
+        }
     }
 
     public static function version_1_to_2(Invoice $invoice): Invoice
