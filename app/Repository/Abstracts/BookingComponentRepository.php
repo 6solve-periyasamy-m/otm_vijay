@@ -11,9 +11,9 @@ use App\Repository\Interfaces\HasComponentType;
 
 abstract class BookingComponentRepository extends ModelRepository implements HasComponentType
 {
-    public abstract function getTourComponentType(): string;
-    public abstract function getCost(): float;
-    public abstract function getTourComponent(): InventoryTourRepository;
+    abstract public function getTourComponentType(): string;
+    abstract public function getCost(): float;
+    abstract public function getTourComponent(): InventoryTourRepository;
 
     public static function getComponent(string $type, int $id): ?BookingComponentRepository
     {

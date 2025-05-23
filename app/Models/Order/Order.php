@@ -3,16 +3,17 @@
 namespace App\Models\Order;
 
 use App\Models\Booking\Booking;
+use App\Models\Customer\Agent;
 use App\Models\Customer\Customer;
 use App\Models\Customer\Group;
 use App\Models\Customer\OrderCustomerGroup;
 use App\Models\Customer\Organization;
-use App\Models\Customer\Agent;
 use App\Models\Helper\Enum\OrderStatus;
 use App\Models\Helper\Model;
 use App\Models\Helper\NotificationSubject;
 use App\Models\Helper\Traits\HasNotifications;
 use App\Models\Helper\Traits\HasPermissions;
+use App\Models\Location\Currency;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Adjustment\OrderCustomerAdjustment;
 use App\Models\Order\Component\OrderActivity;
@@ -54,8 +55,9 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int $tour_id
  * @property int|null $lead_booker_id
  * @property int|null $organization_id
- * @property int|mull $agent_id
+ * @property int|null $agent_id
  * @property int|null $consultant_id
+ * @property int|null $currency_id
  * @property int|null $tax_bracket_id
  * @property string|null $booking_reference Unique reference for the booking
  * @property float|null $deposit The expected deposit amount
@@ -63,6 +65,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property OrderStatus|null $status_override Manually assigned order status
  * @property float|null $commission What percentage of the order is a commission (null if no commission)
  * @property Carbon $ordered_on When the order was placed
+ * @property Carbon|null $last_manual_reminder When was a reminder last manually sent
  * @property bool $cancelled Is the order cancelled?
  * @property string|null $internal_notes The notes shown only to the operator
  * @property string|null $external_notes The notes visible to the customer
@@ -74,6 +77,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Collection|ManualAdjustment[] $adjustments The manual adjustments on the order
  * @property-read Collection|OrderVoucher[] $vouchers
  * @property-read Organization|null $organization
+ * @property-read Agent|null $agent
  * @property-read OrderCache|null $cache
  * @property-read int|null $adjustments_count The amount of manual adjustments on the order
  * @property-read int|null $days_until_next_payment The number of days until the next payment is due, or null if all installments are paid
@@ -101,6 +105,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read OrderStatus $status The status of the order
  * @property-read Quote|null $quote The quote the order was built from
  * @property-read Collection|Group[] $groups List of groups
+ * @property-read Currency|null $currency The sale currency of the order
  * @property-read float $total The total cost of the order
  * @property-read User|null $consultant The consultant who made the order
  * @property-read OrderInstallment|null $next_installment A temporary installment with details of the next payment, or null if all installments are paid
@@ -171,7 +176,7 @@ class Order extends Model implements NotificationSubject
     use SoftDeletes, CascadeSoftDeletes, HasFactory, HasRelationships, HasPermissions, HasNotifications;
 
     protected $guarded = [];
-    protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double', 'status_override' => OrderStatus::class,];
+    protected $casts = ['ordered_on' => 'datetime','last_manual_reminder' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double', 'status_override' => OrderStatus::class,];
     protected $with = ['tour', 'cache'];
 
     protected array $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments', 'installments', 'invoices'];
@@ -351,6 +356,11 @@ class Order extends Model implements NotificationSubject
         return $this->hasManyThrough(OrderCustomerAdjustment::class, OrderCustomer::class, 'order_id', 'order_customer_id');
     }
 
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
+    }
+
     // Attributes
 
     /**
@@ -458,7 +468,8 @@ class Order extends Model implements NotificationSubject
      */
     public function getCalculatedDepositAttribute(): float
     {
-        return sigfig($this->deposit * $this->paying_customers);
+        // Calculated deposit should be at max, the total cost of the order
+        return sigfig(min($this->deposit * $this->paying_customers, $this->total));
     }
 
     /**

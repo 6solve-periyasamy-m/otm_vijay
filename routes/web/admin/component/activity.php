@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Activity\DeleteActivity;
 use App\Http\Controllers\Admin\Activity\ActivityController;
 use App\Http\Controllers\Admin\Activity\ActivityInventoryController;
 use App\Http\Controllers\Admin\Activity\ActivityTypeController;
@@ -8,13 +9,13 @@ use App\Http\Controllers\Admin\Activity\TicketTypeController;
 Route::get('/', [ActivityController::class, 'index'])->name('activities.all')->middleware('bouncer:Activity\Activity,read');
 Route::get('/create', [ActivityController::class, 'create'])->name('activities.create')->middleware('bouncer:Activity\Activity,create');
 Route::post('/create', [ActivityController::class, 'store'])->name('activities.store')->middleware('bouncer:Activity\Activity,create');
+Route::post('/delete', DeleteActivity::class)->name('activities.delete');
 Route::prefix('{activity}')->group(function () {
     Route::get('/', [ActivityController::class, 'view'])->name('activities.view')->middleware('bouncer:Activity\Activity,read');
     Route::get('/manifest', [ActivityController::class, 'manifest'])->name('activities.manifest.view')->middleware('bouncer:Activity\Activity,read');
     Route::get('/manifest/export/{extension?}', [ActivityController::class, 'export'])->name('activities.manifest.export')->middleware('bouncer:Activity\Activity,read');
     Route::get('/update', [ActivityController::class, 'edit'])->name('activities.edit')->middleware('bouncer:Activity\Activity,update');
     Route::post('/update', [ActivityController::class, 'update'])->name('activities.update')->middleware('bouncer:Activity\Activity,update');
-    Route::post('/delete', [ActivityController::class, 'destroy'])->name('activities.delete')->middleware('bouncer:Activity\Activity,delete');
     Route::prefix('inventory')->group(function () {
         Route::get('/create', [ActivityInventoryController::class, 'create'])->name('activity-inventories.create')->middleware('bouncer:Activity\ActivityInventory,create');
         Route::post('/create', [ActivityInventoryController::class, 'store'])->name('activity-inventories.store')->middleware('bouncer:Activity\ActivityInventory,create');

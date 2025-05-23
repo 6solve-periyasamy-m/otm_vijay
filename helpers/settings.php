@@ -34,10 +34,10 @@ if (!function_exists('fx_convert')) {
      * @param float|null $rate The conversion rate (will lookup if null)
      * @return float|null The converted amount
      */
-    function fx_convert(float|int|null $value, Currency|string|null $from = null, Currency|string|null $to = null, float $rate = null): float|null
+    function fx_convert(float|int|null $value, Currency|string|null $from = null, Currency|string|null $to = null, float|null $rate = null): float|null
     {
         if ($value === null) { return null; }
-        if ($from === null || $to === null) { return $value * ($rate ?? 1.0); }
+        if ($from === null) { return $value * ($rate ?? 1.0); }
         if ($rate === null) {
             $systemCurrency = Currency::code(setting('system.currency', 'GBP'));
             if (is_string($from)) { $from = Currency::code($from); }
@@ -58,5 +58,12 @@ if (!function_exists('fx_rate')) {
     {
         $rate = $rate ?? 1.0;
         return sigfig($value * $rate);
+    }
+}
+
+if (!function_exists('default_customer_fields')) {
+    function default_customer_fields(): array
+    {
+        return ['email', 'mobile_number', 'internal_notes'];
     }
 }

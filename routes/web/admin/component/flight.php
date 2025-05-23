@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Flight\DeleteFlight;
 use App\Http\Controllers\Admin\Flight\AirlineController;
 use App\Http\Controllers\Admin\Flight\AirportController;
 use App\Http\Controllers\Admin\Flight\FlightController;
@@ -8,13 +9,13 @@ use App\Http\Controllers\Admin\Flight\FlightInventoryController;
 Route::get('/', [FlightController::class, 'index'])->name('flights.all')->middleware('bouncer:Flight\Flight,read');
 Route::get('/create', [FlightController::class, 'create'])->name('flights.create')->middleware('bouncer:Flight\Flight,create');
 Route::post('/create', [FlightController::class, 'store'])->name('flights.store')->middleware('bouncer:Flight\Flight,create');
+Route::post('/delete', DeleteFlight::class)->name('flights.delete');
 Route::prefix('{flight}')->group(function () {
     Route::get('/', [FlightController::class, 'view'])->name('flights.view')->middleware('bouncer:Flight\Flight,read');
     Route::get('/manifest', [FlightController::class, 'manifest'])->name('flights.manifest.view')->middleware('bouncer:Flight\Flight,read');
     Route::get('/manifest/export/{extension?}', [FlightController::class, 'export'])->name('flights.manifest.export')->middleware('bouncer:Flight\Flight,read');
     Route::get('/update', [FlightController::class, 'edit'])->name('flights.edit')->middleware('bouncer:Flight\Flight,update');
     Route::post('/update', [FlightController::class, 'update'])->name('flights.update')->middleware('bouncer:Flight\Flight,update');
-    Route::post('/delete', [FlightController::class, 'destroy'])->name('flights.delete')->middleware('bouncer:Flight\Flight,delete');
     Route::get('/replicate', [FlightController::class, 'createReturn'])->name('flights.return');
     Route::prefix('inventory')->group(function () {
         Route::get('/create', [FlightInventoryController::class, 'create'])->name('flight-inventories.create')->middleware('bouncer:Flight\FlightInventory,create');

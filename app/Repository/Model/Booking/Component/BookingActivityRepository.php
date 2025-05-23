@@ -57,7 +57,7 @@ class BookingActivityRepository extends BookingComponentRepository
 
     public function getCost(): float
     {
-        return $this->bookingComponent->tourComponent->tour_sales_price;
+        return $this->bookingComponent->tourComponent->tour_sales_price ?? 0.0;
     }
 
     public function getTourComponent(): ActivityInventoryTourRepository

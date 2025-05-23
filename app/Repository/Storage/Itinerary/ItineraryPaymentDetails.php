@@ -2,6 +2,8 @@
 
 namespace App\Repository\Storage\Itinerary;
 
+use App\Models\Location\Currency;
+
 class ItineraryPaymentDetails
 {
     public string|null $paymentDetails;
@@ -23,6 +25,7 @@ class ItineraryPaymentDetails
         public float $cost,
         public array $schedule,
         public array $payments,
+        public Currency|null $currency = null,
     ) {
         $this->paymentDetails = setting('company.bank_transfer');
     }

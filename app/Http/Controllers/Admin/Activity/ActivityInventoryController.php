@@ -29,6 +29,7 @@ class ActivityInventoryController extends Controller
             'sales_price' => $request->input('sales_price') ?? 0,
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
+            'description' => $request->input('description'),
         ]);
         $activity->activityInventory()->save($activityInventory);
         return redirect()->route('activities.view', ['activity' => $activity,]);
@@ -62,6 +63,7 @@ class ActivityInventoryController extends Controller
             'sales_price' => $request->input('sales_price') ?? 0,
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
+            'description' => $request->input('description'),
         ]);
         return redirect()->route('activities.view', ['activity' => $activity,]);
     }

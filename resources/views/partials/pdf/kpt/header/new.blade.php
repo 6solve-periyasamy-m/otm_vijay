@@ -1,8 +1,8 @@
 @php /** @var \App\Repository\Storage\Itinerary\Itinerary $itinerary */ 
     $header_logo = svg_to_b64($itinerary->brand->logo) ;
 @endphp
-@if(!empty($itinerary->image))
-    <img src="{{ $itinerary->image }}" alt="{{ $itinerary->package }}" style="width: 796px;height: 147px;margin-top: -10px;">
+@if(!empty($itinerary->banner))
+    <img src="{{ $itinerary->banner }}" alt="{{ $itinerary->package }}" style="width: 796px;height: 147px;margin-top: -10px;">
 @else
     <div class="banner_header"></div>
 @endif

@@ -88,6 +88,13 @@ class OrderInstallment extends Model
         return $this->amount * $this->order->paying_customers;
     }
 
+    public function getTypeAttribute(): string
+    {
+        $type = ($this->id === null || $this->id === 0) ? 'Final Payment ' : 'Payment ';
+        $type .= ($this->due_on->isAfter(now())) ? 'Due' : 'Overdue';
+        return $type;
+    }
+
     public function getRepositoryAttribute(): OrderInstallmentRepository
     {
         if (!isset($this->internal_repository)) $this->internal_repository = new OrderInstallmentRepository($this);

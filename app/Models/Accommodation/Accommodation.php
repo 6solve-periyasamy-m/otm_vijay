@@ -20,7 +20,10 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
-
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Models\Media;
+use App\Models\Accommodation\Amenity;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Accommodation\Accommodation
@@ -42,7 +45,9 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Address $address
  * @property-read Currency|null $currency
  * @property-read AccommodationRepository $repository
+ * @property-read AccommodationType $accommodationType
  * @property-read Collection|AccommodationInventory[] $inventory List of inventory items for this accommodation
+ * @property-read Collection|Amenity[] $amenities
  * @property-read int|null $inventory_count
  * @method static AccommodationFactory factory(...$parameters)
  * @method static Builder|Accommodation newModelQuery()
@@ -59,6 +64,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @method static Builder|Accommodation whereImageUrl($value)
  * @method static Builder|Accommodation whereName($value)
  * @method static Builder|Accommodation whereUpdatedAt($value)
+ * @method static Builder|Accommodation whereAccommodationTypeId($value)
  * @method static QueryBuilder|Accommodation withTrashed()
  * @method static QueryBuilder|Accommodation withoutTrashed()
  * @mixin Eloquent
@@ -72,6 +78,7 @@ class Accommodation extends Model
     protected $casts = ['audit_date' => 'date','check_in' => 'datetime','check_out' => 'datetime',];
 
     private AccommodationRepository $internal_repository;
+    protected $with = ['amenities'];
 
     public static function getValidationRules(): array
     {
@@ -81,7 +88,11 @@ class Accommodation extends Model
             'currency_id' => 'nullable|exists:currencies,id',
             'image' => 'nullable|image',
             'address_name' => 'required_unless:use_existing,on',
-            'address_id' => 'required_if:use_existing,on'
+            'address_id' => 'required_if:use_existing,on',
+            'gallery' => 'nullable|array',
+            'gallery.*' => 'image|max:2048',
+            'amenities' => 'array',
+            'amenities.*' => 'exists:amenities,id',
         ];
     }
 
@@ -114,5 +125,25 @@ class Accommodation extends Model
     public function __toString(): string
     {
         return $this->repository->__toString();
+    }
+
+    public function accommodationType(): BelongsTo
+    {
+        return $this->belongsTo(AccommodationType::class, 'accommodation_type_id');
+    }
+
+    public function media(): MorphMany
+    {
+        return $this->morphMany(Media::class, 'mediable');
+    }
+
+    public function gallery(): MorphMany
+    {
+        return $this->media()->where('type', 'gallery');
+    }
+
+    public function amenities()
+    {
+        return $this->belongsToMany(Amenity::class, 'accommodation_amenities');
     }
 }

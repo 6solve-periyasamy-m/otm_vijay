@@ -38,4 +38,5 @@ class QuantityBillable
         $this->quantity++;
         return $this;
     }
+
 }

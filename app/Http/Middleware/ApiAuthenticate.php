@@ -29,6 +29,9 @@ class ApiAuthenticate
         } catch (ModelNotFoundException $ignored) {
             abort(403, 'API Token is either not recognized or expired');
         }
+        $request->setUserResolver(function () use ($token) {
+           return $token->user;
+        });
         return $next($request);
     }
 }

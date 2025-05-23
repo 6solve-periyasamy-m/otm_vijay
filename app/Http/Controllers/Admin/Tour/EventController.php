@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Admin\Tour;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Tour\EventRequest;
 use App\Http\Requests\Admin\TableRequest;
+use App\Http\Requests\Admin\Tour\EventRequest;
 use App\Models\Tour\Event;
-use Illuminate\Http\Request;
+use App\Repository\Reporting\Manifest\OrderManifestRepository;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class EventController extends Controller
 {
@@ -36,6 +37,11 @@ class EventController extends Controller
         return redirect()->route('events.view', ['event' => $event,]);
     }
 
+    public function bulkRemind(Event $event)
+    {
+        return view('pages.admin.order.reminder.bulk', ['orders' => $event->orders,]);
+    }
+
     public function view(TableRequest $request, Event $event)
     {
         return view('pages.admin.event.view', ['event' => $event, 'hideNoCategory' => $request->hideNoCategory ?? false,]);
@@ -44,6 +50,16 @@ class EventController extends Controller
     public function edit(Event $event)
     {
         return view('pages.admin.event.form', ['event' => $event,]);
+    }
+
+    public function orderManifest(Event $event)
+    {
+        return (new OrderManifestRepository($event->repository))->view('events.manifest.order.export', ['event' => $event]);
+    }
+
+    public function exportOrderManifest(Event $event, string $extension = 'xslx'): BinaryFileResponse
+    {
+        return (new OrderManifestRepository($event->repository))->export($extension);
     }
 
     public function update(EventRequest $request, Event $event)

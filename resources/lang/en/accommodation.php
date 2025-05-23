@@ -10,6 +10,15 @@ return [
 
         ],
     ],
+    'accommodation-type' => [
+        'title' => [
+            'create' => 'Create Accommodation Type',
+            'update' => 'Update Accommodation Type'
+        ],
+        'fields' => [
+
+        ],
+    ],
     'inventory' => [
         'form' => [
             'title' => [

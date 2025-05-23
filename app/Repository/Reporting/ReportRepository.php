@@ -115,6 +115,12 @@ class ReportRepository
                 'export' => 'reports.manifest.transport.export',
             ],
             [
+                'name' => 'Merchandise Manifest',
+                'details' => 'Manifest of Ordered Merchandise',
+                'view' => 'reports.manifest.merchandise.view',
+                'export' => 'reports.manifest.merchandise.export',
+            ],
+            [
                 'name' => 'Installment Revenue',
                 'details' => 'Information about days revenue',
                 'view' => 'reports.installment-revenue',
@@ -199,7 +205,7 @@ class ReportRepository
             $row->id = $orderMerchandise->id;
             $row->name = "{$component->name} ({$component->type->name})";
             $row->variant = $inventory->variant->name;
-            $row->size = $inventory->size->name;
+            $row->size = $inventory->size?->name;
             $row->tour = $orderMerchandise->orderCustomer->order->tour->name;
             $row->event = $orderMerchandise->orderCustomer->order->tour->event?->name;
             $row->fulfilled = $orderMerchandise->fulfilled;

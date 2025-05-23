@@ -4,10 +4,11 @@ namespace App\Repository\Model\Order;
 
 use App\Models\Order\Invoice\Invoice;
 use Illuminate\Console\OutputStyle;
+use Settings;
 
 class InvoiceUpgrader
 {
-    const LATEST_VERSION = 3;
+    const LATEST_VERSION = 4;
 
     public static function upgradeAll(OutputStyle|null $style = null): void
     {
@@ -16,6 +17,7 @@ class InvoiceUpgrader
         foreach ($invoices as $invoice) {
             $invoice = self::version_1_to_2($invoice);
             $invoice = self::version_2_to_3($invoice);
+            $invoice = self::version_3_to_4($invoice);
             $bar->advance();
         }
         $bar->finish();
@@ -57,6 +59,17 @@ class InvoiceUpgrader
             $customer->save();
         }
         $invoice->generator_version = 3;
+        $invoice->save();
+        return $invoice;
+    }
+
+    public static function version_3_to_4(Invoice $invoice): Invoice
+    {
+        if ($invoice->generator_version !== 3) return $invoice;
+        $invoice->currency_id = $invoice->order->currency_id ?? Settings::currency()->id;
+        $invoice->agent_id = $invoice->order->agent_id;
+        $invoice->organization_id = $invoice->order->organization_id;
+        $invoice->generator_version = 4;
         $invoice->save();
         return $invoice;
     }

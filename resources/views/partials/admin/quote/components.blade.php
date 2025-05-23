@@ -78,14 +78,14 @@
                             {{ $componentRepository->getPurchasePrice() !== null ? $componentRepository->getInventory()?->getPurchasePriceString() : 'Not Set' }}
                         </td>
                         <td>
-                            {{ $componentRepository->getInventoryInternalNotes() }}
-                        </td>
-                        <td>
                             {{ f_currency($componentRepository->getSalesPrice()) }} {{ $componentRepository->priceShown() ? '(Shown)' : '' }}
                         </td>
                         <td>
+                            {{ $componentRepository->getInventoryInternalNotes() }}
+                        </td>
+                        <td>
                             @can('update', \App\Models\Quote\Quote::class)
-                                <a href="{{$componentRepository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1">
+                                <a href="{{$componentRepository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1" title="Edit {{$componentRepository->getComponentType()}}">
                                     {{ Icon::edit() }}
                                 </a>
                             @else
@@ -93,7 +93,7 @@
                                     {{ Icon::edit() }}
                                 </span>
                             @endcan
-                            <a href="{{$componentRepository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1">
+                            <a href="{{$componentRepository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1" title="View {{$componentRepository->getComponentType()}} details">
                                 {{ Icon::list() }}
                             </a>
                             <form class="d-none all-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}"
@@ -101,7 +101,7 @@
                                   method="post">
                                 @csrf
                             </form>
-                            <a href="javascript:$('.all-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
+                            <a href="javascript:$('.all-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1" title="Delete {{$componentRepository->getComponentType()}}">
                                 {{ Icon::delete() }}
                             </a>
                         </td>
@@ -154,7 +154,7 @@
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
-                                <a href="{{$component->repository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1">
+                                <a href="{{$component->repository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1" title="Edit {{$component->repository->getComponentType()}}">
                                     {{ Icon::edit() }}
                                 </a>
                             @else
@@ -162,7 +162,7 @@
                                     {{ Icon::edit() }}
                                 </span>
                             @endcan
-                            <a href="{{$component->repository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1">
+                            <a href="{{$component->repository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1" title="View {{$component->repository->getComponentType()}} details">
                                 {{ Icon::list() }}
                             </a>
                             <form class="d-none accommodation-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}"
@@ -170,7 +170,7 @@
                                   method="post">
                                 @csrf
                             </form>
-                            <a href="javascript:$('.accommodation-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
+                            <a href="javascript:$('.accommodation-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1" title="Delete {{$component->repository->getComponentType()}}">
                                 {{ Icon::delete() }}
                             </a>
                         </td>
@@ -223,7 +223,7 @@
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
-                                <a href="{{$component->repository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1">
+                                <a href="{{$component->repository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1" title="Edit {{$component->repository->getComponentType()}}">
                                     {{ Icon::edit() }}
                                 </a>
                             @else
@@ -231,7 +231,7 @@
                                     {{ Icon::edit() }}
                                 </span>
                             @endcan
-                            <a href="{{$component->repository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1">
+                            <a href="{{$component->repository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1" title="View {{$component->repository->getComponentType()}} details">
                                 {{ Icon::list() }}
                             </a>
                             <form class="d-none activity-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}"
@@ -239,7 +239,7 @@
                                   method="post">
                                 @csrf
                             </form>
-                            <a href="javascript:$('.activity-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
+                            <a href="javascript:$('.activity-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1" title="Delete {{$component->repository->getComponentType()}}">
                                 {{ Icon::delete() }}
                             </a>
                         </td>
@@ -292,7 +292,7 @@
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
-                                <a href="{{$component->repository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1">
+                                <a href="{{$component->repository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1" title="Edit {{$component->repository->getComponentType()}}">
                                     {{ Icon::edit() }}
                                 </a>
                             @else
@@ -300,7 +300,7 @@
                                     {{ Icon::edit() }}
                                 </span>
                             @endcan
-                            <a href="{{$component->repository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1">
+                            <a href="{{$component->repository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1" title="View {{$component->repository->getComponentType()}} details">
                                 {{ Icon::list() }}
                             </a>
                             <form class="d-none flight-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}"
@@ -308,7 +308,7 @@
                                   method="post">
                                 @csrf
                             </form>
-                            <a href="javascript:$('.flight-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
+                            <a href="javascript:$('.flight-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1" title="Delete {{$component->repository->getComponentType()}}">
                                 {{ Icon::delete() }}
                             </a>
                         </td>
@@ -361,7 +361,7 @@
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
-                                <a href="{{$component->repository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1">
+                                <a href="{{$component->repository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1" title="Edit {{$component->repository->getComponentType()}}">
                                     {{ Icon::edit() }}
                                 </a>
                             @else
@@ -369,7 +369,7 @@
                                     {{ Icon::edit() }}
                                 </span>
                             @endcan
-                            <a href="{{$component->repository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1">
+                            <a href="{{$component->repository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1" title="View {{$component->repository->getComponentType()}} details">
                                 {{ Icon::list() }}
                             </a>
                             <form class="d-none transport-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}"
@@ -377,7 +377,7 @@
                                   method="post">
                                 @csrf
                             </form>
-                            <a href="javascript:$('.transport-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
+                            <a href="javascript:$('.transport-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1" title="Delete {{$component->repository->getComponentType()}}">
                                 {{ Icon::delete() }}
                             </a>
                         </td>
@@ -424,7 +424,7 @@
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)
-                                <a href="{{$component->repository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1">
+                                <a href="{{$component->repository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1" title="Edit {{$component->repository->getComponentType()}}">
                                     {{ Icon::edit() }}
                                 </a>
                             @else
@@ -432,7 +432,7 @@
                                     {{ Icon::edit() }}
                                 </span>
                             @endcan
-                            <a href="{{$component->repository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1">
+                            <a href="{{$component->repository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1" title="View {{$component->repository->getComponentType()}} details">
                                 {{ Icon::list() }}
                             </a>
                             <form class="d-none merchandise-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}"
@@ -440,7 +440,7 @@
                                   method="post">
                                 @csrf
                             </form>
-                            <a href="javascript:$('.merchandise-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
+                            <a href="javascript:$('.merchandise-{{$component->repository->getComponentType()}}-{{$component->repository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1" title="Delete {{$component->repository->getComponentType()}}">
                                 {{ Icon::delete() }}
                             </a>
                         </td>

@@ -19,6 +19,11 @@ $hideNoCategory = $hideNoCategory ?? false;
 @endpush
 
 @section('content')
+    @if($event->banner_url !== null)
+    <div class="d-block" style="padding: 1rem;">
+        <img src="{{ asset($event->banner_url) }}" height="100" style="max-height: 100px; min-width: 100%;" alt="Event Banner" />
+    </div>
+    @endif
     <div class="otm-callout">
         <div class="row">
             @if(isset($event->image_url))
@@ -65,6 +70,14 @@ $hideNoCategory = $hideNoCategory ?? false;
                             <span>Edit Event</span>
                         </a>
                     @endcan
+                    <a class="btn btn-warning" href="{{ route('events.reminder.bulk', ['event' => $event,]) }}">
+                        {{ Icon::calendar() }}
+                        <span>Bulk Send Reminders</span>
+                    </a>
+                    <a class="btn btn-info" href="{{ route('events.manifest.order.view', ['event' => $event]) }}">
+                        {{ Icon::report() }}
+                        <span>View Order Manifest</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -167,7 +180,9 @@ $hideNoCategory = $hideNoCategory ?? false;
                     <tbody>
                         @foreach($event->repository->getActivityReport() as $row)
                             <tr>
-                                <th scope="row">{{ $row->activity }}</th>
+                                <th scope="row">
+                                    <a href="{{ route('activities.view', ['activity' => $row->component,]) }}">{{ $row->activity }}</a>
+                                </th>
                                 <td>{{ $row->type }}</td>
                                 <td>{{ $row->totalStock }}</td>
                                 <td>{{ $row->usedStock }}</td>

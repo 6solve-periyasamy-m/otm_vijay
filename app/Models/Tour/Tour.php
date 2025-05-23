@@ -12,10 +12,12 @@ use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Helper\Model;
 use App\Models\Helper\Traits\HasAdditionalCosts;
+use App\Models\Location\Country;
 use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
@@ -73,6 +75,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $date_to
  * @property string|null $invoice_footer
  * @property string $terms Terms and Conditions of purchasing this tour
+ * @property string|null $payment_details Details for sending payment information *do not use*
  * @property Carbon $final_payment
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -130,6 +133,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $order_flights_count
  * @property-read Collection<int, OrderTransport> $orderTransport
  * @property-read int|null $order_transport_count
+ * @property-read string $makePaymentDetails Details for documents to include about making a payment
  * @method static TourFactory factory(...$parameters)
  * @method static Builder|Tour newModelQuery()
  * @method static Builder|Tour newQuery()
@@ -315,6 +319,11 @@ class Tour extends Model
         return $this->hasManyThrough(OrderTransport::class, TransportInventoryTour::class, 'tour_id', 'transport_inventory_tour_id');
     }
 
+    public function orderMerchandise(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderMerchandise::class, MerchandiseInventoryTour::class, 'tour_id', 'merchandise_inventory_tour_id');
+    }
+
     public function transportInventoryTours(): HasMany
     {
         return $this->hasMany(TransportInventoryTour::class, 'tour_id');
@@ -381,7 +390,7 @@ class Tour extends Model
 
     public function getDepositPercentageAttribute(): float
     {
-        return $this->is_deposit_percentage ? $this->deposit
+        return $this->is_deposit_percentage ? ($this->deposit ?? 0.0)
             : ($this->base_price_per_person == 0 ? 0 : round(($this->deposit / $this->base_price_per_person) * 100, 2));
     }
 
@@ -458,5 +467,18 @@ class Tour extends Model
     public function getDepositAmountAttribute(): ?float
     {
         return $this->is_deposit_percentage ? sigfig($this->base_price_per_person * ($this->deposit / 100)) : $this->deposit;
+    }
+
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'country_id');
+    }
+
+    public function getMakePaymentDetailsAttribute(): string
+    {
+        if (empty($this->payment_details)) {
+            return setting('company.bank_transfer', "");
+        }
+        return $this->payment_details;
     }
 }

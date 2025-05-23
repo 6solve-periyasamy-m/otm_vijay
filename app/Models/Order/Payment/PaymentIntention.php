@@ -65,13 +65,15 @@ class PaymentIntention extends Model
         return PaymentIntention::where('id', '=', $id)->first();
     }
 
-    public function makePayment(float $amount, PaymentMethod $method, $created): Payment
+    public function makePayment(float $amount, PaymentMethod $method, $created, Currency|null $currency): Payment
     {
         return Payment::make([
             'payment_method_id' => $method->id,
             'paid_on' => Carbon::parse($created),
-            'customer_id' => $this->customer_id,
+            'payer_id' => $this->customer_id,
+            'payer_type' => Customer::class,
             'amount' => $amount,
+            'currency_id' => $currency?->id,
         ]);
     }
 

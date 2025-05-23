@@ -7,8 +7,10 @@
 $pricePerPerson = $quote->repository->getPricePerPerson($paying)->price_per_person;
 $basicCtC = $quote->repository->getCustomerCostToCompany();
 $remaining = $pricePerPerson * $paying;
-$costOfTour = $quote->repository->getTotalCostToCompany($paying + $travelling);
+$costOfTour = $quote->repository->getTotalCostToCompany($paying);
 $profit = $remaining - $costOfTour;
+$commission = $quote->repository->getCommission($paying);
+$profit -= ($commission ?? 0.0)
 @endphp
 @extends('layout.master')
 
@@ -57,13 +59,13 @@ $profit = $remaining - $costOfTour;
             <div class="col-12 col-xl-2">
                 <p>Price per Person</p>
                 <h6 class="fw-bold">
-                    {{ f_currency($pricePerPerson) }}
+                    {{ fr_currency($pricePerPerson, $quote->currency) }}
                 </h6>
             </div>
             <div class="col-12 col-xl-2">
                 <p>Surcharge</p>
                 <h6 class="fw-bold">
-                    {{ f_currency($quote->single_occupancy_surcharge) }}
+                    {{ fr_currency($quote->single_occupancy_surcharge, $quote->currency) }}
                 </h6>
             </div>
             <div class="col-12 col-xl-2">
@@ -105,7 +107,7 @@ $profit = $remaining - $costOfTour;
                                 No Cost
                             @endif
                         </td>
-                        <td class="text-center base-price" style="width: 20%">{{ f_currency($pricePerPerson) }}</td>
+                        <td class="text-center base-price" style="width: 20%">{{ fr_currency($pricePerPerson, $quote->currency) }}</td>
                         <td class="text-center base-profit" style="width: 20%">{{ f_currency($pricePerPerson - $basicCtC) }}</td>
                     </tr>
                     </tbody>
@@ -148,10 +150,10 @@ $profit = $remaining - $costOfTour;
                                 <input type="hidden" name="per_customer" value="1" />
                             </form>
                             <td>
-                                <a href="javascript:$('.cost-edit-{{$cost->id}}').submit()" class="btn btn-outline-success btn-sm mb-1">
+                                <a href="javascript:$('.cost-edit-{{$cost->id}}').submit()" class="btn btn-outline-success btn-sm mb-1" title="Edit cost">
                                     {{ Icon::edit() }}
                                 </a>
-                                <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
+                                <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1" title="Delete cost">
                                     {{ Icon::delete() }}
                                 </a>
                                 <form id="cost-{{ $cost->id }}-delete" action="{{ route('additional-cost.delete', ['cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
@@ -172,15 +174,15 @@ $profit = $remaining - $costOfTour;
                         <x-slot:header>
                             Expected
                         </x-slot:header>
-                        {{ f_currency($remaining ?? 0) }}
+                        {{ fr_currency($remaining ?? 0, $quote->currency) }}
                     </x-admin.section.otm-text>
-                    <x-admin.section.otm-text width="4">
+                    <x-admin.section.otm-text width="6">
                         <x-slot:header>
                             Cost to Company
                         </x-slot:header>
                         {{ f_currency($costOfTour ?? 0) }}
                     </x-admin.section.otm-text>
-                    <x-admin.section.otm-text width="6">
+                    <x-admin.section.otm-text width="4">
                         <x-slot:header>
                             Profit
                         </x-slot:header>
@@ -189,6 +191,12 @@ $profit = $remaining - $costOfTour;
                         @else
                             <span style="color: green">{{ f_currency($profit ?? 0) }}</span>
                         @endif
+                    </x-admin.section.otm-text>
+                    <x-admin.section.otm-text width="6">
+                        <x-slot:header>
+                            Commission
+                        </x-slot:header>
+                        {{ f_currency($commission ?? 0) }}
                     </x-admin.section.otm-text>
                 </div>
             </x-admin.section.card>
@@ -229,10 +237,10 @@ $profit = $remaining - $costOfTour;
                                 <input type="hidden" name="per_customer" value="0" />
                             </form>
                             <td>
-                                <a href="javascript:$('.cost-edit-{{$cost->id}}').submit()" class="btn btn-outline-success btn-sm mb-1">
+                                <a href="javascript:$('.cost-edit-{{$cost->id}}').submit()" class="btn btn-outline-success btn-sm mb-1" title="Edit cost">
                                     {{ Icon::edit() }}
                                 </a>
-                                <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
+                                <a href="javascript:$('#cost-{{$cost->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1" title="Delete cost">
                                     {{ Icon::delete() }}
                                 </a>
                                 <form id="cost-{{ $cost->id }}-delete" action="{{ route('additional-cost.delete', ['cost' => $cost,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>

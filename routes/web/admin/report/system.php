@@ -41,6 +41,10 @@ Route::prefix('manifest')->name('reports.manifest.')->group(function () {
         Route::get('/', [ManifestController::class, 'viewTransport'])->name('view');
         Route::get('/export/{extension}', [ManifestController::class, 'exportTransport'])->name('export');
     });
+    Route::prefix('merchandise')->name('merchandise.')->group(function () {
+        Route::get('/', [ManifestController::class, 'viewMerchandise'])->name('view');
+        Route::get('/export/{extension}', [ManifestController::class, 'exportMerchandise'])->name('export');
+    });
 });
 Route::prefix('atol')->name('reports.atol.')->group(function () {
     Route::get('/ordered/{year}/{quarter}', [AtolController::class, 'getOrderedInQuarterReport'])->name('ordered');

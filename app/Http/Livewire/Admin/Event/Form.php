@@ -22,6 +22,7 @@ class Form extends Component
     public $termsTemplate;
     public $user;
     public UploadedFile|string|null $image = null;
+    public UploadedFile|string|null $banner = null;
 
     public function mount(Event|int|null $event = null)
     {
@@ -71,6 +72,9 @@ class Form extends Component
         if ($this->image !== null) {
             $this->event->image_url = store_file($this->image, $this->event->image_url);
         }
+        if ($this->banner !== null) {
+            $this->event->banner_url = store_file($this->banner, $this->event->banner_url);
+        }
         $this->event->save();
         return redirect()->route('events.view', ['event' => $this->event]);
     }
@@ -93,6 +97,7 @@ class Form extends Component
             'event.event_category' => ['required', Rule::enum(EventType::class)],
             'event.notes' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:8192',
+            'banner' => 'nullable|image|mimes:jpg,jpeg,png|max:8192',
             'event.booking_url' => 'nullable|string',
             'event.onsite_name' => 'nullable|string',
             'event.onsite_email' => 'nullable|string',

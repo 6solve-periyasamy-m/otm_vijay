@@ -239,6 +239,7 @@ class MerchandiseInventoryRepository extends InventoryRepository
             'Size' => $this->inventory->size?->name,
             'Variant' => $this->inventory->variant?->name,
             'Quantity' => $quantity,
+            'Description' => $this->inventory->external_notes,
         ];
         return new ItineraryItem(
             $this->inventory->component->name,

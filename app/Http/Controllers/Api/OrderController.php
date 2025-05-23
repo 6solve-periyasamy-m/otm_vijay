@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Api;
 use App\Exceptions\MailFailedException;
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\Admin\Order\BulkSendReminderRequest;
 use App\Http\Requests\Admin\TableRequest;
 use App\Http\Requests\Api\Admin\Order\UnknownTravellerRequest;
 use App\Http\Requests\Api\Admin\OrderRequest;
 use App\Models\Order\Order;
 use App\Repository\Model\Order\OrderRepository;
+use Exception;
+use Illuminate\Http\JsonResponse;
 
 class OrderController extends ApiController
 {
@@ -56,5 +59,57 @@ class OrderController extends ApiController
         }
 
         return response()->json(['success' => false, 'message' => 'Mailing is currently disabled on this system']);
+    }
+
+    /**
+     * Bulk send order reminders.
+     *
+     * Request receives an array of order ids, processes them, and sends each the appropriate order reminder
+     *
+     * @param BulkSendReminderRequest $request
+     * @return JsonResponse
+     */
+    public function bulkSendOrderReminders(BulkSendReminderRequest $request): JsonResponse
+    {
+        if (count($request->orders ?? []) === 0) {
+            return response()->json(['success' => false, 'message' => "No orders have been requested"]);
+        }
+
+        $failed = [];
+        $successes = 0;
+
+        foreach ($request->orders as $id) {
+            $order = Order::find($id);
+            if ($order !== null) {
+                if ($order->cancelled) {
+                    $failed[] = ['reference' => $order->booking_reference, 'reason' => 'This order is cancelled'];
+                    continue;
+                }
+                $next = $order->next_installment;
+                if ($next !== null) {
+                    try {
+                        $sent = $order->repository->sendManualReminder($next);
+                        if ($sent) {
+                            $successes++;
+                        } else {
+                            $failed[] = ['reference' => $order->booking_reference, 'reason' => 'Failed to send manual reminder'];
+                        }
+                    } catch (Exception $e) {
+                        $failed[] = ['reference' => $order->booking_reference, 'reason' => $e->getMessage()];
+                    }
+                } else {
+                    $failed[] = ['reference' => $order->booking_reference, 'reason' => 'No Next Installment Available'];
+                }
+            }
+        }
+
+        if ($successes > 0) {
+            if (count($failed) > 0) {
+                return response()->json(['success' => true, 'message' => 'Completed successfully with some errors', 'errors' => $failed]);
+            }
+            return response()->json(['success' => true, 'message' => 'Completed successfully']);
+        }
+
+        return response()->json(['success' => false, 'message' => 'All mail failed', 'errors' => $failed]);
     }
 }

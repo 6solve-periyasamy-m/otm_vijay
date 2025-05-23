@@ -66,7 +66,7 @@ class ActivityRepository extends ModelRepository implements HasActivityManifest
         $total = 0;
         $used = 0;
         foreach ($this->activity->activityInventory()->whereDate('starts_at' , '>=', $starts_at->subDay())
-                     ->whereDate('ends_at' , '<=', $ends_at->subDay())->get() as $inventory) {
+                     ->whereDate('ends_at' , '<=', $ends_at->addDay())->get() as $inventory) {
             $total += $inventory->repository->getTotalStock();
             $used += $inventory->repository->getUsedStock();
         }
@@ -74,7 +74,8 @@ class ActivityRepository extends ModelRepository implements HasActivityManifest
             $this->activity->name,
             $this->activity->activityType->name,
             $total,
-            $used
+            $used,
+            $this->activity,
         );
     }
 }

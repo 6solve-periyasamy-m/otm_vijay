@@ -10,6 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property int|float|null $booking_fee
  * @property int|float|null $commission
  * @property int|null $organization_id
+ * @property int|null $currency_id
  * @property int|null $tax_bracket_id
  * @property int|null $consultant_id
  * @property int|null $status_override
@@ -27,12 +28,14 @@ class UpdateOrderRequest extends FormRequest
             'booking_fee' => $this->booking_fee ?? 0,
             'commission' => $this->commission,
             'organization_id' => $this->organization_id,
+            'currency_id' => $this->currency_id,
             'status_override' => $this->status_override,
             'internal_notes' => $this->internal_notes,
             'external_notes' => $this->external_notes,
             'invoice_footer' => $this->invoice_footer,
             'consultant_id' => $this->consultant_id,
             'tax_bracket_id' => $this->tax_bracket_id,
+            'agent_id' => $this->agent_id,
         ];
     }
 
@@ -48,7 +51,8 @@ class UpdateOrderRequest extends FormRequest
             'deposit' => 'nullable|numeric',
             'booking_fee' => 'nullable|numeric',
             'commission' => 'nullable|numeric',
-            'organization_id' => 'nullable|integer|exists:organizations,id'
+            'organization_id' => 'nullable|integer|exists:organizations,id',
+            'currency_id' => 'nullable|integer|exists:currencies,id',
         ];
     }
 }

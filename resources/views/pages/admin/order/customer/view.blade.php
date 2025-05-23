@@ -153,93 +153,128 @@
     </div>
     <div class="otm-callout">
         <div class="row">
+            <!-- Customer Details -->
+            @php
+                $customer = $orderCustomer->customer;
+            @endphp            
             <div class="col-12">
                 <h4 class="fw-bold">{{ $orderCustomer->customer->first_name }} {{ $orderCustomer->customer->middle_names ?? "" }} {{ $orderCustomer->customer->last_name }}</h4>
-            </div>
+            </div>        
             <div class="col-xl-4">
-                <p>Date of Birth</p>
-                <h6 class="fw-bold">{{ f_date($orderCustomer->customer->date_of_birth) }}</h6>
-                <p>Passport Number</p>
-                <h6 class="fw-bold">{{ $orderCustomer->customer->passport_number ?? 'Passport Number Not Set' }}</h6>
-                <p>Passport Expiry Date</p>
-                <h6 class="fw-bold">{{ f_date($orderCustomer->customer->passport_expiry_date) ?? 'Expiry Date Not Set' }}</h6>
-                <p>Insurance Policy</p>
-                <h6 class="fw-bold">{{ $orderCustomer->policy_number ?? 'No Insurance Policy' }} ({{ $orderCustomer->travel_insurer ?? 'Insurer Not Set' }})</h6>
+                @if(in_array('email', $customerFields))
+                    @include('partials.fields.groupfields.field', ['label' => 'Email Address', 'value' => $customer->email_address, 'isLink' => true, 'linkPrefix' => 'mailto:', 'col' => 'col-4' ])
+                @endif
+                @if(in_array('mobile_number', $customerFields))
+                    @include('partials.fields.groupfields.field', ['label' => 'Phone Number', 'value' => $customer->mobile_number, 'isLink' => true, 'linkPrefix' => 'tel:', 'col' => 'col-4' ])
+                @endif
+                @if(in_array('date_of_birth', $customerFields))
+                    @include('partials.fields.groupfields.field', ['label' => 'Date of Birth', 'value' => f_date($customer->date_of_birth), 'col' => 'col-4' ])
+                @endif
+                @include('partials.fields.groupfields.field', ['label' => 'Insurance Policy', 'value' => $orderCustomer->policy_number ?? 'No Insurance Policy', 'col' => 'col-4' ])
             </div>
             <div class="col-xl-8">
-                @if ($orderCustomer->customer->homeAddress->address_line_1 != '' || $orderCustomer->customer->billingAddress->address_line_1 != '')
-                    <div class="row">
-                        <div class="col-xl-6">
-                            <p>Street (Home Address)</p>
-                            <h6 class="fw-bold">{{ $orderCustomer->customer->homeAddress->address_line_1 }}</h6>
-                        </div>
-                        <div class="col-xl-6">
-                            <p>Street (Billing Address)</p>
-                            <h6 class="fw-bold">{{ $orderCustomer->customer->billingAddress->address_line_1 }}</h6>
-                        </div>
-                    </div>
+                <div class="row">
+                @if(in_array('home_address', $customerFields))
+                    @include('partials.fields.groupfields.field', ['label' => 'Street (Home Address)', 'value' => $customer->homeAddress->address_line_1, 'col' => 'col-xl-6' ])
                 @endif
-                @if ($orderCustomer->customer->homeAddress->region != '' || $orderCustomer->customer->billingAddress->region != '')
-                    <div class="row">
-                        <div class="col-xl-6">
-                            <p>Town (Home Address)</p>
-                            <h6 class="fw-bold">{{ $orderCustomer->customer->homeAddress->region }}</h6>
-                        </div>
-                        <div class="col-xl-6">
-                            <p>Town (Billing Address)</p>
-                            <h6 class="fw-bold">{{ $orderCustomer->customer->billingAddress->region }}</h6>
-                        </div>
-                    </div>
+                @if(in_array('billing_address', $customerFields))
+                    @include('partials.fields.groupfields.field', ['label' => 'Street (Billing Address)', 'value' => $customer->billingAddress->address_line_1, 'col' => 'col-xl-6' ])
                 @endif
-                @if ($orderCustomer->customer->homeAddress->country != '' || $orderCustomer->customer->billingAddress->country != '')
-                    <div class="row">
-                        <div class="col-xl-6">
-                            <p>Country (Home Address)</p>
-                            <h6 class="fw-bold">{{ $orderCustomer->customer->homeAddress->country }}</h6>
-                        </div>
-                        <div class="col-xl-6">
-                            <p>Country (Billing Address)</p>
-                            <h6 class="fw-bold">{{ $orderCustomer->customer->billingAddress->country }}</h6>
-                        </div>
-                    </div>
+                </div>
+                <div class="row">
+                @if(in_array('home_address', $customerFields))
+                    @include('partials.fields.groupfields.field', ['label' => 'Town (Home Address)', 'value' => $customer->homeAddress->region, 'col' => 'col-xl-6' ])
                 @endif
-                @if ($orderCustomer->customer->homeAddress->postcode != '' || $orderCustomer->customer->billingAddress->postcode != '')
-                    <div class="row">
-                        <div class="col-xl-6">
-                            <p>Postcode (Home Address)</p>
-                            <h6 class="fw-bold">{{ $orderCustomer->customer->homeAddress->postcode }}</h6>
-                        </div>
-                        <div class="col-xl-6">
-                            <p>Postcode (Billing Address)</p>
-                            <h6 class="fw-bold">{{ $orderCustomer->customer->billingAddress->postcode }}</h6>
-                        </div>
-                    </div>
+                @if(in_array('billing_address', $customerFields))
+                    @include('partials.fields.groupfields.field', ['label' => 'Town (Billing Address)', 'value' => $customer->billingAddress->region, 'col' => 'col-xl-6' ])
                 @endif
+                </div>
+                <div class="row">
+                @if(in_array('home_address', $customerFields))
+                    @include('partials.fields.groupfields.field', ['label' => 'Country (Home Address)', 'value' => $customer->homeAddress->country, 'col' => 'col-xl-6' ])
+                @endif
+                @if(in_array('billing_address', $customerFields))
+                    @include('partials.fields.groupfields.field', ['label' => 'Country (Billing Address)', 'value' => $customer->billingAddress->country, 'col' => 'col-xl-6' ])
+                @endif
+                </div>
+                <div class="row">
+                @if(in_array('home_address', $customerFields))
+                    @include('partials.fields.groupfields.field', ['label' => 'Postcode (Home Address)', 'value' => $customer->homeAddress->postcode, 'col' => 'col-xl-6' ])
+                @endif
+                @if(in_array('billing_address', $customerFields))
+                    @include('partials.fields.groupfields.field', ['label' => 'Postcode (Billing Address)', 'value' => $customer->billingAddress->postcode, 'col' => 'col-xl-6' ])
+                @endif
+                </div>  
             </div>
-            <div class="col-4">
-                <p>Dietary Requirements</p>
-                <h6 class="fw-bold">{{ $orderCustomer->customer->dietary_notes }}</h6>
-            </div>
-            <div class="col-4">
-                <p>Mobility Requirements</p>
-                <h6 class="fw-bold">{{ $orderCustomer->customer->mobility_notes }}</h6>
-            </div>
-            <div class="col-4">
-                <p>Internal Customer Notes</p>
-                <h6 class="fw-bold">{{ $orderCustomer->customer->internal_notes }}</h6>
-            </div>
-            <div class="col-4">
-                <p>External Customer Notes</p>
-                <h6 class="fw-bold">{{ $orderCustomer->customer->external_notes }}</h6>
-            </div>
-            <div class="col-4">
-                <p>Internal Order Customer Notes</p>
-                <h6 class="fw-bold">{{ $orderCustomer->internal_notes }}</h6>
-            </div>
-            <div class="col-4">
-                <p>External Order Customer Notes</p>
-                <h6 class="fw-bold">{{ $orderCustomer->external_notes }}</h6>
-            </div>
+            @if(in_array('first_name', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'First Name', 'value' => $customer->first_name, 'col' => 'col-4' ])
+            @endif
+            @if(in_array('middle_names', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'Middle Name', 'value' => $customer->middle_names, 'col' => 'col-4' ])
+            @endif
+            @if(in_array('last_name', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'Last Name', 'value' => $customer->last_name, 'col' => 'col-4' ])
+            @endif
+            @if(in_array('passport_first_name', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'Passport First Name', 'value' => $customer->passport_first_name , 'col' => 'col-4' ])
+            @endif
+
+            @if(in_array('passport_middle_names', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'Passport Middle Name', 'value' => $customer->passport_middle_names, 'col' => 'col-4' ])
+            @endif
+
+            @if(in_array('passport_last_name', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'Passport Last Name', 'value' => $customer->passport_last_name , 'col' => 'col-4' ])
+            @endif
+
+            @if(in_array('passport_number', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'Passport Number', 'value' => $customer->passport_number, 'col' => 'col-4' ])
+            @endif
+
+            @if(in_array('passport_expiry_date', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'Passport Expires', 'value' => f_date($customer->passport_expiry_date), 'col' => 'col-4' ])
+            @endif
+
+            @if(in_array('emergency_contact_name', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'Contact Name (Emergency)', 'value' => $customer->emergency_contact_name , 'col' => 'col-4' ])
+            @endif
+            @if(in_array('emergency_contact_relationship', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'Contact Relationship (Emergency)', 'value' => $customer->emergency_contact_relationship , 'col' => 'col-4' ])
+            @endif
+            @if(in_array('emergency_contact_telephone', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'Contact telephone (Emergency)', 'value' => $customer->emergency_contact_telephone , 'isLink' => true, 'linkPrefix' => 'tel:', 'col' => 'col-4' ])
+            @endif
+
+            @if(in_array('loyalty_number', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'Loyalty Number', 'value' => $customer->loyalty_number , 'col' => 'col-4' ])
+            @endif
+            @if(in_array('t_shirt_size', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'T Shirt Size', 'value' => $customer->t_shirt_size , 'col' => 'col-4' ])
+            @endif
+            @if(in_array('hat_size', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'Hat Size', 'value' => $customer->hat_size , 'col' => 'col-4' ])
+            @endif
+            <!-- @if(in_array('registered', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'Has Account', 'value' => $customer->registered , 'col' => 'col-4' ])
+            @endif -->
+            @if(in_array('dietary_notes', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'Dietary Requirements', 'value' => $customer->dietary_notes, 'col' => 'col-4' ])
+            @endif
+
+            @if(in_array('mobility_notes', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'Mobility Requirements', 'value' => $customer->mobility_notes, 'col' => 'col-4' ])
+            @endif
+
+            @if(in_array('internal_notes', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'Internal Customer Notes', 'value' => $customer->internal_notes, 'col' => 'col-4' ])
+            @endif
+
+            @if(in_array('external_notes', $customerFields))
+                @include('partials.fields.groupfields.field', ['label' => 'External Customer Notes', 'value' => $customer->external_notes, 'col' => 'col-4' ])
+            @endif
+            @include('partials.fields.groupfields.field', ['label' => 'Internal Order Customer Notes', 'value' => $orderCustomer->internal_notes, 'col' => 'col-4' ])
+            @include('partials.fields.groupfields.field', ['label' => 'External Order Customer Notes', 'value' => $orderCustomer->external_notes, 'col' => 'col-4' ])            
+            <!-- End of the customer details -->
             <div class="col-12">
                 @can('create', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
                     <a href="{{ route('order-customer-adjustments.create', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}"

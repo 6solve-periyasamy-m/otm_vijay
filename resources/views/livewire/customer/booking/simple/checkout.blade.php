@@ -247,7 +247,8 @@
                                 <p>{{ f_currency($booking->repository->getDueTodayAmount()) }}</p>
                             </div>
                         </div>
-                        <!-- <div class="form-field-checkbox" wire:click="setPayFull(0)">
+
+                        {{--<div class="form-field-checkbox" wire:click="setPayFull(0)">
                             <div class="left-ass">
                                 <label class="containr">
                                 <span class="txt">
@@ -263,20 +264,18 @@
                             <div class="right-assets">
                                 <p>{{ f_currency($booking->repository->getDueTodayAmount()) }}</p>
                             </div>
-                        </div> -->
+                        </div> --}}
                         @endif
-                        {{--
                         <div class="card-field-box">
                             <div class="first-in active">
                                 {{ Icon::regular('credit-card') }}
                                 <p>Credit / Debit card</p>
                             </div>
-                            <div class="first-in">
+                            {{--<div class="first-in">
                                 {{ Icon::solid('file-invoice') }}
                                 <p>Invoice – Direct Debit</p>
-                            </div>
+                            </div>--}}
                         </div>
-                        --}}
                     </div>
                     <div class="wh-las-cls-con">
                         <div class="acc-tp-cond">

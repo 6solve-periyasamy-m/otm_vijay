@@ -66,13 +66,14 @@
                                onclick="event.preventDefault();document.getElementById('transport-{{ $transport->id }}-delete').submit();">
                                 {{ Icon::delete() }}
                             </a>
-                            <form id="transport-{{ $transport->id }}-delete"
-                                  action="{{ route('transports.delete', ['transport' => $transport,]) }}" method="POST"
-                                  style="display: none;">{{ csrf_field() }}</form>
+                            <form id="transport-{{ $transport->id }}-delete" action="{{ route('transports.delete') }}" method="POST" style="display: none;">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="id" value="{{ $transport->id }}" />
+                            </form>
                         @else
                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                    {{ Icon::delete() }}
-                                </span>
+                                {{ Icon::delete() }}
+                            </span>
                         @endcan
                     </td>
                 </tr>

@@ -22,6 +22,7 @@ return [
         'description' => 'Description',
         'organization' => 'Organization',
         'agent' => 'Agent',
+        'event' => 'Event',
         'notes' => [
             'internal' => 'Internal Note',
             'external' => 'External Note',
@@ -53,10 +54,11 @@ return [
                         'flights' => 'Flights',
                         'transport' => 'Transport',
                         'merchandise' => 'Merchandise',
+                        'section' => 'Section',
                         'per-customer' => 'Per Customer',
                         'overall' => 'Whole Order',
                         'total' => 'Total Cost',
-                        'approximate' => 'Amount is based on the purchase price of template accommodation and may differ',
+                        'approximate' => 'Amount is based on the purchase price of template accommodation and may differ. If in a foreign currency, it will attempt conversion',
                     ],
                     'lead' => [
                         'header' => 'Lead Traveller Details',
@@ -144,8 +146,11 @@ return [
             ],
             'sections' => [
                 'header' => 'Quote Sections',
+                'type' => 'Type',
                 'title' => 'Title',
                 'body' => 'Body',
+                'quantity' => 'Quantity',
+                'cost' => 'Purchase Price',
                 'image' => 'Has Image?',
                 'hidden' => 'Hidden?',
                 'order' => 'Order'

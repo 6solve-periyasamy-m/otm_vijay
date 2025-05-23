@@ -10,7 +10,6 @@ use App\Http\Requests\Admin\Order\CreateOrderRequest;
 use App\Http\Requests\Admin\Order\MigrateRequest;
 use App\Http\Requests\Admin\Order\UpdateOrderRequest;
 use App\Http\Requests\Admin\TableRequest;
-use App\Models\Order\Invoice\Invoice;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\InvoiceRepository;
@@ -67,6 +66,8 @@ class OrderController extends Controller
         $invoice =
             $order->invoices()->where('invoice_number', '=', $version)->first()
             ?? $order->repository->getInvoiceRepository()->invoice;
+        // TODO: Implement a better solution for this.
+        $invoice->payment_schedule = $order->repository->getScheduleItineraryArray();
         return (new InvoiceRepository($invoice))->getResponseStream();
     }
 

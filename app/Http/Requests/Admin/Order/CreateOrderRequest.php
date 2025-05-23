@@ -11,6 +11,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $ordered_on
  * @property int $tour_id
  * @property int|null $organization_id
+ * @property int|null $currency_id
  * @property float|null $deposit
  * @property array $lead_booker
  * @property array|null $customers
@@ -45,6 +46,9 @@ class CreateOrderRequest extends FormRequest
             'deposit' => $this->deposit ?? $this->getTour()->deposit_amount,
             'invoice_footer' => $this->getTour()->invoice_footer,
             'organization_id' => $this->organization_id,
+            'currency_id' => $this->currency_id,
+            'agent_id' => $this->agent_id,
+            'commission' => $this->commission,
         ];
     }
 
@@ -87,7 +91,10 @@ class CreateOrderRequest extends FormRequest
             'deposit' => 'nullable|numeric|min:0',
             'tour_id' => 'required|integer|exists:tours,id',
             'lead_booker.id' => 'required|integer|exists:customers,id',
-            'organization_id' => 'nullable|integer|exists:organizations,id'
+            'organization_id' => 'nullable|integer|exists:organizations,id',
+            'currency_id' => 'nullable|integer|exists:currencies,id',
+            'agent_id' => 'nullable|integer|exists:agents,id',
+            'commission' => 'nullable|numeric|min:0',
         ];
     }
 }

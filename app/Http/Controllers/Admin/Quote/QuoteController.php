@@ -33,7 +33,8 @@ class QuoteController extends Controller
     public function create(?Tour $tour = null)
     {
         if (isset($tour)) {
-            return view('pages.admin.quote.create.basic', ['tour' => $tour,]);
+            $is_final_payment_passed = now()->gt($tour->final_payment);
+            return view('pages.admin.quote.create.basic', ['tour' => $tour, 'is_final_payment_passed' => $is_final_payment_passed,]);
         }
         return view('pages.admin.quote.form');
     }

@@ -21,6 +21,7 @@ class QuoteMail extends TemplatedMail
         }
         $customer = $quote?->leadTraveller?->customer;
         return [
+            'LEAD_CONTACT_NAME' => $quote?->agent?->name ?? $quote?->organization?->name ?? $quote?->leadTraveller?->name ?? $this->faker->name,
             'LEAD_TITLE' => $customer?->title ?? $this->faker?->title,
             'LEAD_FIRST_NAME' => $customer?->first_name ?? $this->faker?->firstName,
             'LEAD_MIDDLE_NAMES' => $customer?->middle_names ?? $this->faker?->name,

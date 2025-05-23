@@ -44,17 +44,9 @@ class MerchandiseController extends Controller
     public function update(MerchandiseRequest $request, Merchandise $merchandise, string $view = 'overview')
     {
         $merchandise->repository->updateWithImage($request->getDataset(), $request->image);
-        if ($view == 'detailed') {
+        if ($view === 'detailed') {
             return redirect()->route('merchandise.detailed', ['merchandise' => $merchandise,]);
         }
         return redirect()->route('merchandise.view', ['merchandise' => $merchandise,]);
-    }
-
-    public function destroy(Merchandise $merchandise)
-    {
-        if (!$merchandise->repository->delete()) {
-            return back()->withErrors(['msg' => 'Component is used on tours']);
-        }
-        return redirect()->route('merchandise.all');
     }
 }

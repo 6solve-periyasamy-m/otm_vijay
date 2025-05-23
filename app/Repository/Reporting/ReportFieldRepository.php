@@ -521,6 +521,10 @@ class ReportFieldRepository
                         'name' => 'Tour Name',
                         'method' => 'tour_name',
                     ],
+                    'event_name' => [
+                        'name' => 'Event Name',
+                        'method' => 'event_name',
+                    ],
                     'ordered_on' => [
                         'name' => 'Ordered On',
                         'method' => 'ordered_on',
@@ -701,6 +705,11 @@ class ReportFieldRepository
                 'status' => [
                     'name' => 'Status',
                     'method' => 'status',
+                ],
+                'currency' => [
+                    'name' => 'Currency',
+                    'method' => 'currency',
+                    'format' => 'coalesceSystemCurrency'
                 ],
                 'total' => [
                     'name' => 'Cost',

@@ -10,6 +10,7 @@ use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
 use Exception;
 use Livewire\Component;
+use Settings;
 
 class Calculator extends Component
 {
@@ -32,13 +33,16 @@ class Calculator extends Component
     /** @var float $total Total Cost to Customers */
     public float $total = 0;
 
-    /** @var float $profit Raw profit amount (total - cost to company) */
-    public float $profit = 0;
+    /** @var float|null $profit Raw profit amount (total - cost to company), or null if can't convert */
+    public float|null $profit = 0;
     /** @var float $margin Percentage profit margin for package ((total - cost to company) / total)*/
     public float $margin = 0;
     /** @var string|float|null $markup Percentage markup for package ((total - cost to company) / cost to company) */
     public string|float|null $markup = null;
     public float|null $commission = null;
+    public bool $adjust = false;
+    public float|null $fromRate = null;
+    public float|null $toRate = null;
     public float $toBePaid;
     public float|string $marked_up_price = 0;
     public float|null $taxes = null;
@@ -48,6 +52,8 @@ class Calculator extends Component
         $this->quote = $quote;
         $this->paying = $this->quote->paying ?? 0;
         $this->travelling = $this->quote->travelling ?? 0;
+        $this->fromRate = $this->quote->from_rate ?? Settings::getConversionRate($this->quote->currency, Settings::currency()) ?? 1;
+        $this->toRate = $this->quote->to_rate ?? Settings::getConversionRate(Settings::currency(), $this->quote->currency) ?? 1;
         $this->calculate(false);
     }
 
@@ -66,12 +72,21 @@ class Calculator extends Component
 
         /** @var float $costPerPerson Cost to the company per person (average) */
         $costPerPerson = $totalTravellerCount > 0 ? sigfig($this->costToCompany / $totalTravellerCount) : 0;
-        $this->total = $this->quote->repository->getTotalCost($this->paying + ($this->quote->leadTraveller->paying ? 1 : 0));
-        $this->profit = sigfig($this->total - $this->costToCompany);
-        $this->margin = $this->total == 0 ? 100 : sigfig((($this->total - $this->costToCompany) / $this->total) * 100);
+        $paying = $this->paying + ($this->quote->leadTraveller->paying ? 1 : 0);
+        $this->total = ($this->quote->repository->getPricePerPerson($paying)?->price_per_person ?? 0) * $paying;
+        if ($this->quote->currency !== null && $this->quote->currency_id !== Settings::currency()?->id) {
+            if ($this->fromRate === null) {
+                $this->profit = null;
+            } else {
+                $this->profit = sigfig(sigfig($this->total * $this->fromRate) - $this->costToCompany);
+            }
+        } else {
+            $this->profit = sigfig($this->total - $this->costToCompany);
+        }
+        $this->margin = $this->total == 0 ? 100 : sigfig(((($this->total * $this->fromRate) - $this->costToCompany) / ($this->total * $this->fromRate)) * 100);
 
-        $this->markup = sigfig($this->markup ?? ($this->costToCompany == 0 ? 100 : ((($this->total - $this->costToCompany) / $this->costToCompany) * 100)), 6);
-        $this->marked_up_price = sigfig($costPerPerson + ($costPerPerson * ($this->markup / 100)));
+        $this->markup = sigfig($this->markup ?? ($this->costToCompany == 0 ? 100 : (((($this->total * $this->fromRate) - $this->costToCompany) / $this->costToCompany) * 100)), 6);
+        $this->marked_up_price = sigfig(($costPerPerson + ($costPerPerson * ($this->markup / 100))) * ($this->toRate ?? 0.0));
 
         if ($this->quote->commission !== null) {
             $this->commission = sigfig($this->total * ($this->quote->commission / 100));
@@ -97,6 +112,12 @@ class Calculator extends Component
             $this->markup = $costPerPerson == 0 ? 100 : sigfig(((($this->marked_up_price - $costPerPerson)/$costPerPerson) * 100), 6, true);
         }
         $this->calculate();
+    }
+
+    public function enableEditing(): void
+    {
+        $this->adjust = true;
+        $this->refresh();
     }
 
     public function incrementPaying(int $value): void
@@ -134,6 +155,7 @@ class Calculator extends Component
 
     public function updatePricePoint(bool $all = false): void
     {
+        $this->quote->refresh();
         $point = $this->quote->repository->getPricePerPerson(1)
             ?? $this->quote->pricePoints()->save(QuotePricePoint::make(['quantity' => 1, 'price_per_person' => 0]));
         $oldPrice = $point->price_per_person;
@@ -144,17 +166,25 @@ class Calculator extends Component
                 if ($point->quantity === 1) continue;
                 $diff = $oldPrice - $point->price_per_person;
                 // Calculate the percentage difference (i.e 10% reduction = 0.9) then multiply by marked up price
-                if ($diff == 0) {
-                    continue;
+                if ($diff === 0) {
+                    $multiplier = 1;
                 } elseif ($diff > 0) {
-                    $diffPercent = 1 - ($diff / $oldPrice);
+                    $multiplier = 1 - ($diff / $oldPrice);
                 } else  {
-                    $diffPercent = 1 + (($diff * -1) / $oldPrice);
+                    $multiplier = 1 + (($diff * -1) / $oldPrice);
                 }
-                $point->price_per_person = ($this->marked_up_price * $diffPercent);
+                $point->price_per_person = ($this->marked_up_price * $multiplier);
                 $point->save();
             }
         }
+        $this->refresh();
+    }
+
+    public function saveConversion(): void
+    {
+        $this->quote->from_rate = $this->fromRate;
+        $this->quote->to_rate = $this->toRate;
+        $this->quote->save();
         $this->refresh();
     }
 
@@ -175,16 +205,24 @@ class Calculator extends Component
             $this->toast('Failed to Send Quote', "No price point exists for $paying paying travellers", 'danger');
             return;
         }
+        $target = $this->quote->agent?->email ?? $this->quote->organization?->contact_email ?? $this->quote->leadTraveller->customer->email_address;
+        if ($target === null) {
+            $this->toast('Failed to Send Quote', 'Cannot send quote, no valid target email found', 'danger');
+            return;
+        }
         try {
-            $status = $this->quote->repository->resend($this->quote->repository->generateSent($this->quote->leadTraveller->email, $this->paying, $this->travelling));
+            $status = $this->quote->repository->resend($this->quote->repository->generateSent($target, $this->paying, $this->travelling));
         } catch (MailDisabledException) {
             $this->toast('Failed to Send Quote', 'Emails are not enabled on this system', 'danger');
             return;
         } catch (MailFailedException $e) {
             $status = false;
+        } catch (Exception $e) {
+            $this->toast('Failed to Send Quote', $e->getMessage(), 'danger');
+            return;
         }
         if ($status ?? false) {
-            $this->toast('Email Sent Successfully', 'The quote document has been successfully sent to the recipient', 'success');
+            $this->toast('Email Sent Successfully', "The quote document has been successfully sent to the recipient, {$target}", 'success');
         } else {
             $this->toast('Email Failed to Send', 'The quote document could not be sent to the recipient. Please double check the recipient email address and try again later.', 'danger');
         }

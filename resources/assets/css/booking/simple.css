@@ -21,6 +21,48 @@
     font-family: "PlayfairDisplay-Regular";
     src: url(./font/PlayfairDisplay-Regular.ttf);
 }
+
+.third-block .form-field.sng-cls::before{
+content: " ";
+background: url('../booking/icon/single_bed.svg');
+background-repeat: no-repeat;
+width: 24px;
+    height: 16px;
+    left: 15px;
+    display: inline-block;
+    position: absolute;
+    top: 17px;
+}
+.third-block .form-field{
+    position: relative;
+}
+.third-block .form-field.twn-cls::before{
+    content: " ";
+    background: url('../booking/icon/twin_bed.svg');
+    background-repeat: no-repeat;
+    width: 24px;
+        height: 16px;
+        left: 12px;
+        display: inline-block;
+        position: absolute;
+    top: 17px;
+}
+.third-block .form-field.dbl-cls::before{
+    content: " ";
+    background: url('../booking/icon/default_bed.svg');
+    background-repeat: no-repeat;
+    width: 24px;
+        height: 16px;
+        left: 12px;
+        display: inline-block;
+        position: absolute;
+    top: 17px;
+}
+.form-field.twn-cls select,
+.form-field.dbl-cls select,
+.form-field.sng-cls select{
+padding-left: 40px !important;
+}
 body .row {
     width: 90%;
     max-width: 1410px;
@@ -397,7 +439,7 @@ body {
     letter-spacing: 2.24px;
 }
 
-body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus, .ma-block .row .left-col .contain .third-block select:focus {
+body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus, .ma-block .row .left-col .contain .third-block select:focus,.ma-block .row .left-col .contain .second-block select:focus {
     background-color: var(--white) !important;
     border: 2px solid var(--primary-color) !important;
     outline: 0 !important;
@@ -410,17 +452,19 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 }
 
 .ma-block .row .left-col .contain .second-block .inner-block .left-col p {
-    font-size: 14px;
+    font-size: 12px;
     line-height: 20px;
     margin-bottom: 0;
     color: var(--text-dark);
     letter-spacing: 0;
+    font-weight: 500;
 }
 
 .ma-block .row .left-col .contain .second-block .inner-block {
     display: flex;
     justify-content: space-between;
     margin-bottom: 24px;
+    align-items: center;
 }
 
 .ma-block .row .left-col .contain .second-block .inner-block .right .inn {
@@ -473,6 +517,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     color: var(--text-dark);
     letter-spacing: 0;
     font-weight: 500;
+    line-height: 20px;
 }
 
 .ma-block .row .left-col .contain .second-block .contain p a {
@@ -505,7 +550,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     line-height: 24px;
     margin-bottom: 24px;
 }
-.ma-block .row .left-col .contain .third-block select {
+.ma-block .row .left-col .contain .third-block select,.ma-block .row .left-col .contain .second-block select {
     width: 100%;
     height: 53px;
     background: var(--secondary-color);
@@ -535,7 +580,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 .ma-block .row .left-col .contain .third-block .first-bl {
     margin-bottom: 24px;
 }
-.ma-block .row .left-col .contain .third-block select {
+.ma-block .row .left-col .contain .third-block select,.ma-block .row .left-col .contain .second-block select {
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance: none;
@@ -565,7 +610,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     font-weight: 500;
     color: var(--text-dark);
     font-size: 24px;
-    line-height: 28.8px;
+    line-height: 30px;
     padding-top:24px;
 }
 
@@ -627,7 +672,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 .ma-block .row .right-col .contain .snd-sec .right-col p {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 16.8px;
     color: var(--text-dark);
     text-transform: uppercase;
@@ -672,7 +717,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     text-decoration: none;
     text-transform: none;
     font-size: 16px;
-    line-height: 24px;
+    line-height: 19.2px;
     letter-spacing: 0;
     text-transform:uppercase;
     letter-spacing:2.24px;
@@ -701,7 +746,9 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     border-top: 1px solid #FAE8D3;
 }
 .ma-block .row .right-col .contain .third-col ul li p.total {
-    color: var(--primary-color);
+    /* color: var(--primary-color); */
+    color: #000;
+    font-weight: 700;
 }
 .submit-btn-cls {
     margin-top: 32px;
@@ -882,8 +929,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     position: relative;
 }
 
-.see-more-popup,
-.upgrades-popup {
+.see-more-popup{
     position: fixed;
     top: 0;
     left: 0;
@@ -898,13 +944,52 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     z-index: 1111 !important;
 }
 
-.see-more-popup .popup-inner-two,
+
+.upgrades-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    z-index: 1111 !important;
+  
+}
+@keyframes move-to-center {
+    0% {
+        bottom: -100px; /* Start position */
+    }
+    50% {
+        bottom: 50%; /* Midway for a smooth effect */
+        transform: translateY(50%);
+    }
+    100% {
+        bottom: 50%; /* Final position */
+        transform: translateY(50%);
+    }
+}
+
+.see-more-popup .popup-inner-two{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
 .upgrades-popup .popup-inner {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
     width: 100%;
+    position: absolute;
+    bottom: -100px; /* Start outside the viewport */
+    animation: move-to-center 1.5s ease-out forwards; /* Animation details */
 }
 
 .see-more-popup .convco-two,
@@ -2450,7 +2535,7 @@ input::-webkit-inner-spin-button {
         position: fixed;
         bottom: 0;
         background: #ffffff;
-        padding: 16px 8px;
+        padding: 8px;
         z-index:999;
         width: 100%;
     }
@@ -2598,6 +2683,7 @@ input::-webkit-inner-spin-button {
         width: 280px !important;
     }
 }
+
 .upp-block-two .right-col p.date {padding-left:24px!important;}
 .package-details-heading-block .close-button {cursor:pointer;}
 .submit-btn-cls {
@@ -2670,7 +2756,7 @@ input::-webkit-inner-spin-button {
     }
 }
 .ma-block .row .left-col .contain > h3.head-evnt{
-    font-weight: 600 !important;
+    font-weight: 500 !important;
 }
 @media only screen and (min-width:768px) and (max-width:1023px) {
     .top-head .row .col-one .img-contain img {
@@ -2681,4 +2767,120 @@ input::-webkit-inner-spin-button {
     .top-head .row .col-one .img-contain img {
         width:117px!important;
     }
+}
+@media only screen and (min-width:767px){
+    .right-col .submit-btn-cls{
+        display: block;
+    }
+}
+.additional-block .card-field-box .first-in{
+    width: 50%;
+}
+
+/*feedbacks css*/
+
+.ma-block .row .left-col h3.ytd_bold_class,.right-col h3.ytd_bold_class{
+    font-weight: 600;
+}
+.ma-block .row .left-col h3.head-evnt.event_color_class,.event-name.event_color_class{
+    color: #F35B15 !important;
+}
+
+.inner-block .left-col .age_limit{
+    display: none;
+}
+.mob-trip-summary-block_outerdiv{
+    bottom: 0;
+    background: #ffffff;
+    z-index: 999;
+    width: 100%;
+    position: fixed;
+    /* height: 250px; */
+    height: 175px;
+    box-shadow: 0px 0px 34px 0px #00000026;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.upgrade_hide_cta{
+    display: none !important;
+}
+.base-price-div{
+    color: #000000;
+    font-weight: 600;
+    text-align: right;
+    padding-top: 24px;
+    display: flex;
+    flex-direction: column;
+}
+.name_price_div{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.base-price-div .base-price-span{
+    font-weight: 500;
+}
+.ma-block .row .right-col .contain .third-col ul li .single_occ_div{
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+}
+.price-details-block ul li{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.click_popup_div .event_name{
+    font-weight: 600;
+}
+.click_popup_div .date::before{
+    content: "";
+    background: url(icon/calendar.svg) no-repeat;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 0;
+    left: 0;
+}
+.click_popup_div .date{
+    position: relative;
+    padding-left: 24px;
+}
+.click_popup_div .points::before{
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    position: absolute;
+    background-color: #000000;
+    border-radius: 0%;
+    top: 6px;
+    left: 10px;
+}
+.click_popup_div .points{
+    padding-left: 24px;
+    position: relative;
+}
+.mob-trip-summary-block_outerdiv .price-details-block{
+    border-bottom: 1px solid #FAE8D3;
+    border-top: 1px solid #FAE8D3;
+    padding-top: 32px;
+    padding-bottom: 32px;
+    margin: 20px 0;
+}
+.mob-trip-summary-block.open{
+    bottom: 24px;
+}
+.ma-block .row .left-col .contain .second-block  h6.hover-h-cls{
+    margin-bottom: 4px;
+}
+.second-block.rme-det .hotel-board{
+    font-family: "PP Neue Montreal Medium";
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #000;
+    margin-bottom: 10px;
 }

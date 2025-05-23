@@ -4,13 +4,14 @@ namespace App\Http\Livewire\Admin\Quote;
 
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
+use App\Models\Customer\Agent;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
 use App\Models\Quote\QuoteProspect;
 use App\Models\System\LargeTextTemplate;
-use App\Models\Customer\Agent;
-use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
+use Settings;
+use Carbon\Carbon;
 
 class Form extends Component
 {
@@ -18,23 +19,39 @@ class Form extends Component
 
     public Quote|int|null $quote;
     public QuoteProspect|null $prospect = null;
-    public QuotePricePoint|null $pricePoint = null;
+    public float|null $price = null;
     public int|null $footerTemplate = null;
     public int|null $termsTemplate = null;
+    public int|null $paymentTemplate = null;
+    public $minToDate;
+    public $maxFinalDate;
 
     public function mount(Quote|int|null $quote): void
     {
         $this->quote = Quote::getForMount($quote);
         $this->prospect = $quote->leadTraveller ?? new QuoteProspect();
         if ($this->quote->id !== null) {
-            $this->pricePoint = $this->quote->pricePoints()->where('quantity', '=', 1)->first();
+            $this->price = $this->quote->pricePoints()->where('quantity', '=', 1)->first()?->price_per_person;
         }
-        if ($this->pricePoint === null) {
-            $this->pricePoint = new QuotePricePoint(['quantity' => 1, 'price_per_person' => 0,]);
-        }
-        $this->quote->expires = $this->quote->expires ?? now()->addDays(setting('system.quote.expiry', null));
+        $this->quote->expires = $this->quote->expires ?? now()->addDays((int)setting('system.quote.expiry', null));
         $this->prospect->travelling = $this->prospect->travelling ?? true;
         $this->prospect->paying = $this->prospect->paying ?? true;
+
+        if ($this->quote->date_from) {
+            $this->minToDate = Carbon::parse($this->quote->date_from)->subDay()->toDateString();
+            $this->maxFinalDate = Carbon::parse($this->quote->date_from)->subDay()->toDateString();
+        }
+    }
+
+    public function updatedQuoteDateFrom($value)
+    {
+        if ($value) {
+            $dateFrom = Carbon::parse($value);
+            $today = Carbon::today();
+            $this->quote->date_to = $value;
+            $this->minToDate = $dateFrom->isAfter($today) ? $dateFrom->toDateString() : $today->toDateString();
+            $this->maxFinalDate = $dateFrom->subDay()->toDateString();
+        }
     }
 
     public function save()
@@ -43,6 +60,7 @@ class Form extends Component
         if ($this->quote->commission != 0 && empty($this->quote->commission)) { $this->quote->commission = null; }
         if ($this->quote->brand_id <= 0) { $this->quote->brand_id = null; }
         $this->quote->brand_id = $this->quote->brand_id ?? null;
+        $this->quote->currency_id = $this->quote->currency_id ?? null;
         $this->quote->is_deposit_percentage = $this->quote->is_deposit_percentage ?? false;
         $this->prospect->travelling = $this->prospect->travelling ?? false;
         $this->prospect->paying = $this->prospect->paying ?? false;
@@ -51,9 +69,19 @@ class Form extends Component
         $this->quote->save();
         $this->quote->reference = $this->quote->reference ?? $this->quote->repository->generateReference();
         $this->quote->invoice_footer = $this->quote->invoice_footer ?? "";
+        if ($this->quote->id === null ||
+            $this->quote->currency_id !== null ||
+            Quote::find($this->quote->id)?->currency_id !== $this->quote->currency_id)
+        {
+            $this->quote->from_rate = Settings::getConversionRate($this->quote->currency, Settings::currency());
+            $this->quote->to_rate = Settings::getConversionRate(Settings::currency(), $this->quote->currency);
+        }
         $this->quote->save();
-        $this->pricePoint->quote_id = $this->quote->id;
-        $this->pricePoint->save();
+
+        $pricePoint = $this->quote->pricePoints()->where('quantity', '=', 1)->first() ?? QuotePricePoint::make(['quantity' => 1,]);
+        $pricePoint->price_per_person = $this->price;
+        $this->quote->pricePoints()->save($pricePoint);
+
         return redirect()->route('quotes.view', ['quote' => $this->quote]);
     }
 
@@ -82,6 +110,12 @@ class Form extends Component
             $this->quote->invoice_footer = $template->content;
             $this->updateValue('quote.invoice_footer', $template->content);
         }
+        if ($key === 'paymentTemplate') {
+            $template = LargeTextTemplate::find($this->paymentTemplate);
+            if ($template === null) { return; }
+            $this->quote->payment_details = $template->content;
+            $this->updateValue('quote.payment_details', $template->content);
+        }
     }
 
     public static function getSelectAgencies($organization_id)
@@ -109,6 +143,7 @@ class Form extends Component
             'quote.name' => 'required|string|min:3',
             'quote.brand_id' => 'nullable|integer',
             'quote.tax_bracket_id' => 'nullable|integer|exists:tax_brackets,id',
+            'quote.currency_id' => 'nullable|integer|exists:currencies,id',
             'quote.consultant_id' => 'nullable|integer|exists:users,id',
             'quote.organization_id' => 'nullable|integer|exists:organizations,id',
             'quote.agent_id' => 'nullable|integer|exists:agents,id',
@@ -116,7 +151,7 @@ class Form extends Component
             'quote.commission' => 'nullable|numeric|between:0,100',
             'quote.deposit' => 'nullable|numeric',
             'quote.is_deposit_percentage' => 'nullable|boolean',
-            'pricePoint.price_per_person' => 'required|numeric|gte:0|regex:/^[0-9]+(\.[0-9]{1,2})?$/',
+            'price' => 'required|numeric|gte:0|regex:/^[0-9]+(\.[0-9]{1,2})?$/',
             'quote.single_occupancy_surcharge' => 'required|numeric|gte:0',
             'quote.description' => 'nullable|string|min:3',
             'prospect.customer_id' => 'required|integer|exists:customers,id',
@@ -124,12 +159,21 @@ class Form extends Component
             'prospect.travelling' => 'nullable|boolean',
             'quote.date_from' => 'required|date',
             'quote.date_to' => 'required|date|after:quote.date_from',
-            'quote.final_payment' => 'required|date',
-            'quote.expires' => 'required|date',
+            'quote.final_payment' => 'required|date|before_or_equal:quote.date_from',
+            'quote.expires' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) {
+                    if ($this->quote['date_from'] && strtotime($value) > strtotime($this->quote['date_from'])) {
+                        $fail('The expiration date must be before date from.');
+                    }
+                }
+            ],
             'quote.internal_notes' => 'nullable|string|min:3',
             'quote.external_notes' => 'nullable|string|min:3',
             'quote.terms' => 'required|string|min:3',
             'quote.invoice_footer' => 'nullable|string|min:3',
+            'quote.payment_details' => 'nullable|string|min:3',
         ];
     }
 }

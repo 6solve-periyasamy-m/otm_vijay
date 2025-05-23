@@ -6,8 +6,11 @@ use App\View\Components\Livewire\Input\Select\Accommodation\BoardType;
 use App\View\Components\Livewire\Input\Select\Accommodation\RoomCategory;
 use App\View\Components\Livewire\Input\Select\Accommodation\RoomType;
 use App\View\Components\Livewire\Input\Select\AccommodationInventory;
+use App\View\Components\Livewire\Input\Select\Activity\ActivityType;
+use App\View\Components\Livewire\Input\Select\Activity\Seating;
+use App\View\Components\Livewire\Input\Select\Activity\Session as ActivitySession;
+use App\View\Components\Livewire\Input\Select\Agent;
 use App\View\Components\Livewire\Input\Select\Brand;
-use App\View\Components\Livewire\Input\Select\Country;
 use App\View\Components\Livewire\Input\Select\Currency;
 use App\View\Components\Livewire\Input\Select\Customer;
 use App\View\Components\Livewire\Input\Select\Event\All as AllEvents;
@@ -16,7 +19,7 @@ use App\View\Components\Livewire\Input\Select\Event\Normal as NormalEvent;
 use App\View\Components\Livewire\Input\Select\LargeTextTemplate;
 use App\View\Components\Livewire\Input\Select\Order\PaymentMethod;
 use App\View\Components\Livewire\Input\Select\Organization;
-use App\View\Components\Livewire\Input\Select\Agent;
+use App\View\Components\Livewire\Input\Select\Quote\QuoteSectionType;
 use App\View\Components\Livewire\Input\Select\TaxBracket;
 use App\View\Components\Livewire\Input\Select\TourCategory;
 use App\View\Components\Livewire\Input\Select\User;
@@ -68,7 +71,12 @@ Route::prefix('board-types')->name('board-types.')->group(function () {
 
 Route::prefix('currencies')->name('currencies.')->group(function () {
     Route::post('/', [Currency::class, 'getAll'])->name('select');
-    Route::post('/{id}', [Country::class, 'getOne'])->name('selected');
+    Route::post('/{id}', [Currency::class, 'getOne'])->name('selected');
+});
+
+Route::prefix('quote-section-types')->name('quote-section-types.')->group(function () {
+    Route::post('/', [QuoteSectionType::class, 'getAll'])->name('select');
+    Route::post('/{id}', [QuoteSectionType::class, 'getOne'])->name('selected');
 });
 
 Route::prefix('inventory')->name('inventory.')->group(function () {
@@ -98,6 +106,21 @@ Route::prefix('payment-method')->name('payment-method.')->group(function () {
     Route::post('/{id}', [PaymentMethod::class, 'getOne'])->name('selected');
 });
 
+Route::prefix('activity')->name('activity.')->group(function () {
+    Route::prefix('activity-type')->name('type.')->group(function () {
+        Route::post('/', [ActivityType::class, 'getAll'])->name('select');
+        Route::post('/{id}', [ActivityType::class, 'getOne'])->name('selected');
+    });
+    Route::prefix('session')->name('session.')->group(function () {
+        Route::post('/', [ActivitySession::class, 'getAll'])->name('select');
+        Route::post('/{id}', [ActivitySession::class, 'getOne'])->name('selected');
+    });
+    Route::prefix('seating')->name('seating.')->group(function () {
+        Route::post('/', [Seating::class, 'getAll'])->name('select');
+        Route::post('/{id}', [Seating::class, 'getOne'])->name('selected');
+    });
+});
+
 Route::prefix('events')->name('events.')->group(function () {
     Route::prefix('main')->name('main.')->group(function () {
         Route::post('/', [MainEvent::class, 'getAll'])->name('select');
@@ -116,8 +139,6 @@ Route::post('addresses', [SelectController::class, 'getAddresses'])->name('addre
 Route::post('filter/countries', [SelectController::class, 'getAvailableFilterCountries'])->name('countries.filter.select');
 Route::post('regions', [SelectController::class, 'getRegions'])->name('regions.select');
 Route::post('location-types', [SelectController::class, 'getLocationTypes'])->name('location-types.select');
-Route::post('room-types', [SelectController::class, 'getRoomTypes'])->name('room-types.select');
-Route::post('board-types', [SelectController::class, 'getBoardTypes'])->name('board-types.select');
 Route::post('transport-types', [SelectController::class, 'getTransportTypes'])->name('transport-types.select');
 Route::post('operators', [SelectController::class, 'getOperators'])->name('operators.select');
 Route::post('travel-classes', [SelectController::class, 'getTravelClasses'])->name('travel-classes.select');
@@ -132,6 +153,7 @@ Route::post('merchandise-types', [SelectController::class, 'getAvailableMerchand
 Route::post('variants', [SelectController::class, 'getAvailableVariants'])->name('variants.select');
 Route::post('sizes', [SelectController::class, 'getAvailableSizes'])->name('sizes.select');
 Route::post('banks', [SelectController::class, 'getAvailableBanks'])->name('banks.select');
+Route::post('accommodation-types', [SelectController::class, 'getAccommodationTypes'])->name('accommodation-types.select');
 Route::prefix('inventory')->group(function () {
     Route::post('activity', [SelectController::class, 'getActivityInventory'])->name('inventory.activity.select');
     Route::post('flight', [SelectController::class, 'getFlightInventory'])->name('inventory.flight.select');
@@ -147,11 +169,8 @@ Route::prefix('selected')->group(function () {
     Route::post('filter/countries/{id}', [SelectController::class, 'getSelectedFilterCountries'])->name('countries.filter.selected');
     Route::post('location/{id}', [SelectController::class, 'getSelectedLocation'])->name('locations.selected');
     Route::post('address/{id}', [SelectController::class, 'getSelectedAddress'])->name('addresses.selected');
-    Route::post('currency/{id}', [SelectController::class, 'getSelectedCurrency'])->name('currencies.selected');
     Route::post('region/{id}', [SelectController::class, 'getSelectedRegion'])->name('regions.selected');
     Route::post('location-type/{id}', [SelectController::class, 'getSelectedLocationType'])->name('location-types.selected');
-    Route::post('room-type/{id}', [SelectController::class, 'getSelectedRoomType'])->name('room-types.selected');
-    Route::post('board-type/{id}', [SelectController::class, 'getSelectedBoardType'])->name('board-types.selected');
     Route::post('transport-type/{id}', [SelectController::class, 'getSelectedTransportType'])->name('transport-types.selected');
     Route::post('operator/{id}', [SelectController::class, 'getSelectedOperator'])->name('operators.selected');
     Route::post('travel-class/{id}', [SelectController::class, 'getSelectedTravelClass'])->name('travel-classes.selected');
@@ -165,6 +184,7 @@ Route::prefix('selected')->group(function () {
     Route::post('variants/{id}', [SelectController::class, 'getSelectedVariant'])->name('variants.selected');
     Route::post('sizes/{id}', [SelectController::class, 'getSelectedSize'])->name('sizes.selected');
     Route::post('banks/{id}', [SelectController::class, 'getSelectedBank'])->name('banks.selected');
+    Route::post('accommodation-type/{id}', [SelectController::class, 'getSelectedAccommodationType'])->name('accommodation-types.selected');
     Route::prefix('inventory/{id}')->group(function () {
         Route::post('activity', [SelectController::class, 'getSelectedActivityInventory'])->name('inventory.activity.selected');
         Route::post('flight', [SelectController::class, 'getSelectedFlightInventory'])->name('inventory.flight.selected');

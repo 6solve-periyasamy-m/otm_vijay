@@ -1,10 +1,11 @@
 @php
     /** @var \App\Models\Order\Invoice\Invoice $invoice */
+    use App\Repository\Storage\Itinerary\ItineraryScheduleType;
 @endphp
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
-    xmlns:o="urn:schemas-microsoft-com:office:office">
+<html xmlns="http://www.w3.org/1999/xhtml"
+>
 
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
@@ -162,7 +163,7 @@
             vertical-align: top;
         }
         .header .left-column {
-            padding: 32px 20px 32px 20px;
+            padding: 32px 20px 32px 35px;
         }
         .header .right-column  {
             padding: 20px 28px 0px 20px;
@@ -181,7 +182,7 @@
             font-family: 'Lato', sans-serif;
             font-weight: 600;
             line-height: 53.8px;
-            padding-left:20px;
+            padding-left:35px;
         }
         .items, .payment-options, .totals {
             width: 100%;
@@ -196,10 +197,10 @@
         }
         .details tr h6{
             font-family: 'Lato', sans-serif;
-            font-weight: 400;
+            font-weight: 700;
             text-align: left;
             color: #F35B15;
-            font-size: 9px;
+            font-size:12px;
             line-height: 10.18px;
             padding: 0px 0px 0px 20px;
             margin-top:0px;
@@ -212,7 +213,7 @@
         .details tr td:first-child p, .details tr td:nth-child(2) p {
             font-family: 'Lato', sans-serif;
             font-weight: 400;
-            font-size: 10px;
+            font-size: 12px;
             line-height: 17px;
             padding: 0px 0px 0px 20px !important;
             vertical-align: top;
@@ -220,38 +221,21 @@
         .details tr td {
             font-family: 'Lato', sans-serif;
             font-weight: 400;
-            font-size: 10px;
+            font-size: 12px;
             line-height: 17px;
             vertical-align: top;
         }
-        .details tr td span {font-weight:500;}
-        .details tr td:last-child {
-            background-color: #F9F4EE;
-            padding: 0px 0px 0px 30px; 
-            position:relative;  
-            border-right: 10px solid #f35b15;   
-        }
+        .details tr td span {font-weight:600;}
         .details tr p.bg-box-contain.f-1 {
             padding-top:15px!important;
         }
         .details tr p.bg-box-contain.f-3 {
             padding-bottom:15px!important;
         }
-        .bg-box-contain
-        /* .details tr .bg-box-contain:after {
-            content:"";
-            height:100%;
-            width:10px;
-            background-color:#f35b15;
-            display:inline-block;
-            position:absolute;
-            right:0px;
-            top:0px;
-        } */
         .items th {
             background-color: #f35b15;
             padding:4px 30px;
-            
+            font-family: 'Lato', sans-serif;
         }
         .items th h2 {
             font-family: 'Lato', sans-serif;
@@ -263,47 +247,37 @@
             padding: 4px 0px 6px 0px;
         }
         .items td {
-            padding:4px 30px;
+            padding:3px 30px;
             font-family: 'Lato', sans-serif;
             font-weight: 400;
-            font-size: 10px;
-            line-height: 12px;
+            font-size: 12px;
+            line-height: 18px;
             color:#000000;
-            padding-top:18px;
-            padding-bottom:18px;
             text-align:center;
-            height: 25px;
+            height: 30px;
         }
-        .items tr:nth-child(even) td  {
-            background-color: #F9F4EE;     
-        }       
+        .whole-items-cls .items tr:nth-child(2) td {padding-top:10px;}
         .items tr td:nth-child(2)  {
             text-align:left;
         }
         .payment-options {
             margin-top:10px;
-            border-top: 1px solid #f35b15;
-            border-bottom: 1px solid #f35b15;
+            padding-left: 30px;
+            padding-right: 30px;
         }
+        .payment_schedule_order_total { padding-left: 30px; }
+        .payment_schedule_order_total .order_total h3{margin-right: 30px !important;}
         .payment-options th {padding:0;}
-        .payment-options th h3 {
+        .payment-options th h3,.payment_schedule_order_total h3 {
             font-family: 'Lato', sans-serif;
             font-weight: 700;
             font-size: 16px;
             line-height: 21.33px;
-            color: #ffffff;
-            border-right: 1px solid #f35b15;
+            color: #f35b15;
+            border-bottom: 2px solid #f35b15;
             padding: 5px;
-            background: #f35b15;
-       }
-       .payment-options tr td:first-child {
-            padding:25px 0px 25px 20px;
-       }
-       .payment-options th:last-child, .payment-options td:last-child {
-            border-left: 1px solid #f35b15;
-            line-height: 23px;
-            position: relative;
-            vertical-align: top;
+            text-align: left;
+            text-transform: uppercase;
        }
        .payment-options tr h4 {
             font-family: 'Lato', sans-serif;
@@ -316,20 +290,11 @@
         }
        .payment-options tr td {
             font-family: 'Lato', sans-serif;
-            font-weight: 400;
+            font-weight: 600;
             text-align: left;
             color: #000000;
-            font-size: 10px;
-            line-height: 12px;
-        }
-       .payment-options tr td p.terms-conditions {
-            margin-top: 30px!important;
-         }
-         .payment-options tr td p.terms-conditions.upd {
-            margin-top: 0px!important;
-         }
-       .payment-options td:last-child p {
-           padding-left:15px!important; 
+            font-size: 15px;
+            line-height: 20px;
         }
        .payment-options td span:first-child {
             width:200px;
@@ -399,32 +364,76 @@
        .payment-options tr td figure.table table tbody tr td {
         border: 0px !important;
         padding: 0;
-        width: 120px;
+        font-weight: 400;
        }
-       .payment-options tr td figure.table table tbody tr td:nth-child(3) br {display:none;}
-       .payment-options tr td figure.table table tbody tr td:nth-child(3) strong {display:block;line-height:10px;}
-       .payment-options tr td:first-child > p {display:none;}
-       .payment-options tr td:first-child > p.terms-conditions {display:block;}
-       .payment-options tr td:first-child > p.terms-conditions {
-        margin-top:20px!important
-       }
-       .payment-options tr td:first-child > p.terms-conditions.upd {
-        margin-top:5px!important
+       .bank-info-block table td:first-child { vertical-align: top;}
+       .payment_schedule_order_total{
+            margin-top: 100px;
+            margin-bottom: 30px;
        }
        .payment-options { 
         bottom: 0cm;
         height: 228px; 
         page-break-inside: avoid;
-        margin-top: 100px;
         }
         .full-btm-cls-mod p span {
-        font-family: 'Lato', sans-serif!important;
-        font-weight: 400!important;
-        text-align: left!important;
-        color: #000000!important;
-        font-size: 10px!important;
-        line-height: 12px!important;
+            font-family: 'Lato', sans-serif!important;
+            font-weight: 400!important;
+            text-align: left!important;
+            color: #000000!important;
+            font-size: 12px!important;
+            line-height: 16px!important;
         }
+        .payment_schedule_order_total h3{margin-bottom: 15px;}
+        .payment_schedule{width: 415px;padding-right: 25px;vertical-align: baseline;}
+        .order_total{width: 322px;vertical-align: baseline;}
+        .payment_schedule tr{border-bottom: 1px solid #000;}
+        .payment_schedule td{padding: 10px;text-align: center;font-family: 'Lato', sans-serif;font-size: 13px;}
+        .order_total table{width: 100%;}
+        .full-btm-cls-mod p{display: flex;justify-content: space-between;margin-bottom: 12px !important;}
+        .order_total h4{
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            line-height: 21.33px;
+            color: #000;
+            background-color: #F9F4EE;
+            padding: 10px 10px 10px 5px;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            border-right: 10px solid #f35b15;
+            margin-top: 20px;
+        }
+        .payment_schedule th{ 
+            font-family: 'Lato', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            line-height: 10px;
+            color: #000;
+            padding: 5px 10px 10px 10px;
+            text-align: center;
+        }
+        .payment-options tr td figure{float: left;}
+        .payment-options tr td figure.table table tbody tr td:nth-child(1){width: 300px;}
+        .payment-options tr td figure.table table tbody tr td:nth-child(2){width: 250px;}
+        .payment_mode div{width: 200px;margin-top: -12px;float:left; margin-left: 40px;}
+        .payment-options tr td figure.table table tbody tr td:nth-child(1) strong{margin-bottom: 20px;}
+        .text-weight{ font-weight: 600; }
+        .tbl-bg-style{ background-color: #F9F4EE; padding: 0px 0px 0px 20px; position:relative;  border-right: 10px solid #f35b15;}
+        .order-total-inner {margin-left: 5px; font-size: 12px; font-family: 'Lato', sans-serif;}
+        .tbl-font-style{ font-family: 'Lato', sans-serif; font-weight: 400;font-size: 12px;line-height: 17px;}
+        .event-name { white-space: nowrap; }
+        /* .payment-schedule-font, .terms-condition-block, .bank-info-block{ font-family: 'Lato', sans-serif; font-weight: 400; font-size: 12px;} */
+        .payment-schedule-font th {font-family: 'Lato', sans-serif; font-weight: 700; font-size: 12px; }
+        .payment-schedule-font td, .terms-condition-block p, .bank-info-block td p{ font-family: 'Lato', sans-serif; font-weight: 400; font-size: 12px;}
+        .terms-condition-block {padding-top: 13px;}
+        p.title-heading {font-weight: 700;}
+        .vertical-align-top {vertical-align: top;}
+        .bank-details {padding-top:15px;}
+        .terms-condition{ font-family: 'Lato', sans-serif; font-weight: 400; font-size: 13px;}
+        .bank-info-block td:first-child { font-family: 'Lato', sans-serif; font-weight: 400; font-size: 13px;}
     </style>
     <title>Invoice - {{ $invoice->booking_reference }}</title>
 </head>
@@ -455,21 +464,34 @@
     <!-- Details Table -->
     <table class="details">
         <tr>
-            <td>
-                <h6>Invoice To</h6>
-                <p class="name">{{ $invoice->lead->full_name }}</p>
-                <p class="name">{{$invoice->lead->email}}</p>
-                <p class="address">
-                    {{ implode(', ', array_filter([$invoice->lead->address_line_1, $invoice->lead->address_line_2, $invoice->lead->town, $invoice->lead->region, $invoice->lead->country, $invoice->lead->postcode])) }}
-                </p>
+            <td><h6>Invoice To</h6></td>
+            <td><h6>Details</h6></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td style="width: 32%;">
+                @if (!is_null($invoice->organization) && !is_null($invoice->agent))
+                    <p class="name">{{ $invoice->organization->name }}</p>
+                    <p class="name">{{ $invoice->agent->first_name . ' ' . $invoice->agent->last_name }}</p>
+                    <p class="address">{{ implode(', ', array_filter([$invoice->organization->deliveryAddress->address_line_1, $invoice->organization->deliveryAddress->address_line_2, $invoice->organization->deliveryAddress->town, $invoice->organization->deliveryAddress->region, $invoice->organization->deliveryAddress->country, $invoice->organization->deliveryAddress->postcode])) }}</p>
+                @elseif (!is_null($invoice->organization))
+                    <p class="name">{{ $invoice->organization->name }}</p>
+                    <p class="address">{{ implode(', ', array_filter([$invoice->organization->deliveryAddress->address_line_1, $invoice->organization->deliveryAddress->address_line_2, $invoice->organization->deliveryAddress->town, $invoice->organization->deliveryAddress->region, $invoice->organization->deliveryAddress->country, $invoice->organization->deliveryAddress->postcode])) }}</p>
+                @elseif (!is_null($invoice->agent))
+                    <p class="name">{{ $invoice->agent->first_name . ' ' . $invoice->agent->last_name }}</p>
+                    <p class="name">{{ $invoice->agent->email ?? '' }}</p>
+                @else
+                    <p class="name">{{ $invoice->lead->full_name }}</p>
+                    <p class="name">{{$invoice->lead->email}}</p>
+                    <p class="address">{{ implode(', ', array_filter([$invoice->lead->address_line_1, $invoice->lead->address_line_2, $invoice->lead->town, $invoice->lead->region, $invoice->lead->country, $invoice->lead->postcode])) }}</p>
+                @endif
             </td>
-            <td>
-            <h6>Details</h6>
+            <td style="width: 32%;">
                 <p class="event-name"><span>Reference:</span> <span>{{$invoice->booking_reference}}</span></p>
                 <p class="event-name"><span>Event Name:</span> <span>{{ $invoice->event }}</span></p>
                 <p class="no-of-pax"><span>Number of Pax:</span> <span>{{$invoice->getTravellingTravellersAtribute()}}</span></p>
             </td>
-            <td>
+            <td class="tbl-bg-style" style="width: 23%;">
                 <p class="bg-box-contain"><span>Invoice No:</span> <span>{{ $invoice->invoice_number }}</span></p>
                 <p class="bg-box-contain"><span>Invoice Date:</span> <span>{{ date('d M Y', strtotime($invoice->generated)) }}</span></p>
             </td>
@@ -480,7 +502,7 @@
     <div class="whole-items-cls"> 
     <table class="items">
         <tr style="background-color: #f35b15;">
-            <th><h2>No</h2></th>
+            <th><h2>No.</h2></th>
             <th><h2>Description</h2></th>
             <th><h2>Qty</h2></th>
         </tr>
@@ -501,39 +523,158 @@
         @endforeach
     </table>
     </div>
-
     <!-- Payment Options Table -->
+    <table class="payment_schedule_order_total" style="width:100%;">
+        <tr>
+            <td class="payment_schedule" style="width:45%; padding-right:5%;">
+                <h3>Payment Schedule</h3>
+                <table class="payment-schedule-font" style="width:100%;">
+                    <tr>
+                        <th>Instalment</th>
+                        <th>Received</th>
+                        <th>Outstanding</th>
+                        <th>Date Due</th>
+                    </tr>
+                    @php
+                        $balance_received = 0;
+                        $balance_received_total = 0;
+                    @endphp
+                    @foreach ($invoice->payment_schedule as $key => $installment)
+                        @if($installment->type === ItineraryScheduleType::BOOKING_FEE)
+                        <tr>
+                            <td>{{ fr_currency($installment->amount, $invoice->currency) }}</td>
+                            <td>
+                                {{ fr_currency(min($installment->amount, $installment->received), $invoice->currency) }}
+                                @php $balance_received = $balance_received + min($installment->amount, $installment->received) @endphp
+                            </td>
+                            <td>
+                            @if($installment->amount <= $installment->received)
+                                Paid
+                            @else
+                                {{ fr_currency($installment->amount - min($installment->amount, $installment->received), $invoice->currency) }}
+                            @endif
+                            </td>
+                            <td class="text-weight"></td>
+                        </tr>
+                        @endif
+                        @if ($installment->type === ItineraryScheduleType::DEPOSIT)
+                        <tr>
+                            <td>{{ fr_currency($installment->amount, $invoice->currency) }}</td>
+                            <td>
+                            @php $amount = $installment->amount - min(($installment->received - ($installment->balance ?? 0)), $installment->amount); @endphp
+                            @if($amount <= 0)
+                                {{ fr_currency($installment->amount, $invoice->currency) }}
+                                @php $balance_received = $balance_received + $installment->amount @endphp
+                            @else
+                                {{ fr_currency($installment->received, $invoice->currency) }}
+                                @php $balance_received = $balance_received + $installment->received @endphp
+                            @endif
+                            </td>
+                            <td>
+                            @if($amount <= 0)
+                                Paid
+                            @else
+                                {{ fr_currency($amount, $invoice->currency) }}
+                            @endif
+                            </td>
+                            <td class="text-weight"></td>
+                        </tr>
+                        @endif
+                        @if ($installment->type === ItineraryScheduleType::INSTALLMENT)
+                            @php $amount = $installment->amount - $installment->received; @endphp
+                            <tr>
+                                <td>{{ fr_currency($installment->amount, $invoice->currency) }}</td>
+                                <td>
+                                @if($amount <= 0)
+                                    {{ fr_currency($installment->amount, $invoice->currency) }}
+                                    @php $balance_received = $balance_received + $installment->amount @endphp
+                                @else
+                                    {{ fr_currency($installment->received, $invoice->currency) }}
+                                    @php $balance_received = $balance_received + $installment->received @endphp
+                                @endif
+                                </td>
+                                <td>
+                                @if($amount <= 0)
+                                    Paid
+                                @else
+                                    {{ fr_currency($amount, $invoice->currency) }}
+                                @endif
+                                </td>
+                                <td>
+                                @if(!is_null(optional($installment->due)))
+                                    {{ optional($installment->due)->format('d M Y') }}
+                                @endif
+                                </td>
+                            </tr>
+                        @endif
+                        @if ($installment->type === ItineraryScheduleType::REMAINING)
+                            <tr>
+                                <td>{{ fr_currency($installment->amount, $invoice->currency) }}</td>
+                                <td>
+                                @php $balance_received_total = $installment->received - $balance_received; @endphp
+                                {{ fr_currency($balance_received_total, $invoice->currency) }}
+                                </td>
+                                <td>
+                                @php $amount = min($installment->balance, $installment->amount); @endphp
+                                @if($amount <= 0)
+                                    Paid
+                                @else
+                                    {{ fr_currency($amount, $invoice->currency) }}
+                                @endif
+                                </td>
+                                <td>
+                                @if(!is_null(optional($installment->due)))
+                                    {{ optional($installment->due)->format('d M Y') }}
+                                @endif
+                                </td>
+                            </tr>
+                        @endif
+                    @endforeach
+                </table>
+            </td>
+            <td style="width:10%;">&nbsp;</td>
+            <td class="order_total" style="width:35%; padding-left:5%;">
+                <h3>Order Total</h3>
+                <table class="order-total-inner">
+                    <tr>
+                        <td>
+                            <div class="full-btm-cls-mod" style="">
+                                <p><span style="font-weight:700 !important;">Invoice Total:</span> <span style="font-weight:700 !important;">{{fr_currency($invoice->total_cost + $invoice->commission_amount, $invoice->currency)}}</span></p>
+                                @if($invoice->commission_amount > 0)
+                                    <p><span>Commission ({{$invoice->commission_percentage}}%):</span> <span>{{fr_currency($invoice->commission_amount, $invoice->currency)}}</span></p>
+                                    <p><span>Booking Total: </span> <span>{{fr_currency($invoice->total_cost, $invoice->currency)}}</span></p>
+                                @endif
+                                <p><span>GST (included):</span> <span>{{fr_currency($invoice->tax_amount, $invoice->currency)}}</span></p>
+                                <p><span>Received:</span> <span>{{fr_currency($invoice->total_paid, $invoice->currency)}}</span></p>
+                                @if($invoice->total_fees > 0)
+                                    <p><span>Fees Paid:</span> <span>{{fr_currency($invoice->total_fees, $invoice->currency)}}</span></p>
+                                @endif
+                            </div>
+                            <h4><span>Balance Due:</span> <span>{{fr_currency($invoice->total_cost - $invoice->total_paid, $invoice->currency)}}</span></h4>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
     <table class="payment-options">
         <tr>
             <th><h3>Payment Options</h3></th>
-            <th></th>
         </tr>
         <tr>
-            <td>
-                {!! setting('company.bank_transfer', '-')  !!}
-                <p class="terms-conditions" style="margin-top:30px; font-weight: bold">
-                   Terms and conditions apply
-                </p>
-                <p class="terms-conditions upd" style="margin-top:0px;">
-                Please see our website for a copy or view them <a style="color: blue !important; text-decoration: underline !important;" href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">here</a>
-                </p>
-            </td>
-            <td>
-               <div class="full-btm-cls-mod" style="height:106px;">
-                        <p style="font-size:16px;font-weight:800;"><span>Invoice Total:</span> <span>{{f_currency($invoice->total_cost + $invoice->commission_amount)}}</span></p>
-                    @if($invoice->commission_amount > 0)
-                        <p><span>Commission ({{$invoice->commission_percentage}}%):</span> <span>{{f_currency($invoice->commission_amount)}}</span></p>
-                        <p><span>Booking Total: </span> <span>{{f_currency($invoice->total_cost)}}</span></p>
-                    @endif
-                        <p><span>GST (included):</span> <span>{{f_currency($invoice->tax_amount)}}</span></p>
-                        <p><span>Received:</span> <span>{{f_currency($invoice->total_paid)}}</span></p>
-                        @if($invoice->total_fees > 0)
-                            <p><span>Fees Paid:</span> <span>{{f_currency($invoice->total_fees)}}</span></p>
-                        @endif
-                        <!-- <p><span>Balance Due:</span> <span>{{f_currency($invoice->total_cost - $invoice->total_paid)}}</span></p> -->
-                    </div>
-                    <h3><span>BALANCE DUE:</span> <span>{{f_currency($invoice->total_cost - $invoice->total_paid)}}</span></h3>
-                
+        <td class="payment_mode">
+                <table class="bank-details" style="width: 100%;">
+                    <tr>
+                        <td style="width:75%">{!! setting('company.bank_transfer', '-')  !!}</td>
+                        <td class="vertical-align-top"  style="width:25%">
+                            <div class="terms-condition-block"><p class="title-heading">Terms & Conditions</p>
+                                <p class="terms-condition">
+                                    Visit our website for full details or view them <a style="color: blue !important; text-decoration: underline !important;" target="_blank" href="https://www.kpt.com.au/terms-and-conditions/">here.</a>
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>

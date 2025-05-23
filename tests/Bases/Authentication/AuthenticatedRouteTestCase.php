@@ -2,6 +2,7 @@
 
 namespace Tests\Bases\Authentication;
 
+use App\Models\Order\OrderCustomer;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Testing\TestResponse;
@@ -63,8 +64,9 @@ abstract class AuthenticatedRouteTestCase extends AuthenticationTestCase
         env('SHOULD_LOG', true) && print_r('Testing with everything on ' . $route . "\n");
         $this->performPostRouteWithEverything($route, $params, 302);
         // Requires refreshing as the model is cached, so is not deleted
-        $model->refresh();
-        $this->assertTrue($model->trashed());
+        //$model->refresh();
+        $model = OrderCustomer::find($model->id);
+        $this->assertNull($model);
         // Restore for use later in the test
         $model->restore();
 

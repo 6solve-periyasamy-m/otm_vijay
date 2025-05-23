@@ -10,6 +10,7 @@ use App\Repository\Model\Location\AddressRepository;
 use App\Repository\Reporting\Manifest\RoomingReportRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use App\Models\Accommodation\Amenity;
 
 class AccommodationController extends Controller
 {
@@ -21,7 +22,8 @@ class AccommodationController extends Controller
 
     public function create()
     {
-        return view('pages.admin.accommodation.form');
+        $amenities = Amenity::select('id', 'name')->get();
+        return view('pages.admin.accommodation.form', compact('amenities'));
     }
 
     public function store(Request $request)
@@ -35,6 +37,8 @@ class AccommodationController extends Controller
             'internal_notes' => $request->input('notes'),
             'check_in' => $request->input('check_in'),
             'check_out' => $request->input('check_out'),
+            'accommodation_type_id' => $request->input('accommodation_type_id'),
+            'additional_description' => $request->input('additional_description'),
         ]);
         if ($request->input('use_existing') == 'on') {
             $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::ACCOMMODATION);
@@ -49,6 +53,18 @@ class AccommodationController extends Controller
 
         $accommodation->address_id = $address->id;
         $accommodation->save();
+        if ($request->has('amenities')) {
+            $accommodation->amenities()->sync($request->amenities ?? []);
+        }
+        if ($request->hasFile('gallery')) {
+            foreach ($request->file('gallery') as $image) {
+                $path = $image->storePublicly('uploads/images');
+                $accommodation->media()->create([
+                    'file_path' => $path,
+                    'type' => 'gallery',
+                ]);
+            }
+        }
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 
@@ -71,7 +87,9 @@ class AccommodationController extends Controller
 
     public function edit(Accommodation $accommodation)
     {
-        return view('pages.admin.accommodation.form', ['accommodation' => $accommodation,]);
+        $amenities = Amenity::select('id', 'name')->get();
+        $selected_amenities = $accommodation->amenities->pluck('id')->toArray();
+        return view('pages.admin.accommodation.form', compact('accommodation', 'amenities', 'selected_amenities'));
     }
 
     public function update(Request $request, Accommodation $accommodation)
@@ -85,6 +103,8 @@ class AccommodationController extends Controller
             'internal_notes' => $request->input('notes'),
             'check_in' => $request->input('check_in'),
             'check_out' => $request->input('check_out'),
+            'accommodation_type_id' => $request->input('accommodation_type_id'),
+            'additional_description' => $request->input('additional_description'),
         ]);
         if ($request->input('use_existing') == 'on') {
             Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::ACCOMMODATION, $accommodation->address);
@@ -99,17 +119,19 @@ class AccommodationController extends Controller
             $accommodation->image_url = $request->file('image')->storePublicly('uploads/images');
         }
         $accommodation->save();
-        return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
-    }
-
-    public function destroy(Accommodation $accommodation)
-    {
-        foreach ($accommodation->inventory as $inventory) {
-            if ($inventory->tourComponents()->count() > 0) {
-                return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Accommodation']));
+        if ($request->has('amenities')) {
+            $accommodation->amenities()->sync($request->amenities ?? []);
+        }
+        if ($request->hasFile('gallery')) {
+            $accommodation->gallery()->delete();
+            foreach ($request->file('gallery') as $image) {
+                $path = $image->storePublicly('uploads/images');
+                $accommodation->media()->create([
+                    'file_path' => $path,
+                    'type' => 'gallery',
+                ]);
             }
         }
-        $accommodation->delete();
-        return redirect()->route('accommodations.all');
+        return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 }
