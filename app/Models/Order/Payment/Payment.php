@@ -61,7 +61,7 @@ class Payment extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
-    protected $casts = ['paid_on' => 'datetime:Y-m-d H:i:s', 'amount' => 'double', 'payment_fee' => 'double'];
+    protected $casts = ['paid_on' => 'datetime:Y-m-d H:i:s', 'amount' => 'float', 'payment_fee' => 'float'];
 
     public static function getValidationRules(): array
     {
