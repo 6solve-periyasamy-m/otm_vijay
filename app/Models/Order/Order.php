@@ -468,7 +468,8 @@ class Order extends Model implements NotificationSubject
      */
     public function getCalculatedDepositAttribute(): float
     {
-        return sigfig($this->deposit * $this->paying_customers);
+        // Calculated deposit should be at max, the total cost of the order
+        return sigfig(min($this->deposit * $this->paying_customers, $this->total));
     }
 
     /**

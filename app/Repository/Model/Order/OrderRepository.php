@@ -268,7 +268,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public function getInstallments(bool $final = false): Collection|array
     {
         $customers = $this->order->paying_customers;
-        $paid = $this->order->paid - (($this->order->deposit ?? 0.0) * $customers) - ($this->order->booking_fee ?? 0.0);
+        $paid = $this->order->paid - ($this->order->calculated_deposit ?? 0.0) - ($this->order->booking_fee ?? 0.0);
         DB::statement("SET @total:={$paid};");
         $installments = OrderInstallment::where('order_id', '=', $this->order->id)
             ->orderBy('due_on')

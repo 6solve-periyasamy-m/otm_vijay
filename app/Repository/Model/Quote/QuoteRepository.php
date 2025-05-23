@@ -537,11 +537,11 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function getRemaining(int $paying = 1): float
     {
         $cost = $this->getTotalCost($paying);
-        $cost -= $this->quote->deposit;
+        $cost -= $this->quote->getDepositAmount($paying);
         foreach ($this->quote->installments as $installment) {
-            $cost -= $installment->amount;
+            $cost -= $installment->getAmount($paying);
         }
-        return $cost * $paying;
+        return $cost;
     }
 
     /**
@@ -551,7 +551,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $data = [];
         foreach ($this->getTemplates(false) as $template) {
-            $time = $template->repository->getInventory()->getStartTime()?->unix();
+            $time = $template->repository->getInventory()?->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
