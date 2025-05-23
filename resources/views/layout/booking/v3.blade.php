@@ -3213,6 +3213,21 @@
             position: relative;
             top: -40px;
         }
+        .seating-map-wrapper{
+            width:24px;
+            height:24px;
+            cursor: pointer;
+        }
+        .seating-map-wrapper-img-block{ 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--secondary-color);
+            border: 1px solid #d9d9d9;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+        }
     </style>
 </head>
 <body>
