@@ -1233,7 +1233,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $paying += $this->quote->leadTraveller->paying;
         $travelling += $this->quote->leadTraveller->travelling;
         $event = is_array($this->quote->event) ? new Event($this->quote->event) : $this->quote->event;
-        $paymentDetails = $this->quote->payment_details ?? $this->quote->tour?->payment_details;
+        $paymentDetails = ($this->quote->payment_details) ? $this->quote->payment_details : ($this->quote->tour?->payment_details ? $this->quote->tour?->payment_details : setting('company.bank_transfer'));
         return new Itinerary(
             null,
             $event,

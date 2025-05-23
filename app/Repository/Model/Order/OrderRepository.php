@@ -909,6 +909,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
     private function getGenericItinerary(): Itinerary
     {
+        $paymentDetails = ($this->order->payment_details) ? $this->order->quote?->payment_details : ($this->order->tour?->payment_details ? $this->order->tour?->payment_details : setting('company.bank_transfer'));
         return new Itinerary(
             $this->order->tour->name,
             $this->order->tour->event,
@@ -930,7 +931,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $this->order->tour->terms,
             $this->order->invoice_footer,
             $this->order->external_notes,
-            $this->order->payment_details,
+            $paymentDetails,
         );
     }
 
