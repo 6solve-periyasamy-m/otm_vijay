@@ -909,7 +909,13 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
 
     private function getGenericItinerary(): Itinerary
     {
-        $paymentDetails = ($this->order->payment_details) ? $this->order->quote?->payment_details : ($this->order->tour?->payment_details ? $this->order->tour?->payment_details : setting('company.bank_transfer'));
+        //dd($this->order->payment_details, $this->order->quote, $this->order->tour);
+        $paymentDetails = collect([
+                $this->order->payment_details,
+                $this->order->quote?->payment_details,
+                $this->order->tour?->payment_details,
+                setting('company.bank_transfer')
+            ])->first(fn($value) => !empty($value));
         return new Itinerary(
             $this->order->tour->name,
             $this->order->tour->event,

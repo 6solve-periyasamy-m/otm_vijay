@@ -669,7 +669,7 @@
         <td class="payment_mode">
                 <table class="bank-details" style="width: 100%;">
                     <tr>
-                        <td style="width:75%">{!! $paymentDetails  !!}</td>
+                        <td style="width:75%">{!! $invoice->payment_details  !!}</td>
                         <td class="vertical-align-top"  style="width:25%">
                             <div class="terms-condition-block"><p class="title-heading">Terms & Conditions</p>
                                 <p class="terms-condition">
