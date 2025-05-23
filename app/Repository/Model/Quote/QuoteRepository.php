@@ -78,6 +78,10 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'description' => $tour->description,
             ...$data,
         ]);
+        if ($quote->currency !== null) {
+            $quote->from_rate = Settings::getConversionRate($quote->currency, Settings::currency());
+            $quote->to_rate = Settings::getConversionRate(Settings::currency(), $quote->currency);
+        }
         $lead = $quote->repository->createProspect($customer, $leadData);
         $quote->lead_traveller_id = $lead->id;
         $quote->reference = $quote->repository->generateReference();
@@ -967,6 +971,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'deposit' => $this->quote->getDepositAmount(),
             'commission' => $this->quote->commission,
             'ordered_on' => now(),
+            'currency_id' => $this->quote->currency_id,
             'invoice_footer' => $this->quote->invoice_footer,
             'internal_notes' => $this->quote->internal_notes,
             'external_notes' => $this->quote->external_notes,
@@ -1234,6 +1239,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $this->getFinalCost($paying),
             $this->getScheduleItineraryArray($paying),
             [], // No Payments on Quotes
+            $this->quote->currency,
         );
     }
     

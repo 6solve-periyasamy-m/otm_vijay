@@ -101,19 +101,20 @@
 
 @section('form-body')
     @can('create', \App\Models\Tour\Tour::class)
-        @include('partials.fields.selector.adder', ['name' => 'Tour', 'field' => 'tour_id', 'value' => 0,'route' => 'tours', 'createRoute' => route('tours.create'), 'width' => 6])
+        @include('partials.fields.selector.adder', ['name' => 'Tour', 'field' => 'tour_id', 'value' => 0,'route' => 'tours', 'createRoute' => route('tours.create'), 'width' => 4])
     @else
-        @include('partials.fields.selector.default', ['name' => 'Tour', 'field' => 'tour_id', 'value' => 0, 'route' => 'tours', 'width' => 6])
+        @include('partials.fields.selector.default', ['name' => 'Tour', 'field' => 'tour_id', 'value' => 0, 'route' => 'tours', 'width' => 4])
     @endcan
     @can('create', \App\Models\Customer\Customer::class)
         @include('partials.fields.selector.traveller-adder',
                     ['name' => 'Lead Booker', 'id' => 'lead_selector', 'field' => 'lead_booker', 'value' => null,
-                     'route' => 'customers', 'createRoute' => route('customers.create'), 'width' => 6])
+                     'route' => 'customers', 'createRoute' => route('customers.create'), 'width' => 4])
     @else
         @include('partials.fields.selector.default',
                 ['name' => 'Lead Booker', 'field' => 'lead_booker_id', 'value' => null,
-                 'route' => 'customers', 'width' => 6])
+                 'route' => 'customers', 'width' => 4])
     @endcan
+    <x-livewire.input.select.currency name="currency_id" label="Currency" width="4" clearable />
     @include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'width' => 4 ])
     @include('partials.fields.text', ['name' => 'Booking Fee', 'field' => 'booking_fee', 'width' => 4 ])
     @include('partials.fields.datetime', ['name' => 'Ordered On', 'field' => 'ordered_on', 'width' => 4, 'value' => now(), ])

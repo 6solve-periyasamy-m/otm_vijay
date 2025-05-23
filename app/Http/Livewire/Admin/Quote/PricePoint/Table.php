@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Quote\PricePoint;
 
 use App\Http\Livewire\Abstract\CurrencyColumn;
 use App\Http\Livewire\Abstract\LivewireForm;
+use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 use Mediconesystems\LivewireDatatables\NumberColumn;
@@ -25,13 +26,18 @@ class Table extends LivewireDatatable
 
     public function columns()
     {
+        $priceTitle = "Price Per Person";
+        $quote = Quote::find($this->quote);
+        if ($quote?->currency !== null) {
+            $priceTitle .= " ({$quote->currency->code})";
+        }
         return [
             NumberColumn::name('quantity')
                 ->label('Quantity')
                 ->sortable()
                 ->editable(),
             CurrencyColumn::name('price_per_person')
-                ->label('Price Per Person')
+                ->label($priceTitle)
                 ->sortable()
                 ->editable(),
         ];

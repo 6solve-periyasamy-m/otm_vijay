@@ -33,7 +33,7 @@
 
         function updatePayingCount(count = 1)
         {
-            $('.installment-cell').each((index, cell) => { $(cell).text(sysFormatCurrency($(cell).attr('base') * count)); });
+            $('.installment-cell').each((index, cell) => { $(cell).text(sysFormatCurrency($(cell).attr('base') * count, "{{ $quote?->currency?->code ?? Settings::currency()?->code }}")); });
         }
 
         function multiDelete() {
@@ -177,7 +177,7 @@
                     <tr>
                         <td>{{ __('quotes.view.cards.installments.types.deposit') }}</td>
                         <td data-order="0000-00-00">{{ __('quotes.view.cards.installments.with-order') }}</td>
-                        <td>{{ f_currency($quote->getDepositAmount()) }} ({{$quote->getDepositPercentage()}}%)</td>
+                        <td>{{ fr_currency($quote->getDepositAmount(), $quote->currency) }} ({{$quote->getDepositPercentage()}}%)</td>
                         <td class="installment-cell" base="{{ $quote->getDepositAmount() }}">{{ $quote->getDepositAmount() }}</td>
                         <td>
                             <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}"
@@ -193,10 +193,10 @@
                                 {{ f_date($installment->due_on) }}
                             </td>
                             <td>
-                                {{ f_currency($installment->getAmount()) }} ({{$installment->getPercentage()}}%)
+                                {{ fr_currency($installment->getAmount(), $quote->currency) }} ({{$installment->getPercentage()}}%)
                             </td>
                             <td class="installment-cell" base="{{$installment->getAmount()}}">
-                                {{ f_currency($installment->getAmount()) }}
+                                {{ fr_currency($installment->getAmount(), $quote->currency) }}
                             </td>
                             <td>
                                 <a href="javascript:showInstallmentForm({{$installment->id}})"
@@ -215,8 +215,8 @@
                     <tr>
                         <td>{{ __('quotes.view.cards.installments.types.remaining') }}</td>
                         <td data-order="{{$quote->final_payment->format('Y-m-d')}}">{{ f_date($quote->final_payment) }}</td>
-                        <td>{{ f_currency($quote->remaining) }} ({{ $quote->getRemainingPercentage() }}%)</td>
-                        <td class="installment-cell" base="{{ $quote->remaining }}">{{ f_currency($quote->remaining) }}</td>
+                        <td>{{ fr_currency($quote->remaining, $quote->currency) }} ({{ $quote->getRemainingPercentage() }}%)</td>
+                        <td class="installment-cell" base="{{ $quote->remaining }}">{{ fr_currency($quote->remaining, $quote->currency) }}</td>
                         <td>
                             <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}"
                                class="btn btn-outline-success btn-sm mb-1" title="Edit">
