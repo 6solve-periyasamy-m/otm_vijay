@@ -59,6 +59,10 @@
                     403: function (data) {
                         sending = false;
                         showToast('Access Denied', 'If you believe this is in error, please refresh the page and try again', 'danger');
+                    },
+                    500: function (data) {
+                        sending = false;
+                        showToast('An error occurred whilst sending.');
                     }
                 },
             });
@@ -101,6 +105,7 @@
                             <th scope="col">Status</th>
                             <th scope="col">Contact Name</th>
                             <th scope="col">Contact Email</th>
+                            <th scope="col">Last Manual Reminder</th>
                             <th scope="col">Reminder Type</th>
                             <th scope="col">Amount Owed</th>
                         </tr>
@@ -118,6 +123,13 @@
                                 <td>{{ $order->status->badge() }}</td>
                                 <td>{{ $order->lead_booker_name }}</td>
                                 <td>{{ $order->leadBooker->customer->email_address }}</td>
+                                <td>
+                                    @if($order->last_manual_reminder !== null)
+                                        {{ f_datetime($order->last_manual_reminder) }}
+                                    @else
+                                        Never
+                                    @endif
+                                </td>
                                 <td>
                                     @if($next->id === null || $next->id === 0)
                                         Final Payment {{ $next->due_on->isAfter(now()) ? 'Due' : 'Overdue' }}

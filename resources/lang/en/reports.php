@@ -96,6 +96,10 @@ return [
                 'name' => 'Booking Reference',
                 'description' => 'The booking reference for the order',
             ],
+            'currency' => [
+                'name' => 'Currency',
+                'description' => 'The currency for the order',
+            ],
             'travellers' => [
                 'name' => 'Travellers',
                 'description' => 'The number of travellers on the order',
@@ -118,13 +122,23 @@ return [
                     'description' => 'The percentage of the order value to be taken as commission'
                 ],
                 'amount' => [
-                    'name' => 'Commission Amount',
-                    'description' => 'The amount of commission to be taken'
+                    'system' => [
+                        'name' => 'Commission Amount (System)',
+                        'description' => 'The amount of commission to be taken, in system currency'
+                    ],
+                    'foreign' => [
+                        'name' => 'Commission Amount (Order)',
+                        'description' => 'The amount of commission to be taken, in order currency'
+                    ],
                 ],
             ],
             'ordered' => [
                 'name' => 'Ordered',
                 'description' => 'When the order was placed'
+            ],
+            'traveller-names' => [
+                'name' => 'Traveller Names',
+                'description' => 'Names of all travellers on the order'
             ],
             'cancelled' => [
                 'name' => 'Cancelled',
@@ -143,24 +157,64 @@ return [
                 'description' => 'The footer message for the order invoice'
             ],
             'paid' => [
-                'name' => 'Amount Paid',
-                'description' => 'The total amount paid so far on the order'
+                'system' => [
+                    'name' => 'Amount Paid (System)',
+                    'description' => 'The total amount paid so far on the order, in system currency'
+                ],
+                'foreign' => [
+                    'name' => 'Amount Paid (Order)',
+                    'description' => 'The total amount paid so far on the order'
+                ],
             ],
             'cost' => [
-                'name' => 'Total Cost',
-                'description' => 'The total cost of the order before adjustments and commission'
+                'system' => [
+                    'name' => 'Total Cost (System)',
+                    'description' => 'The total cost of the order before adjustments and commission, in system currency'
+                ],
+                'foreign' => [
+                    'name' => 'Total Cost (Order)',
+                    'description' => 'The total cost of the order before adjustments and commission'
+                ],
             ],
             'total_owed' => [
-                'name' => 'Total Owed',
-                'description' => 'The total amount owed by the customer after adjustments and commission'
+                'system' => [
+                    'name' => 'Total Owed (System)',
+                    'description' => 'The total amount owed by the customer after adjustments and commission, in system currency'
+                ],
+                'foreign' => [
+                    'name' => 'Total Owed (Order)',
+                    'description' => 'The total amount owed by the customer after adjustments and commission'
+                ],
             ],
             'remaining' => [
-                'name' => 'Remaining',
-                'description' => 'The amount remaining to be paid on the order'
+                'system' => [
+                    'name' => 'Remaining (System)',
+                    'description' => 'The amount remaining to be paid on the order, in system currency'
+                ],
+                'foreign' => [
+                    'name' => 'Remaining (Order)',
+                    'description' => 'The amount remaining to be paid on the order, in order currency'
+                ],
             ],
             'cost_to_company' => [
-                'name' => 'Cost to Company',
-                'description' => 'The total cost to company for the order'
+                'system' => [
+                    'name' => 'Cost to Company (System)',
+                    'description' => 'The total cost to company for the order, in system currency'
+                ],
+                'foreign' => [
+                    'name' => 'Cost to Company (Order)',
+                    'description' => 'The total cost to company for the order, in order currency'
+                ],
+            ],
+            'profit' => [
+                'system' => [
+                    'name' => 'Current Profit (System)',
+                    'description' => 'The total profit to company for the order, in system currency',
+                ],
+                'foreign' => [
+                    'name' => 'Current Profit (Order)',
+                    'description' => 'The total profit to company for the order, in order currency',
+                ],
             ],
             'next_payment' => [
                 'due' => [
@@ -168,12 +222,24 @@ return [
                     'description' => 'When is the next installment due'
                 ],
                 'amount' => [
-                    'name' => 'Next Installment Amount',
-                    'description' => 'The total due for the next installment'
+                    'system' => [
+                        'name' => 'Next Installment Amount (System)',
+                        'description' => 'The total due for the next installment, in system currency',
+                    ],
+                    'foreign' => [
+                        'name' => 'Next Installment Amount (Order)',
+                        'description' => 'The total due for the next installment, in order currency',
+                    ],
                 ],
                 'remaining' => [
-                    'name' => 'Next Installment Remaining',
-                    'description' => 'The total amount remaining on the next installment'
+                    'system' => [
+                        'name' => 'Next Installment Remaining (System)',
+                        'description' => 'The total amount remaining on the next installment, in system currency'
+                    ],
+                    'foreign' => [
+                        'name' => 'Next Installment Remaining (Order)',
+                        'description' => 'The total amount remaining on the next installment, in order currency'
+                    ],
                 ],
             ],
             'lead_booker' => [
@@ -215,7 +281,27 @@ return [
                     'name' => 'Consultant Email',
                     'description' => 'The email address of the consultant'
                 ],
-            ]
+            ],
+            'organization' => [
+                'name' => [
+                    'name' => 'Organization Name',
+                    'description' => 'The name of the organization for the order'
+                ],
+            ],
+            'agent' => [
+                'first_name' => [
+                    'name' => 'Agent First Name',
+                    'description' => 'First name of the agent'
+                ],
+                'last_name' => [
+                    'name' => 'Agent Last Name',
+                    'description' => 'Last name of the agent'
+                ],
+                'email' => [
+                    'name' => 'Agent Email',
+                    'description' => 'The email address of the agent'
+                ],
+            ],
         ],
     ],
 ];

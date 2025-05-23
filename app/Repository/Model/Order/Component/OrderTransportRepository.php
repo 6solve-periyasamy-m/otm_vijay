@@ -144,4 +144,9 @@ class OrderTransportRepository extends OrderComponentRepository
         }
         return $date;
     }
+
+    public function getCostToCompany(): float
+    {
+        return $this->orderComponent->purchase_price ?? $this->orderComponent->tourComponent->inventory->local_purchase_price;
+    }
 }

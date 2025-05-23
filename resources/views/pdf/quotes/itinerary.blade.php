@@ -275,7 +275,6 @@ h4 {
     line-height: 20px;
     color: var(--text-color);
     margin: 0px 0px 24px 0px;
-    text-transform: capitalize;
 }
 h4 span.mark {
   width:88px;
@@ -452,7 +451,8 @@ h5 span {
 }
 .payment-detail {margin: 0px 0px;}
 @page {
-    margin-top: 25px; 
+    margin-top: 25px;
+    margin-bottom: 50px;
 }
 @page:first {
     margin-top: 0px;
@@ -460,11 +460,7 @@ h5 span {
 figure.table {
      margin:-5px 0px -40px 0px;
 }
-figure.table tr td:nth-child(2) {display:none;}
-/* .single-module, .custom-details-module, .paragraph {
-        page-break-inside: avoid;
-    }  */
-      /* #static-pages {page-break-inside: avoid;} */
+/*figure.table tr td:nth-child(2) {display:none;} */
 .mb-n15{
   margin-bottom:-15px;
 }
@@ -472,9 +468,18 @@ figure.table tr td:nth-child(2) {display:none;}
   width: 125px;
 }
 .quote-payment-schedule tbody tr:last-child td {font-weight: bold;}
+.quote-section tbody tr td:first-child {width: 125px;}
+.component-body {width:"100%";}
+.component-body table th, .flight-block table th{ font-family: "PPNeueMontreal-Medium"; font-size: 14px; font-weight: 500; line-height: 20px; padding: 8px 0px; border: 1px solid gray;}
+.component-body table td, .flight-block table td { padding: 6.5px; text-align: center; border: 1px solid gray; }
+.section-flight-info{font-family: "PPNeueMontreal-Regular";font-size: 14px; font-weight: 400;line-height: 18px; color: var(--text-color); margin: 0;}
+.flight-block {padding-bottom: 50px;}
+.pt-20 { padding-bottom: 45px; width:100%;}
+.quote-section-tbl tbody tr td:first-child{width: 125px; }
+.pb20 table {padding-bottom: 35px;}
+.event-block table tr:last-of-type td:last-child{padding-bottom: 5px !important;}
+.extra-space-bottom { padding-bottom:20px;}
 </style>
-
-   
 </head>
 
 <body class="body" style="margin: 0;">
@@ -485,11 +490,10 @@ figure.table tr td:nth-child(2) {display:none;}
       <div class="pdf-header">
          <div class="header-logo">
             <img src="{{ $headlogo }}" alt="logo-ch">
-         </div>
+          </div>
       </div>
-	  
       <div class="customer-details-block">
-        <div class="customer-details-text-block">
+        <div class="customer-details-text-block">            
           <div class="top-heading-section">
             <h1>{{ $type ?? "Quote" }}</h1>
             <h5 style="margin-bottom:12px;">REFERENCE: {{ $reference }} <span></span></h5>         
@@ -547,208 +551,341 @@ figure.table tr td:nth-child(2) {display:none;}
 </div>
 
 <div class="heading-2">
-	  <h2>Package inclusions</h2> 
-  </div>
-@if(!empty($itinerary->items['Transfers']))
+  <h2>Package inclusions</h2> 
+</div>
+
+  @php
+    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Flights');
+    $flights = collect($itinerary->items['Flights'] ?? []);
+    $section_flights = $sections->merge($flights)->sortBy(function ($item) {
+      return $item->sortKey;
+    });
+  @endphp
+
+  @if(!empty($section_flights))
+      @php
+        $firstLoop = true;
+      @endphp
+    @foreach($section_flights as $flights)
+      @if(isset($flights->details['Quantity']) && $flights->details['Quantity'] > 0)
+        <div class="single-module mb-n15 <?php echo $firstLoop?'':'add-on-cls'?>">
+          @if($firstLoop)
+              <div class="heading-module">
+                  <h3   style="margin-top:10px;">
+                      <span class="mark"></span>
+                      <span class="text">Flights</span>
+                  </h3>
+              </div>
+              @php
+                  $firstLoop = false;
+              @endphp
+          @endif
+            <div class="details-module">
+              @if ($flights->type === 'Section')
+                @foreach($flights->details as $key => $value)
+                  <div class="section-body">
+                  @if ($key === 'Body')
+                    {!! $value !!}
+                  @endif
+                  </div>
+                @endforeach
+              @else
+                <div class="component-body">
+                  <table class="tbl-quote-section" style="width: 100%;">
+                      <tr>
+                          <th>Airline</th>
+                          <th>Flight No.</th>
+                          <th>Class</th>
+                          <th>Date</th>
+                          <th>From</th>
+                          <th>To</th>
+                          <th>Departure</th>
+                          <th>Arrival</th>
+                      </tr>
+                      <tr>
+                        <td class="text-wrap" style="width:80px;">{{ $flights->name }}</td>
+                        <td class="text-wrap" style="width:100px;">{{ $flights->details['Flight Number'] }}</td>
+                        <td class="text-wrap" style="width:60px;">{{ $flights->details['Class'] }}</td>
+                        <td style="width:70px;">{{ $flights->details['Departure Date'] }}</td>
+                        <td class="text-wrap" style="width:100px;">{{ $flights->details['Departure Airport'] }}</td>
+                        <td class="text-wrap" style="width:100px;">{{ $flights->details['Arrival Airport'] }}</td>
+                        <td style="width:55px;">{{ $flights->details['Departure Time'] }}</td>
+                        <td style="width:55px;">{{ $flights->details['Arrival Time'] }}</td>
+                      </tr>
+                  </table>
+                </div>
+              @endif
+            </div>
+        </div>
+      @endif
+    @endforeach
+  @endif
+
+  @php
+    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Transport');
+    $transfers = collect($itinerary->items['Transfers'] ?? []);
+    $section_transfers = $sections->merge($transfers)->sortBy(function ($item) {
+        return $item->sortKey;
+    });
+  @endphp
+
+  @if(!empty($section_transfers))
+      @php
+        $firstLoop = true;
+      @endphp
+    @foreach($section_transfers as $transport)
+      @if(isset($transport->details['Quantity']) && $transport->details['Quantity'] > 0)
+        <div class="single-module mb-n15 <?php echo $firstLoop?'':'add-on-cls'?>">
+          @if($firstLoop)
+              <div class="heading-module">
+                  <h3   style="margin-top:10px;">
+                      <span class="mark"></span>
+                      <span class="text">Transport</span>
+                  </h3>
+              </div>
+              @php
+                  $firstLoop = false;
+              @endphp
+          @endif
+            <div class="details-module">
+              @if ($transport->type === 'Section')
+                @foreach($transport->details as $key => $value)
+                  <div class="section-body">
+                  @if ($key === 'Body')
+                    {!! $value !!}
+                  @endif
+                  @if ($key === 'Quantity')
+                    <table style="padding-top: 46px;">
+                      <tbody>
+                        <tr>
+                          <td class="w-125 pt-10"><strong>Quantity:</strong></td>
+                          <td>{{ $value }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  @endif
+                  </div>
+                @endforeach
+              @else
+                <table>
+                    <tbody>
+                      <tr>
+                        <td class="item-header w-125">
+                          <strong> Service: </strong>
+                        </td>
+                        <td class="item-detail">
+                          {{ $transport->name }}
+                        </td>
+                      </tr>
+                        @php
+                          $disable_items = ['Description', 'Transport', 'Travel Class'];
+                        @endphp
+                        @foreach($transport->details as $key => $value)
+                        @php
+                          $class_desc_pos = $key == 'Description' ? 'desc-pos-top text-wrap' : '';
+                        @endphp
+                            @if (!in_array($key, $disable_items))
+                              <tr>
+                                  <td class="item-header w-125">
+                                      <strong>{{ $key }}:</strong>
+                                  </td>
+                                  <td class="item-detail <?php echo $class_desc_pos;?>">
+                                    {{ $value }}
+                                  </td>
+                              </tr>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+              @endif
+            </div>
+        </div>
+      @endif
+    @endforeach
+  @endif
+
+
+  @php
+    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Accommodation');
+    $accommodation = collect($itinerary->items['Accommodation'] ?? []);
+    $section_accommodation = $sections->merge($accommodation)->sortBy(function ($item) {
+        return $item->sortKey;
+    });
+  @endphp
+
+  @if(!empty($section_accommodation))
     @php
-      $firstLoop = true;
+        $firstLoop = true;
     @endphp
-    
-  @foreach($itinerary->items['Transfers'] as $transport)
-    @if(isset($transport->details['Quantity']) && $transport->details['Quantity'] > 0)
+    @foreach($section_accommodation as $accommodation)
       <div class="single-module mb-n15 <?php echo $firstLoop?'':'add-on-cls'?>">
         @if($firstLoop)
             <div class="heading-module">
-                <h3   style="margin-top:10px;">
+                <h3 style="margin-top:10px;">
                     <span class="mark"></span>
-                    <span class="text">Transport</span>
+                    <span class="text">Accommodation</span>
                 </h3>
             </div>
             @php
                 $firstLoop = false;
             @endphp
         @endif
+          <h4>
+              <span class="text">{{ $accommodation->name }}</span>
+              <span class="mark"></span>
+          </h4>
           <div class="details-module">
+            @if ($accommodation->type === 'Section')
+              @foreach($accommodation->details as $key => $value)
+                <div class="section-body pb20">
+                @if ($key === 'Body')
+                  {!! $value !!}
+                @endif
+                </div>
+              @endforeach
+            @else
               <table>
                   <tbody>
-                    <tr>
-                      <td class="item-header w-125">
-                        <strong> Service: </strong>
-                      </td>
-                      <td class="item-detail">
-                        {{ $transport->name }}
-                      </td>
-                    </tr>
                       @php
-                        $disable_items = ['Description', 'Transport', 'Travel Class'];
+                        if (isset($accommodation->details['Description'], $accommodation->details['Quantity'])) {
+                          $temp_desc = $accommodation->details['Description'];
+                          unset($accommodation->details['Description']);
+                          $accommodation->details['Description'] = $temp_desc;
+                      }
                       @endphp
-                      @foreach($transport->details as $key => $value)
+                      @foreach($accommodation->details as $key => $value)
                       @php
                         $class_desc_pos = $key == 'Description' ? 'desc-pos-top text-wrap' : '';
                       @endphp
-                          @if (!in_array($key, $disable_items))
-                            <tr>
-                                <td class="item-header w-125">
-                                    <strong>{{ $key }}:</strong>
-                                </td>
-                                <td class="item-detail <?php echo $class_desc_pos;?>">
-                                  {{ $value }}
-                                </td>
-                            </tr>
-                          @endif
+                          @continue(empty($value))
+                          <tr>
+                              <td class="item-header w-125">
+                                  <strong>{{ $key }}:</strong>
+                              </td>
+                              <td class="item-detail <?php echo $class_desc_pos;?>">
+                                  @if(is_array($value))
+                                      @if(isset($value['attributes']['address_line_1']))
+                                          {{ $value['attributes']['address_line_1'] }}
+                                      @else
+                                          Address not available
+                                      @endif
+                                  @else
+                                      {!! $value !!}
+                                  @endif
+                              </td>
+                          </tr>
                       @endforeach
                   </tbody>
               </table>
+            @endif
           </div>
       </div>
-    @endif
-  @endforeach
-@endif  
-@if(!empty($itinerary->items['Accommodation']))
-  @php
-      $firstLoop = true;
-  @endphp
-    
-  @foreach($itinerary->items['Accommodation'] as $accommodation)
-
-    <div class="single-module mb-n15 <?php echo $firstLoop?'':'add-on-cls'?>">
-      @if($firstLoop)
-          <div class="heading-module">
-              <h3 style="margin-top:10px;">
-                  <span class="mark"></span>
-                  <span class="text">Accommodation</span>
-              </h3>
-          </div>
-          @php
-              $firstLoop = false;
-          @endphp
-      @endif
-        <h4>
-            <span class="text">{{ $accommodation->name }}</span>
-            <span class="mark"></span>
-        </h4>
-        <div class="details-module">
-            <table>
-                <tbody>
-                    @php
-                      if (isset($accommodation->details['Description'], $accommodation->details['Quantity'])) {
-                        $temp_desc = $accommodation->details['Description'];
-                        unset($accommodation->details['Description']);
-                        $accommodation->details['Description'] = $temp_desc;
-                    }
-                    @endphp
-                    @foreach($accommodation->details as $key => $value)
-                    @php
-                      $class_desc_pos = $key == 'Description' ? 'desc-pos-top text-wrap' : '';
-                    @endphp
-                        @continue(empty($value))
-                        <tr>
-                            <td class="item-header w-125">
-                                <strong>{{ $key }}:</strong>
-                            </td>
-                            <td class="item-detail <?php echo $class_desc_pos;?>">
-                                @if(is_array($value))
-                                    @if(isset($value['attributes']['address_line_1']))
-                                        {{ $value['attributes']['address_line_1'] }}
-                                    @else
-                                        Address not available
-                                    @endif
-                                @else
-                                    {!! $value !!}
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
-  @endforeach
+    @endforeach
   @endif
   </div>
-  <!-- </section> -->
 
-  @if(!empty($itinerary->items['Event'])) 
+
+  @php
+    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Event');
+    $events = collect($itinerary->items['Event'] ?? [])->filter(fn($item) => $item->type === 'Event');
+    $section_events = $sections->merge($events)->sortBy(function ($item) {
+        return $item->sortKey;
+    });
+  @endphp
+  @if(!empty($section_events))
     @php
         $firstLoop = true;
     @endphp
-    <!-- <section class="pdf-individual-block"> -->
-        <div class="row">
-            @foreach($itinerary->items['Event'] as $item)
-                <div class="single-module <?php echo $firstLoop?'':'add-on-cls'?>" style="margin-bottom:0px;">
-                    @if($firstLoop)
-                        <div class="heading-module">
-                            <h3>
-                                <span class="mark"></span>
-                                <span class="text">Event</span>
-                            </h3>
-                        </div>
-                        @php
-                            $firstLoop = false;
-                        @endphp
+    <div class="row">
+        @foreach($section_events as $item)
+          <div class="single-module <?php echo $firstLoop?'':'add-on-cls'?>" style="margin-bottom:0px;">
+              @if($firstLoop)
+                  <div class="heading-module">
+                      <h3>
+                          <span class="mark"></span>
+                          <span class="text">Event</span>
+                      </h3>
+                  </div>
+                  @php
+                      $firstLoop = false;
+                  @endphp
+              @endif
+              <div class="details-module event-block">
+                @if ($item->type === 'Section')
+                  @foreach($item->details as $key => $value)
+                    <div class="section-body">
+                    @if ($key === 'Body')
+                      <div class="extra-space-bottom">
+                        {!! $value !!}
+                      </div>
                     @endif
-                    <div class="details-module">
-                        <table>
-                            <tbody>
-                                <tr>
-                                  <td class="w-125"><strong>Event:</strong></td>
-                                  <td>{{ $evename }}</td>
-                                </tr>
-                                @if(array_key_exists('Ticket', $item->details) && !empty($item->details['Ticket']))
-                                    <tr>
-                                        <td class="w-125"><strong>Ticket:</strong></td>
-                                        <td>{{ $item->details['Ticket'] }}</td>
-                                    </tr>
-                                @endif
-                                @if(!empty($item->details['Dates']))
-                                    <tr>
-                                        <td class="w-125"><strong>Dates:</strong></td>
-                                        <td> <?php
-                                                $dates = explode('to', $item->details['Dates']); 
-                                                echo trim($dates[0]); 
-                                                ?>
-                                        </td>
-                                    </tr>
-                                @endif
-
-                                @if(!empty($item->details['Venue']))
-                                    <tr>
-                                        <td class="w-125"><strong>Venue:</strong></td>
-                                        <td>{{ $item->details['Venue'] }}</td>
-                                    </tr>
-                                @endif
-
-
-                                @if(!empty($item->details['Quantity']) && $item->details['Quantity'] > 0)
-                                    <tr>
-                                        <td class="w-125"><strong>Quantity:</strong></td>
-                                        <td>{{ $item->details['Quantity'] }}</td>
-                                    </tr>
-                                @endif
-
-                                @if(!empty($item->details['Description']))
-                                    <tr>
-                                        <td class="w-125"><strong>Description:</strong></td>
-                                        <td class="text-wrap">{!! $item->details['Description'] !!}</td>
-                                    </tr>
-                                @endif                 
-                            </tbody>
-                        </table>
                     </div>
-                </div>
-            @endforeach
-        </div>
-    <!-- </section> -->
-@endif
+                  @endforeach
+                @else
+                  <table>
+                    <tbody>
+                        <tr>
+                          <td class="w-125"><strong>Event:</strong></td>
+                          <td>{{ $evename }}</td>
+                        </tr>
+                        @if(array_key_exists('Ticket', $item->details) && !empty($item->details['Ticket']))
+                            <tr>
+                                <td class="w-125"><strong>Ticket:</strong></td>
+                                <td>{{ $item->details['Ticket'] }}</td>
+                            </tr>
+                        @endif
+                        @if(!empty($item->details['Dates']))
+                            <tr>
+                                <td class="w-125"><strong>Dates:</strong></td>
+                                <td> <?php
+                                        $dates = explode('to', $item->details['Dates']);
+                                        echo trim($dates[0]);
+                                        ?>
+                                </td>
+                            </tr>
+                        @endif
+                        @if(!empty($item->details['Venue']))
+                            <tr>
+                                <td class="w-125"><strong>Venue:</strong></td>
+                                <td>{{ $item->details['Venue'] }}</td>
+                            </tr>
+                        @endif
+                        @if(!empty($item->details['Quantity']) && $item->details['Quantity'] > 0)
+                            <tr>
+                                <td class="w-125"><strong>Quantity:</strong></td>
+                                <td>{{ $item->details['Quantity'] }}</td>
+                            </tr>
+                        @endif
+                        @if(!empty($item->details['Description']))
+                            <tr>
+                                <td class="w-125"><strong>Description:</strong></td>
+                                <td class="text-wrap">{!! $item->details['Description'] !!}</td>
+                            </tr>
+                        @endif
+                    </tbody>
+                  </table>
+                @endif
+              </div>
+          </div>
+        @endforeach
+    </div>
+  @endif
 
-@if(!empty($itinerary->items['Inclusion']))
+  @php
+    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Additional Inclusions');
+    $inclusion = collect($itinerary->items['Inclusion'] ?? [])->filter(fn($item) => $item->type === 'Inclusions');
+    $section_inclusion = $sections->merge($inclusion)->sortBy(function ($item) {
+        return $item->sortKey;
+    });
+  @endphp
+
+
+@if(!empty($section_inclusion))
   @php
     $firstLoop = true;
   @endphp
-<!-- <section class="pdf-individual-block"> -->
    <div class="row">
-   
-      @foreach($itinerary->items['Inclusion'] as $item)
+      @foreach($section_inclusion as $item)
       <div class="single-module <?php echo $firstLoop?'':'add-on-cls'?>">
       @if($firstLoop)
         <div class="heading-module">
@@ -761,50 +898,139 @@ figure.table tr td:nth-child(2) {display:none;}
             $firstLoop = false;
           @endphp
         @endif
-         <!-- <h4>
-            <span class="text">{{ $item->name }}</span>
-            <span class="mark"></span>
-         </h4> -->
          <div class="details-module">
-            <table>
-               <tbody>
-                  <tr>
-                     <td class="w-125"><strong>Inclusion:</strong></td>
-                      @if(array_key_exists('Ticket', $item->details))
-                        <td>{{ $item->details['Ticket'] }}</td>
-                      @else
-                          <td>{{ $item->name }}</td>
-                      @endif
-                  </tr>
-                    @php
-                        $disable_items = ['Ticket'];
-                    @endphp
-                   @foreach($item->details as $key => $value)
-                      @php
-                        $class_desc_pos = $key == 'Description' ? 'text-wrap' : '';
-                      @endphp
-                       @continue(empty($value))
-                        @if (!in_array($key, $disable_items))
-                          <tr>
-                            <td class="w-125"><strong>{{ $key }}:</strong></td>
-                            <td class="<?php echo $class_desc_pos;?>">
-                                @if($key === 'Dates')
-                                    {{ trim(explode('to', $value)[0]) }}
-                                @else
-                                    {!! $value !!}
-                                @endif
-                            </td>
-                          </tr>
+          @if ($item->type === 'Section')
+              @foreach($item->details as $key => $value)
+                <div class="section-body">
+                @if ($key === 'Body')
+                  {!! $value !!}
+                @endif
+                </div>
+              @endforeach
+            @else
+              <table>
+                <tbody>
+                    <tr>
+                      <td class="w-125"><strong>Inclusion:</strong></td>
+                        @if(array_key_exists('Ticket', $item->details))
+                          <td>{{ $item->details['Ticket'] }}</td>
+                        @else
+                            <td>{{ $item->name }}</td>
                         @endif
-                   @endforeach
-               </tbody>
-            </table>
+                    </tr>
+                      @php
+                          $disable_items = ['Ticket'];
+                      @endphp
+                    @foreach($item->details as $key => $value)
+                        @php
+                          $class_desc_pos = $key == 'Description' ? 'text-wrap' : '';
+                        @endphp
+                        @continue(empty($value))
+                          @if (!in_array($key, $disable_items))
+                            <tr>
+                              <td class="w-125"><strong>{{ $key }}:</strong></td>
+                              <td class="<?php echo $class_desc_pos;?>">
+                                  @if($key === 'Dates')
+                                      {{ trim(explode('to', $value)[0]) }}
+                                  @else
+                                      {!! $value !!}
+                                  @endif
+                              </td>
+                            </tr>
+                          @endif
+                    @endforeach
+                </tbody>
+              </table>
+            @endif
          </div>
       </div>
       @endforeach
    </div>
-<!-- </section> -->
 @endif
+
+@php
+    $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Merchandise');
+    $merchandise = collect($itinerary->items['Inclusion'] ?? [])->filter(fn($item) => $item->type === 'Merchandise');
+    $section_merchandise = $sections->merge($merchandise)->sortBy(function ($item) {
+        return $item->sortKey;
+    });
+  @endphp
+
+  @if(!empty($section_merchandise))
+      @php
+        $firstLoop = true;
+      @endphp
+    @foreach($section_merchandise as $merchandise)
+      @if(isset($merchandise->details['Quantity']) && $merchandise->details['Quantity'] > 0)
+        <div class="single-module mb-n15 <?php echo $firstLoop?'':'add-on-cls'?>">
+          @if($firstLoop)
+              <div class="heading-module">
+                  <h3   style="margin-top:10px;">
+                      <span class="mark"></span>
+                      <span class="text">Merchandise</span>
+                  </h3>
+              </div>
+              @php
+                  $firstLoop = false;
+              @endphp
+          @endif
+            <div class="details-module">
+              @if ($merchandise->type === 'Section')
+                @foreach($merchandise->details as $key => $value)
+                  <div class="section-body">
+                  @if ($key === 'Body')
+                    {!! $value !!}
+                  @endif
+                  @if ($key === 'Quantity')
+                    <table style="padding-top: 46px;">
+                      <tbody>
+                        <tr>
+                          <td class="w-125 pt-10"><strong>Quantity:</strong></td>
+                          <td>{{ $value }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  @endif
+                  </div>
+                @endforeach
+              @else
+                <table>
+                    <tbody>
+                      <tr>
+                        <td class="item-header w-125">
+                          <strong> Name: </strong>
+                        </td>
+                        <td class="item-detail">
+                          {{ $merchandise->name }}
+                        </td>
+                      </tr>
+                        @php
+                          $disable_items = ['Description'];
+                        @endphp
+                        @foreach($merchandise->details as $key => $value)
+                        @php
+                          $class_desc_pos = $key == 'Description' ? 'desc-pos-top text-wrap' : '';
+                        @endphp
+                            @if (!in_array($key, $disable_items))
+                              <tr>
+                                  <td class="item-header w-125">
+                                      <strong>{{ $key }}:</strong>
+                                  </td>
+                                  <td class="item-detail <?php echo $class_desc_pos;?>">
+                                    {{ $value }}
+                                  </td>
+                              </tr>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+              @endif
+            </div>
+        </div>
+      @endif
+    @endforeach
+  @endif
+
 
 @if(!empty($itinerary->finances))
 <!-- <section class="pdf-individual-block"> -->
@@ -812,7 +1038,7 @@ figure.table tr td:nth-child(2) {display:none;}
    
    
    <div class="single-module heading-2">
-   <h2 style="margin-left:-32px;margin-top:20px;">Payment summary</h2> 
+   <h2 style="margin-left:-32px;margin-top:30px;">Payment summary</h2>
    
    <div class="heading-module">
     <h3>
@@ -825,23 +1051,23 @@ figure.table tr td:nth-child(2) {display:none;}
            <tbody>
                   <tr>            
                    <td style="font-weight:400;min-width:128px;">Booking Total:</td>
-                   <td>{{ f_currency($itinerary->finances->cost + $itinerary->finances->commission) }}</td>
+                   <td>{{ fr_currency($itinerary->finances->total + $itinerary->finances->commission, $itinerary->finances->currency) }}</td>
                   </tr>
                   <tr>
                       <td style="font-weight:400;min-width:128px;">GST (included):</td>
-                      <td>{{ $itinerary->finances->tax > 0 ? f_currency($itinerary->finances->tax) : 'No Taxes Due' }}</td>
+                      <td>{{ $itinerary->finances->tax > 0 ? fr_currency($itinerary->finances->tax, $itinerary->finances->currency) : 'No Taxes Due' }}</td>
                   </tr>
                   @if($itinerary->finances->commission > 0 )
                   <tr>
                       <td style="font-weight:400;min-width:128px;">Commission:</td>
-                      <td>{{ f_currency($itinerary->finances->commission) }}</td>
+                      <td>{{ fr_currency($itinerary->finances->commission, $itinerary->finances->currency) }}</td>
                   </tr>
                   @endif      
                   <tr>
                       <td style="font-weight:400;min-width:128px;"><strong style="margin-top:15px">FINAL PRICE:
                       <span style="width: 100%;height: 1px;display: block;margin: 0;margin-top: 2px;background-color: var(--head-text-background);"></span>
                       </strong></td>
-                      <td><strong style="margin-top:15px">{{ f_currency($itinerary->finances->cost) }}</strong></td>
+                      <td><strong style="margin-top:15px">{{ fr_currency($itinerary->finances->total, $itinerary->finances->currency) }}</strong></td>
                   </tr>
                                     
            </tbody>
@@ -875,16 +1101,16 @@ figure.table tr td:nth-child(2) {display:none;}
             @if($installment->type === ItineraryScheduleType::BOOKING_FEE)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ f_currency($installment->amount) }}</td>
+                <td>{{ fr_currency($installment->amount, $itinerary->finances->currency) }}</td>
                 <td>
-                    {{ f_currency(min($installment->amount, $installment->received)) }}
+                    {{ fr_currency(min($installment->amount, $installment->received), $itinerary->finances->currency) }}
                     @php $balance_received = $balance_received + min($installment->amount, $installment->received) @endphp
                 </td>
                 <td>
                   @if($installment->amount <= $installment->received)
                     Paid
                   @else
-                      {{ f_currency($installment->amount - min($installment->amount, $installment->received)) }}
+                      {{ fr_currency($installment->amount - min($installment->amount, $installment->received), $itinerary->finances->currency) }}
                   @endif
                 </td>
                 <td>With Order</td>
@@ -893,14 +1119,14 @@ figure.table tr td:nth-child(2) {display:none;}
             @if ($installment->type === ItineraryScheduleType::DEPOSIT)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ f_currency($installment->amount) }}</td>
+                <td>{{ fr_currency($installment->amount, $itinerary->finances->currency) }}</td>
                 <td>
                   @php $amount = $installment->amount - min(($installment->received - ($installment->balance ?? 0)), $installment->amount); @endphp
                   @if($amount <= 0)
-                      {{ f_currency($installment->amount) }}
+                      {{ fr_currency($installment->amount, $itinerary->finances->currency) }}
                       @php $balance_received = $balance_received + $installment->amount @endphp
                   @else
-                      {{ f_currency($installment->received) }}
+                      {{ fr_currency($installment->received, $itinerary->finances->currency) }}
                       @php $balance_received = $balance_received + $installment->received @endphp
                   @endif
                 </td>
@@ -908,7 +1134,7 @@ figure.table tr td:nth-child(2) {display:none;}
                   @if($amount <= 0)
                     Paid
                   @else
-                      {{ f_currency($amount) }}
+                      {{ fr_currency($amount, $itinerary->finances->currency) }}
                   @endif
                 </td>
                 <td>With Order</td>
@@ -918,13 +1144,13 @@ figure.table tr td:nth-child(2) {display:none;}
               @php $amount = $installment->amount - $installment->received; @endphp
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ f_currency($installment->amount) }}</td>
+                <td>{{ fr_currency($installment->amount, $itinerary->finances->currency) }}</td>
                 <td>
                   @if($amount <= 0)
-                      {{ f_currency($installment->amount) }}
+                      {{ fr_currency($installment->amount, $itinerary->finances->currency) }}
                       @php $balance_received = $balance_received + $installment->amount @endphp
                   @else
-                      {{ f_currency($installment->received) }}
+                      {{ fr_currency($installment->received, $itinerary->finances->currency) }}
                       @php $balance_received = $balance_received + $installment->received @endphp
                   @endif
                 </td>
@@ -932,7 +1158,7 @@ figure.table tr td:nth-child(2) {display:none;}
                   @if($amount <= 0)
                       Paid
                   @else
-                      {{ f_currency($amount) }}
+                      {{ fr_currency($amount, $itinerary->finances->currency) }}
                   @endif
                 </td>
                 <td>
@@ -945,17 +1171,17 @@ figure.table tr td:nth-child(2) {display:none;}
             @if ($installment->type === ItineraryScheduleType::REMAINING)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ f_currency($installment->amount) }}</td>
+                <td>{{ fr_currency($installment->amount, $itinerary->finances->currency) }}</td>
                 <td>
                   @php $balance_received_total = $installment->received - $balance_received; @endphp
-                  {{ f_currency($balance_received_total) }}
+                  {{ fr_currency($balance_received_total, $itinerary->finances->currency) }}
                 </td>
                 <td>
                   @php $amount = min($installment->balance, $installment->amount); @endphp
                   @if($amount <= 0)
                       Paid
                   @else
-                      {{ f_currency($amount) }}
+                      {{ fr_currency($amount, $itinerary->finances->currency) }}
                   @endif
                 </td>
                 <td>
@@ -979,11 +1205,12 @@ figure.table tr td:nth-child(2) {display:none;}
         </thead>
         <tbody>
           @foreach ($itinerary->finances->schedule as $installment)
+          @continue(empty($installment->amount))
           <tr>
               <td>
                 {{ ($installment->type === ItineraryScheduleType::INSTALLMENT) ? "Instalment" : ucfirst(strtolower($installment->type->name)) }}
               </td>
-              <td>{{ f_currency($installment->amount) }}</td>
+              <td>{{ fr_currency($installment->amount, $itinerary->finances->currency) }}</td>
               <td>
                 @if ($installment->type === ItineraryScheduleType::DEPOSIT)
                   Now
@@ -1012,7 +1239,8 @@ figure.table tr td:nth-child(2) {display:none;}
     <tr>
         <td style="vertical-align: top;">
             <!-- <strong>BANK TRANSFER</strong><br> -->
-            {!! $itinerary->finances->paymentDetails !!}
+             @php $payment_details = $itinerary->payment_details ?? $itinerary->finances->paymentDetails;  @endphp
+            {!! $payment_details !!}
         </td>
         <!-- <td style="vertical-align: top;">
             <strong>PAYMENT GATE</strong><br>

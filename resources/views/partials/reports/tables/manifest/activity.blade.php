@@ -13,6 +13,8 @@
         <th scope="col">Start Time</th>
         <th scope="col">End Date</th>
         <th scope="col">End Time</th>
+        <th scope="col">Purchase Price</th>
+        <th scope="col">Sales Price</th>
         <th scope="col">Customer Activity Notes</th>
     </tr>
     </thead>
@@ -31,6 +33,8 @@
             <td>{{ f_time($row->start)}}</td>
             <td>{{ f_date($row->end)}}</td>
             <td>{{ f_time($row->end)}}</td>
+            <td>{{ f_currency($row->purchase) }}</td>
+            <td>{{ f_currency($row->sales) }}</td>
             <td>{{ $row->notes }}</td>
         </tr>
     @endforeach

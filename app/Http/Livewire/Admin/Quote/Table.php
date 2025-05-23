@@ -18,8 +18,9 @@ class Table extends LivewireDatatable
     public function builder()
     {
         return Quote::query()
-            ->join('quote_prospects', 'quote_prospects.id', '=', 'quotes.lead_traveller_id')
-            ->join('customers', 'customers.id', '=', 'quote_prospects.customer_id');
+            ->leftJoin('quote_prospects', 'quote_prospects.id', '=', 'quotes.lead_traveller_id')
+            ->leftJoin('customers', 'customers.id', '=', 'quote_prospects.customer_id')
+            ->leftJoin('events', 'events.id', '=', 'quotes.event_id');
     }
 
     public function getColumns(): array
@@ -40,10 +41,16 @@ class Table extends LivewireDatatable
                 ->sortable()
                 ->editable()
                 ->filterable(Quote::pluck('name')->unique()),
-            Column::name('quotes.description')
-                ->label('Description')
+            Column::name('events.name')
+                ->label('Event Name')
                 ->searchable()
                 ->sortable(),
+            DateColumn::name('quotes.created_at')
+                ->label('Quote Created')
+                ->sortable()
+                ->searchable()
+                ->filterable()
+                ->format('d/m/Y'),
             Column::callback(['customers.title', 'customers.first_name', 'customers.last_name'], static function (...$fields) { return implode(' ', $fields); })
                 ->label('Lead Traveller')
                 ->searchable()

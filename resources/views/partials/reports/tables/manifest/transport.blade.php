@@ -13,6 +13,8 @@
         <th scope="col">Arrival Date</th>
         <th scope="col">Arrival Time</th>
         <th scope="col">Arrival Address</th>
+        <th scope="col">Purchase Price</th>
+        <th scope="col">Sales Price</th>
         <th scope="col">Component Type</th>
         <th scope="col">Customer Transport Notes</th>
     </tr>
@@ -32,6 +34,8 @@
             <td>{{ f_date($row->end)}}</td>
             <td>{{ f_time($row->end)}}</td>
             <td>{{ $row->arrival->name }}</td>
+            <td>{{ f_currency($row->purchase) }}</td>
+            <td>{{ f_currency($row->sales) }}</td>
             <td>{{ $row->component }}</td>
             <td>{{ $row->notes }}</td>
         </tr>

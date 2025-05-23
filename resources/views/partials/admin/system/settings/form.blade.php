@@ -83,6 +83,17 @@
             </div>
     </x-admin.section.card>
     </div>
+    <div class="col-xl-12">
+        <x-admin.section.card>
+            <x-slot:title>
+                System Emails
+            </x-slot:title>
+            <div class="row">
+                @include('partials.fields.text', ['name' => 'Emails to CC (Separate with semi-colon(;))', 'field' => 'system_cc_email', 'value' => setting('system.cc.mail', ''), 'width' => 6,])
+                @include('partials.fields.text', ['name' => 'Emails to BCC (Separate with semi-colon(;))', 'field' => 'system_bcc_email', 'value' => setting('system.bcc.mail', ''), 'width' => 6,])
+            </div>
+        </x-admin.section.card>
+    </div>
     <div class="col-xl-4">
         <x-admin.section.card>
             <x-slot:title>
@@ -146,6 +157,9 @@
                 @include('partials.fields.checkbox', ['name' => 'Maintain quote reference on conversion where possible', 'field' => 'quote_reference', 'value' => flag('quote.convert.reference', false),])                
                 @include('partials.fields.checkbox', ['name' => 'Should Booking Deposit Percentage Include Additional Costs', 'field' => 'deposit_full', 'value' => flag('booking.deposit.full', false),])
                 @include('partials.fields.checkbox', ['name' => 'Show Non-Paying travellers', 'field' => 'nonpaying_travellers_enabled', 'value' => flag('non-paying.travellers.enabled', true),])
+                @if(config('app.features.kpt', false) || config('app.features.bleeding-edge'))
+                    @include('partials.fields.checkbox', ['name' => 'Enable sending reservation and invoice document emails.', 'field' => 'reservation_invoice_mail_enabled', 'value' => flag('reservation.invoice.mail.enabled', false),])
+                @endif
             </div>
     </x-admin.section.card>
     </div>
@@ -183,6 +197,25 @@
                 @include('partials.admin.system.settings.lock', ['name' => 'Activity Notes', 'field' => 'activity'])
                 @include('partials.admin.system.settings.lock', ['name' => 'Flight Notes', 'field' => 'flight'])
                 @include('partials.admin.system.settings.lock', ['name' => 'Transport Notes', 'field' => 'transport'])
+            </div>
+        </x-admin.section.card>
+    </div>
+    <div class="col-xl-12">
+        <x-admin.section.card>
+            <x-slot:title>
+                Customer Data Toggles
+            </x-slot:title>
+            <div class="row">
+                <div class="checkbox-group">
+                    @foreach($customerFieldList['fields'] as $field => $info)
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" name="{{ $field }}"
+                                value="{{ $field }}"
+                                @if(in_array($field, $selectedFields) || in_array($field, default_customer_fields())) checked @endif>
+                                <label class="form-check-label lh-lg ps-2" for="{{ $field }}">{{ $info['name'] }}</label>
+                        </div>
+                    @endforeach
+                </div>
             </div>
         </x-admin.section.card>
     </div>

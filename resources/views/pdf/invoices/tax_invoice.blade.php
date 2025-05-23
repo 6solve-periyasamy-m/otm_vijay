@@ -4,8 +4,8 @@
 @endphp
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
-    xmlns:o="urn:schemas-microsoft-com:office:office">
+<html xmlns="http://www.w3.org/1999/xhtml"
+>
 
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
@@ -235,7 +235,7 @@
         .items th {
             background-color: #f35b15;
             padding:4px 30px;
-            
+            font-family: 'Lato', sans-serif;
         }
         .items th h2 {
             font-family: 'Lato', sans-serif;
@@ -425,9 +425,11 @@
         .order-total-inner {margin-left: 5px; font-size: 12px; font-family: 'Lato', sans-serif;}
         .tbl-font-style{ font-family: 'Lato', sans-serif; font-weight: 400;font-size: 12px;line-height: 17px;}
         .event-name { white-space: nowrap; }
-        .payment-schedule-font, .terms-condition-block, .bank-info-block{ font-family: 'Lato', sans-serif; font-weight: 400; font-size: 12px;}
+        /* .payment-schedule-font, .terms-condition-block, .bank-info-block{ font-family: 'Lato', sans-serif; font-weight: 400; font-size: 12px;} */
+        .payment-schedule-font th {font-family: 'Lato', sans-serif; font-weight: 700; font-size: 12px; }
+        .payment-schedule-font td, .terms-condition-block p, .bank-info-block td p{ font-family: 'Lato', sans-serif; font-weight: 400; font-size: 12px;}
         .terms-condition-block {padding-top: 13px;}
-        .title-heading {font-size: 16px; font-weight: 600; font-family: 'Lato', sans-serif;}
+        p.title-heading {font-weight: 700;}
         .vertical-align-top {vertical-align: top;}
         .bank-details {padding-top:15px;}
         .terms-condition{ font-family: 'Lato', sans-serif; font-weight: 400; font-size: 13px;}
@@ -468,11 +470,21 @@
         </tr>
         <tr>
             <td style="width: 32%;">
-                <p class="name">{{ $invoice->lead->full_name }}</p>
-                <p class="name">{{$invoice->lead->email}}</p>
-                <p class="address">
-                    {{ implode(', ', array_filter([$invoice->lead->address_line_1, $invoice->lead->address_line_2, $invoice->lead->town, $invoice->lead->region, $invoice->lead->country, $invoice->lead->postcode])) }}
-                </p>
+                @if (!is_null($invoice->organization) && !is_null($invoice->agent))
+                    <p class="name">{{ $invoice->organization->name }}</p>
+                    <p class="name">{{ $invoice->agent->first_name . ' ' . $invoice->agent->last_name }}</p>
+                    <p class="address">{{ implode(', ', array_filter([$invoice->organization->deliveryAddress->address_line_1, $invoice->organization->deliveryAddress->address_line_2, $invoice->organization->deliveryAddress->town, $invoice->organization->deliveryAddress->region, $invoice->organization->deliveryAddress->country, $invoice->organization->deliveryAddress->postcode])) }}</p>
+                @elseif (!is_null($invoice->organization))
+                    <p class="name">{{ $invoice->organization->name }}</p>
+                    <p class="address">{{ implode(', ', array_filter([$invoice->organization->deliveryAddress->address_line_1, $invoice->organization->deliveryAddress->address_line_2, $invoice->organization->deliveryAddress->town, $invoice->organization->deliveryAddress->region, $invoice->organization->deliveryAddress->country, $invoice->organization->deliveryAddress->postcode])) }}</p>
+                @elseif (!is_null($invoice->agent))
+                    <p class="name">{{ $invoice->agent->first_name . ' ' . $invoice->agent->last_name }}</p>
+                    <p class="name">{{ $invoice->agent->email ?? '' }}</p>
+                @else
+                    <p class="name">{{ $invoice->lead->full_name }}</p>
+                    <p class="name">{{$invoice->lead->email}}</p>
+                    <p class="address">{{ implode(', ', array_filter([$invoice->lead->address_line_1, $invoice->lead->address_line_2, $invoice->lead->town, $invoice->lead->region, $invoice->lead->country, $invoice->lead->postcode])) }}</p>
+                @endif
             </td>
             <td style="width: 32%;">
                 <p class="event-name"><span>Reference:</span> <span>{{$invoice->booking_reference}}</span></p>
@@ -530,16 +542,16 @@
                     @foreach ($invoice->payment_schedule as $key => $installment)
                         @if($installment->type === ItineraryScheduleType::BOOKING_FEE)
                         <tr>
-                            <td>{{ f_currency($installment->amount) }}</td>
+                            <td>{{ fr_currency($installment->amount, $invoice->currency) }}</td>
                             <td>
-                                {{ f_currency(min($installment->amount, $installment->received)) }}
+                                {{ fr_currency(min($installment->amount, $installment->received), $invoice->currency) }}
                                 @php $balance_received = $balance_received + min($installment->amount, $installment->received) @endphp
                             </td>
                             <td>
                             @if($installment->amount <= $installment->received)
                                 Paid
                             @else
-                                {{ f_currency($installment->amount - min($installment->amount, $installment->received)) }}
+                                {{ fr_currency($installment->amount - min($installment->amount, $installment->received), $invoice->currency) }}
                             @endif
                             </td>
                             <td class="text-weight"></td>
@@ -547,14 +559,14 @@
                         @endif
                         @if ($installment->type === ItineraryScheduleType::DEPOSIT)
                         <tr>
-                            <td>{{ f_currency($installment->amount) }}</td>
+                            <td>{{ fr_currency($installment->amount, $invoice->currency) }}</td>
                             <td>
                             @php $amount = $installment->amount - min(($installment->received - ($installment->balance ?? 0)), $installment->amount); @endphp
                             @if($amount <= 0)
-                                {{ f_currency($installment->amount) }}
+                                {{ fr_currency($installment->amount, $invoice->currency) }}
                                 @php $balance_received = $balance_received + $installment->amount @endphp
                             @else
-                                {{ f_currency($installment->received) }}
+                                {{ fr_currency($installment->received, $invoice->currency) }}
                                 @php $balance_received = $balance_received + $installment->received @endphp
                             @endif
                             </td>
@@ -562,7 +574,7 @@
                             @if($amount <= 0)
                                 Paid
                             @else
-                                {{ f_currency($amount) }}
+                                {{ fr_currency($amount, $invoice->currency) }}
                             @endif
                             </td>
                             <td class="text-weight"></td>
@@ -571,13 +583,13 @@
                         @if ($installment->type === ItineraryScheduleType::INSTALLMENT)
                             @php $amount = $installment->amount - $installment->received; @endphp
                             <tr>
-                                <td>{{ f_currency($installment->amount) }}</td>
+                                <td>{{ fr_currency($installment->amount, $invoice->currency) }}</td>
                                 <td>
                                 @if($amount <= 0)
-                                    {{ f_currency($installment->amount) }}
+                                    {{ fr_currency($installment->amount, $invoice->currency) }}
                                     @php $balance_received = $balance_received + $installment->amount @endphp
                                 @else
-                                    {{ f_currency($installment->received) }}
+                                    {{ fr_currency($installment->received, $invoice->currency) }}
                                     @php $balance_received = $balance_received + $installment->received @endphp
                                 @endif
                                 </td>
@@ -585,7 +597,7 @@
                                 @if($amount <= 0)
                                     Paid
                                 @else
-                                    {{ f_currency($amount) }}
+                                    {{ fr_currency($amount, $invoice->currency) }}
                                 @endif
                                 </td>
                                 <td>
@@ -597,17 +609,17 @@
                         @endif
                         @if ($installment->type === ItineraryScheduleType::REMAINING)
                             <tr>
-                                <td>{{ f_currency($installment->amount) }}</td>
+                                <td>{{ fr_currency($installment->amount, $invoice->currency) }}</td>
                                 <td>
                                 @php $balance_received_total = $installment->received - $balance_received; @endphp
-                                {{ f_currency($balance_received_total) }}
+                                {{ fr_currency($balance_received_total, $invoice->currency) }}
                                 </td>
                                 <td>
                                 @php $amount = min($installment->balance, $installment->amount); @endphp
                                 @if($amount <= 0)
                                     Paid
                                 @else
-                                    {{ f_currency($amount) }}
+                                    {{ fr_currency($amount, $invoice->currency) }}
                                 @endif
                                 </td>
                                 <td>
@@ -627,18 +639,18 @@
                     <tr>
                         <td>
                             <div class="full-btm-cls-mod" style="">
-                                <p><span style="font-weight:700 !important;">Invoice Total:</span> <span style="font-weight:700 !important;">{{f_currency($invoice->total_cost + $invoice->commission_amount)}}</span></p>
+                                <p><span style="font-weight:700 !important;">Invoice Total:</span> <span style="font-weight:700 !important;">{{fr_currency($invoice->total_cost + $invoice->commission_amount, $invoice->currency)}}</span></p>
                                 @if($invoice->commission_amount > 0)
-                                    <p><span>Commission ({{$invoice->commission_percentage}}%):</span> <span>{{f_currency($invoice->commission_amount)}}</span></p>
-                                    <p><span>Booking Total: </span> <span>{{f_currency($invoice->total_cost)}}</span></p>
+                                    <p><span>Commission ({{$invoice->commission_percentage}}%):</span> <span>{{fr_currency($invoice->commission_amount, $invoice->currency)}}</span></p>
+                                    <p><span>Booking Total: </span> <span>{{fr_currency($invoice->total_cost, $invoice->currency)}}</span></p>
                                 @endif
-                                <p><span>GST (included):</span> <span>{{f_currency($invoice->tax_amount)}}</span></p>
-                                <p><span>Received:</span> <span>{{f_currency($invoice->total_paid)}}</span></p>
+                                <p><span>GST (included):</span> <span>{{fr_currency($invoice->tax_amount, $invoice->currency)}}</span></p>
+                                <p><span>Received:</span> <span>{{fr_currency($invoice->total_paid, $invoice->currency)}}</span></p>
                                 @if($invoice->total_fees > 0)
-                                    <p><span>Fees Paid:</span> <span>{{f_currency($invoice->total_fees)}}</span></p>
+                                    <p><span>Fees Paid:</span> <span>{{fr_currency($invoice->total_fees, $invoice->currency)}}</span></p>
                                 @endif
                             </div>
-                            <h4><span>Balance Due:</span> <span>{{f_currency($invoice->total_cost - $invoice->total_paid)}}</span></h4>
+                            <h4><span>Balance Due:</span> <span>{{fr_currency($invoice->total_cost - $invoice->total_paid, $invoice->currency)}}</span></h4>
                         </td>
                     </tr>
                 </table>

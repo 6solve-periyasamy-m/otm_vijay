@@ -74,6 +74,10 @@ $hideNoCategory = $hideNoCategory ?? false;
                         {{ Icon::calendar() }}
                         <span>Bulk Send Reminders</span>
                     </a>
+                    <a class="btn btn-info" href="{{ route('events.manifest.order.view', ['event' => $event]) }}">
+                        {{ Icon::report() }}
+                        <span>View Order Manifest</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -176,7 +180,9 @@ $hideNoCategory = $hideNoCategory ?? false;
                     <tbody>
                         @foreach($event->repository->getActivityReport() as $row)
                             <tr>
-                                <th scope="row">{{ $row->activity }}</th>
+                                <th scope="row">
+                                    <a href="{{ route('activities.view', ['activity' => $row->component,]) }}">{{ $row->activity }}</a>
+                                </th>
                                 <td>{{ $row->type }}</td>
                                 <td>{{ $row->totalStock }}</td>
                                 <td>{{ $row->usedStock }}</td>

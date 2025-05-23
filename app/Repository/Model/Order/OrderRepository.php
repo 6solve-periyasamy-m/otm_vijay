@@ -5,6 +5,7 @@ namespace App\Repository\Model\Order;
 use App\Events\Order\Customer\OrderCustomerCreatedEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Exceptions\MailDisabledException;
+use App\Exceptions\MailFailedException;
 use App\Models\Customer\Customer;
 use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Helper\Enum\AddressParent;
@@ -12,6 +13,10 @@ use App\Models\Helper\Enum\OrderStatus;
 use App\Models\Location\Address;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderMerchandise;
+use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCache;
 use App\Models\Order\OrderCustomer;
@@ -23,6 +28,7 @@ use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Interfaces\GeneratesFellohData;
 use App\Repository\Mailing\Mailer\Order\OrderMailer;
+use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
 use App\Repository\Storage\Itinerary\Itinerary;
@@ -32,6 +38,7 @@ use App\Repository\Storage\Itinerary\ItineraryPaymentDetails;
 use App\Repository\Storage\Itinerary\ItinerarySchedule;
 use App\Repository\Storage\Itinerary\ItineraryScheduleType;
 use App\Repository\Storage\Itinerary\ItineraryTraveller;
+use App\Repository\Storage\Order\MergedAccommodation;
 use App\Repository\Storage\Rooming\AccommodationByDateStorage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -39,6 +46,8 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Settings;
 
 class OrderRepository extends ModelRepository implements GeneratesFellohData
 {
@@ -176,7 +185,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public static function create(Tour $tour, array $data, ConvertedCustomer $lead, array $customers = [], bool $shouldInvoice = true): Order
     {
         $order = Order::make(['consultant_id' => get_current_admin()?->id, 'tax_bracket_id' => $tour->tax_bracket_id, ...$data]);
-        $order->commission = $lead->customer->organization?->commission;
+        $order->commission = $data['commission'] ?? $lead->customer->organization?->commission;
         $tour->orders()->saveQuietly($order);
         $leadBooker = $order->repository->addCustomer($lead, false, false, true);
         $order->updateQuietly(['lead_booker_id' => $leadBooker->id,]);
@@ -192,6 +201,15 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $orderCustomer = $order->repository->addCustomer($customer, false, false, true);
             if ($customer->travelling) {
                 $orderCustomer->repository->bulkSaveStandard($included->clone());
+            }
+        }
+        $tbcCounter = 1;
+        foreach ($order->customers as $customer) {
+            if (Str::startsWith($customer->first_name, 'Unknown')) {
+                $customer->first_name = "TBC {$tbcCounter}";
+                $customer->last_name = "Paying - {$order->booking_reference}";
+                $customer->saveQuietly();
+                $tbcCounter++;
             }
         }
         OrderAccommodation::withoutEvents(static function () use ($order)  {
@@ -303,6 +321,17 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public function getAtolRepository(): AtolRepository
     {
         return $this->atolRepository;
+    }
+
+    /**
+     * @throws MailFailedException
+     */
+    public function sendManualReminder(OrderInstallment|null $next): bool
+    {
+        $sent = $this->order->repository->mailer(true)->sendReminderMail(null, $next);
+        if (!$sent) { return false; }
+        $this->update(['last_manual_reminder' => now(),]);
+        return true;
     }
 
     public function addAdjustment(float $amount, string $reason, Carbon|null $when = null): Model|bool
@@ -483,7 +512,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         $this->order->installments()->delete();
         foreach ($this->order->tour->paymentInstallments as $installment) {
             $oInstallment = OrderInstallment::make([
-                'amount' => $installment->cost,
+                'amount' => $installment->getCostAttribute($this->order->commission_amount / ($this->order->paying_customers ?? 1)),
                 'due_on' => $installment->due_on,
             ]);
             $this->order->installments()->save($oInstallment);
@@ -564,6 +593,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         $cache = $this->order->cache ?? new OrderCache(['order_id' => $this->order->id,]);
         $cache->save(); // If the cache isn't saved in the database, then it doesn't write properly for some reason
         $nextPayment = $this->getNextPaymentDetails();
+        $cost_to_company = $this->getCostToCompany(true);
         $cache->update([
             'cost' => $this->getCost(true),
             'status' => $this->getOrderStatus(true),
@@ -572,7 +602,8 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             'next_payment_amount' => $nextPayment?->amount,
             'next_payment_remaining' => $nextPayment?->remaining,
             'commission_amount' => $this->order->commission_amount,
-            'cost_to_company' => $this->getCostToCompany(true),
+            'cost_to_company' => $cost_to_company,
+            'profit' => $this->getCurrentProfit(true, $cost_to_company),
             'cached' => now(),
         ]);
         $cache->save();
@@ -664,15 +695,48 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         }
         $cost = 0;
         foreach ($this->order->orderCustomers as $orderCustomer) {
-            $cost += $orderCustomer->repository->getCostToCompany();
+            $cost += $orderCustomer->repository->getCostToCompany(true);
         }
-        return $cost;
+        $seen = [];
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            foreach ($orderCustomer->orderAccommodation as $component) {
+                if (in_array($component->id, $seen)) { continue; }
+                $cost += $component->repository->getCostToCompany();
+                $seen[] = $component->id;
+            }
+        }
+        foreach ($this->order->tour?->costs()->where('per_customer', '=', false)->get() ?? [] as $item) {
+            $cost += $item->amount;
+        }
+        return sigfig($cost);
+    }
+
+    /**
+     * Get the current profit for the order. Estimated if using FX rates
+     *
+     * @param bool $recache Should this bypass the cache and recalculate anyway
+     * @param float|null $cost_to_company Cached cost to company value. Defaults to calculating if not provided
+     * @return float|null Returns the profit, or null if in foreign currency with no FX rate
+     */
+    public function getCurrentProfit(bool $recache = false, float|null $cost_to_company = null): float|null
+    {
+        if (!$recache && $this->order->cache->profit !== null) {
+            return $this->order->cache->profit;
+        }
+        $cost_to_company = $cost_to_company ?? $this->getCostToCompany($recache);
+        // If using conversion, then convert total
+        if ($this->order->currency !== null && $this->order->currency !== Settings::currency()) {
+            $fx = Settings::getConversionRate($this->order->currency, Settings::currency());
+            if ($fx === null) { return null; }
+            return ($this->order->total * $fx) - $cost_to_company;
+        }
+        return $this->order->total - $cost_to_company;
     }
 
     public function getBeforeString(): string|null
     {
         if ($this->order->total_adjustments > 0 || $this->order->commission_amount > 0) {
-            $string = f_currency($this->order->cost) . " before ";
+            $string = fr_currency($this->order->cost, $this->order->currency) . " before ";
             if ($this->order->total_adjustments > 0 && $this->order->commission_amount > 0) {
                 $string .= "adjustments and commission";
             } elseif ($this->order->total_adjustments > 0) {
@@ -822,7 +886,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     {
         $payments = [];
         foreach ($this->order->payments as $payment) {
-            $payments[] = new ItineraryPayment($payment->paid_on, $payment->amount, $payment->payment_type, $payment->customer?->full_name);
+            $payments[] = new ItineraryPayment($payment->paid_on, $payment->amount, $payment->payment_type, $payment->payer_name);
         }
         return $payments;
     }
@@ -856,13 +920,14 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     private function getItineraryFinances(): ItineraryPaymentDetails
     {
         return new ItineraryPaymentDetails(
-            $this->order->cost,
+            $this->order->total,
             $this->order->getTaxes(),
             $this->order->commission_amount,
             $this->order->commission,
-            $this->order->total,
+            $this->order->cost,
             $this->getScheduleItineraryArray(),
             $this->getPaymentItineraryArray(),
+            $this->order->currency,
         );
     }
 
@@ -889,6 +954,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $this->order->tour->terms,
             $this->order->invoice_footer,
             $this->order->external_notes,
+            $this->order->payment_details,
         );
     }
 
@@ -1005,5 +1071,76 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             ];
         }
         return $data;
+    }
+
+    public function getQuantity(OrderAccommodation|OrderActivity|OrderFlight|OrderTransport|OrderMerchandise $component): int
+    {
+        return match (true) {
+            $component instanceof OrderAccommodation => $this->getAccommodationQuantity($component),
+            $component instanceof OrderActivity => $this->order->orderActivities()->where('activity_inventory_tour_id', '=', $component->activity_inventory_tour_id)->count(),
+            $component instanceof OrderFlight => $this->order->orderFlights()->where('flight_inventory_tour_id', '=', $component->flight_inventory_tour_id)->count(),
+            $component instanceof OrderTransport => $this->order->orderTransport()->where('transport_inventory_tour_id', '=', $component->transport_inventory_tour_id)->count(),
+            $component instanceof OrderMerchandise => $this->order->orderMerchandise()->where('merchandise_inventory_tour_id', '=', $component->merchandise_inventory_tour_id)->count(),
+        };
+    }
+
+    public function getAccommodationQuantity(OrderAccommodation $component): int
+    {
+        $count = 0;
+        foreach ($this->order->groups as $group) {
+            foreach ($group->rooms as $room) {
+                if ($room->accommodation_inventory_tour_id === $component->accommodation_inventory_tour_id) {
+                    ++$count;
+                }
+            }
+        }
+        return $count;
+    }
+
+    /**
+     * Returns all OrderAccommodation on the order, sorted by check_in
+     *
+     * @return OrderAccommodation[]
+     */
+    public function getOrderAccommodationByStart(): array
+    {
+        $rooms = [];
+        foreach ($this->order->groups as $group) {
+            foreach ($group->rooms as $room) {
+                $rooms[] = $room;
+            }
+        }
+        usort($rooms, static function (OrderAccommodation $a, OrderAccommodation $b) {
+            if ($a->tourComponent?->inventory === null) return -1;
+            if ($b->tourComponent?->inventory === null) return 1;
+            return AccommodationInventoryRepository::compareTwo($a->tourComponent->inventory, $b->tourComponent->inventory);
+        });
+        return $rooms;
+    }
+
+    /**
+     * Return a list of merged accommodation
+     *
+     * @return MergedAccommodation[]
+     */
+    public function getMergedAccommodation(): array
+    {
+        /** @var MergedAccommodation[] $merged */
+        $merged = [];
+        foreach ($this->getOrderAccommodationByStart() as $room) {
+            if ($room->tourComponent?->inventory === null) { continue; }
+            $found = false;
+            foreach ($merged as $key => $merge) {
+                if ($merge->addToMerge($room)) {
+                    $found = true;
+                    $merged[$key] = $merge;
+                    break;
+                }
+            }
+            if (!$found) {
+                $merged[] = MergedAccommodation::make($room);
+            }
+        }
+        return $merged;
     }
 }

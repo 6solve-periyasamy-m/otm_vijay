@@ -27,10 +27,12 @@
                             Create New
                         </button>
                     </div>
-
                 </slot:header>
                 <livewire:admin.accommodation.room-category.table />
             </x-admin.section.card>
+        </div>
+        <div class="col-xl-4">
+            @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Accommodation\AccommodationTypeRepository::class])
         </div>
     </div>
     <div class="card">
@@ -43,6 +45,34 @@
     <div class="row collapse show" id="activity">
         <div class="col-xl-4">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Activity\ActivityTypeRepository::class])
+        </div>
+        <div class="col-xl-4">
+            <x-admin.section.card>
+                <slot:header>
+                    <div class="d-flex justify-content-between">
+                        <h4 class="fw-bold">Sessions</h4>
+                        <button class="btn btn-primary" onclick="openModal('admin.activity.session.form')">
+                            {{ Icon::create() }}
+                            Create New
+                        </button>
+                    </div>
+                </slot:header>
+                <livewire:admin.activity.session.table />
+            </x-admin.section.card>
+        </div>
+        <div class="col-xl-4">
+            <x-admin.section.card>
+                <slot:header>
+                    <div class="d-flex justify-content-between">
+                        <h4 class="fw-bold">Seating</h4>
+                        <button class="btn btn-primary" onclick="openModal('admin.activity.seating.form')">
+                            {{ Icon::create() }}
+                            Create New
+                        </button>
+                    </div>
+                </slot:header>
+                <livewire:admin.activity.seating.table />
+            </x-admin.section.card>
         </div>
         <div class="col-xl-4">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Activity\TicketTypeRepository::class])
@@ -173,6 +203,17 @@
                     </div>
                 </x-slot:header>
                 <livewire:admin.system.payment-method.table />
+            </x-admin.section.card>
+        </div>
+        <div class="col-6">
+            <x-admin.section.card>
+                <x-slot:header>
+                    <div class="flex justify-between">
+                        <div><h4 class="fw-bold">Amenity</h4></div>
+                        <div><button class="btn btn-primary" onclick="openModal('admin.system.amenity.form')">{{ \Icon::create() }} Create New</button></div>
+                    </div>
+                </x-slot:header>
+                <livewire:admin.system.amenity.table />
             </x-admin.section.card>
         </div>
     </div>

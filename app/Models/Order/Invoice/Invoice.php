@@ -2,6 +2,9 @@
 
 namespace App\Models\Order\Invoice;
 
+use App\Models\Customer\Agent;
+use App\Models\Customer\Organization;
+use App\Models\Location\Currency;
 use App\Models\Order\Order;
 use App\Repository\Model\Order\InvoiceRepository;
 use Eloquent;
@@ -31,6 +34,9 @@ use Illuminate\Support\Carbon;
  * @property float|null $commission_amount The amount of the commission on the order
  * @property float|null $commission_percentage The percentage of the order that is commission
  * @property int $invoice_brand_id
+ * @property int|null $currency_id
+ * @property int|null $agent_id
+ * @property int|null $organization_id
  * @property float $total_cost Total cost of the order
  * @property float $total_paid Total amount paid to date
  * @property float $total_fees Total fees for the order
@@ -48,6 +54,9 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, InvoiceInstallment> $installments
  * @property-read int|null $installments_count
  * @property-read InvoiceCustomer|null $lead The lead booker
+ * @property-read Currency|null $currency
+ * @property-read Agent|null $agent
+ * @property-read Organization|null $organization
  * @property-read int $paying_travellers
  * @property-read int $travelling_travellers
  * @property-read Order $order
@@ -90,9 +99,24 @@ class Invoice extends Model
         return $this->belongsTo(Order::class, 'order_id');
     }
 
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
+    }
+
     public function brand(): BelongsTo
     {
         return $this->belongsTo(InvoiceBrand::class, 'invoice_brand_id');
+    }
+
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class, 'organization_id');
+    }
+
+    public function agent(): BelongsTo
+    {
+        return $this->belongsTo(Agent::class, 'agent_id');
     }
 
     public function customers(): HasMany

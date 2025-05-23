@@ -154,6 +154,46 @@
                     </form>
                 </x-admin.section.card>
             </div>
+            <div class="col-xl-4">
+                <x-admin.section.card>
+                    <div class="card-title d-flex justify-content-between">
+                        <h4 class="fw-bold">Operator</h4>
+                        <div>
+                            <a class="btn btn-primary pr-2" href="{{ asset('import/operator.csv') }}" target="_blank">
+                                Get Template
+                            </a>
+                            <button class="btn btn-success" onclick="$('#operator-file-upload').click()">
+                                Upload File
+                            </button>
+                        </div>
+                    </div>
+                    The import must contain exactly one row: name
+                    <form action="{{ route('import.operator') }}" enctype="multipart/form-data" method="post" class="d-none">
+                        @csrf
+                        <input id="operator-file-upload" type="file" name="file" class="d-none" onchange="form.submit()">
+                    </form>
+                </x-admin.section.card>
+            </div>
+            <div class="col-xl-4">
+                <x-admin.section.card>
+                    <div class="card-title d-flex justify-content-between">
+                        <h4 class="fw-bold">Conversion Rates</h4>
+                        <div>
+                            <a class="btn btn-primary pr-2" href="{{ asset('import/conversion_rate.csv') }}" target="_blank">
+                                Get Template
+                            </a>
+                            <button class="btn btn-success" onclick="$('#conversion-rate-file-upload').click()">
+                                Upload File
+                            </button>
+                        </div>
+                    </div>
+                    The contents of the Conversion Rate field must exactly match an existing currency code in the system, and the rate must be a required numeric value. Each row must include the following: From Currency Code, To Currency Code, and Rate. If 'Automatic' is not provided, it will default to false.
+                    <form action="{{ route('import.conversion-rate') }}" enctype="multipart/form-data" method="post" class="d-none">
+                        @csrf
+                        <input id="conversion-rate-file-upload" type="file" name="file" class="d-none" onchange="form.submit()">
+                    </form>
+                </x-admin.section.card>
+            </div>
         </div>
     </div>
 @endsection

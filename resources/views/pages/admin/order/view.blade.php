@@ -2,6 +2,12 @@
 /**
  * @param \App\Models\Order\Order $order;
  */
+/** @var bool $nonSystem Is the order using a non-system currency */
+$nonSystem = $order->currency !== null && $order->currency !== Settings::currency();
+/** @var float|null $fromSystem conversion rate from system currency */
+$fromSystem = \Settings::getConversionRate(\Settings::currency(), $order->currency);;
+/** @var float|null $toSystem conversion rate to system currency */
+$toSystem = \Settings::getConversionRate($order->currency, \Settings::currency());
 @endphp
 
 @extends('layout.master')
@@ -46,15 +52,21 @@
             <p>Booking Reference</p>
             <h6 class="fw-bold">{{ $order->booking_reference }}</h6>
         </div>
+        @isset ($order->tour?->event?->name)
+            <div class="col-12 col-xl-6">
+                <p>Event</p>
+                <h6 class="fw-bold">{{ $order->tour->event->name }}</h6>
+            </div>
+        @endisset
         <div class="col-12 col-xl-6">
             <p>Tour</p>
             <h6 class="fw-bold">{{ $order->tour?->name ?? "Tour Deleted" }}</h6>
         </div>
-        <div class="col-12 col-xl-6">
+        <div class="col-12 col-xl-4">
             <p>Tour Date</p>
             <h6 class="fw-bold">{{ $order->tour !== null ? f_date($order->tour->date_from) . " to " . f_date($order->tour->date_to) : "Tour Deleted" }}</h6>
         </div>
-        <div class="col-12 col-xl-6">
+        <div class="col-12 col-xl-2">
             <p>Order Status</p>
             <h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6>
         </div>                
@@ -62,9 +74,13 @@
             <p>Order Value</p>
             <h6 class="fw-bold">
                 @if($order->cancelled)
-                    {{ f_currency($order->total) }} ({{ f_currency($order->cost) }} before cancellation)
+                    {{ fr_currency($order->total, $order->currency) }}
+                    @if($nonSystem) ({{ fr_currency($order->total * $toSystem, Settings::currency()) }}) @endif
+                    ({{ fr_currency($order->cost, $order->currency) }}
+                    @if($nonSystem) ({{ fr_currency($order->cost * $toSystem, Settings::currency()) }}) @endif
+                    before cancellation)
                 @else
-                    {{ f_currency($order->total) }}
+                    {{ fr_currency($order->total, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->total * $toSystem, Settings::currency()) }}) @endif
                     @if ($order->repository->getBeforeString() !== null)
                         ({{ $order->repository->getBeforeString() }})
                     @endif
@@ -73,19 +89,55 @@
         </div>
         <div class="col-12 col-xl-3">
             <p>Total Paid</p>
-            <h6 class="fw-bold">{{ f_currency($order->paid) }}</h6>
+            <h6 class="fw-bold">{{ fr_currency($order->paid, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->paid * $toSystem, Settings::currency()) }}) @endif</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Balance Outstanding</p>
+            <h6 class="fw-bold">{{ fr_currency($order->remaining, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->remaining * $toSystem, Settings::currency()) }}) @endif</h6>
         </div>
         <div class="col-12 col-xl-3">
-            <p>Balance Outstanding</p>
-            <h6 class="fw-bold">{{ f_currency($order->remaining) }}</h6>
-        </div>
-        <div class="col-12 col-xl-6">
             <p>Next Payment Due</p>
-            <h6 class="fw-bold">{{ $order->next_installment !== null ? f_date($order->next_installment->due_on) . ' - ' . f_currency($order->next_installment->remaining) : 'All installments paid' }}</h6>
+            <h6 class="fw-bold">
+                @if($order->next_installment !== null)
+                {{f_date($order->next_installment->due_on)}} - {{fr_currency($order->next_installment->remaining, $order->currency)}}
+                    @if($nonSystem) ({{ fr_currency($order->next_installment->remaining * $toSystem, Settings::currency()) }}) @endif
+                @else
+                    All installments paid
+                @endif
+            </h6>
         </div>
-        <div class="col-12 col-xl-6">
+        <div class="col-12 col-xl-3">
             <p>Tax Amount</p>
-            <h6 class="fw-bold">{{ $order->getTaxes() !== null ? f_currency($order->getTaxes()) : 'No Taxes Due' }}</h6>
+            <h6 class="fw-bold">
+                @if($order->getTaxes() !== null)
+                    {{fr_currency($order->getTaxes(), $order->currency)}}
+                    @if($nonSystem) ({{ fr_currency($order->getTaxes() * $toSystem, Settings::currency()) }}) @endif
+                @else
+                    No Taxes Due
+                @endif
+            </h6>
+        </div>
+        <div class="col-12 col-xl-3">
+            <p>Cost to Company</p>
+            <h6 class="fw-bold">
+                {{ f_currency($order->repository->getCostToCompany())}}
+                @if($nonSystem)
+                    ({{ fr_currency($order->repository->getCostToCompany() * $fromSystem, $order->currency) }})
+                @else
+                    No FX Rate for Conversion
+                @endif
+            </h6>
+        </div>
+        <div class="col-12 col-xl-3">
+            <p>Current Profit</p>
+            <h6 class="fw-bold">
+                @if($order->cache->profit !== null)
+                    {{ f_currency($order->cache->profit)}}
+                    @if($nonSystem) ({{ fr_currency($order->cache->profit * $fromSystem, $order->currency) }}) @endif
+                @else
+                    No FX Rate for Conversion
+                @endif
+            </h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Lead Booker</p>
@@ -150,7 +202,11 @@
         </div>
         @endcan
         <div class="row">
-            @foreach($order->orderCustomers as $ordersCustomer)
+            @foreach($order->orderCustomers as $key => $ordersCustomer)
+            @php
+                $isTbcCustomer = (strpos($ordersCustomer->customer->first_name, 'Unknown') !== false || strpos($ordersCustomer->customer->last_name, 'Unknown') !== false);
+                $customerName = $isTbcCustomer ? "TBC". $key. " - Paying - " . $ordersCustomer->customer->last_name : $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name;
+            @endphp
             <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
                 <div class="otm-card">
                     <p>{{ ($order->lead_booker_id == $ordersCustomer->id) ? 'Lead Booker' : ' Additional Customer'}}</p>
@@ -209,31 +265,46 @@
                     @endcan
                 </div>
                 <div class="pt-1">
-                    <table class="datatable table table-striped" id="payment-table">
+                    <table class="datatable table" id="payment-table" data-ordering="false">
                         <thead>
                         <tr>
                             <th scope="col">Type</th>
                             <th scope="col">Method</th>
-                            <th scope="col">Customer</th>
-                            <th scope="col">Value</th>
+                            <th scope="col">Payer</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Amount</th>
                             <th scope="col">Paid</th>
+                            <th scope="col">Notes</th>
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
-                        @foreach($order->payments as $payment)
-                            <tr>
+                        @foreach($order->payments as $index => $payment)
+                            @php
+                                $row_class = $index % 2 == 0 ? 'odd-row' : 'even-row';
+                            @endphp
+                            <tr class="{{ $row_class }}">
                                 <td>{{ $payment->payment_type }}</td>
                                 <td>{{ $payment->paymentMethod->name }}</td>
-                                <td>{{ $payment->customer?->full_name ?? "No Customer Found" }}</td>
+                                <td>{{ $payment->payer_name ?? "No Customer Found" }}</td>
                                 <td>
                                     @if($payment->payment_fee !== null)
-                                        <abbr title="{{ f_currency($payment->totalWithFee()) }} with payment fee">{{ f_currency($payment->amount) }}</abbr>
+                                        <abbr title="{{ fr_currency($payment->totalWithFee(), $payment->currency) }} with payment fee">{{ fr_currency($payment->amount, $payment->currency) }}</abbr>
                                     @else
-                                        {{ f_currency($payment->amount) }}
+                                        {{ fr_currency($payment->amount, $payment->currency) }}
                                     @endif
-                                </td>
+                                <td>{{ fr_currency($payment->amount, $payment->currency) }}</td>
                                 <td>{{ f_datetime($payment->paid_on) }}</td>
-                                <td class="actions">
+                                @php
+                                    $rowspan = $payment->payment_fee ? 2 : 1;
+                                    $internalNotes = $payment->internal_notes ?? " -Nil- ";
+                                    $fee = $payment->payment_fee ? f_currency($payment->payment_fee) : null;
+                                @endphp
+
+                                <td class="w-15 align-top text-justify" rowspan="{{ $rowspan }}">
+                                    {{ $internalNotes }}
+                                </td>
+
+                                <td class="actions align-middle" rowspan="{{ $rowspan }}">
                                     @can('update', \App\Models\Order\Payment\Payment::class)
                                         <a href="{{ route('payments.edit', ['order' => $order, 'payment' => $payment,]) }}"
                                            class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
@@ -256,13 +327,24 @@
                                     @endcan
                                 </td>
                             </tr>
+                            @if($payment->payment_fee !== null)
+                                <tr class="{{ $row_class }}">
+                                    <td>Payment Fee</td>
+                                    <td>{{ $payment->paymentMethod->name }} Fee</td>
+                                    <td>{{ $payment->payer_name ?? "No Customer Found" }}</td>
+                                    <td>{{ $fee }}</td>
+                                    <td>{{ f_datetime($payment->paid_on) }}</td>
+                                    <td hidden></td>
+                                    <td hidden></td>
+                                </tr>
+                            @endif
                         @endforeach
                     </table>
                 </div>
             </x-admin.section.card>
             <x-admin.section.card>
                 <x-slot:title>
-                    Costs
+                    Sell Price Per Person
                 </x-slot:title>
                 <div>
                     <table class="datatable table table-striped" id="cost-table">
@@ -275,25 +357,25 @@
                         @foreach($order->orderCustomers()->where('is_charged', '=', 1)->get() as $ordersCustomer)
                             <tr>
                                 <td>Base: {{ $ordersCustomer->customer->first_name . ' ' . $ordersCustomer->customer->last_name }}</td>
-                                <td>{{ f_currency($ordersCustomer->tour_cost) }}</td>
+                                <td>{{ fr_currency($ordersCustomer->tour_cost, $order->currency) }}</td>
                             </tr>
                             @if($ordersCustomer->has_surcharge)
                                 <tr>
                                     <td>Single Occupancy Surcharge: {{ $ordersCustomer->customer->full_name }}</td>
-                                    <td>{{ f_currency($ordersCustomer->single_occupancy_surcharge) }}</td>
+                                    <td>{{ fr_currency($ordersCustomer->single_occupancy_surcharge, $order->currency) }}</td>
                                 </tr>
                             @endif
                         @endforeach
                         @foreach($order->getAdditionalCosts()['upgrades'] as $upgrade)
                             <tr>
                                 <td>Upgrade: {{ $upgrade['description'] }}</td>
-                                <td>{{ f_currency($upgrade['upgrade']->cost) }}</td>
+                                <td>{{ fr_currency($upgrade['upgrade']->cost, $order->currency) }}</td>
                             </tr>
                         @endforeach
                         @foreach($order->getAdditionalCosts()['addons'] as $addon)
                             <tr>
                                 <td>Add-on: {{ $addon['description'] }}</td>
-                                <td>{{ f_currency($addon['addon']->cost) }}</td>
+                                <td>{{ fr_currency($addon['addon']->cost, $order->currency) }}</td>
                             </tr>
                         @endforeach
                     </table>
@@ -332,15 +414,15 @@
                             <tr>
                                 <th scope="row">Booking Fee</th>
                                 <td>With Order</td>
-                                <td>{{ f_currency($order->booking_fee) }}</td>
+                                <td>{{ fr_currency($order->booking_fee, $order->currency) }}</td>
                                 <td>
-                                    {{ f_currency(min($order->booking_fee, $order->paid)) }}
+                                    {{ fr_currency(min($order->booking_fee, $order->paid), $order->currency) }}
                                 </td>
                                 <td>
                                     @if($order->booking_fee <= $order->paid)
                                         Paid
                                     @else
-                                        {{ f_currency($order->booking_fee - min($order->booking_fee, $order->paid)) }}
+                                        {{ fr_currency($order->booking_fee - min($order->booking_fee, $order->paid), $order->currency) }}
                                     @endif
                                 </td>
                                 <td>
@@ -358,20 +440,20 @@
                             <tr>
                                 <th scope="row">Deposit</th>
                                 <td>With Order</td>
-                                <td>{{ f_currency($order->calculated_deposit) }} ({{ $order->deposit_percentage }}%)</td>
+                                <td>{{ fr_currency($order->calculated_deposit, $order->currency) }} ({{ $order->deposit_percentage }}%)</td>
                                 <td>
                                     @php $amount = $order->calculated_deposit - min(($order->paid - ($order->booking_fee ?? 0)), $order->calculated_deposit); @endphp
                                     @if($amount <= 0)
-                                        {{ f_currency($order->calculated_deposit) }}
+                                        {{ fr_currency($order->calculated_deposit, $order->currency) }}
                                     @else
-                                        {{ f_currency($order->paid) }}
+                                        {{ fr_currency($order->paid, $order->currency) }}
                                     @endif
                                 </td>
                                 <td>
                                     @if($amount <= 0)
                                         Paid
                                     @else
-                                        {{ f_currency($amount) }}
+                                        {{ fr_currency($amount, $order->currency) }}
                                     @endif
                                 </td>
                                 <td>
@@ -391,19 +473,19 @@
                             <tr>
                                 <th scope="row">Installment</th>
                                 <td>{{ f_date($installment->due_on) }}</td>
-                                <td>{{ f_currency($installment->calculated_amount) }} ({{ $installment->percentage }}%)</td>
+                                <td>{{ fr_currency($installment->calculated_amount, $order->currency) }} ({{ $installment->percentage }}%)</td>
                                 <td>
                                     @if($amount <= 0)
-                                        {{ f_currency($installment->calculated_amount) }}
+                                        {{ fr_currency($installment->calculated_amount, $order->currency) }}
                                     @else
-                                        {{ f_currency($installment->repository->getAmountPaid()) }}
+                                        {{ fr_currency($installment->repository->getAmountPaid(), $order->currency) }}
                                     @endif
                                 </td>
                                 <td>
                                     @if($amount <= 0)
                                         Paid
                                     @else
-                                        {{ f_currency($amount) }}
+                                        {{ fr_currency($amount, $order->currency) }}
                                     @endif
                                 </td>
                                 <td>
@@ -427,14 +509,14 @@
                         <tr>
                             <th scope="row">Remaining Balance</th>
                             <td>{{ f_date($order->tour?->final_payment) }}</td>
-                            <td>{{ f_currency($order->remaining_installment) }} ({{ $order->remaining_percentage }}%)</td>
+                            <td>{{ fr_currency($order->remaining_installment, $order->currency) }} ({{ $order->remaining_percentage }}%)</td>
                             <td> {{ f_currency($order->paid) }} </td>
                             <td>
                                 @php $amount = min($order->remaining, $order->remaining_installment); @endphp
                                 @if($amount <= 0)
                                     Paid
                                 @else
-                                    {{ f_currency($amount) }}
+                                    {{ fr_currency($amount, $order->currency) }}
                                 @endif
                             </td>
                             <td>
@@ -477,7 +559,7 @@
                         </thead>
                             @if($order->commission !== null)
                                 <tr>
-                                    <td>{{ f_currency($order->commission_amount) }}</td>
+                                    <td>{{ fr_currency($order->commission_amount, $order->currency) }}</td>
                                     <td>Commission: {{ $order->commission }}%</td>
                                     <td class="actions">
                                         <a href="{{ route('orders.edit', ['order' => $order,]) }}"
@@ -487,7 +569,7 @@
                             @endif
                             @foreach($order->adjustments as $adjustment)
                             <tr>
-                                <td>{{ f_currency($adjustment->amount) }}</td>
+                                <td>{{ fr_currency($adjustment->amount, $order->currency) }}</td>
                                 <td>{{ $adjustment->reason }}</td>
                                 <td class="actions">
                                     @can('update', \App\Models\Order\Adjustment\ManualAdjustment::class)
@@ -534,7 +616,7 @@
                             @foreach($ordersCustomer->adjustments as $adjustment)
                                 <tr>
                                     <td>{{ $ordersCustomer->customer->first_name .  " " . $ordersCustomer->customer->last_name }}</td>
-                                    <td>{{ f_currency($adjustment->amount) }}</td>
+                                    <td>{{ fr_currency($adjustment->amount, $order->currency) }}</td>
                                     <td>{{ $adjustment->reason }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)

@@ -210,6 +210,11 @@ class BookingTraveller extends Model
     public function getFullNameAttribute(): string
     {
         if (isset($this->customer)) return $this->customer->full_name;
-        return "{$this->first_name} {$this->last_name}";
+        if ($this->role === BookingTravellerRole::UNKNOWN) return "Unknown Traveller";
+        $name = "{$this->first_name} {$this->last_name}";
+        if (empty(trim($name))) {
+            $name = "Unknown Traveller";
+        }
+        return $name;
     }
 }

@@ -17,7 +17,11 @@ class OrderCustomerController extends Controller
 
     public function show(Order $order, OrderCustomer $orderCustomer) {
         $order->repository->refresh();
-        return view('pages.admin.order.customer.view', ['orderCustomer' => $orderCustomer,]);
+        $storedFields = setting('system.customer.fields');
+        $selectedFields = !empty($storedFields)
+            ? explode(',', $storedFields)
+            : default_customer_fields();
+        return view('pages.admin.order.customer.view', ['orderCustomer' => $orderCustomer, 'customerFields' => $selectedFields]);
     }
 
     public function store(OrderCustomerRequest $request, Order $order)
@@ -45,7 +49,9 @@ class OrderCustomerController extends Controller
 
     public function destroy(Order $order, OrderCustomer $orderCustomer)
     {
-        $orderCustomer->repository->delete();
+        if ($orderCustomer->id !== $order->lead_booker_id) {
+            $orderCustomer->repository->forceDelete();
+        }
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 }

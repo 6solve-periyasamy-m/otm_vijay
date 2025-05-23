@@ -19,6 +19,8 @@ $atol = [
                 <x-livewire.input.select.tour-category name="tour.tour_category_id" width="6" label="Tour Category" clear />
                 <x-livewire.input wire:model="tour.booking_form_url" width="10" label="Booking Form URL" />
                 <x-livewire.input.checkbox wire:model="tour.is_active" width="2" label="Is Active?" />
+                <x-livewire.input wire:model="tour.city" label="City" width="6" />
+                <x-livewire.input.select2 name="tour.country_id" value="{{ $tour->country_id }}" route="countries" width="6" label="Country" />
             </div>
         </x-admin.section.card>
     </div>
@@ -59,13 +61,17 @@ $atol = [
             <x-livewire.input.text-area wire:model="tour.notes" label="Tour Notes" />
         </x-admin.section.card>
     </div>
-    <div class="col-xl-6">
+    <div class="col-xl-4">
         <x-admin.section.card>
             <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" value="{{ $termsTemplate }}" />
             <x-livewire.ckeditor name="tour.terms" value="{{ $tour?->terms }}" label="Terms and Conditions" required />
         </x-admin.section.card>
     </div>
-    <div class="col-xl-6">
+    <div class="col-xl-4">
+        <x-livewire.input.select.large-text-template name="paymentTemplate" label="Copy from Template" value="{{ $paymentTemplate }}" />
+        <x-livewire.ckeditor name="tour.payment_details" value="{{ $tour?->payment_details }}" label="Payment Details" />
+    </div>
+    <div class="col-xl-4">
         <x-admin.section.card>
             <x-livewire.input.select.large-text-template name="footerTemplate" label="Copy from Template" value="{{ $footerTemplate }}" />
             <x-livewire.ckeditor name="tour.invoice_footer" value="{{ $tour?->invoice_footer }}" label="Invoice Footer" />

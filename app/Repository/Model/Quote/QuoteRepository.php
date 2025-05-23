@@ -50,6 +50,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Settings;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Str;
 
 class QuoteRepository extends ComponentPackageRepository implements SerializesToJson
 {
@@ -77,6 +78,10 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'description' => $tour->description,
             ...$data,
         ]);
+        if ($quote->currency !== null) {
+            $quote->from_rate = Settings::getConversionRate($quote->currency, Settings::currency());
+            $quote->to_rate = Settings::getConversionRate(Settings::currency(), $quote->currency);
+        }
         $lead = $quote->repository->createProspect($customer, $leadData);
         $quote->lead_traveller_id = $lead->id;
         $quote->reference = $quote->repository->generateReference();
@@ -158,6 +163,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'invoice_footer' => $this->quote->invoice_footer,
             'organization_id' => $this->quote->organization_id,
             'agent_id' => $this->quote->agent_id,
+            'payment_details' => $this->quote->payment_details,
         ];
         $order = OrderRepository::create($tour, $data, $lead, $travellers, $email);
         if (flag('quote.convert.reference', false) &&
@@ -171,12 +177,12 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getRemainingInstallment(int $paying = 1, float|null $price = null): float|null
     {
-        $ppp = ($price ?? $this->getPricePerPerson($paying)?->price_per_person ?? 0);
+        $ppp = ($price ?? sigfig($this->getTotalCost($paying) / $paying) ?? 0);
         $price = ($ppp * $paying);
         foreach ($this->quote->installments as $installment) {
             $price -= $installment->getAmount($paying, $ppp);
         }
-        return $price - $this->quote->getDepositAmount($paying) - $this->getCommission($paying);
+        return $price - $this->quote->getDepositAmount($paying);
     }
 
     public function convertToTour(int $customerCount = 1, bool $components = true): Tour
@@ -272,7 +278,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getTotalCost(int $paying): float
     {
-        return $this->getPricePerPerson($paying)?->price_per_person * $paying;
+        return ($this->getPricePerPerson($paying)?->price_per_person * $paying) - $this->getCommission($paying);
     }
 
     /**
@@ -807,9 +813,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
      */
     public function resend(SentQuote $sent, string $email = null): bool
     {
-        $bcc = flag('mail.bcc-consultant', false) ? $this->quote->consultant->email : "";
+        $bcc = flag('mail.bcc-consultant', false) ? $this->quote->consultant->email. ";" . (setting('system.bcc.mail') ?? "") : "";
         $attachment = new Attachment($this->getStream($sent), $this->quote->reference . '.pdf', ['mime' => 'application/pdf',]);
-        return (new QuoteMail('quote'))->send($email ?? $sent->recipient, $sent, [$attachment,], $bcc, true);
+        return (new QuoteMail('quote', $this->quote->consultant))->send($email ?? $sent->recipient, $sent, [$attachment,], $bcc, true);
     }
 
     public static function deserializeAndSave(SentQuote $sent): Quote
@@ -963,8 +969,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'consultant_id' => $this->quote->consultant_id,
             'tax_bracket_id' => $this->quote->tax_bracket_id,
             'deposit' => $this->quote->getDepositAmount(),
-            'commission' => $lead->getCustomer()->organization?->commission,
+            'commission' => $this->quote->commission,
             'ordered_on' => now(),
+            'currency_id' => $this->quote->currency_id,
             'invoice_footer' => $this->quote->invoice_footer,
             'internal_notes' => $this->quote->internal_notes,
             'external_notes' => $this->quote->external_notes,
@@ -985,6 +992,17 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $customer->orderCustomer = $traveller;
             $customers[$key] = $customer;
         }
+
+        $tbcCounter = 1;
+        foreach ($order->customers as $customer) {
+            if (Str::startsWith($customer->first_name, 'Unknown Paying Traveller')) {
+                $customer->first_name = "TBC {$tbcCounter}";
+                $customer->last_name = "Paying - {$order->booking_reference}";
+                $customer->saveQuietly();
+                $tbcCounter++;
+            }
+        }
+
         foreach ($this->quote->accommodation as $component) {
             $component->repository->convertToTourComponent($tour);
         }
@@ -1158,12 +1176,35 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             usort($data, static function (ItineraryItem $a, ItineraryItem $b) { return $a->sortKey >= $b->sortKey ? 1 : -1; });
             $items[$key] = $data;
         }
+        if (isset($this->quote->sections) && !empty($this->quote->sections)){
+            $heading = "Sections";
+            foreach ($this->quote->sections as $section) {
+                $item = $this->getItinerarySectionItem($section);
+                $items[$heading][] = $item;
+            }
+        }
         return $items;
+    }
+
+    private function getItinerarySectionItem($section): ItineraryItem
+    {
+        $details = [
+            'Date' => $section->sort_date,
+            'Type' => $section->type,
+            'Body' => $section->body ?? null,
+            'Quantity' => $section->quantity ?? null,
+        ];
+        return new ItineraryItem(
+            $section->title,
+            'Section',
+            $section->sort_date?->unix() ?? $section->order,
+            $details,
+        );
     }
 
     private function getScheduleItineraryArray(int $paying): array
     {
-        $price = $this->getPricePerPerson($paying)?->price_per_person;
+        $price = sigfig($this->getTotalCost($paying) / $paying);
         $schedule = [];
         if ($this->quote->getDepositAmount($paying) > 0) {
             $schedule[] = new ItinerarySchedule(ItineraryScheduleType::DEPOSIT, null, $this->quote->getDepositAmount($paying), $this->quote->getDepositPercentage($paying));
@@ -1171,14 +1212,16 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         foreach ($this->quote->installments as $installment) {
             $schedule[] = new ItinerarySchedule(ItineraryScheduleType::INSTALLMENT, $installment->due_on, $installment->getAmount($paying, $price), $installment->getPercentage($paying, $price));
         }
-        $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->quote->final_payment, $this->getRemainingInstallment($paying, $price), $this->quote->getRemainingPercentage());
-        $schedule[] = new ItinerarySchedule(ItineraryScheduleType::TOTAL, null, $this->getFinalCost($paying), null);
+        if ($this->getRemainingInstallment($paying, $price) > 0) {
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->quote->final_payment, $this->getRemainingInstallment($paying, $price), $this->quote->getRemainingPercentage());
+        }
+        $schedule[] = new ItinerarySchedule(ItineraryScheduleType::TOTAL, null, $this->getTotalCost($paying), null);
         return $schedule;
     }
 
     public function getCommission(int $paying): ?float
     {
-        return $this->quote->commission !== null ? sigfig($this->getTotalCost($paying) * ($this->quote->commission / 100)) : null;
+        return $this->quote->commission !== null ? sigfig(($this->getPricePerPerson($paying)?->price_per_person * $paying) * ($this->quote->commission / 100)) : null;
     }
 
     public function getFinalCost(int $paying): ?float
@@ -1196,6 +1239,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $this->getFinalCost($paying),
             $this->getScheduleItineraryArray($paying),
             [], // No Payments on Quotes
+            $this->quote->currency,
         );
     }
     
@@ -1226,6 +1270,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $this->quote->terms,
             $this->quote->invoice_footer,
             $this->quote->external_notes,
+            $this->quote->payment_details,
         );
     }
 

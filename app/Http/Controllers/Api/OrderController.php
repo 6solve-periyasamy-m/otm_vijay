@@ -88,8 +88,12 @@ class OrderController extends ApiController
                 $next = $order->next_installment;
                 if ($next !== null) {
                     try {
-                        $order->repository->mailer(true)->sendReminderMail(null, $next);
-                        $successes++;
+                        $sent = $order->repository->sendManualReminder($next);
+                        if ($sent) {
+                            $successes++;
+                        } else {
+                            $failed[] = ['reference' => $order->booking_reference, 'reason' => 'Failed to send manual reminder'];
+                        }
                     } catch (Exception $e) {
                         $failed[] = ['reference' => $order->booking_reference, 'reason' => $e->getMessage()];
                     }

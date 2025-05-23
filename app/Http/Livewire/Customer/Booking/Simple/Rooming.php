@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Customer\Booking\Simple;
 
+use App\Models\Accommodation\RoomType;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Helper\Enum\BookingTravellerRole;
@@ -20,6 +21,7 @@ class Rooming extends Component
     ];
 
     public Tour|int $tour;
+    public int|null $selectedHotel;
     public Booking|int|null $booking;
     public BookingTraveller|null $lead = null;
     public array $rooms = [];
@@ -35,6 +37,10 @@ class Rooming extends Component
             $this->booking = BookingRepository::make($this->tour);
             $this->booking->save();
         }
+
+        $hotels = $this->tour->repository->getHotels();
+        if (count($hotels) > 0) { $this->selectedHotel = $hotels[array_key_first($hotels)]['hotel']->id; }
+
 
         $this->lead = $this->booking->leadTraveller ?? BookingTravellerRepository::make([]);
 
@@ -62,7 +68,8 @@ class Rooming extends Component
     private function renewRooming(): void
     {
         foreach ($this->booking->groups as $group) {
-            $this->rooms[] = ['room' => $group->accommodation()->first()?->accommodation_inventory_tour_id, 'travellers' => $group->travellers()->count(),];
+            $type = $group->accommodation()->first()?->tourComponent->inventory->room_type_id ?? $this->tour->repository->getDefaultRoom($this->selectedHotel);
+            $this->rooms[] = ['room' => $type, 'travellers' => $group->travellers()->count(),];
         }
     }
 
@@ -90,7 +97,7 @@ class Rooming extends Component
 
     public function setupRooming(): void
     {
-        $this->booking->repository->setupSimpleRooming($this->rooms);
+        $this->booking->repository->setupSimpleRooming($this->selectedHotel, $this->rooms);
     }
 
     public function proceed()
@@ -101,13 +108,13 @@ class Rooming extends Component
         $this->booking->save();
         $travellerExcess = $this->getTravellerCount();
         foreach ($this->rooms as $room) {
-            $travellerExcess -= $room['travellers'];
+            $travellerExcess -= RoomType::find($room['room'])?->maximum_occupancy;
         }
         if ($travellerExcess > 0) {
-            return $this->addError('common', 'Not all travellers have rooms');
+           return $this->addError('common', 'Not all travellers have rooms');
         }
         if ($travellerExcess < 0) {
-            return $this->addError('common', 'More travellers have been added to rooms than are travelling');
+           return $this->addError('common', 'More travellers have been added to rooms than are travelling');
         }
         return redirect()->route('booking.simple.checkout', [
             'token' => $this->booking->token,
@@ -128,7 +135,8 @@ class Rooming extends Component
     public function addRoom(): void
     {
         if (count($this->rooms) >= $this->getMaximumRooms()) { return; }
-        $this->rooms[] = ['room' => $this->tour->repository->getDefaultRoom(), 'travellers' => 2,];
+        $room = $this->tour->repository->getDefaultRoom($this->selectedHotel);
+        $this->rooms[] = ['room' => $room, 'travellers' => RoomType::find($room)?->maximum_occupancy,];
     }
 
     public function removeRoom(): void
@@ -143,7 +151,7 @@ class Rooming extends Component
             $this->rooms[$i]['travellers'] = (int)$iValue['travellers'];
         }
         for ($i = count($this->rooms); $i < $this->getMinimumRooms(); $i++) {
-            $this->rooms[] = ['room' => $this->tour->repository->getDefaultRoom(), 'travellers' => 2,];
+            $this->rooms[] = ['room' => $this->tour->repository->getDefaultRoom($this->selectedHotel), 'travellers' => 2,];
         }
         for ($i = count($this->rooms) - 1; $i >= $this->getMaximumRooms(); $i--) {
             unset($this->rooms[$i]);
@@ -182,7 +190,8 @@ class Rooming extends Component
         return [
             'lead.email_address' => 'required|email:rfc,dns',
             'rooms.*.room' => 'required|integer',
-            'rooms.*.travellers' => 'required|integer|min:1',
+            'selectedHotel' => 'required|integer',
+            //'rooms.*.travellers' => 'required|integer|min:1',
         ];
     }
 }

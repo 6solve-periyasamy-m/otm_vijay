@@ -13,6 +13,7 @@ use App\Models\Helper\Model;
 use App\Models\Helper\NotificationSubject;
 use App\Models\Helper\Traits\HasNotifications;
 use App\Models\Helper\Traits\HasPermissions;
+use App\Models\Location\Currency;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Adjustment\OrderCustomerAdjustment;
 use App\Models\Order\Component\OrderActivity;
@@ -56,6 +57,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int|null $organization_id
  * @property int|null $agent_id
  * @property int|null $consultant_id
+ * @property int|null $currency_id
  * @property int|null $tax_bracket_id
  * @property string|null $booking_reference Unique reference for the booking
  * @property float|null $deposit The expected deposit amount
@@ -63,6 +65,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property OrderStatus|null $status_override Manually assigned order status
  * @property float|null $commission What percentage of the order is a commission (null if no commission)
  * @property Carbon $ordered_on When the order was placed
+ * @property Carbon|null $last_manual_reminder When was a reminder last manually sent
  * @property bool $cancelled Is the order cancelled?
  * @property string|null $internal_notes The notes shown only to the operator
  * @property string|null $external_notes The notes visible to the customer
@@ -102,6 +105,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read OrderStatus $status The status of the order
  * @property-read Quote|null $quote The quote the order was built from
  * @property-read Collection|Group[] $groups List of groups
+ * @property-read Currency|null $currency The sale currency of the order
  * @property-read float $total The total cost of the order
  * @property-read User|null $consultant The consultant who made the order
  * @property-read OrderInstallment|null $next_installment A temporary installment with details of the next payment, or null if all installments are paid
@@ -172,7 +176,7 @@ class Order extends Model implements NotificationSubject
     use SoftDeletes, CascadeSoftDeletes, HasFactory, HasRelationships, HasPermissions, HasNotifications;
 
     protected $guarded = [];
-    protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double', 'status_override' => OrderStatus::class,];
+    protected $casts = ['ordered_on' => 'datetime','last_manual_reminder' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double', 'status_override' => OrderStatus::class,];
     protected $with = ['tour', 'cache'];
 
     protected array $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments', 'installments', 'invoices'];
@@ -350,6 +354,11 @@ class Order extends Model implements NotificationSubject
     public function customerAdjustments(): HasManyThrough
     {
         return $this->hasManyThrough(OrderCustomerAdjustment::class, OrderCustomer::class, 'order_id', 'order_customer_id');
+    }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
 
     // Attributes

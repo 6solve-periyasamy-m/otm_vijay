@@ -135,7 +135,6 @@
             line-height: 20px;
             color: var(--text-color);
             margin: 0px 0px 24px 0px;
-            text-transform: capitalize;
         }
         .single-module table td {
             font-family: "PPNeueMontreal-Regular";
@@ -180,6 +179,15 @@
         .bg-line-color h5::before{content:"";margin-top: 20px; position: absolute; display: block; height: 4px; width: 80px; background-color: var(--head-text-background);}
         .event_terms table {margin-left: -45px;}
         .event_terms table td:first-child {width: 120px;}
+        .component-body {width:"100%";}
+        .component-body table th, .flight-block table th{ font-family: "PPNeueMontreal-Medium"; font-size: 14px; font-weight: 500; line-height: 20px; padding: 8px 0px; border: 1px solid gray;}
+        .component-body table td, .flight-block table td { padding: 6.5px; text-align: center; border: 1px solid gray; }
+        .non-booking-ref-block {line-height:20px;}
+        .pn10 {padding:-10px;}
+        .component-body table { page-break-inside: avoid; }
+        .component-break { page-break-inside: avoid; }
+        .word-wrap { word-wrap: break-word; word-break: break-word; white-space: normal; }
+        .text-full-wrap table td {word-wrap: break-word; word-break: break-word; white-space: normal;}
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
@@ -204,7 +212,7 @@
                         </tr>
                         @if($all_customers->isNotEmpty())
                         <tr>
-                            <td colspan=2 style="padding-left: 10px;padding-bottom: 12px;"><h4>Guest Names</h4></td>
+                            <td colspan=2 style="padding-bottom: 12px;"><h4>Guest Names</h4></td>
                         </tr>                        
                         <tr>
                             <td colspan=2 >
@@ -252,7 +260,7 @@
 
             @foreach($itinerary->items['Flights'] as $flight)
                 @if(isset($flight->details['Quantity']) && $flight->details['Quantity'] > 0)
-                <div class="single-module mb-n15">
+                <div class="single-module mb-n15 component-break">
                     @if($firstLoop)
                         <div class="heading-module">
                             <h3>
@@ -262,38 +270,47 @@
                         </div>
                         @php $firstLoop = false; @endphp
                     @endif
-                    <div class="details-module">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td class="item-header w-125"><strong> Airline: </strong></td>
-                                    <td class="item-detail">{{ $flight->name }}</td>
-                                </tr>
-                                @php
-                                    $disable_items = ['Check In', 'Quantity'];
-                                    $keyMappings = [
-                                        'Departure Date' => 'Date',
-                                        'Arrival Date' => 'Date',
-                                        'Departure Time' => 'Time',
-                                        'Arrival Time' => 'Time',
-                                    ];
-                                @endphp
-                                @foreach($flight->details as $key => $value)
-                                    @php
-                                        $key = $keyMappings[$key] ?? $key;
-                                    @endphp
-                                    @if (!in_array($key, $disable_items) && !empty($value))
-                                        <tr>
-                                            <td class="item-header w-125">
-                                                <strong>{{ $key }}:</strong>
-                                            </td>
-                                            <td class="item-detail {{ $key === 'Description' ? 'text-wrap' : '' }}">
-                                                {{ $value }}
-                                            </td>
-                                        </tr>
-                                    @endif
-                                @endforeach
-                            </tbody>
+                    @if($flight->details['Flight Number'] !== $flight->details['Booking Reference'])
+                        <div class="details-module">
+                            <table>
+                                <tbody>
+                                    <tr><td colspan="2" class="pn10"></td></tr>
+                                    <tr>
+                                        <td class="w-125"><strong>Quantity:</strong></td>
+                                        <td>{{ $flight->details['Quantity'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="w-125"><strong>Booking Reference:</strong></td>
+                                        <td>{{ $flight->details['Booking Reference'] }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <p class="non-booking-ref-block">&nbsp;</p>
+                    @endif
+                    <div class="component-body">
+                        <table class="tbl-quote-section" style="width: 90%;">
+                            <tr>
+                                <th>Airline</th>
+                                <th>Flight No.</th>
+                                <th>Class</th>
+                                <th>Date</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Departure</th>
+                                <th>Arrival</th>
+                            </tr>
+                            <tr>
+                                <td class="word-wrap" style="width:80px;">{{ $flight->name }}</td>
+                                <td style="width:100px;">{{ $flight->details['Flight Number'] }}</td>
+                                <td style="width:60px;">{{ $flight->details['Class'] }}</td>
+                                <td style="width:70px;">{{ $flight->details['Departure Date'] }}</td>
+                                <td class="word-wrap" style="width:100px;">{{ $flight->details['Departure Airport'] }}</td>
+                                <td class="word-wrap" style="width:100px;">{{ $flight->details['Arrival Airport'] }}</td>
+                                <td style="width:55px;">{{ $flight->details['Departure Time'] }}</td>
+                                <td style="width:55px;">{{ $flight->details['Arrival Time'] }}</td>
+                            </tr>
                         </table>
                     </div>
                 </div>

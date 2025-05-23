@@ -14,11 +14,16 @@
         @endif
     </x-admin.section.header.detail>
 
-    <x-admin.section.header.detail width="6" raw>
+    <x-admin.section.header.detail width="3" raw>
         <x-slot:title>{{ __('quotes.view.status') }}</x-slot:title>
         {{ $quote->status->badge() }}
     </x-admin.section.header.detail>
-
+    @isset($quote->event?->name)
+        <x-admin.section.header.detail width="3">
+            <x-slot:title>{{ __('quotes.view.event') }}</x-slot:title>
+            {{ $quote->event->name }}
+        </x-admin.section.header.detail>
+    @endisset
     <x-admin.section.header.detail width="6">
         <x-slot:title>{{ __('quotes.view.name') }}</x-slot:title>
         <x-livewire.input wire:model="quote.name" value="{{ $quote->name }}"/>

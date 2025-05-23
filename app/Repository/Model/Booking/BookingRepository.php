@@ -8,7 +8,6 @@ use App\Exceptions\RoomingFailedException;
 use App\Exceptions\UnauthorizedGatewayException;
 use App\Http\Gateways\AirwallexGateway;
 use App\Http\Gateways\Storage\LineItem;
-use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\RoomType;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Booking\Booking;
@@ -35,9 +34,6 @@ use App\Repository\Storage\Rooming\RemoteBookingGroup;
 use Carbon\Carbon;
 use DB;
 use Gateway;
-use Illuminate\Foundation\Application;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Redirector;
 use Log;
 use Throwable;
 
@@ -617,23 +613,31 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     }
 
     /**
+     * Setup rooming with a specific hotel and room type
+     * @param int $hotel The ID number of the hotel
      * @param array<array{room: int, travellers: int}> $rooming
      * @return void
      */
-    public function setupSimpleRooming(array $rooming): void
+    public function setupSimpleRooming(int $hotel, array $rooming): void
     {
         $this->wipeGroups();
         $key = -1;
         $group = null;
+        foreach ($rooming as $i => $room) {
+            $roomType = RoomType::find($room['room']);
+            $room['travellers'] = min($room['travellers'], $roomType?->maximum_occupancy);
+            $rooming[$i] = $room;
+        }
         foreach ($this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->get() as $traveller) {
             if ($group === null || $rooming[$key]['travellers'] === 0) {
                 $key++;
                 if ($key >= count($rooming)) { break; }
-                $room = AccommodationInventoryTour::find($rooming[$key]['room']);
-                if ($room instanceof AccommodationInventoryTour) {
-                    $group = new BookingGroup(['booking_id' => $this->booking->id,]);
-                    $group->save();
-                    $group->repository->addRoomToGroup(AccommodationInventoryTour::find($rooming[$key]['room']));
+                $group = BookingGroup::create(['booking_id' => $this->booking->id,]);
+                foreach ($this->booking->tour->accommodationInventoryTours as $room) {
+                    /** @noinspection TypeUnsafeComparisonInspection Type unsafe required. IDs are int, and code returns string */
+                    if ($room->inventory->room_type_id == $rooming[$key]['room'] && $room->inventory->accommodation_id == $hotel) {
+                        $group->repository->addRoomToGroup($room);
+                    }
                 }
             }
             if ($key >= count($rooming)) { break; }

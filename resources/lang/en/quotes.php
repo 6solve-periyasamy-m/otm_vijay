@@ -22,6 +22,7 @@ return [
         'description' => 'Description',
         'organization' => 'Organization',
         'agent' => 'Agent',
+        'event' => 'Event',
         'notes' => [
             'internal' => 'Internal Note',
             'external' => 'External Note',
@@ -57,7 +58,7 @@ return [
                         'per-customer' => 'Per Customer',
                         'overall' => 'Whole Order',
                         'total' => 'Total Cost',
-                        'approximate' => 'Amount is based on the purchase price of template accommodation and may differ',
+                        'approximate' => 'Amount is based on the purchase price of template accommodation and may differ. If in a foreign currency, it will attempt conversion',
                     ],
                     'lead' => [
                         'header' => 'Lead Traveller Details',

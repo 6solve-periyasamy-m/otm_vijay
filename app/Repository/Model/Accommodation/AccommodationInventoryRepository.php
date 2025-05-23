@@ -15,6 +15,7 @@ use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsAccommodation;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 use Settings;
 
@@ -263,5 +264,39 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
             $this->inventory->check_in->unix(),
             $details,
         );
+    }
+
+    public function getNightsInTour(Tour $tour): int
+    {
+        $nights = [];
+        foreach ($tour->accommodationInventoryTours as $component) {
+            if ($component->inventory->accommodation_id !== $this->inventory->accommodation_id) { continue; }
+            foreach (CarbonPeriod::create($component->inventory->check_in,'1 day', $component->inventory->check_out) as $date) {
+                $nights[$date->format('Y-m-d')] = true;
+            }
+        }
+        $count = 0;
+        foreach ($nights as $night => $active) {
+            if ($active) { $count++; }
+        }
+        return $count;
+    }
+
+    /**
+     * Compare two AccommodationInventory based on their start and end times
+     *
+     * @param AccommodationInventory $a
+     * @param AccommodationInventory $b
+     * @return int Returns: 1 if a is after, 0 if same, -1 if b is after
+     */
+    public static function compareTwo(AccommodationInventory $a, AccommodationInventory $b): int
+    {
+        if ($a->check_in->isSameDay($b->check_in)) {
+            if ($a->check_out->isSameDay($b->check_out)) { return 0; }
+            if ($a->check_out->gt($b->check_out)) { return 1; }
+            return -1;
+        }
+        if ($a->check_in->gt($b->check_in)) { return 1; }
+        return -1;
     }
 }

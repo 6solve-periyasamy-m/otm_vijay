@@ -32,3 +32,4 @@ Archived
 .cache/
 *.exclude
 /.phpunit.cache
+pnpm-workspace.yaml
