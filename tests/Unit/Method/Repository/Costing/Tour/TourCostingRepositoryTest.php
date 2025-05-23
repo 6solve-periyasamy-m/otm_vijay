@@ -22,7 +22,7 @@ class TourCostingRepositoryTest extends DatabaseTestCase
 
         // Test if cost is not 0
         $cost = 0;
-        foreach ($tour->repository->getComponents(false ) as $component) {
+        foreach ($tour->repository->getComponents(false, true, true, true, false ) as $component) {
             if ($component->getTourComponentType() === 'Included') {
                 $inventory = $component->getInventory()->get();
                 $inventory->purchase_price = 100;

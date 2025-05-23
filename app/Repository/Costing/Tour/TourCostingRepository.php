@@ -126,7 +126,8 @@ class TourCostingRepository extends CostingRepository
 
     public function getBaseMargin(): float
     {
-        $cost = $this->getCostOfComponents(['Included'], true);
+        // Disabled due to sizing etc. All merch is included but only certain will be provided
+        $cost = $this->getCostOfComponents(['Included'], false);
         return empty($cost) ? 100 : ($this->tour->base_price_per_person / $cost) * 100;
     }
 
