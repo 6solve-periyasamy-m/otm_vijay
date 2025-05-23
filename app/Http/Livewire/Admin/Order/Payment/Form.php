@@ -25,6 +25,9 @@ class Form extends Component
         $this->payment = Payment::getForMount($payment);
         $this->feeUpdated = $this->payment->id !== null;
         $payer = $this->payment->payer;
+        if ($this->payment->id === null) {
+            $this->payment->currency_id = $this->order->currency_id;
+        }
         if ($payer !== null) {
             if ($payer instanceof Customer) {
                 $this->customer = $payer->id;
@@ -59,8 +62,14 @@ class Form extends Component
             $method = $this->payment->paymentMethod;
             if ($method?->fee_percentage === null) {
                 $this->payment->payment_fee = null;
+            } else if ((float)($method?->fee_percentage) === 0.0) {
+                // Dev note: Somewhere, livewire mangles the autoset value if this is set to any other variation of 0.
+                // PHP will automatically cast that back to a float as required, and I think it prevents some
+                // weird JS behaviour where it gets cast to null or bool false or something
+                // Not sure, but it fixes the corruption, so it stays as is
+                $this->payment->payment_fee = "0.0";
             } else {
-                $this->payment->payment_fee = ($method->fee_percentage / 100) * $this->payment->amount;
+                $this->payment->payment_fee = (float)(($method->fee_percentage / 100) * $this->payment->amount);
             }
         }
     }
@@ -111,6 +120,7 @@ class Form extends Component
             'payment.amount' => 'required|numeric',
             'payment.payment_fee' => 'nullable|numeric',
             'payment.paid_on' => 'required|date',
+            'payment.currency_id' => 'nullable|exists:currencies,id',
             'payment.internal_notes' => 'nullable|string',
         ];
     }

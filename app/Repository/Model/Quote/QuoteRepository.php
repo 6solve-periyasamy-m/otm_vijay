@@ -50,6 +50,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Settings;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Str;
 
 class QuoteRepository extends ComponentPackageRepository implements SerializesToJson
 {
@@ -77,6 +78,10 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'description' => $tour->description,
             ...$data,
         ]);
+        if ($quote->currency !== null) {
+            $quote->from_rate = Settings::getConversionRate($quote->currency, Settings::currency());
+            $quote->to_rate = Settings::getConversionRate(Settings::currency(), $quote->currency);
+        }
         $lead = $quote->repository->createProspect($customer, $leadData);
         $quote->lead_traveller_id = $lead->id;
         $quote->reference = $quote->repository->generateReference();
@@ -532,11 +537,11 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function getRemaining(int $paying = 1): float
     {
         $cost = $this->getTotalCost($paying);
-        $cost -= $this->quote->deposit;
+        $cost -= $this->quote->getDepositAmount($paying);
         foreach ($this->quote->installments as $installment) {
-            $cost -= $installment->amount;
+            $cost -= $installment->getAmount($paying);
         }
-        return $cost * $paying;
+        return $cost;
     }
 
     /**
@@ -546,7 +551,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $data = [];
         foreach ($this->getTemplates(false) as $template) {
-            $time = $template->repository->getInventory()->getStartTime()?->unix();
+            $time = $template->repository->getInventory()?->getStartTime()?->unix();
             do {
                 $exists = array_key_exists($time, $data);
                 if ($exists) $time++;
@@ -966,6 +971,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'deposit' => $this->quote->getDepositAmount(),
             'commission' => $this->quote->commission,
             'ordered_on' => now(),
+            'currency_id' => $this->quote->currency_id,
             'invoice_footer' => $this->quote->invoice_footer,
             'internal_notes' => $this->quote->internal_notes,
             'external_notes' => $this->quote->external_notes,
@@ -986,6 +992,17 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $customer->orderCustomer = $traveller;
             $customers[$key] = $customer;
         }
+
+        $tbcCounter = 1;
+        foreach ($order->customers as $customer) {
+            if (Str::startsWith($customer->first_name, 'Unknown Paying Traveller')) {
+                $customer->first_name = "TBC {$tbcCounter}";
+                $customer->last_name = "Paying - {$order->booking_reference}";
+                $customer->saveQuietly();
+                $tbcCounter++;
+            }
+        }
+
         foreach ($this->quote->accommodation as $component) {
             $component->repository->convertToTourComponent($tour);
         }
@@ -1033,6 +1050,12 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         });
 
         $order->repository->resetInstallments();
+
+        // If the order has a commission or adjustments, this makes sure that during conversion, the deposit is never greater than the total
+        if ($order->calculated_deposit > $order->total) {
+            $order->deposit = sigfig($order->total / ($order->paying_customers));
+            $order->save();
+        }
 
         $this->update(['quote_status' => QuoteStatus::CONVERTED->value, 'order_id' => $order->id]);
         return $order;
@@ -1222,6 +1245,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $this->getFinalCost($paying),
             $this->getScheduleItineraryArray($paying),
             [], // No Payments on Quotes
+            $this->quote->currency,
         );
     }
     

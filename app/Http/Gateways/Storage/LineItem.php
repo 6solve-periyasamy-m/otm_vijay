@@ -2,6 +2,8 @@
 
 namespace App\Http\Gateways\Storage;
 
+use App\Models\Location\Currency;
+
 /**
  * @property-read string $name The name of the item being billed for
  * @property-read float $cost The cost of the item, as decimal
@@ -19,11 +21,15 @@ class LineItem
         public readonly float $cost,
         public readonly int $quantity = 1) { }
 
-    public function toStripe(): array
+    public function toStripe(Currency|string|null $currency = null): array
     {
+        if ($currency instanceof Currency) {
+            $currency = $currency->code;
+        }
+        $currency = $currency ?? config('app.currency');
         return [
             'price_data' => [
-                'currency' => config('app.currency'),
+                'currency' => $currency,
                 'product_data' => [
                     'name' => $this->name,
                 ],
