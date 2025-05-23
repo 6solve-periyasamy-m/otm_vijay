@@ -4,12 +4,11 @@ namespace App\Http\Requests\Admin\Quote;
 
 use App\Models\Customer\Customer;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Customer\Organization;
-use Carbon\Carbon;
 
 /**
  * @property int $customer_id
  * @property int|null $organization_id
+ * @property int|null $currency_id
  * @property float $single_occupancy_surcharge
  * @property string $travelling
  * @property string $paying
@@ -40,6 +39,7 @@ class CreateBasicQuoteRequest extends FormRequest
             'external_notes' => $this->external_notes,
             'brand_id' => $this->brand_id,
             'tax_bracket_id' => $this->tax_bracket_id,
+            'currency_id' => $this->currency_id,
             'agent_id' => $this->agent_id,
             'commission' => $this->commission,
             'final_payment' => $this->final_payment,
@@ -67,6 +67,7 @@ class CreateBasicQuoteRequest extends FormRequest
             'customer_id' => 'required|exists:customers,id',
             'expires' => 'required|date',
             'organization_id' => 'nullable|integer|exists:organizations,id',
+            'currency_id' => 'nullable|integer|exists:currencies,id',
             'final_payment' => 'nullable|date',
             'deposit' => 'nullable|numeric|min:0',
             'is_deposit_percentage' => 'nullable|boolean'

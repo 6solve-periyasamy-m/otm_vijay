@@ -41,7 +41,7 @@ class MergedAccommodation
             $inventory->check_in,
             $inventory->check_out,
             $component->group->orderCustomers()->count(),
-            $inventory->purchase_price,
+            $inventory->purchase_price ?? 0.0,
             $component->tourComponent->tour_sales_price,
             $component->tourComponent->tour_component_type,
             $component->tourComponent->inventory->internal_notes,

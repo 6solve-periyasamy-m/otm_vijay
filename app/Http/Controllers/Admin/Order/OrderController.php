@@ -68,8 +68,6 @@ class OrderController extends Controller
             ?? $order->repository->getInvoiceRepository()->invoice;
         // TODO: Implement a better solution for this.
         $invoice->payment_schedule = $order->repository->getScheduleItineraryArray();
-        $invoice->organization = $order->organization ?? null;
-        $invoice->agent = $order->agent ?? null;
         return (new InvoiceRepository($invoice))->getResponseStream();
     }
 

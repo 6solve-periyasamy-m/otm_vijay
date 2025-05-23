@@ -12,6 +12,7 @@ use App\Models\Order\Invoice\InvoiceGroup;
 use App\Models\Order\Invoice\InvoiceInstallment;
 use App\Models\Order\Invoice\InvoicePayment;
 use App\Models\Order\Order;
+use Settings;
 
 class InvoiceGenerator
 {
@@ -51,6 +52,7 @@ class InvoiceGenerator
             'commission_percentage' => $this->order->commission,
             'commission_amount' => $this->order->commission_amount,
             'generator_version' => InvoiceUpgrader::LATEST_VERSION,
+            'currency_id' => $this->order->currency_id ?? Settings::currency()->id,
             'payment_details' => $paymentDetails,
         ]);
         return $save ? $this->generateSaved($invoice) : $this->generateTemporary($invoice);
@@ -83,6 +85,9 @@ class InvoiceGenerator
             'adjustments' => $this->generateAdjustments(),
             'installments' => $this->generateInstallments(),
             'payments' => $this->generatePayments(),
+            'currency' => $this->order->currency,
+            'agent' => $this->order->agent,
+            'organization' => $this->order->organization,
         ]);
         return $invoice;
     }
