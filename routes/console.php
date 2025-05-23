@@ -26,7 +26,16 @@ Artisan::command('order:recache', function () {
     $bar = $this->output->createProgressBar($orders->count());
     $bar->start();
     foreach ($orders as $order) {
-        $order->repository->refresh();
+        try {
+            $order->repository->refresh();
+        } catch (Exception $e) {
+            try {
+                \Log::error($e);
+            } catch (Exception $e) {
+                echo "Failed to log error: " . $e->getMessage() . PHP_EOL;
+            }
+            echo "Failed to refresh order: " . $order->booking_reference . PHP_EOL;
+        }
         $bar->advance();
     }
     $bar->finish();

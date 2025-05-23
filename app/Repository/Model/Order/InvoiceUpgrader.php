@@ -3,7 +3,9 @@
 namespace App\Repository\Model\Order;
 
 use App\Models\Order\Invoice\Invoice;
+use Exception;
 use Illuminate\Console\OutputStyle;
+use Log;
 use Settings;
 
 class InvoiceUpgrader
@@ -15,9 +17,18 @@ class InvoiceUpgrader
         $invoices = Invoice::where('generator_version', '<', self::LATEST_VERSION)->get();
         $bar = $style?->createProgressBar($invoices->count());
         foreach ($invoices as $invoice) {
-            $invoice = self::version_1_to_2($invoice);
-            $invoice = self::version_2_to_3($invoice);
-            $invoice = self::version_3_to_4($invoice);
+            try {
+                $invoice = self::version_1_to_2($invoice);
+                $invoice = self::version_2_to_3($invoice);
+                $invoice = self::version_3_to_4($invoice);
+            } catch (Exception $e) {
+                try {
+                    Log::error($e);
+                } catch (Exception $e) {
+                    echo "Failed to log error: " . $e->getMessage() . PHP_EOL;
+                }
+                echo "Failed to refresh order: " . $invoice->booking_reference . PHP_EOL;
+            }
             $bar->advance();
         }
         $bar->finish();
