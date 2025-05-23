@@ -46,7 +46,6 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Settings;
 use Illuminate\Support\Str;
 use Settings;
 
