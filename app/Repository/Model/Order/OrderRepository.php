@@ -48,6 +48,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Settings;
 use Illuminate\Support\Str;
+use Settings;
 
 class OrderRepository extends ModelRepository implements GeneratesFellohData
 {
@@ -217,6 +218,13 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         });
         event(new OrderCreatedEvent($order, $shouldInvoice));
         $order->repository->refresh();
+
+        // If the order has a commission or adjustments, this makes sure that during conversion, the deposit is never greater than the total
+        if ($order->calculated_deposit > $order->total) {
+            $order->deposit = sigfig($order->total / ($order->paying_customers));
+            $order->saveQuietly();
+        }
+
         return $order;
     }
 
@@ -268,7 +276,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public function getInstallments(bool $final = false): Collection|array
     {
         $customers = $this->order->paying_customers;
-        $paid = $this->order->paid - (($this->order->deposit ?? 0.0) * $customers) - ($this->order->booking_fee ?? 0.0);
+        $paid = $this->order->paid - ($this->order->calculated_deposit ?? 0.0) - ($this->order->booking_fee ?? 0.0);
         DB::statement("SET @total:={$paid};");
         $installments = OrderInstallment::where('order_id', '=', $this->order->id)
             ->orderBy('due_on')
