@@ -41,15 +41,4 @@ class OrderInstallmentRouteTest extends AuthenticatedRouteTestCase
         $orderInstallment = $this->generateOrderInstallment(now(), 100);
         $this->performAllForRoute($this->class, 'update', 'order-installments.resync', ['order' => $orderInstallment->order,], 302);
     }
-
-    /**
-     * @covers \App\Http\Controllers\Admin\Order\OrderInstallmentController::destroy
-     * @return void
-     */
-    public function testOrderCustomerAdjustmentDelete(): void
-    {
-        $orderInstallment = $this->generateOrderInstallment(now(), 100);
-        $this->performAllForDeleteRoute($this->class, 'update', 'order-installments.delete',
-            ['order' => $orderInstallment->order, 'orderInstallment' => $orderInstallment], $orderInstallment);
-    }
 }

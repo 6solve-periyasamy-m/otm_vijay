@@ -46,6 +46,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Settings;
 
 class OrderRepository extends ModelRepository implements GeneratesFellohData
@@ -200,6 +201,15 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $orderCustomer = $order->repository->addCustomer($customer, false, false, true);
             if ($customer->travelling) {
                 $orderCustomer->repository->bulkSaveStandard($included->clone());
+            }
+        }
+        $tbcCounter = 1;
+        foreach ($order->customers as $customer) {
+            if (Str::startsWith($customer->first_name, 'Unknown')) {
+                $customer->first_name = "TBC {$tbcCounter}";
+                $customer->last_name = "Paying - {$order->booking_reference}";
+                $customer->saveQuietly();
+                $tbcCounter++;
             }
         }
         OrderAccommodation::withoutEvents(static function () use ($order)  {

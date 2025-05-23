@@ -18,7 +18,7 @@ class OperatorImport implements ToCollection, WithHeadingRow, WithValidation
         $data = [];
         foreach ($collection as $row) {
             $data[] = Operator::create([
-                'name' => $row['name'],
+                'name' => $row['name'] ?? '',
             ]);
         }
         return $data;

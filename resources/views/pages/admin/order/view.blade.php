@@ -202,7 +202,11 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
         </div>
         @endcan
         <div class="row">
-            @foreach($order->orderCustomers as $ordersCustomer)
+            @foreach($order->orderCustomers as $key => $ordersCustomer)
+            @php
+                $isTbcCustomer = (strpos($ordersCustomer->customer->first_name, 'Unknown') !== false || strpos($ordersCustomer->customer->last_name, 'Unknown') !== false);
+                $customerName = $isTbcCustomer ? "TBC". $key. " - Paying - " . $ordersCustomer->customer->last_name : $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name;
+            @endphp
             <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
                 <div class="otm-card">
                     <p>{{ ($order->lead_booker_id == $ordersCustomer->id) ? 'Lead Booker' : ' Additional Customer'}}</p>

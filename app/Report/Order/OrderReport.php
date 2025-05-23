@@ -72,6 +72,11 @@ class OrderReport extends TourReport
                     NumberColumn::raw('(SELECT COUNT(*) FROM order_customers WHERE order_customers.order_id = orders.id AND order_customers.deleted_at IS NULL)')
                         ->filterable()
                 ),
+            'order_traveller_names' =>
+                new ColumnDefinition(
+                    'reports.order.column.traveller-names',
+                    Column::raw("(SELECT GROUP_CONCAT(CONCAT(c.first_name, ' ', c.last_name) SEPARATOR ', ') FROM order_customers oc JOIN customers c ON oc.customer_id = c.id WHERE oc.order_id = orders.id)")
+                ),
             'order_deposit' =>
                 new ColumnDefinition(
                     'reports.order.column.deposit',
