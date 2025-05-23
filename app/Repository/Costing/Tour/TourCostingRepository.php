@@ -126,7 +126,7 @@ class TourCostingRepository extends CostingRepository
 
     public function getBaseMargin(): float
     {
-        $cost = $this->getCostOfComponents(['Included']);
+        $cost = $this->getCostOfComponents(['Included'], true);
         return empty($cost) ? 100 : ($this->tour->base_price_per_person / $cost) * 100;
     }
 

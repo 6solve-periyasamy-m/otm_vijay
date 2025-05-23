@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Method\Repository\Costing\Tour;
 
-use App\Repository\Costing\Tour\TourCostingRepository;
 use Tests\Bases\DatabaseTestCase;
 use Tests\Traits\Model\TestsTour;
 
@@ -23,7 +22,17 @@ class TourCostingRepositoryTest extends DatabaseTestCase
 
         // Test if cost is not 0
         $cost = 0;
-        foreach ($tour->repository->getComponents() as $component) {
+        foreach ($tour->repository->getComponents(false ) as $component) {
+            if ($component->getTourComponentType() === 'Included') {
+                $inventory = $component->getInventory()->get();
+                $inventory->purchase_price = 100;
+                $inventory->save();
+                $cost += $component->getLocalPurchasePrice();
+            }
+        }
+        // Not all inventory are included in margin calculations, only the templates are
+        foreach ($tour->templates as $template) {
+            $component = $template->repository;
             if ($component->getTourComponentType() === 'Included') {
                 $inventory = $component->getInventory()->get();
                 $inventory->purchase_price = 100;

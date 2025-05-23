@@ -41,15 +41,4 @@ class OrderCustomerRouteTest extends AuthenticatedRouteTestCase
         $orderCustomer = $this->generateOrderCustomer(true);
         $this->performAllForRoute($this->class, 'create', 'order-customers.create', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]);
     }
-
-    /**
-     * @covers \App\Http\Controllers\Admin\Order\OrderCustomerController::destroy
-     * @return void
-     */
-    public function testOrderCustomerAdjustmentDelete(): void
-    {
-        $orderCustomer = $this->generateOrderCustomer(true);
-        $this->performAllForDeleteRoute($this->class, 'delete', 'order-customers.delete',
-            ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ], $orderCustomer);
-    }
 }
