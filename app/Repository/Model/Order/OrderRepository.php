@@ -217,6 +217,13 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         });
         event(new OrderCreatedEvent($order, $shouldInvoice));
         $order->repository->refresh();
+
+        // If the order has a commission or adjustments, this makes sure that during conversion, the deposit is never greater than the total
+        if ($order->calculated_deposit > $order->total) {
+            $order->deposit = sigfig($order->total / ($order->paying_customers));
+            $order->saveQuietly();
+        }
+
         return $order;
     }
 

@@ -1051,6 +1051,12 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
         $order->repository->resetInstallments();
 
+        // If the order has a commission or adjustments, this makes sure that during conversion, the deposit is never greater than the total
+        if ($order->calculated_deposit > $order->total) {
+            $order->deposit = sigfig($order->total / ($order->paying_customers));
+            $order->save();
+        }
+
         $this->update(['quote_status' => QuoteStatus::CONVERTED->value, 'order_id' => $order->id]);
         return $order;
     }
