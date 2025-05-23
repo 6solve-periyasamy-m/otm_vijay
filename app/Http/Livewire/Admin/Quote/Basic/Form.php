@@ -48,6 +48,23 @@ class Form extends Component
         return redirect()->route('quotes.view', ['quote' => $quote]);
     }
 
+    public function addCost()
+    {
+        $this->quote->costs[] = [
+            'id' => null,
+            'name' => null,
+            'amount' => null,
+            'per_customer' => false,
+        ];
+    }
+
+    public function removeCost($key)
+    {
+        if (array_key_exists($key, $this->costs)) {
+            unset($this->quote->costs[$key]);
+        }
+    }
+
     public function render()
     {
         return view('livewire.admin.quote.basic.form');
@@ -71,6 +88,10 @@ class Form extends Component
             'quote.commission' => 'nullable|numeric|min:0',
             'quote.internalNotes' => 'nullable|string',
             'quote.externalNotes' => 'nullable|string',
+            'quote.costs.*.id' => 'nullable|int|exists:additional_costs,id',
+            'quote.costs.*.name' => 'required|string|min:3',
+            'quote.costs.*.amount' => 'required|numeric',
+            'quote.costs.*.per_customer' => 'boolean',
         ];
     }
 }

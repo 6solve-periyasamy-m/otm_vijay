@@ -2,6 +2,7 @@
 
 namespace App\Repository\Storage\Quote;
 
+use App\Models\AdditionalCost;
 use App\Models\Customer\Customer;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
@@ -11,6 +12,9 @@ use Settings;
 
 class BasicQuote implements Wireable
 {
+
+    /** @var array<array{name: string, per_customer: boolean, amount: float}> */
+
     public function __construct(
         public Tour $tour,
         public int|null $brand = null,
@@ -28,6 +32,7 @@ class BasicQuote implements Wireable
         public int|null $agent = null,
         public string|null $internalNotes = null,
         public string|null $externalNotes = null,
+        public array $costs = [],
     )
     {
         if ($this->final === null) {
@@ -51,11 +56,30 @@ class BasicQuote implements Wireable
         if ($this->singleOccupancy === null) {
             $this->singleOccupancy = $this->tour->single_occupancy_surcharge;
         }
+        if (empty($this->costs)) {
+            foreach ($this->tour->costs as $cost) {
+                $this->costs[] = [
+                    'name' => $cost->name,
+                    'amount' => $cost->amount,
+                    'per_customer' => $cost->per_customer,
+                ];
+            }
+        }
     }
 
     public function convert(): Quote
     {
-        return QuoteRepository::createFromTour($this->tour, Customer::find($this->lead), $this->getQuoteDataset(), $this->getCustomerDataset());
+        $quote = QuoteRepository::createFromTour($this->tour, Customer::find($this->lead), $this->getQuoteDataset(), $this->getCustomerDataset());
+        $quote->costs()->delete();
+        foreach ($this->costs as $cost) {
+            $model = new AdditionalCost([
+                'name' => $cost['name'],
+                'amount' => $cost['amount'],
+                'per_customer' => $cost['per_customer'],
+            ]);
+            $quote->costs()->save($model);
+        }
+        return $quote;
     }
 
     private function getQuoteDataset(): array
@@ -103,6 +127,7 @@ class BasicQuote implements Wireable
             'agent' => $this->agent,
             'internalNotes' => $this->internalNotes,
             'externalNotes' => $this->externalNotes,
+            'costs' => $this->costs,
         ];
     }
 
@@ -125,7 +150,8 @@ class BasicQuote implements Wireable
             $value['commission'],
             $value['agent'],
             $value['internalNotes'],
-            $value['externalNotes']
+            $value['externalNotes'],
+            $value['costs'],
         );
     }
 }
