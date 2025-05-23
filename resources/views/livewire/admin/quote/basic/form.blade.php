@@ -13,8 +13,9 @@
                 <x-livewire.input.checkbox wire:model="quote.travelling" label="Lead Travelling?" width="6" />
                 <x-livewire.input.checkbox wire:model="quote.paying" label="Lead Paying?" width="6" />
             </div>
-            <x-livewire.input wire:model="quote.singleOccupancy" label="Single Occupancy Surcharge" width="3" />
-            <x-livewire.input.select.tax-bracket name="quote.tax" value="{{$quote->tax}}" label="Tax Bracket" width="3" />
+            <x-livewire.input wire:model="quote.singleOccupancy" label="Single Occupancy Surcharge" width="2" />
+            <x-livewire.input.select.tax-bracket name="quote.tax" value="{{$quote->tax}}" label="Tax Bracket" width="2" />
+            <x-livewire.input.select.currency name="quote.currency" value="{{$quote->currency}}" label="Currency" width="2" />
             <x-livewire.input type="date" wire:model="quote.final" label="Final Payment" width="2" />
             <x-livewire.input wire:model="quote.deposit" label="Deposit" width="2" />
             <x-livewire.input.checkbox wire:model="quote.depositPercentage" label="Percentage?" width="2" />
