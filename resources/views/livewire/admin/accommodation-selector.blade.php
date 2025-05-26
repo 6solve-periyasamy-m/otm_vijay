@@ -47,13 +47,30 @@
         </x-admin.section.card>
     </div>
     <div class="row">
-        @foreach($this->fetchData() as $data)
-            @continue(!$this->shouldShow($data))
-            @php $selected = $this->selected($data); @endphp
-            <div class="col-3 @if($selected) selected @endif">
-                <x-admin.accommodation.accommodation-selector-card :key="now()" :storage="$data" :start="$this->getStart()" :end="$this->getEnd()" :selected="$selected" :travellers="$travellers" :quantity="$this->getQuantity($data)"/>
-            </div>
-        @endforeach
+        <table class="table " >
+            <thead wire:ignore>
+                <tr>
+                    <th scope="col">&nbsp;</th>
+                    <th scope="col"><strong>Name</strong></th>
+                    <th scope="col"><strong>Room</strong></th>
+                    <th scope="col"><strong>Size</strong></th>
+                    <th scope="col"><strong>Board</strong></th>
+                    <th scope="col"><strong>Category</strong></th>
+                    <th scope="col"><strong>Stock Availability</strong></th>
+                    <!-- <th scope="col"><strong>Quantity</strong></th> -->
+                    <th scope="col"><strong>Action</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($this->fetchData() as $data)
+                    @continue(!$this->shouldShow($data))
+                    @php $selected = $this->selected($data); @endphp
+                    <tr data-slt="{{ $selected }}" class="@if($selected) selected @endif">
+                        <x-admin.accommodation.accommodation-selector-card :key="now()" :storage="$data" :start="$this->getStart()" :end="$this->getEnd()" :selected="$selected" :travellers="$travellers" :quantity="$this->getQuantity($data)"/>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
     <x-wire-loader/>
 </div>
