@@ -4,5 +4,6 @@
         <div class="state p-{{$attributes->get('color', 'primary')}}">
             <label>{{ $attributes->get('label', "") ?? $slot }}</label>
         </div>
+        @error($attributes->get('wire:model', $attributes->get('name'))) <span class="text-danger">({{ $message }})</span> @enderror
     </div>
 </div>

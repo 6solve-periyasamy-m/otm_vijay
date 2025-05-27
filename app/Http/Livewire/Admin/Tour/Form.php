@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Tour;
 
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
+use App\Models\AdditionalCost;
 use App\Models\Helper\Enum\LargeTextType;
 use App\Models\System\LargeTextTemplate;
 use App\Models\Tour\Event;
@@ -21,6 +22,8 @@ class Form extends Component
     public int|null $termsTemplate = null;
     public int|null $footerTemplate = null;
     public int|null $paymentTemplate = null;
+    /** @var array<array{id: int|null, name: string, per_customer: boolean, amount: float}> */
+    public array $costs = [];
 
     public function mount(Tour|int|null $tour = null): void
     {
@@ -40,6 +43,15 @@ class Form extends Component
             }
         }
         $this->tour = $tour;
+
+        foreach ($this->tour->costs as $cost) {
+            $this->costs[] = [
+                'id' => $cost->id,
+                'name' => $cost->name,
+                'amount' => $cost->amount,
+                'per_customer' => $cost->per_customer,
+            ];
+        }
 
         if ($this->tour->date_from !== null) $this->manuallySet('tour.date_from');
         if ($this->tour->date_to !== null) $this->manuallySet('tour.date_to');
@@ -119,6 +131,23 @@ class Form extends Component
         $create = $this->tour->id === null;
         $this->tour->save();
         if ($create) { $this->tour->repository->cloneFromDefaultInstallments(); }
+        foreach ($this->costs as $cost) {
+            $model = AdditionalCost::find($cost['id'] ?? null);
+            if ($model !== null) {
+                $model->name = $cost['name'];
+                $model->amount = $cost['amount'];
+                $model->per_customer = $cost['per_customer'];
+                $model->save();
+            } else {
+                $model = new AdditionalCost([
+                    'name' => $cost['name'],
+                    'amount' => $cost['amount'],
+                    'per_customer' => $cost['per_customer'],
+                ]);
+                $this->tour->costs()->save($model);
+            }
+
+        }
         $this->redirect(route('tours.view', ['tour' => $this->tour,]));
     }
 
@@ -155,7 +184,31 @@ class Form extends Component
             'tour.city' => 'nullable|string',
             'tour.country_id' => 'nullable|exists:countries,id',
             'tour.payment_details' => 'nullable|string|min:3',
+            'costs.*.id' => 'nullable|int|exists:additional_costs,id',
+            'costs.*.name' => 'required|string|min:3',
+            'costs.*.amount' => 'required|numeric',
+            'costs.*.per_customer' => 'boolean',
         ];
+    }
+
+    public function addCost()
+    {
+        $this->costs[] = [
+            'id' => null,
+            'name' => null,
+            'amount' => null,
+            'per_customer' => false,
+        ];
+    }
+
+    public function removeCost($key)
+    {
+        if (array_key_exists($key, $this->costs)) {
+            if ($this->costs[$key]['id'] !== null) {
+                $this->tour->costs()->where('id', $this->costs[$key]['id'])->forceDelete();
+            }
+            unset($this->costs[$key]);
+        }
     }
 
     private function refreshTermsTemplate(): void
