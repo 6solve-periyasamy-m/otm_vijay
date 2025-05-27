@@ -89,7 +89,7 @@ class OpayoGateway extends Gateway implements SupportsRedirect
         return view('pages.payments.felloh.failed');
     }
 
-    public function process(string $reference, float $amount, string $created = null): void
+    public function process(string $reference, float $amount, string $created = null, string|null $currency = null): void
     {
         $intention = PaymentIntention::fetch($reference);
         if (!isset($intention)) return;

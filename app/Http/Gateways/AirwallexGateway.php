@@ -135,7 +135,7 @@ class AirwallexGateway extends Gateway implements SupportsRedirect, SupportsApiK
         return ['id' => $data['id'], 'secret' => $data['client_secret'],];
     }
 
-    public function process(string $reference, float $amount, string $created = null): void
+    public function process(string $reference, float $amount, string $created = null, string|null $currency = null): void
     {
         $intention = PaymentIntention::find($reference);
         if ($intention !== null) {
