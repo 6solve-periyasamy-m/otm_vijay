@@ -103,15 +103,16 @@ abstract class TemplatedMail
      * @param string|null $email
      * @param null $model
      * @param Attachment[] $attachments
-     * @param string|array $bccTargets
+     * @param string|array|null $bccTargets
      * @param bool $force
-     * @param string|array $ccTargets
+     * @param string|array|null $ccTargets
      * @return bool
      * @throws MailDisabledException
      * @throws MailFailedException
      */
-    final public function send(string|null $email, $model = null, array $attachments = [], string|array|null $bccTargets = "", bool $force = false, string|array $ccTargets = ""): bool
+    final public function send(string|null $email, $model = null, array $attachments = [], string|array|null $bccTargets = "", bool $force = false, string|array|null $ccTargets = ""): bool
     {
+        $ccTargets = $ccTargets ?? "";
         $bccTargets = $bccTargets ?? "";
         if (!$force && !flag('system.mail.enabled', true)) {
             throw new MailDisabledException('Sending Emails is disabled on this system');
