@@ -657,6 +657,10 @@
             </td>
         </tr>
     </table>
+    @php
+        $paymentDetails = $invoice->order->payment_details ?? $invoice->order->tour?->payment_details;
+        $paymentDetails = $paymentDetails ?? setting('company.bank_transfer', '-');
+    @endphp
     <table class="payment-options">
         <tr>
             <th><h3>Payment Options</h3></th>
@@ -665,7 +669,7 @@
         <td class="payment_mode">
                 <table class="bank-details" style="width: 100%;">
                     <tr>
-                        <td style="width:75%">{!! setting('company.bank_transfer', '-')  !!}</td>
+                        <td style="width:75%">{!! $invoice->payment_details  !!}</td>
                         <td class="vertical-align-top"  style="width:25%">
                             <div class="terms-condition-block"><p class="title-heading">Terms & Conditions</p>
                                 <p class="terms-condition">

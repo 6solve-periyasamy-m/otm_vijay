@@ -161,6 +161,9 @@
                 @if(config('app.features.kpt', false) || config('app.features.bleeding-edge'))
                     @include('partials.fields.checkbox', ['name' => 'Enable sending reservation and invoice document emails.', 'field' => 'reservation_invoice_mail_enabled', 'value' => flag('reservation.invoice.mail.enabled', false),])
                 @endif
+                @if(config('app.features.kpt', false) || config('app.features.bleeding-edge'))
+                    @include('partials.fields.checkbox', ['name' => 'Enable sending itinerary document emails.', 'field' => 'itinerary_document_mail_enabled', 'value' => flag('itinerary.document.mail.enabled', false),])
+                @endif
             </div>
     </x-admin.section.card>
     </div>
