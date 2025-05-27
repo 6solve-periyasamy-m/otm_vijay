@@ -17,8 +17,8 @@ class Table extends Component
     {
         $notifications = Notification::with([
             'actor', 'subject', 'resolver'
-        ])->latest()->get()->reject(function ($notification) {
-                return $notification->type === NotificationType::BOOKING_PROGRESS;
+        ])->latest()->get()->filter(function ($notification) {
+                return $notification->type === NotificationType::ORDER_CREATED;
             });
 
         return view('livewire.admin.system.notification.table', [

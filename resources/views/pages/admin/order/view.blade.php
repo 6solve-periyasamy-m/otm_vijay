@@ -290,9 +290,9 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                     @if($payment->payment_fee !== null)
                                         <abbr title="{{ fr_currency($payment->totalWithFee(), $payment->currency) }} with payment fee">{{ fr_currency($payment->amount, $payment->currency) }}</abbr>
                                     @else
-                                        {{ fr_currency($payment->amount, $payment->currency) }}
+                                        {{ fr_currency($payment->amount, $payment->currency, false, 2) }}
                                     @endif
-                                <td>{{ fr_currency($payment->amount, $payment->currency) }}</td>
+                                <td>{{ fr_currency($payment->amount, $payment->currency, false, 2) }}</td>
                                 <td>{{ f_datetime($payment->paid_on) }}</td>
                                 @php
                                     $rowspan = $payment->payment_fee ? 2 : 1;
@@ -414,15 +414,15 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                             <tr>
                                 <th scope="row">Booking Fee</th>
                                 <td>With Order</td>
-                                <td>{{ fr_currency($order->booking_fee, $order->currency) }}</td>
+                                <td>{{ fr_currency($order->booking_fee, $order->currency, false, 2) }}</td>
                                 <td>
-                                    {{ fr_currency(min($order->booking_fee, $order->paid), $order->currency) }}
+                                    {{ fr_currency(min($order->booking_fee, $order->paid), $order->currency, false, 2) }}
                                 </td>
                                 <td>
                                     @if($order->booking_fee <= $order->paid)
                                         Paid
                                     @else
-                                        {{ fr_currency($order->booking_fee - min($order->booking_fee, $order->paid), $order->currency) }}
+                                        {{ fr_currency($order->booking_fee - min($order->booking_fee, $order->paid), $order->currency, false, 2) }}
                                     @endif
                                 </td>
                                 <td>
@@ -440,20 +440,20 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                             <tr>
                                 <th scope="row">Deposit</th>
                                 <td>With Order</td>
-                                <td>{{ fr_currency($order->calculated_deposit, $order->currency) }} ({{ $order->deposit_percentage }}%)</td>
+                                <td>{{ fr_currency($order->calculated_deposit, $order->currency, false, 2) }} ({{ $order->deposit_percentage }}%)</td>
                                 <td>
                                     @php $amount = $order->calculated_deposit - min(($order->paid - ($order->booking_fee ?? 0)), $order->calculated_deposit); @endphp
                                     @if($amount <= 0)
-                                        {{ fr_currency($order->calculated_deposit, $order->currency) }}
+                                        {{ fr_currency($order->calculated_deposit, $order->currency, false, 2) }}
                                     @else
-                                        {{ fr_currency($order->paid, $order->currency) }}
+                                        {{ fr_currency($order->paid, $order->currency, false, 2) }}
                                     @endif
                                 </td>
                                 <td>
                                     @if($amount <= 0)
                                         Paid
                                     @else
-                                        {{ fr_currency($amount, $order->currency) }}
+                                        {{ fr_currency($amount, $order->currency, false, 2) }}
                                     @endif
                                 </td>
                                 <td>
@@ -473,19 +473,19 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                             <tr>
                                 <th scope="row">Installment</th>
                                 <td>{{ f_date($installment->due_on) }}</td>
-                                <td>{{ fr_currency($installment->calculated_amount, $order->currency) }} ({{ $installment->percentage }}%)</td>
+                                <td>{{ fr_currency($installment->calculated_amount, $order->currency, false, 2) }} ({{ $installment->percentage }}%)</td>
                                 <td>
                                     @if($amount <= 0)
-                                        {{ fr_currency($installment->calculated_amount, $order->currency) }}
+                                        {{ fr_currency($installment->calculated_amount, $order->currency, false, 2) }}
                                     @else
-                                        {{ fr_currency($installment->repository->getAmountPaid(), $order->currency) }}
+                                        {{ fr_currency($installment->repository->getAmountPaid(), $order->currency, false, 2) }}
                                     @endif
                                 </td>
                                 <td>
                                     @if($amount <= 0)
                                         Paid
                                     @else
-                                        {{ fr_currency($amount, $order->currency) }}
+                                        {{ fr_currency($amount, $order->currency, false, 2) }}
                                     @endif
                                 </td>
                                 <td>
@@ -509,14 +509,14 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                         <tr>
                             <th scope="row">Remaining Balance</th>
                             <td>{{ f_date($order->tour?->final_payment) }}</td>
-                            <td>{{ fr_currency($order->remaining_installment, $order->currency) }} ({{ $order->remaining_percentage }}%)</td>
-                            <td> {{ f_currency($order->paid) }} </td>
+                            <td>{{ fr_currency($order->remaining_installment, $order->currency, false, 2) }} ({{ $order->remaining_percentage }}%)</td>
+                            <td> {{ fr_currency($order->paid, $order->currency, false, 2) }} </td>
                             <td>
                                 @php $amount = min($order->remaining, $order->remaining_installment); @endphp
                                 @if($amount <= 0)
                                     Paid
                                 @else
-                                    {{ fr_currency($amount, $order->currency) }}
+                                    {{ fr_currency($amount, $order->currency, false, 2) }}
                                 @endif
                             </td>
                             <td>
