@@ -25,12 +25,6 @@
         </div>
     </x-admin.section.card>
     <x-admin.section.card>
-        <div class="row">
-            <x-livewire.input.text-area wire:model="quote.internalNotes" label="Internal Notes" width="6" />
-            <x-livewire.input.text-area wire:model="quote.externalNotes" label="External Notes" width="6" />
-        </div>
-    </x-admin.section.card>
-    <x-admin.section.card>
         <div class="d-flex justify-content-between">
             <div>
                 <h4 class="fw-bold">
@@ -58,4 +52,10 @@
             </div>
         @endforeach
     </div>
+    <x-admin.section.card>
+        <div class="row">
+            <x-livewire.input.text-area wire:model="quote.internalNotes" label="Internal Notes" width="6" />
+            <x-livewire.input.text-area wire:model="quote.externalNotes" label="External Notes" width="6" />
+        </div>
+    </x-admin.section.card>
 </div>
