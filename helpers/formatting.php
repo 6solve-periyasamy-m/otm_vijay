@@ -31,7 +31,7 @@ if (!function_exists('fr_currency')) {
      * @param Currency|string|null $currency The currency to format in
      * @return string
      */
-    function fr_currency(?float $amount, Currency|string|null $currency = null, bool $strip = false, ?int $decimalPrecision = 0): string
+    function fr_currency(?float $amount, Currency|string|null $currency = null, bool $strip = false, ?int $decimalPrecision = 2): string
     {
         if (!is_string($currency)) $currency = ($currency ?? Settings::currency())?->code;
         // $string = (new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($amount ?? 0.0, $currency);
