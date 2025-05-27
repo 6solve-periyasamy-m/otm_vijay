@@ -76,6 +76,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'invoice_footer' => $tour->invoice_footer ?? "",
             'name' => $tour->name,
             'description' => $tour->description,
+            'tour_id' => $tour->id,
+            'payment_details' => $tour->payment_details ?? "",
             ...$data,
         ]);
         if ($quote->currency !== null) {
@@ -1255,6 +1257,11 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $paying += $this->quote->leadTraveller->paying;
         $travelling += $this->quote->leadTraveller->travelling;
         $event = is_array($this->quote->event) ? new Event($this->quote->event) : $this->quote->event;
+        $paymentDetails = collect([
+                $this->quote->payment_details,
+                $this->quote->tour?->payment_details,
+                setting('company.bank_transfer')
+            ])->first(fn($value) => !empty($value));
         return new Itinerary(
             null,
             $event,
@@ -1276,7 +1283,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $this->quote->terms,
             $this->quote->invoice_footer,
             $this->quote->external_notes,
-            $this->quote->payment_details,
+            $paymentDetails,
         );
     }
 

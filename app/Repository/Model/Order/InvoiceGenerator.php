@@ -28,6 +28,12 @@ class InvoiceGenerator
     {
         // If the booking reference is null, then the order isn't properly initialized
         if ($this->order->booking_reference === null) { return null; }
+        $paymentDetails = collect([
+                $this->order->payment_details,
+                $this->order->quote?->payment_details,
+                $this->order->tour?->payment_details,
+                setting('company.bank_transfer')
+            ])->first(fn($value) => !empty($value));
         $invoice = new Invoice([
             'order_id' => $this->order->id,
             'name' => $this->order->tour->name,
@@ -47,6 +53,7 @@ class InvoiceGenerator
             'commission_amount' => $this->order->commission_amount,
             'generator_version' => InvoiceUpgrader::LATEST_VERSION,
             'currency_id' => $this->order->currency_id ?? Settings::currency()->id,
+            'payment_details' => $paymentDetails,
         ]);
         return $save ? $this->generateSaved($invoice) : $this->generateTemporary($invoice);
     }
