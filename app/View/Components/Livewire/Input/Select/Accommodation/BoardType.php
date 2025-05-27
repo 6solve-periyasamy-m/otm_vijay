@@ -2,7 +2,7 @@
 
 namespace App\View\Components\Livewire\Input\Select\Accommodation;
 
-use App\Models\Accommodation\RoomCategory as DataModel;
+use App\Models\Accommodation\BoardType as DataModel;
 use App\View\Components\Livewire\Input\Select\AbstractSelectComponent;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
