@@ -46,6 +46,13 @@
                     </x-admin.popup-button>
                 @endif
 
+                @if((config('app.features.kpt', false) || config('app.features.bleeding-edge')) && flag('itinerary.document.mail.enabled', false))
+                    <x-admin.popup-button href="#" onclick="event.preventDefault(); if(confirm('Are you sure you want to send the itinerary document to email?')) { Livewire.emit('sendItineraryToEmail'); }" class="color-mint row-4">
+                        <x-slot:icon>{{ Icon::email() }}</x-slot:icon>
+                        Send itinerary Document
+                    </x-admin.popup-button>
+                @endif
+
                 {{-- Dangerous Controls --}}
                 <x-admin.popup-button href="{{ route('orders.migrate', ['order' => $order,]) }}" class="color-warning row-5">
                     <x-slot:icon>{{ Icon::edit() }}</x-slot:icon>

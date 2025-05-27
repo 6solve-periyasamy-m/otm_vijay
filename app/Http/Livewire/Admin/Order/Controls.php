@@ -28,6 +28,7 @@ class Controls extends ModalComponent
         'sendPaymentDueMail' => 'sendPaymentDue',
         'sendPaymentMail' => 'sendPaymentMade',
         'sendReservationToEmail' => 'sendReservationToEmail',
+        'sendItineraryToEmail' => 'sendItineraryToEmail',
     ];
 
     public Order|int $order;
@@ -71,6 +72,30 @@ class Controls extends ModalComponent
             return false;
         }
     }
+
+
+    /**
+     * Send the order itinerary document to the email
+     */
+    public function sendItineraryToEmail(): bool
+    {
+        try {
+            $this->order->repository->mailer(true)->sendItineraryEmail();
+            $this->toast('Mail Sent Successfully', 'Successfully sent the itinerary document', 'success');
+            return true;
+        } catch (MailDisabledException) {
+            $this->toast('Mail Failed To Send', 'Sending Emails is disabled on this system', 'danger');
+            return false;
+        } catch (MailFailedException $e) {
+            $this->toast('Mail Failed To Send', $e->getMessage(), 'danger');
+            return false;
+        } catch (Exception $e) {
+            $this->toast('Mail Failed To Send', 'Please try again later', 'danger');
+            Log::error($e);
+            return false;
+        }
+    }
+
 
     /**
      * Send the booking confirmation email
