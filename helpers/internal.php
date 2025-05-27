@@ -130,3 +130,18 @@ if (!function_exists('add_email_alias')) {
         return $newLocalPart . '@' . $domainPart;
     }
 }
+if (!function_exists('round_to_nearest')) {
+    /**
+     * Round up to nearest X
+     *
+     * @param float|int|null $number
+     * @param float|null $value
+     * @return float
+     */
+    function round_to_nearest(float|int|null $number, float|null $value = null): float
+    {
+        if ($number === null) { return 0.0; }
+        if (empty($value)) { return $number; }
+        return sigfig(ceil($number / $value) * $value);
+    }
+}
