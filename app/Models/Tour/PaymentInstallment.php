@@ -60,7 +60,7 @@ class PaymentInstallment extends Model
 
     public function getCostAttribute(float|null $commission = 0): float
     {
-        $commission = $commission ?? 0;
+        $commission = $commission ?? 0.0;
         if ($this->is_percentage) {
             return round(($this->tour->base_price_per_person - $commission) * ($this->amount / 100), 2);
         } else {
