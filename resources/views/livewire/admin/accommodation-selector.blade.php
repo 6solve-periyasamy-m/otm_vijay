@@ -57,7 +57,6 @@
                     <th scope="col"><strong>Board</strong></th>
                     <th scope="col"><strong>Category</strong></th>
                     <th scope="col"><strong>Stock Availability</strong></th>
-                    <!-- <th scope="col"><strong>Quantity</strong></th> -->
                     <th scope="col"><strong>Action</strong></th>
                 </tr>
             </thead>

@@ -1,4 +1,4 @@
-<td>
+<td class="align-middle">
     @if($storage->accommodation->image_url !== null)
         <img class="rounded border border-primary border-2" style="width: 100%; height: 150px; object-fit: cover;" src="{{ asset($storage->accommodation->image_url) }}" alt="{{ $storage->accommodation->name }}"/>
     @endif
@@ -25,26 +25,6 @@
     @endforeach
 </td>
 
-@if(($quantity ?? null) !== null)
-<td>
-    <div class="row">
-        <div class="col-2">
-            <button title="Remove Quantity" wire:click="removeQuantity({{$storage->accommodation->id}}, {{$storage->room->id}}, {{ $storage->board->id }}, {{ $storage->category?->id ?? "null" }})" class="btn btn-sm mb-1 btn-outline-danger">
-                {{ Icon::minus() }}
-            </button>
-        </div>
-        <div class="col-8">
-            <x-livewire.input disabled value="{{ $quantity ?? 0 }}" label="Quantity" />
-        </div>
-        <div class="col-2">
-            <button title="Add Quantity" wire:click="addQuantity({{$storage->accommodation->id}}, {{$storage->room->id}}, {{ $storage->board->id }}, {{ $storage->category?->id ?? "null" }})" class="btn btn-sm mb-1 btn-outline-success">
-                {{ Icon::plus() }}
-            </button>
-        </div>
-    </div>
-</td>
-@endif
-
 <td  class="align-middle">
     <span><a href="{{ route('accommodations.view', ['accommodation' => $storage->accommodation]) }}" title="View Accommodation" target="_blank" class="btn btn-sm mb-1 btn-outline-info">
         {{ Icon::eye() }}
@@ -61,5 +41,28 @@
                 </button>
             @endif
         </span>
+    @endif
+    @if(($quantity ?? null) !== null)
+        <div class="d-flex flex-column align-items-center">
+            <label class="fw-bold mb-1">Quantity</label> <!-- Common centered label -->
+
+            <div class="d-flex align-items-center">
+                <button title="Remove Quantity" class="btn btn-sm me-2 btn-outline-danger">
+                    {{ Icon::minus() }}
+                </button>
+
+                <input type="text"
+                    disabled
+                    value="{{ $quantity ?? 0 }}"
+                    class="form-control text-center me-2"
+                    style="width: 60px; padding: 0.25rem;" />
+
+                <button title="Add Quantity"
+                        wire:click="addQuantity({{ $storage->accommodation->id }}, {{ $storage->room->id }}, {{ $storage->board->id }}, {{ $storage->category?->id ?? 'null' }})"
+                        class="btn btn-sm btn-outline-success">
+                    {{ Icon::plus() }}
+                </button>
+            </div>
+        </div>
     @endif
 </td>
