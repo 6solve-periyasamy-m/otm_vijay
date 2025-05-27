@@ -16,10 +16,11 @@
             <x-livewire.input wire:model="quote.commission" label="Commission (%)" width="3" />
             <x-livewire.input.select.agent name="quote.agent_id" table="organizations" find="{{$quote->organization_id}}" value="{{$quote->agent_id}}" label="Agent" width="3" />
             <!-- -->
-            <x-livewire.input wire:model="quote.deposit" label="Deposit" width="3"  />
+            <x-livewire.input.select.currency name="quote.currency_id" value="{{$quote->currency_id}}" label="Currency" width="3" clear />
+            <x-livewire.input wire:model="quote.deposit" label="Deposit" width="2"  />
             <x-livewire.input.checkbox wire:model="quote.is_deposit_percentage" label="Percentage?" width="1" />
-            <x-livewire.input wire:model="price" label="Base Price" width="4" required  />
-            <x-livewire.input wire:model="quote.single_occupancy_surcharge" label="Single Occupancy Surcharge" width="4" required />
+            <x-livewire.input wire:model="price" label="Base Price" width="3" required  />
+            <x-livewire.input wire:model="quote.single_occupancy_surcharge" label="Single Occupancy Surcharge" width="3" required />
             <!-- -->
             <x-livewire.input.text-area wire:model="quote.description" label="Description" />
         </div>
@@ -39,6 +40,34 @@
             <x-livewire.input type="date" wire:model="quote.expires" label="Quote Expiry Date" width="3" required min="{{ now()->format('Y-m-d') }}" />
         </div>
     </x-admin.section.card>
+    <x-admin.section.card>
+        <div class="d-flex justify-content-between">
+            <div>
+                <h4 class="fw-bold">
+                    Additional Costs
+                </h4>
+            </div>
+            <div>
+                <button wire:click="addCost" class="btn btn-success">{{ Icon::plus() }} Add Cost</button>
+            </div>
+        </div>
+    </x-admin.section.card>
+    <div class="row">
+        @foreach($costs as $key => $cost)
+            <div class="col-xl-4">
+                <x-admin.section.card>
+                    <div class="row">
+                        <x-livewire.input wire:model="costs.{{$key}}.name" label="Name" width="3" />
+                        <x-livewire.input wire:model="costs.{{$key}}.amount" label="Amount" width="3" />
+                        <x-livewire.input.checkbox wire:model="costs.{{$key}}.per_customer" label="Per Customer" width="3" />
+                        <div class="col-3">
+                            <button class="btn btn-danger" wire:click="removeCost({{$key}})" title="Remove">{{Icon::trash()}}</button>
+                        </div>
+                    </div>
+                </x-admin.section.card>
+            </div>
+        @endforeach
+    </div>
     <x-admin.section.card>
         <div class="row">
             <x-livewire.input.text-area wire:model="quote.internal_notes" label="Internal Notes" width="6" />

@@ -4,13 +4,15 @@ namespace App\Http\Livewire\Admin\Quote;
 
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
+use App\Models\AdditionalCost;
 use App\Models\Customer\Agent;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
 use App\Models\Quote\QuoteProspect;
 use App\Models\System\LargeTextTemplate;
-use Carbon\Carbon;
 use Livewire\Component;
+use Settings;
+use Carbon\Carbon;
 
 class Form extends Component
 {
@@ -24,6 +26,8 @@ class Form extends Component
     public int|null $paymentTemplate = null;
     public $minToDate;
     public $maxFinalDate;
+    /** @var array<array{id: int|null, name: string, per_customer: boolean, amount: float}> */
+    public array $costs = [];
 
     public function mount(Quote|int|null $quote): void
     {
@@ -39,6 +43,15 @@ class Form extends Component
         if ($this->quote->date_from) {
             $this->minToDate = Carbon::parse($this->quote->date_from)->subDay()->toDateString();
             $this->maxFinalDate = Carbon::parse($this->quote->date_from)->subDay()->toDateString();
+        }
+
+        foreach ($this->quote->costs as $cost) {
+            $this->costs[] = [
+                'id' => $cost->id,
+                'name' => $cost->name,
+                'amount' => $cost->amount,
+                'per_customer' => $cost->per_customer,
+            ];
         }
     }
 
@@ -59,6 +72,7 @@ class Form extends Component
         if ($this->quote->commission != 0 && empty($this->quote->commission)) { $this->quote->commission = null; }
         if ($this->quote->brand_id <= 0) { $this->quote->brand_id = null; }
         $this->quote->brand_id = $this->quote->brand_id ?? null;
+        $this->quote->currency_id = $this->quote->currency_id ?? null;
         $this->quote->is_deposit_percentage = $this->quote->is_deposit_percentage ?? false;
         $this->prospect->travelling = $this->prospect->travelling ?? false;
         $this->prospect->paying = $this->prospect->paying ?? false;
@@ -67,11 +81,36 @@ class Form extends Component
         $this->quote->save();
         $this->quote->reference = $this->quote->reference ?? $this->quote->repository->generateReference();
         $this->quote->invoice_footer = $this->quote->invoice_footer ?? "";
+        if ($this->quote->id === null ||
+            $this->quote->currency_id !== null ||
+            Quote::find($this->quote->id)?->currency_id !== $this->quote->currency_id)
+        {
+            $this->quote->from_rate = Settings::getConversionRate($this->quote->currency, Settings::currency());
+            $this->quote->to_rate = Settings::getConversionRate(Settings::currency(), $this->quote->currency);
+        }
         $this->quote->save();
 
         $pricePoint = $this->quote->pricePoints()->where('quantity', '=', 1)->first() ?? QuotePricePoint::make(['quantity' => 1,]);
         $pricePoint->price_per_person = $this->price;
         $this->quote->pricePoints()->save($pricePoint);
+
+        foreach ($this->costs as $cost) {
+            $model = AdditionalCost::find($cost['id'] ?? null);
+            if ($model !== null) {
+                $model->name = $cost['name'];
+                $model->amount = $cost['amount'];
+                $model->per_customer = $cost['per_customer'];
+                $model->save();
+            } else {
+                $model = new AdditionalCost([
+                    'name' => $cost['name'],
+                    'amount' => $cost['amount'],
+                    'per_customer' => $cost['per_customer'],
+                ]);
+                $this->quote->costs()->save($model);
+            }
+
+        }
 
         return redirect()->route('quotes.view', ['quote' => $this->quote]);
     }
@@ -123,6 +162,26 @@ class Form extends Component
         return $data;
     }
 
+    public function addCost()
+    {
+        $this->costs[] = [
+            'id' => null,
+            'name' => null,
+            'amount' => null,
+            'per_customer' => false,
+        ];
+    }
+
+    public function removeCost($key)
+    {
+        if (array_key_exists($key, $this->costs)) {
+            if ($this->costs[$key]['id'] !== null) {
+                $this->tour->costs()->where('id', $this->costs[$key]['id'])->forceDelete();
+            }
+            unset($this->costs[$key]);
+        }
+    }
+
     public function render()
     {
         return view('livewire.admin.quote.form');
@@ -134,6 +193,7 @@ class Form extends Component
             'quote.name' => 'required|string|min:3',
             'quote.brand_id' => 'nullable|integer',
             'quote.tax_bracket_id' => 'nullable|integer|exists:tax_brackets,id',
+            'quote.currency_id' => 'nullable|integer|exists:currencies,id',
             'quote.consultant_id' => 'nullable|integer|exists:users,id',
             'quote.organization_id' => 'nullable|integer|exists:organizations,id',
             'quote.agent_id' => 'nullable|integer|exists:agents,id',

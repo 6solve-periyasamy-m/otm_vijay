@@ -97,7 +97,7 @@ class FellohGateway extends Gateway implements SupportsRedirect
         return $this->getRedirect($items, $intention, $customer, $success);
     }
 
-    public function process(string $reference, float $amount, string $created = null): void
+    public function process(string $reference, float $amount, string $created = null, string|null $currency = null): void
     {
         $intention = GatewayPaymentLink::get(self::$GATEWAY, $reference)?->intention;
         if (!isset($intention)) return;
