@@ -791,6 +791,10 @@
             scrollbar-width: none;
         }
 
+        /* .inside-body-block {
+            overflow-y: auto;
+            scrollbar-width: none;
+        } */
         .popup-tour-description ul li {
             font-family: "PP Neue Montreal Medium";
             font-weight: 500;
@@ -3214,8 +3218,8 @@
             top: -40px;
         }
         .seating-map-wrapper{
-            width:24px;
-            height:24px;
+            width:28px;
+            height:28px;
             cursor: pointer;
         }
         .seating-map-wrapper-img-block{ 
@@ -3225,9 +3229,10 @@
             background-color: var(--secondary-color);
             border: 1px solid #d9d9d9;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
         }
+        .seating-map-wrapper-img-block img { width: 18px;}
     </style>
 </head>
 <body>
