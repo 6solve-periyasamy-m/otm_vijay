@@ -542,16 +542,16 @@
                     @foreach ($invoice->payment_schedule as $key => $installment)
                         @if($installment->type === ItineraryScheduleType::BOOKING_FEE)
                         <tr>
-                            <td>{{ fr_currency($installment->amount, $invoice->currency, false,2) }}</td>
+                            <td>{{ fr_currency($installment->amount, $invoice->currency) }}</td>
                             <td>
-                                {{ fr_currency(min($installment->amount, $installment->received), $invoice->currency, false,2) }}
+                                {{ fr_currency(min($installment->amount, $installment->received), $invoice->currency) }}
                                 @php $balance_received = $balance_received + min($installment->amount, $installment->received) @endphp
                             </td>
                             <td>
                             @if($installment->amount <= $installment->received)
                                 Paid
                             @else
-                                {{ fr_currency($installment->amount - min($installment->amount, $installment->received), $invoice->currency, false,2) }}
+                                {{ fr_currency($installment->amount - min($installment->amount, $installment->received), $invoice->currency) }}
                             @endif
                             </td>
                             <td class="text-weight"></td>
@@ -559,14 +559,14 @@
                         @endif
                         @if ($installment->type === ItineraryScheduleType::DEPOSIT)
                         <tr>
-                            <td>{{ fr_currency($installment->amount, $invoice->currency, false,2) }}</td>
+                            <td>{{ fr_currency($installment->amount, $invoice->currency) }}</td>
                             <td>
                             @php $amount = $installment->amount - min(($installment->received - ($installment->balance ?? 0)), $installment->amount); @endphp
                             @if($amount <= 0)
-                                {{ fr_currency($installment->amount, $invoice->currency, false,2) }}
+                                {{ fr_currency($installment->amount, $invoice->currency) }}
                                 @php $balance_received = $balance_received + $installment->amount @endphp
                             @else
-                                {{ fr_currency($installment->received, $invoice->currency, false,2) }}
+                                {{ fr_currency($installment->received, $invoice->currency) }}
                                 @php $balance_received = $balance_received + $installment->received @endphp
                             @endif
                             </td>
@@ -574,7 +574,7 @@
                             @if($amount <= 0)
                                 Paid
                             @else
-                                {{ fr_currency($amount, $invoice->currency, false,2) }}
+                                {{ fr_currency($amount, $invoice->currency) }}
                             @endif
                             </td>
                             <td class="text-weight"></td>
@@ -583,13 +583,13 @@
                         @if ($installment->type === ItineraryScheduleType::INSTALLMENT)
                             @php $amount = $installment->amount - $installment->received; @endphp
                             <tr>
-                                <td>{{ fr_currency($installment->amount, $invoice->currency, false,2) }}</td>
+                                <td>{{ fr_currency($installment->amount, $invoice->currency) }}</td>
                                 <td>
                                 @if($amount <= 0)
-                                    {{ fr_currency($installment->amount, $invoice->currency, false,2) }}
+                                    {{ fr_currency($installment->amount, $invoice->currency) }}
                                     @php $balance_received = $balance_received + $installment->amount @endphp
                                 @else
-                                    {{ fr_currency($installment->received, $invoice->currency, false,2) }}
+                                    {{ fr_currency($installment->received, $invoice->currency) }}
                                     @php $balance_received = $balance_received + $installment->received @endphp
                                 @endif
                                 </td>
@@ -597,7 +597,7 @@
                                 @if($amount <= 0)
                                     Paid
                                 @else
-                                    {{ fr_currency($amount, $invoice->currency, false,2) }}
+                                    {{ fr_currency($amount, $invoice->currency) }}
                                 @endif
                                 </td>
                                 <td>
@@ -609,17 +609,17 @@
                         @endif
                         @if ($installment->type === ItineraryScheduleType::REMAINING)
                             <tr>
-                                <td>{{ fr_currency($installment->amount, $invoice->currency, false,2) }}</td>
+                                <td>{{ fr_currency($installment->amount, $invoice->currency) }}</td>
                                 <td>
                                 @php $balance_received_total = $installment->received - $balance_received; @endphp
-                                {{ fr_currency($balance_received_total, $invoice->currency, false,2) }}
+                                {{ fr_currency($balance_received_total, $invoice->currency) }}
                                 </td>
                                 <td>
                                 @php $amount = min($installment->balance, $installment->amount); @endphp
                                 @if($amount <= 0)
                                     Paid
                                 @else
-                                    {{ fr_currency($amount, $invoice->currency, false,2) }}
+                                    {{ fr_currency($amount, $invoice->currency) }}
                                 @endif
                                 </td>
                                 <td>
@@ -639,18 +639,18 @@
                     <tr>
                         <td>
                             <div class="full-btm-cls-mod" style="">
-                                <p><span style="font-weight:700 !important;">Invoice Total:</span> <span style="font-weight:700 !important;">{{fr_currency($invoice->total_cost + $invoice->commission_amount, $invoice->currency)}}</span></p>
+                                <p><span style="font-weight:700 !important;">Invoice Total:</span> <span style="font-weight:700 !important;">{{fr_currency($invoice->total_cost + $invoice->commission_amount, $invoice->currency, false, 0)}}</span></p>
                                 @if($invoice->commission_amount > 0)
-                                    <p><span>Commission ({{$invoice->commission_percentage}}%):</span> <span>{{fr_currency($invoice->commission_amount, $invoice->currency, false,2)}}</span></p>
-                                    <p><span>Booking Total: </span> <span>{{fr_currency($invoice->total_cost, $invoice->currency, false,2)}}</span></p>
+                                    <p><span>Commission ({{$invoice->commission_percentage}}%):</span> <span>{{fr_currency($invoice->commission_amount, $invoice->currency)}}</span></p>
+                                    <p><span>Booking Total: </span> <span>{{fr_currency($invoice->total_cost, $invoice->currency)}}</span></p>
                                 @endif
-                                <p><span>GST (included):</span> <span>{{fr_currency($invoice->tax_amount, $invoice->currency, false,2)}}</span></p>
-                                <p><span>Received:</span> <span>{{fr_currency($invoice->total_paid, $invoice->currency, false,2)}}</span></p>
+                                <p><span>GST (included):</span> <span>{{fr_currency($invoice->tax_amount, $invoice->currency)}}</span></p>
+                                <p><span>Received:</span> <span>{{fr_currency($invoice->total_paid, $invoice->currency)}}</span></p>
                                 @if($invoice->total_fees > 0)
-                                    <p><span>Fees Paid:</span> <span>{{fr_currency($invoice->total_fees, $invoice->currency, false,2)}}</span></p>
+                                    <p><span>Fees Paid:</span> <span>{{fr_currency($invoice->total_fees, $invoice->currency)}}</span></p>
                                 @endif
                             </div>
-                            <h4><span>Balance Due:</span> <span>{{fr_currency($invoice->total_cost - $invoice->total_paid, $invoice->currency, false,2)}}</span></h4>
+                            <h4><span>Balance Due:</span> <span>{{fr_currency($invoice->total_cost - $invoice->total_paid, $invoice->currency, false,0)}}</span></h4>
                         </td>
                     </tr>
                 </table>
@@ -681,25 +681,6 @@
                 </table>
             </td>
         </tr>
-    </table>
-    <!-- Footer Section -->
-    <!-- <div class="footer">
-        <div class="logo">
-          <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('https://qa.octopustravelmatrix.com/images/pdf_assets/images/KeithProwse_Logo.png'))?>"  alt="logo-ch">
-        </div>
-        <div class="phone">
-           <p>Phone</p>
-           <a href="tel:+{{$invoice->brand->telephone}}">{{$invoice->brand->telephone}}</a>
-        </div>
-        <div class="email">
-           <p>email</p>
-           <a href="mailto:{{$invoice->brand->email}}">{{$invoice->brand->email}}</a>
-        </div>
-        <div class="phone">
-           <p>website</p>
-           <a target="_blank" href="{{$invoice->brand->website}}">{{$invoice->brand->website}}</a>
-        </div>
-    </div>
-   </div> -->
+    </table>   
 </body>
 </html>
