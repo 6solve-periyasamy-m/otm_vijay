@@ -791,6 +791,10 @@
             scrollbar-width: none;
         }
 
+        /* .inside-body-block {
+            overflow-y: auto;
+            scrollbar-width: none;
+        } */
         .popup-tour-description ul li {
             font-family: "PP Neue Montreal Medium";
             font-weight: 500;
@@ -1263,7 +1267,11 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                margin-bottom: 32px;
+                position: sticky;
+                top: -26px;
+                background: #fff;
+                padding: 10px 0px 10px 0px;
+                margin-bottom: 22px;
             }
 
             .package-details h4 {
@@ -2475,13 +2483,23 @@
       cursor: pointer;
     }
 
-    .additional-inclusion-popup .add-close-button, .more-package-info-popup  .info-close-button, .hotel-more-info-popup .hotel-close-button, .default-hotel-more-info-popup .default-hotel-close-button{
+    .additional-inclusion-popup .add-close-button, .hotel-more-info-popup .hotel-close-button, .default-hotel-more-info-popup .default-hotel-close-button{
       position: absolute;
       top: 25px;
       right: 25px;
       cursor: pointer;
     }
     
+    .more-package-info-popup  .info-close-button{
+        position: sticky;
+        top: -44px;
+        right: 0px;
+        cursor: pointer;
+        display: flex;
+        justify-content: flex-end;
+        margin-top: -47px;
+        margin-right: -10px;
+    }
 
     @media only screen and (min-width:981px) and (max-width:1279px) {
       .tickets-listing {
@@ -3214,8 +3232,8 @@
             top: -40px;
         }
         .seating-map-wrapper{
-            width:24px;
-            height:24px;
+            width:28px;
+            height:28px;
             cursor: pointer;
         }
         .seating-map-wrapper-img-block{ 
@@ -3225,9 +3243,10 @@
             background-color: var(--secondary-color);
             border: 1px solid #d9d9d9;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
         }
+        .seating-map-wrapper-img-block img { width: 18px;}
     </style>
 </head>
 <body>

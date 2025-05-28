@@ -146,7 +146,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                         @php $seatingMap = $tourComponent->inventory->component->SeatingMap; @endphp
                                         @if($seatingMap->image_url && !empty($seatingMap->image_url))
                                             <div class="seating-map-wrapper">
-                                                <div>
+                                                <div class="seating-map-wrapper-img-block">
                                                     <img src="/images/Ticket-Icon.svg" alt="ticket-icon" class="seating-map-link">
                                                 </div>
                                                 <div class="ticket-pop-up-modal" style="display:none;">
