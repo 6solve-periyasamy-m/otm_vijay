@@ -2,17 +2,13 @@
 
 namespace App\Http\Livewire\Admin\System\Notification;
 
-use Illuminate\Support\Collection;
+use App\Models\Helper\Enum\NotificationType;
 use App\Models\System\Notification;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Helper\Enum\NotificationType;
 use Livewire\Component;
-use Settings;
-use Illuminate\Support\Str;
 
 class Table extends Component
 {
-
     public function render()
     {
         $notifications = Notification::with([
@@ -66,7 +62,7 @@ class Table extends Component
             $object = $notification->subject_type::find($notification->subject_id);
             $row->eventName = $object ? $object?->tour?->event?->name : '';
             $row->PackageName = $object ? $object?->tour?->name : '';
-            $row->totalOrderValue = $object?->total ? fr_currency($object->total, $object->currency?->code ?? 'GBP', true) : 'N/A';
+            $row->totalOrderValue = $object?->total ? fr_currency($object->total, $object->currency?->code ?? setting('system.currency', 'GBP'), true) : 'N/A';
 
             if (class_basename($notification->subject_type) === 'Booking') {
                 $row->noOfTravellers = $object->travellers()->count();
