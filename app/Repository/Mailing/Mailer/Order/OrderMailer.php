@@ -142,7 +142,7 @@ class OrderMailer
         $invoice->organization = $order->organization ?? null;
         $invoice->agent = $order->agent ?? null;
 
-        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email : "";
+        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email. ";" . (setting('system.bcc.mail') ?? "") : "";
 
         try {
             (new OrderMail('reservation-invoice-document', $sendAsConsultant ? $this->order->consultant : null))
@@ -162,11 +162,11 @@ class OrderMailer
     public function sendItineraryEmail(string $email = null, bool $sendAsConsultant = false): bool
     {
         $email = $email ?? $this->order->agent?->email ?? $this->order->organization?->contact_email ?? $this->order->leadBooker->customer->email_address ;
-        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email : "";
+        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email. ";" . (setting('system.bcc.mail') ?? "") : "";
         try {
             (new OrderMail('itinerary-document', $sendAsConsultant ? $this->order->consultant : null))
                     ->send($email, $this->order, [$this->getItineraryAttachment()], $bcc, true, $this->order->consultant?->email);
-            return true;
+                    return true;
         } catch (MailDisabledException) {
             return false;
         } catch (MailFailedException $e) {
