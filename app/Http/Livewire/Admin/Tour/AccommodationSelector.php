@@ -10,6 +10,7 @@ use Carbon\Carbon;
 class AccommodationSelector extends AccommodationByDateComponent
 {
     public int $tour;
+    public string $type = 'tour';
 
     public function mount(Accommodation|int|null $accommodation = null, Carbon|string|null $start = null, Carbon|string|null $end = null, Tour|int|null $tour = null)
     {

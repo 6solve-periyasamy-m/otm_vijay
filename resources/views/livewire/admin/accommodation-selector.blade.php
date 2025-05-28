@@ -50,14 +50,14 @@
         <table class="table " >
             <thead wire:ignore>
                 <tr>
-                    <th scope="col">&nbsp;</th>
                     <th scope="col"><strong>Name</strong></th>
                     <th scope="col"><strong>Room</strong></th>
                     <th scope="col"><strong>Size</strong></th>
                     <th scope="col"><strong>Board</strong></th>
                     <th scope="col"><strong>Category</strong></th>
                     <th scope="col"><strong>Stock Availability</strong></th>
-                    <th scope="col"><strong>Action</strong></th>
+                    @php $type = $this->type === 'quote' ? 'Quantity' : 'Action'; @endphp
+                    <th scope="col" class="text-center"><strong>{{ $type }}</strong></th>
                 </tr>
             </thead>
             <tbody>

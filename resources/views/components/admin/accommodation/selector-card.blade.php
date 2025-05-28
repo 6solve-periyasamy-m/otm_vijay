@@ -1,34 +1,28 @@
-<td class="align-middle">
-    @if($storage->accommodation->image_url !== null)
-        <img class="rounded border border-primary border-2" style="width: 100%; height: 150px; object-fit: cover;" src="{{ asset($storage->accommodation->image_url) }}" alt="{{ $storage->accommodation->name }}"/>
-    @endif
-</td>
-<td class="align-middle fs-4">{{ $storage->accommodation->name }}</td>
+<td class="align-middle fs-5 td-width-20"><a href="{{ route('accommodations.view', ['accommodation' => $storage->accommodation]) }}" title="View Accommodation" target="_blank">{{ $storage->accommodation->name }}</a></td>
 <td class="align-middle">{{ $storage->room->name }}</td>
 <td class="align-middle">{{ $storage->room->maximum_occupancy }}</td>
 <td class="align-middle">{{ $storage->board->name }}</td>
 <td class="align-middle">{{ $storage->category?->name ?? 'None' }}</td>
-<td class="align-middle td-width-15">    
-    @foreach($period as $date)
-        @php $onNight = $storage->getInventoryOnNight($date) @endphp
-        <span>
-            @if($storage->getInventoryOnNight($date) !== null)
-                @if($onNight->repository->getAvailableStock() >= ($travellers ?? 1))
-                    <h4 class="badge badge-pill badge-success">{{ f_date($date) }}: {{ $onNight->repository->getAvailableStock() }}</h4>
+<td class="align-middle td-width-20">
+    <div class="period-block d-flex flex-wrap gap-2">
+        @foreach($period as $date)
+            @php $onNight = $storage->getInventoryOnNight($date) @endphp
+            <span>
+                @if($storage->getInventoryOnNight($date) !== null)
+                    @if($onNight->repository->getAvailableStock() >= ($travellers ?? 1))
+                        <h4 class="badge badge-pill badge-success">{{ f_date($date) }}: {{ $onNight->repository->getAvailableStock() }}</h4>
+                    @else
+                        <h4 class="badge badge-pill badge-danger">{{ f_date($date) }}: {{ $onNight->repository->getAvailableStock() }}</h4>
+                    @endif
                 @else
-                    <h4 class="badge badge-pill badge-danger">{{ f_date($date) }}: {{ $onNight->repository->getAvailableStock() }}</h4>
+                    <h4 class="badge badge-pill badge-danger">{{ f_date($date) }}: {{ Icon::cross() }}</h4>
                 @endif
-            @else
-                <h4 class="badge badge-pill badge-danger">{{ f_date($date) }}: {{ Icon::cross() }}</h4>
-            @endif
-        </span>
-    @endforeach
+            </span>
+        @endforeach
+    </div>
 </td>
 
-<td  class="align-middle">
-    <span><a href="{{ route('accommodations.view', ['accommodation' => $storage->accommodation]) }}" title="View Accommodation" target="_blank" class="btn btn-sm mb-1 btn-outline-info">
-        {{ Icon::eye() }}
-    </a></span>
+<td  class="align-middle text-center">
     @if(($quantity ?? null) === null)
         <span>
             @if($selected)
@@ -44,8 +38,6 @@
     @endif
     @if(($quantity ?? null) !== null)
         <div class="d-flex flex-column align-items-center">
-            <label class="fw-bold mb-1">Quantity</label> <!-- Common centered label -->
-
             <div class="d-flex align-items-center">
                 <button title="Remove Quantity" class="btn btn-sm me-2 btn-outline-danger">
                     {{ Icon::minus() }}

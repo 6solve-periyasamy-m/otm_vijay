@@ -12,6 +12,7 @@ class AccommodationSelector extends AccommodationByDateComponent
 {
     public int $quote;
     public int $travellers;
+    public string $type = 'quote';
 
     public function mount(Accommodation|int|null $accommodation = null, Carbon|string|null $start = null, Carbon|string|null $end = null, Quote|int|null $quote = null, int|null $travellers = 0)
     {
