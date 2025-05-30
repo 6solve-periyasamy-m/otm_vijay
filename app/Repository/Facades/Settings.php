@@ -90,7 +90,7 @@ class Settings
      */
     public function currency(): Currency|null
     {
-        return Currency::where('code', '=', $this->get('system.currency', ''))->first();
+        return Currency::where('code', '=', $this->get('system.currency', 'GBP'))->first();
     }
 
     public function getDefaultInstallments(): array
