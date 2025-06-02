@@ -10,9 +10,9 @@ use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
 use App\Models\Quote\QuoteProspect;
 use App\Models\System\LargeTextTemplate;
+use Carbon\Carbon;
 use Livewire\Component;
 use Settings;
-use Carbon\Carbon;
 
 class Form extends Component
 {
@@ -145,6 +145,17 @@ class Form extends Component
             if ($template === null) { return; }
             $this->quote->payment_details = $template->content;
             $this->updateValue('quote.payment_details', $template->content);
+        }
+        if ($key === 'price') {
+            $roundValue = (float)setting('round.base_price', null);
+            if ($roundValue > 0) {
+                $new = round_to_nearest($this->price, $roundValue);
+                if ($this->price !== $new) {
+                    $this->price = $new;
+                    if (empty($this->price)) { $this->price = null; }
+                    $this->toast('Base Price Rounded', "Rounded base price to nearest $roundValue", 'primary');
+                }
+            }
         }
     }
 

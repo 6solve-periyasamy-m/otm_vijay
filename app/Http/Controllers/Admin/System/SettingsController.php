@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Admin\System;
 
+use App\Exports\ConversionRatesExport;
 use App\Http\Controllers\Controller;
 use App\Models\Location\Currency;
 use App\Models\System\LargeTextTemplate;
+use App\Repository\Reporting\ReportFieldRepository;
+use Excel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Settings;
-use Excel;
-use App\Exports\ConversionRatesExport;
-use App\Repository\Reporting\ReportFieldRepository;
 
 class SettingsController extends Controller
 {
@@ -37,6 +37,7 @@ class SettingsController extends Controller
             'stripe_key' => 'nullable',
             'date_format' => 'required',
             'year_start' => 'required|date',
+            'round_base_price' => 'nullable|numeric|gte:0',
         ];
     }
 
@@ -111,6 +112,7 @@ class SettingsController extends Controller
             'itinerary.document.mail.enabled' => $request->input('itinerary_document_mail_enabled') === 'on' ? 1 : 0,
             'system.cc.mail' => $request->input('system_cc_email'),
             'system.bcc.mail' => $request->input('system_bcc_email'),
+            'round.base_price' => $request->input('round_base_price'),
         ]);
         if ($request->has('company_logo')  && !empty($request->file('company_logo'))) {
             Settings::set('company.logo', $this->saveImage($request->file('company_logo')));
