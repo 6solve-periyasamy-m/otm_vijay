@@ -29,25 +29,17 @@
                     <h1>Secure Booking</h1>
                 </div>
                 <div class="timeline text-dark">
-                    @php
-                        $steps = [
-                            1 => ['label' => 'Guests', 'route' => 'booking.v3.guest'],
-                            2 => ['label' => 'Accommodation', 'route' => 'booking.v3.hotel'],
-                            3 => ['label' => 'Ticket(s)', 'route' => 'booking.v3.tickets'],
-                            4 => ['label' => 'Additional Inclusions', 'route' => 'booking.v3.inclusions'],
-                            5 => ['label' => 'Details', 'route' => 'booking.v3.details'],
-                            6 => ['label' => 'Confirmation', 'route' => 'booking.v3.confirmation'],
-                        ];
-                    @endphp
-                    @foreach($steps as $step => $data)
+                    @foreach ($this->steps as $step => $data)
                         <div class="step @if($stage === $step) active @elseif($stage > $step) completed @endif">
-                            @if($stage >= $step)
-                                <a class="circle-completed" href="{{ route($data['route'], ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]) }}"><div class="circle"><span>{{ sprintf('%02d', $step) }}</span></div></a>
+                            @if ($stage >= $step)
+                                <a class="circle-completed" href="{{ route($data['route'], ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]) }}">
+                                    <div class="circle"><span>{{ sprintf('%02d', $step) }}</span></div>
+                                </a>
                             @else
                                 <div class="circle"><span>{{ sprintf('%02d', $step) }}</span></div>
                             @endif
                             <div class="label">
-                                @if($stage >= $step)
+                                @if ($stage >= $step)
                                     <a class="text-dark" href="{{ route($data['route'], ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]) }}">
                                         {{ $data['label'] }}
                                     </a>

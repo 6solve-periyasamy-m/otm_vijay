@@ -57,7 +57,11 @@ class Details extends V3BookingComponent
 
     public function back()
     {
-        return redirect()->route('booking.v3.inclusions', ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]);
+        if ($this->hasInclusions()) {
+            return redirect()->route('booking.v3.inclusions', ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]);
+        } else {
+            return redirect()->route('booking.v3.tickets', ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]);
+        }
     }
 
     public function advance()

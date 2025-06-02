@@ -18,6 +18,7 @@ use App\Models\Quote\Quote;
 use App\Models\System\Brand;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
+use App\Models\Helper\Enum\ActivityCategory;
 use Exception;
 use Livewire\Component;
 use Settings;
@@ -351,5 +352,57 @@ abstract class V3BookingComponent extends Component
             }
         }
         $this->renew();
+    }
+
+    public function getStepsProperty()
+    {
+        $steps = [
+            ['label' => 'Guests', 'route' => 'booking.v3.guest'],
+            ['label' => 'Accommodation', 'route' => 'booking.v3.hotel'],
+            ['label' => 'Ticket(s)', 'route' => 'booking.v3.tickets'],
+        ];
+        if ($this->hasInclusions()) {
+            $steps[] = ['label' => 'Additional Inclusions', 'route' => 'booking.v3.inclusions'];
+        }
+        $steps[] = ['label' => 'Details', 'route' => 'booking.v3.details'];
+        $steps[] = ['label' => 'Confirmation', 'route' => 'booking.v3.confirmation'];
+        return collect($steps)->mapWithKeys(fn($step, $i) => [$i + 1 => $step]);
+    }
+
+    public function hasInclusions(): bool
+    {
+        // 1. Included activities (NORMAL)
+        $hasValidIncludedActivities = $this->tour->activityInventoryTours()
+            ->where('tour_component_type', 'Included')
+            ->get()
+            ->contains(fn($component) =>
+                $component->inventory->component->activity_category === ActivityCategory::NORMAL
+            );
+        // 2. Add-on activities (NORMAL & available stock)
+        $hasValidAddonActivities = $this->tour->activityInventoryTours()
+            ->where('tour_component_type', 'Add-on')
+            ->get()
+            ->contains(fn($component) =>
+                $component->inventory->component->activity_category === ActivityCategory::NORMAL
+                && $component->repository->getAvailableStock() > 0
+            );
+
+        // 3. Included merchandise
+        $hasIncludedMerchandise = $this->tour->merchandise()
+            ->where('tour_component_type', 'Included')
+            ->exists();
+
+        // 4. Add-on merchandise with stock
+        $hasValidAddonMerchandise = $this->tour->merchandise()
+            ->where('tour_component_type', 'Add-on')
+            ->get()
+            ->contains(fn($component) =>
+                $component->repository->getAvailableStock() > 0
+            );
+
+        return $hasValidIncludedActivities
+            || $hasValidAddonActivities
+            || $hasIncludedMerchandise
+            || $hasValidAddonMerchandise;
     }
 }
