@@ -74,13 +74,13 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
             <p>Order Value</p>
             <h6 class="fw-bold">
                 @if($order->cancelled)
-                    {{ fr_currency($order->total, $order->currency, false, 0) }}
+                    {{ fr_currency($order->total, $order->currency) }}
                     @if($nonSystem) ({{ fr_currency($order->total * $toSystem, Settings::currency()) }}) @endif
-                    ({{ fr_currency($order->cost, $order->currency, false, 0) }}
+                    ({{ fr_currency($order->cost, $order->currency) }}
                     @if($nonSystem) ({{ fr_currency($order->cost * $toSystem, Settings::currency()) }}) @endif
                     before cancellation)
                 @else
-                    {{ fr_currency($order->total, $order->currency, false, 0) }} @if($nonSystem) ({{ fr_currency($order->total * $toSystem, Settings::currency(), false, 0) }}) @endif
+                    {{ fr_currency($order->total, $order->currency, false, 0) }} @if($nonSystem) ({{ fr_currency($order->total * $toSystem, Settings::currency()) }}) @endif
                     @if ($order->repository->getBeforeString() !== null)
                         ({{ $order->repository->getBeforeString() }})
                     @endif
