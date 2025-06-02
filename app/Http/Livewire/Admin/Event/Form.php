@@ -103,6 +103,8 @@ class Form extends Component
             'event.onsite_email' => 'nullable|string',
             'event.onsite_phone' => 'nullable|string',
             'event.final_terms' => 'nullable|string',
+            'event.itinerary_email_subject' => 'nullable|string',
+            'event.itinerary_email_template' => 'nullable|string',
         ];
     }
 }
