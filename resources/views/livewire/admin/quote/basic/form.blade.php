@@ -19,9 +19,9 @@
             <x-livewire.input type="date" wire:model="quote.final" label="Final Payment" width="2" />
             <x-livewire.input wire:model="quote.deposit" label="Deposit" width="2" />
             <x-livewire.input.checkbox wire:model="quote.depositPercentage" label="Percentage?" width="2" />
-            <x-livewire.input.select.organization name="quote.organization" value="{{$quote->organization}}" width="5" />
+            <x-livewire.input.select.organization name="quote.organization" label="Organisation" value="{{$quote->organization}}" width="5" />
             <x-livewire.input wire:model="quote.commission" label="Commission (%)" width="2" />
-            <x-livewire.input.select.agent name="quote.agent" value="{{$quote->agent}}" width="5" />
+            <x-livewire.input.select.agent name="quote.agent" label="Agent" value="{{$quote->agent}}" width="5" />
         </div>
     </x-admin.section.card>
     <x-admin.section.card>
