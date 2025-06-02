@@ -63,9 +63,12 @@ class Form extends Component
     {
         $this->manuallySet($key);
         match ($key) {
-            default => function () {},
+            default => function () {
+            },
             "tour.event_id" => $this->eventChanged(),
-            "tour.brand_id" => function () { if ($this->tour->brand_id === -1) $this->tour->brand_id = null; },
+            "tour.brand_id" => function () {
+                if ($this->tour->brand_id === -1) $this->tour->brand_id = null;
+            },
             "tour.atol_protection" => function () {
                 $this->tour->atol_protected = $this->tour->atol_protected === -1
                     ? null : $this->tour->atol_protected;
@@ -73,7 +76,21 @@ class Form extends Component
             'termsTemplate' => $this->refreshTermsTemplate(),
             'footerTemplate' => $this->refreshFooterTemplate(),
             'paymentTemplate' => $this->refreshPaymentDetailsTemplate(),
+            'tour.base_price_per_person' => $this->updateBasePrice(),
         };
+    }
+
+    public function updateBasePrice(): void
+    {
+        $roundValue = (float)setting('round.base_price', null);
+        if ($roundValue > 0) {
+            $new = round_to_nearest($this->tour->base_price_per_person, $roundValue);
+            if ($this->tour->base_price_per_person !== $new) {
+                $this->tour->base_price_per_person = $new;
+                if (empty($this->tour->base_price_per_person)) { $this->tour->base_price_per_person = null; }
+                $this->toast('Base Price Rounded', "Rounded base price to nearest $roundValue", 'primary');
+            }
+        }
     }
 
     public function manuallySet($key): void

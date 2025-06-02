@@ -86,7 +86,17 @@ class Calculator extends Component
         $this->margin = $this->total == 0 ? 100 : sigfig(((($this->total * $this->fromRate) - $this->costToCompany) / ($this->total * $this->fromRate)) * 100);
 
         $this->markup = sigfig($this->markup ?? ($this->costToCompany == 0 ? 100 : (((($this->total * $this->fromRate) - $this->costToCompany) / $this->costToCompany) * 100)), 6);
+
         $this->marked_up_price = sigfig(($costPerPerson + ($costPerPerson * ($this->markup / 100))) * ($this->toRate ?? 0.0));
+
+        $roundValue = (float)setting('round.base_price', null);
+        if (!empty($roundValue)) {
+            $new = round_to_nearest($this->marked_up_price, $roundValue);
+            if ($new !== $this->marked_up_price) {
+                $this->marked_up_price = $new;
+                $this->toast('Base Price Rounded', "Rounded base price to nearest $roundValue", 'primary');
+            }
+        }
 
         if ($this->quote->commission !== null) {
             $this->commission = sigfig($this->total * ($this->quote->commission / 100));

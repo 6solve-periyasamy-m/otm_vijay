@@ -146,6 +146,17 @@ class Form extends Component
             $this->quote->payment_details = $template->content;
             $this->updateValue('quote.payment_details', $template->content);
         }
+        if ($key === 'price') {
+            $roundValue = (float)setting('round.base_price', null);
+            if ($roundValue > 0) {
+                $new = round_to_nearest($this->price, $roundValue);
+                if ($this->price !== $new) {
+                    $this->price = $new;
+                    if (empty($this->price)) { $this->price = null; }
+                    $this->toast('Base Price Rounded', "Rounded base price to nearest $roundValue", 'primary');
+                }
+            }
+        }
     }
 
     public static function getSelectAgencies($organization_id)

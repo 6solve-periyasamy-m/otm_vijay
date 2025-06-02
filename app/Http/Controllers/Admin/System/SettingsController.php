@@ -37,6 +37,7 @@ class SettingsController extends Controller
             'stripe_key' => 'nullable',
             'date_format' => 'required',
             'year_start' => 'required|date',
+            'round_base_price' => 'nullable|numeric|gte:0',
         ];
     }
 
@@ -111,6 +112,7 @@ class SettingsController extends Controller
             'itinerary.document.mail.enabled' => $request->input('itinerary_document_mail_enabled') === 'on' ? 1 : 0,
             'system.cc.mail' => $request->input('system_cc_email'),
             'system.bcc.mail' => $request->input('system_bcc_email'),
+            'round.base_price' => $request->input('round_base_price'),
             'booking.round_to_five' => $request->input('round_to_five') === 'on' ? 1 : 0,
             'booking.head.tracking.code' => $request->input('head_tracking_code'),
             'booking.body.tracking.code' => $request->input('body_tracking_code'),
