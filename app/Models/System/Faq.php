@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Settings;
 
 /**
  * App\Models\System\Faq
@@ -33,7 +32,7 @@ use Settings;
 class Faq extends Model
 {
     protected $guarded = [];
-    protected $fillable = ['question', 'answer', 'is_active'];
+    protected $fillable = ['question', 'answer', 'active'];
 
     public function brand(): BelongsTo
     {
