@@ -3,6 +3,7 @@
 namespace App\Models\Helper\Enum;
 
 use App\Models\Helper\Enum\Trait\ConvertsToArray;
+use App\Models\System\LargeTextTemplate;
 
 enum LargeTextType: int
 {
@@ -23,5 +24,10 @@ enum LargeTextType: int
             self::QUOTE_TEMPLATE => __('custom.text.type.quote_template'),
             self::PAYMENT_DETAILS => __('custom.text.type.payment_details'),
         };
+    }
+
+    public function count(): int
+    {
+        return LargeTextTemplate::where('type', '=', $this->value)->count();
     }
 }
