@@ -20,6 +20,7 @@ class Form extends Component
 
     public Event|int|null $event;
     public $termsTemplate;
+    public $emailTemplate;
     public $user;
     public UploadedFile|string|null $image = null;
     public UploadedFile|string|null $banner = null;
@@ -29,8 +30,11 @@ class Form extends Component
         $this->event = Event::getForMount($event);
         if ($event === null) {
             $terms = LargeTextTemplate::where('default', '=', true)->where('type', '=', LargeTextType::TERMS)->first();
+            $email = LargeTextTemplate::where('default', '=', true)->where('type', '=', LargeTextType::EMAIL_TEMPLATE)->first();
             $this->event->final_terms = $terms?->content;
             $this->termsTemplate = $terms?->id;
+            $this->emailTemplate = $email?->id;
+            $this->event->itinerary_email_template = $email?->content;
         }
         $this->event->event_category = $this->event->event_category ?? EventType::NORMAL;
     }
@@ -40,6 +44,9 @@ class Form extends Component
         $this->validateOnly($key);
         if ($key === 'termsTemplate') {
             $this->refreshTermsTemplate();
+        }
+        if ($key === 'termsTemplate') {
+            $this->refreshEmailTemplate();
         }
         if ($key === 'user') {
             $this->refreshUser();
@@ -53,6 +60,15 @@ class Form extends Component
         if ($template !== null) {
             $this->event->final_terms = $template->content;
             $this->updateValue('event.final_terms', $template->content);
+        }
+    }
+
+    private function refreshEmailTemplate(): void
+    {
+        $template = LargeTextTemplate::find($this->termsTemplate);
+        if ($template !== null) {
+            $this->event->itinerary_email_template = $template->content;
+            $this->updateValue('event.itinerary_email_template', $template->content);
         }
     }
 
