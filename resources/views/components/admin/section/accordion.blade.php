@@ -3,7 +3,7 @@ $id = $attributes->get('id', \Str::uuid());
 $open = !$attributes->has('closed');
 @endphp
 <div>
-    <div class="card">
+    <div class="card" style="background: {{ $attributes->get('color', 'inherit') }}">
         <div class="card-body" data-target="#{{$id}}" onclick="toggleAccordion(this)">
             <div class="d-flex justify-content-between">
                 <div>
