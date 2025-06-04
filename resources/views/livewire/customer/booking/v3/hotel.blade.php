@@ -11,7 +11,7 @@
                 @php $imagePath = asset($default->image_url ?? $default->gallery()->first()?->file_path ?? ''); @endphp
                 @if(!empty($imagePath))
                     <div class="image">
-                        <img src="{{ asset($imagePath) }}" alt="{{ $default->name }}" title="{{ $default->name }}">
+                        <img src="{{ asset($imagePath) }}" alt="{{ $default->name }}" title="{{ $default->name }}" class="default-hotel-trigger-popup">
                     </div>
                 @endif
                 <div class="text-block">
@@ -80,7 +80,7 @@
                     ['count' => 3, 'label' => 'Triple'],
                 ];
             @endphp
-            <div class="showcase">
+            {{--<div class="showcase">
                 @foreach($bedTypes as $type)
                     <div class="single">
                         <div>
@@ -91,7 +91,7 @@
                         <p>{{ $type['label'] }}</p>
                     </div>
                 @endforeach
-            </div>
+            </div> --}}
             
             <div class="reselect_config">
                 @if($reselectConfigMessage)
@@ -523,22 +523,23 @@
         });
 
         document.addEventListener('DOMContentLoaded', function () {
-            const moreInfoLink = document.querySelector('.default-hotel-moreinfo-href');
+            const triggers = document.querySelectorAll('.default-hotel-moreinfo-href, .default-hotel-trigger-popup');
             const popup = document.querySelector('.default-hotel-more-info-popup');
             const closeBtn = document.querySelector('.default-hotel-close-button');
-            moreInfoLink?.addEventListener('click', function (e) {
-                e.preventDefault();
-                popup.style.display = 'flex';
-                popup.classList.add('active');
+
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    popup.style.display = 'flex';
+                    popup.classList.add('active');
+                });
             });
 
             closeBtn?.addEventListener('click', function () {
-                // Hide the popup
                 popup.style.display = 'none';
                 popup.classList.remove('active');
             });
 
-            // Optional: Click outside the popup to close
             popup?.addEventListener('click', function (e) {
                 if (e.target === popup) {
                     popup.style.display = 'none';

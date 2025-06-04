@@ -7,7 +7,8 @@ use Livewire\Component;
 class CurrencySelector extends Component
 {
     public string $selectedCurrency;
-    public array $availableCurrencies = ['AUD', 'USD', 'GBP', 'SGD', 'INR', 'EUR'];
+    public array $availableCurrencies = ['AUD'];
+    //public array $availableCurrencies = ['AUD', 'USD', 'GBP', 'SGD', 'INR', 'EUR'];
 
     protected $listeners = ['setCurrencyExternally'];
 
