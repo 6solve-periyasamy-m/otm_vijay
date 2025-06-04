@@ -43,10 +43,10 @@ class BookingV3Controller extends Controller
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
         $token = $booking ?? $request->cookie($tour->booking_form_url);
         $booking = $this->getBooking($tour, $token);
-        $quote = Quote::find($booking->quote_id);
         if ($booking === null) {
             return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
         }
+        $quote = Quote::find($booking->quote_id);
         $this->setupCookie($tour, $booking);
         return view('pages.customer.booking.v3.ticket', ['tour' => $tour, 'booking' => $booking, 'quote' => $quote]);
     }
@@ -56,10 +56,10 @@ class BookingV3Controller extends Controller
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
         $token = $booking ?? $request->cookie($tour->booking_form_url);
         $booking = Booking::where('tour_id', '=', $tour->id)->where('token', '=', $token)->firstOrFail();
-        $quote = Quote::find($booking->quote_id);
         if ($booking === null) {
             return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
         }
+        $quote = Quote::find($booking->quote_id);
         $this->setupCookie($tour, $booking);
         return view('pages.customer.booking.v3.inclusion', ['tour' => $tour, 'booking' => $booking, 'quote' => $quote]);
     }
@@ -69,10 +69,10 @@ class BookingV3Controller extends Controller
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
         $token = $booking ?? $request->cookie($tour->booking_form_url);
         $booking = $this->getBooking($tour, $token);
-        $quote = Quote::find($booking->quote_id);
         if ($booking === null) {
             return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
         }
+        $quote = Quote::find($booking->quote_id);
         $this->setupCookie($tour, $booking);
         return view('pages.customer.booking.v3.details', ['tour' => $tour, 'booking' => $booking, 'quote' => $quote]);
     }
