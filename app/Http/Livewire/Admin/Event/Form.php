@@ -65,7 +65,7 @@ class Form extends Component
 
     private function refreshEmailTemplate(): void
     {
-        $template = LargeTextTemplate::find($this->termsTemplate);
+        $template = LargeTextTemplate::find($this->emailTemplate);
         if ($template !== null) {
             $this->event->itinerary_email_template = $template->content;
             $this->updateValue('event.itinerary_email_template', $template->content);
