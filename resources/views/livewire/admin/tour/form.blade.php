@@ -101,18 +101,21 @@ $atol = [
     </div>
     <div class="col-xl-4">
         <x-admin.section.card>
-            <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" value="{{ $termsTemplate }}" />
-            <x-livewire.ckeditor name="tour.terms" value="{{ $tour?->terms }}" label="Terms and Conditions" required />
+            <p class="fs-5 fw-bold">Terms and Conditions</p>
+            <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" value="{{ $termsTemplate }}" :filterType="\App\Models\Helper\Enum\LargeTextType::TERMS->value" />
+            <x-livewire.ckeditor name="tour.terms" value="{{ $tour?->terms }}" label="Description" required />
         </x-admin.section.card>
     </div>
     <div class="col-xl-4">
-        <x-livewire.input.select.large-text-template name="paymentTemplate" label="Copy from Template" value="{{ $paymentTemplate }}" />
-        <x-livewire.ckeditor name="tour.payment_details" value="{{ $tour?->payment_details }}" label="Payment Details" />
+        <p class="fs-5 fw-bold">Payment Details</p>
+        <x-livewire.input.select.large-text-template name="paymentTemplate" label="Copy from Template" value="{{ $paymentTemplate }}" :filterType="\App\Models\Helper\Enum\LargeTextType::PAYMENT_DETAILS->value" />
+        <x-livewire.ckeditor name="tour.payment_details" value="{{ $tour?->payment_details }}" label="Description" />
     </div>
     <div class="col-xl-4">
         <x-admin.section.card>
-            <x-livewire.input.select.large-text-template name="footerTemplate" label="Copy from Template" value="{{ $footerTemplate }}" />
-            <x-livewire.ckeditor name="tour.invoice_footer" value="{{ $tour?->invoice_footer }}" label="Invoice Footer" />
+            <p class="fs-5 fw-bold">Invoice Footer</p>
+            <x-livewire.input.select.large-text-template name="footerTemplate" label="Copy from Template" value="{{ $footerTemplate }}" :filterType="\App\Models\Helper\Enum\LargeTextType::INVOICE_FOOTER->value" />
+            <x-livewire.ckeditor name="tour.invoice_footer" value="{{ $tour?->invoice_footer }}" label="Description" />
         </x-admin.section.card>
     </div>
 </div>
