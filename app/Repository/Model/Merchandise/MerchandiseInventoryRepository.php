@@ -8,8 +8,8 @@ use App\Models\Merchandise\MerchandiseInventory;
 use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Quote\Component\QuoteMerchandise;
 use App\Models\Quote\Quote;
+use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
-use App\Models\Transport\TransportInventory;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
@@ -174,6 +174,13 @@ class MerchandiseInventoryRepository extends InventoryRepository
         ]);
         $tour->merchandise()->save($mInvTour);
         return $mInvTour->repository;
+    }
+
+    public function addToEvent(Event $event, string|null $tourComponentType = 'Included', float|null $price = null): void
+    {
+        foreach ($event->tours as $tour) {
+            $this->addToTour($tour, $tourComponentType, $price ?? -1);
+        }
     }
 
     public function getOrderCount(): int
