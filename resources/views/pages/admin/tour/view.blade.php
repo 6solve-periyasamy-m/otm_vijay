@@ -33,7 +33,6 @@
                         <span>Create Quote</span>
                     </a>
                 @endcan
-                    {{-- BLEEDING-EDGE: Awaiting approval --}}
                     @if(config('app.features.bleeding-edge') || config('app.features.kpt'))
                         <a href="{{ route('tours.accommodation', ['tour' => $tour]) }}" class="btn btn-secondary">
                             {{ Icon::accommodation() }}

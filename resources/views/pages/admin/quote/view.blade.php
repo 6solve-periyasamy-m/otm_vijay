@@ -89,7 +89,6 @@
                 {{ Icon::edit() }}
                 {{ __('quotes.view.buttons.edit') }}
             </a>
-            {{-- BLEEDING-EDGE: Awaiting approval --}}
             @if(config('app.features.bleeding-edge') || config('app.features.kpt'))
             <a href="{{ route('quotes.accommodation', ['quote' => $quote]) }}" class="btn btn-secondary">
                 {{ Icon::accommodation() }}
