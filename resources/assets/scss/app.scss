@@ -33,3 +33,12 @@ npm run dev creates the files in public that the website can use
 }
 
 .odd-row > td {background-color: #e5e7eb;}
+
+.td-width-20 {
+  width: 20%;
+}
+
+.badge{
+  --bs-badge-padding-x: 1.65em;
+  --bs-badge-padding-y: 0.55em;
+}
