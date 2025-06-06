@@ -14,6 +14,7 @@ class Form extends Component
     use LivewireForm, SendsEvents;
 
     public BasicQuote $quote;
+    public bool $agentRequired = false;
 
     public function mount(Tour|int $tour)
     {
@@ -77,7 +78,9 @@ class Form extends Component
             'quote.lead' => 'required|int|exists:customers,id',
             'quote.tax' => 'nullable|int|exists:tax_brackets,id',
             'quote.organization' => 'nullable|int|exists:organizations,id',
-            'quote.agent' => 'nullable|int|exists:agents,id',
+            'quote.agent' => $this->agentRequired
+                    ? 'required|int|exists:agents,id'
+                    : 'nullable|int|exists:agents,id',
             'quote.expiry' => 'required|date|date_format:Y-m-d',
             'quote.travelling' => 'nullable|boolean',
             'quote.paying' => 'nullable|boolean',
