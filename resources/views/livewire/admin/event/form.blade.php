@@ -22,13 +22,20 @@
             </div>
         </x-admin.section.card>
     </div>
-    <div class="col-xl-6">
+    <div class="col-xl-4">
         <x-admin.section.card>
             <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" value="{{ $termsTemplate }}" />
             <x-livewire.ckeditor name="event.final_terms" value="{{ $event?->final_terms }}" label="Final Terms and Conditions" />
         </x-admin.section.card>
     </div>
-    <div class="col-xl-6">
+    <div class="col-4">
+        <x-admin.section.card>
+            <x-livewire.input wire:model="event.itinerary_email_subject" label="Itinerary Subject" />
+            <x-livewire.input.select.large-text-template name="emailTemplate" label="Copy from Template" value="{{ $termsTemplate }}" />
+            <x-livewire.ckeditor name="event.itinerary_email_template" value="{{ $event?->itinerary_email_template }}" label="Itinerary Body" />
+        </x-admin.section.card>
+    </div>
+    <div class="col-xl-4">
         <x-admin.section.card>
             <div class="row">
                 <x-livewire.input.select.user name="user" label="User to Prefill" />
