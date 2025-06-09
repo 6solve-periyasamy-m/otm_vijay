@@ -7,6 +7,7 @@ use App\Http\Livewire\SendsEvents;
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
 use Livewire\Component;
+use Carbon\Carbon;
 
 class Form extends Component
 {
@@ -15,11 +16,31 @@ class Form extends Component
 
     public Accommodation|int $accommodation;
     public AccommodationInventory|int|null $inventory;
+    public $minEndDate;
 
     public function mount(Accommodation|int $accommodation, AccommodationInventory|int|null $inventory = null): void
     {
         $this->accommodation = Accommodation::getForMount($accommodation);
         $this->inventory = AccommodationInventory::getForMount($inventory);
+        if ($this->inventory->check_in) {
+            $this->minEndDate = Carbon::parse($this->inventory->check_in)->toDateTimeString();
+        }
+    }
+
+    public function updated($key, $value): void
+    {
+        if ($key === 'inventory.check_in') {
+            $this->handleCheckInChange($value);
+        }
+    }
+
+    private function handleCheckInChange($value)
+    {
+        if ($value) {
+            $startDateTime = Carbon::parse($value);
+            $this->minEndDate = $startDateTime->toDateTimeString();
+            $this->inventory->check_out = $startDateTime->copy()->addHour()->toDateTimeString();
+        }
     }
 
     public function save(): void

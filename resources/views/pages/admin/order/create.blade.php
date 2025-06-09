@@ -141,3 +141,11 @@
     <hr class="splitter">
     @include('partials.fields.submit')
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const orderedOn = document.getElementById('ordered_on-input');
+        if (!orderedOn) return;
+        orderedOn.min = appFormatDateTime(new Date());
+    });
+</script>

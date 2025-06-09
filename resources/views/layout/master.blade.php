@@ -115,6 +115,18 @@
     <script defer src="https://unpkg.com/@alpinejs/focus@3.14.3/dist/cdn.min.js"></script>
     @stack('footer-stack')
     <script type="text/javascript">
+        function appFormatDateTime(date){
+            const pad = (n) => String(n).padStart(2, '0');
+            const formatDatetime = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+            return formatDatetime(date);
+        }
+
+        function appFormatDate(date){
+            const pad = (n) => String(n).padStart(2, '0');
+            const formatDate = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+            return formatDate(date);
+        }
+
         $(document).ready(function () {
             $('.datatable:not(.multiselect):not(.autowidth-off)').DataTable({fixedHeader: true,});
             $('.datatable.multi-select').DataTable({fixedHeader: true, select: { style: "multi+shift" },});

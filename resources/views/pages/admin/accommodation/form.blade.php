@@ -19,8 +19,8 @@
     @include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'width' => 4, 'value' => $accommodation?->image_url])
     @include('partials.fields.ckeditor', ['name' => 'Description', 'field' => 'description', 'value' => $accommodation?->description,])
     @include('partials.fields.date', ['name' => 'Audit Date', 'field' => 'audit_date', 'value' => $accommodation?->audit_date,])
-    @include('partials.fields.datetime', ['name' => 'Default Check In', 'field' => 'check_in', 'value' => $accommodation?->check_in, 'width' => 6 ])
-    @include('partials.fields.datetime', ['name' => 'Default Check In', 'field' => 'check_out', 'value' => $accommodation?->check_out, 'width' => 6 ])
+    @include('partials.fields.datetime', ['name' => 'Default Check In', 'field' => 'check_in', 'value' => old('check_in', $accommodation?->check_in), 'width' => 6 ])
+    @include('partials.fields.datetime', ['name' => 'Default Check In', 'field' => 'check_out', 'value' => old('check_out', $accommodation?->check_out), 'width' => 6 ])
     {{-- Gallery Upload --}}
     <div class="form-group col-md-12">
         <label for="gallery">Gallery Images</label>
@@ -56,3 +56,27 @@
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'notes', 'value' => $accommodation?->internal_notes])
     @include('partials.fields.submit')
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkIn = document.getElementById('check_in-input');
+        const checkOut = document.getElementById('check_out-input');
+        const auditDate = document.getElementById('audit_date-input');
+        
+        if (!checkIn || !checkOut || !auditDate) return;
+        
+        const now = new Date();
+        auditDate.min = appFormatDate(now);
+        checkIn.min = appFormatDateTime(now);
+        checkIn.addEventListener('change', (e) => {
+            const selected = new Date(e.target.value);
+            if (isNaN(selected)) return;
+
+            checkOut.min = e.target.value;
+
+            const nextDay = new Date(selected);
+            nextDay.setDate(nextDay.getDate() + 1);
+            checkOut.value = appFormatDateTime(nextDay);
+        });
+    });
+</script>
