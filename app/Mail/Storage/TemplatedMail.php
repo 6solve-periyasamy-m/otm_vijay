@@ -21,6 +21,8 @@ abstract class TemplatedMail
     protected Generator $faker;
     protected string $email;
     protected string $name;
+    protected string|null $subject = null;
+    protected string|null $body = null;
 
     public function __construct(string|null $code = null, User|null $sendAs = null)
     {
@@ -60,14 +62,22 @@ abstract class TemplatedMail
 
     public function getSubject(): string
     {
-        if ($this->code === null) return "";
-        return setting("email.{$this->code}.subject", '');
+        return $this->subject ?? setting("email.{$this->code}.subject", '');
+    }
+
+    public function setSubject(string|null $subject = null): void
+    {
+        $this->subject = $subject;
     }
 
     public function getBody(): string
     {
-        if ($this->code === null) return "";
-        return setting("email.{$this->code}.template", '');
+        return $this->body ?? setting("email.{$this->code}.template", '');
+    }
+
+    public function setBody(string|null $body = null): void
+    {
+        $this->body = $body;
     }
 
     public function getFormattedSubject($model = null): string
