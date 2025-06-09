@@ -163,7 +163,7 @@
             return formatDate(date, '{{ setting('system.format.date', 'd/m/Y') . ' ' . setting('system.format.time', 'H:i') }}');
         }
         function sysFormatCurrency(amount, currency = "{{ setting('system.currency', 'GBP') }}") {
-            return (new Intl.NumberFormat('en-GB', {
+            return (new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: currency,
             })).format(amount);

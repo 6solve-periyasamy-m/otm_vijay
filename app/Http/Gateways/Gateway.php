@@ -11,6 +11,7 @@ use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Helper\Enum\NotificationType;
+use App\Models\Location\Currency;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Order\Payment\PaymentMethod;
@@ -33,14 +34,14 @@ abstract class Gateway
      */
     abstract public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string;
 
-    abstract public function process(string $reference, float $amount, string $created = null): void;
+    abstract public function process(string $reference, float $amount, string $created = null, string|null $currency = null): void;
 
-    public function processIntention(PaymentIntention $intention, float $amount, string $gateway, string $created = null): ?Order
+    public function processIntention(PaymentIntention $intention, float $amount, string $gateway, string $created = null, string|null $currency = null): ?Order
     {
         if (!$intention->processed) {
             $order = OrderRepository::getFromBookingReference($intention->reference);
             if (isset($order)) {
-                $payment = $intention->makePayment($amount / 100, PaymentMethod::findOrCreate($gateway), $created ?? now());
+                $payment = $intention->makePayment($amount / 100, PaymentMethod::findOrCreate($gateway), $created ?? now(), Currency::whereCode($currency)->first());
                 $order->payments()->save($payment);
                 $intention->process();
                 $intention->processed = true;
@@ -58,7 +59,7 @@ abstract class Gateway
                 $order = $booking->repository->convertToOrder(now());
                 $intention->customer_id = $order->leadBooker->customer_id;
                 $intention->save();
-                $payment = $intention->makePayment($amount / 100, PaymentMethod::findOrCreate($gateway), $created ?? now());
+                $payment = $intention->makePayment($amount / 100, PaymentMethod::findOrCreate($gateway), $created ?? now(), Currency::whereCode($currency)->first());
                 $order->payments()->save($payment);
                 $intention->processed = true;
                 $intention->save();

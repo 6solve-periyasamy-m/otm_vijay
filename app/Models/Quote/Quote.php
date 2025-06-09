@@ -7,6 +7,7 @@ use App\Models\Customer\Organization;
 use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Helper\Model;
 use App\Models\Helper\Traits\HasAdditionalCosts;
+use App\Models\Location\Currency;
 use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;
 use App\Models\Quote\Component\QuoteActivity;
@@ -41,6 +42,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $organization_id
  * @property int|null $lead_traveller_id
  * @property int|null $consultant_id
+ * @property int|null $currency_id
  * @property int|null $event_id
  * @property int|null $brand_id
  * @property int|null $agent_id
@@ -56,9 +58,12 @@ use Illuminate\Support\Carbon;
  * @property Carbon $date_from
  * @property Carbon $date_to
  * @property string $terms
+ * @property float|null $from_rate
+ * @property float|null $to_rate
  * @property string $invoice_footer
  * @property int $paying Cached paying value
  * @property int $travelling Cached travelling value
+ * @property string|null $payment_details Details for sending payment information. *Do not use*
  * @property Carbon|null $expires
  * @property QuoteStatus $quote_status
  * @property string|null $internal_notes
@@ -73,6 +78,7 @@ use Illuminate\Support\Carbon;
  * @property-read User|null $consultant
  * @property-read Agent|null $agent
  * @property-read Brand $brand
+ * @property-read Currency|null $currency
  * @property-read Organization|null $organization
  * @property-read int|null $accommodation_count
  * @property-read Collection|QuoteActivity[] $activities
@@ -96,6 +102,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|QuoteTransport[] $transport
  * @property-read int|null $transport_count
  * @property-read float $remaining
+ * @property-read string $makePaymentDetails Details for documents to include about making a payment
  * @method static QuoteFactory factory(...$parameters)
  * @method static Builder|Quote newModelQuery()
  * @method static Builder|Quote newQuery()
@@ -139,7 +146,9 @@ class Quote extends Model
         'date_to' => 'date:Y-m-d',
         'final_payment' => 'date:Y-m-d',
         'sent' => 'datetime',
-        'quote_status' => QuoteStatus::class
+        'quote_status' => QuoteStatus::class,
+        'from_rate' => 'float',
+        'to_rate' => 'float',
     ];
     private QuoteRepository $internal_repository;
     protected array $cascadeDeletes = ['sentQuotes', 'leadTraveller', 'pricePoints', 'installments', 'accommodation', 'activities', 'flights', 'transport', 'merchandise', 'costs'];
@@ -247,6 +256,11 @@ class Quote extends Model
         return $this->hasMany(QuoteMerchandise::class, 'quote_id');
     }
 
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
+    }
+
     public function getStatusAttribute(): QuoteStatus
     {
         // If you need to get the Quote Status using raw SQL. use this IF statement
@@ -295,7 +309,7 @@ class Quote extends Model
     public function getDepositAmount(int $count = 1): float|null
     {
         $price = ($this->repository->getTotalCost($count) / $count);
-        return ($this->is_deposit_percentage ? sigfig(($price * ($this->deposit/100))) : $this->deposit) * $count;
+        return min($this->repository->getTotalCost($count), ($this->is_deposit_percentage ? sigfig(($price * ($this->deposit/100))) : $this->deposit) * $count);
     }
 
     public function getDepositPercentage(int $count = 1): float|null
@@ -303,5 +317,13 @@ class Quote extends Model
         $price = $this->repository->getTotalCost($count);
         if (empty($price) && !$this->is_deposit_percentage) { return 0; }
         return $this->is_deposit_percentage ? $this->deposit : (sigfig(($this->deposit / $price) * 100));
+    }
+
+    public function getMakePaymentDetailsAttribute(): string
+    {
+        if (empty($this->payment_details)) {
+            return setting('company.bank_transfer', "");
+        }
+        return $this->payment_details;
     }
 }

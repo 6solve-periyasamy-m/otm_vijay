@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Tour;
 
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
+use App\Models\AdditionalCost;
 use App\Models\Helper\Enum\LargeTextType;
 use App\Models\System\LargeTextTemplate;
 use App\Models\Tour\Event;
@@ -21,6 +22,9 @@ class Form extends Component
     public Tour|int|null $tour = null;
     public int|null $termsTemplate = null;
     public int|null $footerTemplate = null;
+    public int|null $paymentTemplate = null;
+    /** @var array<array{id: int|null, name: string, per_customer: boolean, amount: float}> */
+    public array $costs = [];
     public $minEndDate;
     public $maxFinalDate;
 
@@ -43,6 +47,15 @@ class Form extends Component
         }
         $this->tour = $tour;
 
+        foreach ($this->tour->costs as $cost) {
+            $this->costs[] = [
+                'id' => $cost->id,
+                'name' => $cost->name,
+                'amount' => $cost->amount,
+                'per_customer' => $cost->per_customer,
+            ];
+        }
+
         if ($this->tour->date_from !== null) {
             $this->manuallySet('tour.date_from');
             $this->minEndDate = Carbon::parse($this->tour->date_from)->toDateString();
@@ -57,17 +70,35 @@ class Form extends Component
     {
         $this->manuallySet($key);
         match ($key) {
-            default => function () {},
+            default => function () {
+            },
             "tour.event_id" => $this->eventChanged(),
-            "tour.brand_id" => function () { if ($this->tour->brand_id === -1) $this->tour->brand_id = null; },
+            "tour.brand_id" => function () {
+                if ($this->tour->brand_id === -1) $this->tour->brand_id = null;
+            },
             "tour.atol_protection" => function () {
                 $this->tour->atol_protected = $this->tour->atol_protected === -1
                     ? null : $this->tour->atol_protected;
             },
             'termsTemplate' => $this->refreshTermsTemplate(),
             'footerTemplate' => $this->refreshFooterTemplate(),
+            'paymentTemplate' => $this->refreshPaymentDetailsTemplate(),
+            'tour.base_price_per_person' => $this->updateBasePrice(),
             "tour.date_from" => $this->handleStartDateChange(),
         };
+    }
+
+    public function updateBasePrice(): void
+    {
+        $roundValue = (float)setting('round.base_price', null);
+        if ($roundValue > 0) {
+            $new = round_to_nearest($this->tour->base_price_per_person, $roundValue);
+            if ($this->tour->base_price_per_person !== $new) {
+                $this->tour->base_price_per_person = $new;
+                if (empty($this->tour->base_price_per_person)) { $this->tour->base_price_per_person = null; }
+                $this->toast('Base Price Rounded', "Rounded base price to nearest $roundValue", 'primary');
+            }
+        }
     }
 
     public function handleStartDateChange()
@@ -139,6 +170,23 @@ class Form extends Component
         $create = $this->tour->id === null;
         $this->tour->save();
         if ($create) { $this->tour->repository->cloneFromDefaultInstallments(); }
+        foreach ($this->costs as $cost) {
+            $model = AdditionalCost::find($cost['id'] ?? null);
+            if ($model !== null) {
+                $model->name = $cost['name'];
+                $model->amount = $cost['amount'];
+                $model->per_customer = $cost['per_customer'];
+                $model->save();
+            } else {
+                $model = new AdditionalCost([
+                    'name' => $cost['name'],
+                    'amount' => $cost['amount'],
+                    'per_customer' => $cost['per_customer'],
+                ]);
+                $this->tour->costs()->save($model);
+            }
+
+        }
         $this->redirect(route('tours.view', ['tour' => $this->tour,]));
     }
 
@@ -174,7 +222,32 @@ class Form extends Component
             'tour.notes' => 'nullable',
             'tour.city' => 'nullable|string',
             'tour.country_id' => 'nullable|exists:countries,id',
+            'tour.payment_details' => 'nullable|string|min:3',
+            'costs.*.id' => 'nullable|int|exists:additional_costs,id',
+            'costs.*.name' => 'required|string|min:3',
+            'costs.*.amount' => 'required|numeric',
+            'costs.*.per_customer' => 'boolean',
         ];
+    }
+
+    public function addCost()
+    {
+        $this->costs[] = [
+            'id' => null,
+            'name' => null,
+            'amount' => null,
+            'per_customer' => false,
+        ];
+    }
+
+    public function removeCost($key)
+    {
+        if (array_key_exists($key, $this->costs)) {
+            if ($this->costs[$key]['id'] !== null) {
+                $this->tour->costs()->where('id', $this->costs[$key]['id'])->forceDelete();
+            }
+            unset($this->costs[$key]);
+        }
     }
 
     private function refreshTermsTemplate(): void
@@ -192,6 +265,15 @@ class Form extends Component
         if ($template !== null) {
             $this->tour->invoice_footer = $template->content;
             $this->updateValue('tour.invoice_footer', $template->content);
+        }
+    }
+
+    private function refreshPaymentDetailsTemplate(): void
+    {
+        $template = LargeTextTemplate::find($this->paymentTemplate);
+        if ($template !== null) {
+            $this->tour->payment_details = $template->content;
+            $this->updateValue('tour.payment_details', $template->content);
         }
     }
 }

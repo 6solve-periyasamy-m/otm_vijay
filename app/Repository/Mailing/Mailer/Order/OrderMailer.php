@@ -142,11 +142,30 @@ class OrderMailer
         $invoice->organization = $order->organization ?? null;
         $invoice->agent = $order->agent ?? null;
 
-        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant->email : "";
+        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email : "";
 
         try {
             (new OrderMail('reservation-invoice-document', $sendAsConsultant ? $this->order->consultant : null))
                     ->send($email, $this->order, [$this->getReservationAttachment(), $this->getInvoiceAttachment()], $bcc, true, $this->order->consultant?->email);
+            return true;
+        } catch (MailDisabledException) {
+            return false;
+        } catch (MailFailedException $e) {
+            throw $e;
+        } catch (Exception $e) {
+            Log::error($e);
+            return false;
+        }
+    }
+
+
+    public function sendItineraryEmail(string $email = null, bool $sendAsConsultant = false): bool
+    {
+        $email = $email ?? $this->order->agent?->email ?? $this->order->organization?->contact_email ?? $this->order->leadBooker->customer->email_address ;
+        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email : "";
+        try {
+            (new OrderMail('itinerary-document', $sendAsConsultant ? $this->order->consultant : null))
+                    ->send($email, $this->order, [$this->getItineraryAttachment()], $bcc, true, $this->order->consultant?->email);
             return true;
         } catch (MailDisabledException) {
             return false;
@@ -204,4 +223,13 @@ class OrderMailer
         $document = dompdf(view('pdf.quotes.itinerary', ['itinerary' => $this->order->repository->getReservationDocument(), 'type' => 'Reservation']), false);
         return new Attachment($document, 'Reservation_'.$this->order->booking_reference.'.pdf', ['mime' => 'application/pdf',]);
     }
+
+
+
+    private function getItineraryAttachment(): Attachment
+    {
+        $document = dompdf(view('pdf.invoices.itinerary', ['order' => $this->order, 'itinerary' => $this->order->repository->getItinerary(),]), false);
+        return new Attachment($document, 'Itinerary_'.$this->order->booking_reference.'.pdf', ['mime' => 'application/pdf',]);
+    }
+
 }

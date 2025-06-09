@@ -34,7 +34,7 @@ $atol = [
     <div class="col-xl-4">
         <x-admin.section.card>
             <div class="row">
-                <x-livewire.input wire:model="tour.base_price_per_person" label="Price per Person" required type="number" step="0.01" />
+                <x-livewire.input key="tour.base_price_per_person" wire:model.defer.300ms="tour.base_price_per_person" label="Price per Person" required type="number" step="0.01" />
                 <x-livewire.input wire:model="tour.deposit" label="Deposit" width="6" type="number" step="0.01" />
                 <x-livewire.input.checkbox wire:model="tour.is_deposit_percentage" label="Percentage?" width="6" />
                 <x-livewire.input wire:model="tour.booking_fee" label="Booking Fee" width="6" />
@@ -61,17 +61,51 @@ $atol = [
             <x-livewire.input.text-area wire:model="tour.notes" label="Tour Notes" />
         </x-admin.section.card>
     </div>
-    <div class="col-xl-6">
+    <div class="col-xl-4">
         <x-admin.section.card>
             <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" value="{{ $termsTemplate }}" />
             <x-livewire.ckeditor name="tour.terms" value="{{ $tour?->terms }}" label="Terms and Conditions" required />
         </x-admin.section.card>
     </div>
-    <div class="col-xl-6">
+    <div class="col-xl-4">
+        <x-livewire.input.select.large-text-template name="paymentTemplate" label="Copy from Template" value="{{ $paymentTemplate }}" />
+        <x-livewire.ckeditor name="tour.payment_details" value="{{ $tour?->payment_details }}" label="Payment Details" />
+    </div>
+    <div class="col-xl-4">
         <x-admin.section.card>
             <x-livewire.input.select.large-text-template name="footerTemplate" label="Copy from Template" value="{{ $footerTemplate }}" />
             <x-livewire.ckeditor name="tour.invoice_footer" value="{{ $tour?->invoice_footer }}" label="Invoice Footer" />
         </x-admin.section.card>
+    </div>
+    <div class="col-xl-12">
+        <x-admin.section.card>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h4 class="fw-bold">
+                        Additional Costs
+                    </h4>
+                </div>
+                <div>
+                    <button wire:click="addCost" class="btn btn-success">{{ Icon::plus() }} Add Cost</button>
+                </div>
+            </div>
+        </x-admin.section.card>
+        <div class="row">
+            @foreach($costs as $key => $cost)
+                <div class="col-xl-4">
+                    <x-admin.section.card>
+                        <div class="row">
+                            <x-livewire.input wire:model="costs.{{$key}}.name" label="Name" width="3" />
+                            <x-livewire.input wire:model="costs.{{$key}}.amount" label="Amount" width="3" />
+                            <x-livewire.input.checkbox wire:model="costs.{{$key}}.per_customer" label="Per Customer" width="3" />
+                            <div class="col-3">
+                                <button class="btn btn-danger" wire:click="removeCost({{$key}})" title="Remove">{{Icon::trash()}}</button>
+                            </div>
+                        </div>
+                    </x-admin.section.card>
+                </div>
+            @endforeach
+        </div>
     </div>
     <div class="col-xl-12">
         <x-admin.section.card>

@@ -121,6 +121,9 @@ class BespokeReportRepository
 
     private static function format($data, string $format): ?string
     {
+        if ($format === 'coalesceSystemCurrency') {
+            return $data ?? \Settings::currency();
+        }
         if (!isset($data)) return 'Not Set';
         switch ($format) {
             case 'date':

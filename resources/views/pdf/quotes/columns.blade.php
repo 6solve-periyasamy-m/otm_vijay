@@ -256,7 +256,7 @@
                 <tr>
                     <td class="date">With Order</td>
                     <td class="amount">Deposit</td>
-                    <td class="paid">{{ f_currency($quote->deposit * $paying) }}</td>
+                    <td class="paid">{{ f_currency($quote->getDepositAmount($paying)) }}</td>
                 </tr>
                 @foreach($quote->installments as $installment)
                     <tr>

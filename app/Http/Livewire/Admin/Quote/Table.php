@@ -10,7 +10,6 @@ use App\Models\Quote\Quote;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
-use Mediconesystems\LivewireDatatables\DatetimeColumn;
 
 class Table extends LivewireDatatable
 {
@@ -19,9 +18,9 @@ class Table extends LivewireDatatable
     public function builder()
     {
         return Quote::query()
-            ->join('quote_prospects', 'quote_prospects.id', '=', 'quotes.lead_traveller_id')
-            ->join('customers', 'customers.id', '=', 'quote_prospects.customer_id')
-            ->join('events', 'events.id', '=', 'quotes.event_id');
+            ->leftJoin('quote_prospects', 'quote_prospects.id', '=', 'quotes.lead_traveller_id')
+            ->leftJoin('customers', 'customers.id', '=', 'quote_prospects.customer_id')
+            ->leftJoin('events', 'events.id', '=', 'quotes.event_id');
     }
 
     public function getColumns(): array

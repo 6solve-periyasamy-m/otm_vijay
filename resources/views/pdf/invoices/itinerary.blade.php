@@ -146,7 +146,7 @@
             padding: 0px;
             vertical-align: top;
         }
-        .event_info_div table td{
+        .event_info_div table td, .event_contact_info_div table td, .onsite-details{
             font-family: "PPNeueMontreal-Regular";
             font-size: 14px;
             font-weight: 400;
@@ -172,7 +172,7 @@
         .event_terms{ font-family: "PPNeueMontreal-Regular";font-size: 15px;font-weight: 400;line-height: 21px;padding-top:15px;}
         .text-full-wrap { word-wrap: break-word; word-break: break-word; white-space: normal; width:720px; line-height: 30px;}
         .text-full-wrap a {color: #3293ed; text-decoration: underline; }
-        .event-profile {width: 100%; table-layout: fixed; padding-top:20px;}
+        .event-profile {width: 100%; table-layout: fixed; padding-top:0px;}
         .event-profile td {padding: 8px 8px 8px 8px;}
         .event-profile td:first-child {text-align: left;padding-left: 0px;}
         .event-profile td:not(:first-child) {text-align: center;}
@@ -187,6 +187,8 @@
         .component-body table { page-break-inside: avoid; }
         .component-break { page-break-inside: avoid; }
         .word-wrap { word-wrap: break-word; word-break: break-word; white-space: normal; }
+        .text-full-wrap table td {word-wrap: break-word; word-break: break-word; white-space: normal;}
+        .onsite-details {font-size: 16px; font-weight: 600;}
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
@@ -205,13 +207,53 @@
             <div class="travel_itinerary_title">
                 <table style="width: 100%;">
                     <tbody>
+                        @if(!empty($itinerary->event->onsite_name) || !empty($itinerary->event->onsite_email) || !empty($itinerary->event->onsite_phone))
+                            <tr>
+                                <td style="width:77%; vertical-align: top;">
+                                    <table class="event-profile">
+                                        <tbody>
+                                            <tr><td style="width:77%; float:left;padding-bottom: 15px;"><h3>{{ $event_name }}</h3></td></tr>
+                                            <tr><td class="bg-line-color" style="width:77%; vertical-align: top; width:67%; text-align:left;padding-bottom: 25px;"><h5><strong>Reference:</strong> {{ $itinerary->reference }} </h5></td></tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td style="width:33%; float:middle;padding-bottom: 15px;">
+                                    <div class="event_contact_info_div">
+                                    @if(!empty($itinerary->event->onsite_name) || !empty($itinerary->event->onsite_email) || !empty($itinerary->event->onsite_phone))
+                                        <table class="event-profile">
+                                            <tbody>
+                                                <tr><td><p class="onsite-details">Onsite Details</p></td></tr>
+                                                @if(!empty($itinerary->event->onsite_name))
+                                                    <tr><td class="event-field-space" style="width: 33.33%;">
+                                                    <strong>Name:&nbsp;&nbsp;</strong><span>{{ $itinerary->event->onsite_name }}</span>
+                                                    </td></tr>
+                                                @endif
+                                                @if(!empty($itinerary->event->onsite_email))
+                                                    <tr><td class="event-field-space" style="width: 36.33%;">
+                                                    <strong>Email:&nbsp;&nbsp;</strong><span>{{ $itinerary->event->onsite_email }}</span>
+                                                    </td></tr>
+                                                @endif
+                                                @if(!empty($itinerary->event->onsite_phone))
+                                                    <tr><td class="event-field-space" style="text-align: left; width: 30.33%;">
+                                                    <strong>Phone:&nbsp;&nbsp;</strong><span>{{ $itinerary->event->onsite_phone }}</span>
+                                                    </td></tr>
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @else
                         <tr>
-                            <td style="width:77%; float:left;padding-bottom: 25px;"><h3>{{ $event_name }}</h3></td>
+                            <td style="width:77%; float:left;padding-bottom: 15px;"><h3>{{ $event_name }}</h3></td>
                             <td class="bg-line-color" style="text-align:left;padding-bottom: 25px;"><h5><strong>Reference:</strong> {{ $itinerary->reference }} </h5></td>
                         </tr>
+                        @endif
+
                         @if($all_customers->isNotEmpty())
                         <tr>
-                            <td colspan=2 style="padding-left: 10px;padding-bottom: 12px;"><h4>Guest Names</h4></td>
+                            <td colspan=2 style="padding-bottom: 12px;"><h4>Guest Names</h4></td>
                         </tr>                        
                         <tr>
                             <td colspan=2 >
@@ -543,9 +585,8 @@
             <h2>Event information</h2> 
         </div>
         <div class="event_info_div">
-            <p class="event_txt">If you require any assistance during your trip, please don't hesitate to reach out to us. Our friendly team is always happy to help ensure your journey is smooth and stress free.</p>
-
-            @if(!empty($itinerary->event->onsite_name) || !empty($itinerary->event->onsite_email) || !empty($itinerary->event->onsite_phone))
+            <!-- <p class="event_txt">If you require any assistance during your trip, please don't hesitate to reach out to us. Our friendly team is always happy to help ensure your journey is smooth and stress free.</p> -->
+            {{-- @if(!empty($itinerary->event->onsite_name) || !empty($itinerary->event->onsite_email) || !empty($itinerary->event->onsite_phone))
                 <table class="event-profile">
                     <tbody>
                         <tr>
@@ -567,7 +608,7 @@
                         </tr>
                     </tbody>
                 </table>
-            @endif
+            @endif --}}
             @if(!empty($itinerary->event?->final_terms) || !empty($itinerary->terms))
                 <div class="event_terms text-full-wrap"><p >{!! $itinerary->event?->final_terms ?? $itinerary->terms !!}</p></div>
             @endif             

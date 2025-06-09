@@ -46,6 +46,8 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Settings;
 
 class OrderRepository extends ModelRepository implements GeneratesFellohData
 {
@@ -201,11 +203,27 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
                 $orderCustomer->repository->bulkSaveStandard($included->clone());
             }
         }
+        $tbcCounter = 1;
+        foreach ($order->customers as $customer) {
+            if (Str::startsWith($customer->first_name, 'Unknown')) {
+                $customer->first_name = "TBC {$tbcCounter}";
+                $customer->last_name = "Paying - {$order->booking_reference}";
+                $customer->saveQuietly();
+                $tbcCounter++;
+            }
+        }
         OrderAccommodation::withoutEvents(static function () use ($order)  {
             RoomingRepository::assignDefaultSharedRooms($order);
         });
         event(new OrderCreatedEvent($order, $shouldInvoice));
         $order->repository->refresh();
+
+        // If the order has a commission or adjustments, this makes sure that during conversion, the deposit is never greater than the total
+        if ($order->calculated_deposit > $order->total) {
+            $order->deposit = sigfig($order->total / ($order->paying_customers));
+            $order->saveQuietly();
+        }
+
         return $order;
     }
 
@@ -257,7 +275,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
     public function getInstallments(bool $final = false): Collection|array
     {
         $customers = $this->order->paying_customers;
-        $paid = $this->order->paid - (($this->order->deposit ?? 0.0) * $customers) - ($this->order->booking_fee ?? 0.0);
+        $paid = $this->order->paid - ($this->order->calculated_deposit ?? 0.0) - ($this->order->booking_fee ?? 0.0);
         DB::statement("SET @total:={$paid};");
         $installments = OrderInstallment::where('order_id', '=', $this->order->id)
             ->orderBy('due_on')
@@ -501,7 +519,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         $this->order->installments()->delete();
         foreach ($this->order->tour->paymentInstallments as $installment) {
             $oInstallment = OrderInstallment::make([
-                'amount' => $installment->cost,
+                'amount' => $installment->getCostAttribute($this->order->commission_amount / ($this->order->paying_customers ?? 1)),
                 'due_on' => $installment->due_on,
             ]);
             $this->order->installments()->save($oInstallment);
@@ -700,20 +718,32 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         return sigfig($cost);
     }
 
-    public function getCurrentProfit(bool $recache = false, float $cost_to_company): float
+    /**
+     * Get the current profit for the order. Estimated if using FX rates
+     *
+     * @param bool $recache Should this bypass the cache and recalculate anyway
+     * @param float|null $cost_to_company Cached cost to company value. Defaults to calculating if not provided
+     * @return float|null Returns the profit, or null if in foreign currency with no FX rate
+     */
+    public function getCurrentProfit(bool $recache = false, float|null $cost_to_company = null): float|null
     {
         if (!$recache && $this->order->cache->profit !== null) {
             return $this->order->cache->profit;
         }
-        $profit = 0;
-        $profit = $this->order->total - $cost_to_company;
-        return $profit;
+        $cost_to_company = $cost_to_company ?? $this->getCostToCompany($recache);
+        // If using conversion, then convert total
+        if ($this->order->currency !== null && $this->order->currency !== Settings::currency()) {
+            $fx = Settings::getConversionRate($this->order->currency, Settings::currency());
+            if ($fx === null) { return null; }
+            return ($this->order->total * $fx) - $cost_to_company;
+        }
+        return $this->order->total - $cost_to_company;
     }
 
     public function getBeforeString(): string|null
     {
         if ($this->order->total_adjustments > 0 || $this->order->commission_amount > 0) {
-            $string = f_currency($this->order->cost) . " before ";
+            $string = fr_currency($this->order->cost, $this->order->currency) . " before ";
             if ($this->order->total_adjustments > 0 && $this->order->commission_amount > 0) {
                 $string .= "adjustments and commission";
             } elseif ($this->order->total_adjustments > 0) {
@@ -904,11 +934,19 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $this->order->cost,
             $this->getScheduleItineraryArray(),
             $this->getPaymentItineraryArray(),
+            $this->order->currency,
         );
     }
 
     private function getGenericItinerary(): Itinerary
     {
+        //dd($this->order->payment_details, $this->order->quote, $this->order->tour);
+        $paymentDetails = collect([
+                $this->order->payment_details,
+                $this->order->quote?->payment_details,
+                $this->order->tour?->payment_details,
+                setting('company.bank_transfer')
+            ])->first(fn($value) => !empty($value));
         return new Itinerary(
             $this->order->tour->name,
             $this->order->tour->event,
@@ -930,6 +968,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $this->order->tour->terms,
             $this->order->invoice_footer,
             $this->order->external_notes,
+            $paymentDetails,
         );
     }
 
