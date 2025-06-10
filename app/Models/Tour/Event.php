@@ -38,6 +38,8 @@ use Settings;
  * @property string|null $image_url Asset link for image
  * @property string|null $banner_url Asset link for banner
  * @property string|null $booking_url
+ * @property string|null $itinerary_email_subject
+ * @property string|null $itinerary_email_template
  * @property string|null $notes
  * @property string|null $onsite_name
  * @property string|null $onsite_email

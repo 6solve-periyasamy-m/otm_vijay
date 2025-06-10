@@ -167,8 +167,10 @@ class OrderMailer
         //$email = $email ?? $this->order->agent?->email ?? $this->order->organization?->contact_email ?? $this->order->leadBooker->customer->email_address ;
         $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email : "";
         try {
-            (new OrderMail('itinerary-document', $sendAsConsultant ? $this->order->consultant : null))
-                    ->send($email, $this->order, [$this->getItineraryAttachment()], $bcc, true, $this->order->consultant?->email);
+            $mail = (new OrderMail('itinerary-document', $sendAsConsultant ? $this->order->consultant : null));
+            if ($this->order?->tour?->event?->itinerary_email_template !== null) { $mail->setBody($this->order?->tour?->event?->itinerary_email_template); }
+            if ($this->order?->tour?->event?->itinerary_email_subject !== null) { $mail->setSubject($this->order?->tour?->event?->itinerary_email_subject); }
+            $mail->send($email, $this->order, [$this->getItineraryAttachment()], $bcc, true, $this->order->consultant?->email);
             return true;
         } catch (MailDisabledException) {
             return false;
