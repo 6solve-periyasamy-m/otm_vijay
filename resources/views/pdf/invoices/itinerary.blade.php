@@ -179,18 +179,18 @@
         }
         .customer-agent-details .customer-details {width:100%;}
         .customer-agent-details .agent-details {
-        width:100%;    
-        margin-top: 16px;
-        margin-bottom: 16px;
+            width:100%;    
+            margin-top: 16px;
+            margin-bottom: 16px;
         }
         .customer-agent-details p, .customer-agent-details div {
-        font-family: "PPNeueMontreal-Medium";
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 18px;
-        margin:0px;
-        margin-bottom: 0px ! Important;
-        color: var(--text-color);
+            font-family: "PPNeueMontreal-Medium";
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 18px;
+            margin:0px;
+            margin-bottom: 0px ! Important;
+            color: var(--text-color);
         }
         .customer-agent-details div.phone_number_block {
             padding-left: 40px;
@@ -220,8 +220,8 @@
         }
         .information-block table td.tbl-td-no-text-wrap {width:300px;}
         .information-block table td strong {
-        font-family: "PPNeueMontreal-Medium";
-        font-weight: 500;
+            font-family: "PPNeueMontreal-Medium";
+            font-weight: 500;
         }
         .customer-agent-details p span, .information-block .column .single p.description {
             font-family: "PPNeueMontreal-Regular";
