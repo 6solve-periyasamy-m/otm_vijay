@@ -1409,7 +1409,7 @@
             position: relative;
             width: 20px;
             height: 20px;
-            /* cursor: pointer; */
+            cursor: pointer;
         }
 
         .check-in-check-out .image-module input {
