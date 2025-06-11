@@ -3,8 +3,17 @@
  * @var \App\Repository\Storage\Itinerary\Itinerary $itinerary
  * @var string $type
  */
-    $type = setting('itinerary.heading') ?? 'Travel Itinerary';
+    use Illuminate\Support\Facades\File;
+    $type = setting('itinerary.heading') ?? 'Itinerary';
     $event_name = $itinerary->event;
+    $headlogo = svg_to_b64($itinerary->brand->logo);
+    $headlogo = svg_to_b64('images/pdf_assets/images/KeithProwse-Travel-Logo.png') ;
+    $eveimg = $itinerary->image;
+    $reference = $itinerary->reference;
+    $all_customers = [];
+    $travellers = collect($itinerary->travellers);
+    $booker = collect([$itinerary->booker]);
+    $all_customers = $booker->merge($travellers);
 @endphp
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -17,155 +26,54 @@
     <style type="text/css">
         <?php include(public_path() . '/css/kpt.css') ?>
         {!! setting('customization.documentation.colors') !!}
-        :root { 
-            --main-background-color:#F9F4EE;
-            --text-head-color: rgba(243, 91, 21, 1);
-            --text-color: #000;
-            --table-header-text: #FFFFFF;
-            --head-text-background:rgba(243, 91, 21, 1);
-            --table-border-color:#EAEAEA;
+        :root { --main-background-color:#F9F4EE; --text-head-color: rgba(243, 91, 21, 1); --text-color: #000; --table-header-text: #FFFFFF; --head-text-background:rgba(243, 91, 21, 1); --table-border-color:#EAEAEA; }
+        @page:first {margin-top: 0px;}
+        @page { margin-top: 50px; margin-left: 0px; margin-right: 0px; margin-bottom: 0px; }
+        
+        .pdf-header {
+            background-color: var(--main-background-color);
+            padding:20px 10px;
         }
-        @page:first {
-            margin-top: 0px;
+        .pdf-individual-block {
+            width: 796px;
         }
-        @page {
-            margin-top: 50px;
-            margin-left: 0px;
-            margin-right: 0px;
-            margin-bottom: 0px;
+        .header-logo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .pdf-header { padding:30px 32px;position: relative; }
-        .pdf-individual-block { width: 796px;position: relative; }
-        .travel_itinerary_block{padding: 0px 30px 25px 30px;margin-top: -30px;}
-        .header-logo{width: 180px; height: 30px;position: absolute; top: -130px;}
-        .header-logo img{width: 100%; height: 100%;}
-        .travel_title{
-            color: #fff;
-            font-family: "PlayfairDisplay-Medium";
-            font-size: 40px;
-            font-weight: 600;
-            line-height: 38px;
-            margin-top: -80px;
-            text-align: center;
-        }
-        .travel_itinerary_title h3{
-            color: var(--text-color);
-            font-family: "PlayfairDisplay-Medium";
-            font-size: 20px;
-            font-weight: 500;
-            line-height: 28px;
-            margin-bottom: 0px;
-            text-align: left;
-        }
-        .travel_itinerary_title h4{
-            font-family: "PP Neue Montreal";
-            font-size: 15px;
-            font-weight: 400;
-            line-height: 12px;
-            color: #F35B15;
-            text-underline-position: from-font;
-            text-decoration-skip-ink: none;
-            text-align: left;
-        }
-        .travel_itinerary_title h6,.event_txt{
-            font-family: "PP Neue Montreal";
-            font-size: 15px;
-            font-weight: 400;
-            line-height: 21px;
-            color: #000;
-        }
+        .event-name h3{ padding-left:20px; color: var(--text-color); font-family: "PlayfairDisplay-Medium"; font-size: 24px; font-weight: 500; line-height: 16px; margin-bottom: 0px; text-align: left; }
+     
+        .travel_itinerary_block{margin-top: -30px;}
+        /* .header-logo{width: 180px; height: 30px;position: absolute; top: -130px;}
+        .header-logo img{width: 100%; height: 100%;} */
+        .travel_title{ color: #fff; font-family: "PlayfairDisplay-Medium"; font-size: 40px; font-weight: 600; line-height: 38px; margin-top: -80px; text-align: center; } 
+        .travel_itinerary_title h3{ color: var(--text-color); font-family: "PlayfairDisplay-Medium"; font-size: 24px; font-weight: 500; line-height: 18px; margin-bottom: 0px; text-align: left; }
+        .travel_itinerary_title h4{ padding-top:10px; font-family: "PP Neue Montreal"; font-size: 15px; font-weight: 400; line-height: 12px; color: #F35B15; text-underline-position: from-font; text-decoration-skip-ink: none; text-align: left; }
+        .travel_itinerary_title h6,.event_txt{ font-family: "PP Neue Montreal"; font-size: 15px; font-weight: 400; line-height: 21px; color: #000; }
         .travel_itinerary_title h5{font-weight: normal;font-family: "PP Neue Montreal";}
-        /* .travel_itinerary_title h5::after{
-            content:"";
-            margin-top: 20px;
-            position: absolute;
-            left: 1.0%;
-            display: block;
-            height: 4px;
-            width: 80px;
-            background-color: var(--head-text-background);
-        } */
-        h2{
-            font-family: 'Lato', sans-serif;
-            font-size: 22px;
-            font-weight: 700;
-            line-height: 28px;
-            padding: 3px 32px;
-            color: var(--table-header-text);
-            background-color: var(--head-text-background);
-            margin: 0;
-            text-transform: capitalize;
-            text-align: center;
-        }
+        h2{ font-family: 'Lato', sans-serif; font-size: 22px; font-weight: 700; line-height: 28px; padding: 3px 32px; color: var(--table-header-text); background-color: var(--head-text-background); margin: 0; text-transform: capitalize; text-align: center; }
         .heading-module {margin-top: 30px !important;}
-        .heading-module h3{
-            margin: 10px 0px 0px;
-            font-family: "PPNeueMontreal-Medium";
-            font-size: 20px;
-            font-weight: 500;
-            line-height: 24px;
-            color: var(--text-color);
-            text-transform: capitalize;
-        }
-        h3 span.mark {
-            width: 5px;
-            height: 30px;
-            display: inline-block;
-            margin-right: 22px;
-            background-color: var(--head-text-background);
-        }
-        h3 span.text {
-            position: relative;
-            top: -10px;
-        }
+        .heading-module h3{ margin: 10px 0px 0px; font-family: "PPNeueMontreal-Medium"; font-size: 20px; font-weight: 500; line-height: 24px; color: var(--text-color); text-transform: capitalize; }
+        h3 span.mark { width: 5px; height: 30px; display: inline-block; margin-right: 22px; background-color: var(--head-text-background); } 
+        h3 span.text { position: relative; top: -10px; }
         .single-module {padding-left: 32px;}
         .pdf-individual-block .single-module .heading-module { margin-left: -32px; }
-        h4 span.mark {
-            width: 88px;
-            height: 1px;
-            display: block;
-            margin: 0;
-            margin-top: 5px;
-            background-color: var(--head-text-background);
-        }
-        .single-module h4{
-            font-family: "PPNeueMontreal-Regular";
-            font-size: 18px;
-            font-weight: 500;
-            line-height: 20px;
-            color: var(--text-color);
-            margin: 0px 0px 24px 0px;
-        }
-        .single-module table td {
-            font-family: "PPNeueMontreal-Regular";
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 20px;
-            color: var(--text-color);
-            margin: 0px 0px 0px 0px;
-            padding: 0px;
-            vertical-align: top;
-        }
-        .event_info_div table td, .event_contact_info_div table td, .onsite-details{
-            font-family: "PPNeueMontreal-Regular";
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 20px;
-            color: var(--text-color);
-            margin: 0px 0px 0px 0px;
-            vertical-align: top;
-        }
+        h4 span.mark { width: 88px; height: 1px; display: block; margin: 0; margin-top: 5px; background-color: var(--head-text-background); }
+        .single-module h4{ font-family: "PPNeueMontreal-Regular"; font-size: 18px; font-weight: 500; line-height: 20px; color: var(--text-color); margin: 0px 0px 24px 0px; }
+        .single-module table td { font-family: "PPNeueMontreal-Regular"; font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-color); margin: 0px 0px 0px 0px; padding: 0px; vertical-align: top; }
+        .event_info_div table td, .onsite-details{font-family: "PPNeueMontreal-Regular";font-size: 14px;font-weight: 400;line-height: 20px;color: var(--text-color);margin: 0px 0px 0px 0px;vertical-align: top;}
         .w-125{width :135px;}
         .item-detail.desc-pos-top{padding-right: 30px;}
         .pdf-individual-block .details-module tr td{padding-bottom: 7px !important;}
         .single-module table tr { margin: 0px 0px 5px 0px;}
         .item-detail { max-width: 100%;}
-        .event_info_div{padding: 45px 35px;}
+        .event_info_div{padding: 10px 35px;}
         .event_descrp{padding-bottom: 15px;}
         .banner_header{ background-color: rgba(0, 0, 0, 0.6);display: inline-block;width: 796px; height: 147px;margin-top: -10px; }
         .text-wrap { word-wrap: break-word; word-break: break-word; white-space: normal; width:600px; }
         .travellers table { width: 100%;  border-collapse: collapse; }
-        .travellers th, td {padding: 5px 10px 5px 5px;text-align: left;}
+        .travellers th, td {text-align: left;}
         .travellers th { background-color: #f4f4f4; }
         .traveller-name-space {width: 245px;padding-top: 5px;padding-bottom: 10px; font-family: "PPNeueMontreal-Regular";font-size: 14px;}
         .event-field-space {padding-top: 35px;padding-bottom: 50px;}
@@ -189,111 +97,233 @@
         .word-wrap { word-wrap: break-word; word-break: break-word; white-space: normal; }
         .text-full-wrap table td {word-wrap: break-word; word-break: break-word; white-space: normal;}
         .onsite-details {font-size: 16px; font-weight: 600;}
+        .tbl-bg-style{ background-color: #F9F4EE; padding: 0px 0px 0px 0px; position:relative;}
+        .event_contact_info_div table tbody td {font-family: "PPNeueMontreal-Regular";font-size: 14px;font-weight: 400;line-height: 0px;color: var(--text-color);margin: 0px 0px 0px 0px;vertical-align: top;}
+        .line-height {line-height: 15px;}
+        .no-padding {padding: 0 !important;}
+
+
+        .customer-details-block h6 {
+            font-family: "PPNeueMontreal-Medium";
+            font-size:14px;
+            font-weight:500;
+            line-height:16px;
+            margin:0px;
+            margin-bottom:8px;
+            color: var(--text-head-color);
+            text-transform:uppercase;
+        } 
+        .customer-details-block .customer-details-text-block,.customer-details-block .customer-details-image-block  {
+            float:left;  
+        }
+        .customer-details-block .customer-details-image-block {
+            width: 376px;
+            height: 252px;
+        }
+        .customer-details-block .customer-details-text-block {    
+            width: 388px;
+            padding-left: 32px;
+        }
+        .customer-details-text-block  h3 span {
+            background-color: var(--text-head-color);
+            display: block;
+            height: 3px;
+            margin-top: 4px;
+            width: 44px;
+            margin-bottom: 19px;
+        }
+        .customer-details-image-block {display:inline-block;}
+        .customer-details-image-block img {width:100%;height:100%;object-fit:contain;}
+        .top-heading-section {
+            width: 400px;
+            position: relative;
+            margin-top: 10px;
+            display: block;
+            margin-bottom: 10px;
+            height: 44px;
+        }
+        .top-heading-section h1 {
+            float: left;
+            width: 255px;
+        }
+        .top-heading-section h5 {
+            width: 194px;
+            margin-bottom: 0px !important;
+            margin-top: 10px;
+            margin-left: auto;
+            position: absolute;
+            right: 0;
+            top: 0px;
+            font-family: "PPNeueMontreal-Medium";
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 14.4px;
+            margin-bottom: 6px;
+            color: var(--text-color);
+        }
+        .top-heading-section h5 span {
+            margin-top: 5px;
+            display: block;
+            height: 3px;
+            width: 44px;
+            background-color: var(--head-text-background);
+        }
+
+        h1 {
+            color: var(--text-color);
+            font-family: "PlayfairDisplay-Medium";
+            font-size: 30px;
+            font-weight: 500;
+            line-height: 36px;
+            margin-bottom: 0px;
+        }
+        .customer-agent-details .customer-details {width:100%;}
+        .customer-agent-details .agent-details {
+            width:100%;    
+            margin-top: 16px;
+            margin-bottom: 16px;
+        }
+        .customer-agent-details p, .customer-agent-details div {
+            font-family: "PPNeueMontreal-Medium";
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 18px;
+            margin:0px;
+            margin-bottom: 0px ! Important;
+            color: var(--text-color);
+        }
+        .customer-agent-details div.phone_number_block {
+            padding-left: 40px;
+            font-family: "PPNeueMontreal-Regular";
+            font-weight: 400;
+            line-height: 21px;
+        }
+        
+        .information-block {
+            background-color: var(--main-background-color);
+            clear: both;
+            width: 100%;
+            display: inline-block;
+            padding-left:10px;
+        }
+        .information-block table {
+            padding: 0px 0px 0px 10px;
+        }
+        .information-block table td {
+            font-family: "PPNeueMontreal-Regular";
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 18px;
+            color: var(--text-color);
+            margin: 0;
+            width:100px;
+        }
+        .information-block table td.tbl-td-no-text-wrap {width:300px;}
+        .information-block table td strong {
+            font-family: "PPNeueMontreal-Medium";
+            font-weight: 500;
+        }
+        .customer-agent-details p span, .information-block .column .single p.description {
+            font-family: "PPNeueMontreal-Regular";
+            font-weight: 400;
+        }
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
 
-<body class="body">
+<body class="body" style="margin: 0px;">
     <section class="pdf-individual-block">
-        @include('partials.pdf.kpt.header.new', ['type' => $type,])
-
-        @php
-            $all_customers = [];
-            $travellers = collect($itinerary->travellers);
-            $booker = collect([$itinerary->booker]);
-            $all_customers = $booker->merge($travellers);
-        @endphp
-        <div class="travel_itinerary_block">
-            <div class="travel_itinerary_title">
+        <div class="row">
+            <div class="pdf-header">
+                <table width="100%" style="width: 100%;">
+                    <tr>
+                        <td style="text-align: left; vertical-align: middle;">
+                            <h3 style="padding-left: 20px; color: var(--text-color); font-family: 'PlayfairDisplay-Medium'; font-size: 24px; font-weight: 500; margin: 0;">
+                                {{ $event_name }}
+                            </h3>
+                        </td>
+                        <td style="text-align: right; vertical-align: middle;">
+                            <img src="{{ $headlogo }}" alt="logo-ch" style="max-height: 60px;">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="customer-details-block">
+                <div class="customer-details-text-block">            
+                    <div class="top-heading-section">
+                        <h1>{{ $type ?? "Quote" }}</h1>
+                        <h5 style="margin-bottom:12px;">REFERENCE: {{ $reference }} <span></span></h5>         
+                    </div>
+                    <div class="customer-agent-details">
+                        <div class="customer-details">
+                            @if(!empty($itinerary->event->onsite_name) || !empty($itinerary->event->onsite_email) || !empty($itinerary->event->onsite_phone))
+                                <h6>Onsite Details</h6>
+                                @if(!empty($itinerary->event->onsite_name))
+                                    <p>Name: <span>{{ $itinerary->event->onsite_name }}</span></p>
+                                @endif
+                                @if(!empty($itinerary->event->onsite_email))
+                                    <p>Email: <span>{{ $itinerary->event->onsite_email }}</span></p>
+                                @endif
+                                @if(!empty($itinerary->event->onsite_phone))
+                                    <p>Phone: <span>
+                                        @php
+                                            $phoneString = $itinerary->event->onsite_phone ?? '';
+                                            $phones = preg_split('/\s*\|\s*|\s{2,}/', $phoneString, -1, PREG_SPLIT_NO_EMPTY);
+                                        @endphp
+                                        @foreach($phones as $phone)
+                                        <div class="phone_number_block"><a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone) }}">{{ trim($phone) }}</a></div>
+                                        @endforeach
+                                    </span></p>
+                                @endif
+                            @endif                        
+                        </div>
+                    </div>  
+                </div>
+                <div class="customer-details-image-block">
+                    <img src="{!! $eveimg !!}" alt="image-block">
+                </div>       
+            </div>
+            <div class="information-block">
+                @if($all_customers->isNotEmpty())
                 <table style="width: 100%;">
                     <tbody>
-                        @if(!empty($itinerary->event->onsite_name) || !empty($itinerary->event->onsite_email) || !empty($itinerary->event->onsite_phone))
-                            <tr>
-                                <td style="width:77%; vertical-align: top;">
-                                    <table class="event-profile">
-                                        <tbody>
-                                            <tr><td style="width:77%; float:left;padding-bottom: 15px;"><h3>{{ $event_name }}</h3></td></tr>
-                                            <tr><td class="bg-line-color" style="width:77%; vertical-align: top; width:67%; text-align:left;padding-bottom: 25px;"><h5><strong>Reference:</strong> {{ $itinerary->reference }} </h5></td></tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                                <td style="width:33%; float:middle;padding-bottom: 15px;">
-                                    <div class="event_contact_info_div">
-                                    @if(!empty($itinerary->event->onsite_name) || !empty($itinerary->event->onsite_email) || !empty($itinerary->event->onsite_phone))
-                                        <table class="event-profile">
-                                            <tbody>
-                                                <tr><td><p class="onsite-details">Onsite Details</p></td></tr>
-                                                @if(!empty($itinerary->event->onsite_name))
-                                                    <tr><td class="event-field-space" style="width: 33.33%;">
-                                                    <strong>Name:&nbsp;&nbsp;</strong><span>{{ $itinerary->event->onsite_name }}</span>
-                                                    </td></tr>
-                                                @endif
-                                                @if(!empty($itinerary->event->onsite_email))
-                                                    <tr><td class="event-field-space" style="width: 36.33%;">
-                                                    <strong>Email:&nbsp;&nbsp;</strong><span>{{ $itinerary->event->onsite_email }}</span>
-                                                    </td></tr>
-                                                @endif
-                                                @if(!empty($itinerary->event->onsite_phone))
-                                                    <tr><td class="event-field-space" style="text-align: left; width: 30.33%;">
-                                                    <strong>Phone:&nbsp;&nbsp;</strong><span>{{ $itinerary->event->onsite_phone }}</span>
-                                                    </td></tr>
-                                                @endif
-                                            </tbody>
-                                        </table>
-                                    @endif
-                                    </div>
-                                </td>
-                            </tr>
-                        @else
-                        <tr>
-                            <td style="width:77%; float:left;padding-bottom: 15px;"><h3>{{ $event_name }}</h3></td>
-                            <td class="bg-line-color" style="text-align:left;padding-bottom: 25px;"><h5><strong>Reference:</strong> {{ $itinerary->reference }} </h5></td>
-                        </tr>
-                        @endif
+                        <tr><td style="padding: 10px 0px 0px 10px; font-weight: normal !important; color: var(--text-head-color);"><p>Guest Names</p></td></tr>
+                        <tr><td>
+                            <!-- List of travellers -->
+                            <table class="travellers" style="width: 100%;">
+                                @php
+                                    $limited_travellers = $all_customers->take(20);
+                                    $chunks = $limited_travellers->chunk(4);
+                                @endphp
+                                @foreach($chunks as $chunk)
+                                    <tr>
+                                        @foreach($chunk as $traveller)
+                                            @php
+                                                $traveller_name = $traveller->customer->first_name . " " . $traveller->customer->last_name;
+                                                if (strpos($traveller_name, 'Unknown') !== false) {
+                                                    $traveller_name = 'TBC';
+                                                }
+                                            @endphp
+                                            <td class="traveller-name-space">
+                                                {{ $traveller_name }}
+                                            </td>
+                                        @endforeach
 
-                        @if($all_customers->isNotEmpty())
-                        <tr>
-                            <td colspan=2 style="padding-bottom: 12px;"><h4>Guest Names</h4></td>
-                        </tr>                        
-                        <tr>
-                            <td colspan=2 >
-                                <!-- List of travellers -->
-                                <table class="travellers">
-                                    @php
-                                        $limited_travellers = $all_customers->take(20);
-                                        $chunks = $limited_travellers->chunk(3);
-                                    @endphp
-                                    @foreach($chunks as $chunk)
-                                        <tr>
-                                            @foreach($chunk as $traveller)
-                                                @php
-                                                    $traveller_name = $traveller->customer->first_name . " " . $traveller->customer->last_name;
-                                                    if (strpos($traveller_name, 'Unknown') !== false) {
-                                                        $traveller_name = 'TBC';
-                                                    }
-                                                @endphp
-                                                <td class="traveller-name-space">
-                                                    {{ $traveller_name }}
-                                                </td>
-                                            @endforeach
-
-                                            @for($i = count($chunk); $i <= 3; $i++)
-                                                <td></td>
-                                            @endfor
-                                        </tr>
-                                    @endforeach
-                                </table>
-                                <!-- end of List of travellers -->
-                            </td>
-                        </tr> 
-                        @endif                   
+                                        @for($i = count($chunk); $i <= 4; $i++)
+                                            <td></td>
+                                        @endfor
+                                    </tr>
+                                @endforeach
+                            </table>
+                            <!-- end of List of travellers -->
+                        </td></tr>
                     </tbody>
-                </table>        
-            </div>            
-        </div>     
-
-        <div class="heading-2">
-            <h2>Itinerary & inclusions</h2>
+                </table>
+                @endif
+            </div>
+            <div class="heading-2">
+                <h2>Itinerary & inclusions</h2>
+            </div>
         </div>
 
         @if(!empty($itinerary->items['Flights']))
@@ -361,7 +391,6 @@
 
         @if(!empty($itinerary->items['Transfers']))
             @php $firstLoop = true; @endphp
-            
             @foreach($itinerary->items['Transfers'] as $transport)
                 @if(isset($transport->details['Quantity']) && $transport->details['Quantity'] > 0)
                 <div class="single-module mb-n15">
@@ -382,7 +411,7 @@
                                     <td class="item-detail">{{ $transport->name }}</td>
                                 </tr>
                                 @php
-                                    $disable_items = ['Description', 'Transport', 'Travel Class'];
+                                    $disable_items = [ 'Transport', 'Travel Class'];
                                 @endphp
                                 @foreach($transport->details as $key => $value)
                                 @php

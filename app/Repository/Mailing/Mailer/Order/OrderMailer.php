@@ -9,6 +9,7 @@ use App\Mail\Storage\OrderMail;
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
 use App\Repository\Model\Order\InvoiceRepository;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 use Log;
 
@@ -161,7 +162,9 @@ class OrderMailer
 
     public function sendItineraryEmail(string $email = null, bool $sendAsConsultant = false): bool
     {
-        $email = $email ?? $this->order->agent?->email ?? $this->order->organization?->contact_email ?? $this->order->leadBooker->customer->email_address ;
+        $user = $sendAs ?? Auth::user();
+        $email = $user->email ?? $this->order->consultant?->email;
+        //$email = $email ?? $this->order->agent?->email ?? $this->order->organization?->contact_email ?? $this->order->leadBooker->customer->email_address ;
         $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email : "";
         try {
             $mail = (new OrderMail('itinerary-document', $sendAsConsultant ? $this->order->consultant : null));
