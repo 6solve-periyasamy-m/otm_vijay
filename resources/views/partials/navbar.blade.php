@@ -17,7 +17,7 @@
             <div class="nav-item dp-down">
                 <a class="nav-item nav-link dp-button" href="#">
                     <span class='text-light'>
-                        {{-- <livewire:admin.system.notification.badge /> --}}
+                        <livewire:admin.system.notification.badge />
                         {{ Auth::user()->name }}
                     </span>
                     <img src="{{ asset(Auth::user()->avatar_url) }}" class="img-thumbnail inline">
