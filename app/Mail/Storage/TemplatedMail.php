@@ -204,4 +204,10 @@ abstract class TemplatedMail
     {
         return route('email.demo', ['mail' => $this->code,]);
     }
+
+    public function setSender(string $email, string|null $name = null): void
+    {
+        $this->email = $email;
+        $this->name = $name ?? $email;
+    }
 }
