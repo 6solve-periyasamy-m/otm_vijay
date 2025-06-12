@@ -73,6 +73,77 @@
 @endpush
 
 @section('content')
+
+<div class="inner_content">
+    <div class="overview_top_bar">
+        <p class="overview_title">FAQs </p>
+        <div class="search_field"><p><input type="text" placeholder="SEARCH"></p></div>
+    </div>
+    <div class="faqs_inner">
+        <div class="faqs_list">
+            <div class="tab-accordian">
+                <div class="titleWrapper inactive">
+                    <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam molestie leo ante</h4>
+                    <div class="arrow-icon"><img src="/images/customer/images/arrow-down-black.svg" alt="arrow_down"/></div>
+                </div>
+                <div id="descwrapper" class="desWrapper">
+                    <p>Curabitur orci nulla, condimentum eu erat non, dapibus ornare mauris. Nunc dapibus lorem a aliquam viverra.
+                        Morbi eu tellus condimentum ligula luctus dictum. Morbi vel nibh suscipit, mollis tortor posuere, dignissim neque. Donec ultrices orci et rutrum luctus. 
+                        Donec sed faucibus ligula. Sed malesuada ac ante eu malesuada.</p>
+                </div>
+            </div>
+            <div class="tab-accordian">
+                <div class="titleWrapper inactive">
+                    <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam molestie leo ante</h4>
+                    <div class="arrow-icon"><img src="/images/customer/images/arrow-down-black.svg" alt="arrow_down"/></div>
+                </div>
+                <div id="descwrapper" class="desWrapper">
+                    <p>Curabitur orci nulla, condimentum eu erat non, dapibus ornare mauris. Nunc dapibus lorem a aliquam viverra.
+                        Morbi eu tellus condimentum ligula luctus dictum. Morbi vel nibh suscipit, mollis tortor posuere, dignissim neque. Donec ultrices orci et rutrum luctus. 
+                        Donec sed faucibus ligula. Sed malesuada ac ante eu malesuada.</p>
+                </div>
+            </div>
+            <div class="tab-accordian">
+                <div class="titleWrapper inactive">
+                    <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam molestie leo ante</h4>
+                    <div class="arrow-icon"><img src="/images/customer/images/arrow-down-black.svg" alt="arrow_down"/></div>
+                </div>
+                <div id="descwrapper" class="desWrapper">
+                    <p>Curabitur orci nulla, condimentum eu erat non, dapibus ornare mauris. Nunc dapibus lorem a aliquam viverra.
+                        Morbi eu tellus condimentum ligula luctus dictum. Morbi vel nibh suscipit, mollis tortor posuere, dignissim neque. Donec ultrices orci et rutrum luctus. 
+                        Donec sed faucibus ligula. Sed malesuada ac ante eu malesuada.</p>
+                </div>
+            </div>
+            <div class="tab-accordian">
+                <div class="titleWrapper inactive">
+                    <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam molestie leo ante</h4>
+                    <div class="arrow-icon"><img src="/images/customer/images/arrow-down-black.svg" alt="arrow_down"/></div>
+                </div>
+                <div id="descwrapper" class="desWrapper">
+                    <p>Curabitur orci nulla, condimentum eu erat non, dapibus ornare mauris. Nunc dapibus lorem a aliquam viverra.
+                        Morbi eu tellus condimentum ligula luctus dictum. Morbi vel nibh suscipit, mollis tortor posuere, dignissim neque. Donec ultrices orci et rutrum luctus. 
+                        Donec sed faucibus ligula. Sed malesuada ac ante eu malesuada.</p>
+                </div>
+            </div>
+            <div class="tab-accordian">
+                <div class="titleWrapper inactive">
+                    <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam molestie leo ante</h4>
+                    <div class="arrow-icon"><img src="/images/customer/images/arrow-down-black.svg" alt="arrow_down"/></div>
+                </div>
+                <div id="descwrapper" class="desWrapper">
+                    <p>Curabitur orci nulla, condimentum eu erat non, dapibus ornare mauris. Nunc dapibus lorem a aliquam viverra.
+                        Morbi eu tellus condimentum ligula luctus dictum. Morbi vel nibh suscipit, mollis tortor posuere, dignissim neque. Donec ultrices orci et rutrum luctus. 
+                        Donec sed faucibus ligula. Sed malesuada ac ante eu malesuada.</p>
+                </div>
+            </div>
+
+    
+
+        </div>
+    </div>
+</div>
+
+{{-- 
 <div class="row payment-balance">
     <div class="col-12">
         <form class="form-horizontal mx-2">
@@ -520,7 +591,14 @@
 </div>
 <div class="waiter">
     <x-loading-spinner center></x-loading-spinner>
-</div>
+</div> --}}
+
+<script>
+    jQuery('.tab-accordian .titleWrapper').click(function(){
+        jQuery(this).toggleClass('active');
+        jQuery(this).closest('.tab-accordian').find('.desWrapper').toggle(400);
+    })
+</script>
 
 @endsection
 

@@ -9,7 +9,7 @@ $passport = $customer->repository->isPassportLocked();
 @section('title', 'Edit Customer Profile')
 
 @section('content')
-    <div class="container-fluid">
+    {{-- <div class="container-fluid">
         <div class="row">
             <!-- Column -->
             <div class="col-lg-3 col-xxl-2 col-md-4">
@@ -286,5 +286,216 @@ $passport = $customer->repository->isPassportLocked();
                 </div>
             </div>
         </div>
+    </div> --}}
+    <div class="inner_content">
+        <div class="overview_top_bar">
+            <p class="overview_title">Your Detials </p>
+            <div class="search_field"><p><input type="text" placeholder="SEARCH"></p></div>
+        </div>
+        <div class="your_details">
+            <div class="your_details_row">
+                <div class="your_details_colm_1">
+                    <ul>
+                        <li class="active"><a href="#personal_details">Personal Details</a></li>
+                        <li><a href="#address_details">Address</a></li>
+                        <li><a href="#passport_details">Passport Details</a></li>
+                        <li><a href="#frequent_details">Frequent Flier Details</a></li>
+                        <li><a href="#other_details">Other Details</a></li>
+                        <li><a href="#change_password">Change Password</a></li>
+                    </ul>
+                </div>
+                <div class="your_details_colm_2">
+                    <form action="" method="get">
+                    <div class="form_inner">
+                        <div class="personal_details" id="personal_details">
+                            <h3>Personal details</h3>
+                            <p>Manage your personal details</p>
+                            <div class="personal_details_form">
+                                <h5>user name</h5>
+                                <div class="one_input_field"><input type="text" name="title" placeholder="TITLE*" required ></div>
+                                <div class="two_input_field">
+                                    <input type="text" name="first name" placeholder="FIRST NAME*" required >
+                                    <input type="text" name="last name" placeholder="LAST NAME*" required >
+                                </div>
+                                <div class="one_input_field">
+                                    <input type="text" name="date of birth" placeholder="DATE OF BIRTH*" onfocus="(this.type='date')"
+                                    onblur="(this.type='text')" required >
+                                </div>
+                                <div class="two_input_field mobile_number">
+                                    <div class="second_mob_no"><span><img src="/images/customer/images/aus_flag.svg" /><b>+61</b></span><input type="number" name="mobile number" placeholder="MOBILE NUMBER" required onchange="hideIcon(this);" class="mobile_no [&::-webkit-inner-spin-button]:appearance-none"></div>
+                                    <div class="second_mob_no"><span><img src="/images/customer/images/aus_flag.svg" /><b>+61</b></span><input type="number" name="alternate mobile number" placeholder="ALTERNATE MOBILE NUMBER" required class="alternate_no mobile_no [&::-webkit-inner-spin-button]:appearance-none"></div>
+                                </div>
+                                <div class="two_input_field">
+                                    <input type="email"  name="email address" placeholder="EMAIL ADDRESS" required>
+                                    <input type="email"  name="alternate email address" placeholder="ALTERNATE EMAIL ADDRESS" required>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <hr/>
+                        <div class="personal_details address_details" id="address_details">
+                            <h3>Address</h3>
+                            <p>Manage your address</p>
+                            <div class="address_details_form">
+                                <div class="address_detail_colm_1">
+                                    <h5>Billing Address</h5>
+                                    <div class="one_input_field"><input type="text" name="address line 1" placeholder="ADDRESS LINE 1" required ></div>
+                                    <div class="one_input_field"><input type="text" name="address line 2" placeholder="ADDRESS LINE 2" required ></div>
+                                    <div class="one_input_field"><input type="text" name="post code" placeholder="POST CODE" required ></div>
+                                    <div class="one_input_field"><input type="text" name="town" placeholder="TOWN" required ></div>
+                                    <div class="one_input_field"><input type="text" name="region" placeholder="REGION" required ></div>
+                                    <div class="one_input_field">
+                                        <select name="country">
+                                            <option value="country">COUNTRY</option>
+                                            <option value="australia">AUSTRALIA</option>
+                                            <option value="dhubai">DHUBAI</option>
+                                            <option value="london">LONDON</option>
+                                            <option value="usa">USA</option>
+                                          </select>
+                                    </div>
+                                </div>
+                                <div class="address_detail_colm_2">
+                                    <div class="home_addr"><h5>Home Address</h5>
+                                    <span class="same_as">
+                                        <label for="same_as_billing" class="hs-form-checkbox-display">
+
+                                            <input id="same_as_billing" class="hs-input" type="checkbox" name="same_as_billing" value="Same as Billing">
+                                            
+                                            <span>Same as Billing</span>
+                                            
+                                            </label>
+                                    </span>
+                                    </div>
+                                    <div class="one_input_field"><input type="text" name="address line 1" placeholder="ADDRESS LINE 1" required ></div>
+                                    <div class="one_input_field"><input type="text" name="address line 2" placeholder="ADDRESS LINE 2" required ></div>
+                                    <div class="one_input_field"><input type="text" name="post code" placeholder="POST CODE" required ></div>
+                                    <div class="one_input_field"><input type="text" name="town" placeholder="TOWN" required ></div>
+                                    <div class="one_input_field"><input type="text" name="region" placeholder="REGION" required ></div>
+                                    <div class="one_input_field">
+                                        <select name="country">
+                                            <option value="country">COUNTRY</option>
+                                            <option value="australia">AUSTRALIA</option>
+                                            <option value="dhubai">DHUBAI</option>
+                                            <option value="london">LONDON</option>
+                                            <option value="usa">USA</option>
+                                          </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="personal_details contact_details" id="contact_details">
+                            <h3>Emergency Contact Details</h3>
+                            <div class="emergency_details_form">
+                                    <div class="two_input_field">
+                                        <input type="text" name="first name" placeholder="FIRST NAME*" required >
+                                        <input type="text" name="last name" placeholder="LAST NAME*" required >
+                                    </div>
+                                    <div class="two_input_field mobile_number">
+                                        <input type="text" name="relationship" placeholder="RELATIONSHIP" class="relationship_input">
+                                        <div class="second_mob_no"><span><img src="/images/customer/images/aus_flag.svg" /><b>+61</b></span><input type="number" name="mobile number" placeholder="MOBILE NUMBER" required onchange="hideIcon(this);" class="mobile_no [&::-webkit-inner-spin-button]:appearance-none"></div>
+                                    </div>
+                                    
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="personal_details passport_details" id="passport_details">
+                            <h3>Passport Details</h3>
+                            <div class="emergency_details_form">
+                                    <div class="two_input_field">
+                                        <input type="text" name="first name" placeholder="FIRST NAME*" required >
+                                        <input type="text" name="last name" placeholder="LAST NAME*" required >
+                                    </div>
+                                    <div class="two_input_field mobile_number">
+                                        <input type="text" name="relationship" placeholder="RELATIONSHIP" class="relationship_input">
+                                        <div class="second_mob_no"><span><img src="/images/customer/images/aus_flag.svg" /><b>+61</b></span><input type="number" name="mobile number" placeholder="MOBILE NUMBER" required onchange="hideIcon(this);" class="mobile_no [&::-webkit-inner-spin-button]:appearance-none"></div>
+                                    </div>
+                                    <div class="one_input_field">
+                                        <select name="country">
+                                            <option value="country">COUNTRY</option>
+                                            <option value="australia">AUSTRALIA</option>
+                                            <option value="dhubai">DHUBAI</option>
+                                            <option value="london">LONDON</option>
+                                            <option value="usa">USA</option>
+                                          </select>
+                                    </div>
+                                    <div class="two_input_field">
+                                        <input type="text" name="issue date" placeholder="ISSUE DATE" onfocus="(this.type='date')"
+                                    onblur="(this.type='text')" required >
+                                    <input type="text" name="expiry date" placeholder="EXPIRY DATE" onfocus="(this.type='date')"
+                                    onblur="(this.type='text')" required >
+                                    </div>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="personal_details frequent_details" id="frequent_details">
+                            <h3>Frequent Flier Details</h3>
+                            <div class="frequent_details_form">
+                                    <div class="one_input_field">
+                                        <select name="program">
+                                            <option value="program1">PROGRAM </option>
+                                            <option value="program2">PROGRAM 2</option>
+                                            <option value="program3">PROGRAM 3</option>
+                                            <option value="program4">PROGRAM 4</option>
+                                          </select>
+                                    </div>
+                                    <div class="one_input_field"><input type="text" name="membership number" placeholder="MEMBERSHIP NUMBER" required ></div>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="personal_details other_details" id="other_details">
+                            <h3>Other Details</h3>
+                            <div class="other_details_form">
+                                    <div class="two_input_field">
+                                        <select name="t-shirt size">
+                                            <option value="Size32">T-Shirt Size </option>
+                                            <option value="Size34">T-Shirt Size 34</option>
+                                            <option value="Size36">T-Shirt Size 36</option>
+                                            <option value="Size38">T-Shirt Size 38</option>
+                                          </select>
+                                          <select name="hat size">
+                                            <option value="Size7">Hat size</option>
+                                            <option value="Size8">Hat size 8</option>
+                                            <option value="Size9">Hat size 9</option>
+                                            <option value="Size10">Hat size 10</option>
+                                          </select>
+                                    </div>
+                                    <div class="one_input_field"><input type="text" name="membership number" placeholder="MEMBERSHIP NUMBER" required ></div>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="personal_details change_password" id="change_password">
+                            <h3>Change Password</h3>
+                            <div class="change_password_form">
+                                <div class="two_input_field">
+                                    <div class="current_pwd"><input type="password"  name="current password" placeholder="CURRENT PASSWORD" required><span class=""><img src="/images/customer/images/eye-slash.svg" /></span></div>
+                                </div>
+                                <div class="two_input_field">
+                                    <input type="password"  name="new password" placeholder="NEW PASSWORD" required>
+                                    <input type="password"  name="confirm new password" placeholder="CONFIRM NEW PASSWORD" required>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="common_btn"><button class="save_changes">Save Changes</button></div>
+                </form>
+                </div>
+            </div>
+        </div>
     </div>
+    <script>
+        jQuery('.your_details_colm_1 li').click(function(e) {
+            e.preventDefault(); 
+            jQuery('.your_details_colm_1 li').removeClass('active');
+            jQuery(this).addClass('active');
+            const targetId = jQuery(this).find('a').attr('href');
+            if (targetId && jQuery(targetId).length) {
+                if (window.scrollY !== jQuery(targetId).offset().top) {
+                    document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+    
 @endsection
