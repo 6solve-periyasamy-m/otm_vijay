@@ -38,5 +38,6 @@ mix.copy('resources/assets/js/addons', 'public/js')
     .copy('resources/assets/css/preprocessed', 'public/css')
     .copy('resources/assets/external-css', 'public/css')
     .copy('resources/assets/css/booking', 'public/css/booking')
+    .copy('resources/assets/css/customer_portal', 'public/css/customer')
     .setPublicPath('public');
 
