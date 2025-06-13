@@ -59,6 +59,7 @@ class ActivityManifestRepository implements HasActivityManifest
             $row->reference = $orderComponent->orderCustomer->order->booking_reference;
             $row->customer = $orderComponent->orderCustomer->customer_name;
             $row->email = $orderComponent->orderCustomer->customer->email_address;
+            $row->mobile_number = $orderComponent->orderCustomer->customer->mobile_number;
             $row->activity = $orderComponent->tourComponent->inventory->component->name;
             $row->passport = $orderComponent->orderCustomer->customer->passport_first_name . ' ' . $orderComponent->orderCustomer->customer->passport_middle_name . ' ' . $orderComponent->orderCustomer->customer->passport_last_name;
             $row->type = $orderComponent->tourComponent->inventory->component->activityType->name;
@@ -69,6 +70,8 @@ class ActivityManifestRepository implements HasActivityManifest
             $row->purchase = $orderComponent->repository->getCostToCompany();
             $row->sales = $orderComponent->cost ?? $orderComponent->tourComponent->inventory->sales_price;
             $row->notes = $orderComponent->orderCustomer->activity_notes;
+            $row->internal_notes = $orderComponent->orderCustomer->internal_notes;
+            $row->external_notes = $orderComponent->orderCustomer->external_notes;
             $data[] = $row;
         }
         return $data;
