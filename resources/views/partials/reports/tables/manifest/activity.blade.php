@@ -5,6 +5,7 @@
         <th scope="col">Customer Name</th>
         <th scope="col">Passport Name</th>
         <th scope="col">Email Address</th>
+        <th scope="col">Phone Number</th>
         <th scope="col">Activity</th>
         <th scope="col">Type</th>
         <th scope="col">Ticket</th>
@@ -16,6 +17,8 @@
         <th scope="col">Purchase Price</th>
         <th scope="col">Sales Price</th>
         <th scope="col">Customer Activity Notes</th>
+        <th scope="col">Internal Notes</th>
+        <th scope="col">External Notes</th>
     </tr>
     </thead>
     <tbody>
@@ -25,6 +28,7 @@
             <td>{{ $row->customer }}</td>
             <td>{{ $row->passport }}</td>
             <td>{{ $row->email }}</td>
+            <td>{{ $row->mobile_number }}</td>
             <td>{{ $row->activity }}</td>
             <td>{{ $row->type }}</td>
             <td>{{ $row->ticket }}</td>
@@ -36,6 +40,8 @@
             <td>{{ f_currency($row->purchase) }}</td>
             <td>{{ f_currency($row->sales) }}</td>
             <td>{{ $row->notes }}</td>
+            <td>{{ $row->internal_notes }}</td>
+            <td>{{ $row->external_notes }}</td>
         </tr>
     @endforeach
     </tbody>

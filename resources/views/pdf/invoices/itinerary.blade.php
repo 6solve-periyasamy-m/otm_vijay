@@ -144,13 +144,14 @@
         }
         .top-heading-section h1 {
             float: left;
-            width: 255px;
+            font-size: 28px;
+            width: 270px;
         }
         .top-heading-section h5 {
             width: 194px;
             margin-bottom: 0px !important;
             margin-top: 10px;
-            margin-left: auto;
+            margin-left: 2rem;
             position: absolute;
             right: 0;
             top: 0px;
@@ -251,13 +252,13 @@
             <div class="customer-details-block">
                 <div class="customer-details-text-block">            
                     <div class="top-heading-section">
-                        <h1>{{ $type ?? "Quote" }}</h1>
-                        <h5 style="margin-bottom:12px;">REFERENCE: {{ $reference }} <span></span></h5>         
+                        <h1 style="margin-right: 100px;">{{ $type ?? "Quote" }}</h1>
+                        <h5 style="padding-left: 20rem !important; margin-bottom:12px;">REFERENCE: {{ $reference }} <span></span></h5>
                     </div>
                     <div class="customer-agent-details">
                         <div class="customer-details">
                             @if(!empty($itinerary->event->onsite_name) || !empty($itinerary->event->onsite_email) || !empty($itinerary->event->onsite_phone))
-                                <h6>Onsite Details</h6>
+                                <h6>On Ground Details</h6>
                                 @if(!empty($itinerary->event->onsite_name))
                                     <p>Name: <span>{{ $itinerary->event->onsite_name }}</span></p>
                                 @endif

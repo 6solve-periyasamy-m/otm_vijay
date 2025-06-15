@@ -163,14 +163,16 @@ class OrderMailer
     public function sendItineraryEmail(string $email = null, bool $sendAsConsultant = false): bool
     {
         $user = $sendAs ?? Auth::user();
-        $email = $user->email ?? $this->order->consultant?->email;
-        //$email = $email ?? $this->order->agent?->email ?? $this->order->organization?->contact_email ?? $this->order->leadBooker->customer->email_address ;
-        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email : "";
+        $customFromEmail = $user->email;
+        $customFromName = $user->name ?? $user->email;
+        $email = $email ?? $this->order->agent?->email ?? $this->order->organization?->contact_email ?? $this->order->leadBooker->customer->email_address ;
+        $bcc = ""; //flag('mail.bcc-consultant', false) ? $this->order->consultant?->email : "";
         try {
-            $mail = (new OrderMail('itinerary-document', $sendAsConsultant ? $this->order->consultant : null));
+            $mail = (new OrderMail('itinerary-document', $sendAsConsultant ? $this->order->consultant : null, $customFromEmail, $customFromName));
             if ($this->order?->tour?->event?->itinerary_email_template !== null) { $mail->setBody($this->order?->tour?->event?->itinerary_email_template); }
             if ($this->order?->tour?->event?->itinerary_email_subject !== null) { $mail->setSubject($this->order?->tour?->event?->itinerary_email_subject); }
-            $mail->send($email, $this->order, [$this->getItineraryAttachment()], $bcc, true, $this->order->consultant?->email);
+            $mail->setSender($customFromEmail, $customFromName);
+            $mail->send($email, $this->order, [$this->getItineraryAttachment()], $bcc, true);
             return true;
         } catch (MailDisabledException) {
             return false;
