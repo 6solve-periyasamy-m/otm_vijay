@@ -177,7 +177,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
 <div class="inner_content">
     <div class="overview_top_bar">
         <p class="overview_title"><span><a href="{{ route('customer.itinerary') }}"><img src="/images/customer/images/arrow-left.svg" alt="arrow left"></a></span>Royal Ascot African Ladies 2024  </p>
-        <div class="search_field"><p><input type="text" placeholder="SEARCH"></p></div>
+        <!-- <div class="search_field"><p><input type="text" placeholder="SEARCH"></p></div> -->
     </div>
     <div class="tours_list_details">
         <div class="upcoming_tours_clock">
@@ -408,7 +408,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
     <div class="inner_content">
         <div class="overview_top_bar">
             <p class="overview_title">Tours </p>
-            <div class="search_field"><p><input type="text" placeholder="SEARCH"></p></div>
+            <!-- <div class="search_field"><p><input type="text" placeholder="SEARCH"></p></div> -->
         </div>
         <div class="tours_list">
             <div class="upcoming_tours">

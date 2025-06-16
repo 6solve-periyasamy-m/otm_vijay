@@ -131,7 +131,7 @@ $branding = $branding ?? \App\Models\System\Brand::getSystemBrand();
                       <a href="{{ route('customer.edit') }}" class="{{ Route::currentRouteName() == 'customer.edit' ? 'active' : '' }}"><img src="/images/customer/images/user.svg" alt="your details" />YOUR DETAILS</a>
                   </li>
                   <li>
-                      <a href="{{ route('customer.extras') }}" class="{{ Route::currentRouteName() == 'customer.extras' ? 'active' : '' }}"><img src="/images/customer/images/message-question.svg" alt="faqs" />FAQS</a>
+                      <a href="{{ route('customer.faq') }}" class="{{ Route::currentRouteName() == 'customer.faq' ? 'active' : '' }}"><img src="/images/customer/images/message-question.svg" alt="faqs" />FAQS</a>
                   </li>
                   <li>
                       <a href="logout" onclick="event.preventDefault();logout();"><img src="/images/customer/images/login.svg" alt="logout" />LOGOUT</a>

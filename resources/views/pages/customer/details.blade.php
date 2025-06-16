@@ -4,6 +4,10 @@
 $currentUser = \App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer();
 $self = $currentUser->id === $customer->id;
 $passport = $customer->repository->isPassportLocked();
+
+use App\Models\Location\Country;
+use App\Models\Customer\TShirtSize;
+use App\Models\Customer\HatSize;
 @endphp
 
 @section('title', 'Edit Customer Profile')
@@ -290,7 +294,7 @@ $passport = $customer->repository->isPassportLocked();
     <div class="inner_content">
         <div class="overview_top_bar">
             <p class="overview_title">Your Detials </p>
-            <div class="search_field"><p><input type="text" placeholder="SEARCH"></p></div>
+            <!-- <div class="search_field"><p><input type="text" placeholder="SEARCH"></p></div> -->
         </div>
         <div class="your_details">
             <div class="your_details_row">
@@ -305,29 +309,44 @@ $passport = $customer->repository->isPassportLocked();
                     </ul>
                 </div>
                 <div class="your_details_colm_2">
-                    <form action="" method="get">
+                    <form @if (!isset($other))
+                                  action="{{ route('customer.update') }}"
+                              @else
+                                  action="{{ route('customer.update.other', ['customer' => $customer,]) }}"
+                              @endif
+                              method="post" enctype="multipart/form-data">
+                            @csrf
+                            <input type="file" name="profile_picture" id="profile_picture" style="display: none;"
+                                   onchange="form.submit()">
                     <div class="form_inner">
                         <div class="personal_details" id="personal_details">
+                            <input type="hidden" value="{{ $customer->id }}" name="id" id="id" >
                             <h3>Personal details</h3>
                             <p>Manage your personal details</p>
                             <div class="personal_details_form">
                                 <h5>user name</h5>
-                                <div class="one_input_field"><input type="text" name="title" placeholder="TITLE*" required ></div>
+                                <div class="one_input_field"><input type="text" name="title" value="{{ $customer->title ?? '' }}" autocomplete="honorific-prefix" required ></div>
                                 <div class="two_input_field">
-                                    <input type="text" name="first name" placeholder="FIRST NAME*" required >
-                                    <input type="text" name="last name" placeholder="LAST NAME*" required >
+                                    <input type="text" name="first_name" value="{{ $customer->first_name ?? '' }}"  autocomplete="given-name" placeholder="First Name *" required>
+                                    <input type="text" name="last_name" value="{{ $customer->last_name ?? '' }}"  autocomplete="family-name"  placeholder="Last Name *" required>
                                 </div>
                                 <div class="one_input_field">
-                                    <input type="text" name="date of birth" placeholder="DATE OF BIRTH*" onfocus="(this.type='date')"
-                                    onblur="(this.type='text')" required >
+                                    <input placeholder="DATE OF BIRTH*" onfocus="(this.type='date')"
+                                    onblur="(this.type='text')" type="date" name="date_of_birth" value="{{ $customer->date_of_birth?->format('Y-m-d') ?? '' }}" width="4" autocomplete="bday" required >
                                 </div>
                                 <div class="two_input_field mobile_number">
-                                    <div class="second_mob_no"><span><img src="/images/customer/images/aus_flag.svg" /><b>+61</b></span><input type="number" name="mobile number" placeholder="MOBILE NUMBER" required onchange="hideIcon(this);" class="mobile_no [&::-webkit-inner-spin-button]:appearance-none"></div>
-                                    <div class="second_mob_no"><span><img src="/images/customer/images/aus_flag.svg" /><b>+61</b></span><input type="number" name="alternate mobile number" placeholder="ALTERNATE MOBILE NUMBER" required class="alternate_no mobile_no [&::-webkit-inner-spin-button]:appearance-none"></div>
-                                </div>
-                                <div class="two_input_field">
-                                    <input type="email"  name="email address" placeholder="EMAIL ADDRESS" required>
-                                    <input type="email"  name="alternate email address" placeholder="ALTERNATE EMAIL ADDRESS" required>
+                                    <!-- <div class="second_mob_no"> -->
+                                        <!-- <span><img src="/images/customer/images/aus_flag.svg" /><b>+61</b></span> -->
+                                        <input type="number "name="mobile_number" value="{{ $customer->mobile_number ?? '' }}" autocomplete="tel"  placeholder="MOBILE NUMBER" onchange="hideIcon(this);" class="mobile_no [&::-webkit-inner-spin-button]:appearance-none">
+                                    <!-- </div> -->
+
+                                    <!-- <div class="second_mob_no"> -->
+                                        <!-- <span><img src="/images/customer/images/aus_flag.svg" /><b>+61</b></span> -->
+                                        <input type="number" name="other_phone_number" value="{{ $customer->other_phone_number ?? '' }}" placeholder="ALTERNATE MOBILE NUMBER"  class="alternate_no mobile_no [&::-webkit-inner-spin-button]:appearance-none"></div>
+                                <!-- </div> -->
+                                <div class="two_input_field">   
+                                    <input type="email" placeholder="EMAIL ADDRESS" name="email_address" value="{{ $customer->email_address ?? '' }}">
+                                    <!-- <input type="email"  name="alternate email address" placeholder="ALTERNATE EMAIL ADDRESS" required> -->
                                 </div>
                             </div>
                             
@@ -338,47 +357,51 @@ $passport = $customer->repository->isPassportLocked();
                             <p>Manage your address</p>
                             <div class="address_details_form">
                                 <div class="address_detail_colm_1">
-                                    <h5>Billing Address</h5>
-                                    <div class="one_input_field"><input type="text" name="address line 1" placeholder="ADDRESS LINE 1" required ></div>
-                                    <div class="one_input_field"><input type="text" name="address line 2" placeholder="ADDRESS LINE 2" required ></div>
-                                    <div class="one_input_field"><input type="text" name="post code" placeholder="POST CODE" required ></div>
-                                    <div class="one_input_field"><input type="text" name="town" placeholder="TOWN" required ></div>
-                                    <div class="one_input_field"><input type="text" name="region" placeholder="REGION" required ></div>
+                                    <h5>Home Address</h5>
+                                    <div class="one_input_field"><input type="text" name="home_address_line_1" value="{{ $customer->homeAddress->address_line_1 ?? '' }}" autocomplete="address-line1"placeholder="ADDRESS LINE 1" required ></div>
+                                    <div class="one_input_field"><input type="text" name="home_address_line_2" value="{{ $customer->homeAddress->address_line_2 ?? '' }}" autocomplete="address-line2" placeholder="ADDRESS LINE 2" required ></div>
+                                    <div class="one_input_field"><input type="text" name="home_postcode" value="{{ $customer->homeAddress->postcode ?? '' }}" autocomplete="postcode" placeholder="POST CODE" required ></div>
+                                    <div class="one_input_field"><input type="text" name="home_town" value="{{ $customer->homeAddress->town ?? '' }}" autocomplete="address-level2"placeholder="TOWN" required ></div>
+                                    <div class="one_input_field"><input type="text" name="home_region" value="{{ $customer->homeAddress->region ?? '' }}" autocomplete="address-level1" placeholder="REGION" required ></div>
                                     <div class="one_input_field">
-                                        <select name="country">
-                                            <option value="country">COUNTRY</option>
-                                            <option value="australia">AUSTRALIA</option>
-                                            <option value="dhubai">DHUBAI</option>
-                                            <option value="london">LONDON</option>
-                                            <option value="usa">USA</option>
-                                          </select>
+                                          <!-- @include('partials.fields.selector.detail-default', ['name' => 'Country', 'field' => 'home_country_id', 'value' => $customer->homeAddress->country_id ?? null, 'width' => 6, 'route' => 'countries', 'divClasses' => 'w-100']) -->
+                                          <select name="home_country_id" id="home_country_id" class="form-control">
+                                            <option value="">Select </option>
+                                            @foreach(Country::all() as $country)
+                                                <option value="{{ $country->id }}" {{ ($customer->homeAddress->country_id ?? '') == $country->id ? 'selected' : '' }}>
+                                                    {{ strtoupper($country->name) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+
                                     </div>
                                 </div>
                                 <div class="address_detail_colm_2">
-                                    <div class="home_addr"><h5>Home Address</h5>
+                                    <div class="home_addr"><h5>Billing Address</h5>
                                     <span class="same_as">
                                         <label for="same_as_billing" class="hs-form-checkbox-display">
 
-                                            <input id="same_as_billing" class="hs-input" type="checkbox" name="same_as_billing" value="Same as Billing">
+                                            <input id="same_as_billing" class="hs-input" type="checkbox" name="home_is_billing" value="1">
                                             
                                             <span>Same as Billing</span>
                                             
                                             </label>
                                     </span>
                                     </div>
-                                    <div class="one_input_field"><input type="text" name="address line 1" placeholder="ADDRESS LINE 1" required ></div>
-                                    <div class="one_input_field"><input type="text" name="address line 2" placeholder="ADDRESS LINE 2" required ></div>
-                                    <div class="one_input_field"><input type="text" name="post code" placeholder="POST CODE" required ></div>
-                                    <div class="one_input_field"><input type="text" name="town" placeholder="TOWN" required ></div>
-                                    <div class="one_input_field"><input type="text" name="region" placeholder="REGION" required ></div>
+                                    <div class="one_input_field"><input type="text"  name="billing_address_line_1" value="{{ $customer->billingAddress->address_line_1 ?? '' }}" autocomplete="address-line1" placeholder="ADDRESS LINE 1" ></div>
+                                    <div class="one_input_field"><input type="text" name="billing_address_line_2" value="{{ $customer->billingAddress->address_line_2 ?? '' }}" autocomplete="address-line2" placeholder="ADDRESS LINE 2"  ></div>
+                                    <div class="one_input_field"><input type="text" name="billing_postcode" value="{{ $customer->billingAddress->postcode ?? '' }}" autocomplete="postcode" placeholder="POST CODE" required ></div>
+                                    <div class="one_input_field"><input type="text" name="billing_town" value="{{ $customer->billingAddress->town ?? '' }}" autocomplete="address-level2" placeholder="TOWN" ></div>
+                                    <div class="one_input_field"><input type="text" name="billing_region" value="{{ $customer->billingAddress->region ?? '' }}" autocomplete="address-level1" placeholder="REGION" ></div>
                                     <div class="one_input_field">
-                                        <select name="country">
-                                            <option value="country">COUNTRY</option>
-                                            <option value="australia">AUSTRALIA</option>
-                                            <option value="dhubai">DHUBAI</option>
-                                            <option value="london">LONDON</option>
-                                            <option value="usa">USA</option>
-                                          </select>
+                                       <select name="billing_country_id" id="billing_country_id" class="form-control">
+                                            <option value="">Select </option>
+                                            @foreach(Country::all() as $country)
+                                                <option value="{{ $country->id }}" {{ ($customer->billingAddress->country_id ?? '') == $country->id ? 'selected' : '' }}>
+                                                    {{ strtoupper($country->name) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -388,12 +411,16 @@ $passport = $customer->repository->isPassportLocked();
                             <h3>Emergency Contact Details</h3>
                             <div class="emergency_details_form">
                                     <div class="two_input_field">
-                                        <input type="text" name="first name" placeholder="FIRST NAME*" required >
-                                        <input type="text" name="last name" placeholder="LAST NAME*" required >
+                                        <input type="text" placeholder="Contact NAME*" name="emergency_contact_name" value="{{ $customer->emergency_contact_name ?? '' }}"  >
+                                        <!-- <input type="text" name="last name" placeholder="LAST NAME*" required > -->
                                     </div>
                                     <div class="two_input_field mobile_number">
-                                        <input type="text" name="relationship" placeholder="RELATIONSHIP" class="relationship_input">
-                                        <div class="second_mob_no"><span><img src="/images/customer/images/aus_flag.svg" /><b>+61</b></span><input type="number" name="mobile number" placeholder="MOBILE NUMBER" required onchange="hideIcon(this);" class="mobile_no [&::-webkit-inner-spin-button]:appearance-none"></div>
+                                        <input type="text" name="emergency_contact_relationship" value="{{ $customer->emergency_contact_relationship ?? '' }}" placeholder="RELATIONSHIP" class="relationship_input">
+                                        <!-- <div class="second_mob_no"> -->
+                                            <!-- <span>
+                                            <img src="/images/customer/images/aus_flag.svg" /><b>+61</b></span> -->
+                                            <input type="number" name="emergency_contact_telephone" value="{{ $customer->emergency_contact_telephone ?? '' }}" placeholder="MOBILE NUMBER"  onchange="hideIcon(this);" class="mobile_no [&::-webkit-inner-spin-button]:appearance-none">
+                                        <!-- </div> -->
                                     </div>
                                     
                             </div>
@@ -401,29 +428,45 @@ $passport = $customer->repository->isPassportLocked();
                         <hr/>
                         <div class="personal_details passport_details" id="passport_details">
                             <h3>Passport Details</h3>
+                            
+                            @php 
+                                $passportdisabled = '';
+                                $passportreadonly = '';
+                            @endphp
+                            @if ($passport)
+                                <span class="fw-bold">Passport details are currently locked due to an upcoming tour. If you need to update your passport details, please contact us.</span>
+                                @php 
+                                    $passportdisabled = 'disabled';
+                                    $passportreadonly = 'readonly';
+                                @endphp
+                            @endif
                             <div class="emergency_details_form">
                                     <div class="two_input_field">
-                                        <input type="text" name="first name" placeholder="FIRST NAME*" required >
-                                        <input type="text" name="last name" placeholder="LAST NAME*" required >
+                                        <input type="text" {{ $passportreadonly }} name="passport_first_name" value="{{ $customer->passport_first_name ?? '' }}" autocomplete="given-name"  placeholder="FIRST NAME*"  >
+                                        <input type="text" {{ $passportreadonly }} name="passport_last_name" value="{{ $customer->passport_last_name ?? '' }}" autocomplete="family-name" placeholder="LAST NAME*"  >
                                     </div>
                                     <div class="two_input_field mobile_number">
-                                        <input type="text" name="relationship" placeholder="RELATIONSHIP" class="relationship_input">
-                                        <div class="second_mob_no"><span><img src="/images/customer/images/aus_flag.svg" /><b>+61</b></span><input type="number" name="mobile number" placeholder="MOBILE NUMBER" required onchange="hideIcon(this);" class="mobile_no [&::-webkit-inner-spin-button]:appearance-none"></div>
+                                        <input type="text"  {{ $passportreadonly }} name="gender" value="{{ $customer->gender ?? '' }}" width="2" autocomplete="sex" placeholder="Gender" class="gender_input">
+                                        <!-- <div class="second_mob_no"> -->
+                                            <!-- <span><img src="/images/customer/images/aus_flag.svg" /><b>+61</b></span> -->
+                                            <input type="number"  {{ $passportreadonly }} name="passport_number" value="{{ $customer->passport_number ?? '' }}" placeholder="MOBILE NUMBER"  onchange="hideIcon(this);" class="mobile_no [&::-webkit-inner-spin-button]:appearance-none">
+                                        <!-- </div> -->
                                     </div>
                                     <div class="one_input_field">
-                                        <select name="country">
-                                            <option value="country">COUNTRY</option>
-                                            <option value="australia">AUSTRALIA</option>
-                                            <option value="dhubai">DHUBAI</option>
-                                            <option value="london">LONDON</option>
-                                            <option value="usa">USA</option>
-                                          </select>
+                                         <select name="passport_country" class="form-control" {{ $passportdisabled }}>
+                                            <option value="">Select </option>
+                                            @foreach(Country::all() as $country)
+                                                <option value="{{ $country->id }}" {{ ($customer->passport_country_of_issue ?? '') == $country->id ? 'selected' : '' }}>
+                                                    {{ strtoupper($country->name) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="two_input_field">
-                                        <input type="text" name="issue date" placeholder="ISSUE DATE" onfocus="(this.type='date')"
-                                    onblur="(this.type='text')" required >
-                                    <input type="text" name="expiry date" placeholder="EXPIRY DATE" onfocus="(this.type='date')"
-                                    onblur="(this.type='text')" required >
+                                        <input type="date"  {{ $passportreadonly }} name="passport_issue_date" value="{{ $customer->passport_issue_date?->format('Y-m-d') ?? '' }}" placeholder="ISSUE DATE" onfocus="(this.type='date')"
+                                    onblur="(this.type='text')"  >
+                                    <input type="date" {{ $passportreadonly }} name="passport_expiry_date" value="{{ $customer->passport_expiry_date?->format('Y-m-d') ?? '' }}" placeholder="EXPIRY DATE" onfocus="(this.type='date')"
+                                    onblur="(this.type='text')"  >
                                     </div>
                             </div>
                         </div>
@@ -439,7 +482,7 @@ $passport = $customer->repository->isPassportLocked();
                                             <option value="program4">PROGRAM 4</option>
                                           </select>
                                     </div>
-                                    <div class="one_input_field"><input type="text" name="membership number" placeholder="MEMBERSHIP NUMBER" required ></div>
+                                    <div class="one_input_field"><input type="text" name="membership number" placeholder="MEMBERSHIP NUMBER" ></div>
                             </div>
                         </div>
                         <hr/>
@@ -447,20 +490,26 @@ $passport = $customer->repository->isPassportLocked();
                             <h3>Other Details</h3>
                             <div class="other_details_form">
                                     <div class="two_input_field">
-                                        <select name="t-shirt size">
-                                            <option value="Size32">T-Shirt Size </option>
-                                            <option value="Size34">T-Shirt Size 34</option>
-                                            <option value="Size36">T-Shirt Size 36</option>
-                                            <option value="Size38">T-Shirt Size 38</option>
-                                          </select>
-                                          <select name="hat size">
-                                            <option value="Size7">Hat size</option>
-                                            <option value="Size8">Hat size 8</option>
-                                            <option value="Size9">Hat size 9</option>
-                                            <option value="Size10">Hat size 10</option>
-                                          </select>
+                                         <select name="t_shirt_size_id" class="form-control">
+                                            <option value="">Select T Shirt Size</option>
+                                            @foreach(TShirtSize::all() as $tsize)
+                                                <option value="{{ $tsize->id }}" {{ ($customer->t_shirt_size_id ?? '') == $tsize->id ? 'selected' : '' }}>
+                                                    {{ strtoupper($tsize->name) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                         <select name="hat_size_id" class="form-control">
+                                            <option value="">Select Hat Size</option>
+                                            @foreach(HatSize::all() as $hsize)
+                                                <option value="{{ $hsize->id }}" {{ ($customer->hat_size_id ?? '') == $hsize->id ? 'selected' : '' }}>
+                                                    {{ strtoupper($hsize->name) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
-                                    <div class="one_input_field"><input type="text" name="membership number" placeholder="MEMBERSHIP NUMBER" required ></div>
+                                    <div class="one_input_field"><input type="text" name="other_notes" value="{{ $customer->external_notes }}"  placeholder="Other Notes"  ></div>
+                                    <div class="one_input_field"><input type="text"  name="dietary_notes" value="{{ $customer->dietary_notes }}" placeholder="Dietary Requirements"  ></div>
+                                    <div class="one_input_field"><input type="text" name="mobility_notes" value="{{ $customer->mobility_notes }}" placeholder="Mobility Requirements" ></div>
                             </div>
                         </div>
                         <hr/>
@@ -468,17 +517,17 @@ $passport = $customer->repository->isPassportLocked();
                             <h3>Change Password</h3>
                             <div class="change_password_form">
                                 <div class="two_input_field">
-                                    <div class="current_pwd"><input type="password"  name="current password" placeholder="CURRENT PASSWORD" required><span class=""><img src="/images/customer/images/eye-slash.svg" /></span></div>
+                                    <div class="current_pwd"><input required type="password" name="current_password" width="4" autocomplete="current-password" placeholder="CURRENT PASSWORD"><span class=""><img src="/images/customer/images/eye-slash.svg" /></span></div>
                                 </div>
                                 <div class="two_input_field">
-                                    <input type="password"  name="new password" placeholder="NEW PASSWORD" required>
-                                    <input type="password"  name="confirm new password" placeholder="CONFIRM NEW PASSWORD" required>
+                                    <input type="password" required name="new_password" width="4" autocomplete="new-password" placeholder="NEW PASSWORD">
+                                    <input type="password" required name="new_password_confirmation" autocomplete="new-password" placeholder="CONFIRM NEW PASSWORD" >
                                 </div>
                             </div>
                         </div>
 
                     </div>
-                    <div class="common_btn"><button class="save_changes">Save Changes</button></div>
+                    <div class="common_btn"><button type="submit" class="save_changes">Save Changes</button></div>
                 </form>
                 </div>
             </div>
@@ -497,5 +546,31 @@ $passport = $customer->repository->isPassportLocked();
             }
         });
     </script>
-    
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkbox = document.getElementById('same_as_billing');
+
+        checkbox.addEventListener('change', function () {
+            if (this.checked) { 
+                document.querySelector('[name="billing_address_line_1"]').value = document.querySelector('[name="home_address_line_1"]').value;
+                document.querySelector('[name="billing_address_line_2"]').value = document.querySelector('[name="home_address_line_2"]').value;
+                document.querySelector('[name="billing_postcode"]').value = document.querySelector('[name="home_postcode"]').value;
+                document.querySelector('[name="billing_town"]').value = document.querySelector('[name="home_town"]').value;
+                document.querySelector('[name="billing_region"]').value = document.querySelector('[name="home_region"]').value;
+
+                const homeCountry = document.getElementById('home_country_id');
+                const billingCountry = document.getElementById('billing_country_id');
+                billingCountry.value = homeCountry.value;
+            } else {
+                // Optional: clear billing address if unchecked
+                document.querySelector('[name="billing_address_line_2"]').value = '';
+                document.querySelector('[name="billing_postcode"]').value = '';
+                document.querySelector('[name="billing_town"]').value = '';
+                document.querySelector('[name="billing_region"]').value = '';
+                document.getElementById('billing_country_id').value = '';
+            }
+        });
+    });
+</script>
+
 @endsection

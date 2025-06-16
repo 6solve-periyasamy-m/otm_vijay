@@ -7,7 +7,7 @@
 @endphp
 
 @section('content')
-    {{-- <div class="row payment-balance">
+    <div class="row payment-balance">
         <div class="col-12">
             <form class="form-horizontal mx-2">
                 <div class="form-group finances-select-wrapper">
@@ -64,11 +64,11 @@
                 </div>
             </div>
         @endif
-    </div> --}}
+    </div>
     <div class="inner_content">
         <div class="overview_top_bar">
             <p class="overview_title">Finances </p>
-            <div class="search_field"><p><input type="text" placeholder="SEARCH"></p></div>
+            <!-- <div class="search_field"><p><input type="text" placeholder="SEARCH"></p></div> -->
         </div>
         <div class="tours_list">
             <div class="upcoming_payments_finances">
