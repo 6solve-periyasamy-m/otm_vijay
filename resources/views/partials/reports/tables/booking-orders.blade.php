@@ -1,4 +1,4 @@
-<table class="datatable table table-striped report-table">
+<table class="datatable table table-striped report-table" data-order='[[ 0, "desc" ]]'>
     <thead>
         <tr>
             <th scope="col"><strong>Ordered On</strong></th>
