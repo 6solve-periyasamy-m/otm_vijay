@@ -40,6 +40,17 @@ class OrderMailer
     }
 
     /**
+     * Sends a online booking confirmation email for the order
+     * @param string|null $email Email to send the mail to. Defaults to lead booker if null
+     * @return bool Did the mail send successfully?
+     * @throws MailFailedException
+     */
+    public function sendOrderConfirmation(string $email = null): bool
+    {
+        return $this->sendMail('order-confirmation', $email);
+    }
+
+    /**
      * @param string|null $email Email to send to
      * @param OrderInstallment|null $next Next Installment, if you've already fetched it
      * @return bool Did the mail send successfully?

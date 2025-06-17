@@ -20,6 +20,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use App\Exceptions\MailFailedException;
 
 abstract class Gateway
 {
@@ -66,6 +67,12 @@ abstract class Gateway
                 $intention->save();
                 $order->createNotification(NotificationType::ORDER_CREATED, 'Booking confirmed', $intention->customer);
                 event(new OrderCreatedEvent($order));
+                // Confirm order email notification
+                try {
+                    $success =  $order->repository->mailer(true)->sendOrderConfirmation();
+                } catch (MailFailedException $e) {
+                    \Log::error($e);
+                }
                 return $order;
             }
         }
