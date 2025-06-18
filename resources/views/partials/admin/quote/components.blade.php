@@ -333,6 +333,11 @@
                 </thead>
                 <tbody>
                 @foreach($quote->transport()->with('inventory')->get() as $component)
+                    @php
+                        $paying = $quote->leadTraveller->paying ? 1 : 0;
+                        $maximum_occupancy = $component->inventory->transportOccupancy->maximum_occupancy;
+                        $paying_travellers = $paying + $quote->paying;
+                    @endphp
                     <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
                         <td data-sort="{{ $component->repository->getStartTime()?->unix() }}">
                             {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}

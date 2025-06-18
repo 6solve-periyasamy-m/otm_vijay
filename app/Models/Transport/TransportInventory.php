@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use App\Models\Transport\TransportOccupancy;
 
 /**
  * App\Models\Transport\TransportInventory
@@ -30,6 +31,7 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $transport_id
  * @property int $travel_class_id
+ * @property int $transport_occupancy_id
  * @property Carbon|null $departs_at
  * @property Carbon|null $arrives_at
  * @property bool $fit_selectable
@@ -58,6 +60,7 @@ use Illuminate\Support\Carbon;
  * @property-read Transport $transport
  * @property-read TravelClass $travelClass
  * @property-read TransportInventoryRepository $repository
+ * @property-read TransportOccupancy $transportOccupancy
  * @method static TransportInventoryFactory factory(...$parameters)
  * @method static Builder|TransportInventory newModelQuery()
  * @method static Builder|TransportInventory newQuery()
@@ -77,6 +80,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|TransportInventory whereStock($value)
  * @method static Builder|TransportInventory whereTransportId($value)
  * @method static Builder|TransportInventory whereTravelClassId($value)
+ * @method static Builder|TransportInventory whereTransportOccupancyId($value)
  * @method static Builder|TransportInventory whereUpdatedAt($value)
  * @method static QueryBuilder|TransportInventory withTrashed()
  * @method static QueryBuilder|TransportInventory withoutTrashed()
@@ -102,6 +106,7 @@ class TransportInventory extends Model
     {
         return [
             'travel_class_id' => 'required|exists:travel_classes,id',
+            'transport_occupancy_id' => 'required|exists:transport_occupancy,id',
             'departs_at' => 'date',
             'arrives_at' => 'date',
             'stock' => 'required|numeric|integer',
@@ -200,5 +205,10 @@ class TransportInventory extends Model
     public function getLocalPurchasePriceAttribute(): float|null
     {
         return fx_convert($this->purchase_price, $this->component->currency);
+    }
+
+    public function transportOccupancy(): BelongsTo
+    {
+        return $this->belongsTo(TransportOccupancy::class, 'transport_occupancy_id');
     }
 }

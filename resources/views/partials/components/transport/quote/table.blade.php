@@ -54,6 +54,7 @@
         <th scope="col">Stock</th>
         <th scope="col">Purchase Price</th>
         <th scope="col">Sales Price</th>
+        <th scope="col">Occupancy</th>
         <th scope="col">Notes</th>
     </tr>
     </thead>
@@ -78,6 +79,7 @@
             </td>
             <td>{{ f_currency($inventory->purchase_price) }}</td>
             <td>{{ f_currency($inventory->sales_price) }}</td>
+            <td>{{ $inventory?->transportOccupancy?->maximum_occupancy }}</td>
             <td>{{ $inventory->internal_notes }}</td>
         </tr>
     @endforeach

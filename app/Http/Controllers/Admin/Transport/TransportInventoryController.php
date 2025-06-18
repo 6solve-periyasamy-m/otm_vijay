@@ -22,6 +22,7 @@ class TransportInventoryController extends Controller
         $request->validate(TransportInventory::getValidationRules());
         $inventory = TransportInventory::make([
             'travel_class_id' => $request->input('travel_class_id'),
+            'transport_occupancy_id' => $request->input('transport_occupancy_id'),
             'departs_at' => $request->input('departs_at'),
             'departure_time_confirmed' => $request->input('departure_time_confirmed') === 'on' ? 1 : 0,
             'arrives_at' => $request->input('arrives_at'),
@@ -58,6 +59,7 @@ class TransportInventoryController extends Controller
         $request->validate(TransportInventory::getValidationRules());
         $inventory->update([
             'travel_class_id' => $request->input('travel_class_id'),
+            'transport_occupancy_id' => $request->input('transport_occupancy_id'),
             'departs_at' => $request->input('departs_at'),
             'departure_time_confirmed' => $request->input('departure_time_confirmed') === 'on' ? 1 : 0,
             'arrives_at' => $request->input('arrives_at'),

@@ -45,6 +45,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Currency|null $currency
  * @property-read Address|null $departureAddress
  * @property-read Operator $operator
+ * @property-read Occupancy $occupancy
  * @property-read Collection|TransportInventory[] $transportInventory
  * @property-read int|null $transport_inventory_count
  * @property-read TransportType $transportType
@@ -66,6 +67,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @method static Builder|Transport whereName($value)
  * @method static Builder|Transport whereNotes($value)
  * @method static Builder|Transport whereOperatorId($value)
+ * @method static Builder|Transport whereOccupancyId($value)
  * @method static Builder|Transport whereTransportTypeId($value)
  * @method static Builder|Transport whereUpdatedAt($value)
  * @method static QueryBuilder|Transport withTrashed()
@@ -105,6 +107,11 @@ class Transport extends Model
     public function operator(): BelongsTo
     {
         return $this->belongsTo(Operator::class);
+    }
+
+    public function Occupancy(): BelongsTo
+    {
+        return $this->belongsTo(TransportOccupancy::class, 'transport_occupancy_id');
     }
 
     public function departureAddress(): HasOne

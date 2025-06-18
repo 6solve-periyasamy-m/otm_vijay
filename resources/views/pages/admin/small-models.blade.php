@@ -113,6 +113,9 @@
         <div class="col-xl-4">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Transport\TransportTypeRepository::class])
         </div>
+        <div class="col-xl-4">
+            @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Transport\TransportOccupancyRepository::class])
+        </div>
     </div>
     <div class="card">
         <div class="card-body" data-target="#merchandise" onclick="toggleAccordion(this)">
