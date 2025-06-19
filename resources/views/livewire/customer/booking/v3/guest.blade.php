@@ -7,18 +7,23 @@
         <div class="top-form-contain">
             <div class="email-quote"> <!-- customer_profile -->
                 <p>
-                    <label for="firstname">First Name *</label>
+                    <label for="firstname">Name *</label>
                     <input type="text" id="firstname" wire:model.lazy="lead.first_name">
                     @error('lead.first_name') <span class="text-danger">{{ $message }}</span>@enderror
                     <span class="mdle_nme">Include middle names if applicable.</span>
                 </p>
                 <p>
+                    <label for="email">Email *</label>
+                    <input type="email" wire:model.lazy="lead.email_address" id="email" name="email">
+                    @error('lead.email_address') <span class="text-danger">{{ $message }}</span> @enderror
+                </p>
+                {{-- <p>
                     <label for="lastname">Last Name *</label>
                     <input type="text" id="lastname" wire:model.lazy="lead.last_name">
                     @error('lead.last_name') <span class="text-danger">{{ $message }}</span> @enderror
-                </p>
+                </p> --}}
             </div>
-            <div class="email-quote">
+            {{-- <div class="email-quote">
                 <p>
                     <label for="email">Email *</label>
                     <input type="email" wire:model.lazy="lead.email_address" id="email" name="email">
@@ -28,7 +33,7 @@
                     <label for="mobileno">Mobile No</label>
                     <input type="text" id="mobileno" wire:model.lazy="lead.mobile_number">
                 </p>
-            </div>
+            </div> --}}
         </div>
         <div class="no-of-travellers">
             <h4 class="sub-heading-4">Number of Travellers</h4>

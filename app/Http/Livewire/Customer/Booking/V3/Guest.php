@@ -18,8 +18,8 @@ class Guest extends V3BookingComponent
     protected array $messages = [
         'lead.email_address.required' => 'Email is required.',
         'lead.email_address.email' => 'Please enter a valid email address.',
-        'lead.first_name.required' => 'First name is required.',
-        'lead.last_name.required' => 'Last name is required.',
+        'lead.first_name.required' => 'Name is required.',
+        //'lead.last_name.required' => 'Last name is required.',
     ];
     public BookingTraveller|null $lead = null;
 
@@ -155,8 +155,8 @@ class Guest extends V3BookingComponent
         return [
             'lead.email_address' => 'required|email',
             'lead.first_name' => 'required|string|max:255',
-            'lead.last_name' => 'required|string|max:255',
-            'lead.mobile_number' => 'nullable|string|regex:/^[0-9+\-\s()]*$/|max:20',
+            //'lead.last_name' => 'required|string|max:255',
+            //'lead.mobile_number' => 'nullable|string|regex:/^[0-9+\-\s()]*$/|max:20',
         ];
     }
 }
