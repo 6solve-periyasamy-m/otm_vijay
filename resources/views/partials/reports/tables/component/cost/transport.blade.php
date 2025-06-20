@@ -1,4 +1,4 @@
-@php /** @var \App\Models\Order\Component\OrderActivity[] $data */ @endphp
+@php /** @var \App\Models\Order\Component\OrderTransport[] $data */ @endphp
 <table class="datatable table table-striped report-table">
     <thead>
     <tr>
@@ -8,12 +8,12 @@
         <th scope="col">Currency</th>
         <th scope="col">Event</th>
         <th scope="col">Tour</th>
-        <th scope="col">Activity</th>
+        <th scope="col">Transport</th>
         <th scope="col">Customer</th>
-        <th scope="col">Activity Currency</th>
-        <th scope="col">Activity Purchase Price</th>
+        <th scope="col">Transport Currency</th>
+        <th scope="col">Transport Purchase Price</th>
         <th scope="col">Purchase Price</th>
-        <th scope="col">Activity Created</th>
+        <th scope="col">Transport Created</th>
         <th scope="col">Has Issue?</th>
     </tr>
     </thead>

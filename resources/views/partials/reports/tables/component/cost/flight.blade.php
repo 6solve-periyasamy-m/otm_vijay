@@ -1,4 +1,4 @@
-@php /** @var \App\Models\Order\Component\OrderActivity[] $data */ @endphp
+@php /** @var \App\Models\Order\Component\OrderFlight[] $data */ @endphp
 <table class="datatable table table-striped report-table">
     <thead>
     <tr>
@@ -8,12 +8,12 @@
         <th scope="col">Currency</th>
         <th scope="col">Event</th>
         <th scope="col">Tour</th>
-        <th scope="col">Activity</th>
+        <th scope="col">Flight</th>
         <th scope="col">Customer</th>
-        <th scope="col">Activity Currency</th>
-        <th scope="col">Activity Purchase Price</th>
+        <th scope="col">Flight Currency</th>
+        <th scope="col">Flight Purchase Price</th>
         <th scope="col">Purchase Price</th>
-        <th scope="col">Activity Created</th>
+        <th scope="col">Flight Created</th>
         <th scope="col">Has Issue?</th>
     </tr>
     </thead>
@@ -36,7 +36,7 @@
             <td>{{ ($component->orderCustomer?->order?->currency ?? Settings::currency())?->code }}</td>
             <td>{{ $component->orderCustomer?->order?->tour?->event?->name }}</td>
             <td>{{ $component->orderCustomer?->order?->tour?->name }}</td>
-            <td>{{ $component->tourComponent?->inventory?->component?->name }}</td>
+            <td>{{ $component->tourComponent?->inventory?->component?->__toString() }}</td>
             <td>
                 @if($component->orderCustomer?->order !== null)
                     <a href="{{ route('order-customers.view', ['order' => $component->orderCustomer->order_id, 'orderCustomer' => $component->order_customer_id,]) }}">

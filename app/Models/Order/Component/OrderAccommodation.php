@@ -6,13 +6,16 @@ use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Customer\Group;
+use App\Models\Customer\OrderCustomerGroup;
 use App\Models\Helper\Model;
+use App\Models\Order\OrderCustomer;
 use App\Repository\Model\Order\Component\OrderAccommodationRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -91,6 +94,19 @@ class OrderAccommodation extends Model
     public function tourComponent(): BelongsTo
     {
         return $this->belongsTo(AccommodationInventoryTour::class, 'accommodation_inventory_tour_id');
+    }
+
+    public function orderCustomers(): HasManyThrough
+    {
+        //
+        return $this->hasManyThrough(
+            OrderCustomer::class,
+            OrderCustomerGroup::class,
+            'group_id',
+            'id',
+            'group_id',
+            'order_customer_id'
+        );
     }
 
     public function getAccommodationInventoryAttribute(): AccommodationInventory

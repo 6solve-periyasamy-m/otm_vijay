@@ -2,8 +2,8 @@
 
 namespace App\Models\Customer;
 
-use App\Models\Accommodation\RoomType;
 use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Repository\Model\Customer\GroupRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,6 +32,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $pivot_count
  * @property-read Collection|OrderAccommodation[] $rooms
  * @property-read int|null $rooms_count
+ * @property-read Order|null $order
  * @property-read GroupRepository $repository
  * @method static Builder|Group newModelQuery()
  * @method static Builder|Group newQuery()
@@ -54,6 +54,7 @@ class Group extends Model
 
     protected array $cascadeDeletes = ['pivot', 'rooms'];
     protected $guarded = [];
+    protected $withCount = ['orderCustomers'];
     private GroupRepository $internal_repository;
 
     public function orderCustomers(): BelongsToMany
@@ -86,5 +87,13 @@ class Group extends Model
     {
         if (!isset($this->internal_repository)) $this->internal_repository = new GroupRepository($this);
         return $this->internal_repository;
+    }
+
+    public function getOrderAttribute()
+    {
+        foreach ($this->orderCustomers as $orderCustomer) {
+            if ($orderCustomer->order !== null) return $orderCustomer->order;
+        }
+        return null;
     }
 }
