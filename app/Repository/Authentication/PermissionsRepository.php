@@ -183,6 +183,31 @@ class PermissionsRepository
                 'group' => 'Orders',
                 'order' => 1,
             ],
+            'Order\Component\OrderAccommodation' => [
+                'name' => 'Order Accommodation',
+                'group' => 'Orders',
+                'order' => 2,
+            ],
+            'Order\Component\OrderActivity' => [
+                'name' => 'Order Activity',
+                'group' => 'Orders',
+                'order' => 2,
+            ],
+            'Order\Component\OrderFlight' => [
+                'name' => 'Order Flight',
+                'group' => 'Orders',
+                'order' => 2,
+            ],
+            'Order\Component\OrderTransport' => [
+                'name' => 'Order Transport',
+                'group' => 'Orders',
+                'order' => 2,
+            ],
+            'Order\Component\OrderMerchandise' => [
+                'name' => 'Order Merchandise',
+                'group' => 'Orders',
+                'order' => 2,
+            ],
             'Order\Adjustment\OrderCustomerAdjustment' => [
                 'name' => 'Customer Adjustment',
                 'group' => 'Orders',
