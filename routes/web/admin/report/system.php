@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Order\Component\OrderComponentCostReportController;
 use App\Http\Controllers\Admin\Reporting\AtolController;
 use App\Http\Controllers\Admin\Reporting\ManifestController;
 use App\Http\Controllers\Admin\Reporting\ReportController;
@@ -28,6 +29,19 @@ Route::get('/rooming', [ReportController::class, 'getRoomingReport'])->name('rep
 Route::get('/rooming/{extension}', [ReportController::class, 'exportRoomingReport'])->name('reports.rooming.export');
 Route::get('/installment-revenue', [ReportController::class, 'getInstallmentRevenueReport'])->name('reports.installment-revenue');
 Route::get('/installment-revenue/{extension}', [ReportController::class, 'exportInstallmentRevenueReport'])->name('reports.installment-revenue.export');
+Route::prefix('/order/cost')->name('reports.component.cost.')->group(function () {
+    Route::get('/activity', [OrderComponentCostReportController::class, 'getOrderActivityReport'])->name('activity');
+    Route::get('/activity/{extension}', [OrderComponentCostReportController::class, 'exportOrderActivityReport'])->name('activity.export');
+    Route::get('/transport', [OrderComponentCostReportController::class, 'getOrderTransportReport'])->name('transport');
+    Route::get('/transport/{extension}', [OrderComponentCostReportController::class, 'exportOrderTransportReport'])->name('transport.export');
+    Route::get('/flight', [OrderComponentCostReportController::class, 'getOrderFlightReport'])->name('flight');
+    Route::get('/flight/{extension}', [OrderComponentCostReportController::class, 'exportOrderFlightReport'])->name('flight.export');
+    Route::get('/accommodation', [OrderComponentCostReportController::class, 'getOrderAccommodationReport'])->name('accommodation');
+    Route::get('/accommodation/{extension}', [OrderComponentCostReportController::class, 'exportOrderAccommodationReport'])->name('accommodation.export');
+    Route::get('/merchandise', [OrderComponentCostReportController::class, 'getOrderMerchandiseReport'])->name('merchandise');
+    Route::get('/merchandise/{extension}', [OrderComponentCostReportController::class, 'exportOrderMerchandiseReport'])->name('merchandise.export');
+});
+
 Route::prefix('manifest')->name('reports.manifest.')->group(function () {
     Route::prefix('activity')->name('activity.')->group(function () {
         Route::get('/', [ManifestController::class, 'viewActivity'])->name('view');

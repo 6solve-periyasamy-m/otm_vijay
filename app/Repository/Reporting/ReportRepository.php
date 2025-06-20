@@ -78,6 +78,36 @@ class ReportRepository
                 'export' => 'reports.reminders.export',
             ],
             [
+                'name' => 'Order Accommodation Costs',
+                'details' => 'Report to check costs of order accommodation',
+                'view' => 'reports.component.cost.accommodation',
+                'export' => 'reports.component.cost.accommodation.export',
+            ],
+            [
+                'name' => 'Order Activity Costs',
+                'details' => 'Report to check costs of order activities',
+                'view' => 'reports.component.cost.activity',
+                'export' => 'reports.component.cost.activity.export',
+            ],
+            [
+                'name' => 'Order Flight Costs',
+                'details' => 'Report to check costs of order flight',
+                'view' => 'reports.component.cost.flight',
+                'export' => 'reports.component.cost.flight.export',
+            ],
+            [
+                'name' => 'Order Transport Costs',
+                'details' => 'Report to check costs of order transport',
+                'view' => 'reports.component.cost.transport',
+                'export' => 'reports.component.cost.transport.export',
+            ],
+            [
+                'name' => 'Order Merchandise Costs',
+                'details' => 'Report to check costs of order merchandise',
+                'view' => 'reports.component.cost.merchandise',
+                'export' => 'reports.component.cost.merchandise.export',
+            ],
+            [
                 'name' => 'Merchandise Orders',
                 'details' => 'Information and shipping details for Merchandise Orders',
                 'view' => 'reports.merchandise',

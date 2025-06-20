@@ -397,6 +397,9 @@
                                         @endif
                                     </td>
                                     <td>
+                                        <button onclick="openModal('admin.order.component.order-accommodation-form', {'component': {{$orderAccommodation->id}}})" class="btn btn-sm btn-outline-warning">
+                                            {{ Icon::edit() }}
+                                        </button>
                                         <form action="{{ route('orderAccommodationDelete', ['id' => $orderAccommodation->id,]) }}"
                                               method="post">
                                             @csrf
@@ -471,6 +474,9 @@
                                         @endif
                                     </td>
                                     <td>
+                                        <button onclick="openModal('admin.order.component.order-activity-form', {'component': {{$orderActivity->id}}})" class="btn btn-sm btn-outline-warning">
+                                            {{ Icon::edit() }}
+                                        </button>
                                         <form action="{{ route('orderActivityDelete', ['id' => $orderActivity->id,]) }}"
                                               method="post">
                                             @csrf
