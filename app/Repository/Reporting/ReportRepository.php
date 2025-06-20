@@ -78,6 +78,12 @@ class ReportRepository
                 'export' => 'reports.reminders.export',
             ],
             [
+                'name' => 'Order Activity Costs',
+                'details' => 'Report to check costs of order activities',
+                'view' => 'reports.component.cost.activity',
+                'export' => 'reports.component.cost.activity.export',
+            ],
+            [
                 'name' => 'Merchandise Orders',
                 'details' => 'Information and shipping details for Merchandise Orders',
                 'view' => 'reports.merchandise',
