@@ -68,11 +68,11 @@ abstract class Gateway
                 $order->createNotification(NotificationType::ORDER_CREATED, 'Booking confirmed', $intention->customer);
                 event(new OrderCreatedEvent($order));
                 // Confirm order email notification
-                try {
-                    $success =  $order->repository->mailer(true)->sendOrderConfirmation();
-                } catch (MailFailedException $e) {
-                    \Log::error($e);
-                }
+                // try {
+                //     $success =  $order->repository->mailer(true)->sendOrderConfirmation();
+                // } catch (MailFailedException $e) {
+                //     \Log::error($e);
+                // }
                 return $order;
             }
         }
