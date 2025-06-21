@@ -397,7 +397,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @can(\App\Models\Order\Component\OrderAccommodation::class, 'update')
+                                        @can('update', \App\Models\Order\Component\OrderAccommodation::class)
                                         <button onclick="openModal('admin.order.component.order-accommodation-form', {'component': {{$orderAccommodation->id}}})" class="btn btn-sm btn-outline-warning">
                                             {{ Icon::edit() }}
                                         </button>
@@ -476,7 +476,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @can(\App\Models\Order\Component\OrderActivity::class, 'update')
+                                        @can('update', \App\Models\Order\Component\OrderActivity::class)
                                         <button onclick="openModal('admin.order.component.order-activity-form', {'component': {{$orderActivity->id}}})" class="btn btn-sm btn-outline-warning">
                                             {{ Icon::edit() }}
                                         </button>
@@ -555,7 +555,7 @@
                                         @endif
                                     </td>
                                     <td class="actions">
-                                        @can(\App\Models\Order\Component\OrderFlight::class, 'update')
+                                        @can('update', \App\Models\Order\Component\OrderFlight::class)
                                         <button onclick="openModal('admin.order.component.order-flight-form', {'component': {{$orderFlight->id}}})" class="btn btn-sm btn-outline-warning">
                                             {{ Icon::edit() }}
                                         </button>
@@ -636,7 +636,7 @@
                                         @endif
                                     </td>
                                     <td class="actions">
-                                        @can(\App\Models\Order\Component\OrderTransport::class, 'update')
+                                        @can('update', \App\Models\Order\Component\OrderTransport::class)
                                         <button onclick="openModal('admin.order.component.order-transport-form', {'component': {{$orderTransport->id}}})" class="btn btn-sm btn-outline-warning">
                                             {{ Icon::edit() }}
                                         </button>
