@@ -28,6 +28,9 @@ class OrderAccommodationCostReportExport implements FromView
             'group.orderCustomers.customer',
             'tourComponent',
             'tourComponent.inventory',
+            'tourComponent.inventory.roomType',
+            'tourComponent.inventory.boardType',
+            'tourComponent.inventory.category',
             'tourComponent.inventory.component',
             'tourComponent.inventory.component.currency',
         ])->withCount('orderCustomers')->get();
