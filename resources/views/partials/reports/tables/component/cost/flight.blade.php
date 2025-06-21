@@ -9,6 +9,9 @@
         <th scope="col">Event</th>
         <th scope="col">Tour</th>
         <th scope="col">Flight</th>
+        <th scope="col">Start</th>
+        <th scope="col">End</th>
+        <th scope="col">Class</th>
         <th scope="col">Customer</th>
         <th scope="col">Flight Currency</th>
         <th scope="col">Flight Purchase Price</th>
@@ -37,6 +40,9 @@
             <td>{{ $component->orderCustomer?->order?->tour?->event?->name }}</td>
             <td>{{ $component->orderCustomer?->order?->tour?->name }}</td>
             <td>{{ $component->tourComponent?->inventory?->component?->__toString() }}</td>
+            <td>{{ f_datetime($component->tourComponent?->inventory?->check_in) }}</td>
+            <td>{{ f_datetime($component->tourComponent?->inventory?->arrives_at) }}</td>
+            <td>{{ $component->tourComponent?->inventory?->travelClass }}</td>
             <td>
                 @if($component->orderCustomer?->order !== null)
                     <a href="{{ route('order-customers.view', ['order' => $component->orderCustomer->order_id, 'orderCustomer' => $component->order_customer_id,]) }}">

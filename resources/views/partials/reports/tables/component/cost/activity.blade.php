@@ -9,6 +9,9 @@
         <th scope="col">Event</th>
         <th scope="col">Tour</th>
         <th scope="col">Activity</th>
+        <th scope="col">Start</th>
+        <th scope="col">End</th>
+        <th scope="col">Ticket</th>
         <th scope="col">Customer</th>
         <th scope="col">Activity Currency</th>
         <th scope="col">Activity Purchase Price</th>
@@ -37,6 +40,9 @@
             <td>{{ $component->orderCustomer?->order?->tour?->event?->name }}</td>
             <td>{{ $component->orderCustomer?->order?->tour?->name }}</td>
             <td>{{ $component->tourComponent?->inventory?->component?->name }}</td>
+            <td>{{ f_datetime($component->tourComponent?->inventory?->starts_at) }}</td>
+            <td>{{ f_datetime($component->tourComponent?->inventory?->ends_at) }}</td>
+            <td>{{ $component->tourComponent?->inventory?->ticketType }}</td>
             <td>
                 @if($component->orderCustomer?->order !== null)
                     <a href="{{ route('order-customers.view', ['order' => $component->orderCustomer->order_id, 'orderCustomer' => $component->order_customer_id,]) }}">

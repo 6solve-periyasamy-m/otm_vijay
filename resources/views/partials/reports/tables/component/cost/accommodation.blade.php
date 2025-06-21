@@ -9,6 +9,11 @@
         <th scope="col">Event</th>
         <th scope="col">Tour</th>
         <th scope="col">Accommodation</th>
+        <th scope="col">Start</th>
+        <th scope="col">End</th>
+        <th scope="col">Room</th>
+        <th scope="col">Board</th>
+        <th scope="col">Category</th>
         <th scope="col">Customer</th>
         <th scope="col">Accommodation Currency</th>
         <th scope="col">Accommodation Purchase Price</th>
@@ -38,6 +43,11 @@
             <td>{{ $component->group?->order?->tour?->event?->name }}</td>
             <td>{{ $component->group?->order?->tour?->name }}</td>
             <td>{{ $component->tourComponent?->inventory?->component?->name }}</td>
+            <td>{{ f_datetime($component->tourComponent?->inventory?->check_in) }}</td>
+            <td>{{ f_datetime($component->tourComponent?->inventory?->check_out) }}</td>
+            <td>{{ $component->tourComponent?->inventory?->roomType }}</td>
+            <td>{{ $component->tourComponent?->inventory?->boardType }}</td>
+            <td>{{ $component->tourComponent?->inventory?->category }}</td>
             <td>
                 @if($component->group?->order !== null)
                     <a href="{{ route('order-customers.view', ['order' => $component->group->order, 'orderCustomer' => $component->orderCustomers->first(),]) }}">

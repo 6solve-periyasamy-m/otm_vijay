@@ -27,6 +27,8 @@ class OrderTransportCostReportExport implements FromView
             'orderCustomer.customer',
             'tourComponent',
             'tourComponent.inventory',
+            'tourComponent.inventory.travelClass',
+            'tourComponent.inventory.component',
             'tourComponent.inventory.component.currency',
         ])->get();
     }

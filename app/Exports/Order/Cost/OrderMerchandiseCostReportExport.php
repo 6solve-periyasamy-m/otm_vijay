@@ -28,6 +28,7 @@ class OrderMerchandiseCostReportExport implements FromView
             'tourComponent',
             'tourComponent.inventory',
             'tourComponent.inventory.component',
+            'tourComponent.inventory.',
             'tourComponent.inventory.component',
         ])->get();
     }
