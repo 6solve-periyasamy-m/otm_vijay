@@ -6,6 +6,8 @@
             <th scope="col">Event</th>
             <th scope="col">Ordered</th>
             <th scope="col">Status</th>
+            <th scope="col">Order Internal Notes</th>
+            <th scope="col">Order External Notes</th>
             <th scope="col">Organization</th>
             <th scope="col">Agent</th>
             <th scope="col">Consultant</th>
@@ -35,6 +37,8 @@
                 <td>{{ $row->event }}</td>
                 <td>{{ $row->ordered->format('d/m/Y') }}</td>
                 <td>{{ $row->status->description() }}</td>
+                <td>{{ $row->orderInternal }}</td>
+                <td>{{ $row->orderExternal }}</td>
                 <td>{{ $row->organization }}</td>
                 <td>{{ $row->agent }}</td>
                 <td>{{ $row->consultant }}</td>
