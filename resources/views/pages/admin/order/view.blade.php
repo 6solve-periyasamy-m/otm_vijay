@@ -209,7 +209,22 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
             @endphp
             <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
                 <div class="otm-card">
-                    <p>{{ ($order->lead_booker_id == $ordersCustomer->id) ? 'Lead Booker' : ' Additional Customer'}}</p>
+                    <p class="d-flex justify-content-between align-items-center">
+                        <span>
+                            {{ ($order->lead_booker_id == $ordersCustomer->id) ? 'Lead Booker' : 'Additional Customer' }}
+                        </span>
+                        <span>
+                            <i class="fas fa-eye text-primary cursor-pointer"
+                            data-order-id="{{ $order->id }}"
+                            data-customer-id="{{ $ordersCustomer->id }}"
+                            data-customer-name="{{ $customerName }}"
+                            data-customer-type="{{ ($order->lead_booker_id == $ordersCustomer->id) ? 'Lead Booker' : 'Additional Customer' }}"
+                            data-bs-toggle="modal"
+                            data-bs-target="#customerDetailsModal"
+                            onclick="loadCustomerComponents.call(this)">
+                            </i>                                
+                        </span>
+                    </p>
                     <h6 class="fw-bold">
                         @can('read', \App\Models\Order\OrderCustomer::class)
                         <a href="{{ route('order-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer, ]) }}" class="link-info">
@@ -651,5 +666,51 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
     </div>
 </div>
 
+<div class="modal fade" id="customerDetailsModal" tabindex="-1" aria-labelledby="customerDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="customerDetailsModalLabel">Customer Components: <span id="customerNamePlaceholder" class="fw-bold"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="customerModalContent">
+        <!-- Content will be loaded here -->
+      </div>
+    </div>
+  </div>
+</div>
+
 {{-- Closing Container--}}
 @endsection
+
+<script>
+function loadCustomerComponents() {
+    const content = document.getElementById("customerModalContent");
+    const modalTitleLink = document.getElementById("customerNamePlaceholder");
+    content.innerHTML = `
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>`;
+    const orderId = event.target.getAttribute('data-order-id');
+    const customerId = event.target.getAttribute('data-customer-id');
+    const customerName = event.target.getAttribute('data-customer-name');
+
+    modalTitleLink.textContent = customerName;
+    modalTitleLink.href = `/admin/orders/${orderId}/customer/${customerId}`;
+
+    fetch(`/admin/orders/${orderId}/customer/${customerId}/components`)
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to load customer components');
+        return response.text();
+    })
+    .then(html => {
+        content.innerHTML = html;
+    })
+    .catch(err => {
+        console.error(err);
+        content.innerHTML = '<div class="text-danger">Unable to load customer components.</div>';
+    });
+}
+</script>
