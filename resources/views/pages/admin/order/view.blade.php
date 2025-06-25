@@ -80,7 +80,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                     @if($nonSystem) ({{ fr_currency($order->cost * $toSystem, Settings::currency()) }}) @endif
                     before cancellation)
                 @else
-                    {{ fr_currency($order->total, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->total * $toSystem, Settings::currency()) }}) @endif
+                    {{ fr_currency($order->total, $order->currency, false, 0) }} @if($nonSystem) ({{ fr_currency($order->total * $toSystem, Settings::currency()) }}) @endif
                     @if ($order->repository->getBeforeString() !== null)
                         ({{ $order->repository->getBeforeString() }})
                     @endif
@@ -202,6 +202,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
         </div>
         @endcan
         <div class="row">
+            @php //dd($orderCustomerFields); @endphp
             @foreach($order->orderCustomers as $key => $ordersCustomer)
             @php
                 $isTbcCustomer = (strpos($ordersCustomer->customer->first_name, 'Unknown') !== false || strpos($ordersCustomer->customer->last_name, 'Unknown') !== false);
@@ -209,20 +210,89 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
             @endphp
             <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
                 <div class="otm-card">
-                    <p>{{ ($order->lead_booker_id == $ordersCustomer->id) ? 'Lead Booker' : ' Additional Customer'}}</p>
-                    <h6 class="fw-bold">
-                        @can('read', \App\Models\Order\OrderCustomer::class)
-                        <a href="{{ route('order-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer, ]) }}" class="link-info">
-                            {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
-                        </a>
-                        @else
-                            {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
-                        @endcan
-                    </h6>
-                    <p>Born</p>
-                    <h6 class="fw-bold">{{ isset($ordersCustomer->customer->date_of_birth) ? f_date($ordersCustomer->customer->date_of_birth) : 'Date of Birth not set' }}</h6>
-                    <p>Passport Number</p>
-                    <h6 class="fw-bold">{{ $ordersCustomer->customer->passport_number ?? 'Not Set' }}</h6>
+                    <p class="d-flex justify-content-between align-items-center">
+                        <span>
+                            {{ ($order->lead_booker_id == $ordersCustomer->id) ? 'Lead Booker' : 'Additional Customer' }}
+                        </span>
+                        <span>
+                            <i class="fas fa-eye text-primary cursor-pointer"
+                            data-order-id="{{ $order->id }}"
+                            data-customer-id="{{ $ordersCustomer->id }}"
+                            data-customer-name="{{ $customerName }}"
+                            data-customer-type="{{ ($order->lead_booker_id == $ordersCustomer->id) ? 'Lead Booker' : 'Additional Customer' }}"
+                            data-bs-toggle="modal"
+                            data-bs-target="#customerDetailsModal"
+                            onclick="loadCustomerComponents.call(this)">
+                            </i>                                
+                        </span>
+                    </p>
+                    @if(in_array('first_name', $orderCustomerFields) || in_array('last_name', $orderCustomerFields))
+                        <h6 class="fw-bold">
+                            @can('read', \App\Models\Order\OrderCustomer::class)
+                                <a href="{{ route('order-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer]) }}" class="link-info">
+                                    {{ $ordersCustomer->customer->first_name . ' ' . $ordersCustomer->customer->last_name }}
+                                </a>
+                            @else
+                                {{ $ordersCustomer->customer->first_name . ' ' . $ordersCustomer->customer->last_name }}
+                            @endcan
+                        </h6>
+                    @endif
+                    @if(in_array('date_of_birth', $orderCustomerFields))
+                        <p>Born</p>
+                        <h6 class="fw-bold">{{ isset($ordersCustomer->customer->date_of_birth) ? f_date($ordersCustomer->customer->date_of_birth) : 'Date of Birth not set' }}</h6>
+                    @endif
+                    @if(in_array('email', $orderCustomerFields))
+                        <p>Email</p><h6 class="fw-bold">{{ $ordersCustomer->customer->email_address ?? 'Not Set' }}</h6>
+                    @endif
+                    @if(in_array('mobile_number', $orderCustomerFields))
+                        <p>Phone Number</p><h6 class="fw-bold">{{ $ordersCustomer->customer->mobile_number ?? 'Not Set' }}</h6>
+                    @endif
+                    @if(in_array('policy_number', $orderCustomerFields))
+                        <p>Insurance Policy</p><h6 class="fw-bold">{{ $ordersCustomer->customer->policy_number ?? 'No Insurance Policy' }}</h6>
+                    @endif
+
+                    @if(in_array('home_address', $orderCustomerFields))
+                        <p>Home Address</p>
+                        <h6 class="fw-bold">
+                            {{ $ordersCustomer->customer->homeAddress->address_line_1 }}
+                            {{ $ordersCustomer->customer->homeAddress->region }}
+                            {{ $ordersCustomer->customer->homeAddress->country }}
+                            {{ $ordersCustomer->customer->homeAddress->postcode }}
+                        </h6>
+                    @endif
+
+                    @if(in_array('billing_address', $orderCustomerFields))
+                        <p>Billing Address</p>
+                        <h6 class="fw-bold">
+                            {{ $ordersCustomer->customer->billingAddress->address_line_1 }}
+                            {{ $ordersCustomer->customer->billingAddress->region }}
+                            {{ $ordersCustomer->customer->billingAddress->country }}
+                            {{ $ordersCustomer->customer->billingAddress->postcode }}
+                        </h6>
+                    @endif
+
+                    @if(in_array('passport_first_name', $orderCustomerFields) || in_array('passport_middle_names', $orderCustomerFields) || in_array('passport_last_name', $orderCustomerFields))
+                        <p>Passport Name</p><h6 class="fw-bold">{{ $ordersCustomer->customer->passport_first_name . ' ' . $ordersCustomer->customer->passport_middle_names . ' ' . $ordersCustomer->customer->passport_last_name ?? 'Not Set' }}</h6>
+                    @endif
+                    @if(in_array('passport_number', $orderCustomerFields))
+                        <p>Passport Number</p><h6 class="fw-bold">{{ $ordersCustomer->customer->passport_number ?? 'Not Set' }}</h6>
+                    @endif
+                    @if(in_array('passport_expiry_date', $orderCustomerFields))
+                        <p>Passport Expires</p><h6 class="fw-bold">{{ $ordersCustomer->customer->passport_expiry_date ?? 'Not Set' }}</h6>
+                    @endif
+
+                    @if(in_array('emergency_contact_name', $orderCustomerFields))
+                        <p>Contact Name (Emergency)</p><h6 class="fw-bold">{{ $ordersCustomer->customer->emergency_contact_name ?? 'Not set' }}</h6>
+                    @endif
+                    @if(in_array('emergency_contact_relationship', $orderCustomerFields))
+                        <p>Contact Relationship (Emergency)</p><h6 class="fw-bold">{{ $ordersCustomer->customer->emergency_contact_relationship ?? 'Not set' }}</h6>
+                    @endif
+                    @if(in_array('emergency_contact_telephone', $orderCustomerFields))
+                        <p>Contact telephone (Emergency)</p><h6 class="fw-bold">{{ $ordersCustomer->customer->emergency_contact_telephone ?? 'Not set' }}</h6>
+                    @endif
+                    @if(in_array('loyalty_number', $orderCustomerFields))
+                        <p>Loyalty Number</p><h6 class="fw-bold">{{ $ordersCustomer->customer->loyalty_number ?? 'Not set' }}</h6>
+                    @endif
                 </div>
             </div>
             @endforeach
@@ -510,7 +580,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                             <th scope="row">Remaining Balance</th>
                             <td>{{ f_date($order->tour?->final_payment) }}</td>
                             <td>{{ fr_currency($order->remaining_installment, $order->currency) }} ({{ $order->remaining_percentage }}%)</td>
-                            <td> {{ f_currency($order->paid) }} </td>
+                            <td> {{ fr_currency($order->paid, $order->currency) }} </td>
                             <td>
                                 @php $amount = min($order->remaining, $order->remaining_installment); @endphp
                                 @if($amount <= 0)
@@ -651,5 +721,51 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
     </div>
 </div>
 
+<div class="modal fade" id="customerDetailsModal" tabindex="-1" aria-labelledby="customerDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="customerDetailsModalLabel">Customer Components: <span id="customerNamePlaceholder" class="fw-bold"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="customerModalContent">
+        <!-- Content will be loaded here -->
+      </div>
+    </div>
+  </div>
+</div>
+
 {{-- Closing Container--}}
 @endsection
+
+<script>
+function loadCustomerComponents() {
+    const content = document.getElementById("customerModalContent");
+    const modalTitleLink = document.getElementById("customerNamePlaceholder");
+    content.innerHTML = `
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>`;
+    const orderId = event.target.getAttribute('data-order-id');
+    const customerId = event.target.getAttribute('data-customer-id');
+    const customerName = event.target.getAttribute('data-customer-name');
+
+    modalTitleLink.textContent = customerName;
+    modalTitleLink.href = `/admin/orders/${orderId}/customer/${customerId}`;
+
+    fetch(`/admin/orders/${orderId}/customer/${customerId}/components`)
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to load customer components');
+        return response.text();
+    })
+    .then(html => {
+        content.innerHTML = html;
+    })
+    .catch(err => {
+        console.error(err);
+        content.innerHTML = '<div class="text-danger">Unable to load customer components.</div>';
+    });
+}
+</script>

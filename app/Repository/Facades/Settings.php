@@ -13,6 +13,7 @@ class Settings
 {
     private SettingsRepository $repository;
     private bool $renew = false;
+    private Currency|null $currency = null;
 
     public function __construct()
     {
@@ -90,7 +91,10 @@ class Settings
      */
     public function currency(): Currency|null
     {
-        return Currency::where('code', '=', $this->get('system.currency', ''))->first();
+        if ($this->currency === null) {
+            $this->currency = Currency::where('code', '=', $this->get('system.currency', 'GBP'))->first();
+        }
+        return $this->currency;
     }
 
     public function getDefaultInstallments(): array

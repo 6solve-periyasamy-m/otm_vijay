@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="{{ asset('css/booking/simple.css') }}">
 
     <script src="{{ asset('js/booking/simple.js') }}"></script>
+    <script src="https://js.stripe.com/basil/stripe.js"></script>
 
     <script type="text/javascript">
         (function (w, d, s, l, i) {
@@ -52,6 +53,7 @@
     </script>
 
     <script type="text/javascript">
+        const stripe = Stripe('{{ config('app.gateways.stripe.publishable') }}');
         window.addEventListener('popupCheckout', (event) => {
             Airwallex.init({
                 env: '{{ config('app.gateways.airwallex.live', false) ? 'prod' : 'demo' }}',
@@ -66,6 +68,41 @@
             mount.addEventListener('onSuccess', (event) => {
                 window.location = event.detail.intent.return_url;
             });
+        });
+        const fetchClientSecretFull = () => {
+            return fetch('{{ route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => true]) }}')
+                .then((response) => response.json())
+                .then((json) => json.checkoutSessionClientSecret)
+        }
+        const fetchClientSecretToday = () => {
+            return fetch('{{ route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => false]) }}', {method: 'GET'})
+                .then((response) => response.json())
+                .then((json) => json.checkoutSessionClientSecret)
+        }
+        window.addEventListener('popupStripeCheckout', (event) => {
+            if (event.detail.checkout !== null) {
+                let fn = (event.detail.full ?? false) ? fetchClientSecretFull : fetchClientSecretToday;
+                stripe.initCheckout({fetchClientSecret: fn}).then((checkout) => {
+                    let paymentElement = checkout.createPaymentElement();
+                    paymentElement.mount('#stripe-container');
+
+                    document.getElementById('stripe-hidden').style.visibility = 'inherit';
+
+                    // Setup Buttons
+                    const button = document.getElementById('pay-button');
+                    const errors = document.getElementById('confirm-errors');
+                    button.addEventListener('click', () => {
+                        // Clear any validation errors
+                        errors.textContent = '';
+
+                        checkout.confirm().then((result) => {
+                            if (result.type === 'error') {
+                                errors.textContent = result.error.message;
+                            }
+                        });
+                    });
+                });
+            }
         });
     </script>
 

@@ -8,6 +8,7 @@ use App\View\Components\Livewire\Input\Select\Accommodation\RoomType;
 use App\View\Components\Livewire\Input\Select\AccommodationInventory;
 use App\View\Components\Livewire\Input\Select\Activity\ActivityType;
 use App\View\Components\Livewire\Input\Select\Activity\Seating;
+use App\View\Components\Livewire\Input\Select\Activity\SeatingMap;
 use App\View\Components\Livewire\Input\Select\Activity\Session as ActivitySession;
 use App\View\Components\Livewire\Input\Select\Agent;
 use App\View\Components\Livewire\Input\Select\Brand;
@@ -118,6 +119,10 @@ Route::prefix('activity')->name('activity.')->group(function () {
     Route::prefix('seating')->name('seating.')->group(function () {
         Route::post('/', [Seating::class, 'getAll'])->name('select');
         Route::post('/{id}', [Seating::class, 'getOne'])->name('selected');
+    });
+    Route::prefix('seating-map')->name('seating-map.')->group(function () {
+        Route::post('/', [SeatingMap::class, 'getAll'])->name('select');
+        Route::post('/{id}', [SeatingMap::class, 'getOne'])->name('selected');
     });
 });
 

@@ -326,7 +326,7 @@
                             <td class="actions-3">
                                 <a href="{{ route('quotes.sent.view', ['quote' => $quote, 'sent' => $sent,]) }}"
                                    class="btn btn-outline-info btn-sm mb-1" title="View">
-                                    {{ Icon::view() }}
+                                    {{ Icon::eye() }}
                                 </a>
                                 <a href="{{ route('quotes.sent.resend', ['quote' => $quote, 'sent' => $sent,]) }}"
                                    class="btn btn-outline-success btn-sm mb-1" title="Resend">

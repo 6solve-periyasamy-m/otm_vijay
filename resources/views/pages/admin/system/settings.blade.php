@@ -88,7 +88,7 @@
     <div class="collapse mx-1" id="brands">
         <livewire:admin.system.brand.brand-list />
     </div>
-        <!-- Faq's -->
+    <!-- Faq's -->
      <div class="card">
         <div class="card-body" data-target="#faqs" onclick="toggleAccordion(this)">
             <h4 class="fw-bold">{{ Icon::maximize() }} Faqs</h4>

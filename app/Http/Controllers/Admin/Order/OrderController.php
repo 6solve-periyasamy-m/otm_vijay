@@ -45,7 +45,11 @@ class OrderController extends Controller
     public function view(Order $order)
     {
         $order->repository->refresh();
-        return view('pages.admin.order.view', ['order' => $order,]);
+        $storedFields = setting('system.order.customer.fields');
+        $selectedFields = !empty($storedFields)
+            ? explode(',', $storedFields)
+            : default_order_customer_fields();
+        return view('pages.admin.order.view', ['order' => $order, 'orderCustomerFields' => $selectedFields]);
     }
 
     public function switchTour(Order $order)

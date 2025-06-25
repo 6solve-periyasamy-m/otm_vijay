@@ -224,9 +224,13 @@
             </div>
         </div>
     </x-admin.section.card>
+    @php
+        $isEmpty = $quote->sentQuotes->isEmpty();
+        $message = ($isEmpty) ? "Are you sure you want to send email?" : "Are you sure you want to resend email?";
+    @endphp
     <script type="text/javascript">
         function confirmAndSend() {
-            if (confirm('Are you sure you want to resend email?')) {
+            if (confirm("{{ $message }}")) {
                 Livewire.emit('sendEmail');
             }
         }

@@ -44,12 +44,20 @@ class SettingsController extends Controller
     public function edit() {
         $fieldList = ReportFieldRepository::getFieldsFromParent('customer');
         $customerFieldList = current(array_filter($fieldList, fn($item) => $item['type'] === 'customer'));
-        return view('pages.admin.system.settings', ['customerFieldList' => $customerFieldList, 'selectedFields' => $this->getCustomerSelectedFields()]);
+        return view('pages.admin.system.settings', [
+                'customerFieldList' => $customerFieldList,
+                'selectedFields' => $this->getCustomerSelectedFields(),
+                'selectedOrderCustomerFields' => $this->getOrderCustomerSelectedFields()
+            ]);
     }
 
     public function update(Request $request): RedirectResponse
     {
-        $request->validate(self::getValidationRules());
+        $request->validate(array_merge(self::getValidationRules(), [
+            'order_customer_fields' => ['array', 'max:4'],
+        ]), [
+            'order_customer_fields.max' => 'You can only select up to 4 Order Customer Data fields.',
+        ]);
         Settings::setAll([
             'company.name' => $request->input('company_name'),
             'company.contact.email' => $request->input('company_email'),
@@ -113,6 +121,10 @@ class SettingsController extends Controller
             'system.cc.mail' => $request->input('system_cc_email'),
             'system.bcc.mail' => $request->input('system_bcc_email'),
             'round.base_price' => $request->input('round_base_price'),
+            'booking.round_to_five' => $request->input('round_to_five') === 'on' ? 1 : 0,
+            'booking.head.tracking.code' => $request->input('head_tracking_code'),
+            'booking.body.tracking.code' => $request->input('body_tracking_code'),
+            'booking.expiry' => $request->input('booking_expiry'),
         ]);
         if ($request->has('company_logo')  && !empty($request->file('company_logo'))) {
             Settings::set('company.logo', $this->saveImage($request->file('company_logo')));
@@ -127,6 +139,7 @@ class SettingsController extends Controller
         Settings::set('system.currency', $currency?->code);
         
         $this->saveCustomerFields($request);
+        $this->saveOrderCustomerFields($request);
         return redirect()->route('settings.edit');
     }
 
@@ -136,16 +149,27 @@ class SettingsController extends Controller
         return explode(',', setting('system.customer.fields'));
     }
 
+    private function getOrderCustomerSelectedFields()
+    {
+        return explode(',', setting('system.order.customer.fields'));
+    }
+
     // Helper method for handling customer fields
     private function saveCustomerFields(Request $request)
     {
         $defaultFields = ['email', 'mobile_number', 'internal_notes'];
+        $selected = $request->input('customer_fields', []);
 
-        $fields = ReportFieldRepository::convertFieldsToOutput(ReportFieldRepository::getFieldsFromParent('customer'));
-        $usedFields = array_filter(array_keys($fields), fn($field) => $request->has($field));
+        $finalFields = array_unique(array_merge($selected, default_customer_fields()));
 
-        $finalFields = array_unique(array_merge($usedFields, default_customer_fields()));
         Settings::set('system.customer.fields', implode(',', $finalFields));
+    }
+
+    private function saveOrderCustomerFields(Request $request)
+    {
+        $selected = $request->input('order_customer_fields', []);
+        $finalFields = array_unique(array_merge($selected, default_order_customer_fields()));
+        Settings::set('system.order.customer.fields', implode(',', $finalFields));
     }
 
     public function template()

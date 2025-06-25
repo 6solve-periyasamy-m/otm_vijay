@@ -27,6 +27,8 @@ class OrderRow
      * @param string $reference Booking reference for the order
      * @param Carbon $ordered When the order was placed
      * @param OrderStatus $status Current status of the order
+     * @param string|null $orderInternal Internal notes for the order
+     * @param string|null $orderExternal External notes for the order
      * @param string|null $organization Organization who placed the order, or null if independent
      * @param string|null $agent Agent who placed the order, or null if independent
      * @param string|null $consultant Consultant who manages the order, or null if unmanaged
@@ -37,7 +39,7 @@ class OrderRow
      * @param string $description Description of the component
      * @param Carbon|null $start Start date/time of component
      * @param Carbon|null $end End date/time of component
-     * @param int $travellers Number of travellers involved with component
+     * @param int|null $travellers Number of travellers involved with component
      * @param int $quantity Quantity ordered within booking
      * @param string $currency Currency sold in
      * @param float $purchasePrice Cost to company for component
@@ -50,6 +52,8 @@ class OrderRow
         public readonly string      $reference,
         public readonly Carbon      $ordered,
         public readonly OrderStatus $status,
+        public readonly string|null $orderInternal,
+        public readonly string|null $orderExternal,
         public readonly string|null $organization,
         public readonly string|null $agent,
         public readonly string|null $consultant,
@@ -134,6 +138,8 @@ class OrderRow
             $order->booking_reference,
             $order->ordered_on,
             $order->status,
+            $order->internal_notes,
+            $order->external_notes,
             $order->organization?->name,
             $order->agent?->name,
             $order->consultant?->name,
@@ -163,6 +169,8 @@ class OrderRow
             $order->booking_reference,
             $order->ordered_on,
             $order->status,
+            $order->internal_notes,
+            $order->external_notes,
             $order->organization?->name,
             $order->agent?->name,
             $order->consultant?->name,
@@ -192,6 +200,8 @@ class OrderRow
             $order->booking_reference,
             $order->ordered_on,
             $order->status,
+            $order->internal_notes,
+            $order->external_notes,
             $order->organization?->name,
             $order->agent?->name,
             $order->consultant?->name,
@@ -221,6 +231,8 @@ class OrderRow
             $order->booking_reference,
             $order->ordered_on,
             $order->status,
+            $order->internal_notes,
+            $order->external_notes,
             $order->organization?->name,
             $order->agent?->name,
             $order->consultant?->name,
@@ -250,6 +262,8 @@ class OrderRow
             $order->booking_reference,
             $order->ordered_on,
             $order->status,
+            $order->internal_notes,
+            $order->external_notes,
             $order->organization?->name,
             $order->agent?->name,
             $order->consultant?->name,
@@ -277,6 +291,8 @@ class OrderRow
             $order->booking_reference,
             $order->ordered_on,
             $order->status,
+            $order->internal_notes,
+            $order->external_notes,
             $order->organization?->name,
             $order->agent?->name,
             $order->consultant?->name,

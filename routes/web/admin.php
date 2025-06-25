@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\Voucher\VoucherCodeController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ECommDashboardController;
 
 Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('show-login');
 Route::post('/login', [AuthenticationController::class, 'login'])->name('login');
@@ -90,6 +91,7 @@ Route::middleware('auth:web')->group(function () {
     //     return view('pages.dash');
     // })->name('dash');
     Route::get('/', [DashboardController::class, 'dashboard'])->name('dash');
+    Route::get('/edashboard', [ECommDashboardController::class, 'dashboard'])->name('edashboard');
 
     Route::get('/attributes', function () {
         return view('pages.admin.small-models');

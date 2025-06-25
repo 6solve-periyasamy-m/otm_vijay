@@ -31,6 +31,7 @@ use Illuminate\Validation\Rules\Password;
 use Silber\Bouncer\Database\Ability;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Silber\Bouncer\Database\Role;
+use App\Models\Helper\Enum\NotificationType;
 
 /**
  * App\Models\User
@@ -261,6 +262,8 @@ class User extends UserAuthenticatable implements MustVerifyEmail
 
     public function unseen(): int
     {
-        return Notification::whereNotIn('id', $this->seenNotifications()->pluck('notification_id'))->count();
+        return Notification::where('type', NotificationType::ORDER_CREATED)
+            ->whereNotIn('id', $this->seenNotifications()->pluck('notification_id'))
+            ->count();
     }
 }

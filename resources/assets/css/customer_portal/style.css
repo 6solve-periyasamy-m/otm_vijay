@@ -1,0 +1,856 @@
+@font-face{font-family:"PP Neue Montreal";src:url(/fonts/customer/font/PPNeueMontreal-Regular.ttf);}
+@font-face{font-family:"PP Editorial New";src:url(/fonts/customer/font/PPEditorialNew-Ultralight.ttf);}
+@font-face{font-family:"Inter Regular";src:url(/fonts/customer/font/Inter-Regular.ttf);}
+.container{max-width: 1440px!important;width: 90%!important; position: relative!important;}
+.body_content{display: flex; width: 100%;}
+.inner_content{max-width: 1168px;width: 80%;margin-bottom: 200px;}
+/*sidebar css*/
+#sidebar {
+    width: 100%;
+    height: 100vh;
+    background: #000000;
+    color: #fff;
+    position: sticky;
+    top: 0px;
+    transition: all 0.3s;
+    padding: 30px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+}
+.menu_list{margin-top: 80px;}
+.menu_list li,.social_media{padding-bottom: 24px;}
+.menu_list li a{font-family: 'PP Neue Montreal';font-size: 14px;font-weight: 500;color: #fff;text-transform: capitalize;text-decoration: none;}
+.menu_list a.active{color: #F35B15;}
+.menu_list li img,.social_media img,.email_id img,.phone_no img{margin-right: 12px;}
+.email_id,.phone_no{padding-bottom: 12px;} 
+.contact_details a{color: #F35B15;text-decoration: none;}
+.contact_details a,.search_field input,.common_btn a,.calendar_date,.view_details a,.save_changes{font-family: 'PP Neue Montreal';font-size: 14px;font-weight: 500;}
+/*Body inner css*/
+.overview_top_bar{background-color: #F9F4EE;padding: 28px 32px;display: flex;justify-content: space-between;align-items: center;}
+.overview_top_bar p{margin-bottom: 0px;display: flex;align-items: center;}
+.search_field input{color: #721111;border-radius: 50px;width: 100%;padding: 10px 24px;border: 0px;}
+.search_field input::placeholder{color: #721111;}
+.search_field{width: 40%;position: relative;}
+.search_field p::after {
+    content: url("/images/customer/images/search-zoom-in.svg");
+    width: 20px;
+    height: 20px;
+    top: 10px;
+    right: 24px;
+    position: absolute;
+    display: inline-block;
+}
+.overview_title,.personal_details h3{font-family: 'PP Neue Montreal';font-size: 24px;line-height: 32px;color: #000000;}
+.tours_list{padding: 50px 32px 32px 32px;}
+.event_image_title{display: flex;align-items: center;}
+.event_list,.event_payment_list{display: flex;justify-content: space-between;align-items: center;padding-top: 24px;}
+.title_date{padding-left: 16px;}
+.title_date h4{font-family: 'PP Neue Montreal';font-size: 24px;font-weight: 500;line-height: 32px;color: #000000;margin-right: 15px;}
+.upcoming_tours h2,.upcoming_payments h2,.past_tours h2,.customer_details h2,.name_address_font h2,.upcoming_payments_finances h2{font-family:'PP Editorial New';font-size: 32px;color: #000000;line-height: 42px;display: flex;align-items: center;}
+.upcoming_tours h2 span,.upcoming_payments h2 span,.past_tours h2 span,.upcoming_payments_finances h2 span{
+    font-family:'PP Neue Montreal';
+    font-size: 16px;
+    color: #ffffff;
+    line-height: 20px;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    background: #F35B15;
+    border-radius: 50px;
+    justify-content: center;
+    align-items: center;
+    margin-left: 15px;
+}
+.common_btn a{line-height: 17px;color: #F35B15;border-radius: 50px;padding: 11px 30px;border: 1px solid #F35B15;text-decoration: none;}
+.common_btn a img,.calendar_date img,.event_location img{margin-right: 10px;}
+.calendar_date{line-height: 17px;color: #721111;align-items: center;margin-bottom: 24px;}
+.view_details a{color: #F35B15;text-decoration: none;letter-spacing: 2px;}
+hr{color: #F9F4EE;opacity: 1;}
+.overdue_btn{font-family: 'Inter Regular';font-size: 12px;line-height: 15px;background-color:#000000;color: #fff;
+    padding:10px;border: 0px; border-radius: 50px;margin-bottom: 15px;
+    margin-top: 15px;border: 1px solid #000;}
+.upcoming_payments,.past_tours{margin-top: 48px;}
+.dollar_amount{font-family: 'PP Neue Montreal';font-size: 24px;line-height: 32px;color: #000000;position: relative; top: 5px;margin-right: 16px;}
+.event_title_date{padding-top: 16px;padding-bottom: 34px;}
+.event_title_date h4{padding-bottom: 24px;font-family: 'PP Neue Montreal';font-size: 24px;font-weight: 500;line-height: 32px;color: #000000;}
+.past_tours_column .calendar_date{margin-bottom: 12px !important;}
+.event_location{margin-bottom: 0px;color: #721111;}
+.past_tours h2{padding-bottom: 16px;}
+.past_tours_column .common_btn{display: flex;column-gap: 10px;}
+.past_tours_column .common_btn a{width: 145px;padding: 11px 0px !important;text-align: center;}
+.tour_event_img img,.sidebar-header img{width: 100%;}
+.event_img{height: 144px;}
+.event_img img{width: 100%;height: 100%;object-fit: cover;}
+.email_id span:hover,.phone_no span:hover,.contact_details p a:hover{color: #fff;}
+.common_btn a:hover{
+border: 1px solid #fff !important;
+color: #fff !important;
+background-color: #f15727 !important;
+transition: all 0.8s ease;
+}
+.common_btn a:hover::before{
+    content: url(/images/customer/images/download_icon_white.svg);
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    margin-left: 31px;
+    margin-top: 6px;
+}
+.past_tours_column .common_btn a:hover::before{
+    margin-left: 24px;
+    margin-top: 0px;
+}
+.past_tours_column .common_btn a.invoice_btn:hover::before{
+    margin-left: 30px !important;
+}
+.upcoming_payments .common_btn a img{margin-top: -5px;}
+.upcoming_payments .common_btn a,.your_details_colm_2{position: relative;}
+.upcoming_payments .common_btn a:hover::before{
+    content: url(/images/customer/images/arrow_right_white.svg);
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 5px;
+    right: 41px;
+}
+.facebook_icon a:hover::before{
+    content: url(/images/customer/images/facebook_blue.svg);
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    margin-top: 2px;
+    transition: all 0.8s ease;
+}
+.twitter_icon,.instagram_icon,.linkedin_icon{display: inline-flex;}
+.twitter_icon a:hover::before{
+    content: url(/images/customer/images/twitter_color.svg);
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    margin-top: 2px;
+    transition: all 0.8s ease;
+}
+.instagram_icon a:hover::before{
+    content: url(/images/customer/images/instagram_color.svg);
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    transition: all 0.8s ease;
+}
+.linkedin_icon a:hover::before{
+    content: url(/images/customer/images/linkedin_color.svg);
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    transition: all 0.8s ease;
+}
+/*Login page*/
+.login_inner_content{width: 100%;}
+.login_row{
+    max-width: 1240px;
+    width: 100%;
+    margin: auto;
+    position: relative;
+    display: flex;
+    column-gap: 10%;   
+    padding-right: 15px;
+    padding-left: 15px;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+.login_img_column,.login_form_column{width: 50%;}
+.login_img_column img{width: 100%;}
+.kpt_logo{padding-bottom: 48px;text-align: center;}
+.kpt_login_title{padding-bottom: 40px;}
+.login_form input,.forgot_pwd a,.guest_email input,.your_details_row input,.your_details_row select,.mobile_number .second_mob_no span b{font-family: 'PP Neue Montreal';font-size: 14px;line-height: 16px;padding-left: 24px;text-decoration: none;}
+.forgot_pwd a:hover{text-decoration: underline;}
+.login_form form,.forgot_pwd{text-align: center;}
+.kpt_login_title h3{
+    font-family:'PP Editorial New';
+    font-size: 40px;
+    line-height: 51px; 
+    color: #000000;    
+    text-align: center;
+    padding-bottom: 40px;
+    margin-bottom: 0px;
+}
+.kpt_login_title h4{
+    font-family:'PP Neue Montreal';
+    font-size: 20px;
+    line-height: 24px; 
+    color: #000000;    
+    text-align: center;
+    margin-bottom: 0px;
+}
+.email{padding-bottom: 16px;margin-bottom: 0px;}
+.password{padding-bottom: 24px;margin-bottom: 0px;}
+.email input,.your_details_row input,.your_details_row select{
+    background-color: #F9F4EE;
+    height: 50px;
+    width: 80%;
+    border-radius: 50px;
+    border: 2px solid #F9F4EE;
+    color: #721111;
+}
+.email input:focus-visible,.password input:focus-visible,.your_details_row input:focus-visible,.your_details_row select:focus-visible{ border: 2px solid #F35B15 !important;outline: none !important;}
+.email input::placeholder,.password input::placeholder,.guest_email input::placeholder,.your_details_row input::placeholder{color: #721111;}
+.password input{
+    background-color: #F9F4EE;
+    height: 50px;
+    width: 80%;
+    border-radius: 50px;
+    color: #721111;
+    border: 2px solid #F9F4EE;
+}
+.forgot_pwd a{color: #F35B15;}
+.submit_btn button{
+    height: 50px;
+    width: 80%;
+    border-radius: 50px;
+    color: #fff;
+    background-color: #F35B15;
+    border: 2px solid #F35B15;
+}
+.submit_btn button:hover{
+    cursor: pointer;
+    background-color: transparent;
+    border: 2px solid #F35B15;
+    transition: all 0.8s ease;
+    color: #F35B15;
+}
+
+.remember_me{ text-align: left; margin-left: 12%;margin-bottom: 0px;}
+.submit_btn span{width: 100px;display: inline-block;position: relative;}
+.submit_btn{position: relative;margin-top: 38px; margin-bottom: 24px;}
+.submit_btn span::after{
+    content: url(/images/customer/images/arrow_right_white.svg);
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 3px;
+    right: -5px;
+}
+.submit_btn span:hover::after{
+    content: url(/images/customer/images/arrow_right.svg);
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 3px;
+    right: -5px;
+}
+/*KPT Tours Inner*/
+.overview_title span{margin-right: 16px;}
+.upcoming_tours_clock .event_list{padding-top: 15px !important;}
+.upcoming_tours_clock .upcoming_tour_title{
+    background-color:#000000;
+    border: 1px solid #000 !important;
+    color: #fff;
+    width: 174px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding:10px;
+    border-radius: 50px;
+    cursor: pointer;
+    position: relative;
+}
+.upcoming_tours_clock .upcoming_tour_title{font-family: 'Inter Regular';font-size: 12px;line-height: 15px;}
+.upcoming_tours_clock .upcoming_tour_title:hover{
+    border: 1px solid #000 !important;
+    color: #000 !important;
+    background-color: #fff !important;
+    transition: all 0.8s ease;
+}
+.upcoming_tour_title:hover::before{
+    content: url(/images/customer/images/clock_black.svg);
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: 23px;
+    top: 8px;
+} 
+.upcoming_tour_title img{margin-right: 8px;}
+.tours_list_details{padding: 32px;}
+.upcoming_tours_clock{padding: 32px;margin: 16px 0px 48px 0px;background-color: #F9F4EE;border-radius: 24px;border:2px solid #F35B15;}
+.ticket_type,.booking_reference{margin-bottom: 12px;}
+.upcoming_tours_clock .calendar_date{margin-bottom: 16px !important;}
+.ticket_type span,.booking_reference span{font-family: 'PP Neue Montreal';font-size: 14px;line-height: 15px;margin-left: 10px;}
+.ticket_type span:first-child,.booking_reference span:first-child,.left_label_column{opacity: 60%;}
+.customer_details h5,.ticket_upgrade_colm h5,.stay_extra_colm h5,.contact_us_text p,.your_details_row h5{font-family: 'PP Neue Montreal';font-size: 14px;line-height: 16px;text-decoration: none;color: #F35B15;margin-bottom: 16px;}
+.guests_row,.img_title_date_btn_1,.img_title_date_btn_2,.add_ons_image_date{ display: flex;justify-content: space-between;column-gap: 12px;}
+.guest_colm_email{width: 30%;}
+.guests_row span:first-child,.lead_guest span:first-child{opacity: 60%;}
+.guest_email input{
+    width: 100%;
+    background-color: #F9F4EE;
+    height: 40px;
+    border-radius: 50px;
+    color: #721111;
+    border: 0px;
+    padding: 0px 24px;
+}
+.lead_guest{margin: 20px 0px 24px 0px;}
+.lead_guest_name {margin-right: 86px;}
+.lead_guest_email{margin-right: 30px;}
+.other_guests p{margin-bottom: 12px;}
+.name_address_font span,.add_ons_title_date h4,.dollar_amt_btn_inr div{font-family: 'PP Neue Montreal';font-size: 16px;line-height: 24px;text-decoration: none;color: #000;}
+.guest_colm1 p:first-child span:first-child{margin-right: 62px;}
+.guest_colm1 p:not(:nth-child(1)) span:not(:nth-child(1)){margin-right: 20px;}
+.guest_colm1 .guest_eaddrs{margin-right: 20px;}
+.guest_colm_email p:first-child span:first-child{margin-right: 16px;}
+.onsite_agent_details{margin-top: 25px;}
+.agent_name{margin-right: 80px;}
+.agend_phone_no{margin-right: 16px;}
+.agend_email{margin-right: 25px;}
+.onsite_agent_details .lead_guest div,.travel_insurance .lead_guest div{margin-bottom: 12px;}
+.travel_title_btn{display: flex;justify-content: space-between;align-items: center;}
+.traveler_name{margin-right: 16px;}
+.policy_no{margin-right: 16px;}
+.tours_list_details hr{margin: 32px 0px;}
+.add_ons_img{height: 100px;width: 100px;float: left;}
+.add_ons_img img{width: 100%;object-fit: cover;}
+.add_ons_title_date{padding: 0px 10px 0px 16px;display: flex;flex-flow: column;justify-content: center;}
+.dollar_amt_btn_inr button{
+    font-family: 'PP Neue Montreal';
+    font-size: 14px;
+    line-height: 17px;
+    padding: 11px 5px;
+    color: #fff;
+    background-color: #F35B15;
+    border: 1px solid #f35b15;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    width: 113px;
+    justify-content: center;
+    position: relative;
+}
+.dollar_amt_btn_inr div{margin-bottom: 12px;}
+.dollar_amt_btn_inr div{text-align: center;}
+.dollar_amt_btn_inr img{position: relative;top: -2px;right: 6px;}
+.add_ons_title_date .calendar_date{margin-bottom: 8px !important;}
+.ticket_upgrade_colm h5,.stay_extra_colm h5,.optional_add_ons h2,.img_title_date_btn_1 {margin-bottom: 24px;}
+.dollar_amt_btn_inr .ticket_add:hover{
+    border: 1px solid #f15727  !important;
+    color: #f15727!important;
+    background-color: #fff!important;
+    transition: all 0.8s ease;
+}
+.dollar_amt_btn_inr .ticket_add:hover::before{
+    content: url(/images/customer/images/add_btn_color.svg);
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: 27px;
+    top: 10px;
+    z-index: 111;
+} 
+.ticket_added{ background-color: #fff !important;border: 1px solid #F35B15 !important;color: #F35B15 !important;}
+.dollar_amt_btn_inr .ticket_added:hover{
+    border: 1px solid #f15727  !important;
+    color: #fff!important;
+    background-color: #f15727!important;
+    transition: all 0.8s ease;
+}
+.dollar_amt_btn_inr .ticket_added:hover::before{
+    content: url(/images/customer/images/check_btn_white.svg);
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: 19px;
+    top: 10px;
+    z-index: 111;
+}
+.ticket_upgrade_colm{margin-right: 24px;}
+.ticket_upgrade_colm,.stay_extra_colm{width: 48%;float: left;}
+.add_tour{margin-top: 24px;}
+.upgrade_option_row,.trip_text_btn{
+    width: 100%;
+    clear: both;
+    padding-top: 68px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.upgrade_option_row p{margin-bottom: 0px !important;}
+.trip_text_btn{padding: 0px 0px 31px 0px!important;}
+.contact_us_text{text-transform: uppercase;cursor: pointer;}
+.optional_add_ons{ padding-bottom: 16px;}
+.upgrade_btn{position: relative;}
+.trip_text_btn .common_btn a{
+    background-color: #f35b15 !important;
+    color: #fff !important;
+}
+.trip_text_btn .common_btn a:hover{
+    background-color: #fff !important;
+    color: #F35B15 !important;
+    border: 1px solid #F35B15 !important;
+}
+.trip_text_btn .common_btn a:hover::before{content: url(/images/customer/images/download_icon.svg) !important;}
+.upgrade_btn button{
+    font-family: 'PP Neue Montreal';
+    font-size: 14px;
+    line-height: 17px;
+    text-decoration: none;
+    color: #fff;
+    height: 50px;
+    width: 136px;
+    border-radius: 50px;
+    position: relative;
+    background-color: #F35B15;
+    border: 2px solid #F35B15;
+}
+.upgrade_btn button:hover{
+    cursor: pointer;
+    background-color: transparent;
+    border: 2px solid #F35B15;
+    transition: all 0.8s ease;
+    color: #F35B15;
+}
+.upgrade_btn button::after{
+    content: url(/images/customer/images/arrow_right_white.svg);
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 15px;
+    right: 16px;
+}
+.upgrade_btn button:hover::after{
+    content: url(/images/customer/images/arrow_right.svg);
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 15.5px;
+    right: 16px;
+}
+.contact_us_text img{margin-left: 8px;margin-top: -2px;}
+.trip_text_btn h2{
+    font-family: 'PP Editorial New';
+    font-size: 40px;
+    line-height: 48px;
+    font-weight: 500;
+    color: #000000;
+    margin-bottom: 0px;
+
+}
+.trip_itinerary_row{padding-top: 32px!important;}
+.trip_days{border: 1px solid #F9F4EE;padding: 32px;}
+.trip_days:not(:last-child){border-bottom: 0px;}
+.trip_days h5{font-family: 'PP Neue Montreal';font-size: 24px;line-height: 32px;font-weight: 500;color: #F35B15;margin: 8px 0px 16px;}
+.left_label_column{width: 100px;display: inline-block;}
+.date_details{ font-family:'PP Neue Montreal';font-size: 14px;line-height: 20px; color: #000000;text-transform: uppercase;}
+.trip_details div:not(:last-child){margin-bottom: 12px;}
+.event_information h3,.final_details h3,.notes_div h3{
+    font-family: 'PP Editorial New';
+    font-size: 32px;
+    line-height: 40px;
+    font-weight: 500;
+    color: #000000;
+    margin-bottom: 24px;
+}
+.event_information p,.final_details p{
+    font-family: 'PP Neue Montreal';
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 500;
+    color: #000000;
+    margin-bottom: 0px;
+}
+.notes_title{
+    font-family: 'PP Neue Montreal';
+    font-size: 14px;
+    line-height: 16px;
+    font-weight: 500;
+    color: #721111;
+    margin-bottom: 0px;
+    text-transform: uppercase;
+}
+.notes_colm{width: 48%;float: left;background-color: #F9F4EE;min-height: 112px; border-radius: 24px; padding: 16px 24px;}
+.notes_row .notes_colm:first-child{margin-right: 24px;}
+/*Finances*/
+.upcoming_payments_finances h2{margin-bottom: 24px;}
+.finances_event{border:2px solid #F35B15;border-radius: 24px;margin-bottom: 24px;}
+.event_payment_list{padding: 24px 24px 16px 24px;justify-content: unset;column-gap: 65px;background-color: #F9F4EE;border-bottom: 2px solid #F35B15;border-radius: 24px 24px 0px 0px;position: relative;}
+.event_invoice_details{padding: 24px;}
+.invoice_tbl th:nth-child(1){width: 15%;}
+.invoice_tbl th:nth-child(2){width: 15%;}
+.invoice_tbl th:nth-child(3){width: 15%;}
+.invoice_tbl th:nth-child(4){width: 41%;}
+.invoice_tbl tr td:nth-child(5){width: 143px;}
+.event_invoice_details{overflow-x: auto;}
+.invoice_tbl { display: block; overflow-x: auto; white-space: nowrap; }
+.invoice_tbl tbody {display: table; width: 100%;}
+.invoice_tbl th{
+    font-family: 'PP Neue Montreal';
+    font-size: 14px;
+    line-height: 17px;
+    font-weight: 500;
+    color: #F35B15;
+    padding-bottom: 10px;
+}
+.invoice_tbl td{padding-right: 30px;}
+.invoice_tbl td,.order_value_amount p{
+    font-family: 'PP Neue Montreal';
+    font-size: 16px;
+    line-height: 19px;
+    font-weight: 500;
+    color: #000;
+    padding-bottom: 10px;
+}
+.invoice_tbl .overdue,.invoice_tbl .notpaid,.invoice_tbl .paid{
+    font-family: 'PP Neue Montreal';
+    font-size: 12px;
+    line-height: 14px;
+    border-radius: 40px;
+    padding: 6px 12px;
+    border: 0px;
+    width: 100px;
+}
+.invoice_tbl .overdue{ background: #FF565633;color: #E60808;}
+.invoice_tbl .overdue:hover{
+    border: 1px solid #E60808 !important;
+    background-color: #fff !important;
+    transition: all 0.8s ease;
+}
+.invoice_tbl .notpaid{background: #72111126;color: #721111;}
+.invoice_tbl .notpaid:hover{
+    border: 1px solid #721111 !important;
+    background-color: #fff !important;
+    transition: all 0.8s ease;
+}
+.invoice_tbl .paid{background: #52D86866;color:#1E4E22;}
+.invoice_tbl .paid:hover{
+    border: 1px solid #1E4E22 !important;
+    background-color: #fff !important;
+    transition: all 0.8s ease;
+}
+.overdue_btn:hover{
+    border: 1px solid #000 !important;
+    color: #000;
+    background-color: #fff !important;
+    transition: all 0.8s ease;
+}
+.invoice_tbl .view_details img{margin-top: -3px;}
+.order_value_amount{ display: flex; justify-content: space-between; column-gap: 13px;width: 42%;}
+.order_value_amount p{padding-bottom: 0px !important;margin-bottom: 4px;}
+.order_value_amount p:nth-child(2){margin-bottom: 0px;opacity: 60%;}
+/*Your Details*/
+.your_details{padding: 48px 32px 32px 32px;}
+.your_details_row{display: flex;width: 100%;}
+.your_details_colm_1{width: 23%;margin-right: 24px;}
+.your_details_colm_2{width: 74%;}
+.form_inner{box-shadow: 0px 0px 34px 0px #0000001A;border: 2px solid #F35B15;padding: 36px 32px 32px 32px;border-radius: 24px;}
+.your_details_row ul{padding-inline-start: 0px;}
+.your_details_row ul li{
+    font-family: 'PP Neue Montreal';
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+    text-transform: uppercase;
+    padding: 24px 12px 24px 0px;
+    position: relative;
+    list-style: none;
+    cursor: pointer;
+}
+.your_details_row ul li a{color: #000;text-decoration: none;}
+.your_details_row ul li:not(:last-child){border-bottom: 1px solid #D9D9D9;}
+.your_details_row ul li.active a{color: #F35B15;}
+.your_details_row ul li::after{
+    content: url(/images/customer/images/arrow_right_black.svg);
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 27px;
+    right: 0px;
+}
+.your_details_row ul li.active::after{
+    content: url(/images/customer/images/arrow_right.svg);
+}
+.your_details_row ul li .active{color: #F35B15;}
+.personal_details h5{text-transform: uppercase;}
+.your_details_row .one_input_field input,.your_details_row select{width: 100%;padding: 0px 24px;}
+.your_details_row .two_input_field input,.address_detail_colm_1,.address_detail_colm_2,.second_mob_no,.current_pwd{width: 50%;}
+.second_mob_no input,.current_pwd input{width: 100% !important;}
+.your_details_row .two_input_field,.address_details_form {display: flex;column-gap: 16px;}
+.your_details_row .one_input_field input,.your_details_row .two_input_field input,.your_details_row .one_input_field select,.your_details_row .two_input_field select{margin-bottom: 16px;}
+input[type="date" i]::-webkit-calendar-picker-indicator { background-image: url(/images/customer/images/calendar_dob.svg);}
+.personal_details p{
+    font-family: 'PP Neue Montreal';
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+    color: #000 ;
+    margin-bottom: 24px;
+}
+.mobile_number .second_mob_no span{position: absolute;margin-left: 25px;border-right: 1px solid #F35B15;padding-right: 10px;top: 12px;}
+.mobile_number .second_mob_no span b{font-weight: normal;padding-left: 10px;color: #721111;}
+.mobile_number .second_mob_no input{padding-left: 100px;}
+.your_details_row select{cursor: pointer;}
+.your_details_row select{
+-webkit-appearance: none;
+-moz-appearance: none;
+background-image: url("/images/customer/images/arrow-down.svg");
+background-repeat: no-repeat;
+background-position-x: 92%;
+background-position-y: 15px;
+}
+.contact_details h3,.passport_details h3,.frequent_details h3,.other_details h3,.change_password h3{margin-bottom: 24px;}
+.passport_details select,.frequent_details select{background-position-x: 96%;}
+.your_details_colm_2 hr{width: 100%;position: absolute;left: 0px;z-index: -1;}
+.address_details,.contact_details,.passport_details,.frequent_details,.other_details,.change_password{padding-top: 35px;}
+.your_details_colm_2 .common_btn{padding-top: 32px;text-align: right;}
+.common_btn .save_changes{line-height: 17px;color: #fff;background-color: #F35B15;border-radius: 50px;padding: 11px 30px;border: 1px solid #F35B15;text-transform: uppercase;text-decoration: none;position: relative;}
+.common_btn .save_changes:hover{
+    border: 1px solid #f35b15 !important;
+    color: #F35B15 !important;
+    background-color: #fff !important;
+    transition: all 0.8s ease;
+}
+.your_details_row input,.your_details_row select{text-transform: uppercase;}
+.home_addr{display: flex;justify-content: space-between;align-items: center;}
+.same_as,.remeber_me { position: relative;top: -10px;}
+.same_as input,.remeber_me input[type=checkbox] {
+    position: absolute;
+    visibility: hidden;
+    width: 30px;
+    height: 30px;
+    top: 0;
+    left: 0;
+}
+input[type=checkbox] { -webkit-appearance: checkbox;}
+.same_as label span,.remeber_me label span {
+    padding-left: 32px;
+    font-family: 'PP Neue Montreal';
+    font-size: 14px;
+    color: #000000;
+    letter-spacing: 0;
+    text-transform: none;
+    cursor: pointer;
+}
+.same_as input[type=checkbox]+span:before,.remeber_me input[type=checkbox]+span:before{
+    display: block;
+    position: absolute;
+    content: url(/images/customer/images/Checkbox_empty_1.svg);
+    border-radius: 0;
+    height: 24px;
+    width: 24px;
+    top: 0;
+    left: 0;
+}
+.same_as input[type=checkbox]:checked+span:before,.remeber_me input[type=checkbox]:checked+span:before  { content: url(/images/customer/images//Checkbox-tick.svg);}
+.same_as input[type=checkbox]+span:before,.remeber_me input[type=checkbox]+span:before  {
+    display: block;
+    position: absolute;
+    border-radius: 0;
+    height: 24px;
+    width: 24px;
+    top: 0;
+    left: 0;
+}
+.current_pwd{position: relative;}
+.current_pwd span{position: absolute;right: 30px;top: 10px;}
+.second_mob_no{display: flex; align-items: center;position: relative;}
+/*FAQs*/
+.faqs_inner{padding: 28px 32px 32px 32px;}
+.faqs_list h4{
+    font-family: 'PP Neue Montreal';
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 32px;
+}
+.faqs_list h4{color: #000;}
+.faqs_list p{
+    font-family: 'PP Neue Montreal';
+    font-size: 14px;
+    color: #000;
+    font-weight: 500;
+    line-height: 20px;
+}
+.faqs_list {position: relative;}
+.faqs_list ul{padding-inline-start: 0px;}
+.faqs_list ul li{list-style: none;}
+.faqs_list h4,.faqs_list p{margin-bottom: 0px;}
+.titleWrapper.active h4{color: #F35B15;}
+.titleWrapper.active .arrow-icon::after{
+    content: url(/images/customer/images/arrow-down-color.svg) !important;
+    transform: rotate(180deg);
+    transition: all .5s ease-in-out;
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 34px;
+    right: 0px;
+	
+}
+.titleWrapper.active .arrow-icon img{display: none;}
+.tab-accordian{
+    width: 100%;
+    border-bottom: 1px solid #F9F4EE;
+    overflow: hidden;
+    position: relative;
+}
+.desWrapper{
+    background: #fff;
+    max-height: 500px;
+    display: none;
+    padding: 0px 0px 24px 0px;
+    transition: max-height 1s ease-in;
+}
+.titleWrapper {
+    padding: 24px 0px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: background-color .8s linear;
+}
+/*Media Query*/
+
+@media only screen and (max-width: 1199px) {
+    .container{width: 100% !important;padding: 0px;display: block !important;}
+    .past_tours_column .common_btn{flex-flow: column; gap: 15px;}
+}
+@media only screen and (max-width: 980px) {
+    .address_detail_colm_2 { padding-top: 30px; }
+    .your_details_row .two_input_field,.address_details_form{flex-flow: column;}
+    .your_details_row .two_input_field input,.second_mob_no,.address_detail_colm_1,.address_detail_colm_2,.relationship_input,.current_pwd{width: 100%;}
+    .your_details_row{display: block;}
+    .your_details_colm_1,.your_details_colm_2{width: 100%;}
+    .ticket_upgrade_colm{margin-bottom: 40px;}
+    .guest_colm1,.guest_colm_email{margin-bottom: 25px;}
+    .guest_colm_email{width: 50%;}
+    .guests_row{flex-flow: column;}
+    .past_tours_column{width: 45% !important;float: left;padding-bottom: 70px;}
+    .past_tours_column:not(:nth-child(3)){margin-right: 5%;}
+} 
+@media only screen and (max-width: 400px) {
+    .personal_details h3{font-size: 20px !important;line-height: 28px !important;}
+    .mobile_number .second_mob_no input{padding-left: 80px !important;}
+    .mobile_number .second_mob_no span{margin-left: 15px !important;}
+    .second_mob_no span{padding-right: 0px !important;}
+    .second_mob_no img{width: 21%;}
+    .your_details_row input, .your_details_row select{font-size: 11px !important;}
+    .add_ons_img{margin-bottom: 20px;} 
+    .add_ons_image_date,.dollar_amt_btn_inr{display: flex !important; align-items: center;flex-flow: column;}
+}
+@media only screen and (max-width: 550px) {
+    .your_details{padding: 48px 15px 32px 15px;}
+    .contact_us_text p{font-size: 12px;}
+    .contact_us_text,.trip_text_btn div:first-child{margin-bottom: 30px;}
+    .upgrade_option_row,.trip_text_btn{flex-flow: column;}
+    .add_ons_image_date{display: block;}
+    .tours_list_details{padding: 32px 20px;}
+    .guest_colm_email,.left_label_column{width: 100% !important;}
+    .img_title_date_btn_1,.img_title_date_btn_2{flex-flow: column;}
+    .dollar_amt_btn_inr div{text-align: left;}
+    .dollar_amt_btn{margin: 25px 0px;}
+}
+@media only screen and (max-width: 767px) {
+    .your_details_row input, .your_details_row select{font-size: 13px;}
+    .form_inner{padding: 36px 15px 32px 15px;}
+    .total_order,.total_paid{margin-bottom: 20px;}
+    .order_value_amount{width: 100%; margin-top: 25px;margin-bottom: 10px;flex-flow: column;}
+    .event_payment_list{column-gap: 15px;flex-flow: column;align-items: start;}
+    .notes_row .notes_colm:first-child{margin-bottom: 18px;}
+    .ticket_upgrade_colm,.stay_extra_colm,.notes_colm{width: 100%;}
+    .travel_insurance .common_btn{position: absolute;bottom: 0px;}
+    .travel_insurance{ position: relative;padding-bottom: 50px;}
+    .common_btn a{padding: 11px 15px;}
+    .upcoming_tours_clock{padding: 32px 15px;}
+    .sidebar-header{text-align: center;}
+    .sidebar-header img{width: auto;}
+    .remember_me{margin-left: 10px;}
+    .login_img_column,.login_form_column{width: 100%;}
+    .email input,.password input,.submit_btn button{width: 100%;}
+    .kpt_login_title h4{font-size: 17px;line-height: 25px;}
+    .kpt_login_title h3{font-size: 30px;line-height: 42px;}
+    .login_form_column{margin-top: 65px;}
+    .login_row{flex-flow: column;height: auto !important; margin-top: 60px !important; margin-bottom: 50px !important;}
+    .inner_content{width: 100% !important;height: auto !important;margin-bottom: 100px !important;}
+    .dollar_amount{padding-bottom: 20px;}
+    .common_btn{display: flex; flex-flow: column;}
+    .upcoming_tours h2, .upcoming_payments h2, .past_tours h2,.customer_details h2,.name_address_font h2,.upcoming_payments_finances h2{font-size: 25px !important;line-height: 32px;}
+    .title_date h4{padding-top: 20px;font-size: 20px !important;line-height: 28px !important;}
+    .event_image_title{flex-flow: column;align-items: start;}
+    .title_date{padding-left: 0px !important;}
+    .overview_top_bar{flex-flow: column;}
+    .search_field{width: 100% !important;margin-top: 20px;}
+    #sidebar{width: 100% !important;height: auto !important;position: relative;}
+    .past_tours_column{width: 100% !important;padding-bottom: 70px;}
+    .past_tours_column:not(:nth-child(3)){margin-right: 0%;}
+    .body_content{flex-flow: column;}
+} 
+@media screen  and (min-width: 768px)  and (max-width: 980px) { 
+    .order_value_amount{width: 80%; margin-top: 25px;margin-bottom: 10px;}
+    .event_payment_list{column-gap: 15px;flex-flow: column;align-items: start;}
+    .notes_row .notes_colm:first-child{margin-right: 20px;}
+    .ticket_upgrade_colm,.stay_extra_colm{width: 100%;}
+    .login_row{column-gap: 30px;}
+    .title_date h4{font-size: 17px;line-height: 25px;}
+    .upcoming_tours h2, .upcoming_payments h2, .past_tours h2,.customer_details h2,.name_address_font h2,.upcoming_payments_finances h2{font-size: 26px !important;line-height: 34px;}
+    .inner_content{width: 77% !important;}
+    #sidebar{width: 23% !important;padding: 30px 19px !important;}
+    .social_media img{margin-right: 9px !important;}
+
+}
+@media screen  and (min-width: 981px)  and (max-width: 1199px) { 
+    .guest_email input{font-size: 12px;padding: 0px 20px;}
+    .guest_colm_email{width: 28%;}
+}
+@media screen  and (min-width: 981px)  and (max-width: 1279px) { 
+    .your_details_row input, .your_details_row select{font-size: 13px;}
+    .address_detail_colm_2{padding-top: 30px;}
+    .mobile_number .second_mob_no:first-child,.relationship_input{margin-bottom: 16px !important;}
+    .mobile_number,.address_details_form{flex-flow: column;}
+    .mobile_number .second_mob_no,.address_detail_colm_1,.address_detail_colm_2,.relationship_input,.current_pwd{width: 100% !important;}
+    .order_value_amount{width: 70%; margin-top: 25px;margin-bottom: 10px;}
+    .event_payment_list{column-gap: 15px;flex-flow: column;align-items: start;}
+    .add_ons_image_date{display: block;}
+    .img_title_date_btn_1,.img_title_date_btn_2{flex-flow: column;}
+    .dollar_amt_btn_inr div{text-align: left;}
+    .dollar_amt_btn{margin: 25px 0px;}
+}
+@media screen  and (min-width: 1280px)  and (max-width: 1399px) { 
+    .alternate_no::placeholder{font-size: 11px;}
+    .order_value_amount p{font-size: 13px;}
+    .order_value_amount{width: 46%;}
+    .event_payment_list{column-gap: 20px;}
+    .add_ons_image_date,.img_title_date_btn_1{column-gap: 0px;}
+    .calendar_date{font-size: 12px;}
+}
+@media screen  and (min-width: 1400px)  and (max-width: 1600px) { 
+    .order_value_amount p{font-size: 13px;}
+}
+@media only screen and (min-width: 981px) {
+    .past_tours_column{width: 31%; float: left;}
+    .past_tours_column:not(:nth-child(3)){margin-right: 3%;}
+}
+@media only screen and (min-width: 1401px) {
+    .order_value_amount{width: 40% !important;}
+}
+@media only screen and (max-width: 1400px) {
+    .event_list{flex-flow: column;align-items: start;}
+    .event_list .common_btn{margin: 30px 0px 20px 0px;}
+
+}

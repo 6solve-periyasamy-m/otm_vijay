@@ -4,6 +4,7 @@ namespace App\Models\Order\Payment;
 
 use App\Models\Booking\Booking;
 use App\Models\Customer\Customer;
+use App\Models\Location\Currency;
 use App\Models\Order\Order;
 use App\Models\System\Brand;
 use App\Repository\Intention\PaymentIntentionRepository;
