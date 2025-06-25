@@ -65,6 +65,7 @@ Route::prefix('{order}')->group(function () {
             Route::post('/update', [OrderCustomerController::class, 'update'])->name('order-customers.update')->middleware('bouncer:Order\OrderCustomer,update');
             Route::post('/delete', [OrderCustomerController::class, 'destroy'])->name('order-customers.delete')->middleware('bouncer:Order\OrderCustomer,delete');
             Route::get('/merchandise/{orderMerchandise}/fulfil', [OrderCustomerController::class, 'fulfil'])->name('merchandise.inventory.tour.order.fulfil')->middleware('bouncer:Order\OrderCustomer,update');
+            Route::get('/components', [OrderCustomerController::class, 'loadTourComponents'])->name('order-customers.components')->middleware('bouncer:Order\OrderCustomer,read');
             Route::prefix('adjustment')->group(function () {
                 Route::get('/', [OrderCustomerAdjustmentController::class, 'index'])->name('order-customer-adjustments.all')->middleware('bouncer:Order\Adjustment\OrderCustomerAdjustment,read');
                 Route::get('/create', [OrderCustomerAdjustmentController::class, 'create'])->name('order-customer-adjustments.create')->middleware('bouncer:Order\Adjustment\OrderCustomerAdjustment,create');

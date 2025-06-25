@@ -67,3 +67,10 @@ if (!function_exists('default_customer_fields')) {
         return ['email', 'mobile_number', 'internal_notes'];
     }
 }
+
+if (!function_exists('default_order_customer_fields')) {
+    function default_order_customer_fields(): array
+    {
+        return ['first_name', 'last_name', 'email', 'date_of_birth'];
+    }
+}

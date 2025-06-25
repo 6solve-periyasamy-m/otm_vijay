@@ -226,16 +226,41 @@
                 <div class="checkbox-group">
                     @foreach($customerFieldList['fields'] as $field => $info)
                         <div class="form-check form-check-inline">
-                            <input type="checkbox" name="{{ $field }}"
+                            <input type="checkbox" name="customer_fields[]"
                                 value="{{ $field }}"
                                 @if(in_array($field, $selectedFields) || in_array($field, default_customer_fields())) checked @endif>
-                                <label class="form-check-label lh-lg ps-2" for="{{ $field }}">{{ $info['name'] }}</label>
+                            <label class="form-check-label lh-lg ps-2" for="{{ $field }}">{{ $info['name'] }}</label>
                         </div>
                     @endforeach
                 </div>
             </div>
         </x-admin.section.card>
     </div>
+    <div class="col-xl-12">
+        <x-admin.section.card>
+            <x-slot:title>
+                Order Customer Data Toggles
+            </x-slot:title>
+            @if($errors->has('order_customer_fields'))
+                <div class="alert alert-danger">
+                    {{ $errors->first('order_customer_fields') }}
+                </div>
+            @endif
+            <div class="row">
+                <div class="checkbox-group">
+                    @foreach($customerFieldList['fields'] as $field => $info)
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" name="order_customer_fields[]"
+                                value="{{ $field }}"
+                                @if(in_array($field, $selectedOrderCustomerFields) || in_array($field, default_order_customer_fields())) checked @endif>
+                            <label class="form-check-label lh-lg ps-2" for="{{ $field }}">{{ $info['name'] }}</label>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </x-admin.section.card>
+    </div>
+
     <div class="col-xl-6">
         <x-admin.section.card>
             <x-slot:title>Bank Transfer Details</x-slot:title>
@@ -251,3 +276,21 @@
         </div>
     @endif
 </form>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const maxSelection = 4;
+        const checkboxes = document.querySelectorAll('input[name="order_customer_fields[]"]');
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+                if (checkedCount > maxSelection) {
+                    checkbox.checked = false;
+                    alert('You can only select up to 4 Order Customer Data fields.');
+                }
+            });
+        });
+    });
+</script>
