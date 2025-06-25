@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Customer\BookingV3Controller;
 use App\Http\Controllers\Customer\CustomerBookingController;
 use App\Http\Controllers\Customer\SimpleBookingController;
 use App\Http\Controllers\StripeController;
@@ -49,16 +48,6 @@ Route::prefix('payment')->name('payment.')->group(function () {
 Route::prefix('/booking/simple/{tour}')->group(function () {
     Route::get('/checkout/{token}', [SimpleBookingController::class, 'checkout'])->name('booking.simple.checkout');
     Route::get('/{token?}', [SimpleBookingController::class, 'index'])->name('booking.simple.index');
-});
-
-Route::prefix('/booking/v3/{tour}')->group(function () {
-    Route::get('/{booking?}', [BookingV3Controller::class, 'guest'])->name('booking.v3.guest');
-    Route::get('/hotels/{booking?}', [BookingV3Controller::class, 'hotel'])->name('booking.v3.hotel');
-    Route::get('/tickets/{booking?}', [BookingV3Controller::class, 'ticket'])->name('booking.v3.tickets');
-    Route::get('/inclusions/{booking?}', [BookingV3Controller::class, 'inclusion'])->name('booking.v3.inclusions');
-    Route::get('/details/{booking?}', [BookingV3Controller::class, 'details'])->name('booking.v3.details');
-    Route::get('/confirmation/{booking?}', [BookingV3Controller::class, 'confirmation'])->name('booking.v3.confirmation');
-    Route::get('/reset/{booking?}', [BookingV3Controller::class, 'confirmation'])->name('booking.v3.confirmation');
 });
 
 

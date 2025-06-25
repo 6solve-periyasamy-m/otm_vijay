@@ -17,10 +17,9 @@
 @section('form-body')
     @include('partials.fields.selector.default',
                 ['name' => 'Activity Inventory', 'field' => 'activity_inventory_id', 'value' => $inventoryTour?->activity_inventory_id ?? 0,
-                 'route' => 'inventory.activity', 'width' => 9])
-    @include('partials.fields.prefab.component_type', ['classes' => 'accommodation-component-type-select', 'value' => $inventoryTour?->tour_component_type ?? 'Included', 'width' => 3])
+                 'route' => 'inventory.activity'])
+    @include('partials.fields.prefab.component_type', ['classes' => 'accommodation-component-type-select', 'value' => $inventoryTour?->tour_component_type ?? 'Included', 'width' => 4])
     @include('partials.fields.text', ['name' => 'Tour Sales Price', 'field' => 'tour_sales_price', 'value' => $inventoryTour?->tour_sales_price ?? null, 'width' => 4])
     @include('partials.fields.checkbox', ['name' => 'Stock Control Active', 'field' => 'stock_control_active', 'divClasses' => 'my-auto', 'value' => $inventoryTour?->stock_control_active ?? false, 'width' => 4])
-    @include('partials.fields.checkbox', ['name' => 'Bookable', 'field' => 'is_bookable', 'value' => $inventoryTour?->is_bookable ?? false, 'divClasses' => 'my-auto', 'width' => 4])
     @include('partials.fields.submit')
 @endsection

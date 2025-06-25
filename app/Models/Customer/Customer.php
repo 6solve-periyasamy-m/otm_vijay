@@ -34,6 +34,8 @@ use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
+use Laravel\Cashier\Billable;
+use Laravel\Cashier\Subscription;
 
 
 /**
@@ -160,6 +162,7 @@ class Customer extends Authenticatable implements NotificationSubject
     use SoftDeletes;
     use HasFactory;
     use Notifiable;
+    use Billable;
     use CascadeSoftDeletes;
     use HasRepository;
     use HasNotifications;

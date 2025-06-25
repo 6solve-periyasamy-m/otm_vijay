@@ -32,6 +32,6 @@ $prefix = $prefix ?? "";
     @include('partials.fields.prefab.addresses.selector', ['value' => $address?->id, ])
 </div>
 <div class="switcher-new row">
-    @include('partials.models.addresses.form', ['address' => $address, 'prefix' => $prefix, 'submit' => false,])
+    @include('partials.models.addresses.form', ['address' => $address, 'prefix' => $prefix,])
 </div>
 <hr class="splitter"/>

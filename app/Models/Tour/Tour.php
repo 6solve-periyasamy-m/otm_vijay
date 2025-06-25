@@ -50,7 +50,6 @@ use Illuminate\Support\Carbon;
  * @property int|null $event_id
  * @property int|null $tax_bracket_id
  * @property string $name
- * @property string|null $package_name Raw package name. Use booking_package_name for display to customers
  * @property string|null $description
  * @property string|null $notes
  * @property float|null $base_price_per_person
@@ -99,7 +98,6 @@ use Illuminate\Support\Carbon;
  * @property-read float $deposit_amount
  * @property-read bool $has_atol_certificate
  * @property-read bool $protected
- * @property-read string $booking_package_name Package name, or tour name if null
  * @property-read float $remaining_installment
  * @property-read float $remaining_percentage
  * @property-read TourRepository $repository
@@ -390,7 +388,7 @@ class Tour extends Model
         return $this->hasMany(PaymentInstallment::class, 'tour_id')->orderBy('due_on');
     }
 
-    public function getDepositPercentageAttribute(): ?float
+    public function getDepositPercentageAttribute(): float
     {
         return $this->is_deposit_percentage ? ($this->deposit ?? 0.0)
             : ($this->base_price_per_person == 0 ? 0 : round(($this->deposit / $this->base_price_per_person) * 100, 2));
@@ -431,9 +429,6 @@ class Tour extends Model
     {
         if ($this->booking_form_url === null) {
             return null;
-        }
-        if (config('app.features.bleeding-edge', false) || config('app.features.kpt', false)) {
-            return route('booking.v3.guest', ['tour' => $this->booking_form_url, 'booking' => $booking?->token]);
         }
         if (config('app.features.kpt', false) || config('app.features.bleeding-edge')) {
             if ($checkout && $booking !== null) {
@@ -477,11 +472,6 @@ class Tour extends Model
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class, 'country_id');
-    }
-
-    public function getBookingPackageNameAttribute(): string
-    {
-        return $this->package_name ?? $this->name;
     }
 
     public function getMakePaymentDetailsAttribute(): string

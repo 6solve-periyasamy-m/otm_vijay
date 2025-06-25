@@ -80,7 +80,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                     @if($nonSystem) ({{ fr_currency($order->cost * $toSystem, Settings::currency()) }}) @endif
                     before cancellation)
                 @else
-                    {{ fr_currency($order->total, $order->currency, false, 0) }} @if($nonSystem) ({{ fr_currency($order->total * $toSystem, Settings::currency()) }}) @endif
+                    {{ fr_currency($order->total, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->total * $toSystem, Settings::currency()) }}) @endif
                     @if ($order->repository->getBeforeString() !== null)
                         ({{ $order->repository->getBeforeString() }})
                     @endif
@@ -580,7 +580,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                             <th scope="row">Remaining Balance</th>
                             <td>{{ f_date($order->tour?->final_payment) }}</td>
                             <td>{{ fr_currency($order->remaining_installment, $order->currency) }} ({{ $order->remaining_percentage }}%)</td>
-                            <td> {{ fr_currency($order->paid, $order->currency) }} </td>
+                            <td> {{ f_currency($order->paid) }} </td>
                             <td>
                                 @php $amount = min($order->remaining, $order->remaining_installment); @endphp
                                 @if($amount <= 0)

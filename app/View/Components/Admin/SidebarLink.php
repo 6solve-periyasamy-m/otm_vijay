@@ -17,7 +17,6 @@ use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Models\Transport\Transport;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Bouncer;
 use Closure;
 use Icon;
@@ -62,11 +61,7 @@ class SidebarLink extends Component
      */
     public static function getSidebarLinks(): array
     {
-        $user = Auth::user();
-        if (empty($user) || !($user instanceof User)) {
-            return [];
-        }
-        $links = [
+        return [
             new SidebarLink('Dashboard', route('dash'), Icon::dashboard()),
             new SidebarLink('Events', route('events.all'), Icon::event(), 'events', Event::class, 'read'),
             new SidebarLink('Tours', route('tours.all'), Icon::tour(), 'tours', Tour::class, 'read'),
@@ -88,13 +83,6 @@ class SidebarLink extends Component
             new SidebarLink('Roles', route('roles.all'), Icon::role(), 'roles', User::class, 'read'),
             new SidebarLink('Reports', route('reports.all'), Icon::report(), 'reports', Report::class, 'read'),
         ];
-
-        // Conditionally add 'e-Dashboard' if user role level is high enough
-        if ($user->getHighestRoleLevel() >= 5) {
-            $links[] = new SidebarLink('e-Dashboard', route('edashboard'), Icon::dashboard());
-        }
-
-        return $links;
     }
 
     public static function getLogsURL(): SidebarLink

@@ -6,7 +6,6 @@ use App\Models\Booking\Component\BookingAccommodation;
 use App\Models\Customer\Group;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Tour\Tour;
-use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
 use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
 use Database\Factories\Accommodation\AccommodationInventoryTourFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -173,10 +172,5 @@ class AccommodationInventoryTour extends Model
     {
         if (!isset($this->internal_repository)) $this->internal_repository = new AccommodationInventoryTourRepository($this);
         return $this->internal_repository;
-    }
-
-    public function compare(AccommodationInventoryTour $inventoryTour): int
-    {
-        return AccommodationInventoryRepository::compareTwo($this->inventory, $inventoryTour->inventory);
     }
 }

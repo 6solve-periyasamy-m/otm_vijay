@@ -580,9 +580,4 @@ class Order extends Model implements NotificationSubject
         $url = route('orders.view', ['order' => $this,]);
         return "<a href='{$url}'>{$this->booking_reference}</a>";
     }
-
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class);
-    }
 }
