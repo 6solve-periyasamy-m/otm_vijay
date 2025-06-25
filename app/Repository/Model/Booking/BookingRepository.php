@@ -944,7 +944,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         return $items;
     }
 
-    public function getCurrency(): Currency
+    public function getCurrency(): Currency|null
     {
         return $this->booking->currency ?? Settings::currency();
     }

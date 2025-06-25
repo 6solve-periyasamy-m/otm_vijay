@@ -9,7 +9,7 @@ $activityLock = $order->tour->repository->isActivityLocked();
 $flightLock = $order->tour->repository->isFlightLocked();
 $transportLock = $order->tour->repository->isTransportLocked();
 
-$currentURL = $_SERVER['REQUEST_URI'];
+$currentURL = $_SERVER['REQUEST_URI'] ?? "";
 $basePattern = '/customer/itinerary/';
 if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePattern, '', $currentURL)) > 0) {
     $dynamic = true;
