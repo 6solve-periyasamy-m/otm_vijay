@@ -202,6 +202,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
         </div>
         @endcan
         <div class="row">
+            @php //dd($orderCustomerFields); @endphp
             @foreach($order->orderCustomers as $key => $ordersCustomer)
             @php
                 $isTbcCustomer = (strpos($ordersCustomer->customer->first_name, 'Unknown') !== false || strpos($ordersCustomer->customer->last_name, 'Unknown') !== false);
@@ -225,19 +226,73 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                             </i>                                
                         </span>
                     </p>
-                    <h6 class="fw-bold">
-                        @can('read', \App\Models\Order\OrderCustomer::class)
-                        <a href="{{ route('order-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer, ]) }}" class="link-info">
-                            {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
-                        </a>
-                        @else
-                            {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
-                        @endcan
-                    </h6>
-                    <p>Born</p>
-                    <h6 class="fw-bold">{{ isset($ordersCustomer->customer->date_of_birth) ? f_date($ordersCustomer->customer->date_of_birth) : 'Date of Birth not set' }}</h6>
-                    <p>Passport Number</p>
-                    <h6 class="fw-bold">{{ $ordersCustomer->customer->passport_number ?? 'Not Set' }}</h6>
+                    @if(in_array('first_name', $orderCustomerFields) || in_array('last_name', $orderCustomerFields))
+                        <h6 class="fw-bold">
+                            @can('read', \App\Models\Order\OrderCustomer::class)
+                                <a href="{{ route('order-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer]) }}" class="link-info">
+                                    {{ $ordersCustomer->customer->first_name . ' ' . $ordersCustomer->customer->last_name }}
+                                </a>
+                            @else
+                                {{ $ordersCustomer->customer->first_name . ' ' . $ordersCustomer->customer->last_name }}
+                            @endcan
+                        </h6>
+                    @endif
+                    @if(in_array('date_of_birth', $orderCustomerFields))
+                        <p>Born</p>
+                        <h6 class="fw-bold">{{ isset($ordersCustomer->customer->date_of_birth) ? f_date($ordersCustomer->customer->date_of_birth) : 'Date of Birth not set' }}</h6>
+                    @endif
+                    @if(in_array('email', $orderCustomerFields))
+                        <p>Email</p><h6 class="fw-bold">{{ $ordersCustomer->customer->email_address ?? 'Not Set' }}</h6>
+                    @endif
+                    @if(in_array('mobile_number', $orderCustomerFields))
+                        <p>Phone Number</p><h6 class="fw-bold">{{ $ordersCustomer->customer->mobile_number ?? 'Not Set' }}</h6>
+                    @endif
+                    @if(in_array('policy_number', $orderCustomerFields))
+                        <p>Insurance Policy</p><h6 class="fw-bold">{{ $ordersCustomer->customer->policy_number ?? 'No Insurance Policy' }}</h6>
+                    @endif
+
+                    @if(in_array('home_address', $orderCustomerFields))
+                        <p>Home Address</p>
+                        <h6 class="fw-bold">
+                            {{ $ordersCustomer->customer->homeAddress->address_line_1 }}
+                            {{ $ordersCustomer->customer->homeAddress->region }}
+                            {{ $ordersCustomer->customer->homeAddress->country }}
+                            {{ $ordersCustomer->customer->homeAddress->postcode }}
+                        </h6>
+                    @endif
+
+                    @if(in_array('billing_address', $orderCustomerFields))
+                        <p>Billing Address</p>
+                        <h6 class="fw-bold">
+                            {{ $ordersCustomer->customer->billingAddress->address_line_1 }}
+                            {{ $ordersCustomer->customer->billingAddress->region }}
+                            {{ $ordersCustomer->customer->billingAddress->country }}
+                            {{ $ordersCustomer->customer->billingAddress->postcode }}
+                        </h6>
+                    @endif
+
+                    @if(in_array('passport_first_name', $orderCustomerFields) || in_array('passport_middle_names', $orderCustomerFields) || in_array('passport_last_name', $orderCustomerFields))
+                        <p>Passport Name</p><h6 class="fw-bold">{{ $ordersCustomer->customer->passport_first_name . ' ' . $ordersCustomer->customer->passport_middle_names . ' ' . $ordersCustomer->customer->passport_last_name ?? 'Not Set' }}</h6>
+                    @endif
+                    @if(in_array('passport_number', $orderCustomerFields))
+                        <p>Passport Number</p><h6 class="fw-bold">{{ $ordersCustomer->customer->passport_number ?? 'Not Set' }}</h6>
+                    @endif
+                    @if(in_array('passport_expiry_date', $orderCustomerFields))
+                        <p>Passport Expires</p><h6 class="fw-bold">{{ $ordersCustomer->customer->passport_expiry_date ?? 'Not Set' }}</h6>
+                    @endif
+
+                    @if(in_array('emergency_contact_name', $orderCustomerFields))
+                        <p>Contact Name (Emergency)</p><h6 class="fw-bold">{{ $ordersCustomer->customer->emergency_contact_name ?? 'Not set' }}</h6>
+                    @endif
+                    @if(in_array('emergency_contact_relationship', $orderCustomerFields))
+                        <p>Contact Relationship (Emergency)</p><h6 class="fw-bold">{{ $ordersCustomer->customer->emergency_contact_relationship ?? 'Not set' }}</h6>
+                    @endif
+                    @if(in_array('emergency_contact_telephone', $orderCustomerFields))
+                        <p>Contact telephone (Emergency)</p><h6 class="fw-bold">{{ $ordersCustomer->customer->emergency_contact_telephone ?? 'Not set' }}</h6>
+                    @endif
+                    @if(in_array('loyalty_number', $orderCustomerFields))
+                        <p>Loyalty Number</p><h6 class="fw-bold">{{ $ordersCustomer->customer->loyalty_number ?? 'Not set' }}</h6>
+                    @endif
                 </div>
             </div>
             @endforeach
