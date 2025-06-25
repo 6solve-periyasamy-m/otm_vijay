@@ -22,4 +22,6 @@ $prefix = $prefix ?? "";
 @include('partials.fields.text', ['name' => 'Region', 'field' => ($prefix) . 'region', 'value' => $address?->region, 'width' => 6])
 <x-livewire.input.select.country label="Country" name="{{ ($prefix) . 'country_id' }}" value="{{$address?->country_id}}" width="6" />
 @include('partials.fields.text', ['name' => 'Postcode', 'field' => ($prefix) . 'postcode', 'value' => $address?->postcode, 'width' => 6])
+@if($submit ?? true)
 @include('partials.fields.submit')
+@endif

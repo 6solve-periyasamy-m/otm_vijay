@@ -9,12 +9,20 @@ $atol = [
 <div class="row">
     <div class="col-xl-12">
         <x-admin.section.card>
+            <div class="float-right">
+                <button class="btn btn-success" wire:click="save">Save Tour</button>
+            </div>
+        </x-admin.section.card>
+    </div>
+    <div class="col-xl-12">
+        <x-admin.section.card>
             <div class="row">
                 <x-livewire.input.select.event.normal name="tour.event_id" value="{{ $tour?->event_id }}" label="Associated Event" />
-                <x-livewire.input wire:model="tour.name" width="8" label="Name" required />
-                <x-livewire.input.select.brand name="tour.brand_id" label="Brand" value="{{ $tour?->brand_id }}" width="2" />
-                <x-livewire.input.select.tax-bracket name="tour.tax_bracket_id" label="Tax Bracket" value="{{ $tour?->tax_bracket_id }}" width="2" />
-                <x-livewire.input wire:model="tour.description" label="Description" />
+                <x-livewire.input wire:model="tour.name" width="6" label="Tour Name" required />
+                <x-livewire.input wire:model="tour.package_name" width="6" label="Package Name" />
+                <x-livewire.input.select.brand name="tour.brand_id" label="Brand" value="{{ $tour?->brand_id }}" width="6" />
+                <x-livewire.input.select.tax-bracket name="tour.tax_bracket_id" label="Tax Bracket" value="{{ $tour?->tax_bracket_id }}" width="6" />
+                <x-livewire.ckeditor name="tour.description" value="{{ $tour?->description }}" label="Description" />
                 <x-livewire.input.dropdown wire:model="tour.atol_protected" :items="$atol" width="6" label="ATOL Protection" />
                 <x-livewire.input.select.tour-category name="tour.tour_category_id" width="6" label="Tour Category" clear />
                 <x-livewire.input wire:model="tour.booking_form_url" width="10" label="Booking Form URL" />
@@ -58,27 +66,6 @@ $atol = [
     </div>
     <div class="col-xl-12">
         <x-admin.section.card>
-            <x-livewire.input.text-area wire:model="tour.notes" label="Tour Notes" />
-        </x-admin.section.card>
-    </div>
-    <div class="col-xl-4">
-        <x-admin.section.card>
-            <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" value="{{ $termsTemplate }}" />
-            <x-livewire.ckeditor name="tour.terms" value="{{ $tour?->terms }}" label="Terms and Conditions" required />
-        </x-admin.section.card>
-    </div>
-    <div class="col-xl-4">
-        <x-livewire.input.select.large-text-template name="paymentTemplate" label="Copy from Template" value="{{ $paymentTemplate }}" />
-        <x-livewire.ckeditor name="tour.payment_details" value="{{ $tour?->payment_details }}" label="Payment Details" />
-    </div>
-    <div class="col-xl-4">
-        <x-admin.section.card>
-            <x-livewire.input.select.large-text-template name="footerTemplate" label="Copy from Template" value="{{ $footerTemplate }}" />
-            <x-livewire.ckeditor name="tour.invoice_footer" value="{{ $tour?->invoice_footer }}" label="Invoice Footer" />
-        </x-admin.section.card>
-    </div>
-    <div class="col-xl-12">
-        <x-admin.section.card>
             <div class="d-flex justify-content-between">
                 <div>
                     <h4 class="fw-bold">
@@ -109,7 +96,26 @@ $atol = [
     </div>
     <div class="col-xl-12">
         <x-admin.section.card>
-            <button class="btn btn-success" wire:click="save">Save Tour</button>
+            <x-livewire.input.text-area wire:model="tour.notes" label="Tour Notes" />
+        </x-admin.section.card>
+    </div>
+    <div class="col-xl-4">
+        <x-admin.section.card>
+            <p class="fs-5 fw-bold">Terms and Conditions</p>
+            <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" value="{{ $termsTemplate }}" :filterType="\App\Models\Helper\Enum\LargeTextType::TERMS->value" />
+            <x-livewire.ckeditor name="tour.terms" value="{{ $tour?->terms }}" label="Description" required />
+        </x-admin.section.card>
+    </div>
+    <div class="col-xl-4">
+        <p class="fs-5 fw-bold">Payment Details</p>
+        <x-livewire.input.select.large-text-template name="paymentTemplate" label="Copy from Template" value="{{ $paymentTemplate }}" :filterType="\App\Models\Helper\Enum\LargeTextType::PAYMENT_DETAILS->value" />
+        <x-livewire.ckeditor name="tour.payment_details" value="{{ $tour?->payment_details }}" label="Description" />
+    </div>
+    <div class="col-xl-4">
+        <x-admin.section.card>
+            <p class="fs-5 fw-bold">Invoice Footer</p>
+            <x-livewire.input.select.large-text-template name="footerTemplate" label="Copy from Template" value="{{ $footerTemplate }}" :filterType="\App\Models\Helper\Enum\LargeTextType::INVOICE_FOOTER->value" />
+            <x-livewire.ckeditor name="tour.invoice_footer" value="{{ $tour?->invoice_footer }}" label="Description" />
         </x-admin.section.card>
     </div>
 </div>

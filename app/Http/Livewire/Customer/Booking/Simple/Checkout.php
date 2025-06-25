@@ -8,8 +8,8 @@ use App\Models\Booking\BookingTraveller;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Location\Address;
-use Livewire\Component;
 use Carbon\Carbon;
+use Livewire\Component;
 
 class Checkout extends Component
 {
@@ -103,7 +103,10 @@ class Checkout extends Component
         $amount = $this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount();
         try {
             $keys = $this->booking->repository->getAirwallexKeys($amount);
-            if ($keys !== null && array_key_exists('id', $keys) && array_key_exists('secret', $keys)) {
+            if (\Gateway::getPaymentGateway('stripe') !== null) {
+                $this->popupStripe($this->payFull);
+                return null;
+            } else if ($keys !== null && array_key_exists('id', $keys) && array_key_exists('secret', $keys)) {
                 $this->popupAirwallex($keys['id'], $keys['secret']);
                 return null;
             } else {
@@ -161,5 +164,10 @@ class Checkout extends Component
     private function popupAirwallex(string $id, string $secret): void
     {
         $this->dispatchBrowserEvent('popupCheckout', ['key' => $id, 'secret' => $secret]);
+    }
+
+    private function popupStripe(bool $full = false): void
+    {
+        $this->dispatchBrowserEvent('popupStripeCheckout', ['full' => $full,]);
     }
 }

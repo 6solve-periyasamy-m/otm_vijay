@@ -12,6 +12,7 @@
                     <th scope="col">Component Type</th>
                     <th scope="col">Stock</th>
                     <th scope="col">Ordered</th>
+                    <th scope="col">Sales Price</th>
                     <th scope="col">Bookable?</th>
                     <th scope="col">Stock Controlled?</th>
                     <th scope="col">Notes</th>
@@ -48,6 +49,7 @@
                         ({{$tourComponent->repository->getAvailableStock()}} Available)
                     </td>
                     <td>{{ $tourComponent->repository->getOrderedCount() }} Ordered, {{ $tourComponent->repository->getBookedCount() }} <abbr title="Bookings created through the form. Will include ones converted to orders">Booked</abbr></td>
+                    <td>{{ f_currency($tourComponent->repository->getCostToCustomer()) }}</td>
                     <td>{{ f_bool($tourComponent->is_bookable) }}</td>
                     <td>{{ f_bool($tourComponent->stock_control_active) }}</td>
                     <td>{{ $tourComponent->repository->getInventoryInternalNotes() }}</td>

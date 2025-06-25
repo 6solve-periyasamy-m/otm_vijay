@@ -31,10 +31,23 @@ if (!function_exists('fr_currency')) {
      * @param Currency|string|null $currency The currency to format in
      * @return string
      */
-    function fr_currency(?float $amount, Currency|string|null $currency = null): string
+    function fr_currency(?float $amount, Currency|string|null $currency = null, bool $strip = false, ?int $decimalPrecision = 2): string
     {
         if (!is_string($currency)) $currency = ($currency ?? Settings::currency())?->code;
-        return (new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($amount ?? 0.0, $currency);
+        // $string = (new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($amount ?? 0.0, $currency);
+        // if ($strip) {
+        //     $string = preg_replace('/\.00$/', '', $string);
+        // }
+        // return $string;
+        $roundedAmount = round($amount ?? 0.0); // Round to nearest whole number
+        $formatter = new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY);
+        $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $decimalPrecision ?? 0); // Hide decimals
+        $amountToFormat = $decimalPrecision ? $amount : $roundedAmount;
+        $formatted = $formatter->formatCurrency($amountToFormat, $currency);
+        if ($currency === 'SGD') {
+            $formatted = preg_replace('/^SGD\s*/', '$', $formatted);
+        }
+        return $formatted;
     }
 }
 if (!function_exists('f_date')) {
@@ -126,5 +139,22 @@ if (!function_exists('truncate')) {
     function truncate(?string $str, int $chars = 150, string $append = '...'): string
     {
         return Str::limit($str ?? "", $chars, $append);
+    }
+}
+if (!function_exists('round_to_nearest_five')) {
+    /**
+     * Round a number to the nearest multiple of 5.
+     *
+     * Examples:
+     * - 2332 becomes 2330
+     * - 2333 becomes 2335
+     * - 2335 stays 2335
+     *
+     * @param float|int $amount  The number to round.
+     * @return int               The number rounded to the nearest 5.
+     */
+    function round_to_nearest_five($amount): int
+    {
+        return round($amount / 5) * 5;
     }
 }

@@ -639,7 +639,7 @@
                     <tr>
                         <td>
                             <div class="full-btm-cls-mod" style="">
-                                <p><span style="font-weight:700 !important;">Invoice Total:</span> <span style="font-weight:700 !important;">{{fr_currency($invoice->total_cost + $invoice->commission_amount, $invoice->currency)}}</span></p>
+                                <p><span style="font-weight:700 !important;">Invoice Total:</span> <span style="font-weight:700 !important;">{{fr_currency($invoice->total_cost + $invoice->commission_amount, $invoice->currency, false, 0)}}</span></p>
                                 @if($invoice->commission_amount > 0)
                                     <p><span>Commission ({{$invoice->commission_percentage}}%):</span> <span>{{fr_currency($invoice->commission_amount, $invoice->currency)}}</span></p>
                                     <p><span>Booking Total: </span> <span>{{fr_currency($invoice->total_cost, $invoice->currency)}}</span></p>
@@ -650,7 +650,7 @@
                                     <p><span>Fees Paid:</span> <span>{{fr_currency($invoice->total_fees, $invoice->currency)}}</span></p>
                                 @endif
                             </div>
-                            <h4><span>Balance Due:</span> <span>{{fr_currency($invoice->total_cost - $invoice->total_paid, $invoice->currency)}}</span></h4>
+                            <h4><span>Balance Due:</span> <span>{{fr_currency($invoice->total_cost - $invoice->total_paid, $invoice->currency, false,0)}}</span></h4>
                         </td>
                     </tr>
                 </table>
@@ -681,25 +681,6 @@
                 </table>
             </td>
         </tr>
-    </table>
-    <!-- Footer Section -->
-    <!-- <div class="footer">
-        <div class="logo">
-          <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('https://qa.octopustravelmatrix.com/images/pdf_assets/images/KeithProwse_Logo.png'))?>"  alt="logo-ch">
-        </div>
-        <div class="phone">
-           <p>Phone</p>
-           <a href="tel:+{{$invoice->brand->telephone}}">{{$invoice->brand->telephone}}</a>
-        </div>
-        <div class="email">
-           <p>email</p>
-           <a href="mailto:{{$invoice->brand->email}}">{{$invoice->brand->email}}</a>
-        </div>
-        <div class="phone">
-           <p>website</p>
-           <a target="_blank" href="{{$invoice->brand->website}}">{{$invoice->brand->website}}</a>
-        </div>
-    </div>
-   </div> -->
+    </table>   
 </body>
 </html>
