@@ -21,7 +21,8 @@
             <x-livewire.input.checkbox wire:model="quote.depositPercentage" label="Percentage?" width="2" />
             <x-livewire.input.select.organization name="quote.organization" label="Organisation" value="{{$quote->organization}}" width="5" />
             <x-livewire.input wire:model="quote.commission" label="Commission (%)" width="2" />
-            <x-livewire.input.select.agent name="quote.agent" label="Agent" value="{{$quote->agent}}" width="5" />
+            <x-livewire.input.checkbox wire:model="agentRequired" label="Require Agent?" width="1" />
+            <x-livewire.input.select.agent name="quote.agent" label="Agent" value="{{$quote->agent}}" width="4" />
         </div>
     </x-admin.section.card>
     <x-admin.section.card>

@@ -34,9 +34,9 @@ $atol = [
     </div>
     <div class="col-xl-4">
         <x-admin.section.card>
-            <x-livewire.input type="date" wire:model="tour.final_payment" label="Final Payment Date" required />
-            <x-livewire.input type="date" wire:model="tour.date_from" label="Tour Start" required />
-            <x-livewire.input type="date" wire:model="tour.date_to" label="Tour End" required />
+            <x-livewire.input type="date" wire:model="tour.final_payment" label="Final Payment Date" required :max="$maxFinalDate" />
+            <x-livewire.input type="date" wire:model="tour.date_from" label="Tour Start" required min="{{ now()->format('Y-m-d') }}" />
+            <x-livewire.input type="date" wire:model="tour.date_to" label="Tour End" required :min="$minEndDate" />
         </x-admin.section.card>
     </div>
     <div class="col-xl-4">

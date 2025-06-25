@@ -73,7 +73,7 @@ class Form extends Component
     {
         return [
             'section.title' => 'required|string|max:255',
-            'section.quote_section_type_id' => 'nullable|integer|exists:quote_section_types,id',
+            'section.quote_section_type_id' => 'required|integer|exists:quote_section_types,id',
             'section.body' => 'required|string',
             'section.sort_date' => 'nullable|date|date_format:Y-m-d H:i',
             'section.order' => 'nullable|integer',

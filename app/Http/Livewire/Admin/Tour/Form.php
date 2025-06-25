@@ -10,6 +10,7 @@ use App\Models\System\LargeTextTemplate;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use Livewire\Component;
+use Carbon\Carbon;
 
 class Form extends Component
 {
@@ -24,6 +25,8 @@ class Form extends Component
     public int|null $paymentTemplate = null;
     /** @var array<array{id: int|null, name: string, per_customer: boolean, amount: float}> */
     public array $costs = [];
+    public $minEndDate;
+    public $maxFinalDate;
 
     public function mount(Tour|int|null $tour = null): void
     {
@@ -53,7 +56,11 @@ class Form extends Component
             ];
         }
 
-        if ($this->tour->date_from !== null) $this->manuallySet('tour.date_from');
+        if ($this->tour->date_from !== null) {
+            $this->manuallySet('tour.date_from');
+            $this->minEndDate = Carbon::parse($this->tour->date_from)->toDateString();
+            $this->maxFinalDate = Carbon::parse($this->tour->date_from)->subDay()->toDateString();
+        }
         if ($this->tour->date_to !== null) $this->manuallySet('tour.date_to');
         if ($this->tour->final_payment !== null) $this->manuallySet('tour.final_payment');
     }
@@ -77,6 +84,7 @@ class Form extends Component
             'footerTemplate' => $this->refreshFooterTemplate(),
             'paymentTemplate' => $this->refreshPaymentDetailsTemplate(),
             'tour.base_price_per_person' => $this->updateBasePrice(),
+            "tour.date_from" => $this->handleStartDateChange(),
         };
     }
 
@@ -90,6 +98,18 @@ class Form extends Component
                 if (empty($this->tour->base_price_per_person)) { $this->tour->base_price_per_person = null; }
                 $this->toast('Base Price Rounded', "Rounded base price to nearest $roundValue", 'primary');
             }
+        }
+    }
+
+    public function handleStartDateChange()
+    {
+        if ($this->tour->event_id !== null) return;
+        if ($this->tour->date_from) {
+            $startDate = Carbon::parse($this->tour->date_from);
+            $today = Carbon::today();
+            $this->minEndDate = $startDate->isAfter($today) ? $startDate->toDateString() : $today->toDateString();
+            $this->tour->date_to = $this->tour->date_from;
+            $this->maxFinalDate = $startDate->subDay()->toDateString();
         }
     }
 
@@ -108,6 +128,7 @@ class Form extends Component
         $this->tour->brand_id = $event?->brand_id;
         $this->updateValue('tour.brand_id', $event?->brand_id);
         $this->dateFromChanged();
+        $this->minEndDate = $event?->starts_at->toDateString();
     }
 
     private function dateFromChanged(): void
@@ -116,6 +137,7 @@ class Form extends Component
         $final = setting('system.installments.final', null);
         if ($final !== null) {
             $this->tour->final_payment = $this->tour->date_from->subDays($final);
+            $this->maxFinalDate = $this->tour->date_from->subDays($final)->toDateString();
         }
     }
 
@@ -181,9 +203,9 @@ class Form extends Component
             'tour.tour_category_id' => 'nullable|int',
             'tour.is_active' => 'nullable|boolean',
             'tour.booking_form_url' => 'nullable|required_if:tour.is_active,true|string',
-            'tour.final_payment' => 'required|date|date_format:Y-m-d',
+            'tour.final_payment' => 'required|date|before_or_equal:quote.date_from|date_format:Y-m-d',
             'tour.date_from' => 'required|date|date_format:Y-m-d',
-            'tour.date_to' => 'required|date|date_format:Y-m-d',
+            'tour.date_to' => 'required|date|after:quote.date_from|date_format:Y-m-d',
             'tour.base_price_per_person' => 'required|numeric|gte:0',
             'tour.deposit' => 'nullable|numeric|gte:0',
             'tour.is_deposit_percentage' => 'nullable|boolean',
