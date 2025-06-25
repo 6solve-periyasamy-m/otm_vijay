@@ -48,6 +48,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read AccommodationType $accommodationType
  * @property-read Collection|AccommodationInventory[] $inventory List of inventory items for this accommodation
  * @property-read Collection|Amenity[] $amenities
+ * @property-read Collection<Media>|Media[] $media
+ * @property-read Collection<Media>|Media[] $gallery
  * @property-read int|null $inventory_count
  * @method static AccommodationFactory factory(...$parameters)
  * @method static Builder|Accommodation newModelQuery()

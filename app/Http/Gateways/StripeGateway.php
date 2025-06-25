@@ -25,13 +25,22 @@ class StripeGateway extends Gateway implements SupportsRedirect
      */
     public function getRedirect(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
     {
-        $currency =
-            (($intention->getRelatedModel() instanceof Order) ? $intention->getRelatedModel()?->currency?->code : null) ?? config('app.currency');
-        $currency = strtoupper($currency);
+        return $this->getCheckout($items, $intention, $customer, $success)->url;
+    }
+
+    public function getCheckoutSecret(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
+    {
+        return $this->getCheckout($items, $intention, $customer, $success, 'custom')->client_secret;
+    }
+
+    private function getCheckout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string $ui = 'hosted'): Session
+    {
+        $currency = (($intention->getRelatedModel() instanceof Order) ? $intention->getRelatedModel()?->currency?->code : null);
+        $currency = strtolower(empty($currency) ? \Settings::currency()?->code : $currency);
         $lineItems = [];
         foreach ($items as $item) { $lineItems[] = $item->toStripe($currency); }
 
-        $session = Session::create([
+        $data = [
             'line_items' => $lineItems,
             'mode' => 'payment',
             'payment_intent_data' => [
@@ -40,14 +49,27 @@ class StripeGateway extends Gateway implements SupportsRedirect
                 ],
             ],
             'currency' => $currency,
+            'customer_email' => $customer?->email_address,
             'metadata' => [
                 'intention_id' => $intention->id,
             ],
-            'success_url' => $success ?? $this->success,
-            'cancel_url' => $this->cancelled,
-        ]);
+            'ui_mode' => $ui,
+        ];
 
-        return $session->url;
+        if ($ui === 'custom') {
+            $data = [
+                ...$data,
+                'return_url' => $success ?? $this->success,
+            ];
+        } else {
+            $data = [
+                ...$data,
+                'success_url' => $success ?? $this->success,
+                'cancel_url' => $this->cancelled,
+            ];
+        }
+
+        return Session::create($data);
     }
 
     public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string

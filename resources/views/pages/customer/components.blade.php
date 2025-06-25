@@ -73,6 +73,7 @@
 @endpush
 
 @section('content')
+
 <div class="row payment-balance">
     <div class="col-12">
         <form class="form-horizontal mx-2">
@@ -520,7 +521,14 @@
 </div>
 <div class="waiter">
     <x-loading-spinner center></x-loading-spinner>
-</div>
+</div> 
+
+<script>
+    jQuery('.tab-accordian .titleWrapper').click(function(){
+        jQuery(this).toggleClass('active');
+        jQuery(this).closest('.tab-accordian').find('.desWrapper').toggle(400);
+    })
+</script>
 
 @endsection
 
