@@ -3,7 +3,7 @@
 @section('title', 'Customer Portal')
 
 @section('content')
-{{-- <div style="position: relative;">
+<div style="position: relative;">
     <div class="d-flex justify-content-center align-items-center h-75 mt-4">
         <div class="donut-menu">
             <div class="menu-item">
@@ -70,121 +70,11 @@
             </div>
         </div>
     </div>
-</div> --}}
-
-<div class="inner_content">
-    <div class="overview_top_bar">
-        <p class="overview_title">Overview </p>
-        <div class="search_field"><p><input type="text" placeholder="SEARCH"></p></div>
-    </div>
-    <div class="tours_list">
-        <div class="upcoming_tours">
-            <h2>Upcoming Tours <span class="tours_count">2</span></h2>
-            <div class="event_list">
-                <div class="event_image_title">
-                        <div class="event_img"><img src="/images/customer/images/royal_ascot.png" alt="royal img"/></div>
-                        <div class="title_date">
-                            <h4>Royal Ascot African Ladies 2024</h4>
-                            <p class="calendar_date"><img src="/images/customer/images/calendar.svg" />02.02.2023 - 08.08.2024</p>
-                            <p class="view_details"><a href="">VIEW DETAILS <img src="/images/customer/images/arrow_right.svg" /></a></p>
-                        </div> 
-                </div>
-                <div class="common_btn"><a href=""><img src="/images/customer/images/download_icon.svg" />DOWNLOAD ITINERARY</a></div>
-            </div>
-            <hr>
-            <div class="event_list">
-                <div class="event_image_title">
-                        <div class="event_img"><img src="/images/customer/images/royal_ascot_1.png" alt="royal img"/></div>
-                        <div class="title_date">
-                            <h4>Royal Ascot African Ladies 2024</h4>
-                            <p class="calendar_date"><img src="/images/customer/images/calendar.svg" />02.02.2023 - 08.08.2024</p>
-                            <p class="view_details"><a href="">VIEW DETAILS <img src="/images/customer/images/arrow_right.svg" /></a></p>
-                        </div> 
-                </div>
-                <div class="common_btn"><a href=""><img src="/images/customer/images/download_icon.svg" />DOWNLOAD ITINERARY</a></div>
-            </div>
-        </div>
-        <div class="upcoming_payments">
-            <h2>Upcoming Payments <span class="tours_count">3</span></h2>
-            <div class="event_list">
-                <div class="event_image_title">
-                        <div class="event_img"><img src="/images/customer/images/royal_ascot.png" alt="royal img"/></div>
-                        <div class="title_date">
-                            <button class="overdue_btn">OVERDUE</button>
-                            <h4>Royal Ascot African Ladies 2024</h4>
-                            <p class="calendar_date"><img src="/images/customer/images/calendar.svg" />02.02.2023 - 08.08.2024</p>
-                        </div> 
-                </div>
-                <div class="common_btn"><span class="dollar_amount">A$400.00</span><a href="">PAY NOW <img src="/images/customer/images/arrow_right.svg" /></a></div>
-            </div>
-            <hr>
-            <div class="event_list">
-                <div class="event_image_title">
-                        <div class="event_img"><img src="/images/customer/images/royal_ascot_1.png" alt="royal img"/></div>
-                        <div class="title_date">
-                            <h4>Event 02</h4>
-                            <p class="calendar_date"><img src="/images/customer/images/calendar.svg" />02.02.2023 - 08.08.2024</p>
-                        </div> 
-                </div>
-                <div class="common_btn"><span class="dollar_amount">A$400.00</span><a href="">PAY NOW <img src="/images/customer/images/arrow_right.svg" /></a></div>
-            </div>
-            <hr>
-            <div class="event_list">
-                <div class="event_image_title">
-                        <div class="event_img"><img src="/images/customer/images/royal_ascot_2.png" alt="royal img"/></div>
-                        <div class="title_date">
-                            <h4>Event 03</h4>
-                            <p class="calendar_date"><img src="/images/customer/images/calendar.svg" />02.02.2023 - 08.08.2024</p>
-                        </div> 
-                </div>
-                <div class="common_btn"><span class="dollar_amount">A$400.00</span><a href="">PAY NOW <img src="/images/customer/images/arrow_right.svg" /></a></div>
-            </div>
-            
-        </div>
-        <div class="past_tours">
-            <h2>Past Tours</h2>
-                <div class="past_tour_row">
-                    <div class="past_tours_column">
-                        <div class="past_image_title">
-                                <div class="tour_event_img"><img src="/images/customer/images/past_tours_1.png" alt="event_img_1"/></div>
-                                <div class="event_title_date">
-                                    <h4>Event 01</h4>
-                                    <p class="calendar_date"><img src="/images/customer/images/calendar.svg" />02.02.2023 - 08.08.2024</p>
-                                    <p class="event_location"><img src="/images/customer/images/location.svg" />SYDNEY, AUSTRALIA</p>
-                                </div> 
-                        </div>
-                        <div class="common_btn"><a href=""> <img src="/images/customer/images/download_icon.svg" /> ITINERARY</a><a href="" class="invoice_btn"> <img src="/images/customer/images/download_icon.svg" /> INVOICE</a></div>
-                    </div>
-                    <div class="past_tours_column">
-                        <div class="past_image_title">
-                                <div class="tour_event_img"><img src="/images/customer/images/past_tours_2.png" alt="event_img_1"/></div>
-                                <div class="event_title_date">
-                                    <h4>Event 02</h4>
-                                    <p class="calendar_date"><img src="/images/customer/images/calendar.svg" />02.02.2023 - 08.08.2024</p>
-                                    <p class="event_location"><img src="/images/customer/images/location.svg" />SYDNEY, AUSTRALIA</p>
-                                </div> 
-                        </div>
-                        <div class="common_btn"><a href=""> <img src="/images/customer/images/download_icon.svg" /> ITINERARY</a><a href="" class="invoice_btn"> <img src="/images/customer/images/download_icon.svg" /> INVOICE</a></div>
-                    </div>
-                    <div class="past_tours_column">
-                        <div class="past_image_title">
-                                <div class="tour_event_img"><img src="/images/customer/images/past_tours_3.png" alt="event_img_1"/></div>
-                                <div class="event_title_date">
-                                    <h4>Event 03</h4>
-                                    <p class="calendar_date"><img src="/images/customer/images/calendar.svg" />02.02.2023 - 08.08.2024</p>
-                                    <p class="event_location"><img src="/images/customer/images/location.svg" />SYDNEY, AUSTRALIA</p>
-                                </div> 
-                        </div>
-                        <div class="common_btn"><a href=""> <img src="/images/customer/images/download_icon.svg" /> ITINERARY</a><a href="" class="invoice_btn"> <img src="/images/customer/images/download_icon.svg" /> INVOICE</a></div>
-                    </div>
-                </div>        
-        </div>
-    </div>
 </div>
 @endsection
 
 @section('footer')
-    {{-- <div class="customer-footer" style="position: fixed; bottom: 0;">
+    <div class="customer-footer" style="position: fixed; bottom: 0;">
         <hr/>
         <div class="socials">
             @if(!empty(setting('social.facebook')))
@@ -214,5 +104,5 @@
             <span>{{ Icon::phone() }} {{ setting('company.contact.phone', '') }}</span>
         </span>
         </div>
-    </div> --}}
+    </div>
 @endsection

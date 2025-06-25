@@ -15,12 +15,6 @@
                         Fulfil Merchandise
                     </x-admin.popup-button>
                     @endcan
-                    @can('create', \App\Models\Tour\Tour::class)
-                    <x-admin.popup-button href="{{ route('tours.duplicate', ['tour' => $tour,]) }}" class="color-warning row-1">
-                        <x-slot:icon>{{ Icon::copy() }}</x-slot:icon>
-                        Duplicate Tour
-                    </x-admin.popup-button>
-                    @endcan
                     @if($tour->protected && $tour->has_atol_certificate)
                     <x-admin.popup-button href="{{ route('tours.atol', ['tour' => $tour,]) }}" class="color-info row-1">
                         <x-slot:icon>{{ Icon::atol() }}</x-slot:icon>

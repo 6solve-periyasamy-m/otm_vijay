@@ -12,22 +12,6 @@ if (!function_exists('sigfig')) {
         return ceil(($number * (10**$figures)))/(10**$figures);
     }
 }
-if (!function_exists('round_to_five')) {
-    /**
-     *  Rounds to the nearest 5 or 0 in final column
-     *
-     * @param int|float|null $number
-     * @return float
-     */
-    function round_to_five(int|float|null $number): float
-    {
-        $number = sigfig($number ?? 0, 0);
-        if ($number % 5 === 0) {
-            return $number;
-        }
-        return ($number + (5 - $number % 5));
-    }
-}
 if (!function_exists('days_until')) {
     /**
      * Calculates the number of days until/since now. Returns negative if in the past

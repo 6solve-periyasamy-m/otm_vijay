@@ -24,7 +24,7 @@
     </div>
     <div class="col-xl-4">
         <x-admin.section.card>
-            <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" value="{{ $termsTemplate }}" :filterType="\App\Models\Helper\Enum\LargeTextType::TERMS->value" />
+            <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" value="{{ $termsTemplate }}" />
             <x-livewire.ckeditor name="event.final_terms" value="{{ $event?->final_terms }}" label="Final Terms and Conditions" />
         </x-admin.section.card>
     </div>

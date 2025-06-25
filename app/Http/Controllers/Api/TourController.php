@@ -2,46 +2,75 @@
 
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ApiController;
-use App\Http\Requests\Api\Tour\TourCostRequest;
-use App\Models\Location\Currency;
+use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
-use Illuminate\Http\JsonResponse;
-use Settings;
 
+/**
+ * tour may belong to an event or not.
+ */
 class TourController extends ApiController
 {
-    public function getTourCost(TourCostRequest $request): JsonResponse
+    /**
+     * getEvents
+     * returns events that have not yet started
+     *
+     * @return JSON events
+     */
+    public function getEvents()
     {
-        $tour = Tour::where('booking_form_url', '=', $request->package_name)->first();
-        if ($tour === null) {
-            return response()->json(['success' => false, 'message' => 'Cannot find package specified']);
-        }
-        if (!empty($request->currency)) {
-            $currency = Currency::where('code', '=', $request->currency)->first();
-            if ($currency === null) {
-                return response()->json(['success' => false, 'message' => 'Cannot find currency specified']);
-            }
+        $events = Event::where('starts_at', '>', date('Y-m-d'))->get();
+
+        return response()->json(['success' => true, 'data' => $events]);
+    }
+
+    /**
+     * getTour
+     *
+     * @param [type] $tour_id
+     * @return JSON tour
+     */
+    public function getTour($tour_id)
+    {
+        $tour = Tour::find($tour_id);
+        if ($tour) {
+            return response()->json(['success' => true, 'tour' => $tour]);
         } else {
-            $currency = Settings::currency();
+            return response()->json(['success' => false]);
         }
-        if ($currency?->id !== Settings::currency()?->id) {
-            $rate = Settings::getConversionRate(Settings::currency(), $currency);
-            if ($rate === null) {
-                return response()->json(['success' => false, 'message' => 'No FX rate set for currency specified']);
-            }
+    }
+
+    /**
+     * getTours
+     *
+     * @param OPTIONAL $event_id
+     * @return JSON tours for a specific event after today, or all tours if no event specified
+     */
+    public function getTours($event_id = null)
+    {
+        $today = date('Y-m-d');
+        if ($event_id) {
+            $tours = Tour::where('event_id', $event_id)
+                    ->join('events', 'tours.event_id', 'events.id')
+                    ->where('events.starts_at', '>', $today)
+                    ->get();
         } else {
-            $rate = 1;
+            $tours = Tour::get();
         }
-        $cost = sigfig($tour->base_price_per_person * $rate);
-        if (flag('booking.round_to_five')) {
-            $cost = round_to_five($cost);
+
+        return response()->json(['success' => true, 'data' => $tours]);
+    }
+
+    /**
+     * getTourPrice
+     *
+     * @param [type] $tour_id
+     * @return JSON response with tour_price (per person), accommodation single surchage and deposit
+     */
+    public function getTourPrice($tour_id)
+    {
+        $tour = Tour::find($tour_id);
+        if ($tour) {
+            return response()->json(['success' => true, 'tour_price' => $tour->base_price_per_person, 'single_occupancy_surcharge' => $tour->single_occupancy_surcharge, 'deposit' => $tour->deposit]);
         }
-        return response()->json([
-            'success' => true,
-            'message' => 'Successfully found package and cost',
-            'currency' => $currency?->code,
-            'rate' => $rate,
-            'price' => $cost,
-        ]);
     }
 }

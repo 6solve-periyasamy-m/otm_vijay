@@ -7,6 +7,7 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityType;
 use App\Models\Activity\TicketType;
 use App\Models\Order\OrderCustomer;
+use App\Models\Tour\Event;
 
 interface ActivityTransformsInterface {
     public static function getSelectActivityTypes($filter);
@@ -81,7 +82,7 @@ class ActivityTransforms implements ActivityTransformsInterface
         $inventory = ActivityInventory::findOrFail($id);
         $data = [];
         $data['id'] = $inventory->id;
-        $data['text'] = $inventory->activity->name . ' - ' . $inventory->activity->activityType->name . ' - ' . $inventory->ticketType->name . ' - ' . $inventory->starts_at . ' to ' . $inventory->ends_at;
+        $data['text'] = $inventory->activity->name . ' - ' . $inventory->activity->activityType->name . ' - ' . $inventory->ticketType->name . ' - ' . $inventory->check_in . ' to ' . $inventory->check_out;
         return $data;
     }
 

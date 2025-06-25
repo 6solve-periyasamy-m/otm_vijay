@@ -31,25 +31,4 @@ trait HasNotifications
         $notification->save();
         return $notification;
     }
-
-    public function updateBookingProgressNotification(string $step, User|Customer|null $actor = null): Notification
-    {
-        $details = "Booking is in progress. Last completed step: $step";
-
-        $existing = Notification::where('type', NotificationType::BOOKING_PROGRESS)
-            ->where('subject_type', get_class($this))
-            ->where('subject_id', $this->id)
-            ->first();
-
-        if ($existing) {
-            $existing->details = $details;
-            $existing->actor()->associate($actor ?? Auth::user());
-            $existing->save();
-            return $existing;
-        }
-
-        return $this->createNotification(NotificationType::BOOKING_PROGRESS, $details, $actor);
-    }
-
-
 }

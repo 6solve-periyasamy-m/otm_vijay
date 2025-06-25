@@ -23,7 +23,6 @@ use App\Repository\Storage\ComponentInformation;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsAccommodation;
 use Auth;
-use DB;
 use Icon;
 use Illuminate\Support\Collection;
 
@@ -67,7 +66,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         return $this->tourComponent;
     }
 
-    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false, float $rate = 1): ?OrderComponentRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderComponentRepository
     {
         $orderComponent = $this->getOrderComponent($orderCustomer);
         if ($orderComponent !== null) return $orderComponent;
@@ -77,11 +76,6 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             $group->repository->addCustomerToGroup($orderCustomer);
         }
         $component = $group->repository->addRoomToGroup($this->tourComponent, $silent);
-        $component->cost *= $rate;
-        if (flag('booking.round_to_five')) {
-            $component->cost = round_to_five($component->cost);
-        }
-        $component->save();
         //event(new OrderCustomerAccommodationAddedEvent($orderComponent));
         return $component->repository;
     }
@@ -372,11 +366,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function getBookedCount(): int
     {
-        return $this->tourComponent->bookings()
-            ->leftJoin('booking_groups', 'booking_groups.id', '=', 'booking_accommodations.booking_group_id')
-            ->leftJoin('bookings', 'bookings.id', '=', 'booking_groups.booking_id')
-            ->where(DB::raw('COALESCE(`bookings`.`last_renewed`, `bookings`.`created_at`)'), '>', now()->subMinutes(setting('booking.expiry', Booking::DEFAULT_EXPIRY)))
-            ->count();
+        return $this->tourComponent->bookings()->count();
     }
 
     public function getComponentInternalNotes(): string|null
@@ -397,21 +387,5 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     public function getInventoryExternalNotes(): string|null
     {
         return $this->tourComponent->inventory->external_notes;
-    }
-
-    public function removeFromAllTravellers(Booking $booking): void
-    {
-        foreach ($booking->groups as $group) {
-            $group->accommodation()->where('accommodation_inventory_tour_id', '=', $this->tourComponent->id)->delete();
-        }
-    }
-
-    public function getQuantityOnBooking(Booking $booking): int
-    {
-        $count = 0;
-        foreach ($booking->groups as $group) {
-            $count += $group->accommodation()->where('accommodation_inventory_tour_id', '=', $this->tourComponent->id)->count();
-        }
-        return $count;
     }
 }

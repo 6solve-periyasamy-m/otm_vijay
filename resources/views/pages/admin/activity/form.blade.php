@@ -28,9 +28,8 @@
     <!-- -->
     <x-livewire.input name="field1" value="{{ $activity?->field1 }}" label="Label 1" width="3" />
     <x-livewire.input name="field2" value="{{ $activity?->field2 }}" label="Label 2" width="3" />
-    <x-livewire.input.select.activity.seating name="seating_id" value="{{ $activity?->seating_id }}" label="Seating" width="2" clear />
-    <x-livewire.input.select.activity.seating-map name="seating_map_id" value="{{ $activity?->seating_map_id }}" label="Seating Map" width="2" clear />
-    <x-livewire.input.select.activity.session name="session_id" value="{{ $activity?->session_id }}" label="Session" width="2" clear />
+    <x-livewire.input.select.activity.seating name="seating_id" value="{{ $activity?->seating_id }}" label="Seating" width="3" clear />
+    <x-livewire.input.select.activity.session name="session_id" value="{{ $activity?->session_id }}" label="Session" width="3" clear />
     <!-- -->
     @include('partials.fields.prefab.addresses.switcher', ['address' => $activity?->address,])
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'notes', 'value' => $activity?->internal_notes])

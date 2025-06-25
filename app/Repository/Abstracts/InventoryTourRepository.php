@@ -23,7 +23,7 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
 {
     abstract public static function getAvailableAddons(Tour $tour, OrderCustomer $orderCustomer = null): array;
 
-    abstract public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false, float $rate = 1): ?OrderComponentRepository;
+    abstract public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderComponentRepository;
 
     abstract public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository;
 
@@ -68,22 +68,6 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
      * @return int
      */
     abstract public function getBookedCount(): int;
-
-    /**
-     * Remove the component from every traveller on a booking
-     *
-     * @param Booking $booking
-     * @return void
-     */
-    abstract public function removeFromAllTravellers(Booking $booking): void;
-
-    /**
-     * Get the count of the component on a booking
-     *
-     * @param Booking $booking
-     * @return int
-     */
-    abstract public function getQuantityOnBooking(Booking $booking): int;
 
     public function getCostToCustomer(): float|int
     {

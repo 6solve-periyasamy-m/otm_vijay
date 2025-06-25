@@ -41,17 +41,10 @@
                     ajax: {
                         url: '{{ $allRoute }}',
                         data: function (params) {
-                            let request = {
+                            return {
                                 filter: params.term,
                                 __api_token: '{{ Auth::user()->getCurrentToken()->token }}',
                             };
-
-                            // Conditionally add filterType if it exists
-                            @if ($attributes->has('filterType'))
-                                request.filterType = '{{ $attributes->get("filterType") }}';
-                            @endif
-
-                            return request;
                         },
                         type: 'post',
                     }

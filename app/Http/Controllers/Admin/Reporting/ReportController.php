@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\Reporting;
 
 use App\Exports\AbandonedBookingsReportExport;
-use App\Exports\BookingOrdersReportExport;
 use App\Exports\ActivitiesReportExport;
 use App\Exports\FinalPaymentReportExport;
 use App\Exports\FlightManifestReportExport;
@@ -100,11 +99,6 @@ class ReportController extends Controller
     public function exportAbandonedBookingsReport(string $extension = 'xlsx')
     {
         return Excel::download(new AbandonedBookingsReportExport(), 'abandoned-bookings.' . $extension);
-    }
-
-    public function exportdBookingOrdersReport(string $extension = 'xlsx')
-    {
-        return Excel::download(new BookingOrdersReportExport(), 'booking-orders.' . $extension);
     }
 
     /**

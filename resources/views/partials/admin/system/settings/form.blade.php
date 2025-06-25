@@ -95,17 +95,6 @@
             </div>
         </x-admin.section.card>
     </div>
-    <div class="col-xl-12">
-        <x-admin.section.card>
-            <x-slot:title>
-                Tracking Code
-            </x-slot:title>
-            <div class="row">
-                @include('partials.fields.textarea', ['name' => "Tracking code before the closing <head> tag:", 'field' => 'head_tracking_code', 'value' => setting('booking.head.tracking.code', ''), 'width' => 12, 'rows' => 5,])
-                @include('partials.fields.textarea', ['name' => 'Tracking code before the closing </body> tag:', 'field' => 'body_tracking_code', 'value' => setting('booking.body.tracking.code', ''), 'width' => 12, 'rows' => 5,])
-            </div>
-        </x-admin.section.card>
-    </div>
     <div class="col-xl-4">
         <x-admin.section.card>
             <x-slot:title>
@@ -147,10 +136,9 @@
                     'width' => 4,
                 ])
                 @include('partials.fields.selector.default', ['name' => 'ATOL Filter Country', 'field' => 'atol_filter', 'value' => \Settings::atolFilter(), 'route' => 'countries.filter', 'width' => 4])
-                @include('partials.fields.date', ['name' => 'Financial Year Start', 'field' => 'year_start', 'value' => setting('system.year.start', '2022-04-01'), 'width' => 3])
-                @include('partials.fields.date', ['name' => 'ATOL Year Start', 'field' => 'atol_start', 'value' => setting('atol.year.start', '2022-04-01'), 'width' => 3])
-                @include('partials.fields.text', ['name' => 'Historic After X Months', 'field' => 'historic', 'value' => setting('system.historic', 6), 'width' => 3])
-                @include('partials.fields.text', ['name' => 'Expire Bookings After X Minutes', 'field' => 'booking_expiry', 'value' => setting('booking.expiry', \App\Models\Booking\Booking::DEFAULT_EXPIRY), 'width' => 3])
+                @include('partials.fields.date', ['name' => 'Financial Year Start', 'field' => 'year_start', 'value' => setting('system.year.start', '2022-04-01'), 'width' => 4])
+                @include('partials.fields.date', ['name' => 'ATOL Year Start', 'field' => 'atol_start', 'value' => setting('atol.year.start', '2022-04-01'), 'width' => 4])
+                @include('partials.fields.text', ['name' => 'Historic After X Months', 'field' => 'historic', 'value' => setting('system.historic', 6), 'width' => 4])
             </div>
     </x-admin.section.card>
     </div>
@@ -172,7 +160,6 @@
                 @include('partials.fields.checkbox', ['name' => 'Show Non-Paying travellers', 'field' => 'nonpaying_travellers_enabled', 'value' => flag('non-paying.travellers.enabled', true),])
                 @if(config('app.features.kpt', false) || config('app.features.bleeding-edge'))
                     @include('partials.fields.checkbox', ['name' => 'Enable sending reservation and invoice document emails.', 'field' => 'reservation_invoice_mail_enabled', 'value' => flag('reservation.invoice.mail.enabled', false),])
-                    @include('partials.fields.checkbox', ['name' => 'Round booking values to nearest 5', 'field' => 'round_to_five', 'value' => flag('booking.round_to_five', false)])
                 @endif
                 @if(config('app.features.kpt', false) || config('app.features.bleeding-edge'))
                     @include('partials.fields.checkbox', ['name' => 'Enable sending itinerary document emails.', 'field' => 'itinerary_document_mail_enabled', 'value' => flag('itinerary.document.mail.enabled', false),])

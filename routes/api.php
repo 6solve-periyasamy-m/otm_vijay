@@ -19,7 +19,6 @@ use App\Http\Controllers\Api\FlightController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\TourComponentController;
-use App\Http\Controllers\Api\TourController;
 use App\Http\Controllers\Api\TransportController;
 use App\Http\Gateways\AirwallexGateway;
 use App\Http\Gateways\FellohGateway;
@@ -52,7 +51,6 @@ Route::prefix('/orders')->group(function () {
 });
 
 Route::stripeWebhooks('/stripe/webhooks');
-Route::get('stripe/booking/checkout', [SimpleBookingController::class, 'getStripeSecret'])->name('api.stripe.checkout.secret.booking');
 Route::post('/felloh/webhook', [FellohGateway::class, 'webhook'])->name('api.felloh.webhook');
 Route::post('/opayo/webhook', [OpayoGateway::class, 'webhook'])->name('api.opayo.webhook');
 Route::post('/airwallex/webhook', [AirwallexGateway::class, 'webhook'])->name('api.airwallex.webhook');
@@ -181,8 +179,4 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
 
 Route::prefix('booking')->middleware([ExpectsJson::class,])->name('booking.')->group(function () {
     Route::post('setup', [SimpleBookingController::class, 'setup'])->name('setup');
-});
-
-Route::prefix('tour')->middleware([ExpectsJson::class,])->name('tour.')->group(function () {
-    Route::get('cost', [TourController::class, 'getTourCost'])->name('cost');
 });

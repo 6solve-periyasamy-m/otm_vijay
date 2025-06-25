@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\CustomerController;
 use App\Models\Order\Order;
 use App\Repository\Model\Order\OrderRepository;
-use App\Models\System\Faq;
 
 class CustomerPortalController extends CustomerController
 {
@@ -22,18 +21,5 @@ class CustomerPortalController extends CustomerController
         return $order->repository->getAtolRepository()->showAtolCertificate();
     }
 
-    public function showFaq()
-    {
-        $customer = $this->user();
-        $brandId = $customer->brand_id ?? null;
-
-        $faqs = Faq::query()
-            ->when($brandId, fn($query) => $query->where('brand_id', $brandId))
-            ->orWhereNull('brand_id')
-            ->where('active', 1)
-            ->orderBy('created_at', 'desc')
-            ->get();
-        return view('pages.customer.faq', compact('faqs'));
-    }
 
 }
