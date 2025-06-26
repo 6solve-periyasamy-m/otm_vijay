@@ -397,6 +397,11 @@
                                         @endif
                                     </td>
                                     <td>
+                                        @can('update', \App\Models\Order\Component\OrderAccommodation::class)
+                                        <button onclick="openModal('admin.order.component.order-accommodation-form', {'component': {{$orderAccommodation->id}}})" class="btn btn-sm btn-outline-warning">
+                                            {{ Icon::edit() }}
+                                        </button>
+                                        @endcan
                                         <form action="{{ route('orderAccommodationDelete', ['id' => $orderAccommodation->id,]) }}"
                                               method="post">
                                             @csrf
@@ -471,6 +476,11 @@
                                         @endif
                                     </td>
                                     <td>
+                                        @can('update', \App\Models\Order\Component\OrderActivity::class)
+                                        <button onclick="openModal('admin.order.component.order-activity-form', {'component': {{$orderActivity->id}}})" class="btn btn-sm btn-outline-warning">
+                                            {{ Icon::edit() }}
+                                        </button>
+                                        @endif
                                         <form action="{{ route('orderActivityDelete', ['id' => $orderActivity->id,]) }}"
                                               method="post">
                                             @csrf
@@ -545,9 +555,11 @@
                                         @endif
                                     </td>
                                     <td class="actions">
+                                        @can('update', \App\Models\Order\Component\OrderFlight::class)
                                         <button onclick="openModal('admin.order.component.order-flight-form', {'component': {{$orderFlight->id}}})" class="btn btn-sm btn-outline-warning">
                                             {{ Icon::edit() }}
                                         </button>
+                                        @endcan
                                         <form style="display:inline-block;" action="{{ route('orderFlightDelete', ['id' => $orderFlight->id,]) }}"
                                               method="post">
                                             @csrf
@@ -624,9 +636,11 @@
                                         @endif
                                     </td>
                                     <td class="actions">
+                                        @can('update', \App\Models\Order\Component\OrderTransport::class)
                                         <button onclick="openModal('admin.order.component.order-transport-form', {'component': {{$orderTransport->id}}})" class="btn btn-sm btn-outline-warning">
                                             {{ Icon::edit() }}
                                         </button>
+                                        @endcan
                                         <form style="display:inline-block;" action="{{ route('orderTransportDelete', ['id' => $orderTransport->id,]) }}"
                                               method="post">
                                             @csrf

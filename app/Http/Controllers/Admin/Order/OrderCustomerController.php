@@ -24,6 +24,19 @@ class OrderCustomerController extends Controller
         return view('pages.admin.order.customer.view', ['orderCustomer' => $orderCustomer, 'customerFields' => $selectedFields]);
     }
 
+    public function loadTourComponents(Order $order, OrderCustomer $orderCustomer)
+    {
+        $this->authorize('read', $orderCustomer); // Optional ACL check
+
+        return view('partials.admin.order.customer.tour-components', [
+            'orderCustomer' => $orderCustomer,
+            'customerViewUrl' => route('order-customers.view', [
+                'order' => $order,
+                'orderCustomer' => $orderCustomer,
+            ]),
+        ]);
+    }
+
     public function store(OrderCustomerRequest $request, Order $order)
     {
         $orderCustomer = $order->repository->addCustomer($request->getConvertedCustomer());

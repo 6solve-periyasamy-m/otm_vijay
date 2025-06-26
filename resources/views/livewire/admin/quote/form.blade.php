@@ -12,9 +12,10 @@
             <x-livewire.input.select.user name="quote.consultant_id" value="{{$quote->consultant_id ?? get_current_admin()?->id}}" label="Consultant" width="3" />
             <!-- -->
             <x-livewire.input.select.event.normal name="quote.event_id" value="{{$quote->event_id}}" label="Event" width="3" />
-            <x-livewire.input.select.organization name="quote.organization_id" value="{{$quote->organization_id}}" label="Organization" width="3" wire:change="$emit('organization-selected', selectedOrganization)"/>
-            <x-livewire.input wire:model="quote.commission" label="Commission (%)" width="3" />
-            <x-livewire.input.select.agent name="quote.agent_id" table="organizations" find="{{$quote->organization_id}}" value="{{$quote->agent_id}}" label="Agent" width="3" />
+            <x-livewire.input.select.organization name="quote.organization_id" value="{{$quote->organization_id}}" label="Organization" width="3" wire:change="updatedQuoteOrganizationId($event.target.value)"/>
+            <x-livewire.input wire:model="quote.commission" label="Commission (%)" width="2" />
+            <x-livewire.input.checkbox wire:model="agentRequired" label="Require Agent?" width="1" />
+            <x-livewire.input.select.agent name="quote.agent_id" value="{{$quote->agent_id}}" label="Agent" width="3" />
             <!-- -->
             <x-livewire.input.select.currency name="quote.currency_id" value="{{$quote->currency_id}}" label="Currency" width="3" clear />
             <x-livewire.input wire:model="quote.deposit" label="Deposit" width="2"  />

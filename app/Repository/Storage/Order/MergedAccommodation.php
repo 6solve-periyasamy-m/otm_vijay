@@ -91,6 +91,8 @@ class MergedAccommodation
             $order->booking_reference,
             $order->ordered_on,
             $order->status,
+            $order->internal_notes,
+            $order->external_notes,
             $order->organization?->name,
             $order->agent?->name,
             $order->consultant?->name,

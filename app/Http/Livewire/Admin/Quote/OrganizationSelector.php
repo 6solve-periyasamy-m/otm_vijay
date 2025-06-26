@@ -19,18 +19,36 @@ class OrganizationSelector extends Component
     public int|null $organization_id = null;
     public int|null $agent_id = null;
 
-    public function mount($quote = null)
+    public function mount($quote = null, $organization_id = null, $agent_id = null, $commission = null)
     {
         $this->quote = $quote instanceof Quote ? $quote : null;
-        $this->commission = $this->quote?->commission;
+        $this->organization_id = $organization_id;
+        $this->commission = $commission;
+        $this->agent_id = $agent_id;
+
+        if ($this->organization_id) {
+            $organization = Organization::find($this->organization_id);
+            $this->commission = $organization?->commission ?? $this->commission;
+        }
     }
 
-    public function inputChanged(?string $key = null)
+    public function updatedQuoteOrganizationId($value)
     {
-        if ($key === 'organization_id') {
-            $commission = $this->organization_id ? Organization::find($this->organization_id)?->commission : $this->commission;
-            $this->commission = $commission;
+        if ($value) {
+            $organization = Organization::find($value);
+            $this->commission = $organization?->commission ?? 0;
+        } else {
+            $this->commission = null;
         }
+    }
+
+    public function rules()
+    {
+        return [
+            'organization_id' => 'nullable|exists:organizations,id',
+            'agent_id' => 'required_if:organization_id,!null|exists:agents,id',
+            'commission' => 'nullable|numeric|min:0',
+        ];
     }
 
     public function render()

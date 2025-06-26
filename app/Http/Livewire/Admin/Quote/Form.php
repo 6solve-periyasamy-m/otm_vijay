@@ -10,6 +10,7 @@ use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
 use App\Models\Quote\QuoteProspect;
 use App\Models\System\LargeTextTemplate;
+use App\Models\Customer\Organization;
 use Carbon\Carbon;
 use Livewire\Component;
 use Settings;
@@ -28,6 +29,7 @@ class Form extends Component
     public $maxFinalDate;
     /** @var array<array{id: int|null, name: string, per_customer: boolean, amount: float}> */
     public array $costs = [];
+    public bool $agentRequired = false;
 
     public function mount(Quote|int|null $quote): void
     {
@@ -39,7 +41,7 @@ class Form extends Component
         $this->quote->expires = $this->quote->expires ?? now()->addDays((int)setting('system.quote.expiry', null));
         $this->prospect->travelling = $this->prospect->travelling ?? true;
         $this->prospect->paying = $this->prospect->paying ?? true;
-
+        $this->agentRequired = $this->quote->agent_id ? true : false;
         if ($this->quote->date_from) {
             $this->minToDate = Carbon::parse($this->quote->date_from)->subDay()->toDateString();
             $this->maxFinalDate = Carbon::parse($this->quote->date_from)->subDay()->toDateString();
@@ -64,6 +66,20 @@ class Form extends Component
             $this->minToDate = $dateFrom->isAfter($today) ? $dateFrom->toDateString() : $today->toDateString();
             $this->maxFinalDate = $dateFrom->subDay()->toDateString();
         }
+    }
+
+    public function updatedQuoteOrganizationId($organization_id)
+    {
+        if ($organization_id) {
+            $organization = Organization::find($organization_id);
+            if ($organization) {
+                $this->quote->commission = $organization->commission;
+            }
+        } else {
+            $this->quote->commission = null;
+            $this->quote->agent_id = null;
+        }
+        $this->validateOnly('quote.agent_id');
     }
 
     public function save()
@@ -207,7 +223,9 @@ class Form extends Component
             'quote.currency_id' => 'nullable|integer|exists:currencies,id',
             'quote.consultant_id' => 'nullable|integer|exists:users,id',
             'quote.organization_id' => 'nullable|integer|exists:organizations,id',
-            'quote.agent_id' => 'nullable|integer|exists:agents,id',
+            'quote.agent_id' => $this->agentRequired
+                ? 'required|integer|exists:agents,id'
+                : 'nullable|integer|exists:agents,id',
             'quote.event_id' => 'nullable|integer|exists:events,id',
             'quote.commission' => 'nullable|numeric|between:0,100',
             'quote.deposit' => 'nullable|numeric',
