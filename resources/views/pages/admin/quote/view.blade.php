@@ -147,7 +147,8 @@
                 <span>Delete Components</span>
             </a>
         </div>
-        @include('partials.admin.quote.components', ['quote' => $quote,])
+        @php $payingTraveller = $quote->paying + $quote->leadTraveller->paying @endphp
+        <livewire:admin.quote.components-table :quote="$quote" :payingCount="$payingTraveller" />
     </x-admin.section.card>
 
     {{-- Cards --}}
