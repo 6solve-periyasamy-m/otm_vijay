@@ -38,6 +38,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int|null $event_id
  * @property int|null $session_id
  * @property int|null $seating_id
+ * @property int|null $seating_map_id
  * @property string|null $name
  * @property string|null $field1
  * @property string|null $field2
@@ -55,6 +56,18 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Currency|null $currency
  * @property-read Seating|null $seating
  * @property-read Session|null $session
+ * @property-read Event|null $event
+ * @property-read SeatingMap|null $seatingMap
+ * @property-read int|null $orders_count
+ * @method static Builder|Activity whereActivityCategory($value)
+ * @method static Builder|Activity whereEventId($value)
+ * @method static Builder|Activity whereExternalNotes($value)
+ * @method static Builder|Activity whereField1($value)
+ * @method static Builder|Activity whereField2($value)
+ * @method static Builder|Activity whereInternalNotes($value)
+ * @method static Builder|Activity whereSeatingId($value)
+ * @method static Builder|Activity whereSeatingMapId($value)
+ * @method static Builder|Activity whereSessionId($value)
  * @method static ActivityFactory factory(...$parameters)
  * @method static Builder|Activity newModelQuery()
  * @method static Builder|Activity newQuery()
@@ -116,6 +129,11 @@ class Activity extends Model
     public function seating(): BelongsTo
     {
         return $this->belongsTo(Seating::class, 'seating_id');
+    }
+
+    public function seatingMap(): BelongsTo
+    {
+        return $this->belongsTo(SeatingMap::class, 'seating_map_id');
     }
 
     public function orders(): HasManyDeep

@@ -92,7 +92,7 @@ class Settings
     public function currency(): Currency|null
     {
         if ($this->currency === null) {
-            $this->currency = Currency::where('code', '=', $this->get('system.currency', ''))->first();
+            $this->currency = Currency::where('code', '=', $this->get('system.currency', 'GBP'))->first();
         }
         return $this->currency;
     }

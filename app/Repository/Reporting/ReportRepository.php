@@ -461,4 +461,34 @@ class ReportRepository
         }
         return $data;
     }
+
+    public static function getOnlineOrderReport(): array
+    {
+        $data = [];
+        $orders = Order::whereHas('bookings')->orderBy('ordered_on', 'desc')->limit(25)->get();
+        foreach ($orders as $order) {
+            $nextPayment = $order->next_installment;
+            $row = collect();
+            $row->order_id = $order->id;
+            $row->ordered_on = $order->ordered_on;
+            $row->booking_reference = $order->booking_reference;
+            $row->lb_first_name = $order->leadBooker?->customer?->first_name;
+            $row->lb_last_name = $order->leadBooker?->customer?->last_name;
+            $row->lb_email = $order->leadBooker?->customer?->email_address;
+            $row->customer_count = $order->customer_count;
+            $row->tour_name = $order->tour->name;
+            $row->event_name = $order->tour?->event?->name;
+            $row->total_order_value = $order->total;
+            $row->balance_outstanding = $order->remaining;
+            $row->balance_paid = $order->paid;
+            $row->due_date = $nextPayment?->due_on;
+            $row->due_amount = $nextPayment?->calculated_amount;
+            $row->internal_notes = $order->internal_notes;
+            $row->external_notes = $order->external_notes;
+            $row->orderStatus = $order->status;
+            $row->profit = $order->cache?->profit;
+            $data[$order->id] = $row;
+        }
+        return $data;
+    }
 }
