@@ -6,6 +6,8 @@
         <th scope="col">Passport Name</th>
         <th scope="col">Email Address</th>
         <th scope="col">Phone Number</th>
+        <th scope="col">Order Internal Notes</th>
+        <th scope="col">Order External Notes</th>
         <th scope="col">Activity</th>
         <th scope="col">Type</th>
         <th scope="col">Ticket</th>
@@ -29,6 +31,8 @@
             <td>{{ $row->passport }}</td>
             <td>{{ $row->email }}</td>
             <td>{{ $row->mobile_number }}</td>
+            <td>{{ $row->orderInternal }}</td>
+            <td>{{ $row->orderExternal }}</td>
             <td>{{ $row->activity }}</td>
             <td>{{ $row->type }}</td>
             <td>{{ $row->ticket }}</td>

@@ -61,6 +61,8 @@ class TransportManifestRepository implements HasTransportManifest
             $row = collect();
             $row->reference = $orderComponent->orderCustomer->order->booking_reference;
             $row->customer = $orderComponent->orderCustomer->customer_name;
+            $row->orderInternal = $orderComponent->orderCustomer->order->internal_notes;
+            $row->orderExternal = $orderComponent->orderCustomer->order->external_notes;
             $row->passport = $orderComponent->orderCustomer->customer->passport_first_name . ' ' . $orderComponent->orderCustomer->customer->passport_middle_name . ' ' . $orderComponent->orderCustomer->customer->passport_last_name;
             $row->operator = $orderComponent->tourComponent->inventory->component->operator->name;
             $row->departure = $orderComponent->tourComponent->inventory->component->departureAddress;

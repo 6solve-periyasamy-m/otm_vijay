@@ -60,6 +60,8 @@ class MerchandiseManifestRepository implements HasMerchandiseManifest
             $row->customer = $orderComponent->orderCustomer->customer_name;
             $row->email = $orderComponent->orderCustomer->customer->email_address;
             $row->merchandise = $orderComponent->tourComponent->inventory->component->name;
+            $row->orderInternal = $orderComponent->orderCustomer->order->internal_notes;
+            $row->orderExternal = $orderComponent->orderCustomer->order->external_notes;
             $row->passport = $orderComponent->orderCustomer->customer->passport_first_name . ' ' . $orderComponent->orderCustomer->customer->passport_middle_name . ' ' . $orderComponent->orderCustomer->customer->passport_last_name;
             $row->type = $orderComponent->tourComponent->inventory->component->type?->name;
             $row->variant = $orderComponent->tourComponent->inventory->variant?->name;
