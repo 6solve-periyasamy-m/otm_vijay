@@ -18,12 +18,15 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <!-- Custom CSS -->
-    <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
-    <link href="{{ asset('/css/customer.css?v=').time() }}" rel="stylesheet">
+    {{-- <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet"> --}}
+    <link href="{{ asset('/css/customer/style.css')}}" rel="stylesheet">
+    {{-- <link href="{{ asset('/css/customer.css?v=').time() }}" rel="stylesheet"> --}}
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="{{ asset('js/app.js') . '?' . date('U')  }}"></script>
     <script src="{{ asset('js/admin/functions.js') . '?' . date('U')  }}"></script>
     <script src="https://checkout.airwallex.com/assets/elements.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  
     <style>
         .select2-container--default .select2-selection--single {
             border: none !important;
@@ -58,7 +61,7 @@
 
     <div id="app" data-layout="vertical" class="vh-100">
         <!-- Topbar header -->
-        @include('pages.customer.layout.navbar', ['branding' => $branding,])
+        {{-- @include('pages.customer.layout.navbar', ['branding' => $branding,]) --}}
 
         @if ($errors->any())
             <div class="container topbar-padding">
@@ -72,7 +75,12 @@
 
         <!-- Main Body -->
         <div class="container h-80 {{ $errors->any() ? '' : 'topbar-padding' }}" @if(isset($overflow) && !$overflow) style="overflow: hidden;" @endif>
-            @yield('content')
+            <div class="body_content">
+                @if(\App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer() !== null)
+                    <livewire:customer.leftsidebar />
+                @endif
+                @yield('content')
+            </div>
         </div>
         @yield('footer')
 

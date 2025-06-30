@@ -3,11 +3,23 @@
 @section('title', 'View Itinerary')
 
 @php
-$orderNotesLock = $order->tour->repository->isOrderNotesLocked();
-$accommodationLock = $order->tour->repository->isAccommodationLocked();
-$activityLock = $order->tour->repository->isActivityLocked();
-$flightLock = $order->tour->repository->isFlightLocked();
-$transportLock = $order->tour->repository->isTransportLocked();
+use Carbon\Carbon;
+use App\Models\Location\Country;
+if($order){
+    $orderNotesLock     = $order->tour->repository->isOrderNotesLocked();
+    $accommodationLock  = $order->tour->repository->isAccommodationLocked();
+    $activityLock       = $order->tour->repository->isActivityLocked();
+    $flightLock         = $order->tour->repository->isFlightLocked();
+    $transportLock      = $order->tour->repository->isTransportLocked();
+}
+
+$currentURL = $_SERVER['REQUEST_URI'];
+$basePattern = '/customer/itinerary/';
+if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePattern, '', $currentURL)) > 0) {
+    $dynamic = true;
+} else {
+    $dynamic = false;
+}
 @endphp
 
 @push('footer-stack')
@@ -19,9 +31,8 @@ $transportLock = $order->tour->repository->isTransportLocked();
         }
     </script>
 @endpush
-
 @section('content')
-    <div class="row payment-balance">
+    {{-- -<div class="row payment-balance">
         <div class="col-12">
             <form class="form-horizontal mx-2">
                 <div class="form-group order-select-wrapper">
@@ -164,5 +175,535 @@ $transportLock = $order->tour->repository->isTransportLocked();
             </div>
         </div>
     </div></div>
+</div> --}}
+
+@if ($dynamic)
+<div class="inner_content">
+    
+     <x-customer.overview-top-bar title="Tours" :search="false" />
+    <!-- <div class="overview_top_bar">
+        <p class="overview_title"><span><a href="{{ route('customer.itinerary') }}"><img src="{{ asset('images/customer/images/arrow-left.svg') }}" alt="arrow left"></a></span>{{ $order->tour->name }}  </p>
+        <div class="search_field"><p><input type="text" placeholder="SEARCH"></p></div>
+    </div> -->
+    <div class="tours_list_details">
+        <div class="upcoming_tours_clock">
+            <div class="upcoming_tour_title">
+                <img src="/images/customer/images/clock.svg" alt="clock" />
+                <h6 class="badge badge-{{ $orderCustomer->order->status->color() }} fw-bold ">{{ $orderCustomer->order->status->description() }}</h6>
+                <!-- <img src="/images/customer/images/clock.svg" alt="clock" /><span>UPCOMING TOUR</span> -->
+            </div>
+            <div class="event_list">
+                <div class="event_image_title">
+                    @php 
+                        if (!empty($order->tour->event->image_url)){
+                                    $evenImg1 = $order->tour->event->image_url;
+                        } else{
+                            $evenImg1 = 'images/default_image.png';
+                        }
+                    @endphp
+                        <div class="event_img"><img src="{{asset($evenImg1)}}" alt="{{ $order->tour->event->name }}"/></div>
+                        <div class="title_date">
+                            <h4>{{ $order->tour->name }} </h4>
+                            <p class="calendar_date"><img src="{{ asset('/images/customer/images/calendar.svg')}}" />
+                              {{ Carbon::parse($order->tour->date_from)->format('d/M/Y') }}  - {{ Carbon::parse($order->tour->date_to)->format('d/M/Y')}}</p>
+                            <!-- <p class="ticket_type"><span>Ticket Type</span><span>Lorem Ipsum</span></p> -->
+                            <p class="booking_reference"><span>Booking Reference</span><span>{{$order->booking_reference}}</span></p>
+                        </div> 
+                </div>
+                <div class="common_btn"><a href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" />DOWNLOAD ITINERARY</a></div>
+            </div>
+        </div>
+        <div class="customer_details">
+            <h2>Customer Details</h2>
+            <div class="lead_guest name_address_font">
+                <h5>LEAD GUEST</h5>
+                <div><span class="lead_guest_name">Name</span><span>{{$order->leadBooker->customer->first_name ?? '' . " " .$order->leadBooker->customer->last_name ?? ''}}</span></div>
+                <div><span class="lead_guest_email">Email address</span><span>{{ $order->leadBooker->customer->email_address }}</span></div>
+            </div>
+            @if(isset($order->orderCustomers))
+            <div class="other_guests name_address_font">
+                <h5>OTHER GUESTS</h5>
+                <div class="guests_row">
+                        @foreach($order->orderCustomers as $key => $ordersCustomer)
+                            <div class="guest_colm1">
+                                <p><span>Guest {{ $key+1 }}</span><span>{{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}</span></p>
+                                <p><span class="guest_eaddrs">Email address</span><span>{{ $ordersCustomer->customer->email_address ?? '-'}}</span></p>
+                            </div>
+                        @endforeach
+                        <!-- <div class="guest_colm_email">
+                            <p><span>Guest 2</span><span>Matt Rath</span></p>
+                            <p class="guest_email"><input type="email"  name="email" placeholder="ENTER EMAIL ADDRESS" required></p>
+                        </div>
+                        <div class="guest_colm_email">
+                            <p><span>Guest 2</span><span>Ben Rath</span></p>
+                            <p class="guest_email"><input type="email"  name="email" placeholder="ENTER EMAIL ADDRESS" required></p>
+                        </div>
+                            -->
+                </div>             
+            </div>
+            @endif
+        </div>
+        <hr>
+        @if($order->agent)
+        <div class="onsite_agent_details name_address_font">
+            <h2>Onsite Agent Details</h2>
+            <div class="lead_guest">
+                <div><span class="agent_name">Name : </span><span>{{(optional($order->agent)->first_name ?? '') . ' ' .(optional($order->agent)->last_name ?? '-')}}</span></div>
+                    <!-- <div><span class="agend_phone_no">Phone Number</span><span>{{(optional($order->agent)->first_name ?? '')}}</span></div> -->
+                <div><span class="agend_email">Email address : </span><span>{{(optional($order->agent)->email ?? '-')}}</span></div>
+            </div>
+        </div>
+        <hr>
+        @endif
+        @if($orderCustomer->travel_insurer)
+        <div class="travel_insurance name_address_font">
+            <div class="travel_title_btn"><h2>Travel Insurance</h2> 
+                    <!-- <div class="common_btn"><a href=""><img src="/images/customer/images/download_icon.svg" />DOWNLOAD INSURANCE</a></div> -->
+            </div>
+                <div class="lead_guest">
+                    <div><span class="traveler_name">Traveler Name</span><span>{{ $orderCustomer->travel_insurer ?? '-' }}</span></div>
+                    <div><span class="policy_no">Policy Number</span><span>{{ $orderCustomer->policy_number ?? '-'}} </span></div>
+                </div>
+        </div>
+            <hr />
+        @endif
+        {{--<div class="optional_add_ons name_address_font">
+            <h2>Optional add-ons & upgrades</h2>
+            @foreach($orderCustomer->orderActivities as $orderActivity)
+                @if($orderActivity->tourComponent->tour_component_type == 'Add On')
+                    <div class="add_ons_row">
+                        <div class="ticket_upgrade_colm">
+                            <h5>TICKET UPGRADE</h5>
+                            <div class="img_title_date_btn_1">
+                                <div class="add_ons_image_date">
+                                    <div class="add_ons_img"><img src="/images/customer/images/add_ons_img_1.png" /> </div>
+                                        <div class="add_ons_title_date">
+                                            <h4>{{ $orderActivity->activity->name }}</h4>
+                                            <p class="calendar_date"><img src="/images/customer/images/calendar.svg" />{{ f_datetime($orderActivity->activity_inventory->starts_at) }} to {{ f_datetime($orderActivity->activity_inventory->ends_at) }}</p>
+                                            <p class="event_location"><img src="/images/customer/images/location.svg" />{{ $orderActivity->activity->activityType->name }}</p>
+                                        </div>
+                                </div>
+                                <div class="dollar_amt_btn">
+                                    <div class="dollar_amt_btn_inr"><div>
+                                        @if($orderActivity->tourComponent->tour_component_type == 'Included')
+                                            {{ f_currency(0) }}
+                                        @else
+                                            {{ f_currency($orderActivity->cost) }}
+                                        @endif
+                                    </div><button class="ticket_added"><img src="/images/customer/images/check_btn.svg" /> ADDED </button></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Add Ons Row End-->
+                @endif
+            @endforeach
+            <div class="add_ons_row">
+                <div class="ticket_upgrade_colm">
+                    <h5>TICKET UPGRADE</h5>
+                    <div class="img_title_date_btn_1">
+                        <div class="add_ons_image_date">
+                                <div class="add_ons_img"><img src="/images/customer/images/add_ons_img_1.png" /> </div>
+                                <div class="add_ons_title_date">
+                                    <h4>4 Nights, 5 Star Accommodation</h4>
+                                        <p class="calendar_date"><img src="/images/customer/images/calendar.svg" />02.02.2023 - 08.08.2024</p>
+                                        <p class="event_location"><img src="/images/customer/images/location.svg" />SYDNEY, AUSTRALIA</p>
+                                    </div>
+                            </div>
+                            <div class="dollar_amt_btn">
+                                <div class="dollar_amt_btn_inr"><div>A$2,300</div><button class="ticket_added"><img src="/images/customer/images/check_btn.svg" /> ADDED </button></div>
+                            </div>
+                        </div>
+                        <div class="img_title_date_btn_2">
+                            <div class="add_ons_image_date">
+                                <div class="add_ons_img"><img src="/images/customer/images/add_ons_img_2.png" /> </div>
+                                    <div class="add_ons_title_date">
+                                    <h4>4 Nights, 5 Star Accommodation</h4>
+                                        <p class="calendar_date"><img src="/images/customer/images/calendar.svg" />02.02.2023 - 08.08.2024</p>
+                                        <p class="event_location"><img src="/images/customer/images/location.svg" />SYDNEY, AUSTRALIA</p>
+                                    </div>
+                            </div>
+                            <div class="dollar_amt_btn">
+                                <div class="dollar_amt_btn_inr"><div>A$2,300</div><button class="ticket_add"><img src="/images/customer/images/add_btn.svg" /> ADD </button></div>
+                            </div>
+                        </div>
+                        <div class="add_tour">
+                            <h5>ADD A TOUR</h5>
+                            <div class="img_title_date_btn_1">
+                                <div class="add_ons_image_date">
+                                    <div class="add_ons_img"><img src="/images/customer/images/add_ons_img_1.png" /> </div>
+                                        <div class="add_ons_title_date">
+                                        <h4>4 Nights, 5 Star Accommodation</h4>
+                                            <p class="calendar_date"><img src="/images/customer/images/calendar.svg" />02.02.2023 - 08.08.2024</p>
+                                            <p class="event_location"><img src="/images/customer/images/location.svg" />SYDNEY, AUSTRALIA</p>
+                                        </div>
+                                </div>
+                                <div class="dollar_amt_btn">
+                                    <div class="dollar_amt_btn_inr"><div>A$2,300</div><button class="ticket_added"><img src="/images/customer/images/check_btn.svg" /> ADDED </button></div>
+                                </div>
+                            </div>
+                            <div class="img_title_date_btn_2">
+                                <div class="add_ons_image_date">
+                                    <div class="add_ons_img"><img src="/images/customer/images/add_ons_img_2.png" /> </div>
+                                        <div class="add_ons_title_date">
+                                        <h4>4 Nights, 5 Star Accommodation</h4>
+                                            <p class="calendar_date"><img src="/images/customer/images/calendar.svg" />02.02.2023 - 08.08.2024</p>
+                                            <p class="event_location"><img src="/images/customer/images/location.svg" />SYDNEY, AUSTRALIA</p>
+                                        </div>
+                                </div>
+                                <div class="dollar_amt_btn">
+                                    <div class="dollar_amt_btn_inr"><div>A$2,300</div><button class="ticket_add"><img src="/images/customer/images/add_btn.svg" /> ADD </button></div>
+                                </div>
+                            </div> 
+                        </div>
+                </div>
+                <div class="stay_extra_colm">
+                    <h5>STAY EXTRA NIGHTS</h5>
+                        <div class="img_title_date_btn_1">
+                            <div class="add_ons_image_date">
+                                <div class="add_ons_img"><img src="/images/customer/images/add_ons_img_1.png" /> </div>
+                                    <div class="add_ons_title_date">
+                                    <h4>4 Nights, 5 Star Accommodation</h4>
+                                        <p class="calendar_date"><img src="/images/customer/images/calendar.svg" />02.02.2023 - 08.08.2024</p>
+                                        <p class="event_location"><img src="/images/customer/images/location.svg" />SYDNEY, AUSTRALIA</p>
+                                </div>
+                        </div>
+                        <div class="dollar_amt_btn">
+                                <div class="dollar_amt_btn_inr"><div>A$2,300</div><button class="ticket_added"><img src="/images/customer/images/check_btn.svg" /> ADDED </button></div>
+                            </div>
+                        </div>
+                        <div class="img_title_date_btn_2">
+                            <div class="add_ons_image_date">
+                                <div class="add_ons_img"><img src="/images/customer/images/add_ons_img_2.png" /> </div>
+                                    <div class="add_ons_title_date">
+                                    <h4>4 Nights, 5 Star Accommodation</h4>
+                                        <p class="calendar_date"><img src="/images/customer/images/calendar.svg" />02.02.2023 - 08.08.2024</p>
+                                        <p class="event_location"><img src="/images/customer/images/location.svg" />SYDNEY, AUSTRALIA</p>
+                    </div>
+                            </div>
+                            <div class="dollar_amt_btn">
+                                <div class="dollar_amt_btn_inr"><div>A$2,300</div><button class="ticket_add"><img src="/images/customer/images/add_btn.svg" /> ADD </button></div>
+                            </div>
+                        </div> 
+
+                </div>
+            </div>
+            <div class="upgrade_option_row">
+                <div class="contact_us_text"><p>Contact Us for more upgrade options <img src="/images/customer/images/arrow_right.svg"></p></div>
+                <div class=""><p class="upgrade_btn"><button>UPGRADE</button></p></div>
+            </div>
+        </div>
+        --}}
+        <div class="trip_itinerary_row name_address_font">
+            <div class="trip_text_btn">
+                <div><h2>Trip itinerary and inclusions</h2></div>
+            <div><div class="common_btn"><a href=""><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" />DOWNLOAD ITINERARY</a></div></div>
+            </div>            
+            <!-- <div class="trip_days">
+                <div class="date_details">DAY 01 - Thursday 28th July 2024</div>
+                <h5>Outbound Flight</h5>
+                <div class="trip_details">
+                    <div><span class="left_label_column">Airline</span><span>RyanAir</span></div>
+                    <div><span class="left_label_column">Details</span><span>London Heathrow Airport to O.R. Tambo International Airport</span></div>
+                    <div><span class="left_label_column">Travel Class</span><span>Economy</span></div>
+                    <div><span class="left_label_column">Date & Time</span><span>28.07.2022 10:00 to 28.07.2022 17:00</span></div>
+                </div>
+            </div>
+            <div class="trip_days">
+                <div class="date_details">DAY 02 - Friday 29th July 2024</div>
+                <h5>Accommodation</h5>
+                <div class="trip_details">
+                    <div><span class="left_label_column">Hotel</span><span>Signature Lux Hotel by ONOMO Foreshore</span></div>
+                    <div><span class="left_label_column">No. of nights</span><span>1</span></div>
+                    <div><span class="left_label_column">Address</span><span>31A Heerengracht Street, Roggebaai Square, Cape Town, South Africa, 8001</span></div>
+                    <div><span class="left_label_column">Quantity</span><span>1</span></div>
+                    <div><span class="left_label_column">Date & Time</span><span>29.07.2022 19:00 to 30.07.2022 09:00</span></div>
+                </div>
+            </div> -->
+            {{-- dd($orderCustomer->repository->getComponentsForItinerary()) ---}}
+            @php
+                $groupedByDate      = [];
+                $accommodationdata  = [];
+                $activitydata       = [];
+                $flightdata         = [];
+                $transportdata      = [];
+
+                foreach ($orderCustomer->orderAccommodation as $accommodation) {
+                    $date = Carbon::parse(optional($accommodation->tourComponent->inventory)->check_in)->toDateString();
+                    $groupedByDate[$date]['accommodations'][] = $accommodation;
+                    $accommodationdata[] = $accommodation;
+                }
+
+                foreach ($orderCustomer->orderActivities as $activity) {
+                    $date = Carbon::parse(optional($activity->activity_inventory)->starts_at)->toDateString();
+                    $groupedByDate[$date]['activities'][] = $activity;
+                    $activitydata[] = $activity;
+                }
+
+                foreach ($orderCustomer->orderFlights as $flight) {
+                    $date = Carbon::parse(optional($flight->flight_inventory)->departs_at)->toDateString();
+                    $groupedByDate[$date]['flights'][] = $flight;
+                    $flightdata[] = $flight;
+                }
+
+                foreach ($orderCustomer->orderTransports as $transport) {
+                    $date = Carbon::parse(optional($transport->repository)->getStartTime())->toDateString();
+                    $transportdata[] = $transport;
+                }
+
+                ksort($groupedByDate); // sort by date
+            @endphp
+           {{-- @foreach($groupedByDate as $date => $components)
+                <div class="trip_days">
+                    <div class="date_details">{{ Carbon::parse($date)->format('l jS F Y') }}</div>
+
+                    @if (!empty($components['accommodations']))
+                        @foreach ($components['accommodations'] as $orderAccommodation)
+                            <h5>Accommodation</h5>
+                            @php
+                                $inventory = $orderAccommodation->tourComponent->inventory ?? null;
+                                $checkIn = $inventory->check_in ?? null;
+                                $checkOut = $inventory->check_out ?? null;
+                                $days = ($checkIn && $checkOut) ? Carbon::parse($checkOut)->diffInDays(Carbon::parse($checkIn)) + 1 : 0;
+                                $address = $inventory->accommodation->address ?? null;
+                            @endphp
+                            <div class="trip_details">
+                                <div><span class="left_label_column">Hotel</span><span>{{ $inventory->accommodation->name ?? '-' }}</span></div>
+                                <div><span class="left_label_column">No. of nights</span><span>{{ $days }}</span></div>
+                                <div><span class="left_label_column">Address</span>
+                                    <span>
+                                        {{ implode(', ', array_filter([
+                                            $address->address_line_1 ?? '',
+                                            $address->address_line_2 ?? '',
+                                            $address->address_line_3 ?? '',
+                                            $address->town ?? '',
+                                            $address->region ?? '',
+                                            $address->postcode ?? '',
+                                        ])) }}
+                                    </span>
+                                </div>
+                                <div><span class="left_label_column">Quantity</span><span>{{ empty($orderAccommodation->group->getMembers($orderCustomer)) ? 'Not Shared' : $orderAccommodation->group->getMembers($orderCustomer) }}</span></div>
+                                <div><span class="left_label_column">Date & Time</span>
+                                    <span>{{ f_datetime($checkIn) ?? '-' }} to {{ f_datetime($checkOut) ?? '-' }}</span>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
+
+                    @if (!empty($components['activities']))
+                        @foreach ($components['activities'] as $orderActivity)
+                            <h5>Activity</h5>
+                            <div class="trip_details">
+                                <div><span class="left_label_column">Name</span><span>{{ $orderActivity->activity->name ?? '-' }}</span></div>
+                                <div><span class="left_label_column">Ticket Type</span><span>{{ $orderActivity->activity_inventory->ticketType->name ?? '-' }}</span></div>
+                                <div><span class="left_label_column">Date & Time</span><span>{{ f_datetime($orderActivity->activity_inventory->starts_at) }} to {{ f_datetime($orderActivity->activity_inventory->ends_at) }}</span></div>
+                            </div>
+                        @endforeach
+                    @endif
+
+                    @if (!empty($components['flights']))
+                        @foreach ($components['flights'] as $orderFlight)
+                            <h5>Flight</h5>
+                            <div class="trip_details">
+                                <div><span class="left_label_column">Number</span><span>{{ $orderFlight->flight_number ?? '-' }}</span></div>
+                                <div><span class="left_label_column">Flight Details</span><span>{{ $orderFlight->flight->departureAirport->name ?? '-' }} to {{ $orderFlight->flight->arrivalAirport->name ?? '-' }}</span></div>
+                                <div><span class="left_label_column">Travel Class</span><span>{{ $orderFlight->flight_inventory->travelClass->name ?? '-' }}</span></div>
+                                <div><span class="left_label_column">Component Type</span><span>{{ $orderFlight->flightInventoryTour->tour_component_type ?? '-' }}</span></div>
+                                <div><span class="left_label_column">Date & Time</span><span>{{ f_datetime($orderFlight->flight_inventory->departs_at) }} to {{ f_datetime($orderFlight->flight_inventory->arrives_at) }}</span></div>
+                            </div>
+                        @endforeach
+                    @endif
+                    @if (!empty($components['transports']))
+                        @foreach ($components['transports'] as $orderTransport)
+                            <h5>Transport</h5>
+                            <div class="trip_details">
+                                <div><span class="left_label_column">Name</span><span>{{ $orderTransport->transport->name ?? '-' }}</span></div>
+                                <div><span class="left_label_column">Transport Type</span><span>{{ $orderTransport->transport->transportType->name ?? '-' }}</span></div>
+                                <div><span class="left_label_column">Transport Information</span><span>{{ $orderTransport->transport->departureAddress->name ?? '-' }} to {{ $orderTransport->transport->arrivalAddress->name ?? '-' }}</span></div>
+                                <div><span class="left_label_column">Travel Class</span><span>{{ $orderTransport->transport_inventory->travelClass->name ?? '-' }}</span></div>
+                                <div><span class="left_label_column">Date & Time</span><span>{{ f_datetime($orderTransport->repository->getStartTime()) }} to {{ f_datetime($orderTransport->repository->getEndTime()) }}</span></div>
+                            </div>
+                        @endforeach
+                    @endif
+                </div>
+            @endforeach --}}
+        <div class="trip_days">
+                {{-- Accommodation --}}
+                @if (!empty($accommodationdata))
+                    <h5>Accommodation</h5>
+                    @foreach ($accommodationdata as $orderAccommodation)
+                        @php
+                            $inventory = $orderAccommodation->tourComponent->inventory ?? null;
+                            $checkIn = $inventory->check_in ?? null;
+                            $checkOut = $inventory->check_out ?? null;
+                            $days = ($checkIn && $checkOut) ? Carbon::parse($checkOut)->diffInDays(Carbon::parse($checkIn)) + 1 : 0;
+                            $address = $inventory->accommodation->address ?? null;
+                        @endphp
+                        <div class="trip_details">
+                            <div><span class="left_label_column">Hotel</span><span>{{ $inventory->accommodation->name ?? '-' }}</span></div>
+                            <div><span class="left_label_column">No. of nights</span><span>{{ $days }}</span></div>
+                            <div><span class="left_label_column">Address</span>
+                                <span>
+                                    {{ implode(', ', array_filter([
+                                        $address->address_line_1 ?? '',
+                                        $address->address_line_2 ?? '',
+                                        $address->address_line_3 ?? '',
+                                        $address->town ?? '',
+                                        $address->region ?? '',
+                                        $address->postcode ?? '',
+                                    ])) }}
+                                </span>
+                            </div>
+                            <div><span class="left_label_column">Quantity</span><span>{{ empty($orderAccommodation->group->getMembers($orderCustomer)) ? 'Not Shared' : $orderAccommodation->group->getMembers($orderCustomer) }}</span></div>
+                            <div><span class="left_label_column">Date & Time</span>
+                                <span>{{ f_datetime($checkIn) ?? '-' }} to {{ f_datetime($checkOut) ?? '-' }}</span>
+                            </div>
+                        </div>
+                        <hr>
+                    @endforeach
+                @endif
+
+                {{-- Activity --}}
+                @if (!empty($activitydata))
+                    <h5>Activity</h5>
+                    @foreach ($activitydata as $orderActivity)
+                        <div class="trip_details">
+                            <div><span class="left_label_column">Name</span><span>{{ $orderActivity->activity->name ?? '-' }}</span></div>
+                            <div><span class="left_label_column">Ticket Type</span><span>{{ $orderActivity->activity_inventory->ticketType->name ?? '-' }}</span></div>
+                            <div><span class="left_label_column">Date & Time</span><span>{{ f_datetime($orderActivity->activity_inventory->starts_at) }} to {{ f_datetime($orderActivity->activity_inventory->ends_at) }}</span></div>
+                        </div>
+                        <hr>
+                    @endforeach
+                @endif
+
+                {{-- Flight --}}
+                @if (!empty($flightdata))
+                    <h5>Flight</h5>
+                    @foreach ($flightdata as $orderFlight)
+                        <div class="trip_details">
+                            <div><span class="left_label_column">Number</span><span>{{ $orderFlight->flight_number ?? '-' }}</span></div>
+                            <div><span class="left_label_column">Flight Details</span><span>{{ $orderFlight->flight->departureAirport->name ?? '-' }} to {{ $orderFlight->flight->arrivalAirport->name ?? '-' }}</span></div>
+                            <div><span class="left_label_column">Travel Class</span><span>{{ $orderFlight->flight_inventory->travelClass->name ?? '-' }}</span></div>
+                            <div><span class="left_label_column">Component Type</span><span>{{ $orderFlight->flightInventoryTour->tour_component_type ?? '-' }}</span></div>
+                            <div><span class="left_label_column">Date & Time</span><span>{{ f_datetime($orderFlight->flight_inventory->departs_at) }} to {{ f_datetime($orderFlight->flight_inventory->arrives_at) }}</span></div>
+                        </div>
+                        <hr>
+            @endforeach
+                @endif
+
+                {{-- Transport --}}
+                @if (!empty($transportdata))
+                    <h5>Transport</h5>
+                    @foreach ($transportdata as $orderTransport)
+                        <div class="trip_details">
+                            <div><span class="left_label_column">Name</span><span>{{ $orderTransport->transport->name ?? '-' }}</span></div>
+                            <div><span class="left_label_column">Transport Type</span><span>{{ $orderTransport->transport->transportType->name ?? '-' }}</span></div>
+                            <div><span class="left_label_column">Transport Information</span><span>{{ $orderTransport->transport->departureAddress->name ?? '-' }} to {{ $orderTransport->transport->arrivalAddress->name ?? '-' }}</span></div>
+                            <div><span class="left_label_column">Travel Class</span><span>{{ $orderTransport->transport_inventory->travelClass->name ?? '-' }}</span></div>
+                            <div><span class="left_label_column">Date & Time</span><span>{{ f_datetime($orderTransport->repository->getStartTime()) }} to {{ f_datetime($orderTransport->repository->getEndTime()) }}</span></div>
+                        </div>
+                        <hr>
+                    @endforeach
+                @endif
+            </div>
+        </div><!--Trip itinerary row-->
+        <hr />
+        <div class="event_information">
+            <h3>Event Information</h3>
+           <p>{!! data_get($orderCustomer, 'order.tour.event.description', '')  !!}</p>
+
+        </div>
+        <hr />
+        <div class="final_details">
+            <h3>Final Details</h3><p>
+            {!!  data_get($orderCustomer, 'order.tour.event.final_terms', '')  !!}</p>
+        </div>
+        <hr />
+        <div class="notes_div">
+            <h3>Notes</h3>
+            <div class="notes_row">
+                <div class="notes_colm">
+                    <p class="notes_title">{!! $orderCustomer->internal_notes ?? '' !!}</p>
+                </div>
+                <div class="notes_colm">
+                    <p class="notes_title">{!! $orderCustomer->external_notes ?? '' !!}</p>
+                </div>
+            </div>
+        </div>               
+    </div>
 </div>
+@else
+    <div class="inner_content">
+         <x-customer.overview-top-bar title="Tours" :search="false" />
+        @php
+
+            $upcomingOrders = $orders->filter(function ($order) {
+                return optional($order->tour)->date_to && Carbon::parse($order->tour->date_to)->isFuture();
+            });
+
+            $pastOrders = $orders->filter(function ($order) {
+                return optional($order->tour)->date_to && Carbon::parse($order->tour->date_to)->isPast();
+            });
+        @endphp
+        <div class="tours_list">
+            <div class="upcoming_tours">
+                <h2>Upcoming Trips <span class="tours_count">{{ $upcomingOrders->count() }}</span></h2>
+                @foreach($upcomingOrders as $kupcom => $vupcom)
+                {{-- dd($vupcom->pivot->customer_id,$vupcom->tour->event->toArray()) --}}
+                    <div class="event_list">
+                        <div class="event_image_title">
+                            @php
+                            if (!empty($vupcom->tour->event->image_url)){
+                                $evenImg = $vupcom->tour->event->image_url;
+                            } else{
+                                $evenImg = 'images/default_image.png';
+                            }
+                            @endphp
+                                <div class="event_img"><img src="{{asset($evenImg)}}" alt="{{ $vupcom->tour->event->name ?? '' }}"/></div>
+                                <div class="title_date">
+                                    <h4>{{ $vupcom->tour->name }}</h4>
+                                    <h6 style="background-color:#000000; border:1px solid #000 !important; color:#fff; width:174px; display:flex; justify-content:center; align-items:center; padding:10px; border-radius:50px; cursor:pointer; position:relative;" class="badge badge-{{ $vupcom->status->color() }} fw-bold">{{ $vupcom->status->description() }}</h6>
+                                    <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />
+                                     {{ Carbon::parse($vupcom->tour->date_from)->format('d/M/Y') }}  - {{ Carbon::parse($vupcom->tour->date_to)->format('d/M/Y')}}</p>
+                                    <p class="view_details"><a href="itinerary/{{$vupcom->booking_reference }}/{{$orderCustomer->customer_id }}" target="_blank"> VIEW DETAILS <img src="{{ asset('images/customer/images/arrow_right.svg')}}" /></a></p>
+                                </div> 
+                        </div>
+                        <div class="common_btn"><a href="{{ route('customer.itinerary.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg')}}" />DOWNLOAD ITINERARY</a></div>
+                    </div>
+                    <hr>
+                @endforeach
+            </div>
+            <div class="past_tours">
+                <h2>Past Tours</h2>
+                <div class="past_tour_row">
+                    @foreach($pastOrders as $kpast => $vpast)
+                        <div class="past_tours_column">
+                            <div class="past_image_title">
+                                @php
+                                if (!empty($vpast->tour->event->image_url)){
+                                    $evenImg = $vpast->tour->event->image_url;
+                                } else{
+                                    $evenImg = 'images/default_image.png';
+                                }
+                                @endphp
+                                <div class="tour_event_img"><img src="{{asset($evenImg)}}" alt="{{ $vpast->tour->event->name ?? '' }}"/></div>
+                                <div class="event_title_date">
+                                    <h4></h4>{{ $vpast->tour->name }}</h4>
+                                    <p class="calendar_date"><img src="{{ asset('/images/customer/images/calendar.svg')}}" />
+                                    {{ Carbon::parse($vpast->tour->date_from)->format('d/M/Y') }}  - {{ Carbon::parse($vpast->tour->date_to)->format('d/M/Y')}}</p>
+                                    <p class="event_location"><img src="{{ asset('/images/customer/images/location.svg')}}" />{{ $vpast->tour->city }},{{ optional(Country::find($vpast->tour->country_id))->name }}
+                                    </p>
+                                </div> 
+                            </div>
+                            @php
+                                $hrefdata = url('/customer/finances/invoice/' .  $vpast->booking_reference);
+                            @endphp
+                            <div class="common_btn"><a href="{{ route('customer.itinerary.download', ['reference' => $vpast->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank"> <img src="{{ asset('images/customer/images/download_icon.svg')}}" /> ITINERARY</a><a  href="{{ $hrefdata }}"  target="_blank" class="invoice_btn"> <img src="{{ asset('images/customer/images/download_icon.svg')}}" /> INVOICE</a></div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
 @endsection

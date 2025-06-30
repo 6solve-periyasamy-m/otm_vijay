@@ -35,12 +35,14 @@ class CustomerTourController extends CustomerController
         $customer = $customer ?? $this->user();
         $order = $reference ??  $customer->repository->getDefaultOrder();
         if (!$this->user()->repository->canEditCustomer($customer)) abort(404);
-        if (!isset($order)) abort(404);
+        // if (!isset($order)) abort(404);
         $oCustomer = null;
-        foreach ($order->orderCustomers as $orderCustomer) {
-            if ($orderCustomer->customer_id === $customer?->id) {
-                $oCustomer = $orderCustomer;
-                break;
+        if(isset($order->orderCustomers)){
+            foreach ($order->orderCustomers as $orderCustomer) {
+                if ($orderCustomer->customer_id === $customer?->id) {
+                    $oCustomer = $orderCustomer;
+                    break;
+                }
             }
         }
         return $oCustomer;
@@ -49,13 +51,34 @@ class CustomerTourController extends CustomerController
     public function showItinerary(?Order $reference = null, ?Customer $customer = null)
     {
         $orderCustomer = $this->getOrderCustomer($reference, $customer);
-        if (!isset($orderCustomer)) abort(404);
+        // if (!isset($orderCustomer)) abort(404);
+        $editable = (isset($orderCustomer->order)) ? $this->getOrderCustomers($orderCustomer->order , $this->user()) : [];
         return view('pages.customer.itinerary', [
             'orderCustomer' => $orderCustomer,
-            'order' => $orderCustomer->order,
-            'orders' => $this->user()->orders,
-            'editable' => $this->getOrderCustomers($orderCustomer->order, $this->user()),
+            'order' => $orderCustomer->order ?? [],
+            'orders' => $this->getFilteredOrders(),
+            'editable' => $editable,
         ]);
+    }
+    private function getFilteredOrders()
+    {
+        $search = request('search');
+
+        $ordersQuery = $this->user()?->orders()
+            ->with(['tour'])
+            ->orderBy('cancelled', 'asc')
+            ->orderBy('ordered_on', 'desc');
+
+        if (!empty($search)) {
+            $ordersQuery->where(function ($query) use ($search) {
+                $query->where('booking_reference', 'like', '%' . $search . '%')
+                    ->orWhereHas('tour', function ($q) use ($search) {
+                        $q->where('name', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+
+        return $ordersQuery->get();
     }
 
     public function downloadItinerary(?Order $reference = null, ?Customer $customer = null): StreamedResponse
