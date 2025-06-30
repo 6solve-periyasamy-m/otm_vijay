@@ -6,6 +6,8 @@
         <th scope="col">Event</th>
         <th scope="col">Consultant</th>
         <th scope="col">Status</th>
+        <th scope="col">Order Internal Notes</th>
+        <th scope="col">Order External Notes</th>
         <th scope="col">Passport Name</th>
         <th scope="col">Email Address</th>
         <th scope="col">Merchandise</th>
@@ -26,6 +28,8 @@
             <td>{{ $row->event }}</td>
             <td>{{ $row->consultant }}</td>
             <td>{{ $row->status->name }}</td>
+            <td>{{ $row->orderInternal }}</td>
+            <td>{{ $row->orderExternal }}</td>
             <td>{{ $row->passport }}</td>
             <td>{{ $row->email }}</td>
             <td>{{ $row->merchandise }}</td>
