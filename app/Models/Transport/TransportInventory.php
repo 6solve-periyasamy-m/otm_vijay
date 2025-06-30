@@ -211,4 +211,12 @@ class TransportInventory extends Model
     {
         return $this->belongsTo(TransportOccupancy::class, 'transport_occupancy_id');
     }
+
+    public function hasSufficientOccupancy(int $passengerCount): bool
+    {
+        $maxOccupancy = $this->transportOccupancy?->maximum_occupancy;
+
+        return is_null($maxOccupancy) || $maxOccupancy >= $passengerCount;
+    }
+
 }
