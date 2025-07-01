@@ -39,7 +39,7 @@ use App\Models\Helper\Enum\ActivityCategory;
                                         @if($seatingMap->image_url && !empty($seatingMap->image_url))
                                             <div class="seating-map-wrapper">
                                                 <div class="seating-map-wrapper-img-block">
-                                                    <img src="/images/Ticket-Icon.svg" alt="ticket-icon" class="seating-map-link">
+                                                    <img src="/images/Ticket-Icon.svg" alt="ticket-icon" class="seating-map-link" alt="Stadium" title="Stadium">
                                                 </div>
                                                 <div class="ticket-pop-up-modal" style="display:none;">
                                                     <div class="ticket-contain-module">

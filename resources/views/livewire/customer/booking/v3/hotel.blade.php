@@ -27,7 +27,7 @@
         </div>
         <div class="booking-dates">
             <h6 class="sub-heading-6">BOOKING DATES</h6>
-            <p>If you would like to extend your stay, please contact our Sales team at <a href="mailto:travel@kpt.com.au">travel@kpt.com.au</a></p>
+            <p>If you would like to extend your stay, please contact our Sales team at <a href="mailto:travel@keithprowsetravel.com">travel@keithprowsetravel.com</a></p>
             <!-- <p class="mod">Extend your stay</p> -->
             <div class="check-in-check-out">
                 <div class="first">
