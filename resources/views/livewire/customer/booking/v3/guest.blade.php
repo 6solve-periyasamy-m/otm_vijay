@@ -50,7 +50,7 @@
                 in touch for a tailor-made package:</p>
             <p class="phone">Domestic <a href="tel:1300 730 023">+1300 730 023</a></p>
             <p class="phone">International <a href="tel:+61 2 7201 9353"> +61 2 7201 9353</a></p>
-            <p class="email">Email <a href="mailto:travel@kpt.com.au">travel@kpt.com.au</a></p>
+            <p class="email">Email <a href="mailto:travel@keithprowsetravel.com">travel@keithprowsetravel.com</a></p>
         </div>
     </x-slot:left>
 </x-customer.booking.v3.layout>

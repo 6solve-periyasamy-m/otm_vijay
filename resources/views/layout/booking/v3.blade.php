@@ -2559,9 +2559,13 @@
     }
 
     .additional-inclusion-popup, .hotel-more-info-popup, .default-hotel-more-info-popup{
-      display: none;
+      /*display: none; */
+      visibility : hidden;
+      display: flex;
     }
-
+    img.default-hotel-trigger-popup {
+      cursor: pointer;
+    }
     .details-form-module>h6 {
       text-transform: uppercase;
       letter-spacing: 2.24px;
