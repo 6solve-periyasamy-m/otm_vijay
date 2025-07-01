@@ -539,6 +539,8 @@
                         $balance_received = 0;
                         $balance_received_total = 0;
                     @endphp
+                    @if(!is_null($invoice->payment_schedule) && is_iterable($invoice->payment_schedule))
+
                     @foreach ($invoice->payment_schedule as $key => $installment)
                         @if($installment->type === ItineraryScheduleType::BOOKING_FEE)
                         <tr>
@@ -630,6 +632,9 @@
                             </tr>
                         @endif
                     @endforeach
+                    @else
+                        <tr><td colspan="4">No payment schedule available</td></tr>
+                    @endif
                 </table>
             </td>
             <td style="width:10%;">&nbsp;</td>
