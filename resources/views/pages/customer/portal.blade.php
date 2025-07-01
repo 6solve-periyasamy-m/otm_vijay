@@ -65,7 +65,9 @@
                                 {{ Carbon::parse($orderCustomer->order->tour->date_from)->format('d/M/Y') }}  - {{ Carbon::parse($orderCustomer->order->tour->date_to)->format('d/M/Y')}}</p>
                             </div> 
                     </div>
-                    <div class="common_btn"><span class="dollar_amount">{{ f_currency($orderCustomer->tour_cost) }}</span><a href="">PAY NOW <img src="{{ asset('images/customer/images/arrow_right.svg') }}" /></a></div>
+                    @if(str_contains($orderCustomer->order->status->description(), 'Outstanding'))
+                        <div class="common_btn"><span class="dollar_amount">{{ f_currency($orderCustomer->tour_cost) }}</span><a href="">PAY NOW <img src="{{ asset('images/customer/images/arrow_right.svg') }}" /></a></div>
+                    @endif
                 </div>
                 <hr>
             @endforeach
