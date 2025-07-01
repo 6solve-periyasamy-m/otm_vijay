@@ -504,10 +504,10 @@
        });
 
        jQuery(document).on('click', '.single-hotel .hotel-block a', function () {
-           jQuery(this).closest('.hotel-block').find('.hotel-more-info-popup').css('display', 'flex')
+           jQuery(this).closest('.hotel-block').find('.hotel-more-info-popup').css('visibility', 'visible')
         })
         jQuery(document).on('click', '.hotel-more-info-popup .hotel-close-button,.hotel-more-info-popup .cancel', function () {
-            jQuery(this).closest('.hotel-block').find('.hotel-more-info-popup').css('display', 'none')
+            jQuery(this).closest('.hotel-block').find('.hotel-more-info-popup').css('visibility', 'hidden')
         })
     </script>
 
@@ -530,19 +530,19 @@
             triggers.forEach(trigger => {
                 trigger.addEventListener('click', function (e) {
                     e.preventDefault();
-                    popup.style.display = 'flex';
+                    popup.style.visibility = 'visible';
                     popup.classList.add('active');
                 });
             });
 
             closeBtn?.addEventListener('click', function () {
-                popup.style.display = 'none';
+                popup.style.visibility = 'hidden';
                 popup.classList.remove('active');
             });
 
             popup?.addEventListener('click', function (e) {
                 if (e.target === popup) {
-                    popup.style.display = 'none';
+                    popup.style.visibility = 'hidden';
                     popup.classList.remove('active');
                 }
             });
