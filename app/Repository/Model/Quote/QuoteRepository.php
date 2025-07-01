@@ -481,8 +481,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         /** @var QuoteTransport $component */
         foreach ($this->quote->transport()->with('inventory')->get() as $component) {
             if ($component->inventory === null) {continue;}
-            $occupancy = optional($component->inventory->transportOccupancy)->maximum_occupancy;
-            if (is_null($occupancy) || $occupancy >= $travellers) {
+            if ($component->inventory->hasSufficientOccupancy($travellers)) {
                 $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0.0) * min($travellers, ($component->quantity ?? $travellers));
             }
         }
@@ -1177,9 +1176,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
 
-            $actualPassengers = $component->quantity ?? $travelling;
-            $maximumOccupancy = optional($component->inventory->transportOccupancy)->maximum_occupancy;
-            if (!is_null($maximumOccupancy) && $maximumOccupancy < $actualPassengers) {
+            $totalTravellers = $component->quantity ?? $travelling;
+            $maximumOccupancy = $component->inventory->transportOccupancy?->maximum_occupancy;
+            if (!is_null($maximumOccupancy) && $maximumOccupancy < $totalTravellers) {
                 continue;
             }
             $item = $component->repository->getItineraryItem($component->quantity ?? $travelling);
