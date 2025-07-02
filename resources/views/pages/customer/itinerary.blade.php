@@ -205,7 +205,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                         <div class="title_date">
                             <h4>{{ $order->tour->name }} </h4>
                             <p class="calendar_date"><img src="{{ asset('/images/customer/images/calendar.svg')}}" />
-                              {{ Carbon::parse($order->tour->date_from)->format('d/M/Y') }}  - {{ Carbon::parse($order->tour->date_to)->format('d/M/Y')}}</p>
+                              {{ Carbon::parse($order->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($order->tour->date_to)->format('d M Y')}}</p>
                             <!-- <p class="ticket_type"><span>Ticket Type</span><span>Lorem Ipsum</span></p> -->
                             <p class="booking_reference"><span>Booking Reference</span><span>{{$order->booking_reference}}</span></p>
                         </div> 
@@ -397,7 +397,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
         <div class="trip_itinerary_row name_address_font">
             <div class="trip_text_btn">
                 <div><h2>Trip itinerary and inclusions</h2></div>
-            <div><div class="common_btn"><a href=""><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" />DOWNLOAD ITINERARY</a></div></div>
+            <div><div class="common_btn"><a href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" />DOWNLOAD ITINERARY</a></div></div>
             </div>            
             <!-- <div class="trip_days">
                 <div class="date_details">DAY 01 - Thursday 28th July 2024</div>
@@ -528,83 +528,281 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                 </div>
             @endforeach --}}
         <div class="trip_days">
-                {{-- Accommodation --}}
-                @if (!empty($accommodationdata))
-                    <h5>Accommodation</h5>
-                    @foreach ($accommodationdata as $orderAccommodation)
-                        @php
-                            $inventory = $orderAccommodation->tourComponent->inventory ?? null;
-                            $checkIn = $inventory->check_in ?? null;
-                            $checkOut = $inventory->check_out ?? null;
-                            $days = ($checkIn && $checkOut) ? Carbon::parse($checkOut)->diffInDays(Carbon::parse($checkIn)) + 1 : 0;
-                            $address = $inventory->accommodation->address ?? null;
-                        @endphp
-                        <div class="trip_details">
-                            <div><span class="left_label_column">Hotel</span><span>{{ $inventory->accommodation->name ?? '-' }}</span></div>
-                            <div><span class="left_label_column">No. of nights</span><span>{{ $days }}</span></div>
-                            <div><span class="left_label_column">Address</span>
-                                <span>
-                                    {{ implode(', ', array_filter([
-                                        $address->address_line_1 ?? '',
-                                        $address->address_line_2 ?? '',
-                                        $address->address_line_3 ?? '',
-                                        $address->town ?? '',
-                                        $address->region ?? '',
-                                        $address->postcode ?? '',
-                                    ])) }}
-                                </span>
+            
+                @if(!empty($itinerary->items['Flights']))
+                    @php $firstLoop = true; @endphp
+
+                    @foreach($itinerary->items['Flights'] as $flight)
+                        @if(isset($flight->details['Quantity']) && $flight->details['Quantity'] > 0)
+                        <div class="single-module mb-n15 component-break">
+                            @if($firstLoop)
+                                <div class="heading-module">
+                                    <h5>Flights
+                                    </h5>
+                                </div>
+                                @php $firstLoop = false; @endphp
+                            @endif
+                            @if($flight->details['Flight Number'] !== $flight->details['Booking Reference'])
+                                <div class="details-module">
+                                    <table>
+                                        <tbody>
+                                            <tr><td colspan="2" class="pn10"></td></tr>
+                                            <tr>
+                                                <td class="left_label_column"><strong>Quantity:</strong></td>
+                                                <td>{{ $flight->details['Quantity'] }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="left_label_column"><strong>Booking Reference:</strong></td>
+                                                <td>{{ $flight->details['Booking Reference'] }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @else
+                                <p class="non-booking-ref-block">&nbsp;</p>
+                            @endif
+                            <div class="component-body">
+                                <table class="tbl-quote-section" style="width: 90%;">
+                                    <tr>
+                                        <th>Airline</th>
+                                        <th>Flight No.</th>
+                                        <th>Class</th>
+                                        <th>Date</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Departure</th>
+                                        <th>Arrival</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="word-wrap" style="width:80px;">{{ $flight->name }}</td>
+                                        <td style="width:100px;">{{ $flight->details['Flight Number'] }}</td>
+                                        <td style="width:60px;">{{ $flight->details['Class'] }}</td>
+                                        <td style="width:70px;">{{ $flight->details['Departure Date'] }}</td>
+                                        <td class="word-wrap" style="width:100px;">{{ $flight->details['Departure Airport'] }}</td>
+                                        <td class="word-wrap" style="width:100px;">{{ $flight->details['Arrival Airport'] }}</td>
+                                        <td style="width:55px;">{{ $flight->details['Departure Time'] }}</td>
+                                        <td style="width:55px;">{{ $flight->details['Arrival Time'] }}</td>
+                                    </tr>
+                                </table>
                             </div>
-                            <div><span class="left_label_column">Quantity</span><span>{{ empty($orderAccommodation->group->getMembers($orderCustomer)) ? 'Not Shared' : $orderAccommodation->group->getMembers($orderCustomer) }}</span></div>
-                            <div><span class="left_label_column">Date & Time</span>
-                                <span>{{ f_datetime($checkIn) ?? '-' }} to {{ f_datetime($checkOut) ?? '-' }}</span>
+                        </div>
+                        @endif
+                    @endforeach
+                @endif
+
+                @if(!empty($itinerary->items['Transfers']))
+                    @php $firstLoop = true; @endphp
+                    @foreach($itinerary->items['Transfers'] as $transport)
+                        @if(isset($transport->details['Quantity']) && $transport->details['Quantity'] > 0)
+                        <div class="single-module mb-n15">
+                            @if($firstLoop)
+                                <div class="heading-module">
+                                    <h5>
+                                        Transport
+                                    </h5>
+                                </div>
+                                @php $firstLoop = false; @endphp
+                            @endif
+                            <div class="details-module">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td class="item-header w-125"><strong> Service: </strong></td>
+                                            <td class="item-detail">{{ $transport->name }}</td>
+                                        </tr>
+                                        @php
+                                            $disable_items = [ 'Transport', 'Travel Class'];
+                                        @endphp
+                                        @foreach($transport->details as $key => $value)
+                                        @php
+                                            $class_desc_pos = $key == 'Description' ? 'text-wrap' : '';
+                                        @endphp
+                                            @if (!in_array($key, $disable_items))
+                                                <tr>
+                                                    <td class="item-header w-125">
+                                                        <strong>{{ $key }}:</strong>
+                                                    </td>
+                                                    <td class="item-detail <?php echo $class_desc_pos;?>">
+                                                    {{ $value }}
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        @endif
+                    @endforeach
+                @endif  
+
+                @if(!empty($itinerary->items['Accommodation']))
+                    @php $firstLoop = true; @endphp
+                    
+                    @foreach($itinerary->items['Accommodation'] as $accommodation)
+                        <div class="single-module mb-n15">
+                            @if($firstLoop)
+                                <div class="heading-module">
+                                    <h5>Accommodation
+                                    </h5>
+                                </div>
+                                @php  $firstLoop = false; @endphp
+                            @endif
+                            <h4>{{ $accommodation->name }}
+                            </h4>
+                            <div class="details-module">
+                                <table>
+                                    <tbody>
+                                        @php
+                                        if (isset($accommodation->details['Description'], $accommodation->details['Quantity'])) {
+                                            $temp_desc = $accommodation->details['Description'];
+                                            unset($accommodation->details['Description']);
+                                            $accommodation->details['Description'] = $temp_desc;
+                                        }
+                                        @endphp
+                                        @foreach($accommodation->details as $key => $value)
+                                            @php  $class_desc_pos = $key == 'Description' ? 'text-wrap' : '';  @endphp
+                                            @continue(empty($value))
+                                            <tr>
+                                                <td class="left_label_column">
+                                                    <strong>{{ $key }}:</strong>
+                                                </td>
+                                                <td class="item-detail <?php echo $class_desc_pos;?>">
+                                                    @if(is_array($value))
+                                                        @if(isset($value['attributes']['address_line_1']))
+                                                            {{ $value['attributes']['address_line_1'] }}
+                                                        @else
+                                                            Address not available
+                                                        @endif
+                                                    @else
+                                                        {!! $value !!}
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
+
+                @if(!empty($itinerary->items['Event'])) 
+                    @php  $firstLoop = true; @endphp
+                    <div class="row">
+                        @foreach($itinerary->items['Event'] as $item)
+                            <div class="single-module mb-n15">
+                                @if($firstLoop)
+                                    <div class="heading-module">
+                                        <h5>Event
+                                        </h5>
+                                    </div>
+                                    @php
+                                        $firstLoop = false;
+                                    @endphp
+                                @endif
+                                <div class="details-module">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td class="left_label_column"><strong>Event:</strong></td>
+                                                <td>{{ $order->tour?->event?->name }}</td>
+                                            </tr>
+                                            @if(array_key_exists('Ticket', $item->details) && !empty($item->details['Ticket']))
+                                                <tr>
+                                                    <td class="left_label_column"><strong>Ticket:</strong></td>
+                                                    <td>{{ $item->details['Ticket'] }}</td>
+                                                </tr>
+                                            @endif
+                                            @if(!empty($item->details['Dates']))
+                                                <tr>
+                                                    <td class="left_label_column"><strong>Dates:</strong></td>
+                                                    <td> <?php
+                                                            $dates = explode('to', $item->details['Dates']); 
+                                                            echo trim($dates[0]); 
+                                                            ?>
+                                                    </td>
+                                                </tr>
+                                            @endif
+
+                                            @if(!empty($item->details['Venue']))
+                                                <tr>
+                                                    <td class="left_label_column"><strong>Venue:</strong></td>
+                                                    <td>{{ $item->details['Venue'] }}</td>
+                                                </tr>
+                                            @endif
+
+
+                                            @if(!empty($item->details['Quantity']) && $item->details['Quantity'] > 0)
+                                                <tr>
+                                                    <td class="left_label_column"><strong>Quantity:</strong></td>
+                                                    <td>{{ $item->details['Quantity'] }}</td>
+                                                </tr>
+                                            @endif
+
+                                            @if(!empty($item->details['Description']))
+                                                <tr>
+                                                    <td class="left_label_column"><strong>Description:</strong></td>
+                                                    <td class="text-wrap">{!! $item->details['Description'] !!}</td>
+                                                </tr>
+                                            @endif                 
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif        
+
+                @if(!empty($itinerary->items['Inclusion']))
+                    @php  $firstLoop = true; @endphp
+                    @foreach($itinerary->items['Inclusion'] as $item)
+                        <div class="single-module mb-n15">
+                            @if($firstLoop)
+                                <div class="heading-module">
+                                    <h5>Additional Inclusions
+                                    </h5 >
+                                </div>
+                                @php $firstLoop = false; @endphp
+                            @endif
+                            <div class="details-module">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td class="left_label_column"><strong>Inclusion:</strong></td>
+                                            @if(array_key_exists('Ticket', $item->details))
+                                                <td>{{ $item->details['Ticket'] }}</td>
+                                            @else
+                                                <td>{{ $item->name }}</td>
+                                            @endif
+                                        </tr>
+                                        @php
+                                            $disable_items = ['Ticket'];
+                                        @endphp
+                                        @foreach($item->details as $key => $value)
+                                            @php $class_desc_pos = $key == 'Description' ? 'text-wrap' : ''; @endphp
+                                            @continue(empty($value))
+                                            @if (!in_array($key, $disable_items))
+                                            <tr>
+                                                <td class="left_label_column"><strong>{{ $key }}:</strong></td>
+                                                <td class="<?php echo $class_desc_pos;?>">
+                                                    @if($key === 'Dates')
+                                                        {{ trim(explode('to', $value)[0]) }}
+                                                    @else
+                                                        {!! $value !!}
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            @endif
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         <hr>
                     @endforeach
                 @endif
 
-                {{-- Activity --}}
-                @if (!empty($activitydata))
-                    <h5>Activity</h5>
-                    @foreach ($activitydata as $orderActivity)
-                        <div class="trip_details">
-                            <div><span class="left_label_column">Name</span><span>{{ $orderActivity->activity->name ?? '-' }}</span></div>
-                            <div><span class="left_label_column">Ticket Type</span><span>{{ $orderActivity->activity_inventory->ticketType->name ?? '-' }}</span></div>
-                            <div><span class="left_label_column">Date & Time</span><span>{{ f_datetime($orderActivity->activity_inventory->starts_at) }} to {{ f_datetime($orderActivity->activity_inventory->ends_at) }}</span></div>
-                        </div>
-                        <hr>
-                    @endforeach
-                @endif
-
-                {{-- Flight --}}
-                @if (!empty($flightdata))
-                    <h5>Flight</h5>
-                    @foreach ($flightdata as $orderFlight)
-                        <div class="trip_details">
-                            <div><span class="left_label_column">Number</span><span>{{ $orderFlight->flight_number ?? '-' }}</span></div>
-                            <div><span class="left_label_column">Flight Details</span><span>{{ $orderFlight->flight->departureAirport->name ?? '-' }} to {{ $orderFlight->flight->arrivalAirport->name ?? '-' }}</span></div>
-                            <div><span class="left_label_column">Travel Class</span><span>{{ $orderFlight->flight_inventory->travelClass->name ?? '-' }}</span></div>
-                            <div><span class="left_label_column">Component Type</span><span>{{ $orderFlight->flightInventoryTour->tour_component_type ?? '-' }}</span></div>
-                            <div><span class="left_label_column">Date & Time</span><span>{{ f_datetime($orderFlight->flight_inventory->departs_at) }} to {{ f_datetime($orderFlight->flight_inventory->arrives_at) }}</span></div>
-                        </div>
-                        <hr>
-            @endforeach
-                @endif
-
-                {{-- Transport --}}
-                @if (!empty($transportdata))
-                    <h5>Transport</h5>
-                    @foreach ($transportdata as $orderTransport)
-                        <div class="trip_details">
-                            <div><span class="left_label_column">Name</span><span>{{ $orderTransport->transport->name ?? '-' }}</span></div>
-                            <div><span class="left_label_column">Transport Type</span><span>{{ $orderTransport->transport->transportType->name ?? '-' }}</span></div>
-                            <div><span class="left_label_column">Transport Information</span><span>{{ $orderTransport->transport->departureAddress->name ?? '-' }} to {{ $orderTransport->transport->arrivalAddress->name ?? '-' }}</span></div>
-                            <div><span class="left_label_column">Travel Class</span><span>{{ $orderTransport->transport_inventory->travelClass->name ?? '-' }}</span></div>
-                            <div><span class="left_label_column">Date & Time</span><span>{{ f_datetime($orderTransport->repository->getStartTime()) }} to {{ f_datetime($orderTransport->repository->getEndTime()) }}</span></div>
-                        </div>
-                        <hr>
-                    @endforeach
-                @endif
             </div>
         </div><!--Trip itinerary row-->
         <hr />
@@ -620,15 +818,31 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
         </div>
         <hr />
         <div class="notes_div">
-            <h3>Notes</h3>
-            <div class="notes_row">
-                <div class="notes_colm">
-                    <p class="notes_title">{!! $orderCustomer->internal_notes ?? '' !!}</p>
+            <h3>Notes</h3>            
+            <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference, 'orderCustomer' => $orderCustomer,]) }}" method="post" class="form-horizontal form-material">
+                 @csrf
+                <div class="notes_row">
+                    <!-- <div class="notes_colm">
+                        <p class="notes_title">{!! $orderCustomer->internal_notes ?? '' !!}</p>
+                    </div>
+                    <div class="notes_colm">
+                        <p class="notes_title">{!! $orderCustomer->external_notes ?? '' !!}</p>
+                    </div> -->
+                    <div class="notes_colm">
+                        <x-customer.input.text-area  name="external_notes" value="{{ $order->external_notes }}">
+                            External Notes
+                        </x-customer.input.text-area>
+                    </div>
+                    {{-- <div  class="notes_colm">
+                        <x-customer.input.text-area  name="internal_notes" value="{{ $order->internal_notes }}">
+                            Internal Notes
+                        </x-customer.input.text-area>
+                    </div> --}}
+                    <div class="">
+                        @include('partials.fields.submit')
+                    </div>
                 </div>
-                <div class="notes_colm">
-                    <p class="notes_title">{!! $orderCustomer->external_notes ?? '' !!}</p>
-                </div>
-            </div>
+            </form>
         </div>               
     </div>
 </div>
@@ -664,7 +878,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                                     <h4>{{ $vupcom->tour->name }}</h4>
                                     <h6 style="background-color:#000000; border:1px solid #000 !important; color:#fff; width:174px; display:flex; justify-content:center; align-items:center; padding:10px; border-radius:50px; cursor:pointer; position:relative;" class="badge badge-{{ $vupcom->status->color() }} fw-bold">{{ $vupcom->status->description() }}</h6>
                                     <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />
-                                     {{ Carbon::parse($vupcom->tour->date_from)->format('d/M/Y') }}  - {{ Carbon::parse($vupcom->tour->date_to)->format('d/M/Y')}}</p>
+                                     {{ Carbon::parse($vupcom->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($vupcom->tour->date_to)->format('d M Y')}}</p>
                                     <p class="view_details"><a href="itinerary/{{$vupcom->booking_reference }}/{{$orderCustomer->customer_id }}" target="_blank"> VIEW DETAILS <img src="{{ asset('images/customer/images/arrow_right.svg')}}" /></a></p>
                                 </div> 
                         </div>
@@ -690,7 +904,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                                 <div class="event_title_date">
                                     <h4></h4>{{ $vpast->tour->name }}</h4>
                                     <p class="calendar_date"><img src="{{ asset('/images/customer/images/calendar.svg')}}" />
-                                    {{ Carbon::parse($vpast->tour->date_from)->format('d/M/Y') }}  - {{ Carbon::parse($vpast->tour->date_to)->format('d/M/Y')}}</p>
+                                    {{ Carbon::parse($vpast->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($vpast->tour->date_to)->format('d M Y')}}</p>
                                     <p class="event_location"><img src="{{ asset('/images/customer/images/location.svg')}}" />{{ $vpast->tour->city }},{{ optional(Country::find($vpast->tour->country_id))->name }}
                                     </p>
                                 </div> 

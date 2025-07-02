@@ -57,6 +57,7 @@ class CustomerTourController extends CustomerController
             'orderCustomer' => $orderCustomer,
             'order' => $orderCustomer->order ?? [],
             'orders' => $this->getFilteredOrders(),
+            'itinerary' => $orderCustomer->order->repository->getItinerary() ?? [],
             'editable' => $editable,
         ]);
     }
@@ -188,26 +189,24 @@ class CustomerTourController extends CustomerController
 
     public function updateNotes(TourDetailsRequest $request, Order $reference, OrderCustomer $orderCustomer)
     {
-        $customer = $this->user();
-        if (!isset($customer)) abort(404);
+        // $customer = $this->user();
+        // if (!isset($customer)) abort(404);
         $order = $reference;
 
-        if (!isset($order) || $order->cancelled) abort(404);
-        if (!$order->repository->isLeadBooker($customer)) abort(404);
-
-        if ($order->repository->isLeadBooker($this->user())) {
-            $order->update(['external_notes' => $request->order_notes,]);
-            $order->save();
-        }
-        $details = $request->getOrderCustomerDetails();
-        if ($order->tour->repository->isOrderNotesLocked()) { unset($details['order_notes']); unset($details['order_customer_notes']); }
-        if ($order->tour->repository->isAccommodationLocked()) { unset($details['accommodation_notes']); }
-        if ($order->tour->repository->isActivityLocked()) { unset($details['activity_notes']); }
-        if ($order->tour->repository->isFlightLocked()) { unset($details['flight_notes']); }
-        if ($order->tour->repository->isTransportLocked()) { unset($details['transport_notes']); }
-        $orderCustomer->repository->update($details);
-
-        $order->createNotification(NotificationType::ORDER_UPDATED, 'Order Notes updated by customer', $this->user());
+        // if (!isset($order) || $order->cancelled) abort(404);
+        // if (!$order->repository->isLeadBooker($customer)) abort(404);
+        // if ($order->repository->isLeadBooker($this->user())) {
+        $order->update(['external_notes' => $request->external_notes,'internal_notes' => $request->internal_notes,]);
+        $order->save();
+        // }
+        // $details = $request->getOrderCustomerDetails();
+        // if ($order->tour->repository->isOrderNotesLocked()) { unset($details['order_notes']); unset($details['order_customer_notes']); }
+        // if ($order->tour->repository->isAccommodationLocked()) { unset($details['accommodation_notes']); }
+        // if ($order->tour->repository->isActivityLocked()) { unset($details['activity_notes']); }
+        // if ($order->tour->repository->isFlightLocked()) { unset($details['flight_notes']); }
+        // if ($order->tour->repository->isTransportLocked()) { unset($details['transport_notes']); }
+        // $orderCustomer->repository->update($details);       
+        // $order->createNotification(NotificationType::ORDER_UPDATED, 'Order Notes updated by customer', $this->user());
         return redirect()->route('customer.itinerary', ['reference' => $order->booking_reference,]);
     }
 

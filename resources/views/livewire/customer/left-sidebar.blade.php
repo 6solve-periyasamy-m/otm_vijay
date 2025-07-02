@@ -16,7 +16,7 @@
                         @foreach($upcomingOrders as $order)
                             <li>
                                 <a href="{{ url('customer/itinerary/' . $order->booking_reference . '/' . $orderCustomer->customer_id) }}">
-                                    {{ $order->tour->name }}
+                                    {{ $order->tour?->event?->name}}
                                 </a>
                             </li>
                         @endforeach

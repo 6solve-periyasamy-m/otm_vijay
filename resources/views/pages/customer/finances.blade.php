@@ -82,8 +82,7 @@
                         <div class="event_payment_list">
                             <div class="event_detail_top">
                                 <div class="event_image_title">
-                                    @php 
-                                   
+                                    @php
                                         $pastdue = 0;
                                         if (!empty($order->tour->event->image_url)){
                                             $evenImg = $order->tour->event->image_url;
@@ -102,15 +101,15 @@
                                             <h6>Lead Guest : {{$order->leadBooker->customer->first_name ?? '' . ' ' .$order->leadBooker->customer->last_name ?? ''}}</h6>
                                             <!-- <h6>Booking Reference : {{ $order->booking_reference }}</h6> -->
                                             <h4>{{ $order->tour->name }}</h4>
-                                            <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />{{ Carbon::parse($order->tour->date_from)->format('d.m.Y') }}  - {{ Carbon::parse($order->tour->date_to)->format('d.m.Y')}}</p>
+                                            <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />{{ Carbon::parse($order->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($order->tour->date_to)->format('d M Y')}}</p>
                                     </div> 
                                 </div>
                             </div>
                             <div class="order_value_amount_div">
-                                <h6>Booking Reference : KP12B7E4K</h6>
+                                <h6>Booking Reference : {{$order->booking_reference}}</h6>
                                 <div class="order_value_amount">
                                     <div class="total_order">
-                                        <p>{{ f_currency($order->total) }}</p>
+                                        <p>{{ f_currency($order->total,true)}}</p>
                                         <p>Total Order Value</p>
                                     </div>
                                     <div class="total_paid">
@@ -155,7 +154,8 @@
                                             @if($amount <= 0)
                                                 <p class="paid">Paid</p> 
                                             @else
-                                                <p class="unpaid"> {{ f_currency($amount) }}</p>
+                                            <!-- <p class="unpaid"> {{ f_currency($amount) }}</p> -->
+                                             <p class="unpaid badge badge-warning fw-bold overdue_btn">Un Paid</p>
                                             @endif
                                         </td>
                                         {!! $tdinv !!}
@@ -171,7 +171,8 @@
                                         @if($amount <= 0)
                                             <p class="paid">Paid</p> 
                                         @else
-                                            <p class="unpaid">{{ f_currency($amount) }}</p>  
+                                            <!-- <p class="unpaid">{{ f_currency($amount) }}</p>   -->
+                                             <p class="unpaid badge badge-warning fw-bold overdue_btn">Un Paid</p>
                                         @endif
                                     </td>
                                     {!! $tdinv !!}
@@ -187,7 +188,8 @@
                                         @if($amount <= 0)
                                             <p class="paid">Paid</p> 
                                         @else
-                                            <p class="unpaid">{{ f_currency($amount) }}</p>
+                                            <!-- <p class="unpaid">{{ f_currency($amount) }}</p> -->
+                                             <p class="unpaid badge badge-warning fw-bold overdue_btn">Un Paid</p>
                                         @endif
                                     </td>
                                     {!! $tdinv !!}
@@ -202,7 +204,8 @@
                                         @if($amount <= 0)
                                             <p class="paid">Paid</p> 
                                         @else
-                                            <p class="unpadi">{{ f_currency($amount) }}</p>
+                                            <!-- <p class="unpaid">{{ f_currency($amount) }}</p> -->
+                                             <p class="unpaid badge badge-warning fw-bold overdue_btn">Un Paid</p>
                                         @endif
                                     </td>
                                     {!! $tdinv !!}
