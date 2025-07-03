@@ -14,7 +14,6 @@ class CustomerPortalController extends CustomerController
     public function show(?Order $reference = null, ?Customer $customer = null)
     {
         $orderCustomer = $this->getOrderCustomer($reference, $customer);
-        // if (!isset($orderCustomer)) abort(404);  
         return view('pages.customer.portal', [
             'customer' => $this->user(),
             'orders' => $this->getFilteredOrders(),

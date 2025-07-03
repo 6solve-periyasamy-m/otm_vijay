@@ -1046,3 +1046,49 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
     line-height: 24px;
 }
 .upcoming_payments .hotel-more-info-popup  {visibility: hidden;}
+
+.payment-details-content {
+    border-bottom: 1px solid rgba(243, 91, 21, 0.2);
+    padding: 12px 0px;
+}
+
+.next-button {
+    margin-top: 24px;
+    width: 100%;
+    height: 67px;
+    background: #f35b15;
+    border: 0px;
+    border-radius: 99px;
+    cursor: pointer;
+}
+
+.next-button > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 8px;
+}
+
+.next-button > span > span {
+    font-family: "PP Neue Montreal Medium";
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 2.24px;
+    color: #FFF;
+}
+
+.heading {
+    font-size: 20px;
+    color: #f35b15;
+    font-weight: 600;
+    margin-top: 2rem !important;
+    text-align: center;
+}
+
+.order_amount {
+    font-size: 20px;
+    color: #f35b15;
+    font-weight: 600;
+    margin-top: 2rem !important;
+}

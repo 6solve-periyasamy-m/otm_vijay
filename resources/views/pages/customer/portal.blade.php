@@ -1,3 +1,10 @@
+@php
+/**
+ * @var \App\Models\System\Brand $branding
+ */
+    $branding = $branding ?? \App\Models\System\Brand::getSystemBrand();
+    $gateways = \Gateway::getDefaultGateway() !== null;
+@endphp
 @extends('layout.customer', ['overflow' => false,])
 @section('title', 'Customer Portal')
 @php
@@ -68,14 +75,55 @@
                             </div> 
                         </div>
                         @if(str_contains($orderCustomer->order->status->description(), 'Outstanding'))
-                            <div class="common_btn"><span class="dollar_amount">{{ f_currency($orderCustomer->tour_cost) }}</span>
-                                <a href="javascript:void(0);" class="pay-now-btn">PAY NOW <img src="{{ asset('images/customer/images/arrow_right.svg') }}" /></a>
+                            @php
+                                $paymentDetails = collect([
+                                    $orderCustomer->order->payment_details,
+                                    $orderCustomer->order->quote?->payment_details,
+                                    $orderCustomer->order->tour?->payment_details,
+                                    setting('company.bank_transfer')
+                                ])->first(fn($value) => !empty($value));
+                            @endphp
+                            <div class="common_btn">
+                                <span class="dollar_amount">{{ fr_currency($orderCustomer->order->cache->total_owed, $orderCustomer->order->currency, false, 0) }}</span>
+                                <a href="javascript:void(0);" class="pay-now-btn"
+                                data-order-id="{{ $orderCustomer->order->id }}">
+                                PAY NOW <img src="{{ asset('images/customer/images/arrow_right.svg') }}" />
+                                </a>
                             </div>
-                           <div class="hotel-more-info-popup">
+                            <div id="payment-details-{{ $orderCustomer->order->id }}" class="payment-details" style="display:none;">
+                                {!! $paymentDetails !!}
+                            </div>
+                            <!-- Popup -->
+                            <div class="hotel-more-info-popup" data-order-id="{{ $orderCustomer->order->id }}">
                                 <div class="hotel-more-info-contain">
                                     <div class="hotel-more-info-block">
                                         <div class="info-body">
-                                            <div class="hotel-close-button"><img src="{{ asset('images/customer/images/Close-Button.svg') }}" alt="package-details"></div>
+                                            <div class="hotel-close-button">
+                                                <img src="{{ asset('images/customer/images/Close-Button.svg') }}" alt="package-details">
+                                            </div>
+                                            <h4>Payment Type</h4>
+                                            <!-- Placeholder for payment details -->
+                                            <div class="payment-details-content"></div>
+                                            @if($gateways)
+                                            <form class="form-material" action="{{ route('customer.payment.make') }}" method="post">
+                                                {{ csrf_field() }}
+                                                <input type="hidden" name="booking_reference" id="form-booking-reference" value="{{ $orderCustomer->order->booking_reference }}">
+                                                <input type="hidden" name="amount" id="amount" value="{{ $orderCustomer->order->cache->total_owed }}">
+                                                <div class="order_amount">Total amount to pay : {{ fr_currency($orderCustomer->order->cache->total_owed, $orderCustomer->order->currency, false, 0) }} </div>
+                                                <button type="submit" class="next-button">
+                                                    <span>
+                                                        <span>CHECKOUT</span>
+                                                        <img src="{{ asset('images/customer/images/Right-arrow-mod.svg') }}" alt="right-arrow">
+                                                    </span>
+                                                </button>
+                                            </form>
+                                            @else
+                                                <div class="col-12">
+                                                    <div class="row">
+                                                        <span class="heading">This operator has not enabled online payments</span>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -127,11 +175,16 @@
     </div>
 </div>
  <script>
-    jQuery(document).on('click', '.upcoming_payments .common_btn a', function () {
-        jQuery(this).closest('.upcoming_payments').find('.hotel-more-info-popup').css('visibility', 'visible');
-    });
-    jQuery(document).on('click', '.upcoming_payments .hotel-more-info-popup .hotel-close-button', function () {
-        jQuery(this).closest('.upcoming_payments').find('.hotel-more-info-popup').css('visibility', 'hidden');
-    });
+jQuery(document).on('click', '.common_btn .pay-now-btn', function () {
+    var orderId = jQuery(this).data('order-id');
+    var paymentDetails = jQuery('#payment-details-' + orderId).html();
+    var popup = jQuery('.hotel-more-info-popup[data-order-id="' + orderId + '"]');
+    popup.find('.payment-details-content').html(paymentDetails);
+    popup.css('visibility', 'visible');
+});
+
+jQuery(document).on('click', '.hotel-more-info-popup .hotel-close-button', function () {
+    jQuery(this).closest('.hotel-more-info-popup').css('visibility', 'hidden');
+});
 </script>
 @endsection
