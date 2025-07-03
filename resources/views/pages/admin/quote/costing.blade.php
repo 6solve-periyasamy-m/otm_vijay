@@ -306,7 +306,7 @@ $profit -= ($commission ?? 0.0)
                             $componentType = $componentRepository->getComponentType();
                             if ($componentType == 'transport') {
                                 $inventory = $componentRepository->getInventory();
-                                $maximumOccupancy = optional(optional($inventory->get())->transportOccupancy)->maximum_occupancy;
+                                $maximumOccupancy = $inventory->get()?->transportOccupancy?->maximum_occupancy;
                             }
                         @endphp
                         @if($componentType !== 'transport' || is_null($maximumOccupancy) || $maximumOccupancy >= $paying)

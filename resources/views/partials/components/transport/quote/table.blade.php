@@ -64,7 +64,7 @@
         $paying_travellers = $paying + $quote->paying;
     @endphp
     @foreach(\App\Repository\Model\Transport\TransportInventoryRepository::getBetweenDates($quote->date_from, $quote->date_to, $quote->repository) as $inventory)
-        @if(is_null(optional($inventory->transportOccupancy)->maximum_occupancy) || optional($inventory->transportOccupancy)->maximum_occupancy >= $paying_travellers)
+        @if(is_null($inventory->transportOccupancy?->maximum_occupancy) || $inventory->transportOccupancy?->maximum_occupancy >= $paying_travellers)
             <tr inventory_id="{{ $inventory->id }}">
                 <td>{{ $inventory->component->name }} {{ $inventory->id }}</td>
                 <td>{{ $inventory->component->transportType }}</td>

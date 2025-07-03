@@ -25,7 +25,7 @@
         </li>
         <li class="nav-item col-6 col-md-2">
             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transport">
-                {{ Icon::transport() }} {{ __('quotes.view.cards.components.tabs.transport') }} {{ $payingCount }}
+                {{ Icon::transport() }} {{ __('quotes.view.cards.components.tabs.transport') }}
             </button>
         </li>
         <li class="nav-item col-6 col-md-2">
@@ -56,7 +56,7 @@
                         $componentType = $componentRepository->getComponentType();
                         if ($componentType == 'transport') {
                             $inventory = $componentRepository->getInventory();
-                            $maximumOccupancy = optional(optional($inventory->get())->transportOccupancy)->maximum_occupancy;
+                            $maximumOccupancy = $inventory->get()?->transportOccupancy?->maximum_occupancy;
                         }
                     @endphp
                     @if($componentType !== 'transport' || is_null($maximumOccupancy) || $maximumOccupancy >= $payingCount)
@@ -372,7 +372,7 @@
                             {{ f_currency($component->repository->getSalesPrice()) }} {{ $component->repository->priceShown() ? '(Shown)' : '' }}
                         </td>
                         <td>
-                            {{ $component->repository->getInventoryInternalNotes() }} {{ $maximumOccupancy }}
+                            {{ $component->repository->getInventoryInternalNotes() }}
                         </td>
                         <td>
                             @can('update', \App\Models\Quote\Quote::class)

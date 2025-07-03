@@ -964,14 +964,6 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
      */
     public function convert(CustomerForConversion $lead, array $customers): Order
     {
-        // $travellers = 1 + count($customers);
-        // foreach ($this->quote->transport as $component) {
-        //     dd($component->inventory->hasSufficientOccupancy($travellers), $travellers);
-        //     //@if($inventory && $inventory->hasSufficientOccupancy($payingCount))
-        //     $maximum_occupancy = $component->inventory->transportOccupancy?->maximum_occupancy;
-        //     dd($maximum_occupancy);
-        // }
-        // exit;
         $travellers = 1 + count($customers);
         $tour = $this->convertToTour($travellers, false);
         $order = Order::forceCreateQuietly([

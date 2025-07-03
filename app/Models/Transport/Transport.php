@@ -109,7 +109,7 @@ class Transport extends Model
         return $this->belongsTo(Operator::class);
     }
 
-    public function Occupancy(): BelongsTo
+    public function occupancy(): BelongsTo
     {
         return $this->belongsTo(TransportOccupancy::class, 'transport_occupancy_id');
     }
