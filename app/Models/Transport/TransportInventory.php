@@ -106,7 +106,7 @@ class TransportInventory extends Model
     {
         return [
             'travel_class_id' => 'required|exists:travel_classes,id',
-            'transport_occupancy_id' => 'required|exists:transport_occupancy,id',
+            'transport_occupancy_id' => 'required|exists:transport_occupancies,id',
             'departs_at' => 'date',
             'arrives_at' => 'date',
             'stock' => 'required|numeric|integer',

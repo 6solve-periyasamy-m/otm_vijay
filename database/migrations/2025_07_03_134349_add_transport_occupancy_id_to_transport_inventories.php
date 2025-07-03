@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('transport_inventories', function (Blueprint $table) {
-            $table->unsignedBigInteger('transport_occupancy_id')->nullable();
-            $table->foreign('transport_occupancy_id')
-                  ->references('id')->on('transport_occupancy')
-                  ->onDelete('cascade');
-            $table->index('transport_occupancy_id');
+            Schema::table('transport_inventories', function (Blueprint $table) {
+            $table->foreignId('transport_occupancy_id')->nullable()
+                  ->constrained('transport_occupancies')
+                  ->cascadeOnDelete();
+        });
         });
     }
 
@@ -26,8 +26,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('transport_inventories', function (Blueprint $table) {
-            $table->dropForeign(['transport_occupancy_id']);
-            $table->dropColumn('transport_occupancy_id');
+                $table->dropConstrainedForeignId('transport_occupancy_id');
         });
     }
 };

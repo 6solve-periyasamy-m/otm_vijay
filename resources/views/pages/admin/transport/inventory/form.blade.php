@@ -25,9 +25,9 @@
                 ['name' => 'Travel Class', 'field' => 'travel_class_id', 'value' => $inventory?->travel_class_id,
                  'route' => 'travel-classes', 'width' => 3,])
     @endcan
-    @include('partials.fields.selector.adder',
+    @include('partials.fields.selector.default',
                     ['name' => 'Occupancy', 'field' => 'transport_occupancy_id', 'value' => $inventory?->transport_occupancy_id,
-                     'route' => 'transport-occupancy', 'createRoute' => route('occupancy.create'), 'width' => 3,])
+                     'route' => 'transport-occupancy', 'width' => 3,])
     <div class="form-group col-xl-6">
         @include('partials.fields.raw.datetime',
                     ['name' => 'Departs At', 'field' => 'departs_at', 'value' => $inventory?->departs_at,
