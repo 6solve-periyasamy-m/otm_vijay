@@ -510,7 +510,7 @@
                         </div>
                         <hr/>
                         <div class="personal_details frequent_details" id="frequent_details">
-                            <h3>Frequent Flier Details</h3>
+                            <h3>Frequent Flyer Details</h3>
                             <div class="frequent_details_form">
                                     <div class="one_input_field">
                                         <select name="program">
