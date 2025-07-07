@@ -36,6 +36,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property ActivityCategory $activity_category
  * @property int|null $currency_id
  * @property int|null $event_id
+ * @property boolean $archived
  * @property int|null $session_id
  * @property int|null $seating_id
  * @property string|null $name
@@ -81,7 +82,7 @@ class Activity extends Model
 
     protected $guarded = [];
     protected array $cascadeDeletes = ['activityInventory'];
-    protected $casts = ['activity_category' => ActivityCategory::class,];
+    protected $casts = ['activity_category' => ActivityCategory::class,, 'archived' => 'boolean'];
 
     public static function getValidationRules(): array
     {
