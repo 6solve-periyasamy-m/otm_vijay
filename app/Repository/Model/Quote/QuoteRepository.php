@@ -691,7 +691,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         foreach ($this->quote->installments as $installment) { $installments[] = ['due_on' => $installment->due_on->format('Y-m-d'), 'percentage' => $installment->percentage, 'amount' => $installment->amount,]; }
         foreach ($this->quote->pricePoints as $pricePoint) { $pricepoints[$pricePoint->quantity] = $pricePoint->price_per_person; }
         foreach ($this->quote->sections as $section) { $sections[] =  $section->serialize(); }
-        $quote['currency'] = $this->quote->currency->toArray();
+        $quote['currency'] = $this->quote->currency?->toArray();
         $quote['installments'] = $installments;
         $quote['pricepoints'] = $pricepoints;
         $quote['sections'] = $sections;
