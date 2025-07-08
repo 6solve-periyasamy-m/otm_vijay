@@ -49,7 +49,7 @@ class Currency extends Model
     protected $guarded = [];
     protected $casts = ['priority' => 'boolean'];
 
-    public static function code(string|null $code): Currency|null
+    public static function code(string|null $code = null): Currency|null
     {
         if ($code === null) return null;
         return Currency::where('code', '=', $code)->first();
