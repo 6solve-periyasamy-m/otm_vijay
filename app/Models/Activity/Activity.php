@@ -82,7 +82,7 @@ class Activity extends Model
 
     protected $guarded = [];
     protected array $cascadeDeletes = ['activityInventory'];
-    protected $casts = ['activity_category' => ActivityCategory::class,, 'archived' => 'boolean'];
+    protected $casts = ['activity_category' => ActivityCategory::class, 'archived' => 'boolean'];
 
     public static function getValidationRules(): array
     {
