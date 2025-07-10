@@ -21,8 +21,7 @@ class OrderCustomerController extends Controller
         $selectedFields = !empty($storedFields)
             ? explode(',', $storedFields)
             : default_customer_fields();
-        $orderCustomers = $order->orderCustomers()->orderBy('id')->get();
-        return view('pages.admin.order.customer.view', ['orderCustomer' => $orderCustomer, 'customerFields' => $selectedFields, 'orderCustomers' => $orderCustomers,]);
+        return view('pages.admin.order.customer.view', ['orderCustomer' => $orderCustomer, 'customerFields' => $selectedFields]);
     }
 
     public function loadTourComponents(Order $order, OrderCustomer $orderCustomer)

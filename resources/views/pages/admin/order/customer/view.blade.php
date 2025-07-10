@@ -148,34 +148,9 @@
         </div>
     </div>
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;">
-
-    @php
-        $customerIds = $orderCustomers->pluck('id')->values();
-        $currentIndex = $customerIds->search($orderCustomer->id);
-
-        $prevCustomer = $orderCustomers->firstWhere('id', $customerIds->get($currentIndex - 1));
-        $nextCustomer = $orderCustomers->firstWhere('id', $customerIds->get($currentIndex + 1));
-    @endphp
-
-    <div class="d-flex justify-content-between align-items-center pt-2 pb-md-3 pb-2 heading mb-3">
-        <h2 class="fw-bold mb-0"><i class="fas fa-user me-2 text-primary"></i>Customer</h2>
-        <div class="d-flex gap-2">
-            @isset($prevCustomer)
-                <a href="{{ route('order-customers.view', ['order' => $orderCustomer->order, 'orderCustomer' => $prevCustomer]) }}"
-                class="btn btn-link text-decoration-none text-primary fw-semibold px-2" title="Previous Customer">
-                    <i class="fas fa-arrow-left me-1"></i> Previous
-                </a>            
-            @endisset
-            @isset($nextCustomer)
-                <a href="{{ route('order-customers.view', ['order' => $orderCustomer->order, 'orderCustomer' => $nextCustomer]) }}"
-                class="btn btn-link text-decoration-none text-primary fw-semibold px-2" title="Next Customer">
-                    Next <i class="fas fa-arrow-right ms-1"></i>
-                </a>            
-            @endisset
-        </div>
+    <div class="heading pt-2 pb-md-3 pb-2">
+        <h2 class="fw-bold">Customer</h2>
     </div>
-
-
     <div class="otm-callout">
         <div class="row">
             <!-- Customer Details -->
