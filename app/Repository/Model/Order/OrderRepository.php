@@ -715,6 +715,10 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         foreach ($this->order->tour?->costs()->where('per_customer', '=', false)->get() ?? [] as $item) {
             $cost += $item->amount;
         }
+
+        if ($this->order->total_manual_cost > 0) {
+            $cost += $this->order->total_manual_cost;
+        }
         return sigfig($cost);
     }
 
@@ -750,6 +754,19 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
                 $string .= "adjustments";
             } elseif ($this->order->commission_amount > 0) {
                 $string .= "commission";
+            }
+            return $string;
+        }
+        return null;
+    }
+
+    public function getCostBeforeString(): string|null
+    {
+        if ($this->order->total_manual_cost > 0) {
+            $cost_to_company = $this->getCostToCompany() - $this->order->total_manual_cost;
+            $string = fr_currency($cost_to_company, $this->order->currency) . " before ";
+            if ($this->order->total_manual_cost > 0) {
+                $string .= "adjustments";
             }
             return $string;
         }
