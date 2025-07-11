@@ -301,6 +301,8 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
 </div>
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;">
 
+@include('partials.admin.order.order-components', ['order' => $order])
+
 <div class="heading pt-2 pb-md-3 pb-2">
     <h2 class="fw-bold">Billing & Payments</h2>        
 </div>
