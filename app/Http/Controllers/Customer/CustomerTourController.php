@@ -89,6 +89,13 @@ class CustomerTourController extends CustomerController
         return (new ItineraryRepository($orderCustomer->order))->getResponseStream($orderCustomer);
     }
 
+    public function downloadPreview(?Order $reference = null, ?Customer $customer = null): StreamedResponse
+    {
+        $orderCustomer = $this->getOrderCustomer($reference, $customer);
+        if (!isset($orderCustomer)) { abort(404); }
+        return dompdf(view('pdf.quotes.itinerary', ['itinerary' => $orderCustomer->order->repository->getReservationDocument(), 'type' => 'Reservation']));
+    }
+
     public function showExtras(?Order $reference = null, ?Customer $customer = null)
     {
         $orderCustomer = $this->getOrderCustomer($reference, $customer);

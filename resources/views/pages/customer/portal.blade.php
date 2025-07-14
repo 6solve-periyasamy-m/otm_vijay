@@ -24,7 +24,9 @@
     @endphp
     <div class="tours_list">
         <div class="upcoming_tours">
-            <h2>Upcoming Trips <span class="tours_count">{{ $upcomingOrders->count() }}</span></h2>
+            @if($upcomingOrders->count() > 0)
+                <h2>Upcoming Trips <span class="tours_count">{{ $upcomingOrders->count() }}</span></h2>
+            @endif
             @foreach($upcomingOrders as $kupcom => $vupcom)
                 <div class="event_list">
                     <div class="event_image_title">
@@ -45,18 +47,29 @@
                                 <p class="view_details"><a href="itinerary/{{$vupcom->booking_reference }}/{{$orderCustomer->customer_id }}"> VIEW DETAILS <img src="{{ asset('images/customer/images/arrow_right.svg') }}" /></a></p>
                             </div> 
                     </div>
-                    <div class="common_btn"><a href="{{ route('customer.itinerary.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" target="_blank">
-                        <img src="{{ asset('images/customer/images/download_icon.svg') }}" />DOWNLOAD ITINERARY</a>
+                    <div class="common_btn d-inline">
+                        <p><a href="{{ route('customer.itinerary.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" target="_blank">
+                            <img src="{{ asset('images/customer/images/download_icon.svg') }}" />DOWNLOAD ITINERARY
+                        </a></p>
+                        <p><a href="{{ route('customer.preview.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" target="_blank">
+                            <img src="{{ asset('images/customer/images/download_icon.svg') }}" />ORDER CONFIRMATION
+                        </a></p>
                     </div>
                 </div>
                 <hr>
             @endforeach
         </div>
+
         <div class="upcoming_payments">
             <h2>Upcoming Payments <span class="tours_count">{{ $customer->orderCustomers->count() }}</span></h2>
-              @foreach($customer->orderCustomers as $orderCustomer)
-                    <div class="event_list">
-                        <div class="event_image_title">
+            <div class="past_tour_row">
+                @foreach($customer->orderCustomers as $orderCustomer)
+                    @php
+                        $toSystem = \Settings::getConversionRate($orderCustomer->order->currency, \Settings::currency());
+                        $nonSystem = $orderCustomer->order->currency !== null && $orderCustomer->order->currency !== Settings::currency();
+                    @endphp
+                    <div class="past_tours_column pb-2">
+                        <div class="past_image_title">
                             @php
                                 if (!empty($vupcom->tour->event->image_url)){
                                     $evenImg2 = $vupcom->tour->event->image_url;
@@ -64,17 +77,42 @@
                                     $evenImg2 = 'images/default_image.png';
                                 }
                             @endphp
-                            <div class="event_img"><img src="{{asset($evenImg2)}}" alt="{{ $orderCustomer->order->tour?->event?->name }}"/></div>
-                            <div class="title_date">
-                                <!-- <button class="overdue_btn"><h6 class="badge badge-{{ $orderCustomer->order->status->color() }} fw-bold">{{ $orderCustomer->order->status->description() }}</h6></button> -->
-				                <h6 class=" badge badge-{{ $orderCustomer->order->status->color() }} fw-bold overdue_btn">{{ $orderCustomer->order->status->description() }}</h6>
-                                <h4>{{ $orderCustomer->order->tour?->event?->name}}</h4>                            
-                                <p>{{ $orderCustomer->order->tour?->name ?? "Tour Deleted" }}</p>
-                                <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />
-                                {{ Carbon::parse($orderCustomer->order->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($orderCustomer->order->tour->date_to)->format('d M Y')}}</p>
+                            <div class="tour_event_img"><img src="{{asset($evenImg2)}}" alt="{{ $orderCustomer->order->tour?->event?->name }}"/></div>
+                            <div class="event_title_date pb-0">
+                                <h4>{{ $orderCustomer->order->tour?->event?->name}}</h4>                                
+                                @if($orderCustomer->order->tour)
+                                    <a href="itinerary/{{$orderCustomer->order->booking_reference }}/{{$orderCustomer->customer_id }}" class="view_details">
+                                        {{ $orderCustomer->order->tour->name }}
+                                    </a>
+                                @else
+                                    <p>Tour Deleted</p>
+                                @endif
+                                <p class="calendar_date lh-lg"><img src="{{ asset('images/customer/images/calendar.svg') }}" />
+                                    {{ Carbon::parse($orderCustomer->order->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($orderCustomer->order->tour->date_to)->format('d M Y')}}
+                                </p>
+                                @if($vupcom->tour->city != '' && optional(Country::find($vupcom->tour->country_id))->name != '' )
+                                    <p class="event_location"><img src="{{ asset('images/customer/images/location.svg') }}" />
+                                        {{ $vupcom->tour->city }},{{ optional(Country::find($vupcom->tour->country_id))->name }}
+                                    </p>
+                                @endif
+                                <p>                                    
+                                    @if($orderCustomer->order->next_installment !== null)
+                                        Payment Due: {{ \Carbon\Carbon::parse($orderCustomer->order->next_installment->due_on)->format('d M Y') }} - {{fr_currency($orderCustomer->order->next_installment->remaining, $orderCustomer->order->currency)}}
+                                        @if($nonSystem) ({{ fr_currency($orderCustomer->order->next_installment->remaining * $toSystem, Settings::currency()) }}) @endif
+                                    @else
+                                        All installments paid
+                                    @endif
+                                </p>
                             </div> 
                         </div>
-                        @if(str_contains($orderCustomer->order->status->description(), 'Outstanding'))
+                        @php
+                            $hrefdata = url('/customer/finances/invoice/' .  $orderCustomer->order->booking_reference);
+                        @endphp
+                        <div class="common_btn">
+                            <a class="cta_space" href="{{ route('customer.itinerary.download', ['reference' => $orderCustomer->order->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> ITINERARY</a>
+                            <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn cta_space"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> INVOICE</a>
+                        </div>
+                        @if($orderCustomer->order->next_installment !== null)
                             @php
                                 $paymentDetails = collect([
                                     $orderCustomer->order->payment_details,
@@ -83,9 +121,8 @@
                                     setting('company.bank_transfer')
                                 ])->first(fn($value) => !empty($value));
                             @endphp
-                            <div class="common_btn">
-                                <span class="dollar_amount">{{ fr_currency($orderCustomer->order->cache->total_owed, $orderCustomer->order->currency, false, 0) }}</span>
-                                <a href="javascript:void(0);" class="pay-now-btn"
+                            <div class="common_btn pt-2">
+                                <a href="javascript:void(0);" class="pay-now-btn w-100"
                                 data-order-id="{{ $orderCustomer->order->id }}">
                                 PAY NOW <img src="{{ asset('images/customer/images/arrow_right.svg') }}" />
                                 </a>
@@ -108,8 +145,8 @@
                                             <form class="form-material" action="{{ route('customer.payment.make') }}" method="post">
                                                 {{ csrf_field() }}
                                                 <input type="hidden" name="booking_reference" id="form-booking-reference" value="{{ $orderCustomer->order->booking_reference }}">
-                                                <input type="hidden" name="amount" id="amount" value="{{ $orderCustomer->order->cache->total_owed }}">
-                                                <div class="order_amount">Total amount to pay : {{ fr_currency($orderCustomer->order->cache->total_owed, $orderCustomer->order->currency, false, 0) }} </div>
+                                                <input type="hidden" name="amount" id="amount" value="{{ $orderCustomer->order->next_installment->remaining }}">
+                                                <div class="order_amount">Due amount to pay : {{ fr_currency($orderCustomer->order->next_installment->remaining, $orderCustomer->order->currency, false, 0) }} </div>
                                                 <button type="submit" class="next-button">
                                                     <span>
                                                         <span>CHECKOUT</span>
@@ -129,10 +166,13 @@
                                 </div>
                             </div>
                         @endif
-                    </div>
-                <hr>
-            @endforeach
+                    </div>  
+                @endforeach
+            </div>
+            <hr>
         </div>
+
+
 
         <div class="past_tours">
             <h2>Past Tours</h2>

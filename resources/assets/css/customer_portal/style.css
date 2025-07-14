@@ -1092,3 +1092,28 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
     font-weight: 600;
     margin-top: 2rem !important;
 }
+.view_details {
+    color: #f35b15;
+    text-decoration: none !important;
+}
+
+.pb-10 {
+    padding-bottom: 10px;
+}
+.pb-0 {
+    padding-bottom: 0px;
+}
+.cta_space {
+    width: 159px !important;
+}
+
+.left-side {
+    width: 85%;
+    padding: 0;
+}
+
+.right-side {
+    width: 15%;
+    padding: 0;
+    vertical-align: top;
+}

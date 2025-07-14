@@ -178,19 +178,13 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
 </div> --}}
 
 @if ($dynamic)
-<div class="inner_content">
-    
+<div class="inner_content">    
      <x-customer.overview-top-bar title="Tours" :search="false" />
-    <!-- <div class="overview_top_bar">
-        <p class="overview_title"><span><a href="{{ route('customer.itinerary') }}"><img src="{{ asset('images/customer/images/arrow-left.svg') }}" alt="arrow left"></a></span>{{ $order->tour->name }}  </p>
-        <div class="search_field"><p><input type="text" placeholder="SEARCH"></p></div>
-    </div> -->
     <div class="tours_list_details">
         <div class="upcoming_tours_clock">
             <div class="upcoming_tour_title">
                 <img src="/images/customer/images/clock.svg" alt="clock" />
                 <h6 class="badge badge-{{ $orderCustomer->order->status->color() }} fw-bold ">{{ $orderCustomer->order->status->description() }}</h6>
-                <!-- <img src="/images/customer/images/clock.svg" alt="clock" /><span>UPCOMING TOUR</span> -->
             </div>
             <div class="event_list">
                 <div class="event_image_title">
@@ -202,15 +196,19 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                         }
                     @endphp
                         <div class="event_img"><img src="{{asset($evenImg1)}}" alt="{{ $order->tour->event->name }}"/></div>
-                        <div class="title_date">
-                            <h4>{{ $order->tour->name }} </h4>
+                        <div class="title_date">                            
+                            <h4>{{ $order->tour->event->name }}</h4>
+                            <p>{{ $order->tour->name }} </p>
                             <p class="calendar_date"><img src="{{ asset('/images/customer/images/calendar.svg')}}" />
                               {{ Carbon::parse($order->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($order->tour->date_to)->format('d M Y')}}</p>
                             <!-- <p class="ticket_type"><span>Ticket Type</span><span>Lorem Ipsum</span></p> -->
                             <p class="booking_reference"><span>Booking Reference</span><span>{{$order->booking_reference}}</span></p>
                         </div> 
                 </div>
-                <div class="common_btn"><a href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" />DOWNLOAD ITINERARY</a></div>
+                <div class="common_btn d-inline">
+                    <p><a href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" />DOWNLOAD ITINERARY</a></p>
+                    <p><a href="{{ route('customer.preview.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" />ORDER CONFIRMATION</a></p>
+                </div>
             </div>
         </div>
         <div class="customer_details">
@@ -255,18 +253,16 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
         </div>
         <hr>
         @endif
-        @if($orderCustomer->travel_insurer)
+        {{-- @if($orderCustomer->travel_insurer)
         <div class="travel_insurance name_address_font">
-            <div class="travel_title_btn"><h2>Travel Insurance</h2> 
-                    <!-- <div class="common_btn"><a href=""><img src="/images/customer/images/download_icon.svg" />DOWNLOAD INSURANCE</a></div> -->
+            <div class="travel_title_btn"><h2>Travel Insurance</h2></div>
+            <div class="lead_guest">
+                <div><span class="traveler_name">Traveler Name</span><span>{{ $orderCustomer->travel_insurer ?? '-' }}</span></div>
+                <div><span class="policy_no">Policy Number</span><span>{{ $orderCustomer->policy_number ?? '-'}} </span></div>
             </div>
-                <div class="lead_guest">
-                    <div><span class="traveler_name">Traveler Name</span><span>{{ $orderCustomer->travel_insurer ?? '-' }}</span></div>
-                    <div><span class="policy_no">Policy Number</span><span>{{ $orderCustomer->policy_number ?? '-'}} </span></div>
-                </div>
         </div>
-            <hr />
-        @endif
+        <hr />
+        @endif --}}
         {{--<div class="optional_add_ons name_address_font">
             <h2>Optional add-ons & upgrades</h2>
             @foreach($orderCustomer->orderActivities as $orderActivity)
@@ -399,28 +395,6 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                 <div><h2>Trip itinerary and inclusions</h2></div>
             <div><div class="common_btn"><a href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" />DOWNLOAD ITINERARY</a></div></div>
             </div>            
-            <!-- <div class="trip_days">
-                <div class="date_details">DAY 01 - Thursday 28th July 2024</div>
-                <h5>Outbound Flight</h5>
-                <div class="trip_details">
-                    <div><span class="left_label_column">Airline</span><span>RyanAir</span></div>
-                    <div><span class="left_label_column">Details</span><span>London Heathrow Airport to O.R. Tambo International Airport</span></div>
-                    <div><span class="left_label_column">Travel Class</span><span>Economy</span></div>
-                    <div><span class="left_label_column">Date & Time</span><span>28.07.2022 10:00 to 28.07.2022 17:00</span></div>
-                </div>
-            </div>
-            <div class="trip_days">
-                <div class="date_details">DAY 02 - Friday 29th July 2024</div>
-                <h5>Accommodation</h5>
-                <div class="trip_details">
-                    <div><span class="left_label_column">Hotel</span><span>Signature Lux Hotel by ONOMO Foreshore</span></div>
-                    <div><span class="left_label_column">No. of nights</span><span>1</span></div>
-                    <div><span class="left_label_column">Address</span><span>31A Heerengracht Street, Roggebaai Square, Cape Town, South Africa, 8001</span></div>
-                    <div><span class="left_label_column">Quantity</span><span>1</span></div>
-                    <div><span class="left_label_column">Date & Time</span><span>29.07.2022 19:00 to 30.07.2022 09:00</span></div>
-                </div>
-            </div> -->
-            {{-- dd($orderCustomer->repository->getComponentsForItinerary()) ---}}
             @php
                 $groupedByDate      = [];
                 $accommodationdata  = [];

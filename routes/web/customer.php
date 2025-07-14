@@ -27,6 +27,7 @@ Route::middleware('auth:customer')->group(function () {
     Route::post('/payment/make', [CustomerFinancesController::class, 'makePayment'])->name('payment.make');
     Route::get('/finances/invoice/{reference}', [CustomerFinancesController::class, 'showInvoice'])->name('invoice');
     Route::get('/download/itinerary/{reference?}/{customer?}', [CustomerTourController::class, 'downloadItinerary'])->name('itinerary.download');
+    Route::get('/download/preview/{reference?}/{customer?}', [CustomerTourController::class, 'downloadPreview'])->name('preview.download');
     Route::get('/itinerary/{reference?}/{customer?}', [CustomerTourController::class, 'showItinerary'])->name('itinerary');
     Route::get('/extras/{reference?}/{customer?}', [CustomerTourController::class, 'showExtras'])->name('extras');
     Route::get('/extras/purchase/{reference}/{componentType}/{componentId}/{customer?}', [CustomerTourController::class, 'purchaseExtra'])->name('extras.purchase');

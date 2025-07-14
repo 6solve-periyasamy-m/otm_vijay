@@ -9,64 +9,6 @@
 @endphp
 
 @section('content')
-   {{-- <div class="row payment-balance">
-        <div class="col-12">
-            <form class="form-horizontal mx-2">
-                <div class="form-group finances-select-wrapper">
-                    <p class="mb-0  heading">Select Order</p>
-                    <select class="form-select order-select" onchange="onOrderChange();" id="booking_reference">
-                        @foreach($orders as $selector)
-                            <option value='{{ $selector->booking_reference }}'>{{ $selector->tour->name }}
-                                ({{ $selector->booking_reference }})
-                                @if($selector->cancelled)
-                                    (Cancelled)
-                                @endif
-                            </option>
-                        @endforeach
-                    </select>
-                    <a href="#" target="_blank" class="invoice btn btn-primary">View Invoice</a>
-                </div>
-            </form>
-        </div>
-        @foreach($orders as $selector)
-            @include('partials.customer.finances.block', ['order' => $selector,])
-        @endforeach
-        @if($gateways)
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <p class="heading">Make Payment</p>
-                            <div class="col-md-12">
-                                <form class="form-material" action="{{ route('customer.payment.make') }}" method="post">
-                                    {{ csrf_field() }}
-                                    <input type="hidden" name="booking_reference" id="form-booking-reference">
-                                    <div class="row">
-                                        <x-customer.input name="amount" :width="10">
-                                            Enter Amount
-                                        </x-customer.input>
-                                        <div class="col-12 col-xl-2 d-flex justify-content-center align-items-center">
-                                            <button type="submit" class="btn btn-primary">Make Payment</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @else
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <p class="heading">This operator has not enabled online payments</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
-    </div> --}}
     <div class="inner_content">
         <x-customer.overview-top-bar title="Finances" :search="false" />
         <div class="tours_list">
@@ -127,89 +69,97 @@
                             </div>                                            
                         </div>
                         <div class="event_invoice_details">
-                            <table class="invoice_tbl">
+                            <table>
                                 <tr>
-                                    <th>DUE DATE</th> 
-                                    <th>STATUS</th>
-                                    <th>AMOUNT</th> 
-                                    <th>Type</th>
-                                    <th></th>
-                                </tr>
-                                @php
-                                    $hrefdata = url('/customer/finances/invoice/' .  $order->booking_reference);
-                                    //$invoice = Invoice::where('order_id',$order->id ?? '')->latest()->first();
-                                    //$tddata  = '<td> INVOICE #'.optional($order->invoices->last())->invoice_number ?? '0'.' </td>';
-                                     $tddata  ='';
-                                    $img_url = asset('images/customer/images/download_icon.svg');
-                                    $tdinv   = '<td><p class="view_details"><a href="'.$hrefdata.'" target="_blank">VIEW INVOICE <img src="'.$img_url.'" /></a></p></td>';
-                                @endphp
-                                <tr>
-                                @if(($order->booking_fee ?? 0) > 0)
-                                        {!! $tddata !!}
-                                        <td data-content="Due By" class="fw-bold">With Order</td>
-                                        <td data-content="Type">Booking Fee</td>
-                                        <td data-content="Amount Due">{{ f_currency($order->booking_fee) }}</td>
-                                        <td data-content="Outstanding">
-                                            @php $amount = $order->booking_fee - min($order->paid, $order->booking_fee); @endphp
-                                            @if($amount <= 0)
-                                                <p class="paid">Paid</p> 
-                                            @else
-                                            <!-- <p class="unpaid"> {{ f_currency($amount) }}</p> -->
-                                             <p class="unpaid badge badge-warning fw-bold overdue_btn">Un Paid</p>
+                                    <td class="left-side">
+                                        <!-- Left Side -->
+                                        <table class="invoice_tbl" style="width: 100%;">
+                                            <tr>
+                                                <th>DUE DATE</th> 
+                                                <th>STATUS</th>
+                                                <th>AMOUNT</th> 
+                                                <th>Type</th>
+                                            </tr>
+                                            @php
+                                                $hrefdata = url('/customer/finances/invoice/' .  $order->booking_reference);
+                                                //$invoice = Invoice::where('order_id',$order->id ?? '')->latest()->first();
+                                                //$tddata  = '<td> INVOICE #'.optional($order->invoices->last())->invoice_number ?? '0'.' </td>';
+                                                $tddata  ='';
+                                                $img_url = asset('images/customer/images/download_icon.svg');
+                                                //$tdinv   = '<td><p class="view_details"><a href="'.$hrefdata.'" target="_blank">VIEW INVOICE <img src="'.$img_url.'" /></a></p></td>';
+                                                $tdinv ='';
+                                            @endphp
+                                            <tr>
+                                            @if(($order->booking_fee ?? 0) > 0)
+                                                    {!! $tddata !!}
+                                                    <td data-content="Due By" class="fw-bold">With Order</td>
+                                                    <td data-content="Type">Booking Fee</td>
+                                                    <td data-content="Amount Due">{{ f_currency($order->booking_fee) }}</td>
+                                                    <td data-content="Outstanding">
+                                                        @php $amount = $order->booking_fee - min($order->paid, $order->booking_fee); @endphp
+                                                        @if($amount <= 0)
+                                                            <p class="paid">Paid</p> 
+                                                        @else
+                                                        <p class="unpaid badge badge-warning fw-bold overdue_btn">Un Paid</p>
+                                                        @endif
+                                                    </td>
+                                                </tr>
                                             @endif
-                                        </td>
+                                            @if(($order->deposit ?? 0) > 0)
+                                                {!! $tddata !!}
+                                                <td data-content="Due By" class="fw-bold">With Order</td>
+                                                <td data-content="Type">Deposit</td>
+                                                <td data-content="Amount Due">{{ f_currency($order->calculated_deposit) }}</td>
+                                                <td data-content="Outstanding">
+                                                    @php $amount = $order->calculated_deposit - min(($order->paid - ($order->booking_fee ?? 0)), $order->calculated_deposit); @endphp
+                                                    @if($amount <= 0)
+                                                        <p class="paid">Paid</p> 
+                                                    @else
+                                                        <p class="unpaid badge badge-warning fw-bold overdue_btn">Un Paid</p>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            @endif
+                                            @foreach($order->installments as $installment)
+                                                {!! $tddata !!}
+                                                <td data-content="Due By" class="fw-bold">{{ f_date($installment->due_on) }}</td>
+                                                <td data-content="Type">Instalment</td>
+                                                <td data-content="Amount Due">{{ f_currency($installment->calculated_amount) }}</td>
+                                                <td data-content="Outstanding">
+                                                    @php $amount = $installment->calculated_amount - $installment->repository->getAmountPaid(); @endphp
+                                                    @if($amount <= 0)
+                                                        <p class="paid">Paid</p> 
+                                                    @else
+                                                        <p class="unpaid badge badge-warning fw-bold overdue_btn">Un Paid</p>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                                {!! $tddata !!}
+                                                <td data-content="Due By" class="fw-bold">{{ f_date($order->tour->final_payment) }}</td>
+                                                <td data-content="Type">Remaining</td>
+                                                <td data-content="Amount Due">{{ f_currency($order->remaining_installment) }}</td>
+                                                <td data-content="Outstanding">
+                                                    @php $amount = min($order->remaining, $order->remaining_installment); @endphp
+                                                    @if($amount <= 0)
+                                                        <p class="paid">Paid</p> 
+                                                    @else
+                                                        <p class="unpaid badge badge-warning fw-bold overdue_btn">Un Paid</p>
+                                                    @endif
+                                                </td>
+                                            </tr>                                
+                                        </table>
+                                        <!-- End of Left Side --> 
+                                    </td>
+                                    <td class="right-side">
+                                        @php
+                                            $hrefdata = url('/customer/finances/invoice/' .  $order->booking_reference);
+                                            $img_url = asset('images/customer/images/download_icon.svg');
+                                            $tdinv   = '<p class="view_details"><a href="'.$hrefdata.'" target="_blank">VIEW INVOICE <img src="'.$img_url.'" /></a></p>';
+                                        @endphp
                                         {!! $tdinv !!}
-                                    </tr>
-                                @endif
-                                @if(($order->deposit ?? 0) > 0)
-                                    {!! $tddata !!}
-                                    <td data-content="Due By" class="fw-bold">With Order</td>
-                                    <td data-content="Type">Deposit</td>
-                                    <td data-content="Amount Due">{{ f_currency($order->calculated_deposit) }}</td>
-                                    <td data-content="Outstanding">
-                                        @php $amount = $order->calculated_deposit - min(($order->paid - ($order->booking_fee ?? 0)), $order->calculated_deposit); @endphp
-                                        @if($amount <= 0)
-                                            <p class="paid">Paid</p> 
-                                        @else
-                                            <!-- <p class="unpaid">{{ f_currency($amount) }}</p>   -->
-                                             <p class="unpaid badge badge-warning fw-bold overdue_btn">Un Paid</p>
-                                        @endif
                                     </td>
-                                    {!! $tdinv !!}
                                 </tr>
-                                @endif
-                                @foreach($order->installments as $installment)
-                                    {!! $tddata !!}
-                                    <td data-content="Due By" class="fw-bold">{{ f_date($installment->due_on) }}</td>
-                                    <td data-content="Type">Instalment</td>
-                                    <td data-content="Amount Due">{{ f_currency($installment->calculated_amount) }}</td>
-                                    <td data-content="Outstanding">
-                                        @php $amount = $installment->calculated_amount - $installment->repository->getAmountPaid(); @endphp
-                                        @if($amount <= 0)
-                                            <p class="paid">Paid</p> 
-                                        @else
-                                            <!-- <p class="unpaid">{{ f_currency($amount) }}</p> -->
-                                             <p class="unpaid badge badge-warning fw-bold overdue_btn">Un Paid</p>
-                                        @endif
-                                    </td>
-                                    {!! $tdinv !!}
-                                </tr>
-                                @endforeach
-                                    {!! $tddata !!}
-                                    <td data-content="Due By" class="fw-bold">{{ f_date($order->tour->final_payment) }}</td>
-                                    <td data-content="Type">Remaining</td>
-                                    <td data-content="Amount Due">{{ f_currency($order->remaining_installment) }}</td>
-                                    <td data-content="Outstanding">
-                                        @php $amount = min($order->remaining, $order->remaining_installment); @endphp
-                                        @if($amount <= 0)
-                                            <p class="paid">Paid</p> 
-                                        @else
-                                            <!-- <p class="unpaid">{{ f_currency($amount) }}</p> -->
-                                             <p class="unpaid badge badge-warning fw-bold overdue_btn">Un Paid</p>
-                                        @endif
-                                    </td>
-                                    {!! $tdinv !!}
-                                </tr>                                
                             </table>
                         </div>
                     </div>
