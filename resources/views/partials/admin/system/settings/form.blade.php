@@ -177,6 +177,7 @@
                 @if(config('app.features.kpt', false) || config('app.features.bleeding-edge'))
                     @include('partials.fields.checkbox', ['name' => 'Enable sending itinerary document emails.', 'field' => 'itinerary_document_mail_enabled', 'value' => flag('itinerary.document.mail.enabled', false),])
                 @endif
+                @include('partials.fields.checkbox', ['name' => 'Show Currency Code Before Symbol', 'field' => 'show_currency_code', 'value' => flag('currency.code.show', false),])
             </div>
     </x-admin.section.card>
     </div>

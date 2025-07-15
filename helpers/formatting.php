@@ -47,7 +47,8 @@ if (!function_exists('fr_currency')) {
         if ($currency === 'SGD') {
             $formatted = preg_replace('/^SGD\s*/', '$', $formatted);
         }
-        return $formatted;
+        $code = flag('currency.code.show', false) ? "{$currency} " : "";
+        return $code . $formatted;
     }
 }
 if (!function_exists('f_date')) {
