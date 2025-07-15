@@ -47,12 +47,20 @@
                                 <p class="view_details"><a href="itinerary/{{$vupcom->booking_reference }}/{{$orderCustomer->customer_id }}"> VIEW DETAILS <img src="{{ asset('images/customer/images/arrow_right.svg') }}" /></a></p>
                             </div> 
                     </div>
-                    <div class="common_btn d-inline">
+                    {{-- <div class="common_btn d-inline">
                         <p><a href="{{ route('customer.itinerary.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" target="_blank">
                             <img src="{{ asset('images/customer/images/download_icon.svg') }}" />DOWNLOAD ITINERARY
                         </a></p>
                         <p><a href="{{ route('customer.preview.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" target="_blank">
                             <img src="{{ asset('images/customer/images/download_icon.svg') }}" />RESERVATION DOCUMENT
+                        </a></p>
+                    </div> --}}
+                    <div class="common_btn d-inline">
+                        <p><a href="{{ route('customer.itinerary.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" class="download_itinerary_link" target="_blank">
+                            <img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/>DOWNLOAD ITINERARY
+                        </a></p>
+                        <p><a href="{{ route('customer.preview.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" class="reservation_doc_link" target="_blank">
+                            <img src="{{ asset('images/customer/images/download_icon.svg') }}" class="reservation_org_icn" /><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="reservation_wht_icn"/>RESERVATION DOCUMENT
                         </a></p>
                     </div>
                 </div>
@@ -128,10 +136,17 @@
                                     setting('company.bank_transfer')
                                 ])->first(fn($value) => !empty($value));
                             @endphp
-                            <div class="common_btn pt-2">
+                            {{--<div class="common_btn pt-3">
                                 <a href="javascript:void(0);" class="pay-now-btn w-100"
                                 data-order-id="{{ $orderCustomer->order->id }}">
                                 PAY NOW <img src="{{ asset('images/customer/images/arrow_right.svg') }}" />
+                                </a>
+                            </div>--}}
+                            <div class="common_btn pt-3">
+                                <a href="javascript:void(0);" class="pay-now-btn w-100"
+                                data-order-id="{{ $orderCustomer->order->id }}">
+                                PAY NOW <img src="{{ asset('images/customer/images/arrow_right.svg') }}" class="pay_right_arrow_org" />
+                                <img src="{{ asset('/images/customer/images/arrow_right_white.svg') }}" class="pay_right_arrow_wht" />
                                 </a>
                             </div>
                             <div id="payment-details-{{ $orderCustomer->order->id }}" class="payment-details" style="display:none;">

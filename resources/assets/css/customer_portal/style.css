@@ -119,9 +119,9 @@ transition: all 0.8s ease;
 .past_tours_column .common_btn a.invoice_btn:hover::before{
     margin-left: 30px !important;
 }
-.upcoming_payments .common_btn a img{margin-top: -5px;}
+.upcoming_payments .common_btn a img{margin-top: -3px;}
 .upcoming_payments .common_btn a,.your_details_colm_2{position: relative;}
-.upcoming_payments .common_btn a:hover::before{
+/* .upcoming_payments .common_btn a:hover::before{
     content: url(/images/customer/images/arrow_right_white.svg);
     display: block;
     width: 16px;
@@ -130,7 +130,7 @@ transition: all 0.8s ease;
     top: 9px;
     right: 30px;
     left: unset;
-}
+} */
 .facebook_icon a:hover::before{
     content: url(/images/customer/images/facebook_blue.svg);
     display: block;
@@ -312,10 +312,12 @@ transition: all 0.8s ease;
 .upcoming_tours_clock{padding: 32px;margin: 16px 0px 48px 0px;background-color: #F9F4EE;border-radius: 24px;border:2px solid #F35B15;}
 .ticket_type,.booking_reference{margin-bottom: 12px;}
 .upcoming_tours_clock .calendar_date{margin-bottom: 16px !important;}
-.ticket_type span,.booking_reference span{font-family: 'PP Neue Montreal';font-size: 14px;line-height: 15px;margin-left: 10px;}
+.booking_reference span,.ticket_type span{font-family: 'PP Neue Montreal';font-size: 14px;line-height: 15px;}
+.ticket_type span:nth-child(2),.booking_reference span:nth-child(2){margin-left: 10px;}
 .ticket_type span:first-child,.booking_reference span:first-child,.left_label_column{opacity: 60%;}
 .customer_details h5,.ticket_upgrade_colm h5,.stay_extra_colm h5,.contact_us_text p,.your_details_row h5{font-family: 'PP Neue Montreal';font-size: 14px;line-height: 16px;text-decoration: none;color: #F35B15;margin-bottom: 16px;}
-.guests_row,.img_title_date_btn_1,.img_title_date_btn_2,.add_ons_image_date{ display: flex;justify-content: space-between;column-gap: 12px; flex-flow: wrap;row-gap: 12px;}
+.img_title_date_btn_1,.img_title_date_btn_2,.add_ons_image_date{ display: flex;justify-content: space-between;column-gap: 12px; flex-flow: wrap;row-gap: 12px;}
+.guests_row{ display: grid; grid-template-columns: 1fr 1fr 1fr;gap: 12px;}
 .guest_colm_email{width: 30%;}
 .guests_row span:first-child,.lead_guest span:first-child{opacity: 60%;}
 .guest_email input{
@@ -1153,3 +1155,12 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
     font-size: smaller;
     color: #FF0000;
 }
+
+.pay-now-btn:hover .pay_right_arrow_org,.pay_right_arrow_wht{display: none;}
+.pay-now-btn:hover .pay_right_arrow_wht,
+.common_btn .download_itinerary_link:hover .download_itinerary_wht_icn,
+.common_btn .reservation_doc_link:hover .reservation_wht_icn{display: block;}
+.common_btn .pay-now-btn:hover::before,.common_btn .download_itinerary_link:hover::before
+,.common_btn .reservation_doc_link:hover::before{display: none;}
+.download_itinerary_wht_icn,.reservation_doc_link .reservation_wht_icn,.download_itinerary_link:hover .download_itinerary_org_icn,
+.reservation_doc_link:hover .reservation_org_icn{display: none;}
