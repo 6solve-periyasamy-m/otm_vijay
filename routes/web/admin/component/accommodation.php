@@ -4,9 +4,9 @@
 use App\Actions\Accommodation\DeleteAccommodation;
 use App\Http\Controllers\Admin\Accommodation\AccommodationController;
 use App\Http\Controllers\Admin\Accommodation\AccommodationInventoryController;
+use App\Http\Controllers\Admin\Accommodation\AccommodationTypeController;
 use App\Http\Controllers\Admin\Accommodation\BoardTypeController;
 use App\Http\Controllers\Admin\Accommodation\RoomTypeController;
-use App\Http\Controllers\Admin\Accommodation\AccommodationTypeController;
 
 Route::get('/', [AccommodationController::class, 'index'])->name('accommodations.all')->middleware('bouncer:Accommodation\Accommodation,read');
 Route::get('/create', [AccommodationController::class, 'create'])->name('accommodations.create')->middleware('bouncer:Accommodation\Accommodation,create');
@@ -15,6 +15,7 @@ Route::get('/identifiers', [AccommodationInventoryController::class, 'exportIden
 Route::post('/delete', DeleteAccommodation::class)->name('accommodations.delete');
 Route::prefix('{accommodation}')->group(function () {
     Route::get('/', [AccommodationController::class, 'view'])->name('accommodations.view')->middleware('bouncer:Accommodation\Accommodation,read');
+    Route::get('/duplicate', [AccommodationController::class, 'duplicate'])->name('accommodations.duplicate')->middleware('bouncer:Accommodation\Accommodation,create');
     Route::get('/update', [AccommodationController::class, 'edit'])->name('accommodations.edit')->middleware('bouncer:Accommodation\Accommodation,update');
     Route::post('/update', [AccommodationController::class, 'update'])->name('accommodations.update')->middleware('bouncer:Accommodation\Accommodation,update');
     Route::get('/rooming', [AccommodationController::class, 'rooming'])->name('accommodations.rooming')->middleware('bouncer:Accommodation\Accommodation,read');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Transport;
 use App\Http\Controllers\Controller;
 use App\Models\Transport\Transport;
 use App\Repository\Reporting\Manifest\TransportManifestRepository;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -95,5 +96,11 @@ class TransportController extends Controller
         $return->arrival_address_id = $arrival;
         $return->save();
         return redirect()->route('transports.edit', ['transport' => $return,]);
+    }
+
+    public function duplicate(Transport $transport): RedirectResponse
+    {
+        $transport->repository->duplicate(true);
+        return redirect()->route('transports.edit', ['transport' => $transport,]);
     }
 }

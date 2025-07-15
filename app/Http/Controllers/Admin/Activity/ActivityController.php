@@ -8,6 +8,7 @@ use App\Models\Helper\Enum\AddressParent;
 use App\Models\Location\Address;
 use App\Repository\Model\Location\AddressRepository;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -105,5 +106,11 @@ class ActivityController extends Controller
         }
         $activity->save();
         return redirect()->route('activities.view', ['activity' => $activity,]);
+    }
+
+    public function duplicate(Activity $activity): RedirectResponse
+    {
+        $activity->repository->duplicate(true);
+        return redirect()->route('activities.edit', ['activity' => $activity,]);
     }
 }

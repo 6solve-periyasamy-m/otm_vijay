@@ -92,4 +92,10 @@ class FlightController extends Controller
         $returnFlight->save();
         return redirect()->route('flights.edit', ['flight' => $returnFlight,]);
     }
+
+    public function duplicate(Flight $flight): RedirectRespNonse
+    {
+        $flight->repository->duplicate(true);
+        return redirect()->route('flights.edit', ['flight' => $flight,]);
+    }
 }

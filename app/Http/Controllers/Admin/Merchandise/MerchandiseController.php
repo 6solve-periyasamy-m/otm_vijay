@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Merchandise\MerchandiseRequest;
 use App\Models\Merchandise\Merchandise;
 use App\Repository\Model\Merchandise\MerchandiseRepository;
+use Illuminate\Http\RedirectResponse;
 
 class MerchandiseController extends Controller
 {
@@ -48,5 +49,11 @@ class MerchandiseController extends Controller
             return redirect()->route('merchandise.detailed', ['merchandise' => $merchandise,]);
         }
         return redirect()->route('merchandise.view', ['merchandise' => $merchandise,]);
+    }
+
+    public function duplicate(Merchandise $merchandise): RedirectResponse
+    {
+        $merchandise->repository->duplicate(true);
+        return redirect()->route('merchandise.edit', ['merchandise' => $merchandise,]);
     }
 }
