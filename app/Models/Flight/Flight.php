@@ -43,6 +43,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Currency|null $currency
  * @property-read Airport|null $departureAirport
  * @property-read Collection|FlightInventory[] $flightInventory
+ * @property-read Collection|FlightInventory[] $inventory
  * @property-read int|null $flight_inventory_count
  * @property-read string $flight_details
  * @property-read FlightRepository $repository
@@ -109,6 +110,11 @@ class Flight extends Model
     public function flightInventory(): HasMany
     {
         return $this->hasMany(FlightInventory::class, 'flight_id');
+    }
+
+    public function inventory(): HasMany
+    {
+        return $this->flightInventory();
     }
 
     public function arrivalAirport(): BelongsTo
