@@ -39,5 +39,6 @@ mix.copy('resources/assets/js/addons', 'public/js')
     .copy('resources/assets/external-css', 'public/css')
     .copy('resources/assets/css/booking', 'public/css/booking')
     .copy('resources/assets/css/customer_portal', 'public/css/customer')
+    .copy('resources/fonts/customer/font', 'public/fonts/customer/font')
     .setPublicPath('public');
 

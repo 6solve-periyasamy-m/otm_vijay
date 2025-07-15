@@ -319,7 +319,7 @@ transition: all 0.8s ease;
 .guest_colm_email{width: 30%;}
 .guests_row span:first-child,.lead_guest span:first-child{opacity: 60%;}
 .guest_email input{
-    width: 100%;
+    width: 345px;
     background-color: #F9F4EE;
     height: 40px;
     border-radius: 50px;
@@ -1136,4 +1136,20 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
 .btn-warning:active {
     background: rgba(240, 173, 78, 1);
     border-color: rgba(240, 173, 78, 1);
+}
+
+.input-error {
+    border: 1px solid #ff0000 !important;
+    color:#ff0000 !important;
+}
+
+.input-success {
+    border: 1px solid #008000 !important;
+}
+
+.guest_email .input-error-message {
+    display: flex;
+    font-family: 'PP Neue Montreal';
+    font-size: smaller;
+    color: #FF0000;
 }
