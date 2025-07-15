@@ -97,6 +97,7 @@ class SettingsController extends Controller
             'mail.bcc-consultant' => $request->input('bcc_consultant') === 'on' ? 1 : 0,
             'quote.convert.reference' => $request->input('quote_reference') === 'on' ? 1 : 0,
             'booking.deposit.full' => $request->input('deposit_full') === 'on' ? 1 : 0,
+            'currency.code.show' => $request->input('show_currency_code') === 'on' ? 1 : 0,
             'components.lock' => $request->input('components_lock'),
             'passport.lock' => $request->input('passport_lock'),
             'passport.unlock' => $request->input('passport_unlock'),
