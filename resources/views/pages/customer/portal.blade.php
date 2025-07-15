@@ -39,7 +39,7 @@
                         @endphp
                             <div class="event_img"><img src="{{asset($evenImg)}}" alt="{{ $vupcom->tour->event->name }}"/></div>
                             <div class="title_date">
-				                <h6  class="badge badge-{{ $vupcom->status->color() }} fw-bold overdue_btn">{{ $vupcom->status->description() }}</h6>
+				                <h6  class="btn btn-warning">{{ $vupcom->status->description() }}</h6>
                                 <h4>{{ $vupcom->tour?->event?->name}}</h4>                            
                                 <p>{{ $vupcom->tour->name }}</p>
                                 <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />
@@ -52,7 +52,7 @@
                             <img src="{{ asset('images/customer/images/download_icon.svg') }}" />DOWNLOAD ITINERARY
                         </a></p>
                         <p><a href="{{ route('customer.preview.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" target="_blank">
-                            <img src="{{ asset('images/customer/images/download_icon.svg') }}" />ORDER CONFIRMATION
+                            <img src="{{ asset('images/customer/images/download_icon.svg') }}" />RESERVATION DOCUMENT
                         </a></p>
                     </div>
                 </div>
@@ -71,8 +71,8 @@
                     <div class="past_tours_column pb-2">
                         <div class="past_image_title">
                             @php
-                                if (!empty($vupcom->tour->event->image_url)){
-                                    $evenImg2 = $vupcom->tour->event->image_url;
+                                if (!empty($orderCustomer->order->tour->event->image_url)){
+                                    $evenImg2 = $orderCustomer->order->tour->event->image_url;
                                 } else{
                                     $evenImg2 = 'images/default_image.png';
                                 }
@@ -87,12 +87,19 @@
                                 @else
                                     <p>Tour Deleted</p>
                                 @endif
-                                <p class="calendar_date lh-lg"><img src="{{ asset('images/customer/images/calendar.svg') }}" />
-                                    {{ Carbon::parse($orderCustomer->order->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($orderCustomer->order->tour->date_to)->format('d M Y')}}
+                                <p class="calendar_date lh-lg d-flex justify-content-between">
+                                    <span>
+                                        <img src="{{ asset('images/customer/images/calendar.svg') }}" />
+                                        {{ Carbon::parse($orderCustomer->order->tour->date_from)->format('d M Y') }} - 
+                                        {{ Carbon::parse($orderCustomer->order->tour->date_to)->format('d M Y') }}
+                                    </span>                                    
+                                    @if($orderCustomer->order->status->description() == 'Payment Overdue')
+                                        <span class="badge rounded-pill bg-danger lh-sm">{{ $orderCustomer->order->status->description() }}</span>
+                                    @endif
                                 </p>
-                                @if($vupcom->tour->city != '' && optional(Country::find($vupcom->tour->country_id))->name != '' )
+                                @if($orderCustomer->order->tour->city != '' && optional(Country::find($orderCustomer->order->tour->country_id))->name != '' )
                                     <p class="event_location"><img src="{{ asset('images/customer/images/location.svg') }}" />
-                                        {{ $vupcom->tour->city }},{{ optional(Country::find($vupcom->tour->country_id))->name }}
+                                        {{ $orderCustomer->order->tour->city }},{{ optional(Country::find($orderCustomer->order->tour->country_id))->name }}
                                     </p>
                                 @endif
                                 <p>                                    
@@ -172,45 +179,49 @@
             <hr>
         </div>
 
-
-
         <div class="past_tours">
-            <h2>Past Tours</h2>
-            <div class="past_tour_row">
-                @foreach($pastOrders as $kpast => $vpast)
-                    <div class="past_tours_column">
-                        <div class="past_image_title">
-                            @php
-                            if (!empty($vpast->tour->event->image_url)){
-                                $evenImg = $vpast->tour->event->image_url;
-                            } else{
-                                $evenImg = 'images/default_image.png';
-                            }
-                            @endphp
-                            <div class="tour_event_img"><img src="{{asset($evenImg)}}" alt="{{ $vpast->tour?->event?->name }}"/></div>
-                            <div class="event_title_date">
-                                <h4>{{ $vpast->tour?->event?->name}}</h4>
-                                <p>{{ $vpast->tour->name }}</p>
-                                <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />
-                                {{ Carbon::parse($vpast->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($vpast->tour->date_to)->format('d M Y')}}
-                                </p>
-                                @if($vpast->tour->city != '' && optional(Country::find($vpast->tour->country_id))->name != '' )
-                                    <p class="event_location"><img src="{{ asset('images/customer/images/location.svg') }}" />
-                                        {{ $vpast->tour->city }},{{ optional(Country::find($vpast->tour->country_id))->name }}
+            @if($pastOrders->count())
+                <h2>Past Tours</h2>
+                <div class="past_tour_row">
+                    @foreach($pastOrders as $kpast => $vpast)
+                        <div class="past_tours_column">
+                            <div class="past_image_title">
+                                @php
+                                if (!empty($vpast->tour->event->image_url)){
+                                    $evenImg = $vpast->tour->event->image_url;
+                                } else{
+                                    $evenImg = 'images/default_image.png';
+                                }
+                                @endphp
+                                <div class="tour_event_img"><img src="{{asset($evenImg)}}" alt="{{ $vpast->tour?->event?->name }}"/></div>
+                                <div class="event_title_date">
+                                    <h4>{{ $vpast->tour?->event?->name}}</h4>
+                                    <p>{{ $vpast->tour->name }}</p>
+                                    <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />
+                                    {{ Carbon::parse($vpast->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($vpast->tour->date_to)->format('d M Y')}}
                                     </p>
-                                @endif
-                            </div> 
+                                    @if($vpast->tour->city != '' && optional(Country::find($vpast->tour->country_id))->name != '' )
+                                        <p class="event_location"><img src="{{ asset('images/customer/images/location.svg') }}" />
+                                            {{ $vpast->tour->city }},{{ optional(Country::find($vpast->tour->country_id))->name }}
+                                        </p>
+                                    @endif
+                                </div> 
+                            </div>
+                            @php
+                                $hrefdata = url('/customer/finances/invoice/' .  $vpast->booking_reference);
+                            @endphp
+                            <div class="common_btn">
+                                <a href="{{ route('customer.itinerary.download', ['reference' => $vpast->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> ITINERARY</a>
+                                <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> INVOICE</a>
+                            </div>
                         </div>
-                        @php
-                            $hrefdata = url('/customer/finances/invoice/' .  $vpast->booking_reference);
-                        @endphp
-                        <div class="common_btn">
-                            <a href="{{ route('customer.itinerary.download', ['reference' => $vpast->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> ITINERARY</a>
-                            <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> INVOICE</a>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="text-center justify-content-center align-items-center">
+                    <p>No past tours found.</p>
+                </div>
+            @endif
         </div>
     </div>
 </div>

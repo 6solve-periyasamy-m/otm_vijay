@@ -16,7 +16,7 @@
 
 @section('content')
 <div class="inner_content">
-    <x-customer.overview-top-bar title="FAQ" :search="false" />
+    <x-customer.overview-top-bar title="FAQ" :search="false"/>
     <div class="faqs_inner">
         <div class="faqs_list">
             @forelse($faqs as $faq)

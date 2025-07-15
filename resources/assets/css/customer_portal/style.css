@@ -26,7 +26,7 @@
 .menu_list li img,.social_media img,.email_id img,.phone_no img{margin-right: 12px;}
 .email_id,.phone_no{padding-bottom: 12px;} 
 .contact_details a{color: #F35B15;text-decoration: none;}
-.contact_details a,.search_field input,.common_btn a,.calendar_date,.view_details a,.save_changes{font-family: 'PP Neue Montreal';font-size: 14px;font-weight: 500;}
+.contact_details a,.search_field input,.common_btn a,.calendar_date span,.view_details a,.save_changes{font-family: 'PP Neue Montreal';font-size: 14px;font-weight: 500;}
 /*Body inner css*/
 .overview_top_bar{background-color: #F9F4EE;padding: 28px 32px;display: flex;justify-content: space-between;align-items: center;}
 .overview_top_bar p{margin-bottom: 0px;display: flex;align-items: center;}
@@ -76,7 +76,8 @@
     gap: 6px;
     position: relative;
 }
-.common_btn a img,.calendar_date img,.event_location img{margin-right: 10px;}
+.common_btn a img,.event_location img{margin-right: 10px;}
+.calendar_date img {margin-right: 1px;}
 .calendar_date{line-height: 17px;color: #721111;align-items: center;margin-bottom: 24px;}
 .view_details a{color: #F35B15;text-decoration: none;letter-spacing: 2px;}
 hr{color: #F9F4EE;opacity: 1;}
@@ -93,7 +94,7 @@ hr{color: #F9F4EE;opacity: 1;}
 .past_tours_column .common_btn{display: flex;column-gap: 10px;}
 .past_tours_column .common_btn a{width: 145px;padding: 11px 0px !important;text-align: center;}
 .sidebar-header img{width: 100%;}
-.event_img{height: 144px; width:180px;}
+.event_img{height: 175px; width:180px;}
 .event_img img{width: 100%;height: 100%;object-fit: cover;}
 .email_id span:hover,.phone_no span:hover,.contact_details p a:hover{color: #fff;}
 .common_btn a:hover{
@@ -1116,4 +1117,23 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
     width: 15%;
     padding: 0;
     vertical-align: top;
+}
+
+
+.btn-warning {
+    font-size: 13px;
+    color: #000;
+    letter-spacing: 1px;
+    line-height: 15px !important;
+    border: 2px solid rgba(240, 173, 78, 0.75) !important;
+    border-radius: 40px !important;
+    background: rgba(240, 173, 78, 0.75) !important;
+    transition: all 0.3s ease 0s;
+}
+
+.btn-warning:hover,
+.btn-warning:focus,
+.btn-warning:active {
+    background: rgba(240, 173, 78, 1);
+    border-color: rgba(240, 173, 78, 1);
 }

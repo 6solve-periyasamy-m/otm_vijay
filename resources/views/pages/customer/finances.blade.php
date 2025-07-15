@@ -51,7 +51,7 @@
                                 <h6>Booking Reference : {{$order->booking_reference}}</h6>
                                 <div class="order_value_amount">
                                     <div class="total_order">
-                                        <p>{{ f_currency($order->total,true)}}</p>
+                                        <p>{{ fr_currency($order->total, $order->currency, false, 0) }}</p>
                                         <p>Total Order Value</p>
                                     </div>
                                     <div class="total_paid">
