@@ -34,7 +34,7 @@ if (!function_exists('fr_currency')) {
     function fr_currency(?float $amount, Currency|string|null $currency = null): string
     {
         if (!is_string($currency)) $currency = ($currency ?? Settings::currency())?->code;
-        return (new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($amount ?? 0.0, $currency);
+        return $currency . " " . (new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($amount ?? 0.0, $currency);
     }
 }
 if (!function_exists('f_date')) {
