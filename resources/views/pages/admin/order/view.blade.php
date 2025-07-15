@@ -146,9 +146,9 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
         <div class="col-12 col-xl-3">
             <p>Cost to Company</p>
             <h6 class="fw-bold">
-                {{ f_currency($order->repository->getCostToCompany())}}
+                {{ fr_currency($order->repository->getCostToCompany() * $fromSystem, $order->currency) }}
                 @if($nonSystem)
-                    ({{ fr_currency($order->repository->getCostToCompany() * $fromSystem, $order->currency) }})
+                    ({{ f_currency($order->repository->getCostToCompany())}})
                 @else
                     No FX Rate for Conversion
                 @endif
@@ -161,8 +161,8 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
             <p>Current Profit</p>
             <h6 class="fw-bold">
                 @if($order->cache->profit !== null)
-                    {{ f_currency($order->cache->profit)}}
-                    @if($nonSystem) ({{ fr_currency($order->cache->profit * $fromSystem, $order->currency) }}) @endif
+                    {{ fr_currency($order->cache->profit * $fromSystem, $order->currency) }}
+                    @if($nonSystem) ({{ f_currency($order->cache->profit)}}) @endif
                 @else
                     No FX Rate for Conversion
                 @endif
