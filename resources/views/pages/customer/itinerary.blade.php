@@ -177,6 +177,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
     </div></div>
 </div> --}}
 
+
 @if ($dynamic)
 @php
     $eventName = $order->tour->event->name ?? $order->tour->name;
@@ -185,10 +186,11 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
     <x-customer.overview-top-bar title="{{ $eventName }}" :search="false" :back="true" :backUrl="route('customer.itinerary')" />
     <div class="tours_list_details">
         <div class="upcoming_tours_clock">
-            <div class="upcoming_tour_title">
+            {{-- <div class="upcoming_tour_title">
                 <img src="/images/customer/images/clock.svg" alt="clock" />
                 <h6 class="badge badge-{{ $orderCustomer->order->status->color() }} fw-bold ">{{ $orderCustomer->order->status->description() }}</h6>
-            </div>
+            </div> --}}
+            <h6  class="btn btn-warning">{{ $orderCustomer->order->status->description() }}</h6>
             <div class="event_list">
                 <div class="event_image_title">
                     @php 
@@ -919,7 +921,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                     </div>
                     @else
                     <div class="text-center justify-content-center align-items-center" style="height: 100vh;">
-                        <p>No past tours found.</p>
+                        <p>No tours found.</p>
                     </div>
                 @endif
             </div>

@@ -17,7 +17,9 @@
     @php
         $upcomingOrders = $orders->filter(function ($order) {
             return optional($order->tour)->date_to && Carbon::parse($order->tour->date_to)->isFuture();
-        });
+        })->sortBy(function ($order) {
+            return Carbon::parse($order->tour->date_to);
+        })->values();
         $pastOrders = $orders->filter(function ($order) {
             return optional($order->tour)->date_to && Carbon::parse($order->tour->date_to)->isPast();
         });
