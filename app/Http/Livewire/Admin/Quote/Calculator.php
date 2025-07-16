@@ -87,7 +87,7 @@ class Calculator extends Component
 
         $this->markup = sigfig($this->markup ?? ($this->costToCompany == 0 ? 100 : (((($this->total * $this->fromRate) - $this->costToCompany) / $this->costToCompany) * 100)), 6);
 
-        $this->marked_up_price = sigfig(($costPerPerson + ($costPerPerson * ($this->markup / 100))) * ($this->toRate ?? 0.0));
+        $this->marked_up_price = sigfig(($costPerPerson + ($costPerPerson * ($this->markup / 100))));
 
         $roundValue = (float)setting('round.base_price', null);
         if (!empty($roundValue)) {
