@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers\Admin\Activity;
 
+use App\Exports\Inventory\ActivityInventoryExport;
+use App\Http\Controllers\Abstract\ImportsToCollection;
 use App\Http\Controllers\Controller;
+use App\Imports\Inventory\ActivityOverrideImport;
 use App\Models\Activity\Activity;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Location\Address;
 use App\Repository\Model\Location\AddressRepository;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
 class ActivityController extends Controller
 {
+    use ImportsToCollection;
 
     public function index()
     {
@@ -58,6 +63,16 @@ class ActivityController extends Controller
     public function view(Activity $activity)
     {
         return view('pages.admin.activity.view', ['activity' => $activity,]);
+    }
+
+    public function exportInventory(Activity $activity)
+    {
+        return (new ActivityInventoryExport($activity))->download();
+    }
+
+    public function importInventory(Request $request, Activity $activity): RedirectResponse
+    {
+        return $this->import((new ActivityOverrideImport($activity)), $request->file('import'));
     }
 
     public function manifest(Activity $activity)

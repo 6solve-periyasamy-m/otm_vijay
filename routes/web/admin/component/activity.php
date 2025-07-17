@@ -16,6 +16,8 @@ Route::prefix('{activity}')->group(function () {
     Route::get('/manifest/export/{extension?}', [ActivityController::class, 'export'])->name('activities.manifest.export')->middleware('bouncer:Activity\Activity,read');
     Route::get('/update', [ActivityController::class, 'edit'])->name('activities.edit')->middleware('bouncer:Activity\Activity,update');
     Route::post('/update', [ActivityController::class, 'update'])->name('activities.update')->middleware('bouncer:Activity\Activity,update');
+    Route::get('/export', [ActivityController::class, 'exportInventory'])->name('activities.inventory.export')->middleware('bouncer:Activity\ActivityInventory,update');
+    Route::post('/import', [ActivityController::class, 'importInventory'])->name('activities.inventory.import')->middleware('bouncer:Activity\ActivityInventory,update');
     Route::prefix('inventory')->group(function () {
         Route::get('/create', [ActivityInventoryController::class, 'create'])->name('activity-inventories.create')->middleware('bouncer:Activity\ActivityInventory,create');
         Route::post('/create', [ActivityInventoryController::class, 'store'])->name('activity-inventories.store')->middleware('bouncer:Activity\ActivityInventory,create');
