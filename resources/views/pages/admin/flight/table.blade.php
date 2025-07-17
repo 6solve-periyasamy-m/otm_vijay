@@ -9,66 +9,13 @@
         {{ Icon::create() }}
         <span>Create New</span>
     </a>
+    <a class="btn btn-warning float-end" href="{{ route('flights.all', ['archived' => !$archived]) }}">
+        {{ Icon::archive() }}
+        <span>{{ $archived ? "Hide" : "Show" }} Archived</span>
+    </a>
 </x-admin.section.card>
 @endcan
 <x-admin.section.card>
-    <table id="flight" style="width: 100%;" class="datatable table table-striped">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col">Airline</th>
-            <th scope="col">Departure Airport</th>
-            <th scope="col">Arrival Airport</th>
-            <th scope="col">Is Domestic</th>
-            <th scope="col">Available From</th>
-            <th scope="col">Notes</th>
-            <th scope="col">Actions</th>
-        </tr>
-        </thead>
-        @foreach($flights as $flight)
-            <tr>
-                <td><a href="{{ route('flights.view', ['flight' => $flight,]) }}">{{ $flight->airline->name }}</a></td>
-                <td>{{ $flight->departureAirport->name }}</td>
-                <td>{{ $flight->arrivalAirport->name }}</td>
-                <td>{{ $flight->is_domestic ? "Domestic" : "International" }}</td>
-                <td>{{ f_date($flight->available_from) }}</td>
-                <td>{{ $flight->internal_notes }}</td>
-                <td class="actions-3">
-                    @can('create', \App\Models\Flight\Flight::class)
-                        <a href="{{route('flights.return', ['flight' => $flight,])}}" title="Return Trip" class="btn btn-outline-blue btn-sm mb-1">
-                            {{ Icon::returnTrip() }}
-                        </a>
-                    @else
-                        <span class="btn btn-outline-dark btn-sm mb-1">
-                                {{ Icon::returnTrip() }}
-                            </span>
-                    @endcan
-                    @can('update', \App\Models\Flight\Flight::class)
-                        <a href="{{route('flights.edit', ['flight' => $flight,])}}" title="Edit" class="btn btn-outline-success btn-sm mb-1">
-                            {{ Icon::edit() }}
-                        </a>
-                    @else
-                        <span class="btn btn-outline-dark btn-sm mb-1">
-                                {{ Icon::edit() }}
-                            </span>
-                    @endcan
-                    @can('delete', \App\Models\Flight\Flight::class)
-                        <a href="#" class="btn btn-outline-danger btn-sm mb-1" title="Delete"
-                           onclick="event.preventDefault();document.getElementById('flight-{{ $flight->id }}-delete').submit();">
-                            {{ Icon::delete() }}
-                        </a>
-                        <form id="flight-{{ $flight->id }}-delete" action="{{ route('flights.delete') }}" method="POST" style="display: none;">
-                            {{ csrf_field() }}
-                            <input type="hidden" name="id" value="{{ $flight->id }}" />
-                        </form>
-                    @else
-                        <span class="btn btn-outline-dark btn-sm mb-1">
-                            {{ Icon::delete() }}
-                        </span>
-                    @endcan
-                </td>
-            </tr>
-
-        @endforeach
-    </table>
+    <livewire:admin.flight.table :archived="$archived" />
 </x-admin.section.card>
 @endsection

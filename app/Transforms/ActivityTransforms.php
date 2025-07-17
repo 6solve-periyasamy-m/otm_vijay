@@ -67,6 +67,7 @@ class ActivityTransforms implements ActivityTransformsInterface
     {
         $data = [];
         foreach (ActivityInventory::all() as $inventory) {
+            if ($inventory->component->archived) continue;
             $subData = [];
             $subData['id'] = $inventory->id;
             $subData['text'] = $inventory->activity->name . ' - ' . $inventory->activity->activityType->name . ' - ' . $inventory->ticketType->name . ' - ' . $inventory->starts_at . ' to ' . $inventory->ends_at;
