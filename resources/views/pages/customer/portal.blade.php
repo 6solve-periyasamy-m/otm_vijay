@@ -87,7 +87,12 @@
                                     $evenImg2 = 'images/default_image.png';
                                 }
                             @endphp
-                            <div class="tour_event_img"><img src="{{asset($evenImg2)}}" alt="{{ $orderCustomer->order->tour?->event?->name }}"/></div>
+                            {{-- <div class="tour_event_img"><img src="{{asset($evenImg2)}}" alt="{{ $orderCustomer->order->tour?->event?->name }}"/></div> --}}
+                            <div class="tour_event_img past_tour_img"><img src="{{asset($evenImg2)}}" alt="{{ $orderCustomer->order->tour?->event?->name }}"/>
+                                @if($orderCustomer->order->status->description() == 'Payment Overdue')
+                                    <span class="badge rounded-pill bg-danger lh-sm">{{ $orderCustomer->order->status->description() }}</span>
+                                @endif
+                            </div>
                             <div class="event_title_date pb-0">
                                 <h4>{{ $orderCustomer->order->tour?->event?->name}}</h4>                                
                                 @if($orderCustomer->order->tour)
@@ -103,9 +108,9 @@
                                         {{ Carbon::parse($orderCustomer->order->tour->date_from)->format('d M Y') }} - 
                                         {{ Carbon::parse($orderCustomer->order->tour->date_to)->format('d M Y') }}
                                     </span>                                    
-                                    @if($orderCustomer->order->status->description() == 'Payment Overdue')
+                                    {{-- @if($orderCustomer->order->status->description() == 'Payment Overdue')
                                         <span class="badge rounded-pill bg-danger lh-sm">{{ $orderCustomer->order->status->description() }}</span>
-                                    @endif
+                                    @endif --}}
                                 </p>
                                 @if($orderCustomer->order->tour->city != '' && optional(Country::find($orderCustomer->order->tour->country_id))->name != '' )
                                     <p class="event_location"><img src="{{ asset('images/customer/images/location.svg') }}" />

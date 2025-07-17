@@ -3,7 +3,7 @@
          @if(isset($back))
             <span><a href="{{ $backUrl }}"><img src="/images/customer/images/arrow-left.svg" alt="arrow left"></a></span>
         @endif
-        {{ $title }}
+        {{ $title }} @if(isset($tourStatus)) <span class="status-btn status-btn-{{ $tourStatusColor }}"> {{ $tourStatus }} </span> @endif
     </p>
     {{-- <p>User : {{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p> --}}
     @if(!isset($search) || $search)

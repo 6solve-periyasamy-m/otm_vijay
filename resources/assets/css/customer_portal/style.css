@@ -233,6 +233,9 @@ transition: all 0.8s ease;
     color: #fff;
     background-color: #F35B15;
     border: 2px solid #F35B15;
+    font-family:'PP Neue Montreal';
+    font-size: 14px;
+    line-height: 14px;
 }
 .submit_btn button:hover{
     cursor: pointer;
@@ -251,7 +254,7 @@ transition: all 0.8s ease;
     width: 16px;
     height: 16px;
     position: absolute;
-    top: 3px;
+    top: 0px;
     right: -5px;
 }
 .submit_btn span:hover::after{
@@ -1140,27 +1143,6 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
     border-color: rgba(240, 173, 78, 1);
 }
 
-
-/* .btn-success {
-    font-size: 13px;
-    color: #000;
-    letter-spacing: 1px;
-    line-height: 15px !important;
-    border: 2px solid rgb(0, 200, 81) !important;
-    border-radius: 40px !important;
-    background: rgb(0, 200, 81) !important;
-    transition: all 0.3s ease 0s;
-}
-
-.btn-success:hover,
-.btn-success:focus,
-.btn-success:active {
-    background: rgb(0, 200, 81);
-    border-color: rgb(0, 200, 81);
-} */
-
-
-
 .input-error {
     border: 1px solid #ff0000 !important;
     color:#ff0000 !important;
@@ -1188,3 +1170,24 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
 .reset_pwd_link.submit_btn span::after{right: -25px;}
 .reset_pwd_link.submit_btn span{width: unset;text-transform: uppercase;}
 .email.reset_pwd_email{display: flex; justify-content: center;}
+
+.past_tour_img{position: relative;}
+.past_tour_img span{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 8px;
+}
+
+
+.status-btn { border-radius: 28px; background-color: #ffc107; color: white; padding: 10px 20px; font-size: 16px; border: none; cursor: pointer; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); transition: background-color 0.3s ease, box-shadow 0.3s ease; letter-spacing: 1px; line-height: 15px; margin-left: 25px; }
+.status-btn:hover { box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);}
+.status-btn-danger { background-color: #ff3547;}
+.status-btn-primary { background-color: #4285f4 } 
+.status-btn-warning { background-color: #fb3; } 
+.status-btn-success { background-color: #00c851; } 
+.status-btn-info { background-color: #33b5e5; } 
+.status-btn-default { background-color: #2bbbad; } 
+.status-btn-secondary { background-color: #a6c; } 
+.status-btn-dark { background-color: #212121; } 
+.status-btn-light { background-color: #e0e0e0; }

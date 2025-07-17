@@ -182,15 +182,14 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
 @php
     $eventName = $order->tour->event->name ?? $order->tour->name;
 @endphp
-<div class="inner_content">     
-    <x-customer.overview-top-bar title="{{ $eventName }}" :search="false" :back="true" :backUrl="route('customer.itinerary')" />
+<div class="inner_content">
+    <x-customer.overview-top-bar title="{{ $eventName }}" :search="false" :back="true" :backUrl="route('customer.itinerary')" tourStatus="{{ $orderCustomer->order->status->description() }}" tourStatusColor="{{ $orderCustomer->order->status->color() }}"/>
     <div class="tours_list_details">
         <div class="upcoming_tours_clock">
             {{-- <div class="upcoming_tour_title">
                 <img src="/images/customer/images/clock.svg" alt="clock" />
                 <h6 class="badge badge-{{ $orderCustomer->order->status->color() }} fw-bold ">{{ $orderCustomer->order->status->description() }}</h6>
             </div> --}}
-            <h6  class="btn btn-warning">{{ $orderCustomer->order->status->description() }}</h6>
             <div class="event_list">
                 <div class="event_image_title">
                     @php 
@@ -207,7 +206,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                             <p class="calendar_date"><img src="{{ asset('/images/customer/images/calendar.svg')}}" />
                               {{ Carbon::parse($order->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($order->tour->date_to)->format('d M Y')}}
                             </p>
-                            <p class="ticket_type"><span>Ticket Type</span><span>{{$order->leadBooker->customer->first_name ?? '' . " " .$order->leadBooker->customer->last_name ?? ''}}</span></p>
+                            <p class="ticket_type"><span>Lead Guest</span><span>{{$order->leadBooker->customer->first_name ?? '' . " " .$order->leadBooker->customer->last_name ?? ''}}</span></p>
                             <p class="booking_reference"><span>Booking Reference</span><span>{{$order->booking_reference}}</span></p>
                         </div> 
                 </div>
@@ -799,17 +798,24 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
             </div>
         </div><!--Trip itinerary row-->
         <hr />
-        <div class="event_information">
-            <h3>Event Information</h3>
-           <p>{!! data_get($orderCustomer, 'order.tour.event.description', '')  !!}</p>
-
-        </div>
-        <hr />
-        <div class="final_details">
-            <h3>Final Details</h3><p>
-            {!!  data_get($orderCustomer, 'order.tour.event.final_terms', '')  !!}</p>
-        </div>
-        <hr />
+        @php
+            $event = $orderCustomer->order->tour->event ?? null;
+        @endphp
+        @if(filled($event?->description))
+            <div class="event_information">
+                <h3>{{ 'Event Information' }}</h3>
+                <p>{!! $event->description !!}</p>
+            </div>
+            <hr />
+        @endif
+        
+        @if(filled($event?->final_terms))
+            <div class="event_information">
+                <h3>{{ 'Event Information' }}</h3>
+                <p>{!! $event->final_terms !!}</p>
+            </div>
+            <hr />
+        @endif
         <div class="notes_div">
             <h3>Notes</h3>            
             <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference, 'orderCustomer' => $orderCustomer,]) }}" method="post" class="form-horizontal form-material">
