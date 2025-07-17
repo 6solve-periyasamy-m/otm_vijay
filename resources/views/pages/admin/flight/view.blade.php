@@ -50,6 +50,12 @@
                         {{ Icon::list() }}
                         <span>View Manifest</span>
                     </a>
+                    @can('delete', \App\Models\Flight\Flight::class)
+                        <a href="{{ route('flights.archive', ['flight' => $flight]) }}" title="{{ $flight->archived ? "Restore" : "Archive" }}" class="btn btn-{{ $flight->archived ? "warning" : "danger" }}">
+                            {{ Icon::archive() }}
+                            <span>{{ $flight->archived ? "Restore" : "Archive" }}</span>
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>

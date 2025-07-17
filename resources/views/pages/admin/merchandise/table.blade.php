@@ -32,6 +32,10 @@
                 {{ Icon::create() }}
                 <span>Create New</span>
             </a>
+            <a class="btn btn-warning float-end" href="{{ route('merchandise.all', ['archived' => !$archived]) }}">
+                {{ Icon::archive() }}
+                <span>{{ $archived ? "Hide" : "Show" }} Archived</span>
+            </a>
         </x-admin.section.card>
     @endcan
     <x-admin.section.card>
@@ -43,6 +47,9 @@
                 <th scope="col">Variants</th>
                 <th scope="col">Orders</th>
                 <th scope="col">Notes</th>
+                @if($archived)
+                    <th scope="col">Archived</th>
+                @endif
                 <th scope="col">Actions</th>
             </tr>
             </thead>
@@ -54,6 +61,9 @@
                     <td>{{ $merch->inventory()->count() }}</td>
                     <td>{{ $merch->repository->getOrderCount() }}</td>
                     <td>{{ $merch->internal_notes }}</td>
+                    @if($archived)
+                        <td>{{ f_bool($merch->archived) }}</td>
+                    @endif
                     <td class="actions">
                         @can('update', \App\Models\Merchandise\Merchandise::class)
                             <a href="{{route('merchandise.edit', ['merchandise' => $merch,])}}" title="Edit" class="btn btn-outline-success btn-sm mb-1">

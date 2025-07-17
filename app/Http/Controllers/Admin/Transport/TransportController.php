@@ -5,15 +5,17 @@ namespace App\Http\Controllers\Admin\Transport;
 use App\Http\Controllers\Controller;
 use App\Models\Transport\Transport;
 use App\Repository\Reporting\Manifest\TransportManifestRepository;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
 class TransportController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('pages.admin.transport.table', ['transports' => Transport::all(),]);
+        $archived = $request->archived ?? false;
+        return view('pages.admin.transport.table', ['archived' => $archived]);
     }
 
     public function create()
@@ -95,5 +97,17 @@ class TransportController extends Controller
         $return->arrival_address_id = $arrival;
         $return->save();
         return redirect()->route('transports.edit', ['transport' => $return,]);
+    }
+
+    public function archive(Transport $transport): RedirectResponse
+    {
+        $transport->archived = !$transport->archived;
+        $transport->save();
+
+        if (!$transport->archived) {
+            return redirect()->route('transports.view', ['transport' => $transport,]);
+        }
+
+        return redirect()->route('transports.all');
     }
 }

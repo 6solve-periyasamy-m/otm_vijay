@@ -92,6 +92,7 @@ class TransportTransforms implements TransportTransformsInterface
     {
         $data = [];
         foreach (TransportInventory::all() as $inventory) {
+            if ($inventory->component->archived) continue;
             $subData = [];
             $subData['id'] = $inventory->id;
             $subData['text'] = $inventory->transport->name . ' - ' . $inventory->transport->transportType->name . ' - ' . $inventory->travelClass->name . ' - ' . $inventory->transport->departureAddress->name . ' to ' . $inventory->transport->arrivalAddress->name;
@@ -114,6 +115,7 @@ class TransportTransforms implements TransportTransformsInterface
         $available = $tourInventory->repository->getAvailableForUpgrade();
         $data = [];
         foreach ($available as $id => $inventory) {
+            if ($inventory->component->archived) continue;
             $subData = [];
             $subData['id'] = $inventory->id;
             $subData['text'] = $inventory->travelClass->name . ' - ' . $inventory->departs_at . ' to ' . $inventory->arrives_at;

@@ -4,10 +4,10 @@ namespace App\Transforms;
 
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
+use App\Models\Accommodation\AccommodationType;
 use App\Models\Accommodation\BoardType;
 use App\Models\Accommodation\RoomType;
 use App\Models\Order\OrderCustomer;
-use App\Models\Accommodation\AccommodationType;
 
 interface AccommodationTransformsInterface {
     public static function getSelectRoomTypes($filter);
@@ -93,6 +93,7 @@ class AccommodationTransforms implements AccommodationTransformsInterface
     {
         $data = [];
         foreach (AccommodationInventory::all() as $inventory) {
+            if ($inventory->accommodation->archived) continue;
             $subData = [];
             $subData['id'] = $inventory->id;
             $subData['text'] = $inventory->accommodation->name . " - " . $inventory->roomType->name . ' - ' . $inventory->boardType->name . ' - ' . $inventory->check_in . ' to ' . $inventory->check_out;
