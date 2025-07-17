@@ -62,9 +62,6 @@
                         </div>
                         <div class="kpt_login_title">
                             <h3>The experience of a lifetime.<br /> Every time.</h3>
-                            <h4>Login to your Keith Prowse Travel account</h4>
-                        </div>
-                        <div class="kpt_login_title">
                             <h4>Reset Password</h4>
                         </div>
                         <div class="login_form">

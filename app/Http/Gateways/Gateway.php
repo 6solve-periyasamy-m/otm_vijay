@@ -58,6 +58,8 @@ abstract class Gateway
             $booking = Booking::where('token', $intention->reference)->first();
             if (isset($booking)) {
                 $order = $booking->repository->convertToOrder(now());
+                $order->external_notes = $booking->notes ?? ''; // Get the notes from the booking
+                $order->save();
                 $booking->updateBookingProgressNotification('Booking Completed', $intention->customer);
                 $intention->customer_id = $order->leadBooker->customer_id;
                 $intention->save();
