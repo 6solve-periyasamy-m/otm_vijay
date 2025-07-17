@@ -1140,6 +1140,27 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
     border-color: rgba(240, 173, 78, 1);
 }
 
+
+/* .btn-success {
+    font-size: 13px;
+    color: #000;
+    letter-spacing: 1px;
+    line-height: 15px !important;
+    border: 2px solid rgb(0, 200, 81) !important;
+    border-radius: 40px !important;
+    background: rgb(0, 200, 81) !important;
+    transition: all 0.3s ease 0s;
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active {
+    background: rgb(0, 200, 81);
+    border-color: rgb(0, 200, 81);
+} */
+
+
+
 .input-error {
     border: 1px solid #ff0000 !important;
     color:#ff0000 !important;
@@ -1164,3 +1185,6 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
 ,.common_btn .reservation_doc_link:hover::before{display: none;}
 .download_itinerary_wht_icn,.reservation_doc_link .reservation_wht_icn,.download_itinerary_link:hover .download_itinerary_org_icn,
 .reservation_doc_link:hover .reservation_org_icn{display: none;}
+.reset_pwd_link.submit_btn span::after{right: -25px;}
+.reset_pwd_link.submit_btn span{width: unset;text-transform: uppercase;}
+.email.reset_pwd_email{display: flex; justify-content: center;}

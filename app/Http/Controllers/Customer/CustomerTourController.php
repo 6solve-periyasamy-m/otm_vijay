@@ -57,7 +57,7 @@ class CustomerTourController extends CustomerController
             'orderCustomer' => $orderCustomer,
             'order' => $orderCustomer->order ?? [],
             'orders' => $this->getFilteredOrders(),
-            'itinerary' => $orderCustomer->order->repository->getItinerary() ?? [],
+            'itinerary' => $orderCustomer?->order->repository->getItinerary() ?? [],
             'editable' => $editable,
         ]);
     }
