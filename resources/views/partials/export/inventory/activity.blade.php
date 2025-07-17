@@ -20,8 +20,8 @@
         <tr>
             <th scope="row">{{ $inventory->id }}</th>
             <td>{{ $inventory->description }}</td>
-            <td>{{ $inventory->starts_at->format('d/m/Y H:i') }}</td>
-            <td>{{ $inventory->ends_at->format('d/m/Y H:i') }}</td>
+            <td>{{ $inventory->starts_at->format('d-m-Y H:i') }}</td>
+            <td>{{ $inventory->ends_at->format('d-m-Y H:i') }}</td>
             <td>{{ strtoupper(f_bool($inventory->fit_selectable)) }}</td>
             <td>{{ $inventory->ticketType->name }}</td>
             <td>{{ $inventory->stock }}</td>

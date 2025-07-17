@@ -36,8 +36,8 @@ class ActivityOverrideImport implements ToCollection, WithHeadingRow, WithValida
             }
             $inventory->update([
                 'description' => trim($row['description']),
-                'starts_at' => Carbon::createFromFormat('d/m/Y H:i', trim($row['start'])),
-                'ends_at' => Carbon::createFromFormat('d/m/Y H:i', trim($row['end'])),
+                'starts_at' => Carbon::createFromFormat('d-m-Y H:i', trim($row['start'])),
+                'ends_at' => Carbon::createFromFormat('d-m-Y H:i', trim($row['end'])),
                 'fit_selectable' => (((trim($row['fit'] ?? "") === 'TRUE') || (trim($row['fit'] ?? "")) === 'YES')),
                 'ticket_type_id' => $ticketType,
                 'stock' => empty(trim($row['stock'] ?? "")) ? 0 : trim($row['stock']),
@@ -56,8 +56,8 @@ class ActivityOverrideImport implements ToCollection, WithHeadingRow, WithValida
         return [
             'id' => 'nullable|int|exists:activity_inventories,id',
             'description' => 'nullable|string',
-            'start' => 'nullable|date_format:d/m/Y H:i',
-            'end' => 'nullable|date_format:d/m/Y H:i',
+            'start' => 'nullable|date_format:d-m-Y H:i',
+            'end' => 'nullable|date_format:d-m-Y H:i',
             'fit' => ['nullable', Rule::in(['YES', 'TRUE', 'FALSE', 'NO'])],
             'ticket_type' => 'required|string|exists:ticket_types,name',
             'stock' => 'nullable|int',
