@@ -19,9 +19,10 @@ class ActivityController extends Controller
 {
     use ImportsToCollection;
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('pages.admin.activity.table', ['activities' => Activity::all(),]);
+        $archived = $request->archived ?? false;
+        return view('pages.admin.activity.table', ['archived' => $archived,]);
     }
 
     public function create()
@@ -120,5 +121,17 @@ class ActivityController extends Controller
         }
         $activity->save();
         return redirect()->route('activities.view', ['activity' => $activity,]);
+    }
+
+    public function archive(Activity $activity): RedirectResponse
+    {
+        $activity->archived = !$activity->archived;
+        $activity->save();
+
+        if (!$activity->archived) {
+            return redirect()->route('activities.view', ['activity' => $activity,]);
+        }
+
+        return redirect()->route('activities.all');
     }
 }

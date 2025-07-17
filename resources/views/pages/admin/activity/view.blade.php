@@ -45,6 +45,12 @@
                         {{ Icon::list() }}
                         <span>View Manifest</span>
                     </a>
+                    @can('delete', \App\Models\Activity\Activity::class)
+                        <a href="{{ route('activities.archive', ['activity' => $activity]) }}" title="{{ $activity->archived ? "Restore" : "Archive" }}" class="btn btn-{{ $activity->archived ? "warning" : "danger" }}">
+                            {{ Icon::archive() }}
+                            <span>{{ $activity->archived ? "Restore" : "Archive" }}</span>
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>

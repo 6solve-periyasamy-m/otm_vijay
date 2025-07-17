@@ -4,20 +4,22 @@ namespace App\Http\Controllers\Admin\Accommodation;
 
 use App\Http\Controllers\Controller;
 use App\Models\Accommodation\Accommodation;
+use App\Models\Accommodation\Amenity;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Location\Address;
 use App\Repository\Model\Location\AddressRepository;
 use App\Repository\Reporting\Manifest\RoomingReportRepository;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use App\Models\Accommodation\Amenity;
 
 class AccommodationController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('pages.admin.accommodation.table', ['accommodations' => Accommodation::all(),]);
+        $archived = $request->archived ?? false;
+        return view('pages.admin.accommodation.table', ['archived' => $archived,]);
     }
 
     public function create()
@@ -133,5 +135,17 @@ class AccommodationController extends Controller
             }
         }
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
+    }
+
+    public function archive(Accommodation $accommodation): RedirectResponse
+    {
+        $accommodation->archived = !$accommodation->archived;
+        $accommodation->save();
+
+        if (!$accommodation->archived) {
+            return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
+        }
+
+        return redirect()->route('accommodations.all');
     }
 }

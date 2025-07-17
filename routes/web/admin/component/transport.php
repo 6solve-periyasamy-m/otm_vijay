@@ -17,6 +17,7 @@ Route::prefix('{transport}')->group(function () {
     Route::get('/manifest/export/{extension?}', [TransportController::class, 'export'])->name('transports.manifest.export')->middleware('bouncer:Transport\Transport,read');
     Route::get('/update', [TransportController::class, 'edit'])->name('transports.edit')->middleware('bouncer:Transport\Transport,update');
     Route::post('/update', [TransportController::class, 'update'])->name('transports.update')->middleware('bouncer:Transport\Transport,update');
+    Route::get('/archive', [TransportController::class, 'archive'])->name('transports.archive')->middleware('bouncer:Transport\Transport,delete');
     Route::get('/replicate', [TransportController::class, 'createReturn'])->name('transports.return');
     Route::prefix('inventory')->group(function () {
         Route::get('/create', [TransportInventoryController::class, 'create'])->name('transport-inventories.create')->middleware('bouncer:Transport\TransportInventory,create');
