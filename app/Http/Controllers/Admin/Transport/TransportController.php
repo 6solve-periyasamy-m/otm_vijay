@@ -12,9 +12,10 @@ use Illuminate\Support\Facades\File;
 class TransportController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('pages.admin.transport.table', ['transports' => Transport::all(),]);
+        $archived = $request->archived ?? false;
+        return view('pages.admin.transport.table', ['archived' => $archived]);
     }
 
     public function create()
@@ -102,5 +103,17 @@ class TransportController extends Controller
     {
         $transport->repository->duplicate(true);
         return redirect()->route('transports.edit', ['transport' => $transport,]);
+    }
+
+    public function archive(Transport $transport): RedirectResponse
+    {
+        $transport->archived = !$transport->archived;
+        $transport->save();
+
+        if (!$transport->archived) {
+            return redirect()->route('transports.view', ['transport' => $transport,]);
+        }
+
+        return redirect()->route('transports.all');
     }
 }

@@ -33,6 +33,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property int $arrival_address_id
  * @property bool $is_domestic
  * @property string $name
+ * @property boolean $archived
  * @property string|null $image_url Asset URL for the component image
  * @property string|null $description
  * @property string|null $internal_notes
@@ -79,7 +80,7 @@ class Transport extends Model
 
     protected $guarded = [];
     protected array $cascadeDeletes = ['transportInventory'];
-    protected $casts = ['is_domestic' => 'boolean'];
+    protected $casts = ['is_domestic' => 'boolean', 'archived' => 'boolean'];
 
     public static function getValidationRules(): array
     {

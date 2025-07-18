@@ -5,15 +5,17 @@ namespace App\Http\Controllers\Admin\Flight;
 use App\Http\Controllers\Controller;
 use App\Models\Flight\Flight;
 use App\Repository\Reporting\Manifest\FlightManifestRepository;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
 class FlightController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('pages.admin.flight.table', ['flights' => Flight::all(),]);
+        $archived = $request->archived ?? false;
+        return view('pages.admin.flight.table', ['archived' => $archived,]);
     }
 
     public function create()
@@ -97,5 +99,17 @@ class FlightController extends Controller
     {
         $flight->repository->duplicate(true);
         return redirect()->route('flights.edit', ['flight' => $flight,]);
+    }
+
+    public function archive(Flight $flight): RedirectResponse
+    {
+        $flight->archived = !$flight->archived;
+        $flight->save();
+
+        if (!$flight->archived) {
+            return redirect()->route('flights.view', ['flight' => $flight,]);
+        }
+
+        return redirect()->route('flights.all');
     }
 }

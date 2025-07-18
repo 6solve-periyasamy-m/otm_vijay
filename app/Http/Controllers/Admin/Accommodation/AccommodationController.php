@@ -16,9 +16,10 @@ use Illuminate\Support\Facades\File;
 class AccommodationController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('pages.admin.accommodation.table', ['accommodations' => Accommodation::all(),]);
+        $archived = $request->archived ?? false;
+        return view('pages.admin.accommodation.table', ['archived' => $archived,]);
     }
 
     public function create()
@@ -140,5 +141,17 @@ class AccommodationController extends Controller
     {
         $accommodation->repository->duplicate(true);
         return redirect()->route('accommodations.edit', ['accommodation' => $accommodation,]);
+    }
+
+    public function archive(Accommodation $accommodation): RedirectResponse
+    {
+        $accommodation->archived = !$accommodation->archived;
+        $accommodation->save();
+
+        if (!$accommodation->archived) {
+            return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
+        }
+
+        return redirect()->route('accommodations.all');
     }
 }

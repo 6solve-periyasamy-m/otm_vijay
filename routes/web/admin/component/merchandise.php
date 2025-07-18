@@ -17,6 +17,7 @@ Route::prefix('{merchandise}')->group(function () {
     Route::get('/duplicate', [MerchandiseController::class, 'duplicate'])->name('duplicate');
     Route::get('/update/{view?}', [MerchandiseController::class, 'edit'])->name('edit');
     Route::post('/update/{view?}', [MerchandiseController::class, 'update'])->name('update');
+    Route::get('/archive', [MerchandiseController::class, 'archive'])->name('archive')->middleware('bouncer:Merchandise\Merchandise,delete');
     Route::prefix('inventory')->name('inventory.')->group(function () {
         Route::get('/create/{view?}', [MerchandiseInventoryController::class, 'create'])->name('create');
         Route::post('/create/{view?}', [MerchandiseInventoryController::class, 'store'])->name('store');

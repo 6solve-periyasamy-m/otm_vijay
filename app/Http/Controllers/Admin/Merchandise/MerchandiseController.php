@@ -7,13 +7,19 @@ use App\Http\Requests\Admin\Merchandise\MerchandiseRequest;
 use App\Models\Merchandise\Merchandise;
 use App\Repository\Model\Merchandise\MerchandiseRepository;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class MerchandiseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $merch = Merchandise::withCount('inventory')->get();
-        return view('pages.admin.merchandise.table', ['merchandise' => $merch,]);
+        $archived = $request->archived ?? false;
+        if ($archived) {
+            $merch = Merchandise::withCount('inventory')->get();
+        } else {
+            $merch = Merchandise::withCount('inventory')->where('archived', '=', false)->get();
+        }
+        return view('pages.admin.merchandise.table', ['merchandise' => $merch, 'archived' => $archived]);
     }
 
     public function create()
@@ -55,5 +61,17 @@ class MerchandiseController extends Controller
     {
         $merchandise->repository->duplicate(true);
         return redirect()->route('merchandise.edit', ['merchandise' => $merchandise,]);
+    }
+
+    public function archive(Merchandise $merchandise): RedirectResponse
+    {
+        $merchandise->archived = !$merchandise->archived;
+        $merchandise->save();
+
+        if (!$merchandise->archived) {
+            return redirect()->route('merchandise.view', ['merchandise' => $merchandise,]);
+        }
+
+        return redirect()->route('merchandise.all');
     }
 }

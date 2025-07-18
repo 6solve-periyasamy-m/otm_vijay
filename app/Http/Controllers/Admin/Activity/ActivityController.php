@@ -15,9 +15,10 @@ use Illuminate\Support\Facades\File;
 class ActivityController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('pages.admin.activity.table', ['activities' => Activity::all(),]);
+        $archived = $request->archived ?? false;
+        return view('pages.admin.activity.table', ['archived' => $archived,]);
     }
 
     public function create()
@@ -112,5 +113,17 @@ class ActivityController extends Controller
     {
         $activity->repository->duplicate(true);
         return redirect()->route('activities.edit', ['activity' => $activity,]);
+    }
+
+    public function archive(Activity $activity): RedirectResponse
+    {
+        $activity->archived = !$activity->archived;
+        $activity->save();
+
+        if (!$activity->archived) {
+            return redirect()->route('activities.view', ['activity' => $activity,]);
+        }
+
+        return redirect()->route('activities.all');
     }
 }

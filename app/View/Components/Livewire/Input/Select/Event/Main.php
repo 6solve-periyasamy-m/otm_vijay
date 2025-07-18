@@ -28,7 +28,7 @@ class Main extends AbstractSelectComponent
         if ($id !== null) {
             return DataModel::where('id', '=', $id)->get();
         }
-        return DataModel::where('event_category', '=', EventType::MAIN)->get();
+        return DataModel::where('event_category', '=', EventType::MAIN)->orderBy('name')->get();
     }
 
     protected function format(DataModel|Model $model): string

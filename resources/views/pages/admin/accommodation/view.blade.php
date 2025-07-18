@@ -53,6 +53,12 @@
                         {{ Icon::list() }}
                         <span>View Rooming List (No Notes)</span>
                     </a>
+                    @can('delete', \App\Models\Accommodation\Accommodation::class)
+                        <a href="{{ route('accommodations.archive', ['accommodation' => $accommodation]) }}" title="{{ $accommodation->archived ? "Restore" : "Archive" }}" class="btn btn-{{ $accommodation->archived ? "warning" : "danger" }}">
+                            {{ Icon::archive() }}
+                            <span>{{ $accommodation->archived ? "Restore" : "Archive" }}</span>
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>
