@@ -27,7 +27,7 @@ class All extends AbstractSelectComponent
         if ($id !== null) {
             return DataModel::where('id', '=', $id)->get();
         }
-        return DataModel::all();
+        return DataModel::orderBy('name')->get();
     }
 
     protected function format(DataModel|Model $model): string
