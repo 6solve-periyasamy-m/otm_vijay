@@ -7,6 +7,7 @@ use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Quote\Component\QuoteFlight;
 use App\Models\Quote\Quote;
+use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
@@ -137,6 +138,13 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
         ]);
         $this->inventory->tourComponents()->save($inventoryTour);
         return $inventoryTour->repository;
+    }
+
+    public function addToEvent(Event $event, string|null $tourComponentType = 'Included', float|null $price = null): void
+    {
+        foreach ($event->tours as $tour) {
+            $this->addToTour($tour, $tourComponentType, $price ?? -1);
+        }
     }
 
     public function addToQuote(Quote $quote, string $tourComponentType, float $price = -1): ?QuoteFlightRepository
