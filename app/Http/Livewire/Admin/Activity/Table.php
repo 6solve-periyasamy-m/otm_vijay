@@ -9,6 +9,7 @@ use App\Http\Livewire\SendsEvents;
 use App\Models\Activity\Activity;
 use App\Models\Activity\ActivityType;
 use App\Models\Helper\Enum\ActivityCategory;
+use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
@@ -17,17 +18,25 @@ class Table extends LivewireDatatable
     use SendsEvents;
 
     public $name = "activity-table";
+    public bool $archived = false;
 
     public function builder()
     {
-        return Activity::query()
+        $query = Activity::query()
             ->leftJoin('activity_types', 'activity_types.id', '=', 'activities.activity_type_id')
             ->leftJoin('addresses', 'addresses.id', '=', 'activities.address_id')
             ->leftJoin('countries', 'countries.id', '=', 'addresses.country_id');
+        if (!$this->archived) {
+            $query = $query->where('archived', '=', false);
+        }
+        return $query;
     }
 
     public function columns()
     {
+        $archiveColumn = BooleanColumn::name('archived')->label('Archived')->filterable();
+        $this->archived || $archiveColumn->hide();
+
         return [
             Column::name('name')
                 ->label('Name')
@@ -51,6 +60,7 @@ class Table extends LivewireDatatable
                 ->label('Description')
                 ->sortable()
                 ->searchable(),
+            $archiveColumn,
             Column::callback(['id'], function ($id) {
                 return view('partials.admin.livewire.table.actions', [
                     'id' => $id,

@@ -24,6 +24,7 @@ use Illuminate\Validation\Rule;
  * @property int $id
  * @property int|null $merchandise_type_id
  * @property string $name
+ * @property boolean $archived
  * @property string|null $image_url
  * @property string|null $internal_notes
  * @property string|null $external_notes
@@ -61,6 +62,7 @@ class Merchandise extends Model
     protected $guarded = [];
 
     protected $with = ['type',];
+    protected $casts = ['archived' => 'boolean'];
 
     public static function getValidationRules(): array
     {
