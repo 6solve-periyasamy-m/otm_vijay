@@ -14,6 +14,7 @@ use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Location\Address;
+use App\Models\Location\Currency;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;
@@ -48,9 +49,9 @@ use App\Repository\Storage\Rooming\AccommodationByDateStorage;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Str;
 use Settings;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Illuminate\Support\Str;
 
 class QuoteRepository extends ComponentPackageRepository implements SerializesToJson
 {
@@ -692,6 +693,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         foreach ($this->quote->installments as $installment) { $installments[] = ['due_on' => $installment->due_on->format('Y-m-d'), 'percentage' => $installment->percentage, 'amount' => $installment->amount,]; }
         foreach ($this->quote->pricePoints as $pricePoint) { $pricepoints[$pricePoint->quantity] = $pricePoint->price_per_person; }
         foreach ($this->quote->sections as $section) { $sections[] =  $section->serialize(); }
+        $quote['currency'] = $this->quote->currency?->toArray();
         $quote['installments'] = $installments;
         $quote['pricepoints'] = $pricepoints;
         $quote['sections'] = $sections;
@@ -775,6 +777,12 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         }
         unset($data['sections']);
         unset($data['lead_traveller']);
+        if (array_key_exists('currency', $data)) {
+            $currency = Currency::make($data['currency'] ?? []);
+            unset($data['currency']);
+        } else {
+            $currency = null;
+        }
         $quote = Quote::make($data);
         $quote->setRelations([
             'pricePoints' => $pricepoints,
@@ -787,6 +795,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'sections' => $sections,
             'leadTraveller' => $lead,
             'event' => is_array($quote->event) ? new Event($quote->event) : $quote->event,
+            'currency' => $currency,
         ]);
         return $quote;
     }
@@ -1255,7 +1264,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $this->getFinalCost($paying),
             $this->getScheduleItineraryArray($paying),
             [], // No Payments on Quotes
-            $this->quote->currency,
+            is_array($this->quote->currency) ? Currency::make($this->quote->currency) : $this->quote->currency,
         );
     }
     

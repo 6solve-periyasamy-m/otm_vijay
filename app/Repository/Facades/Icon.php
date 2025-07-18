@@ -527,6 +527,11 @@ class Icon
         return $this->solid('triangle-exclamation');
     }
 
+    public function archive(): View|string|Closure
+    {
+        return $this->solid('archive');
+    }
+
     public function __call(string $name, array $arguments): View|string|Closure
     {
         return $this->solid($name);

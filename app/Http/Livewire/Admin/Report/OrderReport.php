@@ -72,7 +72,7 @@ class OrderReport extends ExportableDatatable
                 ->label('Event')
                 ->sortable()
                 ->searchable()
-                ->filterable(Event::pluck('name')),
+                ->filterable(Event::orderBy('name')->pluck('name')),
             Column::raw('(COALESCE(`currencies`.`code`, "' . Settings::currency()->code . '")) AS currency')
                 ->label('Currency')
                 ->sortable()

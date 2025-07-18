@@ -39,9 +39,9 @@ if (!function_exists('fx_convert')) {
         if ($value === null) { return null; }
         if ($from === null) { return $value * ($rate ?? 1.0); }
         if ($rate === null) {
-            $systemCurrency = Currency::code(setting('system.currency', 'GBP'));
-            if (is_string($from)) { $from = Currency::code($from); }
-            if (is_string($to)) { $to = Currency::code($to); }
+            $systemCurrency = Currency::fromCode(setting('system.currency', 'GBP'));
+            if (is_string($from)) { $from = Currency::fromCode($from); }
+            if (is_string($to)) { $to = Currency::fromCode($to); }
             $to = $to ?? $systemCurrency;
             $rate = Settings::getConversionRate($from, $to) ?? 1.0;
         }

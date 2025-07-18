@@ -57,6 +57,12 @@
                         {{ Icon::list() }}
                         <span>View Manifest</span>
                     </a>
+                    @can('delete', \App\Models\Transport\Transport::class)
+                        <a href="{{ route('transports.archive', ['transport' => $transport]) }}" title="{{ $transport->archived ? "Restore" : "Archive" }}" class="btn btn-{{ $transport->archived ? "warning" : "danger" }}">
+                            {{ Icon::archive() }}
+                            <span>{{ $transport->archived ? "Restore" : "Archive" }}</span>
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>
