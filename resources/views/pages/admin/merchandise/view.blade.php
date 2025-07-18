@@ -75,10 +75,12 @@
                             {{ Icon::edit() }}
                             Edit Merchandise
                         </a>
-                        <a href="{{ route('merchandise.delete', ['merchandise' => $merchandise,]) }}" class="btn btn-danger">
-                            {{ Icon::delete() }}
-                            Delete Merchandise
-                        </a>
+                        @can('delete', \App\Models\Merchandise\Merchandise::class)
+                            <a href="{{ route('merchandise.archive', ['merchandise' => $merchandise]) }}" title="{{ $merchandise->archived ? "Restore" : "Archive" }}" class="btn btn-{{ $merchandise->archived ? "warning" : "danger" }}">
+                                {{ Icon::archive() }}
+                                <span>{{ $merchandise->archived ? "Restore" : "Archive" }}</span>
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>

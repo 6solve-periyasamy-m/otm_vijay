@@ -7,6 +7,7 @@ use App\Http\Livewire\Abstract\ActionColumn;
 use App\Http\Livewire\Abstract\CurrencyColumn;
 use App\Http\Livewire\Abstract\DisplayModeColumn;
 use App\Http\Livewire\SendsEvents;
+use App\Models\Helper\Enum\EventType;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Models\Tour\TourCategory;
@@ -51,7 +52,7 @@ class Table extends LivewireDatatable
                 ->label('Event')
                 ->sortable()
                 ->searchable()
-                ->filterable(Event::pluck('name')),
+                ->filterable(Event::where('event_category', '=', EventType::NORMAL)->orderBy('name')->pluck('name')),
             DisplayModeColumn::table('tour_categories')
                 ->label('Category')
                 ->searchable()
