@@ -68,6 +68,7 @@ class FlightTransforms implements FlightTransformsInterface
     {
         $data = [];
         foreach (FlightInventory::all() as $inventory) {
+            if ($inventory->component->archived) continue;
             $subData = [];
             $subData['id'] = $inventory->id;
             $subData['text'] = $inventory->flight_number . ' - ' . $inventory->travelClass->name . ' - ' . $inventory->flight->departureAirport->name . ' to ' . $inventory->flight->arrivalAirport->name;

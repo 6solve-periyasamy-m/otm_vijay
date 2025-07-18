@@ -8,15 +8,17 @@ use App\Models\Helper\Enum\AddressParent;
 use App\Models\Location\Address;
 use App\Repository\Model\Location\AddressRepository;
 use App\Repository\Reporting\Manifest\ActivityManifestRepository;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
 class ActivityController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('pages.admin.activity.table', ['activities' => Activity::all(),]);
+        $archived = $request->archived ?? false;
+        return view('pages.admin.activity.table', ['archived' => $archived,]);
     }
 
     public function create()
@@ -105,5 +107,17 @@ class ActivityController extends Controller
         }
         $activity->save();
         return redirect()->route('activities.view', ['activity' => $activity,]);
+    }
+
+    public function archive(Activity $activity): RedirectResponse
+    {
+        $activity->archived = !$activity->archived;
+        $activity->save();
+
+        if (!$activity->archived) {
+            return redirect()->route('activities.view', ['activity' => $activity,]);
+        }
+
+        return redirect()->route('activities.all');
     }
 }

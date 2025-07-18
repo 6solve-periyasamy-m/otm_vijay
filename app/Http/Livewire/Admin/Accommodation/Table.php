@@ -8,6 +8,7 @@ use App\Http\Livewire\Abstract\ActionColumn;
 use App\Http\Livewire\Abstract\AddressColumn;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Accommodation\Accommodation;
+use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
@@ -17,17 +18,24 @@ class Table extends LivewireDatatable
     use SendsEvents;
 
     public $name = "accommodation-table";
+    public bool $archived = false;
 
     public function builder()
     {
-        return Accommodation::query()
+        $query = Accommodation::query()
                 ->leftJoin('addresses', 'accommodations.address_id', '=', 'addresses.id')
                 ->leftJoin('countries', 'addresses.country_id', '=', 'countries.id');
-
+        if (!$this->archived) {
+            $query = $query->where('archived', '=', false);
+        }
+        return $query;
     }
 
     public function columns()
     {
+        $archiveColumn = BooleanColumn::name('archived')->label('Archived')->filterable();
+        $this->archived || $archiveColumn->hide();
+
         return [
             Column::name('name')
                 ->label('Name')
@@ -50,6 +58,7 @@ class Table extends LivewireDatatable
                 ->label('Address')
                 ->searchable()
                 ->sortable(),
+            $archiveColumn,
             ActionColumn::view('accommodation', 'accommodations.edit', 'accommodations.view'),
         ];
     }
