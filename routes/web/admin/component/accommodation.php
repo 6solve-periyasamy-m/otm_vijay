@@ -19,6 +19,8 @@ Route::prefix('{accommodation}')->group(function () {
     Route::get('/update', [AccommodationController::class, 'edit'])->name('accommodations.edit')->middleware('bouncer:Accommodation\Accommodation,update');
     Route::post('/update', [AccommodationController::class, 'update'])->name('accommodations.update')->middleware('bouncer:Accommodation\Accommodation,update');
     Route::get('/archive', [AccommodationController::class, 'archive'])->name('accommodations.archive')->middleware('bouncer:Accommodation\Accommodation,delete');
+    Route::get('/export', [AccommodationController::class, 'exportInventory'])->name('accommodations.inventory.export')->middleware('bouncer:Accommodation\AccommodationInventory,update');
+    Route::post('/import', [AccommodationController::class, 'importInventory'])->name('accommodations.inventory.import')->middleware('bouncer:Accommodation\AccommodationInventory,update');
     Route::get('/rooming', [AccommodationController::class, 'rooming'])->name('accommodations.rooming')->middleware('bouncer:Accommodation\Accommodation,read');
     Route::get('/rooming/{extension}', [AccommodationController::class, 'exportRooming'])->name('accommodations.rooming.export')->middleware('bouncer:Accommodation\Accommodation,read');
 

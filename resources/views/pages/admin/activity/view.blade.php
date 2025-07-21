@@ -69,7 +69,7 @@
                         </button>
                         <form id="import" style="width: 50%;" enctype="multipart/form-data" type="form" method="post" action="{{ route('activities.inventory.import', ['activity' => $activity,]) }}">
                             @csrf
-                            <x-livewire.input type="file" name="import" />
+                            <x-livewire.input type="file" required name="import" />
                         </form>
                     @endcan
                 </div>
