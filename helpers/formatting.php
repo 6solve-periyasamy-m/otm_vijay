@@ -129,3 +129,16 @@ if (!function_exists('truncate')) {
         return Str::limit($str ?? "", $chars, $append);
     }
 }
+if (!function_exists('sanitize')) {
+    /**
+     * Sanitize a string for a filename
+     *
+     * @param string|null $str
+     * @return string
+     */
+    function sanitize(?string $str): string
+    {
+        $str = str_replace(' ', '-', strtolower($str));
+        return preg_replace('/[^A-Za-z0-9\-]/', '', $str);
+    }
+}
