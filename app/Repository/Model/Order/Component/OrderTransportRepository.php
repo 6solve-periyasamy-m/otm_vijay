@@ -103,13 +103,13 @@ class OrderTransportRepository extends OrderComponentRepository
         ]);
     }
 
-    public function getQuantity(Order $order = null): int
+    public function getQuantity(Order|null $order = null): int
     {
         $order = $order ?? $this->orderComponent->orderCustomer->order;
         return $order?->orderTransport()->where('transport_inventory_tour_id', '=', $this->orderComponent->transport_inventory_tour_id)->count() ?? 0;
     }
 
-    public function getItineraryItem(Order $order = null): ItineraryItem
+    public function getItineraryItem(Order|null $order = null): ItineraryItem
     {
         $item = $this->getTourComponent()?->getItineraryItem($this->getQuantity($order));
         if ($this->getStartTime()->isSameDay($this->getEndTime())) {

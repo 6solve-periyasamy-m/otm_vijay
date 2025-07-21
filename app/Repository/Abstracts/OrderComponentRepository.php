@@ -21,8 +21,8 @@ abstract class OrderComponentRepository extends ModelRepository implements HasCo
     abstract public function getTourComponent(): ?InventoryTourRepository;
     abstract public function getItineraryItems(): array;
     abstract public function getInvoiceBillable(): InvoiceBillable;
-    abstract public function getQuantity(Order $order = null): int;
-    abstract public function getItineraryItem(Order $order = null): ItineraryItem;
+    abstract public function getQuantity(Order|null $order = null): int;
+    abstract public function getItineraryItem(Order|null $order = null): ItineraryItem;
     abstract public function getStartTime(): Carbon|null;
     abstract public function getEndTime(): Carbon|null;
     abstract public function getCostToCompany(): float;

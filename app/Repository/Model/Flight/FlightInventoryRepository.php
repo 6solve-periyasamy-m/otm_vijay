@@ -38,7 +38,7 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
      * @param ComponentPackageRepository|null $repository
      * @return Collection<FlightInventory>
      */
-    public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
+    public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository|null $repository = null): Collection
     {
         $from->setTime(0, 0);
         $to->setTime(23, 59, 59);

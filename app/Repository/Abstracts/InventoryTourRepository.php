@@ -21,7 +21,7 @@ use Illuminate\Support\Collection;
 
 abstract class InventoryTourRepository extends InventoryContainerRepository implements HasStockControl
 {
-    abstract public static function getAvailableAddons(Tour $tour, OrderCustomer $orderCustomer = null): array;
+    abstract public static function getAvailableAddons(Tour $tour, OrderCustomer|null $orderCustomer = null): array;
 
     abstract public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderComponentRepository;
 
