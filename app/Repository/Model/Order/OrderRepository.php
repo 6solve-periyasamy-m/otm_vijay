@@ -715,10 +715,6 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         foreach ($this->order->tour?->costs()->where('per_customer', '=', false)->get() ?? [] as $item) {
             $cost += $item->amount;
         }
-
-        if ($this->order->total_manual_cost > 0) {
-            $cost += $this->order->total_manual_cost;
-        }
         return sigfig($cost);
     }
 

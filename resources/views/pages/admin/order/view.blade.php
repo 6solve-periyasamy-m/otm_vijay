@@ -95,23 +95,12 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
             <p>Total Paid</p>
             <h6 class="fw-bold">{{ fr_currency($order->paid, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->paid * $toSystem, Settings::currency()) }}) @endif</h6>
         </div>
-        <div class="col-12 col-xl-6">
+        <div class="col-12 col-xl-4">
             <p>Balance Outstanding</p>
             <h6 class="fw-bold">{{ fr_currency($order->remaining, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->remaining * $toSystem, Settings::currency()) }}) @endif</h6>
         </div>
-        @if(!is_null($order->total_manual_cost) && $order->total_manual_cost != 0)
-        <div class="col-12 col-xl-3">
-            <p>Total Cost Price</p>
-            <h6 class="fw-bold">
-                {{ fr_currency($order->total_manual_cost, $order->currency) }}
-                @if($nonSystem)
-                    ({{ fr_currency($order->total_manual_cost * $toSystem, Settings::currency()) }})
-                @endif
-            </h6>
-        </div>
-        @endif
         @if(!is_null($order->total_manual_amount) && $order->total_manual_amount != 0)
-        <div class="col-12 col-xl-3">
+        <div class="col-12 col-xl-2">
             <p>Total Sell Price</p>
             <h6 class="fw-bold">
                 {{ fr_currency($order->total_manual_amount, $order->currency) }}
@@ -143,7 +132,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                 @endif
             </h6>
         </div>
-        <div class="col-12 col-xl-3">
+        <div class="col-12 col-xl-4">
             <p>Cost to Company</p>
             <h6 class="fw-bold">
                 {{ fr_currency($order->repository->getCostToCompany() * $fromSystem, $order->currency) }}
@@ -157,7 +146,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                 @endif
             </h6>
         </div>
-        <div class="col-12 col-xl-3">
+        <div class="col-12 col-xl-2">
             <p>Current Profit</p>
             <h6 class="fw-bold">
                 @if($order->cache->profit !== null)
