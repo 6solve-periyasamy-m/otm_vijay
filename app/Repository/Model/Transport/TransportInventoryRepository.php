@@ -230,4 +230,33 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
             $details,
         );
     }
+
+    /**
+     * Get all inventory that match this one (excluding dates)
+     *
+     * @return Collection<TransportInventory>|TransportInventory[]
+     */
+    private function getMatchingInventory(): Collection|array
+    {
+        return $this->inventory->transport->inventory()
+            ->where('travel_class_id', '=', $this->inventory->travel_class_id)
+            ->with(['travelClass',])
+            ->get();
+    }
+
+    public function getStartingAt(Carbon $start): TransportInventory
+    {
+        $end = $start->copy()->addDays(diff_in_nights($this->inventory->departs_at, $this->inventory->arrives_at));
+        foreach ($this->getMatchingInventory() as $inventory) {
+            if ($inventory->departs_at->isSameDay($start)
+                && $inventory->arrives_at->isSameDay($end)) {
+                return $inventory;
+            }
+        }
+        $duplicate = $this->inventory->replicate();
+        $duplicate->departs_at = $start;
+        $duplicate->arrives_at = $end;
+        $duplicate->save();
+        return $duplicate;
+    }
 }

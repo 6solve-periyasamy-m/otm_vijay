@@ -111,8 +111,6 @@ class OrderTransportRepository extends OrderComponentRepository
 
     public function getItineraryItem(Order $order = null): ItineraryItem
     {
-
-
         $item = $this->getTourComponent()?->getItineraryItem($this->getQuantity($order));
         if ($this->getStartTime()->isSameDay($this->getEndTime())) {
             $dates = $this->getStartTime()->format('d M Y');

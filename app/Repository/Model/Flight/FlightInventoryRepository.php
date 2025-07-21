@@ -222,4 +222,34 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
             $details,
         );
     }
+
+    /**
+     * Get all inventory that match this one (excluding dates)
+     *
+     * @return Collection<FlightInventory>|FlightInventory[]
+     */
+    private function getMatchingInventory(): Collection|array
+    {
+        return $this->inventory->flight->inventory()
+            ->where('travel_class_id', '=', $this->inventory->travel_class_id)
+            ->with(['travelClass',])
+            ->get();
+    }
+
+    public function getStartingAt(Carbon $start): FlightInventory
+    {
+        $end = $start->copy()->addDays(diff_in_nights($this->inventory->departs_at, $this->inventory->arrives_at));
+        foreach ($this->getMatchingInventory() as $inventory) {
+            if ($inventory->departs_at->isSameDay($start)
+                && $inventory->arrives_at->isSameDay($end)) {
+                return $inventory;
+            }
+        }
+        $duplicate = $this->inventory->replicate();
+        $duplicate->check_in = $this->inventory->check_in->addDays($this->inventory->departs_at->diffInDays($start));
+        $duplicate->departs_at = $start;
+        $duplicate->arrives_at = $end;
+        $duplicate->save();
+        return $duplicate;
+    }
 }
