@@ -173,6 +173,42 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         return $newTour;
     }
 
+    public function duplicateToDate(Carbon $newStart): Tour
+    {
+        $newEnd = $newStart->copy()->addDays(diff_in_nights($this->tour->date_from, $this->tour->date_to));
+        $diffInDays = diff_in_nights($this->tour->date_from, $newStart);
+        $duplicate = $this->duplicate();
+        $duplicate->name .= " (Shifted to " . f_date($newStart). ")";
+        $duplicate->date_from = $newStart;
+        $duplicate->date_to = $newEnd;
+        $duplicate->save();
+        foreach ($duplicate->accommodationInventoryTours as $tourComponent) {
+            $tcStart = $tourComponent->inventory->check_in->addDays($diffInDays);
+            $inventory = $tourComponent->inventory->repository->getStartingAt($tcStart);
+            $tourComponent->accommodation_inventory_id = $inventory->id;
+            $tourComponent->save();
+        }
+        foreach ($duplicate->activityInventoryTours as $tourComponent) {
+            $tcStart = $tourComponent->inventory->starts_at->addDays($diffInDays);
+            $inventory = $tourComponent->inventory->repository->getStartingAt($tcStart);
+            $tourComponent->activity_inventory_id = $inventory->id;
+            $tourComponent->save();
+        }
+        foreach ($duplicate->flightInventoryTours as $tourComponent) {
+            $tcStart = $tourComponent->inventory->departs_at->addDays($diffInDays);
+            $inventory = $tourComponent->inventory->repository->getStartingAt($tcStart);
+            $tourComponent->flight_inventory_id = $inventory->id;
+            $tourComponent->save();
+        }
+        foreach ($duplicate->transportInventoryTours as $tourComponent) {
+            $tcStart = $tourComponent->inventory->departs_at->addDays($diffInDays);
+            $inventory = $tourComponent->inventory->repository->getStartingAt($tcStart);
+            $tourComponent->transport_inventory_id = $inventory->id;
+            $tourComponent->save();
+        }
+        return $duplicate;
+    }
+
     /**
      * @param bool $accommodation Should accommodation be included
      * @param bool $activities Should activities be included

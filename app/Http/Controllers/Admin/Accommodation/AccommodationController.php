@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Accommodation;
 
+use App\Exports\Inventory\AccommodationInventoryExport;
+use App\Http\Controllers\Abstract\ImportsToCollection;
 use App\Http\Controllers\Controller;
+use App\Imports\Inventory\AccommodationOverrideImport;
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\Amenity;
 use App\Models\Helper\Enum\AddressParent;
@@ -15,6 +18,7 @@ use Illuminate\Support\Facades\File;
 
 class AccommodationController extends Controller
 {
+    use ImportsToCollection;
 
     public function index(Request $request)
     {
@@ -73,6 +77,16 @@ class AccommodationController extends Controller
     public function view(Accommodation $accommodation)
     {
         return view('pages.admin.accommodation.view', ['accommodation' => $accommodation,]);
+    }
+
+    public function exportInventory(Accommodation $accommodation)
+    {
+        return (new AccommodationInventoryExport($accommodation))->download();
+    }
+
+    public function importInventory(Request $request, Accommodation $accommodation): RedirectResponse
+    {
+        return $this->import((new AccommodationOverrideImport($accommodation)), $request->file('import'));
     }
 
     public function rooming(Request $request, Accommodation $accommodation)
@@ -135,6 +149,12 @@ class AccommodationController extends Controller
             }
         }
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
+    }
+
+    public function duplicate(Accommodation $accommodation): RedirectResponse
+    {
+        $accommodation->repository->duplicate(true);
+        return redirect()->route('accommodations.edit', ['accommodation' => $accommodation,]);
     }
 
     public function archive(Accommodation $accommodation): RedirectResponse

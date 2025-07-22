@@ -96,13 +96,13 @@ class OrderActivityRepository extends OrderComponentRepository
         ]);
     }
 
-    public function getQuantity(Order $order = null): int
+    public function getQuantity(Order|null $order = null): int
     {
         $order = $order ?? $this->orderComponent->orderCustomer->order;
         return $order?->orderActivities()->where('activity_inventory_tour_id', '=', $this->orderComponent->activity_inventory_tour_id)->count() ?? 0;
     }
 
-    public function getItineraryItem(Order $order = null): ItineraryItem
+    public function getItineraryItem(Order|null $order = null): ItineraryItem
     {
         return $this->getTourComponent()?->getItineraryItem($this->getQuantity($order));
     }

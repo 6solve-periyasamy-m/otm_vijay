@@ -47,6 +47,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Address|null $departureAddress
  * @property-read Operator $operator
  * @property-read Collection|TransportInventory[] $transportInventory
+ * @property-read Collection|TransportInventory[] $inventory
  * @property-read int|null $transport_inventory_count
  * @property-read TransportType $transportType
  * @property-read TransportRepository $repository
@@ -96,6 +97,11 @@ class Transport extends Model
     public function transportInventory(): HasMany
     {
         return $this->hasMany(TransportInventory::class, 'transport_id');
+    }
+
+    public function inventory(): HasMany
+    {
+        return $this->transportInventory();
     }
 
     public function transportType(): BelongsTo

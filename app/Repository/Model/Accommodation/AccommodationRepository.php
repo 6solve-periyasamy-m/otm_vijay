@@ -119,4 +119,23 @@ class AccommodationRepository extends ModelRepository implements HasRoomingList
 
         return $data;
     }
+
+    /**
+     * Duplicate the accommodation into a new component
+     *
+     * @param bool $inventory Should inventory also be duplicated?
+     * @return Accommodation
+     */
+    public function duplicate(bool $inventory = false): Accommodation
+    {
+        $component = $this->accommodation->replicate();
+        $component->name .= " - Duplicate";
+        $component->save();
+        if ($inventory) {
+            foreach ($this->accommodation->inventory as $inv) {
+                $component->inventory()->save($inv->replicate());
+            }
+        }
+        return $component;
+    }
 }

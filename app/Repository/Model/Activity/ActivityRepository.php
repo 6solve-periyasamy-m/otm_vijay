@@ -78,4 +78,23 @@ class ActivityRepository extends ModelRepository implements HasActivityManifest
             $this->activity,
         );
     }
+
+    /**
+     * Duplicate the activity into a new component
+     *
+     * @param bool $inventory Should inventory also be duplicated?
+     * @return Activity
+     */
+    public function duplicate(bool $inventory = false): Activity
+    {
+        $component = $this->activity->replicate();
+        $component->name .= " - Duplicate";
+        $component->save();
+        if ($inventory) {
+            foreach ($this->activity->inventory as $inv) {
+                $component->inventory()->save($inv->replicate());
+            }
+        }
+        return $component;
+    }
 }
