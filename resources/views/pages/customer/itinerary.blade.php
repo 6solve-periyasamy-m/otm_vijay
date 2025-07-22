@@ -187,7 +187,8 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
     <div class="tours_list_details">
         <div class="upcoming_tours_clock">
             {{-- <div class="upcoming_tour_title">
-                <img src="/images/customer/images/clock.svg" alt="clock" />
+                <img src="/images/customer/images/clock.svg" alt="clock" class="clock_whte" />
+                <img src="/images/customer/images/clock_black.svg" alt="clock" class="clock_blk" />
                 <h6 class="badge badge-{{ $orderCustomer->order->status->color() }} fw-bold ">{{ $orderCustomer->order->status->description() }}</h6>
             </div> --}}
             <div class="event_list">
@@ -411,7 +412,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
         <div class="trip_itinerary_row name_address_font">
             <div class="trip_text_btn">
                 <div><h2>Trip itinerary and inclusions</h2></div>
-            <div><div class="common_btn"><a href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" />DOWNLOAD ITINERARY</a></div></div>
+            <div><div class="common_btn"><a href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" class="trip_itinerary_link" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="trip_itinerary_org_icn"/><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="trip_itinerary_wht_icn"/>DOWNLOAD ITINERARY</a></div></div>
             </div>            
             @php
                 $groupedByDate      = [];
@@ -911,7 +912,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                                     @endphp
                                     <div class="tour_event_img"><img src="{{asset($evenImg)}}" alt="{{ $vpast->tour->event->name ?? '' }}"/></div>
                                     <div class="event_title_date">
-                                        <h4></h4>{{ $vpast->tour->name }}</h4>
+                                        <h4>{{ $vpast->tour->name }}</h4>
                                         <p class="calendar_date"><img src="{{ asset('/images/customer/images/calendar.svg')}}" />
                                         {{ Carbon::parse($vpast->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($vpast->tour->date_to)->format('d M Y')}}</p>
                                         <p class="event_location"><img src="{{ asset('/images/customer/images/location.svg')}}" />{{ $vpast->tour->city }},{{ optional(Country::find($vpast->tour->country_id))->name }}

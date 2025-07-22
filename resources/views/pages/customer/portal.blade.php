@@ -116,7 +116,7 @@
                                         {{ $order->tour->city }},{{ optional(Country::find($order->tour->country_id))->name }}
                                     </p>
                                 @endif
-                                <p>                                    
+                                <p class="pay_ment_due">                                    
                                     @if($order->next_installment !== null)
                                         Payment Due: {{ \Carbon\Carbon::parse($order->next_installment->due_on)->format('d M Y') }} - {{fr_currency($order->next_installment->remaining, $order->currency)}}
                                         @if($nonSystem) ({{ fr_currency($order->next_installment->remaining * $toSystem, Settings::currency()) }}) @endif
@@ -130,8 +130,10 @@
                             $hrefdata = url('/customer/finances/invoice/' .  $order->booking_reference);
                         @endphp
                         <div class="common_btn">
-                            <a class="cta_space" href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> ITINERARY</a>
-                            <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn cta_space"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> INVOICE</a>
+                            <!-- <a class="cta_space" href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> ITINERARY</a>
+                            <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn cta_space"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> INVOICE</a> -->
+                            <a class="cta_space download_itinerary_link" href="{{ route('customer.itinerary.download', ['reference' => $orderCustomer->order->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/> ITINERARY</a>
+                            <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn cta_space download_itinerary_link"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/> INVOICE</a>
                         </div>
                         @if($order->next_installment !== null)
                             @php
@@ -217,7 +219,7 @@
                                 <div class="tour_event_img"><img src="{{asset($evenImg)}}" alt="{{ $vpast->tour?->event?->name }}"/></div>
                                 <div class="event_title_date">
                                     <h4>{{ $vpast->tour?->event?->name}}</h4>
-                                    <p>{{ $vpast->tour->name }}</p>
+                                    <p class="pst_tour_details">{{ $vpast->tour->name }}</p>
                                     <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />
                                     {{ Carbon::parse($vpast->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($vpast->tour->date_to)->format('d M Y')}}
                                     </p>
@@ -232,8 +234,10 @@
                                 $hrefdata = url('/customer/finances/invoice/' .  $vpast->booking_reference);
                             @endphp
                             <div class="common_btn">
-                                <a href="{{ route('customer.itinerary.download', ['reference' => $vpast->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> ITINERARY</a>
-                                <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> INVOICE</a>
+                                <!-- <a href="{{ route('customer.itinerary.download', ['reference' => $vpast->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> ITINERARY</a>
+                                <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> INVOICE</a> -->
+                                <a href="{{ route('customer.itinerary.download', ['reference' => $vpast->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank" class="download_itinerary_link"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/> ITINERARY</a>
+                                <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn download_itinerary_link"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/> INVOICE</a>
                             </div>
                         </div>
                     @endforeach

@@ -67,5 +67,14 @@
         function logout() {
             $.post('{{ route('customer.logout') }}', {'_token': '{{ csrf_token() }}',}).then(function () { window.location = '{{ route('customer.login') }}'; });
         }
+        window.addEventListener('load', function () {
+            const targetDiv = document.querySelector('.inner_content');
+            const header = document.getElementById('sidebar');
+            console.log(targetDiv);
+            if (targetDiv && header) {
+            const divHeight = targetDiv.offsetHeight;
+            header.style.height = divHeight + 'px';
+            }
+        });
     </script>
 @endpush

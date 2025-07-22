@@ -9,6 +9,7 @@
             <th scope="col"><strong>Lead Traveller Phone</strong></th>
             <th scope="col"><strong>Travellers</strong></th>
             <th scope="col"><strong>Expected Cost</strong></th>
+            <th scope="col"><strong>Step Abandoned</strong></th>
             <th scope="col"><strong>Continue Link</strong></th>
         </tr>
     </thead>
@@ -23,6 +24,7 @@
                 <td>{{ $row->contact_number }}</td>
                 <td>{{ $row->travellers }}</td>
                 <td>{{ f_currency($row->expected) }}</td>
+                <td>{{ $row->last_page }}</td>
                 <td><a href="javascript:toClipboard('{{ $row->continue }}');">Copy to Clipboard</a></td>
             </tr>
         @endforeach

@@ -93,7 +93,7 @@
                                             <tr>
                                             @if(($order->booking_fee ?? 0) > 0)
                                                     {!! $tddata !!}
-                                                    <td data-content="Due By" class="fw-bold">With Order</td>
+                                                    <td data-content="Due By">With Order</td>
                                                     <td data-content="Type">Booking Fee</td>
                                                     <td data-content="Amount Due">{{ f_currency($order->booking_fee) }}</td>
                                                     <td data-content="Outstanding">
@@ -108,7 +108,7 @@
                                             @endif
                                             @if(($order->deposit ?? 0) > 0)
                                                 {!! $tddata !!}
-                                                <td data-content="Due By" class="fw-bold">With Order</td>
+                                                <td data-content="Due By">With Order</td>
                                                 <td data-content="Type">Deposit</td>
                                                 <td data-content="Amount Due">{{ f_currency($order->calculated_deposit) }}</td>
                                                 <td data-content="Outstanding">
@@ -123,7 +123,7 @@
                                             @endif
                                             @foreach($order->installments as $installment)
                                                 {!! $tddata !!}
-                                                <td data-content="Due By" class="fw-bold">{{ f_date($installment->due_on) }}</td>
+                                                <td data-content="Due By">{{ f_date($installment->due_on) }}</td>
                                                 <td data-content="Type">Instalment</td>
                                                 <td data-content="Amount Due">{{ f_currency($installment->calculated_amount) }}</td>
                                                 <td data-content="Outstanding">
@@ -137,7 +137,7 @@
                                             </tr>
                                             @endforeach
                                                 {!! $tddata !!}
-                                                <td data-content="Due By" class="fw-bold">{{ f_date($order->tour->final_payment) }}</td>
+                                                <td data-content="Due By">{{ f_date($order->tour->final_payment) }}</td>
                                                 <td data-content="Type">Remaining</td>
                                                 <td data-content="Amount Due">{{ f_currency($order->remaining_installment) }}</td>
                                                 <td data-content="Outstanding">

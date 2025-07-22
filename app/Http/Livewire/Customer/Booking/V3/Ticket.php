@@ -37,6 +37,8 @@ class Ticket extends V3BookingComponent
     public function advance()
     {
         $this->booking->updateBookingProgressNotification('Tickets');
+        $this->booking->last_page = 'Tickets';
+        $this->booking->save();
         if ($this->hasInclusions()) {
             return redirect()->route('booking.v3.inclusions', ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]);
         } else {

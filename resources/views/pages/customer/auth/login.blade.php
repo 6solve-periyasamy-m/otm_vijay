@@ -101,7 +101,8 @@
                                         </label>
                                     </span>
                                 </P>
-                                <p class="submit_btn"><button type="submit"><span>SUBMIT</span></button></p>
+                                <p class="submit_btn"><button type="submit"><span>SUBMIT <img src="{{ asset('/images/customer/images/arrow_right_white.svg') }}" class="pay_right_arrow_wht" />
+                                <img src="{{ asset('images/customer/images/arrow_right.svg') }}" class="pay_right_arrow_org" /></span></button></p>
                             </form>
                             <p class="forgot_pwd"><a href="{{ route('customer.password.request') }}">FORGOT PASSWORD?</a></p>
                         </div>

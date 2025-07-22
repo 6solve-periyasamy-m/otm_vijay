@@ -96,6 +96,8 @@ class Guest extends V3BookingComponent
         }
 
         $this->booking->updateBookingProgressNotification('Guest');
+        $this->booking->last_page = 'Guest';
+        $this->booking->save();
         
         return redirect()->route('booking.v3.hotel', ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]);
     }

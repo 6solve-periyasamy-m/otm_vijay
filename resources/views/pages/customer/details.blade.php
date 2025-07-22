@@ -245,7 +245,7 @@
                             </div>
                             <hr class="splitter">
                             @if ($passport)
-                                <span class="fw-bold">Passport details are currently locked due to an upcoming tour. If you need to update your passport details, please contact us.</span>
+                                <span class="passport_dtls">Passport details are currently locked due to an upcoming tour. If you need to update your passport details, please contact us.</span>
                             @endif
                             <x-customer.input :disable="$passport" name="passport_first_name" value="{{ $customer->passport_first_name ?? '' }}" width="4" autocomplete="given-name">
                                 First Name

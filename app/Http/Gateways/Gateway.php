@@ -61,6 +61,8 @@ abstract class Gateway
                 $order->external_notes = $booking->notes ?? ''; // Get the notes from the booking
                 $order->save();
                 $booking->updateBookingProgressNotification('Booking Completed', $intention->customer);
+                $booking->last_page = 'Booking Completed';
+                $booking->save();
                 $intention->customer_id = $order->leadBooker->customer_id;
                 $intention->save();
                 $payment = $intention->makePayment($amount / 100, PaymentMethod::findOrCreate($gateway), $created ?? now(), Currency::whereCode($currency)->first());

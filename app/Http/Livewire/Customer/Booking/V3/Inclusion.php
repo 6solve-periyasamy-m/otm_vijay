@@ -29,6 +29,8 @@ class Inclusion extends V3BookingComponent
     public function advance()
     {
         $this->booking->updateBookingProgressNotification('Additional Inclusions');
+        $this->booking->last_page = 'Additional Inclusions';
+        $this->booking->save();
         return redirect()->route('booking.v3.details', ['tour' => $this->tour->booking_form_url, 'booking' => $this->booking->token]);
     }
 
