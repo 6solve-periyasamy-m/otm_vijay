@@ -49,6 +49,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read Collection|ActivityInventory[] $activityInventory
+ * @property-read Collection|ActivityInventory[] $inventory
  * @property-read Collection|OrderActivity[] $orders
  * @property-read int|null $activity_inventory_count
  * @property-read ActivityType $activityType
@@ -115,6 +116,11 @@ class Activity extends Model
     public function activityInventory(): HasMany
     {
         return $this->hasMany(ActivityInventory::class, 'activity_id');
+    }
+
+    public function inventory(): HasMany
+    {
+        return $this->activityInventory();
     }
 
     public function event(): BelongsTo

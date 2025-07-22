@@ -39,7 +39,7 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
      * @param ComponentPackageRepository|null $repository
      * @return Collection<ActivityInventory>
      */
-    public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
+    public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository|null $repository = null): Collection
     {
         $from->setTime(0, 0);
         $to->setTime(23, 59, 59);
@@ -219,5 +219,34 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
             $this->inventory->starts_at->unix(),
             $details,
         );
+    }
+
+    /**
+     * Get all inventory that match this one (excluding dates)
+     *
+     * @return Collection<ActivityInventory>|ActivityInventory[]
+     */
+    private function getMatchingInventory(): Collection|array
+    {
+        return $this->inventory->activity->inventory()
+            ->where('ticket_type_id', '=', $this->inventory->ticket_type_id)
+            ->with(['ticketType',])
+            ->get();
+    }
+
+    public function getStartingAt(Carbon $start): ActivityInventory
+    {
+        $end = $start->copy()->addDays(diff_in_nights($this->inventory->starts_at, $this->inventory->ends_at));
+        foreach ($this->getMatchingInventory() as $inventory) {
+            if ($inventory->starts_at->isSameDay($start)
+                && $inventory->ends_at->isSameDay($end)) {
+                return $inventory;
+            }
+        }
+        $duplicate = $this->inventory->replicate();
+        $duplicate->starts_at = $start;
+        $duplicate->ends_at = $end;
+        $duplicate->save();
+        return $duplicate;
     }
 }

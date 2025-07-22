@@ -57,6 +57,12 @@ class MerchandiseController extends Controller
         return redirect()->route('merchandise.view', ['merchandise' => $merchandise,]);
     }
 
+    public function duplicate(Merchandise $merchandise): RedirectResponse
+    {
+        $merchandise->repository->duplicate(true);
+        return redirect()->route('merchandise.edit', ['merchandise' => $merchandise,]);
+    }
+
     public function archive(Merchandise $merchandise): RedirectResponse
     {
         $merchandise->archived = !$merchandise->archived;

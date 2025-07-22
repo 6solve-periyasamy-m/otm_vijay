@@ -14,8 +14,11 @@ Route::prefix('{activity}')->group(function () {
     Route::get('/', [ActivityController::class, 'view'])->name('activities.view')->middleware('bouncer:Activity\Activity,read');
     Route::get('/manifest', [ActivityController::class, 'manifest'])->name('activities.manifest.view')->middleware('bouncer:Activity\Activity,read');
     Route::get('/manifest/export/{extension?}', [ActivityController::class, 'export'])->name('activities.manifest.export')->middleware('bouncer:Activity\Activity,read');
+    Route::get('/duplicate', [ActivityController::class, 'duplicate'])->name('activities.duplicate')->middleware('bouncer:Activity\Activity,create');
     Route::get('/update', [ActivityController::class, 'edit'])->name('activities.edit')->middleware('bouncer:Activity\Activity,update');
     Route::post('/update', [ActivityController::class, 'update'])->name('activities.update')->middleware('bouncer:Activity\Activity,update');
+    Route::get('/export', [ActivityController::class, 'exportInventory'])->name('activities.inventory.export')->middleware('bouncer:Activity\ActivityInventory,update');
+    Route::post('/import', [ActivityController::class, 'importInventory'])->name('activities.inventory.import')->middleware('bouncer:Activity\ActivityInventory,update');
     Route::get('/archive', [ActivityController::class, 'archive'])->name('activities.archive')->middleware('bouncer:Activity\Activity,delete');
     Route::prefix('inventory')->group(function () {
         Route::get('/create', [ActivityInventoryController::class, 'create'])->name('activity-inventories.create')->middleware('bouncer:Activity\ActivityInventory,create');

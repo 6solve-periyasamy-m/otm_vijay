@@ -56,7 +56,7 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
      * @param ComponentPackageRepository|null $repository
      * @return Collection<AccommodationInventory>
      */
-    public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
+    public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository|null $repository = null): Collection
     {
         $from->setTime(0, 0);
         $to->setTime(23, 59, 59);
@@ -307,5 +307,31 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         }
         if ($a->check_in->gt($b->check_in)) { return 1; }
         return -1;
+    }
+
+    private function getMatchingInventory(): Collection|array
+    {
+        return $this->inventory->accommodation->inventory()
+                ->where('room_type_id', '=', $this->inventory->room_type_id)
+                ->where('board_type_id', '=', $this->inventory->board_type_id)
+                ->where('room_category_id', '=', $this->inventory->room_category_id)
+                ->with(['roomType', 'boardType', 'category'])
+                ->get();
+    }
+
+    public function getStartingAt(Carbon $start): AccommodationInventory
+    {
+        $end = $start->copy()->addDays(diff_in_nights($this->inventory->check_in, $this->inventory->check_out));
+        foreach ($this->getMatchingInventory() as $inventory) {
+            if ($inventory->check_in->isSameDay($start)
+                && $inventory->check_out->isSameDay($end)) {
+                return $inventory;
+            }
+        }
+        $duplicate = $this->inventory->replicate();
+        $duplicate->check_in = $start;
+        $duplicate->check_out = $end;
+        $duplicate->save();
+        return $duplicate;
     }
 }

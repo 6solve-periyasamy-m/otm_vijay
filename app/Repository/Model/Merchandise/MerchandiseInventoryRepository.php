@@ -98,7 +98,7 @@ class MerchandiseInventoryRepository extends InventoryRepository
      * @param ComponentPackageRepository|null $repository
      * @return Collection<MerchandiseInventory>
      */
-    public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
+    public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository|null $repository = null): Collection
     {
         $inventories = [];
         if (isset($repository)) {

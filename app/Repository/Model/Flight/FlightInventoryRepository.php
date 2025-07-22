@@ -38,7 +38,7 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
      * @param ComponentPackageRepository|null $repository
      * @return Collection<FlightInventory>
      */
-    public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
+    public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository|null $repository = null): Collection
     {
         $from->setTime(0, 0);
         $to->setTime(23, 59, 59);
@@ -221,5 +221,35 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
             $this->inventory->departs_at->unix(),
             $details,
         );
+    }
+
+    /**
+     * Get all inventory that match this one (excluding dates)
+     *
+     * @return Collection<FlightInventory>|FlightInventory[]
+     */
+    private function getMatchingInventory(): Collection|array
+    {
+        return $this->inventory->flight->inventory()
+            ->where('travel_class_id', '=', $this->inventory->travel_class_id)
+            ->with(['travelClass',])
+            ->get();
+    }
+
+    public function getStartingAt(Carbon $start): FlightInventory
+    {
+        $end = $start->copy()->addDays(diff_in_nights($this->inventory->departs_at, $this->inventory->arrives_at));
+        foreach ($this->getMatchingInventory() as $inventory) {
+            if ($inventory->departs_at->isSameDay($start)
+                && $inventory->arrives_at->isSameDay($end)) {
+                return $inventory;
+            }
+        }
+        $duplicate = $this->inventory->replicate();
+        $duplicate->check_in = $this->inventory->check_in->addDays($this->inventory->departs_at->diffInDays($start));
+        $duplicate->departs_at = $start;
+        $duplicate->arrives_at = $end;
+        $duplicate->save();
+        return $duplicate;
     }
 }

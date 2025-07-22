@@ -90,13 +90,13 @@ class OrderMerchandiseRepository extends OrderComponentRepository
         ]);
     }
 
-    public function getQuantity(Order $order = null): int
+    public function getQuantity(Order|null $order = null): int
     {
         $order = $order ?? $this->orderComponent->orderCustomer->order;
         return $order?->orderMerchandise()->where('merchandise_inventory_tour_id', '=', $this->orderComponent->merchandise_inventory_tour_id)->count() ?? 0;
     }
 
-    public function getItineraryItem(Order $order = null): ItineraryItem
+    public function getItineraryItem(Order|null $order = null): ItineraryItem
     {
         return $this->getTourComponent()?->getItineraryItem($this->getQuantity($order));
     }

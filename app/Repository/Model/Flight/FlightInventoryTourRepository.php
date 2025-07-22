@@ -40,7 +40,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
         $this->tourComponent = $tourComponent;
     }
 
-    public static function getAvailableAddons(Tour $tour, OrderCustomer $orderCustomer = null): array
+    public static function getAvailableAddons(Tour $tour, OrderCustomer|null $orderCustomer = null): array
     {
         $components = [];
         foreach ($tour->flightInventoryTours as $component) {

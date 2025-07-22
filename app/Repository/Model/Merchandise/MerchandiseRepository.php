@@ -119,4 +119,23 @@ class MerchandiseRepository extends ModelRepository
     {
         return Merchandise::find($id);
     }
+
+    /**
+     * Duplicate the merchandise into a new component
+     *
+     * @param bool $inventory Should inventory also be duplicated?
+     * @return Merchandise
+     */
+    public function duplicate(bool $inventory = false): Merchandise
+    {
+        $component = $this->component->replicate();
+        $component->name .= " - Duplicate";
+        $component->save();
+        if ($inventory) {
+            foreach ($this->component->inventory as $inv) {
+                $component->inventory()->save($inv->replicate());
+            }
+        }
+        return $component;
+    }
 }
