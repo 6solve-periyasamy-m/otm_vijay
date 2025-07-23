@@ -22,7 +22,7 @@
     height: 100%;
     padding: 4px 0px 14px 7px !important
 }
-.two_input_field.mobile_number .iti{width: 100%;}
+.two_input_field.mobile_number .iti{width: 50%;}
 .two_input_field.mobile_number .iti--separate-dial-code .iti__selected-flag{background: transparent;padding-left: 24px !important;padding-bottom: 7px !important;}
 .two_input_field.mobile_number .iti__arrow {
     width: 1px;
@@ -58,6 +58,7 @@
     background: #F35B15;
     border-radius: 10px;
 }
+.iti--allow-dropdown input[type=tel], .iti--separate-dial-code input,.iti--allow-dropdown input{padding-left: 65px;}
 </style>
 @section('content')
     {{--  <div class="container-fluid">

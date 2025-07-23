@@ -222,7 +222,7 @@ transition: all 0.8s ease;
 .login_img_column img{width: 100%;}
 .kpt_logo{padding-bottom: 48px;text-align: center;}
 .kpt_login_title{padding-bottom: 40px;}
-.login_form input,.forgot_pwd a,.guest_email input,.your_details_row input,.your_details_row select,.mobile_number .second_mob_no span b{font-family: 'PP Neue Montreal';font-size: 14px;line-height: 16px;padding-left: 24px;text-decoration: none;}
+.login_form input,.forgot_pwd a,.guest_email input,.your_details_row input,.your_details_row select,.mobile_number .second_mob_no span b{font-family: 'PP NeueMontreal Medium';font-size: 14px;line-height: 16px;padding-left: 24px;text-decoration: none;}
 .forgot_pwd a:hover{text-decoration: underline;}
 .login_form form,.forgot_pwd{text-align: center;}
 .kpt_login_title h3{
@@ -663,7 +663,7 @@ transition: all 0.8s ease;
 .your_details_row .two_input_field input,.address_detail_colm_1,.address_detail_colm_2,.second_mob_no,.current_pwd{width: 50%;}
 .second_mob_no input,.current_pwd input{width: 100% !important;}
 .your_details_row .two_input_field,.address_details_form {display: flex;column-gap: 16px;}
-.your_details_row .one_input_field input,.your_details_row .two_input_field input,.your_details_row .one_input_field select,.your_details_row .two_input_field select{margin-bottom: 16px;}
+.your_details_row .one_input_field input,.your_details_row .two_input_field input,.your_details_row .one_input_field select,.your_details_row .two_input_field select{margin-bottom: 16px !important;}
 input[type="date" i]::-webkit-calendar-picker-indicator { background-image: url(/images/customer/images/calendar_dob.svg);}
 .personal_details p{
     font-family: 'PP NeueMontreal Medium';
@@ -687,8 +687,8 @@ background-position-y: 15px;
 }
 .contact_details h3,.passport_details h3,.frequent_details h3,.other_details h3,.change_password h3{margin-bottom: 24px;}
 .passport_details select,.frequent_details select{background-position-x: 96%;}
-.your_details_colm_2 hr{width: 100%;position: absolute;left: 0px;z-index: -1;}
-.address_details,.contact_details,.passport_details,.frequent_details,.other_details,.change_password{padding-top: 35px;}
+.your_details_colm_2 hr{width: 100%;position: absolute;left: 0px;z-index: -1;color: #D9D9D9;margin: 0px;}
+.address_details,.contact_details,.passport_details,.frequent_details,.other_details,.change_password{padding-top: 32px;}
 .your_details_colm_2 .common_btn{padding-top: 32px;text-align: right;}
 .common_btn .save_changes{line-height: 17px;color: #fff;background-color: #F35B15;border-radius: 50px;padding: 11px 30px;border: 1px solid #F35B15;text-transform: uppercase;text-decoration: none;position: relative;}
 .common_btn .save_changes:hover{
@@ -1296,3 +1296,5 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
     color: #000;
 }
 .personal_details.passport_details .emergency_details_form{padding-top: 20px;}
+.iti__selected-flag{height: 50px;}
+.personal_details{padding-bottom: 16px;}
