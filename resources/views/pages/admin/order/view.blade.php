@@ -645,6 +645,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                             <th scope="col">Sell Price</th>
                             <th scope="col">Cost</th>
                             <th scope="col">Reason</th>
+                            <th scope="col">Date</th>
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
@@ -664,6 +665,8 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                 <td>{{ fr_currency($adjustment->amount, $order->currency) }}</td>
                                 <td>{{ fr_currency($adjustment->cost, $order->currency) }}</td>
                                 <td>{{ $adjustment->reason }}</td>
+
+                                <td>{{ f_date($adjustment->date) }}</td>
                                 <td class="actions">
                                     @can('update', \App\Models\Order\Adjustment\ManualAdjustment::class)
                                         <a href="{{ route('manual-adjustments.edit', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}"
@@ -702,6 +705,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                             <th scope="col">Customer</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Reason</th>
+                            <th scope="col">Date</th>
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
@@ -711,6 +715,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                     <td>{{ $ordersCustomer->customer->first_name .  " " . $ordersCustomer->customer->last_name }}</td>
                                     <td>{{ fr_currency($adjustment->amount, $order->currency) }}</td>
                                     <td>{{ $adjustment->reason }}</td>
+                                    <td>{{ f_date($adjustment->date) }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
                                             <a href="{{ route('order-customer-adjustments.edit', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}"

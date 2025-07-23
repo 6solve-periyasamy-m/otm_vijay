@@ -398,6 +398,7 @@
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Cost</th>
                                 <th scope="col">Purchase Price</th>
+                                <th scope="col">Updated Date</th>
                                 <th scope="col">Upgrades</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -418,6 +419,7 @@
                                         @endif
                                     </td>
                                     <td>{{ f_currency($orderAccommodation->purchase_price) }} @includeWhen($orderAccommodation->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
+                                    <td>{{ f_date($orderAccommodation->updated_at) }}</td>
                                     <td style="width: 20%">
                                         @if($orderAccommodation->tourComponent->tour_component_type == 'Add-on')
                                             Not Available
@@ -478,6 +480,7 @@
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Cost</th>
                                 <th scope="col">Purchase Price</th>
+                                <th scope="col">Updated Date</th>
                                 <th scope="col">Upgrades</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -497,6 +500,7 @@
                                         @endif
                                     </td>
                                     <td>{{ f_currency($orderActivity->purchase_price) }} @includeWhen($orderActivity->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
+                                    <td>{{ f_date($orderActivity->updated_at) }}</td>
                                     <td style="width: 20%">
                                         @if($orderActivity->tourComponent->tour_component_type == 'Add-on')
                                             Not Available
@@ -557,6 +561,7 @@
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Cost</th>
                                 <th scope="col">Purchase Price</th>
+                                <th scope="col">Updated Date</th>
                                 <th scope="col">Upgrades</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -576,6 +581,7 @@
                                         @endif
                                     </td>
                                     <td>{{ f_currency($orderFlight->purchase_price) }} @includeWhen($orderFlight->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
+                                    <td>{{ f_date($orderFlight->updated_at) }}</td>
                                     <td style="width: 20%">
                                         @if($orderFlight->tourComponent->tour_component_type == 'Add-on')
                                             Not Available
@@ -637,6 +643,7 @@
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Cost</th>
                                 <th scope="col">Purchase Price</th>
+                                <th scope="col">Updated Date</th>
                                 <th scope="col">Upgrades</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -657,6 +664,7 @@
                                         @endif
                                     </td>
                                     <td>{{ f_currency($orderTransport->purchase_price) }} @includeWhen($orderTransport->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
+                                    <td>{{ f_date($orderTransport->updated_at) }}</td>
                                     <td style="width: 20%">
                                         @if($orderTransport->tourComponent->tour_component_type == 'Add-on')
                                             Not Available
@@ -720,6 +728,7 @@
                         <th scope="col">Cost</th>
                         <th scope="col">Component Type</th>
                         <th scope="col">Fulfilled</th>
+                        <th scope="col">Updated Date</th>
                         <th scope="col" class="actions">Actions</th>
                     </tr>
                     </thead>
@@ -734,6 +743,7 @@
                             <td>{{ f_currency($orderMerchandise->tourComponent->tour_sales_price) }}</td>
                             <td>{{ $orderMerchandise->tourComponent->tour_component_type }}</td>
                             <td>{{ f_bool($orderMerchandise->fulfilled) }}</td>
+                            <td>{{ f_date($orderMerchandise->updated_at) }}</td>
                             <td class="actions">
                                 <a href="{{ route('merchandise.inventory.tour.order.fulfil', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderMerchandise' => $orderMerchandise]) }}"
                                    class="btn btn-outline-primary btn-sm">
