@@ -28,9 +28,10 @@ class OrderCustomerController extends Controller
     public function loadTourComponents(Order $order, OrderCustomer $orderCustomer)
     {
         $this->authorize('read', $orderCustomer); // Optional ACL check
-
+        $totalOrderCustomers = $order->orderCustomers->count();
         return view('partials.admin.order.customer.tour-components', [
             'orderCustomer' => $orderCustomer,
+            'payingCount' => $totalOrderCustomers,
             'customerViewUrl' => route('order-customers.view', [
                 'order' => $order,
                 'orderCustomer' => $orderCustomer,

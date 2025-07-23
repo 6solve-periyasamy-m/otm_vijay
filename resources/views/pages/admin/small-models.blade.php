@@ -113,6 +113,20 @@
         <div class="col-xl-4">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Transport\TransportTypeRepository::class])
         </div>
+        <div class="col-xl-4">
+            <x-admin.section.card>
+                <slot:header>
+                    <div class="d-flex justify-content-between">
+                        <h4 class="fw-bold">Transport Occupancy</h4>
+                        <button class="btn btn-primary" onclick="openModal('admin.transport.occupancy.form')">
+                            {{ Icon::create() }}
+                            Create New
+                        </button>
+                    </div>
+                </slot:header>
+                <livewire:admin.transport.occupancy.table />
+            </x-admin.section.card>
+        </div>
     </div>
     <div class="card">
         <div class="card-body" data-target="#merchandise" onclick="toggleAccordion(this)">

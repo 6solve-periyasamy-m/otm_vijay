@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Transport\OperatorController;
 use App\Http\Controllers\Admin\Transport\TransportController;
 use App\Http\Controllers\Admin\Transport\TransportInventoryController;
 use App\Http\Controllers\Admin\Transport\TransportTypeController;
+use App\Http\Controllers\Admin\Transport\TransportOccupancyController;
 
 Route::get('/', [TransportController::class, 'index'])->name('transports.all')->middleware('bouncer:Transport\Transport,read');
 Route::get('/create', [TransportController::class, 'create'])->name('transports.create')->middleware('bouncer:Transport\Transport,create');
@@ -53,6 +54,16 @@ Route::prefix('transport-types')->group(function () {
         Route::get('/update', [TransportTypeController::class, 'edit'])->name('transport-types.edit')->middleware('bouncer:Transport\TransportType,update');
         Route::post('/update', [TransportTypeController::class, 'update'])->name('transport-types.update')->middleware('bouncer:Transport\TransportType,update');
         Route::post('/delete', [TransportTypeController::class, 'destroy'])->name('transport-types.delete')->middleware('bouncer:Transport\TransportType,delete');
+    });
+});
+
+Route::prefix('occupancy')->group(function () {
+    Route::get('/create', [TransportOccupancyController::class, 'create'])->name('occupancy.create')->middleware('bouncer:Transport\TransportOccupancy,create');
+    Route::post('/create', [TransportOccupancyController::class, 'store'])->name('occupancy.store')->middleware('bouncer:Transport\TransportOccupancy,create');
+    Route::prefix('{occupancy}')->group(function () {
+        Route::get('/update', [TransportOccupancyController::class, 'edit'])->name('occupancy.edit')->middleware('bouncer:Transport\TransportOccupancy,update');
+        Route::post('/update', [TransportOccupancyController::class, 'update'])->name('occupancy.update')->middleware('bouncer:Transport\TransportOccupancy,update');
+        Route::post('/delete', [TransportOccupancyController::class, 'destroy'])->name('occupancy.delete')->middleware('bouncer:Transport\TransportOccupancy,delete');
     });
 });
 

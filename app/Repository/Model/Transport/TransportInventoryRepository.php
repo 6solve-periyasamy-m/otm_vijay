@@ -200,34 +200,37 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
 
     public function getItineraryItem(int|null $quantity = null): ItineraryItem
     {
-        $component = $this->inventory->component;
-        $departure_address = "{$component->departureAddress->name}";
-        $arrival_address =  "{$component->arrivalAddress->name}";
-        $departs_at = $this->inventory->departs_at;
-        $arrives_at = $this->inventory->arrives_at;
-        if ($departs_at->isSameDay($arrives_at)) {
-            $dates = $departs_at->format('d M Y');
-            $lbl_dates = 'Date';
-        } else {
-            $dates = $departs_at->format('d M Y') . ' to ' . $arrives_at->format('d M Y');
-            $lbl_dates = 'Dates';
-        }
-        $details = [
-            $lbl_dates => $dates,
-            'Pick-Up' => $departure_address,
-            'Time' => $departs_at->format('H:i'),
-            'Drop-Off' => $arrival_address,
-            'Transport' => $this->inventory->component->transportType->name,
-            'Travel Class' => $this->inventory->travelClass->name,
-            'Quantity' => $quantity,
-            'Description' => $this->inventory->component->description,
-        ];
-        if ($quantity === null) { unset($details['Quantity']); }
-        return new ItineraryItem(
-            $this->inventory->component->name,
-            'Journey',
-            $this->inventory->departs_at->unix(),
-            $details,
-        );
+        //if($this->inventory && $this->inventory->hasSufficientOccupancy($quantity))
+        //{
+            $component = $this->inventory->component;
+            $departure_address = "{$component->departureAddress->name}";
+            $arrival_address =  "{$component->arrivalAddress->name}";
+            $departs_at = $this->inventory->departs_at;
+            $arrives_at = $this->inventory->arrives_at;
+            if ($departs_at->isSameDay($arrives_at)) {
+                $dates = $departs_at->format('d M Y');
+                $lbl_dates = 'Date';
+            } else {
+                $dates = $departs_at->format('d M Y') . ' to ' . $arrives_at->format('d M Y');
+                $lbl_dates = 'Dates';
+            }
+            $details = [
+                $lbl_dates => $dates,
+                'Pick-Up' => $departure_address,
+                'Time' => $departs_at->format('H:i'),
+                'Drop-Off' => $arrival_address,
+                'Transport' => $this->inventory->component->transportType->name,
+                'Travel Class' => $this->inventory->travelClass->name,
+                'Quantity' => $quantity,
+                'Description' => $this->inventory->component->description,
+            ];
+            if ($quantity === null) { unset($details['Quantity']); }
+            return new ItineraryItem(
+                $this->inventory->component->name,
+                'Journey',
+                $this->inventory->departs_at->unix(),
+                $details,
+            );
+        //}
     }
 }

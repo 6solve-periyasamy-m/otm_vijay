@@ -21,6 +21,17 @@ return [
             ],
         ],
     ],
+    'occupancy' => [
+        'form' => [
+            'title' => [
+                'create' => 'Create Transport Occupancy',
+                'update' => 'Update Transport Occupancy'
+            ],
+            'fields' => [
+
+            ],
+        ],
+    ],
     'transport-type' => [
         'form' => [
             'title' => [

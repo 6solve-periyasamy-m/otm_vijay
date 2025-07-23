@@ -7,6 +7,7 @@ use App\Models\Transport\Operator;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportType;
+use App\Models\Transport\TransportOccupancy;
 use App\Models\TravelClass;
 
 interface TransportTransformsInterface {
@@ -18,10 +19,34 @@ interface TransportTransformsInterface {
     public static function getSelectedTravelClass($id);
     public static function getSelectInventory($filter);
     public static function getSelectedInventory($filter);
+    public static function getSelectTransportOccupancy($filter);
+    public static function getSelectedTransportOccupancy($id);
 }
 
 class TransportTransforms implements TransportTransformsInterface
 {
+
+    public static function getSelectTransportOccupancy($filter)
+    {
+        $data = [];
+        foreach (TransportOccupancy::all() as $transportOccupancy) {
+            $subData = [];
+            $subData['id'] = $transportOccupancy->id;
+            $subData['text'] = $transportOccupancy->name . ' (Occupancy: ' . $transportOccupancy->maximum_occupancy . ')';
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        }
+        return $data;
+    }
+
+    public static function getSelectedTransportOccupancy($id)
+    {
+        if ($id == 0) return null;
+        $transportOccupancy = TransportOccupancy::findOrFail($id);
+        $data = [];
+        $data['id'] = $transportOccupancy->id;
+        $data['text'] = $transportOccupancy->name. ' (Occupancy: ' . $transportOccupancy->maximum_occupancy . ')';
+        return $data;
+    }
 
     public static function getSelectTransportTypes($filter)
     {

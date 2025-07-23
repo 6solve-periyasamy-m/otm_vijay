@@ -223,6 +223,8 @@
                         </tr>
                         </thead>
                             @foreach($orderCustomer->orderTransports as $orderTransport)
+                                @php $inventory = $orderTransport->transport_inventory; @endphp
+                                @if($inventory && $inventory->hasSufficientOccupancy($payingCount))
                                 <tr component="{{ $orderTransport->id }}">
                                     <td style="min-width: 200px">{{ f_datetime($orderTransport->repository->getStartTime()) }} to {{ f_datetime($orderTransport->repository->getEndTime()) }}</td>
                                     <td>{{ $orderTransport->transport->name }}</td>
@@ -254,6 +256,7 @@
                                         @endif
                                     </td>
                                 </tr>
+                                @endif
                             @endforeach
                         </table>
                     </div>
