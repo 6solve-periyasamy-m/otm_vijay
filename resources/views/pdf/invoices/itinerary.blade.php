@@ -412,7 +412,7 @@
                                     <td class="item-detail">{{ $transport->name }}</td>
                                 </tr>
                                 @php
-                                    $disable_items = [ 'Transport', 'Travel Class', 'Time'];
+                                    $disable_items = [ 'Transport', 'Travel Class'];
                                 @endphp
                                 @foreach($transport->details as $key => $value)
                                 @php
