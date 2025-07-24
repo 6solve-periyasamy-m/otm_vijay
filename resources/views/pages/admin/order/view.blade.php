@@ -404,7 +404,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                     <td>{{ $payment->payer_name ?? "No Customer Found" }}</td>
                                     <td>{{ $fee }}</td>
                                     <td>{{ f_datetime($payment->paid_on) }}</td>
-                                    <td hidden></td>
+                                    <td></td>
                                     <td hidden></td>
                                 </tr>
                             @endif
