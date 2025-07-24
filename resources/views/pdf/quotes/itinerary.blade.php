@@ -1039,7 +1039,7 @@ figure.table {
 
 @if(!empty($itinerary->finances))
     @php
-      $currency = ($itinerary->finances->currency->name) ? $itinerary->finances->currency : null;
+      $currency = ($itinerary->finances->currency?->name) ? $itinerary->finances->currency : null;
     @endphp
 <!-- <section class="pdf-individual-block"> -->
    <div class="row">
