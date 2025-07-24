@@ -18,6 +18,7 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $order_id
  * @property float $amount
+ * @property float $cost
  * @property string $reason
  * @property Carbon $date Date the adjustment was made. This is separate from created_at/updated_at, as it may be done retrospectively.
  * @property Carbon|null $deleted_at
@@ -29,6 +30,7 @@ use Illuminate\Support\Carbon;
  * @method static QueryBuilder|ManualAdjustment onlyTrashed()
  * @method static Builder|ManualAdjustment query()
  * @method static Builder|ManualAdjustment whereAmount($value)
+ * @method static Builder|ManualAdjustment whereCost($value)
  * @method static Builder|ManualAdjustment whereCreatedAt($value)
  * @method static Builder|ManualAdjustment whereDate($value)
  * @method static Builder|ManualAdjustment whereDeletedAt($value)
@@ -44,12 +46,12 @@ class ManualAdjustment extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['order_id', 'amount', 'reason', 'date',];
-    protected $casts = ['date' => 'date', 'amount' => 'double',];
+    protected $fillable = ['order_id', 'amount', 'reason', 'date', 'cost',];
+    protected $casts = ['date' => 'date', 'amount' => 'double', 'cost' => 'double',];
 
     public static function getValidationRules(): array
     {
-        return ['date' => 'required|date', 'amount' => 'required|numeric', 'reason' => 'required'];
+        return ['date' => 'required|date', 'amount' => 'required|numeric', 'cost' => 'nullable|numeric', 'reason' => 'required'];
     }
 
     public function order(): BelongsTo

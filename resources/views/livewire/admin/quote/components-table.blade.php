@@ -1,4 +1,6 @@
-@php /** @var \App\Models\Quote\Quote $quote */@endphp
+@php
+    /** @var \App\Models\Quote\Quote $quote */
+@endphp
 <div>
     <ul class="nav nav-pills otm-tab">
         <li class="nav-item col-6 col-md-2">
@@ -50,62 +52,71 @@
                 </thead>
                 <tbody>
                 @foreach($quote->repository->getComponents() as $componentRepository)
-                    <tr component_id="{{$componentRepository->get()->id}}" component_type="{{$componentRepository->getComponentType()}}">
-                        <td>
-                            {{ ucwords($componentRepository->getComponentType()) }}
-                        </td>
-                        <td data-sort="{{ $componentRepository->getStartTime()?->unix() }}">
-                            @if ($componentRepository->getComponentType() == 'merchandise')
-                                {{ __('quotes.view.cards.components.common.na') }}
-                            @else
-                                {{ f_datetime($componentRepository->getInventory()?->getStartTime()) }}
-                                to
-                                {{ f_datetime($componentRepository->getInventory()?->getEndTime()) }}
-                            @endif
-                        </td>
-                        <td>
-                            {{ $componentRepository->__toString() }}
-                        </td>
-                        <td>
-                            {{ $componentRepository->getQuantity() ?? "All Travellers" }}
-                        </td>
-                        <td>
-                            {{ $componentRepository->getInventory()?->getAvailableStock() }} / {{ $componentRepository->getInventory()?->getTotalStock() }}
-                            <br />
-                            ({{ $componentRepository->getInventory()?->getUsedStock() }} used)
-                        </td>
-                        <td>
-                            {{ $componentRepository->getPurchasePrice() !== null ? $componentRepository->getInventory()?->getPurchasePriceString() : 'Not Set' }}
-                        </td>
-                        <td>
-                            {{ f_currency($componentRepository->getSalesPrice()) }} {{ $componentRepository->priceShown() ? '(Shown)' : '' }}
-                        </td>
-                        <td>
-                            {{ $componentRepository->getInventoryInternalNotes() }}
-                        </td>
-                        <td>
-                            @can('update', \App\Models\Quote\Quote::class)
-                                <a href="{{$componentRepository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1" title="Edit {{$componentRepository->getComponentType()}}">
-                                    {{ Icon::edit() }}
+                    @php
+                        $componentType = $componentRepository->getComponentType();
+                        if ($componentType == 'transport') {
+                            $inventory = $componentRepository->getInventory();
+                            $maximumOccupancy = $inventory->get()?->transportOccupancy?->maximum_occupancy;
+                        }
+                    @endphp
+                    @if($componentType !== 'transport' || is_null($maximumOccupancy) || $maximumOccupancy >= $payingCount)
+                        <tr component_id="{{$componentRepository->get()->id}}" component_type="{{$componentRepository->getComponentType()}}">
+                            <td>
+                                {{ ucwords($componentRepository->getComponentType()) }}
+                            </td>
+                            <td data-sort="{{ $componentRepository->getStartTime()?->unix() }}">
+                                @if ($componentRepository->getComponentType() == 'merchandise')
+                                    {{ __('quotes.view.cards.components.common.na') }}
+                                @else
+                                    {{ f_datetime($componentRepository->getInventory()?->getStartTime()) }}
+                                    to
+                                    {{ f_datetime($componentRepository->getInventory()?->getEndTime()) }}
+                                @endif
+                            </td>
+                            <td>
+                                {{ $componentRepository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getQuantity() ?? "All Travellers" }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getInventory()?->getAvailableStock() }} / {{ $componentRepository->getInventory()?->getTotalStock() }}
+                                <br />
+                                ({{ $componentRepository->getInventory()?->getUsedStock() }} used)
+                            </td>
+                            <td>
+                                {{ $componentRepository->getPurchasePrice() !== null ? $componentRepository->getInventory()?->getPurchasePriceString() : 'Not Set' }}
+                            </td>
+                            <td>
+                                {{ f_currency($componentRepository->getSalesPrice()) }} {{ $componentRepository->priceShown() ? '(Shown)' : '' }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getInventoryInternalNotes() }} {{ $componentType }}
+                            </td>
+                            <td>
+                                @can('update', \App\Models\Quote\Quote::class)
+                                    <a href="{{$componentRepository->getEditUrl()}}" class="btn btn-sm btn-outline-success mb-1" title="Edit {{$componentRepository->getComponentType()}}">
+                                        {{ Icon::edit() }}
+                                    </a>
+                                @else
+                                    <span class="btn btn-outline-dark btn-sm mb-1">
+                                        {{ Icon::edit() }}
+                                    </span>
+                                @endcan
+                                <a href="{{$componentRepository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1" title="View {{$componentRepository->getComponentType()}} details">
+                                    {{ Icon::list() }}
                                 </a>
-                            @else
-                                <span class="btn btn-outline-dark btn-sm mb-1">
-                                    {{ Icon::edit() }}
-                                </span>
-                            @endcan
-                            <a href="{{$componentRepository->getConvertUrl()}}" class="btn btn-sm btn-outline-info mb-1" title="View {{$componentRepository->getComponentType()}} details">
-                                {{ Icon::list() }}
-                            </a>
-                            <form class="d-none all-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}"
-                                  action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $componentRepository->getComponentType(), 'id' => $componentRepository->get()->id]) }}"
-                                  method="post">
-                                @csrf
-                            </form>
-                            <a href="javascript:$('.all-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1" title="Delete {{$componentRepository->getComponentType()}}">
-                                {{ Icon::delete() }}
-                            </a>
-                        </td>
-                    </tr>
+                                <form class="d-none all-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}"
+                                    action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $componentRepository->getComponentType(), 'id' => $componentRepository->get()->id]) }}"
+                                    method="post">
+                                    @csrf
+                                </form>
+                                <a href="javascript:$('.all-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1" title="Delete {{$componentRepository->getComponentType()}}">
+                                    {{ Icon::delete() }}
+                                </a>
+                            </td>
+                        </tr>
+                    @endif
                 @endforeach
                 </tbody>
             </table>
@@ -317,7 +328,7 @@
                 </tbody>
             </table>
         </div>
-        <div id="transport" role="tabpanel" class="tab-pane fade">
+        <div id="transport" role="tabpanel" class="tab-pane fade"> 
             <table id="transport-table" class="autowidth-off table table-striped summary">
                 <thead>
                 <tr>
@@ -334,10 +345,9 @@
                 <tbody>
                 @foreach($quote->transport()->with('inventory')->get() as $component)
                     @php
-                        $paying = $quote->leadTraveller->paying ? 1 : 0;
-                        $maximum_occupancy = $component->inventory->transportOccupancy?->maximum_occupancy;
-                        $paying_travellers = $paying + $quote->paying;
+                        $maximumOccupancy = $component->inventory->transportOccupancy?->maximum_occupancy;
                     @endphp
+                    @if(is_null($maximumOccupancy) || $maximumOccupancy >= $payingCount)
                     <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
                         <td data-sort="{{ $component->repository->getStartTime()?->unix() }}">
                             {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}
@@ -387,6 +397,7 @@
                             </a>
                         </td>
                     </tr>
+                    @endif
                 @endforeach
                 </tbody>
             </table>

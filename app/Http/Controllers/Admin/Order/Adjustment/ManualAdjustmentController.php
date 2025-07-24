@@ -22,6 +22,7 @@ class ManualAdjustmentController extends Controller
         $request->validate(ManualAdjustment::getValidationRules());
         $manualAdjustment = ManualAdjustment::make([
             'amount' => $request->input('amount'),
+            'cost' => $request->input('cost'),
             'reason' => $request->input('reason'),
             'date' => $request->input('date'),
         ]);
@@ -40,6 +41,7 @@ class ManualAdjustmentController extends Controller
         $request->validate(ManualAdjustment::getValidationRules());
         $manualAdjustment->update([
             'amount' => $request->input('amount'),
+            'cost' => $request->input('cost'),
             'reason' => $request->input('reason'),
             'date' => $request->input('date'),
         ]);
