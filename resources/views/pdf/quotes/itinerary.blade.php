@@ -683,7 +683,7 @@ figure.table {
                         </td>
                       </tr>
                         @php
-                          $disable_items = ['Description', 'Transport', 'Travel Class'];
+                          $disable_items = ['Description', 'Transport', 'Travel Class', 'Time'];
                         @endphp
                         @foreach($transport->details as $key => $value)
                         @php
