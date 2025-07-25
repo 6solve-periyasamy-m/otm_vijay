@@ -21,15 +21,17 @@ class OrderCustomerController extends Controller
         $selectedFields = !empty($storedFields)
             ? explode(',', $storedFields)
             : default_customer_fields();
-        return view('pages.admin.order.customer.view', ['orderCustomer' => $orderCustomer, 'customerFields' => $selectedFields]);
+        $orderCustomers = $order->orderCustomers()->orderBy('id')->get();
+        return view('pages.admin.order.customer.view', ['orderCustomer' => $orderCustomer, 'customerFields' => $selectedFields, 'orderCustomers' => $orderCustomers,]);
     }
 
     public function loadTourComponents(Order $order, OrderCustomer $orderCustomer)
     {
         $this->authorize('read', $orderCustomer); // Optional ACL check
-
+        $totalOrderCustomers = $order->orderCustomers->count();
         return view('partials.admin.order.customer.tour-components', [
             'orderCustomer' => $orderCustomer,
+            'payingCount' => $totalOrderCustomers,
             'customerViewUrl' => route('order-customers.view', [
                 'order' => $order,
                 'orderCustomer' => $orderCustomer,
