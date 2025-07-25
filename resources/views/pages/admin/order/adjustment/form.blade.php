@@ -15,7 +15,8 @@
 @section('title', $title)
 
 @section('form-body')
-    @include('partials.fields.text', ['name' => 'Amount', 'field' => 'amount', 'value' => $manualAdjustment?->amount ?? null,])
+    @include('partials.fields.text', ['name' => 'Sell Price', 'field' => 'amount', 'value' => $manualAdjustment?->amount ?? null,])
+    @include('partials.fields.text', ['name' => 'Cost', 'field' => 'cost', 'value' => $manualAdjustment?->cost ?? null])
     @include('partials.fields.text', ['name' => 'Reason', 'field' => 'reason', 'value' => $manualAdjustment?->reason ?? null,])
     @include('partials.fields.date', ['name' => 'Date', 'field' => 'date', 'value' => $manualAdjustment?->date ?? null,])
     @include('partials.fields.submit')

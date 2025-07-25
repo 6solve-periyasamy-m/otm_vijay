@@ -31,11 +31,18 @@ if (!function_exists('fr_currency')) {
      * @param Currency|string|null $currency The currency to format in
      * @return string
      */
-    function fr_currency(?float $amount, Currency|string|null $currency = null): string
+    function fr_currency(?float $amount, Currency|string|null $currency = null, bool $strip = false, ?int $decimalPrecision = 2): string
     {
         if (!is_string($currency)) $currency = ($currency ?? Settings::currency())?->code;
+        //$code = flag('currency.code.show', false) ? "{$currency} " : "";
+        //return $code . (new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($amount ?? 0.0, $currency);
+        $roundedAmount = round($amount ?? 0.0); // Round to nearest whole number
+        $formatter = new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY);
+        $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $decimalPrecision ?? 0); // Hide decimals
+        $amountToFormat = $decimalPrecision ? $amount : $roundedAmount;
+        $formatted = $formatter->formatCurrency($amountToFormat, $currency);
         $code = flag('currency.code.show', false) ? "{$currency} " : "";
-        return $code . (new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($amount ?? 0.0, $currency);
+        return $code . $formatted;
     }
 }
 if (!function_exists('f_date')) {

@@ -302,35 +302,44 @@ $profit -= ($commission ?? 0.0)
                     </thead>
                     <tbody>
                     @foreach($quote->repository->getComponents() as $componentRepository)
-                        <tr>
-                            <td>
-                                {{ ucwords($componentRepository->getComponentType()) }}
-                            </td>
-                            <td>
-                                @if ($componentRepository->getComponentType() == 'merchandise')
-                                    {{ __('tours.costing.view.cards.components.common.na') }}
-                                @else
-                                    {{ f_datetime($componentRepository->getInventory()->getStartTime()) }}
-                                    to
-                                    {{ f_datetime($componentRepository->getInventory()->getEndTime()) }}
-                                @endif
-                            </td>
-                            <td>
-                                {{ $componentRepository->__toString() }}
-                            </td>
-                            <td>
-                                {{ $componentRepository->getTourComponentType() }}
-                            </td>
-                            <td>
-                                {{ $componentRepository->getPurchasePrice() !== null ? $componentRepository->getInventory()->getPurchasePriceString() : 'Not Set' }}
-                            </td>
-                            <td>
-                                {{ $componentRepository->getCost() !== null ? f_currency($componentRepository->getCost()) : 'Not Set' }}
-                            </td>
-                            <td>
-                                {{ $componentRepository->getMargin() !== null ? $componentRepository->getMargin() . '%' : 'No Cost to Company' }}
-                            </td>
-                        </tr>
+                        @php
+                            $componentType = $componentRepository->getComponentType();
+                            if ($componentType == 'transport') {
+                                $inventory = $componentRepository->getInventory();
+                                $maximumOccupancy = $inventory->get()?->transportOccupancy?->maximum_occupancy;
+                            }
+                        @endphp
+                        @if($componentType !== 'transport' || is_null($maximumOccupancy) || $maximumOccupancy >= $paying)
+                            <tr>
+                                <td>
+                                    {{ ucwords($componentRepository->getComponentType()) }}
+                                </td>
+                                <td>
+                                    @if ($componentRepository->getComponentType() == 'merchandise')
+                                        {{ __('tours.costing.view.cards.components.common.na') }}
+                                    @else
+                                        {{ f_datetime($componentRepository->getInventory()->getStartTime()) }}
+                                        to
+                                        {{ f_datetime($componentRepository->getInventory()->getEndTime()) }}
+                                    @endif
+                                </td>
+                                <td>
+                                    {{ $componentRepository->__toString() }}
+                                </td>
+                                <td>
+                                    {{ $componentRepository->getTourComponentType() }}
+                                </td>
+                                <td>
+                                    {{ $componentRepository->getPurchasePrice() !== null ? $componentRepository->getInventory()->getPurchasePriceString() : 'Not Set' }}
+                                </td>
+                                <td>
+                                    {{ $componentRepository->getCost() !== null ? f_currency($componentRepository->getCost()) : 'Not Set' }}
+                                </td>
+                                <td>
+                                    {{ $componentRepository->getMargin() !== null ? $componentRepository->getMargin() . '%' : 'No Cost to Company' }}
+                                </td>
+                            </tr>
+                        @endif
                     @endforeach
                     </tbody>
                 </table>
@@ -469,6 +478,10 @@ $profit -= ($commission ?? 0.0)
                     </thead>
                     <tbody>
                     @foreach($quote->transport()->with('inventory')->get() as $component)
+                        @php
+                            $maximumOccupancy = $component->inventory->transportOccupancy?->maximum_occupancy;
+                        @endphp
+                        @if(is_null($maximumOccupancy) || $maximumOccupancy >= $paying)
                         <tr>
                             <td>
                                 {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
@@ -491,6 +504,7 @@ $profit -= ($commission ?? 0.0)
                                 {{ $component->repository->getMargin() !== null ? $component->repository->getMargin() . '%' : 'Not Set' }}
                             </td>
                         </tr>
+                        @endif
                     @endforeach
                     </tbody>
                 </table>

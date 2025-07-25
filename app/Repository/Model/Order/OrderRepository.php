@@ -756,6 +756,19 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         return null;
     }
 
+    public function getCostBeforeString(): string|null
+    {
+        if ($this->order->total_manual_cost > 0) {
+            $cost_to_company = $this->getCostToCompany() - $this->order->total_manual_cost;
+            $string = fr_currency($cost_to_company, $this->order->currency) . " before ";
+            if ($this->order->total_manual_cost > 0) {
+                $string .= "adjustments";
+            }
+            return $string;
+        }
+        return null;
+    }
+
     public function forceDelete(): void
     {
         $this->order->booking?->repository->forceDelete();
@@ -1022,6 +1035,12 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $key = "transport-{$component->transport_inventory_tour_id}";
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
+
+            $totalTravellers = $this->order->orderCustomers->count();
+            $maximumOccupancy = $component->transportInventory?->transportOccupancy?->maximum_occupancy;
+            if (!is_null($maximumOccupancy) && $maximumOccupancy < $totalTravellers) {
+                continue;
+            }
             $item = $component->repository->getItineraryItem($this->order);
             if (!empty($component->departs_at_time_override)){
                 $item->details['Time'] = $component->departs_at_time_override->format('H:i');

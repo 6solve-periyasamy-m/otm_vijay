@@ -223,6 +223,8 @@
                         </tr>
                         </thead>
                             @foreach($orderCustomer->orderTransports as $orderTransport)
+                                @php $inventory = $orderTransport->transport_inventory; @endphp
+                                @if($inventory && $inventory->hasSufficientOccupancy($payingCount))
                                 <tr component="{{ $orderTransport->id }}">
                                     <td style="min-width: 200px">{{ f_datetime($orderTransport->repository->getStartTime()) }} to {{ f_datetime($orderTransport->repository->getEndTime()) }}</td>
                                     <td>{{ $orderTransport->transport->name }}</td>
@@ -254,6 +256,7 @@
                                         @endif
                                     </td>
                                 </tr>
+                                @endif
                             @endforeach
                         </table>
                     </div>
@@ -271,6 +274,7 @@
                             <th scope="col">Component Type</th>
                             <th scope="col">Updated Date</th>
                             <th scope="col">Fulfilled</th>
+                            <th scope="col">Updated Date</th>
                         </tr>
                         </thead>
                         @foreach($orderCustomer->orderMerchandise()->with('tourComponent', 'tourComponent.inventory', 'tourComponent.inventory.component')->get() as $orderMerchandise)
@@ -284,7 +288,8 @@
                                 <td>{{ f_currency($orderMerchandise->tourComponent->tour_sales_price) }}</td>
                                 <td>{{ $orderMerchandise->tourComponent->tour_component_type }}</td>
                                 <td>{{ f_date($orderMerchandise->updated_at) }}</td>
-                                <td>{{ f_bool($orderMerchandise->fulfilled) }}</td>                            
+                                <td>{{ f_bool($orderMerchandise->fulfilled) }}</td>
+                                <td>{{ f_date($orderMerchandise->updated_at) }}</td>
                             </tr>
                         @endforeach
                     </table>
