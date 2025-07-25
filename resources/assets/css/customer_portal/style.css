@@ -3,9 +3,10 @@
 @font-face{font-family:"PP Editorial New";src:url(/fonts/customer/font/PPEditorialNew-Ultralight.ttf);}
 @font-face{font-family:"Inter Regular";src:url(/fonts/customer/font/Inter-Regular.ttf);}
 @font-face{font-family:"Inter Medium";src:url(/fonts/customer/font/Inter-Medium.ttf);}
-.container{max-width: 96%!important;width: 100%!important; position: relative!important;}
+.container{max-width: 100%!important;width: 100%!important; position: relative!important;}
 .body_content{display: flex; width: 100%;}
 .inner_content{width: 100%;margin-bottom: 200px;}
+#app .container{padding: 0px;}
 /*sidebar css*/
 #sidebar {
     width: 100%;
@@ -800,7 +801,7 @@ input[type=checkbox] { -webkit-appearance: checkbox;}
     transition: background-color .8s linear;
 }
 /*Media Query*/
-.travel_sub_menu{padding-left: 36px;margin-top: 10px;}
+.travel_sub_menu{padding-left: 50px;margin-top: 10px;}
 .travel_sub_menu li a{
     font-family: 'PP NeueMontreal Medium';
     font-size: 14px;
@@ -1027,6 +1028,14 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
     border: 1px solid #f35b15;
     padding: 10px 32px;
     text-transform: uppercase;
+    border-radius: 50px;
+    text-transform: uppercase;
+    transition: all 0.8s ease;
+}
+.notes_row .form-group button.btn-primary:hover{
+    background-color: #fff !important;
+    color: #F35B15 !important;
+    border: 1px solid #F35B15 !important;
 }
 .upcoming_payments .hotel-more-info-popup {
     position: fixed;
@@ -1233,9 +1242,9 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
     box-shadow: unset;
 }
 .notes_colm .form-floating textarea:focus~label::after{height: 0px;}
-.submit_btn button .pay_right_arrow_wht{display: block;}
-.submit_btn .pay_right_arrow_org,.submit_btn button:hover .pay_right_arrow_wht{display: none;}
-.submit_btn button:hover .pay_right_arrow_org{display: block;}
+.submit_btn button .pay_right_arrow_wht,.common_submit .pay_right_arrow_wht{display: block;}
+.submit_btn .pay_right_arrow_org,.submit_btn button:hover .pay_right_arrow_wht,.common_submit .pay_right_arrow_org,.common_submit:hover .pay_right_arrow_wht{display: none;}
+.submit_btn button:hover .pay_right_arrow_org,.common_submit button:hover .pay_right_arrow_org{display: block;}
 .title_date p{ font-family: 'PP NeueMontreal Medium'; }
 .calendar_date{font-size: 14px;}
 .title_date h6.btn.btn-warning{font-family: 'Inter Medium';font-size: 12px;line-height: 12px;text-transform: uppercase;color: #000000;}
@@ -1298,3 +1307,10 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
 .personal_details.passport_details .emergency_details_form{padding-top: 20px;}
 .iti__selected-flag{height: 50px;}
 .personal_details{padding-bottom: 16px;}
+.common_submit span{
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+.common_submit span img{position: relative;top: -1px;}
