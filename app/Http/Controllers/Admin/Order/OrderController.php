@@ -17,6 +17,7 @@ use App\Repository\Model\Order\ItineraryRepository;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Reporting\ReportRepository;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
@@ -49,7 +50,25 @@ class OrderController extends Controller
         $selectedFields = !empty($storedFields)
             ? explode(',', $storedFields)
             : default_order_customer_fields();
-        return view('pages.admin.order.view', ['order' => $order, 'orderCustomerFields' => $selectedFields]);
+
+        $groupedActivities = $order->orderCustomers
+            ->flatMap(function ($orderCustomer) {
+                return $orderCustomer->orderActivities->map(function ($activity) use ($orderCustomer) {
+                    $activity->orderCustomer = $orderCustomer;
+                    return $activity;
+                });
+            })
+            ->groupBy(fn($activity) => $activity->activity->name)
+            ->map(function ($activities, $activityName) {
+                return [
+                    'name' => $activityName,
+                    'slug' => Str::slug($activityName) . '-' . uniqid(),
+                    'customers' => $activities->pluck('orderCustomer.customer.id')->unique()->count(),
+                    'items' => $activities,
+                ];
+            });
+
+        return view('pages.admin.order.view', ['order' => $order, 'orderCustomerFields' => $selectedFields, 'groupedActivities' => $groupedActivities, ]);
     }
 
     public function switchTour(Order $order)
