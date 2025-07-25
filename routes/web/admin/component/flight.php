@@ -19,6 +19,7 @@ Route::prefix('{flight}')->group(function () {
     Route::post('/update', [FlightController::class, 'update'])->name('flights.update')->middleware('bouncer:Flight\Flight,update');
     Route::get('/archive', [FlightController::class, 'archive'])->name('flights.archive')->middleware('bouncer:Flight\Flight,delete');
     Route::get('/replicate', [FlightController::class, 'createReturn'])->name('flights.return');
+    Route::get('/duplicate', [FlightController::class, 'duplicate'])->name('flights.duplicate')->middleware('bouncer:Flight\Flight,create');
     Route::prefix('inventory')->group(function () {
         Route::get('/create', [FlightInventoryController::class, 'create'])->name('flight-inventories.create')->middleware('bouncer:Flight\FlightInventory,create');
         Route::post('/create', [FlightInventoryController::class, 'store'])->name('flight-inventories.store')->middleware('bouncer:Flight\FlightInventory,create');

@@ -53,6 +53,12 @@
                             <span>Edit Transport</span>
                         </a>
                     @endcan
+                    @can('create', \App\Models\Transport\Transport::class)
+                        <a class="btn btn-info" title="Duplicate Transport" href="{{route('transports.duplicate', ['transport' => $transport,])}}">
+                            {{ Icon::copy() }}
+                            <span>Duplicate Transport</span>
+                        </a>
+                    @endcan
                     <a class="btn btn-secondary" href="{{route('transports.manifest.view', ['transport' => $transport,])}}">
                         {{ Icon::list() }}
                         <span>View Manifest</span>

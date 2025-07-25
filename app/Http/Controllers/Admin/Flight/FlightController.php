@@ -95,10 +95,10 @@ class FlightController extends Controller
         return redirect()->route('flights.edit', ['flight' => $returnFlight,]);
     }
 
-    public function duplicate(Flight $flight): RedirectRespNonse
+    public function duplicate(Flight $flight): RedirectResponse
     {
-        $flight->repository->duplicate(true);
-        return redirect()->route('flights.edit', ['flight' => $flight,]);
+        $duplicate = $flight->repository->duplicate(true);
+        return redirect()->route('flights.view', ['flight' => $duplicate,]);
     }
 
     public function archive(Flight $flight): RedirectResponse

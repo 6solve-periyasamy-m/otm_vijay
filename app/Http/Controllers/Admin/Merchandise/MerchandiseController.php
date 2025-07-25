@@ -59,8 +59,8 @@ class MerchandiseController extends Controller
 
     public function duplicate(Merchandise $merchandise): RedirectResponse
     {
-        $merchandise->repository->duplicate(true);
-        return redirect()->route('merchandise.edit', ['merchandise' => $merchandise,]);
+        $duplicate = $merchandise->repository->duplicate(true);
+        return redirect()->route('merchandise.view', ['merchandise' => $duplicate,]);
     }
 
     public function archive(Merchandise $merchandise): RedirectResponse
