@@ -10,6 +10,7 @@
             <th scope="col">Cost</th>
             <th scope="col">Component Type</th>
             <th scope="col">Fulfilled</th>
+            <th scope="col">Updated Date</th>
             <th scope="col" class="actions">Actions</th>
         </tr>
         </thead>
@@ -33,6 +34,7 @@
                     <td>{{ f_currency($orderMerchandise->tourComponent->tour_sales_price) }}</td>
                     <td>{{ $orderMerchandise->tourComponent->tour_component_type }}</td>
                     <td>{{ f_bool($orderMerchandise->fulfilled) }}</td>
+                    <td>{{ f_date($orderMerchandise->updated_at) }}</td>
                     <td class="actions">                        
                         <a href="javascript:$('#m-{{$orderMerchandise->id}}-delete').submit()" class="btn btn-outline-danger btn-sm" title="Delete merchandise">{{ Icon::delete() }}</a>
                         <form action="{{ route('orderMerchandiseDelete', ['id' => $orderMerchandise->id,]) }}"  method="post" id="m-{{$orderMerchandise->id}}-delete" class="d-none">
