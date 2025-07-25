@@ -146,6 +146,7 @@ class Calculator extends Component
     {
         $this->calculate();
         $this->refreshTables();
+        $this->emit('updatePaying', $this->paying + $this->quote->leadTraveller->paying);
         $this->dispatchBrowserEvent('travellersUpdated', [
             'paying' => $this->paying + $this->quote->leadTraveller->paying,
             'travelling' => $this->travelling + $this->quote->leadTraveller->travelling,

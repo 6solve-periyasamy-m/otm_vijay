@@ -129,7 +129,7 @@
     font-family: "PPNeueMontreal-Regular";
     src: url('images/pdf_assets/fonts/PPNeueMontreal-Regular.ttf');
     }
-  h1 { color: var(--text-color); font-family: "PlayfairDisplay-Medium"; font-size: 30px; font-weight: 500; line-height: 36px; margin-bottom: 0px; } 
+  h1 { color: var(--text-color); font-family: "PlayfairDisplay-Medium"; font-size: 30px; font-weight: 500; line-height: 36px; margin-bottom: 0px; }
   .customer-details-block h6 { font-family: "PPNeueMontreal-Medium"; font-size:14px; font-weight:500; line-height:16px; margin:0px; margin-bottom:8px; color: var(--text-head-color); text-transform:uppercase; }
  .customer-details-block .customer-details-text-block,.customer-details-block .customer-details-image-block  {
     float:left;  
@@ -1022,6 +1022,9 @@ figure.table {
 
 
 @if(!empty($itinerary->finances))
+    @php
+      $currency = ($itinerary->finances->currency?->name) ? $itinerary->finances->currency : null;
+    @endphp
 <!-- <section class="pdf-individual-block"> -->
    <div class="row">
    
@@ -1040,23 +1043,23 @@ figure.table {
            <tbody>
                   <tr>            
                    <td style="font-weight:400;min-width:128px;">Booking Total:</td>
-                   <td>{{ fr_currency($itinerary->finances->total + $itinerary->finances->commission, $itinerary->finances->currency, false, 0) }}</td>
+                   <td>{{ fr_currency($itinerary->finances->total + $itinerary->finances->commission, $currency, false, 0) }}</td>
                   </tr>
                   <tr>
                       <td style="font-weight:400;min-width:128px;">GST (included):</td>
-                      <td>{{ $itinerary->finances->tax > 0 ? fr_currency($itinerary->finances->tax, $itinerary->finances->currency) : 'No Taxes Due' }}</td>
+                      <td>{{ $itinerary->finances->tax > 0 ? fr_currency($itinerary->finances->tax, $currency) : 'No Taxes Due' }}</td>
                   </tr>
                   @if($itinerary->finances->commission > 0 )
                   <tr>
                       <td style="font-weight:400;min-width:128px;">Commission:</td>
-                      <td>{{ fr_currency($itinerary->finances->commission, $itinerary->finances->currency) }}</td>
+                      <td>{{ fr_currency($itinerary->finances->commission, $currency) }}</td>
                   </tr>
                   @endif      
                   <tr>
                       <td style="font-weight:400;min-width:128px;"><strong style="margin-top:15px">FINAL PRICE:
                       <span style="width: 100%;height: 1px;display: block;margin: 0;margin-top: 2px;background-color: var(--head-text-background);"></span>
                       </strong></td>
-                      <td><strong style="margin-top:15px">{{ fr_currency($itinerary->finances->total, $itinerary->finances->currency, false, 0) }}</strong></td>
+                      <td><strong style="margin-top:15px">{{ fr_currency($itinerary->finances->total, $currency, false, 0) }}</strong></td>
                   </tr>
                                     
            </tbody>
@@ -1090,16 +1093,16 @@ figure.table {
             @if($installment->type === ItineraryScheduleType::BOOKING_FEE)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ fr_currency($installment->amount, $itinerary->finances->currency) }}</td>
+                <td>{{ fr_currency($installment->amount, $currency) }}</td>
                 <td>
-                    {{ fr_currency(min($installment->amount, $installment->received), $itinerary->finances->currency) }}
+                    {{ fr_currency(min($installment->amount, $installment->received), $currency) }}
                     @php $balance_received = $balance_received + min($installment->amount, $installment->received) @endphp
                 </td>
                 <td>
                   @if($installment->amount <= $installment->received)
                     Paid
                   @else
-                      {{ fr_currency($installment->amount - min($installment->amount, $installment->received), $itinerary->finances->currency) }}
+                      {{ fr_currency($installment->amount - min($installment->amount, $installment->received), $currency) }}
                   @endif
                 </td>
                 <td>With Order</td>
@@ -1108,14 +1111,14 @@ figure.table {
             @if ($installment->type === ItineraryScheduleType::DEPOSIT)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ fr_currency($installment->amount, $itinerary->finances->currency) }}</td>
+                <td>{{ fr_currency($installment->amount, $currency) }}</td>
                 <td>
                   @php $amount = $installment->amount - min(($installment->received - ($installment->balance ?? 0)), $installment->amount); @endphp
                   @if($amount <= 0)
-                      {{ fr_currency($installment->amount, $itinerary->finances->currency) }}
+                      {{ fr_currency($installment->amount, $currency) }}
                       @php $balance_received = $balance_received + $installment->amount @endphp
                   @else
-                      {{ fr_currency($installment->received, $itinerary->finances->currency) }}
+                      {{ fr_currency($installment->received, $currency) }}
                       @php $balance_received = $balance_received + $installment->received @endphp
                   @endif
                 </td>
@@ -1123,7 +1126,7 @@ figure.table {
                   @if($amount <= 0)
                     Paid
                   @else
-                      {{ fr_currency($amount, $itinerary->finances->currency) }}
+                      {{ fr_currency($amount, $currency) }}
                   @endif
                 </td>
                 <td>With Order</td>
@@ -1133,13 +1136,13 @@ figure.table {
               @php $amount = $installment->amount - $installment->received; @endphp
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ fr_currency($installment->amount, $itinerary->finances->currency) }}</td>
+                <td>{{ fr_currency($installment->amount, $currency) }}</td>
                 <td>
                   @if($amount <= 0)
-                      {{ fr_currency($installment->amount, $itinerary->finances->currency) }}
+                      {{ fr_currency($installment->amount, $currency) }}
                       @php $balance_received = $balance_received + $installment->amount @endphp
                   @else
-                      {{ fr_currency($installment->received, $itinerary->finances->currency) }}
+                      {{ fr_currency($installment->received, $currency) }}
                       @php $balance_received = $balance_received + $installment->received @endphp
                   @endif
                 </td>
@@ -1147,7 +1150,7 @@ figure.table {
                   @if($amount <= 0)
                       Paid
                   @else
-                      {{ fr_currency($amount, $itinerary->finances->currency) }}
+                      {{ fr_currency($amount, $currency) }}
                   @endif
                 </td>
                 <td>
@@ -1160,17 +1163,17 @@ figure.table {
             @if ($installment->type === ItineraryScheduleType::REMAINING)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ fr_currency($installment->amount, $itinerary->finances->currency) }}</td>
+                <td>{{ fr_currency($installment->amount, $currency) }}</td>
                 <td>
                   @php $balance_received_total = $installment->received - $balance_received; @endphp
-                  {{ fr_currency($balance_received_total, $itinerary->finances->currency) }}
+                  {{ fr_currency($balance_received_total, $currency) }}
                 </td>
                 <td>
                   @php $amount = min($installment->balance, $installment->amount); @endphp
                   @if($amount <= 0)
                       Paid
                   @else
-                      {{ fr_currency($amount, $itinerary->finances->currency) }}
+                      {{ fr_currency($amount, $currency) }}
                   @endif
                 </td>
                 <td>
@@ -1201,7 +1204,7 @@ figure.table {
               </td>
               <td>
                 @if ($installment->type === ItineraryScheduleType::TOTAL)
-                  {{ fr_currency($installment->amount, $itinerary->finances->currency) }}
+                  {{ fr_currency($installment->amount, $currency) }}
                 @else
                   {{ fr_currency($installment->amount, $itinerary->finances->currency) }}
                 @endif

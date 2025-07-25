@@ -54,32 +54,40 @@
         <th scope="col">Stock</th>
         <th scope="col">Purchase Price</th>
         <th scope="col">Sales Price</th>
+        <th scope="col">Occupancy</th>
         <th scope="col">Notes</th>
     </tr>
     </thead>
     <tbody>
+    @php
+        $paying = $quote->leadTraveller->paying ? 1 : 0;
+        $paying_travellers = $paying + $quote->paying;
+    @endphp
     @foreach(\App\Repository\Model\Transport\TransportInventoryRepository::getBetweenDates($quote->date_from, $quote->date_to, $quote->repository) as $inventory)
-        <tr inventory_id="{{ $inventory->id }}">
-            <td>{{ $inventory->component->name }}</td>
-            <td>{{ $inventory->component->transportType }}</td>
-            <td>{{ $inventory->travelClass }}</td>
-            <td>{{ $inventory->component->operator }}</td>
-            <td>{{ $inventory->component->departureAddress->name }}</td>
-            <td>{{ f_datetime($inventory->departs_at) }}</td>
-            <td>{{ $inventory->component->arrivalAddress->name }}</td>
-            <td>{{ f_datetime($inventory->arrives_at) }}</td>
-            <td>{{ f_bool($inventory->component->is_domestic) }}</td>
-            <td>
-                <input type="checkbox" disabled @if($inventory->fit_selectable == 1) checked @endif>
-            </td>
-            <td>
-                {{$inventory->stock - $inventory->used_stock}}/{{ $inventory->stock }}<br/>
-                ({{$inventory->used_stock}} Sold)
-            </td>
-            <td>{{ f_currency($inventory->purchase_price) }}</td>
-            <td>{{ f_currency($inventory->sales_price) }}</td>
-            <td>{{ $inventory->internal_notes }}</td>
-        </tr>
+        @if(is_null($inventory->transportOccupancy?->maximum_occupancy) || $inventory->transportOccupancy?->maximum_occupancy >= $paying_travellers)
+            <tr inventory_id="{{ $inventory->id }}">
+                <td>{{ $inventory->component->name }} {{ $inventory->id }}</td>
+                <td>{{ $inventory->component->transportType }}</td>
+                <td>{{ $inventory->travelClass }}</td>
+                <td>{{ $inventory->component->operator }}</td>
+                <td>{{ $inventory->component->departureAddress->name }}</td>
+                <td>{{ f_datetime($inventory->departs_at) }}</td>
+                <td>{{ $inventory->component->arrivalAddress->name }}</td>
+                <td>{{ f_datetime($inventory->arrives_at) }}</td>
+                <td>{{ f_bool($inventory->component->is_domestic) }}</td>
+                <td>
+                    <input type="checkbox" disabled @if($inventory->fit_selectable == 1) checked @endif>
+                </td>
+                <td>
+                    {{$inventory->stock - $inventory->used_stock}}/{{ $inventory->stock }}<br/>
+                    ({{$inventory->used_stock}} Sold)
+                </td>
+                <td>{{ f_currency($inventory->purchase_price) }}</td>
+                <td>{{ f_currency($inventory->sales_price) }}</td>
+                <td>{{ $inventory?->transportOccupancy?->maximum_occupancy }}</td>
+                <td>{{ $inventory->internal_notes }}</td>
+            </tr>
+        @endif
     @endforeach
     </tbody>
 </table>
