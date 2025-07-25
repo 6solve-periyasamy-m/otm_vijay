@@ -1243,7 +1243,7 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
 }
 .notes_colm .form-floating textarea:focus~label::after{height: 0px;}
 .submit_btn button .pay_right_arrow_wht,.common_submit .pay_right_arrow_wht{display: block;}
-.submit_btn .pay_right_arrow_org,.submit_btn button:hover .pay_right_arrow_wht,.common_submit .pay_right_arrow_org,.common_submit:hover .pay_right_arrow_wht{display: none;}
+.submit_btn .pay_right_arrow_org,.submit_btn button:hover .pay_right_arrow_wht,.common_submit .pay_right_arrow_org,.common_submit button:hover .pay_right_arrow_wht{display: none;}
 .submit_btn button:hover .pay_right_arrow_org,.common_submit button:hover .pay_right_arrow_org{display: block;}
 .title_date p{ font-family: 'PP NeueMontreal Medium'; }
 .calendar_date{font-size: 14px;}
