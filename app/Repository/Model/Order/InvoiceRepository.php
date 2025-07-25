@@ -9,6 +9,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use App\Models\Transport\TransportInventoryTour;
 
 class InvoiceRepository
 {
@@ -58,13 +59,20 @@ class InvoiceRepository
     {
         $data = collect();
         $accom_data = collect();
+        $customerCount = count($this->invoice->customers);
         foreach ($this->invoice->customers as $customer) {
             foreach ($customer->billables as $billable) {
-                $qBillable = $data->get($billable->shared_key, new QuantityBillable($billable->description, $billable->shared_key, $billable->amount, $billable->is_base));
-                $data->put($billable->shared_key, $qBillable->addQuantity());
                 if (strpos($billable->shared_key, "transport") !== false) {
                     $billable->description = $this->transportDescriptionFormat($billable->description);
+                    [$prefix, $tourComponentId] = explode('_', $billable->shared_key);
+                    $transportInventoryTour = TransportInventoryTour::find($tourComponentId);
+                    $maxOccupancy = $transportInventoryTour->inventory->transportOccupancy?->maximum_occupancy;
+                    if (!is_null($maxOccupancy) && $maxOccupancy < $customerCount) {
+                        continue;
+                    }
                 }
+                $qBillable = $data->get($billable->shared_key, new QuantityBillable($billable->description, $billable->shared_key, $billable->amount, $billable->is_base));
+                $data->put($billable->shared_key, $qBillable->addQuantity());
             }
         }
         if ($this->invoice->groups) {

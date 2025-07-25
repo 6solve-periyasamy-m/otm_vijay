@@ -580,4 +580,21 @@ class Order extends Model implements NotificationSubject
         $url = route('orders.view', ['order' => $this,]);
         return "<a href='{$url}'>{$this->booking_reference}</a>";
     }
+
+    /**
+     * @return float Sum of 'cost' from manual adjustments
+     */
+    public function getTotalManualCostAttribute(): float
+    {
+        return sigfig($this->adjustments()->sum('cost'));
+    }
+
+    /**
+     * @return float Sum of 'amount' from manual adjustments
+     */
+    public function getTotalManualAmountAttribute(): float
+    {
+        return sigfig($this->adjustments()->sum('amount'));
+    }
+
 }

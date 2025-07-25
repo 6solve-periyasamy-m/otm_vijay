@@ -53,11 +53,15 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
             <h6 class="fw-bold">{{ $order->booking_reference }}</h6>
         </div>
         @isset ($order->tour?->event?->name)
-            <div class="col-12 col-xl-6">
+            <div class="col-12 col-xl-4">
                 <p>Event</p>
                 <h6 class="fw-bold">{{ $order->tour->event->name }}</h6>
             </div>
         @endisset
+        <div class="col-12 col-xl-2">
+                <p>Order Created</p>
+                <h6 class="fw-bold">{{ f_date($order->ordered_on) }}</h6>
+            </div>
         <div class="col-12 col-xl-6">
             <p>Tour</p>
             <h6 class="fw-bold">{{ $order->tour?->name ?? "Tour Deleted" }}</h6>
@@ -91,10 +95,21 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
             <p>Total Paid</p>
             <h6 class="fw-bold">{{ fr_currency($order->paid, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->paid * $toSystem, Settings::currency()) }}) @endif</h6>
         </div>
-        <div class="col-12 col-xl-6">
+        <div class="col-12 col-xl-4">
             <p>Balance Outstanding</p>
             <h6 class="fw-bold">{{ fr_currency($order->remaining, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->remaining * $toSystem, Settings::currency()) }}) @endif</h6>
         </div>
+        @if(!is_null($order->total_manual_amount) && $order->total_manual_amount != 0)
+        <div class="col-12 col-xl-2">
+            <p>Total Sell Price</p>
+            <h6 class="fw-bold">
+                {{ fr_currency($order->total_manual_amount, $order->currency) }}
+                @if($nonSystem)
+                    ({{ fr_currency($order->total_manual_amount * $toSystem, Settings::currency()) }})
+                @endif
+            </h6>
+        </div>
+        @endif
         <div class="col-12 col-xl-3">
             <p>Next Payment Due</p>
             <h6 class="fw-bold">
@@ -117,7 +132,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                 @endif
             </h6>
         </div>
-        <div class="col-12 col-xl-3">
+        <div class="col-12 col-xl-4">
             <p>Cost to Company</p>
             <h6 class="fw-bold">
                 {{ fr_currency($order->repository->getCostToCompany() * $fromSystem, $order->currency) }}
@@ -126,9 +141,12 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                 @else
                     No FX Rate for Conversion
                 @endif
+                @if ($order->repository->getCostBeforeString() !== null)
+                    ({{ $order->repository->getCostBeforeString() }})
+                @endif
             </h6>
         </div>
-        <div class="col-12 col-xl-3">
+        <div class="col-12 col-xl-2">
             <p>Current Profit</p>
             <h6 class="fw-bold">
                 @if($order->cache->profit !== null)
@@ -406,7 +424,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                     <td>{{ $payment->payer_name ?? "No Customer Found" }}</td>
                                     <td>{{ $fee }}</td>
                                     <td>{{ f_datetime($payment->paid_on) }}</td>
-                                    <td hidden></td>
+                                    <td></td>
                                     <td hidden></td>
                                 </tr>
                             @endif
@@ -624,14 +642,17 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                     <table class="datatable table table-striped" id="order-adjustment-table">
                         <thead>
                         <tr>
-                            <th scope="col">Amount</th>
+                            <th scope="col">Sell Price</th>
+                            <th scope="col">Cost</th>
                             <th scope="col">Reason</th>
+                            <th scope="col">Date</th>
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
                             @if($order->commission !== null)
                                 <tr>
                                     <td>{{ fr_currency($order->commission_amount, $order->currency) }}</td>
+                                    <td>-</td>
                                     <td>Commission: {{ $order->commission }}%</td>
                                     <td class="actions">
                                         <a href="{{ route('orders.edit', ['order' => $order,]) }}"
@@ -642,7 +663,10 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                             @foreach($order->adjustments as $adjustment)
                             <tr>
                                 <td>{{ fr_currency($adjustment->amount, $order->currency) }}</td>
+                                <td>{{ fr_currency($adjustment->cost, $order->currency) }}</td>
                                 <td>{{ $adjustment->reason }}</td>
+
+                                <td>{{ f_date($adjustment->date) }}</td>
                                 <td class="actions">
                                     @can('update', \App\Models\Order\Adjustment\ManualAdjustment::class)
                                         <a href="{{ route('manual-adjustments.edit', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}"
@@ -681,6 +705,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                             <th scope="col">Customer</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Reason</th>
+                            <th scope="col">Date</th>
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
@@ -690,6 +715,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                     <td>{{ $ordersCustomer->customer->first_name .  " " . $ordersCustomer->customer->last_name }}</td>
                                     <td>{{ fr_currency($adjustment->amount, $order->currency) }}</td>
                                     <td>{{ $adjustment->reason }}</td>
+                                    <td>{{ f_date($adjustment->date) }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
                                             <a href="{{ route('order-customer-adjustments.edit', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}"

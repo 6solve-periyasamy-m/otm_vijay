@@ -482,7 +482,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         /** @var QuoteTransport $component */
         foreach ($this->quote->transport()->with('inventory')->get() as $component) {
             if ($component->inventory === null) {continue;}
-            $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0.0) * min($travellers, ($component->quantity ?? $travellers));
+            if ($component->inventory->hasSufficientOccupancy($travellers)) {
+                $cost += ($component->inventory->repository->getLocalPurchasePrice() ?? 0.0) * min($travellers, ($component->quantity ?? $travellers));
+            }
         }
         return $cost;
     }
@@ -1174,6 +1176,12 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $key = "transport-{$component->transport_inventory_id}";
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
+
+            $totalTravellers = $component->quantity ?? $travelling;
+            $maximumOccupancy = $component->inventory->transportOccupancy?->maximum_occupancy;
+            if (!is_null($maximumOccupancy) && $maximumOccupancy < $totalTravellers) {
+                continue;
+            }
             $item = $component->repository->getItineraryItem($component->quantity ?? $travelling);
             $heading = "Transfers";
             if (!array_key_exists($heading, $items)) { $items[$heading] = []; }
