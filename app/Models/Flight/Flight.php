@@ -34,6 +34,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property string|null $internal_notes
  * @property string|null $external_notes
  * @property int|null $currency_id
+ * @property boolean $archived
  * @property Carbon|null $available_from
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -73,7 +74,7 @@ class Flight extends Model
 
     protected array $cascadeDeletes = ['flightInventory'];
     protected $guarded = [];
-    protected $casts = ['available_from' => 'date', 'is_domestic' => 'boolean'];
+    protected $casts = ['available_from' => 'date', 'is_domestic' => 'boolean', 'archived' => 'boolean'];
     protected $with = ['departureAirport', 'airline', 'departureAirport.address', 'departureAirport.address.country', 'arrivalAirport', 'arrivalAirport.address', 'arrivalAirport.address.country'];
 
     public static function getValidationRules(): array

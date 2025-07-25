@@ -7,6 +7,7 @@ use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Quote\Component\QuoteAccommodation;
 use App\Models\Quote\Quote;
+use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
@@ -170,7 +171,7 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         return "{$this->inventory->component} - {$this->inventory->roomType} {$this->inventory->boardType} (" . f_datetime($this->inventory->check_in) . " to " . f_datetime($this->inventory->check_out) . ")";
     }
 
-    public function addToTour(Tour $tour, string $tourComponentType, float $price = -1): ?AccommodationInventoryTourRepository
+    public function addToTour(Tour $tour, string|null $tourComponentType = 'Included', float $price = -1): ?AccommodationInventoryTourRepository
     {
         $inventoryTour = AccommodationInventoryTour::make([
             'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
@@ -180,6 +181,13 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         ]);
         $this->inventory->tourComponents()->save($inventoryTour);
         return $inventoryTour->repository;
+    }
+
+    public function addToEvent(Event $event, string|null $tourComponentType = 'Included', float|null $price = null): void
+    {
+        foreach ($event->tours as $tour) {
+            $this->addToTour($tour, $tourComponentType, $price ?? -1);
+        }
     }
 
     public function addToQuote(Quote $quote, string $tourComponentType, float $price = -1): ?QuoteAccommodationRepository

@@ -5,6 +5,7 @@ namespace App\Repository\Model\Transport;
 use App\Exceptions\CannotDeleteException;
 use App\Models\Quote\Component\QuoteTransport;
 use App\Models\Quote\Quote;
+use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
@@ -137,6 +138,13 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
         ]);
         $this->inventory->tourComponents()->save($inventoryTour);
         return $inventoryTour->repository;
+    }
+
+    public function addToEvent(Event $event, string|null $tourComponentType = 'Included', float|null $price = null): void
+    {
+        foreach ($event->tours as $tour) {
+            $this->addToTour($tour, $tourComponentType, $price ?? -1);
+        }
     }
 
     public function addToQuote(Quote $quote, string $tourComponentType, float $price = -1): ?QuoteTransportRepository

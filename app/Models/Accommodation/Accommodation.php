@@ -5,6 +5,7 @@ namespace App\Models\Accommodation;
 use App\Models\Helper\Model;
 use App\Models\Location\Address;
 use App\Models\Location\Currency;
+use App\Models\Media;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Repository\Model\Accommodation\AccommodationRepository;
 use Database\Factories\Accommodation\AccommodationFactory;
@@ -15,15 +16,12 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use App\Models\Media;
-use App\Models\Accommodation\Amenity;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Accommodation\Accommodation
@@ -35,6 +33,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property Carbon|null $check_in
  * @property Carbon|null $check_out
  * @property string|null $image_url Asset link for image
+ * @property boolean $archived
  * @property int|null $currency_id
  * @property int $address_id
  * @property string|null $internal_notes
@@ -75,7 +74,7 @@ class Accommodation extends Model
 
     protected $guarded = [];
     protected array $cascadeDeletes = ['inventory'];
-    protected $casts = ['audit_date' => 'date','check_in' => 'datetime','check_out' => 'datetime',];
+    protected $casts = ['audit_date' => 'date','check_in' => 'datetime','check_out' => 'datetime', 'archived' => 'boolean'];
 
     private AccommodationRepository $internal_repository;
     protected $with = ['amenities'];
