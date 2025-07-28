@@ -272,6 +272,7 @@
                             <th scope="col">Name</th>
                             <th scope="col">Cost</th>
                             <th scope="col">Component Type</th>
+                            <th scope="col">Updated Date</th>
                             <th scope="col">Fulfilled</th>
                             <th scope="col">Updated Date</th>
                         </tr>
@@ -286,6 +287,7 @@
                                 </td>
                                 <td>{{ f_currency($orderMerchandise->tourComponent->tour_sales_price) }}</td>
                                 <td>{{ $orderMerchandise->tourComponent->tour_component_type }}</td>
+                                <td>{{ f_date($orderMerchandise->updated_at) }}</td>
                                 <td>{{ f_bool($orderMerchandise->fulfilled) }}</td>
                                 <td>{{ f_date($orderMerchandise->updated_at) }}</td>
                             </tr>

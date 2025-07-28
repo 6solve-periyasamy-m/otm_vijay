@@ -13,6 +13,7 @@
             <th scope="col">Component Type</th>
             <th scope="col">Cost</th>
             <th scope="col">Purchase Price</th>
+            <th scope="col">Updated Date</th>
             <th scope="col">Actions</th>
         </tr>
         </thead>
@@ -42,6 +43,7 @@
                         @endif
                     </td>
                     <td>{{ f_currency($orderAccommodation->purchase_price) }} @includeWhen($orderAccommodation->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
+                    <td>{{ f_date($orderAccommodation->updated_at) }}</td>
                     <td>
                         @can('update', \App\Models\Order\Component\OrderAccommodation::class)
                         <button onclick="openModal('admin.order.component.order-accommodation-form', {'component': {{$orderAccommodation->id}}})" class="btn btn-sm btn-outline-warning" style="height: 33px;" title="Edit accommodation">
