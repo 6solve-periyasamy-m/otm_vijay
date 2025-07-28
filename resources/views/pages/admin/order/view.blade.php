@@ -126,7 +126,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
             <h6 class="fw-bold">
                 @if($order->getTaxes() !== null)
                     {{fr_currency($order->getTaxes(), $order->currency)}}
-                    @if($nonSystem) ({{ fr_currency($order->getTaxes() * $toSystem, Settings::currency()) }}) @endif
+                    @if($nonSystem) ({{ fr_currency($order->getTaxes() * ($toSystem ?? 1), Settings::currency()) }}) @endif
                 @else
                     No Taxes Due
                 @endif
@@ -135,11 +135,13 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
         <div class="col-12 col-xl-4">
             <p>Cost to Company</p>
             <h6 class="fw-bold">
-                {{ fr_currency($order->repository->getCostToCompany() * $fromSystem, $order->currency) }}
+                {{ fr_currency($order->repository->getCostToCompany() * ($fromSystem ?? 1), $order->currency) }}
                 @if($nonSystem)
-                    ({{ f_currency($order->repository->getCostToCompany())}})
-                @else
-                    No FX Rate for Conversion
+                    @if($fromSystem === null)
+                        No FX Rate for Conversion
+                    @else
+                        ({{ f_currency($order->repository->getCostToCompany())}})
+                    @endif
                 @endif
                 @if ($order->repository->getCostBeforeString() !== null)
                     ({{ $order->repository->getCostBeforeString() }})
