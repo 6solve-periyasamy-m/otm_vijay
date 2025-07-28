@@ -71,6 +71,12 @@
                                 Detailed View
                             </a>
                         @endif
+                        @can('create', \App\Models\Merchandise\Merchandise::class)
+                            <a class="btn btn-info" title="Duplicate Merchandise" href="{{route('merchandise.duplicate', ['merchandise' => $merchandise,])}}">
+                                {{ Icon::copy() }}
+                                <span>Duplicate Merchandise</span>
+                            </a>
+                        @endcan
                         <a href="{{ route('merchandise.edit', ['merchandise' => $merchandise, 'view' => isset($detailed) && $detailed ? 'detailed' : 'overview']) }}" class="btn btn-success">
                             {{ Icon::edit() }}
                             Edit Merchandise

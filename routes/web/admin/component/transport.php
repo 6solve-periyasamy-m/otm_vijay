@@ -21,6 +21,7 @@ Route::prefix('{transport}')->group(function () {
     Route::post('/update', [TransportController::class, 'update'])->name('transports.update')->middleware('bouncer:Transport\Transport,update');
     Route::get('/archive', [TransportController::class, 'archive'])->name('transports.archive')->middleware('bouncer:Transport\Transport,delete');
     Route::get('/replicate', [TransportController::class, 'createReturn'])->name('transports.return');
+    Route::get('/duplicate', [TransportController::class, 'duplicate'])->name('transports.duplicate')->middleware('bouncer:Transport\Transport,create');
     Route::prefix('inventory')->group(function () {
         Route::get('/create', [TransportInventoryController::class, 'create'])->name('transport-inventories.create')->middleware('bouncer:Transport\TransportInventory,create');
         Route::post('/create', [TransportInventoryController::class, 'store'])->name('transport-inventories.store')->middleware('bouncer:Transport\TransportInventory,create');

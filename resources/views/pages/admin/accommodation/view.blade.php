@@ -45,6 +45,12 @@
                             <span>Edit Accommodation</span>
                         </a>
                     @endcan
+                    @can('create', \App\Models\Accommodation\Accommodation::class)
+                        <a class="btn btn-info" title="Duplicate Accommodation" href="{{route('accommodations.duplicate', ['accommodation' => $accommodation,])}}">
+                            {{ Icon::copy() }}
+                            <span>Duplicate Accommodation</span>
+                        </a>
+                    @endcan
                     <a class="btn btn-secondary" title="View Rooming List" href="{{route('accommodations.rooming', ['accommodation' => $accommodation,])}}">
                         {{ Icon::list() }}
                         <span>View Rooming List</span>

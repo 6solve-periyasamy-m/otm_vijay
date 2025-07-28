@@ -153,8 +153,8 @@ class AccommodationController extends Controller
 
     public function duplicate(Accommodation $accommodation): RedirectResponse
     {
-        $accommodation->repository->duplicate(true);
-        return redirect()->route('accommodations.edit', ['accommodation' => $accommodation,]);
+        $duplicate = $accommodation->repository->duplicate(true);
+        return redirect()->route('accommodations.view', ['accommodation' => $duplicate,]);
     }
 
     public function archive(Accommodation $accommodation): RedirectResponse
