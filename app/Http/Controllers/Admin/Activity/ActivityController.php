@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Activity;
 
+use App\Exports\Inventory\ActivityInventoryExport;
+use App\Http\Controllers\Abstract\ImportsToCollection;
 use App\Http\Controllers\Controller;
+use App\Imports\Inventory\ActivityOverrideImport;
 use App\Models\Activity\Activity;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Location\Address;
@@ -14,6 +17,7 @@ use Illuminate\Support\Facades\File;
 
 class ActivityController extends Controller
 {
+    use ImportsToCollection;
 
     public function index(Request $request)
     {
@@ -62,6 +66,16 @@ class ActivityController extends Controller
         return view('pages.admin.activity.view', ['activity' => $activity,]);
     }
 
+    public function exportInventory(Activity $activity)
+    {
+        return (new ActivityInventoryExport($activity))->download();
+    }
+
+    public function importInventory(Request $request, Activity $activity): RedirectResponse
+    {
+        return $this->import((new ActivityOverrideImport($activity)), $request->file('import'));
+    }
+
     public function manifest(Activity $activity)
     {
         return ActivityManifestRepository::viewReport($activity->repository, 'activities.manifest.export', ['activity' => $activity,]);
@@ -107,6 +121,12 @@ class ActivityController extends Controller
         }
         $activity->save();
         return redirect()->route('activities.view', ['activity' => $activity,]);
+    }
+
+    public function duplicate(Activity $activity): RedirectResponse
+    {
+        $duplicate = $activity->repository->duplicate(true);
+        return redirect()->route('activities.view', ['activity' => $duplicate,]);
     }
 
     public function archive(Activity $activity): RedirectResponse

@@ -98,7 +98,7 @@ class OrderAccommodationRepository extends OrderComponentRepository
         ]);
     }
 
-    public function getQuantity(Order $order = null): int
+    public function getQuantity(Order|null $order = null): int
     {
         $order = $order ?? $this->orderComponent->group->orderCustomers()->first()?->order;
         if ($order === null) { return 0; }
@@ -109,7 +109,7 @@ class OrderAccommodationRepository extends OrderComponentRepository
         return $quantity;
     }
 
-    public function getItineraryItem(Order $order = null): ItineraryItem
+    public function getItineraryItem(Order|null $order = null): ItineraryItem
     {
         return $this->getTourComponent()?->getItineraryItem($this->getQuantity($order)); // @phpstan-ignore
     }

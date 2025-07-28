@@ -58,4 +58,23 @@ class TransportRepository extends ModelRepository implements HasTransportManifes
     {
         return Transport::find($id);
     }
+
+    /**
+     * Duplicate the transport into a new component
+     *
+     * @param bool $inventory Should inventory also be duplicated?
+     * @return Transport
+     */
+    public function duplicate(bool $inventory = false): Transport
+    {
+        $component = $this->transport->replicate();
+        $component->name .= " - Duplicate";
+        $component->save();
+        if ($inventory) {
+            foreach ($this->transport->inventory as $inv) {
+                $component->inventory()->save($inv->replicate());
+            }
+        }
+        return $component;
+    }
 }

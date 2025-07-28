@@ -45,6 +45,12 @@
                             <span>Edit Accommodation</span>
                         </a>
                     @endcan
+                    @can('create', \App\Models\Accommodation\Accommodation::class)
+                        <a class="btn btn-info" title="Duplicate Accommodation" href="{{route('accommodations.duplicate', ['accommodation' => $accommodation,])}}">
+                            {{ Icon::copy() }}
+                            <span>Duplicate Accommodation</span>
+                        </a>
+                    @endcan
                     <a class="btn btn-secondary" title="View Rooming List" href="{{route('accommodations.rooming', ['accommodation' => $accommodation,])}}">
                         {{ Icon::list() }}
                         <span>View Rooming List</span>
@@ -100,15 +106,40 @@
 @endsection
 
 @section('inventory')
-    @can('create', \App\Models\Accommodation\AccommodationInventory::class)
-        <x-admin.section.card>
-            <a href="{{ route('accommodation-inventories.create', ['accommodation' => $accommodation, ]) }}"
-               class="btn btn-primary float-end me-1">
-                {{ Icon::create() }}
-                <span>Add Inventory</span>
-            </a>
-        </x-admin.section.card>
-    @endcan
+    <x-admin.section.card>
+        <div class="row">
+            <div class="col-5"></div>
+            <div class="col-3">
+                @can('update', \App\Models\Accommodation\AccommodationInventory::class)
+                    <button onclick="$('#import').submit()" class="btn btn-warning float-end">
+                        {{ Icon::excel() }}
+                        <span>Import Inventory</span>
+                    </button>
+                    <form id="import" style="width: 50%;" enctype="multipart/form-data" type="form" method="post" action="{{ route('accommodations.inventory.import', ['accommodation' => $accommodation,]) }}">
+                        @csrf
+                        <x-livewire.input type="file" required name="import" />
+                    </form>
+                @endcan
+            </div>
+            <div class="col-2">
+                @can('update', \App\Models\Accommodation\AccommodationInventory::class)
+                    <a href="{{ route('accommodations.inventory.export', ['accommodation' => $accommodation,]) }}" class="btn btn-success">
+                        {{ Icon::excel() }}
+                        <span>Export Inventory</span>
+                    </a>
+                @endcan
+            </div>
+            <div class="col-2">
+                @can('create', \App\Models\Accommodation\AccommodationInventory::class)
+                    <a href="{{ route('accommodation-inventories.create', ['accommodation' => $accommodation, ]) }}"
+                       class="btn btn-primary">
+                        {{ Icon::create() }}
+                        <span>Add Inventory</span>
+                    </a>
+                @endcan
+            </div>
+        </div>
+    </x-admin.section.card>
     <x-admin.section.card>
         <table id="accommodationInventory" style="width: 100%;" class="datatable table table-striped">
             <thead class="thead-dark">

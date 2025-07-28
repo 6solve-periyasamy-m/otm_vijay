@@ -41,6 +41,12 @@
                             <span>Edit Activity</span>
                         </a>
                     @endcan
+                    @can('create', \App\Models\Activity\Activity::class)
+                        <a class="btn btn-info" title="Duplicate Activity" href="{{route('activities.duplicate', ['activity' => $activity,])}}">
+                            {{ Icon::copy() }}
+                            <span>Duplicate Activity</span>
+                        </a>
+                    @endcan
                     <a class="btn btn-secondary" href="{{route('activities.manifest.view', ['activity' => $activity,])}}">
                         {{ Icon::list() }}
                         <span>View Manifest</span>
@@ -58,15 +64,40 @@
 @endsection
 
 @section('inventory')
-    @can('create', \App\Models\Activity\ActivityInventory::class)
         <x-admin.section.card>
-            <a href="{{ route('activity-inventories.create', ['activity' => $activity, ]) }}"
-               class="btn btn-primary float-end">
-                {{ Icon::create() }}
-                <span>Add Inventory</span>
-            </a>
+            <div class="row">
+                <div class="col-5"></div>
+                <div class="col-3">
+                    @can('update', \App\Models\Activity\ActivityInventory::class)
+                        <button onclick="$('#import').submit()" class="btn btn-warning float-end">
+                            {{ Icon::excel() }}
+                            <span>Import Inventory</span>
+                        </button>
+                        <form id="import" style="width: 50%;" enctype="multipart/form-data" type="form" method="post" action="{{ route('activities.inventory.import', ['activity' => $activity,]) }}">
+                            @csrf
+                            <x-livewire.input type="file" required name="import" />
+                        </form>
+                    @endcan
+                </div>
+                <div class="col-2">
+                    @can('update', \App\Models\Activity\ActivityInventory::class)
+                        <a href="{{ route('activities.inventory.export', ['activity' => $activity,]) }}" class="btn btn-success">
+                            {{ Icon::excel() }}
+                            <span>Export Inventory</span>
+                        </a>
+                    @endcan
+                </div>
+                <div class="col-2">
+                    @can('create', \App\Models\Activity\ActivityInventory::class)
+                        <a href="{{ route('activity-inventories.create', ['activity' => $activity, ]) }}"
+                           class="btn btn-primary">
+                            {{ Icon::create() }}
+                            <span>Add Inventory</span>
+                        </a>
+                    @endcan
+                </div>
+            </div>
         </x-admin.section.card>
-    @endcan
     <x-admin.section.card>
         <table id="activityInventory" style="width: 100%;" class="datatable table table-striped">
             <thead class="thead-dark">

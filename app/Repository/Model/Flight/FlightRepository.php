@@ -58,4 +58,23 @@ class FlightRepository extends ModelRepository implements HasFlightManifest
     {
         return Flight::find($id);
     }
+
+    /**
+     * Duplicate the flight into a new component
+     *
+     * @param bool $inventory Should inventory also be duplicated?
+     * @return Flight
+     */
+    public function duplicate(bool $inventory = false): Flight
+    {
+        $component = $this->flight->replicate();
+        $component->internal_notes .= " - Duplicate";
+        $component->save();
+        if ($inventory) {
+            foreach ($this->flight->inventory as $inv) {
+                $component->inventory()->save($inv->replicate());
+            }
+        }
+        return $component;
+    }
 }

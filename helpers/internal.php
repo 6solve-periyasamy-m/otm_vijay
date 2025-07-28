@@ -145,3 +145,27 @@ if (!function_exists('round_to_nearest')) {
         return sigfig(ceil($number / $value) * $value);
     }
 }
+if (!function_exists('get_date')) {
+    /**
+     * Get date from formats
+     * @param string $date The date to get from the formats
+     * @param string[] $formats List of valid/accepted formats
+     * @return Carbon|null
+     */
+    function get_date(string $date, string ...$formats): Carbon|null
+    {
+        // Standard array of formats to test
+        $standard = ['Y-m-d', 'Y-m-d H:i:s', 'd/m/Y H:i', 'd-m-Y H:i'];
+        foreach ([...$formats, ...$standard] as $format) {
+            try {
+                $carbon = Carbon::createFromFormat($format, $date);
+                if ($carbon instanceof Carbon) {
+                    return $carbon;
+                }
+            } catch (InvalidFormatException) {
+                continue;
+            }
+        }
+        return null;
+    }
+}

@@ -79,18 +79,24 @@
                         <span>Edit Tour</span>
                     </a>
                 @endcan
+                @can('create', \App\Models\Tour\Tour::class)
+                    <button onclick="openModal('admin.tour.duplicate', {'tour': {{$tour->id}},})" class="btn btn-info">
+                        {{ Icon::copy() }}
+                        <span>Duplicate Tour</span>
+                    </button>
+                @endcan
                 @can('create', \App\Models\Quote\Quote::class)
                     <a class="btn btn-primary" href="{{route('quotes.create', ['tour' => $tour,])}}">
                         {{ Icon::quote() }}
                         <span>Create Quote</span>
                     </a>
                 @endcan
-                    @if(config('app.features.bleeding-edge') || config('app.features.kpt'))
-                        <a href="{{ route('tours.accommodation', ['tour' => $tour]) }}" class="btn btn-secondary">
-                            {{ Icon::accommodation() }}
-                            {{ __('tours.view.buttons.accommodation') }}
-                        </a>
-                    @endif
+                @if(config('app.features.bleeding-edge') || config('app.features.kpt'))
+                    <a href="{{ route('tours.accommodation', ['tour' => $tour]) }}" class="btn btn-secondary">
+                        {{ Icon::accommodation() }}
+                        {{ __('tours.view.buttons.accommodation') }}
+                    </a>
+                @endif
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#optionTour">
                     {{ Icon::options() }}
                     <span>Options</span>

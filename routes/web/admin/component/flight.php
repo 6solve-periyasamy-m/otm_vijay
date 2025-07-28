@@ -14,10 +14,12 @@ Route::prefix('{flight}')->group(function () {
     Route::get('/', [FlightController::class, 'view'])->name('flights.view')->middleware('bouncer:Flight\Flight,read');
     Route::get('/manifest', [FlightController::class, 'manifest'])->name('flights.manifest.view')->middleware('bouncer:Flight\Flight,read');
     Route::get('/manifest/export/{extension?}', [FlightController::class, 'export'])->name('flights.manifest.export')->middleware('bouncer:Flight\Flight,read');
+    Route::get('/update', [FlightController::class, 'duplicate'])->name('flights.duplicate')->middleware('bouncer:Flight\Flight,create');
     Route::get('/update', [FlightController::class, 'edit'])->name('flights.edit')->middleware('bouncer:Flight\Flight,update');
     Route::post('/update', [FlightController::class, 'update'])->name('flights.update')->middleware('bouncer:Flight\Flight,update');
     Route::get('/archive', [FlightController::class, 'archive'])->name('flights.archive')->middleware('bouncer:Flight\Flight,delete');
     Route::get('/replicate', [FlightController::class, 'createReturn'])->name('flights.return');
+    Route::get('/duplicate', [FlightController::class, 'duplicate'])->name('flights.duplicate')->middleware('bouncer:Flight\Flight,create');
     Route::prefix('inventory')->group(function () {
         Route::get('/create', [FlightInventoryController::class, 'create'])->name('flight-inventories.create')->middleware('bouncer:Flight\FlightInventory,create');
         Route::post('/create', [FlightInventoryController::class, 'store'])->name('flight-inventories.store')->middleware('bouncer:Flight\FlightInventory,create');

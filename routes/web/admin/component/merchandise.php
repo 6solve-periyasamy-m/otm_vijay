@@ -14,9 +14,11 @@ Route::post('/delete', DeleteMerchandise::class)->name('delete');
 Route::prefix('{merchandise}')->group(function () {
     Route::get('/', [MerchandiseController::class, 'show'])->name('view');
     Route::get('/detailed', [MerchandiseController::class, 'detailed'])->name('detailed');
+    Route::get('/duplicate', [MerchandiseController::class, 'duplicate'])->name('duplicate');
     Route::get('/update/{view?}', [MerchandiseController::class, 'edit'])->name('edit');
     Route::post('/update/{view?}', [MerchandiseController::class, 'update'])->name('update');
     Route::get('/archive', [MerchandiseController::class, 'archive'])->name('archive')->middleware('bouncer:Merchandise\Merchandise,delete');
+    Route::get('/duplicate', [MerchandiseController::class, 'duplicate'])->name('duplicate')->middleware('bouncer:Merchandise\Merchandise,create');
     Route::prefix('inventory')->name('inventory.')->group(function () {
         Route::get('/create/{view?}', [MerchandiseInventoryController::class, 'create'])->name('create');
         Route::post('/create/{view?}', [MerchandiseInventoryController::class, 'store'])->name('store');
