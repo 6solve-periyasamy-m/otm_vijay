@@ -125,7 +125,7 @@ class Settings
         if (is_string($from)) { $from = Currency::where('code', '=', $from)->first(); }
         if (is_string($to)) { $to = Currency::where('code', '=', $to)->first(); }
 
-        if ($from === null || $to === null) { return 1; }
+        if ($from === null || $to === null) { return null; }
         if ($from->id === $to->id) { return 1; }
 
         return ConversionRate::where('from_currency_id', '=', $from->id)
