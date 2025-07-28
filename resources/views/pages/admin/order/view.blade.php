@@ -79,12 +79,12 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
             <h6 class="fw-bold">
                 @if($order->cancelled)
                     {{ fr_currency($order->total, $order->currency) }}
-                    @if($nonSystem) ({{ fr_currency($order->total * $toSystem, Settings::currency()) }}) @endif
+                    @if($nonSystem) ({{ fr_currency($order->total * ($toSystem ?? 1), Settings::currency()) }}) @endif
                     ({{ fr_currency($order->cost, $order->currency) }}
-                    @if($nonSystem) ({{ fr_currency($order->cost * $toSystem, Settings::currency()) }}) @endif
+                    @if($nonSystem) ({{ fr_currency($order->cost * ($toSystem ?? 1), Settings::currency()) }}) @endif
                     before cancellation)
                 @else
-                    {{ fr_currency($order->total, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->total * $toSystem, Settings::currency()) }}) @endif
+                    {{ fr_currency($order->total, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->total * ($toSystem ?? 1), Settings::currency()) }}) @endif
                     @if ($order->repository->getBeforeString() !== null)
                         ({{ $order->repository->getBeforeString() }})
                     @endif
@@ -93,11 +93,11 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
         </div>
         <div class="col-12 col-xl-3">
             <p>Total Paid</p>
-            <h6 class="fw-bold">{{ fr_currency($order->paid, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->paid * $toSystem, Settings::currency()) }}) @endif</h6>
+            <h6 class="fw-bold">{{ fr_currency($order->paid, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->paid * ($toSystem ?? 1), Settings::currency()) }}) @endif</h6>
         </div>
         <div class="col-12 col-xl-4">
             <p>Balance Outstanding</p>
-            <h6 class="fw-bold">{{ fr_currency($order->remaining, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->remaining * $toSystem, Settings::currency()) }}) @endif</h6>
+            <h6 class="fw-bold">{{ fr_currency($order->remaining, $order->currency) }} @if($nonSystem) ({{ fr_currency($order->remaining * ($toSystem ?? 1), Settings::currency()) }}) @endif</h6>
         </div>
         @if(!is_null($order->total_manual_amount) && $order->total_manual_amount != 0)
         <div class="col-12 col-xl-2">
@@ -105,7 +105,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
             <h6 class="fw-bold">
                 {{ fr_currency($order->total_manual_amount, $order->currency) }}
                 @if($nonSystem)
-                    ({{ fr_currency($order->total_manual_amount * $toSystem, Settings::currency()) }})
+                    ({{ fr_currency($order->total_manual_amount * ($toSystem ?? 1), Settings::currency()) }})
                 @endif
             </h6>
         </div>
@@ -115,7 +115,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
             <h6 class="fw-bold">
                 @if($order->next_installment !== null)
                 {{f_date($order->next_installment->due_on)}} - {{fr_currency($order->next_installment->remaining, $order->currency)}}
-                    @if($nonSystem) ({{ fr_currency($order->next_installment->remaining * $toSystem, Settings::currency()) }}) @endif
+                    @if($nonSystem) ({{ fr_currency($order->next_installment->remaining * ($toSystem ?? 1), Settings::currency()) }}) @endif
                 @else
                     All installments paid
                 @endif
@@ -152,7 +152,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
             <p>Current Profit</p>
             <h6 class="fw-bold">
                 @if($order->cache->profit !== null)
-                    {{ fr_currency($order->cache->profit * $fromSystem, $order->currency) }}
+                    {{ fr_currency($order->cache->profit * ($fromSystem ?? 1), $order->currency) }}
                     @if($nonSystem) ({{ f_currency($order->cache->profit)}}) @endif
                 @else
                     No FX Rate for Conversion
