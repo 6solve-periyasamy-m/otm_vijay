@@ -12,6 +12,7 @@
             <th scope="col">Component Type</th>
             <th scope="col">Cost</th>
             <th scope="col">Purchase Price</th>
+            <th scope="col">Updated Date</th>
             <th scope="col">Actions</th>
         </tr>
         </thead>
@@ -42,6 +43,7 @@
                         @endif
                     </td>
                     <td>{{ f_currency($orderTransport->purchase_price) }} @includeWhen($orderTransport->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>                   
+                    <td>{{ f_date($orderTransport->updated_at) }}</td>
                     <td class="actions">
                         @can('update', \App\Models\Order\Component\OrderTransport::class)
                         <button onclick="openModal('admin.order.component.order-transport-form', {'component': {{$orderTransport->id}}})" class="btn btn-sm btn-outline-warning" style="height: 33px;" title="Edit transport">

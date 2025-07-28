@@ -28,6 +28,7 @@
                                 <th>Component Type</th>
                                 <th>Cost</th>
                                 <th>Purchase Price</th>
+                                <th>Updated Date</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
@@ -62,6 +63,7 @@
                                         {{ f_currency($orderActivity->purchase_price) }}
                                         @includeWhen($orderActivity->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])
                                     </td>
+                                    <td>{{ f_date($orderActivity->updated_at) }}</td>
                                     <td>
                                         <div class="d-flex gap-1">
                                             @can('update', \App\Models\Order\Component\OrderActivity::class)
