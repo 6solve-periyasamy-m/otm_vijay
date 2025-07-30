@@ -117,7 +117,8 @@
     <x-livewire.input.select.currency name="currency_id" label="Currency" width="4" clearable />
     @include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'width' => 4 ])
     @include('partials.fields.text', ['name' => 'Booking Fee', 'field' => 'booking_fee', 'width' => 4 ])
-    @include('partials.fields.datetime', ['name' => 'Ordered On', 'field' => 'ordered_on', 'width' => 4, 'value' => now(), ])
+    @include('partials.fields.datetime', ['name' => 'Ordered On', 'field' => 'ordered_on', 'width' => 2, 'value' => now(), ])
+    <x-livewire.input.checkbox id="allow_backdated" name="allow_backdated" label="Allow Backdated" onchange="updateBackdated(this)" width="2" />
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'width' => 6 ])
     @include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'width' => 6 ])
     @include('partials.fields.checkbox', ['name' => 'Send Booking Confirmation Email?', 'field' => 'should_invoice', 'value' => flag('order.manual.mail', false),])
@@ -148,4 +149,12 @@
         if (!orderedOn) return;
         orderedOn.min = appFormatDateTime(new Date());
     });
+    function updateBackdated(obj) {
+        const orderedOn = document.getElementById('ordered_on-input');
+        if (obj.checked) {
+            orderedOn.min = null;
+        } else {
+            orderedOn.min = appFormatDateTime(new Date());
+        }
+    }
 </script>
