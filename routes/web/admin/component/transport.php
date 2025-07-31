@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Transport\OperatorController;
 use App\Http\Controllers\Admin\Transport\TransportController;
 use App\Http\Controllers\Admin\Transport\TransportInventoryController;
 use App\Http\Controllers\Admin\Transport\TransportTypeController;
+use App\Http\Controllers\Admin\Transport\TransportOccupancyController;
 
 Route::get('/', [TransportController::class, 'index'])->name('transports.all')->middleware('bouncer:Transport\Transport,read');
 Route::get('/create', [TransportController::class, 'create'])->name('transports.create')->middleware('bouncer:Transport\Transport,create');
@@ -20,6 +21,7 @@ Route::prefix('{transport}')->group(function () {
     Route::post('/update', [TransportController::class, 'update'])->name('transports.update')->middleware('bouncer:Transport\Transport,update');
     Route::get('/archive', [TransportController::class, 'archive'])->name('transports.archive')->middleware('bouncer:Transport\Transport,delete');
     Route::get('/replicate', [TransportController::class, 'createReturn'])->name('transports.return');
+    Route::get('/duplicate', [TransportController::class, 'duplicate'])->name('transports.duplicate')->middleware('bouncer:Transport\Transport,create');
     Route::prefix('inventory')->group(function () {
         Route::get('/create', [TransportInventoryController::class, 'create'])->name('transport-inventories.create')->middleware('bouncer:Transport\TransportInventory,create');
         Route::post('/create', [TransportInventoryController::class, 'store'])->name('transport-inventories.store')->middleware('bouncer:Transport\TransportInventory,create');
@@ -54,6 +56,16 @@ Route::prefix('transport-types')->group(function () {
         Route::get('/update', [TransportTypeController::class, 'edit'])->name('transport-types.edit')->middleware('bouncer:Transport\TransportType,update');
         Route::post('/update', [TransportTypeController::class, 'update'])->name('transport-types.update')->middleware('bouncer:Transport\TransportType,update');
         Route::post('/delete', [TransportTypeController::class, 'destroy'])->name('transport-types.delete')->middleware('bouncer:Transport\TransportType,delete');
+    });
+});
+
+Route::prefix('occupancy')->group(function () {
+    Route::get('/create', [TransportOccupancyController::class, 'create'])->name('occupancy.create')->middleware('bouncer:Transport\TransportOccupancy,create');
+    Route::post('/create', [TransportOccupancyController::class, 'store'])->name('occupancy.store')->middleware('bouncer:Transport\TransportOccupancy,create');
+    Route::prefix('{occupancy}')->group(function () {
+        Route::get('/update', [TransportOccupancyController::class, 'edit'])->name('occupancy.edit')->middleware('bouncer:Transport\TransportOccupancy,update');
+        Route::post('/update', [TransportOccupancyController::class, 'update'])->name('occupancy.update')->middleware('bouncer:Transport\TransportOccupancy,update');
+        Route::post('/delete', [TransportOccupancyController::class, 'destroy'])->name('occupancy.delete')->middleware('bouncer:Transport\TransportOccupancy,delete');
     });
 });
 

@@ -46,6 +46,12 @@
                             <span>Edit Flight</span>
                         </a>
                     @endcan
+                    @can('create', \App\Models\Flight\Flight::class)
+                        <a class="btn btn-info" title="Duplicate Flight" href="{{route('flights.duplicate', ['flight' => $flight,])}}">
+                            {{ Icon::copy() }}
+                            <span>Duplicate Flight</span>
+                        </a>
+                    @endcan
                     <a class="btn btn-secondary" href="{{route('flights.manifest.view', ['flight' => $flight,])}}">
                         {{ Icon::list() }}
                         <span>View Manifest</span>

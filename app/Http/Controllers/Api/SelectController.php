@@ -408,4 +408,14 @@ class SelectController extends ApiController
         $filter = $request->has('filter') ? $request->input('filter') : "";
         return AccommodationTransforms::getSelectAccommodationTypes($filter);
     }
+
+    public function getTransportOccupancy(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return TransportTransforms::getSelectTransportOccupancy($filter);
+    }
+
+    public function getSelectedTransportOccupancy($id) {
+        return TransportTransforms::getSelectedTransportOccupancy($id);
+    }
+
 }

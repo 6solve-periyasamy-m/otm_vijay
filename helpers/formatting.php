@@ -34,11 +34,8 @@ if (!function_exists('fr_currency')) {
     function fr_currency(?float $amount, Currency|string|null $currency = null, bool $strip = false, ?int $decimalPrecision = 2): string
     {
         if (!is_string($currency)) $currency = ($currency ?? Settings::currency())?->code;
-        // $string = (new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($amount ?? 0.0, $currency);
-        // if ($strip) {
-        //     $string = preg_replace('/\.00$/', '', $string);
-        // }
-        // return $string;
+        //$code = flag('currency.code.show', false) ? "{$currency} " : "";
+        //return $code . (new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($amount ?? 0.0, $currency);
         $roundedAmount = round($amount ?? 0.0); // Round to nearest whole number
         $formatter = new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY);
         $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $decimalPrecision ?? 0); // Hide decimals

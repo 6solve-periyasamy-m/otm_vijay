@@ -41,6 +41,12 @@
                             <span>Edit Activity</span>
                         </a>
                     @endcan
+                    @can('create', \App\Models\Activity\Activity::class)
+                        <a class="btn btn-info" title="Duplicate Activity" href="{{route('activities.duplicate', ['activity' => $activity,])}}">
+                            {{ Icon::copy() }}
+                            <span>Duplicate Activity</span>
+                        </a>
+                    @endcan
                     <a class="btn btn-secondary" href="{{route('activities.manifest.view', ['activity' => $activity,])}}">
                         {{ Icon::list() }}
                         <span>View Manifest</span>

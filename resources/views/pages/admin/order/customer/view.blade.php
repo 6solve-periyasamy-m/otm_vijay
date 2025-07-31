@@ -148,13 +148,50 @@
         </div>
     </div>
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;">
-    <div class="heading pt-2 pb-md-3 pb-2">
-        <h2 class="fw-bold">Customer</h2>
+
+   @php
+        $customerIds = $orderCustomers->pluck('id')->values();
+        $currentIndex = $customerIds->search($orderCustomer->id);
+        $prevId = $customerIds->get($currentIndex - 1);
+        $nextId = $customerIds->get($currentIndex + 1);
+
+        $prevCustomer = $prevId ? $orderCustomers->firstWhere('id', $prevId) : null;
+        $nextCustomer = $nextId ? $orderCustomers->firstWhere('id', $nextId) : null;
+
+        $prevCustomerName = $prevCustomer && $prevCustomer->customer 
+            ? $prevCustomer->customer->first_name . ' ' . $prevCustomer->customer->last_name 
+            : '';
+        $nextCustomerName = $nextCustomer && $nextCustomer->customer 
+            ? $nextCustomer->customer->first_name . ' ' . $nextCustomer->customer->last_name 
+            : '';
+    @endphp
+
+    <div class="d-flex justify-content-between align-items-center pt-2 pb-md-3 pb-2 heading mb-3">
+        <h2 class="fw-bold mb-0"><i class="fas fa-user me-2 text-primary"></i>Customer</h2>
+        <div class="d-flex gap-2">
+            @if ($prevCustomer)
+                <a href="{{ route('order-customers.view', ['order' => $orderCustomer->order, 'orderCustomer' => $prevCustomer]) }}"
+                class="btn btn-link text-decoration-none text-primary fw-semibold px-2"
+                title="The previous customer - {{ $prevCustomerName }}">
+                    <i class="fas fa-arrow-left me-1"></i> Previous
+                </a>
+            @endif
+            @if ($nextCustomer)
+                <a href="{{ route('order-customers.view', ['order' => $orderCustomer->order, 'orderCustomer' => $nextCustomer]) }}"
+                class="btn btn-link text-decoration-none text-primary fw-semibold px-2"
+                title="Next customer - {{ $nextCustomerName }}">
+                    Next <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            @endif
+        </div>
     </div>
+
+
     <div class="otm-callout">
         <div class="row">
             <!-- Customer Details -->
             @php
+                $payingCount = $orderCustomer->order->orderCustomers->count();
                 $customer = $orderCustomer->customer;
             @endphp            
             <div class="col-12">
@@ -362,6 +399,7 @@
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Cost</th>
                                 <th scope="col">Purchase Price</th>
+                                <th scope="col">Updated Date</th>
                                 <th scope="col">Upgrades</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -382,6 +420,7 @@
                                         @endif
                                     </td>
                                     <td>{{ f_currency($orderAccommodation->purchase_price) }} @includeWhen($orderAccommodation->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
+                                    <td>{{ f_date($orderAccommodation->updated_at) }}</td>
                                     <td style="width: 20%">
                                         @if($orderAccommodation->tourComponent->tour_component_type == 'Add-on')
                                             Not Available
@@ -442,6 +481,7 @@
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Cost</th>
                                 <th scope="col">Purchase Price</th>
+                                <th scope="col">Updated Date</th>
                                 <th scope="col">Upgrades</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -461,6 +501,7 @@
                                         @endif
                                     </td>
                                     <td>{{ f_currency($orderActivity->purchase_price) }} @includeWhen($orderActivity->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
+                                    <td>{{ f_date($orderActivity->updated_at) }}</td>
                                     <td style="width: 20%">
                                         @if($orderActivity->tourComponent->tour_component_type == 'Add-on')
                                             Not Available
@@ -521,6 +562,7 @@
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Cost</th>
                                 <th scope="col">Purchase Price</th>
+                                <th scope="col">Updated Date</th>
                                 <th scope="col">Upgrades</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -540,6 +582,7 @@
                                         @endif
                                     </td>
                                     <td>{{ f_currency($orderFlight->purchase_price) }} @includeWhen($orderFlight->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
+                                    <td>{{ f_date($orderFlight->updated_at) }}</td>
                                     <td style="width: 20%">
                                         @if($orderFlight->tourComponent->tour_component_type == 'Add-on')
                                             Not Available
@@ -601,11 +644,14 @@
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Cost</th>
                                 <th scope="col">Purchase Price</th>
+                                <th scope="col">Updated Date</th>
                                 <th scope="col">Upgrades</th>
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>
                             @foreach($orderCustomer->orderTransports as $orderTransport)
+                                @php $inventory = $orderTransport->transport_inventory; @endphp
+                                @if($inventory && $inventory->hasSufficientOccupancy($payingCount))
                                 <tr component="{{ $orderTransport->id }}">
                                     <td style="min-width: 200px">{{ f_datetime($orderTransport->repository->getStartTime()) }} to {{ f_datetime($orderTransport->repository->getEndTime()) }}</td>
                                     <td>{{ $orderTransport->transport->name }}</td>
@@ -621,6 +667,7 @@
                                         @endif
                                     </td>
                                     <td>{{ f_currency($orderTransport->purchase_price) }} @includeWhen($orderTransport->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
+                                    <td>{{ f_date($orderTransport->updated_at) }}</td>
                                     <td style="width: 20%">
                                         @if($orderTransport->tourComponent->tour_component_type == 'Add-on')
                                             Not Available
@@ -651,6 +698,7 @@
                                         </form>
                                     </td>
                                 </tr>
+                                @endif
                             @endforeach
                         </table>
                     </div>
@@ -684,6 +732,7 @@
                         <th scope="col">Cost</th>
                         <th scope="col">Component Type</th>
                         <th scope="col">Fulfilled</th>
+                        <th scope="col">Updated Date</th>
                         <th scope="col" class="actions">Actions</th>
                     </tr>
                     </thead>
@@ -698,6 +747,7 @@
                             <td>{{ f_currency($orderMerchandise->tourComponent->tour_sales_price) }}</td>
                             <td>{{ $orderMerchandise->tourComponent->tour_component_type }}</td>
                             <td>{{ f_bool($orderMerchandise->fulfilled) }}</td>
+                            <td>{{ f_date($orderMerchandise->updated_at) }}</td>
                             <td class="actions">
                                 <a href="{{ route('merchandise.inventory.tour.order.fulfil', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderMerchandise' => $orderMerchandise]) }}"
                                    class="btn btn-outline-primary btn-sm">
