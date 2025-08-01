@@ -186,6 +186,20 @@
         <div class="col-xl-4">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Customer\TShirtSizeRepository::class])
         </div>
+        <div class="col-xl-4">
+            <x-admin.section.card>
+                <slot:header>
+                    <div class="d-flex justify-content-between">
+                        <h4 class="fw-bold">Airline Frequent Flyers</h4>
+                        <button class="btn btn-primary" onclick="openModal('admin.customer.airline-frequent-flyers.form')">
+                            {{ Icon::create() }}
+                            Create New
+                        </button>
+                    </div>
+                </slot:header>
+                 <livewire:admin.customer.airline-frequent-flyers.table />
+            </x-admin.section.card>
+        </div>
     </div>
     <div class="card">
         <div class="card-body" data-target="#quote" onclick="toggleAccordion(this)">

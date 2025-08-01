@@ -66,10 +66,12 @@ use Illuminate\Validation\Rule;
  * @property Carbon|null $passport_expiry_date
  * @property string|null $passport_country_of_issue
  * @property string|null $loyalty_number
+ * @property string|null $membership
  * @property string $profile_picture Asset link to profile picture
  * @property int|null $t_shirt_size_id
  * @property int|null $hat_size_id
  * @property int|null $organization_id
+ * @property int|null $airline_frequent_flyers_id
  * @property string|null $internal_notes
  * @property string|null $external_notes
  * @property string|null $dietary_notes
@@ -85,6 +87,7 @@ use Illuminate\Validation\Rule;
  * @property-read string $customer_full_name (Deprecated) Full name of the customer
  * @property-read string $full_name Full name of customer
  * @property-read HatSize|null $hatSize Customer hat size
+ * @property-read AirlineFrequentFlyers|null $airlineFrequentFlyers
  * @property-read bool $registered Is the customer a registered user
  * @property-read Address $homeAddress Home address. Should be a unique entry in the database
  * @property-read Collection|Order[] $leadingOrders Orders where they are the lead booker
@@ -123,6 +126,7 @@ use Illuminate\Validation\Rule;
  * @method static Builder|Customer whereFirstName($value)
  * @method static Builder|Customer whereGender($value)
  * @method static Builder|Customer whereHatSizeId($value)
+ * @method static Builder|Customer whereAirlineFrequentFlyersId($value)
  * @method static Builder|Customer whereHomeAddressId($value)
  * @method static Builder|Customer whereOrganizationId($value)
  * @method static Builder|Customer whereId($value)
@@ -169,7 +173,7 @@ class Customer extends Authenticatable implements NotificationSubject
     protected $fillable = ['title', 'first_name', 'middle_names', 'last_name', 'date_of_birth', 'mobile_number', 'other_phone_number',
         'email_address', 'password', 'gender', 'emergency_contact_name', 'emergency_contact_relationship', 'emergency_contact_telephone',
         'passport_first_name', 'passport_middle_name', 'passport_last_name', 'passport_number', 'passport_issue_date', 'passport_expiry_date',
-        'passport_country_of_issue', 't_shirt_size_id', 'hat_size_id', 'notes', 'loyalty_number', 'login_token', 'home_address_id',
+        'passport_country_of_issue', 't_shirt_size_id', 'hat_size_id', 'airline_frequent_flyers_id', 'notes', 'loyalty_number', 'membership', 'login_token', 'home_address_id',
         'billing_address_id', 'internal_notes', 'external_notes', 'dietary_notes', 'mobility_notes', 'organization_id'];
 
     protected $casts = ['date_of_birth' => 'date:Y-m-d', 'passport_issue_date' => 'date:Y-m-d', 'passport_expiry_date' => 'date:Y-m-d',];
@@ -239,6 +243,11 @@ class Customer extends Authenticatable implements NotificationSubject
     public function hatSize(): BelongsTo
     {
         return $this->belongsTo(HatSize::class, 'hat_size_id');
+    }
+
+    public function airlineFrequentFlyers(): BelongsTo
+    {
+        return $this->belongsTo(AirlineFrequentFlyers::class, 'airline_frequent_flyers_id');
     }
 
     public function organization(): BelongsTo

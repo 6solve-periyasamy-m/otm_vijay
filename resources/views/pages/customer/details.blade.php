@@ -514,14 +514,16 @@
                             <h3>Frequent Flyer Details</h3>
                             <div class="frequent_details_form">
                                     <div class="one_input_field">
-                                        <select name="program">
-                                            <option value="program1">PROGRAM </option>
-                                            <option value="program2">PROGRAM 2</option>
-                                            <option value="program3">PROGRAM 3</option>
-                                            <option value="program4">PROGRAM 4</option>
-                                          </select>
+                                        <select name="airline_frequent_flyers_id" class="form-control">
+                                            <option value="">Select </option>
+                                            @foreach($frequentFlyers as $frequentFlyer)
+                                                <option value="{{ $frequentFlyer->id }}" {{ ($customer->airline_frequent_flyers_id ?? '') == $frequentFlyer->id ? 'selected' : '' }}>
+                                                    {{ $frequentFlyer->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
-                                    <div class="one_input_field"><input type="text" name="membership number" placeholder="MEMBERSHIP NUMBER" ></div>
+                                    <div class="one_input_field"><input type="text" name="membership number" placeholder="MEMBERSHIP NUMBER" value="{{ $customer->membership ?? '' }}"></div>
                             </div>
                         </div>
                         <hr/>

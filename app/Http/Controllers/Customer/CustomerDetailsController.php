@@ -8,15 +8,18 @@ use App\Http\Requests\Customer\DetailsRequest;
 use App\Models\Customer\Customer;
 use App\Models\Helper\Enum\NotificationType;
 use App\Models\Location\Address;
+use App\Models\Customer\AirlineFrequentFlyers;
 use Hash;
 use DB;
 class CustomerDetailsController extends CustomerController
 {
     public function edit()
     {
+        $frequentFlyers = AirlineFrequentFlyers::all();
         return view('pages.customer.details', [
             'customer' => $this->user(),
             'editable' => $this->user()->repository->getEditableCustomers(),
+            'frequentFlyers' => $frequentFlyers,
         ]);
     }
 
@@ -58,10 +61,13 @@ class CustomerDetailsController extends CustomerController
                 $homeAddress = Address::create($request->getHomeAddress());
                 $homeAddressId = $homeAddress->id;
             }
-            // dd($homeAddressId);
             $customerDetails = $request->getCustomerDetails(!$user->repository->isPassportLocked());
             $customerDetails['billing_address_id'] = $billingAddress->id;
-            $customerDetails['home_address_id'] = $homeAddressId; 
+            $customerDetails['home_address_id'] = $homeAddressId;
+
+            $customerDetails['airline_frequent_flyers_id'] = $request->airline_frequent_flyers_id;
+            $customerDetails['membership'] = $request->membership_number;
+
             $user->update($customerDetails);
 
             if ($request->hasFile('profile_picture')) {

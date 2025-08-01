@@ -64,6 +64,8 @@ class CustomerController extends Controller
             'dietary_notes' => $request->input('dietary_notes'),
             'mobility_notes' => $request->input('mobility_notes'),
             'loyalty_number' => $request->input('loyalty_number'),
+            'membership' => $request->input('membership'),
+            'airline_frequent_flyers_id' => $request->input('airline_frequent_flyers_id'),
         ]);
         if (!empty($request->input('password'))) {
             $customer->password = Hash::make($request->input('password'));
@@ -155,6 +157,8 @@ class CustomerController extends Controller
             'dietary_notes' => $request->input('dietary_notes'),
             'mobility_notes' => $request->input('mobility_notes'),
             'loyalty_number' => $request->input('loyalty_number'),
+            'membership' => $request->input('membership'),
+            'airline_frequent_flyers_id' => $request->input('airline_frequent_flyers_id'),
         ]);
         if (!empty($request->input('password'))) {
             $customer->password = Hash::make($request->input('password'));

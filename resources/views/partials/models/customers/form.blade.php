@@ -68,6 +68,8 @@
 'route' => 'hat-size', 'createRoute' => route('hat-sizes.create'), 'width' => 3])
 <x-livewire.input.select.organization name="organization_id" value="{{ $customer?->organization_id }}" label="Organization (Optional)" width="3" />
 @include('partials.fields.text', ['name' => 'Loyalty Number', 'field' => 'loyalty_number', 'value' => $loyalty_number ?? null, 'width' => 3])
+@include('partials.fields.text', ['name' => 'Membership', 'field' => 'membership', 'value' => $membership ?? null, 'width' => 3])
+@include('partials.fields.selector.default', ['name' => 'Frequent Flyer', 'field' => 'airline_frequent_flyers_id', 'value' => $customer?->airline_frequent_flyers_id, 'route' => 'frequent-flyer', 'width' => 3,])
 <hr class="splitter"/>
 @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'value' => $internal_notes ?? null, ])
 @include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'value' => $external_notes ?? null, ])
