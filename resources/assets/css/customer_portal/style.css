@@ -902,7 +902,7 @@ input[type=checkbox] { -webkit-appearance: checkbox;}
     .title_date h4{font-size: 17px;line-height: 25px;}
     .upcoming_tours h2, .upcoming_payments h2, .past_tours h2,.customer_details h2,.name_address_font h2,.upcoming_payments_finances h2{font-size: 26px !important;line-height: 34px;}
     .inner_content{width: 77% !important;}
-    #sidebar{width: 23% !important;padding: 30px 19px !important;}
+    #sidebar{width: 100% !important;padding: 30px 19px !important;}
     .social_media img{margin-right: 9px !important;}
 
 }
@@ -1156,7 +1156,7 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
     padding-bottom: 0px;
 }
 .cta_space {
-    width: 159px !important;
+    width: 100% !important;
 }
 
 .left-side {

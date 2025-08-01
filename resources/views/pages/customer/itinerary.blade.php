@@ -838,7 +838,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                             Internal Notes
                         </x-customer.input.text-area>
                     </div> --}}
-                    <div class="">
+                    <div class="customer-portal">
                         @include('partials.fields.submit')
                     </div>
                 </div>
