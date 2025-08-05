@@ -387,12 +387,12 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                 <td>{{ fr_currency($payment->amount, $payment->currency) }}</td>
                                 <td>{{ f_datetime($payment->paid_on) }}</td>
                                 @php
-                                    $rowspan = $payment->payment_fee ? 2 : 1;
+                                    //$rowspan = $payment->payment_fee ? 2 : 1;
                                     $internalNotes = $payment->internal_notes ?? " -Nil- ";
                                     $fee = $payment->payment_fee ? f_currency($payment->payment_fee) : null;
                                 @endphp
 
-                                <td class="w-15 align-top text-justify" rowspan="{{ $rowspan }}">
+                                <td class="w-15 align-top text-justify">
                                     {{ $internalNotes }}
                                 </td>
 
@@ -426,6 +426,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                     <td>{{ $payment->payer_name ?? "No Customer Found" }}</td>
                                     <td>{{ $fee }}</td>
                                     <td>{{ f_datetime($payment->paid_on) }}</td>
+                                    <td></td>
                                     <td></td>
                                     <td hidden></td>
                                 </tr>
