@@ -47,6 +47,13 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelations;
  * @property-read Collection|BookingFlight[] $flights
  * @property-read Collection|BookingTransport[] $transport
  * @property-read Collection|BookingMerchandise[] $merchandise
+ * @property-read int|null $accommodation_count
+ * @property-read int|null $activities_count
+ * @property-read int|null $additional_travellers_count
+ * @property-read int|null $flights_count
+ * @property-read int|null $merchandise_count
+ * @property-read int|null $transport_count
+ * @property-read int|null $vouchers_count
  * @property-read int|null $travellers_count
  * @property-read int $traveller_count
  * @property-read float $total_cost
@@ -54,6 +61,9 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelations;
  * @property-read float $due_today
  * @property-read BookingRepository $repository
  * @property-read FellohLink|null $felloh
+ * @method static Builder|Booking before(?\Illuminate\Support\Carbon $date = null)
+ * @method static Builder|Booking converted()
+ * @method static Builder|Booking whereNotes($value)
  * @method static Builder|Booking newModelQuery()
  * @method static Builder|Booking newQuery()
  * @method static Builder|Booking query()
@@ -158,5 +168,16 @@ class Booking extends Model
     public function getDueTodayAttribute(): float
     {
         return $this->repository->getDueTodayAmount();
+    }
+
+    public function scopeConverted(Builder $query): void
+    {
+        $query->whereNotNull('order_id');
+    }
+
+    public function scopeBefore(Builder $query, Carbon|null $date = null): void
+    {
+        $date = $date ?? Carbon::now()->subDays(180);
+        $query->whereDate('updated_at', '<', $date);
     }
 }
