@@ -209,7 +209,7 @@ class OrderRow
             self::formatAddress($inventory?->component?->departureAirport?->address),
             "Flight",
             $component->tourComponent?->tour_component_type,
-            $inventory?->component->departureAirport?->name . ' to ' . $inventory?->component->arrivalAirport?->name,
+            $inventory?->component->departureAirport?->name . ' to ' . $inventory?->component->arrivalAirport?->name . " ({$inventory->travelClass?->name})",
             $inventory?->departs_at,
             $inventory?->arrives_at,
             null,
