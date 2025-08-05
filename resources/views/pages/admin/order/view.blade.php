@@ -387,7 +387,6 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                 <td>{{ fr_currency($payment->amount, $payment->currency) }}</td>
                                 <td>{{ f_datetime($payment->paid_on) }}</td>
                                 @php
-                                    //$rowspan = $payment->payment_fee ? 2 : 1;
                                     $internalNotes = $payment->internal_notes ?? " -Nil- ";
                                     $fee = $payment->payment_fee ? f_currency($payment->payment_fee) : null;
                                 @endphp
@@ -396,7 +395,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                     {{ $internalNotes }}
                                 </td>
 
-                                <td class="actions align-middle" rowspan="{{ $rowspan }}">
+                                <td class="actions align-middle">
                                     @can('update', \App\Models\Order\Payment\Payment::class)
                                         <a href="{{ route('payments.edit', ['order' => $order, 'payment' => $payment,]) }}"
                                            class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
