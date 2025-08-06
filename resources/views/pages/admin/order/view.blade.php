@@ -653,6 +653,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                         </thead>
                             @if($order->commission !== null)
                                 <tr>
+                                    <td>N/A</td>
                                     <td>{{ fr_currency($order->commission_amount, $order->currency) }}</td>
                                     <td>-</td>
                                     <td>Commission: {{ $order->commission }}%</td>
