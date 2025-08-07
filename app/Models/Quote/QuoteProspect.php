@@ -3,14 +3,13 @@
 namespace App\Models\Quote;
 
 use App\Models\Customer\Customer;
+use App\Models\Helper\Model;
 use Database\Factories\Quote\QuoteProspectFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -20,6 +19,7 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int|null $customer_id
+ * @property int|null $quote_id
  * @property bool $paying
  * @property bool $travelling
  * @property Carbon|null $deleted_at
@@ -30,6 +30,7 @@ use Illuminate\Support\Carbon;
  * @property-read string $name
  * @property-read string $phone
  * @property-read Quote|null $quote
+ * @property-read bool $is_lead
  * @method static QuoteProspectFactory factory(...$parameters)
  * @method static Builder|QuoteProspect newModelQuery()
  * @method static Builder|QuoteProspect newQuery()
@@ -51,11 +52,11 @@ class QuoteProspect extends Model
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
     protected $guarded = [];
-    protected $casts = ['paying' => 'boolean', 'travelling' => 'boolean'];
+    protected $casts = ['paying' => 'boolean', 'travelling' => 'boolean', 'lead_traveller' => 'boolean'];
 
-    public function quote(): HasOne
+    public function quote(): BelongsTo
     {
-        return $this->hasOne(Quote::class, 'lead_traveller_id');
+        return $this->belongsTo(Quote::class, 'quote_id');
     }
 
     public function customer(): BelongsTo
@@ -76,5 +77,10 @@ class QuoteProspect extends Model
     public function getPhoneAttribute(): string
     {
         return $this->customer?->mobile_number ?? "Phone Not Found";
+    }
+
+    public function getIsLeadAttribute(): bool
+    {
+        return $this->id === $this->quote->lead_traveller_id;
     }
 }

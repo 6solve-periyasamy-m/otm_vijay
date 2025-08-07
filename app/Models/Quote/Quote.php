@@ -73,6 +73,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read string $ref Reference-Revision
  * @property-read Collection|QuoteAccommodation[] $accommodation
+ * @property-read Collection|QuoteProspect[] $travellers
  * @property-read Collection|QuoteSection[] $sections
  * @property-read Brand|null $linkedBrand
  * @property-read User|null $consultant
@@ -204,6 +205,11 @@ class Quote extends Model
     public function leadTraveller(): BelongsTo
     {
         return $this->belongsTo(QuoteProspect::class, 'lead_traveller_id');
+    }
+
+    public function travellers(): HasMany
+    {
+        return $this->hasMany(QuoteProspect::class, 'quote_id');
     }
 
     public function pricePoints(): HasMany

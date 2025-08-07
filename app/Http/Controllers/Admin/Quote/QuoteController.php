@@ -10,6 +10,7 @@ use App\Http\Requests\Admin\Quote\StartConversionRequest;
 use App\Http\Requests\Admin\TableRequest;
 use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Quote\Quote;
+use App\Models\Quote\QuoteProspect;
 use App\Models\Quote\SentQuote;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Quote\QuoteRepository;
@@ -142,5 +143,14 @@ class QuoteController extends Controller
         }
         $quote->repository->forceDelete();
         return redirect()->route('quotes.all');
+    }
+
+    public function deleteProspect(Quote $quote, QuoteProspect $prospect): RedirectResponse
+    {
+        if ($prospect->is_lead) {
+            return back()->withErrors(['msg' => "You can't delete the lead traveller"]);
+        }
+        $prospect->delete();
+        return redirect()->route('quotes.view', ['quote' => $quote]);
     }
 }

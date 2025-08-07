@@ -72,7 +72,7 @@ class Calculator extends Component
 
         /** @var float $costPerPerson Cost to the company per person (average) */
         $costPerPerson = $totalTravellerCount > 0 ? sigfig($this->costToCompany / $totalTravellerCount) : 0;
-        $paying = $this->paying + ($this->quote->leadTraveller->paying ? 1 : 0);
+        $paying = $this->paying + ($this->quote->travellers()->where('paying', '=', true)->count());
         $this->total = ($this->quote->repository->getPricePerPerson($paying)?->price_per_person ?? 0) * $paying;
         if ($this->quote->currency !== null && $this->quote->currency_id !== Settings::currency()?->id) {
             if ($this->fromRate === null) {
@@ -148,8 +148,8 @@ class Calculator extends Component
         $this->refreshTables();
         $this->emit('updatePaying', $this->paying + $this->quote->leadTraveller->paying);
         $this->dispatchBrowserEvent('travellersUpdated', [
-            'paying' => $this->paying + $this->quote->leadTraveller->paying,
-            'travelling' => $this->travelling + $this->quote->leadTraveller->travelling,
+            'paying' => $this->paying + $this->quote->travellers()->where('paying', '=', true)->count(),
+            'travelling' => $this->travelling + $this->quote->travellers()->where('travelling', '=', true)->count(),
         ]);
         $this->render();
     }

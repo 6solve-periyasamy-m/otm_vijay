@@ -25,6 +25,10 @@ class Conversion extends Component
         $this->paying = $paying;
         $this->travelling = $travelling;
         $this->travellers[] = ['id' => -1, 'name' => $quote->leadTraveller->name, 'paying' => $quote->leadTraveller->paying,  'travelling' => $quote->leadTraveller->travelling, 'items' => []];
+        foreach ($this->quote->travellers as $traveller) {
+            if ($traveller->is_lead) { continue; }
+            $this->travellers[] = ['id' => $traveller->customer_id, 'name' => $traveller->customer->full_name, 'paying' => $traveller->paying, 'travelling' => $traveller->travelling, 'items' => []];
+        }
         for ($x = 0; $x < $paying; $x++) {
             $this->travellers[] = ['id' => null, 'name' => null, 'paying' => true, 'travelling' => true, 'items' => []];
         }
@@ -36,11 +40,11 @@ class Conversion extends Component
 
     public function inputChanged(string|null $key = null): void
     {
-        foreach ($this->travellers as $key => $traveller) {
-            if (((int)$traveller['id'] ?? 0) > 0) {
+        foreach ($this->travellers as $aKey => $traveller) {
+            if (((int)($traveller['id'] ?? 0)) > 0) {
                 $customer = Customer::find($traveller['id']);
                 $traveller['name'] = "$customer->title $customer->first_name $customer->last_name";
-                $this->travellers[$key] = $traveller;
+                $this->travellers[$aKey] = $traveller;
             }
         }
         $this->render();

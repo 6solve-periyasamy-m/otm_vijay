@@ -3,6 +3,8 @@
 namespace App\Repository\Model\Customer;
 
 use App\Models\Customer\Customer;
+use App\Models\Helper\Enum\AddressParent;
+use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Repository\Abstracts\ModelRepository;
 
@@ -144,5 +146,24 @@ class CustomerRepository extends ModelRepository
     public static function find($id): Customer|null
     {
         return Customer::find($id);
+    }
+    
+    public static function createSimple(array $data): Customer
+    {
+        if (($data['home_address_id'] ?? null) === null) {
+            $homeAddress = Address::create(['parent' => AddressParent::CUSTOMER,]);
+        } else {
+            $homeAddress = Address::find($data['home_address_id']);
+        }
+        if (($data['billing_address_id'] ?? null) === null) {
+            $billingAddress = Address::create(['parent' => AddressParent::CUSTOMER,]);
+        } else {
+            $billingAddress = Address::find($data['billing_address_id']);
+        }
+        return Customer::create([
+            'home_address_id' => $homeAddress->id,
+            'billing_address_id' => $billingAddress->id,
+            ...$data,
+        ]);
     }
 }

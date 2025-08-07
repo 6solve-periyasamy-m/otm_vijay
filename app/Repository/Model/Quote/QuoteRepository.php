@@ -150,6 +150,10 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $pricePerPerson = $this->getPricePerPerson($paying)->price_per_person;
         $lead->data['tour_cost'] = $pricePerPerson;
         $lead->data['single_occupancy_surcharge'] = $this->quote->single_occupancy_surcharge;
+        foreach ($this->quote->travellers as $traveller) {
+            if ($traveller->is_lead) { continue; }
+            $travellers[] = new ConvertedCustomer($traveller->customer, $traveller->paying, $traveller->travelling);
+        }
         foreach ($travellers as $traveller) {
             $traveller->data['tour_cost'] = $pricePerPerson;
             $traveller->data['single_occupancy_surcharge'] = $this->quote->single_occupancy_surcharge;
@@ -234,9 +238,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function createProspect(?Customer $customer = null, array $data = []): QuoteProspect
     {
         if (isset($customer)) {
-            $prospect = QuoteProspect::create(['customer_id' => $customer->id, ...$data]);
+            $prospect = QuoteProspect::create(['customer_id' => $customer->id, 'quote_id' => $this->quote->id, ...$data]);
         } else {
-            $prospect = QuoteProspect::create($data);
+            $prospect = QuoteProspect::create(['quote_id' => $this->quote->id, ...$data]);
         }
         return $prospect;
     }
