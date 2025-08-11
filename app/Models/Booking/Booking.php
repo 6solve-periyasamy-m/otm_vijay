@@ -70,6 +70,7 @@ use App\Models\Helper\Traits\HasNotifications;
  * @property-read FellohLink|null $felloh
  * @method static Builder|Booking before(?\Illuminate\Support\Carbon $date = null)
  * @method static Builder|Booking converted()
+ * @method static Builder|Booking nullLead()
  * @method static Builder|Booking whereNotes($value)
  * @method static Builder|Booking newModelQuery()
  * @method static Builder|Booking newQuery()
@@ -199,5 +200,13 @@ class Booking extends Model
     {
         $date = $date ?? Carbon::now()->subDays(180);
         $query->whereDate('updated_at', '<', $date);
+    }
+
+    public function scopeNullLead(Builder $query): void
+    {
+        $query->leftJoin('booking_travellers', 'booking_travellers.id', '=', 'lead_traveller_id')
+            ->whereNull('booking_travellers.first_name')
+            ->whereNull('booking_travellers.last_name')
+            ->whereNull('booking_travellers.email_address');
     }
 }

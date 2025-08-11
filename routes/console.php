@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Booking\Booking;
 use App\Models\Order\Order;
 use App\Repository\Authentication\UserUpgrader;
 use App\Repository\Model\Order\InvoiceUpgrader;
@@ -45,7 +46,6 @@ Artisan::command('order:recache', function () {
     }
 })->purpose('Refresh the cache on all orders');
 
-
 Artisan::command('update:all', function () {
     $this->info("Recaching all orders");
     $this->runCommand('order:recache', [], $this->output);
@@ -65,4 +65,21 @@ Artisan::command('update:invoices', function () {
 Artisan::command('update:users', function () {
     $this->info("Updating Default Users");
     (new UserUpgrader())->run_upgrades();
+});
+
+Artisan::command('booking:prune-null', function () {
+    $query = Booking::nullLead();
+    $count = $query->count();
+    $confirm = $this->ask("This will remove {$count} bookings, are you sure? (y/n)");
+    if ($confirm === 'y') {
+        $this->info('Starting now, this may take a while...');
+        $bar = $this->output->createProgressBar($count);
+        $bar->start();
+        foreach ($query->get() as $booking) {
+            $booking->repository->delete();
+            $bar->advance();
+        }
+        $bar->finish();
+    }
+    $this->info("{$count} bookings have been pruned");
 });
