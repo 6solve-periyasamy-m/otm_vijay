@@ -37,6 +37,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $internal_notes
  * @property string|null $external_notes
  * @property string|null $description
+ * @property string|null $inventory_description
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
