@@ -75,11 +75,14 @@ Artisan::command('booking:prune-null', function () {
         $this->info('Starting now, this may take a while...');
         $bar = $this->output->createProgressBar($count);
         $bar->start();
+        $skipped = 0;
         foreach ($query->get() as $booking) {
-            $booking->repository->delete();
+            try {
+                $booking->repository->delete();
+            } catch (Exception) { $skipped++; }
             $bar->advance();
         }
         $bar->finish();
+        $this->info("{$count} bookings have been pruned. {$skipped} skipped.");
     }
-    $this->info("{$count} bookings have been pruned");
 });
