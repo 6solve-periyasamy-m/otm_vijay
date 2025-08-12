@@ -62,8 +62,8 @@ class Calculator extends Component
         if ($validate) {
             $this->validate();
             $this->markup = (float)$this->markup;
-            $this->travelling = (int)$this->travelling;
-            $this->paying = (int)$this->paying;
+            $this->travelling = max($this->quote->travelling_count, (int)$this->travelling);
+            $this->paying = max($this->quote->paying_count, (int)$this->paying);
         }
 
         /** @var int $totalTravellerCount Total number of travellers */
@@ -72,7 +72,7 @@ class Calculator extends Component
 
         /** @var float $costPerPerson Cost to the company per person (average) */
         $costPerPerson = $totalTravellerCount > 0 ? sigfig($this->costToCompany / $totalTravellerCount) : 0;
-        $paying = $this->paying + ($this->quote->travellers()->where('paying', '=', true)->count());
+        $paying = $this->paying + ($this->quote->leadTraveller->paying);
         $this->total = ($this->quote->repository->getPricePerPerson($paying)?->price_per_person ?? 0) * $paying;
         if ($this->quote->currency !== null && $this->quote->currency_id !== Settings::currency()?->id) {
             if ($this->fromRate === null) {

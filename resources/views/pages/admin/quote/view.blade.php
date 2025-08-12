@@ -123,65 +123,6 @@
         </div>
     </x-admin.section.header>
 
-    <div class="heading pt-2 pb-md-3 pb-2">
-        <h2 class="fw-bold">Travellers</h2>
-    </div>
-
-    <x-admin.section.card>
-        <div class="row">
-            <div class="col-10"></div>
-            <div class="col-2">
-                <button onclick="openModal('admin.quote.prospect.form', {'quote': {{$quote->id}},})" class="btn btn-success">
-                    {{Icon::create()}} Add Traveller
-                </button>
-            </div>
-            @foreach($quote->travellers as $traveller)
-                <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
-                    <div class="otm-card">
-                        <div class="row">
-                            <div class="col-12 font-bold">
-                                {{ $traveller->is_lead ? "Lead Traveller" : "Traveller" }}
-                            </div>
-                            <div class="col-8">
-                                {{ $traveller->customer->full_name }}
-                            </div>
-                            <div class="col-4">
-                                <button class="btn btn-outline-warning mb-0 p-1" onclick="openModal('admin.quote.prospect.form', {'prospect': {{ $traveller->id }},})">
-                                    {{ Icon::edit() }}
-                                </button>
-                                @if($traveller->is_lead)
-                                    <span class="btn btn-outline-dark mb-0 p-1" title="Cannot delete lead traveller">
-                                        {{ Icon::delete() }}
-                                    </span>
-                                @else
-                                <a class="btn btn-outline-danger mb-0 p-1" href="{{ route('quotes.prospect.delete', ['quote' => $quote, 'prospect' => $traveller,]) }}">
-                                    {{ Icon::delete() }}
-                                </a>
-                                @endif
-                            </div>
-                            <div class="col-5">
-                                Travelling
-                            </div>
-                            <div class="col-1">
-                                {{ $traveller->travelling ? Icon::check() : Icon::cross() }}
-                            </div>
-                            <div class="col-4">
-                                Paying
-                            </div>
-                            <div class="col-1">
-                                {{ $traveller->paying ? Icon::check() : Icon::cross() }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </x-admin.section.card>
-
-    <div class="heading pt-2 pb-md-3 pb-2">
-        <h2 class="fw-bold">{{ __('quotes.view.cards.quick.header') }}</h2>
-    </div>
-
     {{-- Calculator --}}
     <livewire:admin.quote.calculator :quote="$quote"/>
 

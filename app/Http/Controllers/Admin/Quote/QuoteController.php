@@ -74,11 +74,6 @@ class QuoteController extends Controller
     {
         $paying = $request->paying;
         $travelling = $request->travelling;
-        foreach ($quote->travellers as $traveller) {
-            if ($traveller->is_lead) { continue; }
-            $paying += ($quote->leadTraveller->paying ? 1 : 0);
-            $travelling += ($quote->leadTraveller->travelling ? 1 : 0);
-        }
         return $quote->repository->getResponseStream($quote->repository->makeSent($quote->leadTraveller->email, $paying, $travelling));
     }
 

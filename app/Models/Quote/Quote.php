@@ -72,6 +72,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read string $ref Reference-Revision
+ * @property-read int $paying_count Amount of additional paying travellers
+ * @property-read int $travelling_count Amount of additional travelling travellers
  * @property-read Collection|QuoteAccommodation[] $accommodation
  * @property-read Collection|QuoteProspect[] $travellers
  * @property-read Collection|QuoteSection[] $sections
@@ -190,6 +192,16 @@ class Quote extends Model
             return new TaxBracket($bracket);
         }
         return null;
+    }
+
+    public function getPayingCountAttribute(): int
+    {
+        return $this->travellers()->where('paying', '=', true)->where('id', '!=', $this->lead_traveller_id)->count();
+    }
+
+    public function getTravellingCountAttribute(): int
+    {
+        return $this->travellers()->where('paying', '=', false)->where('travelling', '=', true)->where('id', '!=', $this->lead_traveller_id)->count();
     }
 
     public function organization(): BelongsTo

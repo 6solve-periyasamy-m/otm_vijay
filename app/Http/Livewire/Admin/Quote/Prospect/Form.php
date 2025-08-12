@@ -28,7 +28,7 @@ class Form extends ModalComponent
             $this->quote = Quote::find($prospect->quote_id);
         }else if ($quote->id !== null) {
             $this->quote = $quote;
-            $this->prospect = QuoteProspect::make(['quote_id' => $this->quote->id]);
+            $this->prospect = QuoteProspect::make(['quote_id' => $this->quote->id, 'paying' => true, 'travelling' => true,]);
             $this->customer = Customer::make();
         } else {
             $this->toast('Quote not found', 'Error loading form', 'error');
@@ -62,7 +62,8 @@ class Form extends ModalComponent
         $this->prospect->travelling = $this->prospect->travelling ?? false;
         $this->prospect->save();
         $this->toast('Prospect Saved Successfully', 'Successfully saved the quote traveller');
-        $this->refreshPage();
+        $this->refreshTables();
+        $this->closeModal();
     }
 
     public function render()
