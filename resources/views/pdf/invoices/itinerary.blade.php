@@ -128,7 +128,7 @@
         .overlay {  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;  background-color: rgba(0, 0, 0, 0.4); z-index: 1;}
         .event-overlay-title {font-family: 'PlayfairDisplay-Medium'; font-size: 24px; font-weight: 500; margin-bottom: 8px; line-height: 1.2;}
         .event-overlay-reference {font-family: 'PPNeueMontreal-Regular'; font-weight: 600; font-size: 17px; line-height: 1.2;}
-        .event-grp-info {z-index:1111; position: absolute; top: 50%; left: 32px; transform: translateY(-50%); color: white; padding: 15px; max-width: 60%;}
+        .event-grp-info {z-index:1111; position: absolute; top: 30%; left: 32px; transform: translateY(-50%); color: white; padding: 15px; max-width: 60%;}
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
